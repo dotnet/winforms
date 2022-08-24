@@ -6,8 +6,9 @@ using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
+using Windows.Win32.UI.Shell.Common;
 using static Interop;
 using static Interop.Shell32;
 
@@ -260,7 +261,7 @@ namespace System.Windows.Forms
             if (UseVistaDialogInternal && TryRunDialogVista(hWndOwner, out bool returnValue))
                 return returnValue;
 
-            return RunDialogOld(hWndOwner);
+            return RunDialogOld((HWND)hWndOwner);
         }
 
         private bool TryRunDialogVista(IntPtr owner, out bool returnValue)
@@ -345,7 +346,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    IShellItem initialDirectory = GetShellItemForPath(_initialDirectory);
+                    IShellItem initialDirectory = PInvoke.GetShellItemForPath(_initialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);
@@ -398,106 +399,112 @@ namespace System.Windows.Forms
             }
         }
 
-        private unsafe bool RunDialogOld(IntPtr hWndOwner)
+        private unsafe bool RunDialogOld(HWND hWndOwner)
         {
-            SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out CoTaskMemSafeHandle listHandle);
-            if (listHandle.IsInvalid)
+            PInvoke.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out ITEMIDLIST* listHandle);
+            if (listHandle is null)
             {
-                SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
-                if (listHandle.IsInvalid)
+                PInvoke.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
+                if (listHandle is null)
                 {
                     throw new InvalidOperationException(SR.FolderBrowserDialogNoRootFolder);
                 }
             }
 
-            using (listHandle)
+            uint mergedOptions = PInvoke.BIF_NEWDIALOGSTYLE;
+            if (!ShowNewFolderButton)
             {
-                uint mergedOptions = BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
-                if (!ShowNewFolderButton)
-                {
-                    mergedOptions |= BrowseInfoFlags.BIF_NONEWFOLDERBUTTON;
-                }
+                mergedOptions |= PInvoke.BIF_NONEWFOLDERBUTTON;
+            }
 
-                // The SHBrowserForFolder dialog is OLE/COM based, and documented as only being safe to use under the STA
-                // threading model if the BIF_NEWDIALOGSTYLE flag has been requested (which we always do in mergedOptions
-                // above). So make sure OLE is initialized, and throw an exception if caller attempts to invoke dialog
-                // under the MTA threading model (...dialog does appear under MTA, but is totally non-functional).
-                if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
-                {
-                    throw new ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
-                }
+            // The SHBrowserForFolder dialog is OLE/COM based, and documented as only being safe to use under the STA
+            // threading model if the BIF_NEWDIALOGSTYLE flag has been requested (which we always do in mergedOptions
+            // above). So make sure OLE is initialized, and throw an exception if caller attempts to invoke dialog
+            // under the MTA threading model (...dialog does appear under MTA, but is totally non-functional).
+            if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
+            {
+                throw new ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
+            }
 
-                BrowseCallbackProc callback = FolderBrowserDialog_BrowseCallbackProc;
-                char[] displayName = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
-                try
+            delegate* unmanaged[Stdcall]<HWND, uint, LPARAM, LPARAM, int> callback = &FolderBrowserDialog_BrowseCallbackProc;
+            char[] displayName = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
+            var handle = GCHandle.Alloc(this);
+            try
+            {
+                fixed (char* pDisplayName = displayName)
+                fixed (char* title = _descriptionText)
                 {
-                    fixed (char* pDisplayName = displayName)
+                    var bi = new BROWSEINFOW
                     {
-                        var bi = new BROWSEINFO
-                        {
-                            pidlRoot = listHandle,
-                            hwndOwner = hWndOwner,
-                            pszDisplayName = pDisplayName,
-                            lpszTitle = _descriptionText,
-                            ulFlags = mergedOptions,
-                            lpfn = callback,
-                            lParam = IntPtr.Zero,
-                            iImage = 0
-                        };
+                        pidlRoot = listHandle,
+                        hwndOwner = hWndOwner,
+                        pszDisplayName = pDisplayName,
+                        lpszTitle = title,
+                        ulFlags = mergedOptions,
+                        lpfn = callback,
+                        lParam = GCHandle.ToIntPtr(handle),
+                        iImage = 0
+                    };
 
-                        // Show the dialog
-                        using (CoTaskMemSafeHandle browseHandle = SHBrowseForFolderW(ref bi))
+                    // Show the dialog
+                    ITEMIDLIST* browseHandle = PInvoke.SHBrowseForFolder(in bi);
+                    {
+                        if (browseHandle is null)
                         {
-                            if (browseHandle.IsInvalid)
-                            {
-                                return false;
-                            }
+                            return false;
+                        }
 
-                            // Retrieve the path from the IDList.
-                            SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath!);
-                            GC.KeepAlive(callback);
+                        // Retrieve the path from the IDList.
+                        fixed (char* path = _selectedPath!)
+                        {
+                            PInvoke.SHGetPathFromIDList(browseHandle, path);
                             return true;
                         }
                     }
                 }
-                finally
-                {
-                    ArrayPool<char>.Shared.Return(displayName);
-                }
+            }
+            finally
+            {
+                handle.Free();
+                ArrayPool<char>.Shared.Return(displayName);
             }
         }
 
         /// <summary>
         ///  Callback function used to enable/disable the OK button,
-        ///  and select the initial folder.
+        /// and select the initial folder.
         /// </summary>
-        private int FolderBrowserDialog_BrowseCallbackProc(HWND hwnd, int msg, IntPtr lParam, IntPtr lpData)
+#pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+#pragma warning restore CS3016 // Arrays as attribute arguments is not CLS-compliant
+        private unsafe static int FolderBrowserDialog_BrowseCallbackProc(HWND hwnd, uint msg, LPARAM lParam, LPARAM lpData)
         {
             switch ((BFFM)msg)
             {
                 case BFFM.INITIALIZED:
                     // Indicates the browse dialog box has finished initializing. The lpData value is zero.
 
-                    if (_initialDirectory.Length != 0)
+                    var instance = (FolderBrowserDialog)GCHandle.FromIntPtr(lParam).Target!;
+                    if (instance._initialDirectory.Length != 0)
                     {
                         // Try to expand the folder specified by initialDir
-                        PInvoke.SendMessage(hwnd, (User32.WM)BFFM.SETEXPANDED, (WPARAM)(BOOL)true, _initialDirectory);
+                        PInvoke.SendMessage(hwnd, (User32.WM)BFFM.SETEXPANDED, (WPARAM)(BOOL)true, instance._initialDirectory);
                     }
 
-                    if (_selectedPath.Length != 0)
+                    if (instance._selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
-                        PInvoke.SendMessage(hwnd, (User32.WM)BFFM.SETSELECTIONW, (WPARAM)(BOOL)true, _selectedPath);
+                        PInvoke.SendMessage(hwnd, (User32.WM)BFFM.SETSELECTIONW, (WPARAM)(BOOL)true, instance._selectedPath);
                     }
 
                     break;
                 case BFFM.SELCHANGED:
                     // Indicates the selection has changed. The lpData parameter points to the item identifier list for the newly selected item.
-                    IntPtr selectedPidl = lParam;
-                    if (selectedPidl != IntPtr.Zero)
+                    ITEMIDLIST* selectedPidl = (ITEMIDLIST*)lParam;
+                    if (selectedPidl is not null)
                     {
                         // Try to retrieve the path from the IDList
-                        bool isFileSystemFolder = SHGetPathFromIDListLongPath(selectedPidl, out _);
+                        bool isFileSystemFolder = PInvoke.SHGetPathFromIDList(selectedPidl, null);
                         PInvoke.SendMessage(hwnd, (User32.WM)BFFM.ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
                     }
 

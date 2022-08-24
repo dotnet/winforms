@@ -80,7 +80,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return GetShellItemForPath(filePathString);
+            return PInvoke.GetShellItemForPath(filePathString);
         }
     }
 }
