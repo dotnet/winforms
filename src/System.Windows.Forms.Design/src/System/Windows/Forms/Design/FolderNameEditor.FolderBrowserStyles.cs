@@ -9,9 +9,9 @@ namespace System.Windows.Forms.Design
         [Flags]
         protected enum FolderBrowserStyles
         {
-            BrowseForComputer = unchecked((int)PInvoke.BIF_BROWSEFORCOMPUTER),
-            BrowseForEverything = unchecked((int)0x00004000),
-            BrowseForPrinter = unchecked((int)PInvoke.BIF_BROWSEFORPRINTER),
+            BrowseForComputer        = unchecked((int)PInvoke.BIF_BROWSEFORCOMPUTER),
+            BrowseForEverything      = unchecked((int)0x00004000),
+            BrowseForPrinter         = unchecked((int)PInvoke.BIF_BROWSEFORPRINTER),
             RestrictToDomain = unchecked((int)PInvoke.BIF_DONTGOBELOWDOMAIN),
             RestrictToFilesystem = unchecked((int)PInvoke.BIF_RETURNONLYFSDIRS),
             RestrictToSubfolders = unchecked((int)PInvoke.BIF_RETURNFSANCESTORS),
