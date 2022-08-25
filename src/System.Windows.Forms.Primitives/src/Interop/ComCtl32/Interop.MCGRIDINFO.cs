@@ -22,8 +22,8 @@ internal static partial class Interop
             public int iRow;
             public int iCol;
             public BOOL bSelected;
-            public PInvoke.SYSTEMTIME stStart;
-            public PInvoke.SYSTEMTIME stEnd;
+            public SYSTEMTIME stStart;
+            public SYSTEMTIME stEnd;
             public RECT rc;
             public char* pszName;
             public UIntPtr cchName;
