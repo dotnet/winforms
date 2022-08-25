@@ -157,7 +157,7 @@ stages:
       parameters:
         publishUsingPipelines: true
         pool:
-          name: NetCore1ESPool-Internal
+          name: NetCore1ESPool-Svc-Internal
           demands: ImageOverride -equals Build.Server.Amd64.VS2019
 
 
