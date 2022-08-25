@@ -9,7 +9,7 @@ internal static partial class Interop
         public struct NMDAYSTATE
         {
             public NMHDR nmhdr;
-            public PInvoke.SYSTEMTIME stStart;
+            public SYSTEMTIME stStart;
             public int cDayState;
             public IntPtr prgDayState;
         }

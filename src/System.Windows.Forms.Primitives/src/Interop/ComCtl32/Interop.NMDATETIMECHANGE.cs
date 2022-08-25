@@ -10,7 +10,7 @@ internal static partial class Interop
         {
             public NMHDR nmhdr;
             public GDT dwFlags;
-            public PInvoke.SYSTEMTIME st;
+            public SYSTEMTIME st;
         }
     }
 }
