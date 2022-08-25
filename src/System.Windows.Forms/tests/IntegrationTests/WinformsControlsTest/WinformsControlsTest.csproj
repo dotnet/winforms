@@ -94,7 +94,7 @@
 
     -->
   <PropertyGroup>
-    <!-- Don't try to resolve analyzers from <repo root>\.dotnet\packs\Microsoft.WindowsDesktop.App.Ref\<version>\ref\net8.0 -->
+    <!-- Don't try to resolve analyzers from <repo root>\.dotnet\packs\Microsoft.WindowsDesktop.App.Ref\<version>\ref\net6.0 -->
     <ResolveWinFormsAnalyzersFromSdkRefPack>false</ResolveWinFormsAnalyzersFromSdkRefPack>
   </PropertyGroup>
 
