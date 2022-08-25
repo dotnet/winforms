@@ -5,7 +5,6 @@
 using System.Buffers;
 using System.ComponentModel;
 using Windows.Win32.UI.Shell.Common;
-using static Interop;
 
 namespace System.Windows.Forms.Design
 {
