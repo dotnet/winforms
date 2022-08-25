@@ -118,7 +118,7 @@ For example, the content of _[appname].runtimeconfig.json_ generated from above 
 ```XML
 {
   "runtimeOptions": {
-    "tfm": "net7.0",
+    "tfm": "net8.0",
     "frameworks": [
       {
         "name": "Microsoft.NETCore.App",

@@ -44,8 +44,8 @@ To execute unit tests, run `.\build -test`
 If all the tests are successful, you should see something like this:
 
 ```console
-  Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\net6.0\System.Windows.Forms.Tests.dll [net6.0|x64]
-  Tests succeeded: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\net6.0\System.Windows.Forms.Tests.dll [net6.0|x64]
+  Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\net8.0\System.Windows.Forms.Tests.dll [net8.0|x64]
+  Tests succeeded: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\net8.0\System.Windows.Forms.Tests.dll [net8.0|x64]
 
 Build succeeded.
     0 Warning(s)
@@ -57,9 +57,9 @@ Build succeeded.
 When testing from the command line, a failed test should look something like this:
 
 ```console
-Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\net6.0\System.Windows.Forms.Tests.dll [net6.0|x64]
-XUnit : error : Tests failed: E:\src\repos\github\winforms\artifacts\TestResults\Debug\System.Windows.Forms.Tests_net6.0_x64.html [net6.0|x64] [E:\src\repos\github\winforms\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj]
-XUnit : error : Tests failed: E:\src\repos\github\winforms\artifacts\TestResults\Debug\System.Windows.Forms.Tests_net6.0_x64.html [net6.0|x64] [E:\src\repos\github\winforms\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj]
+Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\net8.0\System.Windows.Forms.Tests.dll [net8.0|x64]
+XUnit : error : Tests failed: E:\src\repos\github\winforms\artifacts\TestResults\Debug\System.Windows.Forms.Tests_net8.0_x64.html [net8.0|x64] [E:\src\repos\github\winforms\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj]
+XUnit : error : Tests failed: E:\src\repos\github\winforms\artifacts\TestResults\Debug\System.Windows.Forms.Tests_net8.0_x64.html [net8.0|x64] [E:\src\repos\github\winforms\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj]
 
 Build FAILED.
 ```
@@ -279,8 +279,8 @@ To execute functional tests, run `.\build -integrationTest`
 You will see various windows open and close very quickly. If all the tests are successful, you should see something like this:
 
 ```console
-  Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.IntegrationTests\Debug\net6.0\System.Windows.Forms.IntegrationTests.dll [net6.0|x64]
-  Tests succeeded: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.IntegrationTests\Debug\net6.0\System.Windows.Forms.IntegrationTests.dll [net6.0|x64]
+  Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.IntegrationTests\Debug\net8.0\System.Windows.Forms.IntegrationTests.dll [net8.0|x64]
+  Tests succeeded: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.IntegrationTests\Debug\net8.0\System.Windows.Forms.IntegrationTests.dll [net8.0|x64]
 
 Build succeeded.
     0 Warning(s)

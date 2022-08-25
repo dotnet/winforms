@@ -17,14 +17,14 @@ While the team is rebuilding the experience under the new model, it is straightf
 ```<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 </Project>
 ```
-4.  Change the `<TargetFramework>net6.0-windows</TargetFramework>` to the following: `<TargetFrameworks>net472;net6.0-windows</TargetFrameworks>`
+4.  Change the `<TargetFramework>net8.0-windows</TargetFramework>` to the following: `<TargetFrameworks>net472;net8.0-windows</TargetFrameworks>`
 
 **Note:** it is important to use **net472** (or net48 if you want to target against .NET Framework 4.8) **first** in the  list of targeted frameworks. This tells Visual Studio to load the in-process .NET Framework rather than the .NET OOP WinForms designer.
 
