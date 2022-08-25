@@ -73,14 +73,14 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     fixed (char* pDisplayName = displayName)
-                    fixed (char* ptr = _descriptionText)
+                    fixed (char* ptrDescriptionText = _descriptionText)
                     {
                         var bi = new BROWSEINFOW
                         {
                             pidlRoot = listHandle,
                             hwndOwner = hWndOwner,
                             pszDisplayName = pDisplayName,
-                            lpszTitle = ptr,
+                            lpszTitle = ptrDescriptionText,
                             ulFlags = mergedOptions,
                             lpfn = null,
                             lParam = 0,

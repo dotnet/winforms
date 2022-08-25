@@ -12,11 +12,11 @@ namespace Windows.Win32
     {
         public unsafe static IShellItem SHCreateShellItem(string path)
         {
-            if (SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, 0, psfgaoOut: null).Succeeded)
+            if (SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, sfgaoIn: 0, psfgaoOut: null).Succeeded)
             {
                 // No parent specified
-                Shell.IShellItem** ppsi = default;
-                if (SHCreateShellItem(pidlParent: null, psfParent: null, ppidl, ppsi).Succeeded)
+                Shell.IShellItem* ppsi = default;
+                if (SHCreateShellItem(pidlParent: null, psfParent: null, ppidl, &ppsi).Succeeded)
                 {
                     var obj = Interop.WinFormsComWrappers.Instance
                         .GetOrCreateObjectForComInstance((nint)ppsi, CreateObjectFlags.None);
