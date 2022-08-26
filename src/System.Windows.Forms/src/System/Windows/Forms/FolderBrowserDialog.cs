@@ -365,7 +365,7 @@ namespace System.Windows.Forms
                 else
                 {
                     string folder = Path.GetFileName(_selectedPath);
-                    dialog.SetFolder(CreateItemFromParsingName(parent));
+                    dialog.SetFolder(PInvoke.SHCreateItemFromParsingName(parent));
                     dialog.SetFileName(folder);
                 }
             }
@@ -393,7 +393,7 @@ namespace System.Windows.Forms
             dialog.GetResult(out IShellItem? item);
             if (item is not null)
             {
-                HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath!);
+                HRESULT hr = item.GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out _selectedPath!);
                 hr.ThrowOnFailure();
             }
         }

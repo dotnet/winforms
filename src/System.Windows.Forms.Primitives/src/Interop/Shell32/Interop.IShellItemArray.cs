@@ -34,7 +34,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT GetAttributes(
-                SIATTRIBFLAGS dwAttribFlags,
+                Shell.SIATTRIBFLAGS dwAttribFlags,
                 uint sfgaoMask,
                 out uint psfgaoAttribs);
 

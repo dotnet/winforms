@@ -9,3 +9,6 @@ global using Windows.Win32.UI.Controls;
 global using Windows.Win32.UI.Shell;
 global using Windows.Win32.UI.Shell.PropertiesSystem;
 global using Windows.Win32.UI.WindowsAndMessaging;
+global using Windows.Win32.UI.Shell.Common;
+global using Shell = Windows.Win32.UI.Shell;
+global using Common = Windows.Win32.UI.Shell.Common;

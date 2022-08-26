@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using Shell = Windows.Win32.UI.Shell;
 
 internal static partial class Interop
 {

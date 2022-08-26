@@ -26,7 +26,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT GetDisplayName(
-                SIGDN sigdnName,
+                Shell.SIGDN sigdnName,
                 [MarshalAs(UnmanagedType.LPWStr)] out string? ppszName);
 
             [PreserveSig]
