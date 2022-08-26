@@ -1,17 +1,17 @@
 {
   "tools": {
-    "dotnet": "7.0.100-preview.7.22377.5",
+    "dotnet": "8.0.100-alpha.1.22423.9",
     "runtimes": {
       "dotnet/x64": [
-        "$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)"
+        "$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)"
       ],
       "dotnet/x86": [
-        "$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)"
+        "$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)"
       ]
     }
   },
   "sdk": {
-    "version": "7.0.100-preview.7.22377.5"
+    "version": "8.0.100-alpha.1.22423.9"
   },
   "msbuild-sdks": {
     "Microsoft.DotNet.Arcade.Sdk": "7.0.0-beta.22419.1",

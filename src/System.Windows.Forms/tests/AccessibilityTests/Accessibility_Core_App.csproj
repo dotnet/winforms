@@ -4,7 +4,6 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Accessibility_Core_App</RootNamespace>
     <AssemblyName>Accessibility_Core_App</AssemblyName>
-    <!--<TargetFrameworks>net472;net6.0-windows</TargetFrameworks>-->
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
