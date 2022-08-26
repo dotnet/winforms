@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -107,9 +106,9 @@ namespace System.Windows.Forms
             Point point;
             PInvoke.GetViewportOrgEx(hdc, &point);
             Debug.Assert(point.IsEmpty, "Viewport origin shouldn't be shifted");
-            Debug.Assert(PInvoke.GetMapMode(hdc) == (int)Gdi32.MM.TEXT);
-            Debug.Assert(PInvoke.GetROP2(hdc) == (int)Gdi32.R2.COPYPEN);
-            Debug.Assert(PInvoke.GetBkMode(hdc) == (int)Gdi32.BKMODE.OPAQUE);
+            Debug.Assert(PInvoke.GetMapMode(hdc) == (int)HDC_MAP_MODE.MM_TEXT);
+            Debug.Assert(PInvoke.GetROP2(hdc) == (int)R2_MODE.R2_COPYPEN);
+            Debug.Assert(PInvoke.GetBkMode(hdc) == (int)BACKGROUND_MODE.OPAQUE);
 
             Matrix3x2 matrix = default;
             Debug.Assert(PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&matrix));

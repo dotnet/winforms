@@ -54,12 +54,11 @@ namespace System.Windows.Forms
                 PInvoke.RegionScope hOriginalClippingRegion = new(hdc);
 
                 // Shift the viewpoint origin by coordinates specified in "bounds".
-                var lastViewPort = new Point();
-                success = Gdi32.SetViewportOrgEx(
+                success = PInvoke.SetViewportOrgEx(
                     hdc,
                     viewportOrg.X + bounds.Left,
                     viewportOrg.Y + bounds.Top,
-                    &lastViewPort);
+                    lppt: null);
                 Debug.Assert(success, "SetViewportOrgEx() failed.");
 
                 RegionType originalRegionType;

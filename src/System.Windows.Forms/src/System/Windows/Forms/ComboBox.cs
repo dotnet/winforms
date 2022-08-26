@@ -2183,8 +2183,8 @@ namespace System.Windows.Forms
                 // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
                 // since hollow brush leaves the list background unpainted.
-                Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(ForeColor));
-                Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(BackColor));
+                PInvoke.SetTextColor(dc, (uint)ColorTranslator.ToWin32(ForeColor));
+                PInvoke.SetBkColor(dc, (uint)ColorTranslator.ToWin32(BackColor));
                 return BackColorBrush;
             }
             else

@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Metafiles
 {
     internal static class State
     {
-        internal static IStateValidator BackgroundMode(Gdi32.BKMODE backgroundMode) => new BackgroundModeValidator(backgroundMode);
+        internal static IStateValidator BackgroundMode(BACKGROUND_MODE backgroundMode) => new BackgroundModeValidator(backgroundMode);
         internal static IStateValidator Brush(Color brushColor, Gdi32.BS brushStyle)
             => new BrushValidator(brushColor, brushStyle);
         internal static IStateValidator BrushColor(Color brushColor) => new BrushColorValidator(brushColor);
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Metafiles
         internal static IStateValidator PenColor(Color penColor) => new PenColorValidator(penColor);
         internal static IStateValidator PenStyle(Gdi32.PS penStyle) => new PenStyleValidator(penStyle);
         internal static IStateValidator PenWidth(int penWidth) => new PenWidthValidator(penWidth);
-        internal static IStateValidator Rop2(Gdi32.R2 rop2Mode) => new Rop2Validator(rop2Mode);
+        internal static IStateValidator Rop2(R2_MODE rop2Mode) => new Rop2Validator(rop2Mode);
         internal static IStateValidator TextColor(Color textColor) => new TextColorValidator(textColor);
         internal static IStateValidator Transform(Matrix3x2 transform) => new TransformValidator(transform);
     }

@@ -34,7 +34,7 @@ namespace System.Windows.Forms
             HPEN hpen)
         {
             using Gdi32.SelectObjectScope penScope = new(hdc, hpen);
-            using Gdi32.SetRop2Scope ropScope = new(hdc, Gdi32.R2.COPYPEN);
+            using PInvoke.SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
             using Gdi32.SelectObjectScope brushScope = new(hdc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
 
             Gdi32.Rectangle(hdc, left, top, right, bottom);
@@ -87,8 +87,8 @@ namespace System.Windows.Forms
         {
             Debug.Assert((lines.Length % 4) == 0);
 
-            using var ropScope = new Gdi32.SetRop2Scope(hdc, Gdi32.R2.COPYPEN);
-            using var bkScope = new Gdi32.SetBkModeScope(hdc, Gdi32.BKMODE.TRANSPARENT);
+            using PInvoke.SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
+            using PInvoke.SetBkModeScope bkScope = new(hdc, BACKGROUND_MODE.TRANSPARENT);
             using var selection = new Gdi32.SelectObjectScope(hdc, (HGDIOBJ)hpen.Value);
 
             Point oldPoint = new Point();

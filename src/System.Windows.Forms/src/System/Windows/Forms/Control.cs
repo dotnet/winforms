@@ -6315,8 +6315,8 @@ namespace System.Windows.Forms
             // NOTE: this message may not have originally been sent to this HWND.
             if (!GetStyle(ControlStyles.UserPaint))
             {
-                Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(ForeColor));
-                Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(BackColor));
+                PInvoke.SetTextColor(dc, (uint)ColorTranslator.ToWin32(ForeColor));
+                PInvoke.SetBkColor(dc, (uint)ColorTranslator.ToWin32(BackColor));
                 return BackColorBrush;
             }
 
