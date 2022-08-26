@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Ctor_StartIndexGreaterThanEndIndex_ThrowsArgumentException()
         {
-            Assert.Throws<ArgumentException>(null, () => new ListViewVirtualItemsSelectionRangeChangedEventArgs(1, 0, false));
+            Assert.Throws<ArgumentException>(() => new ListViewVirtualItemsSelectionRangeChangedEventArgs(1, 0, false));
         }
     }
 }

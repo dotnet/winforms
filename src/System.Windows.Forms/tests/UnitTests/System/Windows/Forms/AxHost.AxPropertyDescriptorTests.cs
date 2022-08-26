@@ -1110,7 +1110,7 @@ namespace System.Windows.Forms.Tests
             PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
             PropertyDescriptor property = events[propertyName];
 
-            Assert.Throws<ArgumentException>(null, () => property.SetValue(control, new object()));
+            Assert.Throws<ArgumentException>(() => property.SetValue(control, new object()));
             Assert.Null(control.CustomProperty);
             Assert.True(Assert.IsType<BrowsableAttribute>(property.Attributes[typeof(BrowsableAttribute)]).Browsable);
             Assert.True(control.IsHandleCreated);
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call again.
-            Assert.Throws<ArgumentException>(null, () => property.SetValue(control, new object()));
+            Assert.Throws<ArgumentException>(() => property.SetValue(control, new object()));
             Assert.Null(control.CustomProperty);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1158,7 +1158,7 @@ namespace System.Windows.Forms.Tests
             PropertyDescriptorCollection events = customTypeDescriptor.GetProperties();
             PropertyDescriptor property = events[nameof(CustomAxHost.IntProperty)];
 
-            Assert.Throws<ArgumentException>(null, () => property.SetValue(control, new object()));
+            Assert.Throws<ArgumentException>(() => property.SetValue(control, new object()));
             Assert.Equal(0, control.IntProperty);
             Assert.True(Assert.IsType<BrowsableAttribute>(property.Attributes[typeof(BrowsableAttribute)]).Browsable);
             Assert.True(control.IsHandleCreated);
@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call again.
-            Assert.Throws<ArgumentException>(null, () => property.SetValue(control, new object()));
+            Assert.Throws<ArgumentException>(() => property.SetValue(control, new object()));
             Assert.Equal(0, control.IntProperty);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);

@@ -1607,7 +1607,7 @@ namespace System.Windows.Forms.Tests
         public void Control_BackColor_SetTransparent_ThrowsArgmentException()
         {
             using var control = new Control();
-            Assert.Throws<ArgumentException>(null, () => control.BackColor = Color.FromArgb(254, 1, 2, 3));
+            Assert.Throws<ArgumentException>(() => control.BackColor = Color.FromArgb(254, 1, 2, 3));
         }
 
         [WinFormsFact]
@@ -9817,7 +9817,7 @@ namespace System.Windows.Forms.Tests
         public void Control_Parent_SetSame_ThrowsArgumentException()
         {
             using var control = new Control();
-            Assert.Throws<ArgumentException>(null, () => control.Parent = control);
+            Assert.Throws<ArgumentException>(() => control.Parent = control);
             Assert.Null(control.Parent);
         }
 
@@ -9828,7 +9828,7 @@ namespace System.Windows.Forms.Tests
             using var control = new Control();
             control.Controls.Add(child);
 
-            Assert.Throws<ArgumentException>(null, () => control.Parent = child);
+            Assert.Throws<ArgumentException>(() => control.Parent = child);
             Assert.Null(control.Parent);
         }
 
@@ -9839,7 +9839,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubControl();
             control.SetTopLevel(true);
 
-            Assert.Throws<ArgumentException>(null, () => control.Parent = parent);
+            Assert.Throws<ArgumentException>(() => control.Parent = parent);
             Assert.Null(control.Parent);
         }
 
@@ -9913,13 +9913,13 @@ namespace System.Windows.Forms.Tests
 
             control.Region = value;
             Assert.Same(value, control.Region);
-            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+            Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Region = value;
             Assert.Same(value, control.Region);
-            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+            Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
             Assert.False(control.IsHandleCreated);
         }
 
@@ -9972,7 +9972,7 @@ namespace System.Windows.Forms.Tests
 
             control.Region = value;
             Assert.Same(value, control.Region);
-            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+            Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -9981,7 +9981,7 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.Region = value;
             Assert.Same(value, control.Region);
-            Assert.Throws<ArgumentException>(null, () => oldValue.MakeEmpty());
+            Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);

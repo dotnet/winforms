@@ -1197,7 +1197,7 @@ namespace System.Windows.Forms.Tests
             {
                 TopLevel = false
             };
-            Assert.Throws<ArgumentException>(null, () => control.Parent = control);
+            Assert.Throws<ArgumentException>(() => control.Parent = control);
             Assert.Null(control.Parent);
         }
 
@@ -1206,7 +1206,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new Form();
             using var parent = new Control();
-            Assert.Throws<ArgumentException>(null, () => control.Parent = parent);
+            Assert.Throws<ArgumentException>(() => control.Parent = parent);
             Assert.Null(control.Parent);
         }
 
