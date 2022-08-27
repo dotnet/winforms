@@ -428,7 +428,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_EDIT;
+                cp.ClassName = PInvoke.WC_EDIT;
                 cp.Style |= (int)(ES.AUTOHSCROLL | ES.AUTOVSCROLL);
                 if (!_textBoxFlags[hideSelection])
                 {

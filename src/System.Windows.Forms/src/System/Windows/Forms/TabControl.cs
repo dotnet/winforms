@@ -276,7 +276,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_TABCONTROL;
+                cp.ClassName = PInvoke.WC_TABCONTROL;
 
                 // set up window styles
                 //

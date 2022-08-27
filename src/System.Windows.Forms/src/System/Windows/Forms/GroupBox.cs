@@ -116,7 +116,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw)
                 {
-                    cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
+                    cp.ClassName = PInvoke.WC_BUTTON;
                     cp.Style |= (int)User32.BS.GROUPBOX;
                 }
                 else
