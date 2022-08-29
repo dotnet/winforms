@@ -16,7 +16,7 @@ internal static partial class Interop
         public interface IDragSourceHelper2
         {
             HRESULT InitializeFromBitmap(
-                in Shell.SHDRAGIMAGE pshdi,
+                in SHDRAGIMAGE pshdi,
                 IDataObject dataObject);
 
             HRESULT InitializeFromWindow(
