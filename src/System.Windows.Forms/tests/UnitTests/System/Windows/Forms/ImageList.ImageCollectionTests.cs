@@ -339,7 +339,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             using var value = new Metafile("bitmaps/telescope_01.wmf");
-            Assert.Throws<ArgumentException>(null, () => collection[0] = value);
+            Assert.Throws<ArgumentException>(() => collection[0] = value);
         }
 
         [WinFormsTheory]
@@ -806,9 +806,9 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             using var value = new Metafile("bitmaps/telescope_01.wmf");
-            Assert.Throws<ArgumentException>(null, () => collection.Add(value));
-            Assert.Throws<ArgumentException>(null, () => collection.Add(value, Color.Transparent));
-            Assert.Throws<ArgumentException>(null, () => collection.Add("Key", value));
+            Assert.Throws<ArgumentException>(() => collection.Add(value));
+            Assert.Throws<ArgumentException>(() => collection.Add(value, Color.Transparent));
+            Assert.Throws<ArgumentException>(() => collection.Add("Key", value));
         }
 
         [WinFormsTheory]
@@ -883,7 +883,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             using var value = new Metafile("bitmaps/telescope_01.wmf");
-            Assert.Throws<ArgumentException>(null, () => collection.AddRange(new Image[] { value }));
+            Assert.Throws<ArgumentException>(() => collection.AddRange(new Image[] { value }));
         }
 
         public static IEnumerable<object[]> AddStrip_TestData()
@@ -1723,7 +1723,7 @@ namespace System.Windows.Forms.Tests
             IList collection = list.Images;
 
             using var value = new Metafile("bitmaps/telescope_01.wmf");
-            Assert.Throws<ArgumentException>(null, () => collection[0] = value);
+            Assert.Throws<ArgumentException>(() => collection[0] = value);
         }
 
         public static IEnumerable<object[]> IListContains_Image_TestData()

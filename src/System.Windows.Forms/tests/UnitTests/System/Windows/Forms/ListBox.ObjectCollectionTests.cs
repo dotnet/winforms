@@ -70,8 +70,8 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(emptyCollection);
             Assert.Empty(owner.Items);
             Assert.False(emptyCollection.IsReadOnly);
-            Assert.Throws<ArgumentException>(null, () => new ListBox.ObjectCollection(owner, Array.Empty<object>()));
-            Assert.Throws<ArgumentException>(null, () => new ListBox.ObjectCollection(owner, otherCollection));
+            Assert.Throws<ArgumentException>(() => new ListBox.ObjectCollection(owner, Array.Empty<object>()));
+            Assert.Throws<ArgumentException>(() => new ListBox.ObjectCollection(owner, otherCollection));
         }
 
         [WinFormsFact]
@@ -2187,7 +2187,7 @@ namespace System.Windows.Forms.Tests
                 DataSource = Array.Empty<object>()
             };
             var collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Add(1));
+            Assert.Throws<ArgumentException>(() => collection.Add(1));
         }
 
         [WinFormsTheory]
@@ -3658,8 +3658,8 @@ namespace System.Windows.Forms.Tests
             var collection = new ListBox.ObjectCollection(owner);
             using var otherOwner = new ListBox();
             var otherCollection = new ListBox.ObjectCollection(otherOwner);
-            Assert.Throws<ArgumentException>(null, () => collection.AddRange(Array.Empty<object>()));
-            Assert.Throws<ArgumentException>(null, () => collection.AddRange(otherCollection));
+            Assert.Throws<ArgumentException>(() => collection.AddRange(Array.Empty<object>()));
+            Assert.Throws<ArgumentException>(() => collection.AddRange(otherCollection));
         }
 
         [WinFormsTheory]
@@ -5007,7 +5007,7 @@ namespace System.Windows.Forms.Tests
                 DataSource = Array.Empty<object>()
             };
             var collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Insert(0, 1));
+            Assert.Throws<ArgumentException>(() => collection.Insert(0, 1));
         }
 
         [WinFormsTheory]
@@ -5955,7 +5955,7 @@ namespace System.Windows.Forms.Tests
                 DataSource = Array.Empty<object>()
             };
             var collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Remove(1));
+            Assert.Throws<ArgumentException>(() => collection.Remove(1));
         }
 
         [WinFormsFact]
@@ -5966,8 +5966,8 @@ namespace System.Windows.Forms.Tests
                 DataSource = new object[] { 1 }
             };
             var collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Remove(1));
-            Assert.Throws<ArgumentException>(null, () => collection.Remove(2));
+            Assert.Throws<ArgumentException>(() => collection.Remove(1));
+            Assert.Throws<ArgumentException>(() => collection.Remove(2));
         }
 
         [WinFormsFact]
@@ -6829,7 +6829,7 @@ namespace System.Windows.Forms.Tests
                 DataSource = Array.Empty<object>()
             };
             var collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.RemoveAt(1));
+            Assert.Throws<ArgumentException>(() => collection.RemoveAt(1));
         }
 
         [WinFormsFact]
@@ -6840,7 +6840,7 @@ namespace System.Windows.Forms.Tests
                 DataSource = new object[] { 1 }
             };
             var collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.RemoveAt(1));
+            Assert.Throws<ArgumentException>(() => collection.RemoveAt(1));
         }
 
         [WinFormsFact]
@@ -8948,7 +8948,7 @@ namespace System.Windows.Forms.Tests
                 DataSource = Array.Empty<object>()
             };
             IList collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Add(1));
+            Assert.Throws<ArgumentException>(() => collection.Add(1));
         }
 
         [WinFormsTheory]
@@ -10291,7 +10291,7 @@ namespace System.Windows.Forms.Tests
                 DataSource = Array.Empty<object>()
             };
             IList collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Insert(0, 1));
+            Assert.Throws<ArgumentException>(() => collection.Insert(0, 1));
         }
 
         [WinFormsTheory]
@@ -11239,7 +11239,7 @@ namespace System.Windows.Forms.Tests
                 DataSource = Array.Empty<object>()
             };
             IList collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Remove(1));
+            Assert.Throws<ArgumentException>(() => collection.Remove(1));
         }
 
         [WinFormsFact]
@@ -11250,8 +11250,8 @@ namespace System.Windows.Forms.Tests
                 DataSource = new object[] { 1 }
             };
             IList collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Remove(1));
-            Assert.Throws<ArgumentException>(null, () => collection.Remove(2));
+            Assert.Throws<ArgumentException>(() => collection.Remove(1));
+            Assert.Throws<ArgumentException>(() => collection.Remove(2));
         }
 
         [WinFormsFact]
@@ -12113,7 +12113,7 @@ namespace System.Windows.Forms.Tests
                 DataSource = Array.Empty<object>()
             };
             IList collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.RemoveAt(1));
+            Assert.Throws<ArgumentException>(() => collection.RemoveAt(1));
         }
 
         [WinFormsFact]
@@ -12124,7 +12124,7 @@ namespace System.Windows.Forms.Tests
                 DataSource = new object[] { 1 }
             };
             IList collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.RemoveAt(1));
+            Assert.Throws<ArgumentException>(() => collection.RemoveAt(1));
         }
 
         private class CustomAddStringListBox : ListBox

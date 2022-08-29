@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms.Tests
             using var owner = new TabControl();
             var collection = new TabControl.TabPageCollection(owner);
             IList iList = collection;
-            Assert.Throws<ArgumentException>(null, () => iList.Add(value));
+            Assert.Throws<ArgumentException>(() => iList.Add(value));
         }
 
         [WinFormsFact]
@@ -3103,7 +3103,7 @@ namespace System.Windows.Forms.Tests
             using var owner = new TabControl();
             var collection = new TabControl.TabPageCollection(owner);
             IList iList = collection;
-            Assert.Throws<ArgumentException>(null, () => iList.Insert(0, value));
+            Assert.Throws<ArgumentException>(() => iList.Insert(0, value));
         }
 
         [WinFormsFact]
@@ -3878,7 +3878,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
             IList iList = collection;
             iList.Add(page);
-            Assert.Throws<ArgumentException>(null, () => iList[0] = value);
+            Assert.Throws<ArgumentException>(() => iList[0] = value);
         }
 
         [WinFormsTheory]

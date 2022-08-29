@@ -1573,7 +1573,7 @@ namespace System.Windows.Forms.Tests
         public void WebBrowser_Parent_SetSame_ThrowsArgumentException()
         {
             using var control = new WebBrowser();
-            Assert.Throws<ArgumentException>(null, () => control.Parent = control);
+            Assert.Throws<ArgumentException>(() => control.Parent = control);
             Assert.Null(control.Parent);
         }
 
@@ -2079,7 +2079,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new WebBrowser();
             var relativeUri = new Uri("/path", UriKind.Relative);
-            Assert.Throws<ArgumentException>(null, () => control.Url = relativeUri);
+            Assert.Throws<ArgumentException>(() => control.Url = relativeUri);
         }
 
         [WinFormsFact]
@@ -3450,10 +3450,10 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new WebBrowser();
             var relativeUri = new Uri("/path", UriKind.Relative);
-            Assert.Throws<ArgumentException>(null, () => control.Navigate(relativeUri));
-            Assert.Throws<ArgumentException>(null, () => control.Navigate(relativeUri, "targetFrameName"));
-            Assert.Throws<ArgumentException>(null, () => control.Navigate(relativeUri, false));
-            Assert.Throws<ArgumentException>(null, () => control.Navigate(relativeUri, "targetFrameName", null, null));
+            Assert.Throws<ArgumentException>(() => control.Navigate(relativeUri));
+            Assert.Throws<ArgumentException>(() => control.Navigate(relativeUri, "targetFrameName"));
+            Assert.Throws<ArgumentException>(() => control.Navigate(relativeUri, false));
+            Assert.Throws<ArgumentException>(() => control.Navigate(relativeUri, "targetFrameName", null, null));
         }
 
         [WinFormsFact]
