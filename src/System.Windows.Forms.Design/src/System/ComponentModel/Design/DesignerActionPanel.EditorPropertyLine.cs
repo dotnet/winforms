@@ -77,7 +77,7 @@ namespace System.ComponentModel.Design
                     using (var hdc = new User32.GetDcScope(listBox.Handle))
                     {
                         using PInvoke.ObjectScope hFont = new(listBox.Font.ToHFONT());
-                        using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
+                        using PInvoke.SelectObjectScope fontSelection = new(hdc, hFont);
 
                         TEXTMETRICW tm = default;
 

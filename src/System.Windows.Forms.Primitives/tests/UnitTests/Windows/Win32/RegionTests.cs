@@ -5,7 +5,6 @@
 using System.Drawing;
 using Xunit;
 using static Interop;
-using static Interop.Gdi32;
 
 namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
 {
@@ -25,7 +24,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
 
                 try
                 {
-                    SelectObject(hdc, hbitmap);
+                    PInvoke.SelectObject(hdc, hbitmap);
                     HRGN hregion = PInvoke.CreateRectRgn(0, 0, 0, 0);
 
                     Assert.False(hregion.IsNull);
@@ -96,7 +95,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                 {
                     Rectangle rectangle = new(1, 2, 3, 4);
                     using PInvoke.RegionScope originalRegion = new(rectangle);
-                    SelectClipRgn(hdc, originalRegion);
+                    PInvoke.SelectClipRgn(hdc, originalRegion);
                     using PInvoke.RegionScope retrievedRegion = new(hdc);
                     RECT rect = default;
                     RegionType type = (RegionType)PInvoke.GetRgnBox(retrievedRegion, &rect);

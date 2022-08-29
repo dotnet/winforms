@@ -3925,11 +3925,11 @@ namespace System.Windows.Forms
 
                         HDC dc = useBeginPaint ? paintScope : (HDC)m.WParamInternal;
 
-                        using var savedDcState = new Gdi32.SaveDcScope(dc);
+                        using PInvoke.SaveDcScope savedDcState = new(dc);
 
                         if (getRegionSucceeded)
                         {
-                            Gdi32.SelectClipRgn(dc, dropDownRegion);
+                            PInvoke.SelectClipRgn(dc, dropDownRegion);
                         }
 
                         m.WParamInternal = (WPARAM)dc;
@@ -3937,7 +3937,7 @@ namespace System.Windows.Forms
 
                         if (getRegionSucceeded)
                         {
-                            Gdi32.SelectClipRgn(dc, windowRegion);
+                            PInvoke.SelectClipRgn(dc, windowRegion);
                         }
 
                         using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);

@@ -5848,14 +5848,14 @@ namespace System.Windows.Forms
 
             using User32.GetDcScope dc = new(Handle, default, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-            HGDIOBJ saveBrush = Gdi32.SelectObject(dc, halftone);
+            HGDIOBJ saveBrush = PInvoke.SelectObject(dc, halftone);
 
-            Gdi32.PatBlt(dc, r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
-            Gdi32.PatBlt(dc, r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
-            Gdi32.PatBlt(dc, r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
-            Gdi32.PatBlt(dc, r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
+            PInvoke.PatBlt(dc, r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
+            PInvoke.PatBlt(dc, r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
+            PInvoke.PatBlt(dc, r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
+            PInvoke.PatBlt(dc, r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
 
-            Gdi32.SelectObject(dc, saveBrush);
+            PInvoke.SelectObject(dc, saveBrush);
             PInvoke.DeleteObject(halftone);
         }
 
@@ -5867,9 +5867,9 @@ namespace System.Windows.Forms
         {
             HDC dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-            HGDIOBJ saveBrush = Gdi32.SelectObject(dc, halftone);
-            Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
-            Gdi32.SelectObject(dc, saveBrush);
+            HGDIOBJ saveBrush = PInvoke.SelectObject(dc, halftone);
+            PInvoke.PatBlt(dc, r.X, r.Y, r.Width, r.Height, ROP_CODE.PATINVERT);
+            PInvoke.SelectObject(dc, saveBrush);
             PInvoke.DeleteObject(halftone);
             User32.ReleaseDC(new HandleRef(this, Handle), dc);
         }
