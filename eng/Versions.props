@@ -13,7 +13,7 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>8.0.0-alpha.1.22429.10</VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>7.0.0-rc.1.22415.13</VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>
     <SystemDiagnosticsEventLogPackageVersion>8.0.0-alpha.1.22429.10</SystemDiagnosticsEventLogPackageVersion>
     <SystemDirectoryServicesPackageVersion>8.0.0-alpha.1.22429.10</SystemDirectoryServicesPackageVersion>
     <SystemReflectionMetadataLoadContextPackageVersion>8.0.0-alpha.1.22429.10</SystemReflectionMetadataLoadContextPackageVersion>
