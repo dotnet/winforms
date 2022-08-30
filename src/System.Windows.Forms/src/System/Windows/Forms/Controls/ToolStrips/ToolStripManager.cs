@@ -548,15 +548,25 @@ public static partial class ToolStripManager
         }
     }
 
-    internal static ToolStripRenderer CreateRenderer(ToolStripManagerRenderMode renderMode)
-    {
-        return renderMode switch
+        internal static ToolStripRenderer CreateRenderer(ToolStripManagerRenderMode renderMode)
         {
-            ToolStripManagerRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
-            ToolStripManagerRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
-            _ => new ToolStripSystemRenderer(isDefault: true),
-        };
-    }
+            switch (renderMode)
+            {
+                case ToolStripManagerRenderMode.System:
+                    return new ToolStripSystemRenderer(isDefault: true);
+                case ToolStripManagerRenderMode.Professional:
+                    if (Application.IsDarkModeEnabled)
+                    {
+                        return new ToolStripProfessionalRenderer(new DarkProfessionalColors());
+                    }
+                    
+                    return new ToolStripProfessionalRenderer(isDefault: true);
+                    
+                case ToolStripManagerRenderMode.Custom:
+                default:
+                    return new ToolStripSystemRenderer(isDefault: true);
+            }
+        }
 
     internal static ToolStripRenderer CreateRenderer(ToolStripRenderMode renderMode)
     {

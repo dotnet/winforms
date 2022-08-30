@@ -58,8 +58,9 @@ public sealed partial class Application
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public delegate bool MessageLoopCallback();
 
-    // Used to avoid recursive exit
-    private static bool s_exiting;
+        // Used to avoid recursive exit
+        private static bool s_exiting;
+        private static ThemedSystemColors s_systemColors;
 
     private static bool s_parkingWindowCreated;
 
@@ -253,7 +254,7 @@ public sealed partial class Application
                         return DarkMode.NotSupported;
                     }
 
-                    return DarkMode.Inherits;
+                    return DarkMode.Disabled;
                 }
 
                 return s_darkMode.Value;
@@ -271,6 +272,8 @@ public sealed partial class Application
 
         private static bool SetDefaultDarkModeCore(DarkMode darkMode)
         {
+            s_systemColors = null;
+            
             if (EnvironmentDarkMode == DarkMode.NotSupported)
             {
                 s_darkMode = DarkMode.NotSupported;
@@ -312,6 +315,33 @@ public sealed partial class Application
                     1 => DarkMode.Disabled,
                     _ => DarkMode.NotSupported
                 };
+            }
+        }
+
+        internal static bool IsDarkModeEnabled => DefaultDarkMode switch
+        {
+            DarkMode.Enabled => true,
+            DarkMode.Disabled => false,
+            _ => EnvironmentDarkMode switch
+            {
+                DarkMode.Enabled => true,
+                DarkMode.Disabled => false,
+                _ => throw new InvalidOperationException("DefaultDarkMode is not set.")
+            }
+        };
+
+        internal static ThemedSystemColors SystemColors
+        {
+            get
+            {
+                if (s_systemColors is null)
+                {
+                    s_systemColors = IsDarkModeEnabled
+                        ? (ThemedSystemColors)new DarkThemedSystemColors()
+                        : new LightThemedSystemColors();
+                }
+
+                return s_systemColors;
             }
         }
 
