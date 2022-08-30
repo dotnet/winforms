@@ -169,6 +169,15 @@
                                           }
                                       ],
                          "LanguageSet":  "VS_Main_Languages"
+                     },
+					 {
+                         "CloneLanguageSet":  "WiX_CloneLanguages",
+                         "LocItems":  [
+
+                                      ],
+                         "LssFiles":  [
+                                          "wxl_loc.lss"
+                                      ]
                      }
                  ]
 }
