@@ -24,13 +24,17 @@ public partial class StatusStrip : ToolStrip
     private RightToLeftLayoutGrip? _rtlLayoutGrip;
     private Orientation _lastOrientation = Orientation.Horizontal;
 
-    public StatusStrip()
-    {
-        SuspendLayout();
-        CanOverflow = false;
-        LayoutStyle = ToolStripLayoutStyle.Table;
-        RenderMode = ToolStripRenderMode.System;
-        GripStyle = ToolStripGripStyle.Hidden;
+        public StatusStrip()
+        {
+            SuspendLayout();
+            CanOverflow = false;
+            LayoutStyle = ToolStripLayoutStyle.Table;
+            
+            // Default changed for DarkMode from System to ManagerRenderMode.
+            // Also to be consistent to the MenuStrip.
+            // TODO: We'd need to quirk that!
+            RenderMode = ToolStripRenderMode.ManagerRenderMode;
+            GripStyle = ToolStripGripStyle.Hidden;
 
         SetStyle(ControlStyles.ResizeRedraw, true);
         Stretch = true;
