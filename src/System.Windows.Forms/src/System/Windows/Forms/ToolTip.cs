@@ -211,7 +211,7 @@ namespace System.Windows.Forms
                     cp.Parent = TopLevelControl.Handle;
                 }
 
-                cp.ClassName = WindowClasses.TOOLTIPS_CLASS;
+                cp.ClassName = PInvoke.TOOLTIPS_CLASS;
                 if (_showAlways)
                 {
                     cp.Style = (int)TTS.ALWAYSTIP;

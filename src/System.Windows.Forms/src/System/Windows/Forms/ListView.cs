@@ -647,7 +647,7 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                cp.ClassName = WindowClasses.WC_LISTVIEW;
+                cp.ClassName = PInvoke.WC_LISTVIEW;
 
                 // Keep the scrollbar if we are just updating styles.
                 if (IsHandleCreated)

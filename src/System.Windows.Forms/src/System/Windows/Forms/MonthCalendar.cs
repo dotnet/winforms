@@ -293,7 +293,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = WindowClasses.WC_MONTHCAL;
+                cp.ClassName = PInvoke.MONTHCAL_CLASS;
                 cp.Style |= (int)MCS.MULTISELECT | (int)MCS.DAYSTATE;
                 if (!_showToday)
                 {

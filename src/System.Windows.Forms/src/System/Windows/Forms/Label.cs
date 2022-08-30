@@ -246,7 +246,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_STATIC;
+                cp.ClassName = PInvoke.WC_STATIC;
 
                 if (OwnerDraw)
                 {

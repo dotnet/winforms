@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_PROGRESS;
+                cp.ClassName = PInvoke.PROGRESS_CLASS;
                 if (Style == ProgressBarStyle.Continuous)
                 {
                     cp.Style |= (int)ComCtl32.PBS.SMOOTH;

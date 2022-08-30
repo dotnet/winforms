@@ -131,7 +131,7 @@ namespace System.Windows.Forms
                     cparams = new CreateParams
                     {
                         Parent = Handle,
-                        ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS,
+                        ClassName = PInvoke.TOOLTIPS_CLASS,
                         Style = (int)ComCtl32.TTS.ALWAYSTIP
                     };
                     _tipWindow = new NativeWindow();

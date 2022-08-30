@@ -392,7 +392,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = WindowClasses.WC_DATETIMEPICK;
+                cp.ClassName = PInvoke.DATETIMEPICK_CLASS;
 
                 cp.Style |= (int)_style;
 
