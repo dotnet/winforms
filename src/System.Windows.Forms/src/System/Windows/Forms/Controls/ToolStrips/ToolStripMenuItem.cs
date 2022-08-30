@@ -725,9 +725,9 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
         }
 
-        image.MakeTransparent(SystemColors.Control);
-        return image;
-    }
+                image.MakeTransparent(Application.SystemColors.Control);
+                return image;
+            }
 
     internal Size GetShortcutTextSize()
     {
@@ -965,22 +965,22 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         Graphics g = e.Graphics;
         renderer.DrawMenuItemBackground(new ToolStripItemRenderEventArgs(g, this));
 
-        Color textColor = SystemColors.MenuText;
-        if (IsForeColorSet)
-        {
-            textColor = ForeColor;
-        }
-        else if (!IsTopLevel || (ToolStripManager.VisualStylesEnabled))
-        {
-            if (Selected || Pressed)
+            Color textColor = Application.SystemColors.MenuText;
+            if (IsForeColorSet)
             {
-                textColor = SystemColors.HighlightText;
+                textColor = ForeColor;
             }
-            else
+            else if (!IsTopLevel || (ToolStripManager.VisualStylesEnabled))
             {
-                textColor = SystemColors.MenuText;
+                if (Selected || Pressed)
+                {
+                    textColor = Application.SystemColors.HighlightText;
+                }
+                else
+                {
+                    textColor = Application.SystemColors.MenuText;
+                }
             }
-        }
 
         bool rightToLeft = (RightToLeft == RightToLeft.Yes);
 
@@ -1017,13 +1017,13 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
                 }
             }
 
-            if (HasDropDownItems)
-            {
-                ArrowDirection arrowDir = (rightToLeft) ? ArrowDirection.Left : ArrowDirection.Right;
-                Color arrowColor = (Selected || Pressed) ? SystemColors.HighlightText : SystemColors.MenuText;
-                arrowColor = (Enabled) ? arrowColor : SystemColors.ControlDark;
-                renderer.DrawArrow(new ToolStripArrowRenderEventArgs(g, this, menuItemInternalLayout.ArrowRectangle, arrowColor, arrowDir));
-            }
+                if (HasDropDownItems)
+                {
+                    ArrowDirection arrowDir = (rightToLeft) ? ArrowDirection.Left : ArrowDirection.Right;
+                    Color arrowColor = (Selected || Pressed) ? Application.SystemColors.HighlightText : Application.SystemColors.MenuText;
+                    arrowColor = (Enabled) ? arrowColor : Application.SystemColors.ControlDark;
+                    renderer.DrawArrow(new ToolStripArrowRenderEventArgs(g, this, menuItemInternalLayout.ArrowRectangle, arrowColor, arrowDir));
+                }
 
             if (menuItemInternalLayout.PaintImage && (DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image && Image is not null)
             {

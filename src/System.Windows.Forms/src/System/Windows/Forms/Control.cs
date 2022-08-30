@@ -1821,7 +1821,7 @@ public unsafe partial class Control :
         ///  The default BackColor of a generic top-level Control.  Subclasses may have
         ///  different defaults.
         /// </summary>
-        public static Color DefaultBackColor => SystemColors.Control;
+        public static Color DefaultBackColor => Application.SystemColors.Control;
 
     /// <summary>
     ///  Deriving classes can override this to configure a default cursor for their control.
@@ -1848,11 +1848,11 @@ public unsafe partial class Control :
         }
     }
 
-    /// <summary>
-    ///  The default ForeColor of a generic top-level Control.  Subclasses may have
-    ///  different defaults.
-    /// </summary>
-    public static Color DefaultForeColor => SystemColors.ControlText;
+        /// <summary>
+        ///  The default ForeColor of a generic top-level Control.  Subclasses may have
+        ///  different defaults.
+        /// </summary>
+        public static Color DefaultForeColor => Application.SystemColors.ControlText;
 
     protected virtual Padding DefaultMargin => CommonProperties.DefaultMargin;
 
@@ -1883,24 +1883,28 @@ public unsafe partial class Control :
         // deviceDpi may change in WmDpiChangedBeforeParent in PmV2 scenarios, so we can't cache statically.
         => ScaleHelper.IsThreadPerMonitorV2Aware ? _deviceDpi : ScaleHelper.InitialSystemDpi;
 
-    // The color to use when drawing disabled text.  Normally we use BackColor,
-    // but that obviously won't work if we're transparent.
-    internal Color DisabledColor
-    {
-        get
+        // The color to use when drawing disabled text.  Normally we use BackColor,
+        // but that obviously won't work if we're transparent.
+        internal Color DisabledColor
         {
-            Color color = BackColor;
-            if (color.A == 0)
+            get
             {
-                Control? control = ParentInternal;
-                while (color.A == 0)
+                if (foo is null)
                 {
-                    if (control is null)
+                    return;
+                }
+                Color color = BackColor;
+                if (color.A == 0)
+                {
+                    Control? control = ParentInternal;
+                    while (color.A == 0)
                     {
-                        // Don't know what to do, this seems good as anything
-                        color = SystemColors.Control;
-                        break;
-                    }
+                        if (control is null)
+                        {
+                            // Don't know what to do, this seems good as anything
+                            color = Application.SystemColors.Control;
+                            break;
+                        }
 
                     color = control.BackColor;
                     control = control.ParentInternal;
@@ -8670,7 +8674,7 @@ public unsafe partial class Control :
             // For whatever reason, our parent can't paint our background, but we need some kind of background
             // since we're transparent.
             using DeviceContextHdcScope hdcNoParent = new(e);
-            using CreateBrushScope hbrush = new(SystemColors.Control);
+            using CreateBrushScope hbrush = new(Application.SystemColors.Control);
             hdcNoParent.FillRectangle(rectangle, hbrush);
             return;
         }

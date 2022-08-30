@@ -42,9 +42,4 @@ namespace System.Windows.Forms
         public virtual Color GradientInactiveCaption { get; } = SystemColors.GradientActiveCaption;
         public virtual Color WindowText { get; } = SystemColors.WindowText;
     }
-
-    internal class DarkThemedSystemColors : ThemedSystemColors
-    {
-        public override Color Control => Color.FromArgb(0xFF, 0x20, 0x20, 0x20);
-    }
 }
