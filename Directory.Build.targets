@@ -65,8 +65,8 @@
   <ItemGroup>
     <!-- Set TargetingPackVersion -->
     <FrameworkReference Update="Microsoft.NETCore.App"
-      Condition=" '$(MicrosoftNETCoreAppRuntimewinx64PackageVersion)'!='' And $(TargetFramework.StartsWith('net7.')) ">
-    <TargetingPackVersion>$(MicrosoftNETCoreAppRuntimewinx64PackageVersion)</TargetingPackVersion>
+      Condition=" '$(Microsoft.NETCore.App.Ref)'!='' And $(TargetFramework.StartsWith('net7.')) ">
+    <TargetingPackVersion>$(Microsoft.NETCore.App.Ref)</TargetingPackVersion>
     </FrameworkReference>
   </ItemGroup>
 
