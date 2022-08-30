@@ -7,9 +7,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
 -->
 <Dependencies>
   <ProductDependencies>
-    <Dependency Name="VS.Redist.Common.NetCore.SharedFramework.x64.8.0" Version="8.0.0-alpha.1.22429.10">
+    <Dependency Name="VS.Redist.Common.NetCore.SharedFramework.x64.8.0" Version="7.0.0-rc.1.22415.13">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>bc9c37105c87b1f763692a33c0304e4e81fbbb92</Sha>
+      <Sha>7d981168a2a2ed7d2190776a08ece88665cba727</Sha>
     </Dependency>
     <Dependency Name="Microsoft.NETCore.Platforms" Version="8.0.0-alpha.1.22429.10">
       <Uri>https://github.com/dotnet/runtime</Uri>
