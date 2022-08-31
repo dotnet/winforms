@@ -2,17 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-internal partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Shell32
+    internal static partial class PInvoke
     {
-        public enum SIATTRIBFLAGS : uint
+        public static void DragAcceptFiles(IHandle hWnd, BOOL fAccept)
         {
-            AND = 0x1,
-            OR = 0x2,
-            APPCOMPAT = 0x3,
-            MASK = 0x3,
-            ALLITEMS = 0x4000
+            DragAcceptFiles((HWND)hWnd.Handle, fAccept);
+            GC.KeepAlive(hWnd);
         }
     }
 }
