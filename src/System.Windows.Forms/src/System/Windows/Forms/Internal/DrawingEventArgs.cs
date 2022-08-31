@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -140,7 +139,7 @@ namespace System.Windows.Forms
 
             if (!_oldPalette.IsNull && !_hdc.IsNull)
             {
-                Gdi32.SelectPalette(_hdc, _oldPalette, false);
+                PInvoke.SelectPalette(_hdc, _oldPalette, bForceBkgd: false);
                 _oldPalette = default;
             }
         }

@@ -126,14 +126,14 @@ namespace System.Windows.Forms
 
             // Create a compatible DC to render the source bitmap.
             using PInvoke.CreateDcScope sourceDC = new(screenDC);
-            using Gdi32.SelectObjectScope sourceBitmapSelection = new(sourceDC, hBitmap);
+            using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, hBitmap);
 
             // Create a compatible DC and a new compatible bitmap.
             using PInvoke.CreateDcScope destinationDC = new(screenDC);
             HBITMAP bitmap = PInvoke.CreateCompatibleBitmap(screenDC, bm.Size.Width, bm.Size.Height);
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-            using Gdi32.SelectObjectScope destinationBitmapSelection = new(destinationDC, bitmap);
+            using PInvoke.SelectObjectScope destinationBitmapSelection = new(destinationDC, bitmap);
             PInvoke.BitBlt(
                 destinationDC,
                 0,

@@ -3807,7 +3807,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 var hFont = (HFONT)Font.ToHfont();
                 using (PInvoke.ObjectScope fontScope = new(hFont))
                 {
-                    using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
+                    using PInvoke.SelectObjectScope fontSelection = new(hdc, hFont);
 
                     selectionIndex = GetCurrentValueIndex(gridEntry);
                     if (rgItems is not null && rgItems.Length > 0)

@@ -21,11 +21,11 @@ namespace System.Windows.Forms.Tests
             // Create a bitmap using the screen's stats
             using PInvoke.CreateDcScope dcScope = new(default);
             using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
-            Gdi32.SelectObject(dcScope, bitmapScope);
+            PInvoke.SelectObject(dcScope, bitmapScope);
 
             // Select a clipping region into the DC
             using var dcRegion = new PInvoke.RegionScope(2, 1, 4, 7);
-            RegionType type = Gdi32.SelectClipRgn(dcScope, dcRegion);
+            RegionType type = (RegionType)PInvoke.SelectClipRgn(dcScope, dcRegion);
             Assert.Equal(RegionType.SIMPLEREGION, type);
 
             using var test = new PInvoke.RegionScope(0, 0, 0, 0);
@@ -62,11 +62,11 @@ namespace System.Windows.Forms.Tests
             using PInvoke.CreateDcScope dcScope = new(default);
             using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
             HDC_MAP_MODE originalMapMode = (HDC_MAP_MODE)PInvoke.SetMapMode(dcScope, HDC_MAP_MODE.MM_HIMETRIC);
-            Gdi32.SelectObject(dcScope, bitmapScope);
+            PInvoke.SelectObject(dcScope, bitmapScope);
 
             using PInvoke.CreateBrushScope blueBrush = new(Color.Blue);
             using PInvoke.CreateBrushScope redBrush = new(Color.Red);
-            Gdi32.SelectObject(dcScope, blueBrush);
+            PInvoke.SelectObject(dcScope, blueBrush);
 
             using Graphics graphics = dcScope.CreateGraphics();
             HGDIOBJ current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(dcScope.HDC, (HDC)hdc);
                 current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
                 Assert.Equal(blueBrush.HBRUSH, (HBRUSH)current);
-                Gdi32.SelectObject(dcScope, redBrush);
+                PInvoke.SelectObject(dcScope, redBrush);
             }
             finally
             {

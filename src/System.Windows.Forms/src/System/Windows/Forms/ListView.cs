@@ -2673,7 +2673,7 @@ namespace System.Windows.Forms
                             _odCacheFont = new Font(_odCacheFont, FontStyle.Bold);
                             _odCacheFontHandleWrapper = new FontHandleWrapper(_odCacheFont);
                             _odCacheFontHandle = _odCacheFontHandleWrapper.Handle;
-                            Gdi32.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
+                            PInvoke.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
                             m.ResultInternal = (LRESULT)(nint)CDRF.NEWFONT;
                         }
 
@@ -2974,7 +2974,7 @@ namespace System.Windows.Forms
                             // safety net code just in case
                             if (_odCacheFont is not null)
                             {
-                                Gdi32.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandle);
+                                PInvoke.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandle);
                             }
                         }
                         else
@@ -2985,7 +2985,7 @@ namespace System.Windows.Forms
                             }
 
                             _odCacheFontHandleWrapper = new FontHandleWrapper(subItemFont);
-                            Gdi32.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
+                            PInvoke.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
                         }
 
                         if (!dontmess)

@@ -759,7 +759,7 @@ namespace System.Windows.Forms
             // We must do the same here if our dialogs are to scale in a
             // similar fashion.
 
-            using Gdi32.SelectObjectScope fontSelection = new(dc, FontHandle);
+            using PInvoke.SelectObjectScope fontSelection = new(dc, FontHandle);
 
             TEXTMETRICW tm = default;
             PInvoke.GetTextMetrics(dc, &tm);

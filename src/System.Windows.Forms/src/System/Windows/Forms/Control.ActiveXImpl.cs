@@ -438,13 +438,15 @@ namespace System.Windows.Forms
                     // we back-convert prcBounds so that we convert it to this coordinate
                     // system. This puts us in the most similar coordinates as we currently
                     // use.
-                    Gdi32.LPtoDP(hdc, ref rc, 2);
+                    Point p1 = new(rc.left, rc.top);
+                    Point p2 = new(rc.right - rc.left, rc.bottom - rc.top);
+                    PInvoke.LPtoDP(hdc, new Point[] { p1, p2 }.AsSpan());
 
                     iMode = (HDC_MAP_MODE)PInvoke.SetMapMode(hdc, HDC_MAP_MODE.MM_ANISOTROPIC);
                     PInvoke.SetWindowOrgEx(hdc, 0, 0, &pW);
                     PInvoke.SetWindowExtEx(hdc, _control.Width, _control.Height, (SIZE*)&sWindowExt);
-                    PInvoke.SetViewportOrgEx(hdc, rc.left, rc.top, &pVp);
-                    PInvoke.SetViewportExtEx(hdc, rc.right - rc.left, rc.bottom - rc.top, (SIZE*)&sViewportExt);
+                    PInvoke.SetViewportOrgEx(hdc, p1.X, p1.Y, &pVp);
+                    PInvoke.SetViewportExtEx(hdc, p2.X, p2.Y, (SIZE*)&sViewportExt);
                 }
 
                 // Now do the actual drawing.  We must ask all of our children to draw as well.

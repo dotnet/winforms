@@ -2,14 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
         ///  Helper to scope lifetime of a saved device context state.
         /// </summary>
         /// <remarks>
+        ///  <para>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by <see langword="ref" />
         ///  to avoid duplicating the handle and risking a double restore.
         ///
@@ -18,6 +19,7 @@ internal static partial class Interop
         ///
         ///  Ideally saving the entire DC state can be avoided for simple drawing operations and relying on restoring
         ///  individual state pieces can be done instead (putting back the original pen, etc.).
+        ///  </para>
         /// </remarks>
         public readonly ref struct SaveDcScope
         {

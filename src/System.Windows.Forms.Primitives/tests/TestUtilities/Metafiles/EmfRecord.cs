@@ -11,17 +11,17 @@ namespace System.Windows.Forms.Metafiles
     internal unsafe readonly struct EmfRecord
     {
         public HDC HDC { get; }
-        private readonly HGDIOBJ* _lpht;
-        private readonly Gdi32.ENHMETARECORD* _lpmr;
+        private readonly HANDLETABLE* _lpht;
+        private readonly ENHMETARECORD* _lpmr;
         private readonly int _nHandles;
-        public IntPtr Data { get; }
+        public LPARAM Data { get; }
 
         public EmfRecord(
             HDC hdc,
-            HGDIOBJ* lpht,
-            Gdi32.ENHMETARECORD* lpmr,
+            HANDLETABLE* lpht,
+            ENHMETARECORD* lpmr,
             int nHandles,
-            IntPtr data)
+            LPARAM data)
         {
             HDC = hdc;
             _lpht = lpht;
@@ -30,8 +30,8 @@ namespace System.Windows.Forms.Metafiles
             Data = data;
         }
 
-        public Gdi32.EMR Type => _lpmr->iType;
-        public ReadOnlySpan<uint> Params => _lpmr->dParm;
+        public Gdi32.EMR Type => (Gdi32.EMR)_lpmr->iType;
+        public ReadOnlySpan<uint> Params => new(_lpmr->dParm.ToArray());
         public ReadOnlySpan<HGDIOBJ> Handles => new(_lpht, _nHandles);
 
         public ENHMETAHEADER* HeaderRecord => Type == Gdi32.EMR.HEADER ? (ENHMETAHEADER*)_lpmr : null;
