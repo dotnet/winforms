@@ -58,6 +58,8 @@ variables:
     value: true
   - name: EnableLoc
     value: false
+  - name: NativeToolsOnMachine
+    value: true
   - name: isPublic
     value: ${{ eq(variables['System.TeamProject'], 'public') }}
   - name: isPR
