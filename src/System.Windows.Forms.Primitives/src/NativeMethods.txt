@@ -5,8 +5,10 @@ AdjustWindowRectEx
 AdjustWindowRectExForDpi
 AUTOCOMPLETEOPTIONS
 BeginPaint
+BIF_*
 BitBlt
 BlockInput
+BROWSEINFOW
 CallNextHookEx
 CallWindowProc
 CloseEnhMetaFile
@@ -206,9 +208,13 @@ SetWindowExtEx
 SetWindowOrgEx
 SetWindowsHookEx
 SHCreateItemFromParsingName
+SHBrowseForFolder
+SHCreateShellItem
 SHDRAGIMAGE
 ShellExecute
 SHGetKnownFolderPath
+SHGetPathFromIDList
+SHGetSpecialFolderLocation
 ShowCursor
 SHGetSpecialFolderLocation
 SHParseDisplayName
