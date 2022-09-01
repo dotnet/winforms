@@ -72,7 +72,7 @@ public class DragDropTests : ControlTestBase
             // Open the Resources directory and set focus on DragAccept.rtf
             string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
             Process.Start("explorer.exe", $"/select,\"{dragAcceptRtfPath}\"");
-            WaitForExplorer(Resources);
+            WaitForAndMaximizeExplorer(Resources);
             Assert.True(IsExplorerOpen(Resources));
 
             // Create a CUIAutomation object and obtain the IUIAutomation interface
@@ -382,13 +382,22 @@ public class DragDropTests : ControlTestBase
         return false;
     }
 
-    private void WaitForExplorer(string directory)
+    private void WaitForAndMaximizeExplorer(string directory)
     {
         int wait = 0, maxWait = 40;
         while (!IsExplorerOpen(directory) && wait++ < maxWait)
         {
             TestOutputHelper.WriteLine($"Waiting for Explorer to open, wait {wait}");
             Thread.Sleep(DragDropDelayMS);
+        }
+
+        foreach (Process process in Process.GetProcesses())
+        {
+            if (process.ProcessName == Explorer && process.MainWindowTitle == directory)
+            {
+                TestOutputHelper.WriteLine($"Maximize Explorer");
+                User32.ShowWindow(process.MainWindowHandle, User32.SW.MAXIMIZE);
+            }
         }
     }
 
