@@ -69,10 +69,14 @@ public class DragDropTests : ControlTestBase
 
         try
         {
+            int horizontalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
+            int verticalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
+            TestOutputHelper.WriteLine($"Screen resolution of ({horizontalResolution}, {verticalResolution})");
+
             // Open the Resources directory and set focus on DragAccept.rtf
             string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
             Process.Start("explorer.exe", $"/select,\"{dragAcceptRtfPath}\"");
-            WaitForAndMaximizeExplorer(Resources);
+            WaitForExplorer(Resources);
             Assert.True(IsExplorerOpen(Resources));
 
             // Create a CUIAutomation object and obtain the IUIAutomation interface
@@ -102,9 +106,11 @@ public class DragDropTests : ControlTestBase
                 var endRect = form.RichTextBoxDropTarget.DisplayRectangle;
                 var centerOfEndtRect = new Point(endRect.Left, endRect.Top) + new Size(endRect.Width / 2, endRect.Height / 2);
                 var endCoordinates = form.RichTextBoxDropTarget.PointToScreen(centerOfEndtRect);
-                var virtualPointStart = ToVirtualPoint(startCoordinates);
-                var virtualPointEnd = ToVirtualPoint(endCoordinates);
 
+                var virtualPointStart = new Point((int)Math.Round((65535.0 / horizontalResolution) * startCoordinates.X),
+                    (int)Math.Round((65535.0 / verticalResolution) * startCoordinates.Y));
+                var virtualPointEnd = new Point((int)Math.Round((65535.0 / horizontalResolution) * endCoordinates.X),
+                    (int)Math.Round((65535.0 / verticalResolution) * endCoordinates.Y));
                 TestOutputHelper.WriteLine($"virtualPointStart: {virtualPointStart}");
                 TestOutputHelper.WriteLine($"virtualPointEnd: {virtualPointEnd}");
 
@@ -382,7 +388,7 @@ public class DragDropTests : ControlTestBase
         return false;
     }
 
-    private void WaitForAndMaximizeExplorer(string directory)
+    private void WaitForExplorer(string directory)
     {
         int wait = 0, maxWait = 40;
         while (!IsExplorerOpen(directory) && wait++ < maxWait)
@@ -395,8 +401,8 @@ public class DragDropTests : ControlTestBase
         {
             if (process.ProcessName == Explorer && process.MainWindowTitle == directory)
             {
-                TestOutputHelper.WriteLine($"Maximize Explorer");
-                User32.ShowWindow(process.MainWindowHandle, User32.SW.MAXIMIZE);
+                TestOutputHelper.WriteLine($"Restore Explorer to its original size and position");
+                User32.ShowWindow(process.MainWindowHandle, User32.SW.NORMAL);
             }
         }
     }
