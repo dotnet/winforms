@@ -87,6 +87,9 @@ public class DragDropTests : ControlTestBase
             Assert.True(uiAutomationElement?.GetClickablePoint(out clickable, out gotClickable).Succeeded());
             Assert.True(gotClickable);
 
+            TestOutputHelper.WriteLine($"gotClickable: {gotClickable}");
+            TestOutputHelper.WriteLine($"clickable: {clickable}");
+
             // Drag DragAccept.rtf from Explorer to RichTextBox
             await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
             {
@@ -101,6 +104,9 @@ public class DragDropTests : ControlTestBase
                 var endCoordinates = form.RichTextBoxDropTarget.PointToScreen(centerOfEndtRect);
                 var virtualPointStart = ToVirtualPoint(startCoordinates);
                 var virtualPointEnd = ToVirtualPoint(endCoordinates);
+
+                TestOutputHelper.WriteLine($"virtualPointStart: {virtualPointStart}");
+                TestOutputHelper.WriteLine($"virtualPointEnd: {virtualPointEnd}");
 
                 await InputSimulator.SendAsync(
                     form,
@@ -123,13 +129,17 @@ public class DragDropTests : ControlTestBase
                             .Sleep(DragDropDelayMS)
                             .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
                             .Sleep(DragDropDelayMS)
+                            .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                            .Sleep(DragDropDelayMS)
                             .LeftButtonClick()
                             .Sleep(DragDropDelayMS));
 
                 Assert.NotNull(form);
                 Assert.NotNull(form.RichTextBoxDropTarget);
-                Assert.False(string.IsNullOrWhiteSpace(form.RichTextBoxDropTarget.Rtf));
-                Assert.False(string.IsNullOrWhiteSpace(form.RichTextBoxDropTarget.Text));
+                Assert.False(string.IsNullOrWhiteSpace(form.RichTextBoxDropTarget.Rtf),
+                    $"Actual form.RichTextBoxDropTarget.Rtf: {form.RichTextBoxDropTarget.Rtf}");
+                Assert.False(string.IsNullOrWhiteSpace(form.RichTextBoxDropTarget.Text),
+                    $"Actual form.RichTextBoxDropTarget.Text: {form.RichTextBoxDropTarget.Text}");
                 Assert.Equal(dragAcceptRtfContent, form.RichTextBoxDropTarget?.Rtf);
                 Assert.Equal(dragAcceptRtfTextContent, form.RichTextBoxDropTarget?.Text);
             });
@@ -374,9 +384,10 @@ public class DragDropTests : ControlTestBase
 
     private void WaitForExplorer(string directory)
     {
-        int wait = 0, maxWait = 20;
+        int wait = 0, maxWait = 40;
         while (!IsExplorerOpen(directory) && wait++ < maxWait)
         {
+            TestOutputHelper.WriteLine($"Waiting for Explorer to open, wait {wait}");
             Thread.Sleep(DragDropDelayMS);
         }
     }
