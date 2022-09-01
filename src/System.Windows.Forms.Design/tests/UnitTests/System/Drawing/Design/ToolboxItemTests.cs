@@ -1321,8 +1321,8 @@ namespace System.Drawing.Design.Tests
             mockDesignerHost
                 .Setup(h => h.GetService(typeof(ITypeResolutionService)))
                 .Returns(null);
-            Assert.Throws<ArgumentException>(null, () => item.GetType(mockDesignerHost.Object, new AssemblyName(), "typeName", false));
-            Assert.Throws<ArgumentException>(null, () => item.GetType(null, new AssemblyName(), "typeName", false));
+            Assert.Throws<ArgumentException>(() => item.GetType(mockDesignerHost.Object, new AssemblyName(), "typeName", false));
+            Assert.Throws<ArgumentException>(() => item.GetType(null, new AssemblyName(), "typeName", false));
         }
 
         public static IEnumerable<object[]> Initialize_TypeWithAttributes_TestData()

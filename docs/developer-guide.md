@@ -39,14 +39,14 @@ You first need to [fork][fork] then [clone][clone] this Windows Forms repository
 ## More Information
 
 * [.NET Docs and Guidelines][net-runtime-instructions]
-* ["up-for-grabs" issues][up-for-grabs]
+* ["help wanted" issues][help wanted]
 
 [comment]: <> (URI Links)
 
 [net-runtime-instructions]: https://github.com/dotnet/runtime/tree/master/docs
 [fork]: https://guides.github.com/activities/forking/
 [clone]: https://www.git-scm.com/docs/git-clone
-[up-for-grabs]: https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aup-for-grabs
+[help wanted]: https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3A"help%20wanted"
 [chocolatey]: https://chocolatey.org/
 [cmake-download]: https://cmake.org/download/
 [required-individual-components]: ../WinForms.vsconfig

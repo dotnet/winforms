@@ -16,8 +16,8 @@ stages:
         enableRichCodeNavigation: true
         richCodeNavigationEnvironment: 'production'
         pool:
-          name: NetCore1ESPool-Public
-          demands: ImageOverride -equals Build.Windows.Amd64.VS2022.Pre.Open
+          name: NetCore-Public
+          demands: ImageOverride -equals windows.vs2022preview.amd64.open
 
         steps:
         - checkout: self

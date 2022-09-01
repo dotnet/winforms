@@ -877,7 +877,7 @@ namespace System.Windows.Forms.Tests
             using var owner = new TabControl();
             var collection = new TabControl.ControlCollection(owner);
             using var value = new Control();
-            Assert.Throws<ArgumentException>(null, () => collection.Add(value));
+            Assert.Throws<ArgumentException>(() => collection.Add(value));
         }
 
         [WinFormsFact]

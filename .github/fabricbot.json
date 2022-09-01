@@ -1538,7 +1538,7 @@
           {
             "name": "labelAdded",
             "parameters": {
-              "label": "up-for-grabs"
+              "label": "help wanted"
             }
           }
         ]
@@ -1552,17 +1552,17 @@
         {
           "name": "addMilestone",
           "parameters": {
-            "milestoneName": "Up-for-grabs"
+            "milestoneName": "Help wanted"
           }
         },
         {
           "name": "addReply",
           "parameters": {
-            "comment": "This issue is now marked as \"up for grabs\", and we’re looking for a community volunteer to work on this issue. If we receive no interest in 120 days, we will close the issue. To learn more about how we handle feature requests, please see our [documentation](https://aka.ms/winforms/issue-lifecycle).\n\nHappy Coding!"
+            "comment": "This issue is now marked as \"help wanted\", and we’re looking for a community volunteer to work on this issue. If we receive no interest in 180 days, we will close the issue. To learn more about how we handle feature requests, please see our [documentation](https://aka.ms/winforms/issue-lifecycle).\n\nHappy Coding!"
           }
         }
       ],
-      "taskName": "Up-for-grabs: labelled"
+      "taskName": "help wanted: labelled"
     }
   },
   {

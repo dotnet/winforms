@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Tests
         {
             using var value = new PrivateDefaultConstructor(-1);
             var converter = new ColumnHeaderConverter();
-            Assert.Throws<ArgumentException>(null, () => converter.ConvertTo(value, typeof(InstanceDescriptor)));
+            Assert.Throws<ArgumentException>(() => converter.ConvertTo(value, typeof(InstanceDescriptor)));
         }
 
         [Theory]
