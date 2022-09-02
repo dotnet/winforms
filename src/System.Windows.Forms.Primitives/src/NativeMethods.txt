@@ -3,6 +3,7 @@ ActivateActCtx
 ActivateKeyboardLayout
 AdjustWindowRectEx
 AdjustWindowRectExForDpi
+AreDpiAwarenessContextsEqual
 AUTOCOMPLETEOPTIONS
 BeginPaint
 BIF_*
@@ -48,6 +49,12 @@ DISP_E_EXCEPTION
 DISP_E_MEMBERNOTFOUND
 DISP_E_PARAMNOTFOUND
 DISP_E_UNKNOWNNAME
+DPI_AWARENESS
+DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE 
+DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+DPI_AWARENESS_CONTEXT_SYSTEM_AWARE
+DPI_AWARENESS_CONTEXT_UNAWARE 
+DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED
 DragAcceptFiles
 DRAGDROP_E_ALREADYREGISTERED
 DRAGDROP_E_NOTREGISTERED
@@ -80,6 +87,7 @@ GET_MODULE_HANDLE_EX_FLAG*
 GetActiveWindow
 GetAncestor
 GetAsyncKeyState
+GetAwarenessFromDpiAwarenessContext
 GetBitmapBits
 GetBkColor
 GetBkMode
@@ -98,6 +106,8 @@ GetCurrentThread
 GetCurrentThreadId
 GetDeviceCaps
 GetDIBits
+GetDpiForSystem
+GetDpiForWindow
 GetExitCodeThread
 GetFocus
 GetForegroundWindow
@@ -128,12 +138,14 @@ GetTextColor
 GetTextExtentPoint32W
 GetTextMetrics
 GetThemeFont
+GetThreadDpiAwarenessContext
 GetThreadLocale
 GetTickCount
 GetUpdateRect
 GetViewportExtEx
 GetViewportOrgEx
 GetWindow
+GetWindowDpiAwarenessContext
 GetWindowRect
 GetWindowThreadProcessId
 GetWorldTransform
@@ -152,6 +164,8 @@ INPLACE_E_NOTOOLSPACE
 IntersectClipRect
 InvalidateRect
 IsChild
+IsProcessDPIAware
+IsValidDpiAwarenessContext
 IsWindow
 IsWindowVisible
 LineTo
@@ -198,10 +212,13 @@ SetBkMode
 SetFocus
 SetMapMode
 SetParent
+SetProcessDPIAware
+SetProcessDpiAwarenessContext
 SetROP2
 SetSuspendState
 SetTextAlign
 SetTextColor
+SetThreadDpiAwarenessContext
 SetViewportExtEx
 SetViewportOrgEx
 SetWindowExtEx
