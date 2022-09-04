@@ -13,34 +13,34 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>8.0.0-alpha.1.22452.15</VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>
-    <SystemDiagnosticsEventLogPackageVersion>8.0.0-alpha.1.22452.15</SystemDiagnosticsEventLogPackageVersion>
-    <SystemDirectoryServicesPackageVersion>8.0.0-alpha.1.22452.15</SystemDirectoryServicesPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>8.0.0-alpha.1.22452.15</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemSecurityCryptographyXmlPackageVersion>8.0.0-alpha.1.22452.15</SystemSecurityCryptographyXmlPackageVersion>
-    <SystemIOPackagingPackageVersion>8.0.0-alpha.1.22452.15</SystemIOPackagingPackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>8.0.0-alpha.1.22453.2</VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>
+    <SystemDiagnosticsEventLogPackageVersion>8.0.0-alpha.1.22453.2</SystemDiagnosticsEventLogPackageVersion>
+    <SystemDirectoryServicesPackageVersion>8.0.0-alpha.1.22453.2</SystemDirectoryServicesPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>8.0.0-alpha.1.22453.2</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemSecurityCryptographyXmlPackageVersion>8.0.0-alpha.1.22453.2</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemIOPackagingPackageVersion>8.0.0-alpha.1.22453.2</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>8.0.0-alpha.1.22452.15</MicrosoftNETCoreILDAsmPackageVersion>
-    <SystemDiagnosticsPerformanceCounterPackageVersion>8.0.0-alpha.1.22452.15</SystemDiagnosticsPerformanceCounterPackageVersion>
-    <SystemSecurityCryptographyPkcsPackageVersion>8.0.0-alpha.1.22452.15</SystemSecurityCryptographyPkcsPackageVersion>
-    <SystemSecurityCryptographyProtectedDataPackageVersion>8.0.0-alpha.1.22452.15</SystemSecurityCryptographyProtectedDataPackageVersion>
-    <SystemTextEncodingsWebPackageVersion>8.0.0-alpha.1.22452.15</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>8.0.0-alpha.1.22452.15</SystemTextJsonPackageVersion>
-    <SystemThreadingAccessControlPackageVersion>8.0.0-alpha.1.22452.15</SystemThreadingAccessControlPackageVersion>
-    <MicrosoftWin32RegistryAccessControlPackageVersion>8.0.0-alpha.1.22452.15</MicrosoftWin32RegistryAccessControlPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>8.0.0-alpha.1.22452.15</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>8.0.0-alpha.1.22452.15</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>8.0.0-alpha.1.22452.15</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>8.0.0-alpha.1.22452.15</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>8.0.0-alpha.1.22452.15</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>8.0.0-alpha.1.22452.15</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>8.0.0-alpha.1.22452.15</SystemDrawingCommonPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>8.0.0-alpha.1.22452.15</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>8.0.0-alpha.1.22452.15</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>8.0.0-alpha.1.22452.15</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>8.0.0-alpha.1.22452.15</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>8.0.0-alpha.1.22452.15</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>8.0.0-alpha.1.22452.15</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>8.0.0-alpha.1.22453.2</MicrosoftNETCoreILDAsmPackageVersion>
+    <SystemDiagnosticsPerformanceCounterPackageVersion>8.0.0-alpha.1.22453.2</SystemDiagnosticsPerformanceCounterPackageVersion>
+    <SystemSecurityCryptographyPkcsPackageVersion>8.0.0-alpha.1.22453.2</SystemSecurityCryptographyPkcsPackageVersion>
+    <SystemSecurityCryptographyProtectedDataPackageVersion>8.0.0-alpha.1.22453.2</SystemSecurityCryptographyProtectedDataPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>8.0.0-alpha.1.22453.2</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>8.0.0-alpha.1.22453.2</SystemTextJsonPackageVersion>
+    <SystemThreadingAccessControlPackageVersion>8.0.0-alpha.1.22453.2</SystemThreadingAccessControlPackageVersion>
+    <MicrosoftWin32RegistryAccessControlPackageVersion>8.0.0-alpha.1.22453.2</MicrosoftWin32RegistryAccessControlPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>8.0.0-alpha.1.22453.2</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>8.0.0-alpha.1.22453.2</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>8.0.0-alpha.1.22453.2</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>8.0.0-alpha.1.22453.2</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>8.0.0-alpha.1.22453.2</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>8.0.0-alpha.1.22453.2</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>8.0.0-alpha.1.22453.2</SystemDrawingCommonPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>8.0.0-alpha.1.22453.2</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>8.0.0-alpha.1.22453.2</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>8.0.0-alpha.1.22453.2</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>8.0.0-alpha.1.22453.2</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>8.0.0-alpha.1.22453.2</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>8.0.0-alpha.1.22453.2</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
@@ -72,7 +72,7 @@
     <InputSimulatorPlusVersion>1.0.7</InputSimulatorPlusVersion>
     <MicrosoftVisualStudioThreadingVersion>17.0.15-alpha</MicrosoftVisualStudioThreadingVersion>
     <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
-    <MicrosoftWindowsCompatibilityVersion>8.0.0-alpha.1.22452.15</MicrosoftWindowsCompatibilityVersion>
+    <MicrosoftWindowsCompatibilityVersion>8.0.0-alpha.1.22453.2</MicrosoftWindowsCompatibilityVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <VerifyXunitVersion>14.2.0</VerifyXunitVersion>
   </PropertyGroup>
