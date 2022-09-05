@@ -30,7 +30,6 @@ namespace System.Windows.Forms
                 _owningMonthCalendar = owner;
 
                 _owningMonthCalendar.DisplayRangeChanged += OnMonthCalendarStateChanged;
-                _owningMonthCalendar.CalendarViewChanged += OnMonthCalendarStateChanged;
             }
 
             // Use a LinkedList instead a List for the following reasons:
@@ -519,7 +518,6 @@ namespace System.Windows.Forms
                 {
                     calendar.DisconnectChildren();
                     UiaCore.UiaDisconnectProvider(calendar);
-                    calendar.CalendarBodyAccessibleObject.ClearChildCollection();
                 }
 
                 _calendarsAccessibleObjects = null;

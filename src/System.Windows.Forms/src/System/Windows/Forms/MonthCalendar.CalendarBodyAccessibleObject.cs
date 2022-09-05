@@ -69,19 +69,6 @@ namespace System.Windows.Forms
                 _rowsAccessibleObjects = null;
             }
 
-            internal void ClearChildCollection()
-            {
-                if (RowsAccessibleObjects is not null)
-                {
-                    foreach (CalendarRowAccessibleObject row in RowsAccessibleObjects)
-                    {
-                        row.ClearChildCollection();
-                    }
-                }
-
-                _rowsAccessibleObjects = null;
-            }
-
             /// <remark>
             ///  A calendar always have 7 or 4 columns depending on its view.
             /// </remark>
