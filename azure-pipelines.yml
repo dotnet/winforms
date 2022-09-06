@@ -54,8 +54,12 @@ variables:
   # clean the local repo on the build agents
   - name: Build.Repository.Clean
     value: true
-  - name: PostBuildSign
-    value: true
+  - ${{ if or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/internal/release/')) }}:
+    - name: PostBuildSign
+      value: false
+  - ${{ else }}:
+    - name: PostBuildSign
+      value: true
   - name: EnableLoc
     value: false
   - name: NativeToolsOnMachine
