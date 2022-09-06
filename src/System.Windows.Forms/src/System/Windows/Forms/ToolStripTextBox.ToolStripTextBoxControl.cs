@@ -107,8 +107,6 @@ namespace System.Windows.Forms
 
             public ToolStripTextBox? Owner { get; set; }
 
-            internal override bool SupportsUiaProviders => true;
-
             private unsafe void InvalidateNonClient()
             {
                 if (!IsPopupTextBox)

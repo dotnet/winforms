@@ -2652,7 +2652,6 @@ override System.Windows.Forms.DataGridViewTextBoxCell.DetachEditingControl() -> 
 override System.Windows.Forms.DataGridViewTextBoxCell.OnEnter(int rowIndex, bool throughMouseClick) -> void
 override System.Windows.Forms.DataGridViewTextBoxCell.OnLeave(int rowIndex, bool throughMouseClick) -> void
 override System.Windows.Forms.DataGridViewTextBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnGotFocus(System.EventArgs! e) -> void
 override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
 override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnTextChanged(System.EventArgs! e) -> void

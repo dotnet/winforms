@@ -58,11 +58,43 @@ namespace System.Windows.Forms
                 {
                     UIA.TextPatternId => true,
                     UIA.TextPattern2Id => true,
+                    UIA.ValuePatternId => true,
                     _ => base.IsPatternSupported(patternId)
                 };
 
-            internal override bool IsReadOnly
-                => Owner is TextBoxBase textBoxBase && textBoxBase.ReadOnly;
+            internal override bool IsReadOnly => _owningTextBoxBase.ReadOnly;
+
+            public override string? Name
+            {
+                get
+                {
+                    var name = base.Name;
+                    return name != null || !_owningTextBoxBase.PasswordProtect ? name : string.Empty;
+                }
+                set => base.Name = value;
+            }
+
+            public override string? Value => !_owningTextBoxBase.PasswordProtect ? ValueInternal : SR.AccessDenied;
+
+            protected virtual string ValueInternal => Owner.Text;
+
+            internal override void SetFocus()
+            {
+                if (!Owner.IsHandleCreated)
+                {
+                    return;
+                }
+
+                base.SetFocus();
+
+                RaiseAutomationEvent(UIA.AutomationFocusChangedEventId);
+            }
+
+            internal override void SetValue(string? newValue)
+            {
+                Owner.Text = newValue;
+                base.SetValue(newValue);
+            }
 
             internal override ITextRangeProvider? DocumentRangeInternal
                 => _textProvider?.DocumentRange;

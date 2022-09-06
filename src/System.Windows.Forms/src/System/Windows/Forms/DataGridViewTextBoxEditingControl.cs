@@ -24,9 +24,7 @@ namespace System.Windows.Forms
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new DataGridViewTextBoxEditingControlAccessibleObject(this);
-        }
+            => new DataGridViewTextBoxEditingControlAccessibleObject(this);
 
         public virtual DataGridView? EditingControlDataGridView
         {
@@ -235,15 +233,6 @@ namespace System.Windows.Forms
         {
             _valueChanged = true;
             _dataGridView?.NotifyCurrentCellDirty(true);
-        }
-
-        protected override void OnGotFocus(EventArgs e)
-        {
-            base.OnGotFocus(e);
-            if (IsAccessibilityObjectCreated)
-            {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            }
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)

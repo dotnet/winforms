@@ -1341,6 +1341,24 @@ namespace System.Windows.Forms
             }
         }
 
+        protected bool ContainsNavigationKeyCode(Keys keyCode)
+        {
+            switch (keyCode)
+            {
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.PageUp:
+                case Keys.PageDown:
+                case Keys.Home:
+                case Keys.End:
+                case Keys.Left:
+                case Keys.Right:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         /// <summary>
         ///  Copies the current selection in the text box to the Clipboard.
         /// </summary>
@@ -2204,23 +2222,13 @@ namespace System.Windows.Forms
 
                     break;
                 case WM.DESTROY:
-                    base.WndProc(ref m);
-
-                    if (TryGetAccessibilityObject(out AccessibleObject? @object) && !RecreatingHandle)
+                    if (TryGetAccessibilityObject(out AccessibleObject? @object) && @object is TextBoxBaseAccessibleObject accessibleObject &&
+                        !RecreatingHandle)
                     {
-                        // The SupportsUiaProviders check prevents double disconnection after Control.ReleaseUiaProvider.
-                        // ReleaseUiaProvider works only for controls that support UIA, so this check allows to avoid
-                        // double disconnection when TextBoxBase will start UIA supporting.
-                        if (OsVersion.IsWindows8OrGreater && !SupportsUiaProviders)
-                        {
-                            UiaCore.UiaDisconnectProvider(@object);
-                        }
-
-                        if (@object is TextBoxBaseAccessibleObject accessibleObject)
-                        {
-                            accessibleObject.ClearObjects();
-                        }
+                        accessibleObject.ClearObjects();
                     }
+
+                    base.WndProc(ref m);
 
                     break;
                 default:

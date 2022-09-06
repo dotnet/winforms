@@ -397,6 +397,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
         {
             Size scrollBarPadding = Size.Empty;
@@ -590,6 +592,11 @@ namespace System.Windows.Forms
                     SelectAll();
                 }
             }
+
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.SetFocus();
+            }
         }
 
         /// <summary>
@@ -651,24 +658,6 @@ namespace System.Windows.Forms
             }
         }
 
-        private static bool ContainsNavigationKeyCode(Keys keyCode)
-        {
-            switch (keyCode)
-            {
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.PageUp:
-                case Keys.PageDown:
-                case Keys.Home:
-                case Keys.End:
-                case Keys.Left:
-                case Keys.Right:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
@@ -679,7 +668,7 @@ namespace System.Windows.Forms
                 // about text selection changed for TextBox assuming
                 // that any mouse down on textbox leads to change of
                 // the caret position and thereby change the selection.
-                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
         }
 
