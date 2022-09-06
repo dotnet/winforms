@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using Windows.Win32.UI.Shell.Common;
 using Shell = Windows.Win32.UI.Shell;
 
 namespace Windows.Win32
