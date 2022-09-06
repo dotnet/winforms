@@ -9,11 +9,11 @@ namespace Windows.Win32
     internal static partial class PInvoke
     {
         /// <summary>
-        ///  Tries to set thread dpi awareness context
+        ///  Tries to set the thread dpi awareness context.
         /// </summary>
         /// <returns>
-        /// Returns old thread dpi awareness context if API is available in this version of OS.
-        /// Otherwise, return <see cref="DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT"/>.
+        /// Returns the old thread dpi awareness context if the API is available in this version of OS.
+        /// Otherwise, returns <see cref="DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT"/>.
         /// </returns>
         public static DPI_AWARENESS_CONTEXT SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT dpiContext)
         {

@@ -436,12 +436,16 @@ namespace System.Windows.Forms
                 {
                     HighDpiMode.SystemAware => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE,
                     HighDpiMode.PerMonitor => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE,
-                    HighDpiMode.PerMonitorV2 => PInvoke.IsValidDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2)
-                                                ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
-                                                : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, // Necessary for RS1, since this SetProcessIntPtr IS available here.
-                    HighDpiMode.DpiUnawareGdiScaled => PInvoke.IsValidDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED)
-                                                ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED
-                                                : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE,// Let's make sure, we do not try to set a value which has been introduced in later Windows releases.
+                    HighDpiMode.PerMonitorV2 =>
+                        // Necessary for RS1, since this SetProcessIntPtr IS available here.
+                        PInvoke.IsValidDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2)
+                        ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+                        : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, 
+                    HighDpiMode.DpiUnawareGdiScaled =>
+                        // Let's make sure, we do not try to set a value which has been introduced in later Windows releases.
+                        PInvoke.IsValidDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED)
+                        ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED
+                        : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE,
                     _ => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE,
                 };
 
