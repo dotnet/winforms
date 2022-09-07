@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using Xunit;
 using Xunit.Abstractions;
 using static Interop;
-using static Interop.UiaClient;
+using static UiaClient;
 
 namespace System.Windows.Forms.UITests;
 
@@ -84,11 +84,11 @@ public class DragDropTests : ControlTestBase
             Assert.NotNull(uiAutomation);
 
             // Retrieve the UI element that has focus
-            Assert.True(uiAutomation?.GetFocusedElement(out uiAutomationElement).Succeeded());
+            Assert.Equal((int)HRESULT.S_OK, uiAutomation?.GetFocusedElement(out uiAutomationElement));
             Assert.NotNull(uiAutomationElement);
 
             // Retrieve a point that can be clicked
-            Assert.True(uiAutomationElement?.GetClickablePoint(out clickable, out gotClickable).Succeeded());
+            Assert.Equal((int)HRESULT.S_OK, uiAutomationElement?.GetClickablePoint(out clickable, out gotClickable));
             Assert.True(gotClickable);
 
             TestOutputHelper.WriteLine($"gotClickable: {gotClickable}");
