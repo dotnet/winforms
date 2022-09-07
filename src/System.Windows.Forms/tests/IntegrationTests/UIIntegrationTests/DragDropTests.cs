@@ -63,53 +63,49 @@ public class DragDropTests : ControlTestBase
     [WinFormsFact]
     public async Task DragDrop_RTF_FromExplorer_ToRichTextBox_ReturnsExpected_Async()
     {
-        Point clickable = default;
-        string dragAcceptRtfContent = string.Empty;
-        string dragAcceptRtfTextContent = string.Empty;
-        bool gotClickable = false;
-        IUIAutomation? uiAutomation = null;
-        IUIAutomationElement? uiAutomationElement = null;
-
-        try
+        await RunTestAsync(async dragDropForm =>
         {
-            string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
-            using (RichTextBox richTextBox = new())
+            IUIAutomation? uiAutomation = null;
+            IUIAutomationElement? uiAutomationElement = null;
+
+            try
             {
-                richTextBox.Rtf = File.ReadAllText(dragAcceptRtfPath);
-                dragAcceptRtfContent = richTextBox.Rtf;
-                dragAcceptRtfTextContent = richTextBox.Text;
-            }
+                string dragAcceptRtfContent = string.Empty;
+                string dragAcceptRtfTextContent = string.Empty;
+                string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+                using (RichTextBox richTextBox = new())
+                {
+                    richTextBox.Rtf = File.ReadAllText(dragAcceptRtfPath);
+                    dragAcceptRtfContent = richTextBox.Rtf;
+                    dragAcceptRtfTextContent = richTextBox.Text;
+                }
 
-            Assert.False(string.IsNullOrWhiteSpace(dragAcceptRtfContent));
-            Assert.False(string.IsNullOrWhiteSpace(dragAcceptRtfTextContent));
+                // Open the Resources directory and set focus on DragAccept.rtf
+                Process.Start("explorer.exe", $"/select,\"{dragAcceptRtfPath}\"");
+                WaitForExplorer(Resources, new Point(dragDropForm.Location.X + dragDropForm.Width, dragDropForm.Location.Y));
+                Assert.True(IsExplorerOpen(Resources));
 
-            // Open the Resources directory and set focus on DragAccept.rtf
-            Process.Start("explorer.exe", $"/select,\"{dragAcceptRtfPath}\"");
-            WaitForExplorer(Resources);
-            Assert.True(IsExplorerOpen(Resources));
+                // Create a CUIAutomation object and obtain the IUIAutomation interface
+                Assert.True(TryGetUIAutomation(out uiAutomation));
+                Assert.NotNull(uiAutomation);
 
-            // Create a CUIAutomation object and obtain the IUIAutomation interface
-            Assert.True(TryGetUIAutomation(out uiAutomation));
-            Assert.NotNull(uiAutomation);
+                // Retrieve the UI element that has focus
+                Assert.Equal((int)HRESULT.S_OK, uiAutomation?.GetFocusedElement(out uiAutomationElement));
+                Assert.NotNull(uiAutomationElement);
 
-            // Retrieve the UI element that has focus
-            Assert.Equal((int)HRESULT.S_OK, uiAutomation?.GetFocusedElement(out uiAutomationElement));
-            Assert.NotNull(uiAutomationElement);
+                // Retrieve a point that can be clicked
+                Point clickable = default;
+                bool gotClickable = false;
+                Assert.Equal((int)HRESULT.S_OK, uiAutomationElement?.GetClickablePoint(out clickable, out gotClickable));
+                Assert.True(gotClickable);
+                TestOutputHelper.WriteLine($"gotClickable: {gotClickable}");
+                TestOutputHelper.WriteLine($"clickable: {clickable}");
 
-            // Retrieve a point that can be clicked
-            Assert.Equal((int)HRESULT.S_OK, uiAutomationElement?.GetClickablePoint(out clickable, out gotClickable));
-            Assert.True(gotClickable);
-
-            TestOutputHelper.WriteLine($"gotClickable: {gotClickable}");
-            TestOutputHelper.WriteLine($"clickable: {clickable}");
-
-            // Drag DragAccept.rtf from Explorer to RichTextBox
-            await RunFormWithoutControlAsync(() => new DragImageDropDescriptionForm(TestOutputHelper), async (form) =>
-            {
-                var startCoordinates = clickable;
-                var endRect = form.RichTextBoxDropTarget.ClientRectangle;
-                var centerOfEndtRect = new Point(endRect.Left, endRect.Top) + new Size(endRect.Width / 2, endRect.Height / 2);
-                var endCoordinates = form.RichTextBoxDropTarget.PointToScreen(centerOfEndtRect);
+                Point startCoordinates = clickable;
+                Rectangle endRect = dragDropForm.RichTextBoxDropTarget.ClientRectangle;
+                Point centerOfEndtRect = new Point(endRect.Left + ((endRect.Right - endRect.Left) / 2),
+                    endRect.Top + ((endRect.Bottom - endRect.Top) / 2));
+                Point endCoordinates = dragDropForm.RichTextBoxDropTarget.PointToScreen(centerOfEndtRect);
 
                 int vscreenWidth = User32.GetSystemMetrics(User32.SystemMetric.SM_CXVIRTUALSCREEN);
                 int vscreenHeight = User32.GetSystemMetrics(User32.SystemMetric.SM_CYVIRTUALSCREEN);
@@ -129,60 +125,62 @@ public class DragDropTests : ControlTestBase
                 TestOutputHelper.WriteLine($"virtualPointStart: {virtualPointStart}");
                 TestOutputHelper.WriteLine($"virtualPointEnd: {virtualPointEnd}");
 
+                Assert.Equal((int)HRESULT.S_OK, uiAutomationElement?.SetFocus());
+
                 await InputSimulator.SendAsync(
-                    form,
-                    inputSimulator
-                        => inputSimulator.Mouse
-                            .MoveMouseToPositionOnVirtualDesktop(virtualPointStart.X, virtualPointStart.Y)
-                            .Sleep(DragDropDelayMS)
-                            .LeftButtonDown()
-                            .Sleep(DragDropDelayMS)
-                            .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X, virtualPointEnd.Y)
-                            .Sleep(DragDropDelayMS)
-                            .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                            .Sleep(DragDropDelayMS)
-                            .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                            .Sleep(DragDropDelayMS)
-                            .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                            .Sleep(DragDropDelayMS)
-                            .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                            .Sleep(DragDropDelayMS)
-                            .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
-                            .Sleep(DragDropDelayMS)
-                            .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
-                            .Sleep(DragDropDelayMS)
-                            .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X, virtualPointEnd.Y)
-                            .Sleep(DragDropDelayMS)
-                            .LeftButtonClick()
-                            .Sleep(DragDropDelayMS));
+                        dragDropForm,
+                        inputSimulator
+                            => inputSimulator.Mouse
+                                .MoveMouseToPositionOnVirtualDesktop(virtualPointStart.X, virtualPointStart.Y)
+                                .Sleep(DragDropDelayMS)
+                                .LeftButtonDown()
+                                .Sleep(DragDropDelayMS)
+                                .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X, virtualPointEnd.Y)
+                                .Sleep(DragDropDelayMS)
+                                .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
+                                .Sleep(DragDropDelayMS)
+                                .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
+                                .Sleep(DragDropDelayMS)
+                                .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
+                                .Sleep(DragDropDelayMS)
+                                .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
+                                .Sleep(DragDropDelayMS)
+                                .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
+                                .Sleep(DragDropDelayMS)
+                                .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
+                                .Sleep(DragDropDelayMS)
+                                .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X, virtualPointEnd.Y)
+                                .Sleep(DragDropDelayMS)
+                                .LeftButtonClick()
+                                .Sleep(DragDropDelayMS));
 
-                Assert.NotNull(form);
-                Assert.NotNull(form.RichTextBoxDropTarget);
-                Assert.False(string.IsNullOrWhiteSpace(form.RichTextBoxDropTarget.Rtf),
-                    $"Actual form.RichTextBoxDropTarget.Rtf: {form.RichTextBoxDropTarget.Rtf}");
-                Assert.False(string.IsNullOrWhiteSpace(form.RichTextBoxDropTarget.Text),
-                    $"Actual form.RichTextBoxDropTarget.Text: {form.RichTextBoxDropTarget.Text}");
-                Assert.Equal(dragAcceptRtfContent, form.RichTextBoxDropTarget?.Rtf);
-                Assert.Equal(dragAcceptRtfTextContent, form.RichTextBoxDropTarget?.Text);
-            });
-        }
-        finally
-        {
-            if (uiAutomationElement is not null)
-            {
-                Marshal.ReleaseComObject(uiAutomationElement);
+                Assert.NotNull(dragDropForm);
+                Assert.NotNull(dragDropForm.RichTextBoxDropTarget);
+                Assert.False(string.IsNullOrWhiteSpace(dragDropForm.RichTextBoxDropTarget.Rtf),
+                    $"Actual form.RichTextBoxDropTarget.Rtf: {dragDropForm.RichTextBoxDropTarget.Rtf}");
+                Assert.False(string.IsNullOrWhiteSpace(dragDropForm.RichTextBoxDropTarget.Text),
+                    $"Actual form.RichTextBoxDropTarget.Text: {dragDropForm.RichTextBoxDropTarget.Text}");
+                Assert.Equal(dragAcceptRtfContent, dragDropForm.RichTextBoxDropTarget?.Rtf);
+                Assert.Equal(dragAcceptRtfTextContent, dragDropForm.RichTextBoxDropTarget?.Text);
             }
+            finally
+            {
+                if (uiAutomationElement is not null)
+                {
+                    Marshal.ReleaseComObject(uiAutomationElement);
+                }
 
-            if (uiAutomation is not null)
-            {
-                Marshal.ReleaseComObject(uiAutomation);
-            }
+                if (uiAutomation is not null)
+                {
+                    Marshal.ReleaseComObject(uiAutomation);
+                }
 
-            if (IsExplorerOpen(Resources))
-            {
-                CloseExplorer(Resources);
+                if (IsExplorerOpen(Resources))
+                {
+                    CloseExplorer(Resources);
+                }
             }
-        }
+        });
     }
 
     [WinFormsFact]
@@ -404,16 +402,16 @@ public class DragDropTests : ControlTestBase
         return false;
     }
 
-    private async Task RunTestAsync(Func<Form, Task> runTest)
+    private async Task RunTestAsync(Func<DragImageDropDescriptionForm, Task> runTest)
     {
         await RunFormWithoutControlAsync(
             testDriverAsync: runTest,
             createForm: () =>
             {
-                return new()
+                return new DragImageDropDescriptionForm(TestOutputHelper)
                 {
-                    IsMdiContainer = true,
-                    ClientSize = new Size(640, 480),
+                    Location = new Point(0, 0),
+                    StartPosition = FormStartPosition.Manual
                 };
             });
     }
@@ -438,7 +436,7 @@ public class DragDropTests : ControlTestBase
         return false;
     }
 
-    private void WaitForExplorer(string directory)
+    private void WaitForExplorer(string directory, Point startPosition)
     {
         int wait = 0, maxWait = 40;
         while (!IsExplorerOpen(directory) && wait++ < maxWait)
@@ -451,8 +449,12 @@ public class DragDropTests : ControlTestBase
         {
             if (process.ProcessName == Explorer && process.MainWindowTitle == directory)
             {
-                TestOutputHelper.WriteLine($"Restore Explorer to its original size and position");
-                User32.ShowWindow(process.MainWindowHandle, User32.SW.NORMAL);
+                User32.SetWindowPos(
+                    process.MainWindowHandle,
+                    User32.HWND_TOP,
+                    startPosition.X,
+                    startPosition.Y,
+                    flags: User32.SWP.NOSIZE | User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
             }
         }
     }

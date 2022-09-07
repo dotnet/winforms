@@ -12,7 +12,7 @@ internal static partial class UiaClient
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IUIAutomationElement
     {
-        void SetFocus();
+        int SetFocus();
 
         void GetRuntimeId();
 
