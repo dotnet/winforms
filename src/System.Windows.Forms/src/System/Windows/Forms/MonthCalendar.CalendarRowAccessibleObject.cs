@@ -96,8 +96,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal void ClearChildCollection() => _cellsAccessibleObjects = null;
-
             internal void DisconnectChildren()
             {
                 Debug.Assert(OsVersion.IsWindows8OrGreater);
