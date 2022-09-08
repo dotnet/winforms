@@ -528,7 +528,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
-        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForNotEmptyDGV(bool focused)
+        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_False_ForNotEmptyDGV(bool focused)
         {
             using DataGridView dataGridView = new FakeFocusDataGridView(focused);
             dataGridView.Columns.Add(new DataGridViewButtonColumn());
@@ -538,7 +538,37 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(focused, dataGridView.Focused);
             Assert.Equal(1, dataGridView.RowCount); // One new row for editing, it will be in focus instead of whole DGV
-            Assert.Equal(focused, actual);
+            Assert.False(actual);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_AsExpected_DependsOnForm(bool modal)
+        {
+            using Form form = new();
+            using DataGridView dataGridView = new FakeFocusDataGridView(true);
+            dataGridView.Columns.Add(new DataGridViewButtonColumn());
+            dataGridView.Parent = form;
+
+            bool? actualValue = null;
+            form.Load += (_, _) =>
+            {
+                actualValue = (bool)dataGridView.AccessibilityObject
+                    .GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+                form.Close();
+            };
+            if (modal)
+            {
+                form.ShowDialog();
+            }
+            else
+            {
+                form.Show();
+            }
+
+            Assert.Equal(modal, actualValue);
             Assert.False(dataGridView.IsHandleCreated);
         }
 

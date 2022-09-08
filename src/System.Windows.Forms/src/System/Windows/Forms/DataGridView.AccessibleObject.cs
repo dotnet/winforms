@@ -12,6 +12,7 @@ namespace System.Windows.Forms
         protected class DataGridViewAccessibleObject : ControlAccessibleObject
         {
             private int[]? runtimeId; // Used by UIAutomation
+            private bool? _isModal;
 
             private readonly DataGridView _ownerDataGridView;
             private DataGridViewTopRowAccessibleObject? _topRowAccessibilityObject;
@@ -21,6 +22,15 @@ namespace System.Windows.Forms
                 : base(owner) => _ownerDataGridView = owner;
 
             internal override bool IsReadOnly => _ownerDataGridView.ReadOnly;
+
+            private bool IsModal
+            {
+                get
+                {
+                    _isModal ??= _ownerDataGridView.TopMostParent is Form { Modal: true };
+                    return _isModal.Value;
+                }
+            }
 
             public override AccessibleRole Role
             {
@@ -240,7 +250,9 @@ namespace System.Windows.Forms
                             ? UiaCore.UIA.DataGridControlTypeId
                             : base.GetPropertyValue(propertyID);
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _ownerDataGridView.Focused;
+                        // If no inner cell entire DGV should be announced as focused by Narrator.
+                        // Else only inner cell should be announced as focused by Narrator but not entire DGV.
+                        return (IsModal || RowCount == 0) && _ownerDataGridView.Focused;
                     case UiaCore.UIA.IsControlElementPropertyId:
                         return true;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
