@@ -11,6 +11,7 @@ CreateActCtx
 CreateBitmap
 CreateBrushIndirect
 CreateCompatibleBitmap
+CreatePen
 DeactivateActCtx
 DuplicateHandle
 FormatMessage

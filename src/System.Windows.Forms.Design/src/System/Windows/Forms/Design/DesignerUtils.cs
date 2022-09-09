@@ -25,14 +25,19 @@ namespace System.Windows.Forms.Design
     {
         private static Size s_minDragSize = Size.Empty;
         //brush used to draw a 'hover' state over a designer action glyph
-        private static SolidBrush s_hoverBrush = new SolidBrush(Color.FromArgb(50, SystemColors.Highlight));
+        private static SolidBrush s_hoverBrush = new(Color.FromArgb(alpha: 50, SystemColors.Highlight));
         //brush used to draw the resizeable selection borders around controls/components
-        private static HatchBrush s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
+        private static HatchBrush s_selectionBorderBrush =
+            new(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
         //Pens and Brushes used via GDI to render our grabhandles
-        private static Gdi32.HBRUSH s_grabHandleFillBrushPrimary = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
-        private static Gdi32.HBRUSH s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
-        private static Gdi32.HPEN s_grabHandlePenPrimary = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
-        private static Gdi32.HPEN s_grabHandlePen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
+        private static Gdi32.HBRUSH s_grabHandleFillBrushPrimary =
+            Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
+        private static Gdi32.HBRUSH s_grabHandleFillBrush =
+            Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
+        private static Gdi.HPEN s_grabHandlePenPrimary =
+            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        private static Gdi.HPEN s_grabHandlePen =
+            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.Window));
 
         //The box-like image used as the user is dragging comps from the toolbox
         private static Bitmap s_boxImage;
@@ -43,7 +48,8 @@ namespace System.Windows.Forms.Design
         // Although the selection border is only 1, we actually want a 3 pixel hittestarea
         public static int SELECTIONBORDERHITAREA = ScaleLogicalToDeviceUnitsX(3);
 
-        // We want to make sure that the 1 pixel selectionborder is centered on the handles. The fact that the border is actually 3 pixels wide works like magic. If you draw a picture, then you will see why.
+        // We want to make sure that the 1 pixel selectionborder is centered on the handles.
+        // The fact that the border is actually 3 pixels wide works like magic. If you draw a picture, then you will see why.
         //grabhandle size (diameter)
         public static int HANDLESIZE = ScaleLogicalToDeviceUnitsX(7);
         //how much should the grabhandle overlap the control
@@ -178,10 +184,10 @@ namespace System.Windows.Forms.Design
             s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
 
             Gdi32.DeleteObject(s_grabHandlePenPrimary);
-            s_grabHandlePenPrimary = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
+            s_grabHandlePenPrimary = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
             Gdi32.DeleteObject(s_grabHandlePen);
-            s_grabHandlePen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
+            s_grabHandlePen = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.Window));
         }
 
         /// <summary>
@@ -284,13 +290,19 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static void DrawLockedHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
-            using var hDC = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
+            using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
-            using var penSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandlePenPrimary);
+            using Gdi32.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
             // Upper rect - upper rect is always filled with the primary brush
-            using var brushSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandleFillBrushPrimary);
-            Gdi32.RoundRect(hDC, bounds.Left + LOCKHANDLEUPPER_OFFSET, bounds.Top, bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER, bounds.Top + LOCKHANDLESIZE_UPPER, 2, 2);
+            using Gdi32.SelectObjectScope brushSelection = new(hDC, s_grabHandleFillBrushPrimary);
+            Gdi32.RoundRect(
+                hDC,
+                bounds.Left + LOCKHANDLEUPPER_OFFSET,
+                bounds.Top, bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER,
+                bounds.Top + LOCKHANDLESIZE_UPPER,
+                width: 2,
+                height: 2);
 
             // Lower rect - its fillbrush depends on the primary selection
             Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
@@ -306,7 +318,11 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Used to generate an image that represents the given control.  First, this method will call the 'GenerateSnapShotWithWM_PRINT' method on the control.  If we believe that this method did not return us a valid image (caused by some comctl/ax controls not properly responding to a wm_print) then we will attempt to do a bitblt of the control instead.
+        ///  Used to generate an image that represents the given control.
+        ///  First, this method will call the 'GenerateSnapShotWithWM_PRINT' method on the control.
+        ///  If we believe that this method did not return us a valid image
+        ///  (caused by some comctl/ax controls not properly responding to a wm_print)
+        ///  then we will attempt to do a bitblt of the control instead.
         /// </summary>
         public static void GenerateSnapShot(Control control, ref Image image, int borderSize, double opacity, Color backColor)
         {
@@ -404,7 +420,7 @@ namespace System.Windows.Forms.Design
         public static void GenerateSnapShotWithBitBlt(Control control, ref Image image)
         {
             // Get the DC's and create our image
-            using var controlDC = new User32.GetDcScope(control.Handle);
+            using User32.GetDcScope controlDC = new(control.Handle);
             image = new Bitmap(
                 Math.Max(control.Width, MINCONTROLBITMAPSIZE),
                 Math.Max(control.Height, MINCONTROLBITMAPSIZE),
@@ -417,18 +433,18 @@ namespace System.Windows.Forms.Design
                 gDest.Clear(SystemColors.Control);
             }
 
-            using var destDC = new DeviceContextHdcScope(gDest, applyGraphicsState: false);
+            using DeviceContextHdcScope destDC = new(gDest, applyGraphicsState: false);
 
             // Perform our bitblit operation to push the image into the dest bitmap
             PInvoke.BitBlt(
                 destDC,
-                0,
-                0,
+                x: 0,
+                y: 0,
                 image.Width,
                 image.Height,
                 controlDC,
-                0,
-                0,
+                x1: 0,
+                y1: 0,
                 Gdi.ROP_CODE.SRCCOPY);
         }
 
@@ -438,7 +454,10 @@ namespace System.Windows.Forms.Design
         public static bool GenerateSnapShotWithWM_PRINT(Control control, ref Image image)
         {
             IntPtr hWnd = control.Handle;
-            image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), PixelFormat.Format32bppPArgb);
+            image = new Bitmap(
+                Math.Max(control.Width, MINCONTROLBITMAPSIZE),
+                Math.Max(control.Height, MINCONTROLBITMAPSIZE),
+                PixelFormat.Format32bppPArgb);
 
             // Have to do this BEFORE we set the testcolor.
             if (control.BackColor == Color.Transparent)
@@ -642,7 +661,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Determine a unique site name for a component, starting from a base name. Return value should be passed into the Container.Add() method. If null is returned, this just means "let container generate a default name based on component type".
+        ///  Determine a unique site name for a component, starting from a base name.
+        ///  Return value should be passed into the Container.Add() method.
+        ///  If null is returned, this just means "let container generate a default name based on component type".
         /// </summary>
         public static string GetUniqueSiteName(IDesignerHost host, string name)
         {
@@ -747,7 +768,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Checks the given container, substituting any nested container with its owning container. Ensures that a SplitterPanel in a SplitContainer returns the same container as other form components, since SplitContainer sites its two SplitterPanels inside a nested container.
+        ///  Checks the given container, substituting any nested container with its owning container.
+        ///  Ensures that a SplitterPanel in a SplitContainer returns the same container as other form components,
+        ///  since SplitContainer sites its two SplitterPanels inside a nested container.
         /// </summary>
         public static IContainer CheckForNestedContainer(IContainer container)
         {
@@ -795,7 +818,9 @@ namespace System.Windows.Forms.Design
                     store.Close();
                     copyObjects = css.Deserialize(store);
 
-                    // Now, copyObjects contains a flattened list of all the controls contained in the original drag objects, that's not what we want to return. We only want to return the root drag objects, so that the caller gets an identical copy - identical in terms of objects.Count
+                    // Now, copyObjects contains a flattened list of all the controls contained in the original drag objects,
+                    // that's not what we want to return. We only want to return the root drag objects,
+                    // so that the caller gets an identical copy - identical in terms of objects.Count
                     ArrayList newObjects = new ArrayList(objects.Count);
                     foreach (IComponent comp in copyObjects)
                     {
