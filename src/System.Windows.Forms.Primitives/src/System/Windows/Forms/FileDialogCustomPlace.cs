@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics.CodeAnalysis;
-using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -80,7 +79,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return GetShellItemForPath(filePathString);
+            return PInvoke.SHCreateShellItem(filePathString);
         }
     }
 }
