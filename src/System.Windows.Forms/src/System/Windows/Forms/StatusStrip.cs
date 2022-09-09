@@ -175,7 +175,7 @@ namespace System.Windows.Forms
                     HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
                     if (!rootHwnd.IsNull)
                     {
-                        return !User32.IsZoomed(rootHwnd).IsTrue();
+                        return !User32.IsZoomed(rootHwnd);
                     }
                 }
 
@@ -586,7 +586,7 @@ namespace System.Windows.Forms
 
                     // if the main window isn't maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
-                    if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd).IsTrue())
+                    if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd))
                     {
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
@@ -613,7 +613,7 @@ namespace System.Windows.Forms
                         {
                             if ((deltaRightEdge + deltaBottomEdge) < 2)
                             {
-                                m.ResultInternal = (nint)User32.HT.BOTTOMRIGHT;
+                                m.ResultInternal = (LRESULT)(nint)User32.HT.BOTTOMRIGHT;
                                 return;
                             }
                         }
@@ -649,7 +649,7 @@ namespace System.Windows.Forms
                 {
                     if (ClientRectangle.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                     {
-                        m.ResultInternal = (nint)User32.HT.BOTTOMLEFT;
+                        m.ResultInternal = (LRESULT)(nint)User32.HT.BOTTOMLEFT;
                         return;
                     }
                 }

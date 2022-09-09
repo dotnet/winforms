@@ -415,7 +415,7 @@ namespace System.Windows.Forms
             else
             {
                 // Available on Vista and higher
-                return User32.IsProcessDPIAware().IsTrue() ? HighDpiMode.SystemAware : HighDpiMode.DpiUnaware;
+                return User32.IsProcessDPIAware() ? HighDpiMode.SystemAware : HighDpiMode.DpiUnaware;
             }
 
             // We should never get here, except someone ported this with force to < Windows 7.
@@ -444,13 +444,13 @@ namespace System.Windows.Forms
                         break;
                     case HighDpiMode.PerMonitorV2:
                         // Necessary for RS1, since this SetProcessIntPtr IS available here.
-                        rs2AndAboveDpiFlag = User32.IsValidDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2).IsTrue()
+                        rs2AndAboveDpiFlag = User32.IsValidDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2)
                             ? User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2
                             : User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
                         break;
                     case HighDpiMode.DpiUnawareGdiScaled:
                         // Let's make sure, we do not try to set a value which has been introduced in later Windows releases.
-                        rs2AndAboveDpiFlag = User32.IsValidDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED).IsTrue()
+                        rs2AndAboveDpiFlag = User32.IsValidDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED)
                             ? User32.DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED
                             : User32.DPI_AWARENESS_CONTEXT.UNAWARE;
                         break;
@@ -459,7 +459,7 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                success = User32.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag).IsTrue();
+                success = User32.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag);
             }
             else if (OsVersion.IsWindows8_1OrGreater)
             {
@@ -504,7 +504,7 @@ namespace System.Windows.Forms
 
                 if (dpiFlag == SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE)
                 {
-                    success = User32.SetProcessDPIAware().IsTrue();
+                    success = User32.SetProcessDPIAware();
                 }
             }
 

@@ -9,8 +9,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial int GetWindowTextLengthW(IntPtr hWnd);
+        [DllImport(Libraries.User32)]
+        public static extern int GetWindowTextLengthW(IntPtr hWnd);
 
         public static int GetWindowTextLengthW(HandleRef hWnd)
         {
@@ -19,8 +19,8 @@ internal static partial class Interop
             return result;
         }
 
-        [LibraryImport(Libraries.User32)]
-        private static unsafe partial int GetWindowTextW(IntPtr hWnd, char* lpString, int nMaxCount);
+        [DllImport(Libraries.User32)]
+        private static unsafe extern int GetWindowTextW(IntPtr hWnd, char* lpString, int nMaxCount);
 
         public static unsafe string GetWindowText(IntPtr hWnd)
         {

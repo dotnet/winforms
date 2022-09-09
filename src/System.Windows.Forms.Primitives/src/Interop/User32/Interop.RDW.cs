@@ -7,7 +7,7 @@ internal static partial class Interop
     internal static partial class User32
     {
         /// <summary>
-        ///  <see cref="RedrawWindow(IntPtr, RECT*, Gdi32.HRGN, RDW)"/> flags.
+        ///  <see cref="RedrawWindow(IntPtr, RECT*, HRGN, RDW)"/> flags.
         /// </summary>
         [Flags]
         public enum RDW : uint

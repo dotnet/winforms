@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                 IntPtr wParam,
                 IntPtr lParam)
             {
-                return BOOL.TRUE;
+                return true;
             }
 
             /// <inheritdoc/>
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
                 if (pcrinfo is null || pdwComponentID is null
                     || pcrinfo->cbSize < sizeof(MSOCRINFO))
                 {
-                    return BOOL.FALSE;
+                    return false;
                 }
 
                 // Construct Hashtable entry for this component
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
                 // Return the cookie
                 *pdwComponentID = _cookieCounter;
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager: Component registered.  ID: {_cookieCounter}");
-                return BOOL.TRUE;
+                return true;
             }
 
             /// <inheritdoc/>
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
                 if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Component not registered.");
-                    return BOOL.FALSE;
+                    return false;
                 }
 
                 if (entry.component == _activeComponent)
@@ -126,7 +126,7 @@ namespace System.Windows.Forms
                 }
 
                 OleComponents.Remove(dwComponentID);
-                return BOOL.TRUE;
+                return true;
             }
 
             /// <inheritdoc/>
@@ -138,12 +138,12 @@ namespace System.Windows.Forms
                 if (pcrinfo is null
                     || !OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
-                    return BOOL.FALSE;
+                    return false;
                 }
 
                 entry.componentInfo = *pcrinfo;
                 OleComponents[dwComponentID] = entry;
-                return BOOL.TRUE;
+                return true;
             }
 
             /// <inheritdoc/>
@@ -154,26 +154,26 @@ namespace System.Windows.Forms
                 if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "*** Component not registered ***");
-                    return BOOL.FALSE;
+                    return false;
                 }
 
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"New active component is : {entry}");
                 _activeComponent = entry.component;
-                return BOOL.TRUE;
+                return true;
             }
 
             /// <inheritdoc/>
             BOOL IMsoComponentManager.FSetTrackingComponent(UIntPtr dwComponentID, BOOL fTrack)
             {
                 if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry)
-                    || !((entry.component == _trackingComponent) ^ fTrack.IsTrue()))
+                    || !((entry.component == _trackingComponent) ^ fTrack))
                 {
-                    return BOOL.FALSE;
+                    return false;
                 }
 
-                _trackingComponent = fTrack.IsTrue() ? entry.component : null;
+                _trackingComponent = fTrack ? entry.component : null;
 
-                return BOOL.TRUE;
+                return true;
             }
 
             /// <inheritdoc/>
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
                     foreach (ComponentHashtableEntry entry in OleComponents.Values)
                     {
                         Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"Notifying {entry.component}");
-                        entry.component.OnEnterState(uStateID, BOOL.TRUE);
+                        entry.component.OnEnterState(uStateID, true);
                     }
 
                     Debug.Unindent();
@@ -227,24 +227,24 @@ namespace System.Windows.Forms
                     foreach (ComponentHashtableEntry entry in OleComponents.Values)
                     {
                         Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"Notifying {entry.component}");
-                        entry.component.OnEnterState(uStateID, BOOL.FALSE);
+                        entry.component.OnEnterState(uStateID, false);
                     }
 
                     Debug.Unindent();
                 }
 
-                return BOOL.FALSE;
+                return false;
             }
 
             /// <inheritdoc/>
             BOOL IMsoComponentManager.FInState(msocstate uStateID, void* pvoid)
-                => _currentState == uStateID ? BOOL.TRUE : BOOL.FALSE;
+                => _currentState == uStateID ? true : false;
 
             /// <inheritdoc/>
             BOOL IMsoComponentManager.FContinueIdle()
             {
                 // If we have a message on queue, then don't continue idle processing.
-                var msg = new User32.MSG();
+                var msg = new MSG();
                 return User32.PeekMessageW(ref msg);
             }
 
@@ -256,18 +256,18 @@ namespace System.Windows.Forms
             {
                 // Hold onto old state to allow restore before we exit...
                 msocstate currentLoopState = _currentState;
-                BOOL continueLoop = BOOL.TRUE;
+                BOOL continueLoop = true;
 
                 if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
-                    return BOOL.FALSE;
+                    return false;
                 }
 
                 IMsoComponent prevActive = _activeComponent;
 
                 try
                 {
-                    User32.MSG msg = new User32.MSG();
+                    MSG msg = new MSG();
                     IMsoComponent requestingComponent = entry.component;
                     _activeComponent = requestingComponent;
 
@@ -276,7 +276,7 @@ namespace System.Windows.Forms
                         $"ComponentManager : Pushing message loop {uReason}");
                     Debug.Indent();
 
-                    while (continueLoop.IsTrue())
+                    while (continueLoop)
                     {
                         // Determine the component to route the message to
                         IMsoComponent component = _trackingComponent ?? _activeComponent ?? requestingComponent;
@@ -284,34 +284,34 @@ namespace System.Windows.Forms
                         bool useAnsi = false;
                         BOOL peeked = User32.PeekMessageW(ref msg);
 
-                        if (peeked.IsTrue())
+                        if (peeked)
                         {
-                            useAnsi = msg.hwnd != IntPtr.Zero && User32.IsWindowUnicode(msg.hwnd).IsFalse();
+                            useAnsi = msg.hwnd != IntPtr.Zero && !User32.IsWindowUnicode(msg.hwnd);
                             if (useAnsi)
                             {
                                 peeked = User32.PeekMessageA(ref msg);
                             }
                         }
 
-                        if (peeked.IsTrue())
+                        if (peeked)
                         {
                             continueLoop = component.FContinueMessageLoop(uReason, pvLoopData, &msg);
 
                             // If the component wants us to process the message, do it.
-                            if (continueLoop.IsTrue())
+                            if (continueLoop)
                             {
                                 if (useAnsi)
                                 {
                                     User32.GetMessageA(ref msg);
-                                    Debug.Assert(User32.IsWindowUnicode(msg.hwnd).IsFalse());
+                                    Debug.Assert(!User32.IsWindowUnicode(msg.hwnd));
                                 }
                                 else
                                 {
                                     User32.GetMessageW(ref msg);
-                                    Debug.Assert(msg.hwnd == IntPtr.Zero || User32.IsWindowUnicode(msg.hwnd).IsTrue());
+                                    Debug.Assert(msg.hwnd == IntPtr.Zero || User32.IsWindowUnicode(msg.hwnd));
                                 }
 
-                                if (msg.message == User32.WM.QUIT)
+                                if (msg.message == (uint)User32.WM.QUIT)
                                 {
                                     Debug.WriteLineIf(
                                         CompModSwitches.MSOComponentManager.TraceInfo,
@@ -321,10 +321,10 @@ namespace System.Windows.Forms
 
                                     if (uReason != msoloop.Main)
                                     {
-                                        User32.PostQuitMessage(PARAM.ToInt(msg.wParam));
+                                        User32.PostQuitMessage(PARAM.ToInt((nint)(nuint)msg.wParam));
                                     }
 
-                                    continueLoop = BOOL.FALSE;
+                                    continueLoop = false;
                                     break;
                                 }
 
@@ -333,7 +333,7 @@ namespace System.Windows.Forms
                                 // Reading through the rather sparse documentation,
                                 // it seems we should only call FPreTranslateMessage
                                 // on the active component.
-                                if (component.FPreTranslateMessage(&msg).IsFalse())
+                                if (!component.FPreTranslateMessage(&msg))
                                 {
                                     User32.TranslateMessage(ref msg);
                                     if (useAnsi)
@@ -362,14 +362,14 @@ namespace System.Windows.Forms
                             {
                                 foreach (ComponentHashtableEntry idleEntry in OleComponents.Values)
                                 {
-                                    continueIdle |= idleEntry.component.FDoIdle(msoidlef.All).IsTrue();
+                                    continueIdle |= idleEntry.component.FDoIdle(msoidlef.All);
                                 }
                             }
 
                             // Give the component one more chance to terminate the message loop.
                             continueLoop = component.FContinueMessageLoop(uReason, pvLoopData, null);
 
-                            if (continueLoop.IsTrue())
+                            if (continueLoop)
                             {
                                 if (continueIdle)
                                 {
@@ -390,7 +390,7 @@ namespace System.Windows.Forms
                                     // message appeared between processing and now WaitMessage
                                     // would wait for the next message.  We minimize this here
                                     // by calling PeekMessage.
-                                    if (User32.PeekMessageW(ref msg, IntPtr.Zero, 0, 0, User32.PM.NOREMOVE).IsFalse())
+                                    if (!User32.PeekMessageW(ref msg, IntPtr.Zero, 0, 0, User32.PM.NOREMOVE))
                                     {
                                         User32.WaitMessage();
                                     }
@@ -408,7 +408,7 @@ namespace System.Windows.Forms
                     _activeComponent = prevActive;
                 }
 
-                return continueLoop.IsFalse() ? BOOL.TRUE : BOOL.FALSE;
+                return !continueLoop;
             }
 
             /// <inheritdoc/>
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
                     *ppvObj = null;
                 }
 
-                return BOOL.FALSE;
+                return false;
             }
 
             /// <inheritdoc/>
@@ -436,7 +436,7 @@ namespace System.Windows.Forms
                     *ppicm = null;
                 }
 
-                return BOOL.FALSE;
+                return false;
             }
 
             /// <inheritdoc/>
@@ -455,13 +455,13 @@ namespace System.Windows.Forms
                 };
 
                 if (component is null)
-                    return BOOL.FALSE;
+                    return false;
 
                 if (pcrinfo is not null)
                 {
                     if (pcrinfo->cbSize < sizeof(MSOCRINFO))
                     {
-                        return BOOL.FALSE;
+                        return false;
                     }
 
                     foreach (ComponentHashtableEntry entry in OleComponents.Values)
@@ -480,7 +480,7 @@ namespace System.Windows.Forms
                     *ppic = (void*)Marshal.GetComInterfaceForObject<IMsoComponent, IMsoComponent>(component);
                 }
 
-                return BOOL.TRUE;
+                return true;
             }
         }
     }

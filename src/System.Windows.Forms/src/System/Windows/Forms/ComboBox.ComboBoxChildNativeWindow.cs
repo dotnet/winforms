@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -141,7 +141,7 @@ namespace System.Windows.Forms
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    m.ResultInternal = UiaCore.UiaReturnRawElementProvider(
+                    m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
                         this,
                         m.WParamInternal,
                         m.LParamInternal,
@@ -156,10 +156,7 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        m.ResultInternal = Oleacc.LresultFromObject(
-                            in IID.IAccessible,
-                            m.WParamInternal,
-                            new HandleRef(this, pUnknown));
+                        m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, new HandleRef(this, pUnknown));
                     }
                     finally
                     {

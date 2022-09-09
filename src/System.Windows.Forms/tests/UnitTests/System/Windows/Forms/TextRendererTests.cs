@@ -757,7 +757,7 @@ namespace System.Windows.Forms.Tests
             DeviceContextState state = new DeviceContextState(hdc);
 
             using MemoryStream stream = new MemoryStream(1024);
-            using (Metafile metafileRecorder = new Metafile(stream, hdc.HDC.Handle, EmfType.EmfOnly))
+            using (Metafile metafileRecorder = new Metafile(stream, hdc.HDC, EmfType.EmfOnly))
             using (Graphics graphics = Graphics.FromImage(metafileRecorder))
             {
                 using Matrix matrix = new Matrix();
@@ -782,7 +782,7 @@ namespace System.Windows.Forms.Tests
             // Need to queue the stream back to the beginning for the reader
             stream.Position = 0;
             using Metafile metafile = new Metafile(stream);
-            using var emf = new EmfScope((Interop.Gdi32.HENHMETAFILE)metafile.GetHenhmetafile());
+            using var emf = new EmfScope((HENHMETAFILE)metafile.GetHenhmetafile());
 
             emf.Validate(
                 state,
@@ -794,7 +794,7 @@ namespace System.Windows.Forms.Tests
         }
 
         public static TheoryData<TextFormatFlags, Rectangle> TextRenderer_DrawText_ApplyState_TestData
-            => new TheoryData<TextFormatFlags, Rectangle>
+            => new()
             {
                 { TextFormatFlags.Default, new Rectangle(3, 0, 49, 12) },
                 { TextFormatFlags.PreserveGraphicsTranslateTransform, new Rectangle(8, 10, 49, 12) },

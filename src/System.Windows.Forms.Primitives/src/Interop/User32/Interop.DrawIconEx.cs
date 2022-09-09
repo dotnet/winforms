@@ -8,9 +8,9 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL DrawIconEx(
-            Gdi32.HDC hDC,
+        [DllImport(Libraries.User32)]
+        public static extern BOOL DrawIconEx(
+            HDC hDC,
             int xLeft,
             int yTop,
             IntPtr hIcon,
@@ -21,7 +21,7 @@ internal static partial class Interop
             DI diFlags);
 
         public static BOOL DrawIconEx(
-            Gdi32.HDC hDC,
+            HDC hDC,
             int xLeft,
             int yTop,
             IHandle hIcon,
@@ -41,7 +41,7 @@ internal static partial class Interop
             int cxWidth,
             int cyWidth)
         {
-            BOOL result = DrawIconEx((Gdi32.HDC)hDC.Handle, xLeft, yTop, hIcon.Handle, cxWidth, cyWidth, 0, IntPtr.Zero, DI.NORMAL);
+            BOOL result = DrawIconEx((HDC)hDC.Handle, xLeft, yTop, hIcon.Handle, cxWidth, cyWidth, 0, IntPtr.Zero, DI.NORMAL);
             GC.KeepAlive(hIcon);
             GC.KeepAlive(hDC);
             return result;

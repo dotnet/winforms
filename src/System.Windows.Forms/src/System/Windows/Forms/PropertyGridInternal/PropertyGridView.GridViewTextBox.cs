@@ -294,7 +294,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (m.LParamInternal != 0)
                 {
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
 
                     if (nmhdr->hwndFrom == PropertyGridView.ToolTip.Handle)
                     {
@@ -302,7 +302,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             case ComCtl32.TTN.SHOW:
                                 PositionTooltip(this, PropertyGridView.ToolTip, ClientRectangle);
-                                m.ResultInternal = 1;
+                                m.ResultInternal = (LRESULT)1;
                                 return true;
                             default:
                                 PropertyGridView.WndProc(ref m);
@@ -324,7 +324,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 switch (m.MsgInternal)
                 {
                     case User32.WM.STYLECHANGED:
-                        if ((User32.GWL)m.WParamInternal == User32.GWL.EXSTYLE)
+                        if ((User32.GWL)(nint)m.WParamInternal == User32.GWL.EXSTYLE)
                         {
                             PropertyGridView.Invalidate();
                         }
@@ -342,7 +342,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         _mouseHook.HookMouseDown = false;
                         break;
                     case User32.WM.SHOWWINDOW:
-                        if (m.WParamInternal == 0)
+                        if (m.WParamInternal == 0u)
                         {
                             _mouseHook.HookMouseDown = false;
                         }
@@ -358,10 +358,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     case User32.WM.GETDLGCODE:
 
-                        m.ResultInternal = m.ResultInternal | (nint)(User32.DLGC.WANTARROWS | User32.DLGC.WANTCHARS);
+                        m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)(User32.DLGC.WANTARROWS | User32.DLGC.WANTCHARS));
                         if (PropertyGridView.EditTextBoxNeedsCommit || PropertyGridView.WantsTab(forward: (ModifierKeys & Keys.Shift) == 0))
                         {
-                            m.ResultInternal = m.ResultInternal | (nint)(User32.DLGC.WANTALLKEYS | User32.DLGC.WANTTAB);
+                            m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)(User32.DLGC.WANTALLKEYS | User32.DLGC.WANTTAB));
                         }
 
                         return;

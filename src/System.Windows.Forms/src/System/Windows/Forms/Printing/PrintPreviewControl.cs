@@ -344,7 +344,7 @@ namespace System.Windows.Forms
                     };
 
                     User32.SB direction = horizontal ? User32.SB.HORZ : User32.SB.VERT;
-                    if (User32.GetScrollInfo(m.HWnd, direction, ref si).IsTrue())
+                    if (User32.GetScrollInfo(m.HWnd, direction, ref si))
                     {
                         pos = si.nTrackPos;
                     }
@@ -765,8 +765,8 @@ namespace System.Windows.Forms
                 ref scroll,
                 ref scroll);
 
-            User32.SetScrollPos(this, User32.SB.HORZ, position.X, BOOL.TRUE);
-            User32.SetScrollPos(this, User32.SB.VERT, position.Y, BOOL.TRUE);
+            User32.SetScrollPos(this, User32.SB.HORZ, position.X, true);
+            User32.SetScrollPos(this, User32.SB.VERT, position.Y, true);
         }
 
         internal unsafe void SetVirtualSizeNoInvalidate(Size value)
@@ -783,13 +783,13 @@ namespace System.Windows.Forms
                 nPage = (uint)Height
             };
 
-            User32.SetScrollInfo(this, User32.SB.VERT, ref info, BOOL.TRUE);
+            User32.SetScrollInfo(this, User32.SB.VERT, ref info, true);
 
             info.fMask = User32.SIF.RANGE | User32.SIF.PAGE;
             info.nMin = 0;
             info.nMax = Math.Max(Width, virtualSize.Width) - 1;
             info.nPage = (uint)Width;
-            User32.SetScrollInfo(this, User32.SB.HORZ, ref info, BOOL.TRUE);
+            User32.SetScrollInfo(this, User32.SB.HORZ, ref info, true);
         }
 
         /// <summary>
@@ -818,7 +818,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKeyDown(ref Message msg)
         {
-            Keys keyData = (Keys)msg.WParamInternal | ModifierKeys;
+            Keys keyData = (Keys)(nint)msg.WParamInternal | ModifierKeys;
             Point locPos = Position;
             int pos;
             int maxPos;

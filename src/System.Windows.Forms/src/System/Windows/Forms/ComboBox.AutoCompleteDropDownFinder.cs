@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using System.Text;
-using static Interop;
 using static Interop.User32;
 
 namespace System.Windows.Forms
@@ -50,7 +49,7 @@ namespace System.Windows.Forms
                     ACNativeWindow.RegisterACWindow(hRef.Handle, _shouldSubClass);
                 }
 
-                return BOOL.TRUE;
+                return true;
             }
 
             static string GetClassName(HandleRef hRef)

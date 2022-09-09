@@ -160,15 +160,15 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(bitmap);
 
-            Gdi32.HBITMAP hbitmap;
+            HBITMAP hbitmap;
             Size size = bitmap.Size;
 
             // Don't use the cached DC here as this isn't a common API and we're manipulating the state.
             using var screen = new Gdi32.CreateDcScope(default);
             using var dc = new Gdi32.CreateDcScope(screen);
 
-            Gdi32.HPALETTE palette = Gdi32.CreateHalftonePalette(dc);
-            Gdi32.GetObjectW(palette, out uint entryCount);
+            HPALETTE palette = PInvoke.CreateHalftonePalette(dc);
+            Gdi32.GetObjectW((HGDIOBJ)palette.Value, out uint entryCount);
 
             byte[] imageBuffer = ArrayPool<byte>.Shared.Rent(bitmap.Width * bitmap.Height);
 
@@ -204,7 +204,7 @@ namespace System.Windows.Forms
                     };
                 }
 
-                Gdi32.DeleteObject(palette);
+                Gdi32.DeleteObject((HGDIOBJ)palette.Value);
 
                 hbitmap = Gdi32.CreateDIBSection(
                     screen,
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
                 // Put our new bitmap handle (with the halftone palette) into the dc and use Graphics to
                 // copy the Bitmap into it.
 
-                Gdi32.HGDIOBJ previousBitmap = Gdi32.SelectObject(dc, hbitmap);
+                HGDIOBJ previousBitmap = Gdi32.SelectObject(dc, hbitmap);
                 if (previousBitmap.IsNull)
                 {
                     throw new Win32Exception();
@@ -318,12 +318,12 @@ namespace System.Windows.Forms
 
             Size size = bitmap.Size;
 
-            Gdi32.HBITMAP colorMask = (Gdi32.HBITMAP)bitmap.GetHbitmap();
+            HBITMAP colorMask = (HBITMAP)bitmap.GetHbitmap();
             using User32.GetDcScope screenDC = new(IntPtr.Zero);
             using Gdi32.CreateDcScope sourceDC = new(screenDC);
             using Gdi32.CreateDcScope targetDC = new(screenDC);
-            using Gdi32.SelectObjectScope sourceBitmapSelection = new(sourceDC, (Gdi32.HBITMAP)monochromeMask);
-            using Gdi32.SelectObjectScope targetBitmapSelection = new(targetDC, colorMask);
+            using Gdi32.SelectObjectScope sourceBitmapSelection = new(sourceDC, (HGDIOBJ)monochromeMask);
+            using Gdi32.SelectObjectScope targetBitmapSelection = new(targetDC, (HGDIOBJ)colorMask.Value);
 
             // Now the trick is to make colorBitmap black wherever the transparent color is located, but keep the
             // original color everywhere else. We've already got the original bitmap, so all we need to do is to AND
@@ -332,13 +332,13 @@ namespace System.Windows.Forms
 
             Gdi32.SetBkColor(targetDC, 0x00ffffff);    // white
             Gdi32.SetTextColor(targetDC, 0x00000000);  // black
-            PInvoke.BitBlt(targetDC, x: 0, y: 0, size.Width, size.Height, sourceDC, x1: 0, y1: 0, (Gdi.ROP_CODE)0x220326);
+            PInvoke.BitBlt(targetDC, x: 0, y: 0, size.Width, size.Height, sourceDC, x1: 0, y1: 0, (ROP_CODE)0x220326);
             //RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
             return (IntPtr)colorMask;
         }
 
-        internal unsafe static Gdi32.HBRUSH CreateHalftoneHBRUSH()
+        internal unsafe static HBRUSH CreateHalftoneHBRUSH()
         {
             short* grayPattern = stackalloc short[8];
             for (int i = 0; i < 8; i++)
@@ -348,9 +348,9 @@ namespace System.Windows.Forms
 
             using var hBitmap = new Gdi32.CreateBitmapScope(8, 8, 1, 1, grayPattern);
 
-            Gdi.LOGBRUSH lb = new()
+            LOGBRUSH lb = new()
             {
-                lbStyle = (Gdi.BRUSH_STYLE)(uint)Gdi32.BS.PATTERN,
+                lbStyle = (BRUSH_STYLE)(uint)Gdi32.BS.PATTERN,
                 lbColor = default, // color is ignored since style is BS.PATTERN
                 lbHatch = (nuint)(IntPtr)hBitmap
             };
@@ -1402,9 +1402,8 @@ namespace System.Windows.Forms
                         t_checkImage = null;
                     }
 
-                    // We draw the checkmark slightly off center to eliminate 3-D border artifacts,
-                    // and compensate below
-                    RECT rcCheck = new RECT(0, 0, rectangle.Width, rectangle.Height);
+                    // We draw the checkmark slightly off center to eliminate 3-D border artifacts and compensate below
+                    RECT rcCheck = new(rectangle.Size);
                     Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
                     using (Graphics g2 = Graphics.FromImage(bitmap))
                     {
@@ -1855,8 +1854,8 @@ namespace System.Windows.Forms
 
             using Gdi32.ObjectScope pen = new(style switch
             {
-                FrameStyle.Dashed => PInvoke.CreatePen(Gdi.PEN_STYLE.PS_DOT, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(backColor)),
-                FrameStyle.Thick => PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 2, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(backColor)),
+                FrameStyle.Dashed => (HGDIOBJ)PInvoke.CreatePen(PEN_STYLE.PS_DOT, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
+                FrameStyle.Thick => (HGDIOBJ)PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
                 _ => default
             });
 
@@ -1880,7 +1879,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
-            using Gdi32.ObjectScope pen = new(PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
+            using Gdi32.ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
             using Gdi32.SetRop2Scope ropScope = new(desktopDC, rop2);
             using Gdi32.SelectObjectScope brushSelection = new(desktopDC, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
             using Gdi32.SelectObjectScope penSelection = new(desktopDC, pen);
@@ -2041,7 +2040,7 @@ namespace System.Windows.Forms
         }
 
         internal static void DrawStringDisabled(
-            Gdi32.HDC dc,
+            HDC dc,
             string s,
             Font font,
             Color color,
@@ -2155,35 +2154,35 @@ namespace System.Windows.Forms
                 changed = true;
             }
 
-            bool fontBold = target.Bold.IsTrue();
+            bool fontBold = target.Bold;
             bool isBold = logfont.lfWeight >= Gdi32.FW.BOLD;
             if (fontBold != isBold)
             {
-                target.Bold = isBold.ToBOOL();
+                target.Bold = isBold;
                 changed = true;
             }
 
-            bool fontItalic = target.Italic.IsTrue();
+            bool fontItalic = target.Italic;
             bool isItalic = logfont.lfItalic != 0;
             if (fontItalic != isItalic)
             {
-                target.Italic = isItalic.ToBOOL();
+                target.Italic = isItalic;
                 changed = true;
             }
 
-            bool fontUnderline = target.Underline.IsTrue();
+            bool fontUnderline = target.Underline;
             bool isUnderline = logfont.lfUnderline != 0;
             if (fontUnderline != isUnderline)
             {
-                target.Underline = isUnderline.ToBOOL();
+                target.Underline = isUnderline;
                 changed = true;
             }
 
-            bool fontStrike = target.Strikethrough.IsTrue();
+            bool fontStrike = target.Strikethrough;
             bool isStrike = logfont.lfStrikeOut != 0;
             if (fontStrike != isStrike)
             {
-                target.Strikethrough = isStrike.ToBOOL();
+                target.Strikethrough = isStrike;
                 changed = true;
             }
 

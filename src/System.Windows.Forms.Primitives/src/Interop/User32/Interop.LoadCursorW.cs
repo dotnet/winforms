@@ -31,7 +31,7 @@ internal static partial class Interop
             public const int IDC_HELP = 32651;
         }
 
-        [LibraryImport(Libraries.User32)]
-        public static partial IntPtr LoadCursorW(IntPtr hInstance, IntPtr lpCursorName);
+        [DllImport(Libraries.User32)]
+        public static extern nint LoadCursorW(IntPtr hInstance, IntPtr lpCursorName);
     }
 }

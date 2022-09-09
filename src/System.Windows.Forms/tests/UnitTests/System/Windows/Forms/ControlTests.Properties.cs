@@ -9283,7 +9283,7 @@ namespace System.Windows.Forms.Tests
             var keyState = new byte[256];
             fixed (byte* b = keyState)
             {
-                Assert.True(User32.GetKeyboardState(b).IsTrue());
+                Assert.True(User32.GetKeyboardState(b));
                 keyState[(int)Keys.LButton] = lState;
                 keyState[(int)Keys.MButton] = mState;
                 keyState[(int)Keys.RButton] = rState;

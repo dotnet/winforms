@@ -13,7 +13,6 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using Windows.Win32.Graphics.Gdi;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 using static Interop.User32;
@@ -601,7 +600,7 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                Foundation.HWND focus = PInvoke.GetFocus();
+                HWND focus = PInvoke.GetFocus();
                 return !focus.IsNull
                     && ((_childEdit is not null && focus == _childEdit.Handle) || (_childListBox is not null && focus == _childListBox.Handle));
             }
@@ -1611,7 +1610,7 @@ namespace System.Windows.Forms
 
                     if (AutoCompleteMode != AutoCompleteMode.None)
                     {
-                        char keyChar = (char)m.WParamInternal;
+                        char keyChar = (char)(nint)m.WParamInternal;
                         if (keyChar == (char)(int)Keys.Escape)
                         {
                             DroppedDown = false;
@@ -1820,7 +1819,7 @@ namespace System.Windows.Forms
                         if (_mousePressed)
                         {
                             PInvoke.GetWindowRect(this, out var rect);
-                            Rectangle clientRect = rect.ToRectangle();
+                            Rectangle clientRect = rect;
 
                             if (clientRect.Contains(PointToScreen(PARAM.ToPoint(m.LParamInternal))))
                             {
@@ -1968,7 +1967,7 @@ namespace System.Windows.Forms
         private void OnMouseLeaveInternal(EventArgs args)
         {
             PInvoke.GetWindowRect(this, out var rect);
-            Rectangle rectangle = rect.ToRectangle();
+            Rectangle rectangle = rect;
             Point p = MousePosition;
             if (!rectangle.Contains(p))
             {
@@ -2042,12 +2041,12 @@ namespace System.Windows.Forms
             {
                 if (_childEdit is not null && _childEdit.Handle != IntPtr.Zero)
                 {
-                    InvalidateRect(new HandleRef(this, _childEdit.Handle), null, BOOL.FALSE);
+                    InvalidateRect(new HandleRef(this, _childEdit.Handle), null, false);
                 }
 
                 if (_childListBox is not null && _childListBox.Handle != IntPtr.Zero)
                 {
-                    InvalidateRect(new HandleRef(this, _childListBox.Handle), null, BOOL.FALSE);
+                    InvalidateRect(new HandleRef(this, _childListBox.Handle), null, false);
                 }
             }
         }
@@ -2167,7 +2166,7 @@ namespace System.Windows.Forms
             return listNativeWindow is not null ? listNativeWindow.GetHashCode() : 0;
         }
 
-        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
+        internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg)
         {
             if (msg == WM.CTLCOLORSTATIC && !ShouldSerializeBackColor())
             {
@@ -2216,7 +2215,7 @@ namespace System.Windows.Forms
             else if (m.Msg == (int)WM.CHAR)
             {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
-                char keyChar = (char)m.WParamInternal;
+                char keyChar = (char)(nuint)m.WParamInternal;
                 if (keyChar == (char)Keys.Back)
                 {
                     if (DateTime.Now.Ticks - _autoCompleteTimeStamp > AutoCompleteTimeout ||
@@ -3624,10 +3623,10 @@ namespace System.Windows.Forms
             {
                 RECT rect = default;
                 GetClientRect(this, ref rect);
-                Gdi32.HDC hdc = (Gdi32.HDC)m.WParamInternal;
+                HDC hdc = (HDC)(nint)m.WParamInternal;
                 using var hbrush = new Gdi32.CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
                 hdc.FillRectangle(rect, hbrush);
-                m.ResultInternal = 1;
+                m.ResultInternal = (LRESULT)1;
                 return;
             }
 
@@ -3759,7 +3758,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmReflectDrawItem(ref Message m)
         {
-            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParamInternal;
+            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
             using var e = new DrawItemEventArgs(
                 dis->hDC,
@@ -3772,12 +3771,12 @@ namespace System.Windows.Forms
 
             OnDrawItem(e);
 
-            m.ResultInternal = 1;
+            m.ResultInternal = (LRESULT)1;
         }
 
         private unsafe void WmReflectMeasureItem(ref Message m)
         {
-            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParamInternal;
+            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)(nint)m.LParamInternal;
 
             // Determine if message was sent by a combo item or the combo edit field
             int itemID = (int)mis->itemID;
@@ -3794,7 +3793,7 @@ namespace System.Windows.Forms
                 mis->itemHeight = (uint)ItemHeight;
             }
 
-            m.ResultInternal = 1;
+            m.ResultInternal = (LRESULT)1;
         }
 
         /// <summary>
@@ -3851,7 +3850,7 @@ namespace System.Windows.Forms
                     break;
                 case WM.CTLCOLOREDIT:
                 case WM.CTLCOLORLISTBOX:
-                    m.ResultInternal = InitializeDCForWmCtlColor((Gdi32.HDC)m.WParamInternal, m.MsgInternal);
+                    m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
                     break;
                 case WM.ERASEBKGND:
                     WmEraseBkgnd(ref m);
@@ -3874,7 +3873,7 @@ namespace System.Windows.Forms
                     break;
                 case WM.LBUTTONUP:
                     PInvoke.GetWindowRect(this, out var rect);
-                    Rectangle clientRect = rect.ToRectangle();
+                    Rectangle clientRect = rect;
 
                     Point point = PointToScreen(PARAM.ToPoint(m.LParamInternal));
 
@@ -3912,17 +3911,17 @@ namespace System.Windows.Forms
                         using var windowRegion = new Gdi32.RegionScope(Bounds);
 
                         // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
-                        bool getRegionSucceeded = GetUpdateRgn(Handle, windowRegion, bErase: BOOL.TRUE) != RegionType.ERROR;
+                        bool getRegionSucceeded = GetUpdateRgn(Handle, windowRegion, bErase: true) != RegionType.ERROR;
 
                         PInvoke.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, RGN_COMBINE_MODE.RGN_DIFF);
                         RECT updateRegionBoundingRect = default;
                         Gdi32.GetRgnBox(windowRegion, ref updateRegionBoundingRect);
 
                         // Call the base class to do its painting (with a clipped DC).
-                        bool useBeginPaint = m.WParamInternal == 0;
-                        using var paintScope = useBeginPaint ? new PInvoke.BeginPaintScope((Foundation.HWND)Handle) : default;
+                        bool useBeginPaint = m.WParamInternal == 0u;
+                        using var paintScope = useBeginPaint ? new PInvoke.BeginPaintScope((HWND)Handle) : default;
 
-                        Gdi.HDC dc = useBeginPaint ? paintScope : (Gdi.HDC)m.WParamInternal;
+                        HDC dc = useBeginPaint ? paintScope : (HDC)(nint)m.WParamInternal;
 
                         using var savedDcState = new Gdi32.SaveDcScope(dc);
 
@@ -3931,7 +3930,7 @@ namespace System.Windows.Forms
                             Gdi32.SelectClipRgn(dc, dropDownRegion);
                         }
 
-                        m.WParamInternal = dc;
+                        m.WParamInternal = (nint)dc;
                         DefWndProc(ref m);
 
                         if (getRegionSucceeded)
@@ -3954,7 +3953,7 @@ namespace System.Windows.Forms
                     {
                         DefWndProc(ref m);
 
-                        if (((PRF)m.LParamInternal & PRF.CLIENT) == PRF.CLIENT)
+                        if (((PRF)(nint)m.LParamInternal & PRF.CLIENT) == PRF.CLIENT)
                         {
                             if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                             {

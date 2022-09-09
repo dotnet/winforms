@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial IntPtr MonitorFromRect(ref RECT lprc, MONITOR dwFlags);
+        [DllImport(Libraries.User32)]
+        public static extern IntPtr MonitorFromRect(ref RECT lprc, MONITOR dwFlags);
     }
 }

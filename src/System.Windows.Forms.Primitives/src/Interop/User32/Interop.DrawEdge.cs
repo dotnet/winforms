@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL DrawEdge(Gdi32.HDC hdc, ref RECT qrc, EDGE edge, BF grfFlags);
+        [DllImport(Libraries.User32)]
+        public static extern BOOL DrawEdge(HDC hdc, ref RECT qrc, EDGE edge, BF grfFlags);
     }
 }

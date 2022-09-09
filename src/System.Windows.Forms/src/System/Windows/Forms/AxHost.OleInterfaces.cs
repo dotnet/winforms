@@ -337,7 +337,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            unsafe HRESULT IOleControlSite.TranslateAccelerator(User32.MSG* pMsg, KEYMODIFIERS grfModifiers)
+            unsafe HRESULT IOleControlSite.TranslateAccelerator(MSG* pMsg, KEYMODIFIERS grfModifiers)
             {
                 if (pMsg is null)
                 {
@@ -347,7 +347,7 @@ namespace System.Windows.Forms
                 Debug.Assert(!_host.GetAxState(s_siteProcessedInputKey), "Re-entering IOleControlSite.TranslateAccelerator!!!");
                 _host.SetAxState(s_siteProcessedInputKey, true);
 
-                Message msg = *pMsg;
+                Message msg = Message.Create(pMsg);
                 try
                 {
                     bool f = _host.PreProcessMessage(ref msg);
@@ -520,7 +520,7 @@ namespace System.Windows.Forms
                 if (lpFrameInfo is not null)
                 {
                     lpFrameInfo->cb = (uint)Marshal.SizeOf<OLEINPLACEFRAMEINFO>();
-                    lpFrameInfo->fMDIApp = BOOL.FALSE;
+                    lpFrameInfo->fMDIApp = false;
                     lpFrameInfo->hAccel = IntPtr.Zero;
                     lpFrameInfo->cAccelEntries = 0;
                     lpFrameInfo->hwndFrame = _host.ParentInternal?.Handle ?? IntPtr.Zero;
@@ -548,7 +548,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in OnInPlaceDeactivate");
                 if (_host.GetOcState() == OC_UIACTIVE)
                 {
-                    ((IOleInPlaceSite)this).OnUIDeactivate(0);
+                    ((IOleInPlaceSite)this).OnUIDeactivate(false);
                 }
 
                 _host.GetParentContainer().OnInPlaceDeactivate(_host);

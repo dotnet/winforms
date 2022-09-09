@@ -220,7 +220,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Gdi32.HFONT CalendarFontHandle
+        private HFONT CalendarFontHandle
         {
             get
             {
@@ -1465,7 +1465,7 @@ namespace System.Windows.Forms
                 User32.EnumChildWindows(this, c.enumChildren);
                 if (c.hwndFound != IntPtr.Zero)
                 {
-                    User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, BOOL.TRUE);
+                    User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, true);
                     User32.UpdateWindow(c.hwndFound);
                 }
             }
@@ -1496,7 +1496,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateTimeChange(ref Message m)
         {
-            NMDATETIMECHANGE* nmdtc = (NMDATETIMECHANGE*)m.LParamInternal;
+            NMDATETIMECHANGE* nmdtc = (NMDATETIMECHANGE*)(nint)m.LParamInternal;
             DateTime temp = _value;
             bool oldvalid = _validTime;
             if (nmdtc->dwFlags != GDT.NONE)
@@ -1554,7 +1554,7 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
                 switch ((DTN)nmhdr->code)
                 {
                     case DTN.CLOSEUP:

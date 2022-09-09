@@ -24,7 +24,7 @@ namespace System.Windows.Forms
 
         private IntPtr _hookedWndProc;
 
-        private Foundation.HWND _defaultControlHwnd;
+        private HWND _defaultControlHwnd;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="CommonDialog"/> class.
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
         ///  common dialog hook procedure to center the dialog on the screen before it
         ///  is shown.
         /// </summary>
-        private protected static void MoveToScreenCenter(Foundation.HWND hwnd)
+        private protected static void MoveToScreenCenter(HWND hwnd)
         {
             PInvoke.GetWindowRect(hwnd, out var r);
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);

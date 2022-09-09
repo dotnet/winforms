@@ -34,7 +34,7 @@ namespace System.Windows.Forms
                     _ownedWindows.Add(parent);
                 }
 
-                return BOOL.TRUE;
+                return true;
             }
 
             // Resets the owner of all the windows owned by this Form before handle recreation.

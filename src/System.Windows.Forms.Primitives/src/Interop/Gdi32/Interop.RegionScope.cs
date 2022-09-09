@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using Gdi = Windows.Win32.Graphics.Gdi;
 
 internal static partial class Interop
 {
@@ -96,16 +95,15 @@ internal static partial class Interop
             /// <summary>
             ///  Returns true if this represents a null HRGN.
             /// </summary>
-            public bool IsNull => Region.Handle == IntPtr.Zero;
+            public bool IsNull => Region.IsNull;
 
             public static implicit operator HRGN(RegionScope regionScope) => regionScope.Region;
-            public static implicit operator Gdi.HRGN(RegionScope regionScope) => regionScope.Region;
 
             /// <summary>
             ///  Creates a GDI+ region for this region.
             /// </summary>
             /// <returns>The GDI+ region. Must be disposed.</returns>
-            public Region CreateGdiPlusRegion() => System.Drawing.Region.FromHrgn(Region.Handle);
+            public Region CreateGdiPlusRegion() => System.Drawing.Region.FromHrgn(Region);
 
             /// <summary>
             ///  Clears the handle. Use this to hand over ownership to another entity.
@@ -114,7 +112,7 @@ internal static partial class Interop
 
             public void Dispose()
             {
-                if (Region.Handle != IntPtr.Zero)
+                if (!Region.IsNull)
                 {
                     DeleteObject(Region);
                 }

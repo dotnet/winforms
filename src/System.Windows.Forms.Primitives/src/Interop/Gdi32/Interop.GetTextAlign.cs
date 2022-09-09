@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
-        public static partial TA GetTextAlign(HDC hdc);
+        [DllImport(Libraries.Gdi32)]
+        public static extern TA GetTextAlign(HDC hdc);
 
         public static TA GetTextAlign(IHandle hdc)
         {

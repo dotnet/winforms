@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Gdi32Tests
         [InlineData((int)Gdi32.StockObject.WHITE_BRUSH, 0x00FFFFFF, (uint)Gdi32.BS.SOLID)]
         public void GetStockBrushes(int id, uint color, uint brushStyle)
         {
-            Gdi32.HGDIOBJ hgdiobj = Gdi32.GetStockObject((Gdi32.StockObject)id);
+            HGDIOBJ hgdiobj = Gdi32.GetStockObject((Gdi32.StockObject)id);
             Assert.False(hgdiobj.IsNull);
 
             Gdi32.GetObjectW(hgdiobj, out Gdi32.LOGBRUSH logBrush);

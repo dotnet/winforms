@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 Threading.Thread.Sleep(50);
 
                 // Set back the mouse position where it was.
-                if (setOldCursorPos.IsTrue())
+                if (setOldCursorPos)
                 {
                     SendMouseInput(previousPosition.X, previousPosition.Y, User32.MOUSEEVENTF.MOVE | User32.MOUSEEVENTF.ABSOLUTE);
                 }

@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                 // WriteEx wasn't found - that's fine - we will use Write.
             }
 
-            return ComCtl32.ImageList.Write(new HandleRef(this, handle), new Ole32.GPStream(stream)).IsTrue();
+            return ComCtl32.ImageList.Write(new HandleRef(this, handle), new Ole32.GPStream(stream));
         }
 
         /// <summary>

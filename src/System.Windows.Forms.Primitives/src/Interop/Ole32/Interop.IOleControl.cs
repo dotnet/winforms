@@ -19,7 +19,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT OnMnemonic(
-                User32.MSG* pMsg);
+                MSG* pMsg);
 
             [PreserveSig]
             HRESULT OnAmbientPropertyChange(

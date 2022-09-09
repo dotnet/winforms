@@ -6,7 +6,6 @@ using System.Drawing;
 using Xunit;
 using static Interop;
 using static Interop.ComCtl32;
-using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms.Tests;
 
@@ -21,8 +20,8 @@ public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExcept
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId));
-        PInvoke.GetWindowRect(labelEdit, out Foundation.RECT r);
-        Assert.Equal(r, accessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId));
+        PInvoke.GetWindowRect(labelEdit, out RECT r);
+        Assert.Equal((Rectangle)r, accessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId));
         Assert.Equal(Environment.ProcessId, accessibilityObject.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
         Assert.Equal(UiaCore.UIA.EditControlTypeId, accessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
         Assert.Equal(accessibilityObject.Name, accessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));

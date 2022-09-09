@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial COLORREF GetSysColor(COLOR nIndex);
+        [DllImport(Libraries.User32)]
+        public static extern COLORREF GetSysColor(COLOR nIndex);
     }
 }

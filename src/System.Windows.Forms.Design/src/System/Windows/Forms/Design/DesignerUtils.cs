@@ -13,7 +13,6 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
 using static Interop;
-using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms.Design
 {
@@ -29,14 +28,14 @@ namespace System.Windows.Forms.Design
         private static HatchBrush s_selectionBorderBrush =
             new(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
         //Pens and Brushes used via GDI to render our grabhandles
-        private static Gdi32.HBRUSH s_grabHandleFillBrushPrimary =
+        private static HBRUSH s_grabHandleFillBrushPrimary =
             Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
-        private static Gdi32.HBRUSH s_grabHandleFillBrush =
+        private static HBRUSH s_grabHandleFillBrush =
             Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
-        private static Gdi.HPEN s_grabHandlePenPrimary =
-            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
-        private static Gdi.HPEN s_grabHandlePen =
-            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+        private static HPEN s_grabHandlePenPrimary =
+            PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        private static HPEN s_grabHandlePen =
+            PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
         //The box-like image used as the user is dragging comps from the toolbox
         private static Bitmap s_boxImage;
@@ -183,10 +182,10 @@ namespace System.Windows.Forms.Design
             s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
 
             Gdi32.DeleteObject(s_grabHandlePenPrimary);
-            s_grabHandlePenPrimary = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+            s_grabHandlePenPrimary = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
             Gdi32.DeleteObject(s_grabHandlePen);
-            s_grabHandlePen = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+            s_grabHandlePen = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
         }
 
         /// <summary>
@@ -444,7 +443,7 @@ namespace System.Windows.Forms.Design
                 controlDC,
                 x1: 0,
                 y1: 0,
-                Gdi.ROP_CODE.SRCCOPY);
+                ROP_CODE.SRCCOPY);
         }
 
         /// <summary>

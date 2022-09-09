@@ -8,10 +8,10 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme)]
-        public static unsafe partial HRESULT GetThemeMargins(
+        [DllImport(Libraries.UxTheme)]
+        public static unsafe extern HRESULT GetThemeMargins(
             IntPtr hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             int iPropId,
@@ -20,7 +20,7 @@ internal static partial class Interop
 
         public unsafe static HRESULT GetThemeMargins(
             IHandle hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             int iPropId,

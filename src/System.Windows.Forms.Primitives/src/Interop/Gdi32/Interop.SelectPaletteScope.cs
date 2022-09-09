@@ -27,7 +27,7 @@ internal static partial class Interop
             public SelectPaletteScope(HDC hdc, HPALETTE hpalette, bool forceBackground, bool realizePalette)
             {
                 HDC = hdc;
-                HPalette = SelectPalette(hdc, hpalette, forceBackground.ToBOOL());
+                HPalette = SelectPalette(hdc, hpalette, forceBackground);
                 if (!HPalette.IsNull && realizePalette)
                 {
                     RealizePalette((IntPtr)hdc);
@@ -62,7 +62,7 @@ internal static partial class Interop
             {
                 if (!HPalette.IsNull)
                 {
-                    SelectPalette(HDC, HPalette, bForceBkgd: BOOL.FALSE);
+                    SelectPalette(HDC, HPalette, bForceBkgd: false);
                 }
 
                 DisposalTracking.SuppressFinalize(this);

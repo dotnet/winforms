@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using static Interop;
 using static Interop.User32;
 
 namespace System.Windows.Forms
@@ -36,10 +35,10 @@ namespace System.Windows.Forms
                     ACNativeWindow newAC = new ACNativeWindow(handle);
                 }
 
-                return BOOL.TRUE;
+                return true;
             }
 
-            internal bool Visible => IsWindowVisible(this).IsTrue();
+            internal bool Visible => IsWindowVisible(this);
 
             static internal bool AutoCompleteActive
             {

@@ -842,7 +842,7 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((PRF)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
+            if (((PRF)(nint)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
                 && BorderStyle == BorderStyle.Fixed3D)
             {
                 using Graphics g = Graphics.FromHdc(m.WParamInternal);
@@ -889,7 +889,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws the <see cref="PlaceholderText"/> in the client area of the <see cref="TextBox"/> using the default font and color.
         /// </summary>
-        private void DrawPlaceholderText(Gdi32.HDC hdc)
+        private void DrawPlaceholderText(HDC hdc)
         {
             TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top |
                                     TextFormatFlags.EndEllipsis;
@@ -975,7 +975,7 @@ namespace System.Windows.Forms
                         // Invalidate the whole control to make sure the native control doesn't make any assumptions over what it has to paint
                         if (ShouldRenderPlaceHolderText())
                         {
-                            User32.InvalidateRect(Handle, null, bErase: BOOL.TRUE);
+                            User32.InvalidateRect(Handle, null, bErase: true);
                         }
 
                         // Let the native implementation draw the background and animate the frame
@@ -984,10 +984,10 @@ namespace System.Windows.Forms
                         if (ShouldRenderPlaceHolderText())
                         {
                             // Invalidate again because the native WM_PAINT already validated everything by calling BeginPaint itself.
-                            User32.InvalidateRect(Handle, null, bErase: BOOL.TRUE);
+                            User32.InvalidateRect(Handle, null, bErase: true);
 
                             // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
-                            using var paintScope = new PInvoke.BeginPaintScope((Foundation.HWND)Handle);
+                            using var paintScope = new PInvoke.BeginPaintScope((HWND)Handle);
                             DrawPlaceholderText(paintScope);
 
                             User32.ValidateRect(this, null);

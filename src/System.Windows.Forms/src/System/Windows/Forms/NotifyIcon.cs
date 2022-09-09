@@ -738,7 +738,7 @@ namespace System.Windows.Forms
             switch (msg.MsgInternal)
             {
                 case (User32.WM)WM_TRAYMOUSEMESSAGE:
-                    switch ((User32.WM)msg.LParamInternal)
+                    switch ((User32.WM)(nint)msg.LParamInternal)
                     {
                         case User32.WM.LBUTTONDBLCLK:
                             WmMouseDown(MouseButtons.Left, 2);

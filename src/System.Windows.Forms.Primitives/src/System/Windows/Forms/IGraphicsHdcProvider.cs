@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -25,9 +24,9 @@ namespace System.Windows.Forms
         bool IsGraphicsStateClean { get; }
 
         /// <summary>
-        ///  Gets the <see cref="Gdi32.HDC"/>, if the object was created from one.
+        ///  Gets the <see cref="HDC"/>, if the object was created from one.
         /// </summary>
-        Gdi32.HDC GetHDC();
+        HDC GetHDC();
 
         /// <summary>
         ///  Get the <see cref="Graphics"/> object.

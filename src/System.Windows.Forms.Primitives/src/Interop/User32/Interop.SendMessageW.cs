@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using Windows.Win32.Foundation;
 
 internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial nint SendMessageW(
+        [DllImport(Libraries.User32)]
+        public static extern nint SendMessageW(
             IntPtr hWnd,
             WM Msg,
             nint wParam = default,

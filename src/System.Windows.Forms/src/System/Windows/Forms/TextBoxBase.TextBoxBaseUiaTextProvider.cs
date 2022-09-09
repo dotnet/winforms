@@ -104,7 +104,7 @@ namespace System.Windows.Forms
 
             public override UiaCore.ITextRangeProvider? GetCaretRange(out BOOL isActive)
             {
-                isActive = BOOL.FALSE;
+                isActive = false;
 
                 if (!_owningTextBoxBase.IsHandleCreated)
                 {
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
                 var hasKeyboardFocus = _owningTextBoxBase.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
                 if (hasKeyboardFocus is bool && (bool)hasKeyboardFocus)
                 {
-                    isActive = BOOL.TRUE;
+                    isActive = true;
                 }
 
                 return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, _owningTextBoxBase.SelectionStart, _owningTextBoxBase.SelectionStart);
@@ -380,7 +380,7 @@ namespace System.Windows.Forms
                 }
 
                 // Add the width of the character at that position.
-                return Gdi32.GetTextExtentPoint32W(hdc, item.ToString(), 1, ref size).IsTrue();
+                return Gdi32.GetTextExtentPoint32W(hdc, item.ToString(), 1, ref size);
             }
         }
     }

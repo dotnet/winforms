@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Gdi = Windows.Win32.Graphics.Gdi;
-
 internal static partial class Interop
 {
     internal static partial class User32
     {
         /// <summary>
-        ///  Helper to scope lifetime of an <see cref="Gdi32.HDC"/> retrieved via <see cref="GetDC(IntPtr)"/> and
-        ///  <see cref="GetDCEx(IntPtr, IntPtr, DCX)"/>. Releases the <see cref="Gdi32.HDC"/> (if any) when disposed.
+        ///  Helper to scope lifetime of an <see cref="HDC"/> retrieved via <see cref="GetDC(IntPtr)"/> and
+        ///  <see cref="GetDCEx(IntPtr, IntPtr, DCX)"/>. Releases the <see cref="HDC"/> (if any) when disposed.
         /// </summary>
         /// <remarks>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by <see langword="ref" />
@@ -18,7 +16,7 @@ internal static partial class Interop
         /// </remarks>
         public readonly ref struct GetDcScope
         {
-            public Gdi32.HDC HDC { get; }
+            public HDC HDC { get; }
             public IntPtr HWND { get; }
 
             public GetDcScope(IntPtr hwnd)
@@ -28,7 +26,7 @@ internal static partial class Interop
             }
 
             /// <summary>
-            ///  Creates a <see cref="Gdi32.HDC"/> using <see cref="GetDCEx(IntPtr, IntPtr, DCX)"/>.
+            ///  Creates a <see cref="HDC"/> using <see cref="GetDCEx(IntPtr, IntPtr, DCX)"/>.
             /// </summary>
             /// <remarks>
             ///  GetWindowDC calls GetDCEx(hwnd, null, DCX_WINDOW | DCX_USESTYLE).
@@ -53,9 +51,8 @@ internal static partial class Interop
 
             public bool IsNull => HDC.IsNull;
 
-            public static implicit operator IntPtr(in GetDcScope scope) => scope.HDC.Handle;
-            public static implicit operator Gdi32.HDC(in GetDcScope scope) => scope.HDC;
-            public static implicit operator Gdi.HDC(in GetDcScope scope) => scope.HDC;
+            public static implicit operator nint(in GetDcScope scope) => scope.HDC;
+            public static implicit operator HDC(in GetDcScope scope) => scope.HDC;
 
             public void Dispose()
             {

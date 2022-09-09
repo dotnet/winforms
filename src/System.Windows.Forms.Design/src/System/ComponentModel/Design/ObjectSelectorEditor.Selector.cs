@@ -201,7 +201,7 @@ namespace System.ComponentModel.Design
                 switch (m.MsgInternal)
                 {
                     case User32.WM.GETDLGCODE:
-                        m.ResultInternal = m.ResultInternal | (int)User32.DLGC.WANTALLKEYS;
+                        m.ResultInternal = (LRESULT)(m.ResultInternal | (int)User32.DLGC.WANTALLKEYS);
                         return;
                     case User32.WM.MOUSEMOVE:
                         if (clickSeen)
@@ -211,7 +211,7 @@ namespace System.ComponentModel.Design
 
                         break;
                     case User32.WM.REFLECT_NOTIFY:
-                        User32.NMHDR* nmtv = (User32.NMHDR*)m.LParamInternal;
+                        User32.NMHDR* nmtv = (User32.NMHDR*)(nint)m.LParamInternal;
                         if (nmtv->code == (int)ComCtl32.NM.CLICK)
                         {
                             clickSeen = true;

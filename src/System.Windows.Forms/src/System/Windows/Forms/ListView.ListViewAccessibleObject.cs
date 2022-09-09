@@ -26,7 +26,7 @@ namespace System.Windows.Forms
                     if (_owningListView.IsHandleCreated)
                     {
                         PInvoke.GetWindowRect(_owningListView, out var rect);
-                        return rect.ToRectangle();
+                        return rect;
                     }
 
                     return Rectangle.Empty;

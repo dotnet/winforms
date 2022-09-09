@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using Microsoft.Win32;
-using Windows.Win32.Graphics.Gdi;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -27,11 +26,11 @@ namespace System.Windows.Forms
             }
 
             // returns the distance from the client rect to the upper left hand corner of the control
-            private Foundation.RECT AbsoluteClientRECT
+            private RECT AbsoluteClientRECT
             {
                 get
                 {
-                    Foundation.RECT rect = new();
+                    RECT rect = new();
                     CreateParams cp = CreateParams;
 
                     AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
@@ -52,7 +51,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private Rectangle AbsoluteClientRectangle => AbsoluteClientRECT.ToRectangle();
+            private Rectangle AbsoluteClientRectangle => AbsoluteClientRECT;
 
             private ProfessionalColorTable ColorTable
             {
@@ -270,7 +269,7 @@ namespace System.Windows.Forms
                 g.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
 
                 // We've handled WM_NCPAINT.
-                m.ResultInternal = 0;
+                m.ResultInternal = (LRESULT)0;
             }
 
             protected override void WndProc(ref Message m)

@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices.ComTypes;
 using Xunit;
-using static Interop;
 using static Interop.Shell32;
 using static Interop.User32;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -106,7 +105,7 @@ namespace System.Windows.Forms.Tests
                 DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_DRAGIMAGEBITS);
                 void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
                 SHDRAGIMAGE* pDragImage = (SHDRAGIMAGE*)basePtr;
-                bool isDragImageNull = BitOperations.LeadingZeroCount((uint)pDragImage->hbmpDragImage.Handle.ToInt64()).Equals(32);
+                bool isDragImageNull = BitOperations.LeadingZeroCount((uint)(nint)pDragImage->hbmpDragImage).Equals(32);
                 Size dragImageSize = pDragImage->sizeDragImage;
                 Point offset = pDragImage->ptOffset;
                 PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
@@ -130,7 +129,7 @@ namespace System.Windows.Forms.Tests
                 DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_DRAGIMAGEBITS);
                 void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
                 SHDRAGIMAGE* pDragImage = (SHDRAGIMAGE*)basePtr;
-                bool isDragImageNull = BitOperations.LeadingZeroCount((uint)pDragImage->hbmpDragImage.Handle.ToInt64()).Equals(32);
+                bool isDragImageNull = BitOperations.LeadingZeroCount((uint)(nint)pDragImage->hbmpDragImage).Equals(32);
                 Size dragImageSize = pDragImage->sizeDragImage;
                 Point offset = pDragImage->ptOffset;
                 PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
@@ -317,7 +316,7 @@ namespace System.Windows.Forms.Tests
                 DragDropHelper.SetInDragLoop(dataObject, inDragLoop);
                 DragDropFormat dragDropFormat = (DragDropFormat)dataObject.GetData(DragDropHelper.CF_INSHELLDRAGLOOP);
                 void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
-                bool inShellDragLoop = (basePtr is not null) && (*(BOOL*)basePtr == BOOL.TRUE);
+                bool inShellDragLoop = (basePtr is not null) && (*(BOOL*)basePtr == true);
                 PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
                 Assert.Equal(inDragLoop, inShellDragLoop);
             }

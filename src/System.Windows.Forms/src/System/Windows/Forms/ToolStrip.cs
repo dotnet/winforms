@@ -15,7 +15,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
-using Windows.Win32.Graphics.Gdi;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -2895,7 +2894,7 @@ namespace System.Windows.Forms
 
         // This function will print to the PrinterDC. ToolStrip have there own buffered painting and doesnt play very well
         // with the DC translations done by base Control class. Hence we do our own Painting and the BitBLT the DC into the printerDc.
-        private protected override void PrintToMetaFileRecursive(Gdi32.HDC hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(HDC hDC, IntPtr lParam, Rectangle bounds)
         {
             using Bitmap image = new Bitmap(bounds.Width, bounds.Height);
             using Graphics g = Graphics.FromImage(image);
@@ -3811,7 +3810,7 @@ namespace System.Windows.Forms
                 using (var toolStripHDC = new DeviceContextHdcScope(toolstripGraphics, ApplyGraphicsProperties.Clipping))
                 {
                     // Get the cached item HDC.
-                    Gdi32.HDC itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
+                    HDC itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
 
                     Graphics itemGraphics = itemHDC.CreateGraphics();
                     try
@@ -4962,7 +4961,7 @@ namespace System.Windows.Forms
         {
             if (m.MsgInternal == User32.WM.SETFOCUS)
             {
-                SnapFocus((HWND)m.WParamInternal);
+                SnapFocus((HWND)(nint)m.WParamInternal);
             }
 
             if (m.MsgInternal == User32.WM.MOUSEACTIVATE)
@@ -4979,7 +4978,7 @@ namespace System.Windows.Forms
                 if (hwndClicked == Handle)
                 {
                     _lastMouseDownedItem = null;
-                    m.ResultInternal = (nint)User32.MA.NOACTIVATE;
+                    m.ResultInternal = (LRESULT)(nint)User32.MA.NOACTIVATE;
 
                     if (!IsDropDown && !IsInDesignMode)
                     {
@@ -4993,7 +4992,7 @@ namespace System.Windows.Forms
                             {
                                 // Activate the window, and discard the mouse message.
                                 // this appears to be the same behavior as office.
-                                m.ResultInternal = (nint)User32.MA.ACTIVATEANDEAT;
+                                m.ResultInternal = (LRESULT)(nint)User32.MA.ACTIVATEANDEAT;
                             }
                         }
                     }

@@ -227,7 +227,7 @@ namespace System.Windows.Forms
             // Call the original window procedure to process the message.
             if (_originalWindowProc != IntPtr.Zero)
             {
-                m.ResultInternal = User32.CallWindowProcW(
+                m.ResultInternal = (LRESULT)User32.CallWindowProcW(
                     _originalWindowProc,
                     m.HWnd,
                     m.MsgInternal,
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(hWnd == _handle);
 
-            Message m = Message.Create(hWnd, msg, wParam, lParam);
+            Message m = Message.Create((HWND)hWnd, msg, wParam, lParam);
             try
             {
                 WndProc(ref m);

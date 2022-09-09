@@ -52,7 +52,7 @@ namespace System.ComponentModel.Design
 
                         // The first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use
                         // that to sling focus to the grid.
-                        if (m.WParamInternal == VK_PROCESSKEY)
+                        if (m.WParamInternal == (nuint)VK_PROCESSKEY)
                         {
                             if (PropertyGrid is not null)
                             {

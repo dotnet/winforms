@@ -10,8 +10,8 @@ internal partial class Interop
     {
         public static partial class ImageList
         {
-            [LibraryImport(Libraries.Comctl32, EntryPoint = "ImageList_GetImageCount")]
-            public static partial int GetImageCount(IntPtr himl);
+            [DllImport(Libraries.Comctl32, EntryPoint = "ImageList_GetImageCount")]
+            public static extern int GetImageCount(IntPtr himl);
 
             public static int GetImageCount(IHandle himl)
             {

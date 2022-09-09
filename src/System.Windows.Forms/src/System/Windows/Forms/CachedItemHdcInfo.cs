@@ -7,21 +7,21 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    internal class CachedItemHdcInfo : IDisposable, IHandle<Gdi.HDC>
+    internal class CachedItemHdcInfo : IDisposable, IHandle<HDC>
     {
         internal CachedItemHdcInfo()
         {
         }
 
-        private Gdi.HDC _cachedItemHDC;
+        private HDC _cachedItemHDC;
         private Size _cachedHDCSize = Size.Empty;
-        private Gdi32.HBITMAP _cachedItemBitmap;
+        private HBITMAP _cachedItemBitmap;
 
-        public Gdi.HDC Handle => _cachedItemHDC;
+        public HDC Handle => _cachedItemHDC;
 
         // this DC is cached and should only be deleted on Dispose or when the size changes.
 
-        public Gdi32.HDC GetCachedItemDC(Gdi32.HDC toolStripHDC, Size bitmapSize)
+        public HDC GetCachedItemDC(HDC toolStripHDC, Size bitmapSize)
         {
             if (_cachedHDCSize.Width < bitmapSize.Width
                  || _cachedHDCSize.Height < bitmapSize.Height)
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
 
                 // Create compatible bitmap with the correct size.
                 _cachedItemBitmap = PInvoke.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
-                Gdi32.HGDIOBJ oldBitmap = Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
+                HGDIOBJ oldBitmap = Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
                 // Delete the old bitmap
                 if (!oldBitmap.IsNull)

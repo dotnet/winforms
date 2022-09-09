@@ -41,9 +41,9 @@ namespace System.Windows.Forms
                     cySize = (long)(font.SizeInPoints * 10000),
                     sWeight = (short)logFont.lfWeight,
                     sCharset = logFont.lfCharSet,
-                    fItalic = font.Italic.ToBOOL(),
-                    fUnderline = font.Underline.ToBOOL(),
-                    fStrikethrough = font.Strikeout.ToBOOL(),
+                    fItalic = font.Italic,
+                    fUnderline = font.Underline,
+                    fStrikethrough = font.Strikeout,
                 };
                 Guid iid = typeof(Ole32.IFont).GUID;
                 Ole32.IFont oleFont = Oleaut32.OleCreateFontIndirect(ref fontDesc, in iid);

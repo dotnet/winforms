@@ -34,7 +34,7 @@ namespace System.Windows.Forms
                 get
                 {
                     PInvoke.GetWindowRect(_owningComboBox.GetListNativeWindow(), out var rect);
-                    return rect.ToRectangle();
+                    return rect;
                 }
             }
 

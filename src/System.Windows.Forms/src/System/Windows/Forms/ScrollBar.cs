@@ -494,7 +494,7 @@ namespace System.Windows.Forms
             return base.GetScaledBounds(bounds, factor, specified);
         }
 
-        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg) => default;
+        internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg) => default;
 
         protected override void OnEnabledChanged(EventArgs e)
         {
@@ -619,7 +619,7 @@ namespace System.Windows.Forms
 
             si.nTrackPos = 0;
 
-            User32.SetScrollInfo(this, User32.SB.CTL, ref si, BOOL.TRUE);
+            User32.SetScrollInfo(this, User32.SB.CTL, ref si, true);
         }
 
         private void WmReflectScroll(ref Message m)

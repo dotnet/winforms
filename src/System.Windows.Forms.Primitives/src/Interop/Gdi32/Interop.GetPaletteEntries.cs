@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32, SetLastError = true)]
-        private unsafe static partial uint GetPaletteEntries(HPALETTE hpal, uint iStart, uint nEntries, PALETTEENTRY* lppe);
+        [DllImport(Libraries.Gdi32, SetLastError = true)]
+        private unsafe static extern uint GetPaletteEntries(HPALETTE hpal, uint iStart, uint nEntries, PALETTEENTRY* lppe);
 
         public unsafe static uint GetPaletteEntries(HPALETTE hpal, Span<PALETTEENTRY> entries)
         {

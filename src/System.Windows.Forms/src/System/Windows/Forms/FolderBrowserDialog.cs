@@ -481,13 +481,13 @@ namespace System.Windows.Forms
                     if (_initialDirectory.Length != 0)
                     {
                         // Try to expand the folder specified by initialDir
-                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, (nint)BOOL.TRUE, _initialDirectory);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, (nint)(BOOL)true, _initialDirectory);
                     }
 
                     if (_selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
-                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, (nint)BOOL.TRUE, _selectedPath);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, (nint)(BOOL)true, _selectedPath);
                     }
 
                     break;
@@ -498,7 +498,7 @@ namespace System.Windows.Forms
                     {
                         // Try to retrieve the path from the IDList
                         bool isFileSystemFolder = SHGetPathFromIDListLongPath(selectedPidl, out _);
-                        User32.SendMessageW(hwnd, (User32.WM)BFFM.ENABLEOK, 0, (nint)isFileSystemFolder.ToBOOL());
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
                     }
 
                     break;

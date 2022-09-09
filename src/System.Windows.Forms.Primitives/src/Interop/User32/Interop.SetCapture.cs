@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial IntPtr SetCapture(IntPtr hWnd);
+        [DllImport(Libraries.User32)]
+        public static extern nint SetCapture(IntPtr hWnd);
 
         public static IntPtr SetCapture(IHandle handle)
         {

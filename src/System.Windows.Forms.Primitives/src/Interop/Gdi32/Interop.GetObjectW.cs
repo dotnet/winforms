@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
-        private unsafe static partial int GetObjectW(HGDIOBJ h, int c, void* pv);
+        [DllImport(Libraries.Gdi32)]
+        private unsafe static extern int GetObjectW(HGDIOBJ h, int c, void* pv);
 
         public unsafe static bool GetObjectW<T>(HGDIOBJ h, out T @object) where T : unmanaged
         {

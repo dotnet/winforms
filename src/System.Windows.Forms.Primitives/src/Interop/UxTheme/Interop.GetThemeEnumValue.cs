@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme)]
-        public static partial HRESULT GetThemeEnumValue(IntPtr hTheme, int iPartId, int iStateId, int iPropId, ref int piVal);
+        [DllImport(Libraries.UxTheme)]
+        public static extern HRESULT GetThemeEnumValue(IntPtr hTheme, int iPartId, int iStateId, int iPropId, ref int piVal);
 
         public static HRESULT GetThemeEnumValue(IHandle hTheme, int iPartId, int iStateId, int iPropId, ref int piVal)
         {

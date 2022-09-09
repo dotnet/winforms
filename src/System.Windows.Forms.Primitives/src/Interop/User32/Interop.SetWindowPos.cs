@@ -14,8 +14,8 @@ internal static partial class Interop
         public static IntPtr HWND_NOTOPMOST = (IntPtr)(-2);
         public static IntPtr HWND_MESSAGE = (IntPtr)(-3);
 
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL SetWindowPos(
+        [DllImport(Libraries.User32)]
+        public static extern BOOL SetWindowPos(
             IntPtr hWnd,
             IntPtr hWndInsertAfter,
             int x = 0,

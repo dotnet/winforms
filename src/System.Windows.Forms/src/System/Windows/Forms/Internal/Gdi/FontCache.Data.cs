@@ -19,7 +19,7 @@ namespace System.Windows.Forms
             private const byte False = 0;
 
             public WeakReference<Font> Font { get; }
-            public Gdi32.HFONT HFONT { get; private set; }
+            public HFONT HFONT { get; private set; }
             public Gdi32.QUALITY Quality { get; }
 
             private int? _tmHeight;
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
                     if (!_tmHeight.HasValue)
                     {
                         using var screenDC = GdiCache.GetScreenHdc();
-                        Gdi32.HDC hdc = screenDC.HDC;
+                        HDC hdc = screenDC.HDC;
                         using var fontSelection = new Gdi32.SelectObjectScope(hdc, HFONT);
                         Debug.Assert(Gdi32.GetMapMode(hdc) == Gdi32.MM.TEXT);
 
@@ -66,7 +66,7 @@ namespace System.Windows.Forms
             ///  Constructs a WindowsFont object from an existing System.Drawing.Font object (GDI+), based on the screen dc
             ///  MapMode and resolution (normally: MM_TEXT and 96 dpi).
             /// </summary>
-            private static Gdi32.HFONT FromFont(Font font, Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)
+            private static HFONT FromFont(Font font, Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)
             {
                 string familyName = font.FontFamily.Name;
 
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
                     logFont.FaceName = DefaultFaceName;
                 }
 
-                Gdi32.HFONT hfont = Gdi32.CreateFontIndirectW(ref logFont);
+                HFONT hfont = Gdi32.CreateFontIndirectW(ref logFont);
 
                 if (hfont.IsNull)
                 {

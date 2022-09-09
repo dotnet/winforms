@@ -8,8 +8,8 @@ internal partial class Interop
 {
     internal partial class Imm32
     {
-        [LibraryImport(Libraries.Imm32)]
-        public static partial IntPtr ImmGetContext(IntPtr hWnd);
+        [DllImport(Libraries.Imm32)]
+        public static extern nint ImmGetContext(IntPtr hWnd);
 
         public static IntPtr ImmGetContext(IHandle hWnd)
         {

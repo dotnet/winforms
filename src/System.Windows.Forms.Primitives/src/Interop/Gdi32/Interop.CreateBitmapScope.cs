@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Windows.Win32;
-
 internal static partial class Interop
 {
     internal static partial class Gdi32
     {
         /// <summary>
-        ///  Helper to scope lifetime of a <see cref="HBITMAP"/> created via <see cref="PInvoke.CreateBitmap"/>
-        ///  Deletes the <see cref="HBITMAP"/> (if any) when disposed.
+        ///  Helper to scope lifetime of a <see cref="Windows.Win32.Graphics.Gdi.HBITMAP"/> created via <see cref="PInvoke.CreateBitmap"/>
+        ///  Deletes the <see cref="Windows.Win32.Graphics.Gdi.HBITMAP"/> (if any) when disposed.
         /// </summary>
         /// <remarks>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
@@ -22,14 +20,14 @@ internal static partial class Interop
         internal readonly ref struct CreateBitmapScope
 #endif
         {
-            public HBITMAP HBitmap { get; }
+            public HBITMAP HBITMAP { get; }
 
             /// <summary>
             ///  Creates a bitmap using <see cref="PInvoke.CreateBitmap"/>
             /// </summary>
             public unsafe CreateBitmapScope(int nWidth, int nHeight, uint nPlanes, uint nBitCount, void* lpvBits)
             {
-                HBitmap = PInvoke.CreateBitmap(nWidth, nHeight, nPlanes, nBitCount, lpvBits);
+                HBITMAP = PInvoke.CreateBitmap(nWidth, nHeight, nPlanes, nBitCount, lpvBits);
             }
 
             /// <summary>
@@ -37,20 +35,20 @@ internal static partial class Interop
             /// </summary>
             public CreateBitmapScope(HDC hdc, int cx, int cy)
             {
-                HBitmap = PInvoke.CreateCompatibleBitmap(hdc, cx, cy);
+                HBITMAP = PInvoke.CreateCompatibleBitmap(hdc, cx, cy);
             }
 
-            public static implicit operator HBITMAP(in CreateBitmapScope scope) => scope.HBitmap;
-            public static implicit operator HGDIOBJ(in CreateBitmapScope scope) => scope.HBitmap;
-            public static explicit operator IntPtr(in CreateBitmapScope scope) => scope.HBitmap.Handle;
+            public static implicit operator HBITMAP(in CreateBitmapScope scope) => scope.HBITMAP;
+            public static implicit operator HGDIOBJ(in CreateBitmapScope scope) => scope.HBITMAP;
+            public static explicit operator nint(in CreateBitmapScope scope) => scope.HBITMAP;
 
-            public bool IsNull => HBitmap.IsNull;
+            public bool IsNull => HBITMAP.IsNull;
 
             public void Dispose()
             {
-                if (!HBitmap.IsNull)
+                if (!HBITMAP.IsNull)
                 {
-                    DeleteObject(HBitmap);
+                    DeleteObject(HBITMAP);
                 }
 
 #if DEBUG

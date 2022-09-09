@@ -8,10 +8,10 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        private static partial RegionType GetWindowRgn(IntPtr hwnd, Gdi32.HRGN hrgn);
+        [DllImport(Libraries.User32)]
+        private static extern RegionType GetWindowRgn(IntPtr hwnd, HRGN hrgn);
 
-        public static RegionType GetWindowRgn(IHandle hwnd, Gdi32.HRGN hrgn)
+        public static RegionType GetWindowRgn(IHandle hwnd, HRGN hrgn)
         {
             RegionType result = GetWindowRgn(hwnd.Handle, hrgn);
             GC.KeepAlive(hwnd);

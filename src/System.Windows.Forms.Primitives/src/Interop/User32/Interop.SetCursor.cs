@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        private static partial IntPtr SetCursor(IntPtr hCursor);
+        [DllImport(Libraries.User32)]
+        private static extern nint SetCursor(IntPtr hCursor);
 
         public static IntPtr SetCursor(IHandle? hCursor)
         {

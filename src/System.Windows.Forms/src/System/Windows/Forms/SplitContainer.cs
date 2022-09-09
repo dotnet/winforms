@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms
         {
             Rectangle r = CalcSplitLine(splitSize, 3);
             using var dc = new User32.GetDcScope(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
-            Gdi32.HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
+            HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
             using var objectScope = new Gdi32.ObjectScope(halftone);
             using var selectBrush = new Gdi32.SelectObjectScope(dc, halftone);
             Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);

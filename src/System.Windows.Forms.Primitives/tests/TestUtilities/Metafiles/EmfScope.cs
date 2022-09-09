@@ -8,39 +8,38 @@ using System.ComponentModel;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
-using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
     internal class EmfScope : DisposalTracking.Tracker, IDisposable
     {
-        public Gdi32.HDC HDC { get; }
-        private Gdi32.HENHMETAFILE _hemf;
+        public HDC HDC { get; }
+        private HENHMETAFILE _hemf;
 
         public unsafe EmfScope()
             : this(CreateEnhMetaFile())
         {
         }
 
-        public EmfScope(Gdi32.HDC hdc)
+        public EmfScope(HDC hdc)
         {
             HDC = hdc;
             _hemf = default;
         }
 
-        public EmfScope(Gdi32.HENHMETAFILE hemf)
+        public EmfScope(HENHMETAFILE hemf)
         {
             _hemf = hemf;
         }
 
-        private unsafe static Gdi32.HDC CreateEnhMetaFile(
-            Gdi32.HDC hdc = default,
+        private unsafe static HDC CreateEnhMetaFile(
+            HDC hdc = default,
             string? lpFilename = null,
             RECT* lprc = null,
             string? lpDesc = null)
         {
-            Gdi32.HDC metafileHdc = Gdi32.CreateEnhMetaFileW(hdc, lpFilename, lprc, lpDesc);
+            HDC metafileHdc = Gdi32.CreateEnhMetaFileW(hdc, lpFilename, lprc, lpDesc);
             if (metafileHdc.IsNull)
             {
                 throw new Win32Exception("Could not create metafile");
@@ -51,7 +50,7 @@ namespace System.Windows.Forms.Metafiles
 
         public unsafe static EmfScope Create() => new EmfScope();
 
-        public Gdi32.HENHMETAFILE HENHMETAFILE
+        public HENHMETAFILE HENHMETAFILE
         {
             get
             {
@@ -219,8 +218,8 @@ namespace System.Windows.Forms.Metafiles
         }
 
         private static unsafe BOOL CallBack(
-            Gdi32.HDC hdc,
-            Gdi32.HGDIOBJ* lpht,
+            HDC hdc,
+            HGDIOBJ* lpht,
             Gdi32.ENHMETARECORD* lpmr,
             int nHandles,
             IntPtr data)
@@ -229,10 +228,10 @@ namespace System.Windows.Forms.Metafiles
             GCHandle enumeratorHandle = GCHandle.FromIntPtr(data);
             ProcessRecordDelegate enumerator = (ProcessRecordDelegate)enumeratorHandle.Target!;
             var record = new EmfRecord(hdc, lpht, lpmr, nHandles, data);
-            return enumerator(ref record).ToBOOL();
+            return enumerator(ref record);
         }
 
-        public static implicit operator Gdi32.HDC(in EmfScope scope) => scope.HDC;
+        public static implicit operator HDC(in EmfScope scope) => scope.HDC;
 
         public void Dispose()
         {
