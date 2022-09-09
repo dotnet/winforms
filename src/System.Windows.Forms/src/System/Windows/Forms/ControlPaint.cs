@@ -2096,7 +2096,7 @@ namespace System.Windows.Forms
                 User32.GetDesktopWindow(),
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
-            using PInvoke.ObjectScope brush = new(Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor)));
+            using PInvoke.ObjectScope brush = new(PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
             using Gdi32.SetRop2Scope ropScope = new(desktopDC, rop2);
             using Gdi32.SelectObjectScope brushSelection = new(desktopDC, brush);
 

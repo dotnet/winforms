@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -81,13 +80,13 @@ namespace System.Windows.Forms
         ///  another method it must be passed by reference or you risk double disposal and accidentally returning extra
         ///  copies to the cache.
         /// </remarks>
-        public static FontCache.Scope GetHFONT(Font? font, Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)
+        public static FontCache.Scope GetHFONT(Font? font, FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY)
         {
             Debug.Assert(font is not null);
             return font is null ? new FontCache.Scope() : s_fontCache.GetEntry(font, quality);
         }
 
-        public static FontCache.Scope GetHFONT(Font? font, Gdi32.QUALITY quality, HDC hdc)
+        public static FontCache.Scope GetHFONT(Font? font, FONT_QUALITY quality, HDC hdc)
         {
             if (font is not null)
             {

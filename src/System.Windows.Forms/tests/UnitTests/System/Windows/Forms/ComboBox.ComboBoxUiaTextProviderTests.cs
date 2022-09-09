@@ -7,6 +7,7 @@ using System.Windows.Forms.Automation;
 using Xunit;
 using static Interop;
 using static Interop.User32;
+using LOGFONTW = Windows.Win32.Graphics.Gdi.LOGFONTW;
 
 namespace System.Windows.Forms.Tests
 {
@@ -401,7 +402,7 @@ namespace System.Windows.Forms.Tests
             {
                 using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
                 ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-                LOGFONTW expected = new LOGFONTW();
+                LOGFONTW expected = default;
 
                 LOGFONTW actual = provider.Logfont;
 

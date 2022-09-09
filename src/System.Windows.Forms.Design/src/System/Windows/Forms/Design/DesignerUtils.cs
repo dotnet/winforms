@@ -29,9 +29,9 @@ namespace System.Windows.Forms.Design
             new(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
         //Pens and Brushes used via GDI to render our grabhandles
         private static HBRUSH s_grabHandleFillBrushPrimary =
-            Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
+            PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
         private static HBRUSH s_grabHandleFillBrush =
-            Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
+            PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
         private static HPEN s_grabHandlePenPrimary =
             PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
         private static HPEN s_grabHandlePen =
@@ -176,10 +176,10 @@ namespace System.Windows.Forms.Design
             s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
 
             PInvoke.DeleteObject(s_grabHandleFillBrushPrimary);
-            s_grabHandleFillBrushPrimary = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
+            s_grabHandleFillBrushPrimary = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
             PInvoke.DeleteObject(s_grabHandleFillBrush);
-            s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
+            s_grabHandleFillBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
             PInvoke.DeleteObject(s_grabHandlePenPrimary);
             s_grabHandlePenPrimary = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));

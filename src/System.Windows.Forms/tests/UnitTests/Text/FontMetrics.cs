@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Tests.Text
                 return;
             }
 
-            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
+            using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
             Assert.Equal(height, hfont.Data.Height);
         }
 
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests.Text
                 return;
             }
 
-            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
+            using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
             User32.DRAWTEXTPARAMS margins = hfont.GetTextMargins();
             Assert.Equal(left, margins.iLeftMargin);
             Assert.Equal(right, margins.iRightMargin);
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Tests.Text
                 return;
             }
 
-            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
+            using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
             using var screen = GdiCache.GetScreenHdc();
             Size extent = screen.HDC.GetTextExtent("Whizzo Butter", hfont);
             Assert.Equal(width, extent.Width);
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Tests.Text
                 return;
             }
 
-            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
+            using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
             using var screen = GdiCache.GetScreenHdc();
             Size measure = screen.HDC.MeasureText("Windows Foundation Classes", hfont, proposedSize, (TextFormatFlags)dt);
             Assert.Equal(expected, measure);
@@ -140,7 +140,7 @@ namespace System.Windows.Forms.Tests.Text
                 return;
             }
 
-            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
+            using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
             using var screen = GdiCache.GetScreenHdc();
             using var fontSelection = new Gdi32.SelectObjectScope(screen, hfont.Object);
 

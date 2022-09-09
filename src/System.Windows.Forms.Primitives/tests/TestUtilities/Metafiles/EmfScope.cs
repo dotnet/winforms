@@ -39,13 +39,17 @@ namespace System.Windows.Forms.Metafiles
             RECT* lprc = null,
             string? lpDesc = null)
         {
-            HDC metafileHdc = Gdi32.CreateEnhMetaFileW(hdc, lpFilename, lprc, lpDesc);
-            if (metafileHdc.IsNull)
+            fixed (char* pFileName = lpFilename)
+            fixed (char* pDesc = lpDesc)
             {
-                throw new Win32Exception("Could not create metafile");
-            }
+                HDC metafileHdc = PInvoke.CreateEnhMetaFile(hdc, pFileName, lprc, pDesc);
+                if (metafileHdc.IsNull)
+                {
+                    throw new Win32Exception("Could not create metafile");
+                }
 
-            return metafileHdc;
+                return metafileHdc;
+            }
         }
 
         public unsafe static EmfScope Create() => new EmfScope();
