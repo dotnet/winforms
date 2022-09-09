@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -18,7 +17,7 @@ namespace System.Windows.Forms
     ///  hopefully handling the majority of application use cases. There is a limit of 65K GDI handles system wide and
     ///  10K (default) per process.
     /// </remarks>
-    internal sealed partial class FontCache : RefCountedCache<HFONT, FontCache.Data, (Font Font, Gdi32.QUALITY Quality)>
+    internal sealed partial class FontCache : RefCountedCache<HFONT, FontCache.Data, (Font Font, FONT_QUALITY Quality)>
     {
         private readonly object _lock = new object();
 
@@ -32,9 +31,9 @@ namespace System.Windows.Forms
         ///  <paramref name="font"/> and <paramref name="quality"/>. The scope MUST be disposed to release the ref
         ///  count accurately. Use the result in a using statement to avoid leaking fonts.
         /// </summary>
-        public Scope GetEntry(Font font, Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT) => GetEntry((font, quality));
+        public Scope GetEntry(Font font, FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY) => GetEntry((font, quality));
 
-        public override Scope GetEntry((Font Font, Gdi32.QUALITY Quality) key)
+        public override Scope GetEntry((Font Font, FONT_QUALITY Quality) key)
         {
             lock (_lock)
             {
@@ -42,10 +41,10 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override CacheEntry CreateEntry((Font Font, Gdi32.QUALITY Quality) key, bool cached)
+        protected override CacheEntry CreateEntry((Font Font, FONT_QUALITY Quality) key, bool cached)
             => new FontCacheEntry(new Data(key.Font, key.Quality), cached);
 
-        protected override bool IsMatch((Font Font, Gdi32.QUALITY Quality) key, CacheEntry entry)
+        protected override bool IsMatch((Font Font, FONT_QUALITY Quality) key, CacheEntry entry)
             => entry.Data.Font.TryGetTarget(out Font? currentFont)
                 && key.Font == currentFont
                 && key.Quality == entry.Data.Quality;

@@ -11,5 +11,6 @@ namespace Windows.Win32.Graphics.Gdi
 
         public static implicit operator HDC(CreatedHDC hdc) => new(hdc.Value);
         public static implicit operator CreatedHDC(HDC hdc) => new(hdc.Value);
+        public static implicit operator HDC(HdcMetdataEnhFileHandle hdc) => new(hdc.Value);
     }
 }

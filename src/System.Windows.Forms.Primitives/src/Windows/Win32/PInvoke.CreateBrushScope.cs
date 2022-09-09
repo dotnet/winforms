@@ -15,8 +15,10 @@ namespace Windows.Win32
         ///  Helper to scope the lifetime of a <see cref="HBRUSH"/>.
         /// </summary>
         /// <remarks>
+        ///  <para>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
+        ///  </para>
         /// </remarks>
 #if DEBUG
         internal class CreateBrushScope : DisposalTracking.Tracker, IDisposable
@@ -27,13 +29,13 @@ namespace Windows.Win32
             public HBRUSH HBRUSH { get; }
 
             /// <summary>
-            ///  Creates a solid brush based on the <paramref name="color"/> using <see cref="Gdi32.CreateSolidBrush(int)"/>.
+            ///  Creates a solid brush based on the <paramref name="color"/> using <see cref="PInvoke.CreateSolidBrush(COLORREF)"/>.
             /// </summary>
             public CreateBrushScope(Color color)
             {
                 HBRUSH = color.IsSystemColor
                     ? User32.GetSysColorBrush(color)
-                    : Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(color));
+                    : CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(color));
                 ValidateBrushHandle();
             }
 
@@ -47,7 +49,7 @@ namespace Windows.Win32
                 if (!HBRUSH.IsNull)
                 {
                     // Note that this is a no-op if the original brush was a system brush
-                    PInvoke.DeleteObject(HBRUSH);
+                    DeleteObject(HBRUSH);
                 }
 
 #if DEBUG

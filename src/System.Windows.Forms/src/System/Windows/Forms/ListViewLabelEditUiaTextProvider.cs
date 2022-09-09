@@ -61,7 +61,7 @@ namespace System.Windows.Forms
 
         public override int LinesPerPage => _owningChildEditAccessibilityObject.BoundingRectangle.IsEmpty ? 0 : OwnerChildEditLinesCount;
 
-        public override User32.LOGFONTW Logfont => User32.LOGFONTW.FromFont(_owningListView.Font);
+        public override LOGFONTW Logfont => LOGFONTW.FromFont(_owningListView.Font);
 
         public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
 

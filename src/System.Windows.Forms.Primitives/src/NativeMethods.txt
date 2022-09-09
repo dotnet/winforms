@@ -20,10 +20,16 @@ CreateBitmap
 CreateBrushIndirect
 CreateCompatibleBitmap
 CreateCompatibleDC
+CreateDC
 CreateDIBSection
+CreateEnhMetaFileW
+CreateICW
+CreateFontIndirectW
 CreateHalftonePalette
+CreatePatternBrush
 CreatePen
 CreateRectRgn
+CreateSolidBrush
 CreateWindowEx
 DeactivateActCtx
 DefFrameProc
