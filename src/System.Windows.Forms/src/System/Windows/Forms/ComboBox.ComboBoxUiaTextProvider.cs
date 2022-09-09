@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Windows.Forms.Automation;
 using static Interop;
 using static Interop.User32;
-using LOGFONTW = Windows.Win32.Graphics.Gdi.LOGFONTW;
 
 namespace System.Windows.Forms
 {

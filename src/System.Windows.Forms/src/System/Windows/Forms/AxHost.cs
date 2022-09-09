@@ -4119,14 +4119,14 @@ namespace System.Windows.Forms
                 return cachedFDesc;
             }
 
-            User32.LOGFONTW logfont = User32.LOGFONTW.FromFont(font);
+            LOGFONTW logfont = LOGFONTW.FromFont(font);
             var fdesc = new Oleaut32.FONTDESC
             {
                 cbSizeOfStruct = (uint)Marshal.SizeOf<Oleaut32.FONTDESC>(),
                 lpstrName = font.Name,
                 cySize = (long)(font.SizeInPoints * 10000),
                 sWeight = (short)logfont.lfWeight,
-                sCharset = logfont.lfCharSet,
+                sCharset = (short)logfont.lfCharSet,
                 fItalic = font.Italic,
                 fUnderline = font.Underline,
                 fStrikethrough = font.Strikeout

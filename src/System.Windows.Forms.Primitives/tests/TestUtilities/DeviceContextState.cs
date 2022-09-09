@@ -43,7 +43,7 @@ namespace System
             BrushOrigin = point;
 
             var hfont = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_FONT);
-            PInvoke.GetObject(hfont, out User32.LOGFONTW logfont);
+            PInvoke.GetObject(hfont, out LOGFONTW logfont);
             SelectedFont = logfont;
 
             var hpen = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_PEN);
@@ -62,7 +62,7 @@ namespace System
         public Point BrushOrigin { get => _currentState.BrushOrigin; set => _currentState.BrushOrigin = value; }
         public Gdi32.TA TextAlign { get => _currentState.TextAlign; set => _currentState.TextAlign = value; }
         public Gdi32.BKMODE BackgroundMode { get => _currentState.BackgroundMode; set => _currentState.BackgroundMode = value; }
-        public User32.LOGFONTW SelectedFont { get => _currentState.SelectedFont; set => _currentState.SelectedFont = value; }
+        public LOGFONTW SelectedFont { get => _currentState.SelectedFont; set => _currentState.SelectedFont = value; }
         public Gdi32.LOGBRUSH SelectedBrush { get => _currentState.SelectedBrush; set => _currentState.SelectedBrush = value; }
         public EXTLOGPEN32 SelectedPen { get => _currentState.SelectedPen; set => _currentState.SelectedPen = value; }
         public Point LastBeginPathBrushOrigin { get => _currentState.LastBeginPathBrushOrigin; set => _currentState.LastBeginPathBrushOrigin = value; }
@@ -79,7 +79,7 @@ namespace System
             public Point BrushOrigin { get; set; }
             public Gdi32.TA TextAlign { get; set; }
             public Gdi32.BKMODE BackgroundMode { get; set; }
-            public User32.LOGFONTW SelectedFont { get; set; }
+            public LOGFONTW SelectedFont { get; set; }
             public Gdi32.LOGBRUSH SelectedBrush { get; set; }
             public EXTLOGPEN32 SelectedPen { get; set; }
             public Point LastBeginPathBrushOrigin { get; set; }
@@ -153,7 +153,7 @@ namespace System
                     case Gdi32.StockObject.DEVICE_DEFAULT_FONT:
                     case Gdi32.StockObject.SYSTEM_FIXED_FONT:
                     case Gdi32.StockObject.DEFAULT_GUI_FONT:
-                        PInvoke.GetObject(hgdiobj, out User32.LOGFONTW logfont);
+                        PInvoke.GetObject(hgdiobj, out LOGFONTW logfont);
                         SelectedFont = logfont;
                         break;
                     case Gdi32.StockObject.WHITE_BRUSH:

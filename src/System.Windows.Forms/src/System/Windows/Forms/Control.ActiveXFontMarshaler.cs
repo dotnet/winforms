@@ -33,14 +33,14 @@ namespace System.Windows.Forms
             public IntPtr MarshalManagedToNative(object obj)
             {
                 Font font = (Font)obj;
-                User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(font);
+                LOGFONTW logFont = LOGFONTW.FromFont(font);
                 var fontDesc = new Oleaut32.FONTDESC
                 {
                     cbSizeOfStruct = (uint)Marshal.SizeOf<Oleaut32.FONTDESC>(),
                     lpstrName = font.Name,
                     cySize = (long)(font.SizeInPoints * 10000),
                     sWeight = (short)logFont.lfWeight,
-                    sCharset = logFont.lfCharSet,
+                    sCharset = (short)logFont.lfCharSet,
                     fItalic = font.Italic,
                     fUnderline = font.Underline,
                     fStrikethrough = font.Strikeout,
