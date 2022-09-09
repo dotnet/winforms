@@ -161,7 +161,8 @@ namespace System.Windows.Forms
 
         protected unsafe override bool RunDialog(IntPtr hwndOwner)
         {
-            var hookProcPtr = new User32.WNDPROCINT(HookProc);
+            WNDPROC hookProc = HookProcInternal;
+            void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
             var cc = new Comdlg32.CHOOSECOLORW
             {
                 lStructSize = (uint)Marshal.SizeOf<Comdlg32.CHOOSECOLORW>()
@@ -169,9 +170,9 @@ namespace System.Windows.Forms
 
             fixed (int* customColors = _customColors)
             {
-                cc.hwndOwner = hwndOwner;
-                cc.hInstance = Instance;
-                cc.rgbResult = ColorTranslator.ToWin32(_color);
+                cc.hwndOwner = (HWND)hwndOwner;
+                cc.hInstance = (HINSTANCE)Instance;
+                cc.rgbResult = _color.ToWin32();
                 cc.lpCustColors = (IntPtr)customColors;
 
                 Comdlg32.CC flags = (Comdlg32.CC)Options | Comdlg32.CC.RGBINIT | Comdlg32.CC.ENABLEHOOK;
@@ -194,6 +195,8 @@ namespace System.Windows.Forms
                 {
                     _color = ColorTranslator.FromOle(cc.rgbResult);
                 }
+
+                GC.KeepAlive(hookProc);
 
                 return true;
             }

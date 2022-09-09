@@ -262,17 +262,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  and 'owned' windows such as modal dialogs. Using window handles rather
             ///  than Control objects allows it to catch un-managed windows as well.
             /// </summary>
-            private bool OwnsWindow(IntPtr hWnd)
+            private bool OwnsWindow(HWND hWnd)
             {
-                while (hWnd != IntPtr.Zero)
+                while (!hWnd.IsNull)
                 {
-                    hWnd = User32.GetWindowLong(hWnd, User32.GWL.HWNDPARENT);
-                    if (hWnd == IntPtr.Zero)
+                    hWnd = (HWND)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                    if (hWnd.IsNull)
                     {
                         return false;
                     }
 
-                    if (hWnd == Handle)
+                    if (hWnd == HWND)
                     {
                         return true;
                     }
@@ -283,7 +283,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public bool OnClickHooked()
             {
-                _gridView.CloseDropDownInternal(false);
+                _gridView.CloseDropDownInternal(resetFocus: false);
                 return false;
             }
 
@@ -675,8 +675,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     SetState(States.Modal, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
-                    IntPtr activatedWindow = m.LParamInternal;
-                    if (Visible && (User32.WA)PARAM.LOWORD(m.WParamInternal) == User32.WA.INACTIVE && !OwnsWindow(activatedWindow))
+                    HWND activatedWindow = (HWND)m.LParamInternal;
+                    if (Visible && (User32.WA)m.WParamInternal.LOWORD == User32.WA.INACTIVE && !OwnsWindow(activatedWindow))
                     {
                         _gridView.CloseDropDownInternal(false);
                         return;

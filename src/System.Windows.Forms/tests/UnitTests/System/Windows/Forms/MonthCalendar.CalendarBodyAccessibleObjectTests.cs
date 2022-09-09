@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Tests
             using MonthCalendar control = new MonthCalendar();
 
             control.CreateControl();
-            User32.SendMessageW(control, (User32.WM)MCM.SETCURRENTVIEW, 0, view);
+            PInvoke.SendMessage(control, (User32.WM)MCM.SETCURRENTVIEW, 0, view);
             CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
             Assert.Equal(expected, accessibleObject.ColumnCount);
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Tests
             using MonthCalendar control = new MonthCalendar();
 
             control.CreateControl();
-            User32.SendMessageW(control, (User32.WM)MCM.SETCURRENTVIEW, 0, view);
+            PInvoke.SendMessage(control, (User32.WM)MCM.SETCURRENTVIEW, 0, view);
             CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
             Assert.Null(accessibleObject.GetColumnHeaders());
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Tests
             control.SelectionStart = new DateTime(2021, 1, 1);
 
             control.CreateControl();
-            User32.SendMessageW(control, (User32.WM)MCM.SETCURRENTVIEW, 0, (nint)view);
+            PInvoke.SendMessage(control, (User32.WM)MCM.SETCURRENTVIEW, 0, (nint)view);
             MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             LinkedListNode<CalendarAccessibleObject> calendarNode = controlAccessibleObject.CalendarsAccessibleObjects.First;
 

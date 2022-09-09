@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 
 namespace WinformsControlsTest
 {
@@ -44,7 +46,11 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
                 dwEffects = Interop.Richedit.CFE.LINK,
             };
 
-            Interop.User32.SendMessageW(control, (Interop.User32.WM)Interop.Richedit.EM.SETCHARFORMAT, (nint)Interop.Richedit.SCF.SELECTION, ref format);
+            PInvoke.SendMessage(
+                control,
+                (Interop.User32.WM)Interop.Richedit.EM.SETCHARFORMAT,
+                (WPARAM)(uint)Interop.Richedit.SCF.SELECTION,
+                ref format);
 
             control.Select(0, 0);
         }

@@ -77,7 +77,7 @@ namespace System.Windows.Forms.UITests
                     stSelEnd = date,
                 };
 
-                SendMessageW(calendar, WM.REFLECT | WM.NOTIFY, 0, ref lParam);
+                PInvoke.SendMessage(calendar, WM.REFLECT | WM.NOTIFY, 0, ref lParam);
             });
         }
 
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.UITests
                     dwFlags = MCGIF.RECT,
                 };
 
-                Assert.NotEqual(default, User32.SendMessageW(control, (User32.WM)ComCtl32.MCM.GETCALENDARGRIDINFO, default, ref result));
+                Assert.NotEqual(default, PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETCALENDARGRIDINFO, default, ref result));
                 var rect = Rectangle.FromLTRB(result.rc.left, result.rc.top, result.rc.right, result.rc.bottom);
                 return rect;
             }

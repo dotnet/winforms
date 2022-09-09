@@ -302,7 +302,7 @@ namespace System.Windows.Forms
                     // If this.MdiClient is not null it means this.IsMdiContainer == true.
                     if (_ctlClient is not null && _ctlClient.IsHandleCreated)
                     {
-                        IntPtr hwnd = User32.SendMessageW(_ctlClient, User32.WM.MDIGETACTIVE);
+                        IntPtr hwnd = PInvoke.SendMessage(_ctlClient, User32.WM.MDIGETACTIVE);
                         mdiChild = FromHandle(hwnd) as Form;
                     }
                 }
@@ -1745,7 +1745,7 @@ namespace System.Windows.Forms
                         CreateParams cp = CreateParams;
                         if ((int)ExtendedWindowStyle != cp.ExStyle)
                         {
-                            User32.SetWindowLong(this, User32.GWL.EXSTYLE, cp.ExStyle);
+                            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, cp.ExStyle);
                         }
                     }
                 }
@@ -2100,7 +2100,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  For forms that are show in task bar false, this returns a HWND they must be parented to in order for it to work.
         /// </summary>
-        private IHandle TaskbarOwner
+        private IHandle<HWND> TaskbarOwner
         {
             get
             {
@@ -2295,7 +2295,7 @@ namespace System.Windows.Forms
                 //
                 if (0 == _formState[FormStateSWCalled])
                 {
-                    User32.SendMessageW(this, User32.WM.SHOWWINDOW, PARAM.FromBool(value));
+                    PInvoke.SendMessage(this, User32.WM.SHOWWINDOW, (WPARAM)(BOOL)value);
                 }
             }
             else
@@ -2604,7 +2604,7 @@ namespace System.Windows.Forms
                 {
                     if (MdiParentInternal.MdiClient is not null)
                     {
-                        User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
+                        PInvoke.SendMessage(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, (WPARAM)HWND);
                     }
                 }
                 else
@@ -3060,7 +3060,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 _closeReason = CloseReason.UserClosing;
-                User32.SendMessageW(this, User32.WM.CLOSE);
+                PInvoke.SendMessage(this, User32.WM.CLOSE);
             }
             else
             {
@@ -3220,14 +3220,14 @@ namespace System.Windows.Forms
                 // In order for a window not to have a taskbar entry, it must be owned.
                 if (!ShowInTaskbar && OwnerInternal is null && TopLevel)
                 {
-                    User32.SetWindowLong(this, User32.GWL.HWNDPARENT, (nint)TaskbarOwner.Handle);
+                    PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, TaskbarOwner);
 
                     // Make sure the large icon is set so the ALT+TAB icon
                     // reflects the real icon of the application
                     Icon? icon = Icon;
-                    if (icon is not null && TaskbarOwner.Handle != IntPtr.Zero)
+                    if (icon is not null && !TaskbarOwner.Handle.IsNull)
                     {
-                        User32.SendMessageW(TaskbarOwner, User32.WM.SETICON, (nint)User32.ICON.BIG, icon.Handle);
+                        PInvoke.SendMessage(TaskbarOwner, User32.WM.SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
                     }
                 }
 
@@ -3305,11 +3305,18 @@ namespace System.Windows.Forms
         {
             if (_ctlClient is not null && _ctlClient.IsHandleCreated && _ctlClient.ParentInternal == this)
             {
-                m.ResultInternal = (LRESULT)User32.DefFrameProcW(m.HWnd, _ctlClient.Handle, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                m.ResultInternal = PInvoke.DefFrameProc(
+                    m.HWND,
+                    _ctlClient.HWND,
+                    (uint)m.Msg,
+                    m.WParamInternal,
+                    m.LParamInternal);
+
+                GC.KeepAlive(_ctlClient);
             }
             else if (0 != _formStateEx[FormStateExUseMdiChildProc])
             {
-                m.ResultInternal = (LRESULT)User32.DefMDIChildProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                m.ResultInternal = PInvoke.DefMDIChildProc(m.HWND, (uint)m.Msg, m.WParamInternal, m.LParamInternal);
             }
             else
             {
@@ -3596,7 +3603,7 @@ namespace System.Windows.Forms
             {
                 if (MdiParentInternal.MdiClient is not null)
                 {
-                    User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
+                    PInvoke.SendMessage(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, this);
                 }
 
                 return Focused;
@@ -3735,7 +3742,7 @@ namespace System.Windows.Forms
 
             Point p = new Point();
             Size s = Size;
-            HWND ownerHandle = (HWND)User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
+            HWND ownerHandle = (HWND)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
 
             if (!ownerHandle.IsNull)
             {
@@ -3787,13 +3794,13 @@ namespace System.Windows.Forms
             }
             else
             {
-                IntPtr hWndOwner = IntPtr.Zero;
+                HWND hWndOwner = default;
                 if (TopLevel)
                 {
-                    hWndOwner = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
+                    hWndOwner = (HWND)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                 }
 
-                desktop = hWndOwner != IntPtr.Zero ? Screen.FromHandle(hWndOwner) : Screen.FromPoint(MousePosition);
+                desktop = !hWndOwner.IsNull ? Screen.FromHandle(hWndOwner) : Screen.FromPoint(MousePosition);
             }
 
             Rectangle screenRect = desktop.WorkingArea;
@@ -4348,9 +4355,9 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
 
             Size desiredSize = new Size();
-            m.ResultInternal = (LRESULT)(OnGetDpiScaledSize(_deviceDpi, PARAM.SignedLOWORD(m.WParamInternal), ref desiredSize)
-                ? PARAM.FromLowHigh(Size.Width, Size.Height)
-                : 0);
+            m.ResultInternal = OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize)
+                ? LRESULT.MAKELONG(Size.Width, Size.Height)
+                : (LRESULT)0;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4656,7 +4663,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 // First put all the owned windows into a list
-                callback = new EnumThreadWindowsCallback(Handle);
+                callback = new EnumThreadWindowsCallback(HWND);
                 User32.EnumThreadWindows(PInvoke.GetCurrentThreadId(), callback.Callback);
 
                 // Reset the owner of the windows in the list
@@ -4844,14 +4851,14 @@ namespace System.Windows.Forms
 
             if (TopLevel)
             {
-                User32.SetActiveWindow(new HandleRef(this, Handle));
+                PInvoke.SetActiveWindow(this);
             }
             else if (IsMdiChild)
             {
-                User32.SetActiveWindow(new HandleRef(MdiParentInternal, MdiParentInternal.Handle));
+                PInvoke.SetActiveWindow(MdiParentInternal);
                 if (MdiParentInternal.MdiClient is not null)
                 {
-                    User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
+                    PInvoke.SendMessage(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, (WPARAM)HWND);
                 }
             }
             else
@@ -5189,16 +5196,14 @@ namespace System.Windows.Forms
             if (!ownerHwnd.IsNull && ownerHwnd.Handle != HWND)
             {
                 // Catch the case of a window trying to own its owner
-                if (User32.GetWindowLong(ownerHwnd.Handle, User32.GWL.HWNDPARENT) == HWND)
+                if (PInvoke.GetWindowLong(ownerHwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT) == HWND)
                 {
                     throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(Show)), nameof(owner));
                 }
 
                 // Set the new owner.
-                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd.Handle);
+                PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
             }
-
-            GC.KeepAlive(ownerHwnd.Wrapper);
 
             Visible = true;
         }
@@ -5261,7 +5266,7 @@ namespace System.Windows.Forms
             HWND captureHwnd = PInvoke.GetCapture();
             if (!captureHwnd.IsNull)
             {
-                User32.SendMessageW(captureHwnd, User32.WM.CANCELMODE);
+                PInvoke.SendMessage(captureHwnd, User32.WM.CANCELMODE);
                 User32.ReleaseCapture();
             }
 
@@ -5292,7 +5297,7 @@ namespace System.Windows.Forms
                 if (!ownerHwnd.IsNull && ownerHwnd.Handle != HWND)
                 {
                     // Catch the case of a window trying to own its owner
-                    if (User32.GetWindowLong(ownerHwnd.Handle, User32.GWL.HWNDPARENT) == Handle)
+                    if (PInvoke.GetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT) == Handle)
                     {
                         throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(ShowDialog)), nameof(owner));
                     }
@@ -5311,7 +5316,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // Set the new parent.
-                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd.Handle);
+                        PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
                     }
                 }
 
@@ -5541,7 +5546,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && TopLevel)
             {
-                IHandle? ownerHwnd = null;
+                IHandle<HWND> ownerHwnd = NullHandle<HWND>.Instance;
 
                 Form? owner = (Form?)Properties.GetObject(PropOwner);
 
@@ -5557,7 +5562,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd?.Handle ?? default);
+                PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
                 GC.KeepAlive(ownerHwnd);
             }
         }
@@ -5628,7 +5633,7 @@ namespace System.Windows.Forms
                         Properties.SetObject(PropDummyMdiMenu, dummyMenu);
                     }
 
-                    User32.SendMessageW(_ctlClient, User32.WM.MDISETMENU, dummyMenu.Value, 0);
+                    PInvoke.SendMessage(_ctlClient, User32.WM.MDISETMENU, (WPARAM)dummyMenu.Value);
                 }
 
                 // (New fix: Only destroy Win32 Menu if using a MenuStrip)
@@ -5900,15 +5905,15 @@ namespace System.Windows.Forms
 
                     if (_smallIcon is not null)
                     {
-                        User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, _smallIcon.Handle);
+                        PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
                     }
 
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, icon.Handle);
+                    PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
                 }
                 else
                 {
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, 0);
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, 0);
+                    PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_SMALL);
+                    PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_BIG);
                 }
 
                 if (WindowState == FormWindowState.Maximized && MdiParent?.MdiControlStrip is not null)
@@ -6048,7 +6053,7 @@ namespace System.Windows.Forms
         private void WmActivate(ref Message m)
         {
             Application.FormActivated(Modal, true);
-            Active = (User32.WA)PARAM.LOWORD(m.WParamInternal) != User32.WA.INACTIVE;
+            Active = (User32.WA)m.WParamInternal.LOWORD != User32.WA.INACTIVE;
             Application.FormActivated(Modal, Active);
         }
 
@@ -6195,7 +6200,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                e.Cancel = m.WParamInternal == (nint)0;
+                e.Cancel = m.WParamInternal == 0;
             }
 
             // Pass 2 (WM_CLOSE & WM_ENDSESSION)... Fire closed
@@ -6363,11 +6368,11 @@ namespace System.Windows.Forms
             {
                 // This message is propagated twice by the MDIClient window. Once to the
                 // window being deactivated and once to the window being activated.
-                if (Handle == m.WParamInternal)
+                if (HWND == (HWND)m.WParamInternal)
                 {
                     formMdiParent.DeactivateMdiChild();
                 }
-                else if (Handle == m.LParamInternal)
+                else if (HWND == m.LParamInternal)
                 {
                     formMdiParent.ActivateMdiChild(this);
                 }
@@ -6473,7 +6478,7 @@ namespace System.Windows.Forms
         {
             bool callDefault = true;
 
-            User32.SC sc = (User32.SC)(PARAM.LOWORD(m.WParamInternal) & 0xFFF0);
+            User32.SC sc = (User32.SC)(m.WParamInternal.LOWORD & 0xFFF0);
             switch (sc)
             {
                 case User32.SC.CLOSE:
@@ -6507,7 +6512,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if (Command.DispatchID(PARAM.LOWORD(m.WParamInternal)))
+            if (Command.DispatchID(m.WParamInternal.LOWORD))
             {
                 callDefault = false;
             }

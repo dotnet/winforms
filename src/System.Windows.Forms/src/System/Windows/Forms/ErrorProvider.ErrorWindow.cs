@@ -137,12 +137,16 @@ namespace System.Windows.Forms
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
 
-                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                    PInvoke.SendMessage(
+                        _tipWindow,
+                        (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
+                        (WPARAM)0,
+                        (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
                     User32.SetWindowPos(
                         new HandleRef(_tipWindow, _tipWindow.Handle),
                         User32.HWND_TOP,
                         flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE | User32.SWP.NOACTIVATE);
-                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (nint)ComCtl32.TTDT.INITIAL, 0);
+                    PInvoke.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (WPARAM)(uint)ComCtl32.TTDT.INITIAL);
                 }
 
                 return true;

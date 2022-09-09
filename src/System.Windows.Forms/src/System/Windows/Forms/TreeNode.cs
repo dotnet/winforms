@@ -247,7 +247,7 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
-                if (User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, 1, ref rc) == 0)
+                if (PInvoke.SendMessage(tv, (User32.WM)TVM.GETITEMRECT, 1, ref rc) == 0)
                 {
                     // This means the node is not visible
                     return Rectangle.Empty;
@@ -276,7 +276,7 @@ namespace System.Windows.Forms
                     return Rectangle.Empty;
                 }
 
-                if (User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, 0, ref rc) == 0)
+                if (PInvoke.SendMessage(tv, (User32.WM)TVM.GETITEMRECT, 0, ref rc) == 0)
                 {
                     // This means the node is not visible
                     return Rectangle.Empty;
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
                 };
 
                 item.state |= value ? CHECKED : UNCHECKED;
-                User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
+                PInvoke.SendMessage(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
             }
         }
 
@@ -353,7 +353,7 @@ namespace System.Windows.Forms
                         stateMask = TVIS.STATEIMAGEMASK
                     };
 
-                    User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, 0, ref item);
+                    PInvoke.SendMessage(tv, (User32.WM)TVM.GETITEMW, 0, ref item);
                     Debug.Assert(
                         !tv.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
                         $"isChecked on node '{Name}' did not match the state in TVM_GETITEM.");
@@ -665,7 +665,7 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
 
-                bool visible = User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, 1, ref rc) != 0;
+                bool visible = PInvoke.SendMessage(tv, (User32.WM)TVM.GETITEMRECT, 1, ref rc) != 0;
                 if (visible)
                 {
                     Size size = tv.ClientSize;
@@ -752,8 +752,13 @@ namespace System.Windows.Forms
 
                 if (node is not null)
                 {
-                    IntPtr next = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (nint)TVGN.NEXTVISIBLE, node.Handle);
-                    if (next != IntPtr.Zero)
+                    LRESULT next = PInvoke.SendMessage(
+                        tv,
+                        (User32.WM)TVM.GETNEXTITEM,
+                        (WPARAM)(uint)TVGN.NEXTVISIBLE,
+                        (LPARAM)node.Handle);
+
+                    if (next != 0)
                     {
                         return tv.NodeFromHandle(next);
                     }
@@ -910,8 +915,13 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    IntPtr prev = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (nint)TVGN.PREVIOUSVISIBLE, node.Handle);
-                    if (prev != IntPtr.Zero)
+                    LRESULT prev = PInvoke.SendMessage(
+                        tv,
+                        (User32.WM)TVM.GETNEXTITEM,
+                        (WPARAM)(uint)TVGN.PREVIOUSVISIBLE,
+                        (LPARAM)node.Handle);
+
+                    if (prev != 0)
                     {
                         return tv.NodeFromHandle(prev);
                     }
@@ -1019,7 +1029,7 @@ namespace System.Windows.Forms
                     stateMask = TVIS.SELECTED | TVIS.EXPANDED
                 };
 
-                User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, 0, ref item);
+                PInvoke.SendMessage(tv, (User32.WM)TVM.GETITEMW, 0, ref item);
                 return item.state;
             }
         }
@@ -1359,7 +1369,7 @@ namespace System.Windows.Forms
                     tv.Focus();
                 }
 
-                User32.SendMessageW(tv, (User32.WM)TVM.EDITLABELW, 0, _handle);
+                PInvoke.SendMessage(tv, (User32.WM)TVM.EDITLABELW, 0, _handle);
             }
         }
 
@@ -1552,7 +1562,7 @@ namespace System.Windows.Forms
                 tv.OnBeforeCollapse(e);
                 if (!e.Cancel)
                 {
-                    User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (nint)TVE.COLLAPSE, Handle);
+                    PInvoke.SendMessage(tv, (User32.WM)TVM.EXPAND, (WPARAM)(uint)TVE.COLLAPSE, (LPARAM)Handle);
                     tv.OnAfterCollapse(new TreeViewEventArgs(this));
                 }
             }
@@ -1671,7 +1681,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, PARAM.FromBool(cancel));
+            PInvoke.SendMessage(tv, (User32.WM)TVM.ENDEDITLABELNOW, (WPARAM)(BOOL)cancel);
         }
 
         /// <summary>
@@ -1740,7 +1750,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(tv, (User32.WM)TVM.ENSUREVISIBLE, 0, Handle);
+            PInvoke.SendMessage(tv, (User32.WM)TVM.ENSUREVISIBLE, 0, Handle);
         }
 
         /// <summary>
@@ -1758,7 +1768,7 @@ namespace System.Windows.Forms
             ResetExpandedState(tv);
             if (!IsExpanded)
             {
-                User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (nint)TVE.EXPAND, Handle);
+                PInvoke.SendMessage(tv, (User32.WM)TVM.EXPAND, (WPARAM)(uint)TVE.EXPAND, (LPARAM)Handle);
             }
 
             expandOnRealization = false;
@@ -1962,15 +1972,15 @@ namespace System.Windows.Forms
                 // asynchronously (PostMessage) after the add is complete
                 // to get the expected behavior.
                 bool editing = false;
-                nint editHandle = User32.SendMessageW(tv, (User32.WM)TVM.GETEDITCONTROL);
+                nint editHandle = PInvoke.SendMessage(tv, (User32.WM)TVM.GETEDITCONTROL);
                 if (editHandle != 0)
                 {
                     // Currently editing.
                     editing = true;
-                    User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, (nint)(BOOL)false);
+                    PInvoke.SendMessage(tv, (User32.WM)TVM.ENDEDITLABELNOW, (WPARAM)(BOOL)false);
                 }
 
-                _handle = User32.SendMessageW(tv, (User32.WM)TVM.INSERTITEMW, 0, ref tvis);
+                _handle = PInvoke.SendMessage(tv, (User32.WM)TVM.INSERTITEMW, 0, ref tvis);
                 tv._nodesByHandle[_handle] = this;
 
                 // Lets update the Lparam to the Handle.
@@ -1992,7 +2002,7 @@ namespace System.Windows.Forms
                     // and this is the FIRST NODE to get added..
                     // This is Comctl quirk where it just doesn't draw
                     // the first node after a Clear( ) if Scrollable == false.
-                    User32.SendMessageW(tv, User32.WM.SETREDRAW, (nint)(BOOL)true);
+                    PInvoke.SendMessage(tv, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                     nodesCleared = false;
                 }
             }
@@ -2067,7 +2077,7 @@ namespace System.Windows.Forms
             {
                 if (notify && tv.IsHandleCreated)
                 {
-                    User32.SendMessageW(tv, (User32.WM)TVM.DELETEITEM, 0, _handle);
+                    PInvoke.SendMessage(tv, (User32.WM)TVM.DELETEITEM, 0, _handle);
                 }
 
                 treeView._nodesByHandle.Remove(_handle);
@@ -2119,7 +2129,7 @@ namespace System.Windows.Forms
                 state = 0
             };
 
-            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
+            PInvoke.SendMessage(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
         }
 
         private bool ShouldSerializeBackColor()
@@ -2266,7 +2276,7 @@ namespace System.Windows.Forms
                 item.lParam = _handle;
             }
 
-            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
+            PInvoke.SendMessage(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
             if ((mask & TVIF.TEXT) != 0)
             {
                 Marshal.FreeHGlobal(item.pszText);
@@ -2297,7 +2307,7 @@ namespace System.Windows.Forms
                 iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
             };
 
-            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
+            PInvoke.SendMessage(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
         }
 
         /// <summary>

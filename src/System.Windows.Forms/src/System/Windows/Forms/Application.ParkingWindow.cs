@@ -154,7 +154,7 @@ namespace System.Windows.Forms
                 switch (m.MsgInternal)
                 {
                     case User32.WM.PARENTNOTIFY:
-                        if ((User32.WM)PARAM.LOWORD(m.WParamInternal) == User32.WM.DESTROY)
+                        if ((User32.WM)m.WParamInternal.LOWORD == User32.WM.DESTROY)
                         {
                             User32.PostMessageW(this, (User32.WM)WM_CHECKDESTROY);
                         }

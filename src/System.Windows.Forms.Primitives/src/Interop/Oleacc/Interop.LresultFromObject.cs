@@ -11,9 +11,9 @@ internal static partial class Interop
         [DllImport(Libraries.Oleacc, ExactSpelling = true)]
         public static extern nint LresultFromObject(in Guid refiid, nint wParam, IntPtr pAcc);
 
-        public static nint LresultFromObject(in Guid refiid, nint wParam, HandleRef pAcc)
+        public static nint LresultFromObject(in Guid refiid, WPARAM wParam, HandleRef pAcc)
         {
-            nint result = LresultFromObject(in refiid, wParam, pAcc.Handle);
+            nint result = LresultFromObject(in refiid, (nint)wParam, pAcc.Handle);
             GC.KeepAlive(pAcc.Wrapper);
             return result;
         }

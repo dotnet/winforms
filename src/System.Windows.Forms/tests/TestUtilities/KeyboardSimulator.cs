@@ -4,6 +4,8 @@
 
 using static Interop;
 using System.Windows.Forms;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 
 namespace System
 {
@@ -12,14 +14,14 @@ namespace System
         public static void KeyDown(Control control, Keys key)
         {
             (nint keyCode, nint lParam) = GetKeyParameters(key);
-            User32.SendMessageW(control, User32.WM.KEYDOWN, keyCode, lParam);
+            PInvoke.SendMessage(control, User32.WM.KEYDOWN, (WPARAM)keyCode, lParam);
         }
 
         public static void KeyPress(Control control, Keys key)
         {
             (nint keyCode, nint lParam) = GetKeyParameters(key);
-            User32.SendMessageW(control, User32.WM.KEYDOWN, keyCode, lParam);
-            User32.SendMessageW(control, User32.WM.KEYUP, keyCode, lParam);
+            PInvoke.SendMessage(control, User32.WM.KEYDOWN, (WPARAM)keyCode, lParam);
+            PInvoke.SendMessage(control, User32.WM.KEYUP, (WPARAM)keyCode, lParam);
         }
 
         private static (nint keyCode, nint lParam) GetKeyParameters(Keys key)

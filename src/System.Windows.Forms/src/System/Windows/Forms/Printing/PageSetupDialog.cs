@@ -272,17 +272,21 @@ namespace System.Windows.Forms
 
         protected unsafe override bool RunDialog(IntPtr hwndOwner)
         {
-            var hookProcPtr = new User32.WNDPROCINT(HookProc);
+            WNDPROC hookProc = HookProcInternal;
+            void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
+
             if (_pageSettings is null)
             {
                 throw new ArgumentException(SR.PSDcantShowWithoutPage);
             }
 
-            var data = new Comdlg32.PAGESETUPDLGW();
-            data.lStructSize = (uint)Marshal.SizeOf<Comdlg32.PAGESETUPDLGW>();
-            data.Flags = GetFlags();
-            data.hwndOwner = hwndOwner;
-            data.lpfnPageSetupHook = hookProcPtr;
+            Comdlg32.PAGESETUPDLGW data = new()
+            {
+                lStructSize = (uint)sizeof(Comdlg32.PAGESETUPDLGW),
+                Flags = GetFlags(),
+                hwndOwner = hwndOwner,
+                lpfnPageSetupHook = hookProcPtr
+            };
 
             PrinterUnit toUnit = PrinterUnit.ThousandthsOfAnInch;
 
@@ -348,6 +352,7 @@ namespace System.Windows.Forms
             {
                 PInvoke.GlobalFree(data.hDevMode);
                 PInvoke.GlobalFree(data.hDevNames);
+                GC.KeepAlive(hookProc);
             }
         }
     }

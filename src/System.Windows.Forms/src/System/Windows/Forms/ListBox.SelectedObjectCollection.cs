@@ -54,7 +54,7 @@ namespace System.Windows.Forms
 
                             case SelectionMode.MultiSimple:
                             case SelectionMode.MultiExtended:
-                                return (int)SendMessageW(_owner, (WM)LB.GETSELCOUNT);
+                                return (int)PInvoke.SendMessage(_owner, (WM)LB.GETSELCOUNT);
                         }
 
                         return 0;

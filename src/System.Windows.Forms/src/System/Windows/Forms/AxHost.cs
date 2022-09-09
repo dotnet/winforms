@@ -1349,14 +1349,14 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            IntPtr handle = Handle;
-            IntPtr currentWndproc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
+            HWND handle = HWND;
+            IntPtr currentWndproc = PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
             if (currentWndproc == _wndprocAddr)
             {
                 return true;
             }
 
-            if ((int)User32.SendMessageW(this, _registeredMessage) == REGMSG_RETVAL)
+            if ((int)PInvoke.SendMessage(this, _registeredMessage) == REGMSG_RETVAL)
             {
                 _wndprocAddr = currentWndproc;
                 return true;
@@ -1366,7 +1366,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_axHostSwitch.TraceVerbose, "The control subclassed itself w/o calling the old wndproc.");
             Debug.Assert(!OwnWindow(), "Why are we here if we own our window?");
             WindowReleaseHandle();
-            User32.SetWindowLong(this, User32.GWL.WNDPROC, new HandleRef(this, currentWndproc));
+            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, currentWndproc);
             WindowAssignHandle(handle, _axState[s_assignUniqueID]);
             InformOfNewHandle();
             _axState[s_manualUpdate] = true;
@@ -1909,7 +1909,7 @@ namespace System.Windows.Forms
                         // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
                         hwnd = (ContainingControl is null) ? (HWND)0 : ContainingControl.HWND,
                         message = (uint)User32.WM.SYSKEYDOWN,
-                        wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+                        wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                         lParam = 0x20180001,
                         time = PInvoke.GetTickCount()
                     };
@@ -3453,10 +3453,10 @@ namespace System.Windows.Forms
                     if (GetOcState() >= OC_INPLACE)
                     {
                         Ole32.IOleInPlaceObject ipo = GetInPlaceObject();
-                        IntPtr hwnd = IntPtr.Zero;
+                        HWND hwnd = HWND.Null;
                         if (ipo.GetWindow(&hwnd).Succeeded())
                         {
-                            Application.ParkHandle(handle: new(ipo, (HWND)hwnd), DpiAwarenessContext);
+                            Application.ParkHandle(handle: new(ipo, hwnd), DpiAwarenessContext);
                         }
                     }
 
@@ -3524,13 +3524,20 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DetachAndForward(ref Message m)
+        private unsafe void DetachAndForward(ref Message m)
         {
             DetachWindow();
             if (IsHandleCreated)
             {
-                IntPtr wndProc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
-                m.ResultInternal = (LRESULT)User32.CallWindowProcW(wndProc, Handle, (User32.WM)m.Msg, m.WParamInternal, m.LParamInternal);
+                void* wndProc = (void*)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
+                m.ResultInternal = PInvoke.CallWindowProc(
+                    (delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, LRESULT>)wndProc,
+                    HWND,
+                    (uint)m.Msg,
+                    m.WParamInternal,
+                    m.LParamInternal);
+
+                GC.KeepAlive(this);
             }
         }
 
@@ -3546,10 +3553,10 @@ namespace System.Windows.Forms
         private void InformOfNewHandle()
         {
             Debug.Assert(IsHandleCreated, "we got to have a handle to be here...");
-            _wndprocAddr = User32.GetWindowLong(this, User32.GWL.WNDPROC);
+            _wndprocAddr = PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
         }
 
-        private void AttachWindow(IntPtr hwnd)
+        private void AttachWindow(HWND hwnd)
         {
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"attaching window for {ToString()} {hwnd}");
             if (!_axState[s_fFakingWindow])

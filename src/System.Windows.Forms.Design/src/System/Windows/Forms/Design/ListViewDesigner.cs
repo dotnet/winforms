@@ -79,12 +79,12 @@ namespace System.Windows.Forms.Design
 
                 if (!hwndHit.IsNull && hwndHit != listView.Handle)
                 {
-                    HWND headerHwnd = (HWND)User32.SendMessageW(listView, (User32.WM)ComCtl32.LVM.GETHEADER);
+                    HWND headerHwnd = (HWND)PInvoke.SendMessage(listView, (User32.WM)ComCtl32.LVM.GETHEADER);
                     if (hwndHit == headerHwnd)
                     {
                         PInvoke.MapWindowPoints(HWND.Null, headerHwnd, ref point);
                         _hdrhit.pt = point;
-                        User32.SendMessageW(headerHwnd, (User32.WM)ComCtl32.HDM.HITTEST, 0, ref _hdrhit);
+                        PInvoke.SendMessage(headerHwnd, (User32.WM)ComCtl32.HDM.HITTEST, 0, ref _hdrhit);
                         if (_hdrhit.flags == ComCtl32.HHT.ONDIVIDER)
                             return true;
                     }

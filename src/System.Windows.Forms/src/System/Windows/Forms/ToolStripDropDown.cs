@@ -1624,16 +1624,14 @@ namespace System.Windows.Forms
         private void ReparentToActiveToolStripWindow()
         {
             ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
-            User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd.Handle);
+            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd);
         }
 
         private void ReparentToDropDownOwnerWindow()
         {
             // when we're toplevel we need to parent ourselves to a hidden window
             // this prevents a taskbar entry.
-            NativeWindow ownerWindow = DropDownOwnerWindow;
-            HandleRef ownerHandle = new HandleRef(ownerWindow, ownerWindow.Handle);
-            User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHandle);
+            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, DropDownOwnerWindow);
         }
 
         internal override void ResetScaling(int newDpi)
@@ -2205,7 +2203,7 @@ namespace System.Windows.Forms
                         // We're activating - notify the previous guy that we're activating.
                         HandleRef<HWND> activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
-                        User32.SendMessageW(activeHwndHandleRef.Handle, User32.WM.NCACTIVATE, (nint)(BOOL)true, -1);
+                        PInvoke.SendMessage(activeHwndHandleRef, User32.WM.NCACTIVATE, (WPARAM)(BOOL)true, (LPARAM)(-1));
                         User32.RedrawWindow(
                             activeHwndHandleRef.Handle,
                             flags: User32.RDW.FRAME | User32.RDW.INVALIDATE);

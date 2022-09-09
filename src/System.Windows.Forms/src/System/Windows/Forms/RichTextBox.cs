@@ -191,11 +191,11 @@ namespace System.Windows.Forms
                 richTextBoxFlags[autoWordSelectionSection] = value ? 1 : 0;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(
+                    PInvoke.SendMessage(
                         this,
                         (User32.WM)EM.SETOPTIONS,
-                        (nint)(value ? ECOOP.OR : ECOOP.XOR),
-                        (nint)ECO.AUTOWORDSELECTION);
+                        (WPARAM)(int)(value ? ECOOP.OR : ECOOP.XOR),
+                        (LPARAM)(int)ECO.AUTOWORDSELECTION);
                 }
             }
         }
@@ -278,7 +278,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.RichTextBoxCanRedoDescr))]
-        public bool CanRedo => IsHandleCreated && (int)User32.SendMessageW(this, (User32.WM)EM.CANREDO) != 0;
+        public bool CanRedo => IsHandleCreated && (int)PInvoke.SendMessage(this, (User32.WM)EM.CANREDO) != 0;
 
         protected override CreateParams CreateParams
         {
@@ -376,7 +376,7 @@ namespace System.Windows.Forms
                     richTextBoxFlags[autoUrlDetectSection] = value ? 1 : 0;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)EM.AUTOURLDETECT, PARAM.FromBool(value));
+                        PInvoke.SendMessage(this, (User32.WM)EM.AUTOURLDETECT, (WPARAM)(BOOL)(value));
                         RecreateHandle();
                     }
                 }
@@ -519,7 +519,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return (RichTextBoxLanguageOptions)User32.SendMessageW(this, (User32.WM)EM.GETLANGOPTIONS);
+                    return (RichTextBoxLanguageOptions)(int)PInvoke.SendMessage(this, (User32.WM)EM.GETLANGOPTIONS);
                 }
 
                 return languageOption;
@@ -531,7 +531,7 @@ namespace System.Windows.Forms
                     languageOption = value;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)EM.SETLANGOPTIONS, 0, (nint)value);
+                        PInvoke.SendMessage(this, (User32.WM)EM.SETLANGOPTIONS, 0, (nint)value);
                     }
                 }
             }
@@ -588,7 +588,7 @@ namespace System.Windows.Forms
                     return string.Empty;
                 }
 
-                int n = (int)User32.SendMessageW(this, (User32.WM)EM.GETREDONAME);
+                int n = (int)PInvoke.SendMessage(this, (User32.WM)EM.GETREDONAME);
                 return GetEditorActionName(n);
             }
         }
@@ -643,8 +643,8 @@ namespace System.Windows.Forms
                     }
                     else if (IsHandleCreated)
                     {
-                        using PInvoke.CreateDcScope hDC = new("DISPLAY");
-                        User32.SendMessageW(this, (User32.WM)EM.SETTARGETDEVICE, hDC, Pixel2Twip(value, true));
+                        using PInvoke.CreateDcScope hdc = new("DISPLAY");
+                        PInvoke.SendMessage(this, (User32.WM)EM.SETTARGETDEVICE, (WPARAM)hdc, Pixel2Twip(value, true));
                     }
                 }
             }
@@ -746,7 +746,7 @@ namespace System.Windows.Forms
                 };
 
                 // Get the format for our currently selected paragraph.
-                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
 
                 // check if alignment has been set yet
                 if ((PFM.ALIGNMENT & pf.dwMask) != 0)
@@ -797,7 +797,7 @@ namespace System.Windows.Forms
                 }
 
                 // Set the format for our current paragraph or selection.
-                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
             }
         }
 
@@ -822,7 +822,7 @@ namespace System.Windows.Forms
                 };
 
                 // Get the format for our currently selected paragraph.
-                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
 
                 // check if alignment has been set yet
                 if ((PFM.NUMBERING & pf.dwMask) != 0)
@@ -862,7 +862,7 @@ namespace System.Windows.Forms
                 }
 
                 // Set the format for our current paragraph or selection.
-                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
             }
         }
 
@@ -906,7 +906,7 @@ namespace System.Windows.Forms
                 // SendMessage will force the handle to be created if it hasn't already. Normally,
                 // we would cache property values until the handle is created - but for this property,
                 // it's far more simple to just create the handle.
-                User32.SendMessageW(this, (User32.WM)EM.SETCHARFORMAT, (nint)SCF.SELECTION, ref cf);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETCHARFORMAT, (uint)SCF.SELECTION, ref cf);
             }
         }
 
@@ -942,7 +942,7 @@ namespace System.Windows.Forms
                 cf.crTextColor = ColorTranslator.ToWin32(value);
 
                 // Set the format information.
-                User32.SendMessageW(this, (User32.WM)EM.SETCHARFORMAT, (nint)SCF.SELECTION, ref cf);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref cf);
             }
         }
 
@@ -1000,7 +1000,7 @@ namespace System.Windows.Forms
                         cf2.crBackColor = ColorTranslator.ToWin32(value);
                     }
 
-                    User32.SendMessageW(this, (User32.WM)EM.SETCHARFORMAT, (nint)SCF.SELECTION, ref cf2);
+                    PInvoke.SendMessage(this, (User32.WM)EM.SETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref cf2);
                 }
             }
         }
@@ -1047,7 +1047,7 @@ namespace System.Windows.Forms
                 };
 
                 // Get the format for our currently selected paragraph.
-                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
 
                 // Check if alignment has been set yet.
                 if ((PFM.OFFSET & pf.dwMask) != 0)
@@ -1069,7 +1069,7 @@ namespace System.Windows.Forms
                 };
 
                 // Set the format for our current paragraph or selection.
-                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
             }
         }
 
@@ -1095,7 +1095,7 @@ namespace System.Windows.Forms
                 };
 
                 // Get the format for our currently selected paragraph.
-                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
 
                 // Check if alignment has been set yet.
                 if ((PFM.STARTINDENT & pf.dwMask) != 0)
@@ -1117,7 +1117,7 @@ namespace System.Windows.Forms
                 };
 
                 // Set the format for our current paragraph or selection.
-                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
             }
         }
 
@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms
                 };
 
                 // Get the format for our currently selected paragraph.
-                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
 
                 // Check if alignment has been set yet.
                 if ((PFM.RIGHTINDENT & pf.dwMask) != 0)
@@ -1248,7 +1248,7 @@ namespace System.Windows.Forms
                 };
 
                 // Set the format for our current paragraph or selection.
-                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
             }
         }
 
@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms
                 };
 
                 // get the format for our currently selected paragraph
-                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
 
                 // check if alignment has been set yet
                 if ((PFM.TABSTOPS & pf.dwMask) != 0)
@@ -1301,7 +1301,7 @@ namespace System.Windows.Forms
 
                 // get the format for our currently selected paragraph because
                 // we need to get the number of tabstops to copy
-                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.GETPARAFORMAT, 0, ref pf);
 
                 pf.cTabCount = (short)((value is null) ? 0 : value.Length);
                 pf.dwMask = PFM.TABSTOPS;
@@ -1311,7 +1311,7 @@ namespace System.Windows.Forms
                 }
 
                 // Set the format for our current paragraph or selection.
-                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETPARAFORMAT, 0, ref pf);
             }
         }
 
@@ -1352,7 +1352,7 @@ namespace System.Windows.Forms
                 ForceHandleCreate();
                 if (SelectionLength > 0)
                 {
-                    int n = (int)User32.SendMessageW(this, (User32.WM)EM.SELECTIONTYPE);
+                    int n = (int)PInvoke.SendMessage(this, (User32.WM)EM.SELECTIONTYPE);
                     return (RichTextBoxSelectionTypes)n;
                 }
                 else
@@ -1379,11 +1379,11 @@ namespace System.Windows.Forms
                     richTextBoxFlags[showSelBarSection] = value ? 1 : 0;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(
+                        PInvoke.SendMessage(
                             this,
                             (User32.WM)EM.SETOPTIONS,
-                            (nint)(value ? ECOOP.OR : ECOOP.XOR),
-                            (nint)ECO.SELECTIONBAR);
+                            (WPARAM)(int)(value ? ECOOP.OR : ECOOP.XOR),
+                            (LPARAM)(int)ECO.SELECTIONBAR);
                     }
                 }
             }
@@ -1448,7 +1448,7 @@ namespace System.Windows.Forms
 
                         StreamIn(value, SF.TEXT | SF.UNICODE);
                         // reset Modified
-                        User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY);
+                        PInvoke.SendMessage(this, (User32.WM)User32.EM.SETMODIFY);
                     }
                 }
             }
@@ -1479,7 +1479,7 @@ namespace System.Windows.Forms
                     codepage = 1200u /* CP_UNICODE */
                 };
 
-                return (int)User32.SendMessageW(this, (User32.WM)EM.GETTEXTLENGTHEX, (nint)(&gtl));
+                return (int)PInvoke.SendMessage(this, (User32.WM)EM.GETTEXTLENGTHEX, (WPARAM)(&gtl));
             }
         }
 
@@ -1503,7 +1503,7 @@ namespace System.Windows.Forms
                     return "";
                 }
 
-                int n = (int)User32.SendMessageW(this, (User32.WM)EM.GETUNDONAME);
+                int n = (int)PInvoke.SendMessage(this, (User32.WM)EM.GETUNDONAME);
                 return GetEditorActionName(n);
             }
         }
@@ -1547,7 +1547,7 @@ namespace System.Windows.Forms
                 {
                     int numerator = 0;
                     int denominator = 0;
-                    User32.SendMessageW(this, (User32.WM)EM.GETZOOM, (nint)(&numerator), ref denominator);
+                    PInvoke.SendMessage(this, (User32.WM)EM.GETZOOM, (WPARAM)(&numerator), ref denominator);
                     if ((numerator != 0) && (denominator != 0))
                     {
                         zoomMultiplier = numerator / ((float)denominator);
@@ -1697,7 +1697,7 @@ namespace System.Windows.Forms
         ///  given clipboard format.
         /// </summary>
         public bool CanPaste(DataFormats.Format clipFormat)
-            => (int)User32.SendMessageW(this, (User32.WM)EM.CANPASTE, clipFormat.Id) != 0;
+            => PInvoke.SendMessage(this, (User32.WM)EM.CANPASTE, (WPARAM)clipFormat.Id) != 0;
 
         //DrawToBitmap doesn't work for this control, so we should hide it.  We'll
         //still call base so that this has a chance to work if it can.
@@ -1958,7 +1958,7 @@ namespace System.Windows.Forms
             fixed (char* pText = str)
             {
                 ft.lpstrText = pText;
-                position = (int)User32.SendMessageW(this, (User32.WM)EM.FINDTEXT, (nint)findOptions, ref ft);
+                position = (int)PInvoke.SendMessage(this, (User32.WM)EM.FINDTEXT, (WPARAM)(uint)findOptions, ref ft);
             }
 
             // if we didn't find anything, or we don't have to select what was found,
@@ -2001,8 +2001,8 @@ namespace System.Windows.Forms
                     chrg.cpMax = foundCursor;
                 }
 
-                User32.SendMessageW(this, (User32.WM)EM.EXSETSEL, 0, ref chrg);
-                User32.SendMessageW(this, (User32.WM)User32.EM.SCROLLCARET);
+                PInvoke.SendMessage(this, (User32.WM)EM.EXSETSEL, 0, ref chrg);
+                PInvoke.SendMessage(this, (User32.WM)User32.EM.SCROLLCARET);
             }
 
             return position;
@@ -2128,7 +2128,7 @@ namespace System.Windows.Forms
 
                     // go get the text in this range, if we didn't get any text then punt
                     int len;
-                    len = (int)User32.SendMessageW(this, (User32.WM)EM.GETTEXTRANGE, 0, ref txrg);
+                    len = (int)PInvoke.SendMessage(this, (User32.WM)EM.GETTEXTRANGE, 0, ref txrg);
                     if (len == 0)
                     {
                         chrg.cpMax = chrg.cpMin = -1; // Hit end of control without finding what we wanted
@@ -2222,7 +2222,7 @@ namespace System.Windows.Forms
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
 
-            User32.SendMessageW(this, (User32.WM)EM.GETCHARFORMAT, (nint)(fSelection ? SCF.SELECTION : SCF.DEFAULT), ref cf);
+            PInvoke.SendMessage(this, (User32.WM)EM.GETCHARFORMAT, (WPARAM)(uint)(fSelection ? SCF.SELECTION : SCF.DEFAULT), ref cf);
             return cf;
         }
 
@@ -2306,7 +2306,7 @@ namespace System.Windows.Forms
         public override int GetCharIndexFromPosition(Point pt)
         {
             var wpt = new Point(pt.X, pt.Y);
-            int index = (int)User32.SendMessageW(this, (User32.WM)User32.EM.CHARFROMPOS, 0, ref wpt);
+            int index = (int)PInvoke.SendMessage(this, (User32.WM)User32.EM.CHARFROMPOS, 0, ref wpt);
 
             string t = Text;
             // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
@@ -2343,7 +2343,7 @@ namespace System.Windows.Forms
         ///  return 1 and not 0.
         /// </summary>
         public override int GetLineFromCharIndex(int index)
-            => (int)User32.SendMessageW(this, (User32.WM)EM.EXLINEFROMCHAR, 0, index);
+            => (int)PInvoke.SendMessage(this, (User32.WM)EM.EXLINEFROMCHAR, 0, index);
 
         /// <summary>
         ///  Returns the location of the character at the given index.
@@ -2361,7 +2361,7 @@ namespace System.Windows.Forms
             }
 
             var pt = new Point();
-            User32.SendMessageW(this, (User32.WM)User32.EM.POSFROMCHAR, (nint)(&pt), index);
+            PInvoke.SendMessage(this, (User32.WM)User32.EM.POSFROMCHAR, (WPARAM)(&pt), index);
             return pt;
         }
 
@@ -2436,7 +2436,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, 0, BackColor.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)EM.SETBKGNDCOLOR, 0, BackColor.ToWin32());
             }
 
             base.OnBackColorChanged(e);
@@ -2516,7 +2516,7 @@ namespace System.Windows.Forms
 
             // This is needed so that the control will fire change and update events
             // even if it is hidden
-            User32.SendMessageW(
+            PInvoke.SendMessage(
                 this,
                 (User32.WM)EM.SETEVENTMASK,
                 0,
@@ -2531,7 +2531,7 @@ namespace System.Windows.Forms
             rightMargin = 0;
             RightMargin = rm;
 
-            User32.SendMessageW(this, (User32.WM)EM.AUTOURLDETECT, DetectUrls ? 1 : 0, 0);
+            PInvoke.SendMessage(this, (User32.WM)EM.AUTOURLDETECT, (WPARAM)(DetectUrls ? 1 : 0));
             if (selectionBackColorToSetOnHandleCreated != Color.Empty)
             {
                 SelectionBackColor = selectionBackColorToSetOnHandleCreated;
@@ -2540,7 +2540,7 @@ namespace System.Windows.Forms
             // Initialize colors before initializing RTF, otherwise CFE_AUTOCOLOR will be in effect
             // and our text will all be Color.WindowText.
             AutoWordSelection = AutoWordSelection;
-            User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, 0, BackColor.ToWin32());
+            PInvoke.SendMessage(this, (User32.WM)EM.SETBKGNDCOLOR, (WPARAM)0, (LPARAM)BackColor);
             InternalSetForeColor(ForeColor);
 
             // base sets the Text property.  It's important to do this *after* setting EM_AUTOUrlDETECT.
@@ -2676,7 +2676,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Paste(DataFormats.Format clipFormat)
         {
-            User32.SendMessageW(this, (User32.WM)EM.PASTESPECIAL, (IntPtr)clipFormat.Id);
+            PInvoke.SendMessage(this, (User32.WM)EM.PASTESPECIAL, (WPARAM)clipFormat.Id);
         }
 
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
@@ -2698,7 +2698,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Redoes the last undone editing operation.
         /// </summary>
-        public void Redo() => User32.SendMessageW(this, (User32.WM)EM.REDO);
+        public void Redo() => PInvoke.SendMessage(this, (User32.WM)EM.REDO);
 
         //NOTE: Undo is implemented on TextBox
 
@@ -2785,7 +2785,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)EM.SETZOOM, numerator, denominator);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETZOOM, (WPARAM)numerator, (LPARAM)denominator);
             }
 
             if (numerator != 0)
@@ -2822,7 +2822,7 @@ namespace System.Windows.Forms
                 }
 
                 // set the format information
-                return User32.SendMessageW(this, (User32.WM)EM.SETCHARFORMAT, (nint)SCF.SELECTION, ref cf) != 0;
+                return PInvoke.SendMessage(this, (User32.WM)EM.SETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref cf) != 0;
             }
 
             return false;
@@ -2830,7 +2830,7 @@ namespace System.Windows.Forms
 
         private bool SetCharFormat(SCF charRange, CHARFORMAT2W cf)
         {
-            return User32.SendMessageW(this, (User32.WM)EM.SETCHARFORMAT, (nint)charRange, ref cf) != 0;
+            return PInvoke.SendMessage(this, (User32.WM)EM.SETCHARFORMAT, (WPARAM)(uint)charRange, ref cf) != 0;
         }
 
         private unsafe void SetCharFormatFont(bool selectionOnly, Font value)
@@ -2874,10 +2874,10 @@ namespace System.Windows.Forms
                 FaceName = logFont.FaceName
             };
 
-            User32.SendMessageW(
+            PInvoke.SendMessage(
                 this,
                 (User32.WM)EM.SETCHARFORMAT,
-                (nint)(selectionOnly ? SCF.SELECTION : SCF.ALL),
+                (WPARAM)(uint)(selectionOnly ? SCF.SELECTION : SCF.ALL),
                 ref charFormat);
         }
 
@@ -2909,13 +2909,13 @@ namespace System.Windows.Forms
                 // Destroy the selection if callers was setting selection text
                 if ((SF.F_SELECTION & flags) != 0)
                 {
-                    User32.SendMessageW(this, User32.WM.CLEAR);
+                    PInvoke.SendMessage(this, User32.WM.CLEAR);
                     ProtectedError = false;
                     return;
                 }
 
                 // WM_SETTEXT is allowed even if we have protected text
-                User32.SendMessageW(this, User32.WM.SETTEXT, 0, string.Empty);
+                PInvoke.SendMessage(this, User32.WM.SETTEXT, 0, string.Empty);
                 return;
             }
 
@@ -2951,7 +2951,7 @@ namespace System.Windows.Forms
             if ((flags & SF.F_SELECTION) == 0)
             {
                 var cr = new CHARRANGE();
-                User32.SendMessageW(this, (User32.WM)EM.EXSETSEL, 0, ref cr);
+                PInvoke.SendMessage(this, (User32.WM)EM.EXSETSEL, 0, ref cr);
             }
 
             try
@@ -3008,10 +3008,10 @@ namespace System.Windows.Forms
 
                 // gives us TextBox compatible behavior, programatic text change shouldn't
                 // be limited...
-                User32.SendMessageW(this, (User32.WM)EM.EXLIMITTEXT, 0, int.MaxValue);
+                PInvoke.SendMessage(this, (User32.WM)EM.EXLIMITTEXT, 0, int.MaxValue);
 
                 // go get the text for the control
-                User32.SendMessageW(this, (User32.WM)EM.STREAMIN, (nint)flags, ref es);
+                PInvoke.SendMessage(this, (User32.WM)EM.STREAMIN, (WPARAM)(uint)flags, ref es);
                 GC.KeepAlive(callback);
 
                 UpdateMaxLength();
@@ -3030,10 +3030,10 @@ namespace System.Windows.Forms
                 }
 
                 // set the modify tag on the control
-                User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY, -1);
+                PInvoke.SendMessage(this, (User32.WM)User32.EM.SETMODIFY, (WPARAM)(-1));
 
                 // EM_GETLINECOUNT will cause the RichTextBox to recalculate its line indexes
-                User32.SendMessageW(this, (User32.WM)User32.EM.GETLINECOUNT);
+                PInvoke.SendMessage(this, (User32.WM)User32.EM.GETLINECOUNT);
             }
             finally
             {
@@ -3117,7 +3117,7 @@ namespace System.Windows.Forms
                 es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
 
                 // Get Text
-                User32.SendMessageW(this, (User32.WM)EM.STREAMOUT, (nint)flags, ref es);
+                PInvoke.SendMessage(this, (User32.WM)EM.STREAMOUT, (WPARAM)(uint)flags, ref es);
                 GC.KeepAlive(callback);
 
                 // check to make sure things went well
@@ -3153,7 +3153,7 @@ namespace System.Windows.Forms
             }
 
             GETTEXTLENGTHEX* pGtl = &gtl;
-            int expectedLength = (int)User32.SendMessageW(this, (User32.WM)User32.EM.GETTEXTLENGTHEX, (nint)pGtl);
+            int expectedLength = (int)PInvoke.SendMessage(this, (User32.WM)User32.EM.GETTEXTLENGTHEX, (WPARAM)pGtl);
             if (expectedLength == (int)HRESULT.E_INVALIDARG)
                 throw new Win32Exception(expectedLength);
 
@@ -3174,7 +3174,7 @@ namespace System.Windows.Forms
             GETTEXTEX* pGt = &gt;
             fixed (char* pText = text)
             {
-                int actualLength = (int)User32.SendMessageW(this, (User32.WM)User32.EM.GETTEXTEX, (nint)pGt, (nint)pText);
+                int actualLength = (int)PInvoke.SendMessage(this, (User32.WM)User32.EM.GETTEXTEX, (WPARAM)pGt, (LPARAM)pText);
 
                 // The default behaviour of EM_GETTEXTEX is to normalise line endings to '\r'
                 // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
@@ -3224,7 +3224,7 @@ namespace System.Windows.Forms
                         Marshal.QueryInterface(punk, ref iidRichEditOleCallback, out IntPtr pRichEditOleCallback);
                         try
                         {
-                            User32.SendMessageW(this, (User32.WM)EM.SETOLECALLBACK, 0, pRichEditOleCallback);
+                            PInvoke.SendMessage(this, (User32.WM)EM.SETOLECALLBACK, 0, pRichEditOleCallback);
                         }
                         finally
                         {
@@ -3249,7 +3249,7 @@ namespace System.Windows.Forms
             {
                 if (BackColor.IsSystemColor)
                 {
-                    User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, 0, BackColor.ToWin32());
+                    PInvoke.SendMessage(this, (User32.WM)EM.SETBKGNDCOLOR, 0, BackColor.ToWin32());
                 }
 
                 if (ForeColor.IsSystemColor)
@@ -3331,7 +3331,7 @@ namespace System.Windows.Forms
             }
 
             txrg.lpstrText = unmanagedBuffer;
-            int len = (int)User32.SendMessageW(this, (User32.WM)EM.GETTEXTRANGE, 0, ref txrg);
+            int len = (int)PInvoke.SendMessage(this, (User32.WM)EM.GETTEXTRANGE, 0, ref txrg);
             Debug.Assert(len != 0, "CHARRANGE from RichTextBox was bad! - impossible?");
             charBuffer.PutCoTaskMem(unmanagedBuffer);
             if (txrg.lpstrText != IntPtr.Zero)
@@ -3347,7 +3347,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)EM.EXLIMITTEXT, 0, (IntPtr)MaxLength);
+                PInvoke.SendMessage(this, (User32.WM)EM.EXLIMITTEXT, 0, (IntPtr)MaxLength);
             }
         }
 
@@ -3357,7 +3357,7 @@ namespace System.Windows.Forms
             // the rich edit control fires spurious events during this time.
             if (m.LParamInternal == Handle && !GetState(States.CreatingHandle))
             {
-                switch ((User32.EN)PARAM.HIWORD(m.WParamInternal))
+                switch ((User32.EN)m.WParamInternal.HIWORD)
                 {
                     case User32.EN.HSCROLL:
                         OnHScroll(EventArgs.Empty);
@@ -3522,14 +3522,14 @@ namespace System.Windows.Forms
             if (ImeMode == ImeMode.Hangul || ImeMode == ImeMode.HangulFull)
             {
                 // Is the IME CompositionWindow open?
-                ICM compMode = (ICM)User32.SendMessageW(this, (User32.WM)EM.GETIMECOMPMODE);
+                ICM compMode = (ICM)(int)PInvoke.SendMessage(this, (User32.WM)EM.GETIMECOMPMODE);
                 if (compMode != ICM.NOTOPEN)
                 {
                     int textLength = User32.GetWindowTextLengthW(new HandleRef(this, Handle));
                     if (selStart == selEnd && textLength == MaxLength)
                     {
-                        User32.SendMessageW(this, User32.WM.KILLFOCUS);
-                        User32.SendMessageW(this, User32.WM.SETFOCUS);
+                        PInvoke.SendMessage(this, User32.WM.KILLFOCUS);
+                        PInvoke.SendMessage(this, User32.WM.SETFOCUS);
                         User32.PostMessageW(this, (User32.WM)User32.EM.SETSEL, (IntPtr)(selEnd - 1), (IntPtr)selEnd);
                     }
                 }
@@ -3639,7 +3639,7 @@ namespace System.Windows.Forms
                 case User32.WM.VSCROLL:
                     {
                         base.WndProc(ref m);
-                        User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParamInternal);
+                        User32.SBV loWord = (User32.SBV)m.WParamInternal.LOWORD;
                         if (loWord == User32.SBV.THUMBTRACK)
                         {
                             OnVScroll(EventArgs.Empty);
@@ -3655,7 +3655,7 @@ namespace System.Windows.Forms
                 case User32.WM.HSCROLL:
                     {
                         base.WndProc(ref m);
-                        User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParamInternal);
+                        User32.SBH loWord = (User32.SBH)m.WParamInternal.LOWORD;
                         if (loWord == User32.SBH.THUMBTRACK)
                         {
                             OnHScroll(EventArgs.Empty);

@@ -146,11 +146,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(
+                PInvoke.SendMessage(
                     this,
                     (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
-                    0,
-                    SystemInformation.MaxWindowTrackSize.Width);
+                    (WPARAM)0,
+                    (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             _toolTipText = oldText;
-            User32.SendMessageW(this, (User32.WM)ComCtl32.TTM.UPDATE);
+            PInvoke.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATE);
         }
 
         protected override void WndProc(ref Message msg)

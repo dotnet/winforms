@@ -50,6 +50,7 @@ namespace Windows.Win32
             public static implicit operator HDC(in CreateDcScope scope) => scope.HDC;
             public static implicit operator HGDIOBJ(in CreateDcScope scope) => (HGDIOBJ)(scope.HDC.Value);
             public static implicit operator nint(in CreateDcScope scope) => scope.HDC;
+            public static explicit operator WPARAM(in CreateDcScope scope) => (WPARAM)(nuint)(nint)scope.HDC;
 
             public bool IsNull => HDC.IsNull;
 

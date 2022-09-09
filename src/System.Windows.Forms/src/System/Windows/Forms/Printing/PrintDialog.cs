@@ -344,7 +344,7 @@ namespace System.Windows.Forms
             data.nCopies = (ushort)PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;
 
-            User32.WNDPROCINT wndproc = new User32.WNDPROCINT(HookProc);
+            WNDPROC wndproc = HookProcInternal;
             data.lpfnPrintHook = Marshal.GetFunctionPointerForDelegate(wndproc);
 
             try
