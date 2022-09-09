@@ -3,6 +3,7 @@ ActivateActCtx
 ActivateKeyboardLayout
 AdjustWindowRectEx
 AdjustWindowRectExForDpi
+BeginPaint
 BitBlt
 CloseEnhMetaFile
 CloseHandle
@@ -15,8 +16,10 @@ CreateCompatibleBitmap
 CreatePen
 DeactivateActCtx
 DuplicateHandle
+EndPaint
 FormatMessage
 GET_MODULE_HANDLE_EX_FLAG*
+GetClientRect
 GetCurrentActCtx
 GetCurrentProcess
 GetCurrentProcessId
