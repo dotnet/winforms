@@ -10,7 +10,6 @@ using System.Windows.Forms.Metafiles;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -588,7 +587,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,                                   // Don't care about the bounds for this test
                     State.FontFace(SystemFonts.DefaultFont.Name),
                     State.TextColor(Color.Blue),
-                    State.BackgroundMode(Gdi32.BKMODE.TRANSPARENT)));
+                    State.BackgroundMode(BACKGROUND_MODE.TRANSPARENT)));
         }
 
         public static TheoryData<Func<IDeviceContext, Action>> TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData

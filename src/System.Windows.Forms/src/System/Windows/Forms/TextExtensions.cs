@@ -67,19 +67,19 @@ namespace System.Windows.Forms
             (User32.DT dt, TextPaddingOptions padding) = SplitTextFormatFlags(flags);
 
             // DrawText requires default text alignment.
-            using var alignment = new Gdi32.SetTextAlignmentScope(hdc, default);
+            using PInvoke.SetTextAlignmentScope alignment = new(hdc, default);
 
             // Color empty means use the one currently selected in the dc.
-            using var textColor = foreColor.IsEmpty ? default : new Gdi32.SetTextColorScope(hdc, foreColor);
+            using var textColor = foreColor.IsEmpty ? default : new PInvoke.SetTextColorScope(hdc, foreColor);
             using var fontSelection = new Gdi32.SelectObjectScope(hdc, (HFONT)font);
 
-            Gdi32.BKMODE newBackGroundMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
-                Gdi32.BKMODE.TRANSPARENT :
-                Gdi32.BKMODE.OPAQUE;
+            BACKGROUND_MODE newBackGroundMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
+                BACKGROUND_MODE.TRANSPARENT :
+                BACKGROUND_MODE.OPAQUE;
 
-            using var backgroundMode = new Gdi32.SetBkModeScope(hdc, newBackGroundMode);
-            using var backgroundColor = newBackGroundMode != Gdi32.BKMODE.TRANSPARENT
-                ? new Gdi32.SetBackgroundColorScope(hdc, backColor)
+            using PInvoke.SetBkModeScope backgroundMode = new(hdc, newBackGroundMode);
+            using var backgroundColor = newBackGroundMode != BACKGROUND_MODE.TRANSPARENT
+                ? new PInvoke.SetBackgroundColorScope(hdc, backColor)
                 : default;
 
             User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font, padding);

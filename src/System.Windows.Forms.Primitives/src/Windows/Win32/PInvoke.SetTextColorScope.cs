@@ -2,33 +2,41 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#if DEBUG
+#endif
 using System.Drawing;
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
-        ///  Helper to scope selecting a given background color into a HDC. Restores the original background color into
-        ///  the HDC when disposed.
+        ///  Helper to scope selecting a given foreground text color into a HDC. Restores the original text color into
+        ///  into the HDC when disposed.
         /// </summary>
         /// <remarks>
+        ///  <para>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
         ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
+        ///  </para>
         /// </remarks>
-        internal readonly ref struct SetBackgroundColorScope
+#if DEBUG
+        internal class SetTextColorScope : DisposalTracking.Tracker, IDisposable
+#else
+        internal readonly ref struct SetTextColorScope
+#endif
         {
-            private readonly int _previousColor;
+            private readonly COLORREF _previousColor;
             private readonly HDC _hdc;
 
             /// <summary>
             ///  Sets text color <paramref name="color"/> in the given <paramref name="hdc"/> using
-            ///  <see cref="SetBkColor(HDC, int)"/>.
+            ///  <see cref="SetTextColor(HDC, COLORREF)"/>.
             /// </summary>
-            public SetBackgroundColorScope(HDC hdc, Color color)
+            public SetTextColorScope(HDC hdc, Color color)
             {
-                int colorref = ColorTranslator.ToWin32(color);
-                _previousColor = SetBkColor(hdc, colorref);
+                COLORREF colorref = (COLORREF)(uint)ColorTranslator.ToWin32(color);
+                _previousColor = SetTextColor(hdc, colorref);
 
                 // If we didn't actually change the color, don't keep the HDC so we skip putting back the same state.
                 _hdc = colorref == _previousColor ? default : hdc;
@@ -38,8 +46,12 @@ internal static partial class Interop
             {
                 if (!_hdc.IsNull)
                 {
-                    SetBkColor(_hdc, _previousColor);
+                    SetTextColor(_hdc, _previousColor);
                 }
+
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
             }
         }
     }

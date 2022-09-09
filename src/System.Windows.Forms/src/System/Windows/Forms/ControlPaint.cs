@@ -329,8 +329,8 @@ namespace System.Windows.Forms
             // with the inverse of the mask (ROP DSna). When going from monochrome to color, Windows sets all 1 bits
             // to the background color, and all 0 bits to the foreground color.
 
-            Gdi32.SetBkColor(targetDC, 0x00ffffff);    // white
-            Gdi32.SetTextColor(targetDC, 0x00000000);  // black
+            PInvoke.SetBkColor(targetDC, (COLORREF)0x00ffffff);    // white
+            PInvoke.SetTextColor(targetDC, (COLORREF)0x00000000);  // black
             PInvoke.BitBlt(targetDC, x: 0, y: 0, size.Width, size.Height, sourceDC, x1: 0, y1: 0, (ROP_CODE)0x220326);
             //RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
@@ -1836,17 +1836,17 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawReversibleFrame(Rectangle rectangle, Color backColor, FrameStyle style)
         {
-            Gdi32.R2 rop2;
+            R2_MODE rop2;
             Color graphicsColor;
 
             if (backColor.GetBrightness() < .5)
             {
-                rop2 = Gdi32.R2.NOTXORPEN;
+                rop2 = R2_MODE.R2_NOTXORPEN;
                 graphicsColor = Color.White;
             }
             else
             {
-                rop2 = Gdi32.R2.XORPEN;
+                rop2 = R2_MODE.R2_XORPEN;
                 graphicsColor = Color.Black;
             }
 
@@ -1862,11 +1862,11 @@ namespace System.Windows.Forms
                 _ => default
             });
 
-            using Gdi32.SetRop2Scope rop2Scope = new(desktopDC, rop2);
+            using PInvoke.SetRop2Scope rop2Scope = new(desktopDC, rop2);
             using Gdi32.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
             using Gdi32.SelectObjectScope penSelection = new(desktopDC, pen);
 
-            Gdi32.SetBkColor(desktopDC, ColorTranslator.ToWin32(graphicsColor));
+            PInvoke.SetBkColor(desktopDC, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
             Gdi32.Rectangle(desktopDC, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
         }
 
@@ -1875,7 +1875,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static unsafe void DrawReversibleLine(Point start, Point end, Color backColor)
         {
-            Gdi32.R2 rop2 = (Gdi32.R2)GetColorRop(backColor, (int)Gdi32.R2.NOTXORPEN, (int)Gdi32.R2.XORPEN);
+            R2_MODE rop2 = (R2_MODE)GetColorRop(backColor, (int)R2_MODE.R2_NOTXORPEN, (int)R2_MODE.R2_XORPEN);
 
             using User32.GetDcScope desktopDC = new(
                 User32.GetDesktopWindow(),
@@ -1883,7 +1883,7 @@ namespace System.Windows.Forms
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
             using PInvoke.ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
-            using Gdi32.SetRop2Scope ropScope = new(desktopDC, rop2);
+            using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
             using Gdi32.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
             using Gdi32.SelectObjectScope penSelection = new(desktopDC, pen);
 
@@ -2090,14 +2090,14 @@ namespace System.Windows.Forms
                 backColor,
                 0xa50065,   // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
                 0x5a0049);  // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
-            Gdi32.R2 rop2 = Gdi32.R2.NOT;
+            R2_MODE rop2 = R2_MODE.R2_NOT;
 
             using var desktopDC = new User32.GetDcScope(
                 User32.GetDesktopWindow(),
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             using PInvoke.ObjectScope brush = new(PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
-            using Gdi32.SetRop2Scope ropScope = new(desktopDC, rop2);
+            using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
             using Gdi32.SelectObjectScope brushSelection = new(desktopDC, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.

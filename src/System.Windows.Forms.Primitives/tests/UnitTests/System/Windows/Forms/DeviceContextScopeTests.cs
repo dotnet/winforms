@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Tests
             // Create a bitmap using the screen's stats
             using PInvoke.CreateDcScope dcScope = new(default);
             using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
-            Gdi32.MM originalMapMode = Gdi32.SetMapMode(dcScope, Gdi32.MM.HIMETRIC);
+            HDC_MAP_MODE originalMapMode = (HDC_MAP_MODE)PInvoke.SetMapMode(dcScope, HDC_MAP_MODE.MM_HIMETRIC);
             Gdi32.SelectObject(dcScope, bitmapScope);
 
             using PInvoke.CreateBrushScope blueBrush = new(Color.Blue);
@@ -71,12 +71,12 @@ namespace System.Windows.Forms.Tests
             using Graphics graphics = dcScope.CreateGraphics();
             HGDIOBJ current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
 
-            Gdi32.MM currentMode = (Gdi32.MM)PInvoke.GetMapMode(dcScope);
-            Assert.Equal(Gdi32.MM.HIMETRIC, currentMode);
+            HDC_MAP_MODE currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+            Assert.Equal(HDC_MAP_MODE.MM_HIMETRIC, currentMode);
 
             IntPtr hdc = graphics.GetHdc();
-            currentMode = Gdi32.SetMapMode(dcScope, Gdi32.MM.TEXT);
-            Assert.Equal(Gdi32.MM.HIMETRIC, currentMode);
+            currentMode = (HDC_MAP_MODE)PInvoke.SetMapMode(dcScope, HDC_MAP_MODE.MM_TEXT);
+            Assert.Equal(HDC_MAP_MODE.MM_HIMETRIC, currentMode);
             try
             {
                 // We get the same HDC out
@@ -88,15 +88,15 @@ namespace System.Windows.Forms.Tests
             finally
             {
                 graphics.ReleaseHdc(hdc);
-                currentMode = (Gdi32.MM)PInvoke.GetMapMode(dcScope);
-                Assert.Equal(Gdi32.MM.TEXT, currentMode);
+                currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+                Assert.Equal(HDC_MAP_MODE.MM_TEXT, currentMode);
                 current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
 
                 graphics.GetHdc();
                 try
                 {
-                    currentMode = (Gdi32.MM)PInvoke.GetMapMode(dcScope);
-                    Assert.Equal(Gdi32.MM.TEXT, currentMode);
+                    currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+                    Assert.Equal(HDC_MAP_MODE.MM_TEXT, currentMode);
                 }
                 finally
                 {
