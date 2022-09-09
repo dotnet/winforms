@@ -1,14 +1,17 @@
 ACTCTX_FLAG_*
+ActivateActCtx
 ActivateKeyboardLayout
 AdjustWindowRectEx
 AdjustWindowRectExForDpi
 BitBlt
 CloseEnhMetaFile
 CombineRgn
+CP_ACP
 CreateActCtx
 CreateBitmap
 CreateBrushIndirect
 CreateCompatibleBitmap
+DeactivateActCtx
 DuplicateHandle
 FormatMessage
 GET_MODULE_HANDLE_EX_FLAG*
@@ -22,6 +25,9 @@ GetKeyboardLayout
 GetKeyboardLayoutList
 GetModuleHandleEx
 GetProcAddress
+GetShortPathName
+GetStartupInfo
+GetSystemPowerStatus
 GetThreadLocale
 GetTickCount
 GlobalAlloc
@@ -30,3 +36,5 @@ GlobalLock
 GlobalReAlloc
 GlobalSize
 GlobalUnlock
+MultiByteToWideChar
+WideCharToMultiByte

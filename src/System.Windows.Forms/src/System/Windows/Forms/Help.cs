@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 using static Interop.Hhctl;
 
@@ -142,14 +143,14 @@ namespace System.Windows.Forms
                 string localPath = (file is not null && file.IsFile) ? file.LocalPath : url;
 
                 // If this is a local path, convert it to a short path name. Pass 0 as the length the first time
-                uint requiredStringSize = Kernel32.GetShortPathNameW(localPath, null, 0);
+                uint requiredStringSize = PInvoke.GetShortPathName(localPath, null, 0);
                 if (requiredStringSize > 0)
                 {
                     // It's able to make it a short path.
                     char[] shortName = ArrayPool<char>.Shared.Rent((int)requiredStringSize);
                     fixed (char* pShortName = shortName)
                     {
-                        requiredStringSize = Kernel32.GetShortPathNameW(localPath, pShortName, requiredStringSize);
+                        requiredStringSize = PInvoke.GetShortPathName(localPath, pShortName, requiredStringSize);
                         // If it can't make it a  short path, just leave the path we had.
                         pathAndFileName = new string(pShortName, 0, (int)requiredStringSize);
                     }
