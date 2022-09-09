@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 using System.Security;
 using Microsoft.Win32;
 using Windows.Win32;
+using Windows.Win32.Foundation;
 using Xunit;
-using static Interop;
 
 namespace System
 {
@@ -191,7 +191,7 @@ namespace System
                 }
                 finally
                 {
-                    Kernel32.CloseHandle(processToken);
+                    PInvoke.CloseHandle((HANDLE)processToken);
                 }
 
                 return s_isWindowsElevated == 1;

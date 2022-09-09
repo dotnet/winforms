@@ -295,7 +295,7 @@ namespace System.Windows.Forms
                 int result;
                 fixed (char* pBuffer = buffer)
                 {
-                    result = Kernel32.GetLocaleInfoEx(Kernel32.LOCALE_NAME_USER_DEFAULT, Kernel32.LCTYPE.IMEASURE, pBuffer, 2);
+                    result = PInvoke.GetLocaleInfoEx(PInvoke.LOCALE_NAME_SYSTEM_DEFAULT, PInvoke.LOCALE_IMEASURE, pBuffer, 2);
                 }
 
                 if (result > 0 && int.Parse(buffer, NumberStyles.Integer, CultureInfo.InvariantCulture) == 0)

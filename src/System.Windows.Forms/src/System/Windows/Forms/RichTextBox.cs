@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using Windows.Win32;
 using static Interop;
 using static Interop.Richedit;
 
@@ -288,7 +289,7 @@ namespace System.Windows.Forms
                 if (moduleHandle == IntPtr.Zero)
                 {
                     string richEditControlDllVersion = Libraries.RichEdit41;
-                    moduleHandle = Kernel32.LoadLibraryFromSystemPathIfAvailable(richEditControlDllVersion);
+                    moduleHandle = PInvoke.LoadLibraryFromSystemPathIfAvailable(richEditControlDllVersion);
 
                     int lastWin32Error = Marshal.GetLastWin32Error();
 
