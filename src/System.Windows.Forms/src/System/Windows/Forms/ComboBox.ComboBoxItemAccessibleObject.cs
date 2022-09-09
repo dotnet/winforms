@@ -58,8 +58,9 @@ namespace System.Windows.Forms
                     }
 
                     // Translate the item rect to screen coordinates
-                    User32.MapWindowPoints(listHandle, IntPtr.Zero, ref itemRect);
-                    return itemRect;
+                    Foundation.RECT translated = itemRect.ToRect();
+                    PInvoke.MapWindowPoints((Foundation.HWND)listHandle, default, ref translated);
+                    return translated.ToRectangle();
                 }
             }
 

@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -36,7 +35,7 @@ namespace System.Windows.Forms
                     parentControl = Control.FromHandle(parentHandle);
 
                     _parentWindowContext = parentControl is not null && parentControl.InvokeRequired
-                        ? GetContextForHandle(new HandleRef(this, parentHandle)) : null;
+                        ? GetContextForHandle(parentControl) : null;
                 }
 
                 // If we got a thread context, that means our parent is in a different thread, make the call on that thread.

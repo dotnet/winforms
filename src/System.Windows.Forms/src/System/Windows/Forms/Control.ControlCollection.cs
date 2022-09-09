@@ -327,7 +327,7 @@ namespace System.Windows.Forms
 
                 if (value.ParentInternal == Owner)
                 {
-                    value.SetParentHandle(IntPtr.Zero);
+                    value.SetParentHandle(default);
 
                     // Remove the control from the internal control array
                     InnerList.Remove(value);

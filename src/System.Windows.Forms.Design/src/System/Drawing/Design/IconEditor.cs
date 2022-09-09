@@ -4,10 +4,8 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.Drawing.Design
 {
@@ -71,7 +69,7 @@ namespace System.Drawing.Design
                 _fileDialog.Filter = filter;
             }
 
-            IntPtr hwndFocus = User32.GetFocus();
+            HWND hwndFocus = PInvoke.GetFocus();
             try
             {
                 if (_fileDialog.ShowDialog() == DialogResult.OK)
@@ -82,9 +80,9 @@ namespace System.Drawing.Design
             }
             finally
             {
-                if (hwndFocus != IntPtr.Zero)
+                if (!hwndFocus.IsNull)
                 {
-                    User32.SetFocus(new HandleRef(null, hwndFocus));
+                    PInvoke.SetFocus(hwndFocus);
                 }
             }
 

@@ -4962,8 +4962,8 @@ namespace System.Windows.Forms
 
         private unsafe void PositionHeader()
         {
-            IntPtr hdrHWND = User32.GetWindow(this, User32.GW.CHILD);
-            if (hdrHWND != IntPtr.Zero)
+            HWND hdrHWND = PInvoke.GetWindow(this, GET_WINDOW_CMD.GW_CHILD);
+            if (!hdrHWND.IsNull)
             {
                 var rc = new RECT();
                 var wpos = new User32.WINDOWPOS();

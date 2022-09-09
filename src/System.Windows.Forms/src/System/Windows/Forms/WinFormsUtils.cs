@@ -157,11 +157,11 @@ namespace System.Windows.Forms
         ///  use AssertControlInformation if sticking in an assert - then the work
         ///  to figure out the control info will only be done when the assertion is false.
         /// </summary>
-        internal static string GetControlInformation(IntPtr hwnd)
+        internal static string GetControlInformation(HWND hwnd)
         {
-            if (hwnd == IntPtr.Zero)
+            if (hwnd.IsNull)
             {
-                return "Handle is IntPtr.Zero";
+                return "Handle is null";
             }
 
 #if DEBUG
@@ -183,12 +183,12 @@ namespace System.Windows.Forms
                     // Add some extra debug info for ToolStripDropDowns.
                     if (c is ToolStripDropDown dd && dd.OwnerItem is not null)
                     {
-                        nameOfControl += Environment.NewLine + "\tOwnerItem: " + dd.OwnerItem.ToString();
+                        nameOfControl += $"{Environment.NewLine}\tOwnerItem: {dd.OwnerItem}";
                     }
                 }
             }
 
-            return windowText + Environment.NewLine + "\tType: " + typeOfControl + Environment.NewLine + "\t" + nameOfControl + Environment.NewLine;
+            return $"{windowText}{Environment.NewLine}\tType: {typeOfControl}{Environment.NewLine}\t{nameOfControl}{Environment.NewLine}";
 #else
             return string.Empty;
 #endif
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
         /// </remarks>
         public static Point TranslatePoint(Point point, Control fromControl, Control toControl)
         {
-            User32.MapWindowPoint(fromControl, toControl, ref point);
+            PInvoke.MapWindowPoints(fromControl, toControl, ref point);
             return point;
         }
 

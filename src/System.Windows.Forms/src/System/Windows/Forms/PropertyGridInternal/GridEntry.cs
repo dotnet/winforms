@@ -13,7 +13,6 @@ using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
-using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal

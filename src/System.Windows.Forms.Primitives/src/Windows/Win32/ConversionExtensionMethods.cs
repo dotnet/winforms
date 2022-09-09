@@ -17,6 +17,22 @@ namespace Windows.Win32
 
         public static RECT ToRect(this in Size size) => new() { right = size.Width, bottom = size.Height };
 
+        public static RECT ToRect(this in Rectangle rectangle) => new()
+        {
+            left = rectangle.Left,
+            top = rectangle.Top,
+            right = rectangle.Right,
+            bottom = rectangle.Bottom
+        };
+
+        public static RECT ToRect(this in Interop.RECT rect) => new()
+        {
+            left = rect.left,
+            top = rect.top,
+            right = rect.right,
+            bottom = rect.bottom
+        };
+
         public static Size Size(this in RECT rect) => new(rect.Width(), rect.Height());
     }
 }

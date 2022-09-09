@@ -15,7 +15,6 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -165,7 +164,7 @@ namespace System.Windows.Forms
         private ContainerControl _newParent;
         private AxContainer _axContainer;
         private State _ocxState;
-        private IntPtr _hwndFocus = IntPtr.Zero;
+        private Foundation.HWND _hwndFocus;
 
         // CustomTypeDescriptor related state
 
@@ -890,15 +889,7 @@ namespace System.Windows.Forms
             return _axState[s_fOwnWindow] || _axState[s_fFakingWindow];
         }
 
-        private IntPtr GetHandleNoCreate()
-        {
-            if (IsHandleCreated)
-            {
-                return Handle;
-            }
-
-            return IntPtr.Zero;
-        }
+        private Foundation.HWND GetHandleNoCreate() => IsHandleCreated ? (Foundation.HWND)Handle : default;
 
         private ISelectionService GetSelectionService()
         {
@@ -1053,10 +1044,10 @@ namespace System.Windows.Forms
             // destroy that window, these controls will crash trying to process WM_CHAR.
             // We now check to see if we are losing focus to a child, and if so, not call
             // UIDeactivate().
-            bool uiDeactivate = (GetHandleNoCreate() != _hwndFocus);
+            bool uiDeactivate = GetHandleNoCreate() != _hwndFocus;
             if (uiDeactivate && IsHandleCreated)
             {
-                uiDeactivate = !User32.IsChild(new HandleRef(this, GetHandleNoCreate()), _hwndFocus).IsTrue();
+                uiDeactivate = !PInvoke.IsChild(this, _hwndFocus);
             }
 
             base.OnLostFocus(e);
@@ -2586,7 +2577,7 @@ namespace System.Windows.Forms
             AddSelectionHandler();
             _editMode = EDITM_HOST;
             SetSelectionStyle(2);
-            _ = User32.GetFocus();
+            _ = PInvoke.GetFocus();
             try
             {
                 UiActivate();
@@ -3420,14 +3411,14 @@ namespace System.Windows.Forms
 
                 case User32.WM.KILLFOCUS:
                     {
-                        _hwndFocus = m.WParamInternal;
+                        _hwndFocus = (Foundation.HWND)m.WParamInternal;
                         try
                         {
                             base.WndProc(ref m);
                         }
                         finally
                         {
-                            _hwndFocus = IntPtr.Zero;
+                            _hwndFocus = default;
                         }
 
                         break;
@@ -3465,7 +3456,7 @@ namespace System.Windows.Forms
                         IntPtr hwnd = IntPtr.Zero;
                         if (ipo.GetWindow(&hwnd).Succeeded())
                         {
-                            Application.ParkHandle(new HandleRef(ipo, hwnd), DpiAwarenessContext);
+                            Application.ParkHandle(handle: new(ipo, (HWND)hwnd), DpiAwarenessContext);
                         }
                     }
 

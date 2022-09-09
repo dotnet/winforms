@@ -229,10 +229,9 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Provides access to the parent window handle
-            ///  when we are UI active
+            ///  Provides access to the parent window handle when we are UI active.
             /// </summary>
-            internal IntPtr HWNDParent { get; private set; }
+            internal HWND HWNDParent { get; private set; }
 
             /// <summary>
             ///  Retrieves the number of logical pixels per inch on the
@@ -294,10 +293,10 @@ namespace System.Windows.Forms
                 User32.MSG* lpmsg,
                 IOleClientSite pActiveSite,
                 int lindex,
-                IntPtr hwndParent,
+                HWND hwndParent,
                 RECT* lprcPosRect)
             {
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:ActiveXImpl:DoVerb(" + iVerb + ")");
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, $"AxSource:ActiveXImpl:DoVerb({iVerb})");
                 switch (iVerb)
                 {
                     case OLEIVERB.SHOW:
@@ -313,16 +312,18 @@ namespace System.Windows.Forms
                         {
                             Control target = _control;
 
-                            if (lpmsg->hwnd != _control.Handle && lpmsg->IsMouseMessage())
+                            HWND hwnd = (HWND)lpmsg->hwnd;
+                            if (hwnd != _control.HWND && lpmsg->IsMouseMessage())
                             {
                                 // Must translate message coordinates over to our HWND.  We first try
-                                IntPtr hwndMap = lpmsg->hwnd == IntPtr.Zero ? hwndParent : lpmsg->hwnd;
+                                HWND hwndMap = hwnd.IsNull ? hwndParent : hwnd;
                                 var pt = new Point
                                 {
                                     X = PARAM.LOWORD(lpmsg->lParam),
                                     Y = PARAM.HIWORD(lpmsg->lParam)
                                 };
-                                User32.MapWindowPoint(hwndMap, _control, ref pt);
+
+                                PInvoke.MapWindowPoints(hwndMap, _control, ref pt);
 
                                 // check to see if this message should really go to a child
                                 //  control, and if so, map the point into that child's window
@@ -845,8 +846,8 @@ namespace System.Windows.Forms
                     };
 
                     // We are entering a secure context here.
-                    IntPtr hwndParent = IntPtr.Zero;
-                    HRESULT hr = inPlaceSite.GetWindow(&hwndParent);
+                    HWND hwndParent = default;
+                    HRESULT hr = inPlaceSite.GetWindow((nint*)&hwndParent);
                     if (!hr.Succeeded())
                     {
                         ThrowHr(hr);
@@ -886,7 +887,7 @@ namespace System.Windows.Forms
                     // If it doesn't, that means that the host
                     // won't reflect messages back to us.
                     HWNDParent = hwndParent;
-                    if (User32.SetParent(new HandleRef(_control, _control.Handle), hwndParent) == IntPtr.Zero)
+                    if (PInvoke.SetParent(_control, hwndParent) == IntPtr.Zero)
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                     }
@@ -984,7 +985,7 @@ namespace System.Windows.Forms
                 }
 
                 _control.Visible = false;
-                HWNDParent = IntPtr.Zero;
+                HWNDParent = default;
 
                 if (_inPlaceUiWindow is not null && Marshal.IsComObject(_inPlaceUiWindow))
                 {
@@ -2130,17 +2131,17 @@ namespace System.Windows.Forms
                     if (!intersect.Equals(posRect))
                     {
                         // Offset the rectangle back to client coordinates
-                        RECT rcIntersect = intersect;
-                        IntPtr hWndParent = User32.GetParent(_control);
+                        Foundation.RECT rcIntersect = intersect.ToRect();
+                        HWND hWndParent = PInvoke.GetParent(_control);
 
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Old Intersect: {(Rectangle)rcIntersect}");
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Old Intersect: {rcIntersect.ToRectangle()}");
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Control Bounds: {posRect}");
 
-                        User32.MapWindowPoints(hWndParent, _control, ref rcIntersect);
+                        PInvoke.MapWindowPoints(hWndParent, _control, ref rcIntersect);
 
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Intersect: {(Rectangle)rcIntersect}");
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Intersect: {rcIntersect.ToRectangle()}");
 
-                        _lastClipRect = rcIntersect;
+                        _lastClipRect = rcIntersect.ToRectangle();
                         setRegion = true;
 
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Created clipping region");
@@ -2250,17 +2251,17 @@ namespace System.Windows.Forms
                 if (_clientSite is IOleControlSite ioleClientSite)
                 {
                     KEYMODIFIERS keyState = 0;
-                    if (User32.GetKeyState(User32.VK.SHIFT) < 0)
+                    if (PInvoke.GetKeyState(User32.VK.SHIFT) < 0)
                     {
                         keyState |= KEYMODIFIERS.SHIFT;
                     }
 
-                    if (User32.GetKeyState(User32.VK.CONTROL) < 0)
+                    if (PInvoke.GetKeyState(User32.VK.CONTROL) < 0)
                     {
                         keyState |= KEYMODIFIERS.CONTROL;
                     }
 
-                    if (User32.GetKeyState(User32.VK.MENU) < 0)
+                    if (PInvoke.GetKeyState(User32.VK.MENU) < 0)
                     {
                         keyState |= KEYMODIFIERS.ALT;
                     }

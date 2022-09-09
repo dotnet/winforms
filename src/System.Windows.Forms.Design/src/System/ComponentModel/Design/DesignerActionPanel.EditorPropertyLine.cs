@@ -605,8 +605,8 @@ namespace System.ComponentModel.Design
                         User32.SetWindowLong(this, User32.GWL.HWNDPARENT, parent.Handle);
 
                         // Lifted directly from Form.ShowDialog()...
-                        IntPtr hWndCapture = User32.GetCapture();
-                        if (hWndCapture != IntPtr.Zero)
+                        HWND hWndCapture = PInvoke.GetCapture();
+                        if (!hWndCapture.IsNull)
                         {
                             User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE);
                             User32.ReleaseCapture();

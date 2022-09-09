@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.DotNet.RemoteExecutor;
 using System.Windows.Forms.TestUtilities;
-using Windows.Win32;
 using Xunit;
 
 namespace System.Windows.Forms.Tests

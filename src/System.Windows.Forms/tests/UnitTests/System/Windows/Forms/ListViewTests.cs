@@ -11,7 +11,6 @@ using Xunit;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.ComCtl32;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Tests
 {
@@ -5328,7 +5327,7 @@ namespace System.Windows.Forms.Tests
 
             listView.CreateControl();
 
-            User32.SetFocus(new HandleRef(listView, listView.Handle));
+            PInvoke.SetFocus(listView);
             listView.Items[0].Selected = true;
 
             // Add a pixel both to x and y as the left-upper corner is not a part of subitem

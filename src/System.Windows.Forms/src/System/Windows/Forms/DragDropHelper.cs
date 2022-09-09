@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using Windows.Win32;
 using static Interop;
 using static Interop.Shell32;
 using static Interop.User32;

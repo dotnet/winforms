@@ -8,10 +8,8 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
-using Windows.Win32;
 using static Interop;
 using static Interop.User32;
-using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {

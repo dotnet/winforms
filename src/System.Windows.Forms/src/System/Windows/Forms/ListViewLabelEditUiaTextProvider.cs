@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using static Interop;
+using BOOL = Interop.BOOL;
 
 namespace System.Windows.Forms
 {
@@ -202,7 +203,7 @@ namespace System.Windows.Forms
 
         public override Point PointToScreen(Point pt)
         {
-            User32.MapWindowPoint(_owningChildEdit, IntPtr.Zero, ref pt);
+            PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref pt);
             return pt;
         }
 
@@ -239,7 +240,7 @@ namespace System.Windows.Forms
 
             // Convert screen to client coordinates.
             // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-            if (User32.MapWindowPoint(IntPtr.Zero, _owningChildEdit, ref clientLocation) == 0)
+            if (PInvoke.MapWindowPoints(HWND.Null, (HWND)_owningChildEdit.Handle, ref clientLocation) == 0)
             {
                 return new UiaTextRange(_owningChildEditAccessibilityObject, this, start: 0, end: 0);
             }
@@ -247,7 +248,7 @@ namespace System.Windows.Forms
             // We have to deal with the possibility that the coordinate is inside the window rect
             // but outside the client rect. In that case we just scoot it over so it is at the nearest
             // point in the client rect.
-            RECT clientRectangle = _owningChildEditAccessibilityObject.BoundingRectangle;
+            Interop.RECT clientRectangle = _owningChildEditAccessibilityObject.BoundingRectangle;
 
             clientLocation.X = Math.Max(clientLocation.X, clientRectangle.left);
             clientLocation.X = Math.Min(clientLocation.X, clientRectangle.right);
@@ -262,8 +263,8 @@ namespace System.Windows.Forms
 
         public override Rectangle RectangleToScreen(Rectangle rect)
         {
-            RECT r = rect;
-            User32.MapWindowPoints(_owningChildEdit.Handle, IntPtr.Zero, ref r);
+            Foundation.RECT r = rect;
+            PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref r);
             return Rectangle.FromLTRB(r.left, r.top, r.right, r.bottom);
         }
 
@@ -306,10 +307,10 @@ namespace System.Windows.Forms
             return index;
         }
 
-        private RECT GetFormattingRectangle()
+        private Interop.RECT GetFormattingRectangle()
         {
             // Send an EM_GETRECT message to find out the bounding rectangle.
-            RECT rectangle = new RECT();
+            Interop.RECT rectangle = new Interop.RECT();
             User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.GETRECT, 0, ref rectangle);
 
             return rectangle;

@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using static Interop;
 using static Interop.User32;
 
 namespace System.Drawing.Design
@@ -242,7 +241,7 @@ namespace System.Drawing.Design
                 _colorUI.EditorService.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
                 CustomColorDialog dialog = new CustomColorDialog();
 
-                IntPtr hwndFocus = GetFocus();
+                HWND hwndFocus = PInvoke.GetFocus();
                 try
                 {
                     DialogResult result = dialog.ShowDialog();
@@ -258,9 +257,9 @@ namespace System.Drawing.Design
                 }
                 finally
                 {
-                    if (hwndFocus != IntPtr.Zero)
+                    if (!hwndFocus.IsNull)
                     {
-                        User32.SetFocus(hwndFocus);
+                        PInvoke.SetFocus(hwndFocus);
                     }
                 }
             }
