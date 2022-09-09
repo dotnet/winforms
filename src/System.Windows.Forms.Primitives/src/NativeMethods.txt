@@ -1,4 +1,5 @@
 ACTCTX_FLAG_*
+ActivateKeyboardLayout
 AdjustWindowRectEx
 AdjustWindowRectExForDpi
 BitBlt
@@ -17,6 +18,8 @@ GetCurrentProcessId
 GetCurrentThread
 GetCurrentThreadId
 GetExitCodeThread
+GetKeyboardLayout
+GetKeyboardLayoutList
 GetModuleHandleEx
 GetProcAddress
 GetThreadLocale
