@@ -7,6 +7,7 @@ using System.Diagnostics;
 #endif
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -14,7 +15,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements a Windows message.
     /// </summary>
-    public struct Message : IEquatable<Message>
+    public struct Message : IEquatable<Message>, IHandle<HWND>
     {
 #if DEBUG
         private static readonly TraceSwitch s_allWinMessages = new("AllWinMessages", "Output every received message");
@@ -26,6 +27,7 @@ namespace System.Windows.Forms
         internal nint LParamInternal;
         internal nint WParamInternal;
         internal User32.WM MsgInternal;
+        internal HWND HWND => (HWND)HWnd;
 #pragma warning restore IDE1006 // Naming Styles
 
         public IntPtr HWnd { get; set; }
@@ -80,6 +82,8 @@ namespace System.Windows.Forms
             get => ResultInternal;
             set => ResultInternal = value;
         }
+
+        HWND IHandle<HWND>.Handle => HWND;
 
         /// <summary>
         ///  Gets the <see cref="LParam"/> value, and converts the value to an object.

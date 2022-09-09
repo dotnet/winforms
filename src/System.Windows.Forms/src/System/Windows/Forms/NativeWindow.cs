@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Text;
-using Windows.Win32;
 using Windows.Win32.Foundation;
 using static Interop;
 
@@ -18,7 +17,7 @@ namespace System.Windows.Forms
     ///  Provides a low-level encapsulation of a window handle
     ///  and a window procedure. The class automatically manages window class creation and registration.
     /// </summary>
-    public partial class NativeWindow : MarshalByRefObject, IWin32Window, IHandle
+    public partial class NativeWindow : MarshalByRefObject, IWin32Window, IHandle, IHandle<HWND>
     {
 #if DEBUG
         private static readonly BooleanSwitch AlwaysUseNormalWndProc = new("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
@@ -93,26 +92,26 @@ namespace System.Windows.Forms
         /// </summary>
         internal unsafe void ForceExitMessageLoop()
         {
-            nint handle;
+            HWND handle;
             bool ownedHandle;
 
             lock (this)
             {
-                handle = Handle;
+                handle = HWND;
                 ownedHandle = _ownHandle;
             }
 
-            if (handle != 0)
+            if (!handle.IsNull)
             {
                 // Now, before we set handle to zero and finish the finalizer, let's send
                 // a WM_NULL to the window.  Why?  Because if the main ui thread is INSIDE
                 // the wndproc for this control during our unsubclass, then we could AV
                 // when control finally reaches us.
-                if (User32.IsWindow(handle).IsTrue())
+                if (PInvoke.IsWindow(handle))
                 {
-                    uint id = User32.GetWindowThreadProcessId(handle, out uint lpdwProcessId);
-                    Application.ThreadContext ctx = Application.ThreadContext.FromId(id);
-                    nint threadHandle = (ctx is null ? 0 : ((IHandle)ctx).Handle);
+                    uint id = User32.GetWindowThreadProcessId(handle, out _);
+                    Application.ThreadContext context = Application.ThreadContext.FromId(id);
+                    nint threadHandle = context is null ? 0 : context.Handle;
 
                     if (threadHandle != 0)
                     {
@@ -132,14 +131,14 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (Handle != 0)
+                if (!HWND.IsNull)
                 {
                     // If the dest thread is gone, it should be safe to unsubclass here.
                     ReleaseHandle(true);
                 }
             }
 
-            if (handle != 0 && ownedHandle)
+            if (!handle.IsNull && ownedHandle)
             {
                 // If we owned the handle, post a WM_CLOSE to get rid of it.
                 User32.PostMessageW(handle, User32.WM.CLOSE);
@@ -155,6 +154,10 @@ namespace System.Windows.Forms
         ///  Gets the handle for this window.
         /// </summary>
         public IntPtr Handle { get; private set; }
+
+        internal HWND HWND => (HWND)Handle;
+
+        HWND IHandle<HWND>.Handle => HWND;
 
         /// <summary>
         ///  This returns the prior NativeWindow created with the same native handle, if any.

@@ -12,9 +12,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
-using Windows.Win32;
 using static Interop;
-using Foundation = Windows.Win32.Foundation;
 using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms.Design

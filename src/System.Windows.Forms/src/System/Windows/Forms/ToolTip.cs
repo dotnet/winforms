@@ -11,8 +11,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.ComCtl32;
-using Windows.Win32;
-using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {
@@ -24,7 +22,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(Popup))]
     [ToolboxItemFilter("System.Windows.Forms")]
     [SRDescription(nameof(SR.DescriptionToolTip))]
-    public partial class ToolTip : Component, IExtenderProvider, IHandle
+    public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HWND>
     {
         // The actual delay values are based on the user-set double click time.
         // These values are initialized using the default double-click time value.
@@ -57,7 +55,7 @@ namespace System.Windows.Forms
         private string _toolTipTitle = string.Empty;
         private ToolTipIcon _toolTipIcon = ToolTipIcon.None;
         private ToolTipTimer _timer;
-        private readonly Dictionary<IntPtr, Control> _owners = new();
+        private readonly Dictionary<HWND, Control> _owners = new();
         private bool _stripAmpersands;
         private bool _useAnimation = true;
         private bool _useFading = true;
@@ -271,6 +269,10 @@ namespace System.Windows.Forms
 
         IntPtr IHandle.Handle => Handle;
 
+        HWND IHandle<HWND>.Handle => HWND;
+
+        internal HWND HWND => (HWND)Handle;
+
         internal IntPtr Handle
         {
             get
@@ -318,9 +320,9 @@ namespace System.Windows.Forms
             if (window is Control control &&
                 (control.ShowParams & (User32.SW)0xF) != User32.SW.SHOWNOACTIVATE)
             {
-                IntPtr hWnd = User32.GetActiveWindow();
-                IntPtr rootHwnd = User32.GetAncestor(control, User32.GA.ROOT);
-                if (hWnd != rootHwnd)
+                HWND hwnd = PInvoke.GetActiveWindow();
+                HWND rootHwnd = PInvoke.GetAncestor(control, GET_ANCESTOR_FLAGS.GA_ROOT);
+                if (hwnd != rootHwnd)
                 {
                     if (_tools.TryGetValue(control, out TipInfo tt) && (tt.TipType & TipInfo.Type.SemiAbsolute) != 0)
                     {
@@ -1327,8 +1329,7 @@ namespace System.Windows.Forms
 
             if (window is Control associatedControl)
             {
-                var rect = new RECT();
-                User32.GetWindowRect(associatedControl, ref rect);
+                PInvoke.GetWindowRect(associatedControl, out var rect);
 
                 _ = Cursor.Current;
                 Point cursorLocation = Cursor.Position;
@@ -1430,8 +1431,7 @@ namespace System.Windows.Forms
             if (IsWindowActive(window))
             {
                 // Set the ToolTips.
-                var r = new RECT();
-                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
 
@@ -1449,14 +1449,16 @@ namespace System.Windows.Forms
 
             if (duration < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
+                throw new ArgumentOutOfRangeException(
+                    nameof(duration),
+                    duration,
+                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
             }
 
             if (IsWindowActive(window))
             {
                 // Set the ToolTips.
-                var r = new RECT();
-                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
                 SetTrackPosition(pointX, pointY);
@@ -1474,8 +1476,7 @@ namespace System.Windows.Forms
 
             if (IsWindowActive(window))
             {
-                var r = new RECT();
-                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
                 SetTrackPosition(pointX, pointY);
@@ -1492,13 +1493,15 @@ namespace System.Windows.Forms
 
             if (duration < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
+                throw new ArgumentOutOfRangeException(
+                    nameof(duration),
+                    duration,
+                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
             }
 
             if (IsWindowActive(window))
             {
-                var r = new RECT();
-                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
                 SetTrackPosition(pointX, pointY);
@@ -1534,10 +1537,9 @@ namespace System.Windows.Forms
                 pointY = optimalPoint.Y;
 
                 // Update TipInfo for the tool with optimal position.
-                TipInfo tipInfo;
                 if (tool is Control toolAsControl)
                 {
-                    if (!_tools.TryGetValue(toolAsControl, out tipInfo))
+                    if (!_tools.TryGetValue(toolAsControl, out TipInfo tipInfo))
                     {
                         if (tool.GetOwnerWindow() is Control ownerWindowAsControl
                             && _tools.TryGetValue(ownerWindowAsControl, out tipInfo))
@@ -1780,7 +1782,7 @@ namespace System.Windows.Forms
             // Check if the passed in IWin32Window is a Control.
             if (win is not Control tool)
             {
-                _owners.Remove(win.Handle);
+                _owners.Remove((HWND)win.Handle);
             }
             else
             {
@@ -1790,7 +1792,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    _owners.Remove(win.Handle);
+                    _owners.Remove((HWND)win.Handle);
                 }
 
                 // Find the Form for associated Control and hook up to the Deactivated event
@@ -1878,8 +1880,7 @@ namespace System.Windows.Forms
                     tipInfo.Position = position;
                     _tools[windowAsControl] = tipInfo;
 
-                    IntPtr hWnd = Control.GetSafeHandle(window);
-                    _owners[hWnd] = windowAsControl;
+                    _owners[windowAsControl.HWND] = windowAsControl;
                 }
 
                 var toolInfo = GetWinTOOLINFO(window);
@@ -1988,20 +1989,20 @@ namespace System.Windows.Forms
                 User32.SWP.NOACTIVATE | User32.SWP.NOSIZE | User32.SWP.NOOWNERZORDER);
         }
 
-        private IntPtr GetCurrentToolHwnd()
+        private HWND GetCurrentToolHwnd()
         {
             var toolInfo = new ToolInfoWrapper<Control>();
             if (toolInfo.SendMessage(this, (User32.WM)TTM.GETCURRENTTOOLW) != IntPtr.Zero)
             {
-                return toolInfo.Info.hwnd;
+                return (HWND)toolInfo.Info.hwnd;
             }
 
-            return IntPtr.Zero;
+            return default;
         }
 
         private IWin32Window GetCurrentToolWindow()
         {
-            IntPtr hwnd = GetCurrentToolHwnd();
+            HWND hwnd = GetCurrentToolHwnd();
             return _owners.TryGetValue(hwnd, out Control control) ? control : Control.FromHandle(hwnd);
         }
 
@@ -2011,9 +2012,6 @@ namespace System.Windows.Forms
         private void WmMove()
         {
             IWin32Window window = GetCurrentToolWindow();
-            if (window is null)
-                return;
-
             if (window is not Control windowAsControl || !_tools.TryGetValue(windowAsControl, out TipInfo tipInfo))
             {
                 return;
@@ -2021,11 +2019,10 @@ namespace System.Windows.Forms
 
             // Reposition the tooltip when its about to be shown since the tooltip can go out of screen
             // working area bounds Reposition would check the bounds for us.
-            var rectangle = new RECT();
-            User32.GetWindowRect(this, ref rectangle);
+            PInvoke.GetWindowRect(this, out var rectangle);
             if (tipInfo.Position != Point.Empty)
             {
-                Reposition(tipInfo.Position, rectangle.Size);
+                Reposition(tipInfo.Position, rectangle.Size());
             }
         }
 
@@ -2036,10 +2033,11 @@ namespace System.Windows.Forms
         {
             IWin32Window window = GetCurrentToolWindow();
             if (window is null)
+            {
                 return;
+            }
 
-            var r = new RECT();
-            User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+            PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
             Point cursorLocation = Cursor.Position;
 
             // Do not activate the mouse if its within the bounds of the
@@ -2068,15 +2066,16 @@ namespace System.Windows.Forms
         {
             IWin32Window window = GetCurrentToolWindow();
             if (window is null)
+            {
                 return;
+            }
 
             // Get the bounds.
-            var rect = new RECT();
-            User32.GetWindowRect(this, ref rect);
+            PInvoke.GetWindowRect(this, out var rect);
 
             Control toolControl = window as Control;
 
-            Size currentTooltipSize = rect.Size;
+            Size currentTooltipSize = rect.Size();
             PopupEventArgs e = new PopupEventArgs(window, toolControl, IsBalloon, currentTooltipSize);
             OnPopup(e);
 
@@ -2097,16 +2096,16 @@ namespace System.Windows.Forms
             // any of the tooltip attributes/properties could have been updated
             // during the popup event; in which case the size of the tooltip is
             // affected. e.ToolTipSize is respected over rect.Size
-            User32.GetWindowRect(this, ref rect);
-            currentTooltipSize = (e.ToolTipSize == currentTooltipSize) ? rect.Size : e.ToolTipSize;
+            PInvoke.GetWindowRect(this, out rect);
+            currentTooltipSize = (e.ToolTipSize == currentTooltipSize) ? rect.Size() : e.ToolTipSize;
 
             if (IsBalloon)
             {
                 // Get the text display rectangle
                 User32.SendMessageW(this, (User32.WM)TTM.ADJUSTRECT, (nint)BOOL.TRUE, ref rect);
-                if (rect.Size.Height > currentTooltipSize.Height)
+                if (rect.Height() > currentTooltipSize.Height)
                 {
-                    currentTooltipSize.Height = rect.Size.Height;
+                    currentTooltipSize.Height = rect.Height();
                 }
             }
 
@@ -2114,7 +2113,7 @@ namespace System.Windows.Forms
             // This prevents the operating system from drawing incorrect rectangles
             // when determining the correct display rectangle
             // Set the MaxWidth only if user has changed the width.
-            if (currentTooltipSize != rect.Size)
+            if (currentTooltipSize != rect.Size())
             {
                 Screen screen = Screen.FromPoint(Cursor.Position);
                 int maxwidth = (IsBalloon)
@@ -2280,7 +2279,7 @@ namespace System.Windows.Forms
             if ((tipInfo.TipType & TipInfo.Type.Auto) == 0)
             {
                 _tools.Remove(control);
-                _owners.Remove(window.Handle);
+                _owners.Remove((HWND)window.Handle);
 
                 control.HandleCreated -= HandleCreated;
                 control.HandleDestroyed -= HandleDestroyed;

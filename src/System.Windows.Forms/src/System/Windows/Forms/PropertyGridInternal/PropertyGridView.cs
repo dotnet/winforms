@@ -845,7 +845,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (IsHandleCreated && Visible && Enabled)
                 {
-                    gotFocus = User32.SetFocus(new HandleRef(this, Handle)) != IntPtr.Zero;
+                    gotFocus = !PInvoke.SetFocus(this).IsNull;
                 }
             }
 
@@ -2620,7 +2620,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (_dropDownHolder is not null && _dropDownHolder.Visible)
             {
                 bool found = false;
-                for (IntPtr hwnd = User32.GetForegroundWindow(); hwnd != IntPtr.Zero; hwnd = User32.GetParent(hwnd))
+                for (Foundation.HWND hwnd = PInvoke.GetForegroundWindow(); !hwnd.IsNull; hwnd = PInvoke.GetParent(hwnd))
                 {
                     if (hwnd == _dropDownHolder.Handle)
                     {
@@ -3165,8 +3165,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // Ensure that tooltips don't display when host application is not foreground app.
                 // Assume that we don't want to display the tooltips
-                IntPtr foregroundWindow = User32.GetForegroundWindow();
-                if (User32.IsChild(foregroundWindow, new HandleRef(this, Handle)).IsTrue())
+                Foundation.HWND foregroundWindow = PInvoke.GetForegroundWindow();
+                if (PInvoke.IsChild(PInvoke.GetForegroundWindow(), this))
                 {
                     // Don't show the tips if a dropdown is showing
                     if (_dropDownHolder is null || _dropDownHolder.Component is null || rowMoveCurrent == _selectedRow)
@@ -3947,14 +3947,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         bool forward = (keyData & Keys.Shift) == 0;
 
-                        Control focusedControl = FromHandle(User32.GetFocus());
+                        Control focusedControl = FromHandle(PInvoke.GetFocus());
 
                         if (focusedControl is null || !IsMyChild(focusedControl))
                         {
                             if (forward)
                             {
                                 TabSelection();
-                                focusedControl = FromHandle(User32.GetFocus());
+                                focusedControl = FromHandle(PInvoke.GetFocus());
 
                                 // Make sure the value actually took the focus
                                 if (IsMyChild(focusedControl))
@@ -5038,7 +5038,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            IntPtr priorFocus = User32.GetFocus();
+            HWND priorFocus = PInvoke.GetFocus();
 
             DialogResult result;
             if (TryGetService(out IUIService uiService))
@@ -5050,9 +5050,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 result = dialog.ShowDialog(this);
             }
 
-            if (priorFocus != IntPtr.Zero)
+            if (!priorFocus.IsNull)
             {
-                User32.SetFocus(priorFocus);
+                PInvoke.SetFocus(priorFocus);
             }
 
             return result;

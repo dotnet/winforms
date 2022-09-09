@@ -75,7 +75,7 @@ namespace System.Windows.Forms
 
                 // Convert screen to client coordinates.
                 // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-                if (MapWindowPoint(IntPtr.Zero, _owningTextBoxBase, ref clientLocation) == 0)
+                if (PInvoke.MapWindowPoints((HWND)default, _owningTextBoxBase, ref clientLocation) == 0)
                 {
                     return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, end: 0);
                 }

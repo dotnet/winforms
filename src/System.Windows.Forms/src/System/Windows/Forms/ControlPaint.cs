@@ -9,10 +9,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using Windows.Win32;
 using static Interop;
 using Gdi = Windows.Win32.Graphics.Gdi;
-using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {

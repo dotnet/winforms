@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -38,12 +37,11 @@ namespace System.Windows.Forms
                     case User32.WM.NCMBUTTONDOWN:
                         if (_ownerToolStrip.ContainsFocus)
                         {
-                            // if we've clicked on something that's not a child of the toolstrip and we
-                            // currently have focus, restore it.
-                            if (!User32.IsChild(new HandleRef(_ownerToolStrip, _ownerToolStrip.Handle), m.HWnd).IsTrue())
+                            // If we've clicked on something that's not a child of the toolstrip and we currently have focus, restore it.
+                            if (!PInvoke.IsChild(_ownerToolStrip, m.HWND))
                             {
-                                IntPtr rootHwnd = User32.GetAncestor(_ownerToolStrip, User32.GA.ROOT);
-                                if (rootHwnd == m.HWnd || User32.IsChild(rootHwnd, m.HWnd).IsTrue())
+                                HWND rootHwnd = PInvoke.GetAncestor(_ownerToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
+                                if (rootHwnd == m.HWND || PInvoke.IsChild(rootHwnd, m.HWND))
                                 {
                                     // Only RestoreFocus if the hwnd is a child of the root window and isn't on the toolstrip.
                                     RestoreFocusInternal();
@@ -64,7 +62,7 @@ namespace System.Windows.Forms
 
                 _ownerToolStrip.BeginInvoke(new BooleanMethodInvoker(_ownerToolStrip.RestoreFocusInternal), new object[] { ToolStripManager.ModalMenuFilter.InMenuMode });
 
-                // PERF,
+                // PERF
 
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(this);
             }

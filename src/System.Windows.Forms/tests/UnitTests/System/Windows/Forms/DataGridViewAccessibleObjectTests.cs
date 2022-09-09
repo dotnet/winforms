@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Xunit;
 using static Interop;
 
@@ -204,7 +203,7 @@ namespace System.Windows.Forms.Tests
             using DataGridView dataGridView = new();
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
-            User32.SetFocus(new HandleRef(dataGridView, dataGridView.Handle));
+            PInvoke.SetFocus(dataGridView);
 
             DataGridViewCell cell = dataGridView.Rows[0].Cells[0];
             Assert.NotNull(cell);

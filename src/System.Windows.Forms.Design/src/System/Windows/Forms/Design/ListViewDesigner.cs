@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Design
                 ((ListView)Component).View = value;
                 if (value == View.Details)
                 {
-                    HookChildHandles(Control.Handle);
+                    HookChildHandles((HWND)Control.Handle);
                 }
             }
         }
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.Design
                     IntPtr headerHwnd = User32.SendMessageW(listView, (User32.WM)ComCtl32.LVM.GETHEADER);
                     if (hwndHit == headerHwnd)
                     {
-                        User32.MapWindowPoints(IntPtr.Zero, headerHwnd, &point, 1);
+                        PInvoke.MapWindowPoints(default, (HWND)headerHwnd, ref point);
                         _hdrhit.pt = point;
                         User32.SendMessageW(headerHwnd, (User32.WM)ComCtl32.HDM.HITTEST, 0, ref _hdrhit);
                         if (_hdrhit.flags == ComCtl32.HHT.ONDIVIDER)
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Design
             base.Initialize(component);
             if (lv.View == View.Details)
             {
-                HookChildHandles(Control.Handle);
+                HookChildHandles((HWND)Control.Handle);
             }
         }
 

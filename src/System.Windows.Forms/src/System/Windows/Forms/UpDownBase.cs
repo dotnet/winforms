@@ -962,7 +962,7 @@ namespace System.Windows.Forms
                     {
                         if (TextBox.CanFocus)
                         {
-                            User32.SetFocus(new HandleRef(TextBox, TextBox.Handle));
+                            PInvoke.SetFocus(TextBox);
                         }
 
                         base.WndProc(ref m);

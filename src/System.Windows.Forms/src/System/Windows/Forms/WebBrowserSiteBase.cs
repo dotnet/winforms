@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                     {
                         if (hwnd != IntPtr.Zero)
                         {
-                            Host.AttachWindow(hwnd);
+                            Host.AttachWindow((HWND)hwnd);
                             RECT posRect = Host.Bounds;
                             OnActiveXRectChange(&posRect);
                         }
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            *phwnd = User32.GetParent(Host);
+            *phwnd = PInvoke.GetParent(Host);
             return HRESULT.S_OK;
         }
 

@@ -1076,8 +1076,8 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                IntPtr hwndFocus = User32.GetFocus();
-                return hwndFocus != IntPtr.Zero && User32.IsChild(new HandleRef(this, Handle), hwndFocus).IsTrue();
+                HWND hwndFocus = PInvoke.GetFocus();
+                return !hwndFocus.IsNull && PInvoke.IsChild(this, hwndFocus);
             }
         }
 

@@ -34,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public unsafe override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            IntPtr parentHandle = User32.GetFocus();
+            Foundation.HWND parentHandle = PInvoke.GetFocus();
 
             IUIService? uiSvc = (IUIService?)provider.GetService(typeof(IUIService));
             if (uiSvc is not null)
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 IWin32Window parent = uiSvc.GetDialogOwnerWindow();
                 if (parent is not null)
                 {
-                    parentHandle = parent.Handle;
+                    parentHandle = (Foundation.HWND)parent.Handle;
                 }
             }
 

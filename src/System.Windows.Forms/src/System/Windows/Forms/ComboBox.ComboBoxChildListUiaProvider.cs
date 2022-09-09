@@ -29,7 +29,14 @@ namespace System.Windows.Forms
 
             private protected override string AutomationId => COMBO_BOX_LIST_AUTOMATION_ID;
 
-            internal override Rectangle BoundingRectangle => User32.GetWindowRect(_owningComboBox.GetListNativeWindow());
+            internal override Rectangle BoundingRectangle
+            {
+                get
+                {
+                    PInvoke.GetWindowRect(_owningComboBox.GetListNativeWindow(), out var rect);
+                    return rect.ToRectangle();
+                }
+            }
 
             /// <summary>
             ///  Return the child object at the given screen coordinates.

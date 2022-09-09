@@ -1,6 +1,5 @@
 ﻿using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using Windows.Win32;
 using Xunit;
 using static Interop;
 using static Interop.User32;

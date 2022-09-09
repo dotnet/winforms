@@ -234,8 +234,9 @@ namespace System.Windows.Forms
                         NotifySelectionChange(null);
                         Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
-                        // send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
-                        IntPtr ancestor = User32.GetAncestor(this, User32.GA.ROOT);
+
+                        // Send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
+                        HWND ancestor = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
                         User32.PostMessageW(ancestor, User32.WM.SYSCOMMAND, (IntPtr)User32.SC.KEYMENU, (IntPtr)Keys.Space);
                         return true;
                     }

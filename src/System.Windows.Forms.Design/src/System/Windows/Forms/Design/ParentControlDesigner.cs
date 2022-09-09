@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -1928,22 +1927,14 @@ namespace System.Windows.Forms.Design
             }
 
             // Set the mouse capture and clipping to this control.
-            //
             control.Capture = true;
-
-            RECT winRect = default;
-            User32.GetWindowRect(control.Handle, ref winRect);
-            Rectangle.FromLTRB(winRect.left, winRect.top, winRect.right, winRect.bottom);
 
             _mouseDragFrame = (_mouseDragTool == null) ? FrameStyle.Dashed : FrameStyle.Thick;
 
-            // Setting this non-null signifies that we are dragging with the
-            // mouse.
-            //
+            // Setting this non-null signifies that we are dragging with the mouse.
             _mouseDragBase = new Point(x, y);
 
             // Select the given object.
-            //
             ISelectionService selsvc = (ISelectionService)GetService(typeof(ISelectionService));
 
             if (selsvc != null)

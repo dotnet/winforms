@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.Foundation;
 
 internal static partial class Interop
 {
@@ -20,6 +21,17 @@ internal static partial class Interop
             WM Msg,
             nint wParam = default,
             nint lParam = default)
+        {
+            nint result = SendMessageW(hWnd.Handle, Msg, wParam, lParam);
+            GC.KeepAlive(hWnd);
+            return result;
+        }
+
+        public static nint SendMessageW<T>(
+            T hWnd,
+            WM Msg,
+            nint wParam = default,
+            nint lParam = default) where T : IHandle<HWND>
         {
             nint result = SendMessageW(hWnd.Handle, Msg, wParam, lParam);
             GC.KeepAlive(hWnd);

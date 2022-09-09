@@ -4,10 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using Windows.Win32;
 using Windows.Win32.Graphics.Gdi;
-using Windows.Win32.UI.WindowsAndMessaging;
-using Foundation = Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms

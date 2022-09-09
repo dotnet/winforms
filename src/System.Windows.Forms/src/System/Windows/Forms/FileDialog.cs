@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
-using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -35,7 +34,7 @@ namespace System.Windows.Forms
         private bool _ignoreSecondFileOkNotification;
         private int _okNotificationCount;
         private UnicodeCharBuffer? _charBuffer;
-        private IntPtr _dialogHWnd;
+        private Foundation.HWND _dialogHWnd;
 
         /// <summary>
         ///  In an inherited class, initializes a new instance of the <see cref="FileDialog"/>
@@ -530,7 +529,7 @@ namespace System.Windows.Forms
         {
             if (msg == (int)User32.WM.NOTIFY)
             {
-                _dialogHWnd = User32.GetParent(hWnd);
+                _dialogHWnd = PInvoke.GetParent((Foundation.HWND)hWnd);
                 try
                 {
                     Comdlg32.OFNOTIFYW* notify = (Comdlg32.OFNOTIFYW*)lparam;
@@ -714,22 +713,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Prompts the user with a <see cref="MessageBox"/> with the
-        ///  given parameters. It also ensures that the focus is set back on the window that
-        ///  had the focus to begin with (before we displayed the MessageBox).
+        ///  Prompts the user with a <see cref="MessageBox"/> with the given parameters. It also ensures that the
+        ///  focus is set back on the window that had the focus to begin with (before we displayed the MessageBox).
         /// </summary>
-        private protected static bool MessageBoxWithFocusRestore(string message, string caption,
-                MessageBoxButtons buttons, MessageBoxIcon icon)
+        private protected static bool MessageBoxWithFocusRestore(
+            string message,
+            string caption,
+            MessageBoxButtons buttons,
+            MessageBoxIcon icon)
         {
-            IntPtr focusHandle = User32.GetFocus();
+            Foundation.HWND focusHandle = PInvoke.GetFocus();
             try
             {
-                return RTLAwareMessageBox.Show(null, message, caption, buttons, icon,
-                        MessageBoxDefaultButton.Button1, 0) == DialogResult.Yes;
+                return RTLAwareMessageBox.Show(null, message, caption, buttons, icon, MessageBoxDefaultButton.Button1, 0)
+                    == DialogResult.Yes;
             }
             finally
             {
-                User32.SetFocus(focusHandle);
+                PInvoke.SetFocus(focusHandle);
             }
         }
 

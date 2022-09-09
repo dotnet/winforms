@@ -10,7 +10,6 @@ using System.Windows.Forms.Automation;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 using Moq.Protected;
-using Windows.Win32;
 using Xunit;
 using static Interop;
 using static Interop.Richedit;

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static Interop;
 
@@ -58,7 +57,7 @@ namespace System.ComponentModel.Design
                             if (PropertyGrid is not null)
                             {
                                 PropertyGrid.Focus();
-                                User32.SetFocus(new HandleRef(PropertyGrid, PropertyGrid.Handle));
+                                PInvoke.SetFocus(PropertyGrid);
                                 Application.DoEvents();
                             }
                             else
@@ -69,7 +68,7 @@ namespace System.ComponentModel.Design
                             if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                             {
                                 // Recreate the keystroke to the newly activated window.
-                                User32.SendMessageW(User32.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown.WParamInternal, _lastKeyDown.LParamInternal);
+                                User32.SendMessageW(PInvoke.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown.WParamInternal, _lastKeyDown.LParamInternal);
                             }
                         }
 
@@ -85,7 +84,7 @@ namespace System.ComponentModel.Design
                         if (PropertyGrid is not null)
                         {
                             PropertyGrid.Focus();
-                            User32.SetFocus(new HandleRef(PropertyGrid, PropertyGrid.Handle));
+                            PInvoke.SetFocus(PropertyGrid);
                             Application.DoEvents();
                         }
                         else
@@ -96,9 +95,9 @@ namespace System.ComponentModel.Design
                         // Make sure we changed focus properly recreate the keystroke to the newly activated window
                         if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                         {
-                            IntPtr hWnd = User32.GetFocus();
-                            User32.SendMessageW(hWnd, User32.WM.KEYDOWN, _lastKeyDown.WParamInternal, _lastKeyDown.LParamInternal);
-                            User32.SendMessageW(hWnd, User32.WM.CHAR, m.WParamInternal, m.LParamInternal);
+                            HWND hwnd = PInvoke.GetFocus();
+                            User32.SendMessageW(hwnd, User32.WM.KEYDOWN, _lastKeyDown.WParamInternal, _lastKeyDown.LParamInternal);
+                            User32.SendMessageW(hwnd, User32.WM.CHAR, m.WParamInternal, m.LParamInternal);
                             return;
                         }
 
