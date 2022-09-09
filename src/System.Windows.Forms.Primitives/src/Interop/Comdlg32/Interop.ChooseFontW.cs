@@ -17,7 +17,7 @@ internal partial class Interop
             public uint lStructSize;
             public IntPtr hwndOwner;
             public IntPtr hDC;
-            public User32.LOGFONTW* lpLogFont;
+            public LOGFONTW* lpLogFont;
             public int iPointSize;
             public CF Flags;
             public int rgbColors;

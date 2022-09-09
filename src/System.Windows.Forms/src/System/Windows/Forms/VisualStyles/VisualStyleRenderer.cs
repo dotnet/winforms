@@ -546,8 +546,8 @@ namespace System.Windows.Forms.VisualStyles
 
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
-            using var hdc = new DeviceContextHdcScope(dc);
-            _lastHResult = GetThemeFont(this, hdc, Part, State, (int)prop, out User32.LOGFONTW logfont);
+            using DeviceContextHdcScope hdc = new(dc);
+            _lastHResult = PInvoke.GetThemeFont(this, hdc, Part, State, (int)prop, out LOGFONTW logfont);
 
             // Check for a failed HR.
             if (!_lastHResult.Succeeded())

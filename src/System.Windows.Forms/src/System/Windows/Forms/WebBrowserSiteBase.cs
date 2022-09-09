@@ -8,7 +8,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms

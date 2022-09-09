@@ -2862,15 +2862,15 @@ namespace System.Windows.Forms
                 dwEffects |= CFE.UNDERLINE;
             }
 
-            User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(value);
-            var charFormat = new CHARFORMAT2W
+            LOGFONTW logFont = LOGFONTW.FromFont(value);
+            CHARFORMAT2W charFormat = new()
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W),
                 dwMask = dwMask,
                 dwEffects = dwEffects,
                 yHeight = (int)(value.SizeInPoints * 20),
-                bCharSet = logFont.lfCharSet,
-                bPitchAndFamily = logFont.lfPitchAndFamily,
+                bCharSet = (byte)logFont.lfCharSet,
+                bPitchAndFamily = (byte)logFont.lfPitchAndFamily,
                 FaceName = logFont.FaceName
             };
 

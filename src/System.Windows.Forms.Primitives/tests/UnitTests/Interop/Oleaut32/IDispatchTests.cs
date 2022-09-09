@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
 using Xunit;
-using static Interop;
 using static Interop.Ole32;
 using static Interop.Oleaut32;
 
