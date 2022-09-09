@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Metafiles;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -39,7 +38,7 @@ namespace System.Windows.Forms.Tests
                 Validate.TextOut(
                     "abc",
                     bounds: null,                                   // Don't care about the bounds for this test
-                    State.BackgroundMode(Gdi32.BKMODE.TRANSPARENT)));
+                    State.BackgroundMode(BACKGROUND_MODE.TRANSPARENT)));
         }
     }
 }

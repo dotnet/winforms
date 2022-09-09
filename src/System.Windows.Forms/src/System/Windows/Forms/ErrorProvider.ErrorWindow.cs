@@ -189,13 +189,13 @@ namespace System.Windows.Forms
                 if (_parent.IsMirrored)
                 {
                     // Mirror the DC
-                    Gdi32.SetMapMode(hdc, Gdi32.MM.ANISOTROPIC);
+                    PInvoke.SetMapMode(hdc, HDC_MAP_MODE.MM_ANISOTROPIC);
                     SIZE originalExtents = default;
                     PInvoke.GetViewportExtEx(hdc, &originalExtents);
-                    Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, lpsz: null);
+                    PInvoke.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, lpsz: null);
                     Point originalOrigin = default;
                     PInvoke.GetViewportOrgEx(hdc, &originalOrigin);
-                    Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, lppt: null);
+                    PInvoke.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, lppt: null);
                 }
             }
 

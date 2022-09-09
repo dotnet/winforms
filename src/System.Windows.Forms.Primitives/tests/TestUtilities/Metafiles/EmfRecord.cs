@@ -51,10 +51,10 @@ namespace System.Windows.Forms.Metafiles
             => Type == Gdi32.EMR.LINETO ? (EMRPOINTRECORD*)_lpmr : null;
         public EMRCREATEBRUSHINDIRECT* CreateBrushIndirectRecord
             => Type == Gdi32.EMR.CREATEBRUSHINDIRECT ? (EMRCREATEBRUSHINDIRECT*)_lpmr : null;
-        public EMRENUMRECORD<Gdi32.R2>* SetROP2Record
-            => Type == Gdi32.EMR.SETROP2 ? (EMRENUMRECORD<Gdi32.R2>*)_lpmr : null;
-        public EMRENUMRECORD<Gdi32.BKMODE>* SetBkModeRecord
-            => Type == Gdi32.EMR.SETBKMODE ? (EMRENUMRECORD<Gdi32.BKMODE>*)_lpmr : null;
+        public EMRENUMRECORD<R2_MODE>* SetROP2Record
+            => Type == Gdi32.EMR.SETROP2 ? (EMRENUMRECORD<R2_MODE>*)_lpmr : null;
+        public EMRENUMRECORD<BACKGROUND_MODE>* SetBkModeRecord
+            => Type == Gdi32.EMR.SETBKMODE ? (EMRENUMRECORD<BACKGROUND_MODE>*)_lpmr : null;
         public EMRCREATEPEN* CreatePenRecord
             => Type == Gdi32.EMR.CREATEPEN ? (EMRCREATEPEN*)_lpmr : null;
         public EMREXTCREATEPEN* ExtCreatePenRecord
@@ -91,14 +91,14 @@ namespace System.Windows.Forms.Metafiles
             => Type == Gdi32.EMR.SETTEXTCOLOR ? (EMRSETCOLOR*)_lpmr : null;
         public EMRCREATEDIBPATTERNBRUSHPT* CreateDibPatternBrushPtRecord
             => Type == Gdi32.EMR.CREATEDIBPATTERNBRUSHPT ? (EMRCREATEDIBPATTERNBRUSHPT*)_lpmr : null;
-        public EMRENUMRECORD<Gdi32.TA>* SetTextAlignRecord
-            => Type == Gdi32.EMR.SETTEXTALIGN ? (EMRENUMRECORD<Gdi32.TA>*)_lpmr : null;
+        public EMRENUMRECORD<TEXT_ALIGN_OPTIONS>* SetTextAlignRecord
+            => Type == Gdi32.EMR.SETTEXTALIGN ? (EMRENUMRECORD<TEXT_ALIGN_OPTIONS>*)_lpmr : null;
         public EMREXTCREATEFONTINDIRECTW* ExtCreateFontIndirectWRecord
             => Type == Gdi32.EMR.EXTCREATEFONTINDIRECTW ? (EMREXTCREATEFONTINDIRECTW*)_lpmr : null;
         public EMREXTTEXTOUTW* ExtTextOutWRecord
             => Type == Gdi32.EMR.EXTTEXTOUTW ? (EMREXTTEXTOUTW*)_lpmr : null;
-        public EMRENUMRECORD<Gdi32.MM>* SetMapModeRecord
-            => Type == Gdi32.EMR.SETMAPMODE ? (EMRENUMRECORD<Gdi32.MM>*)_lpmr : null;
+        public EMRENUMRECORD<HDC_MAP_MODE>* SetMapModeRecord
+            => Type == Gdi32.EMR.SETMAPMODE ? (EMRENUMRECORD<HDC_MAP_MODE>*)_lpmr : null;
         public EMRRECTRECORD* FillPathRecord
             => Type == Gdi32.EMR.FILLPATH ? (EMRRECTRECORD*)_lpmr : null;
         public EMRRECTRECORD* StrokeAndFillPathRecord
