@@ -8,7 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Windows.Win32.UI.Shell.Common;
 using static Interop;
 using static Interop.Shell32;
 
