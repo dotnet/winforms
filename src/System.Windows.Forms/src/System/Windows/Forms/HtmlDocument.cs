@@ -433,7 +433,7 @@ namespace System.Windows.Forms
                     string[] names = new string[] { scriptName };
                     Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
                     HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
-                    if (!hr.Succeeded() || dispid == Ole32.DispatchID.UNKNOWN)
+                    if (!hr.Succeeded || dispid == Ole32.DispatchID.UNKNOWN)
                     {
                         return null;
                     }

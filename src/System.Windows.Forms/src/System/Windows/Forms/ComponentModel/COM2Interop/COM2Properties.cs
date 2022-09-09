@@ -380,7 +380,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             Ole32.TYPEATTR* pTypeAttr = null;
             HRESULT hr = pTypeInfo.GetTypeAttr(&pTypeAttr);
-            if (!hr.Succeeded() || pTypeAttr is null)
+            if (!hr.Succeeded || pTypeAttr is null)
             {
                 return (0, 0, 0, 0);
             }

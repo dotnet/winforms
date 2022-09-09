@@ -601,7 +601,7 @@ namespace System.Windows.Forms
                         pvt,
                         null,
                         null);
-                    if (hr.Succeeded())
+                    if (hr.Succeeded)
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke succeeded. VT=" + pvt[0].GetType().FullName);
                         obj = pvt[0];
@@ -823,7 +823,7 @@ namespace System.Windows.Forms
                     HRESULT hr = inPlaceSite.CanInPlaceActivate();
                     if (hr != HRESULT.S_OK)
                     {
-                        if (hr.Succeeded())
+                        if (hr.Succeeded)
                         {
                             hr = HRESULT.E_FAIL;
                         }
@@ -848,7 +848,7 @@ namespace System.Windows.Forms
                     // We are entering a secure context here.
                     HWND hwndParent = default;
                     HRESULT hr = inPlaceSite.GetWindow((nint*)&hwndParent);
-                    if (!hr.Succeeded())
+                    if (!hr.Succeeded)
                     {
                         ThrowHr(hr);
                     }
@@ -933,7 +933,7 @@ namespace System.Windows.Forms
 
                     // we have to explicitly say we don't wany any border space.
                     HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
-                    if (!hr.Succeeded() && hr != HRESULT.OLE_E_INVALIDRECT &&
+                    if (!hr.Succeeded && hr != HRESULT.OLE_E_INVALIDRECT &&
                         hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
                     {
                         Marshal.ThrowExceptionForHR((int)hr);
@@ -942,7 +942,7 @@ namespace System.Windows.Forms
                     if (_inPlaceUiWindow is not null)
                     {
                         hr = _inPlaceFrame.SetBorderSpace(null);
-                        if (!hr.Succeeded() && hr != HRESULT.OLE_E_INVALIDRECT &&
+                        if (!hr.Succeeded && hr != HRESULT.OLE_E_INVALIDRECT &&
                             hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
                         {
                             Marshal.ThrowExceptionForHR((int)hr);
@@ -1104,7 +1104,7 @@ namespace System.Windows.Forms
                     try
                     {
                         HRESULT hr = pPropBag.Read(props[i].Name, out object? obj, pErrorLog);
-                        if (hr.Succeeded() && obj is not null)
+                        if (hr.Succeeded && obj is not null)
                         {
                             Debug.Indent();
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Property was in bag");
@@ -1347,7 +1347,7 @@ namespace System.Windows.Forms
                 {
                     // we have to explicitly say we don't wany any border space.
                     HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
-                    if (!hr.Succeeded() && hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
+                    if (!hr.Succeeded && hr != HRESULT.INPLACE_E_NOTOOLSPACE && hr != HRESULT.E_NOTIMPL)
                     {
                         Marshal.ThrowExceptionForHR((int)hr);
                     }

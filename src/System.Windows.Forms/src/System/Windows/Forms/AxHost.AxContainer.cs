@@ -813,7 +813,7 @@ namespace System.Windows.Forms
                 if (pActiveObject is IOleObject oleObject)
                 {
                     HRESULT hr = oleObject.GetClientSite(out IOleClientSite clientSite);
-                    Debug.Assert(hr.Succeeded());
+                    Debug.Assert(hr.Succeeded);
                     if (clientSite is OleInterfaces interfaces)
                     {
                         ctl = interfaces.GetAxHost();

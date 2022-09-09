@@ -148,7 +148,7 @@ namespace System.Windows.Forms
                     }
 
                     Guid rval = Guid.Empty;
-                    if (ippb.MapPropertyToPage(dispid, &rval).Succeeded())
+                    if (ippb.MapPropertyToPage(dispid, &rval).Succeeded)
                     {
                         return rval;
                     }

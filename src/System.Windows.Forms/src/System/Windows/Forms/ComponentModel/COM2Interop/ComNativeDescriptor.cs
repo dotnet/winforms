@@ -87,7 +87,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (component is VSSDK.IVsPerPropertyBrowsing)
             {
                 HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)component).GetClassName(ref name);
-                if (hr.Succeeded() && name is not null)
+                if (hr.Succeeded && name is not null)
                 {
                     return name;
                 }
@@ -152,7 +152,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 HRESULT hr = iDispatch.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
-                if (dispid == DispatchID.UNKNOWN || !hr.Succeeded())
+                if (dispid == DispatchID.UNKNOWN || !hr.Succeeded)
                 {
                     return null;
                 }

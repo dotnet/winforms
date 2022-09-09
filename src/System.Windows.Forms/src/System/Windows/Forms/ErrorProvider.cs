@@ -573,7 +573,7 @@ namespace System.Windows.Forms
                                                             Shell32.SHGSI.ICON | Shell32.SHGSI.SMALLICON,
                                                             &sii);
 
-                    if (hr.Succeeded())
+                    if (hr.Succeeded)
                     {
                         try
                         {

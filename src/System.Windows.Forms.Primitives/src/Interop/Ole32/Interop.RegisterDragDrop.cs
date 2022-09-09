@@ -17,7 +17,7 @@ internal partial class Interop
         public static HRESULT RegisterDragDrop(IHandle hwnd, IDropTarget pDropTarget)
         {
             HRESULT result = WinFormsComWrappers.Instance.TryGetComPointer(pDropTarget, IID.IDropTarget, out var dropTargetPtr);
-            if (result.Failed())
+            if (result.Failed)
             {
                 return result;
             }

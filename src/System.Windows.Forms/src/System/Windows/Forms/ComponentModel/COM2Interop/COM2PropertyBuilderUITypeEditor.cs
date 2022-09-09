@@ -66,7 +66,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     null,
                     parentHandle,
                     ref pValue,
-                    &useValue).Succeeded())
+                    &useValue).Succeeded)
                 {
                     useValue = false;
                 }

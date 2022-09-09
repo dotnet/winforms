@@ -31,7 +31,7 @@ internal partial class Interop
                 fixed (Ole32.STATSTG* pstatstg = &statstg)
                 {
                     ((delegate* unmanaged<IntPtr, Ole32.STATSTG*, Ole32.STATFLAG, HRESULT>)(*(*(void***)_wrappedInstance + 9 /* ILockBytes.Stat */)))
-                        (_wrappedInstance, pstatstg, grfStatFlag).ThrowIfFailed();
+                        (_wrappedInstance, pstatstg, grfStatFlag).ThrowOnFailure();
                 }
             }
         }

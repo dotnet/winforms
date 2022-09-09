@@ -53,10 +53,7 @@ namespace System.Windows.Forms
 
                 Marshal.Release(pFont);
 
-                if (((HRESULT)hr).Failed())
-                {
-                    Marshal.ThrowExceptionForHR(hr);
-                }
+                ((HRESULT)hr).ThrowOnFailure();
 
                 return pIFont;
             }

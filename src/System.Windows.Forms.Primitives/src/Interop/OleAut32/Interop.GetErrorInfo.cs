@@ -15,7 +15,7 @@ internal partial class Interop
         {
             HRESULT result = GetErrorInfo(0, out IntPtr pperrinfo);
             errinfo = null;
-            if (result.Succeeded() && pperrinfo != IntPtr.Zero)
+            if (result.Succeeded && pperrinfo != IntPtr.Zero)
             {
                 errinfo = (WinFormsComWrappers.ErrorInfoWrapper)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(pperrinfo, CreateObjectFlags.Unwrap);
             }
