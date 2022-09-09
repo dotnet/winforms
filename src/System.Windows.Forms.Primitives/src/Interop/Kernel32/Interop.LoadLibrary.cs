@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 
 internal partial class Interop
 {
@@ -50,18 +51,17 @@ internal partial class Interop
         /// </summary>
         /// <param name="libraryName">The assembly name to load.</param>
         /// <returns>A handle to the loaded module, if successful; <see cref="IntPtr.Zero"/> otherwise.</returns>
-        public static IntPtr LoadLibraryFromSystemPathIfAvailable(string libraryName)
+        public static nint LoadLibraryFromSystemPathIfAvailable(string libraryName)
         {
-            IntPtr kernel32 = GetModuleHandleW(Libraries.Kernel32);
-            if (kernel32 == IntPtr.Zero)
+            if (PInvoke.GetModuleHandle(Libraries.Kernel32) == 0)
             {
-                return IntPtr.Zero;
+                return 0;
             }
 
             // LOAD_LIBRARY_SEARCH_SYSTEM32 was introduced in KB2533623. Check for its presence
             // to preserve compat with Windows 7 SP1 without this patch.
-            IntPtr result = LoadLibraryExW(libraryName, IntPtr.Zero, LOAD_LIBRARY_SEARCH_SYSTEM32);
-            if (result != IntPtr.Zero)
+            nint result = LoadLibraryExW(libraryName, 0, LOAD_LIBRARY_SEARCH_SYSTEM32);
+            if (result != 0)
             {
                 return result;
             }
@@ -69,10 +69,10 @@ internal partial class Interop
             // Load without this flag.
             if (Marshal.GetLastWin32Error() != ERROR.INVALID_PARAMETER)
             {
-                return IntPtr.Zero;
+                return 0;
             }
 
-            return LoadLibraryExW(libraryName, IntPtr.Zero, 0);
+            return LoadLibraryExW(libraryName, 0, 0);
         }
     }
 }

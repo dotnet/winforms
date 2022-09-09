@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -441,7 +442,7 @@ namespace System.Windows.Forms
                 lpLogFont = &logFont,
                 Flags = (Comdlg32.CF)Options | Comdlg32.CF.INITTOLOGFONTSTRUCT | Comdlg32.CF.ENABLEHOOK,
                 lpfnHook = hookProcPtr,
-                hInstance = Kernel32.GetModuleHandleW(null),
+                hInstance = PInvoke.GetModuleHandle(null),
                 nSizeMin = minSize,
                 nSizeMax = maxSize == 0 ? int.MaxValue : maxSize,
                 rgbColors = ShowColor || ShowEffects

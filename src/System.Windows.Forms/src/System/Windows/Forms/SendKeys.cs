@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Security;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -228,7 +229,7 @@ namespace System.Windows.Forms
                 s_hhook = User32.SetWindowsHookExW(
                     User32.WH.JOURNALPLAYBACK,
                     s_hook,
-                    Kernel32.GetModuleHandleW(null),
+                    PInvoke.GetModuleHandle(null),
                     0);
 
                 if (s_hhook == IntPtr.Zero)
@@ -247,7 +248,7 @@ namespace System.Windows.Forms
                 IntPtr hookHandle = User32.SetWindowsHookExW(
                     User32.WH.JOURNALPLAYBACK,
                     hookProc,
-                    Kernel32.GetModuleHandleW(null),
+                    PInvoke.GetModuleHandle(null),
                     0);
                 s_hookSupported = (hookHandle != IntPtr.Zero);
 

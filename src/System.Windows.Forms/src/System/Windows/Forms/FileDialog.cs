@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -298,7 +299,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the Win32 instance handle for the application.
         /// </summary>
-        protected virtual IntPtr Instance => Kernel32.GetModuleHandleW(null);
+        protected virtual nint Instance => PInvoke.GetModuleHandle(null);
 
         /// <summary>
         ///  Gets the Win32 common Open File Dialog OFN_* and FOS_* option flags.

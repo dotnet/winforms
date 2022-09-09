@@ -4,6 +4,9 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.System.ApplicationInstallationAndServicing;
 using Xunit;
 using static Interop;
 
@@ -79,14 +82,14 @@ public class PropertyGridTests
 
     private unsafe void ExecuteWithActivationContext(string applicationManifest, Action action)
     {
-        var context = new Kernel32.ACTCTXW();
-        IntPtr handle;
+        var context = new ACTCTXW();
+        HANDLE handle;
         fixed (char* p = applicationManifest)
         {
-            context.cbSize = (uint)sizeof(Kernel32.ACTCTXW);
+            context.cbSize = (uint)sizeof(ACTCTXW);
             context.lpSource = p;
 
-            handle = Kernel32.CreateActCtxW(ref context);
+            handle = PInvoke.CreateActCtx(&context);
         }
 
         if (handle == IntPtr.Zero)
