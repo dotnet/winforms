@@ -142,7 +142,7 @@ namespace System.Windows.Forms
             {
                 HDC = HDC.IsNull ? (HDC)DeviceContext.GetHdc() : HDC;
                 ValidateHDC();
-                _savedHdcState = saveHdcState ? Gdi32.SaveDC(HDC) : 0;
+                _savedHdcState = saveHdcState ? PInvoke.SaveDC(HDC) : 0;
                 return;
             }
 
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
 
                 if (saveHdcState || applyClipping || applyTransform)
                 {
-                    _savedHdcState = Gdi32.SaveDC(HDC);
+                    _savedHdcState = PInvoke.SaveDC(HDC);
                 }
 
                 if (applyClipping)
@@ -196,7 +196,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    type = Gdi32.SelectClipRgn(HDC, graphicsRegion!);
+                    type = (RegionType)PInvoke.SelectClipRgn(HDC, graphicsRegion!);
                     if (type == RegionType.ERROR)
                     {
                         throw new Win32Exception();
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
 
                 if (applyTransform)
                 {
-                    Gdi32.OffsetViewportOrgEx(HDC, (int)offset.X, (int)offset.Y, null);
+                    PInvoke.OffsetViewportOrgEx(HDC, (int)offset.X, (int)offset.Y, lppt: null);
                 }
             }
         }
@@ -246,7 +246,7 @@ namespace System.Windows.Forms
         {
             if (_savedHdcState != 0)
             {
-                Gdi32.RestoreDC(HDC, _savedHdcState);
+                PInvoke.RestoreDC(HDC, _savedHdcState);
             }
 
             // Note that Graphics keeps track of the HDC it passes back, so we don't need to pass it back in

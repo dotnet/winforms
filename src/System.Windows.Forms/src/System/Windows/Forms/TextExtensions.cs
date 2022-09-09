@@ -71,7 +71,7 @@ namespace System.Windows.Forms
 
             // Color empty means use the one currently selected in the dc.
             using var textColor = foreColor.IsEmpty ? default : new PInvoke.SetTextColorScope(hdc, foreColor);
-            using var fontSelection = new Gdi32.SelectObjectScope(hdc, (HFONT)font);
+            using PInvoke.SelectObjectScope fontSelection = new(hdc, (HFONT)font);
 
             BACKGROUND_MODE newBackGroundMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
                 BACKGROUND_MODE.TRANSPARENT :
@@ -250,7 +250,7 @@ namespace System.Windows.Forms
 
             RECT rect = new(proposedSize);
 
-            using var fontSelection = new Gdi32.SelectObjectScope(hdc, font.Object);
+            using PInvoke.SelectObjectScope fontSelection = new(hdc, font.Object);
 
             // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain SINGLELINE and
             // VCENTER or BOTTOM options, DrawTextEx does not bind the rectangle to the actual text height since
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
             }
 
             Size size = default;
-            using Gdi32.SelectObjectScope selectFont = new (hdc, hfont);
+            using PInvoke.SelectObjectScope selectFont = new(hdc, hfont);
 
             fixed (char* pText = text)
             {

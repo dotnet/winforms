@@ -8962,10 +8962,10 @@ namespace System.Windows.Forms
                 rectangle.Width,
                 rectangle.Height);
 
-            using var hdc = new DeviceContextHdcScope(e);
-            using var savedc = new Gdi32.SaveDcScope(hdc);
+            using DeviceContextHdcScope hdc = new(e);
+            using PInvoke.SaveDcScope savedc = new(hdc);
 
-            Gdi32.OffsetViewportOrgEx(hdc, -Left, -Top, null);
+            PInvoke.OffsetViewportOrgEx(hdc, -Left, -Top, lppt: null);
 
             using PaintEventArgs newArgs = new PaintEventArgs(hdc, newClipRect);
 
@@ -9479,7 +9479,7 @@ namespace System.Windows.Forms
             Debug.Assert(!hClippingRegion.IsNull, "CreateRectRgn() failed.");
 
             // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-            RegionType selectResult = Gdi32.SelectClipRgn(hDC, hClippingRegion);
+            RegionType selectResult = (RegionType)PInvoke.SelectClipRgn(hDC, hClippingRegion);
             Debug.Assert(
                 selectResult == RegionType.SIMPLEREGION || selectResult == RegionType.NULLREGION,
                 "SIMPLEREGION or NULLLREGION expected.");

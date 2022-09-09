@@ -226,7 +226,7 @@ namespace System.Windows.Forms
                 // Put our new bitmap handle (with the halftone palette) into the dc and use Graphics to
                 // copy the Bitmap into it.
 
-                HGDIOBJ previousBitmap = Gdi32.SelectObject(dc, hbitmap);
+                HGDIOBJ previousBitmap = PInvoke.SelectObject(dc, hbitmap);
                 if (previousBitmap.IsNull)
                 {
                     throw new Win32Exception();
@@ -321,8 +321,8 @@ namespace System.Windows.Forms
             using User32.GetDcScope screenDC = new(IntPtr.Zero);
             using PInvoke.CreateDcScope sourceDC = new(screenDC);
             using PInvoke.CreateDcScope targetDC = new(screenDC);
-            using Gdi32.SelectObjectScope sourceBitmapSelection = new(sourceDC, (HGDIOBJ)monochromeMask);
-            using Gdi32.SelectObjectScope targetBitmapSelection = new(targetDC, (HGDIOBJ)colorMask.Value);
+            using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, (HGDIOBJ)monochromeMask);
+            using PInvoke.SelectObjectScope targetBitmapSelection = new(targetDC, (HGDIOBJ)colorMask.Value);
 
             // Now the trick is to make colorBitmap black wherever the transparent color is located, but keep the
             // original color everywhere else. We've already got the original bitmap, so all we need to do is to AND
@@ -1863,11 +1863,11 @@ namespace System.Windows.Forms
             });
 
             using PInvoke.SetRop2Scope rop2Scope = new(desktopDC, rop2);
-            using Gdi32.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
-            using Gdi32.SelectObjectScope penSelection = new(desktopDC, pen);
+            using PInvoke.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+            using PInvoke.SelectObjectScope penSelection = new(desktopDC, pen);
 
             PInvoke.SetBkColor(desktopDC, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
-            Gdi32.Rectangle(desktopDC, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+            PInvoke.Rectangle(desktopDC, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
         }
 
         /// <summary>
@@ -1884,11 +1884,11 @@ namespace System.Windows.Forms
 
             using PInvoke.ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
             using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
-            using Gdi32.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
-            using Gdi32.SelectObjectScope penSelection = new(desktopDC, pen);
+            using PInvoke.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+            using PInvoke.SelectObjectScope penSelection = new(desktopDC, pen);
 
-            Gdi32.MoveToEx(desktopDC, start.X, start.Y, lppt: null);
-            Gdi32.LineTo(desktopDC, end.X, end.Y);
+            PInvoke.MoveToEx(desktopDC, start.X, start.Y, lppt: null);
+            PInvoke.LineTo(desktopDC, end.X, end.Y);
         }
 
         /// <summary>
@@ -2086,7 +2086,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void FillReversibleRectangle(Rectangle rectangle, Color backColor)
         {
-            Gdi32.ROP rop3 = (Gdi32.ROP)GetColorRop(
+            ROP_CODE rop3 = (ROP_CODE)GetColorRop(
                 backColor,
                 0xa50065,   // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
                 0x5a0049);  // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
@@ -2098,10 +2098,10 @@ namespace System.Windows.Forms
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             using PInvoke.ObjectScope brush = new(PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
             using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
-            using Gdi32.SelectObjectScope brushSelection = new(desktopDC, brush);
+            using PInvoke.SelectObjectScope brushSelection = new(desktopDC, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
-            Gdi32.PatBlt(desktopDC, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
+            PInvoke.PatBlt(desktopDC, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
         }
 
         /// <summary>

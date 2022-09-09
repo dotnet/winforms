@@ -5,17 +5,19 @@
 #if DEBUG
 #endif
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
         ///  Helper to scope selecting a GDI object into an HDC. Restores the original
         ///  object into the HDC when disposed.
         /// </summary>
         /// <remarks>
+        ///  <para>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double selection.
+        ///  </para>
         /// </remarks>
 #if DEBUG
         internal class SelectObjectScope : DisposalTracking.Tracker, IDisposable

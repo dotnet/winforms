@@ -204,8 +204,8 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void OnPaint()
             {
-                using var hdc = new PInvoke.BeginPaintScope((HWND)Handle);
-                using var save = new Gdi32.SaveDcScope(hdc);
+                using PInvoke.BeginPaintScope hdc = new((HWND)Handle);
+                using PInvoke.SaveDcScope save = new(hdc);
 
                 MirrorDcIfNeeded(hdc);
 
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
                 }
 
                 using User32.GetDcScope hdc = new(Handle);
-                using Gdi32.SaveDcScope save = new(hdc);
+                using PInvoke.SaveDcScope save = new(hdc);
                 MirrorDcIfNeeded(hdc);
 
                 using Graphics g = hdc.CreateGraphics();

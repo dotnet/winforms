@@ -7,7 +7,6 @@
 using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -20,7 +19,7 @@ namespace System.Windows.Forms.Metafiles
         public int yDest;
         public int cxDest;
         public int cyDest;
-        public Gdi32.ROP dwRop;
+        public ROP_CODE dwRop;
         public int xSrc;
         public int ySrc;
         public Matrix3x2 xformSrc;     // Source DC transform

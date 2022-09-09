@@ -541,11 +541,11 @@ namespace System.Windows.Forms.Design
                 new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
 
             using PInvoke.SetRop2Scope rop2Scope = new(dc, rop2);
-            using Gdi32.SelectObjectScope brushSelection = new(dc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
-            using Gdi32.SelectObjectScope penSelection = new(dc, pen);
+            using PInvoke.SelectObjectScope brushSelection = new(dc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+            using PInvoke.SelectObjectScope penSelection = new(dc, pen);
 
             PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
-            Gdi32.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+            PInvoke.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
             // ------ Duplicate code----------------------------------------------------------
         }
 

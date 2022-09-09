@@ -181,7 +181,7 @@ namespace System.ComponentModel.Design
                 {
                     using var hdc = User32.GetDcScope.ScreenDC;
                     using PInvoke.ObjectScope font = new(Font.ToHFONT());
-                    using Gdi32.SelectObjectScope fontSelection = new(hdc, font);
+                    using PInvoke.SelectObjectScope fontSelection = new(hdc, font);
 
                     RECT rect = new RECT();
                     User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.DT.CALCRECT);

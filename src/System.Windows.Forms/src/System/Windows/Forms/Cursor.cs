@@ -330,7 +330,7 @@ namespace System.Windows.Forms
                 // The ROP is SRCCOPY, so we can be simple here and take
                 // advantage of clipping regions.  Drawing the cursor
                 // is merely a matter of offsetting and clipping.
-                Gdi32.IntersectClipRect(this, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
+                PInvoke.IntersectClipRect(this, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
                 User32.DrawIconEx(
                     (HDC)dc,
                     targetX - imageX,

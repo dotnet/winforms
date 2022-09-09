@@ -20,16 +20,13 @@ namespace Windows.Win32
                 string customPath = Path.Join(startupPath, Libraries.Comctl32);
                 Debug.Assert(Path.IsPathFullyQualified(customPath));
 
-                fixed (char* lpLibFileName = customPath)
+                if (Path.IsPathFullyQualified(customPath))
                 {
-                    if (Path.IsPathFullyQualified(customPath))
+                    // OS will validate the path for us
+                    HINSTANCE result = LoadLibraryEx(customPath, (HANDLE)0, 0);
+                    if (result != 0)
                     {
-                        // OS will validate the path for us
-                        IntPtr result = LoadLibraryEx(lpLibFileName, (HANDLE)0, 0);
-                        if (result != IntPtr.Zero)
-                        {
-                            return result;
-                        }
+                        return result;
                     }
                 }
             }
@@ -53,22 +50,19 @@ namespace Windows.Win32
 
             // LOAD_LIBRARY_SEARCH_SYSTEM32 was introduced in KB2533623. Check for its presence
             // to preserve compat with Windows 7 SP1 without this patch.
-            fixed (char* lpLibFileName = libraryName)
+            HINSTANCE result = LoadLibraryEx(libraryName, (HANDLE)0, LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_SEARCH_SYSTEM32);
+            if (result != 0)
             {
-                nint result = LoadLibraryEx(lpLibFileName, (HANDLE)0, LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_SEARCH_SYSTEM32);
-                if (result != 0)
-                {
-                    return result;
-                }
-
-                // Load without this flag.
-                if (Marshal.GetLastWin32Error() != ERROR.INVALID_PARAMETER)
-                {
-                    return 0;
-                }
-
-                return LoadLibraryEx(lpLibFileName, (HANDLE)0, 0);
+                return result;
             }
+
+            // Load without this flag.
+            if (Marshal.GetLastWin32Error() != ERROR.INVALID_PARAMETER)
+            {
+                return (HINSTANCE)0;
+            }
+
+            return LoadLibraryEx(libraryName, (HANDLE)0, 0);
         }
     }
 }

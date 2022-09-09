@@ -1491,8 +1491,8 @@ namespace System.Windows.Forms
             using User32.GetDcScope dc = new(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
             using PInvoke.ObjectScope objectScope = new(halftone);
-            using Gdi32.SelectObjectScope selectBrush = new(dc, halftone);
-            Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
+            using PInvoke.SelectObjectScope selectBrush = new(dc, halftone);
+            PInvoke.PatBlt(dc, r.X, r.Y, r.Width, r.Height, ROP_CODE.PATINVERT);
 
             GC.KeepAlive(this);
         }
