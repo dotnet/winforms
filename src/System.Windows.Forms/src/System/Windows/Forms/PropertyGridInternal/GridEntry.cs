@@ -1644,7 +1644,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     IntPtr handle)
                 {
                     Color backgroundColor = ColorInversionNeededInHighContrast ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
-                    using var compatibleDC = new Gdi32.CreateDcScope(default);
+                    using var compatibleDC = new PInvoke.CreateDcScope(default);
 
                     int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
                     int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);

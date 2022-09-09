@@ -643,7 +643,7 @@ namespace System.Windows.Forms
                     }
                     else if (IsHandleCreated)
                     {
-                        using var hDC = new Gdi32.CreateDcScope("DISPLAY", null, null, IntPtr.Zero, informationOnly: true);
+                        using PInvoke.CreateDcScope hDC = new("DISPLAY");
                         User32.SendMessageW(this, (User32.WM)EM.SETTARGETDEVICE, hDC, Pixel2Twip(value, true));
                     }
                 }

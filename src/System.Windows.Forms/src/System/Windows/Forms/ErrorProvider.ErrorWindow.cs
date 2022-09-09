@@ -397,12 +397,12 @@ namespace System.Windows.Forms
                     _provider._showIcon = !_provider._showIcon;
                 }
 
-                using var hdc = new User32.GetDcScope(Handle);
-                using var save = new Gdi32.SaveDcScope(hdc);
+                using User32.GetDcScope hdc = new(Handle);
+                using Gdi32.SaveDcScope save = new(hdc);
                 MirrorDcIfNeeded(hdc);
 
                 using Graphics g = hdc.CreateGraphics();
-                using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, g);
+                using PInvoke.RegionScope windowRegionHandle = new(windowRegion, g);
                 if (User32.SetWindowRgn(this, windowRegionHandle, true) != 0)
                 {
                     // The HWnd owns the region.

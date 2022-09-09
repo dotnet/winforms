@@ -125,7 +125,7 @@ namespace System.Windows.Forms
         }
 
         internal static Graphics CreateGraphics(this HDC hdc) => Graphics.FromHdcInternal(hdc);
-        internal static Graphics CreateGraphics(this Gdi32.CreateDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC);
+        internal static Graphics CreateGraphics(this PInvoke.CreateDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC);
         internal static Graphics CreateGraphics(this User32.GetDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC);
 
         internal static void DrawAndFillEllipse(
