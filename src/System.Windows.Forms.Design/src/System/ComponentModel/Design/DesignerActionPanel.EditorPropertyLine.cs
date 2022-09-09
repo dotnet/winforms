@@ -76,7 +76,7 @@ namespace System.ComponentModel.Design
                     // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
                     using (var hdc = new User32.GetDcScope(listBox.Handle))
                     {
-                        using var hFont = new Gdi32.ObjectScope(listBox.Font.ToHFONT());
+                        using PInvoke.ObjectScope hFont = new(listBox.Font.ToHFONT());
                         using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
 
                         var tm = new Gdi32.TEXTMETRICW();

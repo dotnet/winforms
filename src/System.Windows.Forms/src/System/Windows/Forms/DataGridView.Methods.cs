@@ -5847,7 +5847,7 @@ namespace System.Windows.Forms
         {
             const byte DATAGRIDVIEW_shadowEdgeThickness = 3;
 
-            using var dc = new User32.GetDcScope(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+            using User32.GetDcScope dc = new(Handle, default, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
             HGDIOBJ saveBrush = Gdi32.SelectObject(dc, halftone);
 
@@ -5857,7 +5857,7 @@ namespace System.Windows.Forms
             Gdi32.PatBlt(dc, r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
 
             Gdi32.SelectObject(dc, saveBrush);
-            Gdi32.DeleteObject(halftone);
+            PInvoke.DeleteObject(halftone);
         }
 
         /// <summary>
@@ -5871,7 +5871,7 @@ namespace System.Windows.Forms
             HGDIOBJ saveBrush = Gdi32.SelectObject(dc, halftone);
             Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
             Gdi32.SelectObject(dc, saveBrush);
-            Gdi32.DeleteObject(halftone);
+            PInvoke.DeleteObject(halftone);
             User32.ReleaseDC(new HandleRef(this, Handle), dc);
         }
 

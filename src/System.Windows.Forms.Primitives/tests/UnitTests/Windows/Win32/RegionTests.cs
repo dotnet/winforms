@@ -6,7 +6,6 @@ using System.Drawing;
 using Xunit;
 using static Interop;
 using static Interop.Gdi32;
-using static Windows.Win32.PInvoke;
 
 namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
 {
@@ -16,18 +15,18 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
         public void GetClipRgn_NoRegion()
         {
             // Create a bitmap using the screen's stats
-            HDC hdc = CreateCompatibleDC((HDC)default);
+            HDC hdc = PInvoke.CreateCompatibleDC((HDC)default);
             Assert.False(hdc.IsNull);
 
             try
             {
-                HBITMAP hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
+                HBITMAP hbitmap = PInvoke.CreateCompatibleBitmap(hdc, 20, 20);
                 Assert.False(hdc.IsNull);
 
                 try
                 {
                     SelectObject(hdc, hbitmap);
-                    HRGN hregion = CreateRectRgn(0, 0, 0, 0);
+                    HRGN hregion = PInvoke.CreateRectRgn(0, 0, 0, 0);
 
                     Assert.False(hregion.IsNull);
                     try
@@ -39,17 +38,17 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                     }
                     finally
                     {
-                        Gdi32.DeleteObject(hregion);
+                        PInvoke.DeleteObject(hregion);
                     }
                 }
                 finally
                 {
-                    Gdi32.DeleteObject(hbitmap);
+                    PInvoke.DeleteObject(hbitmap);
                 }
             }
             finally
             {
-                DeleteDC(hdc);
+                PInvoke.DeleteDC(hdc);
             }
         }
 
@@ -67,17 +66,17 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
 
                 try
                 {
-                    using var hregion = new RegionScope(hdc);
+                    using var hregion = new PInvoke.RegionScope(hdc);
                     Assert.True(hregion.IsNull);
                 }
                 finally
                 {
-                    Gdi32.DeleteObject(hbitmap);
+                    PInvoke.DeleteObject(hbitmap);
                 }
             }
             finally
             {
-                DeleteDC(hdc);
+                PInvoke.DeleteDC(hdc);
             }
         }
 
@@ -96,9 +95,9 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                 try
                 {
                     Rectangle rectangle = new(1, 2, 3, 4);
-                    using RegionScope originalRegion = new(rectangle);
+                    using PInvoke.RegionScope originalRegion = new(rectangle);
                     SelectClipRgn(hdc, originalRegion);
-                    using RegionScope retrievedRegion = new(hdc);
+                    using PInvoke.RegionScope retrievedRegion = new(hdc);
                     RECT rect = default;
                     RegionType type = GetRgnBox(retrievedRegion, ref rect);
                     Assert.Equal(RegionType.SIMPLEREGION, type);
@@ -106,12 +105,12 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
                 }
                 finally
                 {
-                    Gdi32.DeleteObject(hbitmap);
+                    PInvoke.DeleteObject(hbitmap);
                 }
             }
             finally
             {
-                DeleteDC(hdc);
+                PInvoke.DeleteDC(hdc);
             }
         }
     }

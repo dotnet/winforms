@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             {
                 if (!HFONT.IsNull)
                 {
-                    Gdi32.DeleteObject(HFONT);
+                    PInvoke.DeleteObject(HFONT);
                 }
 
                 HFONT = default;

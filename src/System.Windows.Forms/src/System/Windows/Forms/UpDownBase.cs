@@ -551,7 +551,7 @@ namespace System.Windows.Forms
                     backRect.Y--;
                     backRect.Width += 2;
                     backRect.Height += 2;
-                    using var hpen = new Gdi32.CreatePenScope(backColor);
+                    using PInvoke.CreatePenScope hpen = new(backColor);
                     hdc.DrawRectangle(backRect, hpen);
                 }
             }
@@ -572,8 +572,8 @@ namespace System.Windows.Forms
 
                 backRect.Width++;
                 backRect.Height++;
-                using var hdc = new DeviceContextHdcScope(e);
-                using var hpen = new Gdi32.CreatePenScope(backColor, width);
+                using DeviceContextHdcScope hdc = new(e);
+                using PInvoke.CreatePenScope hpen = new(backColor, width);
                 hdc.DrawRectangle(backRect, hpen);
             }
 

@@ -397,8 +397,8 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Gdi32.DeleteObject(hBitmap);
-                Gdi32.DeleteObject(hMask);
+                PInvoke.DeleteObject(hBitmap);
+                PInvoke.DeleteObject(hMask);
             }
 
             if (index == -1)
