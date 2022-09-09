@@ -8,12 +8,10 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
-using System.Windows.Forms.TestUtilities;
 using Moq;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop.Shell32;
 using static Interop.User32;
-using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests
@@ -2161,7 +2159,7 @@ namespace System.Windows.Forms.Tests
                 tymed = TYMED.TYMED_HGLOBAL
             };
             nint handle = PInvoke.GlobalAlloc(
-                GMEM_MOVEABLE | GMEM_ZEROINIT,
+                GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
                 1);
             try
             {
@@ -2201,7 +2199,7 @@ namespace System.Windows.Forms.Tests
                 tymed = TYMED.TYMED_HGLOBAL
             };
             nint handle = PInvoke.GlobalAlloc(
-                GMEM_MOVEABLE | GMEM_ZEROINIT,
+                GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
                 1);
             try
             {
@@ -2274,7 +2272,7 @@ namespace System.Windows.Forms.Tests
                 tymed = TYMED.TYMED_HGLOBAL
             };
             nint handle = PInvoke.GlobalAlloc(
-                GMEM_MOVEABLE | GMEM_ZEROINIT,
+                GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
                 1);
             try
             {
@@ -2312,7 +2310,7 @@ namespace System.Windows.Forms.Tests
                 tymed = TYMED.TYMED_HGLOBAL
             };
             nint handle = PInvoke.GlobalAlloc(
-               GMEM_MOVEABLE | GMEM_ZEROINIT,
+               GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
                 (uint)sizeof(DROPFILES));
             try
             {
