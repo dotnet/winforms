@@ -3,6 +3,7 @@ ActivateActCtx
 ActivateKeyboardLayout
 AdjustWindowRectEx
 AdjustWindowRectExForDpi
+AUTOCOMPLETEOPTIONS
 BeginPaint
 BitBlt
 BlockInput
@@ -27,6 +28,8 @@ DeleteDC
 DeleteEnhMetaFile
 DeleteObject
 DestroyWindow
+DROPDESCRIPTION
+DROPIMAGETYPE
 DuplicateHandle
 EndPaint
 EVENTMSG
