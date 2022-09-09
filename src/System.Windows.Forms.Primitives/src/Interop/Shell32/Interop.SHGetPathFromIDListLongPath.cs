@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32;
 
 internal static partial class Interop
 {
@@ -13,8 +14,8 @@ internal static partial class Interop
 
         public static bool SHGetPathFromIDListLongPath(IntPtr pidl, out string? path)
         {
-            IntPtr pszPath = Marshal.AllocHGlobal((Kernel32.MAX_PATH + 1) * sizeof(char));
-            int length = Kernel32.MAX_PATH;
+            IntPtr pszPath = Marshal.AllocHGlobal((PInvoke.MAX_PATH + 1) * sizeof(char));
+            int length = PInvoke.MAX_PATH;
             try
             {
                 if (!SHGetPathFromIDListLongPath(pidl, ref pszPath, length))
@@ -55,7 +56,7 @@ internal static partial class Interop
             // who doesn't care about the path, but just wants to know that we have an IShellFolder.
             while (SHGetPathFromIDListEx(pidl, pszPath, length, 0).IsFalse())
             {
-                if (length >= Kernel32.MAX_UNICODESTRING_LEN
+                if (length >= PInvoke.MAX_UNICODESTRING_LEN
                     || *(char*)pszPath.ToPointer() == '\0')
                 {
                     // Already at the maximum size string, or no data was copied in. Fail.
@@ -64,9 +65,9 @@ internal static partial class Interop
 
                 // Try giving the API a larger buffer
                 length *= 2;
-                if (length > Kernel32.MAX_UNICODESTRING_LEN)
+                if (length > PInvoke.MAX_UNICODESTRING_LEN)
                 {
-                    length = Kernel32.MAX_UNICODESTRING_LEN;
+                    length = PInvoke.MAX_UNICODESTRING_LEN;
                 }
 
                 pszPath = Marshal.ReAllocHGlobal(pszPath, (IntPtr)(length * sizeof(char)));

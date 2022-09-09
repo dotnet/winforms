@@ -923,7 +923,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    Kernel32.SYSTEMTIME systemTime = new();
+                    PInvoke.SYSTEMTIME systemTime = new();
                     int result = (int)User32.SendMessageW(this, (User32.WM)User32.MCM.GETTODAY, 0, ref systemTime);
                     Debug.Assert(result != 0, "MCM_GETTODAY failed");
                     return ((DateTime)systemTime).Date;
@@ -1348,7 +1348,7 @@ namespace System.Windows.Forms
 
         private SelectionRange GetMonthRange(GMR flag)
         {
-            Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
+            Span<PInvoke.SYSTEMTIME> times = stackalloc PInvoke.SYSTEMTIME[2];
             User32.SendMessageW(this, (User32.WM)MCM.GETMONTHRANGE, (nint)flag, ref times[0]);
             return new SelectionRange
             {
@@ -1394,7 +1394,7 @@ namespace System.Windows.Forms
             {
                 cbSize = (uint)sizeof(MCHITTESTINFO),
                 pt = new Point(x, y),
-                st = new Kernel32.SYSTEMTIME()
+                st = new PInvoke.SYSTEMTIME()
             };
 
             User32.SendMessageW(this, (User32.WM)MCM.HITTEST, 0, ref mchi);
@@ -1403,7 +1403,7 @@ namespace System.Windows.Forms
             HitArea hitArea = GetHitArea(mchi.uHit);
             if (HitTestInfo.HitAreaHasValidDateTime(hitArea))
             {
-                Kernel32.SYSTEMTIME systemTime = new()
+                PInvoke.SYSTEMTIME systemTime = new()
                 {
                     wYear = mchi.st.wYear,
                     wMonth = mchi.st.wMonth,
@@ -1467,7 +1467,7 @@ namespace System.Windows.Forms
 
             if (_todayDateSet)
             {
-                Kernel32.SYSTEMTIME systemTime = _todaysDate;
+                PInvoke.SYSTEMTIME systemTime = _todaysDate;
                 User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, 0, ref systemTime);
             }
 
@@ -1480,7 +1480,7 @@ namespace System.Windows.Forms
             int firstDay;
             if (_firstDayOfWeek == Day.Default)
             {
-                firstDay = (int)Kernel32.LCTYPE.IFIRSTDAYOFWEEK;
+                firstDay = (int)PInvoke.LCTYPE.IFIRSTDAYOFWEEK;
             }
             else
             {
@@ -1838,7 +1838,7 @@ namespace System.Windows.Forms
             // Updated the calendar range
             if (IsHandleCreated)
             {
-                Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
+                Span<PInvoke.SYSTEMTIME> times = stackalloc PInvoke.SYSTEMTIME[2];
                 times[0] = minDate;
                 times[1] = maxDate;
                 GDTR flags = GDTR.MIN | GDTR.MAX;
@@ -2008,7 +2008,7 @@ namespace System.Windows.Forms
             // Always set the value on the control, to ensure that it is up to date.
             if (IsHandleCreated)
             {
-                Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
+                Span<PInvoke.SYSTEMTIME> times = stackalloc PInvoke.SYSTEMTIME[2];
                 times[0] = lower;
                 times[1] = upper;
                 User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETSELRANGE, 0, ref times[0]);
@@ -2128,7 +2128,7 @@ namespace System.Windows.Forms
             {
                 if (_todayDateSet)
                 {
-                    Kernel32.SYSTEMTIME systemTime = _todaysDate;
+                    PInvoke.SYSTEMTIME systemTime = _todaysDate;
                     User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, 0, ref systemTime);
                 }
                 else

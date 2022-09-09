@@ -398,7 +398,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                var sb = new StringBuilder(Kernel32.MAX_PATH);
+                var sb = new StringBuilder(PInvoke.MAX_PATH);
                 var files = new string[count];
                 for (uint i = 0; i < count; i++)
                 {

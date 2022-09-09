@@ -7,7 +7,6 @@
 using System.Runtime.InteropServices;
 using Xunit;
 using static Interop;
-using static Interop.Kernel32;
 using static Interop.Ole32;
 using static Interop.Oleaut32;
 
@@ -861,7 +860,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         {
             using var variant = new VARIANT();
             var dt = new DateTime(2020, 05, 13, 13, 3, 12);
-            var ft = new FILETIME(dt);
+            var ft = new PInvoke.FILETIME(dt);
             HRESULT hr = InitPropVariantFromFileTime(&ft, &variant);
             Assert.Equal(HRESULT.S_OK, hr);
             Assert.Equal(VARENUM.FILETIME, variant.Type);
@@ -889,7 +888,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         {
             using var variant = new VARIANT();
             var dt = new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToLocalTime();
-            var ft = new FILETIME(dt);
+            var ft = new PInvoke.FILETIME(dt);
             HRESULT hr = InitVariantFromFileTime(&ft, &variant);
             Assert.Equal(HRESULT.S_OK, hr);
             Assert.Equal(VARENUM.DATE, variant.Type);
@@ -2056,12 +2055,12 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> VectorFILETIME_TestData()
         {
-            yield return new object[] { Array.Empty<FILETIME>(), Array.Empty<DateTime>() };
+            yield return new object[] { Array.Empty<PInvoke.FILETIME>(), Array.Empty<DateTime>() };
 
             var d1 = new DateTime(2020, 05, 13, 13, 3, 12);
             var d2 = new DateTime(2020, 05, 13, 13, 3, 11);
             var d3 = new DateTime(2020, 3, 13, 13, 3, 12);
-            yield return new object[] { new FILETIME[] { new FILETIME(d1), new FILETIME(d2), new FILETIME(d3) }, new DateTime[] { d1, d2, d3 } };
+            yield return new object[] { new PInvoke.FILETIME[] { new PInvoke.FILETIME(d1), new PInvoke.FILETIME(d2), new PInvoke.FILETIME(d3) }, new DateTime[] { d1, d2, d3 } };
         }
 
         [StaTheory]
@@ -2069,8 +2068,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_VECTORFILETIME_ReturnsExpected(object result, DateTime[] expected)
         {
             using var variant = new VARIANT();
-            FILETIME[] fileTimeResult = (FILETIME[])result;
-            fixed (FILETIME* pResult = fileTimeResult)
+            PInvoke.FILETIME[] fileTimeResult = (PInvoke.FILETIME[])result;
+            fixed (PInvoke.FILETIME* pResult = fileTimeResult)
             {
                 HRESULT hr = InitPropVariantFromFileTimeVector(pResult, (uint)fileTimeResult.Length, &variant);
                 Assert.Equal(HRESULT.S_OK, hr);
@@ -6287,10 +6286,10 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         private unsafe static extern HRESULT InitPropVariantFromCLSID(Guid* clsid, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromFileTime(FILETIME* pftIn, VARIANT* ppropvar);
+        private unsafe static extern HRESULT InitPropVariantFromFileTime(PInvoke.FILETIME* pftIn, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitVariantFromFileTime(FILETIME* pftIn, VARIANT* ppropvar);
+        private unsafe static extern HRESULT InitVariantFromFileTime(PInvoke.FILETIME* pftIn, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
         private unsafe static extern HRESULT InitPropVariantFromBuffer(void* pv, uint cb, VARIANT* ppropvar);

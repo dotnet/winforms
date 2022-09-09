@@ -129,18 +129,11 @@ namespace System.Windows.Forms.Tests
                     tymed = dragDropFormat.Medium.tymed,
                     unionmember = dragDropFormat.Medium.tymed switch
                     {
-                        TYMED.TYMED_HGLOBAL
-                        or TYMED.TYMED_FILE
-                        or TYMED.TYMED_ENHMF
-                        or TYMED.TYMED_GDI
-                        or TYMED.TYMED_MFPICT => Ole32.OleDuplicateData(
-                                dragDropFormat.Medium.unionmember,
-                                formatEtc.cfFormat,
-                                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT),
-
-                        TYMED.TYMED_ISTORAGE
-                        or TYMED.TYMED_ISTREAM
-                        or TYMED.TYMED_NULL => ComPtrType(dragDropFormat.Medium.unionmember),
+                        TYMED.TYMED_HGLOBAL or TYMED.TYMED_FILE or TYMED.TYMED_ENHMF or TYMED.TYMED_GDI or TYMED.TYMED_MFPICT
+                        => Ole32.OleDuplicateData(
+                            dragDropFormat.Medium.unionmember,
+                            formatEtc.cfFormat,
+                            PInvoke.GMEM.MOVEABLE | PInvoke.GMEM.DDESHARE | PInvoke.GMEM.ZEROINIT),
                         _ => dragDropFormat.Medium.unionmember,
                     }
                 };
@@ -171,14 +164,6 @@ namespace System.Windows.Forms.Tests
             finally
             {
                 dragDropFormat?.Dispose();
-            }
-
-            static IntPtr ComPtrType(IntPtr ptr)
-            {
-                if (ptr != IntPtr.Zero)
-                    Marshal.AddRef(ptr);
-
-                return ptr;
             }
         }
 
