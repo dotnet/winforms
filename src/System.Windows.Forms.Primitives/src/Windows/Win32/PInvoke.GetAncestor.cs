@@ -12,7 +12,7 @@ namespace Windows.Win32
         public static HWND GetAncestor<T>(in T hwnd, GET_ANCESTOR_FLAGS flags) where T : IHandle<HWND>
         {
             HWND result = GetAncestor(hwnd.Handle, flags);
-            GC.KeepAlive(hwnd);
+            GC.KeepAlive(hwnd.Wrapper);
             return result;
         }
     }

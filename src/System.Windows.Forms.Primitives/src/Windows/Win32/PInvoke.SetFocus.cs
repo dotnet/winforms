@@ -11,7 +11,7 @@ namespace Windows.Win32
         public static HWND SetFocus<T>(in T hWnd) where T : IHandle<HWND>
         {
             HWND result = SetFocus(hWnd.Handle);
-            GC.KeepAlive(hWnd);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }
