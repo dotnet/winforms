@@ -111,8 +111,8 @@ namespace System.Windows.Forms
                     CreateParams cparams = new CreateParams
                     {
                         Caption = string.Empty,
-                        Style = (int)(User32.WS.VISIBLE | User32.WS.CHILD),
-                        ClassStyle = (int)User32.CS.DBLCLKS,
+                        Style = (int)(WINDOW_STYLE.WS_VISIBLE | WINDOW_STYLE.WS_CHILD),
+                        ClassStyle = (int)WNDCLASS_STYLES.CS_DBLCLKS,
                         X = 0,
                         Y = 0,
                         Width = 0,
@@ -455,10 +455,10 @@ namespace System.Windows.Forms
                         WmGetObject(ref m);
                         break;
                     case User32.WM.NOTIFY:
-                        User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
-                        if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
+                        NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+                        if ((int)nmhdr->code == (int)ComCtl32.TTN.SHOW || (int)nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
-                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);
+                            OnToolTipVisibilityChanging((nint)nmhdr->idFrom, (int)nmhdr->code == (int)ComCtl32.TTN.SHOW);
                         }
 
                         break;

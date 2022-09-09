@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public struct NMLVKEYDOWN
         {
-            public User32.NMHDR hdr;
+            public NMHDR hdr;
             public short wVKey;
             public uint flags;
         }

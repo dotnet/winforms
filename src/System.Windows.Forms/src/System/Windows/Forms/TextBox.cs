@@ -287,7 +287,7 @@ namespace System.Windows.Forms
                 HorizontalAlignment align = RtlTranslateHorizontal(_textAlign);
 
                 // WS_EX_RIGHT overrides the ES_XXXX alignment styles
-                cp.ExStyle &= ~(int)WS_EX.RIGHT;
+                cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_RIGHT;
 
                 switch (align)
                 {
@@ -309,12 +309,12 @@ namespace System.Windows.Forms
                         && _textAlign == HorizontalAlignment.Left
                         && !WordWrap)
                     {
-                        cp.Style |= (int)WS.HSCROLL;
+                        cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
                     }
 
                     if ((_scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
                     {
-                        cp.Style |= (int)WS.VSCROLL;
+                        cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL;
                     }
                 }
 

@@ -23,11 +23,11 @@ namespace System.Windows.Forms
         /// </summary>
         private const int OwnerChildEditLinesCount = 1;
 
-        private readonly IHandle _owningChildEdit;
+        private readonly IHandle<HWND> _owningChildEdit;
         private readonly AccessibleObject _owningChildEditAccessibilityObject;
         private readonly ListView _owningListView;
 
-        public ListViewLabelEditUiaTextProvider(ListView owner, IHandle childEdit, AccessibleObject childEditAccessibilityObject)
+        public ListViewLabelEditUiaTextProvider(ListView owner, IHandle<HWND> childEdit, AccessibleObject childEditAccessibilityObject)
         {
             _owningListView = owner.OrThrowIfNull();
             _owningChildEdit = childEdit;
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
 
         public override bool IsMultiline => false;
 
-        public override bool IsReadingRTL => WindowExStyle.HasFlag(User32.WS_EX.RTLREADING);
+        public override bool IsReadingRTL => WindowExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
         public override bool IsReadOnly => false;
 
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                User32.ES extendedStyle = (User32.ES)User32.GetWindowLong(_owningChildEdit, User32.GWL.STYLE);
+                User32.ES extendedStyle = (User32.ES)User32.GetWindowLong(_owningChildEdit.Handle, User32.GWL.STYLE);
                 return extendedStyle.HasFlag(User32.ES.AUTOHSCROLL);
             }
         }
@@ -65,13 +65,13 @@ namespace System.Windows.Forms
 
         public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
 
-        public override string Text => User32.GetWindowText(_owningChildEdit);
+        public override string Text => User32.GetWindowText(_owningChildEdit.Handle);
 
         public override int TextLength => (int)User32.SendMessageW(_owningChildEdit, User32.WM.GETTEXTLENGTH);
 
-        public override User32.WS_EX WindowExStyle => GetWindowExStyle(_owningChildEdit);
+        public override WINDOW_EX_STYLE WindowExStyle => GetWindowExStyle(_owningChildEdit);
 
-        public override User32.WS WindowStyle => GetWindowStyle(_owningChildEdit);
+        public override WINDOW_STYLE WindowStyle => GetWindowStyle(_owningChildEdit);
 
         public override UiaCore.ITextRangeProvider? GetCaretRange(out BOOL isActive)
         {
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
+            User32.SendMessageW((IHandle)_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
 
             return new UiaTextRange(_owningChildEditAccessibilityObject, this, start, start);
         }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
+            User32.SendMessageW((IHandle)_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
 
             return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end) };
         }
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
         {
             // Send an EM_GETRECT message to find out the bounding rectangle.
             RECT rectangle = new RECT();
-            User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.GETRECT, 0, ref rectangle);
+            User32.SendMessageW(_owningChildEdit.Handle, (User32.WM)User32.EM.GETRECT, 0, ref rectangle);
 
             return rectangle;
         }

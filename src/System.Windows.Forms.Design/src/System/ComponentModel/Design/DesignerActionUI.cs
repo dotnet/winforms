@@ -1086,7 +1086,7 @@ namespace System.ComponentModel.Design
         private bool IsWindowEnabled(IntPtr handle)
         {
             int style = (int)User32.GetWindowLong(new HandleRef(this, handle), User32.GWL.STYLE);
-            return (style & (int)User32.WS.DISABLED) == 0;
+            return (style & (int)WINDOW_STYLE.WS_DISABLED) == 0;
         }
 
         private void WmActivate(ref Message m)

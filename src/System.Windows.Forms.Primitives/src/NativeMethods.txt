@@ -11,6 +11,7 @@ CloseEnhMetaFile
 CloseHandle
 CombineRgn
 CP_ACP
+CW_USEDEFAULT
 CreateActCtx
 CreateBitmap
 CreateBrushIndirect
@@ -20,7 +21,9 @@ CreateDIBSection
 CreateHalftonePalette
 CreatePen
 CreateRectRgn
+CreateWindowEx
 DeactivateActCtx
+DestroyWindow
 DuplicateHandle
 EndPaint
 EVENTMSG
@@ -68,11 +71,20 @@ LOCALE_IMEASURE
 LOCALE_NAME_SYSTEM_DEFAULT
 HC_*
 HFONT
+IDC_*
+IDI_*
 IsChild
 IsWindow
 IsWindowVisible
+LoadCursor
+LoadIcon
+LoadLibraryEx
+LOCALE_IMEASURE
+LOCALE_NAME_SYSTEM_DEFAULT
 MapWindowPoints
 MOUSEHOOKSTRUCT
+MultiByteToWideChar
+NMHDR
 PeekMessage
 PostMessage
 RegisterClass
@@ -82,5 +94,5 @@ SetParent
 SetSuspendState
 SetWindowLong
 SetWindowsHookEx
-MultiByteToWideChar
+ShowCursor
 WideCharToMultiByte

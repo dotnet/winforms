@@ -313,10 +313,10 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     // We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
 
                     // Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -1932,7 +1932,7 @@ namespace System.Windows.Forms
             {
                 // Update display dates states.
                 // For more info see docs: https://docs.microsoft.com/windows/win32/controls/mcm-setdaystate
-                User32.SendMessageW(Handle, (User32.WM)ComCtl32.MCM.SETDAYSTATE, (nint)(void*)monthsCount, (nint)arr);
+                User32.SendMessageW(HWND, (User32.WM)ComCtl32.MCM.SETDAYSTATE, (nint)(void*)monthsCount, (nint)arr);
             }
         }
 
@@ -2293,7 +2293,7 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
+                NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
                 switch ((MCN)nmhdr->code)
                 {

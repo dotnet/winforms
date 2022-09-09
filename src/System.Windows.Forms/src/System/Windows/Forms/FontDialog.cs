@@ -352,7 +352,7 @@ namespace System.Windows.Forms
                     if (PARAM.ToInt(wparam) == 0x402)
                     {
                         var logFont = new User32.LOGFONTW();
-                        User32.SendMessageW(hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, 0, ref logFont);
+                        User32.SendMessageW((HWND)hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, 0, ref logFont);
                         UpdateFont(ref logFont);
                         int index = PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL));
                         if (index != User32.CB_ERR)

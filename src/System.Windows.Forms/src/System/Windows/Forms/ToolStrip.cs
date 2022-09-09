@@ -745,7 +745,7 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = new CreateParams
                     {
-                        ExStyle = (int)User32.WS_EX.TOOLWINDOW
+                        ExStyle = (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW
                     };
                     _dropDownOwnerWindow.CreateHandle(cp);
                 }

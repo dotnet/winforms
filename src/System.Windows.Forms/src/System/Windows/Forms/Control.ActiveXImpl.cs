@@ -887,7 +887,7 @@ namespace System.Windows.Forms
                     // If it doesn't, that means that the host
                     // won't reflect messages back to us.
                     HWNDParent = hwndParent;
-                    if (PInvoke.SetParent(_control, hwndParent) == IntPtr.Zero)
+                    if (PInvoke.SetParent(_control, hwndParent).IsNull)
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                     }

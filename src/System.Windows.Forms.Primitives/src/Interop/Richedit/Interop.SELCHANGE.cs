@@ -11,7 +11,7 @@ internal partial class Interop
         [StructLayout(LayoutKind.Sequential, Pack = RichEditPack)]
         public struct SELCHANGE
         {
-            public User32.NMHDR nmhdr;
+            public NMHDR nmhdr;
             public CHARRANGE chrg;
             public SEL seltyp;
         }

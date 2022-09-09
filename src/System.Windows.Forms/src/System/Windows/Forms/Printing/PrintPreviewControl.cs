@@ -142,8 +142,8 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= (int)User32.WS.HSCROLL;
-                cp.Style |= (int)User32.WS.VSCROLL;
+                cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
+                cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL;
                 return cp;
             }
         }

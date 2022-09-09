@@ -341,9 +341,9 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
+                    cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -2103,8 +2103,8 @@ namespace System.Windows.Forms
 
                 case User32.WM.NOTIFY:
                 case User32.WM.REFLECT_NOTIFY:
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
-                    switch (nmhdr->code)
+                    NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+                    switch ((int)nmhdr->code)
                     {
                         // new switch added to prevent the TabControl from changing to next TabPage ...
                         //in case of validation cancelled...

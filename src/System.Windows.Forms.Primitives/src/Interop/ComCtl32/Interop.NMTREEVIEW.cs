@@ -10,7 +10,7 @@ internal static partial class Interop
     {
         public struct NMTREEVIEW
         {
-            public User32.NMHDR nmhdr;
+            public NMHDR nmhdr;
             public TVC action;
             public TVITEMW itemOld;
             public TVITEMW itemNew;

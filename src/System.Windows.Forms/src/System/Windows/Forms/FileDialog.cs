@@ -534,7 +534,7 @@ namespace System.Windows.Forms
                 {
                     Comdlg32.OFNOTIFYW* notify = (Comdlg32.OFNOTIFYW*)lparam;
 
-                    switch (notify->hdr.code)
+                    switch ((int)notify->hdr.code)
                     {
                         case -601: /* CDN_INITDONE */
                             MoveToScreenCenter(_dialogHWnd);

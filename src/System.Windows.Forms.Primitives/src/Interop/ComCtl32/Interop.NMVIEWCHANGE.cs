@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public struct NMVIEWCHANGE
         {
-            public User32.NMHDR nmhdr;
+            public NMHDR nmhdr;
             public MCMV uOldView;
             public MCMV uNewView;
         }

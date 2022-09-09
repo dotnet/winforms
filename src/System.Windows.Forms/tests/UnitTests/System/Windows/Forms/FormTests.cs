@@ -204,8 +204,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(hLargeIcon != IntPtr.Zero);
 
             // normal form doesn't have WS_EX.DLGMODALFRAME set, and show icon
-            User32.WS_EX extendedStyle = (User32.WS_EX)User32.GetWindowLong(form, User32.GWL.EXSTYLE);
-            Assert.False(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
+            WINDOW_EX_STYLE extendedStyle = (WINDOW_EX_STYLE)User32.GetWindowLong(form, User32.GWL.EXSTYLE);
+            Assert.False(extendedStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME));
         }
 
         [WinFormsFact]
@@ -1055,14 +1055,14 @@ namespace System.Windows.Forms.Tests
             using var form = new Form();
             Assert.True(form.Handle != IntPtr.Zero);
 
-            User32.WS_EX extendedStyle = unchecked((User32.WS_EX)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
-            Assert.False(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
+            WINDOW_EX_STYLE extendedStyle = unchecked((WINDOW_EX_STYLE)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
+            Assert.False(extendedStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME));
 
             form.ShowIcon = false;
 
             // hiding icon sets WS_EX.DLGMODALFRAME
-            extendedStyle = unchecked((User32.WS_EX)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
-            Assert.True(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
+            extendedStyle = unchecked((WINDOW_EX_STYLE)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
+            Assert.True(extendedStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME));
         }
 
         public static IEnumerable<object[]> Parent_SetMdiChild_TestData()

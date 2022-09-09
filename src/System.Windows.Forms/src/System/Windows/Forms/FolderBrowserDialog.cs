@@ -427,7 +427,7 @@ namespace System.Windows.Forms
                     throw new ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
                 }
 
-                var callback = new BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
+                BrowseCallbackProc callback = FolderBrowserDialog_BrowseCallbackProc;
                 char[] displayName = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
                 try
                 {
@@ -471,7 +471,7 @@ namespace System.Windows.Forms
         ///  Callback function used to enable/disable the OK button,
         ///  and select the initial folder.
         /// </summary>
-        private int FolderBrowserDialog_BrowseCallbackProc(IntPtr hwnd, int msg, IntPtr lParam, IntPtr lpData)
+        private int FolderBrowserDialog_BrowseCallbackProc(HWND hwnd, int msg, IntPtr lParam, IntPtr lpData)
         {
             switch ((BFFM)msg)
             {
