@@ -1329,7 +1329,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         StringBuilder strMessage = new StringBuilder(256);
 
                         uint result = Kernel32.FormatMessageW(
-                            Kernel32.FormatMessageOptions.FROM_SYSTEM | Kernel32.FormatMessageOptions.IGNORE_INSERTS,
+                            PInvoke.FormatMessageOptions.FROM_SYSTEM | PInvoke.FormatMessageOptions.IGNORE_INSERTS,
                             IntPtr.Zero,
                             (uint)hr,
                             PInvoke.GetThreadLocale(),

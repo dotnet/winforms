@@ -4,14 +4,15 @@
 
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32;
 
 internal partial class Interop
 {
-    internal partial class Kernel32
+    internal static partial class Kernel32
     {
         [DllImport(Libraries.Kernel32, CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
         public static extern uint FormatMessageW(
-            FormatMessageOptions dwFlags,
+            PInvoke.FormatMessageOptions dwFlags,
             IntPtr lpSource,
             uint dwMessageId,
             uint dwLanguageId,

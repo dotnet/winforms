@@ -4,6 +4,7 @@
 
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32;
 
 internal static partial class Interop
 {
@@ -30,7 +31,7 @@ internal static partial class Interop
                 // passing null for buffer will return actual number of characters in the file name.
                 // So, one extra call would be suffice to avoid while loop in case of long path.
                 uint capacity = DragQueryFileWInternal(hDrop, iFile, null, 0);
-                if (capacity < Kernel32.MAX_UNICODESTRING_LEN)
+                if (capacity < PInvoke.MAX_UNICODESTRING_LEN)
                 {
                     lpszFile.EnsureCapacity((int)capacity);
                     resultValue = DragQueryFileWInternal(hDrop, iFile, lpszFile, (uint)capacity);

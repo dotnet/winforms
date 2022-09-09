@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32;
 
 internal partial class Interop
 {
@@ -21,7 +22,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetCategoryName(
                 PROPCAT propcat,
-                Kernel32.LCID lcid,
+                PInvoke.LCID lcid,
                 out string pbstrName);
         }
     }

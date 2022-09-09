@@ -3390,7 +3390,7 @@ namespace System.Windows.Forms
                         ENDROPFILES* endropfiles = (ENDROPFILES*)m.LParamInternal;
 
                         // Only look at the first file.
-                        var path = new StringBuilder(Kernel32.MAX_PATH);
+                        var path = new StringBuilder(PInvoke.MAX_PATH);
                         if (Shell32.DragQueryFileW(endropfiles->hDrop, 0, path) != 0)
                         {
                             // Try to load the file as an RTF

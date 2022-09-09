@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using Xunit;
-using static Interop.Kernel32;
 
 namespace System.Windows.Forms.Tests.Interop.Kernel32
 {
@@ -13,14 +12,14 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
         [Fact]
         public unsafe void SYSTEMTIME_Sizeof_ReturnsExpected()
         {
-            Assert.Equal(16, Marshal.SizeOf<SYSTEMTIME>());
-            Assert.Equal(16, sizeof(SYSTEMTIME));
+            Assert.Equal(16, Marshal.SizeOf<PInvoke.SYSTEMTIME>());
+            Assert.Equal(16, sizeof(PInvoke.SYSTEMTIME));
         }
 
         [Fact]
         public void SYSTEMTIME_Ctor_Default()
         {
-            var st = new SYSTEMTIME();
+            var st = new PInvoke.SYSTEMTIME();
 
             Assert.Equal(0, st.wYear);
             Assert.Equal(0, st.wMonth);
@@ -35,7 +34,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
         [Fact]
         public void SYSTEMTIME_CastToDateTime_ReturnsExpected()
         {
-            var st = new SYSTEMTIME()
+            var st = new PInvoke.SYSTEMTIME()
             {
                 wYear = 2021,
                 wMonth = 5,
@@ -61,7 +60,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
         [Fact]
         public void SYSTEMTIME_CastToDateTime_ThrowsException_IfArgumentsAreIncorrect()
         {
-            var st = new SYSTEMTIME()
+            var st = new PInvoke.SYSTEMTIME()
             {
                 wYear = 9999,
                 wMonth = 99,
@@ -79,7 +78,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
         [Fact]
         public void SYSTEMTIME_CastToDateTime_ReturnsMinValue_IfValueIsDefault()
         {
-            var st = new SYSTEMTIME();
+            var st = new PInvoke.SYSTEMTIME();
             DateTime dt;
 
             using (new NoAssertContext())
