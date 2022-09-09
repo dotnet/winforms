@@ -449,7 +449,7 @@ namespace System.Windows.Forms
                         // parented to this parking window. Otherwise, reparenting of control will fail.
                         using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext))
                         {
-                            HINSTANCE modHandle = PInvoke.GetModuleHandle(null);
+                            HINSTANCE modHandle = PInvoke.GetModuleHandle((PCWSTR)null);
 
                             // Older versions of Windows AV rather than returning E_OUTOFMEMORY.
                             // Catch this and then we re-throw an out of memory error.

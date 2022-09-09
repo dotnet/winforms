@@ -165,7 +165,7 @@ namespace System.Windows.Forms
                 _windProc = new WNDPROC(Callback);
                 nint callback = Marshal.GetFunctionPointerForDelegate(_windProc);
                 windowClass.lpfnWndProc = (delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, LRESULT>)callback;
-                windowClass.hInstance = PInvoke.GetModuleHandle(null);
+                windowClass.hInstance = PInvoke.GetModuleHandle((PCWSTR)null);
 
                 fixed (char* c = _windowClassName)
                 {
