@@ -10,6 +10,7 @@ using System.Windows.Forms.Automation;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 using Moq.Protected;
+using Windows.Win32;
 using Xunit;
 using static Interop;
 using static Interop.Richedit;
@@ -10832,7 +10833,7 @@ namespace System.Windows.Forms.Tests
 
                     if (_nativeDllHandle == IntPtr.Zero)
                     {
-                        _nativeDllHandle = Kernel32.LoadLibraryFromSystemPathIfAvailable(NativeDll);
+                        _nativeDllHandle = PInvoke.LoadLibraryFromSystemPathIfAvailable(NativeDll);
 
                         int lastWin32Error = Marshal.GetLastWin32Error();
                         if ((ulong)_nativeDllHandle < (ulong)32)

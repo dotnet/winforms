@@ -1545,7 +1545,7 @@ namespace System.Windows.Forms
                 if (s_needToLoadComCtl)
                 {
                     if ((PInvoke.GetModuleHandle(Libraries.Comctl32) != 0)
-                     || (Kernel32.LoadComctl32(Application.StartupPath) != 0))
+                     || (PInvoke.LoadComctl32(Application.StartupPath) != 0))
                     {
                         s_needToLoadComCtl = false;
                     }
@@ -3962,7 +3962,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            nint threadHandle = ctx.GetHandle();
+            nint threadHandle = ((IHandle)ctx).Handle;
             bool processed = false;
             // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
             uint exitCode = 0;

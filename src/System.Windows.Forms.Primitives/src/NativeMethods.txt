@@ -5,6 +5,7 @@ AdjustWindowRectEx
 AdjustWindowRectExForDpi
 BitBlt
 CloseEnhMetaFile
+CloseHandle
 CombineRgn
 CP_ACP
 CreateActCtx
@@ -24,6 +25,7 @@ GetCurrentThreadId
 GetExitCodeThread
 GetKeyboardLayout
 GetKeyboardLayoutList
+GetLocaleInfoEx
 GetModuleHandleEx
 GetProcAddress
 GetShortPathName
@@ -37,6 +39,9 @@ GlobalLock
 GlobalReAlloc
 GlobalSize
 GlobalUnlock
+LoadLibraryEx
+LOCALE_IMEASURE
+LOCALE_NAME_SYSTEM_DEFAULT
 MultiByteToWideChar
 SetSuspendState
 WideCharToMultiByte
