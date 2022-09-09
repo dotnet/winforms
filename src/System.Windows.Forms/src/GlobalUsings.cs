@@ -8,4 +8,5 @@ global using Windows.Win32.Graphics.Gdi;
 global using Windows.Win32.System.Memory;
 global using Windows.Win32.UI.Controls;
 global using Windows.Win32.UI.Shell;
+global using Windows.Win32.UI.Shell.Common;
 global using Windows.Win32.UI.WindowsAndMessaging;

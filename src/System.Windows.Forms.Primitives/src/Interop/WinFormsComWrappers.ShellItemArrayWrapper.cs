@@ -58,7 +58,7 @@ internal partial class Interop
                 }
             }
 
-            HRESULT Shell32.IShellItemArray.GetAttributes(Shell32.SIATTRIBFLAGS dwAttribFlags, uint sfgaoMask, out uint psfgaoAttribs)
+            HRESULT Shell32.IShellItemArray.GetAttributes(SIATTRIBFLAGS dwAttribFlags, uint sfgaoMask, out uint psfgaoAttribs)
             {
                 fixed (uint* psfgaoAttribs_local = &psfgaoAttribs)
                 {

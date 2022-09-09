@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using Shell = Windows.Win32.UI.Shell;
 
 internal static partial class Interop
 {
@@ -17,7 +16,7 @@ internal static partial class Interop
         public interface IDragSourceHelper2
         {
             HRESULT InitializeFromBitmap(
-                in Shell.SHDRAGIMAGE pshdi,
+                in SHDRAGIMAGE pshdi,
                 IDataObject dataObject);
 
             HRESULT InitializeFromWindow(
