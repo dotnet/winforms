@@ -71,7 +71,7 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    ES extendedStyle = (ES)GetWindowLong((IHandle)_owningChildEdit, GWL.STYLE);
+                    ES extendedStyle = (ES)PInvoke.GetWindowLong(_owningChildEdit, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
                     return extendedStyle.HasFlag(ES.AUTOHSCROLL);
                 }
             }
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
 
             public override int TextLength
                 => _owningComboBox.IsHandleCreated
-                    ? (int)SendMessageW((IHandle)_owningChildEdit, WM.GETTEXTLENGTH)
+                    ? (int)PInvoke.SendMessage(_owningChildEdit, WM.GETTEXTLENGTH)
                     : -1;
 
             public override WINDOW_EX_STYLE WindowExStyle
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
 
                 // Returns info about the selected text range.
                 // If there is no selection, start and end parameters are the position of the caret.
-                SendMessageW((IHandle)_owningChildEdit, (WM)EM.GETSEL, ref start, ref end);
+                PInvoke.SendMessage(_owningChildEdit, (WM)EM.GETSEL, ref start, ref end);
 
                 return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, end) };
             }
@@ -354,12 +354,12 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                SendMessageW((IHandle)_owningChildEdit, (WM)EM.SETSEL, start, end);
+                PInvoke.SendMessage(_owningChildEdit, (WM)EM.SETSEL, (WPARAM)start, (LPARAM)end);
             }
 
             private int GetCharIndexFromPosition(Point pt)
             {
-                int index = (int)User32.SendMessageW((IHandle)_owningChildEdit, (WM)EM.CHARFROMPOS, 0, PARAM.FromPoint(pt));
+                int index = (int)PInvoke.SendMessage(_owningChildEdit, (WM)EM.CHARFROMPOS, (WPARAM)0, (LPARAM)pt);
                 index = PARAM.LOWORD(index);
 
                 if (index < 0)
@@ -369,9 +369,9 @@ namespace System.Windows.Forms
                 else
                 {
                     string t = Text;
+
                     // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
                     // is a newline.
-                    //
                     if (index >= t.Length)
                     {
                         index = Math.Max(t.Length - 1, 0);
@@ -385,7 +385,7 @@ namespace System.Windows.Forms
             {
                 // Send an EM_GETRECT message to find out the bounding rectangle.
                 RECT rectangle = new RECT();
-                SendMessageW((IHandle)_owningChildEdit, (WM)EM.GETRECT, 0, ref rectangle);
+                PInvoke.SendMessage(_owningChildEdit, (WM)EM.GETRECT, (WPARAM)0, ref rectangle);
 
                 return rectangle;
             }
@@ -397,7 +397,7 @@ namespace System.Windows.Forms
                     return Point.Empty;
                 }
 
-                int i = (int)SendMessageW((IHandle)_owningChildEdit, (WM)EM.POSFROMCHAR, index);
+                int i = (int)PInvoke.SendMessage(_owningChildEdit, (WM)EM.POSFROMCHAR, (WPARAM)index);
 
                 return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
             }

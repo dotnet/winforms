@@ -484,7 +484,7 @@ namespace System.Windows.Forms.Design
             // Since we need to pre-process each item before inserting it in the ListView, it is better to remove all items
             // from it first and then add the sorted ones back (no replace).  Stop redrawing while we change the list.
 
-            User32.SendMessageW(_listViewCannedMasks, User32.WM.SETREDRAW, (nint)(BOOL)false);
+            PInvoke.SendMessage(_listViewCannedMasks, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
 
             try
             {
@@ -518,7 +518,7 @@ namespace System.Windows.Forms.Design
             finally
             {
                 // Resume redraw.
-                User32.SendMessageW(_listViewCannedMasks, User32.WM.SETREDRAW, (nint)(BOOL)true);
+                PInvoke.SendMessage(_listViewCannedMasks, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                 _listViewCannedMasks.Invalidate();
             }
         }

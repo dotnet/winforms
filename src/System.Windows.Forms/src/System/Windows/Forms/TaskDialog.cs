@@ -567,21 +567,20 @@ namespace System.Windows.Forms
         // Messages that can be sent to the dialog while it is being shown.
 
         /// <summary>
-        ///   Closes the shown task dialog with
-        ///   <see cref="TaskDialogButton.Cancel"/> as resulting button.
+        ///   Closes the shown task dialog with <see cref="TaskDialogButton.Cancel"/> as resulting button.
         /// </summary>
         /// <remarks>
-        /// <para>
+        ///  <para>
         ///   To close the dialog with a different result, call the
         ///   <see cref="TaskDialogButton.PerformClick"/> method of the
         ///   <see cref="TaskDialogButton"/> that you want to set as a result.
-        /// </para>
-        /// <para>
+        ///  </para>
+        ///  <para>
         ///   This method can be called while the dialog is waiting for
         ///   navigation to complete, whereas <see cref="TaskDialogButton.PerformClick"/>
         ///   would throw in that case. When calling this method, the
         ///   <see cref="TaskDialogButton.Click"/> event won't be raised.
-        /// </para>
+        ///  </para>
         /// </remarks>
         public void Close()
         {
@@ -603,25 +602,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   While the dialog is being shown, switches the progress bar mode to either a
-        ///   marquee progress bar or to a regular progress bar.
-        ///   For a marquee progress bar, you can enable or disable the marquee using
-        ///   <see cref="SetProgressBarMarquee(bool, int)"/>.
+        ///  While the dialog is being shown, switches the progress bar mode to either a
+        ///  marquee progress bar or to a regular progress bar.
+        ///  For a marquee progress bar, you can enable or disable the marquee using
+        ///  <see cref="SetProgressBarMarquee(bool, int)"/>.
         /// </summary>
-        /// <param name="marqueeProgressBar"></param>
         internal void SwitchProgressBarMode(bool marqueeProgressBar) => SendTaskDialogMessage(
             ComCtl32.TDM.SET_MARQUEE_PROGRESS_BAR,
-            PARAM.FromBool(marqueeProgressBar),
-            IntPtr.Zero);
+            (WPARAM)(BOOL)marqueeProgressBar);
 
         /// <summary>
-        ///   While the dialog is being shown, enables or disables progress bar marquee when
-        ///   a marquee progress bar is displayed.
+        ///  While the dialog is being shown, enables or disables progress bar marquee when
+        ///  a marquee progress bar is displayed.
         /// </summary>
-        /// <param name="enableMarquee"></param>
         /// <param name="animationSpeed">
-        /// The time in milliseconds between marquee animation updates. If <c>0</c>, the
-        /// animation will be updated every 30 milliseconds.
+        ///  The time in milliseconds between marquee animation updates. If <c>0</c>, the
+        ///  animation will be updated every 30 milliseconds.
         /// </param>
         internal unsafe void SetProgressBarMarquee(bool enableMarquee, int animationSpeed = 0)
         {
@@ -632,19 +628,17 @@ namespace System.Windows.Forms
 
             SendTaskDialogMessage(
                 ComCtl32.TDM.SET_PROGRESS_BAR_MARQUEE,
-                PARAM.FromBool(enableMarquee),
-                (IntPtr)(void*)(uint)animationSpeed);
+                (WPARAM)(BOOL)enableMarquee,
+                (LPARAM)animationSpeed);
         }
 
         /// <summary>
-        ///   While the dialog is being shown, sets the progress bar range.
+        ///  While the dialog is being shown, sets the progress bar range.
         /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
         /// <remarks>
-        /// <para>
+        ///  <para>
         ///   The default range is 0 to 100.
-        /// </para>
+        ///  </para>
         /// </remarks>
         internal unsafe void SetProgressBarRange(int min, int max)
         {
@@ -660,8 +654,8 @@ namespace System.Windows.Forms
 
             SendTaskDialogMessage(
                 ComCtl32.TDM.SET_PROGRESS_BAR_RANGE,
-                IntPtr.Zero,
-                PARAM.FromLowHighUnsigned(min, max));
+                default,
+                LPARAM.MAKELPARAM(min, max));
         }
 
         /// <summary>
@@ -677,8 +671,7 @@ namespace System.Windows.Forms
 
             SendTaskDialogMessage(
                 ComCtl32.TDM.SET_PROGRESS_BAR_POS,
-                (IntPtr)pos,
-                IntPtr.Zero);
+                (WPARAM)pos);
         }
 
         /// <summary>
@@ -687,34 +680,30 @@ namespace System.Windows.Forms
         /// <param name="state"></param>
         internal void SetProgressBarState(ComCtl32.PBST state) => SendTaskDialogMessage(
             ComCtl32.TDM.SET_PROGRESS_BAR_STATE,
-            (IntPtr)state,
-            IntPtr.Zero);
+            (WPARAM)(int)state);
 
         /// <summary>
-        ///   While the dialog is being shown, sets the checkbox to the specified
-        ///   state.
+        ///  While the dialog is being shown, sets the checkbox to the specified state.
         /// </summary>
-        /// <param name="isChecked"></param>
-        /// <param name="focus"></param>
         internal void ClickCheckBox(bool isChecked, bool focus = false) => SendTaskDialogMessage(
             ComCtl32.TDM.CLICK_VERIFICATION,
-            PARAM.FromBool(isChecked),
-            PARAM.FromBool(focus));
+            (WPARAM)(BOOL)isChecked,
+            (LPARAM)(BOOL)focus);
 
         internal void SetButtonElevationRequiredState(int buttonID, bool requiresElevation) => SendTaskDialogMessage(
             ComCtl32.TDM.SET_BUTTON_ELEVATION_REQUIRED_STATE,
-            (IntPtr)buttonID,
-            PARAM.FromBool(requiresElevation));
+            (WPARAM)buttonID,
+            (LPARAM)(BOOL)requiresElevation);
 
         internal void SetButtonEnabled(int buttonID, bool enable) => SendTaskDialogMessage(
             ComCtl32.TDM.ENABLE_BUTTON,
-            (IntPtr)buttonID,
-            PARAM.FromBool(enable));
+            (WPARAM)buttonID,
+            (LPARAM)(BOOL)enable);
 
         internal void SetRadioButtonEnabled(int radioButtonID, bool enable) => SendTaskDialogMessage(
             ComCtl32.TDM.ENABLE_RADIO_BUTTON,
-            (IntPtr)radioButtonID,
-            PARAM.FromBool(enable));
+            (WPARAM)radioButtonID,
+            (LPARAM)(BOOL)enable);
 
         internal void ClickButton(int buttonID, bool checkWaitingForNavigation = true)
         {
@@ -725,8 +714,8 @@ namespace System.Windows.Forms
             {
                 SendTaskDialogMessage(
                     ComCtl32.TDM.CLICK_BUTTON,
-                    (IntPtr)buttonID,
-                    IntPtr.Zero,
+                    (WPARAM)buttonID,
+                    default,
                     checkWaitingForNavigation);
             }
             finally
@@ -740,8 +729,7 @@ namespace System.Windows.Forms
 
         internal void ClickRadioButton(int radioButtonID) => SendTaskDialogMessage(
             ComCtl32.TDM.CLICK_RADIO_BUTTON,
-            (IntPtr)radioButtonID,
-            IntPtr.Zero);
+            (WPARAM)radioButtonID);
 
         internal unsafe void UpdateTextElement(ComCtl32.TDE element, string? text)
         {
@@ -754,9 +742,8 @@ namespace System.Windows.Forms
             fixed (char* textPtr = text)
             {
                 // Note: SetElementText will resize the dialog while UpdateElementText
-                // will not (which would lead to clipped controls), so we use the
-                // former.
-                SendTaskDialogMessage(ComCtl32.TDM.SET_ELEMENT_TEXT, (IntPtr)element, (IntPtr)textPtr);
+                // will not (which would lead to clipped controls), so we use the former.
+                SendTaskDialogMessage(ComCtl32.TDM.SET_ELEMENT_TEXT, (WPARAM)(int)element, (LPARAM)textPtr);
             }
         }
 
@@ -771,7 +758,7 @@ namespace System.Windows.Forms
             //
             // To fix this, we call UpdateWindowSize() after updating the icon, to
             // force the task dialog to update its size.
-            SendTaskDialogMessage(ComCtl32.TDM.UPDATE_ICON, (IntPtr)element, icon);
+            SendTaskDialogMessage(ComCtl32.TDM.UPDATE_ICON, (WPARAM)(int)element, (LPARAM)icon);
             UpdateWindowSize();
         }
 
@@ -1200,8 +1187,8 @@ namespace System.Windows.Forms
                     // noticeable in the SendMessage() return value.
                     SendTaskDialogMessage(
                         ComCtl32.TDM.NAVIGATE_PAGE,
-                        IntPtr.Zero,
-                        (IntPtr)ptrTaskDialogConfig,
+                        default,
+                        (LPARAM)ptrTaskDialogConfig,
                         checkWaitingForNavigation: false);
                 }
                 catch
@@ -1552,13 +1539,13 @@ namespace System.Windows.Forms
 
         private void SendTaskDialogMessage(
             ComCtl32.TDM message,
-            IntPtr wParam,
-            IntPtr lParam,
+            WPARAM wParam,
+            LPARAM lParam = default,
             bool checkWaitingForNavigation = true)
         {
             DenyIfDialogNotUpdatable(checkWaitingForNavigation);
 
-            User32.SendMessageW(
+            PInvoke.SendMessage(
                 _handle,
                 (User32.WM)message,
                 wParam,

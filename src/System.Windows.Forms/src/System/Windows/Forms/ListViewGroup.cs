@@ -408,7 +408,12 @@ namespace System.Windows.Forms
                 return ListViewGroupCollapsedState.Default;
             }
 
-            LVGS state = (LVGS)User32.SendMessageW(ListView, (User32.WM)LVM.GETGROUPSTATE, ID, (nint)(LVGS.COLLAPSIBLE | LVGS.COLLAPSED));
+            LVGS state = (LVGS)(uint)PInvoke.SendMessage(
+                ListView,
+                (User32.WM)LVM.GETGROUPSTATE,
+                (WPARAM)ID,
+                (LPARAM)(uint)(LVGS.COLLAPSIBLE | LVGS.COLLAPSED));
+
             if (!state.HasFlag(LVGS.COLLAPSIBLE))
             {
                 return ListViewGroupCollapsedState.Default;

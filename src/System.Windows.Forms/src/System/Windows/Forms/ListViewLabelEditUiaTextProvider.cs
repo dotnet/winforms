@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                User32.ES extendedStyle = (User32.ES)User32.GetWindowLong(_owningChildEdit.Handle, User32.GWL.STYLE);
+                User32.ES extendedStyle = (User32.ES)PInvoke.GetWindowLong(_owningChildEdit.Handle, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
                 return extendedStyle.HasFlag(User32.ES.AUTOHSCROLL);
             }
         }
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
 
         public override string Text => User32.GetWindowText(_owningChildEdit.Handle);
 
-        public override int TextLength => (int)User32.SendMessageW(_owningChildEdit, User32.WM.GETTEXTLENGTH);
+        public override int TextLength => (int)PInvoke.SendMessage(_owningChildEdit, User32.WM.GETTEXTLENGTH);
 
         public override WINDOW_EX_STYLE WindowExStyle => GetWindowExStyle(_owningChildEdit);
 
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            User32.SendMessageW((IHandle)_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
+            PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
 
             return new UiaTextRange(_owningChildEditAccessibilityObject, this, start, start);
         }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            User32.SendMessageW((IHandle)_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
+            PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
 
             return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end) };
         }
@@ -281,12 +281,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.SETSEL, start, end);
+            PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.SETSEL, (WPARAM)start, (LPARAM)end);
         }
 
         private int GetCharIndexFromPosition(Point pt)
         {
-            int index = PARAM.LOWORD(User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.CHARFROMPOS, 0, PARAM.FromPoint(pt)));
+            int index = PARAM.LOWORD(PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.CHARFROMPOS, 0, PARAM.FromPoint(pt)));
 
             if (index < 0)
             {
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
         {
             // Send an EM_GETRECT message to find out the bounding rectangle.
             RECT rectangle = new RECT();
-            User32.SendMessageW(_owningChildEdit.Handle, (User32.WM)User32.EM.GETRECT, 0, ref rectangle);
+            PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.GETRECT, 0, ref rectangle);
 
             return rectangle;
         }
@@ -322,7 +322,7 @@ namespace System.Windows.Forms
                 return Point.Empty;
             }
 
-            int i = (int)User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.POSFROMCHAR, index);
+            int i = (int)PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.POSFROMCHAR, (WPARAM)index);
 
             return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }

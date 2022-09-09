@@ -424,13 +424,13 @@ namespace System.Windows.Forms
                     return HRESULT.S_OK;
                 }
 
-                IntPtr hwnd = IntPtr.Zero;
+                HWND hwnd = HWND.Null;
                 if (_host.GetInPlaceObject().GetWindow(&hwnd).Succeeded())
                 {
                     if (_host.GetHandleNoCreate() != hwnd)
                     {
                         _host.DetachWindow();
-                        if (hwnd != IntPtr.Zero)
+                        if (!hwnd.IsNull)
                         {
                             _host.AttachWindow(hwnd);
                         }

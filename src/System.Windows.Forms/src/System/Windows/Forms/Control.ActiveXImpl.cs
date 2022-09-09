@@ -352,7 +352,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                User32.SendMessageW(target, (User32.WM)lpmsg->message, (nint)(nuint)lpmsg->wParam, lpmsg->lParam);
+                                PInvoke.SendMessage(target, (User32.WM)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                             }
                         }
 
@@ -450,10 +450,10 @@ namespace System.Windows.Forms
                 // Now do the actual drawing.  We must ask all of our children to draw as well.
                 try
                 {
-                    IntPtr flags = (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
+                    nint flags = (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
                     if (hdcType != Gdi32.OBJ.ENHMETADC)
                     {
-                        User32.SendMessageW(_control, User32.WM.PRINT, hdcDraw, flags);
+                        PInvoke.SendMessage(_control, User32.WM.PRINT, (WPARAM)hdc, (LPARAM)flags);
                     }
                     else
                     {
@@ -772,7 +772,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleWindow::GetWindow
             /// </summary>
-            internal unsafe HRESULT GetWindow(IntPtr* phwnd)
+            internal unsafe HRESULT GetWindow(HWND* phwnd)
             {
                 if (phwnd is null)
                 {
@@ -781,11 +781,11 @@ namespace System.Windows.Forms
 
                 if (!_activeXState[s_inPlaceActive])
                 {
-                    *phwnd = IntPtr.Zero;
+                    *phwnd = HWND.Null;
                     return HRESULT.E_FAIL;
                 }
 
-                *phwnd = _control.Handle;
+                *phwnd = (HWND)_control.Handle;
                 return HRESULT.S_OK;
             }
 

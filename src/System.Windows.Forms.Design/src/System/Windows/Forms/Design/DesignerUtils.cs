@@ -472,11 +472,11 @@ namespace System.Windows.Forms.Design
             using (Graphics g = Graphics.FromImage(image))
             {
                 IntPtr hDc = g.GetHdc();
-                User32.SendMessageW(
+                PInvoke.SendMessage(
                     control,
                     User32.WM.PRINT,
-                    hDc,
-                    (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                    (WPARAM)hDc,
+                    (LPARAM)(uint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
                 g.ReleaseHdc(hDc);
             }
 
@@ -890,7 +890,7 @@ namespace System.Windows.Forms.Design
             => DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(unit) : unit;
 
         private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(HWND handle)
-            => (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
+            => (ComCtl32.TVS_EX)(uint)PInvoke.SendMessage(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
 
         /// <summary>
         ///  Modify a WinForms TreeView control to use the new Explorer style theme
@@ -906,7 +906,7 @@ namespace System.Windows.Forms.Design
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            User32.SendMessageW(treeView, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
+            PInvoke.SendMessage(treeView, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
         }
 
         /// <summary>
@@ -919,11 +919,11 @@ namespace System.Windows.Forms.Design
 
             HWND hwnd = (HWND)listView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
-            User32.SendMessageW(
+            PInvoke.SendMessage(
                 listView,
                 (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE,
-                (nint)ComCtl32.LVS_EX.DOUBLEBUFFER,
-                (nint)ComCtl32.LVS_EX.DOUBLEBUFFER);
+                (WPARAM)(uint)ComCtl32.LVS_EX.DOUBLEBUFFER,
+                (LPARAM)(uint)ComCtl32.LVS_EX.DOUBLEBUFFER);
         }
     }
 }

@@ -8,6 +8,7 @@ BeginPaint
 BitBlt
 BlockInput
 CallNextHookEx
+CallWindowProc
 CloseEnhMetaFile
 CloseHandle
 CombineRgn
@@ -24,6 +25,9 @@ CreatePen
 CreateRectRgn
 CreateWindowEx
 DeactivateActCtx
+DefFrameProc
+DefMDIChildProc
+DefWindowProc
 DeleteDC
 DeleteEnhMetaFile
 DeleteObject
@@ -40,6 +44,7 @@ GetAncestor
 GetAsyncKeyState
 GetCapture
 GetClassInfo
+GetClassName
 GetClientRect
 GetCurrentActCtx
 GetCurrentProcess
@@ -77,8 +82,10 @@ LOCALE_IMEASURE
 LOCALE_NAME_SYSTEM_DEFAULT
 HC_*
 HFONT
+ICON_*
 IDC_*
 IDI_*
+InvalidateRect
 IsChild
 IsWindow
 IsWindowVisible
@@ -94,11 +101,12 @@ NMHDR
 PeekMessage
 PostMessage
 RegisterClass
+SendMessage
 SetActiveWindow
 SetFocus
 SetParent
 SetSuspendState
-SetWindowLong
 SetWindowsHookEx
 ShowCursor
 WideCharToMultiByte
+WINDOW_LONG_PTR_INDEX

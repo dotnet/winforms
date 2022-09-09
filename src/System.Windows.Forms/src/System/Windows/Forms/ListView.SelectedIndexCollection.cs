@@ -33,7 +33,7 @@ namespace System.Windows.Forms
                 {
                     if (_owner.IsHandleCreated)
                     {
-                        return (int)User32.SendMessageW(_owner, (User32.WM)LVM.GETSELECTEDCOUNT);
+                        return (int)PInvoke.SendMessage(_owner, (User32.WM)LVM.GETSELECTEDCOUNT);
                     }
                     else
                     {
@@ -59,7 +59,11 @@ namespace System.Windows.Forms
                         int displayIndex = -1;
                         for (int i = 0; i < count; i++)
                         {
-                            int fidx = (int)User32.SendMessageW(_owner, (User32.WM)LVM.GETNEXTITEM, displayIndex, (nint)LVNI.SELECTED);
+                            int fidx = (int)PInvoke.SendMessage(
+                                _owner,
+                                (User32.WM)LVM.GETNEXTITEM,
+                                (WPARAM)displayIndex,
+                                (LPARAM)(uint)LVNI.SELECTED);
                             if (fidx > -1)
                             {
                                 indices[i] = fidx;
@@ -105,7 +109,11 @@ namespace System.Windows.Forms
                         int fidx = -1;
                         for (int count = 0; count <= index; count++)
                         {
-                            fidx = (int)User32.SendMessageW(_owner, (User32.WM)LVM.GETNEXTITEM, fidx, (nint)LVNI.SELECTED);
+                            fidx = (int)PInvoke.SendMessage(
+                                _owner,
+                                (User32.WM)LVM.GETNEXTITEM,
+                                (WPARAM)fidx,
+                                (LPARAM)(uint)LVNI.SELECTED);
                             Debug.Assert(fidx != -1, "Invalid index returned from LVM_GETNEXTITEM");
                         }
 

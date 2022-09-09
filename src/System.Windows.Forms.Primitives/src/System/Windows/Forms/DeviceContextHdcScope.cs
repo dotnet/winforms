@@ -212,6 +212,7 @@ namespace System.Windows.Forms
 
         public static implicit operator HDC(in DeviceContextHdcScope scope) => scope.HDC;
         public static implicit operator nint(in DeviceContextHdcScope scope) => scope.HDC;
+        public static explicit operator WPARAM(in DeviceContextHdcScope scope) => (WPARAM)scope.HDC;
 
         [Conditional("DEBUG")]
         private void ValidateHDC()

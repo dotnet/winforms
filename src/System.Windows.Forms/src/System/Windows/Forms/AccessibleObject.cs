@@ -1609,7 +1609,7 @@ namespace System.Windows.Forms
         ///  accessible object, which will be able to return an hwnd back to the OS. So we are
         ///  effectively 'preempting' what WindowFromAccessibleObject() would do.
         /// </summary>
-        unsafe HRESULT Ole32.IOleWindow.GetWindow(IntPtr* phwnd)
+        unsafe HRESULT Ole32.IOleWindow.GetWindow(HWND* phwnd)
         {
             // See if we have an inner object that can provide the window handle
             if (_systemIOleWindow is not null)
@@ -1630,7 +1630,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            *phwnd = IntPtr.Zero;
+            *phwnd = HWND.Null;
             return HRESULT.E_FAIL;
         }
 

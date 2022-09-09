@@ -1260,10 +1260,10 @@ namespace System.Windows.Forms
         {
             if (!IsMirrored)
             {
-                User32.SendMessageW(
+                PInvoke.SendMessage(
                     this,
                     User32.WM.HSCROLL,
-                    PARAM.FromLowHigh((RightToLeft == RightToLeft.Yes) ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT, 0),
+                    (WPARAM)(RightToLeft == RightToLeft.Yes ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT),
                     0);
             }
         }
@@ -1291,7 +1291,7 @@ namespace System.Windows.Forms
             }
 
             Rectangle client = ClientRectangle;
-            User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParamInternal);
+            User32.SBV loWord = (User32.SBV)m.WParamInternal.LOWORD;
             bool thumbTrack = loWord != User32.SBV.THUMBTRACK;
             int pos = -_displayRect.Y;
             int oldValue = pos;
@@ -1395,7 +1395,7 @@ namespace System.Windows.Forms
                 maxPos = HorizontalScroll.Maximum;
             }
 
-            User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParamInternal);
+            User32.SBH loWord = (User32.SBH)m.WParamInternal.LOWORD;
             switch (loWord)
             {
                 case User32.SBH.THUMBPOSITION:
@@ -1470,7 +1470,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmOnScroll(ref Message m, int oldValue, int value, ScrollOrientation scrollOrientation)
         {
-            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParamInternal);
+            ScrollEventType type = (ScrollEventType)m.WParamInternal.LOWORD;
             if (type != ScrollEventType.EndScroll)
             {
                 ScrollEventArgs se = new ScrollEventArgs(type, oldValue, value, scrollOrientation);

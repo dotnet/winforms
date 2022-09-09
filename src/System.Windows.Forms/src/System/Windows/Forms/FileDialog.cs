@@ -543,7 +543,7 @@ namespace System.Windows.Forms
                             NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify->lpOFN)!;
 
                             // Get the buffer size required to store the selected file names.
-                            int sizeNeeded = (int)User32.SendMessageW(_dialogHWnd, (User32.WM)1124 /*CDM_GETSPEC*/);
+                            int sizeNeeded = (int)PInvoke.SendMessage(_dialogHWnd, (User32.WM)1124 /*CDM_GETSPEC*/);
                             if (sizeNeeded > ofn.nMaxFile)
                             {
                                 // A bigger buffer is required.
@@ -588,14 +588,14 @@ namespace System.Windows.Forms
                                 {
                                     // This is the second CDN_FILEOK, so we want to ignore it.
                                     _ignoreSecondFileOkNotification = false;
-                                    User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
+                                    PInvoke.SetWindowLong((HWND)hWnd, (WINDOW_LONG_PTR_INDEX)0, -1);
                                     return NativeMethods.InvalidIntPtr;
                                 }
                             }
 
                             if (!DoFileOk(notify->lpOFN))
                             {
-                                User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
+                                PInvoke.SetWindowLong((HWND)hWnd, (WINDOW_LONG_PTR_INDEX)0, -1);
                                 return NativeMethods.InvalidIntPtr;
                             }
 

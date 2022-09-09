@@ -152,16 +152,16 @@ namespace System.Windows.Forms
             switch (value)
             {
                 case MdiLayout.Cascade:
-                    User32.SendMessageW(this, User32.WM.MDICASCADE);
+                    PInvoke.SendMessage(this, User32.WM.MDICASCADE);
                     break;
                 case MdiLayout.TileVertical:
-                    User32.SendMessageW(this, User32.WM.MDITILE, (nint)User32.MDITILE.VERTICAL);
+                    PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)User32.MDITILE.VERTICAL);
                     break;
                 case MdiLayout.TileHorizontal:
-                    User32.SendMessageW(this, User32.WM.MDITILE, (nint)User32.MDITILE.HORIZONTAL);
+                    PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)User32.MDITILE.HORIZONTAL);
                     break;
                 case MdiLayout.ArrangeIcons:
-                    User32.SendMessageW(this, User32.WM.MDIICONARRANGE);
+                    PInvoke.SendMessage(this, User32.WM.MDIICONARRANGE);
                     break;
             }
         }

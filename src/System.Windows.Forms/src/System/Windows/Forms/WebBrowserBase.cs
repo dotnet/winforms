@@ -41,7 +41,7 @@ namespace System.Windows.Forms
         private WebBrowserHelper.SelectionStyle selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
         private WebBrowserSiteBase axSite;
         private ContainerControl containingControl;
-        private IntPtr hwndFocus = IntPtr.Zero;
+        private HWND hwndFocus;
         private EventHandler selectionChangeHandler;
         private Guid clsid;
         // Pointers to the ActiveX object: Interface pointers are cached for perf.
@@ -347,7 +347,7 @@ namespace System.Windows.Forms
                         {
                             hwnd = (HWND)0,
                             message = (uint)User32.WM.SYSKEYDOWN,
-                            wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+                            wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                             lParam = 0x20180001,
                             time = PInvoke.GetTickCount()
                         };
@@ -433,14 +433,14 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.KILLFOCUS:
-                    hwndFocus = m.WParamInternal;
+                    hwndFocus = (HWND)m.WParamInternal;
                     try
                     {
                         base.WndProc(ref m);
                     }
                     finally
                     {
-                        hwndFocus = IntPtr.Zero;
+                        hwndFocus = HWND.Null;
                     }
 
                     break;
@@ -455,10 +455,10 @@ namespace System.Windows.Forms
                     //
                     if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
                     {
-                        IntPtr hwndInPlaceObject = IntPtr.Zero;
+                        HWND hwndInPlaceObject = HWND.Null;
                         if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded())
                         {
-                            Application.ParkHandle(new HandleRef<HWND>(AXInPlaceObject, (HWND)hwndInPlaceObject), DpiAwarenessContext);
+                            Application.ParkHandle(new HandleRef<HWND>(AXInPlaceObject, hwndInPlaceObject), DpiAwarenessContext);
                         }
                     }
 

@@ -36,12 +36,12 @@ namespace System.Windows.Forms
                     Callback);
             }
 
-            private BOOL Callback(IntPtr hWnd)
+            private BOOL Callback(HWND hWnd)
             {
                 // We only do visible and enabled windows.  Also, we only do top level windows.
                 // Finally, we only include windows that are DNA windows, since other MSO components
                 // will be responsible for disabling their own windows.
-                if (PInvoke.IsWindowVisible((HWND)hWnd) && User32.IsWindowEnabled(hWnd))
+                if (PInvoke.IsWindowVisible(hWnd) && User32.IsWindowEnabled(hWnd))
                 {
                     bool add = true;
 
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                             _windows = newWindows;
                         }
 
-                        _windows[_windowCount++] = (HWND)hWnd;
+                        _windows[_windowCount++] = hWnd;
                     }
                 }
 

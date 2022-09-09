@@ -1248,7 +1248,7 @@ namespace System.Windows.Forms
                     // not paint the button as "un-depressed".
                     if (!OwnerDraw)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)(BOOL)true);
+                        PInvoke.SendMessage(this, (User32.WM)User32.BM.SETSTATE, (WPARAM)(BOOL)true);
                     }
 
                     Invalidate(DownChangeRectangle);
@@ -1277,7 +1277,7 @@ namespace System.Windows.Forms
                 {
                     SetFlag(FlagMousePressed, false);
                     SetFlag(FlagMouseDown, false);
-                    User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)(BOOL)false);
+                    PInvoke.SendMessage(this, (User32.WM)User32.BM.SETSTATE, (WPARAM)(BOOL)false);
                 }
 
                 // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
@@ -1509,7 +1509,7 @@ namespace System.Windows.Forms
                 switch (m.MsgInternal)
                 {
                     case User32.WM.REFLECT_COMMAND:
-                        if ((User32.BN)PARAM.HIWORD(m.WParamInternal) == User32.BN.CLICKED && !ValidationCancelled)
+                        if ((User32.BN)m.WParamInternal.HIWORD == User32.BN.CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);
                         }

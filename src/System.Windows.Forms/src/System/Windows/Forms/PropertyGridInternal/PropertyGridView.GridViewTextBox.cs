@@ -324,7 +324,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 switch (m.MsgInternal)
                 {
                     case User32.WM.STYLECHANGED:
-                        if ((User32.GWL)(nint)m.WParamInternal == User32.GWL.EXSTYLE)
+                        if ((WINDOW_LONG_PTR_INDEX)(int)m.WParamInternal == WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)
                         {
                             PropertyGridView.Invalidate();
                         }
