@@ -258,7 +258,7 @@ namespace System.Windows.Forms
 
                 bool success = PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
 
-                return success ? new(gridInfo.stStart, gridInfo.stEnd) : null;
+                return success ? new((DateTime)gridInfo.stStart, (DateTime)gridInfo.stEnd) : null;
             }
 
             internal unsafe RECT GetCalendarPartRectangle(MCGIP dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)

@@ -341,7 +341,7 @@ namespace System.Windows.Forms
                 // The information from win32 DateTimePicker is reliable only when ShowCheckBoxes is True
                 if (ShowCheckBox && IsHandleCreated)
                 {
-                    var sys = new PInvoke.SYSTEMTIME();
+                    var sys = new SYSTEMTIME();
                     GDT gdt = (GDT)PInvoke.SendMessage(this, (User32.WM)DTM.GETSYSTEMTIME, 0, ref sys);
                     return gdt == GDT.VALID;
                 }
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
                     {
                         if (value)
                         {
-                            PInvoke.SYSTEMTIME systemTime = _value;
+                            SYSTEMTIME systemTime = (SYSTEMTIME)_value;
                             PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (WPARAM)(uint)GDT.VALID, ref systemTime);
                         }
                         else
@@ -903,7 +903,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     // Make sure any changes to this code get propagated to createHandle
-                    PInvoke.SYSTEMTIME systemTime = value;
+                    SYSTEMTIME systemTime = (SYSTEMTIME)value;
                     PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (WPARAM)(uint)GDT.VALID, ref systemTime);
                 }
 
@@ -992,7 +992,7 @@ namespace System.Windows.Forms
             if (_userHasSetValue && _validTime)
             {
                 // Make sure any changes to this code get propagated to setValue
-                PInvoke.SYSTEMTIME systemTime = Value;
+                SYSTEMTIME systemTime = (SYSTEMTIME)Value;
                 PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (uint)GDT.VALID, ref systemTime);
             }
             else if (!_validTime)
@@ -1282,7 +1282,7 @@ namespace System.Windows.Forms
             // Update the text displayed in the DateTimePicker.
             if (IsHandleCreated)
             {
-                PInvoke.SYSTEMTIME systemTime = _value;
+                SYSTEMTIME systemTime = (SYSTEMTIME)_value;
                 PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (uint)GDT.VALID, ref systemTime);
             }
 
@@ -1339,9 +1339,9 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                Span<PInvoke.SYSTEMTIME> times = stackalloc PInvoke.SYSTEMTIME[2];
-                times[0] = min;
-                times[1] = max;
+                Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
+                times[0] = (SYSTEMTIME)min;
+                times[1] = (SYSTEMTIME)max;
                 GDTR flags = GDTR.MIN | GDTR.MAX;
                 PInvoke.SendMessage(this, (User32.WM)DTM.SETRANGE, (WPARAM)(uint)flags, ref times[0]);
             }
@@ -1505,7 +1505,7 @@ namespace System.Windows.Forms
             if (nmdtc->dwFlags != GDT.NONE)
             {
                 _validTime = true;
-                _value = nmdtc->st;
+                _value = (DateTime)nmdtc->st;
                 _userHasSetValue = true;
             }
             else
