@@ -3,11 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Drawing;
+using static Interop;
+using Drawing = System.Drawing;
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
         ///  Helper to scope creating regions. Deletes the region when disposed.
@@ -27,7 +28,7 @@ internal static partial class Interop
             /// <summary>
             ///  Creates a region with the given rectangle via <see cref="CreateRectRgn(int, int, int, int)"/>.
             /// </summary>
-            public RegionScope(Rectangle rectangle)
+            public RegionScope(Drawing.Rectangle rectangle)
             {
                 Region = CreateRectRgn(rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
             }
@@ -41,13 +42,13 @@ internal static partial class Interop
             }
 
             /// <summary>
-            ///  Creates a clipping region copy via <see cref="GetClipRgn(HDC, HRGN)"/> for the given device context.
+            ///  Creates a clipping region copy via <see cref="Gdi32.GetClipRgn(HDC, HRGN)"/> for the given device context.
             /// </summary>
             /// <param name="hdc">Handle to a device context to copy the clipping region from.</param>
             public RegionScope(HDC hdc)
             {
                 HRGN region = CreateRectRgn(0, 0, 0, 0);
-                int result = GetClipRgn(hdc, region);
+                int result = Gdi32.GetClipRgn(hdc, region);
                 Debug.Assert(result != -1, "GetClipRgn failed");
 
                 if (result == 1)
@@ -65,7 +66,7 @@ internal static partial class Interop
             /// <summary>
             ///  Creates a native region from a GDI+ <see cref="Region"/>.
             /// </summary>
-            public RegionScope(Region region, Graphics graphics)
+            public RegionScope(Drawing.Region region, Drawing.Graphics graphics)
             {
                 if (region.IsInfinite(graphics))
                 {
@@ -86,9 +87,9 @@ internal static partial class Interop
                 Region = new HRGN(region.GetHrgn(graphics));
             }
 
-            public RegionScope(Region region, IntPtr hwnd)
+            public RegionScope(Drawing.Region region, IntPtr hwnd)
             {
-                using var graphics = Graphics.FromHwndInternal(hwnd);
+                using var graphics = Drawing.Graphics.FromHwndInternal(hwnd);
                 Region = new HRGN(region.GetHrgn(graphics));
             }
 
@@ -103,7 +104,7 @@ internal static partial class Interop
             ///  Creates a GDI+ region for this region.
             /// </summary>
             /// <returns>The GDI+ region. Must be disposed.</returns>
-            public Region CreateGdiPlusRegion() => System.Drawing.Region.FromHrgn(Region);
+            public Drawing.Region CreateGdiPlusRegion() => Drawing.Region.FromHrgn(Region);
 
             /// <summary>
             ///  Clears the handle. Use this to hand over ownership to another entity.
@@ -112,7 +113,7 @@ internal static partial class Interop
 
             public void Dispose()
             {
-                if (!Region.IsNull)
+                if (!IsNull)
                 {
                     DeleteObject(Region);
                 }

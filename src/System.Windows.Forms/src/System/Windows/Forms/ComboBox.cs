@@ -3907,8 +3907,8 @@ namespace System.Windows.Forms
                 case WM.PAINT:
                     if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup) && !(SystemInformation.HighContrast && BackColor == SystemColors.Window))
                     {
-                        using var dropDownRegion = new Gdi32.RegionScope(FlatComboBoxAdapter._dropDownRect);
-                        using var windowRegion = new Gdi32.RegionScope(Bounds);
+                        using PInvoke.RegionScope dropDownRegion = new(FlatComboBoxAdapter._dropDownRect);
+                        using PInvoke.RegionScope windowRegion = new(Bounds);
 
                         // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
                         bool getRegionSucceeded = GetUpdateRgn(Handle, windowRegion, bErase: true) != RegionType.ERROR;

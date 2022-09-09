@@ -54,10 +54,8 @@ namespace System.Windows.Forms
             }
 
             // Didn't find anything in the cache, create a new HDC
-            return CreateNew();
+            return new ScreenDcScope(this, PInvoke.CreateCompatibleDC((HDC)default));
         }
-
-        private ScreenDcScope CreateNew() => new ScreenDcScope(this, Gdi32.CreateCompatibleDC(default));
 
         /// <summary>
         ///  Release an item back to the cache, disposing if no room is available.
@@ -102,7 +100,7 @@ namespace System.Windows.Forms
         {
             // A few sanity checks against the HDC to see if it was left in a dirty state
 
-            HRGN hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
+            HRGN hrgn = PInvoke.CreateRectRgn(0, 0, 0, 0);
             Debug.Assert(Gdi32.GetClipRgn(hdc, hrgn) == 0, "Should not have a clipping region");
             Gdi32.DeleteObject(hrgn);
 

@@ -119,13 +119,13 @@ namespace System.Windows.Forms
                 var absoluteClientRectangle = AbsoluteClientRECT;
 
                 // Get the total client area, then exclude the client by using XOR
-                using var hTotalRegion = new Gdi32.RegionScope(0, 0, Width, Height);
-                using var hClientRegion = new Gdi32.RegionScope(
+                using PInvoke.RegionScope hTotalRegion = new(0, 0, Width, Height);
+                using PInvoke.RegionScope hClientRegion = new(
                     absoluteClientRectangle.left,
                     absoluteClientRectangle.top,
                     absoluteClientRectangle.right,
                     absoluteClientRectangle.bottom);
-                using var hNonClientRegion = new Gdi32.RegionScope(0, 0, 0, 0);
+                using PInvoke.RegionScope hNonClientRegion = new(0, 0, 0, 0);
 
                 PInvoke.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, RGN_COMBINE_MODE.RGN_XOR);
 
