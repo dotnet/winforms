@@ -3768,7 +3768,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Displays the appropriate editor for the given <paramref name="row"/>.
         /// </summary>
-        public void PopupEditor(int row)
+        public unsafe void PopupEditor(int row)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:PopupEditor");
             GridEntry gridEntry = GetGridEntryFromRow(row);
@@ -3800,7 +3800,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 using var hdc = new User32.GetDcScope(DropDownListBox.Handle);
 
-                var tm = new Gdi32.TEXTMETRICW();
+                TEXTMETRICW tm = default;
                 int selectionIndex = -1;
 
                 // This creates a copy of the given Font, and as such we need to delete it
@@ -3813,18 +3813,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                     if (rgItems is not null && rgItems.Length > 0)
                     {
                         string value;
-                        var textSize = new Size();
+                        Size textSize = default;
 
                         for (int i = 0; i < rgItems.Length; i++)
                         {
                             value = gridEntry.GetPropertyTextValue(rgItems[i]);
                             DropDownListBox.Items.Add(value);
-                            Gdi32.GetTextExtentPoint32W(new HandleRef(DropDownListBox, hdc), value, value.Length, ref textSize);
+                            PInvoke.GetTextExtentPoint32W(hdc.HDC, value, value.Length, textSize);
                             maxWidth = Math.Max(textSize.Width, maxWidth);
                         }
                     }
 
-                    Gdi32.GetTextMetricsW(hdc, ref tm);
+                    PInvoke.GetTextMetrics(hdc, &tm);
 
                     // border + padding + scrollbar
                     maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;

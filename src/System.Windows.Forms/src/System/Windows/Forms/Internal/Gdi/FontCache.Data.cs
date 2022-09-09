@@ -32,7 +32,7 @@ namespace System.Windows.Forms
                 _tmHeight = null;
             }
 
-            public int Height
+            public unsafe int Height
             {
                 get
                 {
@@ -41,10 +41,10 @@ namespace System.Windows.Forms
                         using var screenDC = GdiCache.GetScreenHdc();
                         HDC hdc = screenDC.HDC;
                         using var fontSelection = new Gdi32.SelectObjectScope(hdc, HFONT);
-                        Debug.Assert(Gdi32.GetMapMode(hdc) == Gdi32.MM.TEXT);
+                        Debug.Assert(PInvoke.GetMapMode(hdc) == HDC_MAP_MODE.MM_TEXT);
 
-                        Gdi32.TEXTMETRICW tm = default;
-                        Gdi32.GetTextMetricsW(hdc, ref tm);
+                        TEXTMETRICW tm = default;
+                        PInvoke.GetTextMetrics(hdc, &tm);
                         _tmHeight = tm.tmHeight;
                     }
 

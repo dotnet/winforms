@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  <para>
         ///   When a <see cref="Graphics"/> object is created from a <see cref="HDC"/> the clipping region and
-        ///   the viewport origin are applied (<see cref="Gdi32.GetViewportExtEx(HDC, out Size)"/>). The clipping
+        ///   the viewport origin are applied (<see cref="PInvoke.GetViewportExtEx(HDC, SIZE*)"/>). The clipping
         ///   region isn't reflected in <see cref="Graphics.Clip"/>, which is combined with the HDC HRegion.
         ///  </para>
         ///  <para>
@@ -226,13 +226,13 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException("Null HDC");
             }
 
-            var type = Gdi32.GetObjectType((HGDIOBJ)HDC.Value);
+            OBJ_TYPE type = (OBJ_TYPE)PInvoke.GetObjectType(HDC);
             switch (type)
             {
-                case Gdi32.OBJ.DC:
-                case Gdi32.OBJ.MEMDC:
-                case Gdi32.OBJ.METADC:
-                case Gdi32.OBJ.ENHMETADC:
+                case OBJ_TYPE.OBJ_DC:
+                case OBJ_TYPE.OBJ_MEMDC:
+                case OBJ_TYPE.OBJ_METADC:
+                case OBJ_TYPE.OBJ_ENHMETADC:
                     break;
                 default:
 #if DEBUG

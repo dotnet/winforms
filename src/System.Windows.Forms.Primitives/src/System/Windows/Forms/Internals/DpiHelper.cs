@@ -50,7 +50,7 @@ namespace System.Windows.Forms
             if (!OsVersion.IsWindows10_1607OrGreater)
             {
                 using var dc = User32.GetDcScope.ScreenDC;
-                return Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
+                return PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
             }
 
             // This avoids needing to create a DC

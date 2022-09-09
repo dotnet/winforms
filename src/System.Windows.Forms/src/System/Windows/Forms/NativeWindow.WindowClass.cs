@@ -140,7 +140,7 @@ namespace System.Windows.Forms
                     // creates a little bit if flicker.  This happens even though we are overriding wm_erasebackgnd.
                     // Make this hollow to avoid all flicker.
 
-                    windowClass.hbrBackground = (HBRUSH)Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH);
+                    windowClass.hbrBackground = (HBRUSH)PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH);
                     windowClass.style = (WNDCLASS_STYLES)_classStyle;
 
                     _defaultWindProc = DefaultWindowProc;

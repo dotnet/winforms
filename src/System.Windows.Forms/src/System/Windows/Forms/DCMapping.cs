@@ -37,7 +37,8 @@ namespace System.Windows.Forms
             _savedState = Gdi32.SaveDC(hdc);
 
             // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
-            bool success = Gdi32.GetViewportOrgEx(hdc, out Point viewportOrg);
+            Point viewportOrg = default;
+            bool success = PInvoke.GetViewportOrgEx(hdc, &viewportOrg);
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
             // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
@@ -65,8 +66,8 @@ namespace System.Windows.Forms
                 if (!hOriginalClippingRegion.IsNull)
                 {
                     // Get the original clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
-                    RECT originalClipRect = new RECT();
-                    originalRegionType = Gdi32.GetRgnBox(hOriginalClippingRegion, ref originalClipRect);
+                    RECT originalClipRect = default;
+                    originalRegionType = (RegionType)PInvoke.GetRgnBox(hOriginalClippingRegion, &originalClipRect);
                     Debug.Assert(
                         originalRegionType != RegionType.ERROR,
                         "ERROR returned from SelectClipRgn while selecting the original clipping region..");

@@ -6086,8 +6086,8 @@ namespace System.Windows.Forms
                         case CDDS.ITEMPREPAINT:
                             {
                                 using Graphics g = nmcd->hdc.CreateGraphics();
-                                Color foreColor = Gdi32.GetTextColor(nmcd->hdc);
-                                Color backColor = Gdi32.GetBkColor(nmcd->hdc);
+                                Color foreColor = Color.FromArgb((int)PInvoke.GetTextColor(nmcd->hdc).Value);
+                                Color backColor = Color.FromArgb((int)PInvoke.GetBkColor(nmcd->hdc).Value);
                                 Font font = GetListHeaderFont();
                                 var e = new DrawListViewColumnHeaderEventArgs(
                                     g,

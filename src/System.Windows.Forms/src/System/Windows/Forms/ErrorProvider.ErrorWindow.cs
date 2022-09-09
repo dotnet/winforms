@@ -190,10 +190,12 @@ namespace System.Windows.Forms
                 {
                     // Mirror the DC
                     Gdi32.SetMapMode(hdc, Gdi32.MM.ANISOTROPIC);
-                    Gdi32.GetViewportExtEx(hdc, out Size originalExtents);
-                    Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, null);
-                    Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
-                    Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, null);
+                    SIZE originalExtents = default;
+                    PInvoke.GetViewportExtEx(hdc, &originalExtents);
+                    Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, lpsz: null);
+                    Point originalOrigin = default;
+                    PInvoke.GetViewportOrgEx(hdc, &originalOrigin);
+                    Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, lppt: null);
                 }
             }
 

@@ -738,7 +738,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This method calculates the auto scale dimensions based on the control's current font.
         /// </summary>
-        private SizeF GetFontAutoScaleDimensions()
+        private unsafe SizeF GetFontAutoScaleDimensions()
         {
             SizeF retval = SizeF.Empty;
 
@@ -760,15 +760,18 @@ namespace System.Windows.Forms
 
             using Gdi32.SelectObjectScope fontSelection = new(dc, FontHandle);
 
-            Gdi32.TEXTMETRICW tm = new();
-            Gdi32.GetTextMetricsW(dc, ref tm);
+            TEXTMETRICW tm = default;
+            PInvoke.GetTextMetrics(dc, &tm);
 
             retval.Height = tm.tmHeight;
 
-            if ((tm.tmPitchAndFamily & Gdi32.TMPF.FIXED_PITCH) != 0)
+            if ((tm.tmPitchAndFamily & TMPF_FLAGS.TMPF_FIXED_PITCH) != 0)
             {
-                var size = new Size();
-                Gdi32.GetTextExtentPoint32W(dc, FontMeasureString, FontMeasureString.Length, ref size);
+                Size size = default;
+                fixed (char* ps = FontMeasureString)
+                {
+                    PInvoke.GetTextExtentPoint32W(dc, ps, FontMeasureString.Length, (SIZE*)(void*)&size);
+                }
 
                 // Note: intentional integer round off here for Win32 compat
                 retval.Width = (int)Math.Round(size.Width / ((float)FontMeasureString.Length));
