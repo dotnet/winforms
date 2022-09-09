@@ -14,7 +14,7 @@ internal static partial class Interop
             WINEVENTPROC pfnWinEventProc, uint idProcess, uint idThread, WINEVENT dwFlags);
 
         public static nint SetWinEventHook(uint eventId, WINEVENTPROC pfnWinEventProc)
-            => SetWinEventHook(eventId, eventId, Kernel32.GetModuleHandleW(null), pfnWinEventProc,
+            => SetWinEventHook(eventId, eventId, PInvoke.GetModuleHandle(null), pfnWinEventProc,
                 (uint)Environment.ProcessId, PInvoke.GetCurrentThreadId(), WINEVENT.INCONTEXT);
     }
 }

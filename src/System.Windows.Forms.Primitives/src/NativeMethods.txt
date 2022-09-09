@@ -1,6 +1,10 @@
-﻿BitBlt
+ACTCTX_FLAG_*
+AdjustWindowRectEx
+AdjustWindowRectExForDpi
+BitBlt
 CloseEnhMetaFile
 CombineRgn
+CreateActCtx
 CreateBitmap
 CreateBrushIndirect
 CreateCompatibleBitmap

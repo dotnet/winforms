@@ -1544,8 +1544,8 @@ namespace System.Windows.Forms
                 // CLR4.0 or later, comctl32.dll needs to be loaded explicitly.
                 if (s_needToLoadComCtl)
                 {
-                    if ((Kernel32.GetModuleHandleW(Libraries.Comctl32) != IntPtr.Zero)
-                     || (Kernel32.LoadComctl32(Application.StartupPath) != IntPtr.Zero))
+                    if ((PInvoke.GetModuleHandle(Libraries.Comctl32) != 0)
+                     || (Kernel32.LoadComctl32(Application.StartupPath) != 0))
                     {
                         s_needToLoadComCtl = false;
                     }
