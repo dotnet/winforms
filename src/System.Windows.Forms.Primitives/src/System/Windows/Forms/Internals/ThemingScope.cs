@@ -5,7 +5,6 @@
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.System.ApplicationInstallationAndServicing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -36,14 +35,15 @@ namespace System.Windows.Forms
         ///  on the stack even if one is already present. In such cases, this method helps - you get to manage
         ///  the cookie yourself though.
         /// </summary>
-        public static IntPtr Activate(bool useVisualStyles)
+        public unsafe static nint Activate(bool useVisualStyles)
         {
-            if (IsContextActiveButNotCreated(useVisualStyles) && Kernel32.ActivateActCtx(s_hActCtx, out IntPtr userCookie).IsTrue())
+            nuint userCookie;
+            if (IsContextActiveButNotCreated(useVisualStyles) && PInvoke.ActivateActCtx((HANDLE)s_hActCtx, &userCookie))
             {
-                return userCookie;
+                return (nint)userCookie;
             }
 
-            return IntPtr.Zero;
+            return 0;
         }
 
         private static bool IsContextActiveButNotCreated(bool useVisualStyles)
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static IntPtr Deactivate(IntPtr userCookie)
         {
-            if (userCookie == IntPtr.Zero || Kernel32.DeactivateActCtx(0, userCookie).IsTrue())
+            if (userCookie == IntPtr.Zero || PInvoke.DeactivateActCtx(0, (nuint)userCookie))
             {
                 return IntPtr.Zero;
             }
