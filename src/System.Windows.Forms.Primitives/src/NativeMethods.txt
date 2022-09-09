@@ -148,6 +148,10 @@ SetFocus
 SetParent
 SetSuspendState
 SetWindowsHookEx
+SHDRAGIMAGE
+ShellExecute
+SHGetKnownFolderPath
+SHParseDisplayName
 ShowCursor
 STATUS_PENDING
 STATUS_SUCCESS
