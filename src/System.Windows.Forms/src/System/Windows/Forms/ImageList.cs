@@ -228,7 +228,7 @@ namespace System.Windows.Forms
                     var imageInfo = new ComCtl32.IMAGEINFO();
                     if (ComCtl32.ImageList.GetImageInfo(new HandleRef(this, _nativeImageList.Handle), 0, ref imageInfo))
                     {
-                        Gdi32.GetObjectW(imageInfo.hbmImage, out Gdi32.BITMAP bmp);
+                        PInvoke.GetObject(imageInfo.hbmImage, out Gdi32.BITMAP bmp);
                         _colorDepth = bmp.bmBitsPixel switch
                         {
                             4 => ColorDepth.Depth4Bit,

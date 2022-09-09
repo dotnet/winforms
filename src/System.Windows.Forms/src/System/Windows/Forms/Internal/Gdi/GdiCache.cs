@@ -56,11 +56,11 @@ namespace System.Windows.Forms
                 // for easier diagnosis.
                 ArgumentValidation.ThrowIfNull(scope.HDC, "hdc");
 
-                Gdi32.OBJ type = Gdi32.GetObjectType(scope.HDC);
-                if (type == Gdi32.OBJ.DC
-                    || type == Gdi32.OBJ.ENHMETADC
-                    || type == Gdi32.OBJ.MEMDC
-                    || type == Gdi32.OBJ.METADC)
+                OBJ_TYPE type = (OBJ_TYPE)PInvoke.GetObjectType(scope.HDC);
+                if (type == OBJ_TYPE.OBJ_DC
+                    || type == OBJ_TYPE.OBJ_ENHMETADC
+                    || type == OBJ_TYPE.OBJ_MEMDC
+                    || type == OBJ_TYPE.OBJ_METADC)
                 {
                     // Not sure what is wrong in this case, throw the original.
                     throw;
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
             }
 
             // Font is null, build off of the specified HDC's current font.
-            HFONT hfont = (HFONT)Gdi32.GetCurrentObject(hdc, Gdi32.OBJ.FONT);
+            HFONT hfont = (HFONT)PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_FONT);
             return new FontCache.Scope(hfont);
         }
     }

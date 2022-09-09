@@ -245,8 +245,8 @@ namespace System.Windows.Forms
                     {
                         s_logPixels = new Point();
                         using var dc = User32.GetDcScope.ScreenDC;
-                        s_logPixels.X = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
-                        s_logPixels.Y = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
+                        s_logPixels.X = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                        s_logPixels.Y = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
                     }
 
                     return s_logPixels;
@@ -411,16 +411,16 @@ namespace System.Windows.Forms
                 // the caller figures it out and sends us a different DC.
 
                 HDC hdc = (HDC)hdcDraw;
-                Gdi32.OBJ hdcType = Gdi32.GetObjectType(hdc);
-                if (hdcType == Gdi32.OBJ.METADC)
+                OBJ_TYPE hdcType = (OBJ_TYPE)PInvoke.GetObjectType(hdc);
+                if (hdcType == OBJ_TYPE.OBJ_METADC)
                 {
                     return HRESULT.VIEW_E_DRAW;
                 }
 
-                var pVp = new Point();
-                var pW = new Point();
-                var sWindowExt = new Size();
-                var sViewportExt = new Size();
+                Point pVp = default;
+                Point pW = default;
+                Size sWindowExt = default;
+                Size sViewportExt = default;
                 Gdi32.MM iMode = Gdi32.MM.TEXT;
 
                 if (!_control.IsHandleCreated)
@@ -451,7 +451,7 @@ namespace System.Windows.Forms
                 try
                 {
                     nint flags = (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
-                    if (hdcType != Gdi32.OBJ.ENHMETADC)
+                    if (hdcType != OBJ_TYPE.OBJ_ENHMETADC)
                     {
                         PInvoke.SendMessage(_control, User32.WM.PRINT, (WPARAM)hdc, (LPARAM)flags);
                     }

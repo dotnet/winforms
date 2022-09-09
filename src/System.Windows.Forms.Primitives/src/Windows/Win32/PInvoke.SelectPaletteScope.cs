@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
+using static Interop;
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
         ///  Helper to scope palette selection.
@@ -27,16 +27,16 @@ internal static partial class Interop
             public SelectPaletteScope(HDC hdc, HPALETTE hpalette, bool forceBackground, bool realizePalette)
             {
                 HDC = hdc;
-                HPalette = SelectPalette(hdc, hpalette, forceBackground);
+                HPalette = Gdi32.SelectPalette(hdc, hpalette, forceBackground);
                 if (!HPalette.IsNull && realizePalette)
                 {
-                    RealizePalette((IntPtr)hdc);
+                    Gdi32.RealizePalette((IntPtr)hdc);
                 }
             }
 
             public static SelectPaletteScope HalftonePalette(HDC hdc, bool forceBackground, bool realizePalette)
             {
-                if (GetDeviceCaps(hdc, DeviceCapability.BITSPIXEL) > 8)
+                if (PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.BITSPIXEL) > 8)
                 {
                     // https://docs.microsoft.com/windows/win32/api/Gdiplusgraphics/nf-gdiplusgraphics-graphics-gethalftonepalette
                     // The purpose of the Graphics::GetHalftonePalette method is to enable GDI+ to produce a better
@@ -51,7 +51,7 @@ internal static partial class Interop
 
                 return new SelectPaletteScope(
                     hdc,
-                    (HPALETTE)Graphics.GetHalftonePalette(),
+                    (HPALETTE)global::System.Drawing.Graphics.GetHalftonePalette(),
                     forceBackground,
                     realizePalette);
             }
@@ -62,7 +62,7 @@ internal static partial class Interop
             {
                 if (!HPalette.IsNull)
                 {
-                    SelectPalette(HDC, HPalette, bForceBkgd: false);
+                    Gdi32.SelectPalette(HDC, HPalette, bForceBkgd: false);
                 }
 
                 DisposalTracking.SuppressFinalize(this);

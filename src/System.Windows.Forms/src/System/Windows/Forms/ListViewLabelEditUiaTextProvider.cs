@@ -327,7 +327,7 @@ namespace System.Windows.Forms
             return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }
 
-        private bool GetTextExtentPoint32(char item, out Size size)
+        private unsafe bool GetTextExtentPoint32(char item, out Size size)
         {
             size = new Size();
 
@@ -338,7 +338,10 @@ namespace System.Windows.Forms
             }
 
             // Add the width of the character at that position.
-            return Gdi32.GetTextExtentPoint32W(hdc, item.ToString(), 1, ref size);
+            fixed (void* psizle = &size)
+            {
+                return PInvoke.GetTextExtentPoint32W(hdc.HDC, &item, 1, (SIZE*)psizle);
+            }
         }
     }
 }

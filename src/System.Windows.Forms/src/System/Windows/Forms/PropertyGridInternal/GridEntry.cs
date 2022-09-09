@@ -1646,8 +1646,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Color backgroundColor = ColorInversionNeededInHighContrast ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
                     using var compatibleDC = new PInvoke.CreateDcScope(default);
 
-                    int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
-                    int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
+                    int planes = PInvoke.GetDeviceCaps(compatibleDC, GET_DEVICE_CAPS_INDEX.PLANES);
+                    int bitsPixel = PInvoke.GetDeviceCaps(compatibleDC,GET_DEVICE_CAPS_INDEX.BITSPIXEL);
                     HBITMAP compatibleBitmap = PInvoke.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
                     using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
 

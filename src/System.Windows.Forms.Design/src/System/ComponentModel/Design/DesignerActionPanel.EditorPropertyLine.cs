@@ -30,7 +30,7 @@ namespace System.ComponentModel.Design
             {
             }
 
-            private void ActivateDropDown()
+            private unsafe void ActivateDropDown()
             {
                 if (_editor is not null)
                 {
@@ -79,19 +79,22 @@ namespace System.ComponentModel.Design
                         using PInvoke.ObjectScope hFont = new(listBox.Font.ToHFONT());
                         using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
 
-                        var tm = new Gdi32.TEXTMETRICW();
+                        TEXTMETRICW tm = default;
 
                         if (listBox.Items.Count > 0)
                         {
                             foreach (string s in listBox.Items)
                             {
-                                var textSize = new Size();
-                                Gdi32.GetTextExtentPoint32W(hdc, s, s.Length, ref textSize);
-                                maxWidth = Math.Max(textSize.Width, maxWidth);
+                                fixed (char* ps = s)
+                                {
+                                    Size textSize = default;
+                                    PInvoke.GetTextExtentPoint32W(hdc, ps, s.Length, (SIZE*)(void*)&textSize);
+                                    maxWidth = Math.Max(textSize.Width, maxWidth);
+                                }
                             }
                         }
 
-                        Gdi32.GetTextMetricsW(hdc, ref tm);
+                        PInvoke.GetTextMetrics(hdc, &tm);
 
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;

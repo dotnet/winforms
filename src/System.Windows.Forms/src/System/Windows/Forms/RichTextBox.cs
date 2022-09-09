@@ -2884,8 +2884,8 @@ namespace System.Windows.Forms
         private static void SetupLogPixels()
         {
             using var dc = User32.GetDcScope.ScreenDC;
-            logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
-            logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
+            logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+            logPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
         }
 
         private static int Pixel2Twip(int v, bool xDirection)

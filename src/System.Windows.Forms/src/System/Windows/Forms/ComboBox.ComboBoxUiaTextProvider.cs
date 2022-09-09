@@ -402,18 +402,21 @@ namespace System.Windows.Forms
                 return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
             }
 
-            private bool GetTextExtentPoint32(char item, out Size size)
+            private unsafe bool GetTextExtentPoint32(char item, out Size size)
             {
-                size = new Size();
+                size = default;
 
-                using var hdc = new GetDcScope(_owningChildEdit.Handle);
+                using GetDcScope hdc = new(_owningChildEdit.Handle);
                 if (hdc.IsNull)
                 {
                     return false;
                 }
 
-                // Add the width of the character at that position.
-                return Gdi32.GetTextExtentPoint32W(hdc, item.ToString(), 1, ref size);
+                fixed (void* pSize = &size)
+                {
+                    // Add the width of the character at that position.
+                    return PInvoke.GetTextExtentPoint32W(hdc, &item, 1, (SIZE*)pSize);
+                }
             }
         }
     }

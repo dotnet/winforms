@@ -1171,8 +1171,8 @@ namespace System.Windows.Forms
                     return HRESULT.E_FAIL;
                 }
 
-                s_logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
-                s_logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
+                s_logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                s_logPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"log pixels are: {s_logPixelsX} {s_logPixelsY}");
             }
 
