@@ -14,6 +14,7 @@ using System.Globalization;
 using System.Windows.Forms.Design.Behavior;
 using Windows.Win32;
 using static Interop;
+using Foundation = Windows.Win32.Foundation;
 using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms.Design
@@ -35,9 +36,9 @@ namespace System.Windows.Forms.Design
         private static Gdi32.HBRUSH s_grabHandleFillBrush =
             Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
         private static Gdi.HPEN s_grabHandlePenPrimary =
-            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
         private static Gdi.HPEN s_grabHandlePen =
-            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.Window));
+            PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
         //The box-like image used as the user is dragging comps from the toolbox
         private static Bitmap s_boxImage;
@@ -184,10 +185,10 @@ namespace System.Windows.Forms.Design
             s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
 
             Gdi32.DeleteObject(s_grabHandlePenPrimary);
-            s_grabHandlePenPrimary = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+            s_grabHandlePenPrimary = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
             Gdi32.DeleteObject(s_grabHandlePen);
-            s_grabHandlePen = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(SystemColors.Window));
+            s_grabHandlePen = PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
         }
 
         /// <summary>
