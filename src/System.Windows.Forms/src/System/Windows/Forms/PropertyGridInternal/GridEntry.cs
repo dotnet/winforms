@@ -1651,7 +1651,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     HBITMAP compatibleBitmap = PInvoke.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
                     using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
 
-                    using var brush = new Gdi32.CreateBrushScope(backgroundColor);
+                    using PInvoke.CreateBrushScope brush = new(backgroundColor);
                     compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), brush);
                     explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), handle);
 

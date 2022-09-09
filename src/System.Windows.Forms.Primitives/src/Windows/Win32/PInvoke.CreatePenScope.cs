@@ -4,9 +4,9 @@
 
 using System.Drawing;
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Gdi32
+    internal static partial class PInvoke
     {
         /// <summary>
         ///  Helper to scope the lifetime of a <see cref="HPEN"/>.
@@ -25,12 +25,12 @@ internal static partial class Interop
 
             /// <summary>
             ///  Creates a solid pen based on the <paramref name="color"/> and <paramref name="width"/> using
-            ///  <see cref="PInvoke.CreatePen(PEN_STYLE, int, COLORREF)" />.
+            ///  <see cref="CreatePen(PEN_STYLE, int, COLORREF)" />.
             /// </summary>
             public CreatePenScope(Color color, int width = 1)
             {
                 // From MSDN: if width > 1, the style must be PS_NULL, PS_SOLID, or PS_INSIDEFRAME.
-                HPEN = PInvoke.CreatePen(
+                HPEN = CreatePen(
                     width > 1 ? (PEN_STYLE.PS_GEOMETRIC | PEN_STYLE.PS_SOLID) : default,
                     width,
                     (COLORREF)(uint)ColorTranslator.ToWin32(color));

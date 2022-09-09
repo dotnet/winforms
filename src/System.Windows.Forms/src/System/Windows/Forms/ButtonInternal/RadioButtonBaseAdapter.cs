@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
 {
@@ -77,9 +76,9 @@ namespace System.Windows.Forms.ButtonInternal
 
             double scale = GetDpiScaleRatio();
 
-            using var hdc = new DeviceContextHdcScope(e);
-            using var borderPen = new Gdi32.CreatePenScope(border);
-            using var fieldBrush = new Gdi32.CreateBrushScope(field);
+            using DeviceContextHdcScope hdc = new(e);
+            using PInvoke.CreatePenScope borderPen = new(border);
+            using PInvoke.CreateBrushScope fieldBrush = new(field);
 
             if (scale > 1.1)
             {
@@ -146,8 +145,8 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             double scale = GetDpiScaleRatio();
-            using var hdc = new DeviceContextHdcScope(e);
-            using var brush = new Gdi32.CreateBrushScope(checkColor);
+            using DeviceContextHdcScope hdc = new(e);
+            using PInvoke.CreateBrushScope brush = new(checkColor);
 
             // Circle drawing doesn't work at this size
             int offset = 5;

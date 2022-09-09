@@ -360,7 +360,7 @@ namespace System.Windows.Forms
             }
             catch
             {
-                Gdi32.DeleteObject(hbmpDragImage);
+                PInvoke.DeleteObject(hbmpDragImage);
                 return;
             }
             finally

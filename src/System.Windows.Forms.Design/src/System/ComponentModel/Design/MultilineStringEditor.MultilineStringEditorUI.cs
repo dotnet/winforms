@@ -180,8 +180,8 @@ namespace System.ComponentModel.Design
                 get
                 {
                     using var hdc = User32.GetDcScope.ScreenDC;
-                    using var font = new Gdi32.ObjectScope(Font.ToHFONT());
-                    using var fontSelection = new Gdi32.SelectObjectScope(hdc, font);
+                    using PInvoke.ObjectScope font = new(Font.ToHFONT());
+                    using Gdi32.SelectObjectScope fontSelection = new(hdc, font);
 
                     RECT rect = new RECT();
                     User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.DT.CALCRECT);

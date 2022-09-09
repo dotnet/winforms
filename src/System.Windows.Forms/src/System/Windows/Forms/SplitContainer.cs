@@ -1488,10 +1488,10 @@ namespace System.Windows.Forms
         private void DrawSplitHelper(int splitSize)
         {
             Rectangle r = CalcSplitLine(splitSize, 3);
-            using var dc = new User32.GetDcScope(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+            using User32.GetDcScope dc = new(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
             HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-            using var objectScope = new Gdi32.ObjectScope(halftone);
-            using var selectBrush = new Gdi32.SelectObjectScope(dc, halftone);
+            using PInvoke.ObjectScope objectScope = new(halftone);
+            using Gdi32.SelectObjectScope selectBrush = new(dc, halftone);
             Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
 
             GC.KeepAlive(this);

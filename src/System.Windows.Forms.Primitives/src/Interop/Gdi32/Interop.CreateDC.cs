@@ -9,7 +9,7 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         /// <remarks>
-        ///  Use <see cref="DeleteDC(HDC)"/> when finished with the returned DC.
+        ///  Use <see cref="PInvoke.DeleteDC(CreatedHDC)"/> when finished with the returned DC.
         ///  Calling with ("DISPLAY", null, null, IntPtr.Zero) will retrieve a DC for the entire desktop.
         /// </remarks>
         [DllImport(Libraries.Gdi32, SetLastError = true, CharSet = CharSet.Unicode)]

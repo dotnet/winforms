@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                         {
                             if (mask != IntPtr.Zero)
                             {
-                                Gdi32.DeleteObject((HGDIOBJ)mask);
+                                PInvoke.DeleteObject((HGDIOBJ)mask);
                             }
                         }
                     }

@@ -202,7 +202,7 @@ namespace System.Windows.Forms
                     };
                 }
 
-                    Gdi32.DeleteObject((HGDIOBJ)palette.Value);
+                PInvoke.DeleteObject((HGDIOBJ)palette.Value);
 
                 void* bitsBuffer;
                 hbitmap = PInvoke.CreateDIBSection(
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
                     throw new Win32Exception();
                 }
 
-                Gdi32.DeleteObject(previousBitmap);
+                PInvoke.DeleteObject(previousBitmap);
 
                 using Graphics graphics = dc.CreateGraphics();
                 using var brush = background.GetCachedSolidBrushScope();
@@ -242,7 +242,7 @@ namespace System.Windows.Forms
             catch
             {
                 // As we're throwing out, we can't return this and need to delete it.
-                Gdi32.DeleteObject(hbitmap);
+                PInvoke.DeleteObject(hbitmap);
                 throw;
             }
 
@@ -345,7 +345,7 @@ namespace System.Windows.Forms
                 grayPattern[i] = (short)(0x5555 << (i & 1));
             }
 
-            using var hBitmap = new Gdi32.CreateBitmapScope(8, 8, 1, 1, grayPattern);
+            using PInvoke.CreateBitmapScope hBitmap = new(8, 8, 1, 1, grayPattern);
 
             LOGBRUSH lb = new()
             {
@@ -739,8 +739,8 @@ namespace System.Windows.Forms
                     {
                         if (!topColor.HasTransparency() && topStyle == ButtonBorderStyle.Solid)
                         {
-                            using var hdc = new DeviceContextHdcScope(deviceContext);
-                            using var hpen = new Gdi32.CreatePenScope(topColor);
+                            using DeviceContextHdcScope hdc = new(deviceContext);
+                            using PInvoke.CreatePenScope hpen = new(topColor);
                             for (int i = 0; i < topWidth; i++)
                             {
                                 // Need to add one to the destination point for GDI to render the same as GDI+
@@ -778,7 +778,8 @@ namespace System.Windows.Forms
                         using var hdc = new DeviceContextHdcScope(deviceContext);
                         for (int i = 0; i < topWidth; i++)
                         {
-                            using var hpen = new Gdi32.CreatePenScope(topStyle == ButtonBorderStyle.Inset
+                            using PInvoke.CreatePenScope hpen = new(
+                                topStyle == ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
 
@@ -801,8 +802,8 @@ namespace System.Windows.Forms
                     {
                         if (!leftColor.HasTransparency() && leftStyle == ButtonBorderStyle.Solid)
                         {
-                            using var hdc = new DeviceContextHdcScope(deviceContext);
-                            using var hpen = new Gdi32.CreatePenScope(leftColor);
+                            using DeviceContextHdcScope hdc = new(deviceContext);
+                            using PInvoke.CreatePenScope hpen = new(leftColor);
                             for (int i = 0; i < leftWidth; i++)
                             {
                                 // Need to add one to the destination point for GDI to render the same as GDI+
@@ -840,7 +841,8 @@ namespace System.Windows.Forms
                         using var hdc = new DeviceContextHdcScope(deviceContext);
                         for (int i = 0; i < leftWidth; i++)
                         {
-                            using var hpen = new Gdi32.CreatePenScope(leftStyle == ButtonBorderStyle.Inset
+                            using PInvoke.CreatePenScope hpen = new(
+                                leftStyle == ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
 
@@ -863,8 +865,8 @@ namespace System.Windows.Forms
                     {
                         if (!bottomColor.HasTransparency() && bottomStyle == ButtonBorderStyle.Solid)
                         {
-                            using var hdc = new DeviceContextHdcScope(deviceContext);
-                            using var hpen = new Gdi32.CreatePenScope(bottomColor);
+                            using DeviceContextHdcScope hdc = new(deviceContext);
+                            using PInvoke.CreatePenScope hpen = new(bottomColor);
                             for (int i = 0; i < bottomWidth; i++)
                             {
                                 // Need to add one to the destination point for GDI to render the same as GDI+
@@ -909,10 +911,11 @@ namespace System.Windows.Forms
                     {
                         HLSColor hlsColor = new HLSColor(bottomColor);
                         float inc = InfinityToOne(1.0f / (bottomWidth - 1));
-                        using var hdc = new DeviceContextHdcScope(deviceContext);
+                        using DeviceContextHdcScope hdc = new(deviceContext);
                         for (int i = 0; i < bottomWidth; i++)
                         {
-                            using var hpen = new Gdi32.CreatePenScope(bottomStyle != ButtonBorderStyle.Inset
+                            using PInvoke.CreatePenScope hpen = new(
+                                bottomStyle != ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
 
@@ -940,8 +943,8 @@ namespace System.Windows.Forms
                     {
                         if (!rightColor.HasTransparency() && rightStyle == ButtonBorderStyle.Solid)
                         {
-                            using var hdc = new DeviceContextHdcScope(deviceContext);
-                            using var hpen = new Gdi32.CreatePenScope(rightColor);
+                            using DeviceContextHdcScope hdc = new(deviceContext);
+                            using PInvoke.CreatePenScope hpen = new(rightColor);
                             for (int i = 0; i < rightWidth; i++)
                             {
                                 // Need to add one to the destination point for GDI to render the same as GDI+
@@ -984,12 +987,13 @@ namespace System.Windows.Forms
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
-                        HLSColor hlsColor = new HLSColor(rightColor);
+                        HLSColor hlsColor = new(rightColor);
                         float inc = InfinityToOne(1.0f / (rightWidth - 1));
-                        using var hdc = new DeviceContextHdcScope(deviceContext);
+                        using DeviceContextHdcScope hdc = new(deviceContext);
                         for (int i = 0; i < rightWidth; i++)
                         {
-                            using var hpen = new Gdi32.CreatePenScope(rightStyle != ButtonBorderStyle.Inset
+                            using PInvoke.CreatePenScope hpen = new(
+                                rightStyle != ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
 
@@ -1204,8 +1208,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            using var hdc = new DeviceContextHdcScope(context);
-            using var hpen = new Gdi32.CreatePenScope(color);
+            using DeviceContextHdcScope hdc = new(context);
+            using PInvoke.CreatePenScope hpen = new(color);
             hdc.DrawRectangle(bounds, hpen);
         }
 
@@ -1851,7 +1855,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
-            using Gdi32.ObjectScope pen = new(style switch
+            using PInvoke.ObjectScope pen = new(style switch
             {
                 FrameStyle.Dashed => (HGDIOBJ)PInvoke.CreatePen(PEN_STYLE.PS_DOT, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
                 FrameStyle.Thick => (HGDIOBJ)PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
@@ -1878,7 +1882,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
-            using Gdi32.ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
+            using PInvoke.ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
             using Gdi32.SetRop2Scope ropScope = new(desktopDC, rop2);
             using Gdi32.SelectObjectScope brushSelection = new(desktopDC, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
             using Gdi32.SelectObjectScope penSelection = new(desktopDC, pen);
@@ -1971,9 +1975,9 @@ namespace System.Windows.Forms
             int right = x + width - 1;
             int bottom = y + height - 2;
 
-            using var hdc = new DeviceContextHdcScope(deviceContext);
-            using var hpenBright = new Gdi32.CreatePenScope(LightLight(backColor));
-            using var hpenDark = new Gdi32.CreatePenScope(Dark(backColor));
+            using DeviceContextHdcScope hdc = new(deviceContext);
+            using PInvoke.CreatePenScope hpenBright = new(LightLight(backColor));
+            using PInvoke.CreatePenScope hpenDark = new(Dark(backColor));
 
             // Moving from the lower right corner, draw as many groups of 4 diagonal lines as will fit
             // (skip a line, dark, dark, light)
@@ -2092,9 +2096,9 @@ namespace System.Windows.Forms
                 User32.GetDesktopWindow(),
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
-            using var brush = new Gdi32.ObjectScope(Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor)));
-            using var ropScope = new Gdi32.SetRop2Scope(desktopDC, rop2);
-            using var brushSelection = new Gdi32.SelectObjectScope(desktopDC, brush);
+            using PInvoke.ObjectScope brush = new(Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor)));
+            using Gdi32.SetRop2Scope ropScope = new(desktopDC, rop2);
+            using Gdi32.SelectObjectScope brushSelection = new(desktopDC, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
             Gdi32.PatBlt(desktopDC, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);

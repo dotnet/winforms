@@ -39,7 +39,7 @@ namespace System.Windows.Forms
                 // Delete the old bitmap
                 if (!oldBitmap.IsNull)
                 {
-                    Gdi32.DeleteObject(oldBitmap);
+                    PInvoke.DeleteObject(oldBitmap);
                 }
 
                 // remember what size we created.
@@ -55,11 +55,10 @@ namespace System.Windows.Forms
             {
                 if (!_cachedItemBitmap.IsNull)
                 {
-                    Gdi32.DeleteObject(_cachedItemBitmap);
+                    PInvoke.DeleteObject(_cachedItemBitmap);
                 }
 
-                // delete the DC itself.
-                Gdi32.DeleteDC(_cachedItemHDC);
+                PInvoke.DeleteDC(_cachedItemHDC);
             }
 
             _cachedItemHDC = default;

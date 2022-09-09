@@ -23,6 +23,9 @@ CreatePen
 CreateRectRgn
 CreateWindowEx
 DeactivateActCtx
+DeleteDC
+DeleteEnhMetaFile
+DeleteObject
 DestroyWindow
 DuplicateHandle
 EndPaint

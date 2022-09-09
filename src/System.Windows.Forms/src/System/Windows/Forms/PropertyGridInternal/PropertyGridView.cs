@@ -2440,8 +2440,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    using var hdc = new User32.GetDcScope(Handle);
-                    using var hbrush = new Gdi32.CreateBrushScope(color);
+                    using User32.GetDcScope hdc = new(Handle);
+                    using PInvoke.CreateBrushScope hbrush = new(color);
                     hdc.FillRectangle(hbrush, clearRect);
                 }
             }
@@ -3805,7 +3805,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // This creates a copy of the given Font, and as such we need to delete it
                 var hFont = (HFONT)Font.ToHfont();
-                using (var fontScope = new Gdi32.ObjectScope(hFont))
+                using (PInvoke.ObjectScope fontScope = new(hFont))
                 {
                     using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
 

@@ -462,7 +462,7 @@ namespace System.Windows.Forms.VisualStyles
             if (bounds.Width < 0 || bounds.Height < 0)
                 return null;
 
-            using var hdc = new DeviceContextHdcScope(dc);
+            using DeviceContextHdcScope hdc = new(dc);
             RECT boundsRect = bounds;
             _lastHResult = GetThemeBackgroundRegion(this, hdc, Part, State, ref boundsRect, out HRGN hRegion);
 
@@ -477,7 +477,7 @@ namespace System.Windows.Forms.VisualStyles
             // From the GDI+ sources it doesn't appear as if they take ownership of the hRegion, so this is safe to do.
             // We need to DeleteObject in order to not leak.
             Region region = Region.FromHrgn(hRegion);
-            Gdi32.DeleteObject(hRegion);
+            PInvoke.DeleteObject(hRegion);
             return region;
         }
 
