@@ -39,7 +39,9 @@ DeleteDC
 DeleteEnhMetaFile
 DeleteObject
 DestroyWindow
+DragQueryFile
 DROPDESCRIPTION
+DROPFILES
 DROPIMAGETYPE
 DuplicateHandle
 EndPaint
@@ -137,6 +139,7 @@ MultiByteToWideChar
 NMHDR
 PeekMessage
 PostMessage
+PROPERTYKEY
 RegisterClass
 SendMessage
 SetActiveWindow
