@@ -479,7 +479,7 @@ public class DragDropTests : ControlTestBase
             Ole32.CLSCTX.INPROC_SERVER,
             ref IID_IUIAutomation,
             out object obj);
-        if (hr.Succeeded())
+        if (hr.Succeeded)
         {
             uiAutomation = (IUIAutomation)obj;
             return true;

@@ -310,7 +310,7 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.UserPaint, false);
             Ole32.OLEMISC bits = 0;
             HRESULT hr = GetOleObject().GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
-            if (hr.Succeeded())
+            if (hr.Succeeded)
             {
                 _miscStatusBits = bits;
                 ParseMiscBits(_miscStatusBits);
@@ -1074,7 +1074,7 @@ namespace System.Windows.Forms
                 {
                     // Need to deactivate.
                     HRESULT hr = UiDeactivate();
-                    Debug.Assert(hr.Succeeded(), $"Failed to UiDeactivate: {hr}");
+                    Debug.Assert(hr.Succeeded, $"Failed to UiDeactivate: {hr}");
                 }
 
                 if (!iss.GetComponentSelected(this))
@@ -1224,8 +1224,8 @@ namespace System.Windows.Forms
             Size sz = new Size(width, height);
             bool resetExtents = !IsUserMode();
             Pixel2hiMetric(ref sz);
-            Interop.HRESULT hr = GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            if (hr != Interop.HRESULT.S_OK)
+            HRESULT hr = GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
+            if (hr != HRESULT.S_OK)
             {
                 resetExtents = true;
             }
@@ -1414,7 +1414,7 @@ namespace System.Windows.Forms
                             break;
                         case OC_UIACTIVE:
                             HRESULT hr = UiDeactivate();
-                            Debug.Assert(hr.Succeeded(), $"Failed in UiDeactivate: {hr}");
+                            Debug.Assert(hr.Succeeded, $"Failed in UiDeactivate: {hr}");
                             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose && GetOcState() == OC_INPLACE, "failed transition");
                             SetOcState(OC_INPLACE);
                             break;
@@ -1897,7 +1897,7 @@ namespace System.Windows.Forms
                         cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
                     };
                     HRESULT hr = GetOleControl().GetControlInfo(&ctlInfo);
-                    if (!hr.Succeeded())
+                    if (!hr.Succeeded)
                     {
                         return false;
                     }
@@ -2393,7 +2393,7 @@ namespace System.Windows.Forms
                 in s_icf2_Guid,
                 out Ole32.IClassFactory2 icf2);
 
-            if (!hr.Succeeded())
+            if (!hr.Succeeded)
             {
                 if (hr == HRESULT.E_NOINTERFACE)
                 {
@@ -2429,7 +2429,7 @@ namespace System.Windows.Forms
                 Ole32.CLSCTX.INPROC_SERVER,
                 ref NativeMethods.ActiveX.IID_IUnknown,
                 out object ret);
-            hr.ThrowIfFailed();
+            hr.ThrowOnFailure();
 
             _instance = ret;
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t{(_instance is not null)}");
@@ -2446,7 +2446,7 @@ namespace System.Windows.Forms
                     IntPtr.Zero,
                     in s_icf2_Guid,
                     out Ole32.IClassFactory2 icf2);
-                if (hr.Succeeded())
+                if (hr.Succeeded)
                 {
                     icf2.CreateInstanceLic(IntPtr.Zero, IntPtr.Zero, ref NativeMethods.ActiveX.IID_IUnknown, license, out _instance);
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t{(_instance is not null)}");
@@ -3205,7 +3205,7 @@ namespace System.Windows.Forms
             try
             {
                 HRESULT hr = ispp.GetPages(&uuids);
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
                     return false;
                 }
@@ -3286,7 +3286,7 @@ namespace System.Windows.Forms
             Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
             var uuids = new Ole32.CAUUID();
             HRESULT hr = ispp.GetPages(&uuids);
-            if (!hr.Succeeded() || uuids.cElems == 0)
+            if (!hr.Succeeded || uuids.cElems == 0)
             {
                 return;
             }
@@ -3454,7 +3454,7 @@ namespace System.Windows.Forms
                     {
                         Ole32.IOleInPlaceObject ipo = GetInPlaceObject();
                         HWND hwnd = HWND.Null;
-                        if (ipo.GetWindow(&hwnd).Succeeded())
+                        if (ipo.GetWindow(&hwnd).Succeeded)
                         {
                             Application.ParkHandle(handle: new(ipo, hwnd), DpiAwarenessContext);
                         }
@@ -3674,7 +3674,7 @@ namespace System.Windows.Forms
             }
 
             HRESULT hr = iqa.QuickActivate(qaContainer, &qaControl);
-            if (!hr.Succeeded())
+            if (!hr.Succeeded)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Failed to QuickActivate: {hr}");
                 DisposeAxControl();

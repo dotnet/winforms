@@ -122,7 +122,7 @@ internal partial class Interop
                 {
                     var formatEtc = instance.EnumFormatEtc(direction);
                     var result = WinFormsComWrappers.Instance.TryGetComPointer(formatEtc, IID.IEnumFORMATETC, out var formatEtcPtr);
-                    if (result.Failed())
+                    if (result.Failed)
                     {
                         return result;
                     }
@@ -166,7 +166,7 @@ internal partial class Interop
             {
                 var instance = ComInterfaceDispatch.GetInstance<IDataObject>((ComInterfaceDispatch*)thisPtr);
                 var result = (HRESULT)instance.EnumDAdvise(out var enumAdvice);
-                if (result.Failed())
+                if (result.Failed)
                 {
                     return result;
                 }

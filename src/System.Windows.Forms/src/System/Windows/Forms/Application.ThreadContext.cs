@@ -179,7 +179,7 @@ namespace System.Windows.Forms
                         IntPtr messageFilterHandle = default;
 
                         // Clear the thread's message filter to see if there was an existing filter
-                        if (Ole32.CoRegisterMessageFilter(IntPtr.Zero, ref messageFilterHandle).Failed()
+                        if (Ole32.CoRegisterMessageFilter(IntPtr.Zero, ref messageFilterHandle).Failed
                             || messageFilterHandle == IntPtr.Zero)
                         {
                             return null;
@@ -204,7 +204,7 @@ namespace System.Windows.Forms
                         var iid = new Guid(ComponentIds.IID_IMsoComponentManager);
                         try
                         {
-                            if (serviceProvider.QueryService(&sid, &iid, &serviceHandle).Failed() || serviceHandle == IntPtr.Zero)
+                            if (serviceProvider.QueryService(&sid, &iid, &serviceHandle).Failed || serviceHandle == IntPtr.Zero)
                             {
                                 return null;
                             }
@@ -219,7 +219,7 @@ namespace System.Windows.Forms
                         HRESULT hr = (HRESULT)Marshal.QueryInterface(serviceHandle, ref iid, out IntPtr componentManagerHandle);
                         Marshal.Release(serviceHandle);
 
-                        if (hr.Succeeded() && componentManagerHandle != IntPtr.Zero)
+                        if (hr.Succeeded && componentManagerHandle != IntPtr.Zero)
                         {
                             IMsoComponentManager componentManager = (IMsoComponentManager)Marshal.GetObjectForIUnknown(componentManagerHandle);
                             Marshal.Release(componentManagerHandle);

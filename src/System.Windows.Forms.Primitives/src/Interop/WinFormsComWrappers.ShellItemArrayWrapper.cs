@@ -72,7 +72,7 @@ internal partial class Interop
                 fixed (uint* pdwNumItems_local = &pdwNumItems)
                 {
                     ((delegate* unmanaged<IntPtr, uint*, HRESULT>)(*(*(void***)_wrappedInstance + 7)))
-                        (_wrappedInstance, pdwNumItems_local).ThrowIfFailed();
+                        (_wrappedInstance, pdwNumItems_local).ThrowOnFailure();
                 }
             }
 
@@ -80,7 +80,7 @@ internal partial class Interop
             {
                 IntPtr ppsi_local;
                 ((delegate* unmanaged<IntPtr, uint, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 8)))
-                    (_wrappedInstance, dwIndex, &ppsi_local).ThrowIfFailed();
+                    (_wrappedInstance, dwIndex, &ppsi_local).ThrowOnFailure();
                 ppsi = (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
             }
 

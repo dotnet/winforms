@@ -16,7 +16,7 @@ internal static partial class Interop
         {
             Guid shellItemIID = IID.IShellItem;
             HRESULT hr = SHCreateItemFromParsingName(path, IntPtr.Zero, in shellItemIID, out IntPtr ppv);
-            if (hr.Failed())
+            if (hr.Failed)
             {
                 throw new Win32Exception((int)hr);
             }

@@ -424,7 +424,7 @@ namespace System.Windows.Forms
                 }
 
                 HWND hwnd = HWND.Null;
-                if (_host.GetInPlaceObject().GetWindow(&hwnd).Succeeded())
+                if (_host.GetInPlaceObject().GetWindow(&hwnd).Succeeded)
                 {
                     if (_host.GetHandleNoCreate() != hwnd)
                     {

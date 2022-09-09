@@ -17,7 +17,7 @@ internal static partial class Interop
             if (PInvoke.SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, 0, psfgaoOut: null).Succeeded)
             {
                 // No parent specified
-                if (SHCreateShellItem(IntPtr.Zero, IntPtr.Zero, (nint)ppidl, out IntPtr ret).Succeeded())
+                if (SHCreateShellItem(IntPtr.Zero, IntPtr.Zero, (nint)ppidl, out nint ret).Succeeded)
                 {
                     var obj = WinFormsComWrappers.Instance
                         .GetOrCreateObjectForComInstance(ret, CreateObjectFlags.None);

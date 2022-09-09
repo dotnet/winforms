@@ -18,7 +18,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             BOOL valid = false;
             var pGuidBldr = new string[1];
-            if (!target.MapPropertyToBuilder(dispid, bldrType, pGuidBldr, &valid).Succeeded())
+            if (!target.MapPropertyToBuilder(dispid, bldrType, pGuidBldr, &valid).Succeeded)
             {
                 return false;
             }
