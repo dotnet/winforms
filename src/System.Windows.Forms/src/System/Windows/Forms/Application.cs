@@ -1307,7 +1307,7 @@ namespace System.Windows.Forms
         ///  Returns true if the call succeeded, else false.
         /// </summary>
         public static bool SetSuspendState(PowerState state, bool force, bool disableWakeEvent)
-            => Powrprof.SetSuspendState((state == PowerState.Hibernate).ToBOOLEAN(), force.ToBOOLEAN(), disableWakeEvent.ToBOOLEAN()).IsTrue();
+            => PInvoke.SetSuspendState((state == PowerState.Hibernate), force, disableWakeEvent);
 
         /// <summary>
         ///  Overload version of SetUnhandledExceptionMode that sets the UnhandledExceptionMode
