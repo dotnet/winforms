@@ -261,11 +261,11 @@ namespace System.Windows.Forms.Design
             using var hDC = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
 
             // Set our pen and brush based on primary selection
-            using var brushSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-            using var penSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
+            using PInvoke.SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+            using PInvoke.SelectObjectScope penSelection = new(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
 
             // Draw our rounded rect grabhandle
-            Gdi32.RoundRect(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
+            PInvoke.RoundRect(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
         }
 
         /// <summary>
@@ -276,11 +276,11 @@ namespace System.Windows.Forms.Design
             using var hDC = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
 
             // Set our pen and brush based on primary selection
-            using var brushSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-            using var penSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandlePenPrimary);
+            using PInvoke.SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+            using PInvoke.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
             // Draw our rect no-resize handle
-            Gdi32.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
+            PInvoke.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
         }
 
         /// <summary>
@@ -290,11 +290,11 @@ namespace System.Windows.Forms.Design
         {
             using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
-            using Gdi32.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
+            using PInvoke.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
             // Upper rect - upper rect is always filled with the primary brush
-            using Gdi32.SelectObjectScope brushSelection = new(hDC, s_grabHandleFillBrushPrimary);
-            Gdi32.RoundRect(
+            using PInvoke.SelectObjectScope brushSelection = new(hDC, s_grabHandleFillBrushPrimary);
+            PInvoke.RoundRect(
                 hDC,
                 bounds.Left + LOCKHANDLEUPPER_OFFSET,
                 bounds.Top, bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER,
@@ -303,8 +303,8 @@ namespace System.Windows.Forms.Design
                 height: 2);
 
             // Lower rect - its fillbrush depends on the primary selection
-            Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-            Gdi32.Rectangle(hDC, bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
+            PInvoke.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+            PInvoke.Rectangle(hDC, bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
         }
 
         /// <summary>
@@ -577,7 +577,7 @@ namespace System.Windows.Forms.Design
             using Graphics g = ctrl.CreateGraphics();
             using DeviceContextHdcScope dc = new(g, applyGraphicsState: false);
             using PInvoke.ObjectScope hFont = new(ctrl.Font.ToHFONT());
-            using Gdi32.SelectObjectScope hFontOld = new(dc, hFont);
+            using PInvoke.SelectObjectScope hFontOld = new(dc, hFont);
 
             TEXTMETRICW metrics = default;
             PInvoke.GetTextMetrics(dc, &metrics);

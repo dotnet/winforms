@@ -34,7 +34,7 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(hdc);
 
             _hdc = hdc;
-            _savedState = Gdi32.SaveDC(hdc);
+            _savedState = PInvoke.SaveDC(hdc);
 
             // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
             Point viewportOrg = default;
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
                 }
 
                 // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-                RegionType selectResult = Gdi32.SelectClipRgn(hdc, hClippingRegion);
+                RegionType selectResult = (RegionType)PInvoke.SelectClipRgn(hdc, hClippingRegion);
                 Debug.Assert(
                     selectResult == RegionType.SIMPLEREGION || selectResult == RegionType.NULLREGION,
                     "SIMPLEREGION or NULLLREGION expected.");
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
         {
             if (!_hdc.IsNull)
             {
-                Gdi32.RestoreDC(_hdc, _savedState);
+                PInvoke.RestoreDC(_hdc, _savedState);
             }
         }
     }

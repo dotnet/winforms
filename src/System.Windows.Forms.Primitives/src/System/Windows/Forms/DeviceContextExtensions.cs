@@ -33,11 +33,11 @@ namespace System.Windows.Forms
             int bottom,
             HPEN hpen)
         {
-            using Gdi32.SelectObjectScope penScope = new(hdc, hpen);
+            using PInvoke.SelectObjectScope penScope = new(hdc, hpen);
             using PInvoke.SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
-            using Gdi32.SelectObjectScope brushScope = new(hdc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+            using PInvoke.SelectObjectScope brushScope = new(hdc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
 
-            Gdi32.Rectangle(hdc, left, top, right, bottom);
+            PInvoke.Rectangle(hdc, left, top, right, bottom);
         }
 
         internal static void FillRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, HBRUSH hbrush)
@@ -89,15 +89,15 @@ namespace System.Windows.Forms
 
             using PInvoke.SetRop2Scope ropScope = new(hdc, R2_MODE.R2_COPYPEN);
             using PInvoke.SetBkModeScope bkScope = new(hdc, BACKGROUND_MODE.TRANSPARENT);
-            using var selection = new Gdi32.SelectObjectScope(hdc, (HGDIOBJ)hpen.Value);
+            using PInvoke.SelectObjectScope selection = new(hdc, (HGDIOBJ)hpen.Value);
 
-            Point oldPoint = new Point();
+            Point oldPoint = new();
 
             for (int i = 0; i < lines.Length; i += 4)
             {
-                Gdi32.MoveToEx(hdc, lines[i], lines[i + 1], &oldPoint);
-                Gdi32.LineTo(hdc, lines[i + 2], lines[i + 3]);
-                Gdi32.MoveToEx(hdc, oldPoint.X, oldPoint.Y, null);
+                PInvoke.MoveToEx(hdc, lines[i], lines[i + 1], &oldPoint);
+                PInvoke.LineTo(hdc, lines[i + 2], lines[i + 3]);
+                PInvoke.MoveToEx(hdc, oldPoint.X, oldPoint.Y, lppt: null);
             }
         }
 
@@ -144,10 +144,10 @@ namespace System.Windows.Forms
             int right,
             int bottom)
         {
-            using var penSelection = pen.IsNull ? default : new Gdi32.SelectObjectScope(hdc, (HGDIOBJ)pen.Value);
-            using var brushSelection = brush.IsNull ? default : new Gdi32.SelectObjectScope(hdc, (HGDIOBJ)brush.Value);
+            using var penSelection = pen.IsNull ? default : new PInvoke.SelectObjectScope(hdc, (HGDIOBJ)pen.Value);
+            using var brushSelection = brush.IsNull ? default : new PInvoke.SelectObjectScope(hdc, (HGDIOBJ)brush.Value);
 
-            Gdi32.Ellipse(hdc, left, top, right, bottom);
+            PInvoke.Ellipse(hdc, left, top, right, bottom);
         }
 
         internal static void FillRectangle(this User32.GetDcScope hdc, HBRUSH hbrush, Rectangle rectangle)

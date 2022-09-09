@@ -46,7 +46,7 @@ namespace System.Windows.Forms
                 int planes = PInvoke.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.PLANES);
                 int bitsPixel = PInvoke.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
                 _hBitmap = PInvoke.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
-                _hOriginalBmp = (HBITMAP)Gdi32.SelectObject(HDC, _hBitmap);
+                _hOriginalBmp = (HBITMAP)PInvoke.SelectObject(HDC, _hBitmap);
             }
 
             ~MetafileDCWrapper()
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
                 {
                     success = DICopy(_hMetafileDC, HDC, _destRect, bStretch: true);
                     Debug.Assert(success, "DICopy() failed.");
-                    Gdi32.SelectObject(HDC, _hOriginalBmp);
+                    PInvoke.SelectObject(HDC, _hOriginalBmp);
                     success = PInvoke.DeleteObject(_hBitmap);
                     Debug.Assert(success, "DeleteObject() failed.");
                     success = PInvoke.DeleteDC(HDC);
@@ -100,14 +100,14 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    HBITMAP hBitmap = (HBITMAP)Gdi32.SelectObject(hdcSrc, hNullBitmap);
+                    HBITMAP hBitmap = (HBITMAP)PInvoke.SelectObject(hdcSrc, hNullBitmap);
                     if (hBitmap.IsNull)
                     {
                         return false;
                     }
 
                     // Restore original bitmap
-                    Gdi32.SelectObject(hdcSrc, hBitmap);
+                    PInvoke.SelectObject(hdcSrc, hBitmap);
 
                     if (!PInvoke.GetObject(hBitmap, out Gdi32.BITMAP bmp))
                     {

@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests.Text
 
             using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.CLEARTYPE_QUALITY);
             using var screen = GdiCache.GetScreenHdc();
-            using var fontSelection = new Gdi32.SelectObjectScope(screen, hfont.Object);
+            using PInvoke.SelectObjectScope fontSelection = new(screen, hfont.Object);
 
             User32.DRAWTEXTPARAMS param = default;
             Rectangle result = screen.HDC.AdjustForVerticalAlignment(

@@ -77,8 +77,13 @@ namespace System.Windows.Forms.Metafiles
             GCHandle enumeratorHandle = GCHandle.Alloc(enumerator);
             try
             {
-                IntPtr callback = Marshal.GetFunctionPointerForDelegate<Gdi32.Enhmfenumproc>(CallBack);
-                Gdi32.EnumEnhMetaFile(default, HENHMETAFILE, CallBack, (IntPtr)enumeratorHandle, null);
+                var callback = Marshal.GetFunctionPointerForDelegate(CallBack);
+                PInvoke.EnumEnhMetaFile(
+                    default,
+                    HENHMETAFILE,
+                    (delegate* unmanaged[Stdcall]<HDC, HANDLETABLE*, ENHMETARECORD*, int, LPARAM, int>)callback,
+                    (void*)(nint)enumeratorHandle,
+                    (RECT*)null);
             }
             finally
             {
@@ -223,10 +228,10 @@ namespace System.Windows.Forms.Metafiles
 
         private static unsafe BOOL CallBack(
             HDC hdc,
-            HGDIOBJ* lpht,
-            Gdi32.ENHMETARECORD* lpmr,
+            HANDLETABLE* lpht,
+            ENHMETARECORD* lpmr,
             int nHandles,
-            IntPtr data)
+            LPARAM data)
         {
             // Note that the record pointer is *only* valid during the callback.
             GCHandle enumeratorHandle = GCHandle.FromIntPtr(data);

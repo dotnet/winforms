@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Design
 
                 // Select the font of the dialog, so we don't get the underlined font
                 // when the item is being tracked
-                using var fontSelection = new Gdi32.SelectObjectScope(
+                using PInvoke.SelectObjectScope fontSelection = new(
                     dc,
                     (state & STATE_HOT) != 0 ? (HGDIOBJ)Parent!.FontHandle : default);
 
@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Design
                 else
                 {
                     PInvoke.SetBkColor(dc, backColor);
-                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.CLIPPED | Gdi32.ETO.OPAQUE, ref rc, null, 0, null);
+                    PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_CLIPPED | ETO_OPTIONS.ETO_OPAQUE, &rc, lpString: null, 0, lpDx: null);
                 }
 
                 fixed (char* pItemText = itemText)
@@ -158,10 +158,10 @@ namespace System.Windows.Forms.Design
                     rc2.top = rc.top;
                     rc2.bottom = rc.top + 1;
                     rc2.right = rc.right;
-                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
+                    PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
                     rc2.bottom = rc.bottom;
                     rc2.right = rc.left + 1;
-                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
+                    PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
 
                     // bottom right
                     PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlDark));
@@ -169,10 +169,10 @@ namespace System.Windows.Forms.Design
                     rc2.right = rc.right;
                     rc2.top = rc.bottom - 1;
                     rc2.bottom = rc.bottom;
-                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
+                    PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
                     rc2.left = rc.right - 1;
                     rc2.top = rc.top;
-                    Gdi32.ExtTextOutW(dc, 0, 0, Gdi32.ETO.OPAQUE, ref rc2, null, 0, null);
+                    PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
 
                     PInvoke.SetBkColor(dc, savedColor);
                 }
@@ -253,14 +253,14 @@ namespace System.Windows.Forms.Design
 
             private void FillRectDither(HDC dc, RECT rc)
             {
-                HGDIOBJ hbrushOld = Gdi32.SelectObject(dc, _hbrushDither);
+                HGDIOBJ hbrushOld = PInvoke.SelectObject(dc, _hbrushDither);
 
                 if (!hbrushOld.IsNull)
                 {
                     COLORREF oldTextColor = PInvoke.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
                     COLORREF oldBackColor = PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Control));
 
-                    Gdi32.PatBlt(dc, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, Gdi32.ROP.PATCOPY);
+                    PInvoke.PatBlt(dc, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, ROP_CODE.PATCOPY);
                     PInvoke.SetTextColor(dc, oldTextColor);
                     PInvoke.SetBkColor(dc, oldBackColor);
                 }

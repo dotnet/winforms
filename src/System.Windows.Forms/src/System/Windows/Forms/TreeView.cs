@@ -2919,7 +2919,7 @@ namespace System.Windows.Forms
                     if (renderinfo is not null && renderinfo.Font is not null)
                     {
                         // Mess with the DC directly...
-                        Gdi32.SelectObject(nmtvcd->nmcd.hdc, renderinfo.FontHandle);
+                        PInvoke.SelectObject(nmtvcd->nmcd.hdc, renderinfo.FontHandle);
 
                         // There is a problem in winctl that clips node fonts if the fontsize
                         // is larger than the treeview font size. The behavior is much better in comctl 5 and above.

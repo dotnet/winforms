@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -40,7 +39,7 @@ namespace System.Windows.Forms
                     {
                         using var screenDC = GdiCache.GetScreenHdc();
                         HDC hdc = screenDC.HDC;
-                        using var fontSelection = new Gdi32.SelectObjectScope(hdc, HFONT);
+                        using PInvoke.SelectObjectScope fontSelection = new(hdc, HFONT);
                         Debug.Assert(PInvoke.GetMapMode(hdc) == HDC_MAP_MODE.MM_TEXT);
 
                         TEXTMETRICW tm = default;
