@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using Windows.Win32;
 using static Interop;
 using Gdi = Windows.Win32.Graphics.Gdi;
+using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {
@@ -352,7 +353,7 @@ namespace System.Windows.Forms
 
             Gdi.LOGBRUSH lb = new()
             {
-                lbStyle = (uint)Gdi32.BS.PATTERN,
+                lbStyle = (Gdi.BRUSH_STYLE)(uint)Gdi32.BS.PATTERN,
                 lbColor = default, // color is ignored since style is BS.PATTERN
                 lbHatch = (nuint)(IntPtr)hBitmap
             };
@@ -1857,8 +1858,8 @@ namespace System.Windows.Forms
 
             using Gdi32.ObjectScope pen = new(style switch
             {
-                FrameStyle.Dashed => PInvoke.CreatePen(Gdi.PEN_STYLE.PS_DOT, cWidth: 1, (uint)ColorTranslator.ToWin32(backColor)),
-                FrameStyle.Thick => PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 2, (uint)ColorTranslator.ToWin32(backColor)),
+                FrameStyle.Dashed => PInvoke.CreatePen(Gdi.PEN_STYLE.PS_DOT, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(backColor)),
+                FrameStyle.Thick => PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 2, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(backColor)),
                 _ => default
             });
 
@@ -1882,7 +1883,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
-            using Gdi32.ObjectScope pen = new(PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (uint)ColorTranslator.ToWin32(backColor)));
+            using Gdi32.ObjectScope pen = new(PInvoke.CreatePen(Gdi.PEN_STYLE.PS_SOLID, cWidth: 1, (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
             using Gdi32.SetRop2Scope ropScope = new(desktopDC, rop2);
             using Gdi32.SelectObjectScope brushSelection = new(desktopDC, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
             using Gdi32.SelectObjectScope penSelection = new(desktopDC, pen);
