@@ -95,7 +95,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 var cp = new CreateParams
                 {
                     Parent = IntPtr.Zero,
-                    ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS
+                    ClassName = PInvoke.TOOLTIPS_CLASS
                 };
 
                 cp.Style |= (int)(ComCtl32.TTS.ALWAYSTIP | ComCtl32.TTS.NOPREFIX);

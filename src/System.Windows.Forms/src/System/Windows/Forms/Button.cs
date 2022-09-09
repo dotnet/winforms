@@ -136,7 +136,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
+                cp.ClassName = PInvoke.WC_BUTTON;
                 if (GetStyle(ControlStyles.UserPaint))
                 {
                     cp.Style |= (int)User32.BS.OWNERDRAW;
