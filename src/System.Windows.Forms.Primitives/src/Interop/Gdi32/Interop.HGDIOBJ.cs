@@ -19,6 +19,7 @@ internal static partial class Interop
             public static explicit operator nint(HGDIOBJ hgdiobj) => hgdiobj.Handle;
             public static explicit operator HGDIOBJ(nint hgdiobj) => new(hgdiobj);
             public static implicit operator HGDIOBJ(Gdi.HBITMAP hBITMAP) => new(hBITMAP.Value);
+            public static implicit operator HGDIOBJ(Gdi.HPEN hpen) => new(hpen.Value);
 
             public static bool operator ==(HGDIOBJ value1, HGDIOBJ value2) => value1.Handle == value2.Handle;
             public static bool operator !=(HGDIOBJ value1, HGDIOBJ value2) => value1.Handle != value2.Handle;
