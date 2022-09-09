@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Buffers;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,7 +13,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
+using Windows.Win32.System.Diagnostics.Debug;
 using static Interop;
 using static Interop.Ole32;
 
@@ -1326,40 +1327,37 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     else if (errorInfo is null)
                     {
-                        StringBuilder strMessage = new StringBuilder(256);
+                        char[] buffer = ArrayPool<char>.Shared.Rent(256 + 1);
 
-                        uint result = Kernel32.FormatMessageW(
-                            PInvoke.FormatMessageOptions.FROM_SYSTEM | PInvoke.FormatMessageOptions.IGNORE_INSERTS,
-                            IntPtr.Zero,
-                            (uint)hr,
-                            PInvoke.GetThreadLocale(),
-                            strMessage,
-                            255,
-                            IntPtr.Zero);
+                        fixed (char* b = buffer)
+                        {
+                            uint result = PInvoke.FormatMessage(
+                                FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_IGNORE_INSERTS,
+                                null,
+                                (uint)hr,
+                                PInvoke.GetThreadLocale(),
+                                b,
+                                255,
+                                null);
 
-                        if (result == 0)
-                        {
-                            errorInfo = string.Format(CultureInfo.CurrentCulture, string.Format(SR.DispInvokeFailed, "SetValue", hr));
+                            if (result == 0)
+                            {
+                                errorInfo = string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", hr);
+                            }
+                            else
+                            {
+                                ReadOnlySpan<char> ipBuffer = new(buffer);
+                                ipBuffer.TrimEnd('\n');
+                                ipBuffer.TrimEnd('\r');
+                                errorInfo = ipBuffer.ToString();
+                            }
                         }
-                        else
-                        {
-                            errorInfo = TrimNewline(strMessage);
-                        }
+
+                        ArrayPool<char>.Shared.Return(buffer);
                     }
 
                     throw new ExternalException(errorInfo, (int)hr);
             }
-        }
-
-        private static string TrimNewline(StringBuilder errorInfo)
-        {
-            int index = errorInfo.Length - 1;
-            while (index >= 0 && (errorInfo[index] == '\n' || errorInfo[index] == '\r'))
-            {
-                index--;
-            }
-
-            return errorInfo.ToString(0, index + 1);
         }
 
         /// <summary>
