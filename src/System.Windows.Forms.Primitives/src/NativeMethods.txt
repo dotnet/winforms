@@ -12,6 +12,7 @@ CallWindowProc
 CloseEnhMetaFile
 CloseHandle
 CombineRgn
+COMDLG_FILTERSPEC
 CommDlgExtendedError
 CP_ACP
 CreateActCtx
@@ -45,6 +46,7 @@ DISP_E_EXCEPTION
 DISP_E_MEMBERNOTFOUND
 DISP_E_PARAMNOTFOUND
 DISP_E_UNKNOWNNAME
+DragAcceptFiles
 DRAGDROP_E_ALREADYREGISTERED
 DRAGDROP_E_NOTREGISTERED
 DRAGDROP_S_CANCEL
@@ -206,11 +208,15 @@ SetViewportOrgEx
 SetWindowExtEx
 SetWindowOrgEx
 SetWindowsHookEx
+SHCreateItemFromParsingName
 SHDRAGIMAGE
 ShellExecute
 SHGetKnownFolderPath
 ShowCursor
+SHGetSpecialFolderLocation
 SHParseDisplayName
+SIATTRIBFLAGS
+SIGDN
 STATUS_PENDING
 STATUS_SUCCESS
 STATUSCLASSNAME
