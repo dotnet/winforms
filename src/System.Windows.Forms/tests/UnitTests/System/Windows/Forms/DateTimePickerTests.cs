@@ -211,8 +211,8 @@ namespace System.Windows.Forms.Tests
             {
                 // An empty SYSTEMTIME has year, month and day as 0, but DateTime can't have these parameters.
                 // So an empty SYSTEMTIME is incorrect in this case.
-                PInvoke.SYSTEMTIME systemTime = new PInvoke.SYSTEMTIME();
-                DateTime dateTime = systemTime;
+                SYSTEMTIME systemTime = new SYSTEMTIME();
+                DateTime dateTime = (DateTime)systemTime;
                 Assert.Equal(DateTime.MinValue, dateTime);
             }
         }

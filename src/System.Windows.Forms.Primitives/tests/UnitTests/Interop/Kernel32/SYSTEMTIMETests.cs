@@ -12,14 +12,14 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
         [Fact]
         public unsafe void SYSTEMTIME_Sizeof_ReturnsExpected()
         {
-            Assert.Equal(16, Marshal.SizeOf<PInvoke.SYSTEMTIME>());
-            Assert.Equal(16, sizeof(PInvoke.SYSTEMTIME));
+            Assert.Equal(16, Marshal.SizeOf<SYSTEMTIME>());
+            Assert.Equal(16, sizeof(SYSTEMTIME));
         }
 
         [Fact]
         public void SYSTEMTIME_Ctor_Default()
         {
-            var st = new PInvoke.SYSTEMTIME();
+            var st = new SYSTEMTIME();
 
             Assert.Equal(0, st.wYear);
             Assert.Equal(0, st.wMonth);
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
         [Fact]
         public void SYSTEMTIME_CastToDateTime_ReturnsExpected()
         {
-            var st = new PInvoke.SYSTEMTIME()
+            var st = new SYSTEMTIME()
             {
                 wYear = 2021,
                 wMonth = 5,
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
                 wMilliseconds = 50
             };
 
-            DateTime dt = st; // cast to DateTime implicitly
+            DateTime dt = (DateTime)st; // cast to DateTime implicitly
 
             Assert.Equal(st.wYear, dt.Year);
             Assert.Equal(st.wMonth, dt.Month);
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
         [Fact]
         public void SYSTEMTIME_CastToDateTime_ThrowsException_IfArgumentsAreIncorrect()
         {
-            var st = new PInvoke.SYSTEMTIME()
+            var st = new SYSTEMTIME()
             {
                 wYear = 9999,
                 wMonth = 99,
@@ -72,18 +72,18 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
             };
             DateTime dt;
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => dt = st); // cast to DateTime implicitly with incorrect arguments
+            Assert.Throws<ArgumentOutOfRangeException>(() => dt = (DateTime)st); // cast to DateTime implicitly with incorrect arguments
         }
 
         [Fact]
         public void SYSTEMTIME_CastToDateTime_ReturnsMinValue_IfValueIsDefault()
         {
-            var st = new PInvoke.SYSTEMTIME();
+            var st = new SYSTEMTIME();
             DateTime dt;
 
             using (new NoAssertContext())
             {
-                dt = st; // cast to DateTime implicitly
+                dt = (DateTime)st; // cast to DateTime implicitly
             }
 
             Assert.Equal(DateTime.MinValue, dt);

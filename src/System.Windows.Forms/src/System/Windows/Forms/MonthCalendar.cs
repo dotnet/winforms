@@ -923,7 +923,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SYSTEMTIME systemTime = new();
+                    SYSTEMTIME systemTime = new();
                     int result = (int)PInvoke.SendMessage(this, (User32.WM)User32.MCM.GETTODAY, 0, ref systemTime);
                     Debug.Assert(result != 0, "MCM_GETTODAY failed");
                     return ((DateTime)systemTime).Date;
@@ -1348,12 +1348,12 @@ namespace System.Windows.Forms
 
         private SelectionRange GetMonthRange(GMR flag)
         {
-            Span<PInvoke.SYSTEMTIME> times = stackalloc PInvoke.SYSTEMTIME[2];
+            Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
             PInvoke.SendMessage(this, (User32.WM)MCM.GETMONTHRANGE, (WPARAM)(int)flag, ref times[0]);
             return new SelectionRange
             {
-                Start = times[0],
-                End = times[1]
+                Start = (DateTime)times[0],
+                End = (DateTime)times[1]
             };
         }
 
@@ -1394,7 +1394,7 @@ namespace System.Windows.Forms
             {
                 cbSize = (uint)sizeof(MCHITTESTINFO),
                 pt = new Point(x, y),
-                st = new PInvoke.SYSTEMTIME()
+                st = new SYSTEMTIME()
             };
 
             PInvoke.SendMessage(this, (User32.WM)MCM.HITTEST, 0, ref mchi);
@@ -1403,7 +1403,7 @@ namespace System.Windows.Forms
             HitArea hitArea = GetHitArea(mchi.uHit);
             if (HitTestInfo.HitAreaHasValidDateTime(hitArea))
             {
-                PInvoke.SYSTEMTIME systemTime = new()
+                SYSTEMTIME systemTime = new()
                 {
                     wYear = mchi.st.wYear,
                     wMonth = mchi.st.wMonth,
@@ -1415,7 +1415,7 @@ namespace System.Windows.Forms
                     wMilliseconds = mchi.st.wMilliseconds
                 };
 
-                return new HitTestInfo(mchi.pt, hitArea, systemTime);
+                return new HitTestInfo(mchi.pt, hitArea, (DateTime)systemTime);
             }
 
             return new HitTestInfo(mchi.pt, hitArea);
@@ -1467,7 +1467,7 @@ namespace System.Windows.Forms
 
             if (_todayDateSet)
             {
-                PInvoke.SYSTEMTIME systemTime = _todaysDate;
+                SYSTEMTIME systemTime = (SYSTEMTIME)_todaysDate;
                 PInvoke.SendMessage(this, (User32.WM)User32.MCM.SETTODAY, (WPARAM)0, ref systemTime);
             }
 
@@ -1838,9 +1838,9 @@ namespace System.Windows.Forms
             // Updated the calendar range
             if (IsHandleCreated)
             {
-                Span<PInvoke.SYSTEMTIME> times = stackalloc PInvoke.SYSTEMTIME[2];
-                times[0] = minDate;
-                times[1] = maxDate;
+                Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
+                times[0] = (SYSTEMTIME)minDate;
+                times[1] = (SYSTEMTIME)maxDate;
                 GDTR flags = GDTR.MIN | GDTR.MAX;
                 if (PInvoke.SendMessage(this, (User32.WM)MCM.SETRANGE, (WPARAM)(uint)flags, ref times[0]) == 0)
                 {
@@ -2008,9 +2008,9 @@ namespace System.Windows.Forms
             // Always set the value on the control, to ensure that it is up to date.
             if (IsHandleCreated)
             {
-                Span<PInvoke.SYSTEMTIME> times = stackalloc PInvoke.SYSTEMTIME[2];
-                times[0] = lower;
-                times[1] = upper;
+                Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
+                times[0] = (SYSTEMTIME)lower;
+                times[1] = (SYSTEMTIME)upper;
                 PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETSELRANGE, 0, ref times[0]);
             }
 
@@ -2128,7 +2128,7 @@ namespace System.Windows.Forms
             {
                 if (_todayDateSet)
                 {
-                    PInvoke.SYSTEMTIME systemTime = _todaysDate;
+                    SYSTEMTIME systemTime = (SYSTEMTIME)_todaysDate;
                     PInvoke.SendMessage(this, (User32.WM)User32.MCM.SETTODAY, 0, ref systemTime);
                 }
                 else
@@ -2167,8 +2167,8 @@ namespace System.Windows.Forms
         private unsafe void WmDateChanged(ref Message m)
         {
             NMSELCHANGE* nmmcsc = (NMSELCHANGE*)(nint)m.LParamInternal;
-            DateTime start = nmmcsc->stSelStart;
-            DateTime end = nmmcsc->stSelEnd;
+            DateTime start = (DateTime)nmmcsc->stSelStart;
+            DateTime end = (DateTime)nmmcsc->stSelEnd;
 
             // Windows doesn't provide API to get the focused cell.
             // To get the correct focused cell consider 3 cases:
@@ -2254,8 +2254,8 @@ namespace System.Windows.Forms
         private unsafe void WmDateSelected(ref Message m)
         {
             NMSELCHANGE* nmmcsc = (NMSELCHANGE*)(nint)m.LParamInternal;
-            DateTime start = _selectionStart = nmmcsc->stSelStart;
-            DateTime end = _selectionEnd = nmmcsc->stSelEnd;
+            DateTime start = _selectionStart = (DateTime)nmmcsc->stSelStart;
+            DateTime end = _selectionEnd = (DateTime)nmmcsc->stSelEnd;
 
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);

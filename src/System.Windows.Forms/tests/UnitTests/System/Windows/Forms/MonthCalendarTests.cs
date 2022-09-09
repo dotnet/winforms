@@ -1029,7 +1029,7 @@ namespace System.Windows.Forms.Tests
                 SelectionRange = new SelectionRange(lower, upper)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Span<PInvoke.SYSTEMTIME> range = stackalloc PInvoke.SYSTEMTIME[2];
+            Span<SYSTEMTIME> range = stackalloc SYSTEMTIME[2];
             Assert.Equal(1, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETSELRANGE, 0, ref range[0]));
             Assert.Equal(2019, range[0].wYear);
             Assert.Equal(1, range[0].wMonth);
@@ -1068,7 +1068,7 @@ namespace System.Windows.Forms.Tests
                 TodayDate = new DateTime(2019, 1, 30, 3, 4, 5, 6)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            PInvoke.SYSTEMTIME date = default;
+            SYSTEMTIME date = default;
             Assert.Equal(1, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETTODAY, 0, ref date));
             Assert.Equal(2019, date.wYear);
             Assert.Equal(1, date.wMonth);
@@ -1172,7 +1172,7 @@ namespace System.Windows.Forms.Tests
                 MaxDate = new DateTime(2020, 2, 3, 4, 5, 6, 7)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Span<PInvoke.SYSTEMTIME> range = stackalloc PInvoke.SYSTEMTIME[2];
+            Span<SYSTEMTIME> range = stackalloc SYSTEMTIME[2];
             Assert.Equal(3, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETRANGE, 0, ref range[0]));
             Assert.Equal(2019, range[0].wYear);
             Assert.Equal(1, range[0].wMonth);
@@ -1181,7 +1181,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, range[0].wHour);
             Assert.Equal(4, range[0].wMinute);
             Assert.Equal(5, range[0].wSecond);
-            Assert.Equal(0, range[0].wMilliseconds);
+            Assert.Equal(6, range[0].wMilliseconds);
             Assert.Equal(2020, range[1].wYear);
             Assert.Equal(2, range[1].wMonth);
             Assert.Equal(3, range[1].wDay);
@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, range[1].wHour);
             Assert.Equal(5, range[1].wMinute);
             Assert.Equal(6, range[1].wSecond);
-            Assert.Equal(0, range[1].wMilliseconds);
+            Assert.Equal(7, range[1].wMilliseconds);
         }
 
         [WinFormsFact]

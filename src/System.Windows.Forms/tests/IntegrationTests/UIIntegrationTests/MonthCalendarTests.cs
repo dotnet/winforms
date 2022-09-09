@@ -60,11 +60,11 @@ namespace System.Windows.Forms.UITests
                                                     .KeyPress(WindowsInput.Native.VirtualKeyCode.RIGHT));
 
                 DateTime selectedDate = new DateTime(2020, 4, 10);
-                PInvoke.SYSTEMTIME date = new()
+                SYSTEMTIME date = new()
                 {
-                    wYear = (short)selectedDate.Year,
-                    wMonth = (short)selectedDate.Month,
-                    wDay = (short)selectedDate.Day
+                    wYear = (ushort)selectedDate.Year,
+                    wMonth = (ushort)selectedDate.Month,
+                    wDay = (ushort)selectedDate.Day
                 };
 
                 NMSELCHANGE lParam = new()
