@@ -11,7 +11,7 @@ namespace Windows.Win32
         public static BOOL GetWindowRect<T>(in T hWnd, out RECT lpRect) where T : IHandle<HWND>
         {
             BOOL result = GetWindowRect(hWnd.Handle, out lpRect);
-            GC.KeepAlive(hWnd);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }

@@ -51,4 +51,16 @@ internal interface IHandle
 internal interface IHandle<THandle> where THandle : unmanaged
 {
     THandle Handle { get; }
+
+    /// <summary>
+    ///  Owner of the <see cref="Handle"/> that might close it when finalized. Default is the
+    ///  <see cref="IHandle{THandle}"/> implementer.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This allows decoupling the owner from the <typeparamref name="THandle"/> provider and avoids boxing when
+    ///   <see cref="IHandle{THandle}"/> is on a struct. See <see cref="HandleRef{THandle}"/> for a concrete usage.
+    ///  </para>
+    /// </remarks>
+    object? Wrapper => this;
 }

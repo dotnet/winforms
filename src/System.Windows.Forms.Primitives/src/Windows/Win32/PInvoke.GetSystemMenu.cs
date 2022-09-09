@@ -12,7 +12,7 @@ namespace Windows.Win32
         public static HMENU GetSystemMenu<T>(in T hwnd, BOOL bRevert) where T : IHandle<HWND>
         {
             HMENU result = GetSystemMenu(hwnd.Handle, bRevert);
-            GC.KeepAlive(hwnd);
+            GC.KeepAlive(hwnd.Wrapper);
             return result;
         }
     }

@@ -10,7 +10,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using static Interop;
-using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms
 {

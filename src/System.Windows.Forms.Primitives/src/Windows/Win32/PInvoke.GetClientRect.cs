@@ -8,10 +8,11 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static BOOL GetClientRect(IHandle hWnd, out RECT lpRect)
+        public static BOOL GetClientRect<T>(T hWnd, out RECT lpRect)
+            where T : IHandle<HWND>
         {
-            BOOL result = GetClientRect((HWND)hWnd.Handle, out lpRect);
-            GC.KeepAlive(hWnd);
+            BOOL result = GetClientRect(hWnd.Handle, out lpRect);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }

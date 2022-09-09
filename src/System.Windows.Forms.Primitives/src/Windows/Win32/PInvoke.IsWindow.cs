@@ -11,7 +11,7 @@ namespace Windows.Win32
         public static BOOL IsWindow<T>(in T hWnd) where T : IHandle<HWND>
         {
             BOOL result = IsWindow(hWnd.Handle);
-            GC.KeepAlive(hWnd);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }
