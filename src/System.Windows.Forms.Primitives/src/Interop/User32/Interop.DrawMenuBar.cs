@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        private static partial BOOL DrawMenuBar(IntPtr hWnd);
+        [DllImport(Libraries.User32)]
+        private static extern BOOL DrawMenuBar(IntPtr hWnd);
 
         public static BOOL DrawMenuBar(IHandle hWnd)
         {

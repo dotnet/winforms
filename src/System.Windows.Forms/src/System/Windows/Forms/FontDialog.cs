@@ -459,7 +459,7 @@ namespace System.Windows.Forms
             // (limitation of windows control)
 
             Debug.Assert(cf.nSizeMin <= cf.nSizeMax, "min and max font sizes are the wrong way around");
-            if (Comdlg32.ChooseFontW(ref cf).IsFalse())
+            if (!Comdlg32.ChooseFontW(ref cf))
             {
                 return false;
             }

@@ -13,7 +13,7 @@ internal static partial class Interop
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
         public unsafe static extern HRESULT GetThemePartSize(
             IntPtr hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             RECT* prc,
@@ -22,7 +22,7 @@ internal static partial class Interop
 
         public unsafe static HRESULT GetThemePartSize(
             IHandle hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             RECT* prc,

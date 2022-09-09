@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
-        public static partial uint RegisterClipboardFormatW(string lpszFormat);
+        [DllImport(Libraries.User32, SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern uint RegisterClipboardFormatW(string lpszFormat);
     }
 }

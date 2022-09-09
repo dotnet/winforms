@@ -19,21 +19,21 @@ internal static partial class Interop
         internal readonly ref struct ObjectScope
 #endif
         {
-            public HGDIOBJ Object { get; }
+            public HGDIOBJ HGDIOBJ { get; }
 
             /// <param name="object">The object to be deleted when the scope closes.</param>
             public ObjectScope(HGDIOBJ @object)
             {
-                Object = @object;
+                HGDIOBJ = @object;
             }
 
-            public static implicit operator HGDIOBJ(in ObjectScope objectScope) => objectScope.Object;
+            public static implicit operator HGDIOBJ(in ObjectScope objectScope) => objectScope.HGDIOBJ;
 
             public void Dispose()
             {
-                if (Object.Handle != IntPtr.Zero)
+                if (!HGDIOBJ.IsNull)
                 {
-                    DeleteObject(Object);
+                    DeleteObject(HGDIOBJ);
                 }
 
                 DisposalTracking.SuppressFinalize(this!);

@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme)]
-        public static partial BOOL GetThemeSysBool(IntPtr hTheme, TMT iBoolId);
+        [DllImport(Libraries.UxTheme)]
+        public static extern BOOL GetThemeSysBool(IntPtr hTheme, TMT iBoolId);
 
         public static BOOL GetThemeSysBool(IHandle hTheme, TMT iBoolId)
         {

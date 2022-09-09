@@ -25,7 +25,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT Load(IStorage pstg);
 
-            void Save(IStorage pStgSave, Interop.BOOL fSameAsLoad);
+            void Save(IStorage pStgSave, BOOL fSameAsLoad);
 
             void SaveCompleted(IStorage pStgNew);
 

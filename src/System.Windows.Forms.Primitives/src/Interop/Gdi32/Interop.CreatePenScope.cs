@@ -2,12 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DEBUG
-#endif
 using System.Drawing;
-using Windows.Win32;
-using Foundation = Windows.Win32.Foundation;
-using Gdi = Windows.Win32.Graphics.Gdi;
 
 internal static partial class Interop
 {
@@ -26,31 +21,31 @@ internal static partial class Interop
         internal readonly ref struct CreatePenScope
 #endif
         {
-            public HPEN HPen { get; }
+            public HPEN HPEN { get; }
 
             /// <summary>
             ///  Creates a solid pen based on the <paramref name="color"/> and <paramref name="width"/> using
-            ///  <see cref="PInvoke.CreatePen(Gdi.PEN_STYLE, int, Foundation.COLORREF)" />.
+            ///  <see cref="PInvoke.CreatePen(PEN_STYLE, int, COLORREF)" />.
             /// </summary>
             public CreatePenScope(Color color, int width = 1)
             {
                 // From MSDN: if width > 1, the style must be PS_NULL, PS_SOLID, or PS_INSIDEFRAME.
-                HPen = PInvoke.CreatePen(
-                    width > 1 ? (Gdi.PEN_STYLE.PS_GEOMETRIC | Gdi.PEN_STYLE.PS_SOLID) : default,
+                HPEN = PInvoke.CreatePen(
+                    width > 1 ? (PEN_STYLE.PS_GEOMETRIC | PEN_STYLE.PS_SOLID) : default,
                     width,
-                    (Foundation.COLORREF)(uint)ColorTranslator.ToWin32(color));
+                    (COLORREF)(uint)ColorTranslator.ToWin32(color));
             }
 
-            public static implicit operator HPEN(in CreatePenScope scope) => scope.HPen;
-            public static implicit operator HGDIOBJ(in CreatePenScope scope) => scope.HPen;
+            public static implicit operator HPEN(in CreatePenScope scope) => scope.HPEN;
+            public static implicit operator HGDIOBJ(in CreatePenScope scope) => (HGDIOBJ)scope.HPEN.Value;
 
-            public bool IsNull => HPen.IsNull;
+            public bool IsNull => HPEN.IsNull;
 
             public void Dispose()
             {
-                if (!HPen.IsNull)
+                if (!HPEN.IsNull)
                 {
-                    DeleteObject(HPen);
+                    DeleteObject(HPEN);
                 }
 
 #if DEBUG

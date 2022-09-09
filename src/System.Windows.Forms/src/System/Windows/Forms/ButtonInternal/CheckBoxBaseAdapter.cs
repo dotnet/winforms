@@ -224,7 +224,7 @@ namespace System.Windows.Forms.ButtonInternal
             return DrawPopupBorder(hdc, r, colors);
         }
 
-        internal static Rectangle DrawPopupBorder(Gdi32.HDC hdc, Rectangle r, ColorData colors)
+        internal static Rectangle DrawPopupBorder(HDC hdc, Rectangle r, ColorData colors)
         {
             using var high = new Gdi32.CreatePenScope(colors.Highlight);
             using var shadow = new Gdi32.CreatePenScope(colors.ButtonShadow);

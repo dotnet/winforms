@@ -207,7 +207,7 @@ namespace System.Windows.Forms
             internal bool Focused => _owningMonthCalendar.Focused;
 
             internal CalendarCellAccessibleObject? FocusedCell
-                => UiaCore.UiaClientsAreListening().IsTrue()
+                => UiaCore.UiaClientsAreListening()
                     ? _focusedCellAccessibleObject ??= GetCellByDate(_owningMonthCalendar._focusedDate)
                     : null;
 

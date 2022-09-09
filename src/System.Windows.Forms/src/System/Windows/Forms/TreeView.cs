@@ -1718,14 +1718,14 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                    User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)false);
                     if (delayed)
                     {
-                        User32.PostMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                        User32.PostMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)true);
                     }
                     else
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)(BOOL)true);
                     }
                 }
             }
@@ -2687,7 +2687,7 @@ namespace System.Windows.Forms
             {
                 if (User32.SendMessageW(this, (User32.WM)TVM.GETITEMRECT, 1, ref rc) != 0)
                 {
-                    User32.InvalidateRect(new HandleRef(this, Handle), &rc, BOOL.TRUE);
+                    User32.InvalidateRect(new HandleRef(this, Handle), &rc, true);
                 }
             }
         }
@@ -2820,14 +2820,14 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void CustomDraw(ref Message m)
         {
-            NMTVCUSTOMDRAW* nmtvcd = (NMTVCUSTOMDRAW*)m.LParamInternal;
+            NMTVCUSTOMDRAW* nmtvcd = (NMTVCUSTOMDRAW*)(nint)m.LParamInternal;
 
             // Find out which stage we're drawing
             switch (nmtvcd->nmcd.dwDrawStage)
             {
                 // Do we want OwnerDraw for this paint cycle?
                 case CDDS.PREPAINT:
-                    m.ResultInternal = (nint)CDRF.NOTIFYITEMDRAW; // yes, we do...
+                    m.ResultInternal = (LRESULT)(nint)CDRF.NOTIFYITEMDRAW; // yes, we do...
                     return;
                 // We've got opt-in on owner draw for items - so handle each one.
                 case CDDS.ITEMPREPAINT:
@@ -2839,7 +2839,7 @@ namespace System.Windows.Forms
                     {
                         // this can happen if we are presently inserting the node - it hasn't yet
                         // been added to the handle table
-                        m.ResultInternal = (nint)(CDRF.SKIPDEFAULT);
+                        m.ResultInternal = (LRESULT)(nint)(CDRF.SKIPDEFAULT);
                         return;
                     }
 
@@ -2852,7 +2852,7 @@ namespace System.Windows.Forms
                     if (drawMode == TreeViewDrawMode.OwnerDrawText)
                     {
                         nmtvcd->clrText = nmtvcd->clrTextBk;
-                        m.ResultInternal = (nint)(CDRF.NEWFONT | CDRF.NOTIFYPOSTPAINT);
+                        m.ResultInternal = (LRESULT)(nint)(CDRF.NEWFONT | CDRF.NOTIFYPOSTPAINT);
                         return;
                     }
                     else if (drawMode == TreeViewDrawMode.OwnerDrawAll)
@@ -2871,7 +2871,7 @@ namespace System.Windows.Forms
                                 fMask = User32.SIF.POS
                             };
 
-                            if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
+                            if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si))
                             {
                                 // need to get the correct bounds if horizontal scroll bar is shown.
                                 // In this case the bounds.X needs to be negative and width needs to be updated to the increased width (scrolled region).
@@ -2893,7 +2893,7 @@ namespace System.Windows.Forms
 
                         if (!e.DrawDefault)
                         {
-                            m.ResultInternal = (nint)CDRF.SKIPDEFAULT;
+                            m.ResultInternal = (LRESULT)(nint)CDRF.SKIPDEFAULT;
                             return;
                         }
                     }
@@ -2923,7 +2923,7 @@ namespace System.Windows.Forms
 
                         // There is a problem in winctl that clips node fonts if the fontsize
                         // is larger than the treeview font size. The behavior is much better in comctl 5 and above.
-                        m.ResultInternal = (nint)CDRF.NEWFONT;
+                        m.ResultInternal = (LRESULT)(nint)CDRF.NEWFONT;
                         return;
                     }
 
@@ -2981,7 +2981,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        m.ResultInternal = (nint)CDRF.NOTIFYSUBITEMDRAW;
+                        m.ResultInternal = (LRESULT)(nint)CDRF.NOTIFYSUBITEMDRAW;
                         return;
                     }
 
@@ -2989,7 +2989,7 @@ namespace System.Windows.Forms
 
                 default:
                     // just in case we get a spurious message, tell it to do the right thing
-                    m.ResultInternal = (nint)CDRF.DODEFAULT;
+                    m.ResultInternal = (LRESULT)(nint)CDRF.DODEFAULT;
                     return;
             }
         }
@@ -3033,7 +3033,7 @@ namespace System.Windows.Forms
 
         private unsafe bool WmShowToolTip(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
             IntPtr tooltipHandle = nmhdr->hwndFrom;
 
             var tvhip = new TVHITTESTINFO
@@ -3052,7 +3052,7 @@ namespace System.Windows.Forms
                         Rectangle bounds = tn.Bounds;
                         bounds.Location = PointToScreen(bounds.Location);
 
-                        User32.SendMessageW(tooltipHandle, (User32.WM)TTM.ADJUSTRECT, (nint)BOOL.TRUE, ref bounds);
+                        User32.SendMessageW(tooltipHandle, (User32.WM)TTM.ADJUSTRECT, (nint)(BOOL)true, ref bounds);
                         User32.SetWindowPos(
                             new HandleRef(this, tooltipHandle),
                             User32.HWND_TOPMOST,
@@ -3069,7 +3069,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmNeedText(ref Message m)
         {
-            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m.LParamInternal;
+            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)(nint)m.LParamInternal;
             string tipText = controlToolTipText;
 
             var tvhip = new TVHITTESTINFO
@@ -3108,7 +3108,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmNotify(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
 
             // Custom draw code is handled separately.
             if ((nmhdr->code == (int)NM.CUSTOMDRAW))
@@ -3117,18 +3117,18 @@ namespace System.Windows.Forms
             }
             else
             {
-                NMTREEVIEW* nmtv = (NMTREEVIEW*)m.LParamInternal;
+                NMTREEVIEW* nmtv = (NMTREEVIEW*)(nint)m.LParamInternal;
 
                 switch (nmtv->nmhdr.code)
                 {
                     case (int)TVN.ITEMEXPANDINGW:
-                        m.ResultInternal = TvnExpanding(nmtv);
+                        m.ResultInternal = (LRESULT)TvnExpanding(nmtv);
                         break;
                     case (int)TVN.ITEMEXPANDEDW:
                         TvnExpanded(nmtv);
                         break;
                     case (int)TVN.SELCHANGINGW:
-                        m.ResultInternal = TvnSelecting(nmtv);
+                        m.ResultInternal = (LRESULT)TvnSelecting(nmtv);
                         break;
                     case (int)TVN.SELCHANGEDW:
                         TvnSelected(nmtv);
@@ -3140,10 +3140,10 @@ namespace System.Windows.Forms
                         TvnBeginDrag(MouseButtons.Right, nmtv);
                         break;
                     case (int)TVN.BEGINLABELEDITW:
-                        m.ResultInternal = TvnBeginLabelEdit(*(NMTVDISPINFOW*)m.LParamInternal);
+                        m.ResultInternal = (LRESULT)TvnBeginLabelEdit(*(NMTVDISPINFOW*)(nint)m.LParamInternal);
                         break;
                     case (int)TVN.ENDLABELEDITW:
-                        m.ResultInternal = TvnEndLabelEdit(*(NMTVDISPINFOW*)m.LParamInternal);
+                        m.ResultInternal = (LRESULT)TvnEndLabelEdit(*(NMTVDISPINFOW*)(nint)m.LParamInternal);
                         break;
                     case (int)NM.CLICK:
                     case (int)NM.RCLICK:
@@ -3187,7 +3187,7 @@ namespace System.Windows.Forms
                                 User32.SendMessageW(this, User32.WM.CONTEXTMENU, Handle, (nint)User32.GetMessagePos());
                             }
 
-                            m.ResultInternal = 1;
+                            m.ResultInternal = (LRESULT)1;
                         }
 
                         if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
@@ -3266,7 +3266,7 @@ namespace System.Windows.Forms
         {
             base.WndProc(ref m);
 
-            if (((User32.PRF)m.LParamInternal & User32.PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+            if (((User32.PRF)(nint)m.LParamInternal & User32.PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
                 using Graphics g = Graphics.FromHdc(m.WParamInternal);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
@@ -3312,7 +3312,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     if (CheckBoxes)
                     {
-                        TVITEMW* item = (TVITEMW*)m.LParamInternal;
+                        TVITEMW* item = (TVITEMW*)(nint)m.LParamInternal;
 
                         // Check for invalid node handle
                         if (item->hItem != IntPtr.Zero)
@@ -3333,19 +3333,19 @@ namespace System.Windows.Forms
 
                     break;
                 case User32.WM.NOTIFY:
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
                     switch ((TTN)nmhdr->code)
                     {
                         case TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling multiline tool tips
                             User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
-                            m.ResultInternal = 1;
+                            m.ResultInternal = (LRESULT)1;
                             return;
                         case TTN.SHOW:
                             if (WmShowToolTip(ref m))
                             {
-                                m.ResultInternal = 1;
+                                m.ResultInternal = (LRESULT)1;
                                 return;
                             }
                             else
@@ -3412,7 +3412,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        m.ResultInternal = 0;
+                        m.ResultInternal = (LRESULT)0;
                     }
                     else
                     {

@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [LibraryImport(Libraries.Gdi32)]
-        public static partial MM SetMapMode(HDC hdc, MM mode);
+        [DllImport(Libraries.Gdi32)]
+        public static extern MM SetMapMode(HDC hdc, MM mode);
 
         public static MM SetMapMode(IHandle hdc, MM mode)
         {

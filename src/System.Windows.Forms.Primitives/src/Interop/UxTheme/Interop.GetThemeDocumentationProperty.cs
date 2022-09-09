@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme, EntryPoint = "GetThemeDocumentationProperty", StringMarshalling = StringMarshalling.Utf16)]
-        private static unsafe partial int GetThemeDocumentationPropertyInternal(string pszThemeName, string pszPropertyName, char* pszValueBuff, int cchMaxValChars);
+        [DllImport(Libraries.UxTheme, EntryPoint = "GetThemeDocumentationProperty", CharSet = CharSet.Unicode)]
+        private static unsafe extern int GetThemeDocumentationPropertyInternal(string pszThemeName, string pszPropertyName, char* pszValueBuff, int cchMaxValChars);
 
         public static unsafe string GetThemeDocumentationProperty(string pszThemeName, string pszPropertyName)
         {

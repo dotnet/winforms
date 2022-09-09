@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true)]
-        public static partial BOOL GetUserObjectInformationW(IntPtr hObj, UOI nIndex, ref USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);
+        [DllImport(Libraries.User32, SetLastError = true)]
+        public static extern BOOL GetUserObjectInformationW(IntPtr hObj, UOI nIndex, ref USEROBJECTFLAGS pvBuffer, int nLength, ref int lpnLengthNeeded);
     }
 }

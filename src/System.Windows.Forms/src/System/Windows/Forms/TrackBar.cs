@@ -424,7 +424,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.TRUE, _maximum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)(BOOL)true, _maximum);
             Invalidate();
         }
 
@@ -807,8 +807,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)BOOL.FALSE, _minimum);
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.FALSE, _maximum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)(BOOL)false, _minimum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)(BOOL)false, _maximum);
             User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, _tickFrequency);
             User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, 0, _largeChange);
             User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, 0, _smallChange);
@@ -992,10 +992,10 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)BOOL.FALSE, _minimum);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)(BOOL)false, _minimum);
 
                     // We must repaint the trackbar after changing the range.
-                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.TRUE, _maximum);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)(BOOL)true, _maximum);
 
                     Invalidate();
                 }
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms
                     reflectedValue = Minimum + Maximum - _value;
                 }
 
-                User32.SendMessageW(this, (User32.WM)TBM.SETPOS, (nint)BOOL.TRUE, reflectedValue);
+                User32.SendMessageW(this, (User32.WM)TBM.SETPOS, (nint)(BOOL)true, reflectedValue);
             }
         }
 

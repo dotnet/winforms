@@ -2285,8 +2285,8 @@ namespace System.Windows.Forms.Tests
                 DROPFILES* pDropFiles = *(DROPFILES**)stgMedium.unionmember;
                 Assert.Equal(20u, pDropFiles->pFiles);
                 Assert.Equal(Point.Empty, pDropFiles->pt);
-                Assert.Equal(BOOL.FALSE, pDropFiles->fNC);
-                Assert.Equal(BOOL.TRUE, pDropFiles->fWide);
+                Assert.False(pDropFiles->fNC);
+                Assert.True(pDropFiles->fWide);
                 char* text = (char*)IntPtr.Add((IntPtr)pDropFiles, (int)pDropFiles->pFiles);
                 Assert.Equal("Path1\0Path2\0\0", new string(text, 0, "Path1".Length + 1 + "Path2".Length + 1 + 1));
             }
@@ -2323,8 +2323,8 @@ namespace System.Windows.Forms.Tests
                 DROPFILES* pDropFiles = *(DROPFILES**)stgMedium.unionmember;
                 Assert.Equal(0u, pDropFiles->pFiles);
                 Assert.Equal(Point.Empty, pDropFiles->pt);
-                Assert.Equal(BOOL.FALSE, pDropFiles->fNC);
-                Assert.Equal(BOOL.FALSE, pDropFiles->fWide);
+                Assert.False(pDropFiles->fNC);
+                Assert.False(pDropFiles->fWide);
             }
             finally
             {

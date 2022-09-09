@@ -3237,7 +3237,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Shell32.DragAcceptFiles(this, BOOL.FALSE);
+                Shell32.DragAcceptFiles(this, false);
             }
         }
 
@@ -3277,13 +3277,13 @@ namespace System.Windows.Forms
         private unsafe void EnLinkMsgHandler(ref Message m)
         {
             ENLINK enlink;
-            enlink = *(ENLINK*)m.LParamInternal;
+            enlink = *(ENLINK*)(nint)m.LParamInternal;
 
             switch ((User32.WM)enlink.msg)
             {
                 case User32.WM.SETCURSOR:
                     LinkCursor = true;
-                    m.ResultInternal = 1;
+                    m.ResultInternal = (LRESULT)1;
                     return;
                 // Mouse-down triggers Url; this matches Outlook 2000's behavior.
                 case User32.WM.LBUTTONDOWN:
@@ -3293,11 +3293,11 @@ namespace System.Windows.Forms
                         OnLinkClicked(new LinkClickedEventArgs(linktext, enlink.charrange.cpMin, enlink.charrange.cpMax - enlink.charrange.cpMin));
                     }
 
-                    m.ResultInternal = 1;
+                    m.ResultInternal = (LRESULT)1;
                     return;
             }
 
-            m.ResultInternal = 0;
+            m.ResultInternal = (LRESULT)0;
             return;
         }
 
@@ -3380,14 +3380,14 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
                 switch ((EN)nmhdr->code)
                 {
                     case EN.LINK:
                         EnLinkMsgHandler(ref m);
                         break;
                     case EN.DROPFILES:
-                        ENDROPFILES* endropfiles = (ENDROPFILES*)m.LParamInternal;
+                        ENDROPFILES* endropfiles = (ENDROPFILES*)(nint)m.LParamInternal;
 
                         // Only look at the first file.
                         var path = new StringBuilder(PInvoke.MAX_PATH);
@@ -3412,13 +3412,13 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        m.ResultInternal = 1;   // tell them we did the drop
+                        m.ResultInternal = (LRESULT)1;   // tell them we did the drop
                         break;
 
                     case EN.REQUESTRESIZE:
                         if (!CallOnContentsResized)
                         {
-                            REQRESIZE* reqResize = (REQRESIZE*)m.LParamInternal;
+                            REQRESIZE* reqResize = (REQRESIZE*)(nint)m.LParamInternal;
                             if (BorderStyle == BorderStyle.Fixed3D)
                             {
                                 reqResize->rc.bottom++;
@@ -3430,7 +3430,7 @@ namespace System.Windows.Forms
                         break;
 
                     case EN.SELCHANGE:
-                        SELCHANGE* selChange = (SELCHANGE*)m.LParamInternal;
+                        SELCHANGE* selChange = (SELCHANGE*)(nint)m.LParamInternal;
                         WmSelectionChange(*selChange);
                         break;
 
@@ -3438,7 +3438,7 @@ namespace System.Windows.Forms
                         {
                             ENPROTECTED enprotected;
 
-                            enprotected = *(ENPROTECTED*)m.LParamInternal;
+                            enprotected = *(ENPROTECTED*)(nint)m.LParamInternal;
 
                             switch (enprotected.msg)
                             {
@@ -3447,7 +3447,7 @@ namespace System.Windows.Forms
                                     CHARFORMAT2W* charFormat = (CHARFORMAT2W*)enprotected.lParam;
                                     if ((charFormat->dwMask & CFM.PROTECTED) != 0)
                                     {
-                                        m.ResultInternal = 0;
+                                        m.ResultInternal = (LRESULT)0;
                                         return;
                                     }
 
@@ -3466,14 +3466,14 @@ namespace System.Windows.Forms
                                         break;
                                     }
 
-                                    m.ResultInternal = 0;
+                                    m.ResultInternal = (LRESULT)0;
                                     return;
 
                                 // Allow the following
                                 case (int)User32.WM.COPY:
                                 case (int)User32.WM.SETTEXT:
                                 case (int)EM.EXLIMITTEXT:
-                                    m.ResultInternal = 0;
+                                    m.ResultInternal = (LRESULT)0;
                                     return;
 
                                 // Beep and disallow change for all other messages
@@ -3483,7 +3483,7 @@ namespace System.Windows.Forms
                             }
 
                             OnProtected(EventArgs.Empty);
-                            m.ResultInternal = 1;
+                            m.ResultInternal = (LRESULT)1;
                             break;
                         }
 
@@ -3588,7 +3588,7 @@ namespace System.Windows.Forms
                     if (LinkCursor && !Cursor.Equals(Cursors.WaitCursor))
                     {
                         Cursor.Current = Cursors.Hand;
-                        m.ResultInternal = 1;
+                        m.ResultInternal = (LRESULT)1;
                     }
                     else
                     {
@@ -3608,7 +3608,7 @@ namespace System.Windows.Forms
 
                 case User32.WM.GETDLGCODE:
                     base.WndProc(ref m);
-                    m.ResultInternal = AcceptsTab ? m.ResultInternal | (nint)User32.DLGC.WANTTAB : m.ResultInternal & ~(nint)User32.DLGC.WANTTAB;
+                    m.ResultInternal = (LRESULT)(AcceptsTab ? m.ResultInternal | (nint)User32.DLGC.WANTTAB : m.ResultInternal & ~(nint)User32.DLGC.WANTTAB);
                     break;
 
                 case User32.WM.GETOBJECT:
@@ -3620,7 +3620,7 @@ namespace System.Windows.Forms
                     // Otherwise OLEACC will treat rich edit controls as custom controls, so the accessible Role and Value will be wrong.
                     if ((int)m.LParamInternal == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
-                        m.ResultInternal = 65536 + 30;
+                        m.ResultInternal = (LRESULT)(65536 + 30);
                     }
 
                     break;

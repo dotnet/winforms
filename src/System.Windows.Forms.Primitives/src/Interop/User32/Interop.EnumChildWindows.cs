@@ -10,8 +10,8 @@ internal static partial class Interop
     {
         public delegate BOOL EnumChildWindowsCallback(IntPtr hWnd);
 
-        [LibraryImport(Libraries.User32)]
-        private static unsafe partial BOOL EnumChildWindows(IntPtr hwndParent, delegate* unmanaged<IntPtr, IntPtr, BOOL> lpEnumFunc, IntPtr lParam);
+        [DllImport(Libraries.User32)]
+        private static unsafe extern BOOL EnumChildWindows(IntPtr hwndParent, delegate* unmanaged<IntPtr, IntPtr, BOOL> lpEnumFunc, IntPtr lParam);
 
         public static unsafe BOOL EnumChildWindows(IntPtr hwndParent, EnumChildWindowsCallback lpEnumFunc)
         {

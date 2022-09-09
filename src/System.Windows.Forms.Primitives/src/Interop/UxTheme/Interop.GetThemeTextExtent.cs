@@ -8,10 +8,10 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme, StringMarshalling = StringMarshalling.Utf16)]
-        public static unsafe partial HRESULT GetThemeTextExtent(
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Unicode)]
+        public static unsafe extern HRESULT GetThemeTextExtent(
             IntPtr hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             string pszText,
@@ -22,7 +22,7 @@ internal static partial class Interop
 
         public unsafe static HRESULT GetThemeTextExtent(
             IHandle hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             string pszText,

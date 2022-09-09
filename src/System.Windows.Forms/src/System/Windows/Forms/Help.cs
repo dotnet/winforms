@@ -386,8 +386,8 @@ namespace System.Windows.Forms
                         {
                             cbStruct = sizeof(HH_FTS_QUERYW),
                             iProximity = HH_FTS_QUERYW.DEFAULT_PROXIMITY,
-                            fExecute = BOOL.TRUE,
-                            fUniCodeStrings = BOOL.TRUE
+                            fExecute = true,
+                            fUniCodeStrings = true
                         };
                         htmlParam = ftsQuery;
                         return HH.DISPLAY_SEARCH;
@@ -413,8 +413,8 @@ namespace System.Windows.Forms
                         var alink = new HH_ALINKW
                         {
                             cbStruct = sizeof(HH_ALINKW),
-                            fIndexOnFail = BOOL.TRUE,
-                            fReserved = BOOL.FALSE
+                            fIndexOnFail = true,
+                            fReserved = false
                         };
                         htmlParam = alink;
                         return command == HelpNavigator.KeywordIndex ? HH.KEYWORD_LOOKUP : HH.ALINK_LOOKUP;

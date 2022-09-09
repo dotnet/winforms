@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using Windows.Win32;
 
 internal static partial class Interop
 {

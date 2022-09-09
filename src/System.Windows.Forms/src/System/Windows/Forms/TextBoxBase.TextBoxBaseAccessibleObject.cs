@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms
@@ -85,7 +84,7 @@ namespace System.Windows.Forms
 
             internal override ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
             {
-                isActive = BOOL.FALSE;
+                isActive = false;
                 return _textProvider?.GetCaretRange(out isActive);
             }
 

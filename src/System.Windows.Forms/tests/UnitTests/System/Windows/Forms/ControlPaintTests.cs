@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ControlCreateHBitmap16Bit_TestData))]
         public void ControlPaint_CreateHBitmap16Bit_Invoke_ReturnsExpected(Bitmap bitmap, Color background)
         {
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmap16Bit(bitmap, background);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmap16Bit(bitmap, background);
             try
             {
                 Assert.False(hBitmap.IsNull);
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Tests
             bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
             bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmap16Bit(bitmap, Color.Red);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmap16Bit(bitmap, Color.Red);
             try
             {
                 Assert.False(hBitmap.IsNull);
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CreateHBitmapColorMask_TestData))]
         public void ControlPaint_CreateHBitmapColorMask_Invoke_ReturnsExpected(Bitmap bitmap, IntPtr monochromeMask)
         {
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, monochromeMask);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, monochromeMask);
             try
             {
                 Assert.False(hBitmap.IsNull);
@@ -130,7 +130,7 @@ namespace System.Windows.Forms.Tests
             mask.SetPixel(0, 0, Color.FromArgb(255, 255, 0, 0));
             mask.SetPixel(1, 0, Color.FromArgb(255, 0, 255, 0));
             mask.SetPixel(2, 0, Color.FromArgb(0, 0, 0, 255));
-            Gdi32.HBITMAP monochromeMask = (Gdi32.HBITMAP)mask.GetHbitmap();
+            HBITMAP monochromeMask = (HBITMAP)mask.GetHbitmap();
             try
             {
                 using var bitmap = new Bitmap(3, 1);
@@ -138,7 +138,7 @@ namespace System.Windows.Forms.Tests
                 bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
                 bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-                Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)monochromeMask);
+                HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)monochromeMask);
                 try
                 {
                     Assert.False(hBitmap.IsNull);
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.Tests
             bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
             bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, IntPtr.Zero);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, IntPtr.Zero);
             try
             {
                 Assert.False(hBitmap.IsNull);
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CreateHBitmapTransparencyMask_TestData))]
         public void ControlPaint_CreateHBitmapTransparencyMask_Invoke_ReturnsExpected(Bitmap bitmap)
         {
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
             try
             {
                 Assert.False(hBitmap.IsNull);
@@ -239,7 +239,7 @@ namespace System.Windows.Forms.Tests
             bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
             bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+            HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
             try
             {
                 Assert.False(hBitmap.IsNull);

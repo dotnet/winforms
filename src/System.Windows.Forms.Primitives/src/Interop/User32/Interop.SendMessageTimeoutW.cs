@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial IntPtr SendMessageTimeoutW(
+        [DllImport(Libraries.User32)]
+        public static extern nint SendMessageTimeoutW(
             IntPtr hWnd,
             WM Msg,
             IntPtr wParam,

@@ -163,7 +163,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    _iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, BOOL.TRUE);
+                    _iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, true);
                     if (_buffer is null)
                     {
                         _storage = Ole32.StgCreateDocfileOnILockBytes(
@@ -276,7 +276,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                iPersistStorage.Save(_storage, BOOL.TRUE);
+                iPersistStorage.Save(_storage, true);
                 _storage.Commit(0);
                 iPersistStorage.HandsOffStorage();
                 try

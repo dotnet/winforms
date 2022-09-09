@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL PostMessageW(
+        [DllImport(Libraries.User32)]
+        public static extern BOOL PostMessageW(
             IntPtr hWnd,
             WM Msg,
             nint wParam = default,

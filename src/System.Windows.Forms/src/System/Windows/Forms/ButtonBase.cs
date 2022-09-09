@@ -1248,7 +1248,7 @@ namespace System.Windows.Forms
                     // not paint the button as "un-depressed".
                     if (!OwnerDraw)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.TRUE);
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)(BOOL)true);
                     }
 
                     Invalidate(DownChangeRectangle);
@@ -1277,7 +1277,7 @@ namespace System.Windows.Forms
                 {
                     SetFlag(FlagMousePressed, false);
                     SetFlag(FlagMouseDown, false);
-                    User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.FALSE);
+                    User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)(BOOL)false);
                 }
 
                 // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only

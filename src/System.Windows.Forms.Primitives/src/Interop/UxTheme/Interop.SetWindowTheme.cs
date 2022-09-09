@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme, StringMarshalling = StringMarshalling.Utf16)]
-        public static partial HRESULT SetWindowTheme(IntPtr hWnd, string pszSubAppName, string pszSubIdList);
+        [DllImport(Libraries.UxTheme, CharSet = CharSet.Unicode)]
+        public static extern HRESULT SetWindowTheme(IntPtr hWnd, string pszSubAppName, string pszSubIdList);
     }
 }

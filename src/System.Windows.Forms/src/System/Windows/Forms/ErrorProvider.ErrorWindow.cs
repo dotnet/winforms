@@ -180,7 +180,7 @@ namespace System.Windows.Forms
                 DestroyHandle();
             }
 
-            private unsafe void MirrorDcIfNeeded(Gdi32.HDC hdc)
+            private unsafe void MirrorDcIfNeeded(HDC hdc)
             {
                 if (_parent.IsMirrored)
                 {
@@ -198,7 +198,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void OnPaint()
             {
-                using var hdc = new PInvoke.BeginPaintScope((Foundation.HWND)Handle);
+                using var hdc = new PInvoke.BeginPaintScope((HWND)Handle);
                 using var save = new Gdi32.SaveDcScope(hdc);
 
                 MirrorDcIfNeeded(hdc);
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
 
                 using Graphics g = hdc.CreateGraphics();
                 using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, g);
-                if (User32.SetWindowRgn(this, windowRegionHandle, BOOL.TRUE) != 0)
+                if (User32.SetWindowRgn(this, windowRegionHandle, true) != 0)
                 {
                     // The HWnd owns the region.
                     windowRegionHandle.RelinquishOwnership();
@@ -417,7 +417,7 @@ namespace System.Windows.Forms
                     _windowBounds.Width,
                     _windowBounds.Height,
                     User32.SWP.NOACTIVATE);
-                User32.InvalidateRect(new HandleRef(this, Handle), null, BOOL.FALSE);
+                User32.InvalidateRect(new HandleRef(this, Handle), null, false);
             }
 
             /// <summary>
@@ -431,7 +431,7 @@ namespace System.Windows.Forms
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    m.ResultInternal = UiaCore.UiaReturnRawElementProvider(
+                    m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
                         this,
                         m.WParamInternal,
                         m.LParamInternal,
@@ -455,7 +455,7 @@ namespace System.Windows.Forms
                         WmGetObject(ref m);
                         break;
                     case User32.WM.NOTIFY:
-                        User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                        User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
                         if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
                             OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);

@@ -56,9 +56,9 @@ namespace System.Windows.Forms
         {
         }
 
-        internal unsafe Screen(IntPtr monitor, Gdi32.HDC hdc)
+        internal unsafe Screen(IntPtr monitor, HDC hdc)
         {
-            Gdi32.HDC screenDC = hdc;
+            HDC screenDC = hdc;
 
             if (!s_multiMonitorSupport || monitor == (IntPtr)PRIMARY_MONITOR)
             {

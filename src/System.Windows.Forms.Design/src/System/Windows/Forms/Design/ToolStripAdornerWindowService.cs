@@ -286,7 +286,7 @@ namespace System.Windows.Forms.Design
                 switch (m.MsgInternal)
                 {
                     case User32.WM.NCHITTEST:
-                        m.ResultInternal = (nint)User32.HT.TRANSPARENT;
+                        m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
                         break;
                     default:
                         base.WndProc(ref m);

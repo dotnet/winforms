@@ -57,7 +57,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT DoVerb(
                 int iVerb,
-                User32.MSG* lpmsg,
+                MSG* lpmsg,
                 IOleClientSite pActiveSite,
                 int lindex,
                 IntPtr hwndParent,

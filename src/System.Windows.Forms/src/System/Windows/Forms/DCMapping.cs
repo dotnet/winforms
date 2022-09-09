@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using Windows.Win32.Graphics.Gdi;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -27,10 +26,10 @@ namespace System.Windows.Forms
     /// </summary>
     internal struct DCMapping : IDisposable
     {
-        private Gdi32.HDC _hdc;
+        private HDC _hdc;
         private int _savedState;
 
-        public unsafe DCMapping(Gdi32.HDC hdc, Rectangle bounds)
+        public unsafe DCMapping(HDC hdc, Rectangle bounds)
         {
             ArgumentNullException.ThrowIfNull(hdc);
 
@@ -38,7 +37,7 @@ namespace System.Windows.Forms
             _savedState = Gdi32.SaveDC(hdc);
 
             // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
-            bool success = Gdi32.GetViewportOrgEx(hdc, out Point viewportOrg).IsTrue();
+            bool success = Gdi32.GetViewportOrgEx(hdc, out Point viewportOrg);
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
             // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
@@ -59,7 +58,7 @@ namespace System.Windows.Forms
                     hdc,
                     viewportOrg.X + bounds.Left,
                     viewportOrg.Y + bounds.Top,
-                    &lastViewPort).IsTrue();
+                    &lastViewPort);
                 Debug.Assert(success, "SetViewportOrgEx() failed.");
 
                 RegionType originalRegionType;

@@ -9,9 +9,9 @@ internal partial class Interop
     internal static partial class Ole32
     {
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
-        public unsafe static extern BOOL IsAccelerator(IntPtr hAccel, int cAccelEntries, ref User32.MSG lpMsg, ushort* lpwCmd);
+        public unsafe static extern BOOL IsAccelerator(IntPtr hAccel, int cAccelEntries, ref MSG lpMsg, ushort* lpwCmd);
 
-        public unsafe static BOOL IsAccelerator(HandleRef hAccel, int cAccelEntries, ref User32.MSG lpMsg, ushort* lpwCmd)
+        public unsafe static BOOL IsAccelerator(HandleRef hAccel, int cAccelEntries, ref MSG lpMsg, ushort* lpwCmd)
         {
             BOOL result = IsAccelerator(hAccel.Handle, cAccelEntries, ref lpMsg, lpwCmd);
             GC.KeepAlive(hAccel.Wrapper);

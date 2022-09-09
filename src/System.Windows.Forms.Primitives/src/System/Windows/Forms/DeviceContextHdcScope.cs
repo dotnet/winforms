@@ -5,15 +5,13 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using Windows.Win32;
 using static Interop;
-using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Helper to scope getting a <see cref="Gdi32.HDC"/> from a <see cref="IDeviceContext"/> object. Releases
-    ///  the <see cref="Gdi32.HDC"/> when disposed, unlocking the parent <see cref="IDeviceContext"/> object.
+    ///  Helper to scope getting a <see cref="HDC"/> from a <see cref="IDeviceContext"/> object. Releases
+    ///  the <see cref="HDC"/> when disposed, unlocking the parent <see cref="IDeviceContext"/> object.
     ///
     ///  Also saves and restores the state of the HDC.
     /// </summary>
@@ -28,17 +26,17 @@ namespace System.Windows.Forms
 #endif
     {
         public IDeviceContext DeviceContext { get; }
-        public Gdi32.HDC HDC { get; }
+        public HDC HDC { get; }
 
         private readonly int _savedHdcState;
 
         /// <summary>
-        ///  Gets the <see cref="Gdi32.HDC"/> from the given <paramref name="deviceContext"/>.
+        ///  Gets the <see cref="HDC"/> from the given <paramref name="deviceContext"/>.
         /// </summary>
         /// <remarks>
         ///  <para>
-        ///   When a <see cref="Graphics"/> object is created from a <see cref="Gdi32.HDC"/> the clipping region and
-        ///   the viewport origin are applied (<see cref="Gdi32.GetViewportExtEx(Gdi32.HDC, out Size)"/>). The clipping
+        ///   When a <see cref="Graphics"/> object is created from a <see cref="HDC"/> the clipping region and
+        ///   the viewport origin are applied (<see cref="Gdi32.GetViewportExtEx(HDC, out Size)"/>). The clipping
         ///   region isn't reflected in <see cref="Graphics.Clip"/>, which is combined with the HDC HRegion.
         ///  </para>
         ///  <para>
@@ -51,7 +49,7 @@ namespace System.Windows.Forms
         ///  object of type <see cref="Graphics"/>. Otherwise this is a no-op.
         /// </param>
         /// <param name="saveHdcState">
-        ///  When true, saves and restores the <see cref="Gdi32.HDC"/> state.
+        ///  When true, saves and restores the <see cref="HDC"/> state.
         /// </param>
         public DeviceContextHdcScope(
             IDeviceContext deviceContext,
@@ -142,7 +140,7 @@ namespace System.Windows.Forms
 
             if (!needToApplyProperties || graphics is null)
             {
-                HDC = HDC.IsNull ? (Gdi32.HDC)DeviceContext.GetHdc() : HDC;
+                HDC = HDC.IsNull ? (HDC)DeviceContext.GetHdc() : HDC;
                 ValidateHDC();
                 _savedHdcState = saveHdcState ? Gdi32.SaveDC(HDC) : 0;
                 return;
@@ -173,7 +171,7 @@ namespace System.Windows.Forms
                 using var graphicsRegion = applyClipping ? new Gdi32.RegionScope(clipRegion!, graphics) : default;
                 applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
 
-                HDC = (Gdi32.HDC)graphics.GetHdc();
+                HDC = (HDC)graphics.GetHdc();
 
                 if (saveHdcState || applyClipping || applyTransform)
                 {
@@ -191,7 +189,7 @@ namespace System.Windows.Forms
                     using var dcRegion = new Gdi32.RegionScope(HDC);
                     if (!dcRegion.IsNull)
                     {
-                        type = (RegionType)PInvoke.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, Gdi.RGN_COMBINE_MODE.RGN_AND);
+                        type = (RegionType)PInvoke.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, RGN_COMBINE_MODE.RGN_AND);
                         if (type == RegionType.ERROR)
                         {
                             throw new Win32Exception();
@@ -212,9 +210,8 @@ namespace System.Windows.Forms
             }
         }
 
-        public static implicit operator Gdi32.HDC(in DeviceContextHdcScope scope) => scope.HDC;
-        public static implicit operator Gdi.HDC(in DeviceContextHdcScope scope) => scope.HDC;
-        public static implicit operator nint(in DeviceContextHdcScope scope) => scope.HDC.Handle;
+        public static implicit operator HDC(in DeviceContextHdcScope scope) => scope.HDC;
+        public static implicit operator nint(in DeviceContextHdcScope scope) => scope.HDC;
 
         [Conditional("DEBUG")]
         private void ValidateHDC()
@@ -228,7 +225,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException("Null HDC");
             }
 
-            var type = Gdi32.GetObjectType(HDC);
+            var type = Gdi32.GetObjectType((HGDIOBJ)HDC.Value);
             switch (type)
             {
                 case Gdi32.OBJ.DC:

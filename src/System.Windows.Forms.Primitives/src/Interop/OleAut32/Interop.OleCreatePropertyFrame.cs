@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using Windows.Win32;
 
 internal partial class Interop
 {
     internal static partial class Oleaut32
     {
-        [LibraryImport(Libraries.Oleaut32, StringMarshalling = StringMarshalling.Utf16)]
-        public static unsafe partial int OleCreatePropertyFrame(
+        [DllImport(Libraries.Oleaut32, CharSet = CharSet.Unicode)]
+        public static unsafe extern int OleCreatePropertyFrame(
             IntPtr hwndOwner,
             int x,
             int y,

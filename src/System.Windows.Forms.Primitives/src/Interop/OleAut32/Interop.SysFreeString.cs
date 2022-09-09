@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal static partial class Oleaut32
     {
-        [LibraryImport(Libraries.Oleaut32)]
-        public static partial void SysFreeString(IntPtr bstrString);
+        [DllImport(Libraries.Oleaut32)]
+        public static extern void SysFreeString(IntPtr bstrString);
     }
 }

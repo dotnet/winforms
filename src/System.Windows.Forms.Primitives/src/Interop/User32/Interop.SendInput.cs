@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true)]
-        public unsafe static partial uint SendInput(uint cInputs, INPUT* pInputs, int cbSize);
+        [DllImport(Libraries.User32, SetLastError = true)]
+        public unsafe static extern uint SendInput(uint cInputs, INPUT* pInputs, int cbSize);
 
         public unsafe static uint SendInput(uint cInputs, Span<INPUT> pInputs, int cbSize)
         {

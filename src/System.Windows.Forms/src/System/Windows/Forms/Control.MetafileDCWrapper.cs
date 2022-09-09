@@ -24,12 +24,12 @@ namespace System.Windows.Forms
         /// </summary>
         private class MetafileDCWrapper : IDisposable
         {
-            private Gdi32.HBITMAP _hBitmap;
-            private Gdi32.HBITMAP _hOriginalBmp;
-            private readonly Gdi32.HDC _hMetafileDC;
+            private HBITMAP _hBitmap;
+            private HBITMAP _hOriginalBmp;
+            private readonly HDC _hMetafileDC;
             private RECT _destRect;
 
-            internal unsafe MetafileDCWrapper(Gdi32.HDC hOriginalDC, Size size)
+            internal unsafe MetafileDCWrapper(HDC hOriginalDC, Size size)
             {
                 Debug.Assert(Gdi32.GetObjectType(hOriginalDC) == Gdi32.OBJ.ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
@@ -40,13 +40,13 @@ namespace System.Windows.Forms
                 }
 
                 _hMetafileDC = hOriginalDC;
-                _destRect = new RECT(0, 0, size.Width, size.Height);
-                HDC = Gdi32.CreateCompatibleDC((Gdi32.HDC)default);
+                _destRect = new(size);
+                HDC = Gdi32.CreateCompatibleDC(default);
 
                 int planes = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.PLANES);
                 int bitsPixel = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.BITSPIXEL);
                 _hBitmap = PInvoke.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, null);
-                _hOriginalBmp = (Gdi32.HBITMAP)Gdi32.SelectObject(HDC, _hBitmap);
+                _hOriginalBmp = (HBITMAP)Gdi32.SelectObject(HDC, _hBitmap);
             }
 
             ~MetafileDCWrapper()
@@ -68,9 +68,9 @@ namespace System.Windows.Forms
                     success = DICopy(_hMetafileDC, HDC, _destRect, true);
                     Debug.Assert(success, "DICopy() failed.");
                     Gdi32.SelectObject(HDC, _hOriginalBmp);
-                    success = Gdi32.DeleteObject(_hBitmap).IsTrue();
+                    success = Gdi32.DeleteObject(_hBitmap);
                     Debug.Assert(success, "DeleteObject() failed.");
-                    success = Gdi32.DeleteDC(HDC).IsTrue();
+                    success = Gdi32.DeleteDC(HDC);
                     Debug.Assert(success, "DeleteObject() failed.");
                 }
                 finally
@@ -84,15 +84,15 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal Gdi32.HDC HDC { get; private set; }
+            internal HDC HDC { get; private set; }
 
             // ported form VB6 (Ctls\PortUtil\StdCtl.cpp:6176)
-            private unsafe bool DICopy(Gdi32.HDC hdcDest, Gdi32.HDC hdcSrc, RECT rect, bool bStretch)
+            private unsafe bool DICopy(HDC hdcDest, HDC hdcSrc, RECT rect, bool bStretch)
             {
                 long i;
 
                 // Get the bitmap from the DC by selecting in a 1x1 pixel temp bitmap
-                Gdi32.HBITMAP hNullBitmap = PInvoke.CreateBitmap(1, 1, 1, 1, null);
+                HBITMAP hNullBitmap = PInvoke.CreateBitmap(1, 1, 1, 1, null);
                 if (hNullBitmap.IsNull)
                 {
                     return false;
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)Gdi32.SelectObject(hdcSrc, hNullBitmap);
+                    HBITMAP hBitmap = (HBITMAP)Gdi32.SelectObject(hdcSrc, hNullBitmap);
                     if (hBitmap.IsNull)
                     {
                         return false;

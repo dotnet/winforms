@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial IntPtr GetDlgItem(IntPtr hWnd, DialogItemID nIDDlgItem);
+        [DllImport(Libraries.User32)]
+        public static extern nint GetDlgItem(IntPtr hWnd, DialogItemID nIDDlgItem);
 
         public static IntPtr GetDlgItem(IHandle hWnd, DialogItemID nIDDlgItem)
         {

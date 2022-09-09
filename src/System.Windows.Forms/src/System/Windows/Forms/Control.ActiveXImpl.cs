@@ -290,7 +290,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe HRESULT DoVerb(
                 OLEIVERB iVerb,
-                User32.MSG* lpmsg,
+                MSG* lpmsg,
                 IOleClientSite pActiveSite,
                 int lindex,
                 HWND hwndParent,
@@ -341,18 +341,18 @@ namespace System.Windows.Forms
 #if DEBUG
                             if (CompModSwitches.ActiveX.TraceVerbose)
                             {
-                                Message m = Message.Create(lpmsg->hwnd, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
-                                Debug.WriteLine("Valid message pointer passed, sending to control: " + m.ToString());
+                                Message m = Message.Create(lpmsg);
+                                Debug.WriteLine($"Valid message pointer passed, sending to control: {m}");
                             }
 #endif
 
-                            if (lpmsg->message == User32.WM.KEYDOWN && lpmsg->wParam == (IntPtr)User32.VK.TAB)
+                            if (lpmsg->message == (uint)User32.WM.KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)User32.VK.TAB)
                             {
-                                target.SelectNextControl(null, Control.ModifierKeys != Keys.Shift, true, true, true);
+                                target.SelectNextControl(null, ModifierKeys != Keys.Shift, tabStopOnly: true, nested: true, wrap: true);
                             }
                             else
                             {
-                                User32.SendMessageW(target, (User32.WM)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
+                                User32.SendMessageW(target, (User32.WM)lpmsg->message, (nint)(nuint)lpmsg->wParam, lpmsg->lParam);
                             }
                         }
 
@@ -410,7 +410,7 @@ namespace System.Windows.Forms
                 // supported on classic metafiles.  We throw VIEW_E_DRAW in the hope that
                 // the caller figures it out and sends us a different DC.
 
-                Gdi32.HDC hdc = (Gdi32.HDC)hdcDraw;
+                HDC hdc = (HDC)hdcDraw;
                 Gdi32.OBJ hdcType = Gdi32.GetObjectType(hdc);
                 if (hdcType == Gdi32.OBJ.METADC)
                 {
@@ -1343,7 +1343,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal void OnDocWindowActivate(BOOL fActivate)
             {
-                if (_activeXState[s_uiActive] && fActivate.IsTrue() && _inPlaceFrame is not null)
+                if (_activeXState[s_uiActive] && fActivate && _inPlaceFrame is not null)
                 {
                     // we have to explicitly say we don't wany any border space.
                     HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AXSource: SetFocus:  " + focus.ToString());
                 if (_activeXState[s_inPlaceActive] && _clientSite is IOleControlSite)
                 {
-                    ((IOleControlSite)_clientSite).OnFocus(focus ? BOOL.TRUE : BOOL.FALSE);
+                    ((IOleControlSite)_clientSite).OnFocus(focus ? true : false);
                 }
 
                 if (focus && _activeXState[s_inPlaceActive] && !_activeXState[s_uiActive])
@@ -1778,7 +1778,7 @@ namespace System.Windows.Forms
                     0);
                 Debug.Assert(stream is not null, "Stream should be non-null, or an exception should have been thrown.");
 
-                Save(stream, BOOL.TRUE);
+                Save(stream, true);
                 Marshal.ReleaseComObject(stream);
             }
 
@@ -1790,7 +1790,7 @@ namespace System.Windows.Forms
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, save through that method.
                 PropertyBagStream bag = new PropertyBagStream();
-                Save(bag, fClearDirty, BOOL.FALSE);
+                Save(bag, fClearDirty, false);
                 bag.Write(stream);
 
                 if (Marshal.IsComObject(stream))
@@ -1809,7 +1809,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < props.Count; i++)
                 {
-                    if (fSaveAllProperties.IsTrue() || props[i].ShouldSerializeValue(_control))
+                    if (fSaveAllProperties || props[i].ShouldSerializeValue(_control))
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Saving property " + props[i].Name);
 
@@ -1855,7 +1855,7 @@ namespace System.Windows.Forms
                     Marshal.ReleaseComObject(pPropBag);
                 }
 
-                if (fClearDirty.IsTrue())
+                if (fClearDirty)
                 {
                     _activeXState[s_isDirty] = false;
                 }
@@ -2131,17 +2131,17 @@ namespace System.Windows.Forms
                     if (!intersect.Equals(posRect))
                     {
                         // Offset the rectangle back to client coordinates
-                        Foundation.RECT rcIntersect = intersect.ToRect();
+                        RECT rcIntersect = intersect;
                         HWND hWndParent = PInvoke.GetParent(_control);
 
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Old Intersect: {rcIntersect.ToRectangle()}");
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Old Intersect: {rcIntersect}");
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Control Bounds: {posRect}");
 
                         PInvoke.MapWindowPoints(hWndParent, _control, ref rcIntersect);
 
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Intersect: {rcIntersect.ToRectangle()}");
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Intersect: {rcIntersect}");
 
-                        _lastClipRect = rcIntersect.ToRectangle();
+                        _lastClipRect = rcIntersect;
                         setRegion = true;
 
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Created clipping region");
@@ -2174,7 +2174,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Handles IOleControl::TranslateAccelerator
             /// </summary>
-            internal unsafe HRESULT TranslateAccelerator(User32.MSG* lpmsg)
+            internal unsafe HRESULT TranslateAccelerator(MSG* lpmsg)
             {
                 if (lpmsg is null)
                 {
@@ -2197,7 +2197,7 @@ namespace System.Windows.Forms
 #endif // DEBUG
 
                 bool needPreProcess = false;
-                switch (lpmsg->message)
+                switch ((User32.WM)lpmsg->message)
                 {
                     case User32.WM.KEYDOWN:
                     case User32.WM.SYSKEYDOWN:
@@ -2219,7 +2219,7 @@ namespace System.Windows.Forms
                             case PreProcessControlState.MessageProcessed:
                                 // someone returned true from PreProcessMessage
                                 // no need to dispatch the message, its already been coped with.
-                                lpmsg->message = msg.MsgInternal;
+                                lpmsg->message = (uint)msg.MsgInternal;
                                 lpmsg->wParam = msg.WParamInternal;
                                 lpmsg->lParam = msg.LParamInternal;
                                 return HRESULT.S_OK;
@@ -2229,7 +2229,7 @@ namespace System.Windows.Forms
 
                                 // Someone returned true from IsInputKey or IsInputChar
                                 User32.TranslateMessage(ref *lpmsg);
-                                if (User32.IsWindowUnicode(lpmsg->hwnd).IsTrue())
+                                if (User32.IsWindowUnicode(lpmsg->hwnd))
                                 {
                                     User32.DispatchMessageW(ref *lpmsg);
                                 }
@@ -2294,7 +2294,7 @@ namespace System.Windows.Forms
 
                 if (_clientSite is IOleInPlaceSite ioleClientSite)
                 {
-                    ioleClientSite.OnUIDeactivate(0);
+                    ioleClientSite.OnUIDeactivate(false);
                 }
 
                 return HRESULT.S_OK;

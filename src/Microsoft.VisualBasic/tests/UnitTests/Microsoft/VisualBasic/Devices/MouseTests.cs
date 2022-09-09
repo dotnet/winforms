@@ -52,9 +52,12 @@ namespace Microsoft.VisualBasic.Devices.Tests
         [ConditionalFact(typeof(SystemInformation), nameof(SystemInformation.MousePresent), nameof(SystemInformation.MouseWheelPresent))]
         public void Mouse_WheelScrollLines_Get_ReturnsExpected()
         {
-            var mouse = new Mouse();
-            Assert.Equal(SystemInformation.MouseWheelScrollLines, mouse.WheelScrollLines);
-            Assert.Equal(mouse.WheelScrollLines, mouse.WheelScrollLines);
+            if (SystemInformation.MouseWheelPresent)
+            {
+                var mouse = new Mouse();
+                Assert.Equal(SystemInformation.MouseWheelScrollLines, mouse.WheelScrollLines);
+                Assert.Equal(mouse.WheelScrollLines, mouse.WheelScrollLines);
+            }
         }
 
         [ConditionalFact(nameof(NoMouseWheelPresent))]

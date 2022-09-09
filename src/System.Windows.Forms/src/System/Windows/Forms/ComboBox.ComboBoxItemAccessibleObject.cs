@@ -58,9 +58,9 @@ namespace System.Windows.Forms
                     }
 
                     // Translate the item rect to screen coordinates
-                    Foundation.RECT translated = itemRect.ToRect();
-                    PInvoke.MapWindowPoints((Foundation.HWND)listHandle, default, ref translated);
-                    return translated.ToRectangle();
+                    RECT translated = itemRect;
+                    PInvoke.MapWindowPoints((HWND)listHandle, default, ref translated);
+                    return translated;
                 }
             }
 
@@ -242,7 +242,7 @@ namespace System.Windows.Forms
                 }
 
                 _owningComboBox.SelectedIndex = GetCurrentIndex();
-                InvalidateRect(new HandleRef(this, _owningComboBox.GetListHandle()), null, BOOL.FALSE);
+                InvalidateRect(new HandleRef(this, _owningComboBox.GetListHandle()), null, false);
             }
 
             internal override void AddToSelection()

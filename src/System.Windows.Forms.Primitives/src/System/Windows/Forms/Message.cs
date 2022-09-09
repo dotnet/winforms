@@ -7,7 +7,6 @@ using System.Diagnostics;
 #endif
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -23,9 +22,9 @@ namespace System.Windows.Forms
 
         // Using prefixed variants of the property names for easier diffing.
 #pragma warning disable IDE1006 // Naming Styles
-        internal nint ResultInternal;
-        internal nint LParamInternal;
-        internal nint WParamInternal;
+        internal LRESULT ResultInternal;
+        internal LPARAM LParamInternal;
+        internal WPARAM WParamInternal;
         internal User32.WM MsgInternal;
         internal HWND HWND => (HWND)HWnd;
 #pragma warning restore IDE1006 // Naming Styles
@@ -57,8 +56,8 @@ namespace System.Windows.Forms
 #endif
         public IntPtr WParam
         {
-            get => WParamInternal;
-            set => WParamInternal = value;
+            get => (nint)(nuint)WParamInternal;
+            set => WParamInternal = (nuint)value;
         }
 
 #if DEBUG
@@ -80,7 +79,7 @@ namespace System.Windows.Forms
         public IntPtr Result
         {
             get => ResultInternal;
-            set => ResultInternal = value;
+            set => ResultInternal = (LRESULT)value;
         }
 
         HWND IHandle<HWND>.Handle => HWND;
@@ -92,8 +91,14 @@ namespace System.Windows.Forms
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
             Type cls) => Marshal.PtrToStructure(LParamInternal, cls);
 
-        internal static Message Create(IntPtr hWnd, User32.WM msg, nint wparam, nint lparam)
-            => Create(hWnd, (int)msg, wparam, lparam);
+        internal static unsafe Message Create(MSG* msg)
+            => Create(msg->hwnd, msg->message, msg->wParam, msg->lParam);
+
+        internal static Message Create(HWND hWnd, uint msg, WPARAM wparam, LPARAM lparam)
+            => Create(hWnd, (int)msg, (nint)(nuint)wparam, (nint)lparam);
+
+        internal static Message Create(HWND hWnd, User32.WM msg, WPARAM wparam, LPARAM lparam)
+            => Create(hWnd, (int)msg, (nint)(nuint)wparam, (nint)lparam);
 
         public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
@@ -101,9 +106,9 @@ namespace System.Windows.Forms
             {
                 HWnd = hWnd,
                 Msg = msg,
-                WParamInternal = wparam,
+                WParamInternal = (WPARAM)(nuint)wparam,
                 LParamInternal = lparam,
-                ResultInternal = IntPtr.Zero
+                ResultInternal = (LRESULT)0
             };
 
 #if DEBUG
@@ -139,5 +144,13 @@ namespace System.Windows.Forms
         public override int GetHashCode() => HashCode.Combine(HWnd, Msg);
 
         public override string ToString() => MessageDecoder.ToString(this);
+
+        internal MSG ToMSG() => new()
+        {
+            hwnd = HWND,
+            message = (uint)MsgInternal,
+            wParam = (nuint)WParamInternal,
+            lParam = LParamInternal
+        };
     }
 }

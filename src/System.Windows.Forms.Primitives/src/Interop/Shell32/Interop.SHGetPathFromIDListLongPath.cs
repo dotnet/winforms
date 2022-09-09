@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using Windows.Win32;
 
 internal static partial class Interop
 {
@@ -54,7 +53,7 @@ internal static partial class Interop
             // this is much less overhead then looping and copying to intermediate buffers before creating a string.
             // Additionally, implementing this would allow us to short circuit the one caller (FolderBrowserDialog)
             // who doesn't care about the path, but just wants to know that we have an IShellFolder.
-            while (SHGetPathFromIDListEx(pidl, pszPath, length, 0).IsFalse())
+            while (!SHGetPathFromIDListEx(pidl, pszPath, length, 0))
             {
                 if (length >= PInvoke.MAX_UNICODESTRING_LEN
                     || *(char*)pszPath.ToPointer() == '\0')

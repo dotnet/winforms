@@ -306,13 +306,13 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             // Stash off the region we have to update.
                             using var hrgn = new Gdi32.RegionScope(0, 0, 0, 0);
-                            User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.TRUE);
+                            User32.GetUpdateRgn(m.HWnd, hrgn, true);
 
                             // The region we have to update in terms of the smallest rectangle that completely encloses
                             // the update region of the window gives us the clip rectangle.
-                            Foundation.RECT clip = default;
+                            RECT clip = default;
                             PInvoke.GetUpdateRect(m.HWND, &clip, true);
-                            Rectangle paintRect = clip.ToRectangle();
+                            Rectangle paintRect = clip;
 
                             using Region region = hrgn.CreateGdiPlusRegion();
 
@@ -337,11 +337,11 @@ namespace System.Windows.Forms.Design.Behavior
 
                         if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
                         {
-                            m.ResultInternal = (nint)User32.HT.TRANSPARENT;
+                            m.ResultInternal = (LRESULT)(int)User32.HT.TRANSPARENT;
                         }
                         else
                         {
-                            m.ResultInternal = (nint)User32.HT.CLIENT;
+                            m.ResultInternal = (LRESULT)(int)User32.HT.CLIENT;
                         }
 
                         break;

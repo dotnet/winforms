@@ -395,7 +395,7 @@ namespace System.Windows.Forms
                     data.nMaxPage = (ushort)PrinterSettings.MaximumPage;
                 }
 
-                if (PrintDlg(ref data).IsFalse())
+                if (!PrintDlg(ref data))
                 {
                     var result = CommDlgExtendedError();
                     return false;

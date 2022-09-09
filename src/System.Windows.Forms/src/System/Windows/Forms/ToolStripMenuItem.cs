@@ -717,7 +717,7 @@ namespace System.Windows.Forms
                 fMask = User32.MIIM.STATE,
                 wID = _nativeMenuCommandID
             };
-            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
             return (info.fState & User32.MFS.DISABLED) == 0;
         }
 
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
                 fMask = User32.MIIM.STRING,
                 wID = _nativeMenuCommandID
             };
-            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
 
             if (info.cch > 0)
             {
@@ -751,7 +751,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+                    User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
 
                     // convert the string into managed data.
                     if (info.dwTypeData is not null)
@@ -787,7 +787,7 @@ namespace System.Windows.Forms
                 fMask = User32.MIIM.BITMAP,
                 wID = _nativeMenuCommandID
             };
-            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
 
             if (info.hbmpItem != IntPtr.Zero && PARAM.ToInt(info.hbmpItem) > (int)User32.HBMMENU.POPUP_MINIMIZE)
             {

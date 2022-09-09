@@ -1813,7 +1813,7 @@ namespace System.Windows.Forms
                             {
                                 ApplyTopMost(true);
                             }
-                            else if (IsHandleCreated && User32.IsWindowEnabled(this).IsTrue())
+                            else if (IsHandleCreated && User32.IsWindowEnabled(this))
                             {
                                 User32.SetWindowPos(
                                     new HandleRef(this, Handle),
@@ -1993,16 +1993,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Updates the layered window attributes if the control
-        ///  is in layered mode.
+        ///  Updates the layered window attributes if the control is in layered mode.
         /// </summary>
         private void UpdateLayered()
         {
             if (state[stateLayered] && IsHandleCreated && TopLevel)
             {
-                BOOL result = User32.SetLayeredWindowAttributes(this, 0, OpacityAsByte, User32.LWA.ALPHA);
-
-                if (result.IsFalse())
+                if (!User32.SetLayeredWindowAttributes(this, 0, OpacityAsByte, User32.LWA.ALPHA))
                 {
                     throw new Win32Exception();
                 }
@@ -2110,9 +2107,9 @@ namespace System.Windows.Forms
                     // when we get focus again, we should reactivate our message filter.
                     Debug.WriteLineIf(
                         s_snapFocusDebug.TraceVerbose,
-                        $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((User32.WA)m.WParamInternal == User32.WA.ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
+                        $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((User32.WA)(nint)m.WParamInternal == User32.WA.ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
 
-                    if ((User32.WA)m.WParamInternal == User32.WA.ACTIVE)
+                    if ((User32.WA)(nint)m.WParamInternal == User32.WA.ACTIVE)
                     {
                         if (Visible)
                         {
@@ -2124,12 +2121,12 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.Fail($"Why are we being activated when we're not visible? Deactivating thing is {WindowsFormsUtils.GetControlInformation((HWND)m.LParamInternal)}");
+                            Debug.Fail($"Why are we being activated when we're not visible? Deactivating thing is {WindowsFormsUtils.GetControlInformation((HWND)(nint)m.LParamInternal)}");
                         }
                     }
                     else
                     {
-                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"[ToolStripDropDown.WndProc] activating thing is {WindowsFormsUtils.GetControlInformation((HWND)m.LParamInternal)}");
+                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"[ToolStripDropDown.WndProc] activating thing is {WindowsFormsUtils.GetControlInformation((HWND)(nint)m.LParamInternal)}");
                     }
 
                     base.WndProc(ref m);
@@ -2188,7 +2185,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmNCActivate(ref Message m)
         {
-            if (m.WParamInternal == 0)
+            if (m.WParamInternal == 0u)
             {
                 base.WndProc(ref m);
             }
@@ -2206,12 +2203,12 @@ namespace System.Windows.Forms
                         // We're activating - notify the previous guy that we're activating.
                         HandleRef<HWND> activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
-                        User32.SendMessageW(activeHwndHandleRef.Handle, User32.WM.NCACTIVATE, (nint)BOOL.TRUE, -1);
+                        User32.SendMessageW(activeHwndHandleRef.Handle, User32.WM.NCACTIVATE, (nint)(BOOL)true, -1);
                         User32.RedrawWindow(
                             activeHwndHandleRef.Handle,
                             flags: User32.RDW.FRAME | User32.RDW.INVALIDATE);
 
-                        m.WParamInternal = 1;
+                        m.WParamInternal = 1u;
 
                         GC.KeepAlive(activeHwndHandleRef.Wrapper);
                     }

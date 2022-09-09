@@ -1549,12 +1549,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         private bool FilterEditWndProc(ref Message m)
         {
             // If it's the TAB key, we keep it since we'll give them focus with it.
-            if (_dropDownHolder?.Visible == true && m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal != Keys.Tab)
+            if (_dropDownHolder?.Visible == true && m.MsgInternal == User32.WM.KEYDOWN && (Keys)(nint)m.WParamInternal != Keys.Tab)
             {
                 Control control = _dropDownHolder.Component;
                 if (control is not null)
                 {
-                    m.ResultInternal = User32.SendMessageW(control, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    m.ResultInternal = (LRESULT)User32.SendMessageW(control, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return true;
                 }
             }
@@ -2620,7 +2620,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (_dropDownHolder is not null && _dropDownHolder.Visible)
             {
                 bool found = false;
-                for (Foundation.HWND hwnd = PInvoke.GetForegroundWindow(); !hwnd.IsNull; hwnd = PInvoke.GetParent(hwnd))
+                for (HWND hwnd = PInvoke.GetForegroundWindow(); !hwnd.IsNull; hwnd = PInvoke.GetParent(hwnd))
                 {
                     if (hwnd == _dropDownHolder.Handle)
                     {
@@ -3165,7 +3165,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // Ensure that tooltips don't display when host application is not foreground app.
                 // Assume that we don't want to display the tooltips
-                Foundation.HWND foregroundWindow = PInvoke.GetForegroundWindow();
+                HWND foregroundWindow = PInvoke.GetForegroundWindow();
                 if (PInvoke.IsChild(PInvoke.GetForegroundWindow(), this))
                 {
                     // Don't show the tips if a dropdown is showing
@@ -3804,7 +3804,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 int selectionIndex = -1;
 
                 // This creates a copy of the given Font, and as such we need to delete it
-                var hFont = (Gdi32.HFONT)Font.ToHfont();
+                var hFont = (HFONT)Font.ToHfont();
                 using (var fontScope = new Gdi32.ObjectScope(hFont))
                 {
                     using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
@@ -5074,12 +5074,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            var mouseMessage = new User32.MSG();
+            var mouseMessage = new MSG();
             while (User32.PeekMessageW(ref mouseMessage,
                 IntPtr.Zero,
                 User32.WM.MOUSEFIRST,
                 User32.WM.MOUSELAST,
-                User32.PM.REMOVE).IsTrue())
+                User32.PM.REMOVE))
             {
                 // No-op.
             }
@@ -5150,8 +5150,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            var mouseMsg = new User32.MSG();
-            while (User32.PeekMessageW(ref mouseMsg, IntPtr.Zero, User32.WM.MOUSEFIRST, User32.WM.MOUSELAST, User32.PM.REMOVE).IsTrue())
+            var mouseMsg = new MSG();
+            while (User32.PeekMessageW(ref mouseMsg, IntPtr.Zero, User32.WM.MOUSEFIRST, User32.WM.MOUSELAST, User32.PM.REMOVE))
             {
                 // No-op.
             }
@@ -5405,7 +5405,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-            var nmhdr = (User32.NMHDR*)m.LParamInternal;
+            var nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
 
             if (nmhdr->hwndFrom == ToolTip.Handle)
             {
@@ -5453,7 +5453,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             itemRect.Offset(tipPt);
                             PositionTooltip(this, ToolTip, itemRect);
-                            m.ResultInternal = 1;
+                            m.ResultInternal = (LRESULT)1;
                             return true;
                         }
 
@@ -5509,7 +5509,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                     }
 
-                    m.ResultInternal = (nint)flags;
+                    m.ResultInternal = (LRESULT)(nint)flags;
                     return;
 
                 case (int)User32.WM.MOUSEMOVE:
@@ -5531,10 +5531,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     break;
                 case AutomationMessages.PGM_GETSELECTEDROW:
-                    m.ResultInternal = GetRowFromGridEntry(_selectedGridEntry);
+                    m.ResultInternal = (LRESULT)GetRowFromGridEntry(_selectedGridEntry);
                     return;
                 case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m.ResultInternal = Math.Min(_visibleRows, TotalProperties);
+                    m.ResultInternal = (LRESULT)Math.Min(_visibleRows, TotalProperties);
                     return;
             }
 

@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         ///  If foreColor and/or backColor are Color.Empty, the hdc current text and/or background color are used.
         /// </summary>
         public static void DrawText(
-            this Gdi32.HDC hdc,
+            this HDC hdc,
             ReadOnlySpan<char> text,
             FontCache.Scope font,
             Rectangle bounds,
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
 
             // Color empty means use the one currently selected in the dc.
             using var textColor = foreColor.IsEmpty ? default : new Gdi32.SetTextColorScope(hdc, foreColor);
-            using var fontSelection = new Gdi32.SelectObjectScope(hdc, (Gdi32.HFONT)font);
+            using var fontSelection = new Gdi32.SelectObjectScope(hdc, (HFONT)font);
 
             Gdi32.BKMODE newBackGroundMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
                 Gdi32.BKMODE.TRANSPARENT :
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
         ///  This way we paint the top of the text at the top of the bounds passed in.
         /// </summary>
         public static Rectangle AdjustForVerticalAlignment(
-            this Gdi32.HDC hdc,
+            this HDC hdc,
             ReadOnlySpan<char> text,
             Rectangle bounds,
             User32.DT flags,
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
                 return bounds;
             }
 
-            RECT rect = new RECT(bounds);
+            RECT rect = bounds;
 
             // Get the text bounds.
             flags |= User32.DT.CALCRECT;
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
         ///  the horizontal and vertical measurements of the text.  The application must convert it explicitly.
         /// </summary>
         public static Size MeasureText(
-            this Gdi32.HDC hdc,
+            this HDC hdc,
             ReadOnlySpan<char> text,
             FontCache.Scope font,
             Size proposedSize,
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
                 proposedSize.Height = 1;
             }
 
-            var rect = new RECT(0, 0, proposedSize.Width, proposedSize.Height);
+            RECT rect = new(proposedSize);
 
             using var fontSelection = new Gdi32.SelectObjectScope(hdc, font.Object);
 
@@ -282,7 +282,7 @@ namespace System.Windows.Forms
         ///  which computes the width and height of the text ignoring TAB\CR\LF characters.
         ///  A text extent is the distance between the beginning of the space and a character that will fit in the space.
         /// </summary>
-        public static Size GetTextExtent(this Gdi32.HDC hdc, string? text, Gdi32.HFONT hfont)
+        public static Size GetTextExtent(this HDC hdc, string? text, HFONT hfont)
         {
             if (string.IsNullOrEmpty(text))
             {

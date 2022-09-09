@@ -8,8 +8,8 @@ internal partial class Interop
     {
         public struct IMAGEINFO
         {
-            public Gdi32.HBITMAP hbmImage;
-            public Gdi32.HBITMAP hbmMask;
+            public HBITMAP hbmImage;
+            public HBITMAP hbmMask;
             public int Unused1;
             public int Unused2;
             public RECT rcImage;

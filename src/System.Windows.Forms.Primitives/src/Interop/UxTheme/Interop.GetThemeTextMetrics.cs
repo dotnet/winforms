@@ -10,9 +10,9 @@ internal static partial class Interop
     public static partial class UxTheme
     {
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public unsafe static extern HRESULT GetThemeTextMetrics(IntPtr hTheme, Gdi32.HDC hdc, int iPartId, int iStateId, out TextMetrics ptm);
+        public unsafe static extern HRESULT GetThemeTextMetrics(IntPtr hTheme, HDC hdc, int iPartId, int iStateId, out TextMetrics ptm);
 
-        public unsafe static HRESULT GetThemeTextMetrics(IHandle hTheme, Gdi32.HDC hdc, int iPartId, int iStateId, out TextMetrics ptm)
+        public unsafe static HRESULT GetThemeTextMetrics(IHandle hTheme, HDC hdc, int iPartId, int iStateId, out TextMetrics ptm)
         {
             HRESULT hr = GetThemeTextMetrics(hTheme.Handle, hdc, iPartId, iStateId, out ptm);
             GC.KeepAlive(hTheme);

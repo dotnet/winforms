@@ -147,7 +147,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT IOleControlSite.TranslateAccelerator(User32.MSG* pMsg, KEYMODIFIERS grfModifiers)
+        unsafe HRESULT IOleControlSite.TranslateAccelerator(MSG* pMsg, KEYMODIFIERS grfModifiers)
         {
             if (pMsg is null)
             {
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
             if (lpFrameInfo is not null)
             {
                 lpFrameInfo->cb = (uint)Marshal.SizeOf<OLEINPLACEFRAMEINFO>();
-                lpFrameInfo->fMDIApp = BOOL.FALSE;
+                lpFrameInfo->fMDIApp = false;
                 lpFrameInfo->hAccel = IntPtr.Zero;
                 lpFrameInfo->cAccelEntries = 0;
                 lpFrameInfo->hwndFrame = Host.ParentInternal?.Handle ?? IntPtr.Zero;
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
         {
             if (Host.ActiveXState == WebBrowserHelper.AXState.UIActive)
             {
-                ((IOleInPlaceSite)this).OnUIDeactivate(0);
+                ((IOleInPlaceSite)this).OnUIDeactivate(false);
             }
 
             Host.GetParentContainer().OnInPlaceDeactivate(Host);
