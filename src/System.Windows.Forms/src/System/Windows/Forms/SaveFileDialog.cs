@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Controls.Dialogs;
 using static Interop;
 using static Interop.Shell32;
 
@@ -152,9 +153,9 @@ namespace System.Windows.Forms
             if (!result)
             {
                 // Something may have gone wrong - check for error condition
-                switch (Comdlg32.CommDlgExtendedError())
+                switch (PInvoke.CommDlgExtendedError())
                 {
-                    case Comdlg32.FNERR.INVALIDFILENAME:
+                    case COMMON_DLG_ERRORS.FNERR_INVALIDFILENAME:
                         throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
                 }
             }
