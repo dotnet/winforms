@@ -4,8 +4,7 @@
 
 using System.Buffers;
 using System.ComponentModel;
-using Microsoft.Win32.SafeHandles;
-using static Interop;
+using Windows.Win32.UI.Shell.Common;
 
 namespace System.Windows.Forms.Design
 {
@@ -57,54 +56,53 @@ namespace System.Windows.Forms.Design
                 HWND hWndOwner = owner != null ? (HWND)owner.Handle : PInvoke.GetActiveWindow();
 
                 // Get the IDL for the specific start location.
-                Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out CoTaskMemSafeHandle listHandle);
-                if (listHandle.IsInvalid)
+                PInvoke.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out ITEMIDLIST* listHandle);
+                if (listHandle is null)
                 {
                     return DialogResult.Cancel;
                 }
 
-                using (listHandle)
+                uint mergedOptions = (uint)Style | PInvoke.BIF_NEWDIALOGSTYLE;
+                if ((mergedOptions & (int)PInvoke.BIF_NEWDIALOGSTYLE) != 0)
                 {
-                    uint mergedOptions = (uint)Style | Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
-                    if ((mergedOptions & (int)Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE) != 0)
-                    {
-                        Application.OleRequired();
-                    }
+                    Application.OleRequired();
+                }
 
-                    char[] displayName = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
-                    try
+                char[] displayName = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
+                try
+                {
+                    fixed (char* pDisplayName = displayName)
+                    fixed (char* ptrDescriptionText = _descriptionText)
                     {
-                        fixed (char* pDisplayName = displayName)
+                        var bi = new BROWSEINFOW
                         {
-                            var bi = new Shell32.BROWSEINFO
-                            {
-                                pidlRoot = listHandle,
-                                hwndOwner = hWndOwner,
-                                pszDisplayName = pDisplayName,
-                                lpszTitle = _descriptionText,
-                                ulFlags = mergedOptions,
-                                lpfn = null,
-                                lParam = IntPtr.Zero,
-                                iImage = 0
-                            };
+                            pidlRoot = listHandle,
+                            hwndOwner = hWndOwner,
+                            pszDisplayName = pDisplayName,
+                            lpszTitle = ptrDescriptionText,
+                            ulFlags = mergedOptions,
+                            lpfn = null,
+                            lParam = 0,
+                            iImage = 0
+                        };
 
-                            // Show the dialog.
-                            using CoTaskMemSafeHandle browseHandle = Shell32.SHBrowseForFolderW(ref bi);
-                            if (browseHandle.IsInvalid)
-                            {
-                                return DialogResult.Cancel;
-                            }
-
-                            // Retrieve the path from the IDList.
-                            Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out string selectedPath);
-                            DirectoryPath = selectedPath;
-                            return DialogResult.OK;
+                        // Show the dialog.
+                        ITEMIDLIST* browseHandle = PInvoke.SHBrowseForFolder(in bi);
+                        if (browseHandle is null)
+                        {
+                            return DialogResult.Cancel;
                         }
+
+                        // Retrieve the path from the IDList.
+                        PWSTR selectedPath = default;
+                        PInvoke.SHGetPathFromIDList(browseHandle, selectedPath);
+                        DirectoryPath = new string((char*)selectedPath);
+                        return DialogResult.OK;
                     }
-                    finally
-                    {
-                        ArrayPool<char>.Shared.Return(displayName);
-                    }
+                }
+                finally
+                {
+                    ArrayPool<char>.Shared.Return(displayName);
                 }
             }
         }
