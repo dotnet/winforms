@@ -5,7 +5,6 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Windows.Forms;
-using Windows.Win32.UI.Shell;
 
 internal partial class Interop
 {

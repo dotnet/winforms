@@ -103,7 +103,7 @@ internal partial class Interop
                 ((Shell32.IFileDialog)this).GetResult(out ppsi);
             }
 
-            HRESULT Shell32.IFileSaveDialog.AddPlace(Shell32.IShellItem psi, Shell32.FDAP fdap)
+            HRESULT Shell32.IFileSaveDialog.AddPlace(Shell32.IShellItem psi, FDAP fdap)
             {
                 return ((Shell32.IFileDialog)this).AddPlace(psi, fdap);
             }

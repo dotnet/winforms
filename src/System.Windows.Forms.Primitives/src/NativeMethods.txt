@@ -37,6 +37,7 @@ DROPIMAGETYPE
 DuplicateHandle
 EndPaint
 EVENTMSG
+FDAP
 FormatMessage
 GET_MODULE_HANDLE_EX_FLAG*
 GetActiveWindow
@@ -61,6 +62,7 @@ GetLocaleInfoEx
 GetModuleHandleEx
 GetParent
 GetProcAddress
+GETPROPERTYSTOREFLAGS
 GetShortPathName
 GetStartupInfo
 GetSystemMenu

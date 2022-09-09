@@ -37,7 +37,7 @@ internal partial class Interop
                 }
             }
 
-            HRESULT Shell32.IShellItemArray.GetPropertyStore(Shell32.GETPROPERTYSTOREFLAGS flags, ref Guid riid, out IntPtr ppv)
+            HRESULT Shell32.IShellItemArray.GetPropertyStore(GETPROPERTYSTOREFLAGS flags, ref Guid riid, out IntPtr ppv)
             {
                 fixed (Guid* riid_local = &riid)
                 fixed (IntPtr* ppv_local = &ppv)

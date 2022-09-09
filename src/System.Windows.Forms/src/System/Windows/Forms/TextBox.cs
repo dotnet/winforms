@@ -8,7 +8,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
-using Windows.Win32.UI.Shell;
 using static Interop;
 using static Interop.User32;
 
