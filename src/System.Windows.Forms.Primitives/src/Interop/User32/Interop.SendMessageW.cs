@@ -10,7 +10,7 @@ internal static partial class Interop
     {
         [DllImport(Libraries.User32)]
         public static extern nint SendMessageW(
-            IntPtr hWnd,
+            HWND hWnd,
             WM Msg,
             nint wParam = default,
             nint lParam = default);
@@ -21,7 +21,7 @@ internal static partial class Interop
             nint wParam = default,
             nint lParam = default)
         {
-            nint result = SendMessageW(hWnd.Handle, Msg, wParam, lParam);
+            nint result = SendMessageW((HWND)hWnd.Handle, Msg, wParam, lParam);
             GC.KeepAlive(hWnd);
             return result;
         }
@@ -38,7 +38,7 @@ internal static partial class Interop
         }
 
         public unsafe static nint SendMessageW(
-            IntPtr hWnd,
+            HWND hWnd,
             WM Msg,
             nint wParam,
             string? lParam)
@@ -62,7 +62,7 @@ internal static partial class Interop
         }
 
         public unsafe static nint SendMessageW<T>(
-            IntPtr hWnd,
+            HWND hWnd,
             WM Msg,
             nint wParam,
             ref T lParam) where T : unmanaged

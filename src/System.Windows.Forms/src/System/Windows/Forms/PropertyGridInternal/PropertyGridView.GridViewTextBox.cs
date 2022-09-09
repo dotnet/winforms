@@ -294,7 +294,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (m.LParamInternal != 0)
                 {
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
+                    NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
                     if (nmhdr->hwndFrom == PropertyGridView.ToolTip.Handle)
                     {

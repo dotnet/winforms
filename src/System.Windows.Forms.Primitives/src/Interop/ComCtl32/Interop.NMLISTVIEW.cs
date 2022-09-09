@@ -10,7 +10,7 @@ internal static partial class Interop
     {
         public struct NMLISTVIEW
         {
-            public User32.NMHDR hdr;
+            public NMHDR hdr;
             public int iItem;
             public int iSubItem;
             public LVIS uNewState;

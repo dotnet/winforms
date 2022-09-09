@@ -19,7 +19,8 @@ namespace System.Windows.Forms
     public partial class NativeWindow : MarshalByRefObject, IWin32Window, IHandle, IHandle<HWND>
     {
 #if DEBUG
-        private static readonly BooleanSwitch AlwaysUseNormalWndProc = new("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
+        private static readonly BooleanSwitch AlwaysUseNormalWndProc
+            = new("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
 #endif
 
         private static readonly TraceSwitch WndProcChoice = new("WndProcChoice", "Info about choice of WndProc");
@@ -341,7 +342,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_priorWindowProcHandle != _windowProcHandle, "Uh oh! Subclassed ourselves!!!");
 
                 if (assignUniqueID
-                    && ((User32.WS)PARAM.ToUInt(User32.GetWindowLong(this, User32.GWL.STYLE))).HasFlag(User32.WS.CHILD)
+                    && ((WINDOW_STYLE)PARAM.ToUInt(User32.GetWindowLong(this, User32.GWL.STYLE))).HasFlag(WINDOW_STYLE.WS_CHILD)
                     && User32.GetWindowLong(this, User32.GWL.ID) == IntPtr.Zero)
                 {
                     User32.SetWindowLong(this, User32.GWL.ID, handle);
@@ -420,12 +421,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a window handle for this window.
         /// </summary>
-        public virtual void CreateHandle(CreateParams cp)
+        public virtual unsafe void CreateHandle(CreateParams cp)
         {
             lock (this)
             {
                 CheckReleased();
-                WindowClass windowClass = WindowClass.Create(cp.ClassName, (User32.CS)cp.ClassStyle);
+                WindowClass windowClass = WindowClass.Create(cp.ClassName, (WNDCLASS_STYLES)cp.ClassStyle);
                 lock (s_createWindowSyncObject)
                 {
                     // The CLR will sometimes pump messages while we're waiting on the lock.
@@ -437,7 +438,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    IntPtr createResult = IntPtr.Zero;
+                    HWND createResult = HWND.Null;
                     int lastWin32Error = 0;
 
                     NativeWindow? prevTargetWindow = windowClass._targetWindow;
@@ -449,7 +450,7 @@ namespace System.Windows.Forms
                         // parented to this parking window. Otherwise, reparenting of control will fail.
                         using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext))
                         {
-                            nint modHandle = PInvoke.GetModuleHandle(null);
+                            HINSTANCE modHandle = PInvoke.GetModuleHandle(null);
 
                             // Older versions of Windows AV rather than returning E_OUTOFMEMORY.
                             // Catch this and then we re-throw an out of memory error.
@@ -463,17 +464,17 @@ namespace System.Windows.Forms
                                     cp.Caption = cp.Caption.Substring(0, short.MaxValue);
                                 }
 
-                                createResult = User32.CreateWindowExW(
-                                    (User32.WS_EX)cp.ExStyle,
+                                createResult = PInvoke.CreateWindowEx(
+                                    (WINDOW_EX_STYLE)cp.ExStyle,
                                     windowClass._windowClassName,
                                     cp.Caption,
-                                    (User32.WS)cp.Style,
+                                    (WINDOW_STYLE)cp.Style,
                                     cp.X,
                                     cp.Y,
                                     cp.Width,
                                     cp.Height,
-                                    cp.Parent,
-                                    IntPtr.Zero,
+                                    (HWND)cp.Parent,
+                                    HMENU.Null,
                                     modHandle,
                                     cp.Param);
 
@@ -490,9 +491,11 @@ namespace System.Windows.Forms
                         windowClass._targetWindow = prevTargetWindow;
                     }
 
-                    Debug.WriteLineIf(CoreSwitches.PerfTrack.Enabled, "Handle created of type '" + cp.ClassName + "' with caption '" + cp.Caption + "' from NativeWindow of type '" + GetType().FullName + "'");
+                    Debug.WriteLineIf(
+                        CoreSwitches.PerfTrack.Enabled,
+                        $"Handle created of type '{cp.ClassName}' with caption '{cp.Caption}' from NativeWindow of type '{GetType().FullName}'");
 
-                    if (createResult == IntPtr.Zero)
+                    if (createResult.IsNull)
                     {
                         throw new Win32Exception(lastWin32Error, SR.ErrorCreatingHandle);
                     }

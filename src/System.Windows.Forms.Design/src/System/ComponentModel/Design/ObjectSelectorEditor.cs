@@ -66,7 +66,7 @@ namespace System.ComponentModel.Design
             treeView.HotTracking = true;
             treeView.ShowLines = false;
 
-            IntPtr hwnd = treeView.Handle;
+            HWND hwnd = (HWND)treeView.Handle;
             ComCtl32.TVS_EX exstyle = (ComCtl32.TVS_EX)User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
             User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);

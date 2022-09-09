@@ -4,6 +4,7 @@
 
 using System.Reflection;
 using Microsoft.Win32;
+using Windows.Win32.Foundation;
 using Xunit;
 using static Interop.User32;
 
@@ -28,7 +29,7 @@ namespace System
 
         public static void SendMessageOnUserPreferenceChanged(UserPreferenceCategory category)
         {
-            IntPtr window = GetHWnd();
+            HWND window = (HWND)GetHWnd();
 
             WM msg;
             nint wParam;

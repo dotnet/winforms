@@ -359,8 +359,8 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = ComCtl32.WindowClasses.WC_COMBOBOX;
-                cp.Style |= (int)WS.VSCROLL | (int)CBS.HASSTRINGS | (int)CBS.AUTOHSCROLL;
-                cp.ExStyle |= (int)WS_EX.CLIENTEDGE;
+                cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | (int)CBS.HASSTRINGS | (int)CBS.AUTOHSCROLL;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                 if (!_integralHeight)
                 {
                     cp.Style |= (int)CBS.NOINTEGRALHEIGHT;

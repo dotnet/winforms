@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public struct NMDAYSTATE
         {
-            public User32.NMHDR nmhdr;
+            public NMHDR nmhdr;
             public PInvoke.SYSTEMTIME stStart;
             public int cDayState;
             public IntPtr prgDayState;

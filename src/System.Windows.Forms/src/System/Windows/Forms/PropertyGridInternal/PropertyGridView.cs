@@ -349,7 +349,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal bool DrawValuesRightToLeft
             => _editTextBox is not null
                 && _editTextBox.IsHandleCreated
-                && ((User32.WS_EX)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE)).HasFlag(User32.WS_EX.RTLREADING);
+                && ((WINDOW_EX_STYLE)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE)).HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
         internal DropDownHolder DropDownControlHolder => _dropDownHolder;
 
@@ -5405,7 +5405,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-            var nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
+            var nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
             if (nmhdr->hwndFrom == ToolTip.Handle)
             {

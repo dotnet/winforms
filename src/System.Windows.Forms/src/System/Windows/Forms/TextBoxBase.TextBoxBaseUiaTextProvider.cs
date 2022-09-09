@@ -150,7 +150,7 @@ namespace System.Windows.Forms
             public override bool IsMultiline => _owningTextBoxBase.Multiline;
 
             public override bool IsReadingRTL
-                => _owningTextBoxBase.IsHandleCreated && WindowExStyle.HasFlag(WS_EX.RTLREADING);
+                => _owningTextBoxBase.IsHandleCreated && WindowExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
             public override bool IsReadOnly => _owningTextBoxBase.ReadOnly;
 
@@ -210,15 +210,15 @@ namespace System.Windows.Forms
 
             public override int TextLength => Text.Length;
 
-            public override WS_EX WindowExStyle
+            public override WINDOW_EX_STYLE WindowExStyle
                 => _owningTextBoxBase.IsHandleCreated
                     ? GetWindowExStyle(_owningTextBoxBase)
-                    : WS_EX.LEFT;
+                    : WINDOW_EX_STYLE.WS_EX_LEFT;
 
-            public override WS WindowStyle
+            public override WINDOW_STYLE WindowStyle
                 => _owningTextBoxBase.IsHandleCreated
                     ? GetWindowStyle(_owningTextBoxBase)
-                    : WS.OVERLAPPED;
+                    : WINDOW_STYLE.WS_OVERLAPPED;
 
             public override ES EditStyle
                 => _owningTextBoxBase.IsHandleCreated

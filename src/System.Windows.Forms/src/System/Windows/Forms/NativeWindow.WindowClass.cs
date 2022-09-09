@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             internal string? _windowClassName;
             internal NativeWindow? _targetWindow;
 
-            private readonly User32.CS _classStyle;
+            private readonly WNDCLASS_STYLES _classStyle;
             private IntPtr _defaultWindProc;
 
             // This needs to be a field so the GC doesn't collect the managed callback
@@ -34,9 +34,9 @@ namespace System.Windows.Forms
             // There is only ever one AppDomain
             private static readonly string s_currentAppDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
 
-            private static readonly object s_wcInternalSyncObject = new object();
+            private static readonly object s_wcInternalSyncObject = new();
 
-            internal WindowClass(string? className, User32.CS classStyle)
+            internal WindowClass(string? className, WNDCLASS_STYLES classStyle)
             {
                 _className = className;
                 _classStyle = classStyle;
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
             ///  object if there is no such class/style available, or return a
             ///  cached object if one exists.
             /// </summary>
-            internal static WindowClass Create(string? className, User32.CS classStyle)
+            internal static WindowClass Create(string? className, WNDCLASS_STYLES classStyle)
             {
                 lock (s_wcInternalSyncObject)
                 {

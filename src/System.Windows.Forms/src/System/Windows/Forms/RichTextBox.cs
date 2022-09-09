@@ -323,7 +323,7 @@ namespace System.Windows.Forms
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_HORIZ) != 0 && !WordWrap)
                     {
                         // RichEd infers word wrap from the absence of horizontal scroll bars
-                        cp.Style |= (int)User32.WS.HSCROLL;
+                        cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
                         if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
                         {
                             cp.Style |= (int)ES.DISABLENOSCROLL;
@@ -332,7 +332,7 @@ namespace System.Windows.Forms
 
                     if (((int)ScrollBars & RichTextBoxConstants.RTB_VERT) != 0)
                     {
-                        cp.Style |= (int)User32.WS.VSCROLL;
+                        cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL;
                         if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
                         {
                             cp.Style |= (int)ES.DISABLENOSCROLL;
@@ -342,10 +342,10 @@ namespace System.Windows.Forms
 
                 // Remove the WS_BORDER style from the control, if we're trying to set it,
                 // to prevent the control from displaying the single point rectangle around the 3D border
-                if (BorderStyle.FixedSingle == BorderStyle && ((cp.Style & (int)User32.WS.BORDER) != 0))
+                if (BorderStyle.FixedSingle == BorderStyle && ((cp.Style & (int)WINDOW_STYLE.WS_BORDER) != 0))
                 {
-                    cp.Style &= ~(int)User32.WS.BORDER;
-                    cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                 }
 
                 return cp;
@@ -3153,7 +3153,7 @@ namespace System.Windows.Forms
             }
 
             GETTEXTLENGTHEX* pGtl = &gtl;
-            int expectedLength = (int)User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTLENGTHEX, (nint)pGtl);
+            int expectedLength = (int)User32.SendMessageW(this, (User32.WM)User32.EM.GETTEXTLENGTHEX, (nint)pGtl);
             if (expectedLength == (int)HRESULT.E_INVALIDARG)
                 throw new Win32Exception(expectedLength);
 
@@ -3174,7 +3174,7 @@ namespace System.Windows.Forms
             GETTEXTEX* pGt = &gt;
             fixed (char* pText = text)
             {
-                int actualLength = (int)User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTEX, (nint)pGt, (nint)pText);
+                int actualLength = (int)User32.SendMessageW(this, (User32.WM)User32.EM.GETTEXTEX, (nint)pGt, (nint)pText);
 
                 // The default behaviour of EM_GETTEXTEX is to normalise line endings to '\r'
                 // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
@@ -3380,7 +3380,7 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
+                NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                 switch ((EN)nmhdr->code)
                 {
                     case EN.LINK:

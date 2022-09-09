@@ -300,7 +300,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = ComCtl32.WindowClasses.WC_LISTBOX;
 
-                cp.Style |= (int)WS.VSCROLL | (int)LBS.NOTIFY | (int)LBS.HASSTRINGS;
+                cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | (int)LBS.NOTIFY | (int)LBS.HASSTRINGS;
                 if (_scrollAlwaysVisible)
                 {
                     cp.Style |= (int)LBS.DISABLENOSCROLL;
@@ -319,20 +319,20 @@ namespace System.Windows.Forms
                 switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= (int)WS_EX.CLIENTEDGE;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)WS.BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                 }
 
                 if (_multiColumn)
                 {
-                    cp.Style |= (int)LBS.MULTICOLUMN | (int)WS.HSCROLL;
+                    cp.Style |= (int)LBS.MULTICOLUMN | (int)WINDOW_STYLE.WS_HSCROLL;
                 }
                 else if (_horizontalScrollbar)
                 {
-                    cp.Style |= (int)WS.HSCROLL;
+                    cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
                 }
 
                 switch (_selectionMode)

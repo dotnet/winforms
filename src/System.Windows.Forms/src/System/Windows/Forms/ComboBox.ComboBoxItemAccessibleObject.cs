@@ -43,7 +43,7 @@ namespace System.Windows.Forms
                 get
                 {
                     int currentIndex = GetCurrentIndex();
-                    IntPtr listHandle = _owningComboBox.GetListHandle();
+                    HWND listHandle = (HWND)_owningComboBox.GetListHandle();
                     RECT itemRect = new();
 
                     int result = (int)User32.SendMessageW(
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
 
                     // Translate the item rect to screen coordinates
                     RECT translated = itemRect;
-                    PInvoke.MapWindowPoints((HWND)listHandle, default, ref translated);
+                    PInvoke.MapWindowPoints((HWND)listHandle, HWND.Null, ref translated);
                     return translated;
                 }
             }

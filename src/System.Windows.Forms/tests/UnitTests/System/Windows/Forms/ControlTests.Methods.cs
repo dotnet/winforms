@@ -10169,8 +10169,8 @@ namespace System.Windows.Forms.Tests
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style |= (int)User32.WS.BORDER;
-                    cp.ExStyle |= (int)User32.WS_EX.STATICEDGE;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_STATICEDGE;
                     return cp;
                 }
             }

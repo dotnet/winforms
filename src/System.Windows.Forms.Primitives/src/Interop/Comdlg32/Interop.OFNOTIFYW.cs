@@ -8,7 +8,7 @@ internal partial class Interop
     {
         public struct OFNOTIFYW
         {
-            public User32.NMHDR hdr;
+            public NMHDR hdr;
             public IntPtr lpOFN;
             public IntPtr pszFile;
         }

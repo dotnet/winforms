@@ -337,16 +337,16 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     int currentStyle = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
-                    cp.Style |= currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL);
+                    cp.Style |= currentStyle & (int)(WINDOW_STYLE.WS_HSCROLL | WINDOW_STYLE.WS_VSCROLL);
                 }
 
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)User32.WS.BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                 }
 
@@ -416,9 +416,9 @@ namespace System.Windows.Forms
                     if (RightToLeftLayout)
                     {
                         //We want to turn on mirroring for TreeView explicitly.
-                        cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
                         //Don't need these styles when mirroring is turned on.
-                        cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                        cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                     }
                     else
                     {
@@ -3033,8 +3033,8 @@ namespace System.Windows.Forms
 
         private unsafe bool WmShowToolTip(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
-            IntPtr tooltipHandle = nmhdr->hwndFrom;
+            NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+            HWND tooltipHandle = nmhdr->hwndFrom;
 
             var tvhip = new TVHITTESTINFO
             {
@@ -3108,10 +3108,10 @@ namespace System.Windows.Forms
 
         private unsafe void WmNotify(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
+            NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
             // Custom draw code is handled separately.
-            if ((nmhdr->code == (int)NM.CUSTOMDRAW))
+            if ((int)nmhdr->code == (int)NM.CUSTOMDRAW)
             {
                 CustomDraw(ref m);
             }
@@ -3119,7 +3119,7 @@ namespace System.Windows.Forms
             {
                 NMTREEVIEW* nmtv = (NMTREEVIEW*)(nint)m.LParamInternal;
 
-                switch (nmtv->nmhdr.code)
+                switch ((int)nmtv->nmhdr.code)
                 {
                     case (int)TVN.ITEMEXPANDINGW:
                         m.ResultInternal = (LRESULT)TvnExpanding(nmtv);
@@ -3155,15 +3155,15 @@ namespace System.Windows.Forms
                         };
 
                         nint hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
-                        if (nmtv->nmhdr.code != (int)NM.CLICK || (tvhip.flags & TVHT.ONITEM) != 0)
+                        if ((int)nmtv->nmhdr.code != (int)NM.CLICK || (tvhip.flags & TVHT.ONITEM) != 0)
                         {
-                            button = nmtv->nmhdr.code == (int)NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
+                            button = (int)nmtv->nmhdr.code == (int)NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
                         }
 
                         // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
                         // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
                         // We work around that by calling OnMouseUp here.
-                        if (nmtv->nmhdr.code != (int)NM.CLICK
+                        if ((int)nmtv->nmhdr.code != (int)NM.CLICK
                             || (tvhip.flags & TVHT.ONITEM) != 0 || FullRowSelect)
                         {
                             if (hnode != 0 && !ValidationCancelled)
@@ -3174,7 +3174,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        if (nmtv->nmhdr.code == (int)NM.RCLICK)
+                        if ((int)nmtv->nmhdr.code == (int)NM.RCLICK)
                         {
                             TreeNode treeNode = NodeFromHandle(hnode);
                             if (treeNode is not null && treeNode.ContextMenuStrip is not null)
@@ -3192,7 +3192,7 @@ namespace System.Windows.Forms
 
                         if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
                         {
-                            if (nmtv->nmhdr.code != (int)NM.CLICK
+                            if ((int)nmtv->nmhdr.code != (int)NM.CLICK
                             || (tvhip.flags & TVHT.ONITEM) != 0)
                             {
                                 // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
@@ -3333,7 +3333,7 @@ namespace System.Windows.Forms
 
                     break;
                 case User32.WM.NOTIFY:
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)(nint)m.LParamInternal;
+                    NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                     switch ((TTN)nmhdr->code)
                     {
                         case TTN.GETDISPINFOW:

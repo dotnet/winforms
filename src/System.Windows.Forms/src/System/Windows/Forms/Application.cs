@@ -597,17 +597,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
         /// </summary>
-        private unsafe static BOOL SendThemeChanged(IntPtr handle)
+        private unsafe static BOOL SendThemeChanged(HWND hwnd)
         {
             uint thisPID = PInvoke.GetCurrentProcessId();
             uint processId;
-            HWND hwnd = (HWND)handle;
             PInvoke.GetWindowThreadProcessId(hwnd, &processId);
             if (processId == thisPID && PInvoke.IsWindowVisible(hwnd))
             {
-                SendThemeChangedRecursive(handle);
+                SendThemeChangedRecursive(hwnd);
                 User32.RedrawWindow(
-                    handle,
+                    hwnd,
                     flags: User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
             }
 
@@ -619,10 +618,10 @@ namespace System.Windows.Forms
         ///  It is assumed at this point that the handle belongs to the current process
         ///  and has a visible top level window.
         /// </summary>
-        private static BOOL SendThemeChangedRecursive(IntPtr handle)
+        private static BOOL SendThemeChangedRecursive(HWND handle)
         {
             // First send to all children...
-            User32.EnumChildWindows(handle, Application.SendThemeChangedRecursive);
+            User32.EnumChildWindows(handle, SendThemeChangedRecursive);
 
             // Then do myself.
             User32.SendMessageW(handle, User32.WM.THEMECHANGED);
@@ -1070,7 +1069,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(PInvoke.IsWindow(handle), "Handle being parked is not a valid window handle");
             Debug.Assert(
-                ((User32.WS)User32.GetWindowLong(handle.Handle, User32.GWL.STYLE)).HasFlag(User32.WS.CHILD),
+                ((WINDOW_STYLE)User32.GetWindowLong(handle.Handle, User32.GWL.STYLE)).HasFlag(WINDOW_STYLE.WS_CHILD),
                 "Only WS_CHILD windows should be parked.");
 
             GetContextForHandle(handle)?.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);

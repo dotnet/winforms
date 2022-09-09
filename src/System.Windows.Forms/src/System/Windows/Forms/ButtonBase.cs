@@ -278,7 +278,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw)
                 {
-                    cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the BS_XXXX alignment styles
+                    cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the BS_XXXX alignment styles
 
                     cp.Style |= (int)User32.BS.MULTILINE;
 

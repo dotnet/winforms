@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public struct NMLVODSTATECHANGE
         {
-            public User32.NMHDR hdr;
+            public NMHDR hdr;
             public int iFrom;
             public int iTo;
             public ComCtl32.LVIS uNewState;
