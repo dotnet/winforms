@@ -5,10 +5,11 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Windows.Win32;
 using Windows.Win32.Graphics.Gdi;
+using Windows.Win32.UI.WindowsAndMessaging;
+using Foundation = Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -29,39 +30,32 @@ namespace System.Windows.Forms
             }
 
             // returns the distance from the client rect to the upper left hand corner of the control
-            private RECT AbsoluteClientRECT
+            private Foundation.RECT AbsoluteClientRECT
             {
                 get
                 {
-                    RECT rect = new RECT();
+                    Foundation.RECT rect = new();
                     CreateParams cp = CreateParams;
 
-                    AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
+                    AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
 
                     // the coordinates we get back are negative, we need to translate this back to positive.
                     int offsetX = -rect.left; // one to get back to 0,0, another to translate
                     int offsetY = -rect.top;
 
                     // fetch the client rect, then apply the offset.
-                    User32.GetClientRect(new HandleRef(this, Handle), ref rect);
+                    PInvoke.GetClientRect(this, out var clientRect);
 
-                    rect.left += offsetX;
-                    rect.right += offsetX;
-                    rect.top += offsetY;
-                    rect.bottom += offsetY;
+                    clientRect.left += offsetX;
+                    clientRect.right += offsetX;
+                    clientRect.top += offsetY;
+                    clientRect.bottom += offsetY;
 
-                    return rect;
+                    return clientRect;
                 }
             }
 
-            private Rectangle AbsoluteClientRectangle
-            {
-                get
-                {
-                    RECT rect = AbsoluteClientRECT;
-                    return Rectangle.FromLTRB(rect.top, rect.top, rect.right, rect.bottom);
-                }
-            }
+            private Rectangle AbsoluteClientRectangle => AbsoluteClientRECT.ToRectangle();
 
             private ProfessionalColorTable ColorTable
             {
@@ -126,7 +120,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                RECT absoluteClientRectangle = AbsoluteClientRECT;
+                var absoluteClientRectangle = AbsoluteClientRECT;
 
                 // Get the total client area, then exclude the client by using XOR
                 using var hTotalRegion = new Gdi32.RegionScope(0, 0, Width, Height);

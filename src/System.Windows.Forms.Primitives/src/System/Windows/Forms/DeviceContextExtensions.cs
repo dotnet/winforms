@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
+using Gdi = Windows.Win32.Graphics.Gdi;
 
 namespace System.Windows.Forms
 {
@@ -125,6 +126,7 @@ namespace System.Windows.Forms
         }
 
         internal static Graphics CreateGraphics(this Gdi32.HDC hdc) => Graphics.FromHdcInternal(hdc.Handle);
+        internal static Graphics CreateGraphics(this Gdi.HDC hdc) => Graphics.FromHdcInternal(hdc.Value);
         internal static Graphics CreateGraphics(this Gdi32.CreateDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC.Handle);
         internal static Graphics CreateGraphics(this User32.GetDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC.Handle);
 

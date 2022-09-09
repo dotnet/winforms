@@ -8,8 +8,10 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32;
 using static Interop;
 using static Interop.User32;
+using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {
@@ -987,7 +989,7 @@ namespace System.Windows.Forms
                             User32.InvalidateRect(Handle, null, bErase: BOOL.TRUE);
 
                             // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
-                            using var paintScope = new User32.BeginPaintScope(Handle);
+                            using var paintScope = new PInvoke.BeginPaintScope((Foundation.HWND)Handle);
                             DrawPlaceholderText(paintScope);
 
                             User32.ValidateRect(this, null);

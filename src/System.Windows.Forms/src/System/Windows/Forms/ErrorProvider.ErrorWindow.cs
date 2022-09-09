@@ -6,7 +6,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32;
 using static Interop;
+using Foundation = Windows.Win32.Foundation;
 
 namespace System.Windows.Forms
 {
@@ -198,7 +200,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void OnPaint()
             {
-                using var hdc = new User32.BeginPaintScope(Handle);
+                using var hdc = new PInvoke.BeginPaintScope((Foundation.HWND)Handle);
                 using var save = new Gdi32.SaveDcScope(hdc);
 
                 MirrorDcIfNeeded(hdc);
