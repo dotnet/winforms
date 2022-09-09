@@ -358,7 +358,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_COMBOBOX;
+                cp.ClassName = PInvoke.WC_COMBOBOX;
                 cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | (int)CBS.HASSTRINGS | (int)CBS.AUTOHSCROLL;
                 cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                 if (!_integralHeight)

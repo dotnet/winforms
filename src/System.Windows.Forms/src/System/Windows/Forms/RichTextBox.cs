@@ -316,7 +316,7 @@ namespace System.Windows.Forms
                 }
 
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.MSFTEDIT_CLASS;
+                cp.ClassName = PInvoke.MSFTEDIT_CLASS;
 
                 if (Multiline)
                 {

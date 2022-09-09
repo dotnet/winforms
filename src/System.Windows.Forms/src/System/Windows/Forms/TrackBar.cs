@@ -149,7 +149,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = WindowClasses.WC_TRACKBAR;
+                cp.ClassName = PInvoke.TRACKBAR_CLASS;
 
                 switch (_tickStyle)
                 {

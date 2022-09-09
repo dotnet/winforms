@@ -122,7 +122,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_SCROLLBAR;
+                cp.ClassName = PInvoke.WC_SCROLLBAR;
                 cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
                 return cp;
             }
