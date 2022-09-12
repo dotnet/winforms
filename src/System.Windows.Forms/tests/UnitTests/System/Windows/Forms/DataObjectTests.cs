@@ -2234,7 +2234,7 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            Assert.Throws<ArgumentException>(null, () => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
+            Assert.Throws<ArgumentException>(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
         }
 
         [WinFormsTheory]
@@ -2254,7 +2254,7 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            Assert.Throws<ArgumentException>(null, () => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
+            Assert.Throws<ArgumentException>(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
         }
 
         [WinFormsFact]
@@ -2347,7 +2347,7 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            Assert.Throws<ArgumentException>(null, () => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
+            Assert.Throws<ArgumentException>(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
         }
 
         [WinFormsFact]

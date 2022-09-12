@@ -5314,7 +5314,7 @@ namespace System.Windows.Forms.Tests
                 RowCount = 2
             };
             SubDataGridViewRow row = (SubDataGridViewRow)control.Rows[0];
-            Assert.Throws<ArgumentException>(null, () => row.PaintCells(graphics, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true, paintParts));
+            Assert.Throws<ArgumentException>(() => row.PaintCells(graphics, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true, paintParts));
         }
 
         [WinFormsTheory]

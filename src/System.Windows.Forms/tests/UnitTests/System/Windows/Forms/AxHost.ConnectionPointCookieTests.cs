@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
         {
             Type type = Type.GetTypeFromCLSID(CLSID_WebBrowser);
             object source = Activator.CreateInstance(type);
-            Assert.Throws<ArgumentException>(null, () => new AxHost.ConnectionPointCookie(source, null, eventInterface));
+            Assert.Throws<ArgumentException>(() => new AxHost.ConnectionPointCookie(source, null, eventInterface));
         }
 
         public static IEnumerable<object[]> Ctor_InvalidSink_TestData()

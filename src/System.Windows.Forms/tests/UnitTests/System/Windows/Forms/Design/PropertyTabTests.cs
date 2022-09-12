@@ -57,12 +57,12 @@ namespace System.Windows.Forms.Design.Tests
 
             tab.Dispose();
             Assert.Null(tab.Bitmap);
-            Assert.Throws<ArgumentException>(null, () => bitmap.Size);
+            Assert.Throws<ArgumentException>(() => bitmap.Size);
 
             // Dispose again.
             tab.Dispose();
             Assert.Null(tab.Bitmap);
-            Assert.Throws<ArgumentException>(null, () => bitmap.Size);
+            Assert.Throws<ArgumentException>(() => bitmap.Size);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Design.Tests
             if (disposing)
             {
                 Assert.Null(tab.Bitmap);
-                Assert.Throws<ArgumentException>(null, () => bitmap.Size);
+                Assert.Throws<ArgumentException>(() => bitmap.Size);
             }
             else
             {
@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Design.Tests
             if (disposing)
             {
                 Assert.Null(tab.Bitmap);
-                Assert.Throws<ArgumentException>(null, () => bitmap.Size);
+                Assert.Throws<ArgumentException>(() => bitmap.Size);
             }
             else
             {

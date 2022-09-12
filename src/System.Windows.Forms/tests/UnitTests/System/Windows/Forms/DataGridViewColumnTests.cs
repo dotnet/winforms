@@ -1773,8 +1773,8 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewColumn_GetPreferredWidth_NotApplicableAutoSizeColumnMode_ThrowsArgumentException(DataGridViewAutoSizeColumnMode autoSizeColumnMode)
         {
             using var column = new SubDataGridViewColumn();
-            Assert.Throws<ArgumentException>(null, () => column.GetPreferredWidth(autoSizeColumnMode, fixedHeight: true));
-            Assert.Throws<ArgumentException>(null, () => column.GetPreferredWidth(autoSizeColumnMode, fixedHeight: false));
+            Assert.Throws<ArgumentException>(() => column.GetPreferredWidth(autoSizeColumnMode, fixedHeight: true));
+            Assert.Throws<ArgumentException>(() => column.GetPreferredWidth(autoSizeColumnMode, fixedHeight: false));
         }
 
         [WinFormsTheory]
