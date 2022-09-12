@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
         public void LinkConverter_ConvertFrom_InvalidString_ThrowsArgumentException(string value)
         {
             var converter = new LinkConverter();
-            Assert.Throws<ArgumentException>(null, () => converter.ConvertFrom(value));
+            Assert.Throws<ArgumentException>(() => converter.ConvertFrom(value));
         }
 
         [Theory]

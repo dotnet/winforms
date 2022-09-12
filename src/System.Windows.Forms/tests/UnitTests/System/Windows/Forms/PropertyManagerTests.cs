@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Tests
         public void PropertyManager_GetListName_NoDataSource_ThrowsArgumentException()
         {
             var manager = new PropertyManager();
-            Assert.Throws<ArgumentException>(null, () => manager.GetListName());
+            Assert.Throws<ArgumentException>(() => manager.GetListName());
         }
 
         /*

@@ -561,9 +561,11 @@ this is the third line.";
             using Font font = new Font("Arial", 9f, FontStyle.Regular);
             providerMock.Setup(m => m.Logfont).Returns(LOGFONTW.FromFont(font));
             UiaTextProvider provider = providerMock.Object;
+
             UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 3, end: 3);
             double actualWidth = ((ITextRangeProvider)textRange).GetBoundingRectangles()[2]; // {X,Y,Width,Height}
-            Assert.Equal(actualWidth, UiaTextProvider.EndOfLineWidth);
+
+            Assert.Equal(UiaTextProvider.EndOfLineWidth, actualWidth);
         }
 
         public static IEnumerable<object[]> UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsCorrectValue_for_SingleLine_TestData()
