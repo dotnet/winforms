@@ -9,11 +9,11 @@ namespace Windows.Win32
     internal static partial class PInvoke
     {
         /// <summary>
-        ///   Compares two DPI awareness context values for equality.
+        ///  Compares two DPI awareness context values for equality.
         /// </summary>
         /// <returns>
-        ///   <see langword="true"/> if <paramref name="dpiContextA"/> and <paramref name="dpiContextB"/> are equal;
-        ///   otherwise, <see langword="false"/> if not equal or the underlying OS does not support this API.
+        ///  <see langword="true"/> if <paramref name="dpiContextA"/> and <paramref name="dpiContextB"/> are equal;
+        ///  otherwise, <see langword="false"/> if not equal or the underlying OS does not support this API.
         /// </returns>
         public static bool AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT dpiContextA, DPI_AWARENESS_CONTEXT dpiContextB)
         {
