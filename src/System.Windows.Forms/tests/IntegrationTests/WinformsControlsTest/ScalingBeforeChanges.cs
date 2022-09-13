@@ -120,13 +120,13 @@ namespace WinformsControlsTest
             switch ((User32.WM)m.Msg)
             {
                 case User32.WM.DPICHANGED_BEFOREPARENT:
-                    dpi = User32.GetDpiForWindow(Handle);
+                    dpi = PInvoke.GetDpiForWindow(this);
                     Debug.WriteLine($"WM_DPICHANGED_BEFOREPARENT  {dpi}");
 
                     m.Result = (IntPtr)1;
                     break;
                 case User32.WM.DPICHANGED_AFTERPARENT:
-                    dpi = User32.GetDpiForWindow(this);
+                    dpi = PInvoke.GetDpiForWindow(this);
                     Debug.WriteLine($"WM_DPICHANGED_AFTERPARENT {dpi}");
                     m.Result = (IntPtr)1;
                     break;

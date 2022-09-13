@@ -269,7 +269,7 @@ namespace System.Windows.Forms
             ///  Retrieves the actual parking form.  This will demand create the parking window
             ///  if it needs to.
             /// </summary>
-            internal ParkingWindow GetParkingWindow(IntPtr context)
+            internal ParkingWindow GetParkingWindow(DPI_AWARENESS_CONTEXT context)
             {
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
             ///  Returns parking window that matches dpi awareness context. return null if not found.
             /// </summary>
             /// <returns>return matching parking window from list. returns null if not found</returns>
-            internal ParkingWindow GetParkingWindowForContext(IntPtr context)
+            internal ParkingWindow GetParkingWindowForContext(DPI_AWARENESS_CONTEXT context)
             {
                 if (_parkingWindows.Count == 0)
                 {
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
 
                 // Legacy OS/target framework scenario where ControlDpiContext is set to DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNSPECIFIED
                 // because of 'ThreadContextDpiAwareness' API unavailability or this feature is not enabled.
-                if (User32.AreDpiAwarenessContextsEqual(context, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
+                if (PInvoke.AreDpiAwarenessContextsEqualInternal(context, DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
                 {
                     Debug.Assert(_parkingWindows.Count == 1, "parkingWindows count can not be > 1 for legacy OS/target framework versions");
 
@@ -320,7 +320,7 @@ namespace System.Windows.Forms
                 // Supported OS scenario.
                 foreach (ParkingWindow p in _parkingWindows)
                 {
-                    if (User32.AreDpiAwarenessContextsEqual(p.DpiAwarenessContext, context))
+                    if (PInvoke.AreDpiAwarenessContextsEqualInternal(p.DpiAwarenessContext, context))
                     {
                         return p;
                     }

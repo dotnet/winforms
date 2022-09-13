@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             }
 
             // This avoids needing to create a DC
-            return (int)User32.GetDpiForSystem();
+            return (int)PInvoke.GetDpiForSystem();
         }
 
         private static bool GetPerMonitorAware()
@@ -91,8 +91,8 @@ namespace System.Windows.Forms
                 {
                     // We can't cache this value because different top level windows can have different DPI awareness context
                     // for mixed mode applications.
-                    IntPtr dpiAwareness = User32.GetThreadDpiAwarenessContext();
-                    return User32.AreDpiAwarenessContextsEqual(dpiAwareness, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+                    DPI_AWARENESS_CONTEXT dpiAwareness = PInvoke.GetThreadDpiAwarenessContextInternal();
+                    return PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
                 }
                 else
                 {
@@ -372,29 +372,29 @@ namespace System.Windows.Forms
             // For Windows 10 RS2 and above
             if (OsVersion.IsWindows10_1607OrGreater)
             {
-                IntPtr dpiAwareness = User32.GetThreadDpiAwarenessContext();
+                DPI_AWARENESS_CONTEXT dpiAwareness = PInvoke.GetThreadDpiAwarenessContextInternal();
 
-                if (User32.AreDpiAwarenessContextsEqual(dpiAwareness, User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
+                if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                 {
                     return HighDpiMode.SystemAware;
                 }
 
-                if (User32.AreDpiAwarenessContextsEqual(dpiAwareness, User32.DPI_AWARENESS_CONTEXT.UNAWARE))
+                if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE))
                 {
                     return HighDpiMode.DpiUnaware;
                 }
 
-                if (User32.AreDpiAwarenessContextsEqual(dpiAwareness, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+                if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
                 {
                     return HighDpiMode.PerMonitorV2;
                 }
 
-                if (User32.AreDpiAwarenessContextsEqual(dpiAwareness, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE))
+                if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE))
                 {
                     return HighDpiMode.PerMonitor;
                 }
 
-                if (User32.AreDpiAwarenessContextsEqual(dpiAwareness, User32.DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED))
+                if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED))
                 {
                     return HighDpiMode.DpiUnawareGdiScaled;
                 }
@@ -415,7 +415,7 @@ namespace System.Windows.Forms
             else
             {
                 // Available on Vista and higher
-                return User32.IsProcessDPIAware() ? HighDpiMode.SystemAware : HighDpiMode.DpiUnaware;
+                return PInvoke.IsProcessDPIAware() ? HighDpiMode.SystemAware : HighDpiMode.DpiUnaware;
             }
 
             // We should never get here, except someone ported this with force to < Windows 7.
@@ -432,56 +432,34 @@ namespace System.Windows.Forms
 
             if (OsVersion.IsWindows10_1703OrGreater)
             {
-                // SetProcessIntPtr needs Windows 10 RS2 and above
-                IntPtr rs2AndAboveDpiFlag;
-                switch (highDpiMode)
+                var rs2AndAboveDpiFlag = highDpiMode switch
                 {
-                    case HighDpiMode.SystemAware:
-                        rs2AndAboveDpiFlag = User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
-                        break;
-                    case HighDpiMode.PerMonitor:
-                        rs2AndAboveDpiFlag = User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE;
-                        break;
-                    case HighDpiMode.PerMonitorV2:
+                    HighDpiMode.SystemAware => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE,
+                    HighDpiMode.PerMonitor => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE,
+                    HighDpiMode.PerMonitorV2 =>
                         // Necessary for RS1, since this SetProcessIntPtr IS available here.
-                        rs2AndAboveDpiFlag = User32.IsValidDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2)
-                            ? User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2
-                            : User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
-                        break;
-                    case HighDpiMode.DpiUnawareGdiScaled:
+                        PInvoke.IsValidDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2)
+                        ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+                        : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, 
+                    HighDpiMode.DpiUnawareGdiScaled =>
                         // Let's make sure, we do not try to set a value which has been introduced in later Windows releases.
-                        rs2AndAboveDpiFlag = User32.IsValidDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED)
-                            ? User32.DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED
-                            : User32.DPI_AWARENESS_CONTEXT.UNAWARE;
-                        break;
-                    default:
-                        rs2AndAboveDpiFlag = User32.DPI_AWARENESS_CONTEXT.UNAWARE;
-                        break;
-                }
+                        PInvoke.IsValidDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED)
+                        ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED
+                        : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE,
+                    _ => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE,
+                };
 
-                success = User32.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag);
+                success = PInvoke.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag);
             }
             else if (OsVersion.IsWindows8_1OrGreater)
             {
-                // 8.1 introduced SetProcessDpiAwareness
-                SHCore.PROCESS_DPI_AWARENESS dpiFlag;
-                switch (highDpiMode)
+                var dpiFlag = highDpiMode switch
                 {
-                    case HighDpiMode.DpiUnaware:
-                    case HighDpiMode.DpiUnawareGdiScaled:
-                        dpiFlag = SHCore.PROCESS_DPI_AWARENESS.UNAWARE;
-                        break;
-                    case HighDpiMode.SystemAware:
-                        dpiFlag = SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE;
-                        break;
-                    case HighDpiMode.PerMonitor:
-                    case HighDpiMode.PerMonitorV2:
-                        dpiFlag = SHCore.PROCESS_DPI_AWARENESS.PER_MONITOR_AWARE;
-                        break;
-                    default:
-                        dpiFlag = SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE;
-                        break;
-                }
+                    HighDpiMode.DpiUnaware or HighDpiMode.DpiUnawareGdiScaled => SHCore.PROCESS_DPI_AWARENESS.UNAWARE,
+                    HighDpiMode.SystemAware => SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE,
+                    HighDpiMode.PerMonitor or HighDpiMode.PerMonitorV2 => SHCore.PROCESS_DPI_AWARENESS.PER_MONITOR_AWARE,
+                    _ => SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE,
+                };
 
                 success = SHCore.SetProcessDpiAwareness(dpiFlag) == HRESULT.S_OK;
             }
@@ -504,7 +482,7 @@ namespace System.Windows.Forms
 
                 if (dpiFlag == SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE)
                 {
-                    success = User32.SetProcessDPIAware();
+                    success = PInvoke.SetProcessDPIAware();
                 }
             }
 

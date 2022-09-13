@@ -483,7 +483,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets control Dpi awareness context value.
         /// </summary>
-        internal IntPtr DpiAwarenessContext => _window.DpiAwarenessContext;
+        internal DPI_AWARENESS_CONTEXT DpiAwarenessContext => _window.DpiAwarenessContext;
 
         /// <summary>
         ///  The Accessibility Object for this Control
@@ -2147,7 +2147,7 @@ namespace System.Windows.Forms
 
         private protected void AddToDpiFonts(int dpi, Font font)
         {
-            if (!User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+            if (!PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
             {
                 Debug.Assert(false, "Fonts need to be cached only for PerMonitorV2 mode applications");
                 return;
@@ -2160,7 +2160,7 @@ namespace System.Windows.Forms
         private protected bool TryGetDpiFont(int dpi, [NotNullWhen(true)] out Font? font)
         {
             font = null;
-            if (!User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+            if (!PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
             {
                 Debug.Assert(false, $"Fonts need to be cached only for PermonitorV2 mode applications : {DpiHelper.IsPerMonitorV2Awareness} : {DpiAwarenessContext}");
                 return false;
@@ -7854,11 +7854,11 @@ namespace System.Windows.Forms
                     SetWindowFont();
                 }
 
-                if (User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+                if (PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
                 {
                     int old = _deviceDpi;
                     Font localFont = GetCurrentFontAndDpi(out int fontDpi);
-                    _deviceDpi = (int)User32.GetDpiForWindow(this);
+                    _deviceDpi = (int)PInvoke.GetDpiForWindow(this);
                     if (old != _deviceDpi)
                     {
                         if (fontDpi != _deviceDpi)
@@ -12319,7 +12319,7 @@ namespace System.Windows.Forms
             // On certain OS versions, for non-test scenarios, WParam may be empty.
             if (newDeviceDpi == 0)
             {
-                newDeviceDpi = (int)User32.GetDpiForWindow(this);
+                newDeviceDpi = (int)PInvoke.GetDpiForWindow(this);
             }
 
             if (_oldDeviceDpi == newDeviceDpi)

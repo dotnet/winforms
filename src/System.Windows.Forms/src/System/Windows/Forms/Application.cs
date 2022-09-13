@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  "Parks" the given HWND to a temporary HWND. This allows WS_CHILD windows to be parked.
         /// </summary>
-        internal static void ParkHandle(HandleRef<HWND> handle, IntPtr dpiAwarenessContext)
+        internal static void ParkHandle(HandleRef<HWND> handle, DPI_AWARENESS_CONTEXT dpiAwarenessContext)
         {
             Debug.Assert(PInvoke.IsWindow(handle), "Handle being parked is not a valid window handle");
             Debug.Assert(
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="cp"> create params for control handle</param>
         /// <param name="dpiAwarenessContext"> dpi awareness</param>
-        internal static void ParkHandle(CreateParams cp, IntPtr dpiAwarenessContext)
+        internal static void ParkHandle(CreateParams cp, DPI_AWARENESS_CONTEXT dpiAwarenessContext)
         {
             ThreadContext threadContext = ThreadContext.FromCurrent();
             if (threadContext is not null)
@@ -1107,7 +1107,7 @@ namespace System.Windows.Forms
         ///  "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
         /// </summary>
-        internal static void UnparkHandle(IHandle<HWND> handle, IntPtr context)
+        internal static void UnparkHandle(IHandle<HWND> handle, DPI_AWARENESS_CONTEXT context)
         {
             ThreadContext threadContext = GetContextForHandle(handle);
             if (threadContext is not null)
