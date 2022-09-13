@@ -156,10 +156,17 @@ public class DragDropTests : ControlTestBase
 
                 Assert.NotNull(dragDropForm);
                 Assert.NotNull(dragDropForm.RichTextBoxDropTarget);
+
+                TestOutputHelper.WriteLine($"dragAcceptRtfContent: {dragAcceptRtfContent}");
+                TestOutputHelper.WriteLine($"RichTextBoxDropTarget.Rtf: {dragDropForm.RichTextBoxDropTarget.Rtf}");
                 Assert.False(string.IsNullOrWhiteSpace(dragDropForm.RichTextBoxDropTarget.Rtf),
                     $"Actual form.RichTextBoxDropTarget.Rtf: {dragDropForm.RichTextBoxDropTarget.Rtf}");
+
+                TestOutputHelper.WriteLine($"dragAcceptRtfTextContent: {dragAcceptRtfTextContent}");
+                TestOutputHelper.WriteLine($"RichTextBoxDropTarget.Text: {dragDropForm.RichTextBoxDropTarget.Text}");
                 Assert.False(string.IsNullOrWhiteSpace(dragDropForm.RichTextBoxDropTarget.Text),
                     $"Actual form.RichTextBoxDropTarget.Text: {dragDropForm.RichTextBoxDropTarget.Text}");
+
                 Assert.Equal(dragAcceptRtfContent, dragDropForm.RichTextBoxDropTarget?.Rtf);
                 Assert.Equal(dragAcceptRtfTextContent, dragDropForm.RichTextBoxDropTarget?.Text);
             }
