@@ -80,6 +80,8 @@ public class DragDropTests : ControlTestBase
                     dragAcceptRtfTextContent = richTextBox.Text;
                 }
 
+                TestOutputHelper.WriteLine($"dragAcceptRtfPath: {dragAcceptRtfPath}");
+
                 // Open the Resources directory and set focus on DragAccept.rtf
                 Process.Start("explorer.exe", $"/select,\"{dragAcceptRtfPath}\"");
                 WaitForExplorer(Resources, new Point(dragDropForm.Location.X + dragDropForm.Width, dragDropForm.Location.Y));
