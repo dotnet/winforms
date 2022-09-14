@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 internal static partial class UiaClient
 {
@@ -52,7 +53,7 @@ internal static partial class UiaClient
 
         void get_CurrentLocalizedControlType();
 
-        void get_CurrentName();
+        HRESULT get_CurrentName(out BSTR retVal);
 
         void get_CurrentAcceleratorKey();
 
@@ -92,7 +93,7 @@ internal static partial class UiaClient
 
         void get_CurrentItemStatus();
 
-        void get_CurrentBoundingRectangle();
+        HRESULT get_CurrentBoundingRectangle(out RECT retVal);
 
         void get_CurrentLabeledBy();
 
@@ -174,6 +175,6 @@ internal static partial class UiaClient
 
         void get_CachedProviderDescription();
 
-        int GetClickablePoint(out Point clickable, out bool gotClickable);
+        HRESULT GetClickablePoint(out Point clickable, out bool gotClickable);
     }
 }

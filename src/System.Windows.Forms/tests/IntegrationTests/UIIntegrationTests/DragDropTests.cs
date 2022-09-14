@@ -93,10 +93,17 @@ public class DragDropTests : ControlTestBase
                 Assert.Equal((int)HRESULT.S_OK, uiAutomation?.GetFocusedElement(out uiAutomationElement));
                 Assert.NotNull(uiAutomationElement);
 
+                string elementName = GetElementName(uiAutomationElement!);
+                TestOutputHelper.WriteLine($"Focused element name: {elementName}");
+
+                RECT rect = default;
+                uiAutomationElement?.get_CurrentBoundingRectangle(out rect);
+                TestOutputHelper.WriteLine($"Focused element bounding rect: {rect}");
+
                 // Retrieve a point that can be clicked
                 Point clickable = default;
                 bool gotClickable = false;
-                Assert.Equal((int)HRESULT.S_OK, uiAutomationElement?.GetClickablePoint(out clickable, out gotClickable));
+                Assert.Equal(HRESULT.S_OK, uiAutomationElement?.GetClickablePoint(out clickable, out gotClickable));
                 Assert.True(gotClickable);
                 TestOutputHelper.WriteLine($"gotClickable: {gotClickable}");
                 TestOutputHelper.WriteLine($"clickable: {clickable}");
@@ -141,7 +148,7 @@ public class DragDropTests : ControlTestBase
                                 .Sleep(DragDropDelayMS)
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
                                 .Sleep(DragDropDelayMS)
-                                .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
+                                .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
                                 .Sleep(DragDropDelayMS)
                                 .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
                                 .Sleep(DragDropDelayMS)
@@ -387,6 +394,16 @@ public class DragDropTests : ControlTestBase
                 return;
             }
         }
+    }
+
+    private string GetElementName(IUIAutomationElement element)
+    {
+        if (element.get_CurrentName(out BSTR retVal) == 0)
+        {
+            return retVal.String.ToString();
+        }
+
+        return string.Empty;
     }
 
     private bool IsExplorerOpen(string directory)
