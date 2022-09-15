@@ -66,25 +66,41 @@ public class DragDropTests : ControlTestBase
     {
         await RunTestAsync(async dragDropForm =>
         {
+            string dragAcceptRtfDestPath = string.Empty;
+            string dragDropDirectory = Path.Combine(Directory.GetCurrentDirectory(), DragDrop);
             IUIAutomation? uiAutomation = null;
             IUIAutomationElement? uiAutomationElement = null;
 
             try
             {
+                string dragAcceptRtfSourcePath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+                
+                if (!Directory.Exists(dragDropDirectory))
+                {
+                    Directory.CreateDirectory(dragDropDirectory);
+                }
+
+                dragAcceptRtfDestPath = Path.Combine(dragDropDirectory, DragAcceptRtf);
+
+                if (!File.Exists(dragAcceptRtfDestPath))
+                {
+                    File.Copy(dragAcceptRtfSourcePath, dragAcceptRtfDestPath);
+                }
+
                 string dragAcceptRtfContent = string.Empty;
                 string dragAcceptRtfTextContent = string.Empty;
-                string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), DragDrop, DragAcceptRtf);
+                
                 using (RichTextBox richTextBox = new())
                 {
-                    richTextBox.Rtf = File.ReadAllText(dragAcceptRtfPath);
+                    richTextBox.Rtf = File.ReadAllText(dragAcceptRtfDestPath);
                     dragAcceptRtfContent = richTextBox.Rtf;
                     dragAcceptRtfTextContent = richTextBox.Text;
                 }
 
-                TestOutputHelper.WriteLine($"dragAcceptRtfPath: {dragAcceptRtfPath}");
+                TestOutputHelper.WriteLine($"dragAcceptRtfPath: {dragAcceptRtfDestPath}");
 
                 // Open the DragDrop directory and set focus on DragAccept.rtf
-                Process.Start("explorer.exe", $"/select,\"{dragAcceptRtfPath}\"");
+                Process.Start("explorer.exe", $"/select,\"{dragAcceptRtfDestPath}\"");
                 WaitForExplorer(DragDrop, new Point(dragDropForm.Location.X + dragDropForm.Width, dragDropForm.Location.Y));
                 Assert.True(IsExplorerOpen(DragDrop));
 
@@ -192,9 +208,19 @@ public class DragDropTests : ControlTestBase
                     Marshal.ReleaseComObject(uiAutomation);
                 }
 
-                if (IsExplorerOpen(Resources))
+                if (IsExplorerOpen(DragDrop))
                 {
-                    CloseExplorer(Resources);
+                    CloseExplorer(DragDrop);
+                }
+
+                if (File.Exists(dragAcceptRtfDestPath))
+                {
+                    File.Delete(dragAcceptRtfDestPath);
+                }
+
+                if (Directory.Exists(dragDropDirectory))
+                {
+                    Directory.Delete(dragDropDirectory, true);
                 }
             }
         });
