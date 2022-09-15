@@ -29,6 +29,7 @@ namespace System.Windows.Forms.UITests
             owner
                 .Setup(o => o.Handle)
                 .Returns(IntPtr.Zero);
+
             Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
         }
 
@@ -42,6 +43,7 @@ namespace System.Windows.Forms.UITests
                 RunDialogResult = runDialogResult
             };
             using var owner = new Control();
+
             Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
         }
 
@@ -55,6 +57,7 @@ namespace System.Windows.Forms.UITests
                 RunDialogResult = runDialogResult
             };
             using var owner = new Control();
+
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
         }

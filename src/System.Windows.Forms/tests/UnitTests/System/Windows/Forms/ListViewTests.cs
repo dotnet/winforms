@@ -1873,6 +1873,104 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
         }
 
+        public static IEnumerable<object[]> Handle_GetWithGroups_TestData()
+        {
+            foreach (bool showGroups in new bool[] { true, false })
+            {
+                yield return new object[] { showGroups, null!, HorizontalAlignment.Left, null!, HorizontalAlignment.Right, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_LEFT };
+                yield return new object[] { showGroups, null!, HorizontalAlignment.Center, null!, HorizontalAlignment.Center, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_CENTER };
+                yield return new object[] { showGroups, null!, HorizontalAlignment.Right, null!, HorizontalAlignment.Left, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_RIGHT };
+
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Left, string.Empty, HorizontalAlignment.Right, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_LEFT };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Center, string.Empty, HorizontalAlignment.Center, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_CENTER };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Right, string.Empty, HorizontalAlignment.Left, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_RIGHT };
+
+                yield return new object[] { showGroups, "header", HorizontalAlignment.Left, "footer", HorizontalAlignment.Right, "header", "footer", LVGA.HEADER_LEFT, LVGA.HEADER_LEFT | LVGA.FOOTER_RIGHT };
+                yield return new object[] { showGroups, "header", HorizontalAlignment.Center, "footer", HorizontalAlignment.Center, "header", "footer", LVGA.HEADER_LEFT, LVGA.HEADER_CENTER | LVGA.FOOTER_CENTER };
+                yield return new object[] { showGroups, "header", HorizontalAlignment.Right, "footer", HorizontalAlignment.Left, "header", "footer", LVGA.HEADER_LEFT, LVGA.HEADER_RIGHT | LVGA.FOOTER_LEFT };
+
+                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Left, "fo\0oter", HorizontalAlignment.Right, "he", "fo", LVGA.HEADER_LEFT, LVGA.HEADER_LEFT | LVGA.FOOTER_RIGHT };
+                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Center, "fo\0oter", HorizontalAlignment.Center, "he", "fo", LVGA.HEADER_LEFT, LVGA.HEADER_CENTER | LVGA.FOOTER_CENTER };
+                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Right, "fo\0oter", HorizontalAlignment.Left, "he", "fo", LVGA.HEADER_LEFT, LVGA.HEADER_RIGHT | LVGA.FOOTER_LEFT };
+            }
+        }
+
+        [WinFormsFact]
+        public unsafe void ListView_Handle_GetWithGroups_Success()
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            foreach (object[] data in Handle_GetWithGroups_TestData())
+            {
+                bool showGroups = (bool)data[0];
+                string header = (string)data[1];
+                HorizontalAlignment headerAlignment = (HorizontalAlignment)data[2];
+                string footer = (string)data[3];
+                HorizontalAlignment footerAlignment = (HorizontalAlignment)data[4];
+                string expectedHeaderText = (string)data[5];
+                string expectedFooterText = (string)data[6];
+                LVGA expectedAlignGroup1 = (LVGA)data[7];
+                LVGA exptectedAlignGroup2 = (LVGA)data[8];
+                var headerText = header is not null && header.Contains('\0') ? header[..header.IndexOf('\0')] : header;
+                var footerText = footer is not null && footer.Contains('\0') ? footer[..footer.IndexOf('\0')] : footer;
+                int headerSize = !string.IsNullOrEmpty(headerText) ? headerText.Length + 1 : 0;
+                int footerSize = !string.IsNullOrEmpty(footerText) ? footerText.Length + 1 : 0;
+                char* headerBuffer = stackalloc char[headerSize];
+                char* footerBuffer = stackalloc char[footerSize];
+
+                using var listView = new ListView
+                {
+                    ShowGroups = showGroups
+                };
+                var group1 = new ListViewGroup();
+                var group2 = new ListViewGroup
+                {
+                    Header = header,
+                    HeaderAlignment = headerAlignment,
+                    Footer = footer,
+                    FooterAlignment = footerAlignment
+                };
+                listView.Groups.Add(group1);
+                listView.Groups.Add(group2);
+
+                Assert.Equal(2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
+
+                var lvgroup1 = new LVGROUPW
+                {
+                    cbSize = (uint)sizeof(LVGROUPW),
+                    mask = LVGF.HEADER | LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
+                    pszHeader = null,
+                    cchHeader = 0,
+                    pszFooter = null,
+                    cchFooter = 0,
+                };
+                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup1));
+                Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
+                Assert.Empty(new string(lvgroup1.pszFooter));
+                Assert.True(lvgroup1.iGroupId >= 0);
+                Assert.Equal(expectedAlignGroup1, lvgroup1.uAlign);
+
+                var lvgroup2 = new LVGROUPW
+                {
+                    cbSize = (uint)sizeof(LVGROUPW),
+                    mask = LVGF.HEADER | LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
+                    pszHeader = headerBuffer,
+                    cchHeader = headerSize,
+                    pszFooter = footerBuffer,
+                    cchFooter = footerSize,
+                };
+                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 1, ref lvgroup2));
+                Assert.Equal(expectedHeaderText, new string(lvgroup2.pszHeader));
+                Assert.Equal(expectedFooterText, new string(lvgroup2.pszFooter));
+                Assert.True(lvgroup2.iGroupId > 0);
+                Assert.Equal(exptectedAlignGroup2, lvgroup2.uAlign);
+                Assert.True(lvgroup2.iGroupId > lvgroup1.iGroupId);
+            }
+        }
+
         [WinFormsFact]
         public void ListView_Handle_GetTextBackColor_Success()
         {
@@ -4430,6 +4528,50 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.SelectedIndices);
             Assert.Null(control.FocusedItem);
             Assert.Null(control.FocusedGroup);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.Down, 2)]
+        [InlineData(Keys.Up, 1)]
+        public unsafe void ListView_WmReflectNotify_LVN_KEYDOWN_WithGroups_and_SelectedItems_FocusedGroupIsExpected(Keys key, int expectedGroupIndex)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using var control = new ListView();
+            ListViewGroup group1 = new ListViewGroup("Test group1");
+            ListViewGroup group2 = new ListViewGroup("Test group2");
+            ListViewGroup group3 = new ListViewGroup("Test group3");
+            ListViewItem item1 = new ListViewItem(group1);
+            item1.Text = "First";
+            ListViewItem item2 = new ListViewItem(group2);
+            item2.Text = "Second";
+            ListViewItem item3 = new ListViewItem(group3);
+            item3.Text = "Third";
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            control.Items.Add(item3);
+            control.Groups.Add(group1);
+            control.Groups.Add(group2);
+            control.Groups.Add(group3);
+            control.VirtualMode = false;
+            control.CreateControl();
+
+            item2.Selected = true;
+
+            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
+            // The MSDN page tells us what bits of lParam to use for each of the parameters.
+            // All we need to do is some bit shifting to assemble lParam
+            // lParam = repeatCount | (scanCode << 16)
+            uint keyCode = (uint)key;
+            uint lParam = 0x00000001 | keyCode << 16;
+
+            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
+            Assert.True(control.GroupsEnabled);
+            Assert.True(control.Items.Count > 0);
+            Assert.Equal(control.Groups[expectedGroupIndex], control.FocusedGroup);
         }
 
         [WinFormsTheory]

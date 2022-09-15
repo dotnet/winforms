@@ -9,18 +9,16 @@ using static Interop;
 
 namespace System.Windows.Forms.UITests
 {
-    public class ListViewInsertionMarkTests : ControlTestBase
+    public class ListViewInsertionMarkVisualStylesOnTests : ControlTestBase
     {
-        public ListViewInsertionMarkTests(ITestOutputHelper testOutputHelper)
-            : base(testOutputHelper)
+        public ListViewInsertionMarkVisualStylesOnTests(ITestOutputHelper testOutputHelper)
+            : base(testOutputHelper, enableVisualStyles: true)
         {
         }
 
         [WinFormsFact]
         public unsafe void ListViewInsertionMark_AppearsAfterItem_GetInsertMark_Success()
         {
-            Application.EnableVisualStyles();
-
             using var control = new ListView();
             ListViewInsertionMark insertionMark = control.InsertionMark;
 
@@ -65,8 +63,6 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public unsafe void ListViewInsertionMark_AppearsAfterItem_GetInsertMarkWithColor_Success()
         {
-            Application.EnableVisualStyles();
-
             using var control = new ListView();
             ListViewInsertionMark insertionMark = control.InsertionMark;
             control.InsertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
@@ -112,8 +108,6 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public unsafe void ListViewInsertionMark_Color_GetInsertMarkColor_Success()
         {
-            Application.EnableVisualStyles();
-
             using var control = new ListView();
             ListViewInsertionMark insertionMark = control.InsertionMark;
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -148,8 +142,6 @@ namespace System.Windows.Forms.UITests
         [InlineData(1)]
         public unsafe void ListViewInsertionMark_Index_GetInsertMark_Success(int index)
         {
-            Application.EnableVisualStyles();
-
             using var control = new ListView();
             ListViewInsertionMark insertionMark = control.InsertionMark;
 
@@ -197,8 +189,6 @@ namespace System.Windows.Forms.UITests
         [InlineData(1)]
         public unsafe void ListViewInsertionMark_Index_GetInsertMarkWithColor_Success(int index)
         {
-            Application.EnableVisualStyles();
-
             using var control = new ListView();
             ListViewInsertionMark insertionMark = control.InsertionMark;
             insertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);

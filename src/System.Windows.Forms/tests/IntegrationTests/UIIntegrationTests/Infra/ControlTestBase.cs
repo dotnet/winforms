@@ -21,11 +21,19 @@ namespace System.Windows.Forms.UITests
         private JoinableTaskCollection _joinableTaskCollection = null!;
 
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
+            : this(testOutputHelper, enableVisualStyles: true)
+        {
+        }
+
+        protected ControlTestBase(ITestOutputHelper testOutputHelper, bool enableVisualStyles)
         {
             TestOutputHelper = testOutputHelper;
 
-            Application.EnableVisualStyles();
-
+            if (enableVisualStyles)
+            {
+                Application.EnableVisualStyles();
+            }
+            
             // Disable animations for maximum test performance
             bool disabled = false;
             Assert.True(User32.SystemParametersInfoW(User32.SPI.GETCLIENTAREAANIMATION, ref clientAreaAnimation));

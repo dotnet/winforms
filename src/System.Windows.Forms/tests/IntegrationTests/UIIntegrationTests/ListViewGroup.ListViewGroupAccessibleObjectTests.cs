@@ -19,6 +19,8 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public void ListViewGroupAccessibleObject_Bounds_ReturnsCorrectValue()
         {
+            // Control.CheckForIllegalCrossThreadCalls is process-wide and may affect other unit tests that run in parallel. This test
+            // method has been moved to UITests so that it can be executed serially, and without the risk of affecting other tests.
             Control.CheckForIllegalCrossThreadCalls = true;
             using Form form = new Form();
 
