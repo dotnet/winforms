@@ -627,8 +627,6 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderFragment Implementation
 
-            internal override Rectangle BoundingRectangle => Bounds;
-
             internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
                 => _owner?.DataGridView?.AccessibilityObject;
 
@@ -681,10 +679,10 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.DataItemControlTypeId,
+                    UiaCore.UIA.GridItemContainingGridPropertyId => _owner?.DataGridView?.AccessibilityObject,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused, // Announce the cell when focusing.
                     UiaCore.UIA.IsEnabledPropertyId => _owner?.DataGridView?.Enabled ?? false,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                    UiaCore.UIA.GridItemContainingGridPropertyId => _owner?.DataGridView?.AccessibilityObject,
                     _ => base.GetPropertyValue(propertyID),
                 };
 

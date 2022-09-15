@@ -10,6 +10,7 @@
   <ItemGroup>
     <Compile Include="..\..\System.Windows.Forms.Primitives\src\System\Windows\Forms\HighDpiMode.cs" Link="System\Windows\Forms\HighDpiMode.cs" />
     <None Include="..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" Link="System.Windows.Forms.Analyzers.props" />
+    <None Include="..\AppManifestAnalyzer.Help.md" Link="AppManifestAnalyzer.Help.md" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,8 +21,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisCSharpWorkspacesVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="$(MicrosoftCodeAnalysisVisualBasicWorkspacesVersion)" />
 
-    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.txt" />
-    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.txt" />
+    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.md" />
+    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.md" />
   </ItemGroup>
 
   <ItemGroup>

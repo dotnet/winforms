@@ -215,9 +215,7 @@ namespace System.Windows.Forms
         ///  should not call base.CreateAccessibilityObject.
         /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new DomainUpDownAccessibleObject(this);
-        }
+            => new DomainUpDownAccessibleObject(this);
 
         /// <summary>
         ///  Displays the next item in the object collection.

@@ -262,6 +262,16 @@
         <target state="translated">複雜 DataBinding 接受以 IList 或 IListSource 做為資料來源。</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindableComponentBindingContextChangedDescr">
+        <source>Occurs when the binding context has changed.</source>
+        <target state="translated">在繫結內容變更時發生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingComponentBindingContextDescr">
+        <source>Gets or sets the BindingContext for this bindable Component.</source>
+        <target state="translated">取得或設定此可繫結元件的 BindingCoNtext。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
         <source>ListManager for {0} cannot be found.</source>
         <target state="translated">找不到 {0} 的 ListManager。</target>
@@ -1147,9 +1157,34 @@
         <target state="translated">開啟</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandCanExecuteChangedEventDescr">
+        <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
+        <target state="translated">在 ICommand.CanExecute(object?) 指派給 Command 屬性之命令的狀態變更時發生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandChangedEventDescr">
+        <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
+        <target state="translated">在 Command 屬性的指派 ICommand 物件變更時發生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandDescr">
+        <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
+        <target state="translated">取得或設定每當叫用此元件的 Click 事件時，其 Execute 委派會執行的 ICommand 物件。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandParameterDescr">
+        <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
+        <target state="translated">取得或設定在執行或執行內容要求時傳遞到 Command 屬性物件的參數。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">無法配置新的命令 ID。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandParameterChangedEventDescr">
+        <source>Occurs when the value of the CommandParameter property has changed.</source>
+        <target state="translated">CommandParameter 屬性的值變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1455,6 +1490,11 @@
       <trans-unit id="ControlCursorDescr">
         <source>The cursor that appears when the pointer moves over the control.</source>
         <target state="translated">當指標移到控制項時所顯示的游標。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDataContextChangedDescr">
+        <source>Occurs when the value of the DataContext property changes.</source>
+        <target state="translated">DataCoNtext 屬性的值變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4859,6 +4899,11 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="ExceptionCreatingObject">
         <source>Exception occurred while trying to create an instance of {0}. The exception was "{1}".</source>
         <target state="translated">當嘗試建立 {0} 的執行個體時發生例外狀況。例外狀況為 "{1}"。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="translated">展開的</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">
@@ -9911,6 +9956,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">用來顯示控制項內文字與圖片的背景色彩。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="translated">取得或設定此 toolstrip 專案的 BindingCoNtext。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">無法在下拉式項目集合中加入擁有者項目。</target>
@@ -10004,6 +10054,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ToolStripItemOnBackColorChangedDescr">
         <source>Occurs when the value of the BackColor property is changed on the item.</source>
         <target state="translated">當 BackColor 屬性值在項目上變更時發生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="translated">每當可系結的命令變更時發生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="translated">每當繫結內容變更時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">

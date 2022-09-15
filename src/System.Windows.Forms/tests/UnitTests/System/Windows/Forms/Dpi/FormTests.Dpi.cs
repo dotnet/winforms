@@ -45,5 +45,83 @@ namespace System.Windows.Forms.Tests.Dpi
                 User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
             }
         }
+
+        [WinFormsTheory]
+        [InlineData(3.5 * DpiHelper.LogicalDpi)]
+        public void Form_DpiChanged_MinMaxSizeNotChanged_Default(int newDpi)
+        {
+            // Run tests only on Windows 10 versions that support thread dpi awareness.
+            if (!PlatformDetection.IsWindows10Version1803OrGreater)
+            {
+                return;
+            }
+
+            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            try
+            {
+                var minSize = new Drawing.Size(100, 100);
+                var maxSize = new Drawing.Size(500, 500);
+                using var form = new Form();
+                form.MinimumSize = minSize;
+                form.MaximumSize = maxSize;
+                form.AutoScaleMode = AutoScaleMode.Dpi;
+                form.Show();
+                DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
+                var factor = newDpi / DpiHelper.LogicalDpi;
+
+                Assert.Equal(form.MinimumSize, minSize);
+                Assert.Equal(form.MaximumSize,  maxSize);
+                form.Close();
+            }
+            finally
+            {
+                // Reset back to original awareness context.
+                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+            }
+        }
+
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/7579")]
+        [WinFormsTheory(Skip = "Lab machines seems not setting thread's Dpi context. See https://github.com/dotnet/winforms/issues/7579")]
+        [InlineData(3.5 * DpiHelper.LogicalDpi)]
+        public void Form_DpiChanged_MinMaxSizeChanged_WithRuntimeSetting(int newDpi)
+        {
+            // Run tests only on Windows 10 versions that support thread dpi awareness.
+            if (!PlatformDetection.IsWindows10Version1803OrGreater)
+            {
+                return;
+            }
+
+            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            try
+            {
+                var minSize = new Drawing.Size(100, 100);
+                var maxSize = new Drawing.Size(500, 500);
+                using var form = new Form();
+                form.MinimumSize = minSize;
+                form.MaximumSize = maxSize;
+                form.AutoScaleMode = AutoScaleMode.Dpi;
+                form.Show();
+
+                // Explicitly opt-in to resize min and max sizes with Dpi changed event.
+                const string runtimeSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
+                AppContext.SetSwitch(runtimeSwitchName, true);
+
+                DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
+                var factor = newDpi / DpiHelper.LogicalDpi;
+
+                Assert.NotEqual(form.MinimumSize, minSize);
+                Assert.NotEqual(form.MaximumSize, maxSize);
+
+                // Reset switch.
+                AppContext.SetSwitch(runtimeSwitchName, false);
+
+                form.Close();
+            }
+            finally
+            {
+                // Reset back to original awareness context.
+                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+            }
+        }
     }
 }

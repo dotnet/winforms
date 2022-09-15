@@ -719,7 +719,7 @@ namespace System.Windows.Forms.Tests
             };
             int applyCallCount = 0;
             dialog.Apply += (sender, e) => applyCallCount++;
-            Assert.Throws<ArgumentException>(null, () => dialog.HookProc(IntPtr.Zero, (int)User32.WM.COMMAND, (IntPtr)0x402, IntPtr.Zero));
+            Assert.Throws<ArgumentException>(() => dialog.HookProc(IntPtr.Zero, (int)User32.WM.COMMAND, (IntPtr)0x402, IntPtr.Zero));
         }
 
         [WinFormsTheory]

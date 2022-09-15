@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static System.Windows.Forms.ListBox;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
@@ -12,17 +13,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ListBoxAccessibleObjectTests_Ctor_Default()
         {
-            using ListBox listBox = new ListBox();
-            listBox.Items.AddRange(new object[]
-            {
-                "a",
-                "b",
-                "c",
-                "d",
-                "e",
-                "f",
-                "g"
-            });
+            using ListBox listBox = CreateListBoxWithItems();
 
             var childCount = listBox.AccessibilityObject.GetChildCount();
 
@@ -101,6 +92,73 @@ namespace System.Windows.Forms.Tests
 
             Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
             Assert.False(listBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListBox_ReleaseUiaProvider_ClearsItemsAccessibleObjects()
+        {
+            using ListBox listBox = CreateListBoxWithItems();
+            ListBoxAccessibleObject accessibleObject = InitListBoxItemsAccessibleObjects(listBox);
+
+            listBox.ReleaseUiaProvider(listBox.Handle);
+
+            Assert.Equal(0, accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.Count);
+        }
+
+        [WinFormsFact]
+        public void ListBoxItems_Clear_ClearsItemsAccessibleObjects()
+        {
+            using ListBox listBox = CreateListBoxWithItems();
+            ListBoxAccessibleObject accessibleObject = InitListBoxItemsAccessibleObjects(listBox);
+
+            listBox.Items.Clear();
+
+            Assert.Equal(0, accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.Count);
+        }
+
+        [WinFormsFact]
+        public void ListBoxItems_Remove_RemovesItemAccessibleObject()
+        {
+            using ListBox listBox = CreateListBoxWithItems();
+            ListBoxAccessibleObject accessibleObject = InitListBoxItemsAccessibleObjects(listBox);
+            ItemArray.Entry item = listBox.Items.InnerArray.Entries[0];
+            Assert.True(accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.ContainsKey(item));
+
+            listBox.Items.Remove(item);
+
+            Assert.False(accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.ContainsKey(item));
+        }
+
+        private ListBox CreateListBoxWithItems()
+        {
+            ListBox listBox = new();
+            listBox.Items.AddRange(new object[]
+            {
+                "a",
+                "b",
+                "c",
+                "d",
+                "e",
+                "f",
+                "g"
+            });
+
+            return listBox;
+        }
+
+        private ListBoxAccessibleObject InitListBoxItemsAccessibleObjects(ListBox listBox)
+        {
+            ListBoxAccessibleObject accessibilityObject = (ListBoxAccessibleObject)listBox.AccessibilityObject;
+            int childCount = accessibilityObject.GetChildCount();
+            // Force items accessiblity objects creation
+            for (int i = 0; i < childCount; i++)
+            {
+                accessibilityObject.GetChild(i);
+            }
+
+            Assert.Equal(childCount, accessibilityObject.TestAccessor().Dynamic._itemAccessibleObjects.Count);
+
+            return accessibilityObject;
         }
     }
 }

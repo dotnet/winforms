@@ -2551,7 +2551,7 @@ namespace System.Windows.Forms.Tests
         public void TabPage_Parent_SetSame_ThrowsArgumentException()
         {
             using var control = new TabPage();
-            Assert.Throws<ArgumentException>(null, () => control.Parent = control);
+            Assert.Throws<ArgumentException>(() => control.Parent = control);
             Assert.Null(control.Parent);
         }
 
@@ -2560,7 +2560,7 @@ namespace System.Windows.Forms.Tests
         {
             using var parent = new Control();
             using var control = new TabPage();
-            Assert.Throws<ArgumentException>(null, () => control.Parent = parent);
+            Assert.Throws<ArgumentException>(() => control.Parent = parent);
             Assert.Null(control.Parent);
         }
 

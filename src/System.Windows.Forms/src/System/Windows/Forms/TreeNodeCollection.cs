@@ -85,11 +85,8 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                tv._nodesByHandle.Remove(actual._handle);
-                value.parent = owner;
-                value.index = index;
-                owner.children[index] = value;
-                value.Realize(false);
+                Remove(actual);
+                Insert(index, value);
             }
         }
 

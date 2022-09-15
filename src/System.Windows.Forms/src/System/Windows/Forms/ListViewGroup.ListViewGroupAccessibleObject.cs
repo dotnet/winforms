@@ -99,7 +99,9 @@ namespace System.Windows.Forms
                 => _owningListView.AccessibilityObject;
 
             public override string Name
-                => _owningGroup.Header;
+                => !string.IsNullOrEmpty(_owningGroup.Subtitle)
+                    ? $"{_owningGroup.Header}. {_owningGroup.Subtitle}"
+                    : _owningGroup.Header;
 
             public override AccessibleRole Role
                 => AccessibleRole.Grouping;
@@ -181,8 +183,8 @@ namespace System.Windows.Forms
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.GroupControlTypeId,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && Focused,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.NativeWindowHandlePropertyId => _owningListView.IsHandleCreated ? _owningListView.Handle : IntPtr.Zero,
                     _ => base.GetPropertyValue(propertyID)
                 };

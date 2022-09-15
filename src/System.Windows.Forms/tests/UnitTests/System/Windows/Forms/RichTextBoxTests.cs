@@ -2895,7 +2895,7 @@ namespace System.Windows.Forms.Tests
         public void RichTextBox_Rtf_SetInvalidValue_ThrowsArgumentException()
         {
             using var control = new RichTextBox();
-            Assert.Throws<ArgumentException>(null, () => control.Rtf = "text");
+            Assert.Throws<ArgumentException>(() => control.Rtf = "text");
             Assert.True(control.IsHandleCreated);
             Assert.DoesNotContain("text", control.Rtf);
             Assert.Empty(control.Text);
@@ -3402,7 +3402,7 @@ namespace System.Windows.Forms.Tests
         public void RichTextBox_SelectedRtf_SetInvalidValue_ThrowsArgumentException()
         {
             using var control = new RichTextBox();
-            Assert.Throws<ArgumentException>(null, () => control.SelectedRtf = "text");
+            Assert.Throws<ArgumentException>(() => control.SelectedRtf = "text");
             Assert.True(control.IsHandleCreated);
             Assert.DoesNotContain("text", control.Rtf);
             Assert.Empty(control.Text);
@@ -7812,12 +7812,12 @@ namespace System.Windows.Forms.Tests
             {
                 ZoomFactor = value
             };
-            Assert.Equal(expected, control.ZoomFactor, 2);
+            Assert.Equal(expected, control.ZoomFactor, 2f);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ZoomFactor = value;
-            Assert.Equal(expected, control.ZoomFactor, 2);
+            Assert.Equal(expected, control.ZoomFactor, 2f);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -8572,8 +8572,8 @@ namespace System.Windows.Forms.Tests
             {
                 Text = "t"
             };
-            Assert.Throws<ArgumentException>(null, () => control.Find("s", 1, 0, RichTextBoxFinds.None));
-            Assert.Throws<ArgumentException>(null, () => control.Find("s", 1, 0, RichTextBoxFinds.Reverse));
+            Assert.Throws<ArgumentException>(() => control.Find("s", 1, 0, RichTextBoxFinds.None));
+            Assert.Throws<ArgumentException>(() => control.Find("s", 1, 0, RichTextBoxFinds.Reverse));
             Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(new char[] { 's' }, 1, 0));
             Assert.Throws<ArgumentOutOfRangeException>("end", () => control.Find(new char[] { 's' }, 1, 0));
         }
@@ -8808,7 +8808,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new RichTextBox();
             using var stream = new MemoryStream();
-            Assert.Throws<ArgumentException>(null, () => control.LoadFile(stream, fileType));
+            Assert.Throws<ArgumentException>(() => control.LoadFile(stream, fileType));
             Assert.False(control.IsHandleCreated);
         }
 
@@ -8817,7 +8817,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new RichTextBox();
             using var stream = new MemoryStream();
-            Assert.Throws<ArgumentException>(null, () => control.LoadFile(stream, RichTextBoxStreamType.RichText));
+            Assert.Throws<ArgumentException>(() => control.LoadFile(stream, RichTextBoxStreamType.RichText));
             Assert.Empty(control.Text);
             Assert.True(control.IsHandleCreated);
         }
@@ -8831,7 +8831,7 @@ namespace System.Windows.Forms.Tests
             stream.Write(buffer, 0, buffer.Length);
             stream.Position = 0;
 
-            Assert.Throws<ArgumentException>(null, () => control.LoadFile(stream, RichTextBoxStreamType.RichText));
+            Assert.Throws<ArgumentException>(() => control.LoadFile(stream, RichTextBoxStreamType.RichText));
         }
 
         [WinFormsFact]

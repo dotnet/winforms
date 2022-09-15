@@ -274,23 +274,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return GetChild(index - 1);
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    return !_owningPropertyDescriptorGridEntry.IsPropertyReadOnly;
-                }
-                else if (propertyID == UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId)
-                {
-                    return string.Empty;
-                }
-                else if (propertyID == UiaCore.UIA.IsValuePatternAvailablePropertyId)
-                {
-                    return true;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.IsEnabledPropertyId => !_owningPropertyDescriptorGridEntry.IsPropertyReadOnly,
+                    UiaCore.UIA.IsValuePatternAvailablePropertyId => true,
+                    UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => string.Empty,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal override bool IsIAccessibleExSupported() => true;
 

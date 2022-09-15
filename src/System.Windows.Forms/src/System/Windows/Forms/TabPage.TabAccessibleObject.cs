@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                     OwningTabControl is null
                         ? PARAM.ToInt(IntPtr.Zero)
                         : PARAM.ToInt(OwningTabControl.InternalHandle),
-                    GetChildId()
+                    GetHashCode()
                 };
 
             private int CurrentIndex => OwningTabControl?.TabPages.IndexOf(_owningTabPage) ?? -1;
@@ -118,8 +118,8 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TabItemControlTypeId,
-                    UiaCore.UIA.IsEnabledPropertyId => OwningTabControl?.Enabled ?? false,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
+                    UiaCore.UIA.IsEnabledPropertyId => OwningTabControl?.Enabled ?? false,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.

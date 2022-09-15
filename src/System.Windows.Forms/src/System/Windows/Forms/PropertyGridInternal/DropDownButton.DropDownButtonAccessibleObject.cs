@@ -74,11 +74,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="propertyID">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
-            {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
-                _ => base.GetPropertyValue(propertyID),
-            };
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
+                {
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
+                    _ => base.GetPropertyValue(propertyID),
+                };
 
             /// <summary>
             ///  Gets the accessible role.

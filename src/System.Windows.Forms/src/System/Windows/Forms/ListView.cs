@@ -179,6 +179,8 @@ namespace System.Windows.Forms
 
         private bool _blockLabelEdit;
 
+        private ListViewLabelEditNativeWindow? _labelEdit;
+
         // Background image stuff
         // Because we have to create a temporary file and the OS does not clean up the temporary files from the machine
         // we have to do that ourselves
@@ -3213,8 +3215,8 @@ namespace System.Windows.Forms
 
         private bool ClearingInnerListOnDispose
         {
-            get => _listViewState1 [LISTVIEWSTATE1_clearingInnerListOnDispose];
-            set => _listViewState1 [LISTVIEWSTATE1_clearingInnerListOnDispose] = value;
+            get => _listViewState1[LISTVIEWSTATE1_clearingInnerListOnDispose];
+            set => _listViewState1[LISTVIEWSTATE1_clearingInnerListOnDispose] = value;
         }
 
         /// <summary>
@@ -5129,8 +5131,6 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(nint handle)
         {
-            base.ReleaseUiaProvider(handle);
-
             if (!OsVersion.IsWindows8OrGreater || !IsAccessibilityObjectCreated)
             {
                 return;
@@ -5141,7 +5141,10 @@ namespace System.Windows.Forms
                 Items[i].ReleaseUiaProvider();
             }
 
-            DefaultGroup.ReleaseUiaProvider();
+            if (_defaultGroup is not null)
+            {
+                DefaultGroup.ReleaseUiaProvider();
+            }
 
             foreach (ListViewGroup group in Groups)
             {
@@ -5152,6 +5155,8 @@ namespace System.Windows.Forms
             {
                 columnHeader.ReleaseUiaProvider();
             }
+
+            base.ReleaseUiaProvider(handle);
         }
 
         // makes sure that the list view items which are w/o a listView group are parented to the DefaultGroup - if necessary
@@ -6463,6 +6468,14 @@ namespace System.Windows.Forms
 
                 case (int)LVN.BEGINLABELEDITW:
                     {
+                        Debug.Assert(_labelEdit is null,
+                            "A new label editing shouldn't start before the previous one ended");
+                        if (_labelEdit is not null)
+                        {
+                            _labelEdit.ReleaseHandle();
+                            _labelEdit = null;
+                        }
+
                         bool cancelEdit;
                         if (_blockLabelEdit)
                         {
@@ -6478,6 +6491,13 @@ namespace System.Windows.Forms
 
                         m.ResultInternal = cancelEdit ? 1 : 0;
                         _listViewState[LISTVIEWSTATE_inLabelEdit] = !cancelEdit;
+
+                        if (!cancelEdit)
+                        {
+                            _labelEdit = new ListViewLabelEditNativeWindow(this);
+                            _labelEdit.AssignHandle(User32.SendMessageW(this, (User32.WM)LVM.GETEDITCONTROL));
+                        }
+
                         break;
                     }
 
@@ -6507,6 +6527,15 @@ namespace System.Windows.Forms
 
                 case (int)LVN.ENDLABELEDITW:
                     {
+                        Debug.Assert(_labelEdit is not null, "There is no active label edit to end");
+                        if (_labelEdit is null)
+                        {
+                            break;
+                        }
+
+                        _labelEdit.ReleaseHandle();
+                        _labelEdit = null;
+
                         _listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParamInternal;
                         string? text = dispInfo->item.pszText is null ? null : new string(dispInfo->item.pszText);

@@ -471,7 +471,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Ctor_NoSuchDataMember_ThrowsArgumentException()
         {
-            Assert.Throws<ArgumentException>(null, () => new BindingSource(new DataClass(), "NoSuchProperty"));
+            Assert.Throws<ArgumentException>(() => new BindingSource(new DataClass(), "NoSuchProperty"));
         }
 
         [WinFormsFact]

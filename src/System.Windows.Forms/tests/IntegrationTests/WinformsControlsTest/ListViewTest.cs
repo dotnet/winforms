@@ -170,6 +170,7 @@ namespace WinformsControlsTest
         private void AddGroupTasks()
         {
             listView1.Groups[0].TaskLink = "Task";
+            listView1.Groups[0].Subtitle = "Subtitle";
             listView1.GroupTaskLinkClick += listView1_GroupTaskLinkClick;
 
             var lvgroup1 = new ListViewGroup

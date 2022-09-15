@@ -7063,6 +7063,28 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Padding(1, 2, 3, 4), item.Margin);
         }
 
+        [WinFormsFact]
+        public void ToolStripItem_Releases_UiaProvider()
+        {
+            using ToolStripWithDisconnectCount toolStrip = new();
+
+            using ToolStripDropDownItemWithAccessibleObjectFieldAccessor toolStripDropDownItem1 = new();
+            toolStrip.Items.Add(toolStripDropDownItem1);
+
+            using ToolStripDropDownItemWithAccessibleObjectFieldAccessor toolStripDropDownItem2 = new();
+            toolStripDropDownItem1.DropDownItems.Add(toolStripDropDownItem2);
+
+            _ = toolStrip.AccessibilityObject;
+            Assert.True(toolStrip.IsAccessibilityObjectCreated);
+
+            toolStrip.ReleaseUiaProvider(toolStrip.Handle);
+
+            Assert.Equal(1, toolStrip.Disconnects);
+            Assert.True(toolStripDropDownItem1.IsAccessibleObjectCleared());
+            Assert.True(toolStripDropDownItem2.IsAccessibleObjectCleared());
+            Assert.True(toolStrip.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [InlineData(RightToLeft.Inherit, RightToLeft.No)]
         [InlineData(RightToLeft.Yes, RightToLeft.Yes)]
@@ -15545,6 +15567,33 @@ namespace System.Windows.Forms.Tests
             public new void SetBounds(Rectangle bounds) => base.SetBounds(bounds);
 
             public new void SetVisibleCore(bool visible) => base.SetVisibleCore(visible);
+        }
+
+        private class  ToolStripWithDisconnectCount : ToolStrip
+        {
+            public ToolStripWithDisconnectCount() : base() { }
+
+            public int Disconnects { get; private set; }
+
+            internal new void ReleaseUiaProvider(IntPtr handle)
+            {
+                base.ReleaseUiaProvider(handle);
+
+                Disconnects++;
+            }
+        }
+
+        private class ToolStripDropDownItemWithAccessibleObjectFieldAccessor : ToolStripDropDownItem
+        {
+            public ToolStripDropDownItemWithAccessibleObjectFieldAccessor() : base() { }
+
+            public bool IsAccessibleObjectCleared()
+            {
+                var key = this.TestAccessor().Dynamic.s_accessibilityProperty;
+                var accessibleObject = Properties.GetObject(key) as AccessibleObject;
+
+                return accessibleObject is null;
+            }
         }
     }
 }

@@ -68,11 +68,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                 {
+                    UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
                     UiaCore.UIA.IsEnabledPropertyId => !IsReadOnly,
-                    UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
-                    _ => base.GetPropertyValue(propertyID),
+                    _ => base.GetPropertyValue(propertyID)
                 };
 
                 internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch

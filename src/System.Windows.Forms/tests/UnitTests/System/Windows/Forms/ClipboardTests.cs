@@ -356,7 +356,7 @@ namespace System.Windows.Forms.Tests
         public void Clipboard_SetFileDropList_EmptyFilePaths_ThrowsArgumentException()
         {
             var filePaths = new StringCollection();
-            Assert.Throws<ArgumentException>(null, () => Clipboard.SetFileDropList(filePaths));
+            Assert.Throws<ArgumentException>(() => Clipboard.SetFileDropList(filePaths));
         }
 
         [WinFormsTheory]
@@ -368,7 +368,7 @@ namespace System.Windows.Forms.Tests
             {
                 filePath
             };
-            Assert.Throws<ArgumentException>(null, () => Clipboard.SetFileDropList(filePaths));
+            Assert.Throws<ArgumentException>(() => Clipboard.SetFileDropList(filePaths));
         }
 
         [Fact] // x-thread

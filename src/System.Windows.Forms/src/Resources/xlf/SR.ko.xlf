@@ -262,6 +262,16 @@
         <target state="translated">IList 또는 IListSource를 복합 DataBinding의 데이터 소스로 사용할 수 있습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindableComponentBindingContextChangedDescr">
+        <source>Occurs when the binding context has changed.</source>
+        <target state="translated">바인딩 컨텍스트가 변경될 때 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingComponentBindingContextDescr">
+        <source>Gets or sets the BindingContext for this bindable Component.</source>
+        <target state="translated">이 바인딩 가능한 구성 요소에 대한 BindingContext를 가져오거나 설정합니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
         <source>ListManager for {0} cannot be found.</source>
         <target state="translated">{0}의 ListManager를 찾을 수 없습니다.</target>
@@ -1147,9 +1157,34 @@
         <target state="translated">열기</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandCanExecuteChangedEventDescr">
+        <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
+        <target state="translated">Command 속성에 할당된 명령의 ICommand.CanExecute(object?) 상태가 변경될 때 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandChangedEventDescr">
+        <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
+        <target state="translated">Command 속성의 할당된 ICommand 개체가 변경될 때 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandDescr">
+        <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
+        <target state="translated">이 구성 요소의 Click 이벤트가 호출될 때마다 Execute 대리자가 실행되는 ICommand 개체를 가져오거나 설정합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandParameterDescr">
+        <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
+        <target state="translated">실행 또는 실행 컨텍스트 요청 시 Command 속성의 개체에 전달되는 매개 변수를 가져오거나 설정합니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">새 명령 ID를 할당할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandParameterChangedEventDescr">
+        <source>Occurs when the value of the CommandParameter property has changed.</source>
+        <target state="translated">CommandParameter 속성의 값이 변경될 때 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1455,6 +1490,11 @@
       <trans-unit id="ControlCursorDescr">
         <source>The cursor that appears when the pointer moves over the control.</source>
         <target state="translated">포인터가 컨트롤 위로 이동할 때 나타나는 커서입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDataContextChangedDescr">
+        <source>Occurs when the value of the DataContext property changes.</source>
+        <target state="translated">DataContext 속성의 값이 변경되면 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4859,6 +4899,11 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="ExceptionCreatingObject">
         <source>Exception occurred while trying to create an instance of {0}. The exception was "{1}".</source>
         <target state="translated">{0}의 인스턴스를 만드는 동안 예외가 발생했습니다. 예외는 "{1}"입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="translated">확장</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">
@@ -9911,6 +9956,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">컨트롤의 텍스트와 그래픽을 표시하는 데 사용할 배경색입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="translated">이 toolstrip 항목에 대한 BindingContext를 가져오거나 설정합니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">드롭다운 항목 컬렉션에 소유자 항목을 추가할 수 없습니다.</target>
@@ -10004,6 +10054,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ToolStripItemOnBackColorChangedDescr">
         <source>Occurs when the value of the BackColor property is changed on the item.</source>
         <target state="translated">항목에서 BackColor 속성 값이 변경될 때 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="translated">바인딩 가능한 명령이 변경될 때마다 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="translated">바인딩 컨텍스트가 변경될 때마다 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">

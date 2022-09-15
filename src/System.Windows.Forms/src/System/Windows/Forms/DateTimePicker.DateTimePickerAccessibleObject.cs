@@ -102,14 +102,13 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.LocalizedControlTypePropertyId =>
+                    UiaCore.UIA.LocalizedControlTypePropertyId when
                         // We define a custom "LocalizedControlType" by default.
                         // If DateTimePicker.AccessibleRole value is customized by a user
                         // then "LocalizedControlType" value will be based on "ControlType"
                         // which depends on DateTimePicker.AccessibleRole.
                         Owner.AccessibleRole == AccessibleRole.Default
-                            ? s_dateTimePickerLocalizedControlTypeString
-                            : base.GetPropertyValue(propertyID),
+                        => s_dateTimePickerLocalizedControlTypeString,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

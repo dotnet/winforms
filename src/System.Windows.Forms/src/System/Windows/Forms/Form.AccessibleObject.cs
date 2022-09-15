@@ -45,20 +45,18 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                return propertyID switch
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
                     // Unlike other controls, here the default "ControlType" doesn't correspond the value from the mapping
                     // depending on the default Role.
                     // In other cases "ControlType" will reflect changes to Form.AccessibleRole (i.e. if it is set to a custom role).
-                    UiaCore.UIA.ControlTypePropertyId => Role == AccessibleRole.Client
-                                                         ? UiaCore.UIA.WindowControlTypeId
-                                                         : base.GetPropertyValue(propertyID),
+                    UiaCore.UIA.ControlTypePropertyId when
+                        Role == AccessibleRole.Client
+                        => UiaCore.UIA.WindowControlTypeId,
                     UiaCore.UIA.IsDialogPropertyId => _owner.Modal,
                     _ => base.GetPropertyValue(propertyID)
                 };
-            }
 
             internal override bool IsIAccessibleExSupported() => true;
 

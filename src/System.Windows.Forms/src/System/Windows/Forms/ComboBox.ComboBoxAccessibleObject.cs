@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 
@@ -196,26 +197,59 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
+                    UiaCore.UIA.ControlTypePropertyId =>
                         // If we don't set a default role for the accessible object
                         // it will be retrieved from Windows.
                         // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                        return _owningComboBox.AccessibleRole == AccessibleRole.Default
-                               ? UiaCore.UIA.ComboBoxControlTypeId
-                               : base.GetPropertyValue(propertyID);
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _owningComboBox.Focused;
-                    default:
-                        return base.GetPropertyValue(propertyID);
+                        _owningComboBox.AccessibleRole == AccessibleRole.Default
+                            ? UiaCore.UIA.ComboBoxControlTypeId
+                            : base.GetPropertyValue(propertyID),
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningComboBox.Focused,
+                    _ => base.GetPropertyValue(propertyID)
+                };
+
+            internal void RemoveListItemAccessibleObjectAt(int index)
+            {
+                IReadOnlyList<Entry> entries = _owningComboBox.Items.InnerList;
+                Debug.Assert(index < entries.Count);
+
+                Entry item = entries[index];
+                if (!ItemAccessibleObjects.ContainsKey(item))
+                {
+                    return;
                 }
+
+                if (OsVersion.IsWindows8OrGreater)
+                {
+                    UiaCore.UiaDisconnectProvider(ItemAccessibleObjects[item]);
+                }
+
+                ItemAccessibleObjects.Remove(item);
+            }
+
+            internal void ReleaseDropDownButtonUiaProvider()
+            {
+                if (OsVersion.IsWindows8OrGreater)
+                {
+                    UiaCore.UiaDisconnectProvider(_dropDownButtonUiaProvider);
+                }
+
+                _dropDownButtonUiaProvider = null;
             }
 
             internal void ResetListItemAccessibleObjects()
             {
+                if (OsVersion.IsWindows8OrGreater)
+                {
+                    foreach (ComboBoxItemAccessibleObject itemAccessibleObject in ItemAccessibleObjects.Values)
+                    {
+                        UiaCore.UiaDisconnectProvider(itemAccessibleObject);
+                    }
+                }
+
                 ItemAccessibleObjects.Clear();
             }
 

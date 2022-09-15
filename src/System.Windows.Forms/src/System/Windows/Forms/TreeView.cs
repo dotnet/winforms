@@ -183,6 +183,19 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.UseTextForAccessibility, false);
         }
 
+        internal override void ReleaseUiaProvider(IntPtr handle)
+        {
+            foreach (TreeNode rootNode in Nodes)
+            {
+                foreach (TreeNode node in rootNode.GetSelfAndChildNodes())
+                {
+                    node.ReleaseUiaProvider();
+                }
+            }
+
+            base.ReleaseUiaProvider(handle);
+        }
+
         /// <summary>
         ///  The background color for this control. Specifying null for
         ///  this parameter sets the

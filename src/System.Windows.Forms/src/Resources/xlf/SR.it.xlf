@@ -262,6 +262,16 @@
         <target state="translated">L'origine dati di un'associazione dati complessa può essere solo IList o IListSource.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BindableComponentBindingContextChangedDescr">
+        <source>Occurs when the binding context has changed.</source>
+        <target state="translated">Si verifica quando il contesto di associazione viene modificato.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingComponentBindingContextDescr">
+        <source>Gets or sets the BindingContext for this bindable Component.</source>
+        <target state="translated">Ottiene o imposta BindingContext per questo componente associabile.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindingManagerBadIndex">
         <source>ListManager for {0} cannot be found.</source>
         <target state="translated">Impossibile trovare ListManager per {0}.</target>
@@ -1147,9 +1157,34 @@
         <target state="translated">Apri</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandCanExecuteChangedEventDescr">
+        <source>Occurs when the ICommand.CanExecute(object?) status of the command which is assigned to the Command property has changed.</source>
+        <target state="translated">Si verifica quando lo stato ICommand.CanExecute(object?) del comando assegnato alla proprietà Command è stato modificato.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandChangedEventDescr">
+        <source>Occurs when the assigned ICommand object of the Command property has changed.</source>
+        <target state="translated">Si verifica quando l'oggetto ICommand assegnato della proprietà Command viene modificato.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandDescr">
+        <source>Gets or sets the ICommand object whose Execute delegate gets executed whenever the Click event of this component gets invoked.</source>
+        <target state="translated">Ottiene o imposta l'oggetto ICommand il cui delegato Execute viene eseguito ogni volta che viene richiamato l'evento Click di questo componente.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandComponentCommandParameterDescr">
+        <source>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</source>
+        <target state="translated">Ottiene o imposta il parametro passato all'oggetto della proprietà Command durante l'esecuzione o la richiesta del contesto di esecuzione.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">Impossibile allocare un nuovo ID di comando.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandParameterChangedEventDescr">
+        <source>Occurs when the value of the CommandParameter property has changed.</source>
+        <target state="translated">Si verifica quando il valore della proprietà CommandParameter viene modificato.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommonDialogHelpRequested">
@@ -1455,6 +1490,11 @@
       <trans-unit id="ControlCursorDescr">
         <source>The cursor that appears when the pointer moves over the control.</source>
         <target state="translated">Il cursore che viene visualizzato quando il puntatore del mouse viene spostato sul controllo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDataContextChangedDescr">
+        <source>Occurs when the value of the DataContext property changes.</source>
+        <target state="translated">Generato quando il valore della proprietà DataSource cambia.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDisplayRectangleDescr">
@@ -4859,6 +4899,11 @@ Se si sceglie Continua, l'errore verrà ignorato e l'applicazione proverà a con
       <trans-unit id="ExceptionCreatingObject">
         <source>Exception occurred while trying to create an instance of {0}. The exception was "{1}".</source>
         <target state="translated">Durante la creazione di un'istanza di {0} si è verificata la seguente eccezione: "{1}".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExpandedStateName">
+        <source>Expanded</source>
+        <target state="translated">Espansa</target>
         <note />
       </trans-unit>
       <trans-unit id="ExternalException">
@@ -9911,6 +9956,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Colore di sfondo utilizzato per visualizzare testo e grafica nel controllo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripItemBindingContextDescr">
+        <source>Gets or sets the BindingContext for this toolstrip item.</source>
+        <target state="translated">Ottiene o imposta BindingContext per questo elemento toolstrip.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripItemCircularReference">
         <source>Cannot add owner item to the drop-down items collection.</source>
         <target state="translated">Impossibile aggiungere l'elemento proprietario alla raccolta di elementi a discesa.</target>
@@ -10004,6 +10054,16 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="ToolStripItemOnBackColorChangedDescr">
         <source>Occurs when the value of the BackColor property is changed on the item.</source>
         <target state="translated">Generato quando il valore della proprietà BackColor dell'elemento viene modificato.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnCommandChangedDescr">
+        <source>Occurs whenever the bindable command changes.</source>
+        <target state="translated">Si verifica ogni volta che il comando associabile viene modificato.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemOnBindingContextChangedDescr">
+        <source>Occurs whenever the binding context changes.</source>
+        <target state="translated">Si verifica ogni volta che il contesto di associazione cambia.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnClickDescr">

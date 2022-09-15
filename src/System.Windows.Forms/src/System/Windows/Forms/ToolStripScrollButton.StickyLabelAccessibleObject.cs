@@ -51,7 +51,7 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
             {
                 UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
-                _ => base.GetPropertyValue(propertyID),
+                _ => base.GetPropertyValue(propertyID)
             };
         }
     }

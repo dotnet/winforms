@@ -134,33 +134,20 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ListControlTypeId;
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return false; // Narrator should keep the keyboard focus on th ComboBox itself but not on the DropDown.
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return _owningComboBox.Enabled;
-                    case UiaCore.UIA.NativeWindowHandlePropertyId:
-                        return _childListControlhandle;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return false;
-                    case UiaCore.UIA.IsSelectionPatternAvailablePropertyId:
-                        return true;
-                    case UiaCore.UIA.SelectionCanSelectMultiplePropertyId:
-                        return CanSelectMultiple;
-                    case UiaCore.UIA.SelectionIsSelectionRequiredPropertyId:
-                        return IsSelectionRequired;
-
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListControlTypeId,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId =>
+                        // Narrator should keep the keyboard focus on th ComboBox itself but not on the DropDown.
+                        false,
+                    UiaCore.UIA.IsEnabledPropertyId => _owningComboBox.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UiaCore.UIA.IsOffscreenPropertyId => false,
+                    UiaCore.UIA.IsSelectionPatternAvailablePropertyId => true,
+                    UiaCore.UIA.NativeWindowHandlePropertyId => _childListControlhandle,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal override UiaCore.IRawElementProviderFragment? GetFocus()
             {

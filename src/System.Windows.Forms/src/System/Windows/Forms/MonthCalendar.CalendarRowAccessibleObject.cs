@@ -96,16 +96,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal void ClearChildCollection() => _cellsAccessibleObjects = null;
-
             internal void DisconnectChildren()
             {
                 Debug.Assert(OsVersion.IsWindows8OrGreater);
-                if (_weekNumberCellAccessibleObject is not null)
-                {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_weekNumberCellAccessibleObject);
-                    Debug.Assert(result == 0);
-                }
+
+                UiaCore.UiaDisconnectProvider(_weekNumberCellAccessibleObject);
+                _weekNumberCellAccessibleObject = null;
 
                 if (_cellsAccessibleObjects is null)
                 {
@@ -114,9 +110,11 @@ namespace System.Windows.Forms
 
                 foreach (CalendarCellAccessibleObject cell in _cellsAccessibleObjects)
                 {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(cell);
-                    Debug.Assert(result == 0);
+                    UiaCore.UiaDisconnectProvider(cell);
                 }
+
+                _cellsAccessibleObjects.Clear();
+                _cellsAccessibleObjects = null;
             }
 
             public override string? Description

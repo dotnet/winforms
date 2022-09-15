@@ -30,7 +30,6 @@ namespace System.Windows.Forms
                 _owningMonthCalendar = owner;
 
                 _owningMonthCalendar.DisplayRangeChanged += OnMonthCalendarStateChanged;
-                _owningMonthCalendar.CalendarViewChanged += OnMonthCalendarStateChanged;
             }
 
             // Use a LinkedList instead a List for the following reasons:
@@ -84,29 +83,18 @@ namespace System.Windows.Forms
             internal void DisconnectChildren()
             {
                 Debug.Assert(OsVersion.IsWindows8OrGreater);
-                if (_previousButtonAccessibleObject is not null)
-                {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_previousButtonAccessibleObject);
-                    Debug.Assert(result == 0);
-                }
 
-                if (_nextButtonAccessibleObject is not null)
-                {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_nextButtonAccessibleObject);
-                    Debug.Assert(result == 0);
-                }
+                UiaCore.UiaDisconnectProvider(_previousButtonAccessibleObject);
+                _previousButtonAccessibleObject = null;
 
-                if (_todayLinkAccessibleObject is not null)
-                {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_todayLinkAccessibleObject);
-                    Debug.Assert(result == 0);
-                }
+                UiaCore.UiaDisconnectProvider(_nextButtonAccessibleObject);
+                _nextButtonAccessibleObject = null;
 
-                if (_focusedCellAccessibleObject is not null)
-                {
-                    HRESULT result = UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
-                    Debug.Assert(result == 0);
-                }
+                UiaCore.UiaDisconnectProvider(_todayLinkAccessibleObject);
+                _todayLinkAccessibleObject = null;
+
+                UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
+                _focusedCellAccessibleObject = null;
 
                 if (_calendarsAccessibleObjects is null)
                 {
@@ -116,9 +104,11 @@ namespace System.Windows.Forms
                 foreach (CalendarAccessibleObject calendarAccessibleObject in _calendarsAccessibleObjects)
                 {
                     calendarAccessibleObject.DisconnectChildren();
-                    HRESULT result = UiaCore.UiaDisconnectProvider(calendarAccessibleObject);
-                    Debug.Assert(result == 0);
+                    UiaCore.UiaDisconnectProvider(calendarAccessibleObject);
                 }
+
+                _calendarsAccessibleObjects.Clear();
+                _calendarsAccessibleObjects = null;
             }
 
             /// <summary>
@@ -440,9 +430,9 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => _owningMonthCalendar.AccessibleRole == AccessibleRole.Default
-                        ? UiaCore.UIA.CalendarControlTypeId
-                        : base.GetPropertyValue(propertyID),
+                    UiaCore.UIA.ControlTypePropertyId when
+                        _owningMonthCalendar.AccessibleRole == AccessibleRole.Default
+                        => UiaCore.UIA.CalendarControlTypeId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => IsEnabled,
                     _ => base.GetPropertyValue(propertyID)
                 };
@@ -519,21 +509,24 @@ namespace System.Windows.Forms
 
             private void RebuildAccessibilityTree()
             {
-                if (!_owningMonthCalendar.IsHandleCreated || CalendarsAccessibleObjects is null)
+                if (!_owningMonthCalendar.IsHandleCreated || _calendarsAccessibleObjects is null)
                 {
                     return;
                 }
 
-                foreach (CalendarAccessibleObject calendar in CalendarsAccessibleObjects)
+                foreach (CalendarAccessibleObject calendar in _calendarsAccessibleObjects)
                 {
-                    calendar.CalendarBodyAccessibleObject.ClearChildCollection();
+                    calendar.DisconnectChildren();
+                    UiaCore.UiaDisconnectProvider(calendar);
                 }
 
                 _calendarsAccessibleObjects = null;
+
+                UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
                 _focusedCellAccessibleObject = null;
 
                 // Recreate the calendars child collection and check if it is correct
-                if (CalendarsAccessibleObjects.Count > 0)
+                if (CalendarsAccessibleObjects!.Count > 0)
                 {
                     // Get the new focused cell accessible object and try to raise the focus event for it
                     FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);

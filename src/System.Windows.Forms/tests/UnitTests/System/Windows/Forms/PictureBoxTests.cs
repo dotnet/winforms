@@ -1204,7 +1204,7 @@ namespace System.Windows.Forms.Tests
         public void PictureBox_Parent_SetSame_ThrowsArgumentException()
         {
             using var control = new PictureBox();
-            Assert.Throws<ArgumentException>(null, () => control.Parent = control);
+            Assert.Throws<ArgumentException>(() => control.Parent = control);
             Assert.Null(control.Parent);
         }
 

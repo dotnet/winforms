@@ -21,18 +21,17 @@ namespace System.Windows.Forms
                 _owningToolStripDropDownButton = ownerItem;
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                // ToolStripDropDownItemAccessibleObject implements a default Role as MenuItem
-                // because of this, ToolStripItemAccessibleObject will return the unexpected result for this.
-                // Return Button as the expected value by default
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId && _owningToolStripDropDownButton.AccessibleRole == AccessibleRole.Default)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    return UiaCore.UIA.ButtonControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    // ToolStripDropDownItemAccessibleObject implements a default Role as MenuItem
+                    // because of this, ToolStripItemAccessibleObject will return the unexpected result for this.
+                    // Return Button as the expected value by default
+                    UiaCore.UIA.ControlTypePropertyId when
+                        _owningToolStripDropDownButton.AccessibleRole == AccessibleRole.Default
+                        => UiaCore.UIA.ButtonControlTypeId,
+                    _ => base.GetPropertyValue(propertyID)
+                };
         }
     }
 }

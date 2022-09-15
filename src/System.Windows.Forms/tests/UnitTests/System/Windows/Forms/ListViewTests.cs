@@ -4485,14 +4485,8 @@ namespace System.Windows.Forms.Tests
             item1.Selected = selectItems;
             item2.Selected = selectItems;
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam
-            // lParam = repeatCount | (scanCode << 16)
-            uint keyCode = (uint)Keys.Space;
-            uint lParam = (0x00000001 | keyCode << 16);
+            KeyboardSimulator.KeyDown(control, Keys.Space);
 
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Equal(selectItems ? 2 : 0, control.SelectedItems.Count);
             Assert.Equal(!checkItem && selectItems && focusItem, item2.Checked);
         }
@@ -4516,15 +4510,8 @@ namespace System.Windows.Forms.Tests
             control.Groups.Add(group);
             control.CreateControl();
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam
-            // lParam = repeatCount | (scanCode << 16)
-            uint keyCode = (uint)key;
-            uint lParam = (0x00000001 | keyCode << 16);
+            KeyboardSimulator.KeyDown(control, key);
 
-            // If control doesn't have selected items none will be focused.
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Empty(control.SelectedIndices);
             Assert.Null(control.FocusedItem);
             Assert.Null(control.FocusedGroup);
@@ -4560,15 +4547,8 @@ namespace System.Windows.Forms.Tests
             control.CreateControl();
 
             item2.Selected = true;
+            KeyboardSimulator.KeyDown(control, key);
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam
-            // lParam = repeatCount | (scanCode << 16)
-            uint keyCode = (uint)key;
-            uint lParam = 0x00000001 | keyCode << 16;
-
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.True(control.GroupsEnabled);
             Assert.True(control.Items.Count > 0);
             Assert.Equal(control.Groups[expectedGroupIndex], control.FocusedGroup);
@@ -4600,15 +4580,8 @@ namespace System.Windows.Forms.Tests
 
             control.CreateControl();
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam
-            // lParam = repeatCount | (scanCode << 16)
-            uint keyCode = (uint)key;
-            uint lParam = (0x00000001 | keyCode << 16);
+            KeyboardSimulator.KeyDown(control, key);
 
-            // Actually ListView in VirtualMode can't have Groups
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Null(control.FocusedGroup);
         }
 
@@ -4642,15 +4615,8 @@ namespace System.Windows.Forms.Tests
             item2.Checked = false;
             control.FocusedItem = item1;
 
-            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
-            // The MSDN page tells us what bits of lParam to use for each of the parameters.
-            // All we need to do is some bit shifting to assemble lParam
-            // lParam = repeatCount | (scanCode << 16)
-            uint keyCode = (uint)Keys.Space;
-            uint lParam = (0x00000001 | keyCode << 16);
+            KeyboardSimulator.KeyDown(control, Keys.Space);
 
-            // Actually ListView in VirtualMode doesn't check items here
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.False(item2.Checked);
         }
 
@@ -5765,6 +5731,18 @@ namespace System.Windows.Forms.Tests
             listView.Items.Clear();
 
             Assert.Null(listView.FocusedItem);
+        }
+
+        [WinFormsFact]
+        public void ListView_ReleaseUiaProvider_DoesNotForceDefaultGroupCreation()
+        {
+            using ListView listView = new();
+            _ = listView.AccessibilityObject;
+
+            listView.ReleaseUiaProvider(listView.Handle);
+
+            Assert.Null(listView.TestAccessor().Dynamic._defaultGroup);
+            Assert.True(listView.IsHandleCreated);
         }
 
         private class SubListViewItem : ListViewItem

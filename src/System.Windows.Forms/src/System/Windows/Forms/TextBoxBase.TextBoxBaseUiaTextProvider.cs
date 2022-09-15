@@ -96,6 +96,8 @@ namespace System.Windows.Forms
                 return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, start);
             }
 
+            public override Rectangle RectangleToScreen(Rectangle rect) => _owningTextBoxBase.RectangleToScreen(rect);
+
             public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, TextLength);
 
             public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
@@ -206,10 +208,7 @@ namespace System.Windows.Forms
                     ? _owningTextBoxBase.Text
                     : string.Empty;
 
-            public override int TextLength
-                => _owningTextBoxBase.IsHandleCreated
-                    ? (int)SendMessageW(_owningTextBoxBase, WM.GETTEXTLENGTH)
-                    : -1;
+            public override int TextLength => Text.Length;
 
             public override WS_EX WindowExStyle
                 => _owningTextBoxBase.IsHandleCreated
@@ -306,8 +305,24 @@ namespace System.Windows.Forms
                 Point ptStart = new Point(rectangle.X + 1, rectangle.Y + 1);
                 Point ptEnd = new Point(rectangle.Right - 1, rectangle.Bottom - 1);
 
-                visibleStart = _owningTextBoxBase.GetCharIndexFromPosition(ptStart);
-                visibleEnd = _owningTextBoxBase.GetCharIndexFromPosition(ptEnd) + 1; // Add 1 to get a caret position after received character
+                if (IsMultiline)
+                {
+                    visibleStart = GetLineIndex(FirstVisibleLine);
+
+                    int lastVisibleLine = FirstVisibleLine + LinesPerPage - 1;
+                    // Index of the next line is the end caret position of the previous line.
+                    visibleEnd = GetLineIndex(lastVisibleLine + 1);
+                    if (visibleEnd == -1)
+                    {
+                        visibleEnd = Text.Length;
+                    }
+                }
+                else
+                {
+                    visibleStart = _owningTextBoxBase.GetCharIndexFromPosition(ptStart);
+                    // Add 1 to get a caret position after received character.
+                    visibleEnd = _owningTextBoxBase.GetCharIndexFromPosition(ptEnd) + 1;
+                }
 
                 return;
 

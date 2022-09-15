@@ -2346,7 +2346,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             {
                 vt = VARENUM.VECTOR | (VARENUM)vt
             };
-            Assert.Throws<ArgumentException>(null, () => variant.ToObject());
+            Assert.Throws<ArgumentException>(() => variant.ToObject());
         }
 
         [StaTheory]
@@ -5693,7 +5693,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             {
                 vt = VARENUM.ARRAY | VARENUM.VECTOR | VARENUM.I4
             };
-            Assert.Throws<ArgumentException>(null, () => variant.ToObject());
+            Assert.Throws<ArgumentException>(() => variant.ToObject());
         }
 
         [StaFact]
