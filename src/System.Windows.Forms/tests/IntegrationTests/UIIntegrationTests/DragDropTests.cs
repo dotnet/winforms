@@ -19,6 +19,7 @@ public class DragDropTests : ControlTestBase
     private const int DesktopNormalizedMax = 65536;
     public const int DragDropDelayMS = 100;
     public const string DragAcceptRtf = "DragAccept.rtf";
+    public const string DragDrop = "DragDrop";
     public const string Explorer = "explorer";
     public const string Resources = "Resources";
     private readonly Bitmap _dragImage = new("./Resources/move.bmp");
@@ -72,7 +73,7 @@ public class DragDropTests : ControlTestBase
             {
                 string dragAcceptRtfContent = string.Empty;
                 string dragAcceptRtfTextContent = string.Empty;
-                string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), Resources, DragAcceptRtf);
+                string dragAcceptRtfPath = Path.Combine(Directory.GetCurrentDirectory(), DragDrop, DragAcceptRtf);
                 using (RichTextBox richTextBox = new())
                 {
                     richTextBox.Rtf = File.ReadAllText(dragAcceptRtfPath);
@@ -82,10 +83,10 @@ public class DragDropTests : ControlTestBase
 
                 TestOutputHelper.WriteLine($"dragAcceptRtfPath: {dragAcceptRtfPath}");
 
-                // Open the Resources directory and set focus on DragAccept.rtf
+                // Open the DragDrop directory and set focus on DragAccept.rtf
                 Process.Start("explorer.exe", $"/select,\"{dragAcceptRtfPath}\"");
-                WaitForExplorer(Resources, new Point(dragDropForm.Location.X + dragDropForm.Width, dragDropForm.Location.Y));
-                Assert.True(IsExplorerOpen(Resources));
+                WaitForExplorer(DragDrop, new Point(dragDropForm.Location.X + dragDropForm.Width, dragDropForm.Location.Y));
+                Assert.True(IsExplorerOpen(DragDrop));
 
                 // Create a CUIAutomation object and obtain the IUIAutomation interface
                 Assert.True(TryGetUIAutomation(out uiAutomation));
@@ -464,7 +465,7 @@ public class DragDropTests : ControlTestBase
 
     private void WaitForExplorer(string directory, Point startPosition)
     {
-        int wait = 0, maxWait = 40;
+        int wait = 0, maxWait = 100;
         while (!IsExplorerOpen(directory) && wait++ < maxWait)
         {
             TestOutputHelper.WriteLine($"Waiting for Explorer to open, wait {wait}");
