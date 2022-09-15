@@ -2947,7 +2947,7 @@ namespace System.Windows.Forms
             }
 
             // get the tool tip string
-            string toolTipText = GetToolTipText(rowIndex);
+            string toolTipText = GetInternalToolTipText(rowIndex);
 
             if (string.IsNullOrEmpty(toolTipText))
             {

@@ -26,18 +26,57 @@ namespace System.Windows.Forms.UITests
                 dataTable.Rows.Add(values: "name1");
                 dataGridView.ShowCellToolTips = true;
                 dataGridView.DataSource = dataTable;
-                Point point = dataGridView.GetCellDisplayRectangle(columnIndex: 0, rowIndex: 0, cutOverflow: false).Location;
+                Rectangle cellRectangle = dataGridView.GetCellDisplayRectangle(columnIndex: 0, rowIndex: 0, cutOverflow: false);
+                Point cellCenter = GetCenter(cellRectangle);
+                Point targetPoint = ToVirtualPoint(dataGridView.PointToScreen(cellCenter));
 
                 // Move mouse cursor over any cell of the first row to trigger a tooltip.
                 await InputSimulator.SendAsync(
                     form,
-                    inputSimulator => inputSimulator.Mouse.MoveMouseTo(point.X, point.Y));
+                    inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint.X, targetPoint.Y));
 
                 // Close the form to verify no exceptions thrown while showing the tooltip.
                 // Regression test for https://github.com/dotnet/winforms/issues/5496
                 form.Close();
                 dataTable.AcceptChanges();
             });
+        }
+
+        [WinFormsTheory]
+        [InlineData("short value", false)]
+        [InlineData("very long value that will be truncated by the DataGridViewCell", true)]
+        public async Task DataGridView_MouseToolTip_Appears_IfTextIsTruncatedOnly(string cellValue, bool expected)
+        {
+            await RunTestAsync(async (form, dataGridView) =>
+            {
+                using DataTable dataTable = new();
+                dataTable.Columns.Add(columnName: "name");
+                dataTable.Rows.Add(values: cellValue);
+                dataGridView.ShowCellToolTips = true;
+                dataGridView.DataSource = dataTable;
+                Rectangle cellRectangle = dataGridView.GetCellDisplayRectangle(columnIndex: 0, rowIndex: 0, cutOverflow: false);
+                Point cellCenter = GetCenter(cellRectangle);
+                Point targetPoint = ToVirtualPoint(dataGridView.PointToScreen(cellCenter));
+
+                // Move mouse cursor over any cell of the first row to trigger a tooltip.
+                // Wait 1 second to make sure that the toolTip appeared, it has some delay (500 ms by default).
+                await InputSimulator.SendAsync(
+                    form,
+                    inputSimulator => inputSimulator.Mouse.MoveMouseTo(targetPoint.X, targetPoint.Y).Sleep(1000));
+
+                // DataGridViewToolTip is private so use the reflection
+                object toolTip = dataGridView.TestAccessor().Dynamic._toolTipControl;
+                object? actual = toolTip.GetType().GetProperty("Activated")?.GetValue(toolTip);
+
+                Assert.Equal(expected, actual);
+            });
+        }
+
+        private static Point GetCenter(Rectangle cell)
+        {
+            return new Point(GetMiddle(cell.Right, cell.Left), GetMiddle(cell.Top, cell.Bottom));
+
+            static int GetMiddle(int a, int b) => (a + b) / 2;
         }
 
         private async Task RunTestAsync(Func<Form, DataGridView, Task> runTest)
