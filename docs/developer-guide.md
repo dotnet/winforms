@@ -38,6 +38,7 @@ You first need to [fork][fork] then [clone][clone] this Windows Forms repository
 
 ## More Information
 
+* [How to write good docs for .NET](https://review.docs.microsoft.com/help/contribute-ref/how-to-write-net-docs?branch=main)
 * [.NET Docs and Guidelines][net-runtime-instructions]
 * ["help wanted" issues][help wanted]
 
