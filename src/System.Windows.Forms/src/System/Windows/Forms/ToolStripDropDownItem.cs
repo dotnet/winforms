@@ -615,6 +615,12 @@ namespace System.Windows.Forms
             return base.ProcessDialogKey(keyData);
         }
 
+        internal override void ReleaseUiaProvider()
+        {
+            dropDown?.ReleaseUiaProvider(IntPtr.Zero);
+            base.ReleaseUiaProvider();
+        }
+
         private ToolStripDropDownDirection RTLTranslateDropDownDirection(ToolStripDropDownDirection dropDownDirection, RightToLeft rightToLeft)
         {
             switch (dropDownDirection)

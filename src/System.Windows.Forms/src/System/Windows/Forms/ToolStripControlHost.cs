@@ -876,6 +876,12 @@ namespace System.Windows.Forms
 
         private void SuspendSizeSync() => _suspendSyncSizeCount++;
 
+        internal override void ReleaseUiaProvider()
+        {
+            _control?.ReleaseUiaProvider(IntPtr.Zero);
+            base.ReleaseUiaProvider();
+        }
+
         private void ResumeSizeSync() => _suspendSyncSizeCount--;
 
         internal override bool ShouldSerializeBackColor()
