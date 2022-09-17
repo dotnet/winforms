@@ -14273,11 +14273,11 @@ namespace System.Windows.Forms.Tests
             };
 
             item.Select();
-            Assert.True(item.Selected);
+            Assert.Equal(item.CanSelect, item.Selected);
 
             // Select again.
             item.Select();
-            Assert.True(item.Selected);
+            Assert.Equal(item.CanSelect, item.Selected);
         }
 
         public static IEnumerable<object[]> Select_WithoutToolStripItemAccessibleObject_TestData()

@@ -3483,7 +3483,6 @@ override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.GetChildCount(
 override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
 override System.Windows.Forms.ToolStrip.WndProc(ref System.Windows.Forms.Message m) -> void
-override System.Windows.Forms.ToolStripButton.CanSelect.get -> bool
 override System.Windows.Forms.ToolStripButton.DefaultAutoToolTip.get -> bool
 override System.Windows.Forms.ToolStripButton.GetPreferredSize(System.Drawing.Size constrainingSize) -> System.Drawing.Size
 override System.Windows.Forms.ToolStripComboBox.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout

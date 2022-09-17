@@ -616,7 +616,7 @@ namespace System.Windows.Forms
         ///  Determines whether or not the item can be selected.
         /// </summary>
         [Browsable(false)]
-        public virtual bool CanSelect => true;
+        public virtual bool CanSelect => Enabled;
 
         /// <remarks>
         ///  Usually the same as can select, but things like the control box in an MDI window are exceptions
