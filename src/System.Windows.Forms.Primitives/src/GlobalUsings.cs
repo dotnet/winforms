@@ -6,6 +6,7 @@ global using Windows.Win32;
 global using Windows.Win32.Foundation;
 global using Windows.Win32.Graphics.Gdi;
 global using Windows.Win32.UI.Controls;
+global using Windows.Win32.UI.HiDpi;
 global using Windows.Win32.UI.Shell;
 global using Windows.Win32.UI.Shell.Common;
 global using Windows.Win32.UI.Shell.PropertiesSystem;

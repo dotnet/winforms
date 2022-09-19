@@ -2,19 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class User32
+    internal static partial class PInvoke
     {
-        [DllImport(Libraries.User32)]
-        public static extern uint GetDpiForWindow(IntPtr hwnd);
-
-        public static uint GetDpiForWindow(IHandle hwnd)
+        public static uint GetDpiForWindow<T>(T hwnd) where T : IHandle<HWND>
         {
             uint result = GetDpiForWindow(hwnd.Handle);
-            GC.KeepAlive(hwnd);
+            GC.KeepAlive(hwnd.Wrapper);
             return result;
         }
     }

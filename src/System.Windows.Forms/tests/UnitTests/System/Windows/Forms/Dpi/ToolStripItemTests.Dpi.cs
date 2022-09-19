@@ -22,23 +22,23 @@ namespace System.Windows.Forms.Tests.Dpi
             }
 
             // Set thread awareness context to PermonitorV2(PMv2).
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
             try
             {
                 int clientWidth = 800;
-                using var form = new Form();
+                using Form form = new();
                 form.AutoScaleMode = AutoScaleMode.Dpi;
                 form.ClientSize = new Size(clientWidth, 450);
-                using var toolStrip = new ToolStrip();
-                using var toolStripItemOpen = new ToolStripButton("Open");
+                using ToolStrip toolStrip = new();
+                using ToolStripButton toolStripItemOpen = new("Open");
 
                 toolStrip.GripStyle = ToolStripGripStyle.Hidden;
                 toolStrip.Items.Add(toolStripItemOpen);
                 toolStrip.Location = new Point(0, 0);
                 toolStrip.Name = "toolStrip1";
                 toolStrip.Text = "toolStrip1";
-                using Font initialFont = toolStrip.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+                using Font initialFont = toolStrip.Font = new("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
 
                 form.Show();
 
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Tests.Dpi
             finally
             {
                 // Reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
     }
