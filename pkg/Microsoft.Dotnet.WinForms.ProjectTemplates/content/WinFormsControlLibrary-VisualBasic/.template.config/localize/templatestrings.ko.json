@@ -1,4 +1,4 @@
-﻿{
+{
   "author": "Microsoft",
   "name": "Windows Forms 컨트롤 라이브러리",
   "description": ".NET WinForms(Windows Forms)를 대상으로 하는 컨트롤 라이브러리를 만들기 위한 프로젝트 템플릿입니다.",
@@ -13,6 +13,8 @@
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net7.0/description": "대상 net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
+  "symbols/Framework/choices/net8.0/description": "Target net8.0",
+  "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
   "symbols/Framework/displayName": ".NET 7.0",
   "symbols/langVersion/description": "만든 프로젝트 파일의 langVersion를 설정합니다",
   "symbols/langVersion/displayName": "언어 버전",

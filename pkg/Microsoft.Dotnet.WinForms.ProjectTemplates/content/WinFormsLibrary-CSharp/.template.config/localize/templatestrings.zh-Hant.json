@@ -1,4 +1,4 @@
-﻿{
+{
   "author": "Microsoft",
   "name": "Windows Forms 類別庫",
   "description": "用於建立以 .NET Windows Forms (WinForms) 為目標之類別庫的專案範本。",
@@ -13,6 +13,8 @@
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net7.0/description": "目標 net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
+  "symbols/Framework/choices/net8.0/description": "Target net8.0",
+  "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
   "symbols/Framework/displayName": ".NET 7.0",
   "symbols/langVersion/description": "在建立的專案檔中設定 langVersion",
   "symbols/langVersion/displayName": "語言版本",
