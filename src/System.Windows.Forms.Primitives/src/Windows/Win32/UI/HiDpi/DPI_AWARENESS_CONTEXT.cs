@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-
-internal static partial class Interop
+namespace Windows.Win32.UI.HiDpi
 {
-    internal static partial class User32
+    internal readonly partial struct DPI_AWARENESS_CONTEXT
     {
-        [DllImport(Libraries.User32)]
-        public static extern BOOL IsProcessDPIAware();
+        internal static readonly DPI_AWARENESS_CONTEXT UNSPECIFIED_DPI_AWARENESS_CONTEXT = (DPI_AWARENESS_CONTEXT)0;
     }
 }

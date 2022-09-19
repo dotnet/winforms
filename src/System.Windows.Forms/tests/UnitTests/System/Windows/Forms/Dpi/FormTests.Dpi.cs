@@ -20,10 +20,10 @@ namespace System.Windows.Forms.Tests.Dpi
                 return;
             }
 
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
             try
             {
-                using var form = new Form();
+                using Form form = new();
                 form.AutoScaleMode = AutoScaleMode.Dpi;
                 form.Show();
                 Drawing.Rectangle initialBounds = form.Bounds;
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Tests.Dpi
             finally
             {
                 // Reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
 
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Tests.Dpi
                 return;
             }
 
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
             try
             {
                 var minSize = new Drawing.Size(100, 100);
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Tests.Dpi
             finally
             {
                 // Reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContext(originalAwarenessContext);
             }
         }
 
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Tests.Dpi
                 return;
             }
 
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
             try
             {
                 var minSize = new Drawing.Size(100, 100);
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.Tests.Dpi
             finally
             {
                 // Reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContext(originalAwarenessContext);
             }
         }
     }

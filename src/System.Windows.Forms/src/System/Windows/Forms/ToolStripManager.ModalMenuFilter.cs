@@ -614,7 +614,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                IntPtr context = GetDpiAwarenessContextForWindow(m.HWnd);
+                DPI_AWARENESS_CONTEXT context = GetDpiAwarenessContextForWindow(m.HWND);
 
                 using (DpiHelper.EnterDpiAwarenessScope(context))
                 {
@@ -707,35 +707,28 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            internal static IntPtr GetDpiAwarenessContextForWindow(IntPtr hWnd)
+            internal static DPI_AWARENESS_CONTEXT GetDpiAwarenessContextForWindow(HWND hwnd)
             {
-                IntPtr dpiAwarenessContext = User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
+                DPI_AWARENESS_CONTEXT dpiAwarenessContext = DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
 
                 if (OsVersion.IsWindows10_1607OrGreater)
                 {
                     // Works only >= Windows 10/1607
-                    IntPtr awarenessContext = User32.GetWindowDpiAwarenessContext(hWnd);
-                    User32.DPI_AWARENESS awareness = User32.GetAwarenessFromDpiAwarenessContext(awarenessContext);
+                    DPI_AWARENESS_CONTEXT awarenessContext = PInvoke.GetWindowDpiAwarenessContext(hwnd);
+                    DPI_AWARENESS awareness = PInvoke.GetAwarenessFromDpiAwarenessContext(awarenessContext);
                     dpiAwarenessContext = ConvertToDpiAwarenessContext(awareness);
                 }
 
                 return dpiAwarenessContext;
             }
 
-            private static IntPtr ConvertToDpiAwarenessContext(User32.DPI_AWARENESS dpiAwareness)
+            private static DPI_AWARENESS_CONTEXT ConvertToDpiAwarenessContext(DPI_AWARENESS dpiAwareness) => dpiAwareness switch
             {
-                switch (dpiAwareness)
-                {
-                    case User32.DPI_AWARENESS.UNAWARE:
-                        return User32.DPI_AWARENESS_CONTEXT.UNAWARE;
-                    case User32.DPI_AWARENESS.SYSTEM_AWARE:
-                        return User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
-                    case User32.DPI_AWARENESS.PER_MONITOR_AWARE:
-                        return User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2;
-                    default:
-                        return User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
-                }
-            }
+                DPI_AWARENESS.DPI_AWARENESS_UNAWARE => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE,
+                DPI_AWARENESS.DPI_AWARENESS_SYSTEM_AWARE => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE,
+                DPI_AWARENESS.DPI_AWARENESS_PER_MONITOR_AWARE => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2,
+                _ => DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE,
+            };
         }
     }
 }

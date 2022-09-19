@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
-using System.Text;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -75,7 +74,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Cache window DpiContext awareness information that helps to create handle with right context at the later time.
         /// </summary>
-        internal IntPtr DpiAwarenessContext { get; } = User32.GetThreadDpiAwarenessContext();
+        internal DPI_AWARENESS_CONTEXT DpiAwarenessContext { get; } = PInvoke.GetThreadDpiAwarenessContextInternal();
 
         /// <summary>
         ///  Override's the base object's finalize method.

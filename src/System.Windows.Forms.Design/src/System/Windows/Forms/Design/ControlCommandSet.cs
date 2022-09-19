@@ -972,7 +972,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
+                using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                 {
                     tabOrder = new TabOrder((IDesignerHost)GetService(typeof(IDesignerHost)));
                 }
