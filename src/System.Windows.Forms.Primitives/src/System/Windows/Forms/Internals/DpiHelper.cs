@@ -64,18 +64,18 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            HRESULT result = SHCore.GetProcessDpiAwareness(
-                IntPtr.Zero,
-                out SHCore.PROCESS_DPI_AWARENESS processDpiAwareness);
+            HRESULT result = PInvoke.GetProcessDpiAwareness(
+                HANDLE.Null,
+                out PROCESS_DPI_AWARENESS processDpiAwareness);
 
             Debug.Assert(result.Succeeded, $"Failed to get ProcessDpi HRESULT: {result}");
-            Debug.Assert(Enum.IsDefined(typeof(SHCore.PROCESS_DPI_AWARENESS), processDpiAwareness));
+            Debug.Assert(Enum.IsDefined(typeof(PROCESS_DPI_AWARENESS), processDpiAwareness));
 
             return result.Succeeded && processDpiAwareness switch
             {
-                SHCore.PROCESS_DPI_AWARENESS.UNAWARE => false,
-                SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE => false,
-                SHCore.PROCESS_DPI_AWARENESS.PER_MONITOR_AWARE => true,
+                PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE => false,
+                PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE => false,
+                PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE => true,
                 _ => true
             };
         }
@@ -401,14 +401,14 @@ namespace System.Windows.Forms
             }
             else if (OsVersion.IsWindows8_1OrGreater)
             {
-                SHCore.GetProcessDpiAwareness(IntPtr.Zero, out SHCore.PROCESS_DPI_AWARENESS processDpiAwareness);
+                PInvoke.GetProcessDpiAwareness(HANDLE.Null, out PROCESS_DPI_AWARENESS processDpiAwareness);
                 switch (processDpiAwareness)
                 {
-                    case SHCore.PROCESS_DPI_AWARENESS.UNAWARE:
+                    case PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE:
                         return HighDpiMode.DpiUnaware;
-                    case SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE:
+                    case PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE:
                         return HighDpiMode.SystemAware;
-                    case SHCore.PROCESS_DPI_AWARENESS.PER_MONITOR_AWARE:
+                    case PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE:
                         return HighDpiMode.PerMonitor;
                 }
             }
@@ -455,18 +455,18 @@ namespace System.Windows.Forms
             {
                 var dpiFlag = highDpiMode switch
                 {
-                    HighDpiMode.DpiUnaware or HighDpiMode.DpiUnawareGdiScaled => SHCore.PROCESS_DPI_AWARENESS.UNAWARE,
-                    HighDpiMode.SystemAware => SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE,
-                    HighDpiMode.PerMonitor or HighDpiMode.PerMonitorV2 => SHCore.PROCESS_DPI_AWARENESS.PER_MONITOR_AWARE,
-                    _ => SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE,
+                    HighDpiMode.DpiUnaware or HighDpiMode.DpiUnawareGdiScaled => PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE,
+                    HighDpiMode.SystemAware => PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE,
+                    HighDpiMode.PerMonitor or HighDpiMode.PerMonitorV2 => PROCESS_DPI_AWARENESS.PROCESS_PER_MONITOR_DPI_AWARE,
+                    _ => PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE,
                 };
 
-                success = SHCore.SetProcessDpiAwareness(dpiFlag) == HRESULT.S_OK;
+                success = PInvoke.SetProcessDpiAwareness(dpiFlag) == HRESULT.S_OK;
             }
             else
             {
                 // Vista or higher has SetProcessDPIAware
-                SHCore.PROCESS_DPI_AWARENESS dpiFlag = (SHCore.PROCESS_DPI_AWARENESS)(-1);
+                PROCESS_DPI_AWARENESS dpiFlag = (PROCESS_DPI_AWARENESS)(-1);
                 switch (highDpiMode)
                 {
                     case HighDpiMode.DpiUnaware:
@@ -476,11 +476,11 @@ namespace System.Windows.Forms
                     case HighDpiMode.SystemAware:
                     case HighDpiMode.PerMonitor:
                     case HighDpiMode.PerMonitorV2:
-                        dpiFlag = SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE;
+                        dpiFlag = PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
                         break;
                 }
 
-                if (dpiFlag == SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE)
+                if (dpiFlag == PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE)
                 {
                     success = PInvoke.SetProcessDPIAware();
                 }

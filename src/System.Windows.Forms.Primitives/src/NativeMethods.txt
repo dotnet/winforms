@@ -118,6 +118,7 @@ GetObjectW
 GetPaletteEntries
 GetParent
 GetProcAddress
+GetProcessDpiAwareness
 GETPROPERTYSTOREFLAGS
 GetRegionData
 GetRgnBox
@@ -211,6 +212,7 @@ SetFocus
 SetMapMode
 SetParent
 SetProcessDPIAware
+SetProcessDpiAwareness
 SetProcessDpiAwarenessContext
 SetROP2
 SetSuspendState
