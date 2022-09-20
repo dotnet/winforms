@@ -44,11 +44,6 @@
     <DefineConstants>WINFORMS_ANALYZERS</DefineConstants>
   </PropertyGroup>
 
-  <!-- ApplicationConfiguration specific settings -->
-  <PropertyGroup>
-    <ApplicationDefaultFont>Calibri, 11pt, style=regular</ApplicationDefaultFont>
-  </PropertyGroup>
-
   <!-- SDK flipped to 'true' by default https://github.com/dotnet/sdk/pull/12720 -->
   <PropertyGroup>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
