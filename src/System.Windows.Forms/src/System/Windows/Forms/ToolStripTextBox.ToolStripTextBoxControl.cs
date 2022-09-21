@@ -252,8 +252,9 @@ namespace System.Windows.Forms
 
                 // Don't set the clipping region based on the WParam - windows seems to take out the two pixels intended for the non-client border.
 
-                Color outerBorderColor = (MouseIsOver || Focused) ? ColorTable.TextBoxBorder : BackColor;
-                Color innerBorderColor = BackColor;
+                bool focused = MouseIsOver || Focused;
+                Color outerBorderColor = focused ? ColorTable.TextBoxBorder : BackColor;
+                Color innerBorderColor = SystemInformation.HighContrast && !focused ? ColorTable.MenuBorder : BackColor;
 
                 if (!Enabled)
                 {
