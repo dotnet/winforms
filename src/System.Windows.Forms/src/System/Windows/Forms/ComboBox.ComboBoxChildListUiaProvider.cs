@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             {
                 if (!_owningComboBox.IsHandleCreated ||
                     // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
-                    // But between these calls, AccessibleObject can be recreated which is going to memory leaking.
+                    // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
                     !_owningComboBox.Created)
                 {
                     return null;
