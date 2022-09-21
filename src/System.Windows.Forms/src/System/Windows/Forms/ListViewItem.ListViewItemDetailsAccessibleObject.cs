@@ -59,6 +59,19 @@ namespace System.Windows.Forms
                     : GetDetailsSubItemOrFakeInternal(accessibleChildIndex);
             }
 
+            internal AccessibleObject? GetChild(int subItemIndex, Point point)
+            {
+                if (!HasImage || subItemIndex > 0)
+                {
+                    return GetDetailsSubItemOrFake(subItemIndex);
+                }
+
+                return GetDetailsSubItemOrFakeInternal(ImageAccessibleObjectIndex) is ListViewItemImageAccessibleObject imageAccessibleObject &&
+                       imageAccessibleObject.GetImageRectangle().Contains(point)
+                    ? imageAccessibleObject
+                    : GetDetailsSubItemOrFake(0);
+            }
+
             public override int GetChildCount()
             {
                 if (_owningListView.View != View.Details)

@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Rectangle imageRectangle = _owningItem.ListView.GetItemRect(_owningItem.Index, ItemBoundsPortion.Icon);
+                    Rectangle imageRectangle = GetImageRectangle();
                     return _owningItem.ListView.RectangleToScreen(imageRectangle);
                 }
             }
@@ -55,6 +55,8 @@ namespace System.Windows.Forms
             }
 
             public override int GetChildCount() => 0;
+
+            internal Rectangle GetImageRectangle() => _owningItem.ListView.GetItemRect(_owningItem.Index, ItemBoundsPortion.Icon);
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch

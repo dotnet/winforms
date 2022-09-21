@@ -307,7 +307,8 @@ namespace System.Windows.Forms
                     {
                         return _owningListView.View switch
                         {
-                            View.Details => hitTestInfo.SubItem.AccessibilityObject,
+                            View.Details => ((ListViewItem.ListViewItemDetailsAccessibleObject)hitTestInfo.Item.AccessibilityObject)
+                                .GetChild(hitTestInfo.SubItem.Index, point),
 
                             // Only additional ListViewSubItem are displayed in the accessibility tree if the ListView
                             // in the "Tile" view (the first ListViewSubItem is responsible for the ListViewItem)
