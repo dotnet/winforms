@@ -12,6 +12,13 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <!--ApplicationConfiguration specific settings.-->
+  <!--https://github.com/dotnet/designs/blob/main/accepted/2021/winforms/streamline-application-bootstrap.md-->
+  <PropertyGroup>
+    <ApplicationDefaultFont>Calibri, 11pt, style=regular</ApplicationDefaultFont>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+  </PropertyGroup>
+
   <PropertyGroup>
     <NoWarn>$(NoWarn);WFDEV001</NoWarn>
   </PropertyGroup>

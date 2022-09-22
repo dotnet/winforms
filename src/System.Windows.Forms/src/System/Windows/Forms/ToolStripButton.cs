@@ -57,8 +57,6 @@ namespace System.Windows.Forms
             set => base.AutoToolTip = value;
         }
 
-        public override bool CanSelect => true;
-
         [DefaultValue(false)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ToolStripButtonCheckOnClickDescr))]

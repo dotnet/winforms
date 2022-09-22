@@ -616,7 +616,7 @@ namespace System.Windows.Forms
         ///  Determines whether or not the item can be selected.
         /// </summary>
         [Browsable(false)]
-        public virtual bool CanSelect => true;
+        public virtual bool CanSelect => Enabled;
 
         /// <remarks>
         ///  Usually the same as can select, but things like the control box in an MDI window are exceptions
@@ -3196,7 +3196,7 @@ namespace System.Windows.Forms
         internal void RaiseQueryContinueDragEvent(object key, QueryContinueDragEventArgs e)
             => ((QueryContinueDragEventHandler)Events[key])?.Invoke(this, e);
 
-        internal void ReleaseUiaProvider()
+        internal virtual void ReleaseUiaProvider()
         {
             if (TryGetAccessibilityObject(out AccessibleObject accessibleObject))
             {

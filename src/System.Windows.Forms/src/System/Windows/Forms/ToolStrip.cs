@@ -4266,6 +4266,9 @@ namespace System.Windows.Forms
             if (OsVersion.IsWindows8OrGreater)
             {
                 ReleaseToolStripItemsProviders(Items);
+
+                _toolStripGrip?.ReleaseUiaProvider();
+                _toolStripOverflowButton?.ReleaseUiaProvider();
             }
 
             base.ReleaseUiaProvider(handle);

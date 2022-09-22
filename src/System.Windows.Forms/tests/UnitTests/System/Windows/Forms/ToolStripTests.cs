@@ -5792,7 +5792,7 @@ namespace System.Windows.Forms.Tests
             toolStrip.SetDisplayedItems();
 
             toolStrip.OnMouseMove(new MouseEventArgs(MouseButtons.Left, 1, item.Bounds.X, item.Bounds.Y, 0));
-            Assert.True(item.Selected);
+            Assert.Equal(item.CanSelect, item.Selected);
 
             toolStrip.OnMouseLeave(new EventArgs());
             Assert.False(item.Selected);

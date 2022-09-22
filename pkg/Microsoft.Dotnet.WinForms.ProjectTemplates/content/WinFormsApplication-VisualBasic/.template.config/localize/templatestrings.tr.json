@@ -1,4 +1,4 @@
-﻿{
+{
   "author": "Microsoft",
   "name": "Windows Forms Uygulaması",
   "description": ".NET Windows Forms (WinForms) Uygulaması oluşturmak için proje şablonu.",
@@ -14,6 +14,8 @@
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net7.0/description": "Hedef net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
+  "symbols/Framework/choices/net8.0/description": "Target net8.0",
+  "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
   "symbols/Framework/displayName": ".NET 7.0",
   "symbols/langVersion/description": "Oluşturulan proje dosyasında langVersion'ı ayarlar",
   "symbols/langVersion/displayName": "Dil Sürümü",
