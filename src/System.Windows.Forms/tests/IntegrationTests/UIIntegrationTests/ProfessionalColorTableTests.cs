@@ -30,10 +30,12 @@ namespace System.Windows.Forms.UITests
         [InlineData(UserPreferenceCategory.Window)]
         public void ProfessionalColorTable_ChangeUserPreferences_GetColor_ReturnsExpected(UserPreferenceCategory category)
         {
-            // Simulate a SystemEvents.UserPreferenceChanged event.
-            var table = new ProfessionalColorTable();
+            ProfessionalColorTable table = new();
             Color color = table.ButtonSelectedHighlight;
+
+            // Simulate a SystemEvents.UserPreferenceChanged event.
             SystemEventsHelper.SendMessageOnUserPreferenceChanged(category);
+
             Assert.Equal(color, table.ButtonSelectedHighlight);
         }
     }

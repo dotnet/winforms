@@ -51,7 +51,7 @@ namespace System.Windows.Forms.UITests
             // Recreate combobox handle to set parent to ParkingWindow.
             comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            // Lose the reference to combobox to allow Garbage collecting combobox.
+            // Lose the reference to the combobox to allow to garbage collect it.
             comboBox = null;
 
             return form;

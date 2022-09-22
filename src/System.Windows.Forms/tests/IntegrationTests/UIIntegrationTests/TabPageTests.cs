@@ -28,10 +28,8 @@ namespace System.Windows.Forms.UITests
 
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
-        public static void TabPage_BackColor_GetVisualStyles_ReturnsExpected(bool useVisualStyleBackColor)
+        public void TabPage_BackColor_GetVisualStyles_ReturnsExpected(bool useVisualStyleBackColor)
         {
-            Application.EnableVisualStyles();
-
             using var control = new TabPage
             {
                 UseVisualStyleBackColor = useVisualStyleBackColor
@@ -41,10 +39,8 @@ namespace System.Windows.Forms.UITests
 
         [WinFormsTheory]
         [MemberData(nameof(BackColor_GetVisualStylesWithParent_TestData))]
-        public static void TabPage_BackColor_GetVisualStylesWithParent_ReturnsExpected(bool useVisualStyleBackColor, TabAppearance parentAppearance, Color expected)
+        public void TabPage_BackColor_GetVisualStylesWithParent_ReturnsExpected(bool useVisualStyleBackColor, TabAppearance parentAppearance, Color expected)
         {
-            Application.EnableVisualStyles();
-
             using var parent = new TabControl
             {
                 Appearance = parentAppearance

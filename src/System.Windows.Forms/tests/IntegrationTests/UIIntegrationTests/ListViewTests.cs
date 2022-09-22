@@ -6,7 +6,6 @@ using System.Drawing;
 using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
-using static Interop.ComCtl32;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.UITests
@@ -20,28 +19,6 @@ namespace System.Windows.Forms.UITests
         public ListViewTests(ITestOutputHelper testOutputHelper)
             : base(testOutputHelper)
         {
-        }
-
-        public static IEnumerable<object[]> Handle_GetWithGroups_TestData()
-        {
-            foreach (bool showGroups in new bool[] { true, false })
-            {
-                yield return new object[] { showGroups, null!, HorizontalAlignment.Left, null!, HorizontalAlignment.Right, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_LEFT };
-                yield return new object[] { showGroups, null!, HorizontalAlignment.Center, null!, HorizontalAlignment.Center, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_CENTER };
-                yield return new object[] { showGroups, null!, HorizontalAlignment.Right, null!, HorizontalAlignment.Left, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_RIGHT };
-
-                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Left, string.Empty, HorizontalAlignment.Right, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_LEFT };
-                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Center, string.Empty, HorizontalAlignment.Center, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_CENTER };
-                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Right, string.Empty, HorizontalAlignment.Left, string.Empty, string.Empty, LVGA.HEADER_LEFT, LVGA.HEADER_RIGHT };
-
-                yield return new object[] { showGroups, "header", HorizontalAlignment.Left, "footer", HorizontalAlignment.Right, "header", "footer", LVGA.HEADER_LEFT, LVGA.HEADER_LEFT | LVGA.FOOTER_RIGHT };
-                yield return new object[] { showGroups, "header", HorizontalAlignment.Center, "footer", HorizontalAlignment.Center, "header", "footer", LVGA.HEADER_LEFT, LVGA.HEADER_CENTER | LVGA.FOOTER_CENTER };
-                yield return new object[] { showGroups, "header", HorizontalAlignment.Right, "footer", HorizontalAlignment.Left, "header", "footer", LVGA.HEADER_LEFT, LVGA.HEADER_RIGHT | LVGA.FOOTER_LEFT };
-
-                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Left, "fo\0oter", HorizontalAlignment.Right, "he", "fo", LVGA.HEADER_LEFT, LVGA.HEADER_LEFT | LVGA.FOOTER_RIGHT };
-                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Center, "fo\0oter", HorizontalAlignment.Center, "he", "fo", LVGA.HEADER_LEFT, LVGA.HEADER_CENTER | LVGA.FOOTER_CENTER };
-                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Right, "fo\0oter", HorizontalAlignment.Left, "he", "fo", LVGA.HEADER_LEFT, LVGA.HEADER_RIGHT | LVGA.FOOTER_LEFT };
-            }
         }
 
         [WinFormsTheory]

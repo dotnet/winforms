@@ -52,8 +52,6 @@ namespace System.Windows.Forms.UITests
             var data = new (int, int)[] { (-1, -1), (0, 0), (1, 1), (2, 2) };
             foreach ((int Index, int Expected) value in data)
             {
-                Application.EnableVisualStyles();
-
                 using var listView = new ListView();
 
                 using var groupImageList = new ImageList();
@@ -88,8 +86,6 @@ namespace System.Windows.Forms.UITests
             var data = new (string?, int)[] { (null, -1), (string.Empty, -1), ("text", 0), ("te\0t", 0) };
             foreach ((string? Key, int ExpectedIndex) value in data)
             {
-                Application.EnableVisualStyles();
-
                 using var listView = new ListView();
 
                 using var groupImageList = new ImageList();
@@ -117,91 +113,76 @@ namespace System.Windows.Forms.UITests
             }
         }
 
-        [WinFormsFact]
-        public unsafe void ListViewGroup_Subtitle_GetGroupInfo_Success()
+        [WinFormsTheory]
+        [MemberData(nameof(Property_TypeString_GetGroupInfo_TestData))]
+        public unsafe void ListViewGroup_Subtitle_GetGroupInfo_Success(string value, string expected)
         {
             // This needs to be initialized out of the loop.
             char* buffer = stackalloc char[256];
 
-            foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            group.Subtitle = value;
+
+            Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
+
+            var lvgroup = new LVGROUPW
             {
-                string value = (string)data[0];
-                string expected = (string)data[1];
+                cbSize = (uint)sizeof(LVGROUPW),
+                mask = LVGF.SUBTITLE | LVGF.GROUPID,
+                pszSubtitle = buffer,
+                cchSubtitle = string.IsNullOrEmpty(value) ? 0 : (uint)value.Length + 1
+            };
 
-                Application.EnableVisualStyles();
-
-                using var listView = new ListView();
-                var group = new ListViewGroup();
-                listView.Groups.Add(group);
-
-                Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                group.Subtitle = value;
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-
-                var lvgroup = new LVGROUPW
-                {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.SUBTITLE | LVGF.GROUPID,
-                    pszSubtitle = buffer,
-                    cchSubtitle = string.IsNullOrEmpty(value) ? 0 : (uint)value.Length + 1
-                };
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                Assert.Equal(expected, new string(lvgroup.pszSubtitle));
-                Assert.True(lvgroup.iGroupId >= 0);
-            }
+            Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
+            Assert.Equal(expected, new string(lvgroup.pszSubtitle));
+            Assert.True(lvgroup.iGroupId >= 0);
         }
 
-        [WinFormsFact]
-        public unsafe void ListViewGroup_Footer_GetGroupInfo_Success()
+        [WinFormsTheory]
+        [MemberData(nameof(Property_TypeString_GetGroupInfo_TestData))]
+        public unsafe void ListViewGroup_Footer_GetGroupInfo_Success(string value, string expected)
         {
-            foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            group.Footer = value;
+
+            Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
+
+            LVGA expectedHeaderFooterAlignment = LVGA.HEADER_LEFT;
+            int size = 0;
+
+            if (!string.IsNullOrEmpty(value))
             {
-                string value = (string)data[0];
-                string expected = (string)data[1];
-
-                Application.EnableVisualStyles();
-
-                using var listView = new ListView();
-                var group = new ListViewGroup();
-                listView.Groups.Add(group);
-
-                Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                group.Footer = value;
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-
-                LVGA expectedHeaderFooterAlignment = LVGA.HEADER_LEFT;
-                int size = 0;
-
-                if (!string.IsNullOrEmpty(value))
-                {
-                    size = value.Length + 1;
-                    expectedHeaderFooterAlignment |= LVGA.FOOTER_LEFT;
-                }
-
-                char* buffer = stackalloc char[size];
-                var lvgroup = new LVGROUPW
-                {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
-                    pszFooter = buffer,
-                    cchFooter = size
-                };
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                Assert.Equal(expected, new string(lvgroup.pszFooter));
-                Assert.True(lvgroup.iGroupId >= 0);
-                Assert.Equal(expectedHeaderFooterAlignment, lvgroup.uAlign);
+                size = value.Length + 1;
+                expectedHeaderFooterAlignment |= LVGA.FOOTER_LEFT;
             }
+
+            char* buffer = stackalloc char[size];
+            var lvgroup = new LVGROUPW
+            {
+                cbSize = (uint)sizeof(LVGROUPW),
+                mask = LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
+                pszFooter = buffer,
+                cchFooter = size
+            };
+
+            Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
+            Assert.Equal(expected, new string(lvgroup.pszFooter));
+            Assert.True(lvgroup.iGroupId >= 0);
+            Assert.Equal(expectedHeaderFooterAlignment, lvgroup.uAlign);
         }
 
         [WinFormsTheory]
         [MemberData(nameof(FooterAlignment_GetGroupInfo_TestData))]
         public unsafe void ListView_FooterAlignment_GetGroupInfo_Success(string footer, HorizontalAlignment value, int expectedAlign)
         {
-            Application.EnableVisualStyles();
             using var listView = new ListView();
             var group1 = new ListViewGroup
             {
@@ -230,46 +211,38 @@ namespace System.Windows.Forms.UITests
             Assert.Equal(expectedAlign, (int)lvgroup.uAlign);
         }
 
-        [WinFormsFact]
-        public unsafe void ListViewGroup_Header_GetGroupInfo_Success()
+        [WinFormsTheory]
+        [MemberData(nameof(Property_TypeString_GetGroupInfo_TestData))]
+        public unsafe void ListViewGroup_Header_GetGroupInfo_Success(string value, string expected)
         {
-            foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            group.Header = value;
+
+            Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
+            int size = !string.IsNullOrEmpty(value) ? value.Length + 1 : 0;
+            char* buffer = stackalloc char[size];
+            var lvgroup = new LVGROUPW
             {
-                string value = (string)data[0];
-                string expected = (string)data[1];
+                cbSize = (uint)sizeof(LVGROUPW),
+                mask = LVGF.HEADER | LVGF.GROUPID | LVGF.ALIGN,
+                pszHeader = buffer,
+                cchHeader = size
+            };
 
-                Application.EnableVisualStyles();
-
-                using var listView = new ListView();
-                var group = new ListViewGroup();
-                listView.Groups.Add(group);
-
-                Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                group.Header = value;
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                int size = !string.IsNullOrEmpty(value) ? value.Length + 1 : 0;
-                char* buffer = stackalloc char[size];
-                var lvgroup = new LVGROUPW
-                {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.HEADER | LVGF.GROUPID | LVGF.ALIGN,
-                    pszHeader = buffer,
-                    cchHeader = size
-                };
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                Assert.Equal(expected, new string(lvgroup.pszHeader));
-                Assert.True(lvgroup.iGroupId >= 0);
-                Assert.Equal(LVGA.HEADER_LEFT, lvgroup.uAlign);
-            }
+            Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
+            Assert.Equal(expected, new string(lvgroup.pszHeader));
+            Assert.True(lvgroup.iGroupId >= 0);
+            Assert.Equal(LVGA.HEADER_LEFT, lvgroup.uAlign);
         }
 
         [WinFormsTheory]
         [MemberData(nameof(HeaderAlignment_GetGroupInfo_TestData))]
         public unsafe void ListView_HeaderAlignment_GetGroupInfo_Success(string header, HorizontalAlignment value, int expectedAlign)
         {
-            Application.EnableVisualStyles();
             using var listView = new ListView();
             var group1 = new ListViewGroup
             {
@@ -298,80 +271,68 @@ namespace System.Windows.Forms.UITests
             Assert.Equal(expectedAlign, (int)lvgroup.uAlign);
         }
 
-        [WinFormsFact]
-        public unsafe void ListViewGroup_Collapse_GetGroupInfo_Success()
+        [WinFormsTheory]
+        [MemberData(nameof(CollapsedState_TestData))]
+        public unsafe void ListViewGroup_Collapse_GetGroupInfo_Success(ListViewGroupCollapsedState collapsedState, ListViewGroupCollapsedState expectedCollapsedState)
         {
-            foreach (object[] data in CollapsedState_TestData())
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            group.CollapsedState = collapsedState;
+
+            Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
+            var lvgroup = new LVGROUPW
             {
-                Application.EnableVisualStyles();
+                cbSize = (uint)sizeof(LVGROUPW),
+                mask = LVGF.STATE | LVGF.GROUPID,
+                stateMask = LVGS.COLLAPSIBLE | LVGS.COLLAPSED
+            };
 
-                using var listView = new ListView();
-                var group = new ListViewGroup();
-                listView.Groups.Add(group);
-
-                Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                group.CollapsedState = (ListViewGroupCollapsedState)data[0];
-                ListViewGroupCollapsedState expectedCollapsedState = (ListViewGroupCollapsedState)data[1];
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                var lvgroup = new LVGROUPW
-                {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.STATE | LVGF.GROUPID,
-                    stateMask = LVGS.COLLAPSIBLE | LVGS.COLLAPSED
-                };
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                Assert.True(lvgroup.iGroupId >= 0);
-                Assert.Equal(expectedCollapsedState, group.CollapsedState);
-                if (expectedCollapsedState == ListViewGroupCollapsedState.Default)
-                {
-                    Assert.Equal(LVGS.NORMAL, lvgroup.state);
-                }
-                else if (expectedCollapsedState == ListViewGroupCollapsedState.Expanded)
-                {
-                    Assert.Equal(LVGS.COLLAPSIBLE, lvgroup.state);
-                }
-                else
-                {
-                    Assert.Equal(LVGS.COLLAPSIBLE | LVGS.COLLAPSED, lvgroup.state);
-                }
+            Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
+            Assert.True(lvgroup.iGroupId >= 0);
+            Assert.Equal(expectedCollapsedState, group.CollapsedState);
+            if (expectedCollapsedState == ListViewGroupCollapsedState.Default)
+            {
+                Assert.Equal(LVGS.NORMAL, lvgroup.state);
+            }
+            else if (expectedCollapsedState == ListViewGroupCollapsedState.Expanded)
+            {
+                Assert.Equal(LVGS.COLLAPSIBLE, lvgroup.state);
+            }
+            else
+            {
+                Assert.Equal(LVGS.COLLAPSIBLE | LVGS.COLLAPSED, lvgroup.state);
             }
         }
 
-        [WinFormsFact]
-        public unsafe void ListViewGroup_Task_GetGroupInfo_Success()
+        [WinFormsTheory]
+        [MemberData(nameof(Property_TypeString_GetGroupInfo_TestData))]
+        public unsafe void ListViewGroup_Task_GetGroupInfo_Success(string value, string expected)
         {
             // This needs to be outside the loop.
             char* buffer = stackalloc char[256];
 
-            foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            group.TaskLink = value;
+
+            Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
+            var lvgroup = new LVGROUPW
             {
-                string value = (string)data[0];
-                string expected = (string)data[1];
+                cbSize = (uint)sizeof(LVGROUPW),
+                mask = LVGF.TASK | LVGF.GROUPID,
+                pszTask = buffer,
+                cchTask = (uint)(!string.IsNullOrEmpty(value) ? value.Length + 1 : 0)
+            };
 
-                Application.EnableVisualStyles();
-
-                using var listView = new ListView();
-                var group = new ListViewGroup();
-                listView.Groups.Add(group);
-
-                Assert.NotEqual(IntPtr.Zero, listView.Handle);
-                group.TaskLink = value;
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
-                var lvgroup = new LVGROUPW
-                {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.TASK | LVGF.GROUPID,
-                    pszTask = buffer,
-                    cchTask = (uint)(!string.IsNullOrEmpty(value) ? value.Length + 1 : 0)
-                };
-
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
-                Assert.Equal(expected, new string(lvgroup.pszTask));
-                Assert.True(lvgroup.iGroupId >= 0);
-            }
+            Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup));
+            Assert.Equal(expected, new string(lvgroup.pszTask));
+            Assert.True(lvgroup.iGroupId >= 0);
         }
 
         public static IEnumerable<object[]> Property_TypeString_GetGroupInfo_TestData()

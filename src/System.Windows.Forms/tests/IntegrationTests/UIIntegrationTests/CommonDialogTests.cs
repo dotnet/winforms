@@ -19,7 +19,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
-        public void ShowDialog_NonControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
+        public void ShowDialog_NonControlOwner_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
         {
             using var dialog = new SubCommonDialog
             {
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
-        public void ShowDialog_ControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
+        public void ShowDialog_ControlOwner_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
         {
             using var dialog = new SubCommonDialog
             {
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsTheory]
         [InlineData(true, DialogResult.OK)]
         [InlineData(false, DialogResult.Cancel)]
-        public void ShowDialog_ControlOwnerWithHandleWithVisualStyles_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
+        public void ShowDialog_ControlOwnerWithHandle_ReturnsExpected(bool runDialogResult, DialogResult expectedDialogResult)
         {
             using var dialog = new SubCommonDialog
             {
