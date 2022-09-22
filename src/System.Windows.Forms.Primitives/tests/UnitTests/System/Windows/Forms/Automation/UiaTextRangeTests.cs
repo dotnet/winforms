@@ -1115,7 +1115,7 @@ This is the line 3";
         [InlineData(FW.THIN)]
         public void UiaTextRange_private_GetFontWeight_ReturnsCorrectValue(object fontWeight)
         {
-            LOGFONTW logfont = new() { lfWeight = (FONT_WEIGHT)(int)fontWeight };
+            LOGFONTW logfont = new() { lfWeight = (int)fontWeight };
             FW actual = StaticNullTextRange.TestAccessor().GetFontWeight(logfont);
             Assert.Equal(fontWeight, actual);
         }
