@@ -13,106 +13,178 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private class DockUI : Control
         {
-            private const int NONE_HEIGHT = 24;
-            private const int NONE_WIDTH = 90;
-            private const int CONTROL_WIDTH = 94;
-            private const int CONTROL_HEIGHT = 116;
-            private const int OFFSET2X = 2;
-            private const int OFFSET2Y = 2;
-            private const int NONE_Y = 94;
+            private const int NoneHeight = 24;
+            private const int NoneWidth = 90;
+            private const int ControlWidth = 94;
+            private const int ControlHeight = 116;
+            private const int Offset2X = 2;
+            private const int Offset2Y = 2;
 
-            private static bool isScalingInitialized;
-            private static readonly Size buttonSizeDefault = new Size(20, 20);
-            private static readonly Size containerSizeDefault = new Size(90, 90);
+            private static bool s_isScalingInitialized;
+            private static readonly Size s_buttonSizeDefault = new(20, 20);
+            private static readonly Size s_containerSizeDefault = new(90, 90);
 
-            private static int noneHeight = NONE_HEIGHT;
-            private static int noneWidth = NONE_WIDTH;
-            private static Size buttonSize = buttonSizeDefault;
-            private static Size containerSize = containerSizeDefault;
-            private static int controlWidth = CONTROL_WIDTH;
-            private static int controlHeight = CONTROL_HEIGHT;
-            private static int offset2X = OFFSET2X;
-            private static int offset2Y = OFFSET2Y;
-            private static int noneY = NONE_Y;
+            private static int s_noneHeight = NoneHeight;
+            private static int s_noneWidth = NoneWidth;
+            private static Size s_buttonSize = s_buttonSizeDefault;
+            private static Size s_containerSize = s_containerSizeDefault;
+            private static int s_controlWidth = ControlWidth;
+            private static int s_controlHeight = ControlHeight;
+            private static int s_offset2X = Offset2X;
+            private static int s_offset2Y = Offset2Y;
 
-            private readonly CheckBox bottom = new DockEditorCheckBox();
+            private bool _allowExit = true;
 
-            // Even though the selections are mutually exclusive, I'm using
-            // CheckBoxes instead of RadioButtons because RadioButtons fire Click
-            // events whenever they get focus, which is bad when the user is trying
-            // to tab to a specific control using the keyboard.
-            private readonly ContainerPlaceholder container = new ContainerPlaceholder();
-            private readonly DockEditor editor;
-            private IWindowsFormsEditorService edSvc;
-            private readonly CheckBox fill = new DockEditorCheckBox();
-            private readonly CheckBox left = new DockEditorCheckBox();
-            private readonly CheckBox[] leftRightOrder;
-            private readonly CheckBox none = new DockEditorCheckBox();
-            private readonly CheckBox right = new DockEditorCheckBox();
-            private readonly CheckBox[] tabOrder;
-            private readonly CheckBox top = new DockEditorCheckBox();
-            private readonly CheckBox[] upDownOrder;
+            private readonly ContainerPlaceholder _container = new();
+            private readonly DockEditor _editor;
+            private IWindowsFormsEditorService _edSvc;
+            private readonly RadioButton _fill = new DockEditorRadioButton();
+            private readonly RadioButton _left = new DockEditorRadioButton();
+            private readonly RadioButton[] _leftRightOrder;
+            private readonly RadioButton _none = new DockEditorRadioButton();
+            private readonly RadioButton _right = new DockEditorRadioButton();
+            private readonly RadioButton[] _tabOrder;
+            private readonly RadioButton _top = new DockEditorRadioButton();
+            private readonly RadioButton _bottom = new DockEditorRadioButton();
+            private readonly RadioButton[] _upDownOrder;
+            private RadioButton _checkedControl;
 
             public DockUI(DockEditor editor)
             {
-                this.editor = editor;
-                upDownOrder = new[] { top, fill, bottom, none };
-                leftRightOrder = new[] { left, fill, right };
-                tabOrder = new[] { top, left, fill, right, bottom, none };
+                this._editor = editor;
+                _upDownOrder = new[] { _top, _fill, _bottom, _none };
+                _leftRightOrder = new[] { _left, _fill, _right };
+                _tabOrder = new[] { _top, _left, _fill, _right, _bottom, _none };
 
-                if (!isScalingInitialized)
+                if (!s_isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)
                     {
-                        noneHeight = DpiHelper.LogicalToDeviceUnitsY(NONE_HEIGHT);
-                        noneWidth = DpiHelper.LogicalToDeviceUnitsX(NONE_WIDTH);
-                        controlHeight = DpiHelper.LogicalToDeviceUnitsY(CONTROL_HEIGHT);
-                        controlWidth = DpiHelper.LogicalToDeviceUnitsX(CONTROL_WIDTH);
-                        offset2Y = DpiHelper.LogicalToDeviceUnitsY(OFFSET2Y);
-                        offset2X = DpiHelper.LogicalToDeviceUnitsX(OFFSET2X);
-                        noneY = DpiHelper.LogicalToDeviceUnitsY(NONE_Y);
+                        s_noneHeight = DpiHelper.LogicalToDeviceUnitsY(NoneHeight);
+                        s_noneWidth = DpiHelper.LogicalToDeviceUnitsX(NoneWidth);
+                        s_controlHeight = DpiHelper.LogicalToDeviceUnitsY(ControlHeight);
+                        s_controlWidth = DpiHelper.LogicalToDeviceUnitsX(ControlWidth);
+                        s_offset2Y = DpiHelper.LogicalToDeviceUnitsY(Offset2Y);
+                        s_offset2X = DpiHelper.LogicalToDeviceUnitsX(Offset2X);
 
-                        buttonSize = DpiHelper.LogicalToDeviceUnits(buttonSizeDefault);
-                        containerSize = DpiHelper.LogicalToDeviceUnits(containerSizeDefault);
+                        s_buttonSize = DpiHelper.LogicalToDeviceUnits(s_buttonSizeDefault);
+                        s_containerSize = DpiHelper.LogicalToDeviceUnits(s_containerSizeDefault);
                     }
 
-                    isScalingInitialized = true;
+                    s_isScalingInitialized = true;
                 }
 
                 InitializeComponent();
+            }
+
+            private RadioButton CheckedControl
+            {
+                get => _checkedControl;
+                set
+                {
+                    _checkedControl = value;
+                    FocusCheckedControl();
+                }
+            }
+
+            private DockStyle DockStyle
+            {
+                get
+                {
+                    if (ReferenceEquals(CheckedControl, _fill))
+                    {
+                        return DockStyle.Fill;
+                    }
+
+                    if (ReferenceEquals(CheckedControl, _left))
+                    {
+                        return DockStyle.Left;
+                    }
+
+                    if (ReferenceEquals(CheckedControl, _right))
+                    {
+                        return DockStyle.Right;
+                    }
+
+                    if (ReferenceEquals(CheckedControl, _top))
+                    {
+                        return DockStyle.Top;
+                    }
+
+                    if (ReferenceEquals(CheckedControl, _bottom))
+                    {
+                        return DockStyle.Bottom;
+                    }
+
+                    return DockStyle.None;
+                }
+                set
+                {
+                    switch (value)
+                    {
+                        case DockStyle.None:
+                            CheckedControl = _none;
+                            break;
+                        case DockStyle.Fill:
+                            CheckedControl = _fill;
+                            break;
+                        case DockStyle.Left:
+                            CheckedControl = _left;
+                            break;
+                        case DockStyle.Right:
+                            CheckedControl = _right;
+                            break;
+                        case DockStyle.Top:
+                            CheckedControl = _top;
+                            break;
+                        case DockStyle.Bottom:
+                            CheckedControl = _bottom;
+                            break;
+                    }
+                }
             }
 
             public object Value { get; private set; }
 
             public void End()
             {
-                edSvc = null;
+                _edSvc = null;
                 Value = null;
             }
 
-            public virtual DockStyle GetDock(CheckBox btn)
+            private void FocusCheckedControl()
             {
-                if (top == btn)
+                // To actually move focus to a radio button, we need to call Focus() method.
+                // However, that would raise OnClick event, which would close the editor.
+                // We set allowExit to false, to block editor exit, on radio button selection change.
+                _allowExit = false;
+                CheckedControl.Focus();
+                _allowExit = true;
+            }
+
+            public virtual DockStyle GetDock(RadioButton btn)
+            {
+                if (_top == btn)
                 {
                     return DockStyle.Top;
                 }
 
-                if (left == btn)
+                if (_left == btn)
                 {
                     return DockStyle.Left;
                 }
 
-                if (bottom == btn)
+                if (_bottom == btn)
                 {
                     return DockStyle.Bottom;
                 }
 
-                if (right == btn)
+                if (_right == btn)
                 {
                     return DockStyle.Right;
                 }
 
-                if (fill == btn)
+                if (_fill == btn)
                 {
                     return DockStyle.Fill;
                 }
@@ -122,122 +194,108 @@ namespace System.Windows.Forms.Design
 
             private void InitializeComponent()
             {
-                SetBounds(0, 0, controlWidth, controlHeight);
+                SetBounds(0, 0, s_controlWidth, s_controlHeight);
 
                 BackColor = SystemColors.Control;
                 ForeColor = SystemColors.ControlText;
                 AccessibleName = SR.DockEditorAccName;
 
-                none.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-                none.Location = new Point(offset2X, noneY);
-                none.Size = new Size(noneWidth, noneHeight);
-                none.Text = DockStyle.None.ToString();
-                none.TabIndex = 0;
-                none.TabStop = true;
-                none.Appearance = Appearance.Button;
-                none.Click += OnClick;
-                none.KeyDown += OnKeyDown;
-                none.AccessibleName = SR.DockEditorNoneAccName;
+                _none.Dock = DockStyle.Bottom;
+                _none.Size = new Size(s_noneWidth, s_noneHeight);
+                _none.Text = DockStyle.None.ToString();
+                _none.TabIndex = 0;
+                _none.TabStop = true;
+                _none.Appearance = Appearance.Button;
+                _none.Click += OnClick;
+                _none.KeyDown += OnKeyDown;
+                _none.AccessibleName = SR.DockEditorNoneAccName;
 
-                container.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
-                container.Location = new Point(offset2X, offset2Y);
-                container.Size = containerSize;
+                _container.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+                _container.Location = new Point(s_offset2X, s_offset2Y);
+                _container.Size = s_containerSize;
 
-                none.Dock = DockStyle.Bottom;
-                container.Dock = DockStyle.Fill;
+                _none.Dock = DockStyle.Bottom;
+                _container.Dock = DockStyle.Fill;
 
-                right.Dock = DockStyle.Right;
-                right.Size = buttonSize;
-                right.TabIndex = 4;
-                right.TabStop = true;
-                right.Text = " "; // Needs at least one character so focus rect will show.
-                right.Appearance = Appearance.Button;
-                right.Click += OnClick;
-                right.KeyDown += OnKeyDown;
-                right.AccessibleName = SR.DockEditorRightAccName;
+                _right.Dock = DockStyle.Right;
+                _right.Size = s_buttonSize;
+                _right.TabIndex = 4;
+                _right.TabStop = true;
+                _right.Text = " "; // Needs at least one character so focus rect will show.
+                _right.Appearance = Appearance.Button;
+                _right.Click += OnClick;
+                _right.KeyDown += OnKeyDown;
+                _right.AccessibleName = SR.DockEditorRightAccName;
 
-                left.Dock = DockStyle.Left;
-                left.Size = buttonSize;
-                left.TabIndex = 2;
-                left.TabStop = true;
-                left.Text = " ";
-                left.Appearance = Appearance.Button;
-                left.Click += OnClick;
-                left.KeyDown += OnKeyDown;
-                left.AccessibleName = SR.DockEditorLeftAccName;
+                _left.Dock = DockStyle.Left;
+                _left.Size = s_buttonSize;
+                _left.TabIndex = 2;
+                _left.TabStop = true;
+                _left.Text = " ";
+                _left.Appearance = Appearance.Button;
+                _left.Click += OnClick;
+                _left.KeyDown += OnKeyDown;
+                _left.AccessibleName = SR.DockEditorLeftAccName;
 
-                top.Dock = DockStyle.Top;
-                top.Size = buttonSize;
-                top.TabIndex = 1;
-                top.TabStop = true;
-                top.Text = " ";
-                top.Appearance = Appearance.Button;
-                top.Click += OnClick;
-                top.KeyDown += OnKeyDown;
-                top.AccessibleName = SR.DockEditorTopAccName;
+                _top.Dock = DockStyle.Top;
+                _top.Size = s_buttonSize;
+                _top.TabIndex = 1;
+                _top.TabStop = true;
+                _top.Text = " ";
+                _top.Appearance = Appearance.Button;
+                _top.Click += OnClick;
+                _top.KeyDown += OnKeyDown;
+                _top.AccessibleName = SR.DockEditorTopAccName;
 
-                bottom.Dock = DockStyle.Bottom;
-                bottom.Size = buttonSize;
-                bottom.TabIndex = 5;
-                bottom.TabStop = true;
-                bottom.Text = " ";
-                bottom.Appearance = Appearance.Button;
-                bottom.Click += OnClick;
-                bottom.KeyDown += OnKeyDown;
-                bottom.AccessibleName = SR.DockEditorBottomAccName;
+                _bottom.Dock = DockStyle.Bottom;
+                _bottom.Size = s_buttonSize;
+                _bottom.TabIndex = 5;
+                _bottom.TabStop = true;
+                _bottom.Text = " ";
+                _bottom.Appearance = Appearance.Button;
+                _bottom.Click += OnClick;
+                _bottom.KeyDown += OnKeyDown;
+                _bottom.AccessibleName = SR.DockEditorBottomAccName;
 
-                fill.Dock = DockStyle.Fill;
-                fill.Size = buttonSize;
-                fill.TabIndex = 3;
-                fill.TabStop = true;
-                fill.Text = " ";
-                fill.Appearance = Appearance.Button;
-                fill.Click += OnClick;
-                fill.KeyDown += OnKeyDown;
-                fill.AccessibleName = SR.DockEditorFillAccName;
+                _fill.Dock = DockStyle.Fill;
+                _fill.Size = s_buttonSize;
+                _fill.TabIndex = 3;
+                _fill.TabStop = true;
+                _fill.Text = " ";
+                _fill.Appearance = Appearance.Button;
+                _fill.Click += OnClick;
+                _fill.KeyDown += OnKeyDown;
+                _fill.AccessibleName = SR.DockEditorFillAccName;
 
                 Controls.Clear();
-                Controls.AddRange(new Control[]
-                {
-                    container,
-                    none
-                });
+                Controls.Add(_container);
 
-                container.Controls.Clear();
-                container.Controls.AddRange(new Control[]
+                _container.Controls.Clear();
+                _container.Controls.AddRange(new Control[]
                 {
-                    fill,
-                    left,
-                    right,
-                    top,
-                    bottom
+                    _fill,
+                    _left,
+                    _right,
+                    _top,
+                    _bottom,
+                    _none
                 });
             }
 
-            private void OnClick(object sender, EventArgs eventargs)
+            private void OnClick(object sender, EventArgs e)
             {
-                DockStyle val = GetDock((CheckBox)sender);
-                if (val >= 0)
+                if (_allowExit)
                 {
-                    Value = val;
+                    CheckedControl = (RadioButton)sender;
+                    Value = DockStyle;
+                    Teardown();
                 }
-
-                Teardown();
             }
 
             protected override void OnGotFocus(EventArgs e)
             {
                 base.OnGotFocus(e);
-
-                // Set focus to currently selected Dock style
-                for (int i = 0; i < tabOrder.Length; i++)
-                {
-                    if (tabOrder[i].Checked)
-                    {
-                        tabOrder[i].Focus();
-                        break;
-                    }
-                }
+                FocusCheckedControl();
             }
 
             private void OnKeyDown(object sender, KeyEventArgs e)
@@ -252,24 +310,19 @@ namespace System.Windows.Forms.Design
                     case Keys.Down:
                         // If we're going up or down from one of the 'sides', act like we're doing
                         // it from the center
-                        if (sender == left || sender == right)
+                        if (sender == _left || sender == _right)
                         {
-                            sender = fill;
+                            sender = _fill;
                         }
 
-                        maxI = upDownOrder.Length - 1;
+                        maxI = _upDownOrder.Length - 1;
                         for (int i = 0; i <= maxI; i++)
                         {
-                            if (upDownOrder[i] == sender)
+                            if (_upDownOrder[i] == sender)
                             {
-                                if (key == Keys.Up)
-                                {
-                                    target = upDownOrder[Math.Max(i - 1, 0)];
-                                }
-                                else
-                                {
-                                    target = upDownOrder[Math.Min(i + 1, maxI)];
-                                }
+                                target = key == Keys.Up
+                                    ? _upDownOrder[Math.Max(i - 1, 0)]
+                                    : _upDownOrder[Math.Min(i + 1, maxI)];
 
                                 break;
                             }
@@ -278,40 +331,23 @@ namespace System.Windows.Forms.Design
                         break;
                     case Keys.Left:
                     case Keys.Right:
-                        maxI = leftRightOrder.Length - 1;
+                        maxI = _leftRightOrder.Length - 1;
                         for (int i = 0; i <= maxI; i++)
                         {
-                            if (leftRightOrder[i] == sender)
+                            if (_leftRightOrder[i] == sender)
                             {
-                                if (key == Keys.Left)
-                                {
-                                    target = leftRightOrder[Math.Max(i - 1, 0)];
-                                }
-                                else
-                                {
-                                    target = leftRightOrder[Math.Min(i + 1, maxI)];
-                                }
+                                target = key == Keys.Left
+                                    ? _leftRightOrder[Math.Max(i - 1, 0)]
+                                    : _leftRightOrder[Math.Min(i + 1, maxI)];
 
                                 break;
                             }
                         }
 
                         break;
-                    case Keys.Tab:
-                        for (int i = 0; i < tabOrder.Length; i++)
-                        {
-                            if (tabOrder[i] == sender)
-                            {
-                                i += (e.Modifiers & Keys.Shift) == 0 ? 1 : -1;
-                                i = i < 0 ? i + tabOrder.Length : i % tabOrder.Length;
-                                target = tabOrder[i];
-                                break;
-                            }
-                        }
 
-                        break;
                     case Keys.Return:
-                        InvokeOnClick((CheckBox)sender, EventArgs.Empty); // Will tear down editor
+                        InvokeOnClick((RadioButton)sender, EventArgs.Empty); // Will tear down editor
                         return;
                     default:
                         return; // Unhandled keys return here
@@ -319,57 +355,61 @@ namespace System.Windows.Forms.Design
 
                 e.Handled = true;
 
-                if (target != null && target != sender)
+                if (target is RadioButton targetButton && target != sender)
                 {
-                    target.Focus();
+                    CheckedControl = targetButton;
                 }
+            }
+
+            protected override bool ProcessDialogKey(Keys keyData)
+            {
+                if ((keyData & Keys.KeyCode) == Keys.Tab && (keyData & (Keys.Alt | Keys.Control)) == 0)
+                {
+                    for (int i = 0; i < _tabOrder.Length; i++)
+                    {
+                        if (_tabOrder[i] == CheckedControl)
+                        {
+                            i += (keyData & Keys.Shift) == 0 ? 1 : -1;
+                            i = i < 0 ? i + _tabOrder.Length : i % _tabOrder.Length;
+                            CheckedControl = _tabOrder[i];
+                            break;
+                        }
+                    }
+
+                    return true;
+                }
+
+                return base.ProcessDialogKey(keyData);
             }
 
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
-                this.edSvc = edSvc;
+                _none.Checked = false;
+                _top.Checked = false;
+                _left.Checked = false;
+                _right.Checked = false;
+                _bottom.Checked = false;
+                _fill.Checked = false;
+
+                this._edSvc = edSvc;
                 Value = value;
 
-                if (value is DockStyle dock)
-                {
-                    none.Checked = false;
-                    top.Checked = false;
-                    left.Checked = false;
-                    right.Checked = false;
-                    bottom.Checked = false;
-                    fill.Checked = false;
-
-                    switch (dock)
-                    {
-                        case DockStyle.None:
-                            none.Checked = true;
-                            break;
-                        case DockStyle.Top:
-                            top.Checked = true;
-                            break;
-                        case DockStyle.Left:
-                            left.Checked = true;
-                            break;
-                        case DockStyle.Right:
-                            right.Checked = true;
-                            break;
-                        case DockStyle.Bottom:
-                            bottom.Checked = true;
-                            break;
-                        case DockStyle.Fill:
-                            fill.Checked = true;
-                            break;
-                    }
-                }
+                DockStyle = value is DockStyle dockStyle ? dockStyle : DockStyle.None;
+                CheckedControl.Checked = true;
             }
-
+            
             private void Teardown()
             {
-                edSvc.CloseDropDown();
+                _edSvc.CloseDropDown();
             }
 
-            private class DockEditorCheckBox : CheckBox
+            private class DockEditorRadioButton : RadioButton
             {
+                public DockEditorRadioButton()
+                {
+                    AutoCheck = false;
+                }
+
                 protected override bool ShowFocusCues => true;
 
                 protected override bool IsInputKey(Keys keyData)
