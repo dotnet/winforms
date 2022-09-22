@@ -73,5 +73,34 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
             Assert.False(maskedTextBox.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MaskedTextBoxAccessibleObject_IsPassword_IsExpected_WithUseSystemPasswordChar(bool useSystemPasswordChar)
+        {
+            using MaskedTextBox maskedTextBox = new MaskedTextBox();
+            maskedTextBox.UseSystemPasswordChar = useSystemPasswordChar;
+
+            object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsPasswordPropertyId);
+
+            Assert.Equal(useSystemPasswordChar, actual);
+            Assert.False(maskedTextBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData('\0')]
+        [InlineData('*')]
+        public void MaskedTextBoxAccessibleObject_IsPassword_IsExpected_WithPasswordChar(char passwordChar)
+        {
+            using MaskedTextBox maskedTextBox = new MaskedTextBox();
+            maskedTextBox.PasswordChar = passwordChar;
+
+            object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsPasswordPropertyId);
+            bool expected = passwordChar != '\0';
+
+            Assert.Equal(expected, actual);
+            Assert.False(maskedTextBox.IsHandleCreated);
+        }
     }
 }
