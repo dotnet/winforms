@@ -12,10 +12,12 @@ namespace System.Windows.Forms
     {
         internal class TextBoxBaseAccessibleObject : ControlAccessibleObject
         {
+            private readonly TextBoxBase _owningTextBoxBase;
             private TextBoxBaseUiaTextProvider? _textProvider;
 
             public TextBoxBaseAccessibleObject(TextBoxBase owner) : base(owner)
             {
+                _owningTextBoxBase = owner;
                 _textProvider = new TextBoxBaseUiaTextProvider(owner);
             }
 
@@ -42,6 +44,13 @@ namespace System.Windows.Forms
                 // 4) This method call should be uncommented
                 //        ClearOwnerControl();
             }
+
+            internal override object? GetPropertyValue(UIA propertyID)
+                => propertyID switch
+                {
+                    UIA.IsPasswordPropertyId => _owningTextBoxBase.PasswordProtect,
+                    _ => base.GetPropertyValue(propertyID),
+                };
 
             internal override bool IsIAccessibleExSupported() => true;
 

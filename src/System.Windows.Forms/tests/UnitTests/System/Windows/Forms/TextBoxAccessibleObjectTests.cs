@@ -88,5 +88,67 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
             Assert.False(textBox.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TextBoxAccessibleObject_IsPassword_IsExpected_WithUseSystemPasswordChar(bool useSystemPasswordChar)
+        {
+            using TextBox textBox = new TextBox();
+            textBox.UseSystemPasswordChar = useSystemPasswordChar;
+
+            object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.IsPasswordPropertyId);
+
+            Assert.Equal(useSystemPasswordChar, actual);
+            // Handle is recreated when setting UseSystemPasswordChar
+            Assert.True(textBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData('\0')]
+        [InlineData('*')]
+        public void TextBoxAccessibleObject_IsPassword_IsExpected_WithPasswordChar(char passwordChar)
+        {
+            using TextBox textBox = new TextBox();
+            textBox.PasswordChar = passwordChar;
+
+            object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.IsPasswordPropertyId);
+            bool expected = passwordChar != '\0';
+
+            Assert.Equal(expected, actual);
+            // Handle is recreated when getting PasswordChar
+            Assert.True(textBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxAccessibleObject_IsPassword_IsFalse_ForMultilineTextBox_WithUseSystemPasswordChar()
+        {
+            using TextBox textBox = new TextBox();
+            textBox.Multiline = true;
+            textBox.UseSystemPasswordChar = true;
+
+            bool actual = (bool)textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.IsPasswordPropertyId);
+
+            Assert.False(actual);
+            // Handle is recreated when setting UseSystemPasswordChar
+            Assert.True(textBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData('\0')]
+        [InlineData('*')]
+        public void TextBoxAccessibleObject_IsPassword_IsExpected_ForMultilineTextBox_WithPasswordChar(char passwordChar)
+        {
+            using TextBox textBox = new TextBox();
+            textBox.PasswordChar = passwordChar;
+            textBox.Multiline = true;
+
+            object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.IsPasswordPropertyId);
+            bool expected = passwordChar != '\0';
+
+            Assert.Equal(expected, actual);
+            // Handle is recreated when getting PasswordChar
+            Assert.True(textBox.IsHandleCreated);
+        }
     }
 }
