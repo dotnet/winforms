@@ -2158,7 +2158,7 @@ namespace System.Windows.Forms
             }
 
             bool fontBold = target.Bold;
-            bool isBold = logfont.lfWeight >= FONT_WEIGHT.FW_BOLD;
+            bool isBold = logfont.lfWeight >= (int)Gdi32.FW.BOLD;
             if (fontBold != isBold)
             {
                 target.Bold = isBold;

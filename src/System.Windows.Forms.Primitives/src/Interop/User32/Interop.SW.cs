@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         /// <summary>
         ///  Show window flags for <see cref="ShowWindow(IntPtr, SW)"/> and
-        ///  <see cref="PInvoke.ShellExecute(HWND, string, string, string, string, int)"/>
+        ///  <see cref="PInvoke.ShellExecute(HWND, string, string, string, string, SHOW_WINDOW_CMD)"/>
         /// </summary>
         public enum SW : int
         {

@@ -8,7 +8,6 @@ using System.Buffers;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using static Interop;
 using static Interop.Hhctl;
 
 namespace System.Windows.Forms
@@ -261,7 +260,7 @@ namespace System.Windows.Forms
             }
 
             Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, $"\tExecuting '{file}'");
-            PInvoke.ShellExecute(handle.Handle, lpOperation: null, file.ToString(), lpParameters: null, lpDirectory: null, (int)User32.SW.NORMAL);
+            PInvoke.ShellExecute(handle.Handle, lpOperation: null, file.ToString(), lpParameters: null, lpDirectory: null, SHOW_WINDOW_CMD.SW_NORMAL);
             GC.KeepAlive(handle.Wrapper);
         }
 
