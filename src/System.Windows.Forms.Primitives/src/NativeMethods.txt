@@ -224,6 +224,7 @@ SetViewportOrgEx
 SetWindowExtEx
 SetWindowOrgEx
 SetWindowsHookEx
+SHAutoComplete
 SHCreateItemFromParsingName
 SHBrowseForFolder
 SHCreateShellItem
@@ -234,6 +235,7 @@ SHGetPathFromIDList
 SHGetSpecialFolderLocation
 ShowCursor
 SHGetSpecialFolderLocation
+SHLoadIndirectString
 SHParseDisplayName
 SIATTRIBFLAGS
 SIGDN

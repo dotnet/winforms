@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Text;
 using Microsoft.Win32;
 using Windows.Win32.UI.TextServices;
 using static Interop;
@@ -283,11 +282,18 @@ namespace System.Windows.Forms
         {
             if (layoutDisplayName is not null)
             {
-                var sb = new StringBuilder(512);
-                HRESULT res = Shlwapi.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);
-                if (res == HRESULT.S_OK)
+                unsafe
                 {
-                    return sb.ToString();
+                    var ppvReserved = (void*)IntPtr.Zero;
+                    Span<char> buffer = stackalloc char[512];
+                    fixed (char* pBuffer = buffer)
+                    {
+                        HRESULT res = PInvoke.SHLoadIndirectString(layoutDisplayName, pBuffer, (uint)buffer.Length, ref ppvReserved);
+                        if (res == HRESULT.S_OK)
+                        {
+                            return buffer.SliceAtFirstNull().ToString();
+                        }
+                    }
                 }
             }
 

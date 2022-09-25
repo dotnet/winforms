@@ -796,24 +796,24 @@ namespace System.Windows.Forms
                 {
                     if (IsHandleCreated)
                     {
-                        Shlwapi.SHACF mode = Shlwapi.SHACF.DEFAULT;
+                        SHELL_AUTOCOMPLETE_FLAGS mode = SHELL_AUTOCOMPLETE_FLAGS.SHACF_DEFAULT;
                         if (AutoCompleteMode == AutoCompleteMode.Suggest)
                         {
-                            mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
+                            mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_ON | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF;
                         }
 
                         if (AutoCompleteMode == AutoCompleteMode.Append)
                         {
-                            mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
+                            mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_ON | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF;
                         }
 
                         if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                         {
-                            mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
-                            mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON;
+                            mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_ON;
+                            mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_ON;
                         }
 
-                        Shlwapi.SHAutoComplete(this, (Shlwapi.SHACF)AutoCompleteSource | mode);
+                        PInvoke.SHAutoComplete(this, (SHELL_AUTOCOMPLETE_FLAGS)AutoCompleteSource | mode);
                     }
                 }
             }
@@ -830,7 +830,7 @@ namespace System.Windows.Forms
         {
             if ((AutoCompleteMode != AutoCompleteMode.None || force) && IsHandleCreated)
             {
-                Shlwapi.SHAutoComplete(this, (Shlwapi.SHACF)AutoCompleteSource.AllSystemSources | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                PInvoke.SHAutoComplete(this, (SHELL_AUTOCOMPLETE_FLAGS)AutoCompleteSource.AllSystemSources | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
             }
         }
 
