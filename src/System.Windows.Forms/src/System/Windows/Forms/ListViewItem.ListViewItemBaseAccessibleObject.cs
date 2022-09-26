@@ -51,6 +51,8 @@ namespace System.Windows.Forms
             internal int CurrentIndex
                 => _owningItem.Index;
 
+            internal virtual int FirstSubItemIndex => 0;
+
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 => _owningListView.AccessibilityObject;
 
@@ -197,7 +199,7 @@ namespace System.Windows.Forms
                     _ => base.GetPropertyValue(propertyID)
                 };
 
-            internal virtual Rectangle GetSubItemBounds(int subItemIndex) => Rectangle.Empty;
+            internal virtual Rectangle GetSubItemBounds(int index) => Rectangle.Empty;
 
             internal override int[] RuntimeId
             {

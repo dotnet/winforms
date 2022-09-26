@@ -1608,6 +1608,27 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ListViewItemAccessibleObject_GetChildIndex_ReturnsExpected_Image(bool hasImage, int expectedFirstSubItemIndex)
+        {
+            using ImageList imageCollection = new();
+            imageCollection.Images.Add(Form.DefaultIcon);
+            using ListView listView = new()
+            {
+                View = View.Details,
+                SmallImageList = imageCollection
+            };
+            listView.Columns.Add(new ColumnHeader());
+            var listViewItem = new ListViewItem("Item 1", imageIndex: hasImage ? 0 : -1);
+            listView.Items.Add(listViewItem);
+            var accessibleObject = (ListViewItemDetailsAccessibleObject)listView.Items[0].AccessibilityObject;
+            
+            Assert.Equal(expectedFirstSubItemIndex, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [InlineData(View.Details)]
         [InlineData(View.LargeIcon)]
         [InlineData(View.List)]
