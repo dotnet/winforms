@@ -8,7 +8,6 @@ using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
 using static Interop.ComCtl32;
-using static Interop.Kernel32;
 using static Interop.User32;
 
 namespace System.Windows.Forms.UITests
@@ -63,22 +62,22 @@ namespace System.Windows.Forms.UITests
                 DateTime selectedDate = new DateTime(2020, 4, 10);
                 SYSTEMTIME date = new()
                 {
-                    wYear = (short)selectedDate.Year,
-                    wMonth = (short)selectedDate.Month,
-                    wDay = (short)selectedDate.Day
+                    wYear = (ushort)selectedDate.Year,
+                    wMonth = (ushort)selectedDate.Month,
+                    wDay = (ushort)selectedDate.Day
                 };
 
                 NMSELCHANGE lParam = new()
                 {
                     nmhdr = new NMHDR
                     {
-                        code = (int)MCN.SELCHANGE,
+                        code = unchecked((uint)MCN.SELCHANGE),
                     },
                     stSelStart = date,
                     stSelEnd = date,
                 };
 
-                SendMessageW(calendar.Handle, WM.REFLECT | WM.NOTIFY, 0, ref lParam);
+                PInvoke.SendMessage(calendar, WM.REFLECT | WM.NOTIFY, 0, ref lParam);
             });
         }
 
@@ -171,7 +170,7 @@ namespace System.Windows.Forms.UITests
                     dwFlags = MCGIF.RECT,
                 };
 
-                Assert.NotEqual(default, User32.SendMessageW(control, (User32.WM)ComCtl32.MCM.GETCALENDARGRIDINFO, default, ref result));
+                Assert.NotEqual(default, PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETCALENDARGRIDINFO, default, ref result));
                 var rect = Rectangle.FromLTRB(result.rc.left, result.rc.top, result.rc.right, result.rc.bottom);
                 return rect;
             }

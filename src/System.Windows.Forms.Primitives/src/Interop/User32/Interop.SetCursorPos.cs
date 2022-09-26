@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL SetCursorPos(int x, int y);
+        [DllImport(Libraries.User32)]
+        public static extern BOOL SetCursorPos(int x, int y);
     }
 }

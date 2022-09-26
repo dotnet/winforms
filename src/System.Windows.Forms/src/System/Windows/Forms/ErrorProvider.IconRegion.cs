@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Buffers;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns the handle of the region.
             /// </summary>
-            public Region Region
+            public unsafe Region Region
             {
                 get
                 {
@@ -41,12 +41,12 @@ namespace System.Windows.Forms
                     {
                         _region = new Region(new Rectangle(0, 0, 0, 0));
 
-                        IntPtr mask = IntPtr.Zero;
+                        HBITMAP mask = default;
                         try
                         {
                             Size size = _icon.Size;
                             Bitmap bitmap = _icon.ToBitmap();
-                            mask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+                            mask = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
                             bitmap.Dispose();
 
                             // It is been observed that users can use non standard size icons (not a 16 bit multiples for width and height)
@@ -55,28 +55,32 @@ namespace System.Windows.Forms
 
                             // If width is not multiple of 16, we need to allocate BitmapBitsAllocationSize for remaining bits.
                             int widthInBytes = 2 * ((size.Width + 15) / bitmapBitsAllocationSize); // its in bytes.
-                            byte[] bits = new byte[widthInBytes * size.Height];
-                            Gdi32.GetBitmapBits(mask, bits.Length, bits);
-
-                            for (int y = 0; y < size.Height; y++)
+                            byte[] bits = ArrayPool<byte>.Shared.Rent(widthInBytes * size.Height);
+                            fixed (void* pbits = bits)
                             {
-                                for (int x = 0; x < size.Width; x++)
+                                PInvoke.GetBitmapBits(mask, bits.Length, pbits);
+
+                                for (int y = 0; y < size.Height; y++)
                                 {
-                                    // see if bit is set in mask. bits in byte are reversed. 0 is black (set).
-                                    if ((bits[y * widthInBytes + x / 8] & (1 << (7 - (x % 8)))) == 0)
+                                    for (int x = 0; x < size.Width; x++)
                                     {
-                                        _region.Union(new Rectangle(x, y, 1, 1));
+                                        // see if bit is set in mask. bits in byte are reversed. 0 is black (set).
+                                        if ((bits[y * widthInBytes + x / 8] & (1 << (7 - (x % 8)))) == 0)
+                                        {
+                                            _region.Union(new Rectangle(x, y, 1, 1));
+                                        }
                                     }
                                 }
                             }
 
                             _region.Intersect(new Rectangle(0, 0, size.Width, size.Height));
+                            ArrayPool<byte>.Shared.Return(bits);
                         }
                         finally
                         {
-                            if (mask != IntPtr.Zero)
+                            if (!mask.IsNull)
                             {
-                                Gdi32.DeleteObject((Gdi32.HGDIOBJ)mask);
+                                PInvoke.DeleteObject(mask);
                             }
                         }
                     }

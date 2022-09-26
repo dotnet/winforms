@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public unsafe static partial BOOL SetKeyboardState(byte* lpKeyState);
+        [DllImport(Libraries.User32)]
+        public unsafe static extern BOOL SetKeyboardState(byte* lpKeyState);
     }
 }

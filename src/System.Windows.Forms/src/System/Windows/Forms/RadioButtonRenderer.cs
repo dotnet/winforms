@@ -5,7 +5,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -76,7 +75,7 @@ namespace System.Windows.Forms
         }
 
         internal static void DrawRadioButtonWithVisualStyles(
-            Gdi32.HDC hdc,
+            HDC hdc,
             Point glyphLocation,
             RadioButtonState state,
             IntPtr hWnd)
@@ -219,7 +218,7 @@ namespace System.Windows.Forms
             return GetGlyphSize(hdc, state, IntPtr.Zero);
         }
 
-        internal static Size GetGlyphSize(Gdi32.HDC hdc, RadioButtonState state, IntPtr hWnd)
+        internal static Size GetGlyphSize(HDC hdc, RadioButtonState state, IntPtr hWnd)
         {
             if (RenderWithVisualStyles)
             {

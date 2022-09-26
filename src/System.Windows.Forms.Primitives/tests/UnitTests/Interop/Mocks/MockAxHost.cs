@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using static Interop;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks

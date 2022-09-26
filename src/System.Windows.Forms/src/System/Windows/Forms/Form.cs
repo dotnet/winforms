@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.System.Threading;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -273,20 +274,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the currently active form for this application.
         /// </summary>
-        public static Form? ActiveForm
-        {
-            get
-            {
-                IntPtr hwnd = User32.GetForegroundWindow();
-                Control? c = FromHandle(hwnd);
-                if (c is not null && c is Form form)
-                {
-                    return form;
-                }
-
-                return null;
-            }
-        }
+        public static Form? ActiveForm => FromHandle(PInvoke.GetForegroundWindow()) as Form;
 
         /// <summary>
         ///
@@ -314,7 +302,7 @@ namespace System.Windows.Forms
                     // If this.MdiClient is not null it means this.IsMdiContainer == true.
                     if (_ctlClient is not null && _ctlClient.IsHandleCreated)
                     {
-                        IntPtr hwnd = User32.SendMessageW(_ctlClient, User32.WM.MDIGETACTIVE);
+                        IntPtr hwnd = PInvoke.SendMessage(_ctlClient, User32.WM.MDIGETACTIVE);
                         mdiChild = FromHandle(hwnd) as Form;
                     }
                 }
@@ -786,27 +774,27 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                if (IsHandleCreated && WindowStyle.HasFlag(User32.WS.DISABLED))
+                if (IsHandleCreated && WindowStyle.HasFlag(WINDOW_STYLE.WS_DISABLED))
                 {
                     // Forms that are parent of a modal dialog must keep their WS_DISABLED style
-                    cp.Style |= (int)User32.WS.DISABLED;
+                    cp.Style |= (int)WINDOW_STYLE.WS_DISABLED;
                 }
                 else if (TopLevel)
                 {
                     // It doesn't seem to make sense to allow a top-level form to be disabled
                     //
-                    cp.Style &= ~(int)User32.WS.DISABLED;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_DISABLED;
                 }
 
                 if (TopLevel && (_formState[FormStateLayered] != 0))
                 {
-                    cp.ExStyle |= (int)User32.WS_EX.LAYERED;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYERED;
                 }
 
                 IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(PropDialogOwner);
                 if (dialogOwner is not null)
                 {
-                    cp.Parent = GetSafeHandle(dialogOwner);
+                    cp.Parent = GetSafeHandle(dialogOwner).Handle;
                 }
 
                 FillInCreateParamsBorderStyles(cp);
@@ -815,7 +803,7 @@ namespace System.Windows.Forms
 
                 if (_formState[FormStateTaskBar] != 0)
                 {
-                    cp.ExStyle |= (int)User32.WS_EX.APPWINDOW;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_APPWINDOW;
                 }
 
                 FormBorderStyle borderStyle = FormBorderStyle;
@@ -824,7 +812,7 @@ namespace System.Windows.Forms
                      borderStyle == FormBorderStyle.Fixed3D ||
                      borderStyle == FormBorderStyle.FixedSingle))
                 {
-                    cp.ExStyle |= (int)User32.WS_EX.DLGMODALFRAME;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME;
                 }
 
                 if (IsMdiChild)
@@ -839,7 +827,7 @@ namespace System.Windows.Forms
                         if (form is not null
                             && form.WindowState == FormWindowState.Maximized)
                         {
-                            cp.Style |= (int)User32.WS.MAXIMIZE;
+                            cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZE;
                             _formState[FormStateWindowState] = (int)FormWindowState.Maximized;
                             SetState(States.SizeLockedByOS, true);
                         }
@@ -847,10 +835,10 @@ namespace System.Windows.Forms
 
                     if (_formState[FormStateMdiChildMax] != 0)
                     {
-                        cp.Style |= (int)User32.WS.MAXIMIZE;
+                        cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZE;
                     }
 
-                    cp.ExStyle |= (int)User32.WS_EX.MDICHILD;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_MDICHILD;
                 }
 
                 if (TopLevel || IsMdiChild)
@@ -860,10 +848,10 @@ namespace System.Windows.Forms
                     // to allow applyClientSize to adjust the size before displaying
                     // the form.
                     //
-                    if ((cp.Style & (int)User32.WS.VISIBLE) != 0)
+                    if ((cp.Style & (int)WINDOW_STYLE.WS_VISIBLE) != 0)
                     {
                         _formState[FormStateShowWindowOnCreate] = 1;
-                        cp.Style &= ~(int)User32.WS.VISIBLE;
+                        cp.Style &= ~(int)WINDOW_STYLE.WS_VISIBLE;
                     }
                     else
                     {
@@ -874,9 +862,9 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
+                    cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -1757,7 +1745,7 @@ namespace System.Windows.Forms
                         CreateParams cp = CreateParams;
                         if ((int)ExtendedWindowStyle != cp.ExStyle)
                         {
-                            User32.SetWindowLong(this, User32.GWL.EXSTYLE, cp.ExStyle);
+                            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, cp.ExStyle);
                         }
                     }
                 }
@@ -2112,7 +2100,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  For forms that are show in task bar false, this returns a HWND they must be parented to in order for it to work.
         /// </summary>
-        private IHandle TaskbarOwner
+        private IHandle<HWND> TaskbarOwner
         {
             get
             {
@@ -2122,7 +2110,7 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = new CreateParams
                     {
-                        ExStyle = (int)User32.WS_EX.TOOLWINDOW
+                        ExStyle = (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW
                     };
 
                     _ownerWindow.CreateHandle(cp);
@@ -2307,7 +2295,7 @@ namespace System.Windows.Forms
                 //
                 if (0 == _formState[FormStateSWCalled])
                 {
-                    User32.SendMessageW(this, User32.WM.SHOWWINDOW, PARAM.FromBool(value));
+                    PInvoke.SendMessage(this, User32.WM.SHOWWINDOW, (WPARAM)(BOOL)value);
                 }
             }
             else
@@ -2616,7 +2604,7 @@ namespace System.Windows.Forms
                 {
                     if (MdiParentInternal.MdiClient is not null)
                     {
-                        User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
+                        PInvoke.SendMessage(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, (WPARAM)HWND);
                     }
                 }
                 else
@@ -2828,7 +2816,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                IntPtr hmenu = User32.GetSystemMenu(new HandleRef(this, Handle), bRevert: BOOL.FALSE);
+                HMENU hmenu = PInvoke.GetSystemMenu(this, bRevert: false);
                 AdjustSystemMenu(hmenu);
             }
         }
@@ -3072,7 +3060,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 _closeReason = CloseReason.UserClosing;
-                User32.SendMessageW(this, User32.WM.CLOSE);
+                PInvoke.SendMessage(this, User32.WM.CLOSE);
             }
             else
             {
@@ -3089,18 +3077,18 @@ namespace System.Windows.Forms
         private Size ComputeWindowSize(Size clientSize)
         {
             CreateParams cp = CreateParams;
-            return ComputeWindowSize(clientSize, cp.Style, cp.ExStyle);
+            return ComputeWindowSize(clientSize, (WINDOW_STYLE)cp.Style, (WINDOW_EX_STYLE)cp.ExStyle);
         }
 
         /// <summary>
         ///  Computes the window size from the clientSize base on the specified
         ///  window styles. This will not return the correct size if menus wrap.
         /// </summary>
-        private Size ComputeWindowSize(Size clientSize, int style, int exStyle)
+        private Size ComputeWindowSize(Size clientSize, WINDOW_STYLE style, WINDOW_EX_STYLE exStyle)
         {
-            RECT result = new RECT(0, 0, clientSize.Width, clientSize.Height);
+            RECT result = new(clientSize);
             AdjustWindowRectExForControlDpi(ref result, style, false, exStyle);
-            return new Size(result.right - result.left, result.bottom - result.top);
+            return result.Size;
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -3232,14 +3220,14 @@ namespace System.Windows.Forms
                 // In order for a window not to have a taskbar entry, it must be owned.
                 if (!ShowInTaskbar && OwnerInternal is null && TopLevel)
                 {
-                    User32.SetWindowLong(this, User32.GWL.HWNDPARENT, (nint)TaskbarOwner.Handle);
+                    PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, TaskbarOwner);
 
                     // Make sure the large icon is set so the ALT+TAB icon
                     // reflects the real icon of the application
                     Icon? icon = Icon;
-                    if (icon is not null && TaskbarOwner.Handle != IntPtr.Zero)
+                    if (icon is not null && !TaskbarOwner.Handle.IsNull)
                     {
-                        User32.SendMessageW(TaskbarOwner, User32.WM.SETICON, (nint)User32.ICON.BIG, icon.Handle);
+                        PInvoke.SendMessage(TaskbarOwner, User32.WM.SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
                     }
                 }
 
@@ -3317,11 +3305,18 @@ namespace System.Windows.Forms
         {
             if (_ctlClient is not null && _ctlClient.IsHandleCreated && _ctlClient.ParentInternal == this)
             {
-                m.ResultInternal = User32.DefFrameProcW(m.HWnd, _ctlClient.Handle, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                m.ResultInternal = PInvoke.DefFrameProc(
+                    m.HWND,
+                    _ctlClient.HWND,
+                    (uint)m.Msg,
+                    m.WParamInternal,
+                    m.LParamInternal);
+
+                GC.KeepAlive(_ctlClient);
             }
             else if (0 != _formStateEx[FormStateExUseMdiChildProc])
             {
-                m.ResultInternal = User32.DefMDIChildProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                m.ResultInternal = PInvoke.DefMDIChildProc(m.HWND, (uint)m.Msg, m.WParamInternal, m.LParamInternal);
             }
             else
             {
@@ -3426,34 +3421,34 @@ namespace System.Windows.Forms
             {
                 if (!string.IsNullOrEmpty(Text))
                 {
-                    cp.Style |= (int)User32.WS.CAPTION;
+                    cp.Style |= (int)WINDOW_STYLE.WS_CAPTION;
                 }
 
                 if (ControlBox)
                 {
-                    cp.Style |= (int)(User32.WS.SYSMENU | User32.WS.CAPTION);
+                    cp.Style |= (int)(WINDOW_STYLE.WS_SYSMENU | WINDOW_STYLE.WS_CAPTION);
                 }
                 else
                 {
-                    cp.Style &= ~(int)User32.WS.SYSMENU;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_SYSMENU;
                 }
 
                 if (MaximizeBox)
                 {
-                    cp.Style |= (int)User32.WS.MAXIMIZEBOX;
+                    cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZEBOX;
                 }
                 else
                 {
-                    cp.Style &= ~(int)User32.WS.MAXIMIZEBOX;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_MAXIMIZEBOX;
                 }
 
                 if (MinimizeBox)
                 {
-                    cp.Style |= (int)User32.WS.MINIMIZEBOX;
+                    cp.Style |= (int)WINDOW_STYLE.WS_MINIMIZEBOX;
                 }
                 else
                 {
-                    cp.Style &= ~(int)User32.WS.MINIMIZEBOX;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_MINIMIZEBOX;
                 }
 
                 if (HelpButton && !MaximizeBox && !MinimizeBox && ControlBox)
@@ -3462,11 +3457,11 @@ namespace System.Windows.Forms
                     // But someone must have failed the check, because Windows 2000
                     // will show a help button if either the maximize or
                     // minimize button is disabled.
-                    cp.ExStyle |= (int)User32.WS_EX.CONTEXTHELP;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CONTEXTHELP;
                 }
                 else
                 {
-                    cp.ExStyle &= ~(int)User32.WS_EX.CONTEXTHELP;
+                    cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CONTEXTHELP;
                 }
             }
         }
@@ -3481,26 +3476,26 @@ namespace System.Windows.Forms
                 case FormBorderStyle.None:
                     break;
                 case FormBorderStyle.FixedSingle:
-                    cp.Style |= (int)User32.WS.BORDER;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                     break;
                 case FormBorderStyle.Sizable:
-                    cp.Style |= (int)(User32.WS.BORDER | User32.WS.THICKFRAME);
+                    cp.Style |= (int)(WINDOW_STYLE.WS_BORDER | WINDOW_STYLE.WS_THICKFRAME);
                     break;
                 case FormBorderStyle.Fixed3D:
-                    cp.Style |= (int)User32.WS.BORDER;
-                    cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                     break;
                 case FormBorderStyle.FixedDialog:
-                    cp.Style |= (int)User32.WS.BORDER;
-                    cp.ExStyle |= (int)User32.WS_EX.DLGMODALFRAME;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME;
                     break;
                 case FormBorderStyle.FixedToolWindow:
-                    cp.Style |= (int)User32.WS.BORDER;
-                    cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW;
                     break;
                 case FormBorderStyle.SizableToolWindow:
-                    cp.Style |= (int)(User32.WS.BORDER | User32.WS.THICKFRAME);
-                    cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
+                    cp.Style |= (int)(WINDOW_STYLE.WS_BORDER | WINDOW_STYLE.WS_THICKFRAME);
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW;
                     break;
             }
         }
@@ -3514,8 +3509,8 @@ namespace System.Windows.Forms
             {
                 // When computing the client window size, don't tell them that
                 // we are going to be maximized!
-                int maskedStyle = cp.Style & ~(int)(User32.WS.MAXIMIZE | User32.WS.MINIMIZE);
-                Size correct = ComputeWindowSize(ClientSize, maskedStyle, cp.ExStyle);
+                int maskedStyle = cp.Style & ~(int)(WINDOW_STYLE.WS_MAXIMIZE | WINDOW_STYLE.WS_MINIMIZE);
+                Size correct = ComputeWindowSize(ClientSize, (WINDOW_STYLE)maskedStyle, (WINDOW_EX_STYLE)cp.ExStyle);
                 cp.Width = correct.Width;
                 cp.Height = correct.Height;
             }
@@ -3556,8 +3551,11 @@ namespace System.Windows.Forms
                         IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(PropDialogOwner);
                         if ((OwnerInternal is not null) || (dialogOwner is not null))
                         {
-                            IntPtr ownerHandle = (dialogOwner is not null) ? GetSafeHandle(dialogOwner) : OwnerInternal!.Handle;
-                            desktop = Screen.FromHandle(ownerHandle);
+                            HandleRef<HWND> ownerHandle = dialogOwner is not null
+                                ? GetSafeHandle(dialogOwner)
+                                : new(OwnerInternal!);
+                            desktop = Screen.FromHandle(ownerHandle.Handle);
+                            GC.KeepAlive(ownerHandle.Wrapper);
                         }
                         else
                         {
@@ -3585,10 +3583,10 @@ namespace System.Windows.Forms
             switch ((FormWindowState)_formState[FormStateWindowState])
             {
                 case FormWindowState.Maximized:
-                    cp.Style |= (int)User32.WS.MAXIMIZE;
+                    cp.Style |= (int)WINDOW_STYLE.WS_MAXIMIZE;
                     break;
                 case FormWindowState.Minimized:
-                    cp.Style |= (int)User32.WS.MINIMIZE;
+                    cp.Style |= (int)WINDOW_STYLE.WS_MINIMIZE;
                     break;
             }
         }
@@ -3605,7 +3603,7 @@ namespace System.Windows.Forms
             {
                 if (MdiParentInternal.MdiClient is not null)
                 {
-                    User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
+                    PInvoke.SendMessage(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, this);
                 }
 
                 return Focused;
@@ -3744,14 +3742,13 @@ namespace System.Windows.Forms
 
             Point p = new Point();
             Size s = Size;
-            IntPtr ownerHandle = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
+            HWND ownerHandle = (HWND)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
 
-            if (ownerHandle != IntPtr.Zero)
+            if (!ownerHandle.IsNull)
             {
                 Screen desktop = Screen.FromHandle(ownerHandle);
                 Rectangle screenRect = desktop.WorkingArea;
-                var ownerRect = new RECT();
-                User32.GetWindowRect(ownerHandle, ref ownerRect);
+                PInvoke.GetWindowRect(ownerHandle, out var ownerRect);
 
                 p.X = (ownerRect.left + ownerRect.right - s.Width) / 2;
                 if (p.X < screenRect.X)
@@ -3797,13 +3794,13 @@ namespace System.Windows.Forms
             }
             else
             {
-                IntPtr hWndOwner = IntPtr.Zero;
+                HWND hWndOwner = default;
                 if (TopLevel)
                 {
-                    hWndOwner = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
+                    hWndOwner = (HWND)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                 }
 
-                desktop = hWndOwner != IntPtr.Zero ? Screen.FromHandle(hWndOwner) : Screen.FromPoint(MousePosition);
+                desktop = !hWndOwner.IsNull ? Screen.FromHandle(hWndOwner) : Screen.FromPoint(MousePosition);
             }
 
             Rectangle screenRect = desktop.WorkingArea;
@@ -4358,9 +4355,9 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
 
             Size desiredSize = new Size();
-            m.ResultInternal = OnGetDpiScaledSize(_deviceDpi, PARAM.SignedLOWORD(m.WParamInternal), ref desiredSize)
-                ? PARAM.FromLowHigh(Size.Width, Size.Height)
-                : 0;
+            m.ResultInternal = OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize)
+                ? LRESULT.MAKELONG(Size.Width, Size.Height)
+                : (LRESULT)0;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4446,14 +4443,14 @@ namespace System.Windows.Forms
 
             // Process MDI accelerator keys.
             bool retValue = false;
-            User32.MSG win32Message = msg;
+            MSG win32Message = msg;
             if (_ctlClient is not null && _ctlClient.Handle != IntPtr.Zero &&
-                User32.TranslateMDISysAccel(_ctlClient.Handle, ref win32Message).IsTrue())
+                User32.TranslateMDISysAccel(_ctlClient.Handle, ref win32Message))
             {
                 retValue = true;
             }
 
-            msg.MsgInternal = win32Message.message;
+            msg.MsgInternal = (User32.WM)win32Message.message;
             msg.WParamInternal = win32Message.wParam;
             msg.LParamInternal = win32Message.lParam;
             msg.HWnd = win32Message.hwnd;
@@ -4666,8 +4663,8 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 // First put all the owned windows into a list
-                callback = new EnumThreadWindowsCallback(Handle);
-                User32.EnumThreadWindows(Kernel32.GetCurrentThreadId(), callback.Callback);
+                callback = new EnumThreadWindowsCallback(HWND);
+                User32.EnumThreadWindows(PInvoke.GetCurrentThreadId(), callback.Callback);
 
                 // Reset the owner of the windows in the list
                 callback.ResetOwners();
@@ -4808,7 +4805,7 @@ namespace System.Windows.Forms
                 Size restoredSize = _restoredWindowBounds.Size;
                 if ((_restoredWindowBoundsSpecified & BoundsSpecified.Size) != 0)
                 {
-                    restoredSize = SizeFromClientSize(restoredSize.Width, restoredSize.Height);
+                    restoredSize = SizeFromClientSizeInternal(restoredSize);
                 }
 
                 SetBounds(_restoredWindowBounds.X, _restoredWindowBounds.Y,
@@ -4854,14 +4851,14 @@ namespace System.Windows.Forms
 
             if (TopLevel)
             {
-                User32.SetActiveWindow(new HandleRef(this, Handle));
+                PInvoke.SetActiveWindow(this);
             }
             else if (IsMdiChild)
             {
-                User32.SetActiveWindow(new HandleRef(MdiParentInternal, MdiParentInternal.Handle));
+                PInvoke.SetActiveWindow(MdiParentInternal);
                 if (MdiParentInternal.MdiClient is not null)
                 {
-                    User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
+                    PInvoke.SendMessage(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, (WPARAM)HWND);
                 }
             }
             else
@@ -5178,7 +5175,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner is not null) && owner.GetExtendedStyle().HasFlag(User32.WS_EX.TOPMOST))
+            if ((owner is not null) && owner.GetExtendedStyle().HasFlag(WINDOW_EX_STYLE.WS_EX_TOPMOST))
             {
                 // It's not the top-most window
                 if (owner is Control ownerControl)
@@ -5187,8 +5184,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            IntPtr activeHwnd = User32.GetActiveWindow();
-            IntPtr ownerHwnd = owner is null ? activeHwnd : GetSafeHandle(owner);
+            HWND activeHwnd = PInvoke.GetActiveWindow();
+            HandleRef<HWND> ownerHwnd = owner is null ? GetHandleRef(activeHwnd) : GetSafeHandle(owner);
             Properties.SetObject(PropDialogOwner, owner);
             Form? oldOwner = OwnerInternal;
             if (owner is Form ownerForm && owner != oldOwner)
@@ -5196,19 +5193,17 @@ namespace System.Windows.Forms
                 Owner = ownerForm;
             }
 
-            if (ownerHwnd != IntPtr.Zero && ownerHwnd != Handle)
+            if (!ownerHwnd.IsNull && ownerHwnd.Handle != HWND)
             {
                 // Catch the case of a window trying to own its owner
-                if (User32.GetWindowLong(ownerHwnd, User32.GWL.HWNDPARENT) == Handle)
+                if (PInvoke.GetWindowLong(ownerHwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT) == HWND)
                 {
                     throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(Show)), nameof(owner));
                 }
 
                 // Set the new owner.
-                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd);
+                PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
             }
-
-            GC.KeepAlive(owner);
 
             Visible = true;
         }
@@ -5253,7 +5248,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner is not null) && owner.GetExtendedStyle().HasFlag(User32.WS_EX.TOPMOST))
+            if ((owner is not null) && owner.GetExtendedStyle().HasFlag(WINDOW_EX_STYLE.WS_EX_TOPMOST))
             {
                 // It's not the top-most window
                 if (owner is Control ownerControl)
@@ -5268,15 +5263,15 @@ namespace System.Windows.Forms
             // for modal dialogs make sure we reset close reason.
             CloseReason = CloseReason.None;
 
-            IntPtr captureHwnd = User32.GetCapture();
-            if (captureHwnd != IntPtr.Zero)
+            HWND captureHwnd = PInvoke.GetCapture();
+            if (!captureHwnd.IsNull)
             {
-                User32.SendMessageW(captureHwnd, User32.WM.CANCELMODE);
+                PInvoke.SendMessage(captureHwnd, User32.WM.CANCELMODE);
                 User32.ReleaseCapture();
             }
 
-            IntPtr activeHwnd = User32.GetActiveWindow();
-            IntPtr ownerHwnd = owner is null ? activeHwnd : GetSafeHandle(owner);
+            HWND activeHwnd = PInvoke.GetActiveWindow();
+            HandleRef<HWND> ownerHwnd = owner is null ? GetHandleRef(activeHwnd) : GetSafeHandle(owner);
 
             Form? oldOwner = OwnerInternal;
 
@@ -5299,10 +5294,10 @@ namespace System.Windows.Forms
                 // GetActiveWindow.
                 CreateControl();
 
-                if (ownerHwnd != IntPtr.Zero && ownerHwnd != Handle)
+                if (!ownerHwnd.IsNull && ownerHwnd.Handle != HWND)
                 {
                     // Catch the case of a window trying to own its owner
-                    if (User32.GetWindowLong(ownerHwnd, User32.GWL.HWNDPARENT) == Handle)
+                    if (PInvoke.GetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT) == Handle)
                     {
                         throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(ShowDialog)), nameof(owner));
                     }
@@ -5321,7 +5316,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // Set the new parent.
-                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd);
+                        PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
                     }
                 }
 
@@ -5338,18 +5333,18 @@ namespace System.Windows.Forms
                 {
                     // Call SetActiveWindow before setting Visible = false.
 
-                    if (User32.IsWindow(activeHwnd).IsFalse())
+                    if (!PInvoke.IsWindow(activeHwnd))
                     {
-                        activeHwnd = ownerHwnd;
+                        activeHwnd = ownerHwnd.Handle;
                     }
 
-                    if (User32.IsWindow(activeHwnd).IsTrue() && User32.IsWindowVisible(activeHwnd).IsTrue())
+                    if (PInvoke.IsWindow(activeHwnd) && PInvoke.IsWindowVisible(activeHwnd))
                     {
-                        User32.SetActiveWindow(activeHwnd);
+                        PInvoke.SetActiveWindow(activeHwnd);
                     }
-                    else if (User32.IsWindow(ownerHwnd).IsTrue() && User32.IsWindowVisible(ownerHwnd).IsTrue())
+                    else if (PInvoke.IsWindow(ownerHwnd) && PInvoke.IsWindowVisible(ownerHwnd))
                     {
-                        User32.SetActiveWindow(ownerHwnd);
+                        PInvoke.SetActiveWindow(ownerHwnd);
                     }
 
                     SetVisibleCore(false);
@@ -5375,7 +5370,7 @@ namespace System.Windows.Forms
             {
                 Owner = oldOwner;
                 Properties.SetObject(PropDialogOwner, null);
-                GC.KeepAlive(owner);
+                GC.KeepAlive(ownerHwnd.Wrapper);
             }
 
             return DialogResult;
@@ -5551,7 +5546,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && TopLevel)
             {
-                IHandle? ownerHwnd = null;
+                IHandle<HWND> ownerHwnd = NullHandle<HWND>.Instance;
 
                 Form? owner = (Form?)Properties.GetObject(PropOwner);
 
@@ -5567,7 +5562,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd?.Handle ?? default);
+                PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
                 GC.KeepAlive(ownerHwnd);
             }
         }
@@ -5598,7 +5593,7 @@ namespace System.Windows.Forms
                     result = User32.SetLayeredWindowAttributes(this, ColorTranslator.ToWin32(transparencyKey), OpacityAsByte, User32.LWA.ALPHA | User32.LWA.COLORKEY);
                 }
 
-                if (result.IsFalse())
+                if (!result)
                 {
                     throw new Win32Exception();
                 }
@@ -5638,7 +5633,7 @@ namespace System.Windows.Forms
                         Properties.SetObject(PropDummyMdiMenu, dummyMenu);
                     }
 
-                    User32.SendMessageW(_ctlClient, User32.WM.MDISETMENU, dummyMenu.Value, 0);
+                    PInvoke.SendMessage(_ctlClient, User32.WM.MDISETMENU, (WPARAM)dummyMenu.Value);
                 }
 
                 // (New fix: Only destroy Win32 Menu if using a MenuStrip)
@@ -5910,15 +5905,15 @@ namespace System.Windows.Forms
 
                     if (_smallIcon is not null)
                     {
-                        User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, _smallIcon.Handle);
+                        PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
                     }
 
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, icon.Handle);
+                    PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
                 }
                 else
                 {
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, 0);
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, 0);
+                    PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_SMALL);
+                    PInvoke.SendMessage(this, User32.WM.SETICON, (WPARAM)PInvoke.ICON_BIG);
                 }
 
                 if (WindowState == FormWindowState.Maximized && MdiParent?.MdiControlStrip is not null)
@@ -6058,7 +6053,7 @@ namespace System.Windows.Forms
         private void WmActivate(ref Message m)
         {
             Application.FormActivated(Modal, true);
-            Active = (User32.WA)PARAM.LOWORD(m.WParamInternal) != User32.WA.INACTIVE;
+            Active = (User32.WA)m.WParamInternal.LOWORD != User32.WA.INACTIVE;
             Application.FormActivated(Modal, Active);
         }
 
@@ -6086,13 +6081,12 @@ namespace System.Windows.Forms
         private void WmCreate(ref Message m)
         {
             base.WndProc(ref m);
-            var si = new Kernel32.STARTUPINFOW();
-            Kernel32.GetStartupInfoW(ref si);
+            PInvoke.GetStartupInfo(out STARTUPINFOW si);
 
             // If we've been created from explorer, it may
             // force us to show up normal.  Force our current window state to
             // the specified state, unless it's _specified_ max or min
-            if (TopLevel && (si.dwFlags & Kernel32.STARTF.USESHOWWINDOW) != 0)
+            if (TopLevel && (si.dwFlags & STARTUPINFOW_FLAGS.STARTF_USESHOWWINDOW) != 0)
             {
                 switch ((User32.SW)si.wShowWindow)
                 {
@@ -6191,7 +6185,7 @@ namespace System.Windows.Forms
 
                 if (m.MsgInternal == User32.WM.QUERYENDSESSION)
                 {
-                    m.ResultInternal = e.Cancel ? 0 : 1;
+                    m.ResultInternal = (LRESULT)(nint)(BOOL)e.Cancel;
                 }
                 else if (e.Cancel && (MdiParent is not null))
                 {
@@ -6309,7 +6303,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmGetMinMaxInfoHelper(ref Message m, Size minTrack, Size maxTrack, Rectangle maximizedBounds)
         {
-            User32.MINMAXINFO* mmi = (User32.MINMAXINFO*)m.LParamInternal;
+            User32.MINMAXINFO* mmi = (User32.MINMAXINFO*)(nint)m.LParamInternal;
             if (!minTrack.IsEmpty)
             {
                 mmi->ptMinTrackSize.X = minTrack.Width;
@@ -6356,7 +6350,7 @@ namespace System.Windows.Forms
                 mmi->ptMaxSize.Y = maximizedBounds.Height;
             }
 
-            m.ResultInternal = 0;
+            m.ResultInternal = (LRESULT)0;
         }
 
         /// <summary>
@@ -6374,11 +6368,11 @@ namespace System.Windows.Forms
             {
                 // This message is propagated twice by the MDIClient window. Once to the
                 // window being deactivated and once to the window being activated.
-                if (Handle == m.WParamInternal)
+                if (HWND == (HWND)m.WParamInternal)
                 {
                     formMdiParent.DeactivateMdiChild();
                 }
-                else if (Handle == m.LParamInternal)
+                else if (HWND == m.LParamInternal)
                 {
                     formMdiParent.ActivateMdiChild(this);
                 }
@@ -6448,7 +6442,7 @@ namespace System.Windows.Forms
                     point.Y >= (clientSize.Height - SizeGripSize) &&
                     clientSize.Height >= SizeGripSize)
                 {
-                    m.ResultInternal = (nint)(IsMirrored ? User32.HT.BOTTOMLEFT : User32.HT.BOTTOMRIGHT);
+                    m.ResultInternal = (LRESULT)(nint)(IsMirrored ? User32.HT.BOTTOMLEFT : User32.HT.BOTTOMRIGHT);
                     return;
                 }
             }
@@ -6463,7 +6457,7 @@ namespace System.Windows.Forms
                 int result = (int)m.ResultInternal;
                 if (result >= (int)User32.HT.LEFT && result <= (int)User32.HT.BOTTOMRIGHT)
                 {
-                    m.ResultInternal = (nint)User32.HT.BORDER;
+                    m.ResultInternal = (LRESULT)(nint)User32.HT.BORDER;
                 }
             }
         }
@@ -6484,7 +6478,7 @@ namespace System.Windows.Forms
         {
             bool callDefault = true;
 
-            User32.SC sc = (User32.SC)(PARAM.LOWORD(m.WParamInternal) & 0xFFF0);
+            User32.SC sc = (User32.SC)(m.WParamInternal.LOWORD & 0xFFF0);
             switch (sc)
             {
                 case User32.SC.CLOSE:
@@ -6518,7 +6512,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if (Command.DispatchID(PARAM.LOWORD(m.WParamInternal)))
+            if (Command.DispatchID(m.WParamInternal.LOWORD))
             {
                 callDefault = false;
             }
@@ -6541,7 +6535,7 @@ namespace System.Windows.Forms
                 base.WndProc(ref m);
                 if (MdiControlStrip is null && MdiParentInternal is not null && MdiParentInternal.ActiveMdiChildInternal == this)
                 {
-                    MdiParentInternal.UpdateMdiControlStrip((User32.WINDOW_SIZE)m.WParamInternal == User32.WINDOW_SIZE.MAXIMIZED);
+                    MdiParentInternal.UpdateMdiControlStrip((User32.WINDOW_SIZE)(nint)m.WParamInternal == User32.WINDOW_SIZE.MAXIMIZED);
                 }
             }
         }

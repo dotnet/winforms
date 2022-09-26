@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -12,6 +13,7 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using static Interop;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
@@ -72,7 +74,7 @@ namespace System.Windows.Forms
                 }
 
                 Ole32.IStream? pStream = null;
-                IntPtr hglobal = IntPtr.Zero;
+                nint hglobal = 0;
                 try
                 {
                     if (medium.tymed == TYMED.TYMED_ISTREAM && medium.unionmember != IntPtr.Zero)
@@ -80,16 +82,16 @@ namespace System.Windows.Forms
                         pStream = (Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
                         pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.DEFAULT);
 
-                        hglobal = Kernel32.GlobalAlloc(
-                            Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                        hglobal = PInvoke.GlobalAlloc(
+                            GMEM_MOVEABLE | GMEM_ZEROINIT,
                             (uint)sstg.cbSize);
                         // not throwing here because the other out of memory condition on GlobalAlloc
                         // happens inside innerData.GetData and gets turned into a null return value
-                        if (hglobal == IntPtr.Zero)
+                        if (hglobal == 0)
                             return null;
-                        IntPtr ptr = Kernel32.GlobalLock(hglobal);
+                        void* ptr = PInvoke.GlobalLock(hglobal);
                         pStream.Read((byte*)ptr, (uint)sstg.cbSize, null);
-                        Kernel32.GlobalUnlock(hglobal);
+                        PInvoke.GlobalUnlock(hglobal);
 
                         return GetDataFromHGLOBAL(format, hglobal);
                     }
@@ -98,8 +100,8 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (hglobal != IntPtr.Zero)
-                        Kernel32.GlobalFree(hglobal);
+                    if (hglobal != 0)
+                        PInvoke.GlobalFree(hglobal);
 
                     if (pStream is not null)
                         Marshal.ReleaseComObject(pStream);
@@ -135,7 +137,7 @@ namespace System.Windows.Forms
                     }
                     else if (format.Equals(DataFormats.FileDrop))
                     {
-                        data = ReadFileListFromHandle(hglobal);
+                        data = ReadFileListFromHandle((HDROP)hglobal);
                     }
                     else if (format.Equals(CF_DEPRECATED_FILENAME))
                     {
@@ -304,19 +306,19 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Creates an Stream from the data stored in handle.
             /// </summary>
-            private static Stream ReadByteStreamFromHandle(IntPtr handle, out bool isSerializedObject)
+            private unsafe static Stream ReadByteStreamFromHandle(nint handle, out bool isSerializedObject)
             {
-                IntPtr ptr = Kernel32.GlobalLock(handle);
-                if (ptr == IntPtr.Zero)
+                void* ptr = PInvoke.GlobalLock(handle);
+                if (ptr is null)
                 {
                     throw new ExternalException(SR.ExternalException, (int)HRESULT.E_OUTOFMEMORY);
                 }
 
                 try
                 {
-                    int size = Kernel32.GlobalSize(handle);
+                    int size = (int)PInvoke.GlobalSize(handle);
                     byte[] bytes = new byte[size];
-                    Marshal.Copy(ptr, bytes, 0, size);
+                    Marshal.Copy((nint)ptr, bytes, 0, size);
                     int index = 0;
 
                     // The object here can either be a stream or a serialized
@@ -352,7 +354,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Kernel32.GlobalUnlock(handle);
+                    PInvoke.GlobalUnlock(handle);
                 }
             }
 
@@ -389,26 +391,30 @@ namespace System.Windows.Forms
             ///  Parses the HDROP format and returns a list of strings using
             ///  the DragQueryFile function.
             /// </summary>
-            private static string[]? ReadFileListFromHandle(IntPtr hdrop)
+            private unsafe static string[]? ReadFileListFromHandle(HDROP hdrop)
             {
-                uint count = Shell32.DragQueryFileW(hdrop, 0xFFFFFFFF, null);
+                uint count = PInvoke.DragQueryFile(hdrop, iFile: 0xFFFFFFFF, lpszFile: null, cch: 0);
                 if (count == 0)
                 {
                     return null;
                 }
 
-                var sb = new StringBuilder(Kernel32.MAX_PATH);
+                Span<char> fileName = stackalloc char[PInvoke.MAX_PATH + 1];
                 var files = new string[count];
-                for (uint i = 0; i < count; i++)
-                {
-                    uint charlen = Shell32.DragQueryFileW(hdrop, i, sb);
-                    if (charlen == 0)
-                    {
-                        continue;
-                    }
 
-                    string s = sb.ToString(0, (int)charlen);
-                    files[i] = s;
+                fixed (char* buffer = fileName)
+                {
+                    for (uint i = 0; i < count; i++)
+                    {
+                        uint charactersCopied = PInvoke.DragQueryFile(hdrop, i, buffer, (uint)fileName.Length);
+                        if (charactersCopied == 0)
+                        {
+                            continue;
+                        }
+
+                        string s = fileName[..(int)charactersCopied].ToString();
+                        files[i] = s;
+                    }
                 }
 
                 return files;
@@ -419,11 +425,11 @@ namespace System.Windows.Forms
             ///  unicode is set to true, then the string is assume to be Unicode,
             ///  else DBCS (ASCI) is assumed.
             /// </summary>
-            private static unsafe string ReadStringFromHandle(IntPtr handle, bool unicode)
+            private static unsafe string ReadStringFromHandle(nint handle, bool unicode)
             {
                 string? stringData = null;
 
-                IntPtr ptr = Kernel32.GlobalLock(handle);
+                void* ptr = PInvoke.GlobalLock(handle);
                 try
                 {
                     if (unicode)
@@ -437,23 +443,23 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Kernel32.GlobalUnlock(handle);
+                    PInvoke.GlobalUnlock(handle);
                 }
 
                 return stringData;
             }
 
-            private static unsafe string ReadHtmlFromHandle(IntPtr handle)
+            private static unsafe string ReadHtmlFromHandle(nint handle)
             {
-                IntPtr ptr = Kernel32.GlobalLock(handle);
+                void* ptr = PInvoke.GlobalLock(handle);
                 try
                 {
-                    int size = Kernel32.GlobalSize(handle);
+                    int size = (int)PInvoke.GlobalSize(handle);
                     return Encoding.UTF8.GetString((byte*)ptr, size - 1);
                 }
                 finally
                 {
-                    Kernel32.GlobalUnlock(handle);
+                    PInvoke.GlobalUnlock(handle);
                 }
             }
 

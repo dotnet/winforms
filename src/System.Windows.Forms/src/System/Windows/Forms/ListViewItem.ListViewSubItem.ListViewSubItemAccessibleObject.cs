@@ -48,7 +48,7 @@ namespace System.Windows.Forms
                         }
 
                         // Previously bounds was provided using MSAA,
-                        // but using UIA we found out that SendMessageW work incorrectly.
+                        // but using UIA we found out that PInvoke.SendMessage work incorrectly.
                         // When we need to get bounds for first sub item it will return width of all item.
                         int width = bounds.Width;
 

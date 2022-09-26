@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero,
                 Ole32.CLSCTX.INPROC_SERVER,
                 in autoCompleteIID,
-                out IntPtr autoComplete2Ptr).ThrowIfFailed();
+                out IntPtr autoComplete2Ptr).ThrowOnFailure();
 
             var obj = WinFormsComWrappers.Instance
                 .GetOrCreateObjectForComInstance(autoComplete2Ptr, CreateObjectFlags.UniqueInstance);
@@ -48,21 +48,21 @@ namespace System.Windows.Forms
         ///  This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle
         ///  to the edit Control and the "options' are the options that need to be set in the AUTOCOMPLETE mode.
         /// </summary>
-        public bool Bind(HandleRef edit, Shell32.AUTOCOMPLETEOPTIONS options)
+        public bool Bind(HandleRef edit, AUTOCOMPLETEOPTIONS options)
         {
             if (_autoCompleteObject2 is null)
             {
                 return false;
             }
 
-            if (!_autoCompleteObject2.SetOptions(options).Succeeded())
+            if (!_autoCompleteObject2.SetOptions(options).Succeeded)
             {
                 return false;
             }
 
             HRESULT hr = _autoCompleteObject2.Init(edit.Handle, this, IntPtr.Zero, IntPtr.Zero);
             GC.KeepAlive(edit.Wrapper);
-            return hr.Succeeded();
+            return hr.Succeeded;
         }
 
         public void ReleaseAutoComplete()

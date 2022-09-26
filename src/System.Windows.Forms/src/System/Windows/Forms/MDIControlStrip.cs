@@ -6,7 +6,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -25,13 +24,13 @@ namespace System.Windows.Forms
 
         private IWin32Window _target;
 
-        /// <summary> target is ideally the MDI Child to send the system commands to.
-        ///  although there's nothing MDI child specific to it... you could have this
-        ///  a toplevel window.
+        /// <summary>
+        ///  <paramref name="target"/> is ideally the MDI Child to send the system commands to.
+        ///  Although there's nothing MDI child specific to it- it could be a top level window.
         /// </summary>
         public MdiControlStrip(IWin32Window target)
         {
-            IntPtr hMenu = User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE);
+            HMENU hMenu = PInvoke.GetSystemMenu(GetSafeHandle(target), bRevert: false);
             _target = target;
 
             // The menu item itself takes care of enabledness and sending WM_SYSCOMMAND messages to the target.
@@ -98,13 +97,12 @@ namespace System.Windows.Forms
 
         private Image GetTargetWindowIcon()
         {
-            IntPtr hIcon = User32.SendMessageW(GetSafeHandle(_target), User32.WM.GETICON, (nint)User32.ICON.SMALL);
-            Icon icon = hIcon != IntPtr.Zero ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
+            HICON hIcon = (HICON)PInvoke.SendMessage(GetSafeHandle(_target), User32.WM.GETICON, (WPARAM)PInvoke.ICON_SMALL);
+            Icon icon = !hIcon.IsNull ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
             Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
             Image systemIcon = smallIcon.ToBitmap();
             smallIcon.Dispose();
-            GC.KeepAlive(_target);
 
             return systemIcon;
         }
@@ -139,7 +137,7 @@ namespace System.Windows.Forms
             _close.SetNativeTargetWindow(_target);
             _restore.SetNativeTargetWindow(_target);
 
-            IntPtr hMenu = User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(_target)), bRevert: BOOL.FALSE);
+            HMENU hMenu = PInvoke.GetSystemMenu(Control.GetSafeHandle(_target), bRevert: false);
             _system.SetNativeTargetMenu(hMenu);
             _minimize.SetNativeTargetMenu(hMenu);
             _close.SetNativeTargetMenu(hMenu);
@@ -161,7 +159,7 @@ namespace System.Windows.Forms
         {
             if (!_system.HasDropDownItems && (_target is not null))
             {
-                _system.DropDown = ToolStripDropDownMenu.FromHMenu(User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(_target)), bRevert: BOOL.FALSE), _target);
+                _system.DropDown = ToolStripDropDownMenu.FromHMenu(PInvoke.GetSystemMenu(GetSafeHandle(_target), bRevert: false), _target);
             }
             else if (MergedMenu is null)
             {

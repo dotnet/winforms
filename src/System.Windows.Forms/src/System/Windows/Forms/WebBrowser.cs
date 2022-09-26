@@ -298,7 +298,7 @@ namespace System.Windows.Forms
                     {
                         MemoryStream memoryStream = new MemoryStream();
                         Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(memoryStream);
-                        psi.Save(iStream, BOOL.FALSE);
+                        psi.Save(iStream, false);
                         return new MemoryStream(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, false);
                     }
                 }
@@ -1076,8 +1076,8 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                IntPtr hwndFocus = User32.GetFocus();
-                return hwndFocus != IntPtr.Zero && User32.IsChild(new HandleRef(this, Handle), hwndFocus).IsTrue();
+                HWND hwndFocus = PInvoke.GetFocus();
+                return !hwndFocus.IsNull && PInvoke.IsChild(this, hwndFocus);
             }
         }
 

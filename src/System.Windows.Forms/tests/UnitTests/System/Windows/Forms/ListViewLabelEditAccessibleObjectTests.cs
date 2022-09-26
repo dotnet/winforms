@@ -20,7 +20,8 @@ public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExcept
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId));
-        Assert.Equal(User32.GetWindowRect(labelEdit), accessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId));
+        PInvoke.GetWindowRect(labelEdit, out RECT r);
+        Assert.Equal((Rectangle)r, accessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId));
         Assert.Equal(Environment.ProcessId, accessibilityObject.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
         Assert.Equal(UiaCore.UIA.EditControlTypeId, accessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
         Assert.Equal(accessibilityObject.Name, accessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
@@ -165,9 +166,9 @@ public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExcept
 
         listView.CreateControl();
 
-        User32.SetFocus(listView.Handle);
+        PInvoke.SetFocus(listView);
 
-        User32.SendMessageW(listView, (User32.WM)LVM.EDITLABELW, wParam: 0);
+        PInvoke.SendMessage(listView, (User32.WM)LVM.EDITLABELW, wParam: 0);
 
         return listView;
     }
@@ -179,7 +180,7 @@ public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExcept
             if (disposing)
             {
                 // End the label edit because ListView cannot be correctly disposed with an active label edit when AccessibilityObject is created for the ListView
-                User32.SendMessageW(this, (User32.WM)LVM.CANCELEDITLABEL);
+                PInvoke.SendMessage(this, (User32.WM)LVM.CANCELEDITLABEL);
             }
 
             base.Dispose(disposing);

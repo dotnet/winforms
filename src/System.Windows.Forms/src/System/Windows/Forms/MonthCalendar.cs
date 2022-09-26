@@ -293,7 +293,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = WindowClasses.WC_MONTHCAL;
+                cp.ClassName = PInvoke.MONTHCAL_CLASS;
                 cp.Style |= (int)MCS.MULTISELECT | (int)MCS.DAYSTATE;
                 if (!_showToday)
                 {
@@ -313,10 +313,10 @@ namespace System.Windows.Forms
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     // We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
 
                     // Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, 0, (nint)value);
+                        PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, 0, (nint)value);
                     }
 
                     UpdateDisplayRange();
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    if (User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, value) == 0)
+                    if (PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, (WPARAM)value) == 0)
                     {
                         throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, value.ToString("D")), nameof(value));
                     }
@@ -655,7 +655,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMONTHDELTA, value);
+                    PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETMONTHDELTA, (WPARAM)value);
                 }
 
                 _scrollChange = value;
@@ -861,7 +861,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     RECT rect = new RECT();
-                    if (User32.SendMessageW(this, (User32.WM)MCM.GETMINREQRECT, 0, ref rect) == 0)
+                    if (PInvoke.SendMessage(this, (User32.WM)MCM.GETMINREQRECT, 0, ref rect) == 0)
                     {
                         throw new InvalidOperationException(SR.InvalidSingleMonthSize);
                     }
@@ -923,8 +923,8 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    Kernel32.SYSTEMTIME systemTime = new();
-                    int result = (int)User32.SendMessageW(this, (User32.WM)User32.MCM.GETTODAY, 0, ref systemTime);
+                    SYSTEMTIME systemTime = new();
+                    int result = (int)PInvoke.SendMessage(this, (User32.WM)User32.MCM.GETTODAY, 0, ref systemTime);
                     Debug.Assert(result != 0, "MCM_GETTODAY failed");
                     return ((DateTime)systemTime).Date;
                 }
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms
             // If the width we've calculated is too small to fit the Today string, enlarge the width to fit
             if (IsHandleCreated)
             {
-                int maxTodayWidth = (int)User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.GETMAXTODAYWIDTH);
+                int maxTodayWidth = (int)PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.GETMAXTODAYWIDTH);
                 if (maxTodayWidth > minSize.Width)
                 {
                     minSize.Width = maxTodayWidth;
@@ -1348,12 +1348,12 @@ namespace System.Windows.Forms
 
         private SelectionRange GetMonthRange(GMR flag)
         {
-            Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
-            User32.SendMessageW(this, (User32.WM)MCM.GETMONTHRANGE, (nint)flag, ref times[0]);
+            Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
+            PInvoke.SendMessage(this, (User32.WM)MCM.GETMONTHRANGE, (WPARAM)(int)flag, ref times[0]);
             return new SelectionRange
             {
-                Start = times[0],
-                End = times[1]
+                Start = (DateTime)times[0],
+                End = (DateTime)times[1]
             };
         }
 
@@ -1394,16 +1394,16 @@ namespace System.Windows.Forms
             {
                 cbSize = (uint)sizeof(MCHITTESTINFO),
                 pt = new Point(x, y),
-                st = new Kernel32.SYSTEMTIME()
+                st = new SYSTEMTIME()
             };
 
-            User32.SendMessageW(this, (User32.WM)MCM.HITTEST, 0, ref mchi);
+            PInvoke.SendMessage(this, (User32.WM)MCM.HITTEST, 0, ref mchi);
 
             // If the hit area has an associated valid date, get it.
             HitArea hitArea = GetHitArea(mchi.uHit);
             if (HitTestInfo.HitAreaHasValidDateTime(hitArea))
             {
-                Kernel32.SYSTEMTIME systemTime = new()
+                SYSTEMTIME systemTime = new()
                 {
                     wYear = mchi.st.wYear,
                     wMonth = mchi.st.wMonth,
@@ -1415,7 +1415,7 @@ namespace System.Windows.Forms
                     wMilliseconds = mchi.st.wMilliseconds
                 };
 
-                return new HitTestInfo(mchi.pt, hitArea, systemTime);
+                return new HitTestInfo(mchi.pt, hitArea, (DateTime)systemTime);
             }
 
             return new HitTestInfo(mchi.pt, hitArea);
@@ -1460,15 +1460,15 @@ namespace System.Windows.Forms
             SetSelRange(_selectionStart, _selectionEnd);
             if (_maxSelectionCount != DefaultMaxSelectionCount)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, _maxSelectionCount);
+                PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, (WPARAM)_maxSelectionCount);
             }
 
             AdjustSize();
 
             if (_todayDateSet)
             {
-                Kernel32.SYSTEMTIME systemTime = _todaysDate;
-                User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, 0, ref systemTime);
+                SYSTEMTIME systemTime = (SYSTEMTIME)_todaysDate;
+                PInvoke.SendMessage(this, (User32.WM)User32.MCM.SETTODAY, (WPARAM)0, ref systemTime);
             }
 
             SetControlColor(MCSC.TEXT, ForeColor);
@@ -1480,19 +1480,19 @@ namespace System.Windows.Forms
             int firstDay;
             if (_firstDayOfWeek == Day.Default)
             {
-                firstDay = (int)Kernel32.LCTYPE.IFIRSTDAYOFWEEK;
+                firstDay = (int)PInvoke.LCTYPE.IFIRSTDAYOFWEEK;
             }
             else
             {
                 firstDay = (int)_firstDayOfWeek;
             }
 
-            User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, 0, firstDay);
+            PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, (WPARAM)0, (LPARAM)firstDay);
 
             SetRange();
             if (_scrollChange != DefaultScrollChange)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMONTHDELTA, _scrollChange);
+                PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETMONTHDELTA, (WPARAM)_scrollChange);
             }
 
             SystemEvents.UserPreferenceChanged += MarshaledUserPreferenceChanged;
@@ -1788,7 +1788,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETCOLOR, (nint)colorIndex, value.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
             }
         }
 
@@ -1838,11 +1838,11 @@ namespace System.Windows.Forms
             // Updated the calendar range
             if (IsHandleCreated)
             {
-                Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
-                times[0] = minDate;
-                times[1] = maxDate;
+                Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
+                times[0] = (SYSTEMTIME)minDate;
+                times[1] = (SYSTEMTIME)maxDate;
                 GDTR flags = GDTR.MIN | GDTR.MAX;
-                if (User32.SendMessageW(this, (User32.WM)MCM.SETRANGE, (nint)flags, ref times[0]) == 0)
+                if (PInvoke.SendMessage(this, (User32.WM)MCM.SETRANGE, (WPARAM)(uint)flags, ref times[0]) == 0)
                 {
                     throw new InvalidOperationException(
                         string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
@@ -1932,7 +1932,7 @@ namespace System.Windows.Forms
             {
                 // Update display dates states.
                 // For more info see docs: https://docs.microsoft.com/windows/win32/controls/mcm-setdaystate
-                User32.SendMessageW(Handle, (User32.WM)ComCtl32.MCM.SETDAYSTATE, (nint)(void*)monthsCount, (nint)arr);
+                PInvoke.SendMessage(HWND, (User32.WM)ComCtl32.MCM.SETDAYSTATE, (WPARAM)monthsCount, (LPARAM)arr);
             }
         }
 
@@ -2008,10 +2008,10 @@ namespace System.Windows.Forms
             // Always set the value on the control, to ensure that it is up to date.
             if (IsHandleCreated)
             {
-                Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
-                times[0] = lower;
-                times[1] = upper;
-                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETSELRANGE, 0, ref times[0]);
+                Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
+                times[0] = (SYSTEMTIME)lower;
+                times[1] = (SYSTEMTIME)upper;
+                PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETSELRANGE, 0, ref times[0]);
             }
 
             if (changed)
@@ -2128,12 +2128,12 @@ namespace System.Windows.Forms
             {
                 if (_todayDateSet)
                 {
-                    Kernel32.SYSTEMTIME systemTime = _todaysDate;
-                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, 0, ref systemTime);
+                    SYSTEMTIME systemTime = (SYSTEMTIME)_todaysDate;
+                    PInvoke.SendMessage(this, (User32.WM)User32.MCM.SETTODAY, 0, ref systemTime);
                 }
                 else
                 {
-                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, 0, 0);
+                    PInvoke.SendMessage(this, (User32.WM)User32.MCM.SETTODAY, 0, 0);
                 }
             }
         }
@@ -2166,9 +2166,9 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateChanged(ref Message m)
         {
-            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)m.LParamInternal;
-            DateTime start = nmmcsc->stSelStart;
-            DateTime end = nmmcsc->stSelEnd;
+            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)(nint)m.LParamInternal;
+            DateTime start = (DateTime)nmmcsc->stSelStart;
+            DateTime end = (DateTime)nmmcsc->stSelEnd;
 
             // Windows doesn't provide API to get the focused cell.
             // To get the correct focused cell consider 3 cases:
@@ -2225,7 +2225,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateBold(ref Message m)
         {
-            NMDAYSTATE* nmmcds = (NMDAYSTATE*)m.LParamInternal;
+            NMDAYSTATE* nmmcds = (NMDAYSTATE*)(nint)m.LParamInternal;
             Span<int> boldDates = new Span<int>((int*)nmmcds->prgDayState, nmmcds->cDayState);
             WriteBoldDates(boldDates);
         }
@@ -2235,7 +2235,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmCalViewChanged(ref Message m)
         {
-            NMVIEWCHANGE* nmmcvm = (NMVIEWCHANGE*)m.LParamInternal;
+            NMVIEWCHANGE* nmmcvm = (NMVIEWCHANGE*)(nint)m.LParamInternal;
             Debug.Assert(_mcCurView == nmmcvm->uOldView, "Calendar view mode is out of sync with native control");
             if (_mcCurView != nmmcvm->uNewView)
             {
@@ -2253,9 +2253,9 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateSelected(ref Message m)
         {
-            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)m.LParamInternal;
-            DateTime start = _selectionStart = nmmcsc->stSelStart;
-            DateTime end = _selectionEnd = nmmcsc->stSelEnd;
+            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)(nint)m.LParamInternal;
+            DateTime start = _selectionStart = (DateTime)nmmcsc->stSelStart;
+            DateTime end = _selectionEnd = (DateTime)nmmcsc->stSelEnd;
 
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
@@ -2283,7 +2283,7 @@ namespace System.Windows.Forms
         private static void WmGetDlgCode(ref Message m)
         {
             // The MonthCalendar does its own handling of arrow keys.
-            m.ResultInternal = (nint)User32.DLGC.WANTARROWS;
+            m.ResultInternal = (LRESULT)(nint)User32.DLGC.WANTARROWS;
         }
 
         /// <summary>
@@ -2293,7 +2293,7 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
                 switch ((MCN)nmhdr->code)
                 {

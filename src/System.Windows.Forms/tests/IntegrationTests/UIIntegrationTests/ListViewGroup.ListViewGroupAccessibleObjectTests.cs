@@ -42,7 +42,7 @@ namespace System.Windows.Forms.UITests
             Assert.True(list.IsHandleCreated);
 
             RECT groupRect = new RECT();
-            User32.SendMessageW(list, (User32.WM)ComCtl32.LVM.GETGROUPRECT, listGroup.ID, ref groupRect);
+            PInvoke.SendMessage(list, (User32.WM)ComCtl32.LVM.GETGROUPRECT, (WPARAM)listGroup.ID, ref groupRect);
 
             int actualWidth = group1AccObj.Bounds.Width;
             int expectedWidth = groupRect.Width;

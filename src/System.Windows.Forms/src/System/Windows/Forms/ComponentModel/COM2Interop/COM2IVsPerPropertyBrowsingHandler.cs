@@ -31,11 +31,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (propDesc.TargetObject is VSSDK.IVsPerPropertyBrowsing)
             {
-                BOOL pfHide = BOOL.FALSE;
+                BOOL pfHide = false;
                 HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)propDesc.TargetObject).DisplayChildProperties(propDesc.DISPID, &pfHide);
                 if (hr == HRESULT.S_OK)
                 {
-                    return pfHide.IsTrue();
+                    return pfHide;
                 }
             }
 
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // should we localize this?
             string[] pHelpString = new string[1];
-            HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, Kernel32.GetThreadLocale(), null, pHelpString);
+            HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, PInvoke.GetThreadLocale(), null, pHelpString);
             if (hr == HRESULT.S_OK && pHelpString[0] is not null)
             {
                 attrEvent.Add(new DescriptionAttribute(pHelpString[0]));
@@ -102,20 +102,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     // should we hide this?
                     BOOL pfHide = sender.Attributes[typeof(BrowsableAttribute)] is Attribute browsableAttribute
-                                && browsableAttribute.Equals(BrowsableAttribute.No) ? BOOL.TRUE : BOOL.FALSE;
+                                && browsableAttribute.Equals(BrowsableAttribute.No) ? true : false;
                     hr = vsObj.HideProperty(sender.DISPID, &pfHide);
                     if (hr == HRESULT.S_OK)
                     {
-                        attrEvent.Add(pfHide.IsTrue() ? BrowsableAttribute.No : BrowsableAttribute.Yes);
+                        attrEvent.Add(pfHide ? BrowsableAttribute.No : BrowsableAttribute.Yes);
                     }
                 }
 
                 // should we show this
                 if (typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType) && sender.CanShow)
                 {
-                    BOOL pfDisplay = BOOL.FALSE;
+                    BOOL pfDisplay = false;
                     hr = vsObj.DisplayChildProperties(sender.DISPID, &pfDisplay);
-                    if (hr == HRESULT.S_OK && pfDisplay.IsTrue())
+                    if (hr == HRESULT.S_OK && pfDisplay)
                     {
                         attrEvent.Add(BrowsableAttribute.Yes);
                     }
@@ -129,11 +129,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing target)
             {
-                BOOL canReset = boolEvent.Value ? BOOL.TRUE : BOOL.FALSE;
+                BOOL canReset = boolEvent.Value ? true : false;
                 HRESULT hr = target.CanResetPropertyValue(sender.DISPID, &canReset);
-                if (hr.Succeeded())
+                if (hr.Succeeded)
                 {
-                    boolEvent.Value = canReset.IsTrue();
+                    boolEvent.Value = canReset;
                 }
             }
 
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 // get the localized name, if applicable
                 string[] pNameString = new string[1];
-                HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, Kernel32.GetThreadLocale(), pNameString, null);
+                HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, PInvoke.GetThreadLocale(), pNameString, null);
                 if (hr == HRESULT.S_OK && pNameString[0] is not null)
                 {
                     nameItem.Name = pNameString[0];
@@ -167,11 +167,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
             {
                 // should we make this read only?
-                BOOL pfResult = BOOL.FALSE;
+                BOOL pfResult = false;
                 HRESULT hr = vsObj.IsPropertyReadOnly(sender.DISPID, &pfResult);
                 if (hr == HRESULT.S_OK)
                 {
-                    gbvevent.Value = pfResult.IsTrue();
+                    gbvevent.Value = pfResult;
                 }
             }
         }
@@ -189,15 +189,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     VSSDK.IVsPerPropertyBrowsing vsObj = (VSSDK.IVsPerPropertyBrowsing)sender.TargetObject;
 
                     // should we make this read only?
-                    BOOL pfResult = BOOL.FALSE;
+                    BOOL pfResult = false;
                     HRESULT hr = vsObj.DisplayChildProperties(sender.DISPID, &pfResult);
                     if (gveevent.TypeConverter is Com2IDispatchConverter)
                     {
-                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, hr == HRESULT.S_OK && pfResult.IsTrue());
+                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, hr == HRESULT.S_OK && pfResult);
                     }
                     else
                     {
-                        gveevent.TypeConverter = new Com2IDispatchConverter(hr == HRESULT.S_OK && pfResult.IsTrue(), gveevent.TypeConverter);
+                        gveevent.TypeConverter = new Com2IDispatchConverter(hr == HRESULT.S_OK && pfResult, gveevent.TypeConverter);
                     }
                 }
             }
@@ -210,9 +210,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing target)
             {
                 Ole32.DispatchID dispid = sender.DISPID;
-                BOOL canReset = BOOL.FALSE;
+                BOOL canReset = false;
                 HRESULT hr = target.CanResetPropertyValue(dispid, &canReset);
-                if (hr.Succeeded())
+                if (hr.Succeeded)
                 {
                     target.ResetPropertyValue(dispid);
                 }
@@ -226,9 +226,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
             {
                 // by default we say it's default
-                BOOL pfResult = BOOL.TRUE;
+                BOOL pfResult = true;
                 HRESULT hr = vsObj.HasDefaultValue(sender.DISPID, &pfResult);
-                if (hr == HRESULT.S_OK && pfResult.IsFalse())
+                if (hr == HRESULT.S_OK && !pfResult)
                 {
                     // specify a default value editor
                     gbvevent.Value = true;

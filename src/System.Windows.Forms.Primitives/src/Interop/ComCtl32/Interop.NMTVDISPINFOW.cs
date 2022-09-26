@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public struct NMTVDISPINFOW
         {
-            public User32.NMHDR hdr;
+            public NMHDR hdr;
             public TVITEMW item;
         }
     }

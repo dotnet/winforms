@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.ApplicationInstallationAndServicing;
 using Xunit;
 using static Interop;
 
@@ -79,14 +80,14 @@ public class PropertyGridTests
 
     private unsafe void ExecuteWithActivationContext(string applicationManifest, Action action)
     {
-        var context = new Kernel32.ACTCTXW();
-        IntPtr handle;
+        var context = new ACTCTXW();
+        HANDLE handle;
         fixed (char* p = applicationManifest)
         {
-            context.cbSize = (uint)sizeof(Kernel32.ACTCTXW);
+            context.cbSize = (uint)sizeof(ACTCTXW);
             context.lpSource = p;
 
-            handle = Kernel32.CreateActCtxW(ref context);
+            handle = PInvoke.CreateActCtx(&context);
         }
 
         if (handle == IntPtr.Zero)
@@ -96,7 +97,8 @@ public class PropertyGridTests
 
         try
         {
-            if (Kernel32.ActivateActCtx(handle, out var cookie).IsFalse())
+            nuint cookie;
+            if (!PInvoke.ActivateActCtx(handle, &cookie))
             {
                 throw new Win32Exception();
             }
@@ -107,7 +109,7 @@ public class PropertyGridTests
             }
             finally
             {
-                if (Kernel32.DeactivateActCtx(0, cookie).IsFalse())
+                if (!PInvoke.DeactivateActCtx(0, cookie))
                 {
                     throw new Win32Exception();
                 }

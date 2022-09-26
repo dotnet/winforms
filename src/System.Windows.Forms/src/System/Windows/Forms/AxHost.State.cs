@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -139,30 +140,30 @@ namespace System.Windows.Forms
                 return _licenseKey;
             }
 
-            private void CreateStorage()
+            private unsafe void CreateStorage()
             {
                 Debug.Assert(_storage is null, "but we already have a storage!");
-                IntPtr hglobal = IntPtr.Zero;
+                nint hglobal = 0;
                 if (_buffer is not null)
                 {
-                    hglobal = Kernel32.GlobalAlloc(Kernel32.GMEM.MOVEABLE, (uint)_length);
-                    IntPtr pointer = Kernel32.GlobalLock(hglobal);
+                    hglobal = PInvoke.GlobalAlloc(GMEM_MOVEABLE, (uint)_length);
+                    void* pointer = PInvoke.GlobalLock(hglobal);
                     try
                     {
-                        if (pointer != IntPtr.Zero)
+                        if (pointer is not null)
                         {
-                            Marshal.Copy(_buffer, 0, pointer, _length);
+                            Marshal.Copy(_buffer, 0, (nint)pointer, _length);
                         }
                     }
                     finally
                     {
-                        Kernel32.GlobalUnlock(hglobal);
+                        PInvoke.GlobalUnlock(hglobal);
                     }
                 }
 
                 try
                 {
-                    _iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, BOOL.TRUE);
+                    _iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, true);
                     if (_buffer is null)
                     {
                         _storage = Ole32.StgCreateDocfileOnILockBytes(
@@ -180,9 +181,9 @@ namespace System.Windows.Forms
                 }
                 catch (Exception)
                 {
-                    if (_iLockBytes is null && hglobal != IntPtr.Zero)
+                    if (_iLockBytes is null && hglobal != 0)
                     {
-                        Kernel32.GlobalFree(hglobal);
+                        PInvoke.GlobalFree(hglobal);
                     }
                     else
                     {
@@ -266,7 +267,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal State? RefreshStorage(Ole32.IPersistStorage iPersistStorage)
+            internal unsafe State? RefreshStorage(Ole32.IPersistStorage iPersistStorage)
             {
                 Debug.Assert(_storage is not null, "how can we not have a storage object?");
                 Debug.Assert(_iLockBytes is not null, "how can we have a storage w/o ILockBytes?");
@@ -275,7 +276,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                iPersistStorage.Save(_storage, BOOL.TRUE);
+                iPersistStorage.Save(_storage, true);
                 _storage.Commit(0);
                 iPersistStorage.HandsOffStorage();
                 try
@@ -285,13 +286,13 @@ namespace System.Windows.Forms
                     _iLockBytes.Stat(out Ole32.STATSTG stat, Ole32.STATFLAG.NONAME);
                     _length = (int)stat.cbSize;
                     _buffer = new byte[_length];
-                    IntPtr hglobal = Ole32.GetHGlobalFromILockBytes(_iLockBytes);
-                    IntPtr pointer = Kernel32.GlobalLock(hglobal);
+                    nint hglobal = Ole32.GetHGlobalFromILockBytes(_iLockBytes);
+                    void* pointer = PInvoke.GlobalLock(hglobal);
                     try
                     {
-                        if (pointer != IntPtr.Zero)
+                        if (pointer is not null)
                         {
-                            Marshal.Copy(pointer, _buffer, 0, _length);
+                            Marshal.Copy((nint)pointer, _buffer, 0, _length);
                         }
                         else
                         {
@@ -301,7 +302,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        Kernel32.GlobalUnlock(hglobal);
+                        PInvoke.GlobalUnlock(hglobal);
                     }
                 }
                 finally

@@ -16,20 +16,14 @@ namespace System.Windows.Forms
         {
             private class HostedWindowsFormsMessageHook
             {
-                private IntPtr _messageHookHandle;
+                private HHOOK _messageHookHandle;
                 private bool _isHooked;
-                private User32.HOOKPROC _hookProc;
+                private HOOKPROC _callBack;
 
                 public HostedWindowsFormsMessageHook()
                 {
 #if DEBUG
-                    try
-                    {
-                        _callingStack = Environment.StackTrace;
-                    }
-                    catch (Security.SecurityException)
-                    {
-                    }
+                    _callingStack = Environment.StackTrace;
 #endif
                 }
 
@@ -38,13 +32,15 @@ namespace System.Windows.Forms
 
                 ~HostedWindowsFormsMessageHook()
                 {
-                    Debug.Assert(_messageHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + _callingStack);
+                    Debug.Assert(
+                        _messageHookHandle == IntPtr.Zero,
+                        $"Finalizing an active mouse hook. This will crash the process. Calling stack: {_callingStack}");
                 }
 #endif
 
                 public bool HookMessages
                 {
-                    get => _messageHookHandle != IntPtr.Zero;
+                    get => !_messageHookHandle.IsNull;
                     set
                     {
                         if (value)
@@ -58,21 +54,22 @@ namespace System.Windows.Forms
                     }
                 }
 
-                private void InstallMessageHook()
+                private unsafe void InstallMessageHook()
                 {
                     lock (this)
                     {
-                        if (_messageHookHandle != IntPtr.Zero)
+                        if (!_messageHookHandle.IsNull)
                         {
                             return;
                         }
 
-                        _hookProc = new User32.HOOKPROC(MessageHookProc);
-                        _messageHookHandle = User32.SetWindowsHookExW(
-                            User32.WH.GETMESSAGE,
-                            _hookProc,
-                            IntPtr.Zero,
-                            Kernel32.GetCurrentThreadId());
+                        _callBack = MessageHookProc;
+                        var hook = Marshal.GetFunctionPointerForDelegate(_callBack);
+                        _messageHookHandle = PInvoke.SetWindowsHookEx(
+                            WINDOWS_HOOK_ID.WH_GETMESSAGE,
+                            (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
+                            (HINSTANCE)0,
+                            PInvoke.GetCurrentThreadId());
 
                         if (_messageHookHandle != IntPtr.Zero)
                         {
@@ -83,34 +80,34 @@ namespace System.Windows.Forms
                     }
                 }
 
-                private unsafe nint MessageHookProc(User32.HC nCode, nint wparam, nint lparam)
+                private unsafe LRESULT MessageHookProc(int nCode, WPARAM wparam, LPARAM lparam)
                 {
-                    if (nCode == User32.HC.ACTION && _isHooked && (User32.PM)wparam == User32.PM.REMOVE)
+                    if (nCode == PInvoke.HC_ACTION && _isHooked
+                        && (PEEK_MESSAGE_REMOVE_TYPE)(nuint)wparam == PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE)
                     {
                         // Only process messages we've pulled off the queue.
-                        User32.MSG* msg = (User32.MSG*)lparam;
+                        MSG* msg = (MSG*)(nint)lparam;
                         if (msg is not null)
                         {
                             // Call pretranslate on the message to execute the message filters and preprocess message.
                             if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
                             {
-                                msg->message = User32.WM.NULL;
+                                msg->message = (uint)User32.WM.NULL;
                             }
                         }
                     }
 
-                    return User32.CallNextHookEx(_messageHookHandle, nCode, wparam, lparam);
+                    return PInvoke.CallNextHookEx(_messageHookHandle, nCode, wparam, lparam);
                 }
 
                 private void UninstallMessageHook()
                 {
                     lock (this)
                     {
-                        if (_messageHookHandle != IntPtr.Zero)
+                        if (!_messageHookHandle.IsNull)
                         {
-                            User32.UnhookWindowsHookEx(new HandleRef(this, _messageHookHandle));
-                            _hookProc = null;
-                            _messageHookHandle = IntPtr.Zero;
+                            PInvoke.UnhookWindowsHookEx(_messageHookHandle);
+                            _messageHookHandle = default;
                             _isHooked = false;
                         }
                     }

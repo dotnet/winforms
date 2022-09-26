@@ -52,7 +52,7 @@ namespace System.Windows.Forms.UITests
                     await InputSimulator.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.LeftButtonClick());
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         await MoveMouseAsync(form, previousPosition);
                     }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.UITests
                 {
                     richTextBox.LinkClicked -= handler;
 
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
@@ -128,7 +128,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     await InputSimulator.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.LeftButtonClick());
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         await MoveMouseAsync(form, previousPosition);
                     }
@@ -140,7 +140,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 {
                     richTextBox.LinkClicked -= handler;
 
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
@@ -205,7 +205,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     await InputSimulator.SendAsync(
                         form,
                         inputSimulator => inputSimulator.Mouse.LeftButtonClick());
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         await MoveMouseAsync(form, previousPosition);
                     }
@@ -217,7 +217,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 {
                     richTextBox.LinkClicked -= handler;
 
-                    if (setOldCursorPos.IsTrue())
+                    if (setOldCursorPos)
                     {
                         // Move cursor to the old position.
                         await InputSimulator.SendAsync(
@@ -257,7 +257,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 dwEffects = Richedit.CFE.LINK,
             };
 
-            SendMessageW(control, (WM)Richedit.EM.SETCHARFORMAT, (nint)Richedit.SCF.SELECTION, ref format);
+            PInvoke.SendMessage(control, (WM)Richedit.EM.SETCHARFORMAT, (WPARAM)(uint)Richedit.SCF.SELECTION, ref format);
 
             control.Select(0, 0);
         }
@@ -269,7 +269,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
 
             try
             {
-                if (SendMessageW(control, (WM)Richedit.EM.GETOLEINTERFACE, 0, ref pOleInterface) != 0 && pOleInterface != IntPtr.Zero)
+                if (PInvoke.SendMessage(control, (WM)Richedit.EM.GETOLEINTERFACE, 0, ref pOleInterface) != 0 && pOleInterface != IntPtr.Zero)
                 {
                     // This increments the RCW reference count, further casts do not increment it. It is important
                     // to capture the initial reference to the RCW so we can release it even if casts fail.

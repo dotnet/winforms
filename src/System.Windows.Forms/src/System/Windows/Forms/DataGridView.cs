@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {

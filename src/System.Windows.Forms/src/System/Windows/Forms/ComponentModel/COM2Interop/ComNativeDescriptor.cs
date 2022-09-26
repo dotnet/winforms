@@ -87,7 +87,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (component is VSSDK.IVsPerPropertyBrowsing)
             {
                 HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)component).GetClassName(ref name);
-                if (hr.Succeeded() && name is not null)
+                if (hr.Succeeded && name is not null)
                 {
                     return name;
                 }
@@ -151,8 +151,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Guid g = Guid.Empty;
             try
             {
-                HRESULT hr = iDispatch.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
-                if (dispid == DispatchID.UNKNOWN || !hr.Succeeded())
+                HRESULT hr = iDispatch.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
+                if (dispid == DispatchID.UNKNOWN || !hr.Succeeded)
                 {
                     return null;
                 }
@@ -202,7 +202,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = iDispatch.Invoke(
                         dispid,
                         &g,
-                        Kernel32.GetThreadLocale(),
+                        PInvoke.GetThreadLocale(),
                         Oleaut32.DISPATCH.PROPERTYGET,
                         &dispParams,
                         retval,

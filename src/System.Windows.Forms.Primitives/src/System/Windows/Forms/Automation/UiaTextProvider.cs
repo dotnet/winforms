@@ -51,9 +51,9 @@ namespace System.Windows.Forms.Automation
 
         public abstract int TextLength { get; }
 
-        public abstract WS_EX WindowExStyle { get; }
+        public abstract WINDOW_EX_STYLE WindowExStyle { get; }
 
-        public abstract WS WindowStyle { get; }
+        public abstract WINDOW_STYLE WindowStyle { get; }
 
         public abstract int GetLineFromCharIndex(int charIndex);
 
@@ -73,11 +73,11 @@ namespace System.Windows.Forms.Automation
 
         public abstract void SetSelection(int start, int end);
 
-        public static ES GetEditStyle(IHandle hWnd) => (ES)GetWindowLong(hWnd, GWL.STYLE);
+        public static ES GetEditStyle(IHandle<HWND> hWnd) => (ES)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
 
-        public static WS_EX GetWindowExStyle(IHandle hWnd) => (WS_EX)GetWindowLong(hWnd, GWL.EXSTYLE);
+        public static WINDOW_EX_STYLE GetWindowExStyle(IHandle<HWND> hWnd) => (WINDOW_EX_STYLE)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
 
-        public static WS GetWindowStyle(IHandle hWnd) => (WS)GetWindowLong(hWnd, GWL.STYLE);
+        public static WINDOW_STYLE GetWindowStyle(IHandle<HWND> hWnd) => (WINDOW_STYLE)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
 
         public static double[] RectListToDoubleArray(List<Rectangle> rectArray)
         {

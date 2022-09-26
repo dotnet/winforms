@@ -25,44 +25,44 @@ namespace System
         /// <summary>
         ///  Initialize the current state of <paramref name="hdc"/>.
         /// </summary>
-        public DeviceContextState(Gdi32.HDC hdc)
+        public DeviceContextState(HDC hdc)
         {
-            MapMode = Gdi32.GetMapMode(hdc);
-            BackColor = Gdi32.GetBkColor(hdc);
-            TextColor = Gdi32.GetTextColor(hdc);
-            Rop2Mode = Gdi32.GetROP2(hdc);
-            TextAlign = Gdi32.GetTextAlign(hdc);
-            BackgroundMode = Gdi32.GetBkMode(hdc);
+            MapMode = (HDC_MAP_MODE)PInvoke.GetMapMode(hdc);
+            BackColor = PInvoke.GetBkColor(hdc);
+            TextColor = PInvoke.GetTextColor(hdc);
+            Rop2Mode = (R2_MODE)PInvoke.GetROP2(hdc);
+            TextAlign = (TEXT_ALIGN_OPTIONS)PInvoke.GetTextAlign(hdc);
+            BackgroundMode = (BACKGROUND_MODE)PInvoke.GetBkMode(hdc);
 
             Matrix3x2 transform = default;
-            Gdi32.GetWorldTransform(hdc, ref transform);
+            PInvoke.GetWorldTransform(hdc, (XFORM*)(void*)&transform);
             Transform = transform;
 
             Point point = default;
-            Gdi32.GetBrushOrgEx(hdc, ref point);
+            PInvoke.GetBrushOrgEx(hdc, &point);
             BrushOrigin = point;
 
-            var hfont = Gdi32.GetCurrentObject(hdc, Gdi32.OBJ.FONT);
-            Gdi32.GetObjectW(hfont, out User32.LOGFONTW logfont);
+            var hfont = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_FONT);
+            PInvoke.GetObject(hfont, out LOGFONTW logfont);
             SelectedFont = logfont;
 
-            var hpen = Gdi32.GetCurrentObject(hdc, Gdi32.OBJ.PEN);
-            Gdi32.GetObjectW(hpen, out Gdi32.LOGPEN logpen);
+            var hpen = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_PEN);
+            PInvoke.GetObject(hpen, out Gdi32.LOGPEN logpen);
             SelectedPen = logpen;
 
-            var hbrush = Gdi32.GetCurrentObject(hdc, Gdi32.OBJ.BRUSH);
-            Gdi32.GetObjectW(hbrush, out Gdi32.LOGBRUSH logbrush);
+            var hbrush = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_BRUSH);
+            PInvoke.GetObject(hbrush, out Gdi32.LOGBRUSH logbrush);
             SelectedBrush = logbrush;
         }
 
-        public Gdi32.MM MapMode { get => _currentState.MapMode; set => _currentState.MapMode = value; }
-        public Gdi32.R2 Rop2Mode { get => _currentState.Rop2Mode; set => _currentState.Rop2Mode = value; }
+        public HDC_MAP_MODE MapMode { get => _currentState.MapMode; set => _currentState.MapMode = value; }
+        public R2_MODE Rop2Mode { get => _currentState.Rop2Mode; set => _currentState.Rop2Mode = value; }
         public COLORREF BackColor { get => _currentState.BackColor; set => _currentState.BackColor = value; }
         public COLORREF TextColor { get => _currentState.TextColor; set => _currentState.TextColor = value; }
         public Point BrushOrigin { get => _currentState.BrushOrigin; set => _currentState.BrushOrigin = value; }
-        public Gdi32.TA TextAlign { get => _currentState.TextAlign; set => _currentState.TextAlign = value; }
-        public Gdi32.BKMODE BackgroundMode { get => _currentState.BackgroundMode; set => _currentState.BackgroundMode = value; }
-        public User32.LOGFONTW SelectedFont { get => _currentState.SelectedFont; set => _currentState.SelectedFont = value; }
+        public TEXT_ALIGN_OPTIONS TextAlign { get => _currentState.TextAlign; set => _currentState.TextAlign = value; }
+        public BACKGROUND_MODE BackgroundMode { get => _currentState.BackgroundMode; set => _currentState.BackgroundMode = value; }
+        public LOGFONTW SelectedFont { get => _currentState.SelectedFont; set => _currentState.SelectedFont = value; }
         public Gdi32.LOGBRUSH SelectedBrush { get => _currentState.SelectedBrush; set => _currentState.SelectedBrush = value; }
         public EXTLOGPEN32 SelectedPen { get => _currentState.SelectedPen; set => _currentState.SelectedPen = value; }
         public Point LastBeginPathBrushOrigin { get => _currentState.LastBeginPathBrushOrigin; set => _currentState.LastBeginPathBrushOrigin = value; }
@@ -72,14 +72,14 @@ namespace System
 
         private struct State
         {
-            public Gdi32.MM MapMode { get; set; }
-            public Gdi32.R2 Rop2Mode { get; set; }
+            public HDC_MAP_MODE MapMode { get; set; }
+            public R2_MODE Rop2Mode { get; set; }
             public COLORREF BackColor { get; set; }
             public COLORREF TextColor { get; set; }
             public Point BrushOrigin { get; set; }
-            public Gdi32.TA TextAlign { get; set; }
-            public Gdi32.BKMODE BackgroundMode { get; set; }
-            public User32.LOGFONTW SelectedFont { get; set; }
+            public TEXT_ALIGN_OPTIONS TextAlign { get; set; }
+            public BACKGROUND_MODE BackgroundMode { get; set; }
+            public LOGFONTW SelectedFont { get; set; }
             public Gdi32.LOGBRUSH SelectedBrush { get; set; }
             public EXTLOGPEN32 SelectedPen { get; set; }
             public Point LastBeginPathBrushOrigin { get; set; }
@@ -142,7 +142,7 @@ namespace System
 
             if (selectionRecord->IsStockObject)
             {
-                Gdi32.HGDIOBJ hgdiobj = Gdi32.GetStockObject(selectionRecord->StockObject);
+                HGDIOBJ hgdiobj = PInvoke.GetStockObject((GET_STOCK_OBJECT_FLAGS)selectionRecord->StockObject);
 
                 switch (selectionRecord->StockObject)
                 {
@@ -153,7 +153,7 @@ namespace System
                     case Gdi32.StockObject.DEVICE_DEFAULT_FONT:
                     case Gdi32.StockObject.SYSTEM_FIXED_FONT:
                     case Gdi32.StockObject.DEFAULT_GUI_FONT:
-                        Gdi32.GetObjectW(hgdiobj, out User32.LOGFONTW logfont);
+                        PInvoke.GetObject(hgdiobj, out LOGFONTW logfont);
                         SelectedFont = logfont;
                         break;
                     case Gdi32.StockObject.WHITE_BRUSH:
@@ -163,14 +163,14 @@ namespace System
                     case Gdi32.StockObject.BLACK_BRUSH:
                     case Gdi32.StockObject.NULL_BRUSH:
                     case Gdi32.StockObject.DC_BRUSH:
-                        Gdi32.GetObjectW(hgdiobj, out Gdi32.LOGBRUSH logBrush);
+                        PInvoke.GetObject(hgdiobj, out Gdi32.LOGBRUSH logBrush);
                         SelectedBrush = logBrush;
                         break;
                     case Gdi32.StockObject.WHITE_PEN:
                     case Gdi32.StockObject.BLACK_PEN:
                     case Gdi32.StockObject.NULL_PEN:
                     case Gdi32.StockObject.DC_PEN:
-                        Gdi32.GetObjectW(hgdiobj, out Gdi32.LOGPEN logPen);
+                        PInvoke.GetObject(hgdiobj, out Gdi32.LOGPEN logPen);
                         SelectedPen = logPen;
                         break;
                     case Gdi32.StockObject.DEFAULT_PALETTE:

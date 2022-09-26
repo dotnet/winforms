@@ -895,8 +895,8 @@ namespace System.Windows.Forms.Design
 
                     _centerTextBox.Size = _miniToolStrip.DisplayRectangle.Size - _centerTextBox.Margin.Size;
                     _centerTextBox.Name = "centerTextBox";
-                    _centerTextBox.MouseEnter += new EventHandler(CenterTextBoxMouseEnter);
-                    _centerTextBox.MouseLeave += new EventHandler(CenterTextBoxMouseLeave);
+                    _centerTextBox.MouseEnter += CenterTextBoxMouseEnter;
+                    _centerTextBox.MouseLeave += CenterTextBoxMouseLeave;
                     int index = _miniToolStrip.Items.IndexOf(_centerLabel);
                     //swap in our insitu textbox
                     if (index != -1)
@@ -905,16 +905,16 @@ namespace System.Windows.Forms.Design
                         _miniToolStrip.Items.Remove(_centerLabel);
                     }
 
-                    tb.KeyUp += new KeyEventHandler(OnKeyUp);
-                    tb.KeyDown += new KeyEventHandler(OnKeyDown);
+                    tb.KeyUp += OnKeyUp;
+                    tb.KeyDown += OnKeyDown;
                     tb.SelectAll();
                     Control baseComponent = null;
                     if (_designerHost is not null)
                     {
                         baseComponent = (Control)_designerHost.RootComponent;
-                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                        PInvoke.SendMessage(baseComponent, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                         tb.Focus();
-                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                        PInvoke.SendMessage(baseComponent, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                     }
                 }
                 finally
@@ -998,9 +998,9 @@ namespace System.Windows.Forms.Design
                 && _designerHost is not null)
             {
                 Control baseComponent = (Control)_designerHost.RootComponent;
-                User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                PInvoke.SendMessage(baseComponent, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                 designerFrame.Focus();
-                User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                PInvoke.SendMessage(baseComponent, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
             }
         }
 
@@ -1584,7 +1584,7 @@ namespace System.Windows.Forms.Design
                 {
                     case User32.WM.KILLFOCUS:
                         base.WndProc(ref m);
-                        IntPtr focusedWindow = m.WParamInternal;
+                        HWND focusedWindow = (HWND)m.WParamInternal;
                         if (!IsParentWindow(focusedWindow))
                         {
                             owner.Commit(enterKeyPressed: false, tabKeyPressed: false);

@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         private readonly ListViewLabelEditUiaTextProvider _textProvider;
         private int[]? _runtimeId;
 
-        public ListViewLabelEditAccessibleObject(ListView owningListView, IHandle handle)
+        public ListViewLabelEditAccessibleObject(ListView owningListView, IHandle<HWND> handle)
         {
             _owningListView = owningListView.OrThrowIfNull();
             _handle = handle.Handle;

@@ -451,8 +451,8 @@ namespace System.Windows.Forms
                     Guid g = Guid.Empty;
                     var names = new string[] { methodName };
                     Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
-                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
-                    if (!hr.Succeeded() || dispid == Ole32.DispatchID.UNKNOWN)
+                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
+                    if (!hr.Succeeded || dispid == Ole32.DispatchID.UNKNOWN)
                     {
                         return null;
                     }
@@ -477,7 +477,7 @@ namespace System.Windows.Forms
                         hr = scriptObject.Invoke(
                             dispid,
                             &g,
-                            Kernel32.GetThreadLocale(),
+                            PInvoke.GetThreadLocale(),
                             Oleaut32.DISPATCH.METHOD,
                             &dispParams,
                             retVals,

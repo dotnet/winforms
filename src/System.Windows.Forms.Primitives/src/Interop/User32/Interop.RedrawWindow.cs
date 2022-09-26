@@ -8,10 +8,10 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static unsafe partial BOOL RedrawWindow(IntPtr hWnd, RECT* lprcUpdate = default, Gdi32.HRGN hrgnUpdate = default, RDW flags = default);
+        [DllImport(Libraries.User32)]
+        public static unsafe extern BOOL RedrawWindow(IntPtr hWnd, RECT* lprcUpdate = default, HRGN hrgnUpdate = default, RDW flags = default);
 
-        public unsafe static BOOL RedrawWindow(IHandle hWnd, RECT* lprcUpdate = default, Gdi32.HRGN hrgnUpdate = default, RDW flags = default)
+        public unsafe static BOOL RedrawWindow(IHandle hWnd, RECT* lprcUpdate = default, HRGN hrgnUpdate = default, RDW flags = default)
         {
             BOOL result = RedrawWindow(hWnd.Handle, lprcUpdate, hrgnUpdate, flags);
             GC.KeepAlive(hWnd);

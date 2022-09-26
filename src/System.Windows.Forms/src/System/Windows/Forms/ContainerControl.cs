@@ -299,7 +299,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CONTROLPARENT;
                 return cp;
             }
         }
@@ -665,10 +665,10 @@ namespace System.Windows.Forms
             if (_activeControl is not null && _activeControl.Visible)
             {
                 // Avoid focus loops, especially with ComboBoxes.
-                IntPtr focusHandle = User32.GetFocus();
-                if (focusHandle == IntPtr.Zero || FromChildHandle(focusHandle) != _activeControl)
+                HWND focusHandle = PInvoke.GetFocus();
+                if (focusHandle.IsNull || FromChildHandle(focusHandle) != _activeControl)
                 {
-                    User32.SetFocus(new HandleRef(_activeControl, _activeControl.Handle));
+                    PInvoke.SetFocus(_activeControl);
                 }
             }
             else
@@ -690,7 +690,7 @@ namespace System.Windows.Forms
 
                 if (cc is not null && cc.Visible)
                 {
-                    User32.SetFocus(new HandleRef(cc, cc.Handle));
+                    PInvoke.SetFocus(cc);
                 }
             }
         }
@@ -738,14 +738,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This method calculates the auto scale dimensions based on the control's current font.
         /// </summary>
-        private SizeF GetFontAutoScaleDimensions()
+        private unsafe SizeF GetFontAutoScaleDimensions()
         {
             SizeF retval = SizeF.Empty;
 
             // Windows uses CreateCompatibleDC(NULL) to get a memory DC for
             // the monitor the application is currently on.
 
-            using var dc = new Gdi32.CreateDcScope(default);
+            using var dc = new PInvoke.CreateDcScope(default);
             if (dc.IsNull)
             {
                 throw new Win32Exception();
@@ -758,17 +758,20 @@ namespace System.Windows.Forms
             // We must do the same here if our dialogs are to scale in a
             // similar fashion.
 
-            using var fontSelection = new Gdi32.SelectObjectScope(dc, FontHandle);
+            using PInvoke.SelectObjectScope fontSelection = new(dc, FontHandle);
 
-            var tm = new Gdi32.TEXTMETRICW();
-            Gdi32.GetTextMetricsW(dc, ref tm);
+            TEXTMETRICW tm = default;
+            PInvoke.GetTextMetrics(dc, &tm);
 
             retval.Height = tm.tmHeight;
 
-            if ((tm.tmPitchAndFamily & Gdi32.TMPF.FIXED_PITCH) != 0)
+            if ((tm.tmPitchAndFamily & TMPF_FLAGS.TMPF_FIXED_PITCH) != 0)
             {
-                var size = new Size();
-                Gdi32.GetTextExtentPoint32W(dc, FontMeasureString, FontMeasureString.Length, ref size);
+                Size size = default;
+                fixed (char* ps = FontMeasureString)
+                {
+                    PInvoke.GetTextExtentPoint32W(dc, ps, FontMeasureString.Length, (SIZE*)(void*)&size);
+                }
 
                 // Note: intentional integer round off here for Win32 compat
                 retval.Width = (int)Math.Round(size.Width / ((float)FontMeasureString.Length));

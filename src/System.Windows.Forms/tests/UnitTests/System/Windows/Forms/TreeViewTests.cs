@@ -1680,7 +1680,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int version = Application.UseVisualStyles ? 6 : 5;
-            Assert.Equal(version, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
+            Assert.Equal(version, (int)PInvoke.SendMessage(control, (User32.WM)CCM.GETVERSION));
         }
 
         public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()

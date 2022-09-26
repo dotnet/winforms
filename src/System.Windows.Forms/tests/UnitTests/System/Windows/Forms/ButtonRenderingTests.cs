@@ -253,7 +253,7 @@ namespace System.Windows.Forms.Tests
                     State.PenColor(Color.Black),
                     State.PenStyle(Gdi32.PS.ENDCAP_ROUND),
                     State.BrushStyle(Gdi32.BS.NULL),       // Regressed in https://github.com/dotnet/winforms/pull/3667
-                    State.Rop2(Gdi32.R2.COPYPEN)));
+                    State.Rop2(R2_MODE.R2_COPYPEN)));
         }
     }
 }

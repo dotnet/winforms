@@ -44,9 +44,9 @@ namespace System.Windows.Forms.Design
                     _designer.RemoveSubclassedWindow(m.HWnd);
                 }
 
-                if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)PARAM.LOWORD(m.WParamInternal) == User32.WM.CREATE)
+                if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)m.WParamInternal.LOWORD == User32.WM.CREATE)
                 {
-                    _designer.HookChildHandles(m.LParamInternal); // they will get removed from the collection just above
+                    _designer.HookChildHandles((HWND)(nint)m.LParamInternal); // they will get removed from the collection just above
                 }
 
                 // We want these messages to go through the designer's WndProc method, and we want people to be able

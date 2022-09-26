@@ -8,7 +8,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms
@@ -147,7 +146,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT IOleControlSite.TranslateAccelerator(User32.MSG* pMsg, KEYMODIFIERS grfModifiers)
+        unsafe HRESULT IOleControlSite.TranslateAccelerator(MSG* pMsg, KEYMODIFIERS grfModifiers)
         {
             if (pMsg is null)
             {
@@ -196,12 +195,12 @@ namespace System.Windows.Forms
         {
             if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
             {
-                IntPtr hwnd = IntPtr.Zero;
-                if (Host.AXInPlaceObject.GetWindow(&hwnd).Succeeded())
+                HWND hwnd = HWND.Null;
+                if (Host.AXInPlaceObject.GetWindow(&hwnd).Succeeded)
                 {
                     if (Host.GetHandleNoCreate() != hwnd)
                     {
-                        if (hwnd != IntPtr.Zero)
+                        if (!hwnd.IsNull)
                         {
                             Host.AttachWindow(hwnd);
                             RECT posRect = Host.Bounds;
@@ -230,7 +229,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            *phwnd = User32.GetParent(Host);
+            *phwnd = PInvoke.GetParent(Host);
             return HRESULT.S_OK;
         }
 
@@ -273,7 +272,7 @@ namespace System.Windows.Forms
             if (lpFrameInfo is not null)
             {
                 lpFrameInfo->cb = (uint)Marshal.SizeOf<OLEINPLACEFRAMEINFO>();
-                lpFrameInfo->fMDIApp = BOOL.FALSE;
+                lpFrameInfo->fMDIApp = false;
                 lpFrameInfo->hAccel = IntPtr.Zero;
                 lpFrameInfo->cAccelEntries = 0;
                 lpFrameInfo->hwndFrame = Host.ParentInternal?.Handle ?? IntPtr.Zero;
@@ -299,7 +298,7 @@ namespace System.Windows.Forms
         {
             if (Host.ActiveXState == WebBrowserHelper.AXState.UIActive)
             {
-                ((IOleInPlaceSite)this).OnUIDeactivate(0);
+                ((IOleInPlaceSite)this).OnUIDeactivate(false);
             }
 
             Host.GetParentContainer().OnInPlaceDeactivate(Host);

@@ -50,7 +50,7 @@ internal partial class Interop
                 return retVal;
             }
 
-            HRESULT Shell32.IShellItem.GetDisplayName(Shell32.SIGDN sigdnName, out string? ppszName)
+            HRESULT Shell32.IShellItem.GetDisplayName(SIGDN sigdnName, out string? ppszName)
             {
                 IntPtr ppszName_local;
                 HRESULT retVal;

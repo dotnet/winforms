@@ -8,10 +8,10 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme)]
-        public static partial HRESULT GetThemeBackgroundContentRect(
+        [DllImport(Libraries.UxTheme)]
+        public static extern HRESULT GetThemeBackgroundContentRect(
             IntPtr hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             ref RECT pBoundingRect,
@@ -19,7 +19,7 @@ internal static partial class Interop
 
         public static HRESULT GetThemeBackgroundContentRect(
             IHandle hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             ref RECT pBoundingRect,

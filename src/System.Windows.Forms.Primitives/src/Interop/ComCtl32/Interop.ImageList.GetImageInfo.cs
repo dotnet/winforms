@@ -10,8 +10,8 @@ internal partial class Interop
     {
         public static partial class ImageList
         {
-            [LibraryImport(Libraries.Comctl32, EntryPoint = "ImageList_GetImageInfo")]
-            public static partial BOOL GetImageInfo(IntPtr himl, int i, ref IMAGEINFO pImageInfo);
+            [DllImport(Libraries.Comctl32, EntryPoint = "ImageList_GetImageInfo")]
+            public static extern BOOL GetImageInfo(IntPtr himl, int i, ref IMAGEINFO pImageInfo);
 
             public static BOOL GetImageInfo(HandleRef himl, int i, ref IMAGEINFO pImageInfo)
             {

@@ -15,21 +15,24 @@ namespace System.Windows.Forms.Design.Behavior
         private partial class AdornerWindow
         {
             /// <summary>
-            ///  This class knows how to hook all the messages to a given process/thread.
-            ///
-            ///  On any mouse clicks, it asks the designer what to do with the message, that is to eat it or propagate
-            ///  it to the control it was meant for.   This allows us to synchronously process mouse messages when
-            ///  the AdornerWindow itself may be pumping messages.
+            ///  <para>
+            ///   This class knows how to hook all the messages to a given process/thread.
+            ///  </para>
+            ///  <para>
+            ///   On any mouse clicks, it asks the designer what to do with the message, that is to eat it or propagate
+            ///   it to the control it was meant for. This allows us to synchronously process mouse messages when
+            ///   the AdornerWindow itself may be pumping messages.
+            ///  </para>
             /// </summary>
             private class MouseHook
             {
                 private AdornerWindow _currentAdornerWindow;
                 private uint _thisProcessID;
-                private GCHandle _mouseHookRoot;
-                private IntPtr _mouseHookHandle = IntPtr.Zero;
+                private HOOKPROC _callBack;
+                private HHOOK _mouseHookHandle;
                 private bool _processingMessage;
 
-                private bool _isHooked; //VSWHIDBEY # 474112
+                private bool _isHooked;
                 private int _lastLButtonDownTimeStamp;
 
                 public MouseHook()
@@ -41,12 +44,12 @@ namespace System.Windows.Forms.Design.Behavior
                 }
 
 #if DEBUG
-                readonly string _callingStack;
+                private readonly string _callingStack;
                 ~MouseHook()
                 {
                     Debug.Assert(
-                        _mouseHookHandle == IntPtr.Zero,
-                        "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + _callingStack);
+                        _mouseHookHandle == 0,
+                        $"Finalizing an active mouse hook. This will crash the process. Calling stack: {_callingStack}");
                 }
 #endif
 
@@ -55,12 +58,12 @@ namespace System.Windows.Forms.Design.Behavior
                     UnhookMouse();
                 }
 
-                private void HookMouse()
+                private unsafe void HookMouse()
                 {
                     Debug.Assert(s_adornerWindowList.Count > 0, "No AdornerWindow available to create the mouse hook");
                     lock (this)
                     {
-                        if (_mouseHookHandle != IntPtr.Zero || s_adornerWindowList.Count == 0)
+                        if (_mouseHookHandle != 0 || s_adornerWindowList.Count == 0)
                         {
                             return;
                         }
@@ -71,34 +74,31 @@ namespace System.Windows.Forms.Design.Behavior
                             User32.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
                         }
 
-                        var hook = new User32.HOOKPROC(MouseHookProc);
-                        _mouseHookRoot = GCHandle.Alloc(hook);
-                        _mouseHookHandle = User32.SetWindowsHookExW(
-                            User32.WH.MOUSE,
-                            hook,
-                            IntPtr.Zero,
-                            Kernel32.GetCurrentThreadId());
+                        _callBack = MouseHookProc;
+                        var hook = Marshal.GetFunctionPointerForDelegate(_callBack);
+                        _mouseHookHandle = PInvoke.SetWindowsHookEx(
+                            WINDOWS_HOOK_ID.WH_MOUSE,
+                            (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
+                            (HINSTANCE)0,
+                            PInvoke.GetCurrentThreadId());
 
-                        if (_mouseHookHandle != IntPtr.Zero)
-                        {
-                            _isHooked = true;
-                        }
+                        _isHooked = _mouseHookHandle != 0;
 
-                        Debug.Assert(_mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
+                        Debug.Assert(_isHooked, "Failed to install mouse hook.");
                     }
                 }
 
-                private unsafe nint MouseHookProc(User32.HC nCode, nint wparam, nint lparam)
+                private unsafe LRESULT MouseHookProc(int nCode, WPARAM wparam, LPARAM lparam)
                 {
-                    if (_isHooked && nCode == User32.HC.ACTION && lparam != IntPtr.Zero)
+                    if (_isHooked && nCode == PInvoke.HC_ACTION && lparam != 0)
                     {
-                        User32.MOUSEHOOKSTRUCT* mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
+                        MOUSEHOOKSTRUCT* mhs = (MOUSEHOOKSTRUCT*)(nint)lparam;
 
                         try
                         {
-                            if (ProcessMouseMessage(mhs->hWnd, (User32.WM)wparam, mhs->pt.X, mhs->pt.Y))
+                            if (ProcessMouseMessage(mhs->hwnd, (User32.WM)(nuint)wparam, mhs->pt.X, mhs->pt.Y))
                             {
-                                return 1;
+                                return (LRESULT)1;
                             }
                         }
                         catch (Exception ex)
@@ -122,24 +122,27 @@ namespace System.Windows.Forms.Design.Behavior
                     }
 
                     Debug.Assert(_isHooked, "How did we get here when we are disposed?");
-                    return User32.CallNextHookEx(_mouseHookHandle, nCode, wparam, lparam);
+                    return PInvoke.CallNextHookEx(_mouseHookHandle, (int)nCode, wparam, lparam);
                 }
 
                 private void UnhookMouse()
                 {
                     lock (this)
                     {
-                        if (_mouseHookHandle != IntPtr.Zero)
+                        if (_mouseHookHandle != 0)
                         {
-                            User32.UnhookWindowsHookEx(new HandleRef(this, _mouseHookHandle));
-                            _mouseHookRoot.Free();
-                            _mouseHookHandle = IntPtr.Zero;
+                            if (!PInvoke.UnhookWindowsHookEx(_mouseHookHandle))
+                            {
+                                Debug.Fail("Failed to remove mouse hook.");
+                            }
+
+                            _mouseHookHandle = default;
                             _isHooked = false;
                         }
                     }
                 }
 
-                private bool ProcessMouseMessage(IntPtr hWnd, User32.WM msg, int x, int y)
+                private bool ProcessMouseMessage(HWND hwnd, User32.WM msg, int x, int y)
                 {
                     if (_processingMessage)
                     {
@@ -154,16 +157,15 @@ namespace System.Windows.Forms.Design.Behavior
                         }
 
                         _currentAdornerWindow = adornerWindow;
-                        IntPtr handle = adornerWindow.DesignerFrame.Handle;
 
                         // If it's us or one of our children, just process as normal
                         if (adornerWindow.ProcessingDrag
-                            || (hWnd != handle && User32.IsChild(new HandleRef(this, handle), hWnd).IsTrue()))
+                            || (hwnd != adornerWindow.DesignerFrame.Handle && PInvoke.IsChild(adornerWindow.DesignerFrame, hwnd)))
                         {
                             Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
 
                             // Make sure the window is in our process
-                            User32.GetWindowThreadProcessId(hWnd, out uint pid);
+                            User32.GetWindowThreadProcessId(hwnd, out uint pid);
 
                             // If this isn't our process, bail
                             if (pid != _thisProcessID)
@@ -176,7 +178,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 _processingMessage = true;
                                 var pt = new Point(x, y);
                                 adornerWindow.PointToClient(pt);
-                                Message m = Message.Create(hWnd, msg, 0, PARAM.FromLowHigh(pt.Y, pt.X));
+                                Message m = Message.Create(hwnd, msg, 0u, PARAM.FromLowHigh(pt.Y, pt.X));
 
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
                                 if (m.Msg == (int)User32.WM.LBUTTONDOWN)

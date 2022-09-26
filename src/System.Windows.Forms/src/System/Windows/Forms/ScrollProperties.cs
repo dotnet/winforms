@@ -282,7 +282,7 @@ namespace System.Windows.Forms
                     nTrackPos = 0
                 };
 
-                User32.SetScrollInfo(_parent, Orientation, ref si, BOOL.TRUE);
+                User32.SetScrollInfo(_parent, Orientation, ref si, true);
             }
         }
 

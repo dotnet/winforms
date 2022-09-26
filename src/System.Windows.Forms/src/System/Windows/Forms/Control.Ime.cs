@@ -256,7 +256,7 @@ namespace System.Windows.Forms
                         }
                         else if (ContainsFocus)
                         {
-                            ctl = FromChildHandle(User32.GetFocus());
+                            ctl = FromChildHandle(PInvoke.GetFocus());
                         }
 
                         if (ctl is not null && ctl.CanEnableIme)
@@ -386,9 +386,9 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "Initializing PropagatingImeMode");
 
                     ImeMode imeMode = ImeMode.Inherit;
-                    IntPtr focusHandle = User32.GetFocus();
+                    HWND focusHandle = PInvoke.GetFocus();
 
-                    if (focusHandle != IntPtr.Zero)
+                    if (!focusHandle.IsNull)
                     {
                         imeMode = ImeContext.GetImeMode(focusHandle);
 
@@ -396,9 +396,9 @@ namespace System.Windows.Forms
                         // this is the case of a disabled winforms control hosted in a non-Form shell.
                         if (imeMode == ImeMode.Disable)
                         {
-                            focusHandle = User32.GetAncestor(focusHandle, User32.GA.ROOT);
+                            focusHandle = PInvoke.GetAncestor(focusHandle, GET_ANCESTOR_FLAGS.GA_ROOT);
 
-                            if (focusHandle != IntPtr.Zero)
+                            if (!focusHandle.IsNull)
                             {
                                 imeMode = ImeContext.GetImeMode(focusHandle);
                             }
@@ -409,7 +409,7 @@ namespace System.Windows.Forms
                     PropagatingImeMode = imeMode;
                 }
 
-                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "Value: " + Control.propagatingImeMode);
+                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, $"Value: {propagatingImeMode}");
                 Debug.Unindent();
 
                 return Control.propagatingImeMode;
@@ -426,11 +426,15 @@ namespace System.Windows.Forms
                         case ImeMode.NoControl:
                         case ImeMode.Disable:
                             // Cannot set propagating ImeMode to one of these values.
-                            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "Cannot change PropagatingImeMode to " + value);
+                            Debug.WriteLineIf(
+                                CompModSwitches.ImeMode.Level >= TraceLevel.Verbose,
+                                $"Cannot change PropagatingImeMode to {value}");
                             return;
 
                         default:
-                            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Warning, string.Format(CultureInfo.CurrentCulture, "Setting PropagatingImeMode: Current value = {0}, New value = {1}", propagatingImeMode, value));
+                            Debug.WriteLineIf(
+                                CompModSwitches.ImeMode.Level >= TraceLevel.Warning,
+                                $"Setting PropagatingImeMode: Current value = {propagatingImeMode}, New value = {value}");
                             Control.propagatingImeMode = value;
                             break;
                     }
@@ -715,7 +719,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                m.ResultInternal = 0;
+                m.ResultInternal = (LRESULT)0;
             }
 
             Debug.Unindent();
@@ -753,7 +757,7 @@ namespace System.Windows.Forms
         {
             if (ImeSupported && ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable && !IgnoreWmImeNotify)
             {
-                int wparam = PARAM.ToInt(m.WParamInternal);
+                int wparam = (int)m.WParamInternal;
 
                 // The WM_IME_NOTIFY message is not consistent across the different IMEs, particularly the notification type
                 // we care about (IMN_SETCONVERSIONMODE & IMN_SETOPENSTATUS).
@@ -1082,7 +1086,7 @@ namespace System.Windows.Forms
                     goto cleanup;
                 }
 
-                if (!Imm32.ImmGetOpenStatus(inputContext).IsTrue())
+                if (!Imm32.ImmGetOpenStatus(inputContext))
                 {
                     status = string.Format(CultureInfo.CurrentCulture, "Ime closed for handle=[{0}]", handle);
                     goto cleanup;
@@ -1143,7 +1147,7 @@ namespace System.Windows.Forms
             if (inputContext != IntPtr.Zero)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetOpenStatus(" + inputContext + ")");
-                retval = Imm32.ImmGetOpenStatus(inputContext).IsTrue();
+                retval = Imm32.ImmGetOpenStatus(inputContext);
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
                 Imm32.ImmReleaseContext(handle, inputContext);
             }
@@ -1271,13 +1275,13 @@ namespace System.Windows.Forms
                 if (inputContext != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmSetOpenStatus(" + inputContext + ", " + open + ")");
-                    bool succeeded = Imm32.ImmSetOpenStatus(inputContext, open.ToBOOL()).IsTrue();
+                    bool succeeded = Imm32.ImmSetOpenStatus(inputContext, open);
                     Debug.Assert(succeeded, "Could not set the IME open status.");
 
                     if (succeeded)
                     {
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
-                        succeeded = Imm32.ImmReleaseContext(handle, inputContext).IsTrue();
+                        succeeded = Imm32.ImmReleaseContext(handle, inputContext);
                         Debug.Assert(succeeded, "Could not release IME context.");
                     }
                 }

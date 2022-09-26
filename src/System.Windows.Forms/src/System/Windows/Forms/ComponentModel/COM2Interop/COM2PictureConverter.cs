@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -108,7 +107,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // We have to build an IPicture
             if (managedValue is not null)
             {
-                BOOL own = BOOL.FALSE;
+                BOOL own = false;
 
                 PICTDESC pictdesc;
                 if (managedValue is Icon icon)
@@ -118,7 +117,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 else if (managedValue is Bitmap bitmap)
                 {
                     pictdesc = PICTDESC.FromBitmap(bitmap);
-                    own = BOOL.TRUE;
+                    own = true;
                 }
                 else
                 {

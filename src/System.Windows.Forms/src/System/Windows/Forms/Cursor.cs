@@ -13,31 +13,30 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents the image used to paint the mouse pointer.
-    ///  Different cursor shapes are used to inform the user what operation the mouse will
-    ///  have.
+    ///  Represents the image used to paint the mouse pointer. Different cursor shapes are used to inform the user
+    ///  what operation the mouse will have.
     /// </summary>
     [TypeConverter(typeof(CursorConverter))]
-    [Editor("System.Drawing.Design.CursorEditor, " + AssemblyRef.SystemDrawingDesign, typeof(UITypeEditor))]
+    [Editor($"System.Drawing.Design.CursorEditor, {AssemblyRef.SystemDrawingDesign}", typeof(UITypeEditor))]
     public sealed class Cursor : IDisposable, ISerializable, IHandle
     {
         private static Size s_cursorSize = Size.Empty;
 
         private readonly byte[]? _cursorData;
-        private IntPtr _handle = IntPtr.Zero;       // handle to loaded image
+        private HCURSOR _handle;
         private bool _ownHandle = true;
-        private readonly int _resourceId;
+        private readonly PCWSTR _resourceId;
 
         /// <summary>
         ///  Private constructor. If you want a standard system cursor, use one of the
         ///  definitions in the Cursors class.
         /// </summary>
-        internal Cursor(int nResourceId)
+        internal unsafe Cursor(PCWSTR nResourceId)
         {
             // We don't delete stock cursors.
             _ownHandle = false;
             _resourceId = nResourceId;
-            _handle = User32.LoadCursorW(IntPtr.Zero, (IntPtr)nResourceId);
+            _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.InvalidGDIHandle, (typeof(Cursor)).Name), nameof(handle));
             }
 
-            _handle = handle;
+            _handle = (HCURSOR)handle;
             _ownHandle = false;
         }
 
@@ -223,14 +222,14 @@ namespace System.Windows.Forms
 
         private void Dispose(bool disposing)
         {
-            if (_handle != IntPtr.Zero)
+            if (!_handle.IsNull)
             {
                 if (_ownHandle)
                 {
                     User32.DestroyCursor(_handle);
                 }
 
-                _handle = IntPtr.Zero;
+                _handle = default;
             }
         }
 
@@ -331,9 +330,9 @@ namespace System.Windows.Forms
                 // The ROP is SRCCOPY, so we can be simple here and take
                 // advantage of clipping regions.  Drawing the cursor
                 // is merely a matter of offsetting and clipping.
-                Gdi32.IntersectClipRect(this, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
+                PInvoke.IntersectClipRect(this, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
                 User32.DrawIconEx(
-                    (Gdi32.HDC)dc,
+                    (HDC)dc,
                     targetX - imageX,
                     targetY - imageY,
                     this,
@@ -370,7 +369,7 @@ namespace System.Windows.Forms
         /// </summary>
         ~Cursor()
         {
-            Dispose(false);
+            Dispose(disposing: false);
         }
 
         /// <summary>
@@ -385,7 +384,7 @@ namespace System.Windows.Forms
         ///  Hides the cursor. For every call to Cursor.hide() there must be a
         ///  balancing call to Cursor.show().
         /// </summary>
-        public static void Hide() => User32.ShowCursor(BOOL.FALSE);
+        public static void Hide() => User32.ShowCursor(false);
 
         // this code is adapted from Icon.GetIconSize please take this into account when changing this
         private Size GetIconSize(IntPtr iconHandle)
@@ -393,12 +392,12 @@ namespace System.Windows.Forms
             using User32.ICONINFO info = User32.GetIconInfo(iconHandle);
             if (!info.hbmColor.IsNull)
             {
-                Gdi32.GetObjectW(info.hbmColor, out Gdi32.BITMAP bitmap);
+                PInvoke.GetObject(info.hbmColor, out Gdi32.BITMAP bitmap);
                 return new Size(bitmap.bmWidth, bitmap.bmHeight);
             }
             else if (!info.hbmMask.IsNull)
             {
-                Gdi32.GetObjectW(info.hbmMask, out Gdi32.BITMAP bitmap);
+                PInvoke.GetObject(info.hbmMask, out Gdi32.BITMAP bitmap);
                 return new Size(bitmap.bmWidth, bitmap.bmHeight / 2);
             }
             else
@@ -432,7 +431,7 @@ namespace System.Windows.Forms
                             picSize = DpiHelper.LogicalToDeviceUnits(picSize);
                         }
 
-                        _handle = User32.CopyImage(
+                        _handle = (HCURSOR)User32.CopyImage(
                             cursorHandle,
                             User32.IMAGE.CURSOR,
                             picSize.Width,
@@ -460,9 +459,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Saves a picture from the requested stream.
         /// </summary>
-        internal byte[] GetData()
+        internal unsafe byte[] GetData()
         {
-            if (_resourceId != 0)
+            if (_resourceId.Value != null)
             {
                 throw new FormatException(SR.CursorCannotCovertToBytes);
             }
@@ -479,7 +478,7 @@ namespace System.Windows.Forms
         ///  Displays the cursor. For every call to Cursor.show() there must have been
         ///  a previous call to Cursor.hide().
         /// </summary>
-        public static void Show() => User32.ShowCursor(BOOL.TRUE);
+        public static void Show() => User32.ShowCursor(true);
 
         /// <summary>
         ///  Retrieves a human readable string representing this <see cref="Cursor"/>.

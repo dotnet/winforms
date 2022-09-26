@@ -256,14 +256,14 @@ namespace System.Windows.Forms
 
                 if (_owningListBox.SelectedIndex == -1) //no item selected
                 {
-                    User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.SETCARETINDEX, currentIndex);
+                    PInvoke.SendMessage(_owningListBox, (User32.WM)User32.LB.SETCARETINDEX, (WPARAM)currentIndex);
                     return;
                 }
 
-                int firstVisibleIndex = (int)User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.GETTOPINDEX);
+                int firstVisibleIndex = (int)PInvoke.SendMessage(_owningListBox, (User32.WM)User32.LB.GETTOPINDEX);
                 if (currentIndex < firstVisibleIndex)
                 {
-                    User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.SETTOPINDEX, currentIndex);
+                    PInvoke.SendMessage(_owningListBox, (User32.WM)User32.LB.SETTOPINDEX, (WPARAM)currentIndex);
                     return;
                 }
 
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
 
                 for (int i = firstVisibleIndex; i < itemsCount; i++)
                 {
-                    int itemHeight = (int)User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.GETITEMHEIGHT, i);
+                    int itemHeight = (int)PInvoke.SendMessage(_owningListBox, (User32.WM)User32.LB.GETITEMHEIGHT, (WPARAM)i);
 
                     if ((itemsHeightSum += itemHeight) <= listBoxHeight)
                     {
@@ -285,7 +285,7 @@ namespace System.Windows.Forms
 
                     if (currentIndex > lastVisibleIndex)
                     {
-                        User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.SETTOPINDEX, (IntPtr)(currentIndex - visibleItemsCount + 1));
+                        PInvoke.SendMessage(_owningListBox, (User32.WM)User32.LB.SETTOPINDEX, (WPARAM)(currentIndex - visibleItemsCount + 1));
                     }
 
                     break;
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
 
                 _owningListBox.SelectedIndex = CurrentIndex;
 
-                User32.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, BOOL.FALSE);
+                User32.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, false);
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
             }

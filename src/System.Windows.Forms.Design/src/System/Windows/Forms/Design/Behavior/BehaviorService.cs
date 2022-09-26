@@ -299,7 +299,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             var pt = new Point(c.Left, c.Top);
-            User32.MapWindowPoint(c.Parent, _adornerWindow, ref pt);
+            PInvoke.MapWindowPoints(c.Parent, _adornerWindow, ref pt);
             if (c.Parent.IsMirrored)
             {
                 pt.X -= c.Width;
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point MapAdornerWindowPoint(IntPtr handle, Point pt)
         {
-            User32.MapWindowPoint(handle, _adornerWindow, ref pt);
+            PInvoke.MapWindowPoints((HWND)handle, _adornerWindow, ref pt);
             return pt;
         }
 
@@ -482,12 +482,12 @@ namespace System.Windows.Forms.Design.Behavior
             // which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window,
             // let's activate it here.
             IUIService uiService = (IUIService)_serviceProvider.GetService(typeof(IUIService));
-            if (uiService != null)
+            if (uiService is not null)
             {
                 IWin32Window hwnd = uiService.GetDialogOwnerWindow();
-                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != User32.GetActiveWindow())
+                if (hwnd is not null && hwnd.Handle != 0 && hwnd.Handle != PInvoke.GetActiveWindow())
                 {
-                    User32.SetActiveWindow(hwnd.Handle);
+                    PInvoke.SetActiveWindow(new HandleRef<HWND>(hwnd, (HWND)hwnd.Handle));
                 }
             }
         }
@@ -828,13 +828,13 @@ namespace System.Windows.Forms.Design.Behavior
         {
             if (m.LParamInternal == 0)
             {
-                m.ResultInternal = (text.Length + 1) * sizeof(char);
+                m.ResultInternal = (LRESULT)((text.Length + 1) * sizeof(char));
                 return;
             }
 
-            if (m.WParamInternal < text.Length + 1)
+            if ((int)m.WParamInternal < text.Length + 1)
             {
-                m.ResultInternal = -1;
+                m.ResultInternal = (LRESULT)(-1);
                 return;
             }
 
@@ -847,8 +847,8 @@ namespace System.Windows.Forms.Design.Behavior
             nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
 
             Marshal.Copy(bytes, 0, m.LParamInternal, bytes.Length);
-            Marshal.Copy(nullBytes, 0, m.LParamInternal + bytes.Length, nullBytes.Length);
-            m.ResultInternal = (bytes.Length + nullBytes.Length) / sizeof(char);
+            Marshal.Copy(nullBytes, 0, m.LParamInternal + (nint)bytes.Length, nullBytes.Length);
+            m.ResultInternal = (LRESULT)((bytes.Length + nullBytes.Length) / sizeof(char));
         }
 
         private void TestHook_GetAllSnapLines(ref Message m)

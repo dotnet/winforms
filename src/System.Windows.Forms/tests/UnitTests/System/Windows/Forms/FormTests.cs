@@ -197,15 +197,15 @@ namespace System.Windows.Forms.Tests
             using var form = new Form();
             Assert.True(form.Handle != IntPtr.Zero);
 
-            IntPtr hSmallIcon = User32.SendMessageW(form, User32.WM.GETICON, (nint)User32.ICON.SMALL, 0);
-            Assert.True(hSmallIcon != IntPtr.Zero);
+            HICON hSmallIcon = (HICON)PInvoke.SendMessage(form, User32.WM.GETICON, (WPARAM)PInvoke.ICON_SMALL);
+            Assert.False(hSmallIcon.IsNull);
 
-            IntPtr hLargeIcon = User32.SendMessageW(form, User32.WM.GETICON, (nint)User32.ICON.BIG, 0);
-            Assert.True(hLargeIcon != IntPtr.Zero);
+            HICON hLargeIcon = (HICON)PInvoke.SendMessage(form, User32.WM.GETICON, (WPARAM)PInvoke.ICON_BIG);
+            Assert.False(hLargeIcon.IsNull);
 
             // normal form doesn't have WS_EX.DLGMODALFRAME set, and show icon
-            User32.WS_EX extendedStyle = (User32.WS_EX)User32.GetWindowLong(form, User32.GWL.EXSTYLE);
-            Assert.False(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
+            WINDOW_EX_STYLE extendedStyle = (WINDOW_EX_STYLE)PInvoke.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+            Assert.False(extendedStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME));
         }
 
         [WinFormsFact]
@@ -989,7 +989,7 @@ namespace System.Windows.Forms.Tests
             form.Location = new Point(10, 11);
             form.Size = new Size(200, 210);
 
-            User32.SendMessageW(form, User32.WM.SYSCOMMAND, (nint)User32.SC.MAXIMIZE, 0);
+            PInvoke.SendMessage(form, User32.WM.SYSCOMMAND, (WPARAM)(uint)User32.SC.MAXIMIZE);
 
             form.Location = new Point(20, 21);
             form.Size = new Size(300, 310);
@@ -998,7 +998,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(new Point(20, 21), form.Location);
             Assert.NotEqual(new Size(300, 310), form.Size);
 
-            User32.SendMessageW(form, User32.WM.SYSCOMMAND, (nint)User32.SC.RESTORE, 0);
+            PInvoke.SendMessage(form, User32.WM.SYSCOMMAND, (WPARAM)(uint)User32.SC.RESTORE);
 
             Assert.Equal(new Point(20, 21), form.Location);
             Assert.Equal(new Size(300, 310), form.Size);
@@ -1039,14 +1039,14 @@ namespace System.Windows.Forms.Tests
         public static void ShowIcon_renders_icon_correctly(bool showIcon, bool expectedIconNull)
         {
             using var form = new Form();
-            Assert.True(form.Handle != IntPtr.Zero);
+            Assert.True(form.Handle != 0);
 
             form.ShowIcon = showIcon;
 
-            IntPtr hSmallIcon = User32.SendMessageW(form, User32.WM.GETICON, (nint)User32.ICON.SMALL, 0);
-            IntPtr hLargeIcon = User32.SendMessageW(form, User32.WM.GETICON, (nint)User32.ICON.BIG, 0);
-            Assert.Equal(expectedIconNull, hSmallIcon == IntPtr.Zero);
-            Assert.Equal(expectedIconNull, hLargeIcon == IntPtr.Zero);
+            HICON hSmallIcon = (HICON)PInvoke.SendMessage(form, User32.WM.GETICON, (WPARAM)PInvoke.ICON_SMALL);
+            HICON hLargeIcon = (HICON)PInvoke.SendMessage(form, User32.WM.GETICON, (WPARAM)PInvoke.ICON_BIG);
+            Assert.Equal(expectedIconNull, hSmallIcon.IsNull);
+            Assert.Equal(expectedIconNull, hLargeIcon.IsNull);
         }
 
         [WinFormsFact]
@@ -1055,14 +1055,14 @@ namespace System.Windows.Forms.Tests
             using var form = new Form();
             Assert.True(form.Handle != IntPtr.Zero);
 
-            User32.WS_EX extendedStyle = unchecked((User32.WS_EX)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
-            Assert.False(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
+            WINDOW_EX_STYLE extendedStyle = unchecked((WINDOW_EX_STYLE)(long)PInvoke.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE));
+            Assert.False(extendedStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME));
 
             form.ShowIcon = false;
 
             // hiding icon sets WS_EX.DLGMODALFRAME
-            extendedStyle = unchecked((User32.WS_EX)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
-            Assert.True(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
+            extendedStyle = unchecked((WINDOW_EX_STYLE)(long)PInvoke.GetWindowLong(form, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE));
+            Assert.True(extendedStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_DLGMODALFRAME));
         }
 
         public static IEnumerable<object[]> Parent_SetMdiChild_TestData()
@@ -1244,24 +1244,24 @@ namespace System.Windows.Forms.Tests
             control.Show();
 
             control.ShowIcon = false;
-            IntPtr hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.SMALL, 0);
-            Assert.True(hSmallIcon == IntPtr.Zero);
-            IntPtr hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.BIG, 0);
-            Assert.True(hLargeIcon == IntPtr.Zero);
+            HICON hSmallIcon = (HICON)PInvoke.SendMessage(control, User32.WM.GETICON, (WPARAM)PInvoke.ICON_SMALL);
+            Assert.True(hSmallIcon.IsNull);
+            HICON hLargeIcon = (HICON)PInvoke.SendMessage(control, User32.WM.GETICON, (WPARAM)PInvoke.ICON_BIG);
+            Assert.True(hLargeIcon.IsNull);
 
             control.WindowState = FormWindowState.Maximized;
             control.ShowIcon = false;
-            hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.SMALL, 0);
-            Assert.True(hSmallIcon == IntPtr.Zero);
-            hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.BIG, 0);
-            Assert.True(hLargeIcon == IntPtr.Zero);
+            hSmallIcon = (HICON)PInvoke.SendMessage(control, User32.WM.GETICON, (WPARAM)PInvoke.ICON_SMALL);
+            Assert.True(hSmallIcon.IsNull);
+            hLargeIcon = (HICON)PInvoke.SendMessage(control, User32.WM.GETICON, (WPARAM)PInvoke.ICON_BIG);
+            Assert.True(hLargeIcon.IsNull);
             Assert.True(!menuStrip.Items[0].Visible);
 
             control.ShowIcon = true;
-            hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.SMALL, 0);
-            Assert.True(hSmallIcon != IntPtr.Zero);
-            hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (nint)User32.ICON.BIG, 0);
-            Assert.True(hLargeIcon != IntPtr.Zero);
+            hSmallIcon = (HICON)PInvoke.SendMessage(control, User32.WM.GETICON, (WPARAM)PInvoke.ICON_SMALL);
+            Assert.False(hSmallIcon.IsNull);
+            hLargeIcon = (HICON)PInvoke.SendMessage(control, User32.WM.GETICON, (WPARAM)PInvoke.ICON_BIG);
+            Assert.False(hLargeIcon.IsNull);
             Assert.True(menuStrip.Items[0].Visible);
         }
 

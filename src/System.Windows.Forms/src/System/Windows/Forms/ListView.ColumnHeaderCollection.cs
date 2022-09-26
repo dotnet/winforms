@@ -345,7 +345,7 @@ namespace System.Windows.Forms
                             int w = _owner._columnHeaders[colIdx].Width; // Update width before detaching from ListView
                             if (_owner.IsHandleCreated)
                             {
-                                User32.SendMessageW(_owner, (User32.WM)LVM.DELETECOLUMN, colIdx);
+                                PInvoke.SendMessage(_owner, (User32.WM)LVM.DELETECOLUMN, (WPARAM)colIdx);
                             }
 
                             _owner._columnHeaders[colIdx].OwnerListview = null;
@@ -523,7 +523,7 @@ namespace System.Windows.Forms
                 // in Tile view our ListView uses the column header collection to update the Tile Information
                 if (_owner.IsHandleCreated && _owner.View != View.Tile)
                 {
-                    int retval = (int)User32.SendMessageW(_owner, (User32.WM)LVM.DELETECOLUMN, index);
+                    int retval = (int)PInvoke.SendMessage(_owner, (User32.WM)LVM.DELETECOLUMN, (WPARAM)index);
                     if (0 == retval)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));

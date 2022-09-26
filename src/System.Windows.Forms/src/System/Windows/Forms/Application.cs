@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,7 +10,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
@@ -43,7 +42,7 @@ namespace System.Windows.Forms
         private static bool s_comCtlSupportsVisualStylesInitialized;
         private static bool s_comCtlSupportsVisualStyles;
         private static FormCollection s_forms;
-        private static readonly object s_internalSyncObject = new object();
+        private static readonly object s_internalSyncObject = new();
         private static bool s_useWaitCursor;
 
         private static bool s_useEverettThreadAffinity;
@@ -53,8 +52,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Events the user can hook into
         /// </summary>
-        private static readonly object s_eventApplicationExit = new object();
-        private static readonly object s_eventThreadExit = new object();
+        private static readonly object s_eventApplicationExit = new();
+        private static readonly object s_eventThreadExit = new();
 
         // Defines a new callback delegate type
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -82,7 +81,7 @@ namespace System.Windows.Forms
         ///  Returns True if it is OK to continue idle processing. Typically called in an Application.Idle event handler.
         /// </summary>
         internal static bool CanContinueIdle
-            => ThreadContext.FromCurrent().ComponentManager.FContinueIdle().IsTrue();
+            => ThreadContext.FromCurrent().ComponentManager.FContinueIdle();
 
         /// <summary>
         ///  Typically, you shouldn't need to use this directly - use RenderWithVisualStyles instead.
@@ -101,7 +100,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private static bool InitializeComCtlSupportsVisualStyles()
+        private unsafe static bool InitializeComCtlSupportsVisualStyles()
         {
             if (UseVisualStyles)
             {
@@ -117,20 +116,26 @@ namespace System.Windows.Forms
             //
             // GetModuleHandle  returns a handle to a mapped module without incrementing its
             // reference count.
-            IntPtr hModule = Kernel32.GetModuleHandleW(Libraries.Comctl32);
-            if (hModule != IntPtr.Zero)
+            var hModule = PInvoke.GetModuleHandle(Libraries.Comctl32);
+            fixed (byte* ptr = "ImageList_WriteEx\0"u8)
             {
-                return Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
+                if (!hModule.IsNull)
+                {
+                    return PInvoke.GetProcAddress(hModule, (PCSTR)ptr) != 0;
+                }
             }
 
             // Load comctl since GetModuleHandle failed to find it
-            hModule = Kernel32.LoadComctl32(StartupPath);
-            if (hModule == IntPtr.Zero)
+            nint ninthModule = PInvoke.LoadComctl32(StartupPath);
+            if (ninthModule == 0)
             {
                 return false;
             }
 
-            return Kernel32.GetProcAddress(hModule, "ImageList_WriteEx") != IntPtr.Zero;
+            fixed (byte* ptr = "ImageList_WriteEx\0"u8)
+            {
+                return PInvoke.GetProcAddress(hModule, (PCSTR)ptr) != 0;
+            }
         }
 
         /// <summary>
@@ -592,19 +597,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
         /// </summary>
-        private unsafe static BOOL SendThemeChanged(IntPtr handle)
+        private unsafe static BOOL SendThemeChanged(HWND hwnd)
         {
-            uint thisPID = Kernel32.GetCurrentProcessId();
-            User32.GetWindowThreadProcessId(handle, out uint processId);
-            if (processId == thisPID && User32.IsWindowVisible(handle).IsTrue())
+            uint thisPID = PInvoke.GetCurrentProcessId();
+            uint processId;
+            PInvoke.GetWindowThreadProcessId(hwnd, &processId);
+            if (processId == thisPID && PInvoke.IsWindowVisible(hwnd))
             {
-                SendThemeChangedRecursive(handle);
+                SendThemeChangedRecursive(hwnd);
                 User32.RedrawWindow(
-                    handle,
+                    hwnd,
                     flags: User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
             }
 
-            return BOOL.TRUE;
+            return true;
         }
 
         /// <summary>
@@ -612,15 +618,15 @@ namespace System.Windows.Forms
         ///  It is assumed at this point that the handle belongs to the current process
         ///  and has a visible top level window.
         /// </summary>
-        private static BOOL SendThemeChangedRecursive(IntPtr handle)
+        private static BOOL SendThemeChangedRecursive(HWND handle)
         {
             // First send to all children...
-            User32.EnumChildWindows(handle, Application.SendThemeChangedRecursive);
+            User32.EnumChildWindows(handle, SendThemeChangedRecursive);
 
             // Then do myself.
-            User32.SendMessageW(handle, User32.WM.THEMECHANGED);
+            PInvoke.SendMessage(handle, User32.WM.THEMECHANGED);
 
-            return BOOL.TRUE;
+            return true;
         }
 
         /// <summary>
@@ -672,12 +678,12 @@ namespace System.Windows.Forms
         public static bool FilterMessage(ref Message message)
         {
             // Create copy of MSG structure
-            User32.MSG msg = message;
+            MSG msg = message;
             bool processed = ThreadContext.FromCurrent().ProcessFilters(ref msg, out bool modified);
             if (modified)
             {
                 message.HWnd = msg.hwnd;
-                message.MsgInternal = msg.message;
+                message.MsgInternal = (User32.WM)msg.message;
                 message.WParamInternal = msg.wParam;
                 message.LParamInternal = msg.lParam;
             }
@@ -820,9 +826,9 @@ namespace System.Windows.Forms
         {
             // Pull manifest from our resources
             Module module = typeof(Application).Module;
-            IntPtr moduleHandle = Kernel32.GetModuleHandleW(module.Name);
+            var moduleHandle = PInvoke.GetModuleHandle(module.Name);
 
-            if (moduleHandle != IntPtr.Zero)
+            if (moduleHandle != 0)
             {
                 // We have a native module, point to our native embedded manifest resource.
                 // CSC embeds DLL manifests as native resource ID 2
@@ -996,14 +1002,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Locates a thread context given a window handle.
         /// </summary>
-        internal static ThreadContext GetContextForHandle(HandleRef handle)
+        internal static unsafe ThreadContext GetContextForHandle<T>(T handle) where T : IHandle<HWND>
         {
-            ThreadContext threadContext = ThreadContext.FromId(User32.GetWindowThreadProcessId(handle.Handle, out _));
+            ThreadContext threadContext = ThreadContext.FromId(PInvoke.GetWindowThreadProcessId(handle.Handle, null));
             Debug.Assert(
                 threadContext is not null,
                 "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
 
-            GC.KeepAlive(handle.Wrapper);
+            GC.KeepAlive(handle);
             return threadContext;
         }
 
@@ -1059,12 +1065,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  "Parks" the given HWND to a temporary HWND. This allows WS_CHILD windows to be parked.
         /// </summary>
-        internal static void ParkHandle(HandleRef handle, IntPtr dpiAwarenessContext)
+        internal static void ParkHandle(HandleRef<HWND> handle, DPI_AWARENESS_CONTEXT dpiAwarenessContext)
         {
-            Debug.Assert(User32.IsWindow(handle).IsTrue(), "Handle being parked is not a valid window handle");
-            Debug.Assert(((User32.WS)User32.GetWindowLong(handle, User32.GWL.STYLE)).HasFlag(User32.WS.CHILD), "Only WS_CHILD windows should be parked.");
+            Debug.Assert(PInvoke.IsWindow(handle), "Handle being parked is not a valid window handle");
+            Debug.Assert(
+                ((WINDOW_STYLE)PInvoke.GetWindowLong(handle.Handle, WINDOW_LONG_PTR_INDEX.GWL_STYLE)).HasFlag(WINDOW_STYLE.WS_CHILD),
+                "Only WS_CHILD windows should be parked.");
 
             GetContextForHandle(handle)?.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
+
+            GC.KeepAlive(handle);
         }
 
         /// <summary>
@@ -1072,7 +1082,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="cp"> create params for control handle</param>
         /// <param name="dpiAwarenessContext"> dpi awareness</param>
-        internal static void ParkHandle(CreateParams cp, IntPtr dpiAwarenessContext)
+        internal static void ParkHandle(CreateParams cp, DPI_AWARENESS_CONTEXT dpiAwarenessContext)
         {
             ThreadContext threadContext = ThreadContext.FromCurrent();
             if (threadContext is not null)
@@ -1097,7 +1107,7 @@ namespace System.Windows.Forms
         ///  "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
         /// </summary>
-        internal static void UnparkHandle(HandleRef handle, IntPtr context)
+        internal static void UnparkHandle(IHandle<HWND> handle, DPI_AWARENESS_CONTEXT context)
         {
             ThreadContext threadContext = GetContextForHandle(handle);
             if (threadContext is not null)
@@ -1154,7 +1164,7 @@ namespace System.Windows.Forms
                     sb.Append('"');
                 }
 
-                ProcessStartInfo currentStartInfo = new ProcessStartInfo();
+                ProcessStartInfo currentStartInfo = new();
                 currentStartInfo.FileName = ExecutablePath;
                 if (sb.Length > 0)
                 {
@@ -1299,7 +1309,7 @@ namespace System.Windows.Forms
         ///  Returns true if the call succeeded, else false.
         /// </summary>
         public static bool SetSuspendState(PowerState state, bool force, bool disableWakeEvent)
-            => Powrprof.SetSuspendState((state == PowerState.Hibernate).ToBOOLEAN(), force.ToBOOLEAN(), disableWakeEvent.ToBOOLEAN()).IsTrue();
+            => PInvoke.SetSuspendState((state == PowerState.Hibernate), force, disableWakeEvent);
 
         /// <summary>
         ///  Overload version of SetUnhandledExceptionMode that sets the UnhandledExceptionMode

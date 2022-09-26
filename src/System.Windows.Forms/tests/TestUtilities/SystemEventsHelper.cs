@@ -4,6 +4,8 @@
 
 using System.Reflection;
 using Microsoft.Win32;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 using Xunit;
 using static Interop.User32;
 
@@ -28,10 +30,10 @@ namespace System
 
         public static void SendMessageOnUserPreferenceChanged(UserPreferenceCategory category)
         {
-            IntPtr window = GetHWnd();
+            HWND window = (HWND)GetHWnd();
 
             WM msg;
-            nint wParam;
+            WPARAM wParam;
             if (category == UserPreferenceCategory.Color)
             {
                 msg = WM.SYSCOLORCHANGE;
@@ -43,39 +45,39 @@ namespace System
 
                 if (category == UserPreferenceCategory.Accessibility)
                 {
-                    wParam = (nint)SPI.SETHIGHCONTRAST;
+                    wParam = (int)SPI.SETHIGHCONTRAST;
                 }
                 else if (category == UserPreferenceCategory.Desktop)
                 {
-                    wParam = (nint)SPI.SETDESKWALLPAPER;
+                    wParam = (int)SPI.SETDESKWALLPAPER;
                 }
                 else if (category == UserPreferenceCategory.Icon)
                 {
-                    wParam = (nint)SPI.ICONHORIZONTALSPACING;
+                    wParam = (int)SPI.ICONHORIZONTALSPACING;
                 }
                 else if (category == UserPreferenceCategory.Mouse)
                 {
-                    wParam = (nint)SPI.SETDOUBLECLICKTIME;
+                    wParam = (int)SPI.SETDOUBLECLICKTIME;
                 }
                 else if (category == UserPreferenceCategory.Keyboard)
                 {
-                    wParam = (nint)SPI.SETKEYBOARDDELAY;
+                    wParam = (int)SPI.SETKEYBOARDDELAY;
                 }
                 else if (category == UserPreferenceCategory.Menu)
                 {
-                    wParam = (nint)SPI.SETMENUDROPALIGNMENT;
+                    wParam = (int)SPI.SETMENUDROPALIGNMENT;
                 }
                 else if (category == UserPreferenceCategory.Power)
                 {
-                    wParam = (nint)SPI.SETLOWPOWERACTIVE;
+                    wParam = (int)SPI.SETLOWPOWERACTIVE;
                 }
                 else if (category == UserPreferenceCategory.Screensaver)
                 {
-                    wParam = (nint)SPI.SETMENUDROPALIGNMENT;
+                    wParam = (int)SPI.SETMENUDROPALIGNMENT;
                 }
                 else if (category == UserPreferenceCategory.Window)
                 {
-                    wParam = (nint)SPI.SETMENUDROPALIGNMENT;
+                    wParam = (int)SPI.SETMENUDROPALIGNMENT;
                 }
                 else
                 {
@@ -84,7 +86,7 @@ namespace System
             }
 
             // Call with reflect to immediately send the message.
-            SendMessageW(window, msg | WM.REFLECT, wParam);
+            PInvoke.SendMessage(window, msg | WM.REFLECT, wParam);
         }
     }
 }

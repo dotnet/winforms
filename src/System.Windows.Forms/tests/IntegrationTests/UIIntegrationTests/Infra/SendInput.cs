@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using WindowsInput;
 using WindowsInput.Native;
 using static Interop;
@@ -76,36 +75,22 @@ namespace System.Windows.Forms.UITests
                 throw new ArgumentNullException(nameof(actions));
             }
 
-            var foregroundWindow = IntPtr.Zero;
-
-            try
-            {
-                var foreground = GetForegroundWindow();
-                SetForegroundWindow(window.Handle);
-
-                await Task.Run(() => actions(new InputSimulator()));
-            }
-            finally
-            {
-                if (foregroundWindow != IntPtr.Zero)
-                {
-                    SetForegroundWindow(foregroundWindow);
-                }
-            }
+            SetForegroundWindow(window);
+            await Task.Run(() => actions(new InputSimulator()));
 
             await _waitForIdleAsync();
         }
 
-        private static IntPtr GetForegroundWindow()
+        private static HWND GetForegroundWindow()
         {
             var startTime = DateTime.Now;
 
             // Attempt to get the foreground window in a loop, as the NativeMethods function can return IntPtr.Zero
             // in certain circumstances, such as when a window is losing activation.
-            IntPtr foregroundWindow;
+            HWND foregroundWindow;
             do
             {
-                foregroundWindow = User32.GetForegroundWindow();
+                foregroundWindow = PInvoke.GetForegroundWindow();
             }
             while (foregroundWindow == IntPtr.Zero
                 && DateTime.Now - startTime < TimeSpan.FromMilliseconds(500));
@@ -113,13 +98,13 @@ namespace System.Windows.Forms.UITests
             return foregroundWindow;
         }
 
-        private static void SetForegroundWindow(IntPtr window)
+        private static void SetForegroundWindow(Form window)
         {
             // Make the window a top-most window so it will appear above any existing top-most windows
             User32.SetWindowPos(window, User32.HWND_TOPMOST, 0, 0, 0, 0, User32.SWP.NOSIZE | User32.SWP.NOMOVE);
 
             // Move the window into the foreground as it may not have been achieved by the 'SetWindowPos' call
-            if (User32.SetForegroundWindow(window).IsFalse())
+            if (!User32.SetForegroundWindow(window))
             {
                 string windowTitle = User32.GetWindowText(window);
                 if (User32.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)
@@ -130,10 +115,10 @@ namespace System.Windows.Forms.UITests
             }
 
             // Ensure the window is 'Active' as it may not have been achieved by 'SetForegroundWindow'
-            User32.SetActiveWindow(new HandleRef(null, window));
+            PInvoke.SetActiveWindow(window);
 
             // Give the window the keyboard focus as it may not have been achieved by 'SetActiveWindow'
-            User32.SetFocus(new HandleRef(null, window));
+            PInvoke.SetFocus(window);
 
             // Remove the 'Top-Most' qualification from the window
             User32.SetWindowPos(window, User32.HWND_NOTOPMOST, 0, 0, 0, 0, User32.SWP.NOSIZE | User32.SWP.NOMOVE);

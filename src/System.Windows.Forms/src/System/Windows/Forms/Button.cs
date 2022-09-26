@@ -136,7 +136,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
+                cp.ClassName = PInvoke.WC_BUTTON;
                 if (GetStyle(ControlStyles.UserPaint))
                 {
                     cp.Style |= (int)User32.BS.OWNERDRAW;
@@ -369,7 +369,7 @@ namespace System.Windows.Forms
             switch (m.MsgInternal)
             {
                 case User32.WM.REFLECT_COMMAND:
-                    if ((User32.BN)PARAM.HIWORD(m.WParamInternal) == User32.BN.CLICKED)
+                    if ((User32.BN)m.WParamInternal.HIWORD == User32.BN.CLICKED)
                     {
                         if (!ValidationCancelled)
                         {

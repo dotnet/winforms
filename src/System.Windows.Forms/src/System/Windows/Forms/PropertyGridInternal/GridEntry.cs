@@ -1644,18 +1644,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                     IntPtr handle)
                 {
                     Color backgroundColor = ColorInversionNeededInHighContrast ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
-                    using var compatibleDC = new Gdi32.CreateDcScope(default);
+                    using var compatibleDC = new PInvoke.CreateDcScope(default);
 
-                    int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
-                    int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
-                    Gdi32.HBITMAP compatibleBitmap = Gdi32.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpvBits: null);
-                    using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
+                    int planes = PInvoke.GetDeviceCaps(compatibleDC, GET_DEVICE_CAPS_INDEX.PLANES);
+                    int bitsPixel = PInvoke.GetDeviceCaps(compatibleDC,GET_DEVICE_CAPS_INDEX.BITSPIXEL);
+                    HBITMAP compatibleBitmap = PInvoke.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
+                    using PInvoke.SelectObjectScope targetBitmapSelection = new(compatibleDC, compatibleBitmap);
 
-                    using var brush = new Gdi32.CreateBrushScope(backgroundColor);
+                    using PInvoke.CreateBrushScope brush = new(backgroundColor);
                     compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), brush);
                     explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), handle);
 
-                    using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap.Handle);
+                    using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap);
                     ControlPaint.InvertForeColorIfNeeded(bitmap, backgroundColor);
                     graphics.DrawImage(bitmap, rectangle, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel);
                 }

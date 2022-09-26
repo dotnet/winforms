@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms
@@ -12,10 +11,12 @@ namespace System.Windows.Forms
     {
         internal class TextBoxBaseAccessibleObject : ControlAccessibleObject
         {
+            private readonly TextBoxBase _owningTextBoxBase;
             private TextBoxBaseUiaTextProvider? _textProvider;
 
             public TextBoxBaseAccessibleObject(TextBoxBase owner) : base(owner)
             {
+                _owningTextBoxBase = owner;
                 _textProvider = new TextBoxBaseUiaTextProvider(owner);
             }
 
@@ -42,6 +43,13 @@ namespace System.Windows.Forms
                 // 4) This method call should be uncommented
                 //        ClearOwnerControl();
             }
+
+            internal override object? GetPropertyValue(UIA propertyID)
+                => propertyID switch
+                {
+                    UIA.IsPasswordPropertyId => _owningTextBoxBase.PasswordProtect,
+                    _ => base.GetPropertyValue(propertyID),
+                };
 
             internal override bool IsIAccessibleExSupported() => true;
 
@@ -76,7 +84,7 @@ namespace System.Windows.Forms
 
             internal override ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
             {
-                isActive = BOOL.FALSE;
+                isActive = false;
                 return _textProvider?.GetCaretRange(out isActive);
             }
 

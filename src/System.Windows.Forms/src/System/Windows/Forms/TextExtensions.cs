@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         ///  If foreColor and/or backColor are Color.Empty, the hdc current text and/or background color are used.
         /// </summary>
         public static void DrawText(
-            this Gdi32.HDC hdc,
+            this HDC hdc,
             ReadOnlySpan<char> text,
             FontCache.Scope font,
             Rectangle bounds,
@@ -67,19 +67,19 @@ namespace System.Windows.Forms
             (User32.DT dt, TextPaddingOptions padding) = SplitTextFormatFlags(flags);
 
             // DrawText requires default text alignment.
-            using var alignment = new Gdi32.SetTextAlignmentScope(hdc, default);
+            using PInvoke.SetTextAlignmentScope alignment = new(hdc, default);
 
             // Color empty means use the one currently selected in the dc.
-            using var textColor = foreColor.IsEmpty ? default : new Gdi32.SetTextColorScope(hdc, foreColor);
-            using var fontSelection = new Gdi32.SelectObjectScope(hdc, (Gdi32.HFONT)font);
+            using var textColor = foreColor.IsEmpty ? default : new PInvoke.SetTextColorScope(hdc, foreColor);
+            using PInvoke.SelectObjectScope fontSelection = new(hdc, (HFONT)font);
 
-            Gdi32.BKMODE newBackGroundMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
-                Gdi32.BKMODE.TRANSPARENT :
-                Gdi32.BKMODE.OPAQUE;
+            BACKGROUND_MODE newBackGroundMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
+                BACKGROUND_MODE.TRANSPARENT :
+                BACKGROUND_MODE.OPAQUE;
 
-            using var backgroundMode = new Gdi32.SetBkModeScope(hdc, newBackGroundMode);
-            using var backgroundColor = newBackGroundMode != Gdi32.BKMODE.TRANSPARENT
-                ? new Gdi32.SetBackgroundColorScope(hdc, backColor)
+            using PInvoke.SetBkModeScope backgroundMode = new(hdc, newBackGroundMode);
+            using var backgroundColor = newBackGroundMode != BACKGROUND_MODE.TRANSPARENT
+                ? new PInvoke.SetBackgroundColorScope(hdc, backColor)
                 : default;
 
             User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font, padding);
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
         ///  This way we paint the top of the text at the top of the bounds passed in.
         /// </summary>
         public static Rectangle AdjustForVerticalAlignment(
-            this Gdi32.HDC hdc,
+            this HDC hdc,
             ReadOnlySpan<char> text,
             Rectangle bounds,
             User32.DT flags,
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
                 return bounds;
             }
 
-            RECT rect = new RECT(bounds);
+            RECT rect = bounds;
 
             // Get the text bounds.
             flags |= User32.DT.CALCRECT;
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
         ///  the horizontal and vertical measurements of the text.  The application must convert it explicitly.
         /// </summary>
         public static Size MeasureText(
-            this Gdi32.HDC hdc,
+            this HDC hdc,
             ReadOnlySpan<char> text,
             FontCache.Scope font,
             Size proposedSize,
@@ -248,9 +248,9 @@ namespace System.Windows.Forms
                 proposedSize.Height = 1;
             }
 
-            var rect = new RECT(0, 0, proposedSize.Width, proposedSize.Height);
+            RECT rect = new(proposedSize);
 
-            using var fontSelection = new Gdi32.SelectObjectScope(hdc, font.Object);
+            using PInvoke.SelectObjectScope fontSelection = new(hdc, font.Object);
 
             // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain SINGLELINE and
             // VCENTER or BOTTOM options, DrawTextEx does not bind the rectangle to the actual text height since
@@ -282,19 +282,22 @@ namespace System.Windows.Forms
         ///  which computes the width and height of the text ignoring TAB\CR\LF characters.
         ///  A text extent is the distance between the beginning of the space and a character that will fit in the space.
         /// </summary>
-        public static Size GetTextExtent(this Gdi32.HDC hdc, string? text, Gdi32.HFONT hfont)
+        public static unsafe Size GetTextExtent(this HDC hdc, string? text, HFONT hfont)
         {
             if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }
 
-            Size size = new Size();
-            using var selectFont = new Gdi32.SelectObjectScope(hdc, hfont);
+            Size size = default;
+            using PInvoke.SelectObjectScope selectFont = new(hdc, hfont);
 
-            Gdi32.GetTextExtentPoint32W(hdc, text, text.Length, ref size);
+            fixed (char* pText = text)
+            {
+                PInvoke.GetTextExtentPoint32W(hdc, pText, text.Length, (SIZE*)(void*)&size);
+            }
 
-            return new Size(size.Width, size.Height);
+            return size;
         }
     }
 }

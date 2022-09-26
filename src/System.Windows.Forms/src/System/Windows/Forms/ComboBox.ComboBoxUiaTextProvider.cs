@@ -26,7 +26,7 @@ namespace System.Windows.Forms
             /// </summary>
             private const int OwnerChildEditLinesCount = 1;
 
-            private readonly IHandle _owningChildEdit;
+            private readonly IHandle<HWND> _owningChildEdit;
 
             private readonly ComboBox _owningComboBox;
 
@@ -58,9 +58,7 @@ namespace System.Windows.Forms
             public override bool IsMultiline => false;
 
             public override bool IsReadingRTL
-                => _owningComboBox.IsHandleCreated
-                    ? WindowExStyle.HasFlag(WS_EX.RTLREADING)
-                    : false;
+                => _owningComboBox.IsHandleCreated && WindowExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
             public override bool IsReadOnly => false;
 
@@ -73,7 +71,7 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    ES extendedStyle = (ES)GetWindowLong(_owningChildEdit, GWL.STYLE);
+                    ES extendedStyle = (ES)PInvoke.GetWindowLong(_owningChildEdit, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
                     return extendedStyle.HasFlag(ES.AUTOHSCROLL);
                 }
             }
@@ -110,27 +108,27 @@ namespace System.Windows.Forms
 
             public override string Text
                 => _owningComboBox.IsHandleCreated
-                    ? User32.GetWindowText(_owningChildEdit)
+                    ? User32.GetWindowText((IHandle)_owningChildEdit)
                     : string.Empty;
 
             public override int TextLength
                 => _owningComboBox.IsHandleCreated
-                    ? (int)SendMessageW(_owningChildEdit, WM.GETTEXTLENGTH)
+                    ? (int)PInvoke.SendMessage(_owningChildEdit, WM.GETTEXTLENGTH)
                     : -1;
 
-            public override WS_EX WindowExStyle
+            public override WINDOW_EX_STYLE WindowExStyle
                 => _owningComboBox.IsHandleCreated
                     ? GetWindowExStyle(_owningChildEdit)
-                    : WS_EX.LEFT;
+                    : WINDOW_EX_STYLE.WS_EX_LEFT;
 
-            public override WS WindowStyle
+            public override WINDOW_STYLE WindowStyle
                 => _owningComboBox.IsHandleCreated
                     ? GetWindowStyle(_owningChildEdit)
-                    : WS.OVERLAPPED;
+                    : WINDOW_STYLE.WS_OVERLAPPED;
 
             public override UiaCore.ITextRangeProvider? GetCaretRange(out BOOL isActive)
             {
-                isActive = BOOL.FALSE;
+                isActive = false;
 
                 if (!_owningComboBox.IsHandleCreated)
                 {
@@ -140,7 +138,7 @@ namespace System.Windows.Forms
                 object? hasKeyboardFocus = _owningComboBox.ChildEditAccessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
                 if (hasKeyboardFocus is true)
                 {
-                    isActive = BOOL.TRUE;
+                    isActive = true;
                 }
 
                 return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, _owningComboBox.SelectionStart, _owningComboBox.SelectionStart);
@@ -219,7 +217,7 @@ namespace System.Windows.Forms
 
                 // Returns info about the selected text range.
                 // If there is no selection, start and end parameters are the position of the caret.
-                SendMessageW(_owningChildEdit, (WM)EM.GETSEL, ref start, ref end);
+                PInvoke.SendMessage(_owningChildEdit, (WM)EM.GETSEL, ref start, ref end);
 
                 return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, end) };
             }
@@ -272,7 +270,7 @@ namespace System.Windows.Forms
 
             public override Point PointToScreen(Point pt)
             {
-                User32.MapWindowPoint(_owningChildEdit, IntPtr.Zero, ref pt);
+                PInvoke.MapWindowPoints(_owningChildEdit, (HWND)default, ref pt);
                 return pt;
             }
 
@@ -314,7 +312,7 @@ namespace System.Windows.Forms
 
                 // Convert screen to client coordinates.
                 // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-                if (MapWindowPoint(IntPtr.Zero, _owningChildEdit, ref clientLocation) == 0)
+                if (PInvoke.MapWindowPoints((HWND)default, _owningChildEdit, ref clientLocation) == 0)
                 {
                     return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start: 0, end: 0);
                 }
@@ -356,12 +354,12 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                SendMessageW(_owningChildEdit, (WM)EM.SETSEL, start, end);
+                PInvoke.SendMessage(_owningChildEdit, (WM)EM.SETSEL, (WPARAM)start, (LPARAM)end);
             }
 
             private int GetCharIndexFromPosition(Point pt)
             {
-                int index = (int)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, 0, PARAM.FromPoint(pt));
+                int index = (int)PInvoke.SendMessage(_owningChildEdit, (WM)EM.CHARFROMPOS, (WPARAM)0, (LPARAM)pt);
                 index = PARAM.LOWORD(index);
 
                 if (index < 0)
@@ -371,9 +369,9 @@ namespace System.Windows.Forms
                 else
                 {
                     string t = Text;
+
                     // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
                     // is a newline.
-                    //
                     if (index >= t.Length)
                     {
                         index = Math.Max(t.Length - 1, 0);
@@ -387,7 +385,7 @@ namespace System.Windows.Forms
             {
                 // Send an EM_GETRECT message to find out the bounding rectangle.
                 RECT rectangle = new RECT();
-                SendMessageW(_owningChildEdit, (WM)EM.GETRECT, 0, ref rectangle);
+                PInvoke.SendMessage(_owningChildEdit, (WM)EM.GETRECT, (WPARAM)0, ref rectangle);
 
                 return rectangle;
             }
@@ -399,23 +397,26 @@ namespace System.Windows.Forms
                     return Point.Empty;
                 }
 
-                int i = (int)SendMessageW(_owningChildEdit, (WM)EM.POSFROMCHAR, index);
+                int i = (int)PInvoke.SendMessage(_owningChildEdit, (WM)EM.POSFROMCHAR, (WPARAM)index);
 
                 return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
             }
 
-            private bool GetTextExtentPoint32(char item, out Size size)
+            private unsafe bool GetTextExtentPoint32(char item, out Size size)
             {
-                size = new Size();
+                size = default;
 
-                using var hdc = new GetDcScope(_owningChildEdit.Handle);
+                using GetDcScope hdc = new(_owningChildEdit.Handle);
                 if (hdc.IsNull)
                 {
                     return false;
                 }
 
-                // Add the width of the character at that position.
-                return Gdi32.GetTextExtentPoint32W(hdc, item.ToString(), 1, ref size).IsTrue();
+                fixed (void* pSize = &size)
+                {
+                    // Add the width of the character at that position.
+                    return PInvoke.GetTextExtentPoint32W(hdc, &item, 1, (SIZE*)pSize);
+                }
             }
         }
     }

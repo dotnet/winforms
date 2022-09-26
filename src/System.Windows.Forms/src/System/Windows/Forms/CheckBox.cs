@@ -212,7 +212,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)_checkState);
+                        PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(int)_checkState);
                     }
 
                     if (oldChecked != Checked)
@@ -253,7 +253,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
+                cp.ClassName = PInvoke.WC_BUTTON;
                 if (OwnerDraw)
                 {
                     cp.Style |= (int)User32.BS.OWNERDRAW;
@@ -530,7 +530,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)_checkState);
+                PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(int)_checkState);
             }
         }
 

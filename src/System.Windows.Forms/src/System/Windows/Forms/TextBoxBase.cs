@@ -415,7 +415,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.TextBoxCanUndoDescr))]
-        public bool CanUndo => IsHandleCreated && (int)SendMessageW(this, (WM)EM.CANUNDO) != 0;
+        public bool CanUndo => IsHandleCreated && (int)PInvoke.SendMessage(this, (WM)EM.CANUNDO) != 0;
 
         /// <summary>
         ///  Returns the parameters needed to create the handle. Inheriting classes
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_EDIT;
+                cp.ClassName = PInvoke.WC_EDIT;
                 cp.Style |= (int)(ES.AUTOHSCROLL | ES.AUTOVSCROLL);
                 if (!_textBoxFlags[hideSelection])
                 {
@@ -440,16 +440,16 @@ namespace System.Windows.Forms
                     cp.Style |= (int)ES.READONLY;
                 }
 
-                cp.Style &= ~(int)WS.BORDER;
-                cp.ExStyle &= ~(int)WS_EX.CLIENTEDGE;
+                cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
+                cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
                 switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= (int)WS_EX.CLIENTEDGE;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)WS.BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                 }
 
@@ -717,7 +717,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    bool curState = (int)SendMessageW(this, (WM)EM.GETMODIFY) != 0;
+                    bool curState = (int)PInvoke.SendMessage(this, (WM)EM.GETMODIFY) != 0;
                     if (_textBoxFlags[modified] != curState)
                     {
                         // Raise ModifiedChanged event.  See WmReflectCommand for more info.
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
                 {
                     if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)EM.SETMODIFY, PARAM.FromBool(value));
+                        PInvoke.SendMessage(this, (WM)EM.SETMODIFY, (WPARAM)(BOOL)value);
                         // Must maintain this state always in order for the
                         // test in the Get method to work properly.
                     }
@@ -931,7 +931,7 @@ namespace System.Windows.Forms
             {
                 start = 0;
                 int startResult = 0;
-                User32.SendMessageW(this, (WM)EM.GETSEL, (nint)(&startResult), ref end);
+                PInvoke.SendMessage(this, (WM)EM.GETSEL, (WPARAM)(&startResult), ref end);
                 start = startResult;
 
                 //Here, we return the max of either 0 or the # returned by
@@ -986,7 +986,7 @@ namespace System.Windows.Forms
                     _textBoxFlags[readOnly] = value;
                     if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)EM.SETREADONLY, PARAM.FromBool(value));
+                        PInvoke.SendMessage(this, (WM)EM.SETREADONLY, (WPARAM)(BOOL)value);
                     }
 
                     OnReadOnlyChanged(EventArgs.Empty);
@@ -1043,23 +1043,23 @@ namespace System.Windows.Forms
             // The EM_LIMITTEXT message limits only the text the user can enter. It does not affect any text
             // already in the edit control when the message is sent, nor does it affect the length of the text
             // copied to the edit control by the WM_SETTEXT message.
-            SendMessageW(this, (WM)EM.LIMITTEXT);
+            PInvoke.SendMessage(this, (WM)EM.LIMITTEXT);
 
             if (clearUndo)
             {
-                SendMessageW(this, (WM)EM.REPLACESEL, 0, text);
+                PInvoke.SendMessage(this, (WM)EM.REPLACESEL, 0, text);
 
                 // For consistency with Text, we clear the modified flag
-                SendMessageW(this, (WM)EM.SETMODIFY);
+                PInvoke.SendMessage(this, (WM)EM.SETMODIFY);
                 ClearUndo();
             }
             else
             {
-                SendMessageW(this, (WM)EM.REPLACESEL, -1, text);
+                PInvoke.SendMessage(this, (WM)EM.REPLACESEL, (WPARAM)(-1), text);
             }
 
             // Re-enable user input.
-            SendMessageW(this, (WM)EM.LIMITTEXT, _maxLength);
+            PInvoke.SendMessage(this, (WM)EM.LIMITTEXT, (WPARAM)_maxLength);
         }
 
         /// <summary>
@@ -1141,7 +1141,7 @@ namespace System.Windows.Forms
                     if (IsHandleCreated)
                     {
                         // clear the modified flag
-                        SendMessageW(this, (WM)EM.SETMODIFY);
+                        PInvoke.SendMessage(this, (WM)EM.SETMODIFY);
                     }
                 }
             }
@@ -1337,14 +1337,14 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessageW(this, (WM)EM.EMPTYUNDOBUFFER);
+                PInvoke.SendMessage(this, (WM)EM.EMPTYUNDOBUFFER);
             }
         }
 
         /// <summary>
         ///  Copies the current selection in the text box to the Clipboard.
         /// </summary>
-        public void Copy() => SendMessageW(this, WM.COPY);
+        public void Copy() => PInvoke.SendMessage(this, WM.COPY);
 
         protected override AccessibleObject CreateAccessibilityInstance() => new TextBoxBaseAccessibleObject(this);
 
@@ -1369,7 +1369,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Moves the current selection in the text box to the Clipboard.
         /// </summary>
-        public void Cut() => SendMessageW(this, WM.CUT);
+        public void Cut() => PInvoke.SendMessage(this, WM.CUT);
 
         /// <summary>
         ///  Returns the text end position (one past the last input character).  This property is virtual to allow MaskedTextBox
@@ -1440,7 +1440,7 @@ namespace System.Windows.Forms
             UpdateMaxLength();
             if (_textBoxFlags[modified])
             {
-                SendMessageW(this, (WM)EM.SETMODIFY, (nint)BOOL.TRUE);
+                PInvoke.SendMessage(this, (WM)EM.SETMODIFY, (WPARAM)(BOOL)true);
             }
 
             if (_textBoxFlags[scrollToCaretOnHandleCreated])
@@ -1462,7 +1462,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Replaces the current selection in the text box with the contents of the Clipboard.
         /// </summary>
-        public void Paste() => SendMessageW(this, WM.PASTE);
+        public void Paste() => PInvoke.SendMessage(this, WM.PASTE);
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -1592,7 +1592,7 @@ namespace System.Windows.Forms
             CommonProperties.xClearPreferredSizeCache(this);
             base.OnTextChanged(e);
 
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening())
             {
                 RaiseAccessibilityTextChangedEvent();
             }
@@ -1621,7 +1621,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt)
         {
-            int index = (int)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, 0, PARAM.FromPoint(pt));
+            int index = (int)PInvoke.SendMessage(this, (WM)EM.CHARFROMPOS, 0, PARAM.FromPoint(pt));
             index = PARAM.LOWORD(index);
 
             if (index < 0)
@@ -1651,7 +1651,7 @@ namespace System.Windows.Forms
         ///  you pass the index of a overflowed character, GetLineFromCharIndex would
         ///  return 1 and not 0.
         /// </summary>
-        public virtual int GetLineFromCharIndex(int index) => (int)SendMessageW(this, (WM)EM.LINEFROMCHAR, index);
+        public virtual int GetLineFromCharIndex(int index) => (int)PInvoke.SendMessage(this, (WM)EM.LINEFROMCHAR, (WPARAM)index);
 
         /// <summary>
         ///  Returns the location of the character at the given index.
@@ -1663,7 +1663,7 @@ namespace System.Windows.Forms
                 return Point.Empty;
             }
 
-            int i = (int)SendMessageW(this, (WM)EM.POSFROMCHAR, index);
+            int i = (int)PInvoke.SendMessage(this, (WM)EM.POSFROMCHAR, (WPARAM)index);
             return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }
 
@@ -1677,13 +1677,13 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
             }
 
-            return (int)SendMessageW(this, (WM)EM.LINEINDEX, lineNumber);
+            return (int)PInvoke.SendMessage(this, (WM)EM.LINEINDEX, (WPARAM)lineNumber);
         }
 
         /// <summary>
         ///  Returns the index of the first character of the line where the caret is.
         /// </summary>
-        public int GetFirstCharIndexOfCurrentLine() => (int)SendMessageW(this, (WM)EM.LINEINDEX, -1);
+        public int GetFirstCharIndexOfCurrentLine() => (int)PInvoke.SendMessage(this, (WM)EM.LINEINDEX, (WPARAM)(-1));
 
         /// <summary>
         ///  Ensures that the caret is visible in the TextBox window, by scrolling the
@@ -1707,7 +1707,7 @@ namespace System.Windows.Forms
             IntPtr editOlePtr = IntPtr.Zero;
             try
             {
-                if (SendMessageW(this, (WM)Richedit.EM.GETOLEINTERFACE, 0, ref editOlePtr) != 0)
+                if (PInvoke.SendMessage(this, (WM)Richedit.EM.GETOLEINTERFACE, 0, ref editOlePtr) != 0)
                 {
                     IntPtr iTextDocument = IntPtr.Zero;
                     Guid iiTextDocumentGuid = typeof(Richedit.ITextDocument).GUID;
@@ -1734,7 +1734,7 @@ namespace System.Windows.Forms
                             textRange.ScrollIntoView(0);   // 0 ==> tomEnd
 
                             // 2. Get the first visible line.
-                            int firstVisibleLine = (int)SendMessageW(this, (WM)EM.GETFIRSTVISIBLELINE);
+                            int firstVisibleLine = (int)PInvoke.SendMessage(this, (WM)EM.GETFIRSTVISIBLELINE);
 
                             // 3. If the first visible line is smaller than the start of the selection, we are done;
                             if (firstVisibleLine <= selStartLine)
@@ -1770,7 +1770,7 @@ namespace System.Windows.Forms
 
             if (!scrolled)
             {
-                SendMessageW(this, (WM)EM.SCROLLCARET);
+                PInvoke.SendMessage(this, (WM)EM.SCROLLCARET);
             }
         }
 
@@ -1829,7 +1829,7 @@ namespace System.Windows.Forms
             {
                 AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
 
-                SendMessageW(this, (WM)EM.SETSEL, s, e);
+                PInvoke.SendMessage(this, (WM)EM.SETSEL, (WPARAM)s, (LPARAM)e);
 
                 if (IsAccessibilityObjectCreated)
                 {
@@ -1946,7 +1946,7 @@ namespace System.Windows.Forms
             {
                 _textBoxFlags[setSelectionOnHandleCreated] = false;
                 AdjustSelectionStartAndEnd(_selectionStart, _selectionLength, out int start, out int end, -1);
-                SendMessageW(this, (WM)EM.SETSEL, start, end);
+                PInvoke.SendMessage(this, (WM)EM.SETSEL, (WPARAM)start, (LPARAM)end);
             }
         }
 
@@ -2069,17 +2069,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Undoes the last edit operation in the text box.
         /// </summary>
-        public void Undo() => SendMessageW(this, (WM)EM.UNDO);
+        public void Undo() => PInvoke.SendMessage(this, (WM)EM.UNDO);
 
         internal virtual void UpdateMaxLength()
         {
             if (IsHandleCreated)
             {
-                SendMessageW(this, (WM)EM.LIMITTEXT, _maxLength);
+                PInvoke.SendMessage(this, (WM)EM.LIMITTEXT, (WPARAM)_maxLength);
             }
         }
 
-        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
+        internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg)
         {
             if (msg == WM.CTLCOLORSTATIC && !ShouldSerializeBackColor())
             {
@@ -2098,7 +2098,7 @@ namespace System.Windows.Forms
         {
             if (!_textBoxFlags[codeUpdateText] && !_textBoxFlags[creatingHandle])
             {
-                EN wParamAsEN = (EN)PARAM.HIWORD(m.WParamInternal);
+                EN wParamAsEN = (EN)m.WParamInternal.HIWORD;
                 if (wParamAsEN == EN.CHANGE && CanRaiseTextChangedEvent)
                 {
                     OnTextChanged(EventArgs.Empty);
@@ -2116,7 +2116,7 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if (!_textBoxFlags[multiline])
             {
-                SendMessageW(this, (WM)EM.SETMARGINS, (nint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                PInvoke.SendMessage(this, (WM)EM.SETMARGINS, (WPARAM)(uint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
             }
         }
 
@@ -2126,12 +2126,12 @@ namespace System.Windows.Forms
             if (AcceptsTab)
             {
                 Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "TextBox wants tabs");
-                m.ResultInternal = m.ResultInternal | (int)DLGC.WANTTAB;
+                m.ResultInternal = (LRESULT)(m.ResultInternal | (int)DLGC.WANTTAB);
             }
             else
             {
                 Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "TextBox doesn't want tabs");
-                m.ResultInternal = m.ResultInternal & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS);
+                m.ResultInternal = (LRESULT)(m.ResultInternal & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS));
             }
         }
 

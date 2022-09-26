@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        private static partial BOOL GetIconInfo(IntPtr hIcon, out ICONINFO info);
+        [DllImport(Libraries.User32)]
+        private static extern BOOL GetIconInfo(IntPtr hIcon, out ICONINFO info);
 
         public static ICONINFO GetIconInfo(IntPtr hIcon)
         {
@@ -30,20 +30,20 @@ internal static partial class Interop
             public BOOL fIcon;
             public uint xHotspot;
             public uint yHotspot;
-            public Gdi32.HBITMAP hbmMask;
-            public Gdi32.HBITMAP hbmColor;
+            public HBITMAP hbmMask;
+            public HBITMAP hbmColor;
 
             public void Dispose()
             {
                 if (!hbmMask.IsNull)
                 {
-                    Gdi32.DeleteObject(hbmMask);
+                    PInvoke.DeleteObject((HGDIOBJ)hbmMask.Value);
                     hbmMask = default;
                 }
 
                 if (!hbmColor.IsNull)
                 {
-                    Gdi32.DeleteObject(hbmColor);
+                    PInvoke.DeleteObject((HGDIOBJ)hbmColor.Value);
                     hbmColor = default;
                 }
             }

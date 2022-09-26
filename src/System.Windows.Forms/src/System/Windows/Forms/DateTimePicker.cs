@@ -220,7 +220,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Gdi32.HFONT CalendarFontHandle
+        private HFONT CalendarFontHandle
         {
             get
             {
@@ -341,8 +341,8 @@ namespace System.Windows.Forms
                 // The information from win32 DateTimePicker is reliable only when ShowCheckBoxes is True
                 if (ShowCheckBox && IsHandleCreated)
                 {
-                    var sys = new Kernel32.SYSTEMTIME();
-                    GDT gdt = (GDT)User32.SendMessageW(this, (User32.WM)DTM.GETSYSTEMTIME, 0, ref sys);
+                    var sys = new SYSTEMTIME();
+                    GDT gdt = (GDT)PInvoke.SendMessage(this, (User32.WM)DTM.GETSYSTEMTIME, 0, ref sys);
                     return gdt == GDT.VALID;
                 }
                 else
@@ -359,12 +359,12 @@ namespace System.Windows.Forms
                     {
                         if (value)
                         {
-                            Kernel32.SYSTEMTIME systemTime = _value;
-                            User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.VALID, ref systemTime);
+                            SYSTEMTIME systemTime = (SYSTEMTIME)_value;
+                            PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (WPARAM)(uint)GDT.VALID, ref systemTime);
                         }
                         else
                         {
-                            User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.NONE);
+                            PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (WPARAM)(uint)GDT.NONE);
                         }
                     }
 
@@ -392,7 +392,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = WindowClasses.WC_DATETIMEPICK;
+                cp.ClassName = PInvoke.DATETIMEPICK_CLASS;
 
                 cp.Style |= (int)_style;
 
@@ -410,14 +410,14 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for DateTimePicker explicitly.
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -446,7 +446,7 @@ namespace System.Windows.Forms
                     {
                         if (_format == DateTimePickerFormat.Custom)
                         {
-                            User32.SendMessageW(this, (User32.WM)DTM.SETFORMATW, 0, _customFormat);
+                            PInvoke.SendMessage(this, (User32.WM)DTM.SETFORMATW, 0, _customFormat);
                         }
                     }
                 }
@@ -903,8 +903,8 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     // Make sure any changes to this code get propagated to createHandle
-                    Kernel32.SYSTEMTIME systemTime = value;
-                    User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.VALID, ref systemTime);
+                    SYSTEMTIME systemTime = (SYSTEMTIME)value;
+                    PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (WPARAM)(uint)GDT.VALID, ref systemTime);
                 }
 
                 if (valueChanged)
@@ -992,17 +992,17 @@ namespace System.Windows.Forms
             if (_userHasSetValue && _validTime)
             {
                 // Make sure any changes to this code get propagated to setValue
-                Kernel32.SYSTEMTIME systemTime = Value;
-                User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.VALID, ref systemTime);
+                SYSTEMTIME systemTime = (SYSTEMTIME)Value;
+                PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (uint)GDT.VALID, ref systemTime);
             }
             else if (!_validTime)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.NONE);
+                PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (uint)GDT.NONE);
             }
 
             if (_format == DateTimePickerFormat.Custom)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETFORMATW, 0, _customFormat);
+                PInvoke.SendMessage(this, (User32.WM)DTM.SETFORMATW, 0, _customFormat);
             }
 
             UpdateUpDown();
@@ -1149,7 +1149,10 @@ namespace System.Windows.Forms
                 // border should be drawn disabled when theming (VisualStyles) is enabled. Setting the window
                 // style to itself (which will have the proper WS_DISABLED setting after calling base) will
                 // flush the cached value and render the border as one would expect.
-                User32.SetWindowLong(this, User32.GWL.STYLE, User32.GetWindowLong(this, User32.GWL.STYLE));
+                PInvoke.SetWindowLong(
+                    this,
+                    WINDOW_LONG_PTR_INDEX.GWL_STYLE,
+                    PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE));
             }
         }
 
@@ -1279,8 +1282,8 @@ namespace System.Windows.Forms
             // Update the text displayed in the DateTimePicker.
             if (IsHandleCreated)
             {
-                Kernel32.SYSTEMTIME systemTime = _value;
-                User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.VALID, ref systemTime);
+                SYSTEMTIME systemTime = (SYSTEMTIME)_value;
+                PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (uint)GDT.VALID, ref systemTime);
             }
 
             // Updating Checked to false will set the control to "no date" and clear its checkbox.
@@ -1297,7 +1300,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETMCCOLOR, (nint)colorIndex, value.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)DTM.SETMCCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
             }
         }
 
@@ -1308,7 +1311,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETMCFONT, CalendarFontHandle, NativeMethods.InvalidIntPtr);
+                PInvoke.SendMessage(this, (User32.WM)DTM.SETMCFONT, (WPARAM)CalendarFontHandle, (LPARAM)(-1));
             }
         }
 
@@ -1336,11 +1339,11 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
-                times[0] = min;
-                times[1] = max;
+                Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
+                times[0] = (SYSTEMTIME)min;
+                times[1] = (SYSTEMTIME)max;
                 GDTR flags = GDTR.MIN | GDTR.MAX;
-                User32.SendMessageW(this, (User32.WM)DTM.SETRANGE, (nint)flags, ref times[0]);
+                PInvoke.SendMessage(this, (User32.WM)DTM.SETRANGE, (WPARAM)(uint)flags, ref times[0]);
             }
         }
 
@@ -1465,7 +1468,7 @@ namespace System.Windows.Forms
                 User32.EnumChildWindows(this, c.enumChildren);
                 if (c.hwndFound != IntPtr.Zero)
                 {
-                    User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, BOOL.TRUE);
+                    User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, true);
                     User32.UpdateWindow(c.hwndFound);
                 }
             }
@@ -1496,13 +1499,13 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateTimeChange(ref Message m)
         {
-            NMDATETIMECHANGE* nmdtc = (NMDATETIMECHANGE*)m.LParamInternal;
+            NMDATETIMECHANGE* nmdtc = (NMDATETIMECHANGE*)(nint)m.LParamInternal;
             DateTime temp = _value;
             bool oldvalid = _validTime;
             if (nmdtc->dwFlags != GDT.NONE)
             {
                 _validTime = true;
-                _value = nmdtc->st;
+                _value = (DateTime)nmdtc->st;
                 _userHasSetValue = true;
             }
             else
@@ -1524,13 +1527,13 @@ namespace System.Windows.Forms
         {
             if (RightToLeftLayout == true && RightToLeft == RightToLeft.Yes)
             {
-                IntPtr handle = User32.SendMessageW(this, (User32.WM)DTM.GETMONTHCAL);
+                HWND handle = (HWND)PInvoke.SendMessage(this, (User32.WM)DTM.GETMONTHCAL);
                 if (handle != IntPtr.Zero)
                 {
-                    User32.WS_EX style = (User32.WS_EX)User32.GetWindowLong(handle, User32.GWL.EXSTYLE);
-                    style |= User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT;
-                    style &= ~(User32.WS_EX.RIGHT | User32.WS_EX.RTLREADING);
-                    User32.SetWindowLong(handle, User32.GWL.EXSTYLE, (nint)style);
+                    WINDOW_EX_STYLE style = (WINDOW_EX_STYLE)PInvoke.GetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+                    style |= WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
+                    style &= ~(WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_RTLREADING);
+                    PInvoke.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (nint)style);
                     GC.KeepAlive(this);
                 }
             }
@@ -1554,7 +1557,7 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                 switch ((DTN)nmhdr->code)
                 {
                     case DTN.CLOSEUP:

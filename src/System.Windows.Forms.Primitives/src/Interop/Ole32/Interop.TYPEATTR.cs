@@ -9,7 +9,7 @@ internal static partial class Interop
         public struct TYPEATTR
         {
             public Guid guid;
-            public Kernel32.LCID lcid;
+            public PInvoke.LCID lcid;
             public uint dwReserved;
             public DispatchID memidConstructor;
             public DispatchID memidDestructor;

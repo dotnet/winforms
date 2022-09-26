@@ -17,7 +17,7 @@ internal partial class Interop
             public IntPtr ppUnk;
             public uint cPages;
             public IntPtr lpPages;
-            public Kernel32.LCID lcid;
+            public PInvoke.LCID lcid;
             public Ole32.DispatchID dispidInitialProperty;
         }
     }

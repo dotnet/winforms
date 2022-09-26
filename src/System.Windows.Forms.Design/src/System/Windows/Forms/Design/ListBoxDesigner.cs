@@ -194,8 +194,8 @@ namespace System.Windows.Forms.Design
             ListBox lb = (ListBox)Control;
             if (lb.IsHandleCreated && lb.Items.Count == 0)
             {
-                User32.SendMessageW(lb, (User32.WM)User32.LB.RESETCONTENT);
-                User32.SendMessageW(lb, (User32.WM)User32.LB.ADDSTRING, 0, name);
+                PInvoke.SendMessage(lb, (User32.WM)User32.LB.RESETCONTENT);
+                PInvoke.SendMessage(lb, (User32.WM)User32.LB.ADDSTRING, 0, name);
             }
         }
 

@@ -5,7 +5,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -111,7 +110,7 @@ namespace System.Windows.Forms
         /// <param name="bounds">dropdown button bounds</param>
         /// <param name="state"> state</param>
         /// <param name="handle"> handle of the control</param>
-        internal static void DrawDropDownButtonForHandle(Gdi32.HDC hdc, Rectangle bounds, ComboBoxState state, IntPtr handle)
+        internal static void DrawDropDownButtonForHandle(HDC hdc, Rectangle bounds, ComboBoxState state, IntPtr handle)
         {
             InitializeRenderer(ComboBoxElement, (int)state);
 

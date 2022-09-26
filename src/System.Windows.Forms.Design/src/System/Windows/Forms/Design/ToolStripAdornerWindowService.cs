@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Design
             }
 
             var pt = new Point(c.Left, c.Top);
-            User32.MapWindowPoint(c.Parent, _toolStripAdornerWindow, ref pt);
+            PInvoke.MapWindowPoints(c.Parent, _toolStripAdornerWindow, ref pt);
             return pt;
         }
 
@@ -188,8 +188,8 @@ namespace System.Windows.Forms.Design
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~(int)(User32.WS.CLIPCHILDREN | User32.WS.CLIPSIBLINGS);
-                    cp.ExStyle |= (int)User32.WS_EX.TRANSPARENT;
+                    cp.Style &= ~(int)(WINDOW_STYLE.WS_CLIPCHILDREN | WINDOW_STYLE.WS_CLIPSIBLINGS);
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TRANSPARENT;
                     return cp;
                 }
             }
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.Design
                 switch (m.MsgInternal)
                 {
                     case User32.WM.NCHITTEST:
-                        m.ResultInternal = (nint)User32.HT.TRANSPARENT;
+                        m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
                         break;
                     default:
                         base.WndProc(ref m);

@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control is not null && control.IsHandleCreated)
             {
-                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (nint)BOOL.FALSE);
+                PInvoke.SendMessage(control, User32.WM.NCACTIVATE, (WPARAM)(BOOL)false);
                 User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
             }
         }
@@ -1570,7 +1570,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         void IToolboxUser.ToolPicked(ToolboxItem tool)
         {
-            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
+            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 ToolPicked(tool);
             }

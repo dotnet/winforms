@@ -395,12 +395,11 @@ namespace System.Windows.Forms
                     {
                         // We want to instantly change the cursor if the mouse is within our bounds.
                         // This includes the case where the mouse is over one of our children
-                        var r = new RECT();
                         User32.GetCursorPos(out Point p);
-                        User32.GetWindowRect(this, ref r);
-                        if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
+                        PInvoke.GetWindowRect(this, out var r);
+                        if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                         {
-                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (nint)User32.HT.CLIENT);
+                            PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
                         }
                     }
                 }
@@ -1565,7 +1564,7 @@ namespace System.Windows.Forms
                     using (var hdc = new DeviceContextHdcScope(g, applyGraphicsState: false))
                     {
                         color = ColorTranslator.FromWin32(
-                            Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(foreBrush.Color)));
+                            (int)PInvoke.GetNearestColor(hdc, (COLORREF)(uint)ColorTranslator.ToWin32(foreBrush.Color)).Value);
                     }
 
                     Rectangle clientRectWithPadding = ClientRectWithPadding;
@@ -2016,7 +2015,7 @@ namespace System.Windows.Forms
         private void WmSetCursor(ref Message m)
         {
             // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
-            if (m.WParamInternal == InternalHandle && (User32.HT)PARAM.LOWORD(m.LParamInternal) == User32.HT.CLIENT)
+            if ((HWND)m.WParamInternal == InternalHandle && (User32.HT)m.LParamInternal.LOWORD == User32.HT.CLIENT)
             {
                 Cursor.Current = OverrideCursor ?? Cursor;
             }

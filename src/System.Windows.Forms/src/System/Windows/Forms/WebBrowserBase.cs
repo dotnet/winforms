@@ -41,7 +41,7 @@ namespace System.Windows.Forms
         private WebBrowserHelper.SelectionStyle selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
         private WebBrowserSiteBase axSite;
         private ContainerControl containingControl;
-        private IntPtr hwndFocus = IntPtr.Zero;
+        private HWND hwndFocus;
         private EventHandler selectionChangeHandler;
         private Guid clsid;
         // Pointers to the ActiveX object: Interface pointers are cached for perf.
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
             }
 
             // Convert Message to MSG
-            User32.MSG win32Message = msg;
+            MSG win32Message = msg;
             SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
             try
             {
@@ -272,7 +272,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // win32Message may have been modified. Lets copy it back.
-                    msg.MsgInternal = win32Message.message;
+                    msg.MsgInternal = (User32.WM)win32Message.message;
                     msg.WParamInternal = win32Message.wParam;
                     msg.LParamInternal = win32Message.lParam;
                     msg.HWnd = win32Message.hwnd;
@@ -336,25 +336,25 @@ namespace System.Windows.Forms
                     {
                         cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
                     };
+
                     HRESULT hr = axOleControl.GetControlInfo(&ctlInfo);
-                    if (hr.Succeeded())
+                    if (hr.Succeeded)
                     {
-                        //
                         // Sadly, we don't have a message so we must fake one ourselves.
                         // The message we are faking is a WM_SYSKEYDOWN with the right
                         // alt key setting.
-                        var msg = new User32.MSG
+                        var msg = new MSG
                         {
-                            hwnd = IntPtr.Zero,
-                            message = User32.WM.SYSKEYDOWN,
-                            wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
-                            lParam = (IntPtr)0x20180001,
-                            time = Kernel32.GetTickCount()
+                            hwnd = (HWND)0,
+                            message = (uint)User32.WM.SYSKEYDOWN,
+                            wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+                            lParam = 0x20180001,
+                            time = PInvoke.GetTickCount()
                         };
 
                         User32.GetCursorPos(out Point p);
                         msg.pt = p;
-                        if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsFalse())
+                        if (!Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                         {
                             axOleControl.OnMnemonic(&msg);
                             Focus();
@@ -433,14 +433,14 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.KILLFOCUS:
-                    hwndFocus = m.WParamInternal;
+                    hwndFocus = (HWND)m.WParamInternal;
                     try
                     {
                         base.WndProc(ref m);
                     }
                     finally
                     {
-                        hwndFocus = IntPtr.Zero;
+                        hwndFocus = HWND.Null;
                     }
 
                     break;
@@ -455,10 +455,10 @@ namespace System.Windows.Forms
                     //
                     if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
                     {
-                        IntPtr hwndInPlaceObject = IntPtr.Zero;
-                        if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded())
+                        HWND hwndInPlaceObject = HWND.Null;
+                        if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded)
                         {
-                            Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject), DpiAwarenessContext);
+                            Application.ParkHandle(new HandleRef<HWND>(AXInPlaceObject, hwndInPlaceObject), DpiAwarenessContext);
                         }
                     }
 
@@ -485,7 +485,7 @@ namespace System.Windows.Forms
                 default:
                     if (m.MsgInternal == WebBrowserHelper.REGMSG_MSG)
                     {
-                        m.ResultInternal = WebBrowserHelper.REGMSG_RETVAL;
+                        m.ResultInternal = (LRESULT)WebBrowserHelper.REGMSG_RETVAL;
                     }
                     else
                     {
@@ -831,9 +831,9 @@ namespace System.Windows.Forms
             return retVal;
         }
 
-        internal void AttachWindow(IntPtr hwnd)
+        internal void AttachWindow(HWND hwnd)
         {
-            User32.SetParent(hwnd, new HandleRef(this, Handle));
+            PInvoke.SetParent(hwnd, this);
 
             if (axWindow is not null)
             {
@@ -905,7 +905,7 @@ namespace System.Windows.Forms
                     Ole32.CLSCTX.INPROC_SERVER,
                     ref NativeMethods.ActiveX.IID_IUnknown,
                     out activeXInstance);
-                hr.ThrowIfFailed();
+                hr.ThrowOnFailure();
 
                 Debug.Assert(activeXInstance is not null, "w/o an exception being thrown we must have an object...");
 
@@ -959,7 +959,7 @@ namespace System.Windows.Forms
                 // See if the ActiveX control returns OLEMISC_SETCLIENTSITEFIRST
                 Ole32.OLEMISC bits = 0;
                 HRESULT hr = axOleObject.GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
-                if (hr.Succeeded() && ((bits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0))
+                if (hr.Succeeded && ((bits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0))
                 {
                     //
                     // Simply setting the site to the ActiveX control should activate it.
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms
             if (ActiveXState == WebBrowserHelper.AXState.UIActive)
             {
                 HRESULT hr = AXInPlaceObject.UIDeactivate();
-                Debug.Assert(hr.Succeeded(), "Failed to UIDeactivate");
+                Debug.Assert(hr.Succeeded, "Failed to UIDeactivate");
 
                 // We are now InPlaceActive
                 ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
@@ -1185,8 +1185,8 @@ namespace System.Windows.Forms
             var sz = new Size(width, height);
             bool resetExtents = DesignMode;
             Pixel2hiMetric(ref sz);
-            Interop.HRESULT hr = axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            if (hr != Interop.HRESULT.S_OK)
+            HRESULT hr = axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
+            if (hr != HRESULT.S_OK)
             {
                 resetExtents = true;
             }
@@ -1261,7 +1261,7 @@ namespace System.Windows.Forms
 
             if (cc is null && IsHandleCreated)
             {
-                cc = Control.FromHandle(User32.GetParent(this)) as ContainerControl;
+                cc = Control.FromHandle(PInvoke.GetParent(this)) as ContainerControl;
             }
 
             // Never use the parking window for this: its hwnd can be destroyed at any time.

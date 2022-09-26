@@ -207,7 +207,7 @@ namespace System.Windows.Forms
             internal bool Focused => _owningMonthCalendar.Focused;
 
             internal CalendarCellAccessibleObject? FocusedCell
-                => UiaCore.UiaClientsAreListening().IsTrue()
+                => UiaCore.UiaClientsAreListening()
                     ? _focusedCellAccessibleObject ??= GetCellByDate(_owningMonthCalendar._focusedDate)
                     : null;
 
@@ -256,9 +256,9 @@ namespace System.Windows.Forms
                     iRow = rowIndex
                 };
 
-                bool success = User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
+                bool success = PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
 
-                return success ? new(gridInfo.stStart, gridInfo.stEnd) : null;
+                return success ? new((DateTime)gridInfo.stStart, (DateTime)gridInfo.stEnd) : null;
             }
 
             internal unsafe RECT GetCalendarPartRectangle(MCGIP dwPart, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
@@ -278,7 +278,7 @@ namespace System.Windows.Forms
                     iRow = rowIndex
                 };
 
-                bool success = User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
+                bool success = PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
 
                 return success ? _owningMonthCalendar.RectangleToScreen(gridInfo.rc) : default;
             }
@@ -307,7 +307,7 @@ namespace System.Windows.Forms
                         cchName = (UIntPtr)name.Length - 1
                     };
 
-                    User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, 0, ref gridInfo);
+                    PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, 0, ref gridInfo);
                 }
 
                 string text = string.Empty;
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
                     pt = point
                 };
 
-                User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.HITTEST, 0, ref hitTestInfo);
+                PInvoke.SendMessage(_owningMonthCalendar, (User32.WM)MCM.HITTEST, 0, ref hitTestInfo);
 
                 return hitTestInfo;
             }

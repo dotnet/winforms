@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme)]
-        public static partial BOOL IsThemeBackgroundPartiallyTransparent(IntPtr hTheme, int iPartId, int iStateId);
+        [DllImport(Libraries.UxTheme)]
+        public static extern BOOL IsThemeBackgroundPartiallyTransparent(IntPtr hTheme, int iPartId, int iStateId);
 
         public static BOOL IsThemeBackgroundPartiallyTransparent(IHandle hTheme, int iPartId, int iStateId)
         {

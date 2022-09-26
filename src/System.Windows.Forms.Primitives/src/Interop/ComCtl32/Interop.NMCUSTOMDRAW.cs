@@ -8,9 +8,9 @@ internal static partial class Interop
     {
         public struct NMCUSTOMDRAW
         {
-            public User32.NMHDR nmcd;
+            public NMHDR nmcd;
             public CDDS dwDrawStage;
-            public Gdi32.HDC hdc;
+            public HDC hdc;
             public RECT rc;
             public IntPtr dwItemSpec;
             public CDIS uItemState;

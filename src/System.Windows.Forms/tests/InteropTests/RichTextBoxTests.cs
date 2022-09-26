@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using Xunit;
-using static Interop;
 using static Interop.Richedit;
 
 namespace System.Windows.Forms.Interop.Tests;
@@ -20,9 +19,9 @@ public class RichTextBoxTests
     {
         RichTextBox_EnLink(out var value);
 
-        Assert.Equal(132, value.nmhdr.code);
-        Assert.Equal((IntPtr)765, value.nmhdr.hwndFrom);
-        Assert.Equal((IntPtr)432, value.nmhdr.idFrom);
+        Assert.Equal(132u, value.nmhdr.code);
+        Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
+        Assert.Equal(432u, value.nmhdr.idFrom);
         Assert.Equal(22, value.msg);
         Assert.Equal((nuint)6578, value.wParam);
         Assert.Equal(54425, value.lParam);
@@ -35,9 +34,9 @@ public class RichTextBoxTests
     {
         RichTextBox_EnProtected(out var value);
 
-        Assert.Equal(132, value.nmhdr.code);
-        Assert.Equal((IntPtr)765, value.nmhdr.hwndFrom);
-        Assert.Equal((IntPtr)432, value.nmhdr.idFrom);
+        Assert.Equal(132u, value.nmhdr.code);
+        Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
+        Assert.Equal(432u, value.nmhdr.idFrom);
         Assert.Equal(22, value.msg);
         Assert.Equal((nuint)6578, value.wParam);
         Assert.Equal(54425, value.lParam);
@@ -50,10 +49,10 @@ public class RichTextBoxTests
     {
         RichTextBox_EnDropFiles(out var value);
 
-        Assert.Equal(132, value.nmhdr.code);
-        Assert.Equal((IntPtr)765, value.nmhdr.hwndFrom);
-        Assert.Equal((IntPtr)432, value.nmhdr.idFrom);
-        Assert.Equal((IntPtr)22, value.hDrop);
+        Assert.Equal(132u, value.nmhdr.code);
+        Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
+        Assert.Equal(432u, value.nmhdr.idFrom);
+        Assert.Equal(22, value.hDrop);
         Assert.Equal(6578, value.cp);
         Assert.Equal(BOOL.TRUE, value.fProtected);
     }
@@ -131,9 +130,9 @@ public class RichTextBoxTests
     {
         RichTextBox_ReqResize(out var value);
 
-        Assert.Equal(132, value.nmhdr.code);
-        Assert.Equal((IntPtr)765, value.nmhdr.hwndFrom);
-        Assert.Equal((IntPtr)432, value.nmhdr.idFrom);
+        Assert.Equal(132u, value.nmhdr.code);
+        Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
+        Assert.Equal(432u, value.nmhdr.idFrom);
         Assert.Equal(6578, value.rc.left);
         Assert.Equal(109, value.rc.right);
         Assert.Equal(54425, value.rc.top);
@@ -145,9 +144,9 @@ public class RichTextBoxTests
     {
         RichTextBox_SelChange(out var value);
 
-        Assert.Equal(132, value.nmhdr.code);
-        Assert.Equal((IntPtr)765, value.nmhdr.hwndFrom);
-        Assert.Equal((IntPtr)432, value.nmhdr.idFrom);
+        Assert.Equal(132u, value.nmhdr.code);
+        Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
+        Assert.Equal(432u, value.nmhdr.idFrom);
         Assert.Equal(SEL.MULTICHAR, value.seltyp);
         Assert.Equal(109, value.chrg.cpMin);
         Assert.Equal(1577, value.chrg.cpMax);

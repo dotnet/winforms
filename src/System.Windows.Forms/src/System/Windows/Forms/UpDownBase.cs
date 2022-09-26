@@ -223,16 +223,16 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                cp.Style &= ~(int)User32.WS.BORDER;
+                cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
                 if (!Application.RenderWithVisualStyles)
                 {
                     switch (_borderStyle)
                     {
                         case BorderStyle.Fixed3D:
-                            cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                            cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                             break;
                         case BorderStyle.FixedSingle:
-                            cp.Style |= (int)User32.WS.BORDER;
+                            cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                             break;
                     }
                 }
@@ -551,7 +551,7 @@ namespace System.Windows.Forms
                     backRect.Y--;
                     backRect.Width += 2;
                     backRect.Height += 2;
-                    using var hpen = new Gdi32.CreatePenScope(backColor);
+                    using PInvoke.CreatePenScope hpen = new(backColor);
                     hdc.DrawRectangle(backRect, hpen);
                 }
             }
@@ -572,8 +572,8 @@ namespace System.Windows.Forms
 
                 backRect.Width++;
                 backRect.Height++;
-                using var hdc = new DeviceContextHdcScope(e);
-                using var hpen = new Gdi32.CreatePenScope(backColor, width);
+                using DeviceContextHdcScope hdc = new(e);
+                using PInvoke.CreatePenScope hpen = new(backColor, width);
                 hdc.DrawRectangle(backRect, hpen);
             }
 
@@ -962,7 +962,7 @@ namespace System.Windows.Forms
                     {
                         if (TextBox.CanFocus)
                         {
-                            User32.SetFocus(new HandleRef(TextBox, TextBox.Handle));
+                            PInvoke.SetFocus(TextBox);
                         }
 
                         base.WndProc(ref m);

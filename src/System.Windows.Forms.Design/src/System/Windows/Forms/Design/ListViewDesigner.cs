@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Design
                 ((ListView)Component).View = value;
                 if (value == View.Details)
                 {
-                    HookChildHandles(Control.Handle);
+                    HookChildHandles((HWND)Control.Handle);
                 }
             }
         }
@@ -75,16 +75,16 @@ namespace System.Windows.Forms.Design
             if (listView.View == View.Details)
             {
                 Point listViewPoint = Control.PointToClient(point);
-                IntPtr hwndHit = User32.ChildWindowFromPointEx(listView, listViewPoint, User32.CWP.SKIPINVISIBLE);
+                HWND hwndHit = (HWND)User32.ChildWindowFromPointEx(listView, listViewPoint, User32.CWP.SKIPINVISIBLE);
 
-                if (hwndHit != IntPtr.Zero && hwndHit != listView.Handle)
+                if (!hwndHit.IsNull && hwndHit != listView.Handle)
                 {
-                    IntPtr headerHwnd = User32.SendMessageW(listView, (User32.WM)ComCtl32.LVM.GETHEADER);
+                    HWND headerHwnd = (HWND)PInvoke.SendMessage(listView, (User32.WM)ComCtl32.LVM.GETHEADER);
                     if (hwndHit == headerHwnd)
                     {
-                        User32.MapWindowPoints(IntPtr.Zero, headerHwnd, &point, 1);
+                        PInvoke.MapWindowPoints(HWND.Null, headerHwnd, ref point);
                         _hdrhit.pt = point;
-                        User32.SendMessageW(headerHwnd, (User32.WM)ComCtl32.HDM.HITTEST, 0, ref _hdrhit);
+                        PInvoke.SendMessage(headerHwnd, (User32.WM)ComCtl32.HDM.HITTEST, 0, ref _hdrhit);
                         if (_hdrhit.flags == ComCtl32.HHT.ONDIVIDER)
                             return true;
                     }
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Design
             base.Initialize(component);
             if (lv.View == View.Details)
             {
-                HookChildHandles(Control.Handle);
+                HookChildHandles((HWND)Control.Handle);
             }
         }
 
@@ -135,8 +135,8 @@ namespace System.Windows.Forms.Design
             {
                 case (int)User32.WM.NOTIFY:
                 case (int)User32.WM.REFLECT_NOTIFY:
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
-                    if (nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
+                    NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+                    if ((int)nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
                     {
                         // Re-codegen if the columns have been resized
                         try

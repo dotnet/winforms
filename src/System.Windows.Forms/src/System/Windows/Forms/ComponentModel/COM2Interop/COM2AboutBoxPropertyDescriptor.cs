@@ -170,13 +170,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     HRESULT hr = pDisp.Invoke(
                         Ole32.DispatchID.ABOUTBOX,
                         &g,
-                        Kernel32.GetThreadLocale(),
+                        PInvoke.GetThreadLocale(),
                         Oleaut32.DISPATCH.METHOD,
                         &dispParams,
                         null,
                         &pExcepInfo,
                         null);
-                    Debug.Assert(hr.Succeeded(), "Failed to launch about box.");
+                    Debug.Assert(hr.Succeeded, "Failed to launch about box.");
                 }
 
                 return value;

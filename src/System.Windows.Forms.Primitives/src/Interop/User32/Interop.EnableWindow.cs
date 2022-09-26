@@ -8,8 +8,8 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial BOOL EnableWindow(IntPtr hWnd, BOOL bEnable);
+        [DllImport(Libraries.User32)]
+        public static extern BOOL EnableWindow(IntPtr hWnd, BOOL bEnable);
 
         public static BOOL EnableWindow(HandleRef hWnd, BOOL bEnable)
         {

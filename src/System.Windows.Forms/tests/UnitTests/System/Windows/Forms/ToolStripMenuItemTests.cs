@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Tests
         {
             using Form form = new();
             form.CreateControl();
-            IntPtr hMenu = User32.GetSystemMenu(form.Handle, bRevert: BOOL.FALSE);
+            HMENU hMenu = PInvoke.GetSystemMenu(form, bRevert: false);
             using var menuItem = new SubToolStripMenuItem(hMenu, nativeMenuCommandID, form);
 
             using Bitmap bitmap = menuItem.TestAccessor().Dynamic.GetNativeMenuItemImage();

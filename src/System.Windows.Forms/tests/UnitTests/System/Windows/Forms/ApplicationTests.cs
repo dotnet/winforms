@@ -19,50 +19,6 @@ namespace System.Windows.Forms.Tests
             Assert.Same(Thread.CurrentThread.CurrentCulture, Application.CurrentCulture);
         }
 
-        public static IEnumerable<object[]> CurrentCulture_Set_TestData()
-        {
-            yield return new object[] { CultureInfo.InvariantCulture };
-            yield return new object[] { new CultureInfo("en") };
-            yield return new object[] { new CultureInfo("fr-FR") };
-            yield return new object[] { new CultureInfo("en-DK") };
-            yield return new object[] { new CultureInfo("haw") };
-            yield return new object[] { new CultureInfo("en-US") };
-            yield return new object[] { new CultureInfo("de-DE_phoneb") };
-            yield return new object[] { new CustomLCIDCultureInfo(10) };
-            yield return new object[] { new CustomLCIDCultureInfo(0) };
-            yield return new object[] { new CustomLCIDCultureInfo(-1) };
-        }
-
-        [WinFormsFact]
-        public void Application_CurrentCulture_Set_GetReturnsExpected()
-        {
-            foreach (object[] testData in CurrentCulture_Set_TestData())
-            {
-                CultureInfo value = (CultureInfo)testData[0];
-
-                CultureInfo oldValue = Application.CurrentCulture;
-                try
-                {
-                    Application.CurrentCulture = value;
-                    Assert.Same(value, Application.CurrentCulture);
-                    Assert.Same(value, Thread.CurrentThread.CurrentCulture);
-                    Assert.Same(value, CultureInfo.CurrentCulture);
-                    Assert.Equal(value.LCID, CultureInfo.CurrentCulture.LCID);
-
-                    // Set same.
-                    Application.CurrentCulture = value;
-                    Assert.Same(value, Application.CurrentCulture);
-                    Assert.Same(value, Thread.CurrentThread.CurrentCulture);
-                    Assert.Same(value, CultureInfo.CurrentCulture);
-                    Assert.Equal(value.LCID, CultureInfo.CurrentCulture.LCID);
-                }
-                finally
-                {
-                    Application.CurrentCulture = oldValue;
-                }
-            }
-        }
-
         [WinFormsFact]
         public void Application_CurrentCulture_SetNull_ThrowsArgumentNullException()
         {

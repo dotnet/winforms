@@ -191,7 +191,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, PARAM.FromBool(value));
+                        PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(BOOL)value);
                     }
 
                     Invalidate();
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
+                cp.ClassName = PInvoke.WC_BUTTON;
                 if (OwnerDraw)
                 {
                     cp.Style |= (int)User32.BS.OWNERDRAW;
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)_isChecked.ToBOOL());
+                PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(BOOL)_isChecked);
             }
         }
 
@@ -426,7 +426,7 @@ namespace System.Windows.Forms
             // user arrows onto the control..
             if (MouseButtons == MouseButtons.None)
             {
-                if (User32.GetKeyState((int)Keys.Tab) >= 0)
+                if (PInvoke.GetKeyState((int)Keys.Tab) >= 0)
                 {
                     //We enter the radioButton by using arrow keys
                     //Paint in raised state...

@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                     // Using the "top" property, we set which rectangle type of the group we want to get
                     // This is described in more detail in https://docs.microsoft.com/windows/win32/controls/lvm-getgrouprect
                     groupRect.top = (int)rectType;
-                    User32.SendMessageW(_owningListView, (User32.WM)LVM.GETGROUPRECT, nativeGroupId, ref groupRect);
+                    PInvoke.SendMessage(_owningListView, (User32.WM)LVM.GETGROUPRECT, (WPARAM)nativeGroupId, ref groupRect);
 
                     // Using the following code, we limit the size of the ListViewGroup rectangle
                     // so that it does not go beyond the rectangle of the ListView
@@ -165,12 +165,16 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                return LVGS.FOCUSED == (LVGS)User32.SendMessageW(_owningListView, (User32.WM)LVM.GETGROUPSTATE, nativeGroupId, (nint)LVGS.FOCUSED);
+                return LVGS.FOCUSED == (LVGS)(uint)PInvoke.SendMessage(
+                    _owningListView,
+                    (User32.WM)LVM.GETGROUPSTATE,
+                    (WPARAM)nativeGroupId,
+                    (LPARAM)(uint)LVGS.FOCUSED);
             }
 
             private int GetNativeGroupId()
             {
-                if (User32.SendMessageW(_owningListView, (User32.WM)LVM.HASGROUP, _owningGroup.ID) == 0)
+                if (PInvoke.SendMessage(_owningListView, (User32.WM)LVM.HASGROUP, (WPARAM)_owningGroup.ID) == 0)
                 {
                     return -1;
                 }

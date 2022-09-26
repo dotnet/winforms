@@ -160,43 +160,41 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(bitmap);
 
-            Gdi32.HBITMAP hbitmap;
+            HBITMAP hbitmap;
             Size size = bitmap.Size;
 
             // Don't use the cached DC here as this isn't a common API and we're manipulating the state.
-            using var screen = new Gdi32.CreateDcScope(default);
-            using var dc = new Gdi32.CreateDcScope(screen);
+            using PInvoke.CreateDcScope screen = new(default);
+            using PInvoke.CreateDcScope dc = new(screen);
 
-            Gdi32.HPALETTE palette = Gdi32.CreateHalftonePalette(dc);
-            Gdi32.GetObjectW(palette, out uint entryCount);
-
-            byte[] imageBuffer = ArrayPool<byte>.Shared.Rent(bitmap.Width * bitmap.Height);
+            HPALETTE palette = PInvoke.CreateHalftonePalette(dc);
+            PInvoke.GetObject(palette, out uint entryCount);
 
             byte[] bitmapInfoBuffer = ArrayPool<byte>.Shared
-                .Rent(checked((int)(sizeof(Gdi32.BITMAPINFOHEADER) + (sizeof(Gdi32.RGBQUAD) * entryCount))));
+                .Rent(checked((int)(sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * entryCount))));
 
             // Create a DIB based on the screen DC to write into with a halftone palette
             fixed (byte* bi = bitmapInfoBuffer)
             {
-                *((Gdi32.BITMAPINFOHEADER*)bi) = new Gdi32.BITMAPINFOHEADER
+                *((BITMAPINFOHEADER*)bi) = new BITMAPINFOHEADER
                 {
                     biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
                     biWidth = bitmap.Width,
                     biHeight = bitmap.Height,
                     biPlanes = 1,
                     biBitCount = 16,
-                    biCompression = Gdi32.BI.RGB
+                    biCompression = (uint)Gdi32.BI.RGB
                 };
 
-                var colors = new Span<Gdi32.RGBQUAD>(bi + sizeof(Gdi32.BITMAPINFOHEADER), (int)entryCount);
-                Span<Gdi32.PALETTEENTRY> entries = stackalloc Gdi32.PALETTEENTRY[(int)entryCount];
-                Gdi32.GetPaletteEntries(palette, entries);
+                Span<RGBQUAD> colors = new(bi + sizeof(BITMAPINFOHEADER), (int)entryCount);
+                Span<PALETTEENTRY> entries = stackalloc PALETTEENTRY[(int)entryCount];
+                PInvoke.GetPaletteEntries(palette, entries);
 
                 // Set up color table
                 for (int i = 0; i < entryCount; i++)
                 {
-                    Gdi32.PALETTEENTRY entry = entries[i];
-                    colors[i] = new Gdi32.RGBQUAD()
+                    PALETTEENTRY entry = entries[i];
+                    colors[i] = new RGBQUAD
                     {
                         rgbRed = entry.peRed,
                         rgbGreen = entry.peGreen,
@@ -204,15 +202,16 @@ namespace System.Windows.Forms
                     };
                 }
 
-                Gdi32.DeleteObject(palette);
+                PInvoke.DeleteObject(palette);
 
-                hbitmap = Gdi32.CreateDIBSection(
+                void* bitsBuffer;
+                hbitmap = PInvoke.CreateDIBSection(
                     screen,
-                    (IntPtr)bi,
-                    Gdi32.DIB.RGB_COLORS,
-                    imageBuffer,
-                    IntPtr.Zero,
-                    0);
+                    (BITMAPINFO*)bi,
+                    DIB_USAGE.DIB_RGB_COLORS,
+                    &bitsBuffer,
+                    hSection: default,
+                    offset: 0);
 
                 if (hbitmap.IsNull)
                 {
@@ -227,13 +226,13 @@ namespace System.Windows.Forms
                 // Put our new bitmap handle (with the halftone palette) into the dc and use Graphics to
                 // copy the Bitmap into it.
 
-                Gdi32.HGDIOBJ previousBitmap = Gdi32.SelectObject(dc, hbitmap);
+                HGDIOBJ previousBitmap = PInvoke.SelectObject(dc, hbitmap);
                 if (previousBitmap.IsNull)
                 {
                     throw new Win32Exception();
                 }
 
-                Gdi32.DeleteObject(previousBitmap);
+                PInvoke.DeleteObject(previousBitmap);
 
                 using Graphics graphics = dc.CreateGraphics();
                 using var brush = background.GetCachedSolidBrushScope();
@@ -243,7 +242,7 @@ namespace System.Windows.Forms
             catch
             {
                 // As we're throwing out, we can't return this and need to delete it.
-                Gdi32.DeleteObject(hbitmap);
+                PInvoke.DeleteObject(hbitmap);
                 throw;
             }
 
@@ -304,7 +303,7 @@ namespace System.Windows.Forms
             // Create 1bpp.
             fixed (byte* pBits = bits)
             {
-                return (IntPtr)Gdi32.CreateBitmap(size.Width, size.Height, 1, 1, pBits);
+                return (IntPtr)PInvoke.CreateBitmap(size.Width, size.Height, nPlanes: 1, nBitCount: 1, pBits);
             }
         }
 
@@ -318,31 +317,27 @@ namespace System.Windows.Forms
 
             Size size = bitmap.Size;
 
-            Gdi32.HBITMAP colorMask = (Gdi32.HBITMAP)bitmap.GetHbitmap();
-            using var screenDC = new User32.GetDcScope(IntPtr.Zero);
-            using var sourceDC = new Gdi32.CreateDcScope(screenDC);
-            using var targetDC = new Gdi32.CreateDcScope(screenDC);
-            using var sourceBitmapSelection = new Gdi32.SelectObjectScope(sourceDC, (Gdi32.HBITMAP)monochromeMask);
-            using var targetBitmapSelection = new Gdi32.SelectObjectScope(targetDC, colorMask);
+            HBITMAP colorMask = (HBITMAP)bitmap.GetHbitmap();
+            using User32.GetDcScope screenDC = new(IntPtr.Zero);
+            using PInvoke.CreateDcScope sourceDC = new(screenDC);
+            using PInvoke.CreateDcScope targetDC = new(screenDC);
+            using PInvoke.SelectObjectScope sourceBitmapSelection = new(sourceDC, (HGDIOBJ)monochromeMask);
+            using PInvoke.SelectObjectScope targetBitmapSelection = new(targetDC, (HGDIOBJ)colorMask.Value);
 
             // Now the trick is to make colorBitmap black wherever the transparent color is located, but keep the
             // original color everywhere else. We've already got the original bitmap, so all we need to do is to AND
             // with the inverse of the mask (ROP DSna). When going from monochrome to color, Windows sets all 1 bits
             // to the background color, and all 0 bits to the foreground color.
 
-            Gdi32.SetBkColor(targetDC, 0x00ffffff);    // white
-            Gdi32.SetTextColor(targetDC, 0x00000000);  // black
-            Gdi32.BitBlt(
-                targetDC,
-                0, 0, size.Width, size.Height,
-                sourceDC,
-                0, 0,
-                (Gdi32.ROP)0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
+            PInvoke.SetBkColor(targetDC, (COLORREF)0x00ffffff);    // white
+            PInvoke.SetTextColor(targetDC, (COLORREF)0x00000000);  // black
+            PInvoke.BitBlt(targetDC, x: 0, y: 0, size.Width, size.Height, sourceDC, x1: 0, y1: 0, (ROP_CODE)0x220326);
+            //RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
             return (IntPtr)colorMask;
         }
 
-        internal unsafe static Gdi32.HBRUSH CreateHalftoneHBRUSH()
+        internal unsafe static HBRUSH CreateHalftoneHBRUSH()
         {
             short* grayPattern = stackalloc short[8];
             for (int i = 0; i < 8; i++)
@@ -350,16 +345,16 @@ namespace System.Windows.Forms
                 grayPattern[i] = (short)(0x5555 << (i & 1));
             }
 
-            using var hBitmap = new Gdi32.CreateBitmapScope(8, 8, 1, 1, grayPattern);
+            using PInvoke.CreateBitmapScope hBitmap = new(8, 8, 1, 1, grayPattern);
 
-            var lb = new Gdi32.LOGBRUSH
+            LOGBRUSH lb = new()
             {
-                lbColor = Color.Black,
-                lbStyle = Gdi32.BS.PATTERN,
-                lbHatch = (IntPtr)hBitmap
+                lbStyle = (BRUSH_STYLE)(uint)Gdi32.BS.PATTERN,
+                lbColor = default, // color is ignored since style is BS.PATTERN
+                lbHatch = (nuint)(IntPtr)hBitmap
             };
 
-            return Gdi32.CreateBrushIndirect(ref lb);
+            return PInvoke.CreateBrushIndirect(&lb);
         }
 
         /// <summary>
@@ -744,8 +739,8 @@ namespace System.Windows.Forms
                     {
                         if (!topColor.HasTransparency() && topStyle == ButtonBorderStyle.Solid)
                         {
-                            using var hdc = new DeviceContextHdcScope(deviceContext);
-                            using var hpen = new Gdi32.CreatePenScope(topColor);
+                            using DeviceContextHdcScope hdc = new(deviceContext);
+                            using PInvoke.CreatePenScope hpen = new(topColor);
                             for (int i = 0; i < topWidth; i++)
                             {
                                 // Need to add one to the destination point for GDI to render the same as GDI+
@@ -783,7 +778,8 @@ namespace System.Windows.Forms
                         using var hdc = new DeviceContextHdcScope(deviceContext);
                         for (int i = 0; i < topWidth; i++)
                         {
-                            using var hpen = new Gdi32.CreatePenScope(topStyle == ButtonBorderStyle.Inset
+                            using PInvoke.CreatePenScope hpen = new(
+                                topStyle == ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
 
@@ -806,8 +802,8 @@ namespace System.Windows.Forms
                     {
                         if (!leftColor.HasTransparency() && leftStyle == ButtonBorderStyle.Solid)
                         {
-                            using var hdc = new DeviceContextHdcScope(deviceContext);
-                            using var hpen = new Gdi32.CreatePenScope(leftColor);
+                            using DeviceContextHdcScope hdc = new(deviceContext);
+                            using PInvoke.CreatePenScope hpen = new(leftColor);
                             for (int i = 0; i < leftWidth; i++)
                             {
                                 // Need to add one to the destination point for GDI to render the same as GDI+
@@ -845,7 +841,8 @@ namespace System.Windows.Forms
                         using var hdc = new DeviceContextHdcScope(deviceContext);
                         for (int i = 0; i < leftWidth; i++)
                         {
-                            using var hpen = new Gdi32.CreatePenScope(leftStyle == ButtonBorderStyle.Inset
+                            using PInvoke.CreatePenScope hpen = new(
+                                leftStyle == ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
 
@@ -868,8 +865,8 @@ namespace System.Windows.Forms
                     {
                         if (!bottomColor.HasTransparency() && bottomStyle == ButtonBorderStyle.Solid)
                         {
-                            using var hdc = new DeviceContextHdcScope(deviceContext);
-                            using var hpen = new Gdi32.CreatePenScope(bottomColor);
+                            using DeviceContextHdcScope hdc = new(deviceContext);
+                            using PInvoke.CreatePenScope hpen = new(bottomColor);
                             for (int i = 0; i < bottomWidth; i++)
                             {
                                 // Need to add one to the destination point for GDI to render the same as GDI+
@@ -914,10 +911,11 @@ namespace System.Windows.Forms
                     {
                         HLSColor hlsColor = new HLSColor(bottomColor);
                         float inc = InfinityToOne(1.0f / (bottomWidth - 1));
-                        using var hdc = new DeviceContextHdcScope(deviceContext);
+                        using DeviceContextHdcScope hdc = new(deviceContext);
                         for (int i = 0; i < bottomWidth; i++)
                         {
-                            using var hpen = new Gdi32.CreatePenScope(bottomStyle != ButtonBorderStyle.Inset
+                            using PInvoke.CreatePenScope hpen = new(
+                                bottomStyle != ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
 
@@ -945,8 +943,8 @@ namespace System.Windows.Forms
                     {
                         if (!rightColor.HasTransparency() && rightStyle == ButtonBorderStyle.Solid)
                         {
-                            using var hdc = new DeviceContextHdcScope(deviceContext);
-                            using var hpen = new Gdi32.CreatePenScope(rightColor);
+                            using DeviceContextHdcScope hdc = new(deviceContext);
+                            using PInvoke.CreatePenScope hpen = new(rightColor);
                             for (int i = 0; i < rightWidth; i++)
                             {
                                 // Need to add one to the destination point for GDI to render the same as GDI+
@@ -989,12 +987,13 @@ namespace System.Windows.Forms
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
-                        HLSColor hlsColor = new HLSColor(rightColor);
+                        HLSColor hlsColor = new(rightColor);
                         float inc = InfinityToOne(1.0f / (rightWidth - 1));
-                        using var hdc = new DeviceContextHdcScope(deviceContext);
+                        using DeviceContextHdcScope hdc = new(deviceContext);
                         for (int i = 0; i < rightWidth; i++)
                         {
-                            using var hpen = new Gdi32.CreatePenScope(rightStyle != ButtonBorderStyle.Inset
+                            using PInvoke.CreatePenScope hpen = new(
+                                rightStyle != ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
 
@@ -1209,8 +1208,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            using var hdc = new DeviceContextHdcScope(context);
-            using var hpen = new Gdi32.CreatePenScope(color);
+            using DeviceContextHdcScope hdc = new(context);
+            using PInvoke.CreatePenScope hpen = new(color);
             hdc.DrawRectangle(bounds, hpen);
         }
 
@@ -1406,9 +1405,8 @@ namespace System.Windows.Forms
                         t_checkImage = null;
                     }
 
-                    // We draw the checkmark slightly off center to eliminate 3-D border artifacts,
-                    // and compensate below
-                    RECT rcCheck = new RECT(0, 0, rectangle.Width, rectangle.Height);
+                    // We draw the checkmark slightly off center to eliminate 3-D border artifacts and compensate below
+                    RECT rcCheck = new(rectangle.Size);
                     Bitmap bitmap = new Bitmap(rectangle.Width, rectangle.Height);
                     using (Graphics g2 = Graphics.FromImage(bitmap))
                     {
@@ -1838,38 +1836,38 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawReversibleFrame(Rectangle rectangle, Color backColor, FrameStyle style)
         {
-            Gdi32.R2 rop2;
+            R2_MODE rop2;
             Color graphicsColor;
 
             if (backColor.GetBrightness() < .5)
             {
-                rop2 = Gdi32.R2.NOTXORPEN;
+                rop2 = R2_MODE.R2_NOTXORPEN;
                 graphicsColor = Color.White;
             }
             else
             {
-                rop2 = Gdi32.R2.XORPEN;
+                rop2 = R2_MODE.R2_XORPEN;
                 graphicsColor = Color.Black;
             }
 
-            using var desktopDC = new User32.GetDcScope(
+            using User32.GetDcScope desktopDC = new(
                 User32.GetDesktopWindow(),
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
-            using var pen = new Gdi32.ObjectScope(style switch
+            using PInvoke.ObjectScope pen = new(style switch
             {
-                FrameStyle.Dashed => Gdi32.CreatePen(Gdi32.PS.DOT, 1, ColorTranslator.ToWin32(backColor)),
-                FrameStyle.Thick => Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor)),
+                FrameStyle.Dashed => (HGDIOBJ)PInvoke.CreatePen(PEN_STYLE.PS_DOT, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
+                FrameStyle.Thick => (HGDIOBJ)PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
                 _ => default
             });
 
-            using var rop2Scope = new Gdi32.SetRop2Scope(desktopDC, rop2);
-            using var brushSelection = new Gdi32.SelectObjectScope(desktopDC, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
-            using var penSelection = new Gdi32.SelectObjectScope(desktopDC, pen);
+            using PInvoke.SetRop2Scope rop2Scope = new(desktopDC, rop2);
+            using PInvoke.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+            using PInvoke.SelectObjectScope penSelection = new(desktopDC, pen);
 
-            Gdi32.SetBkColor(desktopDC, ColorTranslator.ToWin32(graphicsColor));
-            Gdi32.Rectangle(desktopDC, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+            PInvoke.SetBkColor(desktopDC, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
+            PInvoke.Rectangle(desktopDC, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
         }
 
         /// <summary>
@@ -1877,22 +1875,20 @@ namespace System.Windows.Forms
         /// </summary>
         public static unsafe void DrawReversibleLine(Point start, Point end, Color backColor)
         {
-            Gdi32.R2 rop2 = (Gdi32.R2)GetColorRop(backColor, (int)Gdi32.R2.NOTXORPEN, (int)Gdi32.R2.XORPEN);
+            R2_MODE rop2 = (R2_MODE)GetColorRop(backColor, (int)R2_MODE.R2_NOTXORPEN, (int)R2_MODE.R2_XORPEN);
 
-            using var desktopDC = new User32.GetDcScope(
+            using User32.GetDcScope desktopDC = new(
                 User32.GetDesktopWindow(),
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
-            using var pen = new Gdi32.ObjectScope(Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(backColor)));
-            using var ropScope = new Gdi32.SetRop2Scope(desktopDC, rop2);
-            using var brushSelection = new Gdi32.SelectObjectScope(
-                desktopDC,
-                Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
-            using var penSelection = new Gdi32.SelectObjectScope(desktopDC, pen);
+            using PInvoke.ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
+            using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
+            using PInvoke.SelectObjectScope brushSelection = new(desktopDC, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+            using PInvoke.SelectObjectScope penSelection = new(desktopDC, pen);
 
-            Gdi32.MoveToEx(desktopDC, start.X, start.Y, null);
-            Gdi32.LineTo(desktopDC, end.X, end.Y);
+            PInvoke.MoveToEx(desktopDC, start.X, start.Y, lppt: null);
+            PInvoke.LineTo(desktopDC, end.X, end.Y);
         }
 
         /// <summary>
@@ -1979,9 +1975,9 @@ namespace System.Windows.Forms
             int right = x + width - 1;
             int bottom = y + height - 2;
 
-            using var hdc = new DeviceContextHdcScope(deviceContext);
-            using var hpenBright = new Gdi32.CreatePenScope(LightLight(backColor));
-            using var hpenDark = new Gdi32.CreatePenScope(Dark(backColor));
+            using DeviceContextHdcScope hdc = new(deviceContext);
+            using PInvoke.CreatePenScope hpenBright = new(LightLight(backColor));
+            using PInvoke.CreatePenScope hpenDark = new(Dark(backColor));
 
             // Moving from the lower right corner, draw as many groups of 4 diagonal lines as will fit
             // (skip a line, dark, dark, light)
@@ -2047,7 +2043,7 @@ namespace System.Windows.Forms
         }
 
         internal static void DrawStringDisabled(
-            Gdi32.HDC dc,
+            HDC dc,
             string s,
             Font font,
             Color color,
@@ -2090,22 +2086,22 @@ namespace System.Windows.Forms
         /// </summary>
         public static void FillReversibleRectangle(Rectangle rectangle, Color backColor)
         {
-            Gdi32.ROP rop3 = (Gdi32.ROP)GetColorRop(
+            ROP_CODE rop3 = (ROP_CODE)GetColorRop(
                 backColor,
                 0xa50065,   // RasterOp.BRUSH.Invert().XorWith(RasterOp.TARGET),
                 0x5a0049);  // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
-            Gdi32.R2 rop2 = Gdi32.R2.NOT;
+            R2_MODE rop2 = R2_MODE.R2_NOT;
 
             using var desktopDC = new User32.GetDcScope(
                 User32.GetDesktopWindow(),
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
-            using var brush = new Gdi32.ObjectScope(Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor)));
-            using var ropScope = new Gdi32.SetRop2Scope(desktopDC, rop2);
-            using var brushSelection = new Gdi32.SelectObjectScope(desktopDC, brush);
+            using PInvoke.ObjectScope brush = new(PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
+            using PInvoke.SetRop2Scope ropScope = new(desktopDC, rop2);
+            using PInvoke.SelectObjectScope brushSelection = new(desktopDC, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
-            Gdi32.PatBlt(desktopDC, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
+            PInvoke.PatBlt(desktopDC, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
         }
 
         /// <summary>
@@ -2152,7 +2148,7 @@ namespace System.Windows.Forms
                 changed = true;
             }
 
-            User32.LOGFONTW logfont = User32.LOGFONTW.FromFont(source);
+            LOGFONTW logfont = LOGFONTW.FromFont(source);
 
             short fontWeight = target.Weight;
             if (fontWeight != (short)logfont.lfWeight)
@@ -2161,42 +2157,42 @@ namespace System.Windows.Forms
                 changed = true;
             }
 
-            bool fontBold = target.Bold.IsTrue();
-            bool isBold = logfont.lfWeight >= Gdi32.FW.BOLD;
+            bool fontBold = target.Bold;
+            bool isBold = logfont.lfWeight >= (int)Gdi32.FW.BOLD;
             if (fontBold != isBold)
             {
-                target.Bold = isBold.ToBOOL();
+                target.Bold = isBold;
                 changed = true;
             }
 
-            bool fontItalic = target.Italic.IsTrue();
+            bool fontItalic = target.Italic;
             bool isItalic = logfont.lfItalic != 0;
             if (fontItalic != isItalic)
             {
-                target.Italic = isItalic.ToBOOL();
+                target.Italic = isItalic;
                 changed = true;
             }
 
-            bool fontUnderline = target.Underline.IsTrue();
+            bool fontUnderline = target.Underline;
             bool isUnderline = logfont.lfUnderline != 0;
             if (fontUnderline != isUnderline)
             {
-                target.Underline = isUnderline.ToBOOL();
+                target.Underline = isUnderline;
                 changed = true;
             }
 
-            bool fontStrike = target.Strikethrough.IsTrue();
+            bool fontStrike = target.Strikethrough;
             bool isStrike = logfont.lfStrikeOut != 0;
             if (fontStrike != isStrike)
             {
-                target.Strikethrough = isStrike.ToBOOL();
+                target.Strikethrough = isStrike;
                 changed = true;
             }
 
             short fontCharset = target.Charset;
-            if (fontCharset != logfont.lfCharSet)
+            if (fontCharset != (short)logfont.lfCharSet)
             {
-                target.Charset = logfont.lfCharSet;
+                target.Charset = (short)logfont.lfCharSet;
                 changed = true;
             }
 

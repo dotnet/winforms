@@ -22,14 +22,14 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            IntPtr pv = (IntPtr)int.MaxValue;
+            nint pv = (nint)int.MaxValue;
             hr = typeInfo.AddressOfMember((DispatchID)6, INVOKEKIND.FUNC, &pv);
             Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
-            Assert.Equal(IntPtr.Zero, pv);
+            Assert.Equal(0, pv);
         }
 
         [StaFact]
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -57,17 +57,17 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            IntPtr typeLib = (IntPtr)int.MaxValue;
+            nint typeLib = (nint)int.MaxValue;
             uint index = uint.MaxValue;
             hr = typeInfo.GetContainingTypeLib(&typeLib, &index);
             try
             {
                 Assert.Equal(HRESULT.S_OK, hr);
-                Assert.NotEqual(IntPtr.Zero, typeLib);
+                Assert.NotEqual(0, typeLib);
                 Assert.NotEqual(0u, index);
             }
             finally
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -127,7 +127,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -186,7 +186,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -203,7 +203,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -220,7 +220,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -245,7 +245,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -268,7 +268,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -285,7 +285,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -327,7 +327,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -351,7 +351,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
@@ -383,7 +383,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            HRESULT hr = dispatch.GetTypeInfo(0, PInvoke.GetThreadLocale(), out typeInfo);
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 

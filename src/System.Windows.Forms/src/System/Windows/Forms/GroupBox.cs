@@ -116,7 +116,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw)
                 {
-                    cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
+                    cp.ClassName = PInvoke.WC_BUTTON;
                     cp.Style |= (int)User32.BS.GROUPBOX;
                 }
                 else
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
                     cp.Style &= ~(int)User32.BS.GROUPBOX;
                 }
 
-                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CONTROLPARENT;
 
                 return cp;
             }
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                        PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                     }
 
                     base.Text = value;
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                        PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                     }
                 }
 
@@ -566,8 +566,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    using var hdc = new DeviceContextHdcScope(e);
-                    using var hpen = new Gdi32.CreatePenScope(boxColor);
+                    using DeviceContextHdcScope hdc = new(e);
+                    using PInvoke.CreatePenScope hpen = new(boxColor);
                     hdc.DrawLines(hpen, lines);
                 }
             }
@@ -591,10 +591,10 @@ namespace System.Windows.Forms
                     Width - 2, boxTop - 1, Width - 2, Height - 2    // Right
                 };
 
-                using var hdc = new DeviceContextHdcScope(e);
-                using var hpenLight = new Gdi32.CreatePenScope(ControlPaint.Light(backColor, 1.0f));
+                using DeviceContextHdcScope hdc = new(e);
+                using PInvoke.CreatePenScope hpenLight = new(ControlPaint.Light(backColor, 1.0f));
                 hdc.DrawLines(hpenLight, lightLines);
-                using var hpenDark = new Gdi32.CreatePenScope(ControlPaint.Dark(backColor, 0f));
+                using PInvoke.CreatePenScope hpenDark = new(ControlPaint.Dark(backColor, 0f));
                 hdc.DrawLines(hpenDark, darkLines);
             }
         }
@@ -658,7 +658,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
-            if (m.WParamInternal == 0)
+            if (m.WParamInternal == 0u)
             {
                 return;
             }
@@ -670,18 +670,17 @@ namespace System.Windows.Forms
 
             if (backColor.HasTransparency())
             {
-                using Graphics graphics = Graphics.FromHdcInternal(m.WParamInternal);
+                using Graphics graphics = Graphics.FromHdcInternal((HDC)m.WParamInternal);
                 using var brush = backColor.GetCachedSolidBrushScope();
                 graphics.FillRectangle(brush, rect);
             }
             else
             {
-                var hdc = (Gdi32.HDC)m.WParamInternal;
-                using var hbrush = new Gdi32.CreateBrushScope(backColor);
-                User32.FillRect(hdc, ref rect, hbrush);
+                using var hbrush = new PInvoke.CreateBrushScope(backColor);
+                User32.FillRect((HDC)m.WParamInternal, ref rect, hbrush);
             }
 
-            m.ResultInternal = 1;
+            m.ResultInternal = (LRESULT)1;
         }
 
         protected override void WndProc(ref Message m)
@@ -707,7 +706,7 @@ namespace System.Windows.Forms
                     // of buttons to MSAA (because it assumes buttons won't have children).
                     if (m.LParamInternal == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
-                        m.ResultInternal = 0;
+                        m.ResultInternal = (LRESULT)0;
                     }
 
                     break;

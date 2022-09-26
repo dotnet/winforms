@@ -15,11 +15,11 @@ internal static partial class Interop
             public IntPtr hIcon;
             public int iSysImageIndex;
             public int iIcon;
-            private fixed char _szPath[Kernel32.MAX_PATH];
+            private fixed char _szPath[PInvoke.MAX_PATH];
 
             private ReadOnlySpan<char> szPath
             {
-                get { fixed (char* c = _szPath) { return new ReadOnlySpan<char>(c, Kernel32.MAX_PATH); } }
+                get { fixed (char* c = _szPath) { return new ReadOnlySpan<char>(c, PInvoke.MAX_PATH); } }
             }
 
             public ReadOnlySpan<char> Path

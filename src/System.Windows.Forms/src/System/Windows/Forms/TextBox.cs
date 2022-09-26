@@ -287,7 +287,7 @@ namespace System.Windows.Forms
                 HorizontalAlignment align = RtlTranslateHorizontal(_textAlign);
 
                 // WS_EX_RIGHT overrides the ES_XXXX alignment styles
-                cp.ExStyle &= ~(int)WS_EX.RIGHT;
+                cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_RIGHT;
 
                 switch (align)
                 {
@@ -309,12 +309,12 @@ namespace System.Windows.Forms
                         && _textAlign == HorizontalAlignment.Left
                         && !WordWrap)
                     {
-                        cp.Style |= (int)WS.HSCROLL;
+                        cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
                     }
 
                     if ((_scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
                     {
-                        cp.Style |= (int)WS.VSCROLL;
+                        cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL;
                     }
                 }
 
@@ -345,7 +345,7 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                return (char)SendMessageW(this, (WM)EM.GETPASSWORDCHAR);
+                return (char)PInvoke.SendMessage(this, (WM)EM.GETPASSWORDCHAR);
             }
             set
             {
@@ -357,7 +357,7 @@ namespace System.Windows.Forms
                         if (PasswordChar != value)
                         {
                             // Set the password mode.
-                            SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (nint)value);
+                            PInvoke.SendMessage(this, (WM)EM.SETPASSWORDCHAR, (WPARAM)value);
 
                             // Disable IME if setting the control to password mode.
                             VerifyImeRestrictedModeChanged();
@@ -610,7 +610,7 @@ namespace System.Windows.Forms
             {
                 if (!_useSystemPasswordChar)
                 {
-                    SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (nint)_passwordChar);
+                    PInvoke.SendMessage(this, (WM)EM.SETPASSWORDCHAR, (WPARAM)_passwordChar);
                 }
             }
 
@@ -780,7 +780,7 @@ namespace System.Windows.Forms
                             if (_stringSource is null)
                             {
                                 _stringSource = new StringSource(GetStringsForAutoComplete());
-                                if (!_stringSource.Bind(new HandleRef(this, Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
+                                if (!_stringSource.Bind(new HandleRef(this, Handle), (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                 {
                                     throw new ArgumentException(SR.AutoCompleteFailure);
                                 }
@@ -842,10 +842,10 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((PRF)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
+            if (((PRF)(nint)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
                 && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m.WParamInternal);
+                using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);
@@ -889,7 +889,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws the <see cref="PlaceholderText"/> in the client area of the <see cref="TextBox"/> using the default font and color.
         /// </summary>
-        private void DrawPlaceholderText(Gdi32.HDC hdc)
+        private void DrawPlaceholderText(HDC hdc)
         {
             TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top |
                                     TextFormatFlags.EndEllipsis;
@@ -975,7 +975,7 @@ namespace System.Windows.Forms
                         // Invalidate the whole control to make sure the native control doesn't make any assumptions over what it has to paint
                         if (ShouldRenderPlaceHolderText())
                         {
-                            User32.InvalidateRect(Handle, null, bErase: BOOL.TRUE);
+                            User32.InvalidateRect(Handle, null, bErase: true);
                         }
 
                         // Let the native implementation draw the background and animate the frame
@@ -984,10 +984,10 @@ namespace System.Windows.Forms
                         if (ShouldRenderPlaceHolderText())
                         {
                             // Invalidate again because the native WM_PAINT already validated everything by calling BeginPaint itself.
-                            User32.InvalidateRect(Handle, null, bErase: BOOL.TRUE);
+                            User32.InvalidateRect(Handle, null, bErase: true);
 
                             // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
-                            using var paintScope = new User32.BeginPaintScope(Handle);
+                            using var paintScope = new PInvoke.BeginPaintScope((HWND)Handle);
                             DrawPlaceholderText(paintScope);
 
                             User32.ValidateRect(this, null);

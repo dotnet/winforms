@@ -5,7 +5,6 @@
 #nullable enable
 
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {

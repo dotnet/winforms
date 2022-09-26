@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using Microsoft.Win32;
+using Windows.Win32.UI.TextServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -40,7 +41,7 @@ namespace System.Windows.Forms
             get
             {
                 Application.OleRequired();
-                return new InputLanguage(User32.GetKeyboardLayout(0));
+                return new InputLanguage(PInvoke.GetKeyboardLayout(0));
             }
             set
             {
@@ -51,8 +52,8 @@ namespace System.Windows.Forms
                     value = DefaultInputLanguage;
                 }
 
-                IntPtr handleOld = User32.ActivateKeyboardLayout(value.Handle, 0);
-                if (handleOld == IntPtr.Zero)
+                HKL handleOld = PInvoke.ActivateKeyboardLayout(new HKL(value.Handle), 0);
+                if (handleOld == default)
                 {
                     throw new ArgumentException(SR.ErrorBadInputLanguage, nameof(value));
                 }
@@ -84,13 +85,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                int size = User32.GetKeyboardLayoutList(0, null);
+                int size = PInvoke.GetKeyboardLayoutList(0, null);
 
-                var handles = new IntPtr[size];
-                fixed (IntPtr* pHandles = handles)
-                {
-                    User32.GetKeyboardLayoutList(size, pHandles);
-                }
+                var handles = new HKL[size];
+                PInvoke.GetKeyboardLayoutList(handles);
 
                 InputLanguage[] ils = new InputLanguage[size];
                 for (int i = 0; i < size; i++)
@@ -301,7 +299,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static InputLanguageChangedEventArgs CreateInputLanguageChangedEventArgs(Message m)
         {
-            return new InputLanguageChangedEventArgs(new InputLanguage(m.LParamInternal), (byte)m.WParamInternal);
+            return new InputLanguageChangedEventArgs(new InputLanguage(m.LParamInternal), (byte)(nint)m.WParamInternal);
         }
 
         /// <summary>
@@ -312,7 +310,7 @@ namespace System.Windows.Forms
             var inputLanguage = new InputLanguage(m.LParamInternal);
 
             // NOTE: by default we should allow any locale switch
-            bool localeSupportedBySystem = m.WParamInternal != 0;
+            bool localeSupportedBySystem = m.WParamInternal != 0u;
             return new InputLanguageChangingEventArgs(inputLanguage, localeSupportedBySystem);
         }
 

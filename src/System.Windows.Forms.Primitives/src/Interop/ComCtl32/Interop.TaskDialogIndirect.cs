@@ -12,8 +12,8 @@ internal static partial class Interop
         // because we currently do manual marshalling. Otherwise, the struct might be
         // accidentally marshalled by the runtime when it is no longer blittable, but we
         // also need a pointer to it for SendMessage() calls where it wouldn't be marshalled.
-        [LibraryImport(Libraries.Comctl32)]
-        public static unsafe partial HRESULT TaskDialogIndirect(
+        [DllImport(Libraries.Comctl32)]
+        public static unsafe extern HRESULT TaskDialogIndirect(
             TASKDIALOGCONFIG* pTaskConfig,
             out int pnButton,
             out int pnRadioButton,

@@ -1029,8 +1029,8 @@ namespace System.Windows.Forms.Tests
                 SelectionRange = new SelectionRange(lower, upper)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Span<Kernel32.SYSTEMTIME> range = stackalloc Kernel32.SYSTEMTIME[2];
-            Assert.Equal(1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETSELRANGE, 0, ref range[0]));
+            Span<SYSTEMTIME> range = stackalloc SYSTEMTIME[2];
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETSELRANGE, 0, ref range[0]));
             Assert.Equal(2019, range[0].wYear);
             Assert.Equal(1, range[0].wMonth);
             Assert.Equal(30, range[0].wDay);
@@ -1057,7 +1057,7 @@ namespace System.Windows.Forms.Tests
                 MaxSelectionCount = 10
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(10, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETMAXSELCOUNT));
+            Assert.Equal(10, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETMAXSELCOUNT));
         }
 
         [WinFormsFact]
@@ -1068,8 +1068,8 @@ namespace System.Windows.Forms.Tests
                 TodayDate = new DateTime(2019, 1, 30, 3, 4, 5, 6)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Kernel32.SYSTEMTIME date = default;
-            Assert.Equal(1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETTODAY, 0, ref date));
+            SYSTEMTIME date = default;
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETTODAY, 0, ref date));
             Assert.Equal(2019, date.wYear);
             Assert.Equal(1, date.wMonth);
             Assert.Equal(30, date.wDay);
@@ -1088,7 +1088,7 @@ namespace System.Windows.Forms.Tests
                 ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TEXT));
+            Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETCOLOR, (WPARAM)(int)ComCtl32.MCSC.TEXT));
         }
 
         [WinFormsFact]
@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms.Tests
                 BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x563412, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.MONTHBK));
+            Assert.Equal(0x563412, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETCOLOR, (WPARAM)(int)ComCtl32.MCSC.MONTHBK));
         }
 
         [WinFormsFact]
@@ -1110,7 +1110,7 @@ namespace System.Windows.Forms.Tests
                 TitleBackColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TITLEBK));
+            Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETCOLOR, (WPARAM)(int)ComCtl32.MCSC.TITLEBK));
         }
 
         [WinFormsFact]
@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms.Tests
                 TitleForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TITLETEXT));
+            Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETCOLOR, (WPARAM)(int)ComCtl32.MCSC.TITLETEXT));
         }
 
         [WinFormsFact]
@@ -1132,7 +1132,7 @@ namespace System.Windows.Forms.Tests
                 TrailingForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TRAILINGTEXT));
+            Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETCOLOR, (WPARAM)(int)ComCtl32.MCSC.TRAILINGTEXT));
         }
 
         [WinFormsFact]
@@ -1149,7 +1149,7 @@ namespace System.Windows.Forms.Tests
                 expected -= 7;
             }
 
-            Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETFIRSTDAYOFWEEK));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETFIRSTDAYOFWEEK));
         }
 
         [WinFormsFact]
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms.Tests
                 FirstDayOfWeek = Day.Tuesday
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x10001, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETFIRSTDAYOFWEEK));
+            Assert.Equal(0x10001, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETFIRSTDAYOFWEEK));
         }
 
         [WinFormsFact]
@@ -1172,8 +1172,8 @@ namespace System.Windows.Forms.Tests
                 MaxDate = new DateTime(2020, 2, 3, 4, 5, 6, 7)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Span<Kernel32.SYSTEMTIME> range = stackalloc Kernel32.SYSTEMTIME[2];
-            Assert.Equal(3, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETRANGE, 0, ref range[0]));
+            Span<SYSTEMTIME> range = stackalloc SYSTEMTIME[2];
+            Assert.Equal(3, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETRANGE, 0, ref range[0]));
             Assert.Equal(2019, range[0].wYear);
             Assert.Equal(1, range[0].wMonth);
             Assert.Equal(2, range[0].wDay);
@@ -1181,7 +1181,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, range[0].wHour);
             Assert.Equal(4, range[0].wMinute);
             Assert.Equal(5, range[0].wSecond);
-            Assert.Equal(0, range[0].wMilliseconds);
+            Assert.Equal(6, range[0].wMilliseconds);
             Assert.Equal(2020, range[1].wYear);
             Assert.Equal(2, range[1].wMonth);
             Assert.Equal(3, range[1].wDay);
@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, range[1].wHour);
             Assert.Equal(5, range[1].wMinute);
             Assert.Equal(6, range[1].wSecond);
-            Assert.Equal(0, range[1].wMilliseconds);
+            Assert.Equal(7, range[1].wMilliseconds);
         }
 
         [WinFormsFact]
@@ -1200,7 +1200,7 @@ namespace System.Windows.Forms.Tests
                 ScrollChange = 10
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(10, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETMONTHDELTA));
+            Assert.Equal(10, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.MCM.GETMONTHDELTA));
         }
 
         public static IEnumerable<object[]> ImeMode_Set_TestData()

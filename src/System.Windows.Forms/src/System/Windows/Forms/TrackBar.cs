@@ -149,7 +149,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = WindowClasses.WC_TRACKBAR;
+                cp.ClassName = PInvoke.TRACKBAR_CLASS;
 
                 switch (_tickStyle)
                 {
@@ -176,8 +176,8 @@ namespace System.Windows.Forms
                 {
                     // We want to turn on mirroring for Trackbar explicitly.
                     // Don't need these styles when mirroring is turned on.
-                    cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                 _largeChange = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, 0, value);
+                    PInvoke.SendMessage(this, (User32.WM)TBM.SETPAGESIZE, 0, value);
                 }
             }
         }
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.TRUE, _maximum);
+            PInvoke.SendMessage(this, (User32.WM)TBM.SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
             Invalidate();
         }
 
@@ -482,7 +482,7 @@ namespace System.Windows.Forms
                 _smallChange = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, 0, value);
+                    PInvoke.SendMessage(this, (User32.WM)TBM.SETLINESIZE, 0, value);
                 }
             }
         }
@@ -559,7 +559,7 @@ namespace System.Windows.Forms
                 _tickFrequency = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, value);
+                    PInvoke.SendMessage(this, (User32.WM)TBM.SETTICFREQ, (WPARAM)value);
                     Invalidate();
                 }
             }
@@ -759,7 +759,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                _value = (int)User32.SendMessageW(this, (User32.WM)TBM.GETPOS);
+                _value = (int)PInvoke.SendMessage(this, (User32.WM)TBM.GETPOS);
 
                 // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
                 if (_orientation == Orientation.Vertical)
@@ -807,11 +807,11 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)BOOL.FALSE, _minimum);
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.FALSE, _maximum);
-            User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, _tickFrequency);
-            User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, 0, _largeChange);
-            User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, 0, _smallChange);
+            PInvoke.SendMessage(this, (User32.WM)TBM.SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+            PInvoke.SendMessage(this, (User32.WM)TBM.SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
+            PInvoke.SendMessage(this, (User32.WM)TBM.SETTICFREQ, (WPARAM)_tickFrequency);
+            PInvoke.SendMessage(this, (User32.WM)TBM.SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
+            PInvoke.SendMessage(this, (User32.WM)TBM.SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
             SetTrackBarPosition();
             AdjustSize();
         }
@@ -992,10 +992,10 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)BOOL.FALSE, _minimum);
+                    PInvoke.SendMessage(this, (User32.WM)TBM.SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
 
                     // We must repaint the trackbar after changing the range.
-                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.TRUE, _maximum);
+                    PInvoke.SendMessage(this, (User32.WM)TBM.SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
 
                     Invalidate();
                 }
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms
                     reflectedValue = Minimum + Maximum - _value;
                 }
 
-                User32.SendMessageW(this, (User32.WM)TBM.SETPOS, (nint)BOOL.TRUE, reflectedValue);
+                PInvoke.SendMessage(this, (User32.WM)TBM.SETPOS, (WPARAM)(BOOL)true, (LPARAM)reflectedValue);
             }
         }
 
@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms
             {
                 case User32.WM.REFLECT_HSCROLL:
                 case User32.WM.REFLECT_VSCROLL:
-                    switch (PARAM.LOWORD(m.WParamInternal))
+                    switch (m.WParamInternal.LOWORD)
                     {
                         case NativeMethods.TB_LINEUP:
                         case NativeMethods.TB_LINEDOWN:

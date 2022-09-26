@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                     cbSize = (uint)sizeof(User32.MENUITEMINFOW),
                     fMask = User32.MIIM.FTYPE
                 };
-                User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ BOOL.TRUE, ref info);
+                User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ true, ref info);
 
                 if (info.fType == User32.MFT.SEPARATOR)
                 {
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
                         fMask = User32.MIIM.ID
                     };
 
-                    User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ BOOL.TRUE, ref info);
+                    User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ true, ref info);
 
                     // create the managed object - toolstripmenu item knows how to grok hmenu for information.
                     itemToAdd = new ToolStripMenuItem(hmenu, info.wID, targetWindow);
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
                         fMask = User32.MIIM.SUBMENU
                     };
 
-                    User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ BOOL.TRUE, ref info);
+                    User32.GetMenuItemInfoW(hmenu, i, /*fByPosition=*/ true, ref info);
 
                     if (info.hSubMenu != IntPtr.Zero)
                     {

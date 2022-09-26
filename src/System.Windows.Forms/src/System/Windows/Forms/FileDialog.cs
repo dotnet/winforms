@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         private bool _ignoreSecondFileOkNotification;
         private int _okNotificationCount;
         private UnicodeCharBuffer? _charBuffer;
-        private IntPtr _dialogHWnd;
+        private HWND _dialogHWnd;
 
         /// <summary>
         ///  In an inherited class, initializes a new instance of the <see cref="FileDialog"/>
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the Win32 instance handle for the application.
         /// </summary>
-        protected virtual IntPtr Instance => Kernel32.GetModuleHandleW(null);
+        protected virtual nint Instance => PInvoke.GetModuleHandle((PCWSTR)null);
 
         /// <summary>
         ///  Gets the Win32 common Open File Dialog OFN_* and FOS_* option flags.
@@ -529,12 +529,12 @@ namespace System.Windows.Forms
         {
             if (msg == (int)User32.WM.NOTIFY)
             {
-                _dialogHWnd = User32.GetParent(hWnd);
+                _dialogHWnd = PInvoke.GetParent((HWND)hWnd);
                 try
                 {
                     Comdlg32.OFNOTIFYW* notify = (Comdlg32.OFNOTIFYW*)lparam;
 
-                    switch (notify->hdr.code)
+                    switch ((int)notify->hdr.code)
                     {
                         case -601: /* CDN_INITDONE */
                             MoveToScreenCenter(_dialogHWnd);
@@ -543,7 +543,7 @@ namespace System.Windows.Forms
                             NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify->lpOFN)!;
 
                             // Get the buffer size required to store the selected file names.
-                            int sizeNeeded = (int)User32.SendMessageW(_dialogHWnd, (User32.WM)1124 /*CDM_GETSPEC*/);
+                            int sizeNeeded = (int)PInvoke.SendMessage(_dialogHWnd, (User32.WM)1124 /*CDM_GETSPEC*/);
                             if (sizeNeeded > ofn.nMaxFile)
                             {
                                 // A bigger buffer is required.
@@ -588,14 +588,14 @@ namespace System.Windows.Forms
                                 {
                                     // This is the second CDN_FILEOK, so we want to ignore it.
                                     _ignoreSecondFileOkNotification = false;
-                                    User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
+                                    PInvoke.SetWindowLong((HWND)hWnd, (WINDOW_LONG_PTR_INDEX)0, -1);
                                     return NativeMethods.InvalidIntPtr;
                                 }
                             }
 
                             if (!DoFileOk(notify->lpOFN))
                             {
-                                User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
+                                PInvoke.SetWindowLong((HWND)hWnd, (WINDOW_LONG_PTR_INDEX)0, -1);
                                 return NativeMethods.InvalidIntPtr;
                             }
 
@@ -713,22 +713,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Prompts the user with a <see cref="MessageBox"/> with the
-        ///  given parameters. It also ensures that the focus is set back on the window that
-        ///  had the focus to begin with (before we displayed the MessageBox).
+        ///  Prompts the user with a <see cref="MessageBox"/> with the given parameters. It also ensures that the
+        ///  focus is set back on the window that had the focus to begin with (before we displayed the MessageBox).
         /// </summary>
-        private protected static bool MessageBoxWithFocusRestore(string message, string caption,
-                MessageBoxButtons buttons, MessageBoxIcon icon)
+        private protected static bool MessageBoxWithFocusRestore(
+            string message,
+            string caption,
+            MessageBoxButtons buttons,
+            MessageBoxIcon icon)
         {
-            IntPtr focusHandle = User32.GetFocus();
+            HWND focusHandle = PInvoke.GetFocus();
             try
             {
-                return RTLAwareMessageBox.Show(null, message, caption, buttons, icon,
-                        MessageBoxDefaultButton.Button1, 0) == DialogResult.Yes;
+                return RTLAwareMessageBox.Show(null, message, caption, buttons, icon, MessageBoxDefaultButton.Button1, 0)
+                    == DialogResult.Yes;
             }
             finally
             {
-                User32.SetFocus(focusHandle);
+                PInvoke.SetFocus(focusHandle);
             }
         }
 

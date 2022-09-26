@@ -168,12 +168,12 @@ namespace System.Windows.Forms
                         bool ok;
                         try
                         {
-                            ok = ComCtl32.ImageList.Replace(_owner, index, hBitmap, hMask).IsTrue();
+                            ok = ComCtl32.ImageList.Replace(_owner, index, hBitmap, hMask);
                         }
                         finally
                         {
-                            Gdi32.DeleteObject((Gdi32.HGDIOBJ)hBitmap);
-                            Gdi32.DeleteObject((Gdi32.HGDIOBJ)hMask);
+                            PInvoke.DeleteObject((HGDIOBJ)hBitmap);
+                            PInvoke.DeleteObject((HGDIOBJ)hMask);
                         }
 
                         if (!ok)
@@ -559,7 +559,7 @@ namespace System.Windows.Forms
                 }
 
                 AssertInvariant();
-                bool ok = ComCtl32.ImageList.Remove(_owner, index).IsTrue();
+                bool ok = ComCtl32.ImageList.Remove(_owner, index);
                 if (!ok)
                 {
                     throw new InvalidOperationException(SR.ImageListRemoveFailed);

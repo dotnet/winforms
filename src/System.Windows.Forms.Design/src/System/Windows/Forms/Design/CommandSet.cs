@@ -779,10 +779,10 @@ namespace System.Windows.Forms.Design
                     tbx.SelectedToolboxItemUsed();
 
                     User32.GetCursorPos(out Point p);
-                    IntPtr hwnd = User32.WindowFromPoint(p);
-                    if (hwnd != IntPtr.Zero)
+                    HWND hwnd = (HWND)User32.WindowFromPoint(p);
+                    if (!hwnd.IsNull)
                     {
-                        User32.SendMessageW(hwnd, User32.WM.SETCURSOR, hwnd, (nint)User32.HT.CLIENT);
+                        PInvoke.SendMessage(hwnd, User32.WM.SETCURSOR, hwnd, (nint)User32.HT.CLIENT);
                     }
                     else
                     {
@@ -2145,7 +2145,7 @@ namespace System.Windows.Forms.Design
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                                     object serializationData = formatter.Deserialize(s);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-                                    using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
+                                    using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                                     {
                                         components = ds.Deserialize(serializationData);
                                     }
@@ -2163,7 +2163,7 @@ namespace System.Windows.Forms.Design
                                 ToolboxItem ti = ts.DeserializeToolboxItem(dataObj, host);
                                 if (ti != null)
                                 {
-                                    using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
+                                    using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                                     {
                                         components = ti.CreateComponents(host);
                                     }

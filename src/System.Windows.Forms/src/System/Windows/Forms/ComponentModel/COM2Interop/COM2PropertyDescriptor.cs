@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Buffers;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,7 +13,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
+using Windows.Win32.System.Diagnostics.Debug;
 using static Interop;
 using static Interop.Ole32;
 
@@ -106,16 +107,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Our event signatures.
         /// </summary>
-        private static readonly object EventGetBaseAttributes = new object();
-        private static readonly object EventGetDynamicAttributes = new object();
-        private static readonly object EventShouldRefresh = new object();
-        private static readonly object EventGetDisplayName = new object();
-        private static readonly object EventGetDisplayValue = new object();
-        private static readonly object EventGetIsReadOnly = new object();
-        private static readonly object EventGetTypeConverterAndTypeEditor = new object();
-        private static readonly object EventShouldSerializeValue = new object();
-        private static readonly object EventCanResetValue = new object();
-        private static readonly object EventResetValue = new object();
+        private static readonly object EventGetBaseAttributes = new();
+        private static readonly object EventGetDynamicAttributes = new();
+        private static readonly object EventShouldRefresh = new();
+        private static readonly object EventGetDisplayName = new();
+        private static readonly object EventGetDisplayValue = new();
+        private static readonly object EventGetIsReadOnly = new();
+        private static readonly object EventGetTypeConverterAndTypeEditor = new();
+        private static readonly object EventShouldSerializeValue = new();
+        private static readonly object EventCanResetValue = new();
+        private static readonly object EventResetValue = new();
 
         private static readonly Guid GUID_COLOR = new Guid("{66504301-BE0F-101A-8BBB-00AA00300CAB}");
 
@@ -269,7 +270,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         HRESULT hr = ComNativeDescriptor.GetPropertyValue(target, dispid, new object[1]);
 
                         // if not, go ahead and make this a browsable item
-                        if (hr.Succeeded())
+                        if (hr.Succeeded)
                         {
                             // make it browsable
                             if (newAttributes is null)
@@ -883,32 +884,33 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             HRESULT hr = pDisp.Invoke(
                 dispid,
                 &g,
-                Kernel32.GetThreadLocale(),
+                PInvoke.GetThreadLocale(),
                 Oleaut32.DISPATCH.PROPERTYGET,
                 &dispParams,
                 pVarResult,
                 &pExcepInfo,
                 null);
 
-            switch (hr)
+            if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
             {
-                case HRESULT.S_OK:
-                case HRESULT.S_FALSE:
-
-                    if (pVarResult[0] is null || Convert.IsDBNull(pVarResult[0]))
-                    {
-                        lastValue = null;
-                    }
-                    else
-                    {
-                        lastValue = pVarResult[0];
-                    }
-
-                    return lastValue;
-                case HRESULT.DISP_E_EXCEPTION:
-                    return null;
-                default:
-                    throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue", hr), (int)hr);
+                if (pVarResult[0] is null || Convert.IsDBNull(pVarResult[0]))
+                {
+                    lastValue = null;
+                }
+                else
+                {
+                    lastValue = pVarResult[0];
+                }
+                
+                return lastValue;
+            }
+            else if (hr == HRESULT.DISP_E_EXCEPTION)
+            {
+                return null;
+            }
+            else
+            {
+                throw new ExternalException(string.Format(SR.DispInvokeFailed, "GetValue", hr), (int)hr);
             }
         }
 
@@ -1241,7 +1243,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 owner = ((ICustomTypeDescriptor)owner).GetPropertyOwner(this);
             }
 
-            if (owner is null || !Marshal.IsComObject(owner) || !(owner is Oleaut32.IDispatch))
+            if (owner is null || !Marshal.IsComObject(owner) || owner is not Oleaut32.IDispatch)
             {
                 return;
             }
@@ -1275,7 +1277,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             HRESULT hr = pDisp.Invoke(
                 dispid,
                 &g,
-                Kernel32.GetThreadLocale(),
+                PInvoke.GetThreadLocale(),
                 Oleaut32.DISPATCH.PROPERTYPUT,
                 &dispParams,
                 null,
@@ -1292,74 +1294,70 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            switch (hr)
+            if (hr == HRESULT.E_ABORT || hr == HRESULT.OLE_E_PROMPTSAVECANCELLED)
             {
-                case HRESULT.E_ABORT:
-                case HRESULT.OLE_E_PROMPTSAVECANCELLED:
-                    // cancelled checkout, etc.
-                    return;
-                case HRESULT.S_OK:
-                case HRESULT.S_FALSE:
-                    OnValueChanged(component, EventArgs.Empty);
-                    lastValue = value;
-                    return;
-                default:
-                    if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
+                return;
+            }
+            else if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
+            {
+                OnValueChanged(component, EventArgs.Empty);
+                lastValue = value;
+            }
+            else
+            {
+                if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
+                {
+                    g = typeof(Oleaut32.IDispatch).GUID;
+                    if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
                     {
-                        g = typeof(Oleaut32.IDispatch).GUID;
-                        if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
+                        WinFormsComWrappers.ErrorInfoWrapper pErrorInfo;
+                        Oleaut32.GetErrorInfo(out pErrorInfo);
+
+                        if (pErrorInfo is not null)
                         {
-                            WinFormsComWrappers.ErrorInfoWrapper pErrorInfo;
-                            Oleaut32.GetErrorInfo(out pErrorInfo);
-
-                            if (pErrorInfo is not null)
+                            string info;
+                            if (pErrorInfo.GetDescription(out info))
                             {
-                                string info;
-                                if (pErrorInfo.GetDescription(out info))
-                                {
-                                    errorInfo = info;
-                                }
-
-                                pErrorInfo.Dispose();
+                                errorInfo = info;
                             }
+
+                            pErrorInfo.Dispose();
                         }
                     }
-                    else if (errorInfo is null)
-                    {
-                        StringBuilder strMessage = new StringBuilder(256);
+                }
+                else if (errorInfo is null)
+                {
+                    char[] buffer = ArrayPool<char>.Shared.Rent(256 + 1);
 
-                        uint result = Kernel32.FormatMessageW(
-                            Kernel32.FormatMessageOptions.FROM_SYSTEM | Kernel32.FormatMessageOptions.IGNORE_INSERTS,
-                            IntPtr.Zero,
+                    fixed (char* b = buffer)
+                    {
+                        uint result = PInvoke.FormatMessage(
+                            FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_OPTIONS.FORMAT_MESSAGE_IGNORE_INSERTS,
+                            null,
                             (uint)hr,
-                            Kernel32.GetThreadLocale().RawValue,
-                            strMessage,
+                            PInvoke.GetThreadLocale(),
+                            b,
                             255,
-                            IntPtr.Zero);
+                            null);
 
                         if (result == 0)
                         {
-                            errorInfo = string.Format(CultureInfo.CurrentCulture, string.Format(SR.DispInvokeFailed, "SetValue", hr));
+                            errorInfo = string.Format(CultureInfo.CurrentCulture, SR.DispInvokeFailed, "SetValue", hr);
                         }
                         else
                         {
-                            errorInfo = TrimNewline(strMessage);
+                            ReadOnlySpan<char> ipBuffer = new(buffer);
+                            ipBuffer.TrimEnd('\n');
+                            ipBuffer.TrimEnd('\r');
+                            errorInfo = ipBuffer.ToString();
                         }
                     }
 
-                    throw new ExternalException(errorInfo, (int)hr);
-            }
-        }
+                    ArrayPool<char>.Shared.Return(buffer);
+                }
 
-        private static string TrimNewline(StringBuilder errorInfo)
-        {
-            int index = errorInfo.Length - 1;
-            while (index >= 0 && (errorInfo[index] == '\n' || errorInfo[index] == '\r'))
-            {
-                index--;
+                throw new ExternalException(errorInfo, (int)hr);
             }
-
-            return errorInfo.ToString(0, index + 1);
         }
 
         /// <summary>

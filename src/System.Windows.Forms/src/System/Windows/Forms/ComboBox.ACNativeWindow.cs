@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using static Interop;
 using static Interop.User32;
 
 namespace System.Windows.Forms
@@ -29,17 +28,17 @@ namespace System.Windows.Forms
                 EnumChildWindows(new HandleRef(this, acHandle), RegisterACWindowRecursive);
             }
 
-            private static BOOL RegisterACWindowRecursive(IntPtr handle)
+            private static BOOL RegisterACWindowRecursive(HWND handle)
             {
                 if (!s_ACWindows.ContainsKey(handle))
                 {
                     ACNativeWindow newAC = new ACNativeWindow(handle);
                 }
 
-                return BOOL.TRUE;
+                return true;
             }
 
-            internal bool Visible => IsWindowVisible(this).IsTrue();
+            internal bool Visible => IsWindowVisible(this);
 
             static internal bool AutoCompleteActive
             {

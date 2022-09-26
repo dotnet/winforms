@@ -164,7 +164,7 @@ namespace System.Windows.Forms
         private ContainerControl _newParent;
         private AxContainer _axContainer;
         private State _ocxState;
-        private IntPtr _hwndFocus = IntPtr.Zero;
+        private HWND _hwndFocus;
 
         // CustomTypeDescriptor related state
 
@@ -278,7 +278,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (_axState[s_fOwnWindow] && IsUserMode())
                 {
-                    cp.Style &= ~(int)User32.WS.VISIBLE;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_VISIBLE;
                 }
 
                 return cp;
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.UserPaint, false);
             Ole32.OLEMISC bits = 0;
             HRESULT hr = GetOleObject().GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
-            if (hr.Succeeded())
+            if (hr.Succeeded)
             {
                 _miscStatusBits = bits;
                 ParseMiscBits(_miscStatusBits);
@@ -889,15 +889,7 @@ namespace System.Windows.Forms
             return _axState[s_fOwnWindow] || _axState[s_fFakingWindow];
         }
 
-        private IntPtr GetHandleNoCreate()
-        {
-            if (IsHandleCreated)
-            {
-                return Handle;
-            }
-
-            return IntPtr.Zero;
-        }
+        private HWND GetHandleNoCreate() => IsHandleCreated ? (HWND)Handle : default;
 
         private ISelectionService GetSelectionService()
         {
@@ -1052,10 +1044,10 @@ namespace System.Windows.Forms
             // destroy that window, these controls will crash trying to process WM_CHAR.
             // We now check to see if we are losing focus to a child, and if so, not call
             // UIDeactivate().
-            bool uiDeactivate = (GetHandleNoCreate() != _hwndFocus);
+            bool uiDeactivate = GetHandleNoCreate() != _hwndFocus;
             if (uiDeactivate && IsHandleCreated)
             {
-                uiDeactivate = !User32.IsChild(new HandleRef(this, GetHandleNoCreate()), _hwndFocus).IsTrue();
+                uiDeactivate = !PInvoke.IsChild(this, _hwndFocus);
             }
 
             base.OnLostFocus(e);
@@ -1082,7 +1074,7 @@ namespace System.Windows.Forms
                 {
                     // Need to deactivate.
                     HRESULT hr = UiDeactivate();
-                    Debug.Assert(hr.Succeeded(), $"Failed to UiDeactivate: {hr}");
+                    Debug.Assert(hr.Succeeded, $"Failed to UiDeactivate: {hr}");
                 }
 
                 if (!iss.GetComponentSelected(this))
@@ -1179,8 +1171,8 @@ namespace System.Windows.Forms
                     return HRESULT.E_FAIL;
                 }
 
-                s_logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
-                s_logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
+                s_logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                s_logPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"log pixels are: {s_logPixelsX} {s_logPixelsY}");
             }
 
@@ -1232,8 +1224,8 @@ namespace System.Windows.Forms
             Size sz = new Size(width, height);
             bool resetExtents = !IsUserMode();
             Pixel2hiMetric(ref sz);
-            Interop.HRESULT hr = GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            if (hr != Interop.HRESULT.S_OK)
+            HRESULT hr = GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
+            if (hr != HRESULT.S_OK)
             {
                 resetExtents = true;
             }
@@ -1357,14 +1349,14 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            IntPtr handle = Handle;
-            IntPtr currentWndproc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
+            HWND handle = HWND;
+            IntPtr currentWndproc = PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
             if (currentWndproc == _wndprocAddr)
             {
                 return true;
             }
 
-            if ((int)User32.SendMessageW(this, _registeredMessage) == REGMSG_RETVAL)
+            if ((int)PInvoke.SendMessage(this, _registeredMessage) == REGMSG_RETVAL)
             {
                 _wndprocAddr = currentWndproc;
                 return true;
@@ -1374,7 +1366,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_axHostSwitch.TraceVerbose, "The control subclassed itself w/o calling the old wndproc.");
             Debug.Assert(!OwnWindow(), "Why are we here if we own our window?");
             WindowReleaseHandle();
-            User32.SetWindowLong(this, User32.GWL.WNDPROC, new HandleRef(this, currentWndproc));
+            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, currentWndproc);
             WindowAssignHandle(handle, _axState[s_assignUniqueID]);
             InformOfNewHandle();
             _axState[s_manualUpdate] = true;
@@ -1422,7 +1414,7 @@ namespace System.Windows.Forms
                             break;
                         case OC_UIACTIVE:
                             HRESULT hr = UiDeactivate();
-                            Debug.Assert(hr.Succeeded(), $"Failed in UiDeactivate: {hr}");
+                            Debug.Assert(hr.Succeeded, $"Failed in UiDeactivate: {hr}");
                             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose && GetOcState() == OC_INPLACE, "failed transition");
                             SetOcState(OC_INPLACE);
                             break;
@@ -1828,7 +1820,7 @@ namespace System.Windows.Forms
                     return base.PreProcessMessage(ref msg);
                 }
 
-                User32.MSG win32Message = msg;
+                MSG win32Message = msg;
                 _axState[s_siteProcessedInputKey] = false;
                 try
                 {
@@ -1836,7 +1828,7 @@ namespace System.Windows.Forms
                     if (activeObj is not null)
                     {
                         HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
-                        msg.MsgInternal = win32Message.message;
+                        msg.MsgInternal = (User32.WM)win32Message.message;
                         msg.WParamInternal = win32Message.wParam;
                         msg.LParamInternal = win32Message.lParam;
                         msg.HWnd = win32Message.hwnd;
@@ -1905,25 +1897,25 @@ namespace System.Windows.Forms
                         cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
                     };
                     HRESULT hr = GetOleControl().GetControlInfo(&ctlInfo);
-                    if (!hr.Succeeded())
+                    if (!hr.Succeeded)
                     {
                         return false;
                     }
 
-                    var msg = new User32.MSG
+                    var msg = new MSG
                     {
                         // Sadly, we don't have a message so we must fake one ourselves...
                         // A bit of ugliness here (a bit?  more like a bucket...)
                         // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
-                        hwnd = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle,
-                        message = User32.WM.SYSKEYDOWN,
-                        wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
-                        lParam = (IntPtr)0x20180001,
-                        time = Kernel32.GetTickCount()
+                        hwnd = (ContainingControl is null) ? (HWND)0 : ContainingControl.HWND,
+                        message = (uint)User32.WM.SYSKEYDOWN,
+                        wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+                        lParam = 0x20180001,
+                        time = PInvoke.GetTickCount()
                     };
                     User32.GetCursorPos(out Point p);
                     msg.pt = p;
-                    if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsTrue())
+                    if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                     {
                         GetOleControl().OnMnemonic(&msg);
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"\t Processed mnemonic {msg}");
@@ -2039,7 +2031,7 @@ namespace System.Windows.Forms
                     if (_iPersistPropBag is not null)
                     {
                         propBag = new PropertyBagStream();
-                        _iPersistPropBag.Save(propBag, BOOL.TRUE, BOOL.TRUE);
+                        _iPersistPropBag.Save(propBag, true, true);
                     }
 
                     MemoryStream ms = null;
@@ -2050,11 +2042,11 @@ namespace System.Windows.Forms
                             ms = new MemoryStream();
                             if (_storageType == STG_STREAM)
                             {
-                                _iPersistStream.Save(new Ole32.GPStream(ms), BOOL.TRUE);
+                                _iPersistStream.Save(new Ole32.GPStream(ms), true);
                             }
                             else
                             {
-                                _iPersistStreamInit.Save(new Ole32.GPStream(ms), BOOL.TRUE);
+                                _iPersistStreamInit.Save(new Ole32.GPStream(ms), true);
                             }
 
                             break;
@@ -2299,7 +2291,7 @@ namespace System.Windows.Forms
                     return rval;
                 case Ole32.DispatchID.AMBIENT_LOCALEID:
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for localeid");
-                    return Kernel32.GetThreadLocale().RawValue;
+                    return PInvoke.GetThreadLocale();
                 case Ole32.DispatchID.AMBIENT_RIGHTTOLEFT:
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for right to left");
                     Control ctl = this;
@@ -2345,12 +2337,12 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"freezing {v}");
             if (v)
             {
-                GetOleControl().FreezeEvents(BOOL.TRUE);
+                GetOleControl().FreezeEvents(true);
                 _freezeCount++;
             }
             else
             {
-                GetOleControl().FreezeEvents(BOOL.FALSE);
+                GetOleControl().FreezeEvents(false);
                 _freezeCount--;
             }
 
@@ -2401,7 +2393,7 @@ namespace System.Windows.Forms
                 in s_icf2_Guid,
                 out Ole32.IClassFactory2 icf2);
 
-            if (!hr.Succeeded())
+            if (!hr.Succeeded)
             {
                 if (hr == HRESULT.E_NOINTERFACE)
                 {
@@ -2417,7 +2409,7 @@ namespace System.Windows.Forms
                 cbLicInfo = sizeof(Ole32.LICINFO)
             };
             icf2.GetLicInfo(&licInfo);
-            if (licInfo.fRuntimeAvailable.IsTrue())
+            if (licInfo.fRuntimeAvailable)
             {
                 var rval = new string[1];
                 icf2.RequestLicKey(0, rval);
@@ -2437,7 +2429,7 @@ namespace System.Windows.Forms
                 Ole32.CLSCTX.INPROC_SERVER,
                 ref NativeMethods.ActiveX.IID_IUnknown,
                 out object ret);
-            hr.ThrowIfFailed();
+            hr.ThrowOnFailure();
 
             _instance = ret;
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t{(_instance is not null)}");
@@ -2454,7 +2446,7 @@ namespace System.Windows.Forms
                     IntPtr.Zero,
                     in s_icf2_Guid,
                     out Ole32.IClassFactory2 icf2);
-                if (hr.Succeeded())
+                if (hr.Succeeded)
                 {
                     icf2.CreateInstanceLic(IntPtr.Zero, IntPtr.Zero, ref NativeMethods.ActiveX.IID_IUnknown, license, out _instance);
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t{(_instance is not null)}");
@@ -2538,7 +2530,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            hr = icp.GetCategoryName(propcat, Kernel32.GetThreadLocale(), out string name);
+            hr = icp.GetCategoryName(propcat, PInvoke.GetThreadLocale(), out string name);
             if (hr == HRESULT.S_OK && name is not null)
             {
                 var rval = new CategoryAttribute(name);
@@ -2585,7 +2577,7 @@ namespace System.Windows.Forms
             AddSelectionHandler();
             _editMode = EDITM_HOST;
             SetSelectionStyle(2);
-            _ = User32.GetFocus();
+            _ = PInvoke.GetFocus();
             try
             {
                 UiActivate();
@@ -3213,7 +3205,7 @@ namespace System.Windows.Forms
             try
             {
                 HRESULT hr = ispp.GetPages(&uuids);
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
                     return false;
                 }
@@ -3239,13 +3231,13 @@ namespace System.Windows.Forms
                     var opcparams = new Oleaut32.OCPFIPARAMS
                     {
                         cbStructSize = (uint)Marshal.SizeOf<Oleaut32.OCPFIPARAMS>(),
-                        hwndOwner = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle,
+                        hwndOwner = (ContainingControl is null) ? 0 : ContainingControl.Handle,
                         lpszCaption = pName,
                         cObjects = 1,
-                        ppUnk = (IntPtr)(&pUnk),
+                        ppUnk = (nint)(&pUnk),
                         cPages = 1,
-                        lpPages = (IntPtr)(&guid),
-                        lcid = Kernel32.GetThreadLocale(),
+                        lpPages = (nint)(&guid),
+                        lcid = PInvoke.GetThreadLocale(),
                         dispidInitialProperty = dispid
                     };
                     Oleaut32.OleCreatePropertyFrameIndirect(ref opcparams);
@@ -3294,7 +3286,7 @@ namespace System.Windows.Forms
             Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
             var uuids = new Ole32.CAUUID();
             HRESULT hr = ispp.GetPages(&uuids);
-            if (!hr.Succeeded() || uuids.cElems == 0)
+            if (!hr.Succeeded || uuids.cElems == 0)
             {
                 return;
             }
@@ -3313,8 +3305,8 @@ namespace System.Windows.Forms
                     trans = host.CreateTransaction(SR.AXEditProperties);
                 }
 
-                IntPtr handle = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle;
-                IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
+                nint handle = (ContainingControl is null) ? 0 : ContainingControl.Handle;
+                nint pUnk = Marshal.GetIUnknownForObject(GetOcx());
                 try
                 {
                     Oleaut32.OleCreatePropertyFrame(
@@ -3326,9 +3318,9 @@ namespace System.Windows.Forms
                         &pUnk,
                         uuids.cElems,
                         uuids.pElems,
-                        Kernel32.GetThreadLocale(),
+                        PInvoke.GetThreadLocale(),
                         0,
-                        IntPtr.Zero);
+                        0);
                 }
                 finally
                 {
@@ -3354,7 +3346,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
+        internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg)
         {
             if (_isMaskEdit)
             {
@@ -3419,14 +3411,14 @@ namespace System.Windows.Forms
 
                 case User32.WM.KILLFOCUS:
                     {
-                        _hwndFocus = m.WParamInternal;
+                        _hwndFocus = (HWND)(nint)m.WParamInternal;
                         try
                         {
                             base.WndProc(ref m);
                         }
                         finally
                         {
-                            _hwndFocus = IntPtr.Zero;
+                            _hwndFocus = default;
                         }
 
                         break;
@@ -3461,10 +3453,10 @@ namespace System.Windows.Forms
                     if (GetOcState() >= OC_INPLACE)
                     {
                         Ole32.IOleInPlaceObject ipo = GetInPlaceObject();
-                        IntPtr hwnd = IntPtr.Zero;
-                        if (ipo.GetWindow(&hwnd).Succeeded())
+                        HWND hwnd = HWND.Null;
+                        if (ipo.GetWindow(&hwnd).Succeeded)
                         {
-                            Application.ParkHandle(new HandleRef(ipo, hwnd), DpiAwarenessContext);
+                            Application.ParkHandle(handle: new(ipo, hwnd), DpiAwarenessContext);
                         }
                     }
 
@@ -3522,7 +3514,7 @@ namespace System.Windows.Forms
                 default:
                     if (m.MsgInternal == _registeredMessage)
                     {
-                        m.ResultInternal = REGMSG_RETVAL;
+                        m.ResultInternal = (LRESULT)REGMSG_RETVAL;
                         return;
                     }
 
@@ -3532,13 +3524,20 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DetachAndForward(ref Message m)
+        private unsafe void DetachAndForward(ref Message m)
         {
             DetachWindow();
             if (IsHandleCreated)
             {
-                IntPtr wndProc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
-                m.ResultInternal = User32.CallWindowProcW(wndProc, Handle, (User32.WM)m.Msg, m.WParamInternal, m.LParamInternal);
+                void* wndProc = (void*)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
+                m.ResultInternal = PInvoke.CallWindowProc(
+                    (delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, LRESULT>)wndProc,
+                    HWND,
+                    (uint)m.Msg,
+                    m.WParamInternal,
+                    m.LParamInternal);
+
+                GC.KeepAlive(this);
             }
         }
 
@@ -3554,10 +3553,10 @@ namespace System.Windows.Forms
         private void InformOfNewHandle()
         {
             Debug.Assert(IsHandleCreated, "we got to have a handle to be here...");
-            _wndprocAddr = User32.GetWindowLong(this, User32.GWL.WNDPROC);
+            _wndprocAddr = PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
         }
 
-        private void AttachWindow(IntPtr hwnd)
+        private void AttachWindow(HWND hwnd)
         {
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"attaching window for {ToString()} {hwnd}");
             if (!_axState[s_fFakingWindow])
@@ -3650,7 +3649,7 @@ namespace System.Windows.Forms
             qaContainer.pPropertyNotifySink = _oleSite;
             qaContainer.pFont = (Ole32.IFont)GetIFontFromFont(GetParentContainer()._parent.Font);
             qaContainer.dwAppearance = 0;
-            qaContainer.lcid = Kernel32.GetThreadLocale();
+            qaContainer.lcid = PInvoke.GetThreadLocale();
 
             Control p = ParentInternal;
 
@@ -3675,7 +3674,7 @@ namespace System.Windows.Forms
             }
 
             HRESULT hr = iqa.QuickActivate(qaContainer, &qaControl);
-            if (!hr.Succeeded())
+            if (!hr.Succeeded)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Failed to QuickActivate: {hr}");
                 DisposeAxControl();
@@ -3976,7 +3975,7 @@ namespace System.Windows.Forms
             }
 
             Ole32.PICTDESC pictdesc = GetPICTDESCFromPicture(image);
-            return Ole32.OleCreatePictureIndirect(ref pictdesc, in s_ipicture_Guid, fOwn: BOOL.TRUE);
+            return Ole32.OleCreatePictureIndirect(ref pictdesc, in s_ipicture_Guid, fOwn: true);
         }
 
         /// <summary>
@@ -3991,7 +3990,7 @@ namespace System.Windows.Forms
             }
 
             Ole32.PICTDESC desc = Ole32.PICTDESC.FromIcon(Icon.FromHandle(cursor.Handle), copy: true);
-            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipicture_Guid, fOwn: BOOL.TRUE);
+            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipicture_Guid, fOwn: true);
         }
 
         /// <summary>
@@ -4006,7 +4005,7 @@ namespace System.Windows.Forms
             }
 
             Ole32.PICTDESC desc = GetPICTDESCFromPicture(image);
-            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipictureDisp_Guid, fOwn: BOOL.TRUE);
+            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipictureDisp_Guid, fOwn: true);
         }
 
         /// <summary>
@@ -4120,17 +4119,17 @@ namespace System.Windows.Forms
                 return cachedFDesc;
             }
 
-            User32.LOGFONTW logfont = User32.LOGFONTW.FromFont(font);
+            LOGFONTW logfont = LOGFONTW.FromFont(font);
             var fdesc = new Oleaut32.FONTDESC
             {
                 cbSizeOfStruct = (uint)Marshal.SizeOf<Oleaut32.FONTDESC>(),
                 lpstrName = font.Name,
                 cySize = (long)(font.SizeInPoints * 10000),
                 sWeight = (short)logfont.lfWeight,
-                sCharset = logfont.lfCharSet,
-                fItalic = font.Italic.ToBOOL(),
-                fUnderline = font.Underline.ToBOOL(),
-                fStrikethrough = font.Strikeout.ToBOOL()
+                sCharset = (short)logfont.lfCharSet,
+                fItalic = font.Italic,
+                fUnderline = font.Underline,
+                fStrikethrough = font.Strikeout
             };
             s_fontTable[font] = fdesc;
             return fdesc;

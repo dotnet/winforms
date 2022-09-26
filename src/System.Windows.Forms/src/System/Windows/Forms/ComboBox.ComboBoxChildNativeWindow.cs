@@ -141,7 +141,7 @@ namespace System.Windows.Forms
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    m.ResultInternal = UiaCore.UiaReturnRawElementProvider(
+                    m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
                         this,
                         m.WParamInternal,
                         m.LParamInternal,
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        m.ResultInternal = Oleacc.LresultFromObject(
+                        m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(
                             in IID.IAccessible,
                             m.WParamInternal,
                             new HandleRef(this, pUnknown));

@@ -230,7 +230,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
             UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
             UiaTextRange textRange1 = new UiaTextRange(enclosingElement, provider, start: 3, end: 9);
             UiaTextRange textRange2 = new UiaTextRange(enclosingElement, provider, start, end);
-            bool actual = ((ITextRangeProvider)textRange1).Compare(textRange2).IsTrue();
+            bool actual = ((ITextRangeProvider)textRange1).Compare(textRange2);
             Assert.Equal(expected, actual);
         }
 
@@ -386,7 +386,7 @@ this is the third line.";
 
             foreach (int textAttributeIdentifier in textAttributeIdentifiers)
             {
-                ITextRangeProvider? actual = ((ITextRangeProvider)textRange).FindAttribute(textAttributeIdentifier, new object(), backward.ToBOOL());
+                ITextRangeProvider? actual = ((ITextRangeProvider)textRange).FindAttribute(textAttributeIdentifier, new object(), backward);
                 Assert.Null(actual);
             }
         }
@@ -1070,7 +1070,7 @@ This is the line 3";
         [InlineData("Some test text")]
         public void UiaTextRange_private_GetFontName_ReturnsExpectedValue(string faceName)
         {
-            LOGFONTW logfont = new LOGFONTW
+            LOGFONTW logfont = new()
             {
                 FaceName = faceName
             };
@@ -1115,7 +1115,7 @@ This is the line 3";
         [InlineData(FW.THIN)]
         public void UiaTextRange_private_GetFontWeight_ReturnsCorrectValue(object fontWeight)
         {
-            LOGFONTW logfont = new LOGFONTW() { lfWeight = (FW)fontWeight };
+            LOGFONTW logfont = new() { lfWeight = (int)fontWeight };
             FW actual = StaticNullTextRange.TestAccessor().GetFontWeight(logfont);
             Assert.Equal(fontWeight, actual);
         }

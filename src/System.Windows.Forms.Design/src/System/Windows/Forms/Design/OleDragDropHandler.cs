@@ -4,8 +4,8 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
 using System.ComponentModel.Design;
+using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
@@ -522,29 +522,30 @@ namespace System.Windows.Forms.Design
             // ControlPaint.DrawReversibleFrame(handle, rectangle, backColor, FrameStyle.Thick);
 
             // ------ Duplicate code----------------------------------------------------------
-            Gdi32.R2 rop2;
+            R2_MODE rop2;
             Color graphicsColor;
 
             if (backColor.GetBrightness() < .5)
             {
-                rop2 = Gdi32.R2.NOTXORPEN;
+                rop2 = R2_MODE.R2_NOTXORPEN;
                 graphicsColor = Color.White;
             }
             else
             {
-                rop2 = Gdi32.R2.XORPEN;
+                rop2 = R2_MODE.R2_XORPEN;
                 graphicsColor = Color.Black;
             }
 
-            using var dc = new User32.GetDcScope(handle);
-            using var pen = new Gdi32.ObjectScope(Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor)));
+            using User32.GetDcScope dc = new(handle);
+            using PInvoke.ObjectScope pen =
+                new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
 
-            using var rop2Scope = new Gdi32.SetRop2Scope(dc, rop2);
-            using var brushSelection = new Gdi32.SelectObjectScope(dc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
-            using var penSelection = new Gdi32.SelectObjectScope(dc, pen);
+            using PInvoke.SetRop2Scope rop2Scope = new(dc, rop2);
+            using PInvoke.SelectObjectScope brushSelection = new(dc, PInvoke.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
+            using PInvoke.SelectObjectScope penSelection = new(dc, pen);
 
-            Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));
-            Gdi32.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+            PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
+            PInvoke.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
             // ------ Duplicate code----------------------------------------------------------
         }
 
@@ -589,9 +590,8 @@ namespace System.Windows.Forms.Design
             // We make sure we're painted before we start the drag.  Then, we disable window painting to
             // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
             // but that causes a horrible flashing because GDI+ uses direct draw.
-            //
-            User32.MSG msg = default;
-            while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE).IsTrue())
+            MSG msg = default;
+            while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
             {
                 User32.TranslateMessage(ref msg);
                 User32.DispatchMessageW(ref msg);
@@ -897,7 +897,7 @@ namespace System.Windows.Forms.Design
                                     if (updateLocation)
                                     {
                                         oldDesignerControl = client.GetDesignerControl();
-                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                                        PInvoke.SendMessage(oldDesignerControl, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                                     }
 
                                     Point dropPt = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
@@ -949,7 +949,7 @@ namespace System.Windows.Forms.Design
                                     if (oldDesignerControl is not null)
                                     {
                                         //((ComponentDataObject)dataObj).ShowControls();
-                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                                        PInvoke.SendMessage(oldDesignerControl, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                                         oldDesignerControl.Invalidate(true);
                                     }
 

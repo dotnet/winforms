@@ -2271,7 +2271,7 @@ namespace System.Windows.Forms
             {
                 Ole32.IDropSource dropSource = CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage);
                 HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out finalEffect);
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
                     return DragDropEffects.None;
                 }
@@ -2551,7 +2551,7 @@ namespace System.Windows.Forms
                         if (ParentInternal.LastMouseDownedItem == this)
                         {
                             // Same as Control.MouseButtons == MouseButtons.Left, but slightly more efficient.
-                            if (User32.GetKeyState((int)Keys.LButton) < 0)
+                            if (PInvoke.GetKeyState((int)Keys.LButton) < 0)
                             {
                                 Push(true);
                             }

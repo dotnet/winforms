@@ -31,7 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 try
                 {
                     HRESULT hr = ispp.GetPages(&uuids);
-                    if (!hr.Succeeded())
+                    if (!hr.Succeeded)
                     {
                         return false;
                     }
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             &pUnk,
                             1,
                             &guid,
-                            Kernel32.GetThreadLocale(),
+                            PInvoke.GetThreadLocale(),
                             0,
                             IntPtr.Zero);
                         return true;
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     var uuids = new CAUUID();
                     HRESULT hr = ispp.GetPages(&uuids);
-                    if (!hr.Succeeded() || uuids.cElems == 0)
+                    if (!hr.Succeeded || uuids.cElems == 0)
                     {
                         return false;
                     }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             &pUnk,
                             uuids.cElems,
                             uuids.pElems,
-                            Kernel32.GetThreadLocale(),
+                            PInvoke.GetThreadLocale(),
                             0,
                             IntPtr.Zero);
                         return true;

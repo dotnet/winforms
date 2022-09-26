@@ -407,13 +407,13 @@ namespace System.Windows.Forms
                 if (ListView is not null && ListView.IsHandleCreated && !ListView.Disposing && ListView.View == View.Details)
                 {
                     // Make sure this column has already been added to the ListView, else just return width
-                    IntPtr hwndHdr = User32.SendMessageW(ListView, (User32.WM)LVM.GETHEADER);
-                    if (hwndHdr != IntPtr.Zero)
+                    HWND hwndHdr = (HWND)PInvoke.SendMessage(ListView, (User32.WM)LVM.GETHEADER);
+                    if (!hwndHdr.IsNull)
                     {
-                        int nativeColumnCount = (int)User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT);
+                        int nativeColumnCount = (int)PInvoke.SendMessage(hwndHdr, (User32.WM)HDM.GETITEMCOUNT);
                         if (Index < nativeColumnCount)
                         {
-                            _width = (int)User32.SendMessageW(ListView, (User32.WM)LVM.GETCOLUMNWIDTH, Index);
+                            _width = (int)PInvoke.SendMessage(ListView, (User32.WM)LVM.GETCOLUMNWIDTH, (WPARAM)Index);
                         }
                     }
                 }
@@ -504,7 +504,7 @@ namespace System.Windows.Forms
             {
                 fixed (int* pCols = cols)
                 {
-                    User32.SendMessageW(ListView, (User32.WM)LVM.SETCOLUMNORDERARRAY, cols.Length, (nint)pCols);
+                    PInvoke.SendMessage(ListView, (User32.WM)LVM.SETCOLUMNORDERARRAY, (WPARAM)cols.Length, (LPARAM)pCols);
                 }
             }
         }

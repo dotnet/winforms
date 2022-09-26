@@ -3,6 +3,7 @@ using System.Runtime.InteropServices.ComTypes;
 using Xunit;
 using static Interop;
 using static Interop.User32;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms.Tests
 {
@@ -23,9 +24,9 @@ namespace System.Windows.Forms.Tests
             {
                 pUnkForRelease = null,
                 tymed = TYMED.TYMED_HGLOBAL,
-                unionmember = Kernel32.GlobalAlloc(
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
-                    sizeof(BOOL))
+                unionmember = PInvoke.GlobalAlloc(
+                    GMEM_MOVEABLE | GMEM_ZEROINIT,
+                    BOOL.Size)
             };
 
             SaveInDragLoopToHandle(medium.unionmember, inDragLoop: true);
@@ -62,7 +63,7 @@ namespace System.Windows.Forms.Tests
             {
                 dragDropFormat = new DragDropFormat(formatEtc.cfFormat, medium, copyData: false);
                 dragDropFormat.Dispose();
-                int handleSize = Kernel32.GlobalSize(dragDropFormat.Medium.unionmember);
+                int handleSize = (int)PInvoke.GlobalSize(dragDropFormat.Medium.unionmember);
                 Assert.Equal(0, handleSize);
                 Assert.Null(dragDropFormat.Medium.pUnkForRelease);
                 Assert.Equal(TYMED.TYMED_NULL, dragDropFormat.Medium.tymed);
@@ -128,18 +129,11 @@ namespace System.Windows.Forms.Tests
                     tymed = dragDropFormat.Medium.tymed,
                     unionmember = dragDropFormat.Medium.tymed switch
                     {
-                        TYMED.TYMED_HGLOBAL
-                        or TYMED.TYMED_FILE
-                        or TYMED.TYMED_ENHMF
-                        or TYMED.TYMED_GDI
-                        or TYMED.TYMED_MFPICT => Ole32.OleDuplicateData(
-                                dragDropFormat.Medium.unionmember,
-                                formatEtc.cfFormat,
-                                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT),
-
-                        TYMED.TYMED_ISTORAGE
-                        or TYMED.TYMED_ISTREAM
-                        or TYMED.TYMED_NULL => ComPtrType(dragDropFormat.Medium.unionmember),
+                        TYMED.TYMED_HGLOBAL or TYMED.TYMED_FILE or TYMED.TYMED_ENHMF or TYMED.TYMED_GDI or TYMED.TYMED_MFPICT
+                        => Ole32.OleDuplicateData(
+                            dragDropFormat.Medium.unionmember,
+                            formatEtc.cfFormat,
+                            PInvoke.GMEM.MOVEABLE | PInvoke.GMEM.DDESHARE | PInvoke.GMEM.ZEROINIT),
                         _ => dragDropFormat.Medium.unionmember,
                     }
                 };
@@ -171,26 +165,18 @@ namespace System.Windows.Forms.Tests
             {
                 dragDropFormat?.Dispose();
             }
-
-            static IntPtr ComPtrType(IntPtr ptr)
-            {
-                if (ptr != IntPtr.Zero)
-                    Marshal.AddRef(ptr);
-
-                return ptr;
-            }
         }
 
         private unsafe static void SaveInDragLoopToHandle(IntPtr handle, bool inDragLoop)
         {
             try
             {
-                IntPtr basePtr = Kernel32.GlobalLock(handle);
-                *(BOOL*)basePtr = inDragLoop ? BOOL.TRUE : BOOL.FALSE;
+                void* basePtr = PInvoke.GlobalLock(handle);
+                *(BOOL*)basePtr = (BOOL)inDragLoop;
             }
             finally
             {
-                Kernel32.GlobalUnlock(handle);
+                PInvoke.GlobalUnlock(handle);
             }
         }
     }

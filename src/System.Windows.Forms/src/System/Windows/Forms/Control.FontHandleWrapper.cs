@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -13,14 +12,14 @@ namespace System.Windows.Forms
         // Fonts can be a pain to track, so we wrap Hfonts in this class to get a Finalize method.
         internal sealed class FontHandleWrapper : IDisposable
         {
-            private Gdi32.HFONT _handle;
+            private HFONT _handle;
 
             internal FontHandleWrapper(Font font)
             {
-                _handle = (Gdi32.HFONT)font.ToHfont();
+                _handle = (HFONT)font.ToHfont();
             }
 
-            internal Gdi32.HFONT Handle
+            internal HFONT Handle
             {
                 get
                 {
@@ -39,7 +38,7 @@ namespace System.Windows.Forms
             {
                 if (!_handle.IsNull)
                 {
-                    Gdi32.DeleteObject(_handle);
+                    PInvoke.DeleteObject(_handle);
                     _handle = default;
                 }
             }

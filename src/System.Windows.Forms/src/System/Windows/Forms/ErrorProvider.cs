@@ -573,7 +573,7 @@ namespace System.Windows.Forms
                                                             Shell32.SHGSI.ICON | Shell32.SHGSI.SMALLICON,
                                                             &sii);
 
-                    if (hr.Succeeded())
+                    if (hr.Succeeded)
                     {
                         try
                         {
@@ -814,7 +814,7 @@ namespace System.Windows.Forms
         {
             EnsureControlItem(control).Error = value;
 
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening())
             {
                 control.AccessibilityObject.RaiseAutomationNotification(
                     Automation.AutomationNotificationKind.ActionAborted,

@@ -1269,7 +1269,7 @@ namespace System.Windows.Forms.Tests
                 Multiline = multiline
             };
             control.CreateControl();
-            IntPtr result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMARGINS);
+            IntPtr result = PInvoke.SendMessage(control, (User32.WM)User32.EM.GETMARGINS);
             Assert.Equal(expected, PARAM.LOWORD(result));
             Assert.Equal(expected, PARAM.HIWORD(result));
         }
@@ -1287,7 +1287,7 @@ namespace System.Windows.Forms.Tests
             };
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            IntPtr result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMARGINS);
+            IntPtr result = PInvoke.SendMessage(control, (User32.WM)User32.EM.GETMARGINS);
             Assert.Equal(expected, PARAM.LOWORD(result));
             Assert.Equal(expected, PARAM.HIWORD(result));
         }
@@ -1303,7 +1303,7 @@ namespace System.Windows.Forms.Tests
             };
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMODIFY));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)User32.EM.GETMODIFY));
         }
 
         [WinFormsTheory]
@@ -1673,7 +1673,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_LIMITTEXT.
-            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.LIMITTEXT, 0, 1);
+            PInvoke.SendMessage(control, (User32.WM)User32.EM.LIMITTEXT, 0, 1);
             Assert.Equal(0x7FFF, control.MaxLength);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1782,7 +1782,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.MaxLength = value;
-            Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETLIMITTEXT));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)User32.EM.GETLIMITTEXT));
         }
 
         [WinFormsFact]
@@ -1820,7 +1820,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETMODIFY.
-            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.SETMODIFY, (nint)BOOL.TRUE);
+            PInvoke.SendMessage(control, (User32.WM)User32.EM.SETMODIFY, (WPARAM)(BOOL)true);
             Assert.Equal(0, modifiedChangedCallCount);
 
             Assert.True(control.Modified);
@@ -1898,7 +1898,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.Modified = value;
-            Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMODIFY));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)User32.EM.GETMODIFY));
         }
 
         [WinFormsFact]
@@ -2322,7 +2322,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETREADONLY.
-            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.SETREADONLY, (nint)BOOL.TRUE);
+            PInvoke.SendMessage(control, (User32.WM)User32.EM.SETREADONLY, (WPARAM)(BOOL)true);
             Assert.Equal(0, readOnlyChangedCallCount);
 
             Assert.False(control.ReadOnly);
@@ -2405,7 +2405,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.ReadOnly = value;
 
-            User32.ES style = (User32.ES)User32.GetWindowLong(control.Handle, User32.GWL.STYLE);
+            User32.ES style = (User32.ES)PInvoke.GetWindowLong(control, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
             Assert.Equal(value, style.HasFlag(User32.ES.READONLY));
         }
 
@@ -2915,9 +2915,13 @@ namespace System.Windows.Forms.Tests
             control.SelectionLength = value;
             int selectionStart = 0;
             int selectionEnd = 0;
-            nint result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETSEL, (nint)(&selectionStart), (nint)(&selectionEnd));
-            Assert.Equal(1, PARAM.LOWORD(result));
-            Assert.Equal(expected, PARAM.HIWORD(result));
+            LRESULT result = PInvoke.SendMessage(
+                control,
+                (User32.WM)User32.EM.GETSEL,
+                (WPARAM)(&selectionStart),
+                (LPARAM)(&selectionEnd));
+            Assert.Equal(1, result.LOWORD);
+            Assert.Equal(expected, result.HIWORD);
             Assert.Equal(1, selectionStart);
             Assert.Equal(expected, selectionEnd);
         }
@@ -3088,9 +3092,13 @@ namespace System.Windows.Forms.Tests
             control.SelectionStart = value;
             int selectionStart = 0;
             int selectionEnd = 0;
-            nint result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETSEL, (nint)(&selectionStart), (nint)(&selectionEnd));
-            Assert.Equal(expectedSelectionStart, PARAM.LOWORD(result));
-            Assert.Equal(expectedEnd, PARAM.HIWORD(result));
+            LRESULT result = PInvoke.SendMessage(
+                control,
+                (User32.WM)User32.EM.GETSEL,
+                (WPARAM)(&selectionStart),
+                (LPARAM)(&selectionEnd));
+            Assert.Equal(expectedSelectionStart, result.LOWORD);
+            Assert.Equal(expectedEnd, result.HIWORD);
             Assert.Equal(expectedSelectionStart, selectionStart);
             Assert.Equal(expectedEnd, selectionEnd);
         }
@@ -4271,7 +4279,11 @@ namespace System.Windows.Forms.Tests
             control.CreateHandle();
             int selectionStart = 0;
             int selectionEnd = 0;
-            nint result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETSEL, (nint)(&selectionStart), (nint)(&selectionEnd));
+            LRESULT result = PInvoke.SendMessage(
+                control,
+                (User32.WM)User32.EM.GETSEL,
+                (WPARAM)(&selectionStart),
+                (LPARAM)(&selectionEnd));
             Assert.Equal(1, PARAM.LOWORD(result));
             Assert.Equal(3, PARAM.HIWORD(result));
             Assert.Equal(1, selectionStart);
@@ -6525,9 +6537,13 @@ namespace System.Windows.Forms.Tests
             control.Select(start, length);
             int selectionStart = 0;
             int selectionEnd = 0;
-            nint result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETSEL, (nint)(&selectionStart), (nint)(&selectionEnd));
-            Assert.Equal(expectedSelectionStart, PARAM.LOWORD(result));
-            Assert.Equal(expectedEnd, PARAM.HIWORD(result));
+            LRESULT result = PInvoke.SendMessage(
+                control,
+                (User32.WM)User32.EM.GETSEL,
+                (WPARAM)(&selectionStart),
+                (LPARAM)(&selectionEnd));
+            Assert.Equal(expectedSelectionStart, result.LOWORD);
+            Assert.Equal(expectedEnd, result.HIWORD);
             Assert.Equal(expectedSelectionStart, selectionStart);
             Assert.Equal(expectedEnd, selectionEnd);
         }
@@ -6657,9 +6673,13 @@ namespace System.Windows.Forms.Tests
             control.SelectAll();
             int selectionStart = 0;
             int selectionEnd = 0;
-            nint result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETSEL, (nint)(&selectionStart), (nint)(&selectionEnd));
-            Assert.Equal(0, PARAM.LOWORD(result));
-            Assert.Equal(4, PARAM.HIWORD(result));
+            LRESULT result = PInvoke.SendMessage(
+                control,
+                (User32.WM)User32.EM.GETSEL,
+                (WPARAM)(&selectionStart),
+                (LPARAM)(&selectionEnd));
+            Assert.Equal(0, result.LOWORD);
+            Assert.Equal(4, result.HIWORD);
             Assert.Equal(0, selectionStart);
             Assert.Equal(4, selectionEnd);
         }
@@ -7860,7 +7880,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(!multiline, control.IsHandleCreated);
                 Assert.Equal(0, textChangedCallCount);
                 control.CreateControl();
-                nint result = SendMessageW(control.Handle, (WM)EM.GETMARGINS);
+                nint result = PInvoke.SendMessage(control, (WM)EM.GETMARGINS);
                 Assert.Equal(expectedMargin, PARAM.HIWORD(result));
                 Assert.Equal(expectedMargin, PARAM.LOWORD(result));
             }
@@ -7882,7 +7902,11 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
-            SendMessageW(control.Handle, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN), PARAM.FromLowHigh(1, 2));
+            PInvoke.SendMessage(
+                control,
+                (WM)EM.SETMARGINS,
+                (WPARAM)(uint)(EC.LEFTMARGIN | EC.RIGHTMARGIN),
+                LPARAM.MAKELPARAM(1, 2));
             int textChangedCallCount = 0;
             control.TextChanged += (sender, e) => textChangedCallCount++;
 
@@ -7894,7 +7918,7 @@ namespace System.Windows.Forms.Tests
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
             Assert.Equal(0, textChangedCallCount);
-            IntPtr result = SendMessageW(control.Handle, (WM)EM.GETMARGINS);
+            IntPtr result = PInvoke.SendMessage(control, (WM)EM.GETMARGINS);
             Assert.Equal(expectedLeft, PARAM.LOWORD(result));
             Assert.Equal(expectedRight, PARAM.HIWORD(result));
             Assert.True(control.IsHandleCreated);

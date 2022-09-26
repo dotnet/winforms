@@ -111,8 +111,8 @@ namespace System.Windows.Forms
                     CreateParams cparams = new CreateParams
                     {
                         Caption = string.Empty,
-                        Style = (int)(User32.WS.VISIBLE | User32.WS.CHILD),
-                        ClassStyle = (int)User32.CS.DBLCLKS,
+                        Style = (int)(WINDOW_STYLE.WS_VISIBLE | WINDOW_STYLE.WS_CHILD),
+                        ClassStyle = (int)WNDCLASS_STYLES.CS_DBLCLKS,
                         X = 0,
                         Y = 0,
                         Width = 0,
@@ -131,18 +131,22 @@ namespace System.Windows.Forms
                     cparams = new CreateParams
                     {
                         Parent = Handle,
-                        ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS,
+                        ClassName = PInvoke.TOOLTIPS_CLASS,
                         Style = (int)ComCtl32.TTS.ALWAYSTIP
                     };
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
 
-                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                    PInvoke.SendMessage(
+                        _tipWindow,
+                        (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
+                        (WPARAM)0,
+                        (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
                     User32.SetWindowPos(
                         new HandleRef(_tipWindow, _tipWindow.Handle),
                         User32.HWND_TOP,
                         flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE | User32.SWP.NOACTIVATE);
-                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (nint)ComCtl32.TTDT.INITIAL, 0);
+                    PInvoke.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (WPARAM)(uint)ComCtl32.TTDT.INITIAL);
                 }
 
                 return true;
@@ -180,16 +184,18 @@ namespace System.Windows.Forms
                 DestroyHandle();
             }
 
-            private unsafe void MirrorDcIfNeeded(Gdi32.HDC hdc)
+            private unsafe void MirrorDcIfNeeded(HDC hdc)
             {
                 if (_parent.IsMirrored)
                 {
                     // Mirror the DC
-                    Gdi32.SetMapMode(hdc, Gdi32.MM.ANISOTROPIC);
-                    Gdi32.GetViewportExtEx(hdc, out Size originalExtents);
-                    Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, null);
-                    Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
-                    Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, null);
+                    PInvoke.SetMapMode(hdc, HDC_MAP_MODE.MM_ANISOTROPIC);
+                    SIZE originalExtents = default;
+                    PInvoke.GetViewportExtEx(hdc, &originalExtents);
+                    PInvoke.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, lpsz: null);
+                    Point originalOrigin = default;
+                    PInvoke.GetViewportOrgEx(hdc, &originalOrigin);
+                    PInvoke.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, lppt: null);
                 }
             }
 
@@ -198,8 +204,8 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void OnPaint()
             {
-                using var hdc = new User32.BeginPaintScope(Handle);
-                using var save = new Gdi32.SaveDcScope(hdc);
+                using PInvoke.BeginPaintScope hdc = new((HWND)Handle);
+                using PInvoke.SaveDcScope save = new(hdc);
 
                 MirrorDcIfNeeded(hdc);
 
@@ -397,13 +403,13 @@ namespace System.Windows.Forms
                     _provider._showIcon = !_provider._showIcon;
                 }
 
-                using var hdc = new User32.GetDcScope(Handle);
-                using var save = new Gdi32.SaveDcScope(hdc);
+                using User32.GetDcScope hdc = new(Handle);
+                using PInvoke.SaveDcScope save = new(hdc);
                 MirrorDcIfNeeded(hdc);
 
                 using Graphics g = hdc.CreateGraphics();
-                using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, g);
-                if (User32.SetWindowRgn(this, windowRegionHandle, BOOL.TRUE) != 0)
+                using PInvoke.RegionScope windowRegionHandle = new(windowRegion, g);
+                if (User32.SetWindowRgn(this, windowRegionHandle, true) != 0)
                 {
                     // The HWnd owns the region.
                     windowRegionHandle.RelinquishOwnership();
@@ -417,7 +423,7 @@ namespace System.Windows.Forms
                     _windowBounds.Width,
                     _windowBounds.Height,
                     User32.SWP.NOACTIVATE);
-                User32.InvalidateRect(new HandleRef(this, Handle), null, BOOL.FALSE);
+                User32.InvalidateRect(new HandleRef(this, Handle), null, false);
             }
 
             /// <summary>
@@ -431,7 +437,7 @@ namespace System.Windows.Forms
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    m.ResultInternal = UiaCore.UiaReturnRawElementProvider(
+                    m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
                         this,
                         m.WParamInternal,
                         m.LParamInternal,
@@ -455,10 +461,10 @@ namespace System.Windows.Forms
                         WmGetObject(ref m);
                         break;
                     case User32.WM.NOTIFY:
-                        User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
-                        if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
+                        NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+                        if ((int)nmhdr->code == (int)ComCtl32.TTN.SHOW || (int)nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
-                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);
+                            OnToolTipVisibilityChanging((nint)nmhdr->idFrom, (int)nmhdr->code == (int)ComCtl32.TTN.SHOW);
                         }
 
                         break;

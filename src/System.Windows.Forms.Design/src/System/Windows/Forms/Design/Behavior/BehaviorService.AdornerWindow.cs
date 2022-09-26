@@ -41,8 +41,8 @@ namespace System.Windows.Forms.Design.Behavior
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~(int)(User32.WS.CLIPCHILDREN | User32.WS.CLIPSIBLINGS);
-                    cp.ExStyle |= (int)User32.WS_EX.TRANSPARENT;
+                    cp.Style &= ~(int)(WINDOW_STYLE.WS_CLIPCHILDREN | WINDOW_STYLE.WS_CLIPSIBLINGS);
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TRANSPARENT;
                     return cp;
                 }
             }
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Design.Behavior
             ///  for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated
             ///  to AdornerWindow coords.
             /// </summary>
-            protected override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 //special test hooks
                 if (m.Msg == (int)WM_GETALLSNAPLINES)
@@ -305,13 +305,13 @@ namespace System.Windows.Forms.Design.Behavior
                     case User32.WM.PAINT:
                         {
                             // Stash off the region we have to update.
-                            using var hrgn = new Gdi32.RegionScope(0, 0, 0, 0);
-                            User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.TRUE);
+                            using PInvoke.RegionScope hrgn = new(0, 0, 0, 0);
+                            User32.GetUpdateRgn(m.HWnd, hrgn, true);
 
                             // The region we have to update in terms of the smallest rectangle that completely encloses
                             // the update region of the window gives us the clip rectangle.
-                            RECT clip = new RECT();
-                            User32.GetUpdateRect(m.HWnd, ref clip, BOOL.TRUE);
+                            RECT clip = default;
+                            PInvoke.GetUpdateRect(m.HWND, &clip, true);
                             Rectangle paintRect = clip;
 
                             using Region region = hrgn.CreateGdiPlusRegion();
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                             // Now do our own painting.
                             using Graphics g = Graphics.FromHwnd(m.HWnd);
-                            using PaintEventArgs pevent = new PaintEventArgs(g, paintRect);
+                            using PaintEventArgs pevent = new(g, paintRect);
                             g.Clip = region;
                             _behaviorService.PropagatePaint(pevent);
 
@@ -337,11 +337,11 @@ namespace System.Windows.Forms.Design.Behavior
 
                         if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
                         {
-                            m.ResultInternal = (nint)User32.HT.TRANSPARENT;
+                            m.ResultInternal = (LRESULT)(int)User32.HT.TRANSPARENT;
                         }
                         else
                         {
-                            m.ResultInternal = (nint)User32.HT.CLIENT;
+                            m.ResultInternal = (LRESULT)(int)User32.HT.CLIENT;
                         }
 
                         break;

@@ -142,8 +142,8 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= (int)User32.WS.HSCROLL;
-                cp.Style |= (int)User32.WS.VSCROLL;
+                cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
+                cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL;
                 return cp;
             }
         }
@@ -333,7 +333,7 @@ namespace System.Windows.Forms
 
         private static unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
-            switch ((User32.SBH)PARAM.LOWORD(m.WParamInternal))
+            switch ((User32.SBH)m.WParamInternal.LOWORD)
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
@@ -344,13 +344,13 @@ namespace System.Windows.Forms
                     };
 
                     User32.SB direction = horizontal ? User32.SB.HORZ : User32.SB.VERT;
-                    if (User32.GetScrollInfo(m.HWnd, direction, ref si).IsTrue())
+                    if (User32.GetScrollInfo(m.HWnd, direction, ref si))
                     {
                         pos = si.nTrackPos;
                     }
                     else
                     {
-                        pos = PARAM.HIWORD(m.WParamInternal);
+                        pos = m.WParamInternal.HIWORD;
                     }
 
                     break;
@@ -414,9 +414,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            using var hdc = new User32.GetDcScope(Handle);
-            screendpi = new Point(Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSX),
-                                  Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSY));
+            using User32.GetDcScope hdc = new(Handle);
+            screendpi = new Point(PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
+                                  PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
 
             Size pageSize = pageInfo[StartPage].PhysicalSize;
             Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
@@ -765,8 +765,8 @@ namespace System.Windows.Forms
                 ref scroll,
                 ref scroll);
 
-            User32.SetScrollPos(this, User32.SB.HORZ, position.X, BOOL.TRUE);
-            User32.SetScrollPos(this, User32.SB.VERT, position.Y, BOOL.TRUE);
+            User32.SetScrollPos(this, User32.SB.HORZ, position.X, true);
+            User32.SetScrollPos(this, User32.SB.VERT, position.Y, true);
         }
 
         internal unsafe void SetVirtualSizeNoInvalidate(Size value)
@@ -783,13 +783,13 @@ namespace System.Windows.Forms
                 nPage = (uint)Height
             };
 
-            User32.SetScrollInfo(this, User32.SB.VERT, ref info, BOOL.TRUE);
+            User32.SetScrollInfo(this, User32.SB.VERT, ref info, true);
 
             info.fMask = User32.SIF.RANGE | User32.SIF.PAGE;
             info.nMin = 0;
             info.nMax = Math.Max(Width, virtualSize.Width) - 1;
             info.nPage = (uint)Width;
-            User32.SetScrollInfo(this, User32.SB.HORZ, ref info, BOOL.TRUE);
+            User32.SetScrollInfo(this, User32.SB.HORZ, ref info, true);
         }
 
         /// <summary>
@@ -818,7 +818,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKeyDown(ref Message msg)
         {
-            Keys keyData = (Keys)msg.WParamInternal | ModifierKeys;
+            Keys keyData = (Keys)(nint)msg.WParamInternal | ModifierKeys;
             Point locPos = Position;
             int pos;
             int maxPos;

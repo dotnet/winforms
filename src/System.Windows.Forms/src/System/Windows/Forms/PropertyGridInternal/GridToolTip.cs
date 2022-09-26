@@ -95,7 +95,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 var cp = new CreateParams
                 {
                     Parent = IntPtr.Zero,
-                    ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS
+                    ClassName = PInvoke.TOOLTIPS_CLASS
                 };
 
                 cp.Style |= (int)(ComCtl32.TTS.ALWAYSTIP | ComCtl32.TTS.NOPREFIX);
@@ -146,11 +146,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(
+                PInvoke.SendMessage(
                     this,
                     (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
-                    0,
-                    SystemInformation.MaxWindowTrackSize.Width);
+                    (WPARAM)0,
+                    (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             _toolTipText = oldText;
-            User32.SendMessageW(this, (User32.WM)ComCtl32.TTM.UPDATE);
+            PInvoke.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATE);
         }
 
         protected override void WndProc(ref Message msg)
@@ -180,7 +180,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 case User32.WM.SHOWWINDOW:
                     if ((int)msg.WParamInternal != 0 && _dontShow)
                     {
-                        msg.WParamInternal = 0;
+                        msg.WParamInternal = 0u;
                     }
 
                     break;
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // thru to controls underneath. This is due to a combination of old app-specific code in comctl32,
                     // functional changes between v5 and v6, and the specific way the property grid drives its tooltip.
                     // Workaround is to just force HTTRANSPARENT all the time.
-                    msg.ResultInternal = (nint)User32.HT.TRANSPARENT;
+                    msg.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
                     return;
             }
 

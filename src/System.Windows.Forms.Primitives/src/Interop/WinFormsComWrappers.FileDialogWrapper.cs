@@ -32,14 +32,14 @@ internal partial class Interop
                     (_wrappedInstance, parent);
             }
 
-            HRESULT Shell32.IFileDialog.SetFileTypes(uint cFileTypes, Shell32.COMDLG_FILTERSPEC[] rgFilterSpec)
+            HRESULT Shell32.IFileDialog.SetFileTypes(uint cFileTypes, COMDLG_FILTERSPEC[] rgFilterSpec)
             {
-                ref Shell32.COMDLG_FILTERSPEC rgFilterSpecRef = ref rgFilterSpec == null
-                    ? ref *(Shell32.COMDLG_FILTERSPEC*)0
+                ref COMDLG_FILTERSPEC rgFilterSpecRef = ref rgFilterSpec == null
+                    ? ref *(COMDLG_FILTERSPEC*)0
                     : ref MemoryMarshal.GetArrayDataReference(rgFilterSpec);
-                fixed (Shell32.COMDLG_FILTERSPEC* rgFilterSpec_local = &rgFilterSpecRef)
+                fixed (COMDLG_FILTERSPEC* rgFilterSpec_local = &rgFilterSpecRef)
                 {
-                    return ((delegate* unmanaged<IntPtr, uint, Shell32.COMDLG_FILTERSPEC*, HRESULT>)(*(*(void***)_wrappedInstance + 4)))
+                    return ((delegate* unmanaged<IntPtr, uint, COMDLG_FILTERSPEC*, HRESULT>)(*(*(void***)_wrappedInstance + 4)))
                         (_wrappedInstance, cFileTypes, rgFilterSpec_local);
                 }
             }
@@ -55,7 +55,7 @@ internal partial class Interop
                 fixed (uint* piFileType_local = &piFileType)
                 {
                     ((delegate* unmanaged<IntPtr, uint*, HRESULT>)(*(*(void***)_wrappedInstance + 6)))
-                        (_wrappedInstance, piFileType_local).ThrowIfFailed();
+                        (_wrappedInstance, piFileType_local).ThrowOnFailure();
                 }
             }
 
@@ -65,27 +65,27 @@ internal partial class Interop
                 fixed (uint* pdwCookie_local = &pdwCookie)
                 {
                     ((delegate* unmanaged<IntPtr, IntPtr, uint*, HRESULT>)(*(*(void***)_wrappedInstance + 7)))
-                        (_wrappedInstance, pfde_local, pdwCookie_local).ThrowIfFailed();
+                        (_wrappedInstance, pfde_local, pdwCookie_local).ThrowOnFailure();
                 }
             }
 
             void Shell32.IFileDialog.Unadvise(uint dwCookie)
             {
                 ((delegate* unmanaged<IntPtr, uint, HRESULT>)(*(*(void***)_wrappedInstance + 8)))
-                    (_wrappedInstance, dwCookie).ThrowIfFailed();
+                    (_wrappedInstance, dwCookie).ThrowOnFailure();
             }
 
             void Shell32.IFileDialog.SetOptions(Shell32.FOS fos)
             {
                 ((delegate* unmanaged<IntPtr, Shell32.FOS, HRESULT>)(*(*(void***)_wrappedInstance + 9)))
-                    (_wrappedInstance, fos).ThrowIfFailed();
+                    (_wrappedInstance, fos).ThrowOnFailure();
             }
 
             void Shell32.IFileDialog.GetOptions(out Shell32.FOS pfos)
             {
                 Shell32.FOS pfos_local;
                 ((delegate* unmanaged<IntPtr, Shell32.FOS*, HRESULT>)(*(*(void***)_wrappedInstance + 10)))
-                    (_wrappedInstance, &pfos_local).ThrowIfFailed();
+                    (_wrappedInstance, &pfos_local).ThrowOnFailure();
                 pfos = pfos_local;
             }
 
@@ -93,21 +93,21 @@ internal partial class Interop
             {
                 IntPtr psi_local = WinFormsComWrappers.Instance.GetComPointer(psi, IID.IShellItem);
                 ((delegate* unmanaged<IntPtr, IntPtr, HRESULT>)(*(*(void***)_wrappedInstance + 11)))
-                    (_wrappedInstance, psi_local).ThrowIfFailed();
+                    (_wrappedInstance, psi_local).ThrowOnFailure();
             }
 
             void Shell32.IFileDialog.SetFolder(Shell32.IShellItem psi)
             {
                 IntPtr psi_local = WinFormsComWrappers.Instance.GetComPointer(psi, IID.IShellItem);
                 ((delegate* unmanaged<IntPtr, IntPtr, HRESULT>)(*(*(void***)_wrappedInstance + 12)))
-                    (_wrappedInstance, psi_local).ThrowIfFailed();
+                    (_wrappedInstance, psi_local).ThrowOnFailure();
             }
 
             void Shell32.IFileDialog.GetFolder(out Shell32.IShellItem? ppsi)
             {
                 IntPtr ppsi_local;
                 ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 13)))
-                    (_wrappedInstance, &ppsi_local).ThrowIfFailed();
+                    (_wrappedInstance, &ppsi_local).ThrowOnFailure();
                 ppsi = ppsi_local == IntPtr.Zero ? null : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
             }
 
@@ -126,7 +126,7 @@ internal partial class Interop
                 fixed (char* pszName_local = pszName)
                 {
                     ((delegate* unmanaged<IntPtr, char*, HRESULT>)(*(*(void***)_wrappedInstance + 15)))
-                        (_wrappedInstance, pszName_local).ThrowIfFailed();
+                        (_wrappedInstance, pszName_local).ThrowOnFailure();
                 }
             }
 
@@ -134,7 +134,7 @@ internal partial class Interop
             {
                 IntPtr pszName_local;
                 ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 16)))
-                    (_wrappedInstance, &pszName_local).ThrowIfFailed();
+                    (_wrappedInstance, &pszName_local).ThrowOnFailure();
                 pszName = Marshal.PtrToStringUni(pszName_local);
                 Marshal.FreeCoTaskMem(pszName_local);
             }
@@ -145,7 +145,7 @@ internal partial class Interop
                 fixed (char* pszTitle_local = pszTitle)
                 {
                     ((delegate* unmanaged<IntPtr, char*, HRESULT>)(*(*(void***)_wrappedInstance + 17)))
-                        (_wrappedInstance, pszTitle_local).ThrowIfFailed();
+                        (_wrappedInstance, pszTitle_local).ThrowOnFailure();
                 }
             }
 
@@ -173,14 +173,14 @@ internal partial class Interop
             {
                 IntPtr ppsi_local;
                 ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 20)))
-                    (_wrappedInstance, &ppsi_local).ThrowIfFailed();
+                    (_wrappedInstance, &ppsi_local).ThrowOnFailure();
                 ppsi = ppsi_local == IntPtr.Zero ? null : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
             }
 
-            HRESULT Shell32.IFileDialog.AddPlace(Shell32.IShellItem psi, Shell32.FDAP fdap)
+            HRESULT Shell32.IFileDialog.AddPlace(Shell32.IShellItem psi, FDAP fdap)
             {
                 IntPtr psi_local = WinFormsComWrappers.Instance.GetComPointer(psi, IID.IShellItem);
-                return ((delegate* unmanaged<IntPtr, IntPtr, Shell32.FDAP, HRESULT>)(*(*(void***)_wrappedInstance + 21)))
+                return ((delegate* unmanaged<IntPtr, IntPtr, FDAP, HRESULT>)(*(*(void***)_wrappedInstance + 21)))
                     (_wrappedInstance, psi_local, fdap);
             }
 
@@ -190,14 +190,14 @@ internal partial class Interop
                 fixed (char* pszDefaultExtension_local = pszDefaultExtension)
                 {
                     ((delegate* unmanaged<IntPtr, char*, HRESULT>)(*(*(void***)_wrappedInstance + 22)))
-                        (_wrappedInstance, pszDefaultExtension_local).ThrowIfFailed();
+                        (_wrappedInstance, pszDefaultExtension_local).ThrowOnFailure();
                 }
             }
 
             void Shell32.IFileDialog.Close(int hr)
             {
                 ((delegate* unmanaged<IntPtr, int, HRESULT>)(*(*(void***)_wrappedInstance + 23)))
-                    (_wrappedInstance, hr).ThrowIfFailed();
+                    (_wrappedInstance, hr).ThrowOnFailure();
             }
 
             void Shell32.IFileDialog.SetClientGuid(ref Guid guid)
@@ -205,7 +205,7 @@ internal partial class Interop
                 fixed (Guid* guid_local = &guid)
                 {
                     ((delegate* unmanaged<IntPtr, Guid*, HRESULT>)(*(*(void***)_wrappedInstance + 24)))
-                        (_wrappedInstance, guid_local).ThrowIfFailed();
+                        (_wrappedInstance, guid_local).ThrowOnFailure();
                 }
             }
 

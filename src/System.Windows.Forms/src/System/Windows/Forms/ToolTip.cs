@@ -22,7 +22,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(Popup))]
     [ToolboxItemFilter("System.Windows.Forms")]
     [SRDescription(nameof(SR.DescriptionToolTip))]
-    public partial class ToolTip : Component, IExtenderProvider, IHandle
+    public partial class ToolTip : Component, IExtenderProvider, IHandle, IHandle<HWND>
     {
         // The actual delay values are based on the user-set double click time.
         // These values are initialized using the default double-click time value.
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         private string _toolTipTitle = string.Empty;
         private ToolTipIcon _toolTipIcon = ToolTipIcon.None;
         private ToolTipTimer _timer;
-        private readonly Dictionary<IntPtr, Control> _owners = new();
+        private readonly Dictionary<HWND, Control> _owners = new();
         private bool _stripAmpersands;
         private bool _useAnimation = true;
         private bool _useFading = true;
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
                     // Don't activate the tooltip if we're in the designer.
                     if (!DesignMode && GetHandleCreated())
                     {
-                        User32.SendMessageW(this, (User32.WM)TTM.ACTIVATE, PARAM.FromBool(value));
+                        PInvoke.SendMessage(this, (User32.WM)TTM.ACTIVATE, (WPARAM)(BOOL)value);
                     }
                 }
             }
@@ -193,7 +193,7 @@ namespace System.Windows.Forms
                 _backColor = value;
                 if (GetHandleCreated())
                 {
-                    User32.SendMessageW(this, (User32.WM)TTM.SETTIPBKCOLOR, _backColor.ToWin32());
+                    PInvoke.SendMessage(this, (User32.WM)TTM.SETTIPBKCOLOR, (WPARAM)_backColor);
                 }
             }
         }
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
                     cp.Parent = TopLevelControl.Handle;
                 }
 
-                cp.ClassName = WindowClasses.TOOLTIPS_CLASS;
+                cp.ClassName = PInvoke.TOOLTIPS_CLASS;
                 if (_showAlways)
                 {
                     cp.Style = (int)TTS.ALWAYSTIP;
@@ -262,12 +262,16 @@ namespace System.Windows.Forms
                 _foreColor = value;
                 if (GetHandleCreated())
                 {
-                    User32.SendMessageW(this, (User32.WM)TTM.SETTIPTEXTCOLOR, _foreColor.ToWin32());
+                    PInvoke.SendMessage(this, (User32.WM)TTM.SETTIPTEXTCOLOR, (WPARAM)_foreColor);
                 }
             }
         }
 
         IntPtr IHandle.Handle => Handle;
+
+        HWND IHandle<HWND>.Handle => HWND;
+
+        internal HWND HWND => (HWND)Handle;
 
         internal IntPtr Handle
         {
@@ -316,9 +320,9 @@ namespace System.Windows.Forms
             if (window is Control control &&
                 (control.ShowParams & (User32.SW)0xF) != User32.SW.SHOWNOACTIVATE)
             {
-                IntPtr hWnd = User32.GetActiveWindow();
-                IntPtr rootHwnd = User32.GetAncestor(control, User32.GA.ROOT);
-                if (hWnd != rootHwnd)
+                HWND hwnd = PInvoke.GetActiveWindow();
+                HWND rootHwnd = PInvoke.GetAncestor(control, GET_ANCESTOR_FLAGS.GA_ROOT);
+                if (hwnd != rootHwnd)
                 {
                     if (_tools.TryGetValue(control, out TipInfo tt) && (tt.TipType & TipInfo.Type.SemiAbsolute) != 0)
                     {
@@ -451,11 +455,11 @@ namespace System.Windows.Forms
                     {
                         // If the title is null/empty, the icon won't display.
                         string title = !string.IsNullOrEmpty(_toolTipTitle) ? _toolTipTitle : " ";
-                        User32.SendMessageW(this, (User32.WM)TTM.SETTITLEW, (nint)_toolTipIcon, title);
+                        PInvoke.SendMessage(this, (User32.WM)TTM.SETTITLEW, (uint)_toolTipIcon, title);
 
                         // Tooltip need to be updated to reflect the changes in the icon because
                         // this operation directly affects the size of the tooltip.
-                        User32.SendMessageW(this, (User32.WM)TTM.UPDATE);
+                        PInvoke.SendMessage(this, (User32.WM)TTM.UPDATE);
                     }
                 }
             }
@@ -481,11 +485,11 @@ namespace System.Windows.Forms
                     _toolTipTitle = value;
                     if (GetHandleCreated())
                     {
-                        User32.SendMessageW(this, (User32.WM)TTM.SETTITLEW, (nint)_toolTipIcon, _toolTipTitle);
+                        PInvoke.SendMessage(this, (User32.WM)TTM.SETTITLEW, (uint)_toolTipIcon, _toolTipTitle);
 
                         // Tooltip need to be updated to reflect the changes in the title text because
                         // this operation directly affects the size of the tooltip.
-                        User32.SendMessageW(this, (User32.WM)TTM.UPDATE);
+                        PInvoke.SendMessage(this, (User32.WM)TTM.UPDATE);
                     }
                 }
             }
@@ -747,13 +751,13 @@ namespace System.Windows.Forms
             // If in OwnerDraw mode, we don't want the default border.
             if (OwnerDraw)
             {
-                int style = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
-                style &= ~(int)User32.WS.BORDER;
-                User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
+                int style = unchecked((int)((long)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE)));
+                style &= ~(int)WINDOW_STYLE.WS_BORDER;
+                PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, (IntPtr)style);
             }
 
             // Setting the max width has the added benefit of enabling multiline tool tips.
-            User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+            PInvoke.SendMessage(this, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
             if (_auto)
             {
@@ -792,23 +796,23 @@ namespace System.Windows.Forms
             }
 
             // Set active status.
-            User32.SendMessageW(this, (User32.WM)TTM.ACTIVATE, PARAM.FromBool(active));
+            PInvoke.SendMessage(this, (User32.WM)TTM.ACTIVATE, (WPARAM)(BOOL)active);
 
             if (BackColor != SystemColors.Info)
             {
-                User32.SendMessageW(this, (User32.WM)TTM.SETTIPBKCOLOR, BackColor.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)TTM.SETTIPBKCOLOR, (WPARAM)BackColor);
             }
 
             if (ForeColor != SystemColors.InfoText)
             {
-                User32.SendMessageW(this, (User32.WM)TTM.SETTIPTEXTCOLOR, ForeColor.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)TTM.SETTIPTEXTCOLOR, (WPARAM)ForeColor);
             }
 
             if (_toolTipIcon > 0 || !string.IsNullOrEmpty(_toolTipTitle))
             {
                 // If the title is null/empty, the icon won't display.
                 string title = !string.IsNullOrEmpty(_toolTipTitle) ? _toolTipTitle : " ";
-                User32.SendMessageW(this, (User32.WM)TTM.SETTITLEW, (nint)_toolTipIcon, title);
+                PInvoke.SendMessage(this, (User32.WM)TTM.SETTITLEW, (WPARAM)(int)_toolTipIcon, title);
             }
         }
 
@@ -980,7 +984,7 @@ namespace System.Windows.Forms
                 return _delayTimes[(int)type];
             }
 
-            return (int)User32.SendMessageW(this, (User32.WM)TTM.GETDELAYTIME, (nint)type);
+            return (int)PInvoke.SendMessage(this, (User32.WM)TTM.GETDELAYTIME, (WPARAM)(uint)type);
         }
 
         internal bool GetHandleCreated() => _window is not null && _window.Handle != IntPtr.Zero;
@@ -1003,7 +1007,7 @@ namespace System.Windows.Forms
             return control.GetToolInfoWrapper(flags, caption, this);
         }
 
-        private ToolInfoWrapper<IWin32WindowAdapter> GetWinTOOLINFO(IWin32Window window)
+        private ToolInfoWrapper<HandleRef<HWND>> GetWinTOOLINFO(IWin32Window window)
         {
             TTF flags = TTF.TRANSPARENT | TTF.SUBCLASS;
 
@@ -1012,13 +1016,13 @@ namespace System.Windows.Forms
             {
                 // Indicates that the ToolTip text will be displayed in the opposite direction
                 // to the text in the parent window.
-                if (!window.GetExtendedStyle().HasFlag(User32.WS_EX.LAYOUTRTL))
+                if (!window.GetExtendedStyle().HasFlag(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL))
                 {
                     flags |= TTF.RTLREADING;
                 }
             }
 
-            return new ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(window), flags);
+            return new(Control.GetSafeHandle(window), flags);
         }
 
         /// <summary>
@@ -1195,7 +1199,7 @@ namespace System.Windows.Forms
 
             if (GetHandleCreated() && time >= 0)
             {
-                User32.SendMessageW(this, (User32.WM)TTM.SETDELAYTIME, (nint)type, time);
+                PInvoke.SendMessage(this, (User32.WM)TTM.SETDELAYTIME, (WPARAM)(uint)type, (LPARAM)time);
                 if (type == TTDT.AUTOPOP && time != InfiniteDelay)
                 {
                     IsPersistent = false;
@@ -1325,8 +1329,7 @@ namespace System.Windows.Forms
 
             if (window is Control associatedControl)
             {
-                var rect = new RECT();
-                User32.GetWindowRect(associatedControl, ref rect);
+                PInvoke.GetWindowRect(associatedControl, out var rect);
 
                 _ = Cursor.Current;
                 Point cursorLocation = Cursor.Position;
@@ -1428,8 +1431,7 @@ namespace System.Windows.Forms
             if (IsWindowActive(window))
             {
                 // Set the ToolTips.
-                var r = new RECT();
-                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
 
@@ -1447,14 +1449,16 @@ namespace System.Windows.Forms
 
             if (duration < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
+                throw new ArgumentOutOfRangeException(
+                    nameof(duration),
+                    duration,
+                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
             }
 
             if (IsWindowActive(window))
             {
                 // Set the ToolTips.
-                var r = new RECT();
-                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
                 int pointX = r.left + point.X;
                 int pointY = r.top + point.Y;
                 SetTrackPosition(pointX, pointY);
@@ -1472,8 +1476,7 @@ namespace System.Windows.Forms
 
             if (IsWindowActive(window))
             {
-                var r = new RECT();
-                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
                 SetTrackPosition(pointX, pointY);
@@ -1490,13 +1493,15 @@ namespace System.Windows.Forms
 
             if (duration < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
+                throw new ArgumentOutOfRangeException(
+                    nameof(duration),
+                    duration,
+                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
             }
 
             if (IsWindowActive(window))
             {
-                var r = new RECT();
-                User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+                PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
                 int pointX = r.left + x;
                 int pointY = r.top + y;
                 SetTrackPosition(pointX, pointY);
@@ -1532,10 +1537,9 @@ namespace System.Windows.Forms
                 pointY = optimalPoint.Y;
 
                 // Update TipInfo for the tool with optimal position.
-                TipInfo tipInfo;
                 if (tool is Control toolAsControl)
                 {
-                    if (!_tools.TryGetValue(toolAsControl, out tipInfo))
+                    if (!_tools.TryGetValue(toolAsControl, out TipInfo tipInfo))
                     {
                         if (tool.GetOwnerWindow() is Control ownerWindowAsControl
                             && _tools.TryGetValue(ownerWindowAsControl, out tipInfo))
@@ -1567,22 +1571,22 @@ namespace System.Windows.Forms
             // Get bubble size to use it for optimal position calculation. Requesting the bubble
             // size will AV if there isn't a current tool window.
 
-            IntPtr result = GetCurrentToolHwnd();
-            if (result != IntPtr.Zero)
+            HWND hwnd = GetCurrentToolHwnd();
+            LRESULT result = default;
+
+            if (!hwnd.IsNull)
             {
-                var info = new ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(tool.GetOwnerWindow()));
+                ToolInfoWrapper<HandleRef<HWND>> info = new(Control.GetSafeHandle(tool.GetOwnerWindow()));
                 result = info.SendMessage(this, (User32.WM)TTM.GETBUBBLESIZE);
             }
 
-            if (result == IntPtr.Zero)
+            if (result == 0)
             {
                 bubbleSize = Size.Empty;
                 return false;
             }
 
-            int width = PARAM.LOWORD(result);
-            int height = PARAM.HIWORD(result);
-            bubbleSize = new Size(width, height);
+            bubbleSize = new Size(result.LOWORD, result.HIWORD);
 
             return true;
         }
@@ -1746,7 +1750,7 @@ namespace System.Windows.Forms
             try
             {
                 _trackPosition = true;
-                User32.SendMessageW(this, (User32.WM)TTM.TRACKPOSITION, 0, PARAM.FromLowHigh(pointX, pointY));
+                PInvoke.SendMessage(this, (User32.WM)TTM.TRACKPOSITION, 0, PARAM.FromLowHigh(pointX, pointY));
             }
             finally
             {
@@ -1768,7 +1772,7 @@ namespace System.Windows.Forms
 
             if (GetHandleCreated())
             {
-                var info = new ToolInfoWrapper<IWin32WindowAdapter>(new IWin32WindowAdapter(win));
+                ToolInfoWrapper<HandleRef<HWND>> info = new(Control.GetSafeHandle(win));
                 info.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE);
                 info.SendMessage(this, (User32.WM)TTM.DELTOOLW);
             }
@@ -1778,7 +1782,7 @@ namespace System.Windows.Forms
             // Check if the passed in IWin32Window is a Control.
             if (win is not Control tool)
             {
-                _owners.Remove(win.Handle);
+                _owners.Remove((HWND)win.Handle);
             }
             else
             {
@@ -1788,7 +1792,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    _owners.Remove(win.Handle);
+                    _owners.Remove((HWND)win.Handle);
                 }
 
                 // Find the Form for associated Control and hook up to the Deactivated event
@@ -1853,7 +1857,7 @@ namespace System.Windows.Forms
                 _tools[tool] = tipInfo;
 
                 IntPtr result = toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
-                result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, BOOL.TRUE);
+                result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, true);
             }
             else
             {
@@ -1876,8 +1880,7 @@ namespace System.Windows.Forms
                     tipInfo.Position = position;
                     _tools[windowAsControl] = tipInfo;
 
-                    IntPtr hWnd = Control.GetSafeHandle(window);
-                    _owners[hWnd] = windowAsControl;
+                    _owners[windowAsControl.HWND] = windowAsControl;
                 }
 
                 var toolInfo = GetWinTOOLINFO(window);
@@ -1890,7 +1893,7 @@ namespace System.Windows.Forms
 
                 toolInfo.Text = text;
                 IntPtr result = toolInfo.SendMessage(this, (User32.WM)TTM.ADDTOOLW);
-                result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, BOOL.TRUE);
+                result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, true);
             }
 
             if (tool is not null)
@@ -1986,20 +1989,20 @@ namespace System.Windows.Forms
                 User32.SWP.NOACTIVATE | User32.SWP.NOSIZE | User32.SWP.NOOWNERZORDER);
         }
 
-        private IntPtr GetCurrentToolHwnd()
+        private HWND GetCurrentToolHwnd()
         {
             var toolInfo = new ToolInfoWrapper<Control>();
             if (toolInfo.SendMessage(this, (User32.WM)TTM.GETCURRENTTOOLW) != IntPtr.Zero)
             {
-                return toolInfo.Info.hwnd;
+                return (HWND)toolInfo.Info.hwnd;
             }
 
-            return IntPtr.Zero;
+            return default;
         }
 
         private IWin32Window GetCurrentToolWindow()
         {
-            IntPtr hwnd = GetCurrentToolHwnd();
+            HWND hwnd = GetCurrentToolHwnd();
             return _owners.TryGetValue(hwnd, out Control control) ? control : Control.FromHandle(hwnd);
         }
 
@@ -2009,9 +2012,6 @@ namespace System.Windows.Forms
         private void WmMove()
         {
             IWin32Window window = GetCurrentToolWindow();
-            if (window is null)
-                return;
-
             if (window is not Control windowAsControl || !_tools.TryGetValue(windowAsControl, out TipInfo tipInfo))
             {
                 return;
@@ -2019,8 +2019,7 @@ namespace System.Windows.Forms
 
             // Reposition the tooltip when its about to be shown since the tooltip can go out of screen
             // working area bounds Reposition would check the bounds for us.
-            var rectangle = new RECT();
-            User32.GetWindowRect(this, ref rectangle);
+            PInvoke.GetWindowRect(this, out var rectangle);
             if (tipInfo.Position != Point.Empty)
             {
                 Reposition(tipInfo.Position, rectangle.Size);
@@ -2034,10 +2033,11 @@ namespace System.Windows.Forms
         {
             IWin32Window window = GetCurrentToolWindow();
             if (window is null)
+            {
                 return;
+            }
 
-            var r = new RECT();
-            User32.GetWindowRect(new HandleRef(window, Control.GetSafeHandle(window)), ref r);
+            PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
             Point cursorLocation = Cursor.Position;
 
             // Do not activate the mouse if its within the bounds of the
@@ -2045,7 +2045,7 @@ namespace System.Windows.Forms
             if (cursorLocation.X >= r.left && cursorLocation.X <= r.right &&
                 cursorLocation.Y >= r.top && cursorLocation.Y <= r.bottom)
             {
-                message.ResultInternal = (nint)User32.MA.NOACTIVATE;
+                message.ResultInternal = (LRESULT)(nint)User32.MA.NOACTIVATE;
             }
         }
 
@@ -2054,9 +2054,9 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmWindowFromPoint(ref Message message)
         {
-            var lpPoint = (Point*)message.LParamInternal;
+            var lpPoint = (Point*)(nint)message.LParamInternal;
             bool result = false;
-            message.ResultInternal = GetWindowFromPoint(*lpPoint, ref result);
+            message.ResultInternal = (LRESULT)GetWindowFromPoint(*lpPoint, ref result);
         }
 
         /// <summary>
@@ -2066,11 +2066,12 @@ namespace System.Windows.Forms
         {
             IWin32Window window = GetCurrentToolWindow();
             if (window is null)
+            {
                 return;
+            }
 
             // Get the bounds.
-            var rect = new RECT();
-            User32.GetWindowRect(this, ref rect);
+            PInvoke.GetWindowRect(this, out var rect);
 
             Control toolControl = window as Control;
 
@@ -2095,16 +2096,16 @@ namespace System.Windows.Forms
             // any of the tooltip attributes/properties could have been updated
             // during the popup event; in which case the size of the tooltip is
             // affected. e.ToolTipSize is respected over rect.Size
-            User32.GetWindowRect(this, ref rect);
+            PInvoke.GetWindowRect(this, out rect);
             currentTooltipSize = (e.ToolTipSize == currentTooltipSize) ? rect.Size : e.ToolTipSize;
 
             if (IsBalloon)
             {
                 // Get the text display rectangle
-                User32.SendMessageW(this, (User32.WM)TTM.ADJUSTRECT, (nint)BOOL.TRUE, ref rect);
-                if (rect.Size.Height > currentTooltipSize.Height)
+                PInvoke.SendMessage(this, (User32.WM)TTM.ADJUSTRECT, (WPARAM)(BOOL)true, ref rect);
+                if (rect.Height > currentTooltipSize.Height)
                 {
-                    currentTooltipSize.Height = rect.Size.Height;
+                    currentTooltipSize.Height = rect.Height;
                 }
             }
 
@@ -2118,7 +2119,7 @@ namespace System.Windows.Forms
                 int maxwidth = (IsBalloon)
                     ? Math.Min(currentTooltipSize.Width - 2 * BalloonOffsetX, screen.WorkingArea.Width)
                     : Math.Min(currentTooltipSize.Width, screen.WorkingArea.Width);
-                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, 0, maxwidth);
+                PInvoke.SendMessage(this, (User32.WM)TTM.SETMAXTIPWIDTH, 0, maxwidth);
             }
 
             if (e.Cancel)
@@ -2171,7 +2172,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)message.LParamInternal;
+            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)(nint)message.LParamInternal;
 
             Cursor currentCursor = Cursor.Current;
             Point cursorPos = Cursor.Position;
@@ -2248,7 +2249,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            message.ResultInternal = 0;
+            message.ResultInternal = (LRESULT)0;
         }
 
         /// <summary>
@@ -2270,7 +2271,7 @@ namespace System.Windows.Forms
             if ((tipInfo.TipType & TipInfo.Type.Auto) != 0 || (tipInfo.TipType & TipInfo.Type.SemiAbsolute) != 0)
             {
                 Screen screen = Screen.FromPoint(Cursor.Position);
-                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, 0, screen.WorkingArea.Width);
+                PInvoke.SendMessage(this, (User32.WM)TTM.SETMAXTIPWIDTH, 0, screen.WorkingArea.Width);
             }
 
             // For non-auto tips (those shown through the show(.) methods, we need to
@@ -2278,7 +2279,7 @@ namespace System.Windows.Forms
             if ((tipInfo.TipType & TipInfo.Type.Auto) == 0)
             {
                 _tools.Remove(control);
-                _owners.Remove(window.Handle);
+                _owners.Remove((HWND)window.Handle);
 
                 control.HandleCreated -= HandleCreated;
                 control.HandleDestroyed -= HandleDestroyed;
@@ -2304,12 +2305,12 @@ namespace System.Windows.Forms
             switch (message.Msg)
             {
                 case (int)(User32.WM.REFLECT_NOTIFY):
-                    var nmhdr = (User32.NMHDR*)message.LParamInternal;
-                    if (nmhdr->code == (int)TTN.SHOW && !_trackPosition)
+                    var nmhdr = (NMHDR*)(nint)message.LParamInternal;
+                    if ((int)nmhdr->code == (int)TTN.SHOW && !_trackPosition)
                     {
                         WmShow();
                     }
-                    else if (nmhdr->code == (int)TTN.POP)
+                    else if ((int)nmhdr->code == (int)TTN.POP)
                     {
                         WmPop();
                         _window?.DefWndProc(ref message);
@@ -2347,8 +2348,8 @@ namespace System.Windows.Forms
                 case (int)User32.WM.PAINT:
                     if (OwnerDraw && !_isBalloon && !_trackPosition)
                     {
-                        using var paintScope = new User32.BeginPaintScope(Handle);
-                        Rectangle bounds = paintScope.PaintStruct.rcPaint;
+                        using var paintScope = new PInvoke.BeginPaintScope((HWND)Handle);
+                        Rectangle bounds = paintScope.PaintRectangle;
                         if (bounds == Rectangle.Empty)
                         {
                             return;
@@ -2362,7 +2363,7 @@ namespace System.Windows.Forms
                             Font font;
                             try
                             {
-                                font = Font.FromHfont(User32.SendMessageW(this, User32.WM.GETFONT));
+                                font = Font.FromHfont(PInvoke.SendMessage(this, User32.WM.GETFONT));
                             }
                             catch (ArgumentException)
                             {

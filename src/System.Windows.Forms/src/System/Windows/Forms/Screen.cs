@@ -56,9 +56,9 @@ namespace System.Windows.Forms
         {
         }
 
-        internal unsafe Screen(IntPtr monitor, Gdi32.HDC hdc)
+        internal unsafe Screen(IntPtr monitor, HDC hdc)
         {
-            Gdi32.HDC screenDC = hdc;
+            HDC screenDC = hdc;
 
             if (!s_multiMonitorSupport || monitor == (IntPtr)PRIMARY_MONITOR)
             {
@@ -82,18 +82,18 @@ namespace System.Windows.Forms
 
                 if (hdc.IsNull)
                 {
-                    screenDC = Gdi32.CreateDC(_deviceName, null, null, IntPtr.Zero);
+                    screenDC = PInvoke.CreateDCW(info.szDevice, pwszDevice: null, pszPort: null, pdm: null);
                 }
             }
 
             _hmonitor = monitor;
 
-            _bitDepth = Gdi32.GetDeviceCaps(screenDC, Gdi32.DeviceCapability.BITSPIXEL);
-            _bitDepth *= Gdi32.GetDeviceCaps(screenDC, Gdi32.DeviceCapability.PLANES);
+            _bitDepth = PInvoke.GetDeviceCaps(screenDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
+            _bitDepth *= PInvoke.GetDeviceCaps(screenDC, GET_DEVICE_CAPS_INDEX.PLANES);
 
             if (hdc != screenDC)
             {
-                Gdi32.DeleteDC(screenDC);
+                PInvoke.DeleteDC(screenDC);
             }
         }
 

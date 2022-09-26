@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         ///  TLS is really just an unfortunate artifact of using Win 32.  We want the world to be free
         ///  threaded.
         /// </summary>
-        internal sealed class ThreadContext : MarshalByRefObject, IMsoComponent
+        internal sealed class ThreadContext : MarshalByRefObject, IMsoComponent, IHandle
         {
             private const int STATE_OLEINITIALIZED = 0x00000001;
             private const int STATE_EXTERNALOLEINIT = 0x00000002;
@@ -32,11 +32,11 @@ namespace System.Windows.Forms
 
             private static readonly UIntPtr s_invalidId = (UIntPtr)0xFFFFFFFF;
 
-            private static readonly Hashtable s_contextHash = new Hashtable();
+            private static readonly Hashtable s_contextHash = new();
 
             // When this gets to zero, we'll invoke a full garbage
             // collect and check for root/window leaks.
-            private static readonly object s_tcInternalSyncObject = new object();
+            private static readonly object s_tcInternalSyncObject = new();
 
             private static int s_totalMessageLoopCount;
             private static msoloop s_baseLoopReason;
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
             internal EventHandler _leaveModalHandler;
 
             // Parking window list
-            private readonly List<ParkingWindow> _parkingWindows = new List<ParkingWindow>();
+            private readonly List<ParkingWindow> _parkingWindows = new();
             private Control _marshalingControl;
             private List<IMessageFilter> _messageFilters;
             private List<IMessageFilter> _messageFilterSnapshot;
@@ -90,19 +90,22 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Creates a new thread context object.
             /// </summary>
-            public ThreadContext()
+            public unsafe ThreadContext()
             {
-                IntPtr address = IntPtr.Zero;
+                HANDLE target;
 
-                Kernel32.DuplicateHandle(
-                    Kernel32.GetCurrentProcess(),
-                    Kernel32.GetCurrentThread(),
-                    Kernel32.GetCurrentProcess(),
-                    ref address);
+                PInvoke.DuplicateHandle(
+                    PInvoke.GetCurrentProcess(),
+                    PInvoke.GetCurrentThread(),
+                    PInvoke.GetCurrentProcess(),
+                    &target,
+                    0,
+                    false,
+                    DUPLICATE_HANDLE_OPTIONS.DUPLICATE_SAME_ACCESS);
 
-                _handle = address;
+                _handle = target;
 
-                _id = Kernel32.GetCurrentThreadId();
+                _id = PInvoke.GetCurrentThreadId();
                 _messageLoopCount = 0;
                 t_currentThreadContext = this;
 
@@ -176,7 +179,7 @@ namespace System.Windows.Forms
                         IntPtr messageFilterHandle = default;
 
                         // Clear the thread's message filter to see if there was an existing filter
-                        if (Ole32.CoRegisterMessageFilter(IntPtr.Zero, ref messageFilterHandle).Failed()
+                        if (Ole32.CoRegisterMessageFilter(IntPtr.Zero, ref messageFilterHandle).Failed
                             || messageFilterHandle == IntPtr.Zero)
                         {
                             return null;
@@ -190,7 +193,7 @@ namespace System.Windows.Forms
                         object messageFilter = Marshal.GetObjectForIUnknown(messageFilterHandle);
                         Marshal.Release(messageFilterHandle);
 
-                        if (!(messageFilter is Ole32.IServiceProvider serviceProvider))
+                        if (messageFilter is not Ole32.IServiceProvider serviceProvider)
                         {
                             return null;
                         }
@@ -201,7 +204,7 @@ namespace System.Windows.Forms
                         var iid = new Guid(ComponentIds.IID_IMsoComponentManager);
                         try
                         {
-                            if (serviceProvider.QueryService(&sid, &iid, &serviceHandle).Failed() || serviceHandle == IntPtr.Zero)
+                            if (serviceProvider.QueryService(&sid, &iid, &serviceHandle).Failed || serviceHandle == IntPtr.Zero)
                             {
                                 return null;
                             }
@@ -216,7 +219,7 @@ namespace System.Windows.Forms
                         HRESULT hr = (HRESULT)Marshal.QueryInterface(serviceHandle, ref iid, out IntPtr componentManagerHandle);
                         Marshal.Release(serviceHandle);
 
-                        if (hr.Succeeded() && componentManagerHandle != IntPtr.Zero)
+                        if (hr.Succeeded && componentManagerHandle != IntPtr.Zero)
                         {
                             IMsoComponentManager componentManager = (IMsoComponentManager)Marshal.GetObjectForIUnknown(componentManagerHandle);
                             Marshal.Release(componentManagerHandle);
@@ -238,11 +241,11 @@ namespace System.Windows.Forms
                         };
 
                         UIntPtr id;
-                        bool result = _componentManager.FRegisterComponent(this, &info, &id).IsTrue();
+                        bool result = _componentManager.FRegisterComponent(this, &info, &id);
                         _componentID = id;
                         Debug.Assert(_componentID != s_invalidId, "Our ID sentinel was returned as a valid ID");
 
-                        if (result && !(_componentManager is ComponentManager))
+                        if (result && _componentManager is not Application.ComponentManager)
                         {
                             _messageLoopCount++;
                         }
@@ -266,7 +269,7 @@ namespace System.Windows.Forms
             ///  Retrieves the actual parking form.  This will demand create the parking window
             ///  if it needs to.
             /// </summary>
-            internal ParkingWindow GetParkingWindow(IntPtr context)
+            internal ParkingWindow GetParkingWindow(DPI_AWARENESS_CONTEXT context)
             {
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
@@ -298,7 +301,7 @@ namespace System.Windows.Forms
             ///  Returns parking window that matches dpi awareness context. return null if not found.
             /// </summary>
             /// <returns>return matching parking window from list. returns null if not found</returns>
-            internal ParkingWindow GetParkingWindowForContext(IntPtr context)
+            internal ParkingWindow GetParkingWindowForContext(DPI_AWARENESS_CONTEXT context)
             {
                 if (_parkingWindows.Count == 0)
                 {
@@ -307,7 +310,7 @@ namespace System.Windows.Forms
 
                 // Legacy OS/target framework scenario where ControlDpiContext is set to DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNSPECIFIED
                 // because of 'ThreadContextDpiAwareness' API unavailability or this feature is not enabled.
-                if (User32.AreDpiAwarenessContextsEqual(context, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
+                if (PInvoke.AreDpiAwarenessContextsEqualInternal(context, DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
                 {
                     Debug.Assert(_parkingWindows.Count == 1, "parkingWindows count can not be > 1 for legacy OS/target framework versions");
 
@@ -317,7 +320,7 @@ namespace System.Windows.Forms
                 // Supported OS scenario.
                 foreach (ParkingWindow p in _parkingWindows)
                 {
-                    if (User32.AreDpiAwarenessContextsEqual(p.DpiAwarenessContext, context))
+                    if (PInvoke.AreDpiAwarenessContextsEqualInternal(p.DpiAwarenessContext, context))
                     {
                         return p;
                     }
@@ -481,7 +484,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                bool ourThread = Kernel32.GetCurrentThreadId() == _id;
+                                bool ourThread = PInvoke.GetCurrentThreadId() == _id;
 
                                 try
                                 {
@@ -517,7 +520,7 @@ namespace System.Windows.Forms
                                     // We can always clean up this handle, though
                                     if (_handle != IntPtr.Zero)
                                     {
-                                        Kernel32.CloseHandle(new HandleRef(this, _handle));
+                                        PInvoke.CloseHandle(this);
                                         _handle = IntPtr.Zero;
                                     }
 
@@ -570,7 +573,7 @@ namespace System.Windows.Forms
                     // controls that are living on the parking window.
 
                     uint hwndThread = User32.GetWindowThreadProcessId(_parkingWindows[0], out _);
-                    uint currentThread = Kernel32.GetCurrentThreadId();
+                    uint currentThread = PInvoke.GetCurrentThreadId();
 
                     for (int i = 0; i < _parkingWindows.Count; i++)
                     {
@@ -707,7 +710,7 @@ namespace System.Windows.Forms
                 // We can always clean up this handle, though.
                 if (_handle != IntPtr.Zero)
                 {
-                    Kernel32.CloseHandle(new HandleRef(this, _handle));
+                    PInvoke.CloseHandle((HANDLE)_handle);
                     _handle = IntPtr.Zero;
                 }
             }
@@ -719,7 +722,7 @@ namespace System.Windows.Forms
                 if (activate)
                 {
                     IMsoComponentManager cm = ComponentManager;
-                    if (cm is not null && !(cm is ComponentManager))
+                    if (cm is not null && cm is not Application.ComponentManager)
                     {
                         cm.FOnComponentActivate(_componentID);
                     }
@@ -736,9 +739,9 @@ namespace System.Windows.Forms
                 if (track != GetState(STATE_TRACKINGCOMPONENT))
                 {
                     IMsoComponentManager cm = ComponentManager;
-                    if (cm is not null && !(cm is ComponentManager))
+                    if (cm is not null && cm is not Application.ComponentManager)
                     {
-                        cm.FSetTrackingComponent(_componentID, track.ToBOOL());
+                        cm.FSetTrackingComponent(_componentID, track);
                         SetState(STATE_TRACKINGCOMPONENT, track);
                     }
                 }
@@ -756,7 +759,7 @@ namespace System.Windows.Forms
             internal static ThreadContext FromId(uint id)
             {
                 ThreadContext context = (ThreadContext)s_contextHash[id];
-                if (context is null && id == Kernel32.GetCurrentThreadId())
+                if (context is null && id == PInvoke.GetCurrentThreadId())
                 {
                     context = new ThreadContext();
                 }
@@ -774,7 +777,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the handle to this thread.
             /// </summary>
-            internal IntPtr GetHandle() => _handle;
+            public nint Handle => _handle;
 
             /// <summary>
             ///  Retrieves the ID of this thread.
@@ -808,7 +811,7 @@ namespace System.Windows.Forms
                     }
 
                     void* component;
-                    if (ComponentManager.FGetActiveComponent(msogac.Active, &component, null, 0).IsTrue())
+                    if (ComponentManager.FGetActiveComponent(msogac.Active, &component, null, 0))
                     {
                         IntPtr pUnk = Marshal.GetIUnknownForObject(this);
                         bool matches = ((void*)pUnk == component);
@@ -842,7 +845,7 @@ namespace System.Windows.Forms
 
             internal ApartmentState OleRequired()
             {
-                Thread current = Thread.CurrentThread;
+                _ = Thread.CurrentThread;
                 if (!GetState(STATE_OLEINITIALIZED))
                 {
                     HRESULT ret = Ole32.OleInitialize(IntPtr.Zero);
@@ -1039,7 +1042,7 @@ namespace System.Windows.Forms
 
                 bool fullModal = false;
                 bool localModal = false;
-                IntPtr hwndOwner = IntPtr.Zero;
+                HWND hwndOwner = default;
 
                 if (reason == msoloop.DoEventsModal)
                 {
@@ -1067,25 +1070,25 @@ namespace System.Windows.Forms
                     // If the owner window of the dialog is still enabled, disable it now.
                     // This can happen if the owner window is from a different thread or
                     // process.
-                    hwndOwner = User32.GetWindowLong(_currentForm, User32.GWL.HWNDPARENT);
-                    if (hwndOwner != IntPtr.Zero)
+                    hwndOwner = (HWND)PInvoke.GetWindowLong(_currentForm, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                    if (!hwndOwner.IsNull)
                     {
-                        if (User32.IsWindowEnabled(hwndOwner).IsTrue())
+                        if (User32.IsWindowEnabled(hwndOwner))
                         {
-                            User32.EnableWindow(hwndOwner, BOOL.FALSE);
+                            User32.EnableWindow(hwndOwner, false);
                         }
                         else
                         {
                             // Reset hwndOwner so we are not tempted to fiddle with it
-                            hwndOwner = IntPtr.Zero;
+                            hwndOwner = default;
                         }
                     }
 
                     // The second half of the modalEnabled flag above.  Here, if we were previously
                     // enabled, make sure that's still the case.
-                    if (_currentForm is not null && _currentForm.IsHandleCreated && User32.IsWindowEnabled(_currentForm).IsTrue() != modalEnabled)
+                    if (_currentForm is not null && _currentForm.IsHandleCreated && User32.IsWindowEnabled(_currentForm) != modalEnabled)
                     {
-                        User32.EnableWindow(new HandleRef(_currentForm, _currentForm.Handle), modalEnabled.ToBOOL());
+                        User32.EnableWindow(new HandleRef(_currentForm, _currentForm.Handle), modalEnabled);
                     }
                 }
 
@@ -1114,7 +1117,7 @@ namespace System.Windows.Forms
 
                     if ((!fullModal && !localModal) || ComponentManager is ComponentManager)
                     {
-                        result = ComponentManager.FPushMessageLoop(_componentID, reason, null).IsTrue();
+                        result = ComponentManager.FPushMessageLoop(_componentID, reason, null);
                     }
                     else if (reason == msoloop.DoEvents || reason == msoloop.DoEventsModal)
                     {
@@ -1142,7 +1145,7 @@ namespace System.Windows.Forms
                         // Again, if the hwndOwner was valid and disabled above, re-enable it.
                         if (hwndOwner != IntPtr.Zero)
                         {
-                            User32.EnableWindow(hwndOwner, BOOL.TRUE);
+                            User32.EnableWindow(hwndOwner, true);
                         }
                     }
 
@@ -1178,21 +1181,21 @@ namespace System.Windows.Forms
                 try
                 {
                     // Execute the message loop until the active component tells us to stop.
-                    var msg = new User32.MSG();
+                    var msg = new MSG();
                     bool unicodeWindow = false;
                     bool continueLoop = true;
 
                     while (continueLoop)
                     {
-                        if (User32.PeekMessageW(ref msg).IsTrue())
+                        if (User32.PeekMessageW(ref msg))
                         {
                             // If the component wants us to process the message, do it.
                             // The component manager hosts windows from many places.  We must be sensitive
                             // to ansi / Unicode windows here.
-                            if (msg.hwnd != IntPtr.Zero && User32.IsWindowUnicode(msg.hwnd).IsTrue())
+                            if (!msg.hwnd.IsNull && User32.IsWindowUnicode(msg.hwnd))
                             {
                                 unicodeWindow = true;
-                                if (User32.GetMessageW(ref msg).IsFalse())
+                                if (!User32.GetMessageW(ref msg))
                                 {
                                     continue;
                                 }
@@ -1200,7 +1203,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 unicodeWindow = false;
-                                if (User32.GetMessageA(ref msg).IsFalse())
+                                if (!User32.GetMessageA(ref msg))
                                 {
                                     continue;
                                 }
@@ -1228,7 +1231,7 @@ namespace System.Windows.Forms
                         {
                             break;
                         }
-                        else if (User32.PeekMessageW(ref msg).IsFalse())
+                        else if (!User32.PeekMessageW(ref msg))
                         {
                             User32.WaitMessage();
                         }
@@ -1242,7 +1245,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal bool ProcessFilters(ref User32.MSG msg, out bool modified)
+            internal bool ProcessFilters(ref MSG msg, out bool modified)
             {
                 bool filtered = false;
 
@@ -1284,8 +1287,8 @@ namespace System.Windows.Forms
                             // PreFilterMessage.
                             if (f is IMessageModifyAndFilter)
                             {
-                                msg.hwnd = m.HWnd;
-                                msg.message = m.MsgInternal;
+                                msg.hwnd = (HWND)m.HWnd;
+                                msg.message = (uint)m.MsgInternal;
                                 msg.wParam = m.WParamInternal;
                                 msg.lParam = m.LParamInternal;
                                 modified = true;
@@ -1313,7 +1316,7 @@ namespace System.Windows.Forms
             ///  false, the message should be allowed to continue through the dispatch
             ///  mechanism.
             /// </summary>
-            internal bool PreTranslateMessage(ref User32.MSG msg)
+            internal bool PreTranslateMessage(ref MSG msg)
             {
                 if (ProcessFilters(ref msg, out _))
                 {
@@ -1322,10 +1325,10 @@ namespace System.Windows.Forms
 
                 if (msg.IsKeyMessage())
                 {
-                    if (msg.message == User32.WM.CHAR)
+                    if (msg.message == (uint)User32.WM.CHAR)
                     {
                         int breakLParamMask = 0x1460000; // 1 = extended keyboard, 46 = scan code
-                        if (unchecked((int)(long)msg.wParam) == 3 && (unchecked((int)(long)msg.lParam) & breakLParamMask) == breakLParamMask) // ctrl-brk
+                        if (unchecked((int)(uint)msg.wParam) == 3 && (unchecked((int)msg.lParam) & breakLParamMask) == breakLParamMask) // ctrl-brk
                         {
                             // wParam is the key character, which for ctrl-brk is the same as ctrl-C.
                             // So we need to go to the lparam to distinguish the two cases.
@@ -1374,11 +1377,11 @@ namespace System.Windows.Forms
                         // winforms code.  This can happen with ActiveX controls that launch dialogs specifically
 
                         // First, get the first top-level window in the hierarchy.
-                        IntPtr hwndRoot = User32.GetAncestor(msg.hwnd, User32.GA.ROOT);
+                        HWND hwndRoot = PInvoke.GetAncestor((HWND)msg.hwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
 
                         // If we got a valid HWND, then call IsDialogMessage on it.  If that returns true, it's been processed
                         // so we should return true to prevent Translate/Dispatch from being called.
-                        if (hwndRoot != IntPtr.Zero && User32.IsDialogMessageW(hwndRoot, ref msg).IsTrue())
+                        if (!hwndRoot.IsNull && User32.IsDialogMessageW(hwndRoot, ref msg))
                         {
                             return true;
                         }
@@ -1447,11 +1450,11 @@ namespace System.Windows.Forms
 
             /// <inheritdoc />
             BOOL IMsoComponent.FDebugMessage(IntPtr hInst, uint msg, IntPtr wparam, IntPtr lparam)
-                => BOOL.TRUE;
+                => true;
 
             /// <inheritdoc />
-            unsafe BOOL IMsoComponent.FPreTranslateMessage(User32.MSG* msg)
-                => PreTranslateMessage(ref Unsafe.AsRef<User32.MSG>(msg)).ToBOOL();
+            unsafe BOOL IMsoComponent.FPreTranslateMessage(MSG* msg)
+                => PreTranslateMessage(ref Unsafe.AsRef<MSG>(msg));
 
             /// <inheritdoc />
             void IMsoComponent.OnEnterState(msocstate uStateID, BOOL fEnter)
@@ -1467,7 +1470,7 @@ namespace System.Windows.Forms
                 if (uStateID == msocstate.Modal)
                 {
                     // We should only be messing with windows we own.  See the "ctrl-shift-N" test above.
-                    if (fEnter.IsTrue())
+                    if (fEnter)
                     {
                         DisableWindowsForModalLoop(true, null); // WinFormsOnly = true
                     }
@@ -1505,14 +1508,14 @@ namespace System.Windows.Forms
             BOOL IMsoComponent.FDoIdle(msoidlef grfidlef)
             {
                 _idleHandler?.Invoke(Thread.CurrentThread, EventArgs.Empty);
-                return BOOL.FALSE;
+                return false;
             }
 
             /// <inheritdoc />
             unsafe BOOL IMsoComponent.FContinueMessageLoop(
                 msoloop uReason,
                 void* pvLoopData,
-                User32.MSG* pMsgPeeked)
+                MSG* pMsgPeeked)
             {
                 bool continueLoop = true;
 
@@ -1530,8 +1533,8 @@ namespace System.Windows.Forms
                         case msoloop.FocusWait:
 
                             // For focus wait, check to see if we are now the active application.
-                            User32.GetWindowThreadProcessId(User32.GetActiveWindow(), out uint pid);
-                            if (pid == Kernel32.GetCurrentProcessId())
+                            User32.GetWindowThreadProcessId(PInvoke.GetActiveWindow(), out uint pid);
+                            if (pid == PInvoke.GetCurrentProcessId())
                             {
                                 continueLoop = false;
                             }
@@ -1555,8 +1558,8 @@ namespace System.Windows.Forms
                         case msoloop.DoEvents:
                         case msoloop.DoEventsModal:
                             // For DoEvents, just see if there are more messages on the queue.
-                            User32.MSG temp = default;
-                            if (User32.PeekMessageW(ref temp).IsFalse())
+                            MSG temp = default;
+                            if (!User32.PeekMessageW(ref temp))
                             {
                                 continueLoop = false;
                             }
@@ -1565,16 +1568,16 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return continueLoop.ToBOOL();
+                return continueLoop;
             }
 
             /// <inheritdoc />
-            BOOL IMsoComponent.FQueryTerminate(BOOL fPromptUser) => BOOL.TRUE;
+            BOOL IMsoComponent.FQueryTerminate(BOOL fPromptUser) => true;
 
             /// <inheritdoc />
             void IMsoComponent.Terminate()
             {
-                if (_messageLoopCount > 0 && !(ComponentManager is ComponentManager))
+                if (_messageLoopCount > 0 && ComponentManager is not Application.ComponentManager)
                 {
                     _messageLoopCount--;
                 }

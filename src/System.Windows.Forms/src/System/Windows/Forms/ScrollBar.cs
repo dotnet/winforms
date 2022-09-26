@@ -122,8 +122,8 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_SCROLLBAR;
-                cp.Style &= ~(int)User32.WS.BORDER;
+                cp.ClassName = PInvoke.WC_SCROLLBAR;
+                cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
                 return cp;
             }
         }
@@ -494,7 +494,7 @@ namespace System.Windows.Forms
             return base.GetScaledBounds(bounds, factor, specified);
         }
 
-        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg) => default;
+        internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg) => default;
 
         protected override void OnEnabledChanged(EventArgs e)
         {
@@ -619,12 +619,12 @@ namespace System.Windows.Forms
 
             si.nTrackPos = 0;
 
-            User32.SetScrollInfo(this, User32.SB.CTL, ref si, BOOL.TRUE);
+            User32.SetScrollInfo(this, User32.SB.CTL, ref si, true);
         }
 
         private void WmReflectScroll(ref Message m)
         {
-            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParamInternal);
+            ScrollEventType type = (ScrollEventType)m.WParamInternal.LOWORD;
             DoScroll(type);
         }
 
@@ -734,11 +734,11 @@ namespace System.Windows.Forms
 
                 case User32.WM.SIZE:
                     // Fixes the scrollbar focus rect
-                    if (User32.GetFocus() == Handle)
+                    if (PInvoke.GetFocus() == HWND)
                     {
                         DefWndProc(ref m);
-                        User32.SendMessageW(this, User32.WM.KILLFOCUS);
-                        User32.SendMessageW(this, User32.WM.SETFOCUS);
+                        PInvoke.SendMessage(this, User32.WM.KILLFOCUS);
+                        PInvoke.SendMessage(this, User32.WM.SETFOCUS);
                     }
 
                     break;

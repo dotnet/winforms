@@ -34,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public unsafe override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            IntPtr parentHandle = User32.GetFocus();
+            HWND parentHandle = PInvoke.GetFocus();
 
             IUIService? uiSvc = (IUIService?)provider.GetService(typeof(IUIService));
             if (uiSvc is not null)
@@ -42,11 +42,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 IWin32Window parent = uiSvc.GetDialogOwnerWindow();
                 if (parent is not null)
                 {
-                    parentHandle = parent.Handle;
+                    parentHandle = (HWND)parent.Handle;
                 }
             }
 
-            BOOL useValue = BOOL.FALSE;
+            BOOL useValue = false;
             object? pValue = value;
 
             try
@@ -66,9 +66,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     null,
                     parentHandle,
                     ref pValue,
-                    &useValue).Succeeded())
+                    &useValue).Succeeded)
                 {
-                    useValue = BOOL.FALSE;
+                    useValue = false;
                 }
             }
             catch (ExternalException ex)
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Debug.Fail("Failed to show property frame: " + ex.ErrorCode.ToString(CultureInfo.InvariantCulture));
             }
 
-            if (useValue.IsTrue() && (_bldrType & VSSDK.CTLBLDTYPE.FEDITSOBJIDRECTLY) == 0)
+            if (useValue && (_bldrType & VSSDK.CTLBLDTYPE.FEDITSOBJIDRECTLY) == 0)
             {
                 return pValue;
             }

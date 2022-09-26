@@ -188,7 +188,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
                 }
 
-                return User32.SendMessageW(EditTextBox, (User32.WM)User32.EM.CANUNDO) != 0;
+                return PInvoke.SendMessage(EditTextBox, (User32.WM)User32.EM.CANUNDO) != 0;
             }
         }
 
@@ -349,7 +349,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal bool DrawValuesRightToLeft
             => _editTextBox is not null
                 && _editTextBox.IsHandleCreated
-                && ((User32.WS_EX)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE)).HasFlag(User32.WS_EX.RTLREADING);
+                && ((WINDOW_EX_STYLE)PInvoke.GetWindowLong(_editTextBox, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)).HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
         internal DropDownHolder DropDownControlHolder => _dropDownHolder;
 
@@ -845,7 +845,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (IsHandleCreated && Visible && Enabled)
                 {
-                    gotFocus = User32.SetFocus(new HandleRef(this, Handle)) != IntPtr.Zero;
+                    gotFocus = !PInvoke.SetFocus(this).IsNull;
                 }
             }
 
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (CanUndo && EditTextBox.Visible)
             {
-                User32.SendMessageW(EditTextBox, User32.WM.UNDO);
+                PInvoke.SendMessage(EditTextBox, User32.WM.UNDO);
             }
         }
 
@@ -1504,7 +1504,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // It is unknown why this control was created as a top-level control. Windows does not recommend this way of setting parent.
             // We are not touching this for this release. We may revisit it in next release.
 
-            User32.SetWindowLong(_dropDownHolder, User32.GWL.HWNDPARENT, new HandleRef(this, Handle));
+            PInvoke.SetWindowLong(_dropDownHolder, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, this);
             _dropDownHolder.SetBounds(location.X, location.Y, size.Width, size.Height);
             User32.ShowWindow(_dropDownHolder, User32.SW.SHOWNA);
             EditTextBox.Filter = true;
@@ -1549,12 +1549,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         private bool FilterEditWndProc(ref Message m)
         {
             // If it's the TAB key, we keep it since we'll give them focus with it.
-            if (_dropDownHolder?.Visible == true && m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal != Keys.Tab)
+            if (_dropDownHolder?.Visible == true && m.MsgInternal == User32.WM.KEYDOWN && (Keys)(nint)m.WParamInternal != Keys.Tab)
             {
                 Control control = _dropDownHolder.Component;
                 if (control is not null)
                 {
-                    m.ResultInternal = User32.SendMessageW(control, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    m.ResultInternal = PInvoke.SendMessage(control, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return true;
                 }
             }
@@ -2440,8 +2440,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    using var hdc = new User32.GetDcScope(Handle);
-                    using var hbrush = new Gdi32.CreateBrushScope(color);
+                    using User32.GetDcScope hdc = new(Handle);
+                    using PInvoke.CreateBrushScope hbrush = new(color);
                     hdc.FillRectangle(hbrush, clearRect);
                 }
             }
@@ -2620,7 +2620,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (_dropDownHolder is not null && _dropDownHolder.Visible)
             {
                 bool found = false;
-                for (IntPtr hwnd = User32.GetForegroundWindow(); hwnd != IntPtr.Zero; hwnd = User32.GetParent(hwnd))
+                for (HWND hwnd = PInvoke.GetForegroundWindow(); !hwnd.IsNull; hwnd = PInvoke.GetParent(hwnd))
                 {
                     if (hwnd == _dropDownHolder.Handle)
                     {
@@ -2683,7 +2683,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Math.Abs(screenPoint.Y - _rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
                 {
                     DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
-                    User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, 0, PARAM.FromPoint(e.Location));
+                    PInvoke.SendMessage(EditTextBox, User32.WM.LBUTTONUP, (WPARAM)0, (LPARAM)e.Location);
                     EditTextBox.SelectAll();
                 }
 
@@ -3165,8 +3165,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // Ensure that tooltips don't display when host application is not foreground app.
                 // Assume that we don't want to display the tooltips
-                IntPtr foregroundWindow = User32.GetForegroundWindow();
-                if (User32.IsChild(foregroundWindow, new HandleRef(this, Handle)).IsTrue())
+                HWND foregroundWindow = PInvoke.GetForegroundWindow();
+                if (PInvoke.IsChild(PInvoke.GetForegroundWindow(), this))
                 {
                     // Don't show the tips if a dropdown is showing
                     if (_dropDownHolder is null || _dropDownHolder.Component is null || rowMoveCurrent == _selectedRow)
@@ -3542,8 +3542,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Point editPoint = PointToScreen(_lastMouseDown);
                 editPoint = EditTextBox.PointToClient(editPoint);
-                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONDOWN, 0, PARAM.FromPoint(editPoint));
-                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, 0, PARAM.FromPoint(editPoint));
+                PInvoke.SendMessage(EditTextBox, User32.WM.LBUTTONDOWN, 0, PARAM.FromPoint(editPoint));
+                PInvoke.SendMessage(EditTextBox, User32.WM.LBUTTONUP, (WPARAM)0, (LPARAM)editPoint);
             }
 
             if (setSelectTime)
@@ -3768,7 +3768,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Displays the appropriate editor for the given <paramref name="row"/>.
         /// </summary>
-        public void PopupEditor(int row)
+        public unsafe void PopupEditor(int row)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:PopupEditor");
             GridEntry gridEntry = GetGridEntryFromRow(row);
@@ -3800,31 +3800,31 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 using var hdc = new User32.GetDcScope(DropDownListBox.Handle);
 
-                var tm = new Gdi32.TEXTMETRICW();
+                TEXTMETRICW tm = default;
                 int selectionIndex = -1;
 
                 // This creates a copy of the given Font, and as such we need to delete it
-                var hFont = (Gdi32.HFONT)Font.ToHfont();
-                using (var fontScope = new Gdi32.ObjectScope(hFont))
+                var hFont = (HFONT)Font.ToHfont();
+                using (PInvoke.ObjectScope fontScope = new(hFont))
                 {
-                    using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
+                    using PInvoke.SelectObjectScope fontSelection = new(hdc, hFont);
 
                     selectionIndex = GetCurrentValueIndex(gridEntry);
                     if (rgItems is not null && rgItems.Length > 0)
                     {
                         string value;
-                        var textSize = new Size();
+                        Size textSize = default;
 
                         for (int i = 0; i < rgItems.Length; i++)
                         {
                             value = gridEntry.GetPropertyTextValue(rgItems[i]);
                             DropDownListBox.Items.Add(value);
-                            Gdi32.GetTextExtentPoint32W(new HandleRef(DropDownListBox, hdc), value, value.Length, ref textSize);
+                            PInvoke.GetTextExtentPoint32W(hdc.HDC, value, value.Length, textSize);
                             maxWidth = Math.Max(textSize.Width, maxWidth);
                         }
                     }
 
-                    Gdi32.GetTextMetricsW(hdc, ref tm);
+                    PInvoke.GetTextMetrics(hdc, &tm);
 
                     // border + padding + scrollbar
                     maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
@@ -3895,7 +3895,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             RECT rect = itemRect;
 
-            User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, 1, ref rect);
+            PInvoke.SendMessage(toolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, (WPARAM)1, ref rect);
 
             // Now offset it back to screen coords.
             Point location = parent.PointToScreen(new(rect.left, rect.top));
@@ -3947,14 +3947,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         bool forward = (keyData & Keys.Shift) == 0;
 
-                        Control focusedControl = FromHandle(User32.GetFocus());
+                        Control focusedControl = FromHandle(PInvoke.GetFocus());
 
                         if (focusedControl is null || !IsMyChild(focusedControl))
                         {
                             if (forward)
                             {
                                 TabSelection();
-                                focusedControl = FromHandle(User32.GetFocus());
+                                focusedControl = FromHandle(PInvoke.GetFocus());
 
                                 // Make sure the value actually took the focus
                                 if (IsMyChild(focusedControl))
@@ -5038,7 +5038,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            IntPtr priorFocus = User32.GetFocus();
+            HWND priorFocus = PInvoke.GetFocus();
 
             DialogResult result;
             if (TryGetService(out IUIService uiService))
@@ -5050,9 +5050,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 result = dialog.ShowDialog(this);
             }
 
-            if (priorFocus != IntPtr.Zero)
+            if (!priorFocus.IsNull)
             {
-                User32.SetFocus(priorFocus);
+                PInvoke.SetFocus(priorFocus);
             }
 
             return result;
@@ -5074,12 +5074,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            var mouseMessage = new User32.MSG();
+            var mouseMessage = new MSG();
             while (User32.PeekMessageW(ref mouseMessage,
                 IntPtr.Zero,
                 User32.WM.MOUSEFIRST,
                 User32.WM.MOUSELAST,
-                User32.PM.REMOVE).IsTrue())
+                User32.PM.REMOVE))
             {
                 // No-op.
             }
@@ -5150,8 +5150,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            var mouseMsg = new User32.MSG();
-            while (User32.PeekMessageW(ref mouseMsg, IntPtr.Zero, User32.WM.MOUSEFIRST, User32.WM.MOUSELAST, User32.PM.REMOVE).IsTrue())
+            var mouseMsg = new MSG();
+            while (User32.PeekMessageW(ref mouseMsg, IntPtr.Zero, User32.WM.MOUSEFIRST, User32.WM.MOUSELAST, User32.PM.REMOVE))
             {
                 // No-op.
             }
@@ -5405,7 +5405,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-            var nmhdr = (User32.NMHDR*)m.LParamInternal;
+            var nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
             if (nmhdr->hwndFrom == ToolTip.Handle)
             {
@@ -5453,7 +5453,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             itemRect.Offset(tipPt);
                             PositionTooltip(this, ToolTip, itemRect);
-                            m.ResultInternal = 1;
+                            m.ResultInternal = (LRESULT)1;
                             return true;
                         }
 
@@ -5487,12 +5487,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 case (int)User32.WM.IME_STARTCOMPOSITION:
                     EditTextBox.Focus();
                     EditTextBox.Clear();
-                    User32.PostMessageW(EditTextBox, User32.WM.IME_STARTCOMPOSITION);
+                    PInvoke.PostMessage(EditTextBox, User32.WM.IME_STARTCOMPOSITION);
                     return;
 
                 case (int)User32.WM.IME_COMPOSITION:
                     EditTextBox.Focus();
-                    User32.PostMessageW(EditTextBox, User32.WM.IME_COMPOSITION, m.WParamInternal, m.LParamInternal);
+                    PInvoke.PostMessage(EditTextBox, User32.WM.IME_COMPOSITION, m.WParamInternal, m.LParamInternal);
                     return;
 
                 case (int)User32.WM.GETDLGCODE:
@@ -5509,7 +5509,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                     }
 
-                    m.ResultInternal = (nint)flags;
+                    m.ResultInternal = (LRESULT)(nint)flags;
                     return;
 
                 case (int)User32.WM.MOUSEMOVE:
@@ -5531,10 +5531,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     break;
                 case AutomationMessages.PGM_GETSELECTEDROW:
-                    m.ResultInternal = GetRowFromGridEntry(_selectedGridEntry);
+                    m.ResultInternal = (LRESULT)GetRowFromGridEntry(_selectedGridEntry);
                     return;
                 case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m.ResultInternal = Math.Min(_visibleRows, TotalProperties);
+                    m.ResultInternal = (LRESULT)Math.Min(_visibleRows, TotalProperties);
                     return;
             }
 

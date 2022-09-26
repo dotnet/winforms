@@ -172,10 +172,10 @@ namespace System.Windows.Forms
                         return true;  // we don't care about the state of VS.
                     }
 
-                    IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
-                    if (rootHwnd != IntPtr.Zero)
+                    HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+                    if (!rootHwnd.IsNull)
                     {
-                        return !User32.IsZoomed(rootHwnd).IsTrue();
+                        return !User32.IsZoomed(rootHwnd);
                     }
                 }
 
@@ -582,11 +582,11 @@ namespace System.Windows.Forms
 
                 if (sizeGripBounds.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                 {
-                    IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
+                    HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
 
                     // if the main window isn't maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
-                    if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd).IsTrue())
+                    if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd))
                     {
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
@@ -604,7 +604,7 @@ namespace System.Windows.Forms
                             gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
                         }
 
-                        User32.MapWindowPoint(this, rootHwnd, ref gripLocation);
+                        PInvoke.MapWindowPoints(this, rootHwnd, ref gripLocation);
 
                         int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
                         int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.X);
@@ -613,7 +613,7 @@ namespace System.Windows.Forms
                         {
                             if ((deltaRightEdge + deltaBottomEdge) < 2)
                             {
-                                m.ResultInternal = (nint)User32.HT.BOTTOMRIGHT;
+                                m.ResultInternal = (LRESULT)(nint)User32.HT.BOTTOMRIGHT;
                                 return;
                             }
                         }
@@ -638,7 +638,7 @@ namespace System.Windows.Forms
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
                     return cp;
                 }
             }
@@ -649,7 +649,7 @@ namespace System.Windows.Forms
                 {
                     if (ClientRectangle.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                     {
-                        m.ResultInternal = (nint)User32.HT.BOTTOMLEFT;
+                        m.ResultInternal = (LRESULT)(nint)User32.HT.BOTTOMLEFT;
                         return;
                     }
                 }

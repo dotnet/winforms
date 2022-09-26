@@ -10169,8 +10169,8 @@ namespace System.Windows.Forms.Tests
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style |= (int)User32.WS.BORDER;
-                    cp.ExStyle |= (int)User32.WS_EX.STATICEDGE;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_STATICEDGE;
                     return cp;
                 }
             }
@@ -12674,13 +12674,13 @@ namespace System.Windows.Forms.Tests
         public void Control_WndProc_InvokeDpiChangedAfterParentWithoutHandle_Success()
         {
             // Set thread awareness context to PermonitorV2(PMv2).
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
             try
             {
                 using (new NoAssertContext())
                 {
-                    using var control = new SubControl();
+                    using SubControl control = new();
                     int callCount = 0;
                     control.DpiChangedAfterParent += (sender, e) =>
                     {
@@ -12692,10 +12692,10 @@ namespace System.Windows.Forms.Tests
                     {
                         Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
                         WParam = PARAM.FromLowHigh(192, 192),
-                        Result = (IntPtr)250
+                        Result = 250
                     };
                     control.WndProc(ref m);
-                    Assert.Equal(IntPtr.Zero, m.Result);
+                    Assert.Equal(0, m.Result);
                     Assert.Equal(1, callCount);
                     Assert.False(control.IsHandleCreated);
                 }
@@ -12703,7 +12703,7 @@ namespace System.Windows.Forms.Tests
             finally
             {
                 // Reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
 
@@ -12711,12 +12711,12 @@ namespace System.Windows.Forms.Tests
         public void Control_WndProc_InvokeDpiChangedAfterParentWithHandle_Success()
         {
             // Set thread awareness context to PermonitorV2(PMv2).
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
             try
             {
                 using var control = new SubControl();
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
+                Assert.NotEqual(0, control.Handle);
                 int invalidatedCallCount = 0;
                 control.Invalidated += (sender, e) => invalidatedCallCount++;
                 int styleChangedCallCount = 0;
@@ -12735,10 +12735,10 @@ namespace System.Windows.Forms.Tests
                 {
                     Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
                     WParam = PARAM.FromLowHigh(192, 192),
-                    Result = (IntPtr)250
+                    Result = 250
                 };
                 control.WndProc(ref m);
-                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(0, m.Result);
                 Assert.Equal(1, callCount);
                 Assert.True(control.IsHandleCreated);
                 Assert.Equal(0, invalidatedCallCount);
@@ -12748,7 +12748,7 @@ namespace System.Windows.Forms.Tests
             finally
             {
                 // Reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
 
@@ -12756,7 +12756,7 @@ namespace System.Windows.Forms.Tests
         public void Control_WndProc_InvokeDpiChangedBeforeParentWithoutHandle_Success()
         {
             // Set thread awareness context to PermonitorV2(PMv2).
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
             try
             {
@@ -12774,10 +12774,10 @@ namespace System.Windows.Forms.Tests
                     {
                         Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
                         WParam = PARAM.FromLowHigh(192, 192),
-                        Result = (IntPtr)250
+                        Result = 250
                     };
                     control.WndProc(ref m);
-                    Assert.Equal(IntPtr.Zero, m.Result);
+                    Assert.Equal(0, m.Result);
                     Assert.Equal(1, callCount);
                     Assert.False(control.IsHandleCreated);
                 }
@@ -12785,7 +12785,7 @@ namespace System.Windows.Forms.Tests
             finally
             {
                 // Reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
 
@@ -12793,12 +12793,12 @@ namespace System.Windows.Forms.Tests
         public void Control_WndProc_InvokeDpiChangedBeforeParentWithHandle_Success()
         {
             // Set thread awareness context to PermonitorV2(PMv2).
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
             try
             {
                 using var control = new SubControl();
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
+                Assert.NotEqual(0, control.Handle);
                 int invalidatedCallCount = 0;
                 control.Invalidated += (sender, e) => invalidatedCallCount++;
                 int styleChangedCallCount = 0;
@@ -12817,10 +12817,10 @@ namespace System.Windows.Forms.Tests
                 {
                     Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
                     WParam = PARAM.FromLowHigh(192, 192),
-                    Result = (IntPtr)250
+                    Result = 250
                 };
                 control.WndProc(ref m);
-                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(0, m.Result);
                 Assert.Equal(1, callCount);
                 Assert.True(control.IsHandleCreated);
                 Assert.Equal(0, invalidatedCallCount);
@@ -12830,7 +12830,7 @@ namespace System.Windows.Forms.Tests
             finally
             {
                 // Reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
 

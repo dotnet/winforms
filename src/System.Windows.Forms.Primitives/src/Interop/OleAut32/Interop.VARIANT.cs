@@ -176,7 +176,7 @@ internal static partial class Interop
                             break;
                         }
 
-                        return (*(Kernel32.FILETIME*)data).ToDateTime();
+                        return (*(PInvoke.FILETIME*)data).ToDateTime();
                     case VARENUM.VOID:
                         return null;
                     case VARENUM.RECORD:
@@ -206,7 +206,7 @@ internal static partial class Interop
             {
                 Guid guid;
                 HRESULT hr = record.GetGuid(&guid);
-                hr.ThrowIfFailed();
+                hr.ThrowOnFailure();
 
                 Type? t = System.Type.GetTypeFromCLSID(guid);
                 if (t is null || !t.IsValueType)
@@ -591,7 +591,7 @@ internal static partial class Interop
                 if (vt == VARENUM.RECORD)
                 {
                     HRESULT hr = SafeArrayGetRecordInfo(psa, out IRecordInfo record);
-                    hr.ThrowIfFailed();
+                    hr.ThrowOnFailure();
 
                     elementType = GetRecordElementType(record);
                 }
@@ -815,7 +815,7 @@ internal static partial class Interop
 
                     case VARENUM.FILETIME:
                         {
-                            var data = new Span<Kernel32.FILETIME>(ca.pElems, (int)ca.cElems);
+                            var data = new Span<PInvoke.FILETIME>(ca.pElems, (int)ca.cElems);
                             var result = new DateTime[data.Length];
                             for (int i = 0; i < data.Length; i++)
                             {
@@ -1007,7 +1007,7 @@ internal static partial class Interop
                 public Guid* puuid;
 
                 [FieldOffset(0)]
-                public Kernel32.FILETIME filetime;
+                public PInvoke.FILETIME filetime;
 
                 [FieldOffset(0)]
                 public CA ca;

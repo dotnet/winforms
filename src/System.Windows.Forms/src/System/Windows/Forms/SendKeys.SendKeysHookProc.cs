@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using static Interop;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
@@ -12,28 +13,31 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class is our callback for the journaling hook we install.
         /// </summary>
-        private class SendKeysHookProc
+        private static class SendKeysHookProc
         {
             // There appears to be a timing issue where setting and removing and then setting these hooks via
             // SetWindowsHookEx / UnhookWindowsHookEx can cause messages to be left in the queue and sent after the
             // re-hookup happens. This puts us in a bad state as we get an HC_SKIP before an HC_GETNEXT. So in that
             // case, we just ignore the HC_SKIP calls until we get an HC_GETNEXT. We also sleep a bit in the Unhook.
 
-            private bool _gotNextEvent;
+            private static bool s_gotNextEvent;
 
-            public unsafe virtual nint Callback(User32.HC nCode, nint wparam, nint lparam)
+#pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+#pragma warning restore CS3016
+            public unsafe static LRESULT Callback(int nCode, WPARAM wparam, LPARAM lparam)
             {
-                User32.EVENTMSG* eventmsg = (User32.EVENTMSG*)lparam;
+                EVENTMSG* eventmsg = (EVENTMSG*)(nint)lparam;
 
-                if (User32.GetAsyncKeyState((int)Keys.Pause) != 0)
+                if (PInvoke.GetAsyncKeyState((int)Keys.Pause) != 0)
                 {
                     s_stopHook = true;
                 }
 
-                switch (nCode)
+                switch ((uint)nCode)
                 {
-                    case User32.HC.SKIP:
-                        if (_gotNextEvent)
+                    case PInvoke.HC_SKIP:
+                        if (s_gotNextEvent)
                         {
                             if (s_events.Count > 0)
                             {
@@ -45,24 +49,24 @@ namespace System.Windows.Forms
                         }
 
                         break;
-                    case User32.HC.GETNEXT:
-                        _gotNextEvent = true;
+                    case PInvoke.HC_GETNEXT:
+                        s_gotNextEvent = true;
 
                         Debug.Assert(
                             s_events.Count > 0 && !s_stopHook,
                             "HC_GETNEXT when queue is empty!");
 
                         SKEvent @event = s_events.Peek();
-                        eventmsg->message = @event.WM;
+                        eventmsg->message = (uint)@event.WM;
                         eventmsg->paramL = @event.ParamL;
                         eventmsg->paramH = @event.ParamH;
                         eventmsg->hwnd = @event.HWND;
-                        eventmsg->time = Kernel32.GetTickCount();
+                        eventmsg->time = PInvoke.GetTickCount();
                         break;
                     default:
                         if (nCode < 0)
                         {
-                            User32.CallNextHookEx(s_hhook, nCode, wparam, lparam);
+                            PInvoke.CallNextHookEx(s_hhook, nCode, wparam, lparam);
                         }
 
                         break;
@@ -71,10 +75,10 @@ namespace System.Windows.Forms
                 if (s_stopHook)
                 {
                     UninstallJournalingHook();
-                    _gotNextEvent = false;
+                    s_gotNextEvent = false;
                 }
 
-                return 0;
+                return (LRESULT)0;
             }
         }
     }

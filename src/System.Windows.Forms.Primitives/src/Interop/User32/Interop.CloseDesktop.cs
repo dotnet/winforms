@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32, SetLastError = true)]
-        public static partial BOOL CloseDesktop(IntPtr hDesktop);
+        [DllImport(Libraries.User32, SetLastError = true)]
+        public static extern BOOL CloseDesktop(IntPtr hDesktop);
     }
 }

@@ -105,9 +105,9 @@ namespace System.Windows.Forms
             public int nMaxCustFilter;
             public int nFilterIndex;
             public IntPtr lpstrFile;
-            public int nMaxFile = Kernel32.MAX_PATH;
+            public int nMaxFile = PInvoke.MAX_PATH;
             public IntPtr lpstrFileTitle = IntPtr.Zero;
-            public int nMaxFileTitle = Kernel32.MAX_PATH;
+            public int nMaxFileTitle = PInvoke.MAX_PATH;
             public string? lpstrInitialDir;
             public string? lpstrTitle;
             public int Flags;

@@ -332,7 +332,7 @@ namespace System.Windows.Forms
             Color backColor,
             TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter)
         {
-            Gdi32.HDC hdc = e.HDC;
+            HDC hdc = e.HDC;
             if (hdc.IsNull)
             {
                 // This MUST come before retrieving the HDC, which locks the Graphics object
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
         }
 
         internal static void DrawTextInternal(
-            Gdi32.HDC hdc,
+            HDC hdc,
             string? text,
             Font? font,
             Rectangle bounds,
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
             => DrawTextInternal(hdc, text, font, bounds, foreColor, fontQuality, Color.Empty, flags);
 
         private static void DrawTextInternal(
-            Gdi32.HDC hdc,
+            HDC hdc,
             ReadOnlySpan<char> text,
             Font? font,
             Rectangle bounds,
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
             Color backColor,
             TextFormatFlags flags)
         {
-            using var hfont = GdiCache.GetHFONT(font, fontQuality, hdc);
+            using var hfont = GdiCache.GetHFONT(font, (FONT_QUALITY)fontQuality, hdc);
             hdc.DrawText(text, hfont, bounds, foreColor, flags, backColor);
         }
 
@@ -521,7 +521,7 @@ namespace System.Windows.Forms
                 return Size.Empty;
 
             using var screen = GdiCache.GetScreenHdc();
-            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.DEFAULT, screen);
+            using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.DEFAULT_QUALITY, screen);
 
             return screen.HDC.MeasureText(text, hfont, proposedSize, flags);
         }
@@ -544,7 +544,7 @@ namespace System.Windows.Forms
             // Applying state may not impact text size measurements. Rather than risk missing some
             // case we'll apply as we have historically to avoid surprise regressions.
             using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
-            using var hfont = GdiCache.GetHFONT(font, quality, hdc);
+            using var hfont = GdiCache.GetHFONT(font, (FONT_QUALITY)quality, hdc);
             return hdc.HDC.MeasureText(text, hfont, proposedSize, flags);
         }
 

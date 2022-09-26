@@ -10,18 +10,18 @@ namespace System.Windows.Forms.Metafiles
 {
     internal unsafe readonly struct EmfRecord
     {
-        public Gdi32.HDC HDC { get; }
-        private readonly Gdi32.HGDIOBJ* _lpht;
-        private readonly Gdi32.ENHMETARECORD* _lpmr;
+        public HDC HDC { get; }
+        private readonly HANDLETABLE* _lpht;
+        private readonly ENHMETARECORD* _lpmr;
         private readonly int _nHandles;
-        public IntPtr Data { get; }
+        public LPARAM Data { get; }
 
         public EmfRecord(
-            Gdi32.HDC hdc,
-            Gdi32.HGDIOBJ* lpht,
-            Gdi32.ENHMETARECORD* lpmr,
+            HDC hdc,
+            HANDLETABLE* lpht,
+            ENHMETARECORD* lpmr,
             int nHandles,
-            IntPtr data)
+            LPARAM data)
         {
             HDC = hdc;
             _lpht = lpht;
@@ -30,9 +30,9 @@ namespace System.Windows.Forms.Metafiles
             Data = data;
         }
 
-        public Gdi32.EMR Type => _lpmr->iType;
-        public ReadOnlySpan<uint> Params => _lpmr->dParm;
-        public ReadOnlySpan<Gdi32.HGDIOBJ> Handles => new ReadOnlySpan<Gdi32.HGDIOBJ>(_lpht, _nHandles);
+        public Gdi32.EMR Type => (Gdi32.EMR)_lpmr->iType;
+        public ReadOnlySpan<uint> Params => new(_lpmr->dParm.ToArray());
+        public ReadOnlySpan<HGDIOBJ> Handles => new(_lpht, _nHandles);
 
         public ENHMETAHEADER* HeaderRecord => Type == Gdi32.EMR.HEADER ? (ENHMETAHEADER*)_lpmr : null;
         public EMREXTSELECTCLIPRGN* ExtSelectClipRgnRecord
@@ -51,10 +51,10 @@ namespace System.Windows.Forms.Metafiles
             => Type == Gdi32.EMR.LINETO ? (EMRPOINTRECORD*)_lpmr : null;
         public EMRCREATEBRUSHINDIRECT* CreateBrushIndirectRecord
             => Type == Gdi32.EMR.CREATEBRUSHINDIRECT ? (EMRCREATEBRUSHINDIRECT*)_lpmr : null;
-        public EMRENUMRECORD<Gdi32.R2>* SetROP2Record
-            => Type == Gdi32.EMR.SETROP2 ? (EMRENUMRECORD<Gdi32.R2>*)_lpmr : null;
-        public EMRENUMRECORD<Gdi32.BKMODE>* SetBkModeRecord
-            => Type == Gdi32.EMR.SETBKMODE ? (EMRENUMRECORD<Gdi32.BKMODE>*)_lpmr : null;
+        public EMRENUMRECORD<R2_MODE>* SetROP2Record
+            => Type == Gdi32.EMR.SETROP2 ? (EMRENUMRECORD<R2_MODE>*)_lpmr : null;
+        public EMRENUMRECORD<BACKGROUND_MODE>* SetBkModeRecord
+            => Type == Gdi32.EMR.SETBKMODE ? (EMRENUMRECORD<BACKGROUND_MODE>*)_lpmr : null;
         public EMRCREATEPEN* CreatePenRecord
             => Type == Gdi32.EMR.CREATEPEN ? (EMRCREATEPEN*)_lpmr : null;
         public EMREXTCREATEPEN* ExtCreatePenRecord
@@ -91,14 +91,14 @@ namespace System.Windows.Forms.Metafiles
             => Type == Gdi32.EMR.SETTEXTCOLOR ? (EMRSETCOLOR*)_lpmr : null;
         public EMRCREATEDIBPATTERNBRUSHPT* CreateDibPatternBrushPtRecord
             => Type == Gdi32.EMR.CREATEDIBPATTERNBRUSHPT ? (EMRCREATEDIBPATTERNBRUSHPT*)_lpmr : null;
-        public EMRENUMRECORD<Gdi32.TA>* SetTextAlignRecord
-            => Type == Gdi32.EMR.SETTEXTALIGN ? (EMRENUMRECORD<Gdi32.TA>*)_lpmr : null;
+        public EMRENUMRECORD<TEXT_ALIGN_OPTIONS>* SetTextAlignRecord
+            => Type == Gdi32.EMR.SETTEXTALIGN ? (EMRENUMRECORD<TEXT_ALIGN_OPTIONS>*)_lpmr : null;
         public EMREXTCREATEFONTINDIRECTW* ExtCreateFontIndirectWRecord
             => Type == Gdi32.EMR.EXTCREATEFONTINDIRECTW ? (EMREXTCREATEFONTINDIRECTW*)_lpmr : null;
         public EMREXTTEXTOUTW* ExtTextOutWRecord
             => Type == Gdi32.EMR.EXTTEXTOUTW ? (EMREXTTEXTOUTW*)_lpmr : null;
-        public EMRENUMRECORD<Gdi32.MM>* SetMapModeRecord
-            => Type == Gdi32.EMR.SETMAPMODE ? (EMRENUMRECORD<Gdi32.MM>*)_lpmr : null;
+        public EMRENUMRECORD<HDC_MAP_MODE>* SetMapModeRecord
+            => Type == Gdi32.EMR.SETMAPMODE ? (EMRENUMRECORD<HDC_MAP_MODE>*)_lpmr : null;
         public EMRRECTRECORD* FillPathRecord
             => Type == Gdi32.EMR.FILLPATH ? (EMRRECTRECORD*)_lpmr : null;
         public EMRRECTRECORD* StrokeAndFillPathRecord

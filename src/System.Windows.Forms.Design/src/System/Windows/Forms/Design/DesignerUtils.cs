@@ -23,14 +23,19 @@ namespace System.Windows.Forms.Design
     {
         private static Size s_minDragSize = Size.Empty;
         //brush used to draw a 'hover' state over a designer action glyph
-        private static SolidBrush s_hoverBrush = new SolidBrush(Color.FromArgb(50, SystemColors.Highlight));
+        private static SolidBrush s_hoverBrush = new(Color.FromArgb(alpha: 50, SystemColors.Highlight));
         //brush used to draw the resizeable selection borders around controls/components
-        private static HatchBrush s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
+        private static HatchBrush s_selectionBorderBrush =
+            new(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
         //Pens and Brushes used via GDI to render our grabhandles
-        private static Gdi32.HBRUSH s_grabHandleFillBrushPrimary = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
-        private static Gdi32.HBRUSH s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
-        private static Gdi32.HPEN s_grabHandlePenPrimary = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
-        private static Gdi32.HPEN s_grabHandlePen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
+        private static HBRUSH s_grabHandleFillBrushPrimary =
+            PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+        private static HBRUSH s_grabHandleFillBrush =
+            PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        private static HPEN s_grabHandlePenPrimary =
+            PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        private static HPEN s_grabHandlePen =
+            PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
         //The box-like image used as the user is dragging comps from the toolbox
         private static Bitmap s_boxImage;
@@ -41,7 +46,8 @@ namespace System.Windows.Forms.Design
         // Although the selection border is only 1, we actually want a 3 pixel hittestarea
         public static int SELECTIONBORDERHITAREA = ScaleLogicalToDeviceUnitsX(3);
 
-        // We want to make sure that the 1 pixel selectionborder is centered on the handles. The fact that the border is actually 3 pixels wide works like magic. If you draw a picture, then you will see why.
+        // We want to make sure that the 1 pixel selectionborder is centered on the handles.
+        // The fact that the border is actually 3 pixels wide works like magic. If you draw a picture, then you will see why.
         //grabhandle size (diameter)
         public static int HANDLESIZE = ScaleLogicalToDeviceUnitsX(7);
         //how much should the grabhandle overlap the control
@@ -169,17 +175,17 @@ namespace System.Windows.Forms.Design
             s_selectionBorderBrush.Dispose();
             s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
 
-            Gdi32.DeleteObject(s_grabHandleFillBrushPrimary);
-            s_grabHandleFillBrushPrimary = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
+            PInvoke.DeleteObject(s_grabHandleFillBrushPrimary);
+            s_grabHandleFillBrushPrimary = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
-            Gdi32.DeleteObject(s_grabHandleFillBrush);
-            s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
+            PInvoke.DeleteObject(s_grabHandleFillBrush);
+            s_grabHandleFillBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
-            Gdi32.DeleteObject(s_grabHandlePenPrimary);
-            s_grabHandlePenPrimary = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
+            PInvoke.DeleteObject(s_grabHandlePenPrimary);
+            s_grabHandlePenPrimary = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
-            Gdi32.DeleteObject(s_grabHandlePen);
-            s_grabHandlePen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
+            PInvoke.DeleteObject(s_grabHandlePen);
+            s_grabHandlePen = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
         }
 
         /// <summary>
@@ -255,11 +261,11 @@ namespace System.Windows.Forms.Design
             using var hDC = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
 
             // Set our pen and brush based on primary selection
-            using var brushSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-            using var penSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
+            using PInvoke.SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+            using PInvoke.SelectObjectScope penSelection = new(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
 
             // Draw our rounded rect grabhandle
-            Gdi32.RoundRect(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
+            PInvoke.RoundRect(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
         }
 
         /// <summary>
@@ -270,11 +276,11 @@ namespace System.Windows.Forms.Design
             using var hDC = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
 
             // Set our pen and brush based on primary selection
-            using var brushSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-            using var penSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandlePenPrimary);
+            using PInvoke.SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+            using PInvoke.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
             // Draw our rect no-resize handle
-            Gdi32.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
+            PInvoke.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
         }
 
         /// <summary>
@@ -282,17 +288,23 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static void DrawLockedHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
-            using var hDC = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
+            using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
-            using var penSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandlePenPrimary);
+            using PInvoke.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
             // Upper rect - upper rect is always filled with the primary brush
-            using var brushSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandleFillBrushPrimary);
-            Gdi32.RoundRect(hDC, bounds.Left + LOCKHANDLEUPPER_OFFSET, bounds.Top, bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER, bounds.Top + LOCKHANDLESIZE_UPPER, 2, 2);
+            using PInvoke.SelectObjectScope brushSelection = new(hDC, s_grabHandleFillBrushPrimary);
+            PInvoke.RoundRect(
+                hDC,
+                bounds.Left + LOCKHANDLEUPPER_OFFSET,
+                bounds.Top, bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER,
+                bounds.Top + LOCKHANDLESIZE_UPPER,
+                width: 2,
+                height: 2);
 
             // Lower rect - its fillbrush depends on the primary selection
-            Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-            Gdi32.Rectangle(hDC, bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
+            PInvoke.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+            PInvoke.Rectangle(hDC, bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
         }
 
         /// <summary>
@@ -304,7 +316,11 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Used to generate an image that represents the given control.  First, this method will call the 'GenerateSnapShotWithWM_PRINT' method on the control.  If we believe that this method did not return us a valid image (caused by some comctl/ax controls not properly responding to a wm_print) then we will attempt to do a bitblt of the control instead.
+        ///  Used to generate an image that represents the given control.
+        ///  First, this method will call the 'GenerateSnapShotWithWM_PRINT' method on the control.
+        ///  If we believe that this method did not return us a valid image
+        ///  (caused by some comctl/ax controls not properly responding to a wm_print)
+        ///  then we will attempt to do a bitblt of the control instead.
         /// </summary>
         public static void GenerateSnapShot(Control control, ref Image image, int borderSize, double opacity, Color backColor)
         {
@@ -402,7 +418,7 @@ namespace System.Windows.Forms.Design
         public static void GenerateSnapShotWithBitBlt(Control control, ref Image image)
         {
             // Get the DC's and create our image
-            using var controlDC = new User32.GetDcScope(control.Handle);
+            using User32.GetDcScope controlDC = new(control.Handle);
             image = new Bitmap(
                 Math.Max(control.Width, MINCONTROLBITMAPSIZE),
                 Math.Max(control.Height, MINCONTROLBITMAPSIZE),
@@ -415,19 +431,19 @@ namespace System.Windows.Forms.Design
                 gDest.Clear(SystemColors.Control);
             }
 
-            using var destDC = new DeviceContextHdcScope(gDest, applyGraphicsState: false);
+            using DeviceContextHdcScope destDC = new(gDest, applyGraphicsState: false);
 
             // Perform our bitblit operation to push the image into the dest bitmap
-            Gdi32.BitBlt(
+            PInvoke.BitBlt(
                 destDC,
-                0,
-                0,
+                x: 0,
+                y: 0,
                 image.Width,
                 image.Height,
                 controlDC,
-                0,
-                0,
-                Gdi32.ROP.SRCCOPY);
+                x1: 0,
+                y1: 0,
+                ROP_CODE.SRCCOPY);
         }
 
         /// <summary>
@@ -435,8 +451,10 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static bool GenerateSnapShotWithWM_PRINT(Control control, ref Image image)
         {
-            IntPtr hWnd = control.Handle;
-            image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), PixelFormat.Format32bppPArgb);
+            image = new Bitmap(
+                Math.Max(control.Width, MINCONTROLBITMAPSIZE),
+                Math.Max(control.Height, MINCONTROLBITMAPSIZE),
+                PixelFormat.Format32bppPArgb);
 
             // Have to do this BEFORE we set the testcolor.
             if (control.BackColor == Color.Transparent)
@@ -454,11 +472,11 @@ namespace System.Windows.Forms.Design
             using (Graphics g = Graphics.FromImage(image))
             {
                 IntPtr hDc = g.GetHdc();
-                User32.SendMessageW(
-                    hWnd,
+                PInvoke.SendMessage(
+                    control,
                     User32.WM.PRINT,
-                    hDc,
-                    (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                    (WPARAM)hDc,
+                    (LPARAM)(uint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
                 g.ReleaseHdc(hDc);
             }
 
@@ -551,18 +569,18 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Identifies where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
         /// </summary>
-        public static int GetTextBaseline(Control ctrl, ContentAlignment alignment)
+        public unsafe static int GetTextBaseline(Control ctrl, ContentAlignment alignment)
         {
             //determine the actual client area we are working in (w/padding)
             Rectangle face = ctrl.ClientRectangle;
 
             using Graphics g = ctrl.CreateGraphics();
-            using var dc = new DeviceContextHdcScope(g, applyGraphicsState: false);
-            using var hFont = new Gdi32.ObjectScope(ctrl.Font.ToHFONT());
-            using var hFontOld = new Gdi32.SelectObjectScope(dc, hFont);
+            using DeviceContextHdcScope dc = new(g, applyGraphicsState: false);
+            using PInvoke.ObjectScope hFont = new(ctrl.Font.ToHFONT());
+            using PInvoke.SelectObjectScope hFontOld = new(dc, hFont);
 
-            var metrics = new Gdi32.TEXTMETRICW();
-            Gdi32.GetTextMetricsW(dc, ref metrics);
+            TEXTMETRICW metrics = default;
+            PInvoke.GetTextMetrics(dc, &metrics);
 
             //get the font metrics via gdi
             // Add the font ascent to the baseline
@@ -640,7 +658,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Determine a unique site name for a component, starting from a base name. Return value should be passed into the Container.Add() method. If null is returned, this just means "let container generate a default name based on component type".
+        ///  Determine a unique site name for a component, starting from a base name.
+        ///  Return value should be passed into the Container.Add() method.
+        ///  If null is returned, this just means "let container generate a default name based on component type".
         /// </summary>
         public static string GetUniqueSiteName(IDesignerHost host, string name)
         {
@@ -745,7 +765,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Checks the given container, substituting any nested container with its owning container. Ensures that a SplitterPanel in a SplitContainer returns the same container as other form components, since SplitContainer sites its two SplitterPanels inside a nested container.
+        ///  Checks the given container, substituting any nested container with its owning container.
+        ///  Ensures that a SplitterPanel in a SplitContainer returns the same container as other form components,
+        ///  since SplitContainer sites its two SplitterPanels inside a nested container.
         /// </summary>
         public static IContainer CheckForNestedContainer(IContainer container)
         {
@@ -793,7 +815,9 @@ namespace System.Windows.Forms.Design
                     store.Close();
                     copyObjects = css.Deserialize(store);
 
-                    // Now, copyObjects contains a flattened list of all the controls contained in the original drag objects, that's not what we want to return. We only want to return the root drag objects, so that the caller gets an identical copy - identical in terms of objects.Count
+                    // Now, copyObjects contains a flattened list of all the controls contained in the original drag objects,
+                    // that's not what we want to return. We only want to return the root drag objects,
+                    // so that the caller gets an identical copy - identical in terms of objects.Count
                     ArrayList newObjects = new ArrayList(objects.Count);
                     foreach (IComponent comp in copyObjects)
                     {
@@ -865,8 +889,8 @@ namespace System.Windows.Forms.Design
         private static int ScaleLogicalToDeviceUnitsX(int unit)
             => DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(unit) : unit;
 
-        private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
-            => (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
+        private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(HWND handle)
+            => (ComCtl32.TVS_EX)(uint)PInvoke.SendMessage(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
 
         /// <summary>
         ///  Modify a WinForms TreeView control to use the new Explorer style theme
@@ -878,11 +902,11 @@ namespace System.Windows.Forms.Design
 
             treeView.HotTracking = true;
             treeView.ShowLines = false;
-            IntPtr hwnd = treeView.Handle;
+            HWND hwnd = (HWND)treeView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
+            PInvoke.SendMessage(treeView, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
         }
 
         /// <summary>
@@ -893,13 +917,13 @@ namespace System.Windows.Forms.Design
         {
             ArgumentNullException.ThrowIfNull(listView);
 
-            IntPtr hwnd = listView.Handle;
+            HWND hwnd = (HWND)listView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
-            User32.SendMessageW(
-                hwnd,
+            PInvoke.SendMessage(
+                listView,
                 (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE,
-                (nint)ComCtl32.LVS_EX.DOUBLEBUFFER,
-                (nint)ComCtl32.LVS_EX.DOUBLEBUFFER);
+                (WPARAM)(uint)ComCtl32.LVS_EX.DOUBLEBUFFER,
+                (LPARAM)(uint)ComCtl32.LVS_EX.DOUBLEBUFFER);
         }
     }
 }

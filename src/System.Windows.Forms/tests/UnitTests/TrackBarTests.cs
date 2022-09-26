@@ -781,7 +781,7 @@ namespace System.Windows.Forms.Tests
                 Maximum = 11
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(11, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
+            Assert.Equal(11, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
         }
 
         [WinFormsFact]
@@ -792,7 +792,7 @@ namespace System.Windows.Forms.Tests
                 Minimum = 11
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(11, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
+            Assert.Equal(11, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
         }
 
         [WinFormsTheory]
@@ -811,7 +811,7 @@ namespace System.Windows.Forms.Tests
                 RightToLeftLayout = rightToLeftLayout
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
         }
 
         [WinFormsFact]
@@ -823,7 +823,7 @@ namespace System.Windows.Forms.Tests
                 Value = 5
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(5, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
         }
 
         [WinFormsFact]
@@ -834,7 +834,7 @@ namespace System.Windows.Forms.Tests
                 LargeChange = 11
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(11, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPAGESIZE));
+            Assert.Equal(11, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPAGESIZE));
         }
 
         [WinFormsFact]
@@ -845,7 +845,7 @@ namespace System.Windows.Forms.Tests
                 SmallChange = 11
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(11, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETLINESIZE));
+            Assert.Equal(11, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETLINESIZE));
         }
 
         public static IEnumerable<object[]> Handle_GetSize_TestData()
@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms.Tests
 
             control.LargeChange = value;
             Assert.Equal(value, control.LargeChange);
-            Assert.Equal(value, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPAGESIZE));
+            Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPAGESIZE));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1023,7 +1023,7 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.LargeChange = value;
             Assert.Equal(value, control.LargeChange);
-            Assert.Equal(value, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPAGESIZE));
+            Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPAGESIZE));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1088,9 +1088,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Value);
             Assert.Equal(5, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            Assert.Equal(0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
-            Assert.Equal(value, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
-            Assert.Equal(0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
+            Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1103,9 +1103,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Value);
             Assert.Equal(5, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            Assert.Equal(0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
-            Assert.Equal(value, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
-            Assert.Equal(0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
+            Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1151,9 +1151,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(5, control.Value);
             Assert.Equal(5, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            Assert.Equal(5, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
-            Assert.Equal(5, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
-            Assert.Equal(5, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
+            Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
+            Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1227,9 +1227,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(5, control.Value);
             Assert.Equal(5, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            Assert.Equal(value, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
-            Assert.Equal(10, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
-            Assert.Equal(5, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
+            Assert.Equal(10, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
+            Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1241,9 +1241,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Minimum);
             Assert.Equal(5, control.Value);
             Assert.Equal(5, control.LargeChange);
-            Assert.Equal(value, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
-            Assert.Equal(10, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
-            Assert.Equal(5, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
+            Assert.Equal(10, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
+            Assert.Equal(5, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1289,9 +1289,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(12, control.Value);
             Assert.Equal(5, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            Assert.Equal(12, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
-            Assert.Equal(12, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
-            Assert.Equal(12, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(12, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
+            Assert.Equal(12, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
+            Assert.Equal(12, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms.Tests
 
             control.SmallChange = value;
             Assert.Equal(value, control.SmallChange);
-            Assert.Equal(value, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETLINESIZE));
+            Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETLINESIZE));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1757,7 +1757,7 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.SmallChange = value;
             Assert.Equal(value, control.SmallChange);
-            Assert.Equal(value, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETLINESIZE));
+            Assert.Equal(value, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETLINESIZE));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -2133,7 +2133,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Value);
             Assert.Equal(5, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            Assert.Equal(expectedPos, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(expectedPos, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -2146,7 +2146,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Value);
             Assert.Equal(5, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            Assert.Equal(expectedPos, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(expectedPos, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -3100,9 +3100,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedMinimum, control.Minimum);
             Assert.Equal(expectedMaximum, control.Maximum);
             Assert.Equal(expectedValue, control.Value);
-            Assert.Equal(expectedMinimum, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
-            Assert.Equal(expectedMaximum, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
-            Assert.Equal(expectedValue, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+            Assert.Equal(expectedMinimum, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMIN));
+            Assert.Equal(expectedMaximum, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETRANGEMAX));
+            Assert.Equal(expectedValue, (int)PInvoke.SendMessage(control, (User32.WM)ComCtl32.TBM.GETPOS));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);

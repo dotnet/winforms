@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         private ToolStripItemCollection _displayedItems;
         private ToolStripItemCollection _overflowItems;
         private ToolStripDropTargetManager _dropTargetManager;
-        private IntPtr _hwndThatLostFocus = IntPtr.Zero;
+        private HWND _hwndThatLostFocus;
         private ToolStripItem _lastMouseActiveItem;
         private ToolStripItem _lastMouseDownedItem;
         private LayoutEngine _layoutEngine;
@@ -745,7 +745,7 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = new CreateParams
                     {
-                        ExStyle = (int)User32.WS_EX.TOOLWINDOW
+                        ExStyle = (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW
                     };
                     _dropDownOwnerWindow.CreateHandle(cp);
                 }
@@ -1901,7 +1901,7 @@ namespace System.Windows.Forms
                 {
                     if (_hwndThatLostFocus == IntPtr.Zero)
                     {
-                        SnapFocus(User32.GetFocus());
+                        SnapFocus(PInvoke.GetFocus());
                     }
 
                     controlHost.Control.Select();
@@ -2894,21 +2894,21 @@ namespace System.Windows.Forms
 
         // This function will print to the PrinterDC. ToolStrip have there own buffered painting and doesnt play very well
         // with the DC translations done by base Control class. Hence we do our own Painting and the BitBLT the DC into the printerDc.
-        private protected override void PrintToMetaFileRecursive(Gdi32.HDC hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(HDC hDC, IntPtr lParam, Rectangle bounds)
         {
             using Bitmap image = new Bitmap(bounds.Width, bounds.Height);
             using Graphics g = Graphics.FromImage(image);
             using var imageHdc = new DeviceContextHdcScope(g, applyGraphicsState: false);
 
             // Send the actual wm_print message
-            User32.SendMessageW(
+            PInvoke.SendMessage(
                 this,
                 User32.WM.PRINT,
-                imageHdc.HDC,
-                (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                (WPARAM)imageHdc,
+                (LPARAM)(uint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
             // Now BLT the result to the destination bitmap.
-            Gdi32.BitBlt(
+            PInvoke.BitBlt(
                 hDC,
                 bounds.X,
                 bounds.Y,
@@ -2917,7 +2917,7 @@ namespace System.Windows.Forms
                 imageHdc,
                 0,
                 0,
-                Gdi32.ROP.SRCCOPY);
+                ROP_CODE.SRCCOPY);
         }
 
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
@@ -3810,7 +3810,7 @@ namespace System.Windows.Forms
                 using (var toolStripHDC = new DeviceContextHdcScope(toolstripGraphics, ApplyGraphicsProperties.Clipping))
                 {
                     // Get the cached item HDC.
-                    Gdi32.HDC itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
+                    HDC itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
 
                     Graphics itemGraphics = itemHDC.CreateGraphics();
                     try
@@ -3868,7 +3868,7 @@ namespace System.Windows.Forms
 
                                 // PERF - consider - we only actually need to copy the clipping rect.
                                 // copy the background from the toolstrip onto the offscreen bitmap
-                                Gdi32.BitBlt(
+                                PInvoke.BitBlt(
                                     ItemHdcInfo,
                                     0,
                                     0,
@@ -3877,7 +3877,7 @@ namespace System.Windows.Forms
                                     toolStripHDC,
                                     item.Bounds.X,
                                     item.Bounds.Y,
-                                    Gdi32.ROP.SRCCOPY);
+                                    ROP_CODE.SRCCOPY);
 
                                 // Paint the item into the offscreen bitmap
                                 using (PaintEventArgs itemPaintEventArgs = new PaintEventArgs(itemGraphics, clippingRect))
@@ -3886,7 +3886,7 @@ namespace System.Windows.Forms
                                 }
 
                                 // copy the item back onto the toolstrip
-                                Gdi32.BitBlt(
+                                PInvoke.BitBlt(
                                     toolStripHDC,
                                     item.Bounds.X,
                                     item.Bounds.Y,
@@ -3895,7 +3895,7 @@ namespace System.Windows.Forms
                                     ItemHdcInfo,
                                     0,
                                     0,
-                                    Gdi32.ROP.SRCCOPY);
+                                    ROP_CODE.SRCCOPY);
 
                                 GC.KeepAlive(ItemHdcInfo);
                             }
@@ -4350,25 +4350,28 @@ namespace System.Windows.Forms
         {
             bool focusSuccess = false;
 
-            if ((_hwndThatLostFocus != IntPtr.Zero) && (_hwndThatLostFocus != Handle))
+            if (!_hwndThatLostFocus.IsNull && (_hwndThatLostFocus != Handle))
             {
-                Control c = Control.FromHandle(_hwndThatLostFocus);
+                Control control = FromHandle(_hwndThatLostFocus);
 
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip RestoreFocus]: Will Restore Focus to: " + WindowsFormsUtils.GetControlInformation(_hwndThatLostFocus));
-                _hwndThatLostFocus = IntPtr.Zero;
+                Debug.WriteLineIf(
+                    s_snapFocusDebug.TraceVerbose,
+                    $"[ToolStrip RestoreFocus]: Will Restore Focus to: {WindowsFormsUtils.GetControlInformation(_hwndThatLostFocus)}");
 
-                if ((c is not null) && c.Visible)
+                _hwndThatLostFocus = default;
+
+                if ((control is not null) && control.Visible)
                 {
-                    focusSuccess = c.Focus();
+                    focusSuccess = control.Focus();
                 }
             }
 
-            _hwndThatLostFocus = IntPtr.Zero;
+            _hwndThatLostFocus = default;
 
             if (!focusSuccess)
             {
-                // clear out the focus, we have focus, we're not supposed to anymore.
-                User32.SetFocus(IntPtr.Zero);
+                // Clear out the focus, we have focus, we're not supposed to anymore.
+                PInvoke.SetFocus(default);
             }
         }
 
@@ -4764,7 +4767,7 @@ namespace System.Windows.Forms
         ///  - make sure it's not a child control of this control.
         ///  - make sure the control is on this window
         /// </summary>
-        private void SnapFocus(IntPtr otherHwnd)
+        private void SnapFocus(HWND otherHwnd)
         {
 #if DEBUG
             Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"{!Environment.StackTrace.Contains("FocusInternal")}", "who is setting focus to us?");
@@ -4792,17 +4795,20 @@ namespace System.Windows.Forms
                     SnapMouseLocation();
 
                     // make sure the otherHandle is not a child of thisHandle
-                    if ((Handle != otherHwnd) && !User32.IsChild(new HandleRef(this, Handle), otherHwnd).IsTrue())
+                    if ((Handle != otherHwnd) && !PInvoke.IsChild(this, otherHwnd))
                     {
                         // make sure the root window of the otherHwnd is the same as
                         // the root window of thisHwnd.
-                        IntPtr thisHwndRoot = User32.GetAncestor(this, User32.GA.ROOT);
-                        IntPtr otherHwndRoot = User32.GetAncestor(otherHwnd, User32.GA.ROOT);
+                        HWND thisHwndRoot = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+                        HWND otherHwndRoot = PInvoke.GetAncestor(otherHwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
 
-                        if (thisHwndRoot == otherHwndRoot && (thisHwndRoot != IntPtr.Zero))
+                        if (thisHwndRoot == otherHwndRoot && !thisHwndRoot.IsNull)
                         {
-                            Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip SnapFocus]: Caching for return focus:" + WindowsFormsUtils.GetControlInformation(otherHwnd));
-                            // we know we're in the same window heirarchy.
+                            Debug.WriteLineIf(
+                                s_snapFocusDebug.TraceVerbose,
+                                $"[ToolStrip SnapFocus]: Caching for return focus:{WindowsFormsUtils.GetControlInformation(otherHwnd)}");
+
+                            // We know we're in the same window heirarchy.
                             _hwndThatLostFocus = otherHwnd;
                         }
                     }
@@ -4958,7 +4964,7 @@ namespace System.Windows.Forms
         {
             if (m.MsgInternal == User32.WM.SETFOCUS)
             {
-                SnapFocus(m.WParamInternal);
+                SnapFocus((HWND)(nint)m.WParamInternal);
             }
 
             if (m.MsgInternal == User32.WM.MOUSEACTIVATE)
@@ -4975,22 +4981,21 @@ namespace System.Windows.Forms
                 if (hwndClicked == Handle)
                 {
                     _lastMouseDownedItem = null;
-                    m.ResultInternal = (nint)User32.MA.NOACTIVATE;
+                    m.ResultInternal = (LRESULT)(nint)User32.MA.NOACTIVATE;
 
                     if (!IsDropDown && !IsInDesignMode)
                     {
-                        // If our root HWND is not the active hwnd,
-                        // eat the mouse message and bring the form to the front.
-                        IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
-                        if (rootHwnd != IntPtr.Zero)
+                        // If our root HWND is not the active hwnd,eat the mouse message and bring the form to the front.
+                        HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+                        if (!rootHwnd.IsNull)
                         {
                             // snap the active window and compare to our root window.
-                            IntPtr hwndActive = User32.GetActiveWindow();
+                            HWND hwndActive = PInvoke.GetActiveWindow();
                             if (hwndActive != rootHwnd)
                             {
                                 // Activate the window, and discard the mouse message.
                                 // this appears to be the same behavior as office.
-                                m.ResultInternal = (nint)User32.MA.ACTIVATEANDEAT;
+                                m.ResultInternal = (LRESULT)(nint)User32.MA.ACTIVATEANDEAT;
                             }
                         }
                     }
@@ -5001,7 +5006,7 @@ namespace System.Windows.Forms
                 {
                     // we're setting focus to a child control - remember who gave it to us
                     // so we can restore it on ESC.
-                    SnapFocus(User32.GetFocus());
+                    SnapFocus(PInvoke.GetFocus());
                     if (!IsDropDown && !TabStop)
                     {
                         Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "Installing restoreFocusFilter");

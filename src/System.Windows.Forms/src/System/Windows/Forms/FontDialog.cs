@@ -351,8 +351,8 @@ namespace System.Windows.Forms
                 case User32.WM.COMMAND:
                     if (PARAM.ToInt(wparam) == 0x402)
                     {
-                        var logFont = new User32.LOGFONTW();
-                        User32.SendMessageW(hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, 0, ref logFont);
+                        LOGFONTW logFont = default;
+                        PInvoke.SendMessage((HWND)hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
                         UpdateFont(ref logFont);
                         int index = PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL));
                         if (index != User32.CB_ERR)
@@ -428,10 +428,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override bool RunDialog(IntPtr hWndOwner)
         {
-            var hookProcPtr = new User32.WNDPROCINT(HookProc);
+            WNDPROC hookProc = HookProcInternal;
+            void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
             using var dc = User32.GetDcScope.ScreenDC;
             using Graphics graphics = Graphics.FromHdcInternal(dc);
-            User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(Font, graphics);
+            LOGFONTW logFont = LOGFONTW.FromFont(Font, graphics);
 
             var cf = new Comdlg32.CHOOSEFONTW
             {
@@ -441,7 +442,7 @@ namespace System.Windows.Forms
                 lpLogFont = &logFont,
                 Flags = (Comdlg32.CF)Options | Comdlg32.CF.INITTOLOGFONTSTRUCT | Comdlg32.CF.ENABLEHOOK,
                 lpfnHook = hookProcPtr,
-                hInstance = Kernel32.GetModuleHandleW(null),
+                hInstance = PInvoke.GetModuleHandle((PCWSTR)null),
                 nSizeMin = minSize,
                 nSizeMax = maxSize == 0 ? int.MaxValue : maxSize,
                 rgbColors = ShowColor || ShowEffects
@@ -459,7 +460,7 @@ namespace System.Windows.Forms
             // (limitation of windows control)
 
             Debug.Assert(cf.nSizeMin <= cf.nSizeMax, "min and max font sizes are the wrong way around");
-            if (Comdlg32.ChooseFontW(ref cf).IsFalse())
+            if (!Comdlg32.ChooseFontW(ref cf))
             {
                 return false;
             }
@@ -469,6 +470,8 @@ namespace System.Windows.Forms
                 UpdateFont(ref logFont);
                 UpdateColor(cf.rgbColors);
             }
+
+            GC.KeepAlive(hookProc);
 
             return true;
         }
@@ -516,7 +519,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateFont(ref User32.LOGFONTW lf)
+        private void UpdateFont(ref LOGFONTW lf)
         {
             using var dc = User32.GetDcScope.ScreenDC;
             using Font fontInWorldUnits = Font.FromLogFont(lf, dc);

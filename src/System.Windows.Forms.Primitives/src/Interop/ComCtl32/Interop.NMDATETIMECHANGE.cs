@@ -8,9 +8,9 @@ internal static partial class Interop
     {
         public struct NMDATETIMECHANGE
         {
-            public User32.NMHDR nmhdr;
+            public NMHDR nmhdr;
             public GDT dwFlags;
-            public Kernel32.SYSTEMTIME st;
+            public SYSTEMTIME st;
         }
     }
 }

@@ -18,7 +18,7 @@ internal partial class Interop
                 return ((Shell32.IFileDialog)this).Show(parent);
             }
 
-            HRESULT Shell32.IFileSaveDialog.SetFileTypes(uint cFileTypes, Shell32.COMDLG_FILTERSPEC[] rgFilterSpec)
+            HRESULT Shell32.IFileSaveDialog.SetFileTypes(uint cFileTypes, COMDLG_FILTERSPEC[] rgFilterSpec)
             {
                 return ((Shell32.IFileDialog)this).SetFileTypes(cFileTypes, rgFilterSpec);
             }
@@ -103,7 +103,7 @@ internal partial class Interop
                 ((Shell32.IFileDialog)this).GetResult(out ppsi);
             }
 
-            HRESULT Shell32.IFileSaveDialog.AddPlace(Shell32.IShellItem psi, Shell32.FDAP fdap)
+            HRESULT Shell32.IFileSaveDialog.AddPlace(Shell32.IShellItem psi, FDAP fdap)
             {
                 return ((Shell32.IFileDialog)this).AddPlace(psi, fdap);
             }

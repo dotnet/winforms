@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -812,16 +811,16 @@ namespace System.Windows.Forms
                                         cellStyle.BackColor,
                                         DataGridView.Enabled).Calculate();
 
-                                    using var hdc = new DeviceContextHdcScope(g);
-                                    using var hbrush = new Gdi32.CreateBrushScope(
+                                    using DeviceContextHdcScope hdc = new(g);
+                                    using PInvoke.CreateBrushScope hbrush = new (
                                         colors.Options.HighContrast ? colors.ButtonShadow : colors.LowHighlight);
                                     hdc.FillRectangle(valBounds, hbrush);
                                 }
                                 else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
                                     DataGridView.MouseEnteredCellAddress.X == ColumnIndex && mouseInContentBounds)
                                 {
-                                    using var hdc = new DeviceContextHdcScope(g);
-                                    using var hbrush = new Gdi32.CreateBrushScope(SystemColors.ControlDark);
+                                    using DeviceContextHdcScope hdc = new(g);
+                                    using PInvoke.CreateBrushScope hbrush = new(SystemColors.ControlDark);
                                     hdc.FillRectangle(valBounds, hbrush);
                                 }
                             }

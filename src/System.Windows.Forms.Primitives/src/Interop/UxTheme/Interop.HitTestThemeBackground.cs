@@ -12,7 +12,7 @@ internal static partial class Interop
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
         public unsafe static extern HRESULT HitTestThemeBackground(
             IntPtr hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             uint dwOptions,
@@ -23,7 +23,7 @@ internal static partial class Interop
 
         public unsafe static HRESULT HitTestThemeBackground(
             IHandle hTheme,
-            Gdi32.HDC hdc,
+            HDC hdc,
             int iPartId,
             int iStateId,
             uint dwOptions,

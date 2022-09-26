@@ -14,43 +14,47 @@ namespace System.Windows.Forms.Metafiles
 {
     internal class EmfScope : DisposalTracking.Tracker, IDisposable
     {
-        public Gdi32.HDC HDC { get; }
-        private Gdi32.HENHMETAFILE _hemf;
+        public HDC HDC { get; }
+        private HENHMETAFILE _hemf;
 
         public unsafe EmfScope()
             : this(CreateEnhMetaFile())
         {
         }
 
-        public EmfScope(Gdi32.HDC hdc)
+        public EmfScope(HDC hdc)
         {
             HDC = hdc;
             _hemf = default;
         }
 
-        public EmfScope(Gdi32.HENHMETAFILE hemf)
+        public EmfScope(HENHMETAFILE hemf)
         {
             _hemf = hemf;
         }
 
-        private unsafe static Gdi32.HDC CreateEnhMetaFile(
-            Gdi32.HDC hdc = default,
+        private unsafe static HDC CreateEnhMetaFile(
+            HDC hdc = default,
             string? lpFilename = null,
             RECT* lprc = null,
             string? lpDesc = null)
         {
-            Gdi32.HDC metafileHdc = Gdi32.CreateEnhMetaFileW(hdc, lpFilename, lprc, lpDesc);
-            if (metafileHdc.IsNull)
+            fixed (char* pFileName = lpFilename)
+            fixed (char* pDesc = lpDesc)
             {
-                throw new Win32Exception("Could not create metafile");
-            }
+                HDC metafileHdc = PInvoke.CreateEnhMetaFile(hdc, pFileName, lprc, pDesc);
+                if (metafileHdc.IsNull)
+                {
+                    throw new Win32Exception("Could not create metafile");
+                }
 
-            return metafileHdc;
+                return metafileHdc;
+            }
         }
 
         public unsafe static EmfScope Create() => new EmfScope();
 
-        public Gdi32.HENHMETAFILE HENHMETAFILE
+        public HENHMETAFILE HENHMETAFILE
         {
             get
             {
@@ -61,7 +65,7 @@ namespace System.Windows.Forms.Metafiles
                         return default;
                     }
 
-                    _hemf = Gdi32.CloseEnhMetaFile(HDC);
+                    _hemf = PInvoke.CloseEnhMetaFile(HDC);
                 }
 
                 return _hemf;
@@ -73,8 +77,13 @@ namespace System.Windows.Forms.Metafiles
             GCHandle enumeratorHandle = GCHandle.Alloc(enumerator);
             try
             {
-                IntPtr callback = Marshal.GetFunctionPointerForDelegate<Gdi32.Enhmfenumproc>(CallBack);
-                Gdi32.EnumEnhMetaFile(default, HENHMETAFILE, CallBack, (IntPtr)enumeratorHandle, null);
+                var callback = Marshal.GetFunctionPointerForDelegate(CallBack);
+                PInvoke.EnumEnhMetaFile(
+                    default,
+                    HENHMETAFILE,
+                    (delegate* unmanaged[Stdcall]<HDC, HANDLETABLE*, ENHMETARECORD*, int, LPARAM, int>)callback,
+                    (void*)(nint)enumeratorHandle,
+                    (RECT*)null);
             }
             finally
             {
@@ -218,26 +227,26 @@ namespace System.Windows.Forms.Metafiles
         }
 
         private static unsafe BOOL CallBack(
-            Gdi32.HDC hdc,
-            Gdi32.HGDIOBJ* lpht,
-            Gdi32.ENHMETARECORD* lpmr,
+            HDC hdc,
+            HANDLETABLE* lpht,
+            ENHMETARECORD* lpmr,
             int nHandles,
-            IntPtr data)
+            LPARAM data)
         {
             // Note that the record pointer is *only* valid during the callback.
             GCHandle enumeratorHandle = GCHandle.FromIntPtr(data);
             ProcessRecordDelegate enumerator = (ProcessRecordDelegate)enumeratorHandle.Target!;
             var record = new EmfRecord(hdc, lpht, lpmr, nHandles, data);
-            return enumerator(ref record).ToBOOL();
+            return enumerator(ref record);
         }
 
-        public static implicit operator Gdi32.HDC(in EmfScope scope) => scope.HDC;
+        public static implicit operator HDC(in EmfScope scope) => scope.HDC;
 
         public void Dispose()
         {
             if (!HDC.IsNull)
             {
-                Gdi32.DeleteEnhMetaFile(HENHMETAFILE);
+                PInvoke.DeleteEnhMetaFile(HENHMETAFILE);
             }
 
             GC.SuppressFinalize(this);

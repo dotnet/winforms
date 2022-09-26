@@ -267,7 +267,7 @@ namespace System.Windows.Forms
                 if (_owningListView.IsHandleCreated)
                 {
                     _owningListView.SelectedIndices.Add(CurrentIndex);
-                    User32.InvalidateRect(new HandleRef(this, _owningListView.Handle), null, BOOL.FALSE);
+                    User32.InvalidateRect(new HandleRef(this, _owningListView.Handle), null, false);
                 }
 
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);

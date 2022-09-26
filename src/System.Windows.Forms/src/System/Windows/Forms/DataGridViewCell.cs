@@ -1253,7 +1253,7 @@ namespace System.Windows.Forms
                         // We don't want the grid to get the keyboard focus
                         // when the editing control gets parented to the parking window,
                         // because some other window is in the middle of receiving the focus.
-                        User32.SetFocus(IntPtr.Zero);
+                        PInvoke.SetFocus(default);
                     }
                 }
 

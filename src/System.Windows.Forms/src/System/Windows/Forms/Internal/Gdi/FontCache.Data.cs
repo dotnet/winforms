@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -19,12 +18,12 @@ namespace System.Windows.Forms
             private const byte False = 0;
 
             public WeakReference<Font> Font { get; }
-            public Gdi32.HFONT HFONT { get; private set; }
-            public Gdi32.QUALITY Quality { get; }
+            public HFONT HFONT { get; private set; }
+            public FONT_QUALITY Quality { get; }
 
             private int? _tmHeight;
 
-            public Data(Font font, Gdi32.QUALITY quality)
+            public Data(Font font, FONT_QUALITY quality)
             {
                 Font = new WeakReference<Font>(font);
                 Quality = quality;
@@ -32,19 +31,19 @@ namespace System.Windows.Forms
                 _tmHeight = null;
             }
 
-            public int Height
+            public unsafe int Height
             {
                 get
                 {
                     if (!_tmHeight.HasValue)
                     {
                         using var screenDC = GdiCache.GetScreenHdc();
-                        Gdi32.HDC hdc = screenDC.HDC;
-                        using var fontSelection = new Gdi32.SelectObjectScope(hdc, HFONT);
-                        Debug.Assert(Gdi32.GetMapMode(hdc) == Gdi32.MM.TEXT);
+                        HDC hdc = screenDC.HDC;
+                        using PInvoke.SelectObjectScope fontSelection = new(hdc, HFONT);
+                        Debug.Assert(PInvoke.GetMapMode(hdc) == HDC_MAP_MODE.MM_TEXT);
 
-                        Gdi32.TEXTMETRICW tm = default;
-                        Gdi32.GetTextMetricsW(hdc, ref tm);
+                        TEXTMETRICW tm = default;
+                        PInvoke.GetTextMetrics(hdc, &tm);
                         _tmHeight = tm.tmHeight;
                     }
 
@@ -56,7 +55,7 @@ namespace System.Windows.Forms
             {
                 if (!HFONT.IsNull)
                 {
-                    Gdi32.DeleteObject(HFONT);
+                    PInvoke.DeleteObject(HFONT);
                 }
 
                 HFONT = default;
@@ -66,7 +65,7 @@ namespace System.Windows.Forms
             ///  Constructs a WindowsFont object from an existing System.Drawing.Font object (GDI+), based on the screen dc
             ///  MapMode and resolution (normally: MM_TEXT and 96 dpi).
             /// </summary>
-            private static Gdi32.HFONT FromFont(Font font, Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)
+            private static unsafe HFONT FromFont(Font font, FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY)
             {
                 string familyName = font.FontFamily.Name;
 
@@ -89,13 +88,13 @@ namespace System.Windows.Forms
                 // specify a negative size value (in pixels) for the height so the font mapper provides the closest match
                 // for the character height rather than the cell height.
 
-                User32.LOGFONTW logFont = new User32.LOGFONTW
+                LOGFONTW logFont = new()
                 {
                     lfHeight = -pixelsY,
-                    lfCharSet = font.GdiCharSet,
-                    lfOutPrecision = Gdi32.OUT_PRECIS.TT,
+                    lfCharSet = (FONT_CHARSET)font.GdiCharSet,
+                    lfOutPrecision = FONT_OUTPUT_PRECISION.OUT_TT_PRECIS,
                     lfQuality = quality,
-                    lfWeight = (font.Style & FontStyle.Bold) == FontStyle.Bold ? Gdi32.FW.BOLD : Gdi32.FW.NORMAL,
+                    lfWeight = (int)((font.Style & FontStyle.Bold) == FontStyle.Bold ? Interop.Gdi32.FW.BOLD : Interop.Gdi32.FW.NORMAL),
                     lfItalic = (font.Style & FontStyle.Italic) == FontStyle.Italic ? True : False,
                     lfUnderline = (font.Style & FontStyle.Underline) == FontStyle.Underline ? True : False,
                     lfStrikeOut = (font.Style & FontStyle.Strikeout) == FontStyle.Strikeout ? True : False,
@@ -107,14 +106,14 @@ namespace System.Windows.Forms
                     logFont.FaceName = DefaultFaceName;
                 }
 
-                Gdi32.HFONT hfont = Gdi32.CreateFontIndirectW(ref logFont);
+                HFONT hfont = PInvoke.CreateFontIndirect(&logFont);
 
                 if (hfont.IsNull)
                 {
                     // Get the default font if we couldn't get what we requested.
                     logFont.FaceName = DefaultFaceName;
-                    logFont.lfOutPrecision = Gdi32.OUT_PRECIS.TT_ONLY;
-                    hfont = Gdi32.CreateFontIndirectW(ref logFont);
+                    logFont.lfOutPrecision = FONT_OUTPUT_PRECISION.OUT_TT_ONLY_PRECIS;
+                    hfont = PInvoke.CreateFontIndirect(&logFont);
 
                     Debug.Assert(!hfont.IsNull);
                 }

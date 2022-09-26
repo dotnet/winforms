@@ -326,8 +326,8 @@ namespace System.Windows.Forms
                     Point pt1 = new Point(clientRect.Left, clientRect.Bottom - 1);
                     Point pt2 = new Point(clientRect.Right, clientRect.Bottom - 1);
 
-                    using var hdc = new DeviceContextHdcScope(e);
-                    using var hpen = new Gdi32.CreatePenScope(color);
+                    using DeviceContextHdcScope hdc = new(e);
+                    using PInvoke.CreatePenScope hpen = new(color);
                     hdc.DrawLine(hpen, pt1, pt2);
                 }
 

@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.ComponentModel.Design
 {
@@ -98,7 +97,7 @@ namespace System.ComponentModel.Design
                         // in the AttachPerf context we should see which module is already loaded
                         if (_regroot is null)
                         {
-                            _shouldUseTestDll = Kernel32.GetModuleHandleW(ProductDllName) == IntPtr.Zero;
+                            _shouldUseTestDll = PInvoke.GetModuleHandle(ProductDllName) == 0;
                         }
                         else
                         {

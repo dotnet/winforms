@@ -64,22 +64,22 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
             IntPtr hBitmap = errorBitmap.GetHbitmap();
             try
             {
-                var mock = new Mock<IPicture>(MockBehavior.Strict);
+                Mock<IPicture> mock = new(MockBehavior.Strict);
                 mock.Setup(m => m.Handle).Returns(PARAM.ToInt(hBitmap));
                 mock.Setup(m => m.Type).Returns((short)PICTYPE.BITMAP);
 
-                using Bitmap bitmap = (Bitmap)Instance.ConvertNativeToManaged(mock.Object, null);
+                using Bitmap bitmap = (Bitmap)Instance.ConvertNativeToManaged(mock.Object, pd: null);
 
                 Assert.Equal(bitmap.Height, errorIcon.Height);
                 Assert.Equal(bitmap.Width, errorIcon.Width);
                 Assert.Equal(typeof(Bitmap), Instance.ManagedType);
 
                 // We should get the cached object if the handle didn't change
-                Assert.Same(bitmap, (Bitmap)Instance.ConvertNativeToManaged(mock.Object, null));
+                Assert.Same(bitmap, (Bitmap)Instance.ConvertNativeToManaged(mock.Object, pd: null));
             }
             finally
             {
-                Gdi32.DeleteObject((Gdi32.HGDIOBJ)hBitmap);
+                PInvoke.DeleteObject((HGDIOBJ)hBitmap);
             }
         }
 

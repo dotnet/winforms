@@ -9,14 +9,10 @@ using System.Runtime.InteropServices;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 using static Interop.User32;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ListBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -773,7 +769,7 @@ namespace System.Windows.Forms.Tests
             control.ColumnWidth = 123;
 
             RECT rc = default;
-            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETITEMRECT, 0, ref rc));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)LB.GETITEMRECT, 0, ref rc));
             Assert.Equal(123, ((Rectangle)rc).Width);
         }
 
@@ -1466,10 +1462,10 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             Assert.Equal(0, control.HorizontalExtent);
-            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETHORIZONTALEXTENT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (WM)LB.GETHORIZONTALEXTENT));
 
             control.HorizontalExtent = 10;
-            Assert.Equal(expected, SendMessageW(control.Handle, (WM)LB.GETHORIZONTALEXTENT));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)LB.GETHORIZONTALEXTENT));
         }
 
         public static IEnumerable<object[]> HorizontalScrollbar_Set_TestData()
@@ -1805,7 +1801,7 @@ namespace System.Windows.Forms.Tests
             };
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(expected, SendMessageW(control.Handle, (WM)LB.GETITEMHEIGHT) == 25);
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)LB.GETITEMHEIGHT) == 25);
         }
 
         [WinFormsTheory]
@@ -2633,15 +2629,15 @@ namespace System.Windows.Forms.Tests
             // Select last.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.SelectedIndex = 1;
-            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
 
             // Select first.
             control.SelectedIndex = 0;
-            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
 
             // Clear selection.
             control.SelectedIndex = -1;
-            Assert.Equal(-1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(-1, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
         }
 
         [WinFormsTheory]
@@ -2660,21 +2656,21 @@ namespace System.Windows.Forms.Tests
             // Select last.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.SelectedIndex = 1;
-            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
             Span<int> buffer = stackalloc int[5];
-            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)LB.GETSELITEMS, (WPARAM)buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 1, 0, 0, 0, 0 }, buffer.ToArray());
 
             // Select first.
             control.SelectedIndex = 0;
-            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
-            Assert.Equal(2, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
+            Assert.Equal(2, (int)PInvoke.SendMessage(control, (WM)LB.GETSELITEMS, (WPARAM)buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 0, 1, 0, 0, 0 }, buffer.ToArray());
 
             // Clear selection.
             control.SelectedIndex = -1;
-            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
-            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (WM)LB.GETSELITEMS, (WPARAM)buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 0, 1, 0, 0, 0 }, buffer.ToArray());
         }
 
@@ -3146,19 +3142,19 @@ namespace System.Windows.Forms.Tests
             // Select last.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.SelectedItem = "item2";
-            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
 
             // Select invalid.
             control.SelectedItem = "NoSuchItem";
-            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
 
             // Select first.
             control.SelectedItem = "item1";
-            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
 
             // Clear selection.
             control.SelectedItem = null;
-            Assert.Equal(-1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(-1, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
         }
 
         [WinFormsTheory]
@@ -3177,28 +3173,28 @@ namespace System.Windows.Forms.Tests
             // Select last.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.SelectedItem = "item2";
-            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
             Span<int> buffer = stackalloc int[5];
-            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)LB.GETSELITEMS, (WPARAM)buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 1, 0, 0, 0, 0 }, buffer.ToArray());
 
             // Select invalid.
             control.SelectedItem = "NoSuchItem";
-            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
             buffer = stackalloc int[5];
-            Assert.Equal(1, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)LB.GETSELITEMS, (WPARAM)buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 1, 0, 0, 0, 0 }, buffer.ToArray());
 
             // Select first.
             control.SelectedItem = "item1";
-            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
-            Assert.Equal(2, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
+            Assert.Equal(2, (int)PInvoke.SendMessage(control, (WM)LB.GETSELITEMS, (WPARAM)buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 0, 1, 0, 0, 0 }, buffer.ToArray());
 
             // Clear selection.
             control.SelectedItem = null;
-            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETCURSEL));
-            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETSELITEMS, buffer.Length, ref buffer[0]));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (WM)LB.GETCURSEL));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (WM)LB.GETSELITEMS, (WPARAM)buffer.Length, ref buffer[0]));
             Assert.Equal(new int[] { 0, 1, 0, 0, 0 }, buffer.ToArray());
         }
 
@@ -3328,7 +3324,7 @@ namespace System.Windows.Forms.Tests
             void Dirty()
             {
                 // Simulate a selection change notification.
-                SendMessageW(control.Handle, WM.REFLECT | WM.COMMAND, PARAM.FromLowHigh(0, (int)LBN.SELCHANGE));
+                PInvoke.SendMessage(control, WM.REFLECT | WM.COMMAND, WPARAM.MAKEWPARAM(0, (int)LBN.SELCHANGE));
             }
         }
 
@@ -4434,7 +4430,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.TopIndex = 1;
-            Assert.Equal(0, SendMessageW(control.Handle, (WM)LB.GETTOPINDEX));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (WM)LB.GETTOPINDEX));
         }
 
         [WinFormsTheory]

@@ -95,8 +95,8 @@ namespace System.Windows.Forms
                 // Add the style MDIS_ALLCHILDSTYLES
                 // so that MDI Client windows can have the WS_VISIBLE style removed from the window style
                 // to make them not visible but still present.
-                cp.Style |= (int)(User32.WS.VSCROLL | User32.WS.HSCROLL);
-                cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                cp.Style |= (int)(WINDOW_STYLE.WS_VSCROLL | WINDOW_STYLE.WS_HSCROLL);
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                 cp.Param = new User32.CLIENTCREATESTRUCT
                 {
                     idFirstChild = 1
@@ -104,16 +104,16 @@ namespace System.Windows.Forms
                 ISite? site = ParentInternal?.Site;
                 if (site is not null && site.DesignMode)
                 {
-                    cp.Style |= (int)User32.WS.DISABLED;
+                    cp.Style |= (int)WINDOW_STYLE.WS_DISABLED;
                     SetState(States.Enabled, false);
                 }
 
                 if (RightToLeft == RightToLeft.Yes && ParentInternal is not null && ParentInternal.IsMirrored)
                 {
                     //We want to turn on mirroring for MdiClient explicitly.
-                    cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
+                    cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -152,16 +152,16 @@ namespace System.Windows.Forms
             switch (value)
             {
                 case MdiLayout.Cascade:
-                    User32.SendMessageW(this, User32.WM.MDICASCADE);
+                    PInvoke.SendMessage(this, User32.WM.MDICASCADE);
                     break;
                 case MdiLayout.TileVertical:
-                    User32.SendMessageW(this, User32.WM.MDITILE, (nint)User32.MDITILE.VERTICAL);
+                    PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)User32.MDITILE.VERTICAL);
                     break;
                 case MdiLayout.TileHorizontal:
-                    User32.SendMessageW(this, User32.WM.MDITILE, (nint)User32.MDITILE.HORIZONTAL);
+                    PInvoke.SendMessage(this, User32.WM.MDITILE, (WPARAM)(uint)User32.MDITILE.HORIZONTAL);
                     break;
                 case MdiLayout.ArrangeIcons:
-                    User32.SendMessageW(this, User32.WM.MDIICONARRANGE);
+                    PInvoke.SendMessage(this, User32.WM.MDIICONARRANGE);
                     break;
             }
         }
@@ -284,14 +284,14 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetWindowRgn()
         {
-            RECT rect = new RECT();
+            RECT rect = new();
             CreateParams cp = CreateParams;
 
-            AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
+            AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);
 
             Rectangle bounds = Bounds;
-            using var rgn1 = new Gdi32.RegionScope(0, 0, bounds.Width, bounds.Height);
-            using var rgn2 = new Gdi32.RegionScope(
+            using PInvoke.RegionScope rgn1 = new(0, 0, bounds.Width, bounds.Height);
+            using PInvoke.RegionScope rgn2 = new(
                 -rect.left,
                 -rect.top,
                 bounds.Width - rect.right,
@@ -302,12 +302,12 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }
 
-            if (Gdi32.CombineRgn(rgn1, rgn1, rgn2, Gdi32.RGN.DIFF) == 0)
+            if ((RegionType)PInvoke.CombineRgn(rgn1, rgn1, rgn2, RGN_COMBINE_MODE.RGN_DIFF) == RegionType.ERROR)
             {
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }
 
-            if (User32.SetWindowRgn(this, rgn1, BOOL.TRUE) == 0)
+            if (User32.SetWindowRgn(this, rgn1, true) == 0)
             {
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }

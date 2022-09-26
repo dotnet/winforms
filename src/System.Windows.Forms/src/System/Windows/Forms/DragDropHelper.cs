@@ -10,7 +10,9 @@ using System.Runtime.InteropServices.ComTypes;
 using static Interop;
 using static Interop.Shell32;
 using static Interop.User32;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Shell = Windows.Win32.UI.Shell;
 
 namespace System.Windows.Forms
 {
@@ -168,12 +170,12 @@ namespace System.Windows.Forms
 
                 medium = new();
                 dataObject.GetData(ref formatEtc, out medium);
-                IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-                return (basePtr != IntPtr.Zero) && (*(BOOL*)basePtr == BOOL.TRUE);
+                void* basePtr = PInvoke.GlobalLock(medium.unionmember);
+                return (basePtr is not null) && (*(BOOL*)basePtr == true);
             }
             finally
             {
-                Kernel32.GlobalUnlock(medium.unionmember);
+                PInvoke.GlobalUnlock(medium.unionmember);
                 Ole32.ReleaseStgMedium(ref medium);
             }
         }
@@ -193,12 +195,12 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    IntPtr basePtr = Kernel32.GlobalLock(dragDropFormat.Medium.unionmember);
-                    return (basePtr != IntPtr.Zero) && (*(BOOL*)basePtr == BOOL.TRUE);
+                    void* basePtr = PInvoke.GlobalLock(dragDropFormat.Medium.unionmember);
+                    return (basePtr is not null) && (*(BOOL*)basePtr == true);
                 }
                 finally
                 {
-                    Kernel32.GlobalUnlock(dragDropFormat.Medium.unionmember);
+                    PInvoke.GlobalUnlock(dragDropFormat.Medium.unionmember);
                 }
             }
             else
@@ -269,9 +271,9 @@ namespace System.Windows.Forms
             {
                 pUnkForRelease = null,
                 tymed = TYMED.TYMED_HGLOBAL,
-                unionmember = Kernel32.GlobalAlloc(
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
-                    sizeof(BOOL))
+                unionmember = PInvoke.GlobalAlloc(
+                    GMEM_MOVEABLE | GMEM_ZEROINIT,
+                    (nuint)sizeof(BOOL))
             };
 
             if (medium.unionmember == IntPtr.Zero)
@@ -279,16 +281,16 @@ namespace System.Windows.Forms
                 throw new Win32Exception(Marshal.GetLastSystemError(), SR.ExternalException);
             }
 
-            IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-            if (basePtr == IntPtr.Zero)
+            void* basePtr = PInvoke.GlobalLock(medium.unionmember);
+            if (basePtr is null)
             {
-                Kernel32.GlobalFree(medium.unionmember);
+                PInvoke.GlobalFree(medium.unionmember);
                 medium.unionmember = IntPtr.Zero;
                 throw new Win32Exception(Marshal.GetLastSystemError(), SR.ExternalException);
             }
 
-            *(BOOL*)basePtr = value.ToBOOL();
-            Kernel32.GlobalUnlock(medium.unionmember);
+            *(BOOL*)basePtr = value;
+            PInvoke.GlobalUnlock(medium.unionmember);
             dataObject.SetData(ref formatEtc, ref medium, release: true);
         }
 
@@ -337,14 +339,14 @@ namespace System.Windows.Forms
                 SetInDragLoop(dataObject, inDragLoop: true);
             }
 
-            Gdi32.HBITMAP hbmpDragImage = (Gdi32.HBITMAP)IntPtr.Zero;
+            HBITMAP hbmpDragImage = (HBITMAP)IntPtr.Zero;
 
             try
             {
                 // The Windows drag image manager will own this bitmap object and free the memory when its finished. Only
                 // call DeleteObject if an exception occurs while initializing.
                 hbmpDragImage = dragImage is not null ? dragImage.GetHBITMAP() : hbmpDragImage;
-                SHDRAGIMAGE shDragImage = new()
+                Shell.SHDRAGIMAGE shDragImage = new()
                 {
                     hbmpDragImage = hbmpDragImage,
                     sizeDragImage = dragImage is not null ? dragImage.Size : default,
@@ -354,12 +356,12 @@ namespace System.Windows.Forms
 
                 // Allow text specified in DROPDESCRIPTION to be displayed on the drag image. If you pass a drag image into an IDragSourceHelper
                 // object, then by default, the extra text description of the drag-and-drop operation is not displayed.
-                dragSourceHelper.SetFlags(DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowIfFailed();
-                dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowIfFailed();
+                dragSourceHelper.SetFlags(DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowOnFailure();
+                dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowOnFailure();
             }
             catch
             {
-                Gdi32.DeleteObject(hbmpDragImage);
+                PInvoke.DeleteObject(hbmpDragImage);
                 return;
             }
             finally
@@ -406,12 +408,12 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(dataObject);
             SourceGenerated.EnumValidator.Validate(dropImageType, nameof(dropImageType));
 
-            if (message.Length >= Kernel32.MAX_PATH)
+            if (message.Length >= PInvoke.MAX_PATH)
             {
                 throw new ArgumentOutOfRangeException(nameof(message));
             }
 
-            if (messageReplacementToken.Length >= Kernel32.MAX_PATH)
+            if (messageReplacementToken.Length >= PInvoke.MAX_PATH)
             {
                 throw new ArgumentOutOfRangeException(nameof(messageReplacementToken));
             }
@@ -429,8 +431,8 @@ namespace System.Windows.Forms
             {
                 pUnkForRelease = null,
                 tymed = TYMED.TYMED_HGLOBAL,
-                unionmember = Kernel32.GlobalAlloc(
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                unionmember = PInvoke.GlobalAlloc(
+                    GMEM_MOVEABLE | GMEM_ZEROINIT,
                     (uint)sizeof(DROPDESCRIPTION))
             };
 
@@ -439,19 +441,19 @@ namespace System.Windows.Forms
                 throw new Win32Exception(Marshal.GetLastSystemError(), SR.ExternalException);
             }
 
-            IntPtr basePtr = Kernel32.GlobalLock(medium.unionmember);
-            if (basePtr == IntPtr.Zero)
+            void* basePtr = PInvoke.GlobalLock(medium.unionmember);
+            if (basePtr is null)
             {
-                Kernel32.GlobalFree(medium.unionmember);
+                PInvoke.GlobalFree(medium.unionmember);
                 medium.unionmember = IntPtr.Zero;
                 throw new Win32Exception(Marshal.GetLastSystemError(), SR.ExternalException);
             }
 
             DROPDESCRIPTION* pDropDescription = (DROPDESCRIPTION*)basePtr;
             pDropDescription->type = (DROPIMAGETYPE)dropImageType;
-            pDropDescription->Message = message;
-            pDropDescription->Insert = messageReplacementToken;
-            Kernel32.GlobalUnlock(medium.unionmember);
+            pDropDescription->szMessage = message;
+            pDropDescription->szInsert = messageReplacementToken;
+            PInvoke.GlobalUnlock(medium.unionmember);
 
             // Set the InShellDragLoop flag to true to facilitate loading and retrieving arbitrary private formats. The
             // drag-and-drop helper object calls IDataObject::SetData to load private formats--used for cross-process support--into
@@ -531,7 +533,7 @@ namespace System.Windows.Forms
                     Ole32.CLSCTX.INPROC_SERVER,
                     ref NativeMethods.ActiveX.IID_IUnknown,
                     out object obj);
-                if (hr.Succeeded())
+                if (hr.Succeeded)
                 {
                     dragDropHelper = (TDragDropHelper)obj;
                     return true;

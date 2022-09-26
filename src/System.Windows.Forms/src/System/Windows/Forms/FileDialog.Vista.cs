@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    IShellItem initialDirectory = GetShellItemForPath(InitialDirectory);
+                    IShellItem initialDirectory = PInvoke.SHCreateShellItem(InitialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);
@@ -203,28 +203,17 @@ namespace System.Windows.Forms
         private void SetFileTypes(IFileDialog dialog)
         {
             COMDLG_FILTERSPEC[] filterItems = GetFilterItems(_filter);
-            try
-            {
-                HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
-                hr.ThrowIfFailed();
+            HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
+            hr.ThrowOnFailure();
 
-                if (filterItems.Length > 0)
-                {
-                    hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
-                    hr.ThrowIfFailed();
-                }
-            }
-            finally
+            if (filterItems.Length > 0)
             {
-                foreach (var item in filterItems)
-                {
-                    Marshal.FreeCoTaskMem(item.pszName);
-                    Marshal.FreeCoTaskMem(item.pszSpec);
-                }
+                hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
+                hr.ThrowOnFailure();
             }
         }
 
-        private static COMDLG_FILTERSPEC[] GetFilterItems(string? filter)
+        private unsafe static COMDLG_FILTERSPEC[] GetFilterItems(string? filter)
         {
             // Expected input types
             // "Text files (*.txt)|*.txt|All files (*.*)|*.*"
@@ -239,10 +228,14 @@ namespace System.Windows.Forms
                     // Odd numbered tokens are the associated extensions
                     for (int i = 1; i < tokens.Length; i += 2)
                     {
-                        COMDLG_FILTERSPEC extension;
-                        extension.pszSpec = Marshal.StringToCoTaskMemUni(tokens[i]);        // This may be a semicolon delimited list of extensions (that's ok)
-                        extension.pszName = Marshal.StringToCoTaskMemUni(tokens[i - 1]);
-                        extensions.Add(extension);
+                        fixed (char* token = tokens[i])
+                        fixed (char* tokenOne = tokens[i + 1])
+                        {
+                            COMDLG_FILTERSPEC extension;
+                            extension.pszSpec = token;        // This may be a semicolon delimited list of extensions (that's ok)
+                            extension.pszName = tokenOne;
+                            extensions.Add(extension);
+                        }
                     }
                 }
             }
@@ -252,8 +245,8 @@ namespace System.Windows.Forms
 
         private protected static string GetFilePathFromShellItem(IShellItem item)
         {
-            HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string? filename);
-            hr.ThrowIfFailed();
+            HRESULT hr = item.GetDisplayName(SIGDN.SIGDN_DESKTOPABSOLUTEPARSING, out string? filename);
+            hr.ThrowOnFailure();
             return filename!;
         }
 

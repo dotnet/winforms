@@ -20,7 +20,7 @@ internal partial class Interop
                 return this.Show(parent);
             }
 
-            HRESULT Shell32.IFileOpenDialog.SetFileTypes(uint cFileTypes, Shell32.COMDLG_FILTERSPEC[] rgFilterSpec)
+            HRESULT Shell32.IFileOpenDialog.SetFileTypes(uint cFileTypes, COMDLG_FILTERSPEC[] rgFilterSpec)
             {
                 return ((Shell32.IFileDialog)this).SetFileTypes(cFileTypes, rgFilterSpec);
             }
@@ -105,7 +105,7 @@ internal partial class Interop
                 ((Shell32.IFileDialog)this).GetResult(out ppsi);
             }
 
-            HRESULT Shell32.IFileOpenDialog.AddPlace(Shell32.IShellItem psi, Shell32.FDAP fdap)
+            HRESULT Shell32.IFileOpenDialog.AddPlace(Shell32.IShellItem psi, FDAP fdap)
             {
                 return ((Shell32.IFileDialog)this).AddPlace(psi, fdap);
             }
@@ -145,7 +145,7 @@ internal partial class Interop
             {
                 IntPtr ppenum_local;
                 ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 27)))
-                    (_wrappedInstance, &ppenum_local).ThrowIfFailed();
+                    (_wrappedInstance, &ppenum_local).ThrowOnFailure();
                 ppenum = ppenum_local == IntPtr.Zero ? null : (Interop.WinFormsComWrappers.ShellItemArrayWrapper)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppenum_local, CreateObjectFlags.UniqueInstance);
             }
 
@@ -172,7 +172,7 @@ internal partial class Interop
                 {
                     pszText_local = Marshal.StringToCoTaskMemUni(pszText);
                     ((delegate* unmanaged<IntPtr, uint, IntPtr, HRESULT>)(*(*(void***)thisPtr + 11 /* IFileDialogCustomize.AddText */)))
-                        (thisPtr, dwIDCtl, pszText_local).ThrowIfFailed();
+                        (thisPtr, dwIDCtl, pszText_local).ThrowOnFailure();
                 }
                 finally
                 {

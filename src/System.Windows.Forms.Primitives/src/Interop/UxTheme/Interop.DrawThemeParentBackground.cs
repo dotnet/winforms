@@ -8,10 +8,10 @@ internal static partial class Interop
 {
     public static partial class UxTheme
     {
-        [LibraryImport(Libraries.UxTheme)]
-        public static partial HRESULT DrawThemeParentBackground(IntPtr hwnd, Gdi32.HDC hdc, ref RECT prc);
+        [DllImport(Libraries.UxTheme)]
+        public static extern HRESULT DrawThemeParentBackground(IntPtr hwnd, HDC hdc, ref RECT prc);
 
-        public static HRESULT DrawThemeParentBackground(IHandle hwnd, Gdi32.HDC hdc, ref RECT prc)
+        public static HRESULT DrawThemeParentBackground(IHandle hwnd, HDC hdc, ref RECT prc)
         {
             HRESULT hr = DrawThemeParentBackground(hwnd.Handle, hdc, ref prc);
             GC.KeepAlive(hwnd);

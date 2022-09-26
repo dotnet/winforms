@@ -93,11 +93,11 @@ namespace System.Windows.Forms.Tests.Serialization
                 using ImageListStreamer result = BinarySerialization.EnsureDeserialize<ImageListStreamer>(blob);
                 using (NativeImageList nativeImageList = result.GetNativeImageList())
                 {
-                    Assert.True(ComCtl32.ImageList.GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y).IsTrue());
+                    Assert.True(ComCtl32.ImageList.GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y));
                     Assert.Equal(16, x);
                     Assert.Equal(16, y);
                     var imageInfo = new ComCtl32.IMAGEINFO();
-                    Assert.True(ComCtl32.ImageList.GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, ref imageInfo).IsTrue());
+                    Assert.True(ComCtl32.ImageList.GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, ref imageInfo));
                     Assert.False(imageInfo.hbmImage.IsNull);
                 }
             }

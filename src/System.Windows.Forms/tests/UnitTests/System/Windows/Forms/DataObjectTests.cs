@@ -11,8 +11,6 @@ using System.Runtime.Serialization;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
-using static Interop.Shell32;
 using static Interop.User32;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -2160,8 +2158,8 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            IntPtr handle = Kernel32.GlobalAlloc(
-                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+            nint handle = PInvoke.GlobalAlloc(
+                GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
                 1);
             try
             {
@@ -2173,7 +2171,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Kernel32.GlobalFree(handle);
+                PInvoke.GlobalFree(handle);
             }
         }
 
@@ -2200,8 +2198,8 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            IntPtr handle = Kernel32.GlobalAlloc(
-                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+            nint handle = PInvoke.GlobalAlloc(
+                GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
                 1);
             try
             {
@@ -2213,7 +2211,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Kernel32.GlobalFree(handle);
+                PInvoke.GlobalFree(handle);
             }
         }
 
@@ -2273,8 +2271,8 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            IntPtr handle = Kernel32.GlobalAlloc(
-                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+            nint handle = PInvoke.GlobalAlloc(
+                GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
                 1);
             try
             {
@@ -2284,14 +2282,14 @@ namespace System.Windows.Forms.Tests
                 DROPFILES* pDropFiles = *(DROPFILES**)stgMedium.unionmember;
                 Assert.Equal(20u, pDropFiles->pFiles);
                 Assert.Equal(Point.Empty, pDropFiles->pt);
-                Assert.Equal(BOOL.FALSE, pDropFiles->fNC);
-                Assert.Equal(BOOL.TRUE, pDropFiles->fWide);
+                Assert.False(pDropFiles->fNC);
+                Assert.True(pDropFiles->fWide);
                 char* text = (char*)IntPtr.Add((IntPtr)pDropFiles, (int)pDropFiles->pFiles);
                 Assert.Equal("Path1\0Path2\0\0", new string(text, 0, "Path1".Length + 1 + "Path2".Length + 1 + 1));
             }
             finally
             {
-                Kernel32.GlobalFree(handle);
+                PInvoke.GlobalFree(handle);
             }
         }
 
@@ -2311,8 +2309,8 @@ namespace System.Windows.Forms.Tests
             {
                 tymed = TYMED.TYMED_HGLOBAL
             };
-            IntPtr handle = Kernel32.GlobalAlloc(
-                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+            nint handle = PInvoke.GlobalAlloc(
+               GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
                 (uint)sizeof(DROPFILES));
             try
             {
@@ -2322,12 +2320,12 @@ namespace System.Windows.Forms.Tests
                 DROPFILES* pDropFiles = *(DROPFILES**)stgMedium.unionmember;
                 Assert.Equal(0u, pDropFiles->pFiles);
                 Assert.Equal(Point.Empty, pDropFiles->pt);
-                Assert.Equal(BOOL.FALSE, pDropFiles->fNC);
-                Assert.Equal(BOOL.FALSE, pDropFiles->fWide);
+                Assert.False(pDropFiles->fNC);
+                Assert.False(pDropFiles->fWide);
             }
             finally
             {
-                Kernel32.GlobalFree(handle);
+                PInvoke.GlobalFree(handle);
             }
         }
 

@@ -27,7 +27,7 @@ namespace System.ComponentModel.Design
             {
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
 
-                WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
+                WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, true);
 
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
@@ -57,7 +57,7 @@ namespace System.ComponentModel.Design
                 HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, $"real clsid:{realClsid} (hr={hr:X})");
 
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
                     return HRESULT.S_FALSE;
                 }

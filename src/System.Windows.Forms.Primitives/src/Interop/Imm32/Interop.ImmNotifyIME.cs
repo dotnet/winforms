@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Imm32
     {
-        [LibraryImport(Libraries.Imm32)]
-        public static partial BOOL ImmNotifyIME(IntPtr hIMC, NI dwAction, CPS dwIndex, int dwValue);
+        [DllImport(Libraries.Imm32)]
+        public static extern BOOL ImmNotifyIME(IntPtr hIMC, NI dwAction, CPS dwIndex, int dwValue);
     }
 }

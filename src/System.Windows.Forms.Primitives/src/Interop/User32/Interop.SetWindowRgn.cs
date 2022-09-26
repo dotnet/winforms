@@ -8,12 +8,12 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        private static partial int SetWindowRgn(IntPtr hwnd, IntPtr hrgn, BOOL fRedraw);
+        [DllImport(Libraries.User32)]
+        private static extern int SetWindowRgn(IntPtr hwnd, IntPtr hrgn, BOOL fRedraw);
 
-        public static int SetWindowRgn(IHandle hwnd, Gdi32.HRGN hrgn, BOOL fRedraw)
+        public static int SetWindowRgn(IHandle hwnd, HRGN hrgn, BOOL fRedraw)
         {
-            int result = SetWindowRgn(hwnd.Handle, hrgn.Handle, fRedraw);
+            int result = SetWindowRgn(hwnd.Handle, hrgn, fRedraw);
             GC.KeepAlive(hwnd);
             return result;
         }

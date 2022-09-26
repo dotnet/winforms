@@ -43,13 +43,13 @@ namespace System.Windows.Forms
                 get
                 {
                     int currentIndex = GetCurrentIndex();
-                    IntPtr listHandle = _owningComboBox.GetListHandle();
+                    HWND listHandle = (HWND)_owningComboBox.GetListHandle();
                     RECT itemRect = new();
 
-                    int result = (int)User32.SendMessageW(
+                    int result = (int)PInvoke.SendMessage(
                         listHandle,
                         (User32.WM)User32.LB.GETITEMRECT,
-                        currentIndex,
+                        (WPARAM)currentIndex,
                         ref itemRect);
 
                     if (result == User32.LB_ERR)
@@ -58,8 +58,9 @@ namespace System.Windows.Forms
                     }
 
                     // Translate the item rect to screen coordinates
-                    User32.MapWindowPoints(listHandle, IntPtr.Zero, ref itemRect);
-                    return itemRect;
+                    RECT translated = itemRect;
+                    PInvoke.MapWindowPoints((HWND)listHandle, HWND.Null, ref translated);
+                    return translated;
                 }
             }
 
@@ -223,7 +224,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                User32.SendMessageW(_owningComboBox, (User32.WM)User32.CB.SETTOPINDEX, GetCurrentIndex());
+                PInvoke.SendMessage(_owningComboBox, (User32.WM)User32.CB.SETTOPINDEX, (WPARAM)GetCurrentIndex());
             }
 
             internal override void SetFocus()
@@ -241,7 +242,7 @@ namespace System.Windows.Forms
                 }
 
                 _owningComboBox.SelectedIndex = GetCurrentIndex();
-                InvalidateRect(new HandleRef(this, _owningComboBox.GetListHandle()), null, BOOL.FALSE);
+                InvalidateRect(new HandleRef(this, _owningComboBox.GetListHandle()), null, false);
             }
 
             internal override void AddToSelection()

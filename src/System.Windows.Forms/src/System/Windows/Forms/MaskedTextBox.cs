@@ -317,7 +317,7 @@ namespace System.Windows.Forms
 
                 // Translate for Rtl if necessary
                 HorizontalAlignment align = RtlTranslateHorizontal(_textAlign);
-                cp.ExStyle &= ~(int)WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
@@ -1101,7 +1101,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 // This message does not return a value.
-                User32.SendMessageW(this, (User32.WM)EM.SETPASSWORDCHAR, (nint)pwdChar);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETPASSWORDCHAR, (WPARAM)pwdChar);
                 Invalidate();
             }
         }
@@ -2888,10 +2888,10 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((User32.PRF)m.LParamInternal & User32.PRF.NONCLIENT) != 0
+            if (((User32.PRF)(nint)m.LParamInternal & User32.PRF.NONCLIENT) != 0
                 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m.WParamInternal);
+                using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);

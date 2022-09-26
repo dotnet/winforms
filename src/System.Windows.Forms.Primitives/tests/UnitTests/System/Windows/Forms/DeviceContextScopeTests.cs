@@ -13,25 +13,25 @@ namespace System.Windows.Forms.Tests
     public class DeviceContextScopeTests
     {
         [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
-        private static extern int GetRandomRgn(Gdi32.HDC hdc, Gdi32.HRGN hrgn, int i);
+        private static extern int GetRandomRgn(HDC hdc, HRGN hrgn, int i);
 
         [Fact]
-        public void Scope_ApplyGraphicsProperties()
+        public unsafe void Scope_ApplyGraphicsProperties()
         {
             // Create a bitmap using the screen's stats
-            using var dcScope = new Gdi32.CreateDcScope(default);
-            using var bitmapScope = new Gdi32.CreateBitmapScope(dcScope, 20, 20);
-            Gdi32.SelectObject(dcScope, bitmapScope);
+            using PInvoke.CreateDcScope dcScope = new(default);
+            using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
+            PInvoke.SelectObject(dcScope, bitmapScope);
 
             // Select a clipping region into the DC
-            using var dcRegion = new Gdi32.RegionScope(2, 1, 4, 7);
-            RegionType type = Gdi32.SelectClipRgn(dcScope, dcRegion);
+            using var dcRegion = new PInvoke.RegionScope(2, 1, 4, 7);
+            RegionType type = (RegionType)PInvoke.SelectClipRgn(dcScope, dcRegion);
             Assert.Equal(RegionType.SIMPLEREGION, type);
 
-            using var test = new Gdi32.RegionScope(0, 0, 0, 0);
+            using var test = new PInvoke.RegionScope(0, 0, 0, 0);
             int result = GetRandomRgn(dcScope, test, 1);
             RECT rect2 = default;
-            type = Gdi32.GetRgnBox(test, ref rect2);
+            type = (RegionType)PInvoke.GetRgnBox(test, &rect2);
 
             // Create a Graphics object and set it's clipping region
             using Graphics graphics = dcScope.CreateGraphics();
@@ -45,62 +45,58 @@ namespace System.Windows.Forms.Tests
             graphics.Clip = region;
             graphics.Transform = new Matrix(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f);
 
-            using (var hdcScope = new DeviceContextHdcScope(graphics))
-            {
-                using var regionScope = new Gdi32.RegionScope(hdcScope);
-                Assert.False(regionScope.IsNull);
-                RECT rect = default;
-                type = Gdi32.GetRgnBox(regionScope, ref rect);
+            using var hdcScope = new DeviceContextHdcScope(graphics);
+            using var regionScope = new PInvoke.RegionScope(hdcScope);
+            Assert.False(regionScope.IsNull);
+            RECT rect = default;
+            type = (RegionType)PInvoke.GetRgnBox(regionScope, &rect);
 
-                // Our clipping region should be the intersection
-                Assert.Equal(new Rectangle(2, 1, 1, 3), (Rectangle)rect);
-            }
+            // Our clipping region should be the intersection
+            Assert.Equal(new Rectangle(2, 1, 1, 3), (Rectangle)rect);
         }
 
         [Fact]
         public void Graphics_HdcStatePersistence()
         {
             // Create a bitmap using the screen's stats
-            using var dcScope = new Gdi32.CreateDcScope(default);
-            using var bitmapScope = new Gdi32.CreateBitmapScope(dcScope, 20, 20);
-            Gdi32.MM originalMapMode = Gdi32.SetMapMode(dcScope, Gdi32.MM.HIMETRIC);
-            Gdi32.SelectObject(dcScope, bitmapScope);
+            using PInvoke.CreateDcScope dcScope = new(default);
+            using PInvoke.CreateBitmapScope bitmapScope = new(dcScope, 20, 20);
+            HDC_MAP_MODE originalMapMode = (HDC_MAP_MODE)PInvoke.SetMapMode(dcScope, HDC_MAP_MODE.MM_HIMETRIC);
+            PInvoke.SelectObject(dcScope, bitmapScope);
 
-            Gdi32.OBJ type = Gdi32.GetObjectType(dcScope);
-
-            using var blueBrush = new Gdi32.CreateBrushScope(Color.Blue);
-            using var redBrush = new Gdi32.CreateBrushScope(Color.Red);
-            Gdi32.SelectObject(dcScope, blueBrush);
+            using PInvoke.CreateBrushScope blueBrush = new(Color.Blue);
+            using PInvoke.CreateBrushScope redBrush = new(Color.Red);
+            PInvoke.SelectObject(dcScope, blueBrush);
 
             using Graphics graphics = dcScope.CreateGraphics();
-            Gdi32.HGDIOBJ current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
+            HGDIOBJ current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
 
-            Gdi32.MM currentMode = Gdi32.GetMapMode(dcScope);
-            Assert.Equal(Gdi32.MM.HIMETRIC, currentMode);
+            HDC_MAP_MODE currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+            Assert.Equal(HDC_MAP_MODE.MM_HIMETRIC, currentMode);
 
             IntPtr hdc = graphics.GetHdc();
-            currentMode = Gdi32.SetMapMode(dcScope, Gdi32.MM.TEXT);
-            Assert.Equal(Gdi32.MM.HIMETRIC, currentMode);
+            currentMode = (HDC_MAP_MODE)PInvoke.SetMapMode(dcScope, HDC_MAP_MODE.MM_TEXT);
+            Assert.Equal(HDC_MAP_MODE.MM_HIMETRIC, currentMode);
             try
             {
                 // We get the same HDC out
-                Assert.Equal(dcScope.HDC.Handle, (nint)hdc);
-                current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
-                Assert.Equal(blueBrush.HBrush.Handle, current.Handle);
-                Gdi32.SelectObject(dcScope, redBrush);
+                Assert.Equal(dcScope.HDC, (HDC)hdc);
+                current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
+                Assert.Equal(blueBrush.HBRUSH, (HBRUSH)current);
+                PInvoke.SelectObject(dcScope, redBrush);
             }
             finally
             {
                 graphics.ReleaseHdc(hdc);
-                currentMode = Gdi32.GetMapMode(dcScope);
-                Assert.Equal(Gdi32.MM.TEXT, currentMode);
-                current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
+                currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+                Assert.Equal(HDC_MAP_MODE.MM_TEXT, currentMode);
+                current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
 
                 graphics.GetHdc();
                 try
                 {
-                    currentMode = Gdi32.GetMapMode(dcScope);
-                    Assert.Equal(Gdi32.MM.TEXT, currentMode);
+                    currentMode = (HDC_MAP_MODE)PInvoke.GetMapMode(dcScope);
+                    Assert.Equal(HDC_MAP_MODE.MM_TEXT, currentMode);
                 }
                 finally
                 {
@@ -108,7 +104,7 @@ namespace System.Windows.Forms.Tests
                 }
             }
 
-            current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
+            current = PInvoke.GetCurrentObject(dcScope, OBJ_TYPE.OBJ_BRUSH);
         }
     }
 }

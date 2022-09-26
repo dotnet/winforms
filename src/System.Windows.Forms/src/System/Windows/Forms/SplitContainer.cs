@@ -439,10 +439,7 @@ namespace System.Windows.Forms
 
         private Cursor? OverrideCursor
         {
-            get
-            {
-                return _overrideCursor;
-            }
+            get => _overrideCursor;
             set
             {
                 if (_overrideCursor != value)
@@ -452,12 +449,11 @@ namespace System.Windows.Forms
                     if (IsHandleCreated)
                     {
                         // We want to instantly change the cursor if the mouse is within our bounds.
-                        var r = new RECT();
                         User32.GetCursorPos(out Point p);
-                        User32.GetWindowRect(this, ref r);
-                        if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
+                        PInvoke.GetWindowRect(this, out var r);
+                        if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                         {
-                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (nint)User32.HT.CLIENT);
+                            PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
                         }
                     }
                 }
@@ -1492,11 +1488,11 @@ namespace System.Windows.Forms
         private void DrawSplitHelper(int splitSize)
         {
             Rectangle r = CalcSplitLine(splitSize, 3);
-            using var dc = new User32.GetDcScope(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
-            Gdi32.HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-            using var objectScope = new Gdi32.ObjectScope(halftone);
-            using var selectBrush = new Gdi32.SelectObjectScope(dc, halftone);
-            Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
+            using User32.GetDcScope dc = new(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+            HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
+            using PInvoke.ObjectScope objectScope = new(halftone);
+            using PInvoke.SelectObjectScope selectBrush = new(dc, halftone);
+            PInvoke.PatBlt(dc, r.X, r.Y, r.Width, r.Height, ROP_CODE.PATINVERT);
 
             GC.KeepAlive(this);
         }
@@ -2285,7 +2281,7 @@ namespace System.Windows.Forms
         private void WmSetCursor(ref Message m)
         {
             // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
-            if (m.WParamInternal == InternalHandle && (User32.HT)(m.LParamInternal & 0x0000FFFF) == User32.HT.CLIENT)
+            if ((HWND)m.WParamInternal == InternalHandle && (User32.HT)m.LParamInternal.LOWORD == User32.HT.CLIENT)
             {
                 Cursor.Current = OverrideCursor ?? Cursor;
             }

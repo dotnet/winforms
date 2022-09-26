@@ -545,7 +545,7 @@ namespace System.Windows.Forms
             int width = LayoutUtils.OldGetLargestStringSizeInCollection(Font, Items).Width;
 
             // AdjustWindowRect with our border, since textbox is borderless.
-            width = SizeFromClientSize(width, height).Width + _upDownButtons.Width;
+            width = SizeFromClientSizeInternal(new(width, height)).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }
     }

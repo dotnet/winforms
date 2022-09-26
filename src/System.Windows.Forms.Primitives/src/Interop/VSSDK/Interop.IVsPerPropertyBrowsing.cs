@@ -39,7 +39,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetLocalizedPropertyInfo(
                 Ole32.DispatchID dispid,
-                Kernel32.LCID localeID,
+                PInvoke.LCID localeID,
                 [Out, MarshalAs(UnmanagedType.LPArray)] string[]? pbstrLocalizedName,
                 [Out, MarshalAs(UnmanagedType.LPArray)] string[]? pbstrLocalizeDescription);
 
