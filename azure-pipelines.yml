@@ -164,7 +164,7 @@ stages:
         publishUsingPipelines: true
         pool:
           name: NetCore1ESPool-Svc-Internal
-          demands: ImageOverride -equals Build.Server.Amd64.VS2019
+          demands: ImageOverride -equals windows.vs2022preview.amd64
 
 
 # Copied from the arcade repo and modified for winforms
