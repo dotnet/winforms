@@ -21,6 +21,6 @@
     "Microsoft.NET.Sdk.IL": "8.0.0-alpha.1.22471.15"
   },
   "native-tools": {
-    "cmake": "3"
+    "cmake": "latest"
   }
 }
