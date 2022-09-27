@@ -1,4 +1,4 @@
-{
+﻿{
   "author": "Microsoft",
   "name": "Libreria di classi di Windows Form",
   "description": "Modello di progetto per la creazione di una libreria di classi destinata a Windows Forms (WinForms) .NET.",
@@ -15,7 +15,7 @@
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
   "symbols/Framework/choices/net8.0/description": "Target net8.0",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
-  "symbols/Framework/displayName": ".NET 7.0",
+  "symbols/Framework/displayName": ".NET 8.0",
   "symbols/langVersion/description": "Imposta langVersion nel file di progetto creato",
   "symbols/langVersion/displayName": "Versione linguaggio",
   "symbols/skipRestore/description": "Se specificato, ignora il ripristino automatico del progetto durante la creazione.",

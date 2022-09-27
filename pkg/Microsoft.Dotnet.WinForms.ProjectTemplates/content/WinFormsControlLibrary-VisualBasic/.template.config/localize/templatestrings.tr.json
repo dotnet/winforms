@@ -1,4 +1,4 @@
-{
+﻿{
   "author": "Microsoft",
   "name": "Windows Forms Denetim Kitaplığı",
   "description": ".NET Windows Forms'u (WinForms) hedefleyen bir denetim kitaplığı oluşturmaya yönelik proje şablonu.",
@@ -15,7 +15,7 @@
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
   "symbols/Framework/choices/net8.0/description": "Target net8.0",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
-  "symbols/Framework/displayName": ".NET 7.0",
+  "symbols/Framework/displayName": ".NET 8.0",
   "symbols/langVersion/description": "Oluşturulan proje dosyasında langVersion'ı ayarlar",
   "symbols/langVersion/displayName": "Dil Sürümü",
   "symbols/skipRestore/description": "Belirtilmişse, oluşturulmakta olan projenin otomatik geri yüklenmesini atlar.",

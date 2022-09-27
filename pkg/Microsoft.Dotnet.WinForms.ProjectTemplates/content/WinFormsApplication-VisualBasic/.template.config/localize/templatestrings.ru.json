@@ -1,4 +1,4 @@
-{
+﻿{
   "author": "Майкрософт",
   "name": "Приложение Windows Forms",
   "description": "Шаблон проекта для создания приложения .NET Windows Forms (WinForms).",
@@ -16,7 +16,7 @@
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
   "symbols/Framework/choices/net8.0/description": "Target net8.0",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
-  "symbols/Framework/displayName": ".NET 7.0",
+  "symbols/Framework/displayName": ".NET 8.0",
   "symbols/langVersion/description": "Задает свойство langVersion в созданном файле проекта",
   "symbols/langVersion/displayName": "Версия языка",
   "symbols/skipRestore/description": "Если установлено, автоматическое восстановление проекта при создании пропускается.",
