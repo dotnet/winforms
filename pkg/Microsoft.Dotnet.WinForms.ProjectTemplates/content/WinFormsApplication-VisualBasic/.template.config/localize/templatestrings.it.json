@@ -1,4 +1,4 @@
-{
+﻿{
   "author": "Microsoft",
   "name": "App Windows Forms",
   "description": "Modello di progetto per la creazione di un'app Windows Forms (WinForms) .NET.",
@@ -16,7 +16,7 @@
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
   "symbols/Framework/choices/net8.0/description": "Target net8.0",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
-  "symbols/Framework/displayName": ".NET 7.0",
+  "symbols/Framework/displayName": ".NET 8.0",
   "symbols/langVersion/description": "Imposta langVersion nel file di progetto creato",
   "symbols/langVersion/displayName": "Versione linguaggio",
   "symbols/skipRestore/description": "Se specificato, ignora il ripristino automatico del progetto durante la creazione.",
