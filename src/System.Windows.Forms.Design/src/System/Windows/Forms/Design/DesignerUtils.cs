@@ -903,7 +903,7 @@ namespace System.Windows.Forms.Design
             treeView.HotTracking = true;
             treeView.ShowLines = false;
             HWND hwnd = (HWND)treeView.Handle;
-            PInvoke.SetWindowTheme(hwnd, "Explorer", null);
+            PInvoke.SetWindowTheme(hwnd, "Explorer", pszSubIdList: null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
             PInvoke.SendMessage(treeView, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);

@@ -162,6 +162,11 @@ namespace System.Windows.Forms.VisualStyles
         {
             get
             {
+                if (!Application.UseVisualStyles)
+                {
+                    return 0;
+                }
+
                 PInvoke.GetThemeSysInt(
                     SetParameters(VisualStyleElement.Window.Caption.Active).Handle,
                     THEME_PROPERTY_SYMBOL_ID.TMT_MINCOLORDEPTH,
