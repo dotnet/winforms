@@ -4,8 +4,6 @@
 
 #nullable enable
 
-using static Interop;
-
 namespace System.Windows.Forms.Metafiles
 {
     internal class PolyPolyline16Validator : PolyPoly16Validator
@@ -21,7 +19,7 @@ namespace System.Windows.Forms.Metafiles
         {
         }
 
-        public override bool ShouldValidate(Gdi32.EMR recordType) => recordType == Gdi32.EMR.POLYPOLYLINE16;
+        public override bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType) => recordType == ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYLINE16;
 
         public override unsafe void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
         {

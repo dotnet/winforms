@@ -186,16 +186,16 @@ namespace System
             EmfRecord savedRecord = GdiObjects[(int)selectionRecord->index];
             switch (savedRecord.Type)
             {
-                case Gdi32.EMR.EXTCREATEFONTINDIRECTW:
+                case ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTCREATEFONTINDIRECTW:
                     SelectedFont = savedRecord.ExtCreateFontIndirectWRecord->elfw.elfLogFont;
                     break;
-                case Gdi32.EMR.CREATEPEN:
+                case ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEPEN:
                     SelectedPen = savedRecord.CreatePenRecord->lopn;
                     break;
-                case Gdi32.EMR.EXTCREATEPEN:
+                case ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTCREATEPEN:
                     SelectedPen = savedRecord.ExtCreatePenRecord->elp;
                     break;
-                case Gdi32.EMR.CREATEBRUSHINDIRECT:
+                case ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEBRUSHINDIRECT:
                     SelectedBrush = savedRecord.CreateBrushIndirectRecord->lb;
                     break;
             }

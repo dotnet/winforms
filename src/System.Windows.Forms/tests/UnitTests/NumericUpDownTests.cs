@@ -56,8 +56,8 @@ namespace System.Windows.Forms.Tests
             // This is the "fill" line under the up/down arrows
             emfButtons.Validate(
                 state,
-                Validate.SkipType(Gdi32.EMR.STRETCHDIBITS),
-                Validate.SkipType(Gdi32.EMR.STRETCHDIBITS),
+                Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
+                Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
                 Validate.LineTo(
                     (0, 18), (16, 18),
                     State.Pen(1, upDown.BackColor, Gdi32.PS.SOLID)));
@@ -91,8 +91,8 @@ namespace System.Windows.Forms.Tests
                 Validate.Rectangle(
                     new Rectangle(1, 1, 97, 16),
                     State.Pen(1, SystemColors.Control, Gdi32.PS.SOLID)),
-                Validate.SkipType(Gdi32.EMR.STRETCHDIBITS),
-                Validate.SkipType(Gdi32.EMR.STRETCHDIBITS),
+                Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
+                Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
                 Validate.LineTo(
                     (0, 18), (16, 18),
                     State.Pen(1, upDown.BackColor, Gdi32.PS.SOLID)));

@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     points: null,
                     State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYPOLYGON16), 2));
+               Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYGON16), 2));
         }
 
         [WinFormsFact]
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     points: null,
                     State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.SkipType(Gdi32.EMR.POLYGON16));
+               Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16));
         }
 
         [WinFormsFact]
@@ -138,8 +138,8 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     points: null,
                     State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYPOLYGON16), 2),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYGON16), 1));
+               Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYGON16), 2),
+               Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16), 1));
         }
 
         [WinFormsFact]
@@ -165,8 +165,8 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     points: null,
                     State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYPOLYGON16), 2),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYGON16), 2));
+               Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYGON16), 2),
+               Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16), 2));
         }
 
         private class ToolStripSystemHighContrastRenderer : ToolStripSystemRenderer

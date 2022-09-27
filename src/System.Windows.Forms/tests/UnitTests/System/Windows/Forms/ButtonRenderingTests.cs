@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
             using var emf = new EmfScope();
             button.PrintToMetafile(emf);
 
-            var types = new List<Gdi32.EMR>();
+            var types = new List<ENHANCED_METAFILE_RECORD_TYPE>();
             var details = new List<string>();
             emf.Enumerate((ref EmfRecord record) =>
             {
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Tests
 
             emf.Validate(
                 state,
-                Validate.Repeat(Validate.SkipType(Gdi32.EMR.BITBLT), 1),
+                Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_BITBLT), 1),
                 Validate.LineTo(
                     (bounds.Right - 1, 0), (0, 0),
                     State.PenColor(SystemColors.ControlLightLight)),
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.Tests
 
             emf.Validate(
                 state,
-                Validate.SkipType(Gdi32.EMR.BITBLT),
+                Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_BITBLT),
                 Validate.TextOut("Hello"),
                 Validate.LineTo(
                     (bounds.Right - 1, 0), (0, 0),
@@ -246,7 +246,7 @@ namespace System.Windows.Forms.Tests
 
             emf.Validate(
                 state,
-                Validate.SkipType(Gdi32.EMR.BITBLT),
+                Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_BITBLT),
                 Validate.TextOut("Flat Style"),
                 Validate.Rectangle(
                     new Rectangle(0, 0, button.Width - 1, button.Height - 1),

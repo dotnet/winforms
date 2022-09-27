@@ -30,144 +30,144 @@ namespace System.Windows.Forms.Metafiles
             Data = data;
         }
 
-        public Gdi32.EMR Type => (Gdi32.EMR)_lpmr->iType;
+        public ENHANCED_METAFILE_RECORD_TYPE Type => _lpmr->iType;
         public ReadOnlySpan<uint> Params => new(_lpmr->dParm.ToArray());
         public ReadOnlySpan<HGDIOBJ> Handles => new(_lpht, _nHandles);
 
-        public ENHMETAHEADER* HeaderRecord => Type == Gdi32.EMR.HEADER ? (ENHMETAHEADER*)_lpmr : null;
+        public ENHMETAHEADER* HeaderRecord => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_HEADER ? (ENHMETAHEADER*)_lpmr : null;
         public EMREXTSELECTCLIPRGN* ExtSelectClipRgnRecord
-            => Type == Gdi32.EMR.EXTSELECTCLIPRGN ? (EMREXTSELECTCLIPRGN*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTSELECTCLIPRGN ? (EMREXTSELECTCLIPRGN*)_lpmr : null;
         public EMRPOINTRECORD* SetViewportOrgExRecord
-            => Type == Gdi32.EMR.SETVIEWPORTORGEX ? (EMRPOINTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETVIEWPORTORGEX ? (EMRPOINTRECORD*)_lpmr : null;
         public EMRPOINTRECORD* SetBrushOrgExRecord
-            => Type == Gdi32.EMR.SETBRUSHORGEX ? (EMRPOINTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETBRUSHORGEX ? (EMRPOINTRECORD*)_lpmr : null;
         public EMRPOINTRECORD* SetWindowOrgExRecord
-            => Type == Gdi32.EMR.SETWINDOWORGEX ? (EMRPOINTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETWINDOWORGEX ? (EMRPOINTRECORD*)_lpmr : null;
         public EMRPOINTRECORD* OffsetClipRgnRecord
-            => Type == Gdi32.EMR.OFFSETCLIPRGN ? (EMRPOINTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_OFFSETCLIPRGN ? (EMRPOINTRECORD*)_lpmr : null;
         public EMRPOINTRECORD* MoveToExRecord
-            => Type == Gdi32.EMR.MOVETOEX ? (EMRPOINTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_MOVETOEX ? (EMRPOINTRECORD*)_lpmr : null;
         public EMRPOINTRECORD* LineToRecord
-            => Type == Gdi32.EMR.LINETO ? (EMRPOINTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_LINETO ? (EMRPOINTRECORD*)_lpmr : null;
         public EMRCREATEBRUSHINDIRECT* CreateBrushIndirectRecord
-            => Type == Gdi32.EMR.CREATEBRUSHINDIRECT ? (EMRCREATEBRUSHINDIRECT*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEBRUSHINDIRECT ? (EMRCREATEBRUSHINDIRECT*)_lpmr : null;
         public EMRENUMRECORD<R2_MODE>* SetROP2Record
-            => Type == Gdi32.EMR.SETROP2 ? (EMRENUMRECORD<R2_MODE>*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETROP2 ? (EMRENUMRECORD<R2_MODE>*)_lpmr : null;
         public EMRENUMRECORD<BACKGROUND_MODE>* SetBkModeRecord
-            => Type == Gdi32.EMR.SETBKMODE ? (EMRENUMRECORD<BACKGROUND_MODE>*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETBKMODE ? (EMRENUMRECORD<BACKGROUND_MODE>*)_lpmr : null;
         public EMRCREATEPEN* CreatePenRecord
-            => Type == Gdi32.EMR.CREATEPEN ? (EMRCREATEPEN*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEPEN ? (EMRCREATEPEN*)_lpmr : null;
         public EMREXTCREATEPEN* ExtCreatePenRecord
-            => Type == Gdi32.EMR.EXTCREATEPEN ? (EMREXTCREATEPEN*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTCREATEPEN ? (EMREXTCREATEPEN*)_lpmr : null;
         public EMRINDEXRECORD* SelectObjectRecord
-            => Type == Gdi32.EMR.SELECTOBJECT ? (EMRINDEXRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SELECTOBJECT ? (EMRINDEXRECORD*)_lpmr : null;
         public EMRINDEXRECORD* DeleteObjectRecord
-            => Type == Gdi32.EMR.DELETEOBJECT ? (EMRINDEXRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_DELETEOBJECT ? (EMRINDEXRECORD*)_lpmr : null;
         public EMRBITBLT* BitBltRecord
-            => Type == Gdi32.EMR.BITBLT ? (EMRBITBLT*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_BITBLT ? (EMRBITBLT*)_lpmr : null;
         public EMRENUMRECORD<Gdi32.ICM>* SetIcmModeRecord
-            => Type == Gdi32.EMR.SETICMMODE ? (EMRENUMRECORD<Gdi32.ICM>*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETICMMODE ? (EMRENUMRECORD<Gdi32.ICM>*)_lpmr : null;
         public EMRPOLY16* Polygon16Record
-            => Type == Gdi32.EMR.POLYGON16 ? (EMRPOLY16*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16 ? (EMRPOLY16*)_lpmr : null;
         public EMRPOLY16* Polyline16Record
-            => Type == Gdi32.EMR.POLYLINE16 ? (EMRPOLY16*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYLINE16 ? (EMRPOLY16*)_lpmr : null;
         public EMRPOLY16* PolyBezier16Record
-            => Type == Gdi32.EMR.POLYBEZIER16 ? (EMRPOLY16*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYBEZIER16 ? (EMRPOLY16*)_lpmr : null;
         public EMRPOLY16* PolylineTo16Record
-            => Type == Gdi32.EMR.POLYLINETO16 ? (EMRPOLY16*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYLINETO16 ? (EMRPOLY16*)_lpmr : null;
         public EMRPOLY16* PolyBezierTo16Record
-            => Type == Gdi32.EMR.POLYBEZIERTO16 ? (EMRPOLY16*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYBEZIERTO16 ? (EMRPOLY16*)_lpmr : null;
         public EMRPOLYPOLY16* PolyPolyline16Record
-            => Type == Gdi32.EMR.POLYPOLYLINE16 ? (EMRPOLYPOLY16*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYLINE16 ? (EMRPOLYPOLY16*)_lpmr : null;
         public EMRPOLYPOLY16* PolyPolygon16Record
-            => Type == Gdi32.EMR.POLYPOLYGON16 ? (EMRPOLYPOLY16*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYGON16 ? (EMRPOLYPOLY16*)_lpmr : null;
         public EMRSETWORLDTRANSFORM* SetWorldTransformRecord
-            => Type == Gdi32.EMR.SETWORLDTRANSFORM ? (EMRSETWORLDTRANSFORM*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETWORLDTRANSFORM ? (EMRSETWORLDTRANSFORM*)_lpmr : null;
         public EMRMODIFYWORLDTRANSFORM* ModifyWorldTransformRecord
-            => Type == Gdi32.EMR.MODIFYWORLDTRANSFORM ? (EMRMODIFYWORLDTRANSFORM*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_MODIFYWORLDTRANSFORM ? (EMRMODIFYWORLDTRANSFORM*)_lpmr : null;
         public EMRSETCOLOR* SetBkColorRecord
-            => Type == Gdi32.EMR.SETBKCOLOR ? (EMRSETCOLOR*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETBKCOLOR ? (EMRSETCOLOR*)_lpmr : null;
         public EMRSETCOLOR* SetTextColorRecord
-            => Type == Gdi32.EMR.SETTEXTCOLOR ? (EMRSETCOLOR*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETTEXTCOLOR ? (EMRSETCOLOR*)_lpmr : null;
         public EMRCREATEDIBPATTERNBRUSHPT* CreateDibPatternBrushPtRecord
-            => Type == Gdi32.EMR.CREATEDIBPATTERNBRUSHPT ? (EMRCREATEDIBPATTERNBRUSHPT*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEDIBPATTERNBRUSHPT ? (EMRCREATEDIBPATTERNBRUSHPT*)_lpmr : null;
         public EMRENUMRECORD<TEXT_ALIGN_OPTIONS>* SetTextAlignRecord
-            => Type == Gdi32.EMR.SETTEXTALIGN ? (EMRENUMRECORD<TEXT_ALIGN_OPTIONS>*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETTEXTALIGN ? (EMRENUMRECORD<TEXT_ALIGN_OPTIONS>*)_lpmr : null;
         public EMREXTCREATEFONTINDIRECTW* ExtCreateFontIndirectWRecord
-            => Type == Gdi32.EMR.EXTCREATEFONTINDIRECTW ? (EMREXTCREATEFONTINDIRECTW*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTCREATEFONTINDIRECTW ? (EMREXTCREATEFONTINDIRECTW*)_lpmr : null;
         public EMREXTTEXTOUTW* ExtTextOutWRecord
-            => Type == Gdi32.EMR.EXTTEXTOUTW ? (EMREXTTEXTOUTW*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTTEXTOUTW ? (EMREXTTEXTOUTW*)_lpmr : null;
         public EMRENUMRECORD<HDC_MAP_MODE>* SetMapModeRecord
-            => Type == Gdi32.EMR.SETMAPMODE ? (EMRENUMRECORD<HDC_MAP_MODE>*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETMAPMODE ? (EMRENUMRECORD<HDC_MAP_MODE>*)_lpmr : null;
         public EMRRECTRECORD* FillPathRecord
-            => Type == Gdi32.EMR.FILLPATH ? (EMRRECTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_FILLPATH ? (EMRRECTRECORD*)_lpmr : null;
         public EMRRECTRECORD* StrokeAndFillPathRecord
-            => Type == Gdi32.EMR.STROKEANDFILLPATH ? (EMRRECTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_STROKEANDFILLPATH ? (EMRRECTRECORD*)_lpmr : null;
         public EMRRECTRECORD* StrokePathRecord
-            => Type == Gdi32.EMR.STROKEPATH ? (EMRRECTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_STROKEPATH ? (EMRRECTRECORD*)_lpmr : null;
         public EMRRECTRECORD* ExcludeClipRectRecord
-            => Type == Gdi32.EMR.EXCLUDECLIPRECT ? (EMRRECTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_EXCLUDECLIPRECT ? (EMRRECTRECORD*)_lpmr : null;
         public EMRRECTRECORD* IntersetClipRectRecord
-            => Type == Gdi32.EMR.INTERSECTCLIPRECT ? (EMRRECTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_INTERSECTCLIPRECT ? (EMRRECTRECORD*)_lpmr : null;
         public EMRRECTRECORD* EllipseRecord
-            => Type == Gdi32.EMR.ELLIPSE ? (EMRRECTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_ELLIPSE ? (EMRRECTRECORD*)_lpmr : null;
         public EMRRECTRECORD* RectangleRecord
-            => Type == Gdi32.EMR.RECTANGLE ? (EMRRECTRECORD*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_RECTANGLE ? (EMRRECTRECORD*)_lpmr : null;
         public EMRRESTOREDC* RestoreDCRecord
-            => Type == Gdi32.EMR.RESTOREDC ? (EMRRESTOREDC*)_lpmr : null;
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_RESTOREDC ? (EMRRESTOREDC*)_lpmr : null;
 
         public override string ToString() => Type switch
         {
             // Note that not all records have special handling yet- we're filling these in as we go.
-            Gdi32.EMR.HEADER => HeaderRecord->ToString(),
-            Gdi32.EMR.EXTSELECTCLIPRGN => ExtSelectClipRgnRecord->ToString(),
-            Gdi32.EMR.SETVIEWPORTORGEX => SetViewportOrgExRecord->ToString(),
-            Gdi32.EMR.SETWINDOWORGEX => SetWindowOrgExRecord->ToString(),
-            Gdi32.EMR.OFFSETCLIPRGN => OffsetClipRgnRecord->ToString(),
-            Gdi32.EMR.MOVETOEX => MoveToExRecord->ToString(),
-            Gdi32.EMR.LINETO => LineToRecord->ToString(),
-            Gdi32.EMR.CREATEBRUSHINDIRECT => CreateBrushIndirectRecord->ToString(),
-            Gdi32.EMR.SETBKMODE => SetBkModeRecord->ToString(),
-            Gdi32.EMR.SETROP2 => SetROP2Record->ToString(),
-            Gdi32.EMR.CREATEPEN => CreatePenRecord->ToString(),
-            Gdi32.EMR.EXTCREATEPEN => ExtCreatePenRecord->ToString(),
-            Gdi32.EMR.SELECTOBJECT => SelectObjectRecord->ToString(),
-            Gdi32.EMR.DELETEOBJECT => DeleteObjectRecord->ToString(),
-            Gdi32.EMR.BITBLT => BitBltRecord->ToString(),
-            Gdi32.EMR.SETICMMODE => SetIcmModeRecord->ToString(),
-            Gdi32.EMR.POLYLINE16 => Polyline16Record->ToString(),
-            Gdi32.EMR.POLYBEZIER16 => PolyBezier16Record->ToString(),
-            Gdi32.EMR.POLYGON16 => Polygon16Record->ToString(),
-            Gdi32.EMR.POLYBEZIERTO16 => PolyBezierTo16Record->ToString(),
-            Gdi32.EMR.POLYLINETO16 => PolylineTo16Record->ToString(),
-            Gdi32.EMR.POLYPOLYGON16 => PolyPolygon16Record->ToString(),
-            Gdi32.EMR.POLYPOLYLINE16 => PolyPolyline16Record->ToString(),
-            Gdi32.EMR.SETWORLDTRANSFORM => SetWorldTransformRecord->ToString(),
-            Gdi32.EMR.MODIFYWORLDTRANSFORM => ModifyWorldTransformRecord->ToString(),
-            Gdi32.EMR.SETTEXTCOLOR => SetTextColorRecord->ToString(),
-            Gdi32.EMR.SETBKCOLOR => SetBkColorRecord->ToString(),
-            Gdi32.EMR.CREATEDIBPATTERNBRUSHPT => CreateDibPatternBrushPtRecord->ToString(),
-            Gdi32.EMR.SETTEXTALIGN => SetTextAlignRecord->ToString(),
-            Gdi32.EMR.EXTCREATEFONTINDIRECTW => ExtCreateFontIndirectWRecord->ToString(),
-            Gdi32.EMR.EXTTEXTOUTW => ExtTextOutWRecord->ToString(),
-            Gdi32.EMR.SETMAPMODE => SetMapModeRecord->ToString(),
-            Gdi32.EMR.FILLPATH => FillPathRecord->ToString(),
-            Gdi32.EMR.STROKEANDFILLPATH => StrokeAndFillPathRecord->ToString(),
-            Gdi32.EMR.STROKEPATH => StrokePathRecord->ToString(),
-            Gdi32.EMR.EXCLUDECLIPRECT => ExcludeClipRectRecord->ToString(),
-            Gdi32.EMR.INTERSECTCLIPRECT => IntersetClipRectRecord->ToString(),
-            Gdi32.EMR.ELLIPSE => EllipseRecord->ToString(),
-            Gdi32.EMR.RECTANGLE => RectangleRecord->ToString(),
-            Gdi32.EMR.RESTOREDC => RestoreDCRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_HEADER => HeaderRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTSELECTCLIPRGN => ExtSelectClipRgnRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SETVIEWPORTORGEX => SetViewportOrgExRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SETWINDOWORGEX => SetWindowOrgExRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_OFFSETCLIPRGN => OffsetClipRgnRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_MOVETOEX => MoveToExRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_LINETO => LineToRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEBRUSHINDIRECT => CreateBrushIndirectRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SETBKMODE => SetBkModeRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SETROP2 => SetROP2Record->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEPEN => CreatePenRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTCREATEPEN => ExtCreatePenRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SELECTOBJECT => SelectObjectRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_DELETEOBJECT => DeleteObjectRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_BITBLT => BitBltRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SETICMMODE => SetIcmModeRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYLINE16 => Polyline16Record->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYBEZIER16 => PolyBezier16Record->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16 => Polygon16Record->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYBEZIERTO16 => PolyBezierTo16Record->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYLINETO16 => PolylineTo16Record->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYGON16 => PolyPolygon16Record->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYLINE16 => PolyPolyline16Record->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SETWORLDTRANSFORM => SetWorldTransformRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_MODIFYWORLDTRANSFORM => ModifyWorldTransformRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SETTEXTCOLOR => SetTextColorRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SETBKCOLOR => SetBkColorRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEDIBPATTERNBRUSHPT => CreateDibPatternBrushPtRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SETTEXTALIGN => SetTextAlignRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTCREATEFONTINDIRECTW => ExtCreateFontIndirectWRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTTEXTOUTW => ExtTextOutWRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_SETMAPMODE => SetMapModeRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_FILLPATH => FillPathRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_STROKEANDFILLPATH => StrokeAndFillPathRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_STROKEPATH => StrokePathRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_EXCLUDECLIPRECT => ExcludeClipRectRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_INTERSECTCLIPRECT => IntersetClipRectRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_ELLIPSE => EllipseRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_RECTANGLE => RectangleRecord->ToString(),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_RESTOREDC => RestoreDCRecord->ToString(),
             _ => $"[EMR{Type}]"
         };
 
         public string ToString(DeviceContextState state) => Type switch
         {
-            Gdi32.EMR.POLYLINE16 => Polyline16Record->ToString(state),
-            Gdi32.EMR.POLYGON16 => Polygon16Record->ToString(state),
-            Gdi32.EMR.POLYPOLYGON16 => PolyPolygon16Record->ToString(state),
-            Gdi32.EMR.POLYPOLYLINE16 => PolyPolyline16Record->ToString(state),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYLINE16 => Polyline16Record->ToString(state),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16 => Polygon16Record->ToString(state),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYGON16 => PolyPolygon16Record->ToString(state),
+            ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYLINE16 => PolyPolyline16Record->ToString(state),
             _ => ToString()
         };
     }
