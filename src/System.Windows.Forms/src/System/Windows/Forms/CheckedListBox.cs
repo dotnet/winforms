@@ -559,7 +559,7 @@ namespace System.Windows.Forms
                         isMixed: false,
                         (e.State & DrawItemState.HotLight) == DrawItemState.HotLight);
 
-                    _idealCheckSize = CheckBoxRenderer.GetGlyphSize(e, cbState, HandleInternal).Width;
+                    _idealCheckSize = CheckBoxRenderer.GetGlyphSize(e, cbState, HWNDInternal).Width;
                 }
 
                 // Determine bounds for the checkbox
@@ -594,7 +594,7 @@ namespace System.Windows.Forms
                         isMixed: false,
                         ((e.State & DrawItemState.HotLight) == DrawItemState.HotLight));
 
-                    CheckBoxRenderer.DrawCheckBoxWithVisualStyles(e, new Point(box.X, box.Y), cbState, HandleInternal);
+                    CheckBoxRenderer.DrawCheckBoxWithVisualStyles(e, new Point(box.X, box.Y), cbState, HWNDInternal);
                 }
                 else
                 {

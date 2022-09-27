@@ -2,16 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-internal static partial class Interop
+namespace Windows.Win32
 {
-    public static partial class UxTheme
+    internal static partial class PInvoke
     {
         /// <summary>
         ///  Helper to scope the lifetime of a an HTHEME.
         /// </summary>
         /// <remarks>
-        ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
-        ///  <see langword="ref" /> to avoid duplicating the handle and risking a double close.
+        ///  <para>
+        ///   Use in a <see langword="using" /> statement. If you must pass this around, always pass by
+        ///   <see langword="ref" /> to avoid duplicating the handle and risking a double close.
+        ///  </para>
         /// </remarks>
 #if DEBUG
         internal class OpenThemeDataScope : DisposalTracking.Tracker, IDisposable
@@ -19,23 +21,23 @@ internal static partial class Interop
         internal readonly ref struct OpenThemeDataScope
 #endif
         {
-            public IntPtr HTheme { get; }
+            public nint HTheme { get; }
 
             /// <summary>
-            ///  Opens the requested theme data using <see cref="OpenThemeData(IntPtr, string)"/>.
+            ///  Opens the requested theme data using <see cref="OpenThemeData(HWND, string)"/>.
             /// </summary>
-            public OpenThemeDataScope(IntPtr hwnd, string pszClassList)
+            public OpenThemeDataScope(HWND hwnd, string pszClassList, bool throwOnError = false)
             {
                 HTheme = OpenThemeData(hwnd, pszClassList);
             }
 
-            public static implicit operator IntPtr(in OpenThemeDataScope scope) => scope.HTheme;
+            public static implicit operator nint(in OpenThemeDataScope scope) => scope.HTheme;
 
-            public bool IsNull => HTheme == IntPtr.Zero;
+            public bool IsNull => HTheme == 0;
 
             public void Dispose()
             {
-                if (HTheme != IntPtr.Zero)
+                if (HTheme != 0)
                 {
                     CloseThemeData(HTheme);
                 }

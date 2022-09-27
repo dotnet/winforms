@@ -280,7 +280,7 @@ namespace System.Windows.Forms
                     vsr.DrawBackground(
                         hdc,
                         new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
-                        HandleInternal);
+                        HWNDInternal);
 
                     if (!Enabled)
                     {
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
                     vsr.DrawBackground(
                         hdc,
                         new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
-                        HandleInternal);
+                        HWNDInternal);
                 }
                 else
                 {

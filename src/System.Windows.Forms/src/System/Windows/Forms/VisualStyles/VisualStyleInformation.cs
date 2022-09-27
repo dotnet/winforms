@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.VisualStyles
 {
@@ -33,7 +32,7 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///  Returns true if a visual style has currently been applied by the user, else false.
         /// </summary>
-        public static bool IsEnabledByUser => UxTheme.IsAppThemed();
+        public static bool IsEnabledByUser => PInvoke.IsAppThemed();
 
         internal static unsafe string ThemeFilename
         {
@@ -44,7 +43,7 @@ namespace System.Windows.Forms.VisualStyles
                     Span<char> filename = stackalloc char[512];
                     fixed (char* pFilename = filename)
                     {
-                        UxTheme.GetCurrentThemeName(pFilename, filename.Length, null, 0, null, 0);
+                        PInvoke.GetCurrentThemeName(pFilename, filename.Length, null, 0, null, 0);
                     }
 
                     return filename.SliceAtFirstNull().ToString();
@@ -66,7 +65,7 @@ namespace System.Windows.Forms.VisualStyles
                     Span<char> colorScheme = stackalloc char[512];
                     fixed (char* pColorScheme = colorScheme)
                     {
-                        UxTheme.GetCurrentThemeName(null, 0, pColorScheme, colorScheme.Length, null, 0);
+                        PInvoke.GetCurrentThemeName(null, 0, pColorScheme, colorScheme.Length, null, 0);
                     }
 
                     return colorScheme.SliceAtFirstNull().ToString();
@@ -88,7 +87,7 @@ namespace System.Windows.Forms.VisualStyles
                     Span<char> size = stackalloc char[512];
                     fixed (char* pSize = size)
                     {
-                        UxTheme.GetCurrentThemeName(null, 0, null, 0, pSize, size.Length);
+                        PInvoke.GetCurrentThemeName(null, 0, null, 0, pSize, size.Length);
                     }
 
                     return size.SliceAtFirstNull().ToString();
@@ -101,139 +100,60 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///  The current visual style's display name.
         /// </summary>
-        public static unsafe string DisplayName
-        {
-            get
-            {
-                if (IsEnabledByUser)
-                {
-                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.DisplayName);
-                }
-
-                return string.Empty;
-            }
-        }
+        public static unsafe string DisplayName => IsEnabledByUser
+            ? PInvoke.GetThemeDocumentationProperty(ThemeFilename, "DisplayName")
+            : string.Empty;
 
         /// <summary>
         ///  The current visual style's company.
         /// </summary>
-        public static string Company
-        {
-            get
-            {
-                if (IsEnabledByUser)
-                {
-                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Company);
-                }
-
-                return string.Empty;
-            }
-        }
+        public static string Company => IsEnabledByUser
+            ? PInvoke.GetThemeDocumentationProperty(ThemeFilename, "Company")
+            : string.Empty;
 
         /// <summary>
         ///  The name of the current visual style's author.
         /// </summary>
-        public static string Author
-        {
-            get
-            {
-                if (IsEnabledByUser)
-                {
-                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Author);
-                }
-
-                return string.Empty;
-            }
-        }
+        public static string Author => IsEnabledByUser
+            ? PInvoke.GetThemeDocumentationProperty(ThemeFilename, "Author")
+            : string.Empty;
 
         /// <summary>
         ///  The current visual style's copyright information.
         /// </summary>
-        public static string Copyright
-        {
-            get
-            {
-                if (IsEnabledByUser)
-                {
-                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Copyright);
-                }
-
-                return string.Empty;
-            }
-        }
+        public static string Copyright => IsEnabledByUser
+            ? PInvoke.GetThemeDocumentationProperty(ThemeFilename, "Copyright")
+            : string.Empty;
 
         /// <summary>
         ///  The current visual style's url.
         /// </summary>
-        public static string Url
-        {
-            get
-            {
-                if (IsEnabledByUser)
-                {
-                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Url);
-                }
-
-                return string.Empty;
-            }
-        }
+        public static string Url => IsEnabledByUser
+            ? PInvoke.GetThemeDocumentationProperty(ThemeFilename, "Url")
+            : string.Empty;
 
         /// <summary>
         ///  The current visual style's version.
         /// </summary>
-        public static string Version
-        {
-            get
-            {
-                if (IsEnabledByUser)
-                {
-                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Version);
-                }
-
-                return string.Empty;
-            }
-        }
+        public static string Version => IsEnabledByUser
+            ? PInvoke.GetThemeDocumentationProperty(ThemeFilename, "Version")
+            : string.Empty;
 
         /// <summary>
         ///  The current visual style's description.
         /// </summary>
-        public static string Description
-        {
-            get
-            {
-                if (IsEnabledByUser)
-                {
-                    return UxTheme.GetThemeDocumentationProperty(ThemeFilename, UxTheme.VisualStyleDocProperty.Description);
-                }
-
-                return string.Empty;
-            }
-        }
+        public static string Description => IsEnabledByUser
+            ? PInvoke.GetThemeDocumentationProperty(ThemeFilename, "Description")
+            : string.Empty;
 
         /// <summary>
         ///  Returns true if the current theme supports flat menus, else false.
         /// </summary>
-        public static bool SupportsFlatMenus
-        {
-            get
-            {
-                if (Application.RenderWithVisualStyles)
-                {
-                    if (t_visualStyleRenderer is null)
-                    {
-                        t_visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
-                    }
-                    else
-                    {
-                        t_visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
-                    }
-
-                    return UxTheme.GetThemeSysBool(t_visualStyleRenderer, UxTheme.TMT.FLATMENUS);
-                }
-
-                return false;
-            }
-        }
+        public static bool SupportsFlatMenus =>
+            Application.RenderWithVisualStyles
+            && PInvoke.GetThemeSysBool(
+                SetParameters(VisualStyleElement.Window.Caption.Active).Handle,
+                THEME_PROPERTY_SYMBOL_ID.TMT_FLATMENUS);
 
         /// <summary>
         ///  The minimum color depth supported by the current visual style.
@@ -242,77 +162,41 @@ namespace System.Windows.Forms.VisualStyles
         {
             get
             {
-                if (Application.RenderWithVisualStyles)
-                {
-                    if (t_visualStyleRenderer is null)
-                    {
-                        t_visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
-                    }
-                    else
-                    {
-                        t_visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
-                    }
+                PInvoke.GetThemeSysInt(
+                    SetParameters(VisualStyleElement.Window.Caption.Active).Handle,
+                    THEME_PROPERTY_SYMBOL_ID.TMT_MINCOLORDEPTH,
+                    out int depth);
 
-                    int mcDepth = 0;
-
-                    UxTheme.GetThemeSysInt(t_visualStyleRenderer, UxTheme.TMT.MINCOLORDEPTH, ref mcDepth);
-                    return mcDepth;
-                }
-
-                return 0;
+                return depth;
             }
         }
 
         /// <summary>
         ///  Border Color that Windows renders for controls like TextBox and ComboBox.
         /// </summary>
-        public static Color TextControlBorder
-        {
-            get
-            {
-                if (Application.RenderWithVisualStyles)
-                {
-                    if (t_visualStyleRenderer is null)
-                    {
-                        t_visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.TextBox.TextEdit.Normal);
-                    }
-                    else
-                    {
-                        t_visualStyleRenderer.SetParameters(VisualStyleElement.TextBox.TextEdit.Normal);
-                    }
-
-                    Color borderColor = t_visualStyleRenderer.GetColor(ColorProperty.BorderColor);
-                    return borderColor;
-                }
-
-                return SystemColors.WindowFrame;
-            }
-        }
+        public static Color TextControlBorder => Application.RenderWithVisualStyles
+            ? SetParameters(VisualStyleElement.TextBox.TextEdit.Normal).GetColor(ColorProperty.BorderColor)
+            : SystemColors.WindowFrame;
 
         /// <summary>
         ///  This is the color buttons and tab pages are highlighted with when they are moused over on themed OS.
         /// </summary>
-        public static Color ControlHighlightHot
+        public static Color ControlHighlightHot => Application.RenderWithVisualStyles
+            ? SetParameters(VisualStyleElement.Button.PushButton.Normal).GetColor(ColorProperty.AccentColorHint)
+            : SystemColors.ButtonHighlight;
+
+        private static VisualStyleRenderer SetParameters(VisualStyleElement element)
         {
-            get
+            if (t_visualStyleRenderer is null)
             {
-                if (Application.RenderWithVisualStyles)
-                {
-                    if (t_visualStyleRenderer is null)
-                    {
-                        t_visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
-                    }
-                    else
-                    {
-                        t_visualStyleRenderer.SetParameters(VisualStyleElement.Button.PushButton.Normal);
-                    }
-
-                    Color accentColor = t_visualStyleRenderer.GetColor(ColorProperty.AccentColorHint);
-                    return accentColor;
-                }
-
-                return SystemColors.ButtonHighlight;
+                t_visualStyleRenderer = new VisualStyleRenderer(element);
             }
+            else
+            {
+                t_visualStyleRenderer.SetParameters(element);
+            }
+
+            return t_visualStyleRenderer;
         }
     }
 }
