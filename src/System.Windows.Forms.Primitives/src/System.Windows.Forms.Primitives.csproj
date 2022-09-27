@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Primitives</AssemblyName>
@@ -21,6 +21,12 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Remove="Interop\Gdi32\**" />
+    <EmbeddedResource Remove="Interop\Gdi32\**" />
+    <None Remove="Interop\Gdi32\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Accessibility\src\Accessibility.ilproj" />
@@ -40,10 +46,6 @@
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Interop\Gdi32\" />
   </ItemGroup>
 
 </Project>
