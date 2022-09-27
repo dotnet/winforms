@@ -42,4 +42,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interop\Gdi32\" />
+  </ItemGroup>
+
 </Project>

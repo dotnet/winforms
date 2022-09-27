@@ -3,8 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 #nullable enable
-
-using static Interop;
+using Windows.Win32.UI.ColorSystem;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -65,8 +64,8 @@ namespace System.Windows.Forms.Metafiles
             => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_DELETEOBJECT ? (EMRINDEXRECORD*)_lpmr : null;
         public EMRBITBLT* BitBltRecord
             => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_BITBLT ? (EMRBITBLT*)_lpmr : null;
-        public EMRENUMRECORD<Gdi32.ICM>* SetIcmModeRecord
-            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETICMMODE ? (EMRENUMRECORD<Gdi32.ICM>*)_lpmr : null;
+        public EMRENUMRECORD<ICM_MODE>* SetIcmModeRecord
+            => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_SETICMMODE ? (EMRENUMRECORD<ICM_MODE>*)_lpmr : null;
         public EMRPOLY16* Polygon16Record
             => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16 ? (EMRPOLY16*)_lpmr : null;
         public EMRPOLY16* Polyline16Record

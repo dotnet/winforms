@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Metafiles;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -45,7 +44,7 @@ namespace System.Windows.Forms.Tests
                 state,
                 Validate.Rectangle(
                     new Rectangle(1, 1, 98, 17),
-                    State.Pen(2, upDown.BackColor, Gdi32.PS.SOLID)));
+                    State.Pen(2, upDown.BackColor, PEN_STYLE.PS_SOLID)));
 
             // Printing the main control doesn't get the redraw for the child controls on the first render,
             // directly hitting the up/down button subcontrol.
@@ -60,7 +59,7 @@ namespace System.Windows.Forms.Tests
                 Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
                 Validate.LineTo(
                     (0, 18), (16, 18),
-                    State.Pen(1, upDown.BackColor, Gdi32.PS.SOLID)));
+                    State.Pen(1, upDown.BackColor, PEN_STYLE.PS_SOLID)));
         }
 
         [WinFormsFact]
@@ -87,15 +86,15 @@ namespace System.Windows.Forms.Tests
                 state,
                 Validate.Rectangle(
                     new Rectangle(0, 0, 99, 18),
-                    State.Pen(1, upDown.BackColor, Gdi32.PS.SOLID)),
+                    State.Pen(1, upDown.BackColor, PEN_STYLE.PS_SOLID)),
                 Validate.Rectangle(
                     new Rectangle(1, 1, 97, 16),
-                    State.Pen(1, SystemColors.Control, Gdi32.PS.SOLID)),
+                    State.Pen(1, SystemColors.Control, PEN_STYLE.PS_SOLID)),
                 Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
                 Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_STRETCHDIBITS),
                 Validate.LineTo(
                     (0, 18), (16, 18),
-                    State.Pen(1, upDown.BackColor, Gdi32.PS.SOLID)));
+                    State.Pen(1, upDown.BackColor, PEN_STYLE.PS_SOLID)));
         }
 
         [WinFormsFact(Skip = "TODO, refer to https://github.com/dotnet/winforms/issues/4212")]

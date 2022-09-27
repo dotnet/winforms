@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Metafiles;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -251,8 +250,8 @@ namespace System.Windows.Forms.Tests
                 Validate.Rectangle(
                     new Rectangle(0, 0, button.Width - 1, button.Height - 1),
                     State.PenColor(Color.Black),
-                    State.PenStyle(Gdi32.PS.ENDCAP_ROUND),
-                    State.BrushStyle(Gdi32.BS.NULL),       // Regressed in https://github.com/dotnet/winforms/pull/3667
+                    State.PenStyle(PEN_STYLE.PS_ENDCAP_ROUND),
+                    State.BrushStyle(BRUSH_STYLE.BS_NULL),       // Regressed in https://github.com/dotnet/winforms/pull/3667
                     State.Rop2(R2_MODE.R2_COPYPEN)));
         }
     }

@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -177,13 +176,13 @@ namespace System.Windows.Forms.Metafiles
                         var transform = record.ModifyWorldTransformRecord;
                         switch (transform->iMode)
                         {
-                            case Gdi32.MWT.IDENTITY:
+                            case MODIFY_WORLD_TRANSFORM_MODE.MWT_IDENTITY:
                                 state.Transform = Matrix3x2.Identity;
                                 break;
-                            case Gdi32.MWT.LEFTMULTIPLY:
+                            case MODIFY_WORLD_TRANSFORM_MODE.MWT_LEFTMULTIPLY:
                                 state.Transform = transform->xform * state.Transform;
                                 break;
-                            case Gdi32.MWT.RIGHTMULTIPLY:
+                            case MODIFY_WORLD_TRANSFORM_MODE.MWT_RIGHTMULTIPLY:
                                 state.Transform = state.Transform * transform->xform;
                                 break;
                         }

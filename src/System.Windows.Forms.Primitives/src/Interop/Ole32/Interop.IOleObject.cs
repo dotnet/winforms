@@ -112,7 +112,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT SetColorScheme(
-                Gdi32.LOGPALETTE* pLogpal);
+                LOGPALETTE* pLogpal);
         }
     }
 }

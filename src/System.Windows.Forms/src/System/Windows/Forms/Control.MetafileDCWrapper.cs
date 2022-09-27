@@ -5,7 +5,6 @@
 using System.Buffers;
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -109,7 +108,7 @@ namespace System.Windows.Forms
                     // Restore original bitmap
                     PInvoke.SelectObject(hdcSrc, hBitmap);
 
-                    if (!PInvoke.GetObject(hBitmap, out Gdi32.BITMAP bmp))
+                    if (!PInvoke.GetObject(hBitmap, out BITMAP bmp))
                     {
                         return false;
                     }
@@ -136,7 +135,7 @@ namespace System.Windows.Forms
                                 biHeight = bmp.bmHeight,
                                 biPlanes = 1,
                                 biBitCount = bmp.bmBitsPixel,
-                                biCompression = (uint)Gdi32.BI.RGB
+                                biCompression = BI_COMPRESSION.BI_RGB
                             };
 
                             // Include the palette for 256 color bitmaps
