@@ -26,7 +26,7 @@ namespace Windows.Win32
             /// <summary>
             ///  Opens the requested theme data using <see cref="OpenThemeData(HWND, string)"/>.
             /// </summary>
-            public OpenThemeDataScope(HWND hwnd, string pszClassList, bool throwOnError = false)
+            public OpenThemeDataScope(HWND hwnd, string pszClassList)
             {
                 HTheme = OpenThemeData(hwnd, pszClassList);
             }

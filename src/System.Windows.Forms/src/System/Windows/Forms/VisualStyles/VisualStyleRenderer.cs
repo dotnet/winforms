@@ -602,7 +602,7 @@ namespace System.Windows.Forms.VisualStyles
 
             // Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(type, nameof(type));
-            
+
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = PInvoke.GetThemePartSize(Handle, hdc, Part, State, bounds, (THEMESIZE)type, out SIZE size);
             return size;
@@ -626,7 +626,7 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe Padding GetMargins(IDeviceContext dc, MarginProperty prop)
         {
             ArgumentNullException.ThrowIfNull(dc);
-            
+
             // Valid values are 0xe11 to 0xe13
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
@@ -705,7 +705,7 @@ namespace System.Windows.Forms.VisualStyles
         public TextMetrics GetTextMetrics(IDeviceContext dc)
         {
             ArgumentNullException.ThrowIfNull(dc);
-            
+
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = PInvoke.GetThemeTextMetrics(Handle, hdc, Part, State, out TEXTMETRICW tm);
             return TextMetrics.FromTEXTMETRICW(tm);
@@ -729,7 +729,7 @@ namespace System.Windows.Forms.VisualStyles
                 HRGN.Null,
                 pt,
                 out ushort code);
-            
+
             return (HitTestCode)code;
         }
 
@@ -763,6 +763,7 @@ namespace System.Windows.Forms.VisualStyles
                 (HRGN)hRgn,
                 pt,
                 out ushort code);
+
             return (HitTestCode)code;
         }
 
