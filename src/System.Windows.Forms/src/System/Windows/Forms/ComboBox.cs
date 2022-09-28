@@ -3315,7 +3315,7 @@ namespace System.Windows.Forms
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {
-                            Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                            PInvoke.SHAutoComplete(new HandleRef<HWND>(this, _childEdit.HWND), SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
                         }
                         else
                         {
@@ -3342,7 +3342,7 @@ namespace System.Windows.Forms
                         {
                             if (_itemsCollection.Count == 0)
                             {
-                                Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                                PInvoke.SHAutoComplete(new HandleRef<HWND>(this, _childEdit.HWND), SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
                             }
                             else
                             {
@@ -3365,34 +3365,34 @@ namespace System.Windows.Forms
                     {
                         // Drop Down List special handling
                         Debug.Assert(DropDownStyle == ComboBoxStyle.DropDownList);
-                        Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                        PInvoke.SHAutoComplete(new HandleRef<HWND>(this, _childEdit.HWND), SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
                     }
                 }
                 else
                 {
-                    Shlwapi.SHACF mode = Shlwapi.SHACF.DEFAULT;
+                    SHELL_AUTOCOMPLETE_FLAGS mode = SHELL_AUTOCOMPLETE_FLAGS.SHACF_DEFAULT;
                     if (AutoCompleteMode == AutoCompleteMode.Suggest)
                     {
-                        mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
+                        mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_ON | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF;
                     }
 
                     if (AutoCompleteMode == AutoCompleteMode.Append)
                     {
-                        mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
+                        mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_ON | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF;
                     }
 
                     if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                     {
-                        mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
-                        mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON;
+                        mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_ON;
+                        mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_ON;
                     }
 
-                    Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), (Shlwapi.SHACF)AutoCompleteSource | mode);
+                    PInvoke.SHAutoComplete(new HandleRef<HWND>(this, _childEdit.HWND), (SHELL_AUTOCOMPLETE_FLAGS)AutoCompleteSource | mode);
                 }
             }
             else if (reset)
             {
-                Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                PInvoke.SHAutoComplete(new HandleRef<HWND>(this, _childEdit.HWND), SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
             }
         }
 
