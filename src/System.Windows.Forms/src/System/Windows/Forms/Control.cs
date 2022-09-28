@@ -14572,6 +14572,7 @@ namespace System.Windows.Forms
         HWND IHandle<HWND>.Handle => HWND;
 
         internal HWND HWND => (HWND)Handle;
+        internal HWND HWNDInternal => (HWND)HandleInternal;
 
         internal virtual bool AllowsChildrenToShowToolTips() => true;
     }

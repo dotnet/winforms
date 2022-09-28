@@ -1583,7 +1583,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _lastPaintWithExplorerStyle = true;
                 }
 
-                PaintOutlineWithExplorerTreeStyle(g, r, (OwnerGridView is not null) ? OwnerGridView.HandleInternal : IntPtr.Zero);
+                PaintOutlineWithExplorerTreeStyle(g, r, OwnerGridView.HWNDInternal);
             }
             else
             {
@@ -1602,7 +1602,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             // Draw the expansion glyph with the Explorer tree style.
-            void PaintOutlineWithExplorerTreeStyle(Graphics g, Rectangle r, IntPtr handle)
+            void PaintOutlineWithExplorerTreeStyle(Graphics g, Rectangle r, HWND hwnd)
             {
                 // Make sure we're in our bounds.
                 Rectangle outline = Rectangle.Intersect(r, OutlineRectangle);
@@ -1628,20 +1628,20 @@ namespace System.Windows.Forms.PropertyGridInternal
                         : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
 
                     VisualStyleRenderer explorerTreeRenderer = new(element);
-                    RedrawExplorerTreeViewClosedGlyph(g, explorerTreeRenderer, outline, handle);
+                    RedrawExplorerTreeViewClosedGlyph(g, explorerTreeRenderer, outline, hwnd);
                 }
                 else
                 {
                     using var hdc = new DeviceContextHdcScope(g);
                     VisualStyleRenderer explorerTreeRenderer = new(VisualStyleElement.ExplorerTreeView.Glyph.Opened);
-                    explorerTreeRenderer.DrawBackground(hdc, outline, handle);
+                    explorerTreeRenderer.DrawBackground(hdc, outline, hwnd);
                 }
 
                 unsafe void RedrawExplorerTreeViewClosedGlyph(
                     Graphics graphics,
                     VisualStyleRenderer explorerTreeRenderer,
                     Rectangle rectangle,
-                    IntPtr handle)
+                    HWND hwnd)
                 {
                     Color backgroundColor = ColorInversionNeededInHighContrast ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
                     using var compatibleDC = new PInvoke.CreateDcScope(default);
@@ -1653,7 +1653,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     using PInvoke.CreateBrushScope brush = new(backgroundColor);
                     compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), brush);
-                    explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), handle);
+                    explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), hwnd);
 
                     using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap);
                     ControlPaint.InvertForeColorIfNeeded(bitmap, backgroundColor);

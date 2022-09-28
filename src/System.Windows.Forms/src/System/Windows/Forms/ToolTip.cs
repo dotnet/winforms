@@ -740,7 +740,7 @@ namespace System.Windows.Forms
 
                 if (SystemInformation.HighContrast)
                 {
-                    UxTheme.SetWindowTheme(Handle, string.Empty, string.Empty);
+                    PInvoke.SetWindowTheme(HWND, string.Empty, string.Empty);
                 }
             }
             finally
