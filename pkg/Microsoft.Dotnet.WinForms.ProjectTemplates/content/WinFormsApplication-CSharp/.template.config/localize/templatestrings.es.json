@@ -13,7 +13,7 @@
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net7.0/description": "Objetivo net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
-  "symbols/Framework/choices/net8.0/description": "Target net8.0",
+  "symbols/Framework/choices/net8.0/description": "Net8.0 de destino",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
   "symbols/Framework/displayName": "Plataforma",
   "symbols/langVersion/description": "Establece langVersion en el archivo de proyecto creado.",
