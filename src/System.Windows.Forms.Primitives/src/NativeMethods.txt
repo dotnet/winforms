@@ -159,6 +159,17 @@ HFONT
 ICON_*
 IDC_*
 IDI_*
+IME_COMPOSITION_STRING
+ImmAssociateContext
+ImmCreateContext
+ImmGetContext
+ImmGetConversionStatus
+ImmGetOpenStatus
+ImmNotifyIME
+ImmReleaseContext
+ImmSetConversionStatus
+ImmSetOpenStatus
+IMN_*
 INPLACE_E_NOTOOLSPACE
 IntersectClipRect
 InvalidateRect

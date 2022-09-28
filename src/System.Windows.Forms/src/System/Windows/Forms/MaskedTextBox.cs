@@ -10,6 +10,8 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.Globalization;
+using Windows.Win32.UI.Input.Ime;
 using static Interop;
 using static Interop.User32;
 
@@ -1065,25 +1067,25 @@ namespace System.Windows.Forms
         private void ImeComplete()
         {
             _flagState[IME_COMPLETING] = true;
-            ImeNotify(Imm32.CPS.COMPLETE);
+            ImeNotify(NOTIFY_IME_INDEX.CPS_COMPLETE);
         }
 
         /// <summary>
         ///  Notifies the IMM about changes to the status of the IME input context.
         /// </summary>
-        private void ImeNotify(Imm32.CPS action)
+        private void ImeNotify(NOTIFY_IME_INDEX action)
         {
-            IntPtr inputContext = Imm32.ImmGetContext(this);
+            HIMC inputContext = PInvoke.ImmGetContext(this);
 
             if (inputContext != IntPtr.Zero)
             {
                 try
                 {
-                    Imm32.ImmNotifyIME(inputContext, Imm32.NI.COMPOSITIONSTR, action, 0);
+                    PInvoke.ImmNotifyIME(inputContext, NOTIFY_IME_ACTION.NI_COMPOSITIONSTR, action, 0);
                 }
                 finally
                 {
-                    Imm32.ImmReleaseContext(this, inputContext);
+                    PInvoke.ImmReleaseContext(this, inputContext);
                 }
             }
             else
@@ -2768,12 +2770,12 @@ namespace System.Windows.Forms
                 byte imeConversionType = imeConversionNone;
 
                 // Check if there's an update to the composition string:
-                if ((m.LParamInternal & (int)Imm32.GCS.COMPSTR) != 0)
+                if ((m.LParamInternal & (int)IME_COMPOSITION_STRING.GCS_COMPSTR) != 0)
                 {
                     // The character in the composition has been updated but not yet converted.
                     imeConversionType = imeConversionUpdate;
                 }
-                else if ((m.LParamInternal & (int)Imm32.GCS.RESULTSTR) != 0)
+                else if ((m.LParamInternal & (int)IME_COMPOSITION_STRING.GCS_RESULTSTR) != 0)
                 {
                     // The character(s) in the composition has been fully converted.
                     imeConversionType = imeConversionCompleted;
