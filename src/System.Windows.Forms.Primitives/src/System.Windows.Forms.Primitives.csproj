@@ -21,12 +21,6 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <Compile Remove="Interop\Gdi32\**" />
-    <EmbeddedResource Remove="Interop\Gdi32\**" />
-    <None Remove="Interop\Gdi32\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Accessibility\src\Accessibility.ilproj" />
