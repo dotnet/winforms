@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms.Automation;
-using static Interop;
 using static Interop.User32;
 
 namespace System
@@ -54,7 +53,7 @@ namespace System
 
             public bool IsApostrophe(char ch) => Static.IsApostrophe(ch);
 
-            public Gdi32.FW GetFontWeight(LOGFONTW logfont) => Static.GetFontWeight(logfont);
+            public FW GetFontWeight(LOGFONTW logfont) => Static.GetFontWeight(logfont);
 
             public COLORREF GetForegroundColor() => Static.GetForegroundColor();
 

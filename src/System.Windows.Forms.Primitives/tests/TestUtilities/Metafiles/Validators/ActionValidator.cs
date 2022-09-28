@@ -4,8 +4,6 @@
 
 #nullable enable
 
-using static Interop;
-
 namespace System.Windows.Forms.Metafiles
 {
     /// <summary>
@@ -13,23 +11,23 @@ namespace System.Windows.Forms.Metafiles
     /// </summary>
     internal class ActionValidator : IEmfValidator
     {
-        private readonly Gdi32.EMR _recordType;
+        private readonly ENHANCED_METAFILE_RECORD_TYPE _recordType;
         private readonly ProcessRecordDelegate? _processor;
         private readonly ProcessRecordWithStateDelegate? _processorWithState;
 
-        public ActionValidator(Gdi32.EMR recordType, ProcessRecordDelegate processor)
+        public ActionValidator(ENHANCED_METAFILE_RECORD_TYPE recordType, ProcessRecordDelegate processor)
         {
             _recordType = recordType;
             _processor = processor;
         }
 
-        public ActionValidator(Gdi32.EMR recordType, ProcessRecordWithStateDelegate processor)
+        public ActionValidator(ENHANCED_METAFILE_RECORD_TYPE recordType, ProcessRecordWithStateDelegate processor)
         {
             _recordType = recordType;
             _processorWithState = processor;
         }
 
-        public bool ShouldValidate(Gdi32.EMR recordType) => recordType == _recordType;
+        public bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType) => recordType == _recordType;
 
         public void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
         {

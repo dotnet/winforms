@@ -178,12 +178,12 @@ namespace System.Windows.Forms
             {
                 *((BITMAPINFOHEADER*)bi) = new BITMAPINFOHEADER
                 {
-                    biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
+                    biSize = (uint)sizeof(BITMAPINFOHEADER),
                     biWidth = bitmap.Width,
                     biHeight = bitmap.Height,
                     biPlanes = 1,
                     biBitCount = 16,
-                    biCompression = (uint)Gdi32.BI.RGB
+                    biCompression = BI_COMPRESSION.BI_RGB
                 };
 
                 Span<RGBQUAD> colors = new(bi + sizeof(BITMAPINFOHEADER), (int)entryCount);
@@ -349,7 +349,7 @@ namespace System.Windows.Forms
 
             LOGBRUSH lb = new()
             {
-                lbStyle = (BRUSH_STYLE)(uint)Gdi32.BS.PATTERN,
+                lbStyle = BRUSH_STYLE.BS_PATTERN,
                 lbColor = default, // color is ignored since style is BS.PATTERN
                 lbHatch = (nuint)(IntPtr)hBitmap
             };
@@ -2036,7 +2036,7 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(dc);
 
             // This must come before creating the scope.
-            Gdi32.QUALITY quality = TextRenderer.FontQualityFromTextRenderingHint(dc);
+            FONT_QUALITY quality = TextRenderer.FontQualityFromTextRenderingHint(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             DrawStringDisabled(hdc, s, font, color, layoutRectangle, format, quality);
@@ -2049,7 +2049,7 @@ namespace System.Windows.Forms
             Color color,
             Rectangle layoutRectangle,
             TextFormatFlags format,
-            Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)
+            FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY)
         {
             if (SystemInformation.HighContrast)
             {
@@ -2158,7 +2158,7 @@ namespace System.Windows.Forms
             }
 
             bool fontBold = target.Bold;
-            bool isBold = logfont.lfWeight >= (int)Gdi32.FW.BOLD;
+            bool isBold = logfont.lfWeight >= (int)FW.BOLD;
             if (fontBold != isBold)
             {
                 target.Bold = isBold;

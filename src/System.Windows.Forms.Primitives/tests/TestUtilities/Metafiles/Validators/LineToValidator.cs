@@ -6,7 +6,6 @@
 
 using System.Drawing;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -27,7 +26,7 @@ namespace System.Windows.Forms.Metafiles
             _to = to;
         }
 
-        public override bool ShouldValidate(Gdi32.EMR recordType) => recordType == Gdi32.EMR.LINETO;
+        public override bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType) => recordType == ENHANCED_METAFILE_RECORD_TYPE.EMR_LINETO;
 
         public override unsafe void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
         {

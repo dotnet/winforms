@@ -7,7 +7,6 @@
 using System.Drawing;
 using System.Numerics;
 using System.Windows.Forms.Metafiles;
-using static Interop;
 
 namespace System
 {
@@ -47,11 +46,11 @@ namespace System
             SelectedFont = logfont;
 
             var hpen = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_PEN);
-            PInvoke.GetObject(hpen, out Gdi32.LOGPEN logpen);
+            PInvoke.GetObject(hpen, out LOGPEN logpen);
             SelectedPen = logpen;
 
             var hbrush = PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_BRUSH);
-            PInvoke.GetObject(hbrush, out Gdi32.LOGBRUSH logbrush);
+            PInvoke.GetObject(hbrush, out LOGBRUSH logbrush);
             SelectedBrush = logbrush;
         }
 
@@ -63,7 +62,7 @@ namespace System
         public TEXT_ALIGN_OPTIONS TextAlign { get => _currentState.TextAlign; set => _currentState.TextAlign = value; }
         public BACKGROUND_MODE BackgroundMode { get => _currentState.BackgroundMode; set => _currentState.BackgroundMode = value; }
         public LOGFONTW SelectedFont { get => _currentState.SelectedFont; set => _currentState.SelectedFont = value; }
-        public Gdi32.LOGBRUSH SelectedBrush { get => _currentState.SelectedBrush; set => _currentState.SelectedBrush = value; }
+        public LOGBRUSH SelectedBrush { get => _currentState.SelectedBrush; set => _currentState.SelectedBrush = value; }
         public EXTLOGPEN32 SelectedPen { get => _currentState.SelectedPen; set => _currentState.SelectedPen = value; }
         public Point LastBeginPathBrushOrigin { get => _currentState.LastBeginPathBrushOrigin; set => _currentState.LastBeginPathBrushOrigin = value; }
         public bool InPath { get => _currentState.InPath; set => _currentState.InPath = value; }
@@ -80,7 +79,7 @@ namespace System
             public TEXT_ALIGN_OPTIONS TextAlign { get; set; }
             public BACKGROUND_MODE BackgroundMode { get; set; }
             public LOGFONTW SelectedFont { get; set; }
-            public Gdi32.LOGBRUSH SelectedBrush { get; set; }
+            public LOGBRUSH SelectedBrush { get; set; }
             public EXTLOGPEN32 SelectedPen { get; set; }
             public Point LastBeginPathBrushOrigin { get; set; }
             public bool InPath { get; set; }
@@ -142,38 +141,38 @@ namespace System
 
             if (selectionRecord->IsStockObject)
             {
-                HGDIOBJ hgdiobj = PInvoke.GetStockObject((GET_STOCK_OBJECT_FLAGS)selectionRecord->StockObject);
+                HGDIOBJ hgdiobj = PInvoke.GetStockObject(selectionRecord->StockObject);
 
                 switch (selectionRecord->StockObject)
                 {
-                    case Gdi32.StockObject.ANSI_FIXED_FONT:
-                    case Gdi32.StockObject.OEM_FIXED_FONT:
-                    case Gdi32.StockObject.ANSI_VAR_FONT:
-                    case Gdi32.StockObject.SYSTEM_FONT:
-                    case Gdi32.StockObject.DEVICE_DEFAULT_FONT:
-                    case Gdi32.StockObject.SYSTEM_FIXED_FONT:
-                    case Gdi32.StockObject.DEFAULT_GUI_FONT:
+                    case GET_STOCK_OBJECT_FLAGS.ANSI_FIXED_FONT:
+                    case GET_STOCK_OBJECT_FLAGS.OEM_FIXED_FONT:
+                    case GET_STOCK_OBJECT_FLAGS.ANSI_VAR_FONT:
+                    case GET_STOCK_OBJECT_FLAGS.SYSTEM_FONT:
+                    case GET_STOCK_OBJECT_FLAGS.DEVICE_DEFAULT_FONT:
+                    case GET_STOCK_OBJECT_FLAGS.SYSTEM_FIXED_FONT:
+                    case GET_STOCK_OBJECT_FLAGS.DEFAULT_GUI_FONT:
                         PInvoke.GetObject(hgdiobj, out LOGFONTW logfont);
                         SelectedFont = logfont;
                         break;
-                    case Gdi32.StockObject.WHITE_BRUSH:
-                    case Gdi32.StockObject.LTGRAY_BRUSH:
-                    case Gdi32.StockObject.GRAY_BRUSH:
-                    case Gdi32.StockObject.DKGRAY_BRUSH:
-                    case Gdi32.StockObject.BLACK_BRUSH:
-                    case Gdi32.StockObject.NULL_BRUSH:
-                    case Gdi32.StockObject.DC_BRUSH:
-                        PInvoke.GetObject(hgdiobj, out Gdi32.LOGBRUSH logBrush);
+                    case GET_STOCK_OBJECT_FLAGS.WHITE_BRUSH:
+                    case GET_STOCK_OBJECT_FLAGS.LTGRAY_BRUSH:
+                    case GET_STOCK_OBJECT_FLAGS.GRAY_BRUSH:
+                    case GET_STOCK_OBJECT_FLAGS.DKGRAY_BRUSH:
+                    case GET_STOCK_OBJECT_FLAGS.BLACK_BRUSH:
+                    case GET_STOCK_OBJECT_FLAGS.NULL_BRUSH:
+                    case GET_STOCK_OBJECT_FLAGS.DC_BRUSH:
+                        PInvoke.GetObject(hgdiobj, out LOGBRUSH logBrush);
                         SelectedBrush = logBrush;
                         break;
-                    case Gdi32.StockObject.WHITE_PEN:
-                    case Gdi32.StockObject.BLACK_PEN:
-                    case Gdi32.StockObject.NULL_PEN:
-                    case Gdi32.StockObject.DC_PEN:
-                        PInvoke.GetObject(hgdiobj, out Gdi32.LOGPEN logPen);
+                    case GET_STOCK_OBJECT_FLAGS.WHITE_PEN:
+                    case GET_STOCK_OBJECT_FLAGS.BLACK_PEN:
+                    case GET_STOCK_OBJECT_FLAGS.NULL_PEN:
+                    case GET_STOCK_OBJECT_FLAGS.DC_PEN:
+                        PInvoke.GetObject(hgdiobj, out LOGPEN logPen);
                         SelectedPen = logPen;
                         break;
-                    case Gdi32.StockObject.DEFAULT_PALETTE:
+                    case GET_STOCK_OBJECT_FLAGS.DEFAULT_PALETTE:
                         break;
                 }
 
@@ -186,16 +185,16 @@ namespace System
             EmfRecord savedRecord = GdiObjects[(int)selectionRecord->index];
             switch (savedRecord.Type)
             {
-                case Gdi32.EMR.EXTCREATEFONTINDIRECTW:
+                case ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTCREATEFONTINDIRECTW:
                     SelectedFont = savedRecord.ExtCreateFontIndirectWRecord->elfw.elfLogFont;
                     break;
-                case Gdi32.EMR.CREATEPEN:
+                case ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEPEN:
                     SelectedPen = savedRecord.CreatePenRecord->lopn;
                     break;
-                case Gdi32.EMR.EXTCREATEPEN:
+                case ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTCREATEPEN:
                     SelectedPen = savedRecord.ExtCreatePenRecord->elp;
                     break;
-                case Gdi32.EMR.CREATEBRUSHINDIRECT:
+                case ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEBRUSHINDIRECT:
                     SelectedBrush = savedRecord.CreateBrushIndirectRecord->lb;
                     break;
             }
