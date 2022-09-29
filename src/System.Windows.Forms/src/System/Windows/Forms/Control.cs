@@ -10316,7 +10316,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Revoking drop target: {Handle}");
 
                         // Revoke
-                        HRESULT n = Ole32.RevokeDragDrop(new HandleRef(this, Handle));
+                        HRESULT n = PInvoke.RevokeDragDrop(this);
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{n}");
                         if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_NOTREGISTERED)
                         {

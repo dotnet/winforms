@@ -2,16 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-
-internal partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class Ole32
+    internal static partial class PInvoke
     {
-        [DllImport(Libraries.Ole32)]
-        public static extern HRESULT RevokeDragDrop(IntPtr hwnd);
-
-        public static HRESULT RevokeDragDrop(HandleRef hwnd)
+        public static HRESULT RevokeDragDrop<T>(in T hwnd) where T : IHandle<HWND>
         {
             HRESULT result = RevokeDragDrop(hwnd.Handle);
             GC.KeepAlive(hwnd.Wrapper);

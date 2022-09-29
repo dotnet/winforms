@@ -549,7 +549,7 @@ namespace System.Windows.Forms.Design
             if (e.Control.IsHandleCreated)
             {
                 Application.OleRequired();
-                Ole32.RevokeDragDrop(e.Control.Handle);
+                PInvoke.RevokeDragDrop(e.Control);
 
                 // We only hook the control's children if there was no designer. We leave it up to the designer
                 // to hook its own children.
@@ -911,7 +911,7 @@ namespace System.Windows.Forms.Design
                 if (child.IsHandleCreated)
                 {
                     Application.OleRequired();
-                    Ole32.RevokeDragDrop(child.Handle);
+                    PInvoke.RevokeDragDrop(child);
                     HookChildHandles((HWND)child.Handle);
                 }
                 else
@@ -1256,7 +1256,7 @@ namespace System.Windows.Forms.Design
             OnHandleChange();
             if (_revokeDragDrop)
             {
-                Ole32.RevokeDragDrop(Control.Handle);
+                PInvoke.RevokeDragDrop(Control);
             }
         }
 
@@ -2480,7 +2480,7 @@ namespace System.Windows.Forms.Design
                         // have a Windows Forms control associated with them, we have to RevokeDragDrop()
                         // for them so that the ParentControlDesigner()'s drag-drop support can work
                         // correctly.
-                        Ole32.RevokeDragDrop(hwndChild);
+                        PInvoke.RevokeDragDrop(hwndChild);
                         new ChildSubClass(this, hwndChild);
                         SubclassedChildWindows[hwndChild] = true;
                     }
