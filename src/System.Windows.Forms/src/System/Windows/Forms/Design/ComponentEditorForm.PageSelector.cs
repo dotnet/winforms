@@ -139,13 +139,13 @@ namespace System.Windows.Forms.Design
                     ref rc2,
                     User32.DT.LEFT | User32.DT.VCENTER | User32.DT.END_ELLIPSIS | User32.DT.NOPREFIX);
 
-                ComCtl32.ImageList.Draw(
+                PInvoke.ImageList.Draw(
                     imagelist,
                     imageIndex,
                     dc,
                     PADDING_HORZ,
                     rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
-                    ComCtl32.ILD.TRANSPARENT);
+                    (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
 
                 // Draw the hot-tracking border if needed
                 if ((state & STATE_HOT) != 0)

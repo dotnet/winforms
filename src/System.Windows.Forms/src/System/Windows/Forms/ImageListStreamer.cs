@@ -218,7 +218,7 @@ namespace System.Windows.Forms
                 ThemingScope.Deactivate(userCookie);
             }
 
-            if (_nativeImageList.Handle == IntPtr.Zero)
+            if (_nativeImageList.HIMAGELIST.IsNull)
             {
                 throw new InvalidOperationException(SR.ImageListStreamerLoadFailed);
             }
@@ -250,17 +250,17 @@ namespace System.Windows.Forms
 
         private bool WriteImageList(Stream stream)
         {
-            IntPtr handle = IntPtr.Zero;
+            HIMAGELIST handle = HIMAGELIST.Null;
             if (_imageList is not null)
             {
-                handle = _imageList.Handle;
+                handle = (HIMAGELIST)_imageList.Handle;
             }
             else if (_nativeImageList is not null)
             {
-                handle = _nativeImageList.Handle;
+                handle = _nativeImageList.HIMAGELIST;
             }
 
-            if (handle == IntPtr.Zero)
+            if (handle.IsNull)
             {
                 return false;
             }

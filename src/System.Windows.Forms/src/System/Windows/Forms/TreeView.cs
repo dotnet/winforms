@@ -2128,7 +2128,7 @@ namespace System.Windows.Forms
             IntPtr handleOld = PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, (WPARAM)(uint)TVSIL.STATE, (LPARAM)handle);
             if ((handleOld != IntPtr.Zero) && (handleOld != handle))
             {
-                ComCtl32.ImageList.Destroy(new HandleRef(this, handleOld));
+                PInvoke.ImageList.Destroy(new HandleRef<HIMAGELIST>(this, (HIMAGELIST)handleOld));
             }
         }
 
@@ -2139,7 +2139,7 @@ namespace System.Windows.Forms
             IntPtr handle = PInvoke.SendMessage(this, (User32.WM)TVM.GETIMAGELIST, (WPARAM)(uint)TVSIL.STATE);
             if (handle != IntPtr.Zero)
             {
-                ComCtl32.ImageList.Destroy(new HandleRef(this, handle));
+                PInvoke.ImageList.Destroy(new HandleRef<HIMAGELIST>(this, (HIMAGELIST)handle));
                 if (reset)
                 {
                     PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, (WPARAM)(uint)TVSIL.STATE);
