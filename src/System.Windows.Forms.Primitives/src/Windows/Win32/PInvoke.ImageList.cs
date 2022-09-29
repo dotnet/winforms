@@ -33,7 +33,7 @@ namespace Windows.Win32
             public static bool DrawEx<THIML, THDC>(
                 in THIML himl,
                 int i,
-                THDC hdcDst,
+                in THDC hdcDst,
                 int x,
                 int y,
                 int dx,
@@ -83,14 +83,14 @@ namespace Windows.Win32
             public static bool Replace<T>(in T himl, int i, HBITMAP hbmImage, HBITMAP hbmMask) where T : IHandle<HIMAGELIST>
             {
                 bool result = ImageList_Replace(himl.Handle, i, hbmImage, hbmMask);
-                GC.KeepAlive(himl);
+                GC.KeepAlive(himl.Wrapper);
                 return result;
             }
 
             public static int ReplaceIcon<THIML, THICON>(
                 in THIML himl,
                 int i,
-                THICON hicon) where THIML : IHandle<HIMAGELIST> where THICON : IHandle<HICON>
+                in THICON hicon) where THIML : IHandle<HIMAGELIST> where THICON : IHandle<HICON>
             {
                 int result = ImageList_ReplaceIcon(himl.Handle, i, hicon.Handle);
                 GC.KeepAlive(himl.Wrapper);

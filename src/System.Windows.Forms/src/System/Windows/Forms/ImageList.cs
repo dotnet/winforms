@@ -122,7 +122,7 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                return _nativeImageList.Handle;
+                return _nativeImageList.HIMAGELIST;
             }
         }
 
@@ -218,13 +218,13 @@ namespace System.Windows.Forms
                     DestroyHandle();
                     _originals = null;
                     _nativeImageList = himl.Duplicate();
-                    if (PInvoke.ImageList.GetIconSize(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIML), out int x, out int y))
+                    if (PInvoke.ImageList.GetIconSize(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIMAGELIST), out int x, out int y))
                     {
                         _imageSize = new Size(x, y);
                     }
 
                     // need to get the image bpp
-                    if (PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIML), 0, out IMAGEINFO imageInfo))
+                    if (PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, _nativeImageList.HIMAGELIST), 0, out IMAGEINFO imageInfo))
                     {
                         PInvoke.GetObject(imageInfo.hbmImage, out BITMAP bmp);
                         _colorDepth = bmp.bmBitsPixel switch
@@ -804,8 +804,8 @@ namespace System.Windows.Forms
             return s;
         }
 
-        HIMAGELIST IHandle<HIMAGELIST>.Handle => HIML;
+        HIMAGELIST IHandle<HIMAGELIST>.Handle => HIMAGELIST;
 
-        internal HIMAGELIST HIML => (HIMAGELIST)Handle;
+        internal HIMAGELIST HIMAGELIST => (HIMAGELIST)Handle;
     }
 }

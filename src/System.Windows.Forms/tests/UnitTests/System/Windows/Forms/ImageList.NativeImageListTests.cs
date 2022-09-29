@@ -15,10 +15,10 @@ namespace System.Windows.Forms.Tests
             using ImageListStreamer result = BinarySerialization.EnsureDeserialize<ImageListStreamer>(ClassicImageListStreamer);
 
             NativeImageList nativeImageList = result.GetNativeImageList();
-            Assert.NotEqual(IntPtr.Zero, nativeImageList.Handle);
+            Assert.NotEqual(HIMAGELIST.Null, nativeImageList.HIMAGELIST);
 
             nativeImageList.Dispose();
-            Assert.Equal(IntPtr.Zero, nativeImageList.Handle);
+            Assert.Equal(HIMAGELIST.Null, nativeImageList.HIMAGELIST);
         }
 
         private const string ClassicImageListStreamer =

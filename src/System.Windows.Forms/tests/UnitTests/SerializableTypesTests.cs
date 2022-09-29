@@ -92,10 +92,10 @@ namespace System.Windows.Forms.Tests.Serialization
                 using ImageListStreamer result = BinarySerialization.EnsureDeserialize<ImageListStreamer>(blob);
                 using (NativeImageList nativeImageList = result.GetNativeImageList())
                 {
-                    Assert.True(PInvoke.ImageList.GetIconSize(new HandleRef<HIMAGELIST>(this, nativeImageList.HIML), out int x, out int y));
+                    Assert.True(PInvoke.ImageList.GetIconSize(new HandleRef<HIMAGELIST>(this, nativeImageList.HIMAGELIST), out int x, out int y));
                     Assert.Equal(16, x);
                     Assert.Equal(16, y);
-                    Assert.True(PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, nativeImageList.HIML), 0, out IMAGEINFO imageInfo));
+                    Assert.True(PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, nativeImageList.HIMAGELIST), 0, out IMAGEINFO imageInfo));
                     Assert.False(imageInfo.hbmImage.IsNull);
                 }
             }

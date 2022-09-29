@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 {
     public sealed partial class ImageList
     {
-        internal class NativeImageList : IDisposable, IHandle, IHandle<HIMAGELIST>
+        internal class NativeImageList : IDisposable, IHandle<HIMAGELIST>
         {
 #if DEBUG
             private readonly string _callStack = new StackTrace().ToString();
@@ -24,17 +24,17 @@ namespace System.Windows.Forms
 
             public NativeImageList(Ole32.IStream pstm)
             {
-                IntPtr himl;
+                HIMAGELIST himl;
                 lock (s_syncLock)
                 {
-                    himl = ComCtl32.ImageList.Read(pstm);
+                    himl = (HIMAGELIST)ComCtl32.ImageList.Read(pstm);
                     Init(himl);
                 }
             }
 
             public NativeImageList(Size imageSize, IMAGELIST_CREATION_FLAGS flags)
             {
-                IntPtr himl;
+                HIMAGELIST himl;
                 lock (s_syncLock)
                 {
                     himl = PInvoke.ImageList_Create(imageSize.Width, imageSize.Height, flags, InitialCapacity, GrowBy);
@@ -42,16 +42,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            private NativeImageList(IntPtr himl)
+            private NativeImageList(HIMAGELIST himl)
             {
-                Handle = himl;
+                HIMAGELIST = himl;
             }
 
-            private void Init(IntPtr himl)
+            private void Init(HIMAGELIST himl)
             {
-                if (himl != IntPtr.Zero)
+                if (!himl.IsNull)
                 {
-                    Handle = himl;
+                    HIMAGELIST = himl;
                     return;
                 }
 
@@ -61,11 +61,9 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ImageListCreateFailed);
             }
 
-            public IntPtr Handle { get; private set; }
+            HIMAGELIST IHandle<HIMAGELIST>.Handle => HIMAGELIST;
 
-            HIMAGELIST IHandle<HIMAGELIST>.Handle => HIML;
-
-            internal HIMAGELIST HIML => (HIMAGELIST)Handle;
+            internal HIMAGELIST HIMAGELIST { get; private set; }
 
             public void Dispose()
             {
@@ -77,13 +75,13 @@ namespace System.Windows.Forms
             {
                 lock (s_syncLock)
                 {
-                    if (Handle == IntPtr.Zero)
+                    if (HIMAGELIST.IsNull)
                     {
                         return;
                     }
 
                     PInvoke.ImageList.Destroy(this);
-                    Handle = IntPtr.Zero;
+                    HIMAGELIST = HIMAGELIST.Null;
                 }
             }
 
@@ -104,8 +102,8 @@ namespace System.Windows.Forms
             {
                 lock (s_syncLock)
                 {
-                    HIMAGELIST himl = PInvoke.ImageList_Duplicate(HIML);
-                    if (!HIML.IsNull)
+                    HIMAGELIST himl = PInvoke.ImageList_Duplicate(HIMAGELIST);
+                    if (!HIMAGELIST.IsNull)
                     {
                         return new NativeImageList(himl);
                     }
