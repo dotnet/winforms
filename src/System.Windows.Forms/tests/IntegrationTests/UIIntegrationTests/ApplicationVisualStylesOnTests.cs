@@ -9,17 +9,16 @@ using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests
 {
-    public class ApplicationTests : ControlTestBase
+    public class ApplicationVisualStylesOnTests : ControlTestBase
     {
-        public ApplicationTests(ITestOutputHelper testOutputHelper)
-            : base(testOutputHelper)
+        public ApplicationVisualStylesOnTests(ITestOutputHelper testOutputHelper)
+            : base(testOutputHelper, enableVisualStyles: true)
         {
         }
 
         [WinFormsFact]
-        public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
+        public void Application_VisualStylesOn_GetRenderWithVisualStyles_Success()
         {
-            Application.EnableVisualStyles();
             Assert.True(Application.UseVisualStyles);
             Assert.True(Application.RenderWithVisualStyles);
         }

@@ -9,9 +9,10 @@ using static Interop;
 
 namespace System.Windows.Forms.UITests
 {
-    public class ListViewInsertionMarkTests : ControlTestBase
+    [Collection("VisualStyles")]
+    public class ListViewInsertionMarkVisualStylesOnTests : ControlTestBase
     {
-        public ListViewInsertionMarkTests(ITestOutputHelper testOutputHelper)
+        public ListViewInsertionMarkVisualStylesOnTests(ITestOutputHelper testOutputHelper)
             : base(testOutputHelper, enableVisualStyles: true)
         {
         }
