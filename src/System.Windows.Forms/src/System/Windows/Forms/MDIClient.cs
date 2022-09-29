@@ -220,17 +220,11 @@ namespace System.Windows.Forms
             base.ScaleControl(factor, specified);
         }
 
-        /// <summary>
-        ///  Sets the specified bounds of the control.
-        /// </summary>
-        /// <param name="x">The new <see cref="Control.Left" /> property value of the control.</param>
-        /// <param name="y">The new <see cref="Control.Top" /> property value of the control.</param>
-        /// <param name="width">The new <see cref="Control.Width" /> property value of the control.</param>
-        /// <param name="height">The new <see cref="Control.Height" /> property value of the control.</param>
-        /// <param name="specified">A bitwise combination of the enumeration values that specifies the bounds of the control to use.</param>
-        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+        protected override unsafe void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            if (!IsHandleCreated || (ParentInternal as Form)?.MdiChildrenMinimizedAnchorBottom == false || ParentInternal?.Site?.DesignMode == true)
+            if (!IsHandleCreated
+                || (ParentInternal as Form)?.MdiChildrenMinimizedAnchorBottom == false
+                || ParentInternal?.Site?.DesignMode == true)
             {
                 base.SetBoundsCore(x, y, width, height, specified);
                 return;
@@ -241,38 +235,43 @@ namespace System.Windows.Forms
             Rectangle newBounds = Bounds;
 
             int yDelta = oldBounds.Height - newBounds.Height;
-            if (yDelta != 0)
+            if (yDelta == 0)
             {
-                // NOTE: This logic is to keep minimized MDI children anchored to
-                // the bottom left of the client area, normally they are anchored
-                // to the top left which just looks weird!
-                for (int i = 0; i < Controls.Count; i++)
-                {
-                    Control ctl = Controls[i];
-                    if (ctl is not null && ctl is Form child)
-                    {
-                        // Only adjust the window position for visible MDI Child windows to prevent
-                        // them from being re-displayed.
-                        if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
-                        {
-                            User32.GetWindowPlacement(child, out User32.WINDOWPLACEMENT wp);
-                            wp.ptMinPosition.Y -= yDelta;
-                            if (wp.ptMinPosition.Y == -1)
-                            {
-                                if (yDelta < 0)
-                                {
-                                    wp.ptMinPosition.Y = 0;
-                                }
-                                else
-                                {
-                                    wp.ptMinPosition.Y = -2;
-                                }
-                            }
+                return;
+            }
 
-                            wp.flags = User32.WPF.SETMINPOSITION;
-                            User32.SetWindowPlacement(child, ref wp);
+            // NOTE: This logic is to keep minimized MDI children anchored to
+            // the bottom left of the client area, normally they are anchored
+            // to the top left which just looks weird!
+            for (int i = 0; i < Controls.Count; i++)
+            {
+                // Only adjust the window position for visible MDI Child windows to prevent
+                // them from being re-displayed.
+                if (Controls[i] is Form child && child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
+                {
+                    WINDOWPLACEMENT wp = new()
+                    {
+                        length = (uint)sizeof(WINDOWPLACEMENT)
+                    };
+
+                    PInvoke.GetWindowPlacement(child.HWND, &wp);
+                    wp.ptMinPosition.Y -= yDelta;
+                    if (wp.ptMinPosition.Y == -1)
+                    {
+                        if (yDelta < 0)
+                        {
+                            wp.ptMinPosition.Y = 0;
+                        }
+                        else
+                        {
+                            wp.ptMinPosition.Y = -2;
                         }
                     }
+
+                    wp.flags = WINDOWPLACEMENT_FLAGS.WPF_SETMINPOSITION;
+                    PInvoke.SetWindowPlacement(child.HWND, &wp);
+
+                    GC.KeepAlive(child);
                 }
             }
         }

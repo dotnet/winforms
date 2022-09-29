@@ -8,7 +8,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -318,7 +317,7 @@ namespace System.Windows.Forms
             // for ToolStripDropDown ShowParams returns SW_SHOWNOACTIVATE, in which case we don't
             // want to check IsWindowActive and hence return true.
             if (window is Control control &&
-                (control.ShowParams & (User32.SW)0xF) != User32.SW.SHOWNOACTIVATE)
+                (control.ShowParams & (SHOW_WINDOW_CMD)0xF) != SHOW_WINDOW_CMD.SW_SHOWNOACTIVATE)
             {
                 HWND hwnd = PInvoke.GetActiveWindow();
                 HWND rootHwnd = PInvoke.GetAncestor(control, GET_ANCESTOR_FLAGS.GA_ROOT);
@@ -1979,20 +1978,20 @@ namespace System.Windows.Forms
                 moveToLocation.Y = screen.WorkingArea.Bottom - tipSize.Height;
             }
 
-            User32.SetWindowPos(
-                new HandleRef(this, Handle),
-                User32.HWND_TOPMOST,
+            PInvoke.SetWindowPos(
+                this,
+                HWND.HWND_TOPMOST,
                 moveToLocation.X,
                 moveToLocation.Y,
                 tipSize.Width,
                 tipSize.Height,
-                User32.SWP.NOACTIVATE | User32.SWP.NOSIZE | User32.SWP.NOOWNERZORDER);
+                SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOOWNERZORDER);
         }
 
         private HWND GetCurrentToolHwnd()
         {
             var toolInfo = new ToolInfoWrapper<Control>();
-            if (toolInfo.SendMessage(this, (User32.WM)TTM.GETCURRENTTOOLW) != IntPtr.Zero)
+            if (toolInfo.SendMessage(this, (User32.WM)TTM.GETCURRENTTOOLW) != 0)
             {
                 return (HWND)toolInfo.Info.hwnd;
             }
@@ -2125,24 +2124,25 @@ namespace System.Windows.Forms
             if (e.Cancel)
             {
                 _cancelled = true;
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    User32.HWND_TOPMOST,
-                    flags: User32.SWP.NOACTIVATE | User32.SWP.NOOWNERZORDER);
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOPMOST,
+                    0, 0, 0, 0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE | SET_WINDOW_POS_FLAGS.SWP_NOOWNERZORDER);
             }
             else
             {
                 _cancelled = false;
 
                 // Only width/height changes are respected, so set top,left to what we got earlier
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    User32.HWND_TOPMOST,
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOPMOST,
                     rect.left,
                     rect.top,
                     currentTooltipSize.Width,
                     currentTooltipSize.Height,
-                    User32.SWP.NOACTIVATE | User32.SWP.NOOWNERZORDER);
+                    SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE | SET_WINDOW_POS_FLAGS.SWP_NOOWNERZORDER);
             }
         }
 
@@ -2155,7 +2155,7 @@ namespace System.Windows.Forms
         {
             if (_cancelled)
             {
-                User32.ShowWindow(this, User32.SW.HIDE);
+                PInvoke.ShowWindow(this, SHOW_WINDOW_CMD.SW_HIDE);
                 return true;
             }
 
@@ -2172,80 +2172,77 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)(nint)message.LParamInternal;
+            WINDOWPOS* wp = (WINDOWPOS*)(nint)message.LParamInternal;
 
             Cursor currentCursor = Cursor.Current;
             Point cursorPos = Cursor.Position;
 
-            IWin32Window window = GetCurrentToolWindow();
-            if (window is not null)
+            if (GetCurrentToolWindow() is not { } window)
             {
-                TipInfo tipInfo = null;
-                if (window is not null)
-                {
-                    if (window is Control windowAsControl && !_tools.TryGetValue(windowAsControl, out tipInfo))
-                    {
-                        return;
-                    }
+                message.ResultInternal = (LRESULT)0;
+                return;
+            }
 
-                    // Treeview handles its own ToolTips.
-                    if (window is TreeView treeView)
+            TipInfo tipInfo = null;
+
+            if (window is Control windowAsControl && !_tools.TryGetValue(windowAsControl, out tipInfo))
+            {
+                return;
+            }
+
+            // Treeview handles its own ToolTips.
+            if (window is TreeView treeView && treeView.ShowNodeToolTips)
+            {
+                return;
+            }
+
+            if (IsBalloon)
+            {
+                wp->cx += 2 * BalloonOffsetX;
+                return;
+            }
+
+            if ((tipInfo.TipType & TipInfo.Type.Auto) != 0 && _window is not null)
+            {
+                _window.DefWndProc(ref message);
+                return;
+            }
+
+            if (((tipInfo.TipType & TipInfo.Type.SemiAbsolute) != 0) && tipInfo.Position == Point.Empty)
+            {
+                Screen screen = Screen.FromPoint(cursorPos);
+                if (currentCursor is not null)
+                {
+                    wp->x = cursorPos.X;
+                    wp->y = cursorPos.Y;
+                    if (wp->y + wp->cy + currentCursor.Size.Height - currentCursor.HotSpot.Y > screen.WorkingArea.Bottom)
                     {
-                        if (treeView.ShowNodeToolTips)
-                        {
-                            return;
-                        }
+                        wp->y = cursorPos.Y - wp->cy;
+                    }
+                    else
+                    {
+                        wp->y = cursorPos.Y + currentCursor.Size.Height - currentCursor.HotSpot.Y;
                     }
                 }
 
-                if (IsBalloon)
+                if (wp->x + wp->cx > screen.WorkingArea.Right)
                 {
-                    wp->cx += 2 * BalloonOffsetX;
-                    return;
+                    wp->x = screen.WorkingArea.Right - wp->cx;
+                }
+            }
+            else if ((tipInfo.TipType & TipInfo.Type.SemiAbsolute) != 0 && tipInfo.Position != Point.Empty)
+            {
+                Screen screen = Screen.FromPoint(tipInfo.Position);
+                wp->x = tipInfo.Position.X;
+                if (wp->x + wp->cx > screen.WorkingArea.Right)
+                {
+                    wp->x = screen.WorkingArea.Right - wp->cx;
                 }
 
-                if ((tipInfo.TipType & TipInfo.Type.Auto) != 0 && _window is not null)
+                wp->y = tipInfo.Position.Y;
+                if (wp->y + wp->cy > screen.WorkingArea.Bottom)
                 {
-                    _window.DefWndProc(ref message);
-                    return;
-                }
-
-                if (((tipInfo.TipType & TipInfo.Type.SemiAbsolute) != 0) && tipInfo.Position == Point.Empty)
-                {
-                    Screen screen = Screen.FromPoint(cursorPos);
-                    if (currentCursor is not null)
-                    {
-                        wp->x = cursorPos.X;
-                        wp->y = cursorPos.Y;
-                        if (wp->y + wp->cy + currentCursor.Size.Height - currentCursor.HotSpot.Y > screen.WorkingArea.Bottom)
-                        {
-                            wp->y = cursorPos.Y - wp->cy;
-                        }
-                        else
-                        {
-                            wp->y = cursorPos.Y + currentCursor.Size.Height - currentCursor.HotSpot.Y;
-                        }
-                    }
-
-                    if (wp->x + wp->cx > screen.WorkingArea.Right)
-                    {
-                        wp->x = screen.WorkingArea.Right - wp->cx;
-                    }
-                }
-                else if ((tipInfo.TipType & TipInfo.Type.SemiAbsolute) != 0 && tipInfo.Position != Point.Empty)
-                {
-                    Screen screen = Screen.FromPoint(tipInfo.Position);
-                    wp->x = tipInfo.Position.X;
-                    if (wp->x + wp->cx > screen.WorkingArea.Right)
-                    {
-                        wp->x = screen.WorkingArea.Right - wp->cx;
-                    }
-
-                    wp->y = tipInfo.Position.Y;
-                    if (wp->y + wp->cy > screen.WorkingArea.Bottom)
-                    {
-                        wp->y = screen.WorkingArea.Bottom - wp->cy;
-                    }
+                    wp->y = screen.WorkingArea.Bottom - wp->cy;
                 }
             }
 

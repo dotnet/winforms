@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit;
 using Xunit.Abstractions;
 using static Interop;
@@ -502,12 +503,14 @@ public class DragDropTests : ControlTestBase
         {
             if (process.ProcessName == Explorer && process.MainWindowTitle == directory)
             {
-                User32.SetWindowPos(
-                    process.MainWindowHandle,
-                    User32.HWND_TOP,
+                PInvoke.SetWindowPos(
+                    (HWND)process.MainWindowHandle,
+                    HWND.HWND_TOP,
                     startPosition.X,
                     startPosition.Y,
-                    flags: User32.SWP.NOSIZE | User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
+                    0,
+                    0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
             }
         }
     }

@@ -1506,7 +1506,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             PInvoke.SetWindowLong(_dropDownHolder, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, this);
             _dropDownHolder.SetBounds(location.X, location.Y, size.Width, size.Height);
-            User32.ShowWindow(_dropDownHolder, User32.SW.SHOWNA);
+            PInvoke.ShowWindow(_dropDownHolder, SHOW_WINDOW_CMD.SW_SHOWNA);
             EditTextBox.Filter = true;
             _dropDownHolder.Visible = true;
             _dropDownHolder.FocusComponent();

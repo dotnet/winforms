@@ -13,9 +13,12 @@ BlockInput
 BROWSEINFOW
 CallNextHookEx
 CallWindowProc
+CB_*
 CloseEnhMetaFile
 CloseHandle
 CloseThemeData
+cmb4
+COLOR_*
 CombineRgn
 COMDLG_FILTERSPEC
 CommDlgExtendedError
@@ -77,7 +80,9 @@ E_NOINTERFACE
 E_NOTIMPL
 E_OUTOFMEMORY
 E_POINTER
+EC_*
 Ellipse
+EM_*
 EndPaint
 EnumEnhMetaFile
 EVENTMSG
@@ -108,6 +113,7 @@ GetCurrentThread
 GetCurrentThreadId
 GetDeviceCaps
 GetDIBits
+GetDlgItem
 GetDpiForSystem
 GetDpiForWindow
 GetExitCodeThread
@@ -126,6 +132,7 @@ GetPaletteEntries
 GetParent
 GetProcAddress
 GetProcessDpiAwareness
+GetProcessWindowStation
 GETPROPERTYSTOREFLAGS
 GetRegionData
 GetRgnBox
@@ -163,10 +170,12 @@ GetThreadDpiAwarenessContext
 GetThreadLocale
 GetTickCount
 GetUpdateRect
+GetUserObjectInformation
 GetViewportExtEx
 GetViewportOrgEx
 GetWindow
 GetWindowDpiAwarenessContext
+GetWindowPlacement
 GetWindowRect
 GetWindowThreadProcessId
 GetWorldTransform
@@ -182,6 +191,7 @@ LOCALE_NAME_SYSTEM_DEFAULT
 HC_*
 HFONT
 HitTestThemeBackground
+HWND_*
 ICM_MODE
 ICON_*
 IDC_*
@@ -254,6 +264,7 @@ PROGRESS_CLASS
 PROPERTYKEY
 RealizePalette
 Rectangle
+RedrawWindow
 RegisterClass
 RestoreDC
 RevokeDragDrop
@@ -265,6 +276,7 @@ SaveDC
 SelectClipRgn
 SelectObject
 SelectPalette
+SendDlgItemMessage
 SendMessage
 SetActiveWindow
 SetBkColor
@@ -285,6 +297,8 @@ SetViewportExtEx
 SetViewportOrgEx
 SetWindowExtEx
 SetWindowOrgEx
+SetWindowPlacement
+SetWindowPos
 SetWindowsHookEx
 SetWindowTheme
 SHAutoComplete
@@ -299,12 +313,14 @@ SHGetSpecialFolderLocation
 ShowCursor
 SHGetSpecialFolderLocation
 SHLoadIndirectString
+ShowWindow
 SHParseDisplayName
 SIATTRIBFLAGS
 SIGDN
 STATUS_PENDING
 STATUS_SUCCESS
 STATUSCLASSNAME
+stc4
 STG_E_FILENOTFOUND
 STG_E_INVALIDFLAG
 STG_E_INVALIDFUNCTION
@@ -315,6 +331,8 @@ THEME_PROPERTY_SYMBOL_ID
 TOOLTIPS_CLASS
 TRACKBAR_CLASS
 TYPE_E_BADMODULEKIND
+USEROBJECTFLAGS
+ValidateRect
 VIEW_E_DRAW
 WC_BUTTON
 WC_COMBOBOX
@@ -328,3 +346,5 @@ WC_TREEVIEW
 WideCharToMultiByte
 WIN32_ERROR
 WINDOW_LONG_PTR_INDEX
+WINDOWPOS
+WSF_VISIBLE

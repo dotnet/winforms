@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         private ComboBoxChildNativeWindow _childEdit;
         private ComboBoxChildNativeWindow _childListBox;
 
-        private IntPtr _dropDownHandle;
+        private HWND _dropDownHandle;
         private ObjectCollection _itemsCollection;
         private short _prefHeightCache = -1;
         private short _maxDropDownItems = 8;
@@ -467,17 +467,8 @@ namespace System.Windows.Forms
             get
             {
                 int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
-
-                if (found)
-                {
-                    return dropDownWidth;
-                }
-                else
-                {
-                    return Width;
-                }
+                return found ? dropDownWidth : Width;
             }
-
             set
             {
                 if (value < 1)
@@ -493,7 +484,7 @@ namespace System.Windows.Forms
                     Properties.SetInteger(PropDropDownWidth, value);
                     if (IsHandleCreated)
                     {
-                        PInvoke.SendMessage(this, (WM)CB.SETDROPPEDWIDTH, (WPARAM)value);
+                        PInvoke.SendMessage(this, (WM)PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)value);
                     }
                 }
             }
@@ -554,7 +545,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return (int)PInvoke.SendMessage(this, (WM)CB.GETDROPPEDSTATE) != 0;
+                    return (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETDROPPEDSTATE) != 0;
                 }
 
                 return false;
@@ -566,7 +557,7 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                PInvoke.SendMessage(this, (WM)CB.SHOWDROPDOWN, (WPARAM)(value ? -1 : 0));
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_SHOWDROPDOWN, (WPARAM)(value ? -1 : 0));
             }
         }
 
@@ -689,7 +680,7 @@ namespace System.Windows.Forms
                 // Note that the above if clause deals with the case when the handle has not yet been created
                 Debug.Assert(IsHandleCreated, "Handle should be created at this point");
 
-                int h = (int)PInvoke.SendMessage(this, (WM)CB.GETITEMHEIGHT);
+                int h = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETITEMHEIGHT);
                 if (h == -1)
                 {
                     throw new Win32Exception();
@@ -821,7 +812,7 @@ namespace System.Windows.Forms
                     Properties.SetInteger(PropMaxLength, value);
                     if (IsHandleCreated)
                     {
-                        PInvoke.SendMessage(this, (WM)CB.LIMITTEXT, (WPARAM)value);
+                        PInvoke.SendMessage(this, (WM)PInvoke.CB_LIMITTEXT, (WPARAM)value);
                     }
                 }
             }
@@ -1005,7 +996,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return (int)PInvoke.SendMessage(this, (WM)CB.GETCURSEL);
+                    return (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETCURSEL);
                 }
 
                 return _selectedIndex;
@@ -1027,7 +1018,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        PInvoke.SendMessage(this, (WM)CB.SETCURSEL, (WPARAM)value);
+                        PInvoke.SendMessage(this, (WM)PInvoke.CB_SETCURSEL, (WPARAM)value);
                     }
                     else
                     {
@@ -1130,7 +1121,7 @@ namespace System.Windows.Forms
             {
                 int end = 0;
                 int start = 0;
-                PInvoke.SendMessage(this, (WM)CB.GETEDITSEL, (WPARAM)(&start), (LPARAM)(&end));
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_GETEDITSEL, (WPARAM)(&start), (LPARAM)(&end));
                 return end - start;
             }
             set
@@ -1151,7 +1142,7 @@ namespace System.Windows.Forms
             get
             {
                 int value = 0;
-                PInvoke.SendMessage(this, (WM)CB.GETEDITSEL, (WPARAM)(&value));
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_GETEDITSEL, (WPARAM)(&value));
                 return value;
             }
             set
@@ -2043,14 +2034,14 @@ namespace System.Windows.Forms
 
             if (EndUpdateInternal())
             {
-                if (_childEdit is not null && _childEdit.Handle != IntPtr.Zero)
+                if (_childEdit is not null && !_childEdit.HWND.IsNull)
                 {
-                    InvalidateRect(new HandleRef(this, _childEdit.Handle), null, false);
+                    PInvoke.InvalidateRect(_childEdit, lpRect: null, bErase: false);
                 }
 
-                if (_childListBox is not null && _childListBox.Handle != IntPtr.Zero)
+                if (_childListBox is not null && !_childEdit.HWND.IsNull)
                 {
-                    InvalidateRect(new HandleRef(this, _childListBox.Handle), null, false);
+                    PInvoke.InvalidateRect(_childListBox, lpRect: null, bErase: false);
                 }
             }
         }
@@ -2145,7 +2136,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int h = (int)PInvoke.SendMessage(this, (WM)CB.GETITEMHEIGHT, (WPARAM)index);
+                int h = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETITEMHEIGHT, (WPARAM)index);
                 if (h == -1)
                 {
                     throw new Win32Exception();
@@ -2157,9 +2148,9 @@ namespace System.Windows.Forms
             return ItemHeight;
         }
 
-        internal IntPtr GetListHandle()
+        internal HandleRef<HWND> GetListHandle()
         {
-            return DropDownStyle == ComboBoxStyle.Simple ? _childListBox.Handle : _dropDownHandle;
+            return DropDownStyle == ComboBoxStyle.Simple ? new(_childListBox) : new(this, _dropDownHandle);
         }
 
         internal NativeWindow GetListNativeWindow()
@@ -2302,9 +2293,14 @@ namespace System.Windows.Forms
             }
 
             // Control.Invalidate(true) doesn't invalidate the non-client region.
-            RedrawWindow(
+            PInvoke.RedrawWindow(
                 this,
-                flags: RDW.INVALIDATE | RDW.FRAME | RDW.ERASE | RDW.ALLCHILDREN);
+                lprcUpdate: null,
+                HRGN.Null,
+                REDRAW_WINDOW_FLAGS.RDW_INVALIDATE
+                    | REDRAW_WINDOW_FLAGS.RDW_FRAME
+                    | REDRAW_WINDOW_FLAGS.RDW_ERASE
+                    | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN);
         }
 
         /// <summary>
@@ -2338,7 +2334,7 @@ namespace System.Windows.Forms
         private int NativeAdd(object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = (int)PInvoke.SendMessage(this, (WM)CB.ADDSTRING, (WPARAM)0, GetItemText(item));
+            int insertIndex = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_ADDSTRING, (WPARAM)0, GetItemText(item));
             if (insertIndex < 0)
             {
                 throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
@@ -2359,7 +2355,7 @@ namespace System.Windows.Forms
                 saved = WindowText;
             }
 
-            PInvoke.SendMessage(this, (WM)CB.RESETCONTENT);
+            PInvoke.SendMessage(this, (WM)PInvoke.CB_RESETCONTENT);
             if (saved is not null)
             {
                 WindowText = saved;
@@ -2371,7 +2367,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe string NativeGetItemText(int index)
         {
-            int maxLength = (int)PInvoke.SendMessage(this, (WM)CB.GETLBTEXTLEN, (WPARAM)index);
+            int maxLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXTLEN, (WPARAM)index);
             if (maxLength == LB_ERR)
             {
                 return string.Empty;
@@ -2381,7 +2377,7 @@ namespace System.Windows.Forms
             string result;
             fixed (char* pText = text)
             {
-                int actualLength = (int)PInvoke.SendMessage(this, (WM)CB.GETLBTEXT, (WPARAM)index, (LPARAM)pText);
+                int actualLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXT, (WPARAM)index, (LPARAM)pText);
                 Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
                 if (actualLength == LB_ERR)
                 {
@@ -2402,7 +2398,7 @@ namespace System.Windows.Forms
         private int NativeInsert(int index, object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = (int)PInvoke.SendMessage(this, (WM)CB.INSERTSTRING, (WPARAM)index, GetItemText(item));
+            int insertIndex = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_INSERTSTRING, (WPARAM)index, GetItemText(item));
             if (insertIndex < 0)
             {
                 throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
@@ -2429,7 +2425,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
 
-            PInvoke.SendMessage(this, (WM)CB.DELETESTRING, (WPARAM)index);
+            PInvoke.SendMessage(this, (WM)PInvoke.CB_DELETESTRING, (WPARAM)index);
         }
 
         internal override void RecreateHandleCore()
@@ -2464,7 +2460,7 @@ namespace System.Windows.Forms
 
             if (MaxLength > 0)
             {
-                PInvoke.SendMessage(this, (WM)CB.LIMITTEXT, (WPARAM)MaxLength);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_LIMITTEXT, (WPARAM)MaxLength);
             }
 
             // Get the handles and wndprocs of the ComboBox's child windows
@@ -2500,7 +2496,7 @@ namespace System.Windows.Forms
             int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
             if (found)
             {
-                PInvoke.SendMessage(this, (WM)CB.SETDROPPEDWIDTH, (WPARAM)dropDownWidth);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)dropDownWidth);
             }
 
             found = false;
@@ -2541,7 +2537,7 @@ namespace System.Windows.Forms
                 // Now update the current selection.
                 if (_selectedIndex >= 0)
                 {
-                    PInvoke.SendMessage(this, (WM)CB.SETCURSEL, (WPARAM)_selectedIndex);
+                    PInvoke.SendMessage(this, (WM)PInvoke.CB_SETCURSEL, (WPARAM)_selectedIndex);
                     UpdateText();
                     _selectedIndex = -1;
                 }
@@ -2556,7 +2552,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            _dropDownHandle = IntPtr.Zero;
+            _dropDownHandle = HWND.Null;
             if (Disposing)
             {
                 _itemsCollection = null;
@@ -3416,7 +3412,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
             }
 
-            PInvoke.SendMessage(this, (WM)CB.SETEDITSEL, (WPARAM)0, LPARAM.MAKELPARAM(start, end));
+            PInvoke.SendMessage(this, (WM)PInvoke.CB_SETEDITSEL, (WPARAM)0, LPARAM.MAKELPARAM(start, end));
         }
 
         /// <summary>
@@ -3461,7 +3457,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (WM)CB.SETCURSEL, (WPARAM)DataManager.Position);
+                    PInvoke.SendMessage(this, (WM)PInvoke.CB_SETCURSEL, (WPARAM)DataManager.Position);
                 }
                 else
                 {
@@ -3524,7 +3520,7 @@ namespace System.Windows.Forms
 
         private void UpdateDropDownHeight()
         {
-            if (_dropDownHandle != IntPtr.Zero)
+            if (!_dropDownHandle.IsNull)
             {
                 //Now use the DropDownHeight property instead of calculating the Height...
                 int height = DropDownHeight;
@@ -3532,17 +3528,19 @@ namespace System.Windows.Forms
                 {
                     int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
                     int count = Math.Min(Math.Max(itemCount, 1), _maxDropDownItems);
-                    height = (ItemHeight * count + 2);
+                    height = ItemHeight * count + 2;
                 }
 
-                SetWindowPos(
-                    new HandleRef(this, _dropDownHandle),
-                    HWND_TOP,
+                PInvoke.SetWindowPos(
+                    _dropDownHandle,
+                    HWND.HWND_TOP,
                     0,
                     0,
                     DropDownWidth,
                     height,
-                    SWP.NOMOVE | SWP.NOZORDER);
+                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+
+                GC.KeepAlive(this);
             }
         }
 
@@ -3561,21 +3559,21 @@ namespace System.Windows.Forms
 
             if (DrawMode == DrawMode.OwnerDrawFixed)
             {
-                PInvoke.SendMessage(this, (WM)CB.SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
-                PInvoke.SendMessage(this, (WM)CB.SETITEMHEIGHT, 0, ItemHeight);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, 0, ItemHeight);
             }
             else if (DrawMode == DrawMode.OwnerDrawVariable)
             {
-                PInvoke.SendMessage(this, (WM)CB.SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
                 Graphics graphics = CreateGraphicsInternal();
                 for (int i = 0; i < Items.Count; i++)
                 {
-                    int original = (int)PInvoke.SendMessage(this, (WM)CB.GETITEMHEIGHT, (WPARAM)i);
+                    int original = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETITEMHEIGHT, (WPARAM)i);
                     MeasureItemEventArgs mievent = new MeasureItemEventArgs(graphics, i, original);
                     OnMeasureItem(mievent);
                     if (mievent.ItemHeight != original)
                     {
-                        PInvoke.SendMessage(this, (WM)CB.SETITEMHEIGHT, (WPARAM)i, (LPARAM)mievent.ItemHeight);
+                        PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, (WPARAM)i, (LPARAM)mievent.ItemHeight);
                     }
                 }
 
@@ -3644,15 +3642,11 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if ((int)m.WParamInternal == ((int)WM.CREATE | 1000 << 16))
             {
-                _dropDownHandle = m.LParamInternal;
+                _dropDownHandle = (HWND)m.LParamInternal;
 
                 // By some reason WmParentNotify with WM_DESTROY is not called before recreation.
                 // So release the old references here.
-                if (_childDropDown is not null)
-                {
-                    _childDropDown.ReleaseHandle();
-                }
-
+                _childDropDown?.ReleaseHandle();
                 _childDropDown = new ComboBoxChildNativeWindow(this, ChildWindowType.DropDownList);
                 _childDropDown.AssignHandle(_dropDownHandle);
 

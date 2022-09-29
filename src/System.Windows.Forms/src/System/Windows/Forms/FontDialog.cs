@@ -11,10 +11,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents
-    ///  a common dialog box that displays a list of fonts that are currently installed
-    ///  on
-    ///  the system.
+    ///  Represents a common dialog box that displays a list of fonts that are currently installed on the system.
     /// </summary>
     [DefaultEvent(nameof(Apply))]
     [DefaultProperty(nameof(Font))]
@@ -35,8 +32,7 @@ namespace System.Windows.Forms
         private bool usingDefaultIndirectColor;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref="FontDialog"/>
-        ///  class.
+        ///  Initializes a new instance of the <see cref="FontDialog"/> class.
         /// </summary>
         public FontDialog()
         {
@@ -354,10 +350,10 @@ namespace System.Windows.Forms
                         LOGFONTW logFont = default;
                         PInvoke.SendMessage((HWND)hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
                         UpdateFont(ref logFont);
-                        int index = PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL));
-                        if (index != User32.CB_ERR)
+                        int index = (int)PInvoke.SendDlgItemMessage((HWND)hWnd, (int)PInvoke.cmb4, PInvoke.CB_GETCURSEL, 0, 0);
+                        if (index != PInvoke.CB_ERR)
                         {
-                            UpdateColor(PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETITEMDATA, (IntPtr)index)));
+                            UpdateColor((int)PInvoke.SendDlgItemMessage((HWND)hWnd, (int)PInvoke.cmb4, PInvoke.CB_GETITEMDATA, (WPARAM)index, 0));
                         }
 
                         if (NativeWindow.WndProcShouldBeDebuggable)
@@ -376,15 +372,15 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-
+                    
                     break;
                 case User32.WM.INITDIALOG:
                     if (!showColor)
                     {
-                        IntPtr hWndCtl = User32.GetDlgItem(hWnd, User32.DialogItemID.cmb4);
-                        User32.ShowWindow(hWndCtl, User32.SW.HIDE);
-                        hWndCtl = User32.GetDlgItem(hWnd, User32.DialogItemID.stc4);
-                        User32.ShowWindow(hWndCtl, User32.SW.HIDE);
+                        HWND hWndCtl = PInvoke.GetDlgItem((HWND)hWnd, (int)PInvoke.cmb4);
+                        PInvoke.ShowWindow(hWndCtl, SHOW_WINDOW_CMD.SW_HIDE);
+                        hWndCtl = PInvoke.GetDlgItem((HWND)hWnd, (int)PInvoke.stc4);
+                        PInvoke.ShowWindow(hWndCtl, SHOW_WINDOW_CMD.SW_HIDE);
                     }
 
                     break;

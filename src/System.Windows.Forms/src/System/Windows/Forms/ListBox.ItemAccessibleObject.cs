@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Accessibility;
 using static Interop;
 
@@ -301,7 +300,7 @@ namespace System.Windows.Forms
 
                 _owningListBox.SelectedIndex = CurrentIndex;
 
-                User32.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, false);
+                PInvoke.InvalidateRect(_owningListBox, lpRect: null, bErase: false);
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
             }

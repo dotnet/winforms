@@ -40,9 +40,8 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = base.CreateParams;
 
-                    // Message only windows are cheaper and have fewer issues than
-                    // full blown invisible windows.
-                    cp.Parent = User32.HWND_MESSAGE;
+                    // Message only windows are cheaper and have fewer issues than full blown invisible windows.
+                    cp.Parent = HWND.HWND_MESSAGE;
                     return cp;
                 }
             }

@@ -2,19 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-
-internal static partial class Interop
+namespace Windows.Win32
 {
-    internal static partial class User32
+    internal static partial class PInvoke
     {
-        [DllImport(Libraries.User32)]
-        public static extern BOOL ShowWindow(IntPtr hWnd, SW nCmdShow);
-
-        public static BOOL ShowWindow(IHandle hWnd, SW nCmdShow)
+        public static BOOL ShowWindow<T>(in T hWnd, SHOW_WINDOW_CMD nCmdShow) where T : IHandle<HWND>
         {
             BOOL result = ShowWindow(hWnd.Handle, nCmdShow);
-            GC.KeepAlive(hWnd);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }

@@ -2053,28 +2053,30 @@ namespace System.Windows.Forms
             // during the first handle creation.
             //
             // This is set back to the oldSize after the Realize method.
-            int oldSize = 0;
             try
             {
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
-                oldSize = Width;
-                User32.SWP flags = User32.SWP.NOZORDER | User32.SWP.NOACTIVATE | User32.SWP.NOMOVE;
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    User32.HWND_TOP,
+                int oldSize = Width;
+                SET_WINDOW_POS_FLAGS flags = SET_WINDOW_POS_FLAGS.SWP_NOZORDER
+                    | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOMOVE;
+
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOP,
                     Left,
                     Top,
                     int.MaxValue,
                     Height,
                     flags);
 
-                root.Realize(false);
+                root.Realize(insertFirst: false);
 
                 if (oldSize != 0)
                 {
-                    User32.SetWindowPos(
-                        new HandleRef(this, Handle),
-                        User32.HWND_TOP,
+                    PInvoke.SetWindowPos(
+                        this,
+                        HWND.HWND_TOP,
                         Left,
                         Top,
                         oldSize,
@@ -2112,11 +2114,7 @@ namespace System.Windows.Forms
                 newImageList.Images.AddRange(images);
                 PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, (WPARAM)(uint)TVSIL.STATE, (LPARAM)newImageList.Handle);
 
-                if (internalStateImageList is not null)
-                {
-                    internalStateImageList.Dispose();
-                }
-
+                internalStateImageList?.Dispose();
                 internalStateImageList = newImageList;
             }
         }
@@ -2687,7 +2685,7 @@ namespace System.Windows.Forms
             {
                 if (PInvoke.SendMessage(this, (User32.WM)TVM.GETITEMRECT, 1, ref rc) != 0)
                 {
-                    User32.InvalidateRect(new HandleRef(this, Handle), &rc, true);
+                    PInvoke.InvalidateRect(this, &rc, bErase: true);
                 }
             }
         }
@@ -3042,26 +3040,21 @@ namespace System.Windows.Forms
             };
 
             nint hnode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
-            if (hnode != 0 && ((tvhip.flags & TVHT.ONITEM) != 0))
+            if (hnode != 0 && tvhip.flags.HasFlag(TVHT.ONITEM) && NodeFromHandle(hnode) is { } tn && !ShowNodeToolTips)
             {
-                TreeNode tn = NodeFromHandle(hnode);
-                if (tn is not null)
-                {
-                    if (!ShowNodeToolTips) // default ToolTips
-                    {
-                        Rectangle bounds = tn.Bounds;
-                        bounds.Location = PointToScreen(bounds.Location);
+                Rectangle bounds = tn.Bounds;
+                bounds.Location = PointToScreen(bounds.Location);
 
-                        PInvoke.SendMessage(tooltipHandle, (User32.WM)TTM.ADJUSTRECT, (WPARAM)(BOOL)true, ref bounds);
-                        User32.SetWindowPos(
-                            new HandleRef(this, tooltipHandle),
-                            User32.HWND_TOPMOST,
-                            bounds.Left,
-                            bounds.Top,
-                            flags: User32.SWP.NOACTIVATE | User32.SWP.NOSIZE | User32.SWP.NOZORDER);
-                        return true;
-                    }
-                }
+                PInvoke.SendMessage(tooltipHandle, (User32.WM)TTM.ADJUSTRECT, (WPARAM)(BOOL)true, ref bounds);
+                PInvoke.SetWindowPos(
+                    tooltipHandle,
+                    HWND.HWND_TOPMOST,
+                    bounds.Left,
+                    bounds.Top,
+                    0,
+                    0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+                return true;
             }
 
             return false;

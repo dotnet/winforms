@@ -3,11 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -43,7 +41,7 @@ namespace System.Windows.Forms
                 get
                 {
                     int currentIndex = GetCurrentIndex();
-                    HWND listHandle = (HWND)_owningComboBox.GetListHandle();
+                    var listHandle = _owningComboBox.GetListHandle();
                     RECT itemRect = new();
 
                     int result = (int)PInvoke.SendMessage(
@@ -59,7 +57,7 @@ namespace System.Windows.Forms
 
                     // Translate the item rect to screen coordinates
                     RECT translated = itemRect;
-                    PInvoke.MapWindowPoints((HWND)listHandle, HWND.Null, ref translated);
+                    PInvoke.MapWindowPoints(listHandle, HWND.Null, ref translated);
                     return translated;
                 }
             }
@@ -224,7 +222,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                PInvoke.SendMessage(_owningComboBox, (User32.WM)User32.CB.SETTOPINDEX, (WPARAM)GetCurrentIndex());
+                PInvoke.SendMessage(_owningComboBox, (User32.WM)PInvoke.CB_SETTOPINDEX, (WPARAM)GetCurrentIndex());
             }
 
             internal override void SetFocus()
@@ -240,9 +238,9 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
-
+                
                 _owningComboBox.SelectedIndex = GetCurrentIndex();
-                InvalidateRect(new HandleRef(this, _owningComboBox.GetListHandle()), null, false);
+                PInvoke.InvalidateRect(_owningComboBox.GetListHandle(), lpRect: null, bErase: false);
             }
 
             internal override void AddToSelection()

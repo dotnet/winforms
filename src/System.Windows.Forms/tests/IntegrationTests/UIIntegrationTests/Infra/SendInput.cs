@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Windows.Win32.UI.WindowsAndMessaging;
 using WindowsInput;
 using WindowsInput.Native;
 using static Interop;
@@ -101,7 +102,7 @@ namespace System.Windows.Forms.UITests
         private static void SetForegroundWindow(Form window)
         {
             // Make the window a top-most window so it will appear above any existing top-most windows
-            User32.SetWindowPos(window, User32.HWND_TOPMOST, 0, 0, 0, 0, User32.SWP.NOSIZE | User32.SWP.NOMOVE);
+            PInvoke.SetWindowPos(window, HWND.HWND_TOPMOST, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
 
             // Move the window into the foreground as it may not have been achieved by the 'SetWindowPos' call
             if (!User32.SetForegroundWindow(window))
@@ -121,7 +122,7 @@ namespace System.Windows.Forms.UITests
             PInvoke.SetFocus(window);
 
             // Remove the 'Top-Most' qualification from the window
-            User32.SetWindowPos(window, User32.HWND_NOTOPMOST, 0, 0, 0, 0, User32.SWP.NOSIZE | User32.SWP.NOMOVE);
+            PInvoke.SetWindowPos(window, HWND.HWND_NOTOPMOST, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
         }
     }
 }

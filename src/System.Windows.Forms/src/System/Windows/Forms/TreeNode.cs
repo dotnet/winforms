@@ -1993,7 +1993,7 @@ namespace System.Windows.Forms
                     User32.PostMessageW(tv, (User32.WM)TVM.EDITLABELW, 0, _handle);
                 }
 
-                User32.InvalidateRect(new HandleRef(tv, tv.Handle), null, false);
+                PInvoke.InvalidateRect(tv, lpRect: null, bErase: false);
 
                 if (parent.nodesCleared && (insertFirst || prev is null) && !tv.Scrollable)
                 {

@@ -15,13 +15,16 @@ using static Interop;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  This class implements our design time document. This is the outer window that encompasses a designer. It maintains a control hierarchy that looks like this:
-    ///  DesignerFrame
-    ///  ScrollableControl
-    ///  Designer
-    ///  Splitter
-    ///  ScrollableControl
-    ///  Component Tray
+    ///  This class implements our design time document. This is the outer window that encompasses a designer.
+    ///  It maintains a control hierarchy that looks like this:
+    ///
+    ///     - DesignerFrame
+    ///         - ScrollableControl
+    ///             - Designer
+    ///         - Splitter
+    ///         - ScrollableControl
+    ///             - Component Tray
+    ///
     ///  The splitter and second scrollable control are created on demand when a tray is added.
     /// </summary>
     internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IContainsThemedScrollbarWindows
@@ -57,7 +60,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Returns the scroll offset for the scrollable control that manages all overlays.  This is needed by the BehaviorService so we can correctly invalidate our AdornerWindow based on scrollposition.
+        ///  Returns the scroll offset for the scrollable control that manages all overlays.  This is needed by the
+        ///  BehaviorService so we can correctly invalidate our AdornerWindow based on scrollposition.
         /// </summary>
         internal Point AutoScrollPosition
         {
@@ -100,13 +104,13 @@ namespace System.Windows.Forms.Design
 
             base.Dispose(disposing);
         }
-
+        
         private unsafe void ForceDesignerRedraw(bool focus)
         {
-            if (_designer != null && _designer.IsHandleCreated)
+            if (_designer is not null && _designer.IsHandleCreated)
             {
                 PInvoke.SendMessage(_designer, User32.WM.NCACTIVATE, (WPARAM)(BOOL)focus);
-                User32.RedrawWindow(_designer.Handle, flags: User32.RDW.FRAME);
+                PInvoke.RedrawWindow(_designer, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
             }
         }
 
@@ -195,7 +199,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Base wndProc. All messages are sent to wndProc after getting filtered through the preProcessMessage function. Inheriting controls should call base.wndProc for any messages that they don't handle.
+        ///  Base wndProc. All messages are sent to wndProc after getting filtered through the preProcessMessage function.
+        ///  Inheriting controls should call base.wndProc for any messages that they don't handle.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
@@ -270,12 +275,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
+        ///  Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces
+        ///  this control to the top of the existing overlay list.
         /// </summary>
         int IOverlayService.PushOverlay(Control control) => _designerRegion.PushOverlay(control);
 
         /// <summary>
-        ///  Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
+        ///  Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the
+        ///  middle of the overlay list.
         /// </summary>
         void IOverlayService.RemoveOverlay(Control control)
         {
@@ -355,7 +362,11 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Returns IEnumerable of all windows which need to be themed when running inside VS We don't know how to do theming here but we know which windows need to be themed.  The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only controls which are not visible in the user app but are visible inside VS. As a result, we want to theme all windows within the tray but only the top window for the designer pane.
+        ///  Returns IEnumerable of all windows which need to be themed when running inside VS We don't know how to do
+        ///  theming here but we know which windows need to be themed. The two ScrollableControls that hold the designer
+        ///  and the tray need to be themed, all of the children of the designed form should not be themed. The tray
+        ///  contains only controls which are not visible in the user app but are visible inside VS. As a result, we
+        ///  want to theme all windows within the tray but only the top window for the designer pane.
         /// </summary>
         IEnumerable IContainsThemedScrollbarWindows.ThemedScrollbarWindows()
         {
@@ -450,7 +461,8 @@ namespace System.Windows.Forms.Design
                 base.OnLayout(e);
                 Rectangle client = DisplayRectangle;
 
-                // Loop through all of the overlays and size them.  Also make sure that they are still on top of the zorder, because a handle recreate could have changed this.
+                // Loop through all of the overlays and size them.  Also make sure that they are still on top of the
+                // zorder, because a handle recreate could have changed this.
                 if (_overlayList != null)
                 {
                     foreach (Control c in _overlayList)
@@ -461,23 +473,26 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Called to parent an overlay window into our document.  This assumes that we call in reverse stack order, as it always pushes to the top of the z-order.
+            ///  Called to parent an overlay window into our document.  This assumes that we call in reverse stack
+            ///  order, as it always pushes to the top of the z-order.
             /// </summary>
             private void ParentOverlay(Control control)
             {
                 PInvoke.SetParent(control, this);
-                User32.SetWindowPos(
-                    control.Handle,
-                    User32.HWND_TOP,
-                    flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE);
+                PInvoke.SetWindowPos(
+                    control,
+                    HWND.HWND_TOP,
+                    0, 0, 0, 0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
             }
 
             /// <summary>
-            ///  Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
+            ///  Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it
+            ///  forces this control to the top of the existing overlay list.
             /// </summary>
             public int PushOverlay(Control control)
             {
-                Debug.Assert(_overlayList.IndexOf(control) == -1, "Duplicate overlay in overlay service :" + control.GetType().FullName);
+                Debug.Assert(_overlayList.IndexOf(control) == -1, $"Duplicate overlay in overlay service: {control.GetType().FullName}");
                 _overlayList.Add(control);
                 // We need to have these components parented, but we don't want them to effect our layout.
                 if (IsHandleCreated)
@@ -490,11 +505,12 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
+            ///  Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from
+            ///  the middle of the overlay list.
             /// </summary>
             public void RemoveOverlay(Control control)
             {
-                Debug.Assert(_overlayList.IndexOf(control) != -1, "Control is not in overlay service :" + control.GetType().FullName);
+                Debug.Assert(_overlayList.IndexOf(control) != -1, $"Control is not in overlay service: {control.GetType().FullName}");
                 _overlayList.Remove(control);
                 control.Visible = false;
                 control.Parent = null;
@@ -505,7 +521,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void InsertOverlay(Control control, int index)
             {
-                Debug.Assert(_overlayList.IndexOf(control) == -1, "Duplicate overlay in overlay service :" + control.GetType().FullName);
+                Debug.Assert(_overlayList.IndexOf(control) == -1, $"Duplicate overlay in overlay service: {control.GetType().FullName}");
                 Control c = (Control)_overlayList[index];
                 RemoveOverlay(c);
                 PushOverlay(control);
@@ -580,10 +596,11 @@ namespace System.Windows.Forms.Design
                         {
                             foreach (Control c in _overlayList)
                             {
-                                User32.SetWindowPos(
-                                    c.Handle,
-                                    User32.HWND_TOP,
-                                    flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE);
+                                PInvoke.SetWindowPos(
+                                    c,
+                                    HWND.HWND_TOP,
+                                    0, 0, 0, 0,
+                                    SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
                             }
                         }
                     }
