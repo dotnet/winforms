@@ -38,7 +38,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT QueryTextMetrics(
-                Gdi32.TEXTMETRICW* pTM);
+                TEXTMETRICW* pTM);
 
             [PreserveSig]
             HRESULT AddRefHfont(

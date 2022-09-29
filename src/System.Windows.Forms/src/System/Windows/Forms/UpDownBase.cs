@@ -540,10 +540,10 @@ namespace System.Windows.Forms
                     clipBottom.Intersect(clipBounds);
 
                     using var hdc = new DeviceContextHdcScope(e);
-                    vsr.DrawBackground(hdc, bounds, clipLeft, HandleInternal);
-                    vsr.DrawBackground(hdc, bounds, clipTop, HandleInternal);
-                    vsr.DrawBackground(hdc, bounds, clipRight, HandleInternal);
-                    vsr.DrawBackground(hdc, bounds, clipBottom, HandleInternal);
+                    vsr.DrawBackground(hdc, bounds, clipLeft, HWNDInternal);
+                    vsr.DrawBackground(hdc, bounds, clipTop, HWNDInternal);
+                    vsr.DrawBackground(hdc, bounds, clipRight, HWNDInternal);
+                    vsr.DrawBackground(hdc, bounds, clipBottom, HWNDInternal);
 
                     // Draw a rectangle around edit control with the background color.
                     Rectangle backRect = editBounds;

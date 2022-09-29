@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -578,14 +578,14 @@ namespace System.Windows.Forms
                     return VisualStyleState.NoneEnabled;
                 }
 
-                VisualStyleState vState = (VisualStyleState)UxTheme.GetThemeAppProperties();
+                VisualStyleState vState = (VisualStyleState)PInvoke.GetThemeAppProperties();
                 return vState;
             }
             set
             {
                 if (VisualStyleInformation.IsSupportedByOS)
                 {
-                    UxTheme.SetThemeAppProperties((UxTheme.STAP)value);
+                    PInvoke.SetThemeAppProperties((SET_THEME_APP_PROPERTIES_FLAGS)value);
 
                     // 248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
                     // We do it this way to ensure that we get all top level windows -- whether we created them or not.

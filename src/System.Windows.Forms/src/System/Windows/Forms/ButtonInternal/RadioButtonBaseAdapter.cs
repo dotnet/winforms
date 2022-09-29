@@ -208,7 +208,7 @@ namespace System.Windows.Forms.ButtonInternal
                     hdc,
                     new Point(check.Left, check.Top),
                     RadioButtonRenderer.ConvertFromButtonState(style, Control.MouseIsOver),
-                    Control.HandleInternal);
+                    Control.HWNDInternal);
             }
             else
             {

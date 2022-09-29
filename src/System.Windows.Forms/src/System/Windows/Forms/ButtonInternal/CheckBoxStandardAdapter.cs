@@ -135,7 +135,7 @@ namespace System.Windows.Forms.ButtonInternal
                         GetState(),
                         true,
                         Control.MouseIsOver),
-                    Control.HandleInternal).Width;
+                    Control.HWNDInternal).Width;
             }
             else
             {

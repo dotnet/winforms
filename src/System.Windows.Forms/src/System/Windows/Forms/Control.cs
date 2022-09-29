@@ -14084,7 +14084,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleObject.SetColorScheme(Gdi32.LOGPALETTE* pLogpal)
+        unsafe HRESULT Ole32.IOleObject.SetColorScheme(LOGPALETTE* pLogpal)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetColorScheme");
             return HRESULT.S_OK;
@@ -14313,7 +14313,7 @@ namespace System.Windows.Forms
             IntPtr pvAspect,
             Ole32.DVTARGETDEVICE* ptd,
             IntPtr hicTargetDev,
-            Gdi32.LOGPALETTE* ppColorSet)
+            LOGPALETTE* ppColorSet)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetColorSet");
 
@@ -14380,7 +14380,7 @@ namespace System.Windows.Forms
             IntPtr pvAspect,
             Ole32.DVTARGETDEVICE* ptd,
             IntPtr hicTargetDev,
-            Gdi32.LOGPALETTE* ppColorSet)
+            LOGPALETTE* ppColorSet)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetColorSet");
 
@@ -14572,6 +14572,7 @@ namespace System.Windows.Forms
         HWND IHandle<HWND>.Handle => HWND;
 
         internal HWND HWND => (HWND)Handle;
+        internal HWND HWNDInternal => (HWND)HandleInternal;
 
         internal virtual bool AllowsChildrenToShowToolTips() => true;
     }

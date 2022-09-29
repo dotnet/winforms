@@ -2,19 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
+using Windows.Win32.Globalization;
 
-internal partial class Interop
+namespace Windows.Win32
 {
-    internal partial class Imm32
+    internal static partial class PInvoke
     {
-        [DllImport(Libraries.Imm32)]
-        public static extern BOOL ImmReleaseContext(IntPtr hWnd, IntPtr hIMC);
-
-        public static BOOL ImmReleaseContext(IHandle hWnd, IntPtr hIMC)
+        public static BOOL ImmReleaseContext<T>(in T hWnd, HIMC hIMC) where T : IHandle<HWND>
         {
             BOOL result = ImmReleaseContext(hWnd.Handle, hIMC);
-            GC.KeepAlive(hWnd);
+            GC.KeepAlive(hWnd.Wrapper);
             return result;
         }
     }

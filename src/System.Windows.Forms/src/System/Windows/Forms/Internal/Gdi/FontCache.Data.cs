@@ -94,7 +94,7 @@ namespace System.Windows.Forms
                     lfCharSet = (FONT_CHARSET)font.GdiCharSet,
                     lfOutPrecision = FONT_OUTPUT_PRECISION.OUT_TT_PRECIS,
                     lfQuality = quality,
-                    lfWeight = (int)((font.Style & FontStyle.Bold) == FontStyle.Bold ? Interop.Gdi32.FW.BOLD : Interop.Gdi32.FW.NORMAL),
+                    lfWeight = (int)((font.Style & FontStyle.Bold) == FontStyle.Bold ? FW.BOLD : FW.NORMAL),
                     lfItalic = (font.Style & FontStyle.Italic) == FontStyle.Italic ? True : False,
                     lfUnderline = (font.Style & FontStyle.Underline) == FontStyle.Underline ? True : False,
                     lfStrikeOut = (font.Style & FontStyle.Strikeout) == FontStyle.Strikeout ? True : False,

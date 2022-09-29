@@ -2,24 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop.UxTheme;
-
 namespace System.Windows.Forms.VisualStyles
 {
     public enum BooleanProperty
     {
-        Transparent = TMT.TRANSPARENT,
-        AutoSize = TMT.AUTOSIZE,
-        BorderOnly = TMT.BORDERONLY,
-        Composited = TMT.COMPOSITED,
-        BackgroundFill = TMT.BGFILL,
-        GlyphTransparent = TMT.GLYPHTRANSPARENT,
-        GlyphOnly = TMT.GLYPHONLY,
-        AlwaysShowSizingBar = TMT.ALWAYSSHOWSIZINGBAR,
-        MirrorImage = TMT.MIRRORIMAGE,
-        UniformSizing = TMT.UNIFORMSIZING,
-        IntegralSizing = TMT.INTEGRALSIZING,
-        SourceGrow = TMT.SOURCEGROW,
-        SourceShrink = TMT.SOURCESHRINK
+        Transparent = (int)THEME_PROPERTY_SYMBOL_ID.TMT_TRANSPARENT,
+        AutoSize = (int)THEME_PROPERTY_SYMBOL_ID.TMT_AUTOSIZE,
+        BorderOnly = (int)THEME_PROPERTY_SYMBOL_ID.TMT_BORDERONLY,
+        Composited = (int)THEME_PROPERTY_SYMBOL_ID.TMT_COMPOSITED,
+        BackgroundFill = (int)THEME_PROPERTY_SYMBOL_ID.TMT_BGFILL,
+        GlyphTransparent = (int)THEME_PROPERTY_SYMBOL_ID.TMT_GLYPHTRANSPARENT,
+        GlyphOnly = (int)THEME_PROPERTY_SYMBOL_ID.TMT_GLYPHONLY,
+        AlwaysShowSizingBar = (int)THEME_PROPERTY_SYMBOL_ID.TMT_ALWAYSSHOWSIZINGBAR,
+        MirrorImage = (int)THEME_PROPERTY_SYMBOL_ID.TMT_MIRRORIMAGE,
+        UniformSizing = (int)THEME_PROPERTY_SYMBOL_ID.TMT_UNIFORMSIZING,
+        IntegralSizing = (int)THEME_PROPERTY_SYMBOL_ID.TMT_INTEGRALSIZING,
+        SourceGrow = (int)THEME_PROPERTY_SYMBOL_ID.TMT_SOURCEGROW,
+        SourceShrink = (int)THEME_PROPERTY_SYMBOL_ID.TMT_SOURCESHRINK
     }
 }

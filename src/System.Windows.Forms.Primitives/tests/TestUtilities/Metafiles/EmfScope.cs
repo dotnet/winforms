@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -116,83 +115,83 @@ namespace System.Windows.Forms.Metafiles
                 switch (record.Type)
                 {
                     // Not all records are handled yet. Backfilling in as we write specific tests.
-                    case Gdi32.EMR.SETTEXTALIGN:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_SETTEXTALIGN:
                         state.TextAlign = record.SetTextAlignRecord->iMode;
                         break;
-                    case Gdi32.EMR.SETMAPMODE:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_SETMAPMODE:
                         state.MapMode = record.SetMapModeRecord->iMode;
                         break;
-                    case Gdi32.EMR.SETBKMODE:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_SETBKMODE:
                         state.BackgroundMode = record.SetBkModeRecord->iMode;
                         break;
-                    case Gdi32.EMR.SETROP2:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_SETROP2:
                         state.Rop2Mode = record.SetROP2Record->iMode;
                         break;
-                    case Gdi32.EMR.SETTEXTCOLOR:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_SETTEXTCOLOR:
                         state.TextColor = record.SetTextColorRecord->crColor;
                         break;
-                    case Gdi32.EMR.SETBKCOLOR:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_SETBKCOLOR:
                         state.BackColor = record.SetBkColorRecord->crColor;
                         break;
-                    case Gdi32.EMR.MOVETOEX:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_MOVETOEX:
                         state.BrushOrigin = record.MoveToExRecord->point;
                         // The documentation indicates that the last MoveTo will be where CloseFigure draws a line to.
                         state.LastBeginPathBrushOrigin = state.BrushOrigin;
                         break;
-                    case Gdi32.EMR.LINETO:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_LINETO:
                         state.BrushOrigin = record.LineToRecord->point;
                         break;
-                    case Gdi32.EMR.BEGINPATH:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_BEGINPATH:
                         state.LastBeginPathBrushOrigin = state.BrushOrigin;
                         state.InPath = true;
                         break;
-                    case Gdi32.EMR.ABORTPATH:
-                    case Gdi32.EMR.ENDPATH:
-                    case Gdi32.EMR.CLOSEFIGURE:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_ABORTPATH:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_ENDPATH:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_CLOSEFIGURE:
                         state.InPath = false;
                         break;
-                    case Gdi32.EMR.EXTCREATEFONTINDIRECTW:
-                    case Gdi32.EMR.CREATEPALETTE:
-                    case Gdi32.EMR.CREATEPEN:
-                    case Gdi32.EMR.EXTCREATEPEN:
-                    case Gdi32.EMR.CREATEMONOBRUSH:
-                    case Gdi32.EMR.CREATEBRUSHINDIRECT:
-                    case Gdi32.EMR.CREATEDIBPATTERNBRUSHPT:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTCREATEFONTINDIRECTW:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEPALETTE:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEPEN:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTCREATEPEN:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEMONOBRUSH:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEBRUSHINDIRECT:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_CREATEDIBPATTERNBRUSHPT:
                         // All of these records have their index as the first "parameter".
                         state.AddGdiObject(ref record, (int)record.Params[0]);
                         break;
-                    case Gdi32.EMR.SELECTOBJECT:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_SELECTOBJECT:
                         state.SelectGdiObject(record.SelectObjectRecord);
                         break;
-                    case Gdi32.EMR.DELETEOBJECT:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_DELETEOBJECT:
                         state.GdiObjects[(int)record.DeleteObjectRecord->index] = default;
                         break;
-                    case Gdi32.EMR.EXTSELECTCLIPRGN:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_EXTSELECTCLIPRGN:
                         state.ClipRegion = record.ExtSelectClipRgnRecord->ClippingRectangles;
                         break;
-                    case Gdi32.EMR.SETWORLDTRANSFORM:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_SETWORLDTRANSFORM:
                         state.Transform = record.SetWorldTransformRecord->xform;
                         break;
-                    case Gdi32.EMR.MODIFYWORLDTRANSFORM:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_MODIFYWORLDTRANSFORM:
                         var transform = record.ModifyWorldTransformRecord;
                         switch (transform->iMode)
                         {
-                            case Gdi32.MWT.IDENTITY:
+                            case MODIFY_WORLD_TRANSFORM_MODE.MWT_IDENTITY:
                                 state.Transform = Matrix3x2.Identity;
                                 break;
-                            case Gdi32.MWT.LEFTMULTIPLY:
+                            case MODIFY_WORLD_TRANSFORM_MODE.MWT_LEFTMULTIPLY:
                                 state.Transform = transform->xform * state.Transform;
                                 break;
-                            case Gdi32.MWT.RIGHTMULTIPLY:
+                            case MODIFY_WORLD_TRANSFORM_MODE.MWT_RIGHTMULTIPLY:
                                 state.Transform = state.Transform * transform->xform;
                                 break;
                         }
 
                         break;
-                    case Gdi32.EMR.SAVEDC:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_SAVEDC:
                         state.SaveDC();
                         break;
-                    case Gdi32.EMR.RESTOREDC:
+                    case ENHANCED_METAFILE_RECORD_TYPE.EMR_RESTOREDC:
                         state.RestoreDC(record.RestoreDCRecord->iRelative);
                         break;
                 }

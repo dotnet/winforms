@@ -228,12 +228,15 @@ namespace System.Windows.Forms
                     // Odd numbered tokens are the associated extensions
                     for (int i = 1; i < tokens.Length; i += 2)
                     {
-                        fixed (char* token = tokens[i])
-                        fixed (char* tokenOne = tokens[i + 1])
+                        fixed (char* tokenName = tokens[i - 1])
+                        fixed (char* tokenSpec = tokens[i])
                         {
-                            COMDLG_FILTERSPEC extension;
-                            extension.pszSpec = token;        // This may be a semicolon delimited list of extensions (that's ok)
-                            extension.pszName = tokenOne;
+                            COMDLG_FILTERSPEC extension = new()
+                            {
+                                pszName = tokenName,
+                                pszSpec = tokenSpec // This may be a semicolon delimited list of extensions (that's ok)
+                            };
+
                             extensions.Add(extension);
                         }
                     }
