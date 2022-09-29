@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -87,7 +86,7 @@ namespace System.Windows.Forms
 
                     if (_owner.HandleCreated)
                     {
-                        return ComCtl32.ImageList.GetImageCount(_owner);
+                        return PInvoke.ImageList.GetImageCount(_owner);
                     }
                     else
                     {
@@ -163,12 +162,12 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
-                        IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask);
+                        HBITMAP hMask = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+                        HBITMAP hBitmap = (HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, hMask);
                         bool ok;
                         try
                         {
-                            ok = ComCtl32.ImageList.Replace(_owner, index, hBitmap, hMask);
+                            ok = PInvoke.ImageList.Replace(_owner, index, hBitmap, hMask);
                         }
                         finally
                         {
@@ -433,7 +432,7 @@ namespace System.Windows.Forms
 
                 if (_owner.HandleCreated)
                 {
-                    ComCtl32.ImageList.Remove(_owner, -1);
+                    PInvoke.ImageList.Remove(_owner, -1);
                 }
 
                 _owner.OnChangeHandle(EventArgs.Empty);
@@ -559,8 +558,7 @@ namespace System.Windows.Forms
                 }
 
                 AssertInvariant();
-                bool ok = ComCtl32.ImageList.Remove(_owner, index);
-                if (!ok)
+                if (!PInvoke.ImageList.Remove(_owner, index))
                 {
                     throw new InvalidOperationException(SR.ImageListRemoveFailed);
                 }

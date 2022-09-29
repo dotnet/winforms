@@ -7,13 +7,12 @@ using System.Diagnostics;
 #endif
 using System.Drawing;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
     public sealed partial class ImageList
     {
-        internal class NativeImageList : IDisposable, IHandle
+        internal class NativeImageList : IDisposable, IHandle, IHandle<HIMAGELIST>
         {
 #if DEBUG
             private readonly string _callStack = new StackTrace().ToString();
@@ -33,12 +32,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            public NativeImageList(Size imageSize, ILC flags)
+            public NativeImageList(Size imageSize, IMAGELIST_CREATION_FLAGS flags)
             {
                 IntPtr himl;
                 lock (s_syncLock)
                 {
-                    himl = ComCtl32.ImageList.Create(imageSize.Width, imageSize.Height, flags, InitialCapacity, GrowBy);
+                    himl = PInvoke.ImageList_Create(imageSize.Width, imageSize.Height, flags, InitialCapacity, GrowBy);
                     Init(himl);
                 }
             }
@@ -64,6 +63,10 @@ namespace System.Windows.Forms
 
             public IntPtr Handle { get; private set; }
 
+            HIMAGELIST IHandle<HIMAGELIST>.Handle => HIML;
+
+            internal HIMAGELIST HIML => (HIMAGELIST)Handle;
+
             public void Dispose()
             {
                 Dispose(true);
@@ -79,7 +82,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    ComCtl32.ImageList.Destroy(Handle);
+                    PInvoke.ImageList.Destroy(this);
                     Handle = IntPtr.Zero;
                 }
             }
@@ -101,8 +104,8 @@ namespace System.Windows.Forms
             {
                 lock (s_syncLock)
                 {
-                    IntPtr himl = ComCtl32.ImageList.Duplicate(Handle);
-                    if (himl != IntPtr.Zero)
+                    HIMAGELIST himl = PInvoke.ImageList_Duplicate(HIML);
+                    if (!HIML.IsNull)
                     {
                         return new NativeImageList(himl);
                     }
