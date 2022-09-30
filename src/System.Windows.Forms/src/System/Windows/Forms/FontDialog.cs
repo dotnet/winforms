@@ -318,8 +318,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the user clicks the Apply button in the font
-        ///  dialog box.
+        ///  Occurs when the user clicks the Apply button in the font dialog box.
         /// </summary>
         [SRDescription(nameof(SR.FnDapplyDescr))]
         public event EventHandler? Apply
@@ -372,7 +371,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    
+
                     break;
                 case User32.WM.INITDIALOG:
                     if (!showColor)

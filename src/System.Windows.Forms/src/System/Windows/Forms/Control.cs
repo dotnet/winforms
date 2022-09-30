@@ -12705,7 +12705,7 @@ namespace System.Windows.Forms
 
             if (!ReflectMessage(p, ref m))
             {
-                // Additional check For Control. TabControl truncates the HHWND value.
+                // Additional check For Control. TabControl truncates the HWND value.
                 HWND handle = NativeWindow.GetHandleFromWindowId((short)m.WParamInternal.LOWORD);
                 if (!handle.IsNull)
                 {

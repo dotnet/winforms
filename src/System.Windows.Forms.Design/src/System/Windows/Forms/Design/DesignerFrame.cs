@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Design
 
             base.Dispose(disposing);
         }
-        
+
         private unsafe void ForceDesignerRedraw(bool focus)
         {
             if (_designer is not null && _designer.IsHandleCreated)

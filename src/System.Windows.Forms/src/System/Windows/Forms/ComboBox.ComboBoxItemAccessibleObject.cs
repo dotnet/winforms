@@ -238,7 +238,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
-                
+
                 _owningComboBox.SelectedIndex = GetCurrentIndex();
                 PInvoke.InvalidateRect(_owningComboBox.GetListHandle(), lpRect: null, bErase: false);
             }

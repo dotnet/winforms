@@ -4652,16 +4652,15 @@ namespace System.Windows.Forms
 
         internal unsafe override void RecreateHandleCore()
         {
-            WINDOWPLACEMENT wp = new()
-            {
-                length = (uint)sizeof(WINDOWPLACEMENT)
-            };
+            WINDOWPLACEMENT wp = default;
 
             FormStartPosition oldStartPosition = FormStartPosition.Manual;
 
             if (!IsMdiChild && (WindowState == FormWindowState.Minimized || WindowState == FormWindowState.Maximized))
             {
-                PInvoke.GetWindowPlacement(HWND, &wp);
+                wp.length = (uint)sizeof(WINDOWPLACEMENT);
+                bool result = PInvoke.GetWindowPlacement(HWND, &wp);
+                Debug.Assert(result);
             }
 
             if (StartPosition != FormStartPosition.Manual)
@@ -4696,7 +4695,8 @@ namespace System.Windows.Forms
 
             if (wp.length > 0)
             {
-                PInvoke.SetWindowPlacement(HWND, &wp);
+                bool result = PInvoke.SetWindowPlacement(HWND, &wp);
+                Debug.Assert(result);
             }
 
             GC.KeepAlive(this);

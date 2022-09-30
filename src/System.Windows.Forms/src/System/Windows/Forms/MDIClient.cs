@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
@@ -254,7 +255,8 @@ namespace System.Windows.Forms
                         length = (uint)sizeof(WINDOWPLACEMENT)
                     };
 
-                    PInvoke.GetWindowPlacement(child.HWND, &wp);
+                    bool result = PInvoke.GetWindowPlacement(child.HWND, &wp);
+                    Debug.Assert(result);
                     wp.ptMinPosition.Y -= yDelta;
                     if (wp.ptMinPosition.Y == -1)
                     {
