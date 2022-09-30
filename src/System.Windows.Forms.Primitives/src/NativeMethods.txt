@@ -243,6 +243,9 @@ OLE_E_ADVISENOTSUPPORTED
 OLE_E_INVALIDRECT
 OLE_E_NOCONNECTION
 OLE_E_PROMPTSAVECANCELLED
+OleFlushClipboard
+OleInitialize
+OleUninitialize
 OpenThemeData
 PatBlt
 PeekMessage
@@ -253,6 +256,7 @@ RealizePalette
 Rectangle
 RegisterClass
 RestoreDC
+RevokeDragDrop
 RoundRect
 RPC_E_CHANGED_MODE
 S_FALSE

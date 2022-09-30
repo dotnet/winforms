@@ -510,7 +510,7 @@ namespace System.Windows.Forms
                                             if (GetState(STATE_OLEINITIALIZED) && !GetState(STATE_EXTERNALOLEINIT))
                                             {
                                                 SetState(STATE_OLEINITIALIZED, false);
-                                                Ole32.OleUninitialize();
+                                                PInvoke.OleUninitialize();
                                             }
                                         }
                                     }
@@ -848,7 +848,11 @@ namespace System.Windows.Forms
                 _ = Thread.CurrentThread;
                 if (!GetState(STATE_OLEINITIALIZED))
                 {
-                    HRESULT ret = Ole32.OleInitialize(IntPtr.Zero);
+                    HRESULT ret;
+                    unsafe
+                    {
+                        ret = PInvoke.OleInitialize(pvReserved:(void*)null);
+                    }
 
                     SetState(STATE_OLEINITIALIZED, true);
                     if (ret == HRESULT.RPC_E_CHANGED_MODE)

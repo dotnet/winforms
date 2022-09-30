@@ -5,7 +5,6 @@
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Collections;
-using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -32,7 +31,7 @@ namespace System.Windows.Forms.Design
 
             if (control != null && control.Handle != IntPtr.Zero)
             {
-                Ole32.RevokeDragDrop(control.Handle);
+                PInvoke.RevokeDragDrop((HWND)control.Handle);
                 // DragAcceptFiles(control.Handle, false);
             }
         }

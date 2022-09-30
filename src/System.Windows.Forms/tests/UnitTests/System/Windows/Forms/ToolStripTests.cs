@@ -491,7 +491,7 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                Ole32.RevokeDragDrop(control.Handle);
+                PInvoke.RevokeDragDrop((HWND)control.Handle);
             }
         }
 
