@@ -63,6 +63,81 @@ public class DragDropTests : ControlTestBase
     }
 
     [WinFormsFact]
+    public async Task DragDrop_NonSerializedObject_ReturnsExpected_Async()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/7864, and it verifies that we can successfully drag and drop a
+        // non-serialized object.
+
+        Button? button = null;
+        object? data = null;
+        await RunFormWithoutControlAsync(() => new Form(), async (form) =>
+        {
+            form.AllowDrop = true;
+            form.ClientSize = new Size(100, 100);
+            form.DragEnter += (s, e) =>
+            {
+                if (e.Data?.GetDataPresent(typeof(Button)) ?? false)
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+            };
+            form.DragOver += (s, e) =>
+            {
+                if (e.Data?.GetDataPresent(typeof(Button)) ?? false)
+                {
+                    // Get the non-serialized Button.
+                    data = e.Data?.GetData(typeof(Button));
+                    e.Effect = DragDropEffects.Copy;
+                }
+            };
+            form.MouseDown += (s, e) =>
+            {
+                DataObject data = new();
+
+                // Button does not participate in serialization scenarios.
+                // Store a non-serialized Button in the DataObject.
+                button = new()
+                {
+                    Name = "button1",
+                    Text = "Click"
+                };
+                data.SetData(typeof(Button), button);
+                form.DoDragDrop(data, DragDropEffects.Copy);
+            };
+
+            var startRect = form.DisplayRectangle;
+            var centerOfStartRect = new Point(startRect.Left, startRect.Top) + new Size(startRect.Width / 2, startRect.Height / 2);
+            var startCoordinates = form.PointToScreen(centerOfStartRect);
+            var endCoordinates = new Point(startCoordinates.X + 5, startCoordinates.Y + 5);
+            var virtualPointStart = ToVirtualPoint(startCoordinates);
+            var virtualPointEnd = ToVirtualPoint(endCoordinates);
+
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator
+                    => inputSimulator
+                        .Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
+                        .LeftButtonDown()
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
+                        .Sleep(DragDropDelayMS)
+                        .LeftButtonClick()
+                        .Sleep(DragDropDelayMS));
+        });
+
+        Assert.NotNull(data);
+        Assert.True(data is Button);
+        Assert.Equal(button?.Name, ((Button)data).Name);
+        Assert.Equal(button?.Text, ((Button)data).Text);
+    }
+
+    [WinFormsFact]
     public async Task DragDrop_RTF_FromExplorer_ToRichTextBox_ReturnsExpected_Async()
     {
         await RunTestAsync(async dragDropForm =>
@@ -225,6 +300,79 @@ public class DragDropTests : ControlTestBase
                 }
             }
         });
+    }
+
+    [WinFormsFact]
+    public async Task DragDrop_SerializedObject_ReturnsExpected_Async()
+    {
+        // Verifies that we can successfully drag and drop a serialized object.
+
+        ListViewItem? listViewItem = null;
+        object? data = null;
+        await RunFormWithoutControlAsync(() => new Form(), async (form) =>
+        {
+            form.AllowDrop = true;
+            form.ClientSize = new Size(100, 100);
+            form.DragEnter += (s, e) =>
+            {
+                if (e.Data?.GetDataPresent(DataFormats.Serializable) ?? false)
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+            };
+            form.DragOver += (s, e) =>
+            {
+                if (e.Data?.GetDataPresent(DataFormats.Serializable) ?? false)
+                {
+                    // Get the serialized ListViewItem.
+                    data = e.Data?.GetData(DataFormats.Serializable);
+                    e.Effect = DragDropEffects.Copy;
+                }
+            };
+            form.MouseDown += (s, e) =>
+            {
+                DataObject data = new();
+
+                // ListViewItem participates in resx serialization scenarios.
+                // Store a serialized ListViewItem in the DataObject.
+                listViewItem = new("listViewItem1")
+                {
+                    Text = "View"
+                };
+                data.SetData(DataFormats.Serializable, listViewItem);
+                form.DoDragDrop(data, DragDropEffects.Copy);
+            };
+
+            var startRect = form.DisplayRectangle;
+            var centerOfStartRect = new Point(startRect.Left, startRect.Top) + new Size(startRect.Width / 2, startRect.Height / 2);
+            var startCoordinates = form.PointToScreen(centerOfStartRect);
+            var endCoordinates = new Point(startCoordinates.X + 5, startCoordinates.Y + 5);
+            var virtualPointStart = ToVirtualPoint(startCoordinates);
+            var virtualPointEnd = ToVirtualPoint(endCoordinates);
+
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator
+                    => inputSimulator
+                        .Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
+                        .LeftButtonDown()
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
+                        .Sleep(DragDropDelayMS)
+                        .LeftButtonClick()
+                        .Sleep(DragDropDelayMS));
+        });
+
+        Assert.NotNull(data);
+        Assert.True(data is ListViewItem);
+        Assert.Equal(listViewItem?.Name, ((ListViewItem)data).Name);
+        Assert.Equal(listViewItem?.Text, ((ListViewItem)data).Text);
     }
 
     [WinFormsFact]
