@@ -221,7 +221,7 @@ namespace System.Windows.Forms
 
                         // Message only windows are cheaper and have fewer issues than
                         // full blown invisible windows.
-                        Parent = User32.HWND_MESSAGE
+                        Parent = HWND.HWND_MESSAGE
                     };
 
                     CreateHandle(cp);

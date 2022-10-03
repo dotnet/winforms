@@ -558,7 +558,7 @@ namespace System.Windows.Forms
             // Force repainting of the entire window frame.
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                RedrawWindow(this, flags: RDW.INVALIDATE | RDW.FRAME);
+                PInvoke.RedrawWindow(this, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_FRAME);
             }
         }
 
@@ -975,7 +975,7 @@ namespace System.Windows.Forms
                         // Invalidate the whole control to make sure the native control doesn't make any assumptions over what it has to paint
                         if (ShouldRenderPlaceHolderText())
                         {
-                            User32.InvalidateRect(Handle, null, bErase: true);
+                            PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
                         }
 
                         // Let the native implementation draw the background and animate the frame
@@ -984,13 +984,13 @@ namespace System.Windows.Forms
                         if (ShouldRenderPlaceHolderText())
                         {
                             // Invalidate again because the native WM_PAINT already validated everything by calling BeginPaint itself.
-                            User32.InvalidateRect(Handle, null, bErase: true);
+                            PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
 
                             // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
                             using var paintScope = new PInvoke.BeginPaintScope((HWND)Handle);
                             DrawPlaceholderText(paintScope);
 
-                            User32.ValidateRect(this, null);
+                            PInvoke.ValidateRect(this, lpRect: null);
                         }
                     }
 

@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using static Interop;
 using static Interop.User32;
+using Windows.Win32.System.StationsAndDesktops;
 
 namespace System.Windows.Forms
 {
@@ -22,7 +23,7 @@ namespace System.Windows.Forms
         private static bool s_systemEventsAttached;
         private static bool s_systemEventsDirty = true;
 
-        private static IntPtr s_processWinStation = IntPtr.Zero;
+        private static HWINSTA s_processWinStation;
         private static bool s_isUserInteractive;
 
         private static PowerStatus? s_powerStatus;
@@ -622,24 +623,26 @@ namespace System.Windows.Forms
         public static string UserDomainName => Environment.UserDomainName;
 
         /// <summary>
-        ///  Gets a value indicating whether the current process is running in user
-        ///  interactive mode.
+        ///  Gets a value indicating whether the current process is running in user interactive mode.
         /// </summary>
         public unsafe static bool UserInteractive
         {
             get
             {
-                IntPtr hwinsta = User32.GetProcessWindowStation();
-                if (hwinsta != IntPtr.Zero && s_processWinStation != hwinsta)
+                HWINSTA hwinsta = PInvoke.GetProcessWindowStation();
+                if (!hwinsta.IsNull && s_processWinStation != hwinsta)
                 {
                     s_isUserInteractive = true;
 
-                    int lengthNeeded = 0;
-
                     USEROBJECTFLAGS flags = default;
-                    if (GetUserObjectInformationW(hwinsta, UOI.FLAGS, ref flags, sizeof(USEROBJECTFLAGS), ref lengthNeeded))
+                    if (PInvoke.GetUserObjectInformation(
+                        (HANDLE)hwinsta.Value,
+                        USER_OBJECT_INFORMATION_INDEX.UOI_FLAGS,
+                        &flags,
+                        (uint)sizeof(USEROBJECTFLAGS),
+                        null))
                     {
-                        if ((flags.dwFlags & (int)WSF.VISIBLE) == 0)
+                        if ((flags.dwFlags & (int)PInvoke.WSF_VISIBLE) == 0)
                         {
                             s_isUserInteractive = false;
                         }

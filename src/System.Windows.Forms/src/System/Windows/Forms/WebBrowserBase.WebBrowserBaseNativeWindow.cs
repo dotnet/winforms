@@ -39,12 +39,13 @@ namespace System.Windows.Forms
 
             private unsafe void WmWindowPosChanging(ref Message m)
             {
-                User32.WINDOWPOS* wp = (User32.WINDOWPOS*)(nint)m.LParamInternal;
+                WINDOWPOS* wp = (WINDOWPOS*)m.LParamInternal;
                 wp->x = 0;
                 wp->y = 0;
                 Size s = _webBrowserBase.webBrowserBaseChangingSize;
                 if (s.Width == -1)
-                {   // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
+                {
+                    // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
                     wp->cx = _webBrowserBase.Width;
                     wp->cy = _webBrowserBase.Height;
                 }

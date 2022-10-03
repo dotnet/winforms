@@ -1209,7 +1209,7 @@ namespace System.Windows.Forms.Design
             if (control is not null && control.IsHandleCreated)
             {
                 PInvoke.SendMessage(control, User32.WM.NCACTIVATE, (WPARAM)(BOOL)false);
-                User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
+                PInvoke.RedrawWindow(control, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
             }
         }
 

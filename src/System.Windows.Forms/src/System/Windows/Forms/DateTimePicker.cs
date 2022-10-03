@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using SourceGenerated;
@@ -1468,7 +1467,7 @@ namespace System.Windows.Forms
                 User32.EnumChildWindows(this, c.enumChildren);
                 if (c.hwndFound != IntPtr.Zero)
                 {
-                    User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, true);
+                    PInvoke.InvalidateRect(c.hwndFound, lpRect: (RECT*)null, bErase: true);
                     User32.UpdateWindow(c.hwndFound);
                 }
             }

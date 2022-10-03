@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
 
@@ -873,7 +872,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override User32.SW ShowParams => User32.SW.SHOWNOACTIVATE;
+        internal override SHOW_WINDOW_CMD ShowParams => SHOW_WINDOW_CMD.SW_SHOWNOACTIVATE;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -1007,10 +1006,11 @@ namespace System.Windows.Forms
         {
             if (TopMost)
             {
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    topMost ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
-                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
+                PInvoke.SetWindowPos(
+                    this,
+                    topMost ? HWND.HWND_TOPMOST : HWND.HWND_NOTOPMOST,
+                    0, 0, 0, 0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
             }
         }
 
@@ -1815,10 +1815,11 @@ namespace System.Windows.Forms
                             }
                             else if (IsHandleCreated && User32.IsWindowEnabled(this))
                             {
-                                User32.SetWindowPos(
-                                    new HandleRef(this, Handle),
-                                    User32.HWND_TOP,
-                                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
+                                PInvoke.SetWindowPos(
+                                    this,
+                                    HWND.HWND_TOP,
+                                    0, 0, 0, 0,
+                                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
                             }
                         }
                     }
@@ -2201,16 +2202,16 @@ namespace System.Windows.Forms
                             $"Sending WM_NCACTIVATE to toplevel hwnd {ToolStripManager.ModalMenuFilter.ActiveHwnd}");
 
                         // We're activating - notify the previous guy that we're activating.
-                        HandleRef<HWND> activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
+                        HandleRef<HWND> activeWindow = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
-                        PInvoke.SendMessage(activeHwndHandleRef, User32.WM.NCACTIVATE, (WPARAM)(BOOL)true, (LPARAM)(-1));
-                        User32.RedrawWindow(
-                            activeHwndHandleRef.Handle,
-                            flags: User32.RDW.FRAME | User32.RDW.INVALIDATE);
+                        PInvoke.SendMessage(activeWindow, User32.WM.NCACTIVATE, (WPARAM)(BOOL)true, (LPARAM)(-1));
+                        PInvoke.RedrawWindow(
+                            activeWindow,
+                            lprcUpdate: null,
+                            HRGN.Null,
+                            REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
 
                         m.WParamInternal = 1u;
-
-                        GC.KeepAlive(activeHwndHandleRef.Wrapper);
                     }
                     finally
                     {

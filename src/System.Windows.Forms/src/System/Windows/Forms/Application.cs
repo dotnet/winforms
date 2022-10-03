@@ -599,15 +599,19 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe static BOOL SendThemeChanged(HWND hwnd)
         {
-            uint thisPID = PInvoke.GetCurrentProcessId();
             uint processId;
             PInvoke.GetWindowThreadProcessId(hwnd, &processId);
-            if (processId == thisPID && PInvoke.IsWindowVisible(hwnd))
+            if (processId == PInvoke.GetCurrentProcessId() && PInvoke.IsWindowVisible(hwnd))
             {
                 SendThemeChangedRecursive(hwnd);
-                User32.RedrawWindow(
+                PInvoke.RedrawWindow(
                     hwnd,
-                    flags: User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
+                    lprcUpdate: (RECT*)null,
+                    HRGN.Null,
+                    REDRAW_WINDOW_FLAGS.RDW_INVALIDATE
+                        | REDRAW_WINDOW_FLAGS.RDW_FRAME
+                        | REDRAW_WINDOW_FLAGS.RDW_ERASE
+                        | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN);
             }
 
             return true;

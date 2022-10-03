@@ -2325,14 +2325,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Notifies our site that we have changed our size and location.
             /// </summary>
-            internal unsafe void UpdateBounds(ref int x, ref int y, ref int width, ref int height, User32.SWP flags)
+            internal unsafe void UpdateBounds(ref int x, ref int y, ref int width, ref int height, SET_WINDOW_POS_FLAGS flags)
             {
                 if (!_activeXState[s_adjustingRect] && _activeXState[s_inPlaceVisible])
                 {
                     if (_clientSite is IOleInPlaceSite ioleClientSite)
                     {
                         var rc = new RECT();
-                        if ((flags & User32.SWP.NOMOVE) != 0)
+                        if (flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOMOVE))
                         {
                             rc.left = _control.Left;
                             rc.top = _control.Top;
@@ -2343,7 +2343,7 @@ namespace System.Windows.Forms
                             rc.top = y;
                         }
 
-                        if ((flags & User32.SWP.NOSIZE) != 0)
+                        if (flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOSIZE))
                         {
                             rc.right = rc.left + _control.Width;
                             rc.bottom = rc.top + _control.Height;
@@ -2369,13 +2369,13 @@ namespace System.Windows.Forms
                         }
 
                         // On output, the new bounds will be reflected in  rc
-                        if ((flags & User32.SWP.NOMOVE) == 0)
+                        if (!flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOMOVE))
                         {
                             x = rc.left;
                             y = rc.top;
                         }
 
-                        if ((flags & User32.SWP.NOSIZE) == 0)
+                        if (!flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOSIZE))
                         {
                             width = rc.right - rc.left;
                             height = rc.bottom - rc.top;

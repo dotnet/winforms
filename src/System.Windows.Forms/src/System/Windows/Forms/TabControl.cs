@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -1295,14 +1294,14 @@ namespace System.Windows.Forms
 
             if (ShowToolTips)
             {
-                IntPtr tooltipHwnd;
-                tooltipHwnd = PInvoke.SendMessage(this, (User32.WM)ComCtl32.TCM.GETTOOLTIPS);
-                if (tooltipHwnd != IntPtr.Zero)
+                HWND tooltipHwnd = (HWND)PInvoke.SendMessage(this, (User32.WM)ComCtl32.TCM.GETTOOLTIPS);
+                if (!tooltipHwnd.IsNull)
                 {
-                    User32.SetWindowPos(
-                        new HandleRef(this, tooltipHwnd),
-                        User32.HWND_TOPMOST,
-                        flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
+                    PInvoke.SetWindowPos(
+                        this,
+                        HWND.HWND_TOPMOST,
+                        0, 0, 0, 0,
+                        SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
                 }
             }
 
@@ -1342,9 +1341,7 @@ namespace System.Windows.Forms
                 _selectedIndex = SelectedIndex;
             }
 
-            //Remove the Handle from NativeWindow....
-
-            // Don't try to remove the Handle if we've already done so
+            // Remove the handle from NativeWindow.
             if (_handleInTable)
             {
                 _handleInTable = false;
