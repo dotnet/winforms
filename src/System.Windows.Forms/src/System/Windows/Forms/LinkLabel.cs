@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -35,17 +34,17 @@ namespace System.Windows.Forms
         private Color _visitedLinkColor = Color.Empty;
         private Color _disabledLinkColor = Color.Empty;
 
-        private Font _linkFont;
-        private Font _hoverLinkFont;
+        private Font? _linkFont;
+        private Font? _hoverLinkFont;
 
         private bool _textLayoutValid;
         private bool _receivedDoubleClick;
         private readonly List<Link> _links = new List<Link>(2);
 
-        private Link _focusLink;
-        private LinkCollection _linkCollection;
-        private Region _textRegion;
-        private Cursor _overrideCursor;
+        private Link? _focusLink;
+        private LinkCollection? _linkCollection;
+        private Region? _textRegion;
+        private Cursor? _overrideCursor;
 
         private bool _processingOnGotFocus;  // used to avoid raising the OnGotFocus event twice after selecting a focus link.
 
@@ -121,7 +120,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Link FocusLink
+        private Link? FocusLink
         {
             get
             {
@@ -376,7 +375,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected Cursor OverrideCursor
+        protected Cursor? OverrideCursor
         {
             get => _overrideCursor;
             set
@@ -405,7 +404,7 @@ namespace System.Windows.Forms
         // Make this event visible through the property browser.
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        public new event EventHandler TabStopChanged
+        public new event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -420,6 +419,7 @@ namespace System.Windows.Forms
         }
 
         [RefreshProperties(RefreshProperties.Repaint)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -471,7 +471,7 @@ namespace System.Windows.Forms
         /// </summary>
         [WinCategory("Action")]
         [SRDescription(nameof(SR.LinkLabelLinkClickedDescr))]
-        public event LinkLabelLinkClickedEventHandler LinkClicked
+        public event LinkLabelLinkClickedEventHandler? LinkClicked
         {
             add => Events.AddHandler(s_eventLinkClicked, value);
             remove => Events.RemoveHandler(s_eventLinkClicked, value);
@@ -634,7 +634,6 @@ namespace System.Windows.Forms
             }
 
             // bail early for no text
-            //
             if (Text.Length == 0)
             {
                 Links.Clear();
@@ -648,7 +647,7 @@ namespace System.Windows.Forms
             try
             {
                 Font alwaysUnderlined = new Font(Font, Font.Style | FontStyle.Underline);
-                Graphics created = null;
+                Graphics? created = null;
 
                 try
                 {
@@ -707,7 +706,6 @@ namespace System.Windows.Forms
                                                                   textSize.Width - iRightMargin - iLeftMargin,
                                                                   textSize.Height);
                         visualRectangle = CalcTextRenderBounds(visualRectangle /*textRect*/, clientRectWithPadding /*clientRect*/, RtlTranslateContent(TextAlign));
-                        //
 
                         Region visualRegion = new Region(visualRectangle);
                         if (_links is not null && _links.Count == 1)
@@ -803,10 +801,10 @@ namespace System.Windows.Forms
         ///  Determines if the given client coordinates is contained within a portion
         ///  of a link area.
         /// </summary>
-        protected Link PointInLink(int x, int y)
+        protected Link? PointInLink(int x, int y)
         {
             Graphics g = CreateGraphicsInternal();
-            Link hit = null;
+            Link? hit = null;
             try
             {
                 EnsureRun(g);
@@ -822,7 +820,6 @@ namespace System.Windows.Forms
             finally
             {
                 g.Dispose();
-                g = null;
             }
 
             return hit;
@@ -833,7 +830,7 @@ namespace System.Windows.Forms
         ///  the specified link. If link is null, then all linked text
         ///  is invalidated.
         /// </summary>
-        private void InvalidateLink(Link link)
+        private void InvalidateLink(Link? link)
         {
             if (IsHandleCreated)
             {
@@ -913,7 +910,7 @@ namespace System.Windows.Forms
 
             try
             {
-                Link focusLink = FocusLink;
+                Link? focusLink = FocusLink;
                 if (focusLink is null)
                 {
                     // Set focus on first link.
@@ -1037,7 +1034,6 @@ namespace System.Windows.Forms
         {
             base.OnMouseUp(e);
 
-            //
             if (Disposing || IsDisposed)
             {
                 return;
@@ -1057,7 +1053,7 @@ namespace System.Windows.Forms
                     InvalidateLink(_links[i]);
                     Capture = false;
 
-                    Link clicked = PointInLink(e.X, e.Y);
+                    Link? clicked = PointInLink(e.X, e.Y);
 
                     if (clicked is not null && clicked == FocusLink && clicked.Enabled)
                     {
@@ -1080,7 +1076,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Link hoverLink = null;
+            Link? hoverLink = null;
             foreach (Link link in _links)
             {
                 if ((link.State & LinkState.Hover) == LinkState.Hover)
@@ -1090,7 +1086,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            Link pointIn = PointInLink(e.X, e.Y);
+            Link? pointIn = PointInLink(e.X, e.Y);
 
             if (pointIn != hoverLink)
             {
@@ -1132,7 +1128,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnLinkClicked(LinkLabelLinkClickedEventArgs e)
         {
-            ((LinkLabelLinkClickedEventHandler)Events[s_eventLinkClicked])?.Invoke(this, e);
+            ((LinkLabelLinkClickedEventHandler?)Events[s_eventLinkClicked])?.Invoke(this, e);
         }
 
         protected override void OnPaddingChanged(EventArgs e)
@@ -1261,7 +1257,7 @@ namespace System.Windows.Forms
                             if (optimizeBackgroundRendering)
                             {
                                 g.Clip = originalClip;
-                                g.ExcludeClip(_textRegion);
+                                g.ExcludeClip(_textRegion!);
                                 PaintLinkBackground(g);
                             }
                         }
@@ -1287,7 +1283,7 @@ namespace System.Windows.Forms
                         // ClientRectWithPadding which in some cases is smaller that ClientRectangle.
 
                         PaintLinkBackground(g);
-                        g.IntersectClip(_textRegion);
+                        g.IntersectClip(_textRegion!);
 
                         if (UseCompatibleTextRendering)
                         {
@@ -1330,7 +1326,7 @@ namespace System.Windows.Forms
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            Image i = Image;
+            Image? i = Image;
 
             if (i is not null)
             {
@@ -1420,7 +1416,7 @@ namespace System.Windows.Forms
 
         private void PaintLink(
             PaintEventArgs e,
-            Link link,
+            Link? link,
             SolidBrush foreBrush,
             SolidBrush linkBrush,
             bool optimizeBackgroundRendering,
@@ -1442,7 +1438,7 @@ namespace System.Windows.Forms
                     Color brushColor = Color.Empty;
                     LinkState linkState = link.State;
 
-                    font = (linkState & LinkState.Hover) == LinkState.Hover ? _hoverLinkFont : _linkFont;
+                    font = (linkState & LinkState.Hover) == LinkState.Hover ? _hoverLinkFont! : _linkFont!;
 
                     if (link.Enabled)
                     {
@@ -1533,7 +1529,7 @@ namespace System.Windows.Forms
             else
             {
                 // Painting with no link.
-                g.IntersectClip(_textRegion);
+                g.IntersectClip(_textRegion!);
 
                 if (optimizeBackgroundRendering)
                 {
@@ -1577,7 +1573,6 @@ namespace System.Windows.Forms
         void IButtonControl.PerformClick()
         {
             // If a link is not currently focused, focus on the first link
-            //
             if (FocusLink is null && Links.Count > 0)
             {
                 string text = Text;
@@ -1594,7 +1589,6 @@ namespace System.Windows.Forms
             }
 
             // Act as if the focused link was clicked
-            //
             if (FocusLink is not null)
             {
                 OnLinkClicked(new LinkLabelLinkClickedEventArgs(FocusLink));
@@ -1683,7 +1677,7 @@ namespace System.Windows.Forms
 
         private int GetNextLinkIndex(int focusIndex, bool forward)
         {
-            Link test;
+            Link? test;
             string text = Text;
             int charStart = 0;
             int charEnd = 0;

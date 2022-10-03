@@ -72,7 +72,7 @@ namespace System.Windows.Forms
                 }
 
                 Point p = Owner.PointToClient(new Point(x, y));
-                Link hit = _owningLinkLabel.PointInLink(p.X, p.Y);
+                Link? hit = _owningLinkLabel.PointInLink(p.X, p.Y);
 
                 if (hit is not null)
                 {
