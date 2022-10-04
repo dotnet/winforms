@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' the main form closes and provides for shutting down when the main form closes or the
         ''' last form closes, depending on the mode this application is running in.
         ''' </summary>
-        Private Class WinFormsAppContext
+        Private NotInheritable Class WinFormsAppContext
             Inherits ApplicationContext
 
             Private ReadOnly _app As WindowsFormsApplicationBase

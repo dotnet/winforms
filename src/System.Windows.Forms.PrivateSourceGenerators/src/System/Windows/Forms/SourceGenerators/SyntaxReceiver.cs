@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace System.Windows.Forms.PrivateSourceGenerators
 {
-    internal class SyntaxReceiver : ISyntaxReceiver
+    internal sealed class SyntaxReceiver : ISyntaxReceiver
     {
         public List<SyntaxNode> ArgumentsToValidate { get; } = new();
 

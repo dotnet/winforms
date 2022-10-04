@@ -12,7 +12,7 @@ namespace System.Drawing.Design
     public partial class ContentAlignmentEditor
     {
         /// <summary>
-        ///  Control we use to provide the content alignment UI.
+        /// Control we use to provide the content alignment UI.
         /// </summary>
         private class ContentUI : Control
         {

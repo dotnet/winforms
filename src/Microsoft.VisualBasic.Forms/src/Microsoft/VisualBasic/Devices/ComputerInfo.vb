@@ -197,7 +197,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         ''' Calls GlobalMemoryStatusEx and returns the correct value.
         ''' </summary>
-        Private Class InternalMemoryStatus
+        Private NotInheritable Class InternalMemoryStatus
             Friend Sub New()
             End Sub
 
