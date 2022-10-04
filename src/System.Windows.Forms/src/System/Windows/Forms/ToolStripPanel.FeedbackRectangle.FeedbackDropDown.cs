@@ -51,31 +51,30 @@ namespace System.Windows.Forms
                 // have bits of the dropdown region drawn all over them.
                 private void ForceSynchronousPaint()
                 {
-                    if (!IsDisposed)
+                    if (IsDisposed || _numPaintsServiced != 0)
                     {
-                        if (_numPaintsServiced == 0)
-                        {
-                            // protect against re-entrancy.
-                            try
-                            {
-                                var msg = new MSG();
-                                while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
-                                {
-                                    User32.UpdateWindow(msg.hwnd);
+                        return;
+                    }
 
-                                    // Infinite loop protection
-                                    if (_numPaintsServiced++ > MaxPaintsToService)
-                                    {
-                                        Debug.Fail("somehow we've gotten ourself in a situation where we're pumping an unreasonable number of paint messages, investigate.");
-                                        break;
-                                    }
-                                }
-                            }
-                            finally
+                    // Protect against re-entrancy.
+                    try
+                    {
+                        MSG msg = new();
+                        while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
+                        {
+                            PInvoke.UpdateWindow(msg.hwnd);
+
+                            // Infinite loop protection
+                            if (_numPaintsServiced++ > MaxPaintsToService)
                             {
-                                _numPaintsServiced = 0;
+                                Debug.Fail("Somehow we've gotten ourself in a situation where we're pumping an unreasonable number of paint messages, investigate.");
+                                break;
                             }
                         }
+                    }
+                    finally
+                    {
+                        _numPaintsServiced = 0;
                     }
                 }
 

@@ -1045,7 +1045,7 @@ namespace System.Windows.Forms
         ///  Returns the HWND of the window that is at the specified point. This handles special
         ///  cases where one Control owns multiple HWNDs (i.e. ComboBox).
         /// </summary>
-        private IntPtr GetWindowFromPoint(Point screenCoords, ref bool success)
+        private HWND GetWindowFromPoint(Point screenCoords, ref bool success)
         {
             Control current = TopLevelControl;
 
@@ -1053,8 +1053,8 @@ namespace System.Windows.Forms
             if (current is not null && current.IsActiveX)
             {
                 // Find the matching HWnd matching the ScreenCoord and find if the Control has a Tooltip.
-                IntPtr hwndControl = User32.WindowFromPoint(screenCoords);
-                if (hwndControl != IntPtr.Zero)
+                HWND hwndControl = PInvoke.WindowFromPoint(screenCoords);
+                if (!hwndControl.IsNull)
                 {
                     Control currentControl = Control.FromHandle(hwndControl);
                     if (currentControl is not null &&
@@ -1064,11 +1064,11 @@ namespace System.Windows.Forms
                     }
                 }
 
-                return IntPtr.Zero;
+                return HWND.Null;
             }
 
-            IntPtr baseHwnd = current?.Handle ?? IntPtr.Zero;
-            IntPtr hwnd = IntPtr.Zero;
+            HWND baseHwnd = current?.HWND ?? HWND.Null;
+            HWND hwnd = HWND.Null;
             bool finalMatch = false;
             while (!finalMatch)
             {
@@ -1078,13 +1078,13 @@ namespace System.Windows.Forms
                     pt = current.PointToClient(screenCoords);
                 }
 
-                IntPtr found = User32.ChildWindowFromPointEx(baseHwnd, pt, User32.CWP.SKIPINVISIBLE);
+                HWND found = PInvoke.ChildWindowFromPointEx(baseHwnd, pt, CWP_FLAGS.CWP_SKIPINVISIBLE);
                 if (found == baseHwnd)
                 {
                     hwnd = found;
                     finalMatch = true;
                 }
-                else if (found == IntPtr.Zero)
+                else if (found.IsNull)
                 {
                     finalMatch = true;
                 }
@@ -1096,19 +1096,19 @@ namespace System.Windows.Forms
                         current = Control.FromChildHandle(found);
                         if (current is not null)
                         {
-                            hwnd = current.Handle;
+                            hwnd = current.HWND;
                         }
 
                         finalMatch = true;
                     }
                     else
                     {
-                        baseHwnd = current.Handle;
+                        baseHwnd = current.HWND;
                     }
                 }
             }
 
-            if (hwnd != IntPtr.Zero)
+            if (!hwnd.IsNull)
             {
                 Control control = Control.FromHandle(hwnd);
                 if (control is not null)
@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms
 
                     if (current is not null)
                     {
-                        hwnd = IntPtr.Zero;
+                        hwnd = HWND.Null;
                     }
 
                     success = true;
@@ -2055,7 +2055,7 @@ namespace System.Windows.Forms
         {
             var lpPoint = (Point*)(nint)message.LParamInternal;
             bool result = false;
-            message.ResultInternal = (LRESULT)GetWindowFromPoint(*lpPoint, ref result);
+            message.ResultInternal = (LRESULT)(nint)GetWindowFromPoint(*lpPoint, ref result);
         }
 
         /// <summary>

@@ -649,7 +649,7 @@ namespace System.Windows.Forms
                         {
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Mnemonic: " + ch.ToString());
 
-                            short scan = User32.VkKeyScanW(ch);
+                            short scan = PInvoke.VkKeyScan(ch);
                             ushort key = (ushort)(scan & 0x00FF);
                             if (ch >= 'A' && ch <= 'Z')
                             {

@@ -1465,10 +1465,10 @@ namespace System.Windows.Forms
             {
                 EnumChildren c = new EnumChildren();
                 User32.EnumChildWindows(this, c.enumChildren);
-                if (c.hwndFound != IntPtr.Zero)
+                if (!c.hwndFound.IsNull)
                 {
                     PInvoke.InvalidateRect(c.hwndFound, lpRect: (RECT*)null, bErase: true);
-                    User32.UpdateWindow(c.hwndFound);
+                    PInvoke.UpdateWindow(c.hwndFound);
                 }
             }
         }

@@ -1237,7 +1237,7 @@ namespace System.Windows.Forms
                         }
                         else if (!User32.PeekMessageW(ref msg))
                         {
-                            User32.WaitMessage();
+                            PInvoke.WaitMessage();
                         }
                     }
 

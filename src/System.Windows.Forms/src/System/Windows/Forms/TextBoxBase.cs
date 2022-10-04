@@ -1533,29 +1533,24 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            if (mevent is not null)
+            if (mevent is not null && mevent.Button == MouseButtons.Left)
             {
-                Point pt = PointToScreen(mevent.Location);
-
-                if (mevent.Button == MouseButtons.Left)
+                if (!ValidationCancelled && PInvoke.WindowFromPoint(PointToScreen(mevent.Location)) == HWND)
                 {
-                    if (!ValidationCancelled && WindowFromPoint(pt) == Handle)
+                    if (!_doubleClickFired)
                     {
-                        if (!_doubleClickFired)
-                        {
-                            OnClick(mevent);
-                            OnMouseClick(mevent);
-                        }
-                        else
-                        {
-                            _doubleClickFired = false;
-                            OnDoubleClick(mevent);
-                            OnMouseDoubleClick(mevent);
-                        }
+                        OnClick(mevent);
+                        OnMouseClick(mevent);
                     }
-
-                    _doubleClickFired = false;
+                    else
+                    {
+                        _doubleClickFired = false;
+                        OnDoubleClick(mevent);
+                        OnMouseDoubleClick(mevent);
+                    }
                 }
+
+                _doubleClickFired = false;
             }
 
             base.OnMouseUp(mevent);

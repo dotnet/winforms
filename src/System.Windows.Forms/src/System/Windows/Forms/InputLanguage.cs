@@ -66,8 +66,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                IntPtr handle = IntPtr.Zero;
-                User32.SystemParametersInfoW(User32.SPI.GETDEFAULTINPUTLANG, ref handle);
+                nint handle = 0;
+                PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETDEFAULTINPUTLANG, ref handle);
                 return new InputLanguage(handle);
             }
         }

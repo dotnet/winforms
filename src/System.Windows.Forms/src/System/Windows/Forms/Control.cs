@@ -5735,22 +5735,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves the child control that is located at the specified client
-        ///  coordinates.
+        ///  Retrieves the child control that is located at the specified client coordinates.
         /// </summary>
         public Control? GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue)
         {
             int value = (int)skipValue;
-            // Since this is a Flags Enumeration... the only way to validate skipValue is by checking if its within the range.
+
+            // Since this is a flags enumeration the only way to validate skipValue is by checking if its within the range.
             if (value < 0 || value > 7)
             {
                 throw new InvalidEnumArgumentException(nameof(skipValue), value, typeof(GetChildAtPointSkip));
             }
 
-            IntPtr hwnd = User32.ChildWindowFromPointEx(this, pt, (User32.CWP)value);
-            Control? ctl = FromChildHandle(hwnd);
+            HWND hwnd = PInvoke.ChildWindowFromPointEx(this, pt, (CWP_FLAGS)value);
+            Control? control = FromChildHandle(hwnd);
 
-            return (ctl == this) ? null : ctl;
+            return (control == this) ? null : control;
         }
 
         private protected virtual string GetCaptionForTool(ToolTip toolTip)
@@ -11647,7 +11647,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.UpdateWindow(this);
+                PInvoke.UpdateWindow(this);
             }
         }
 
@@ -12575,15 +12575,10 @@ namespace System.Windows.Forms
                     }
                 }
 
-                bool fireClick = false;
-
-                if (_controlStyle.HasFlag(ControlStyles.StandardClick))
-                {
-                    if (GetState(States.MousePressed) && !IsDisposed && User32.WindowFromPoint(screenLocation) == Handle)
-                    {
-                        fireClick = true;
-                    }
-                }
+                bool fireClick = _controlStyle.HasFlag(ControlStyles.StandardClick)
+                    && GetState(States.MousePressed)
+                    && !IsDisposed
+                    && PInvoke.WindowFromPoint(screenLocation) == HWND;
 
                 if (fireClick && !ValidationCancelled)
                 {

@@ -779,7 +779,7 @@ namespace System.Windows.Forms.Design
                     tbx.SelectedToolboxItemUsed();
 
                     User32.GetCursorPos(out Point p);
-                    HWND hwnd = (HWND)User32.WindowFromPoint(p);
+                    HWND hwnd = PInvoke.WindowFromPoint(p);
                     if (!hwnd.IsNull)
                     {
                         PInvoke.SendMessage(hwnd, User32.WM.SETCURSOR, hwnd, (nint)User32.HT.CLIENT);

@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Xunit;
+using static Windows.Win32.UI.WindowsAndMessaging.SYSTEM_PARAMETERS_INFO_ACTION;
 using static Interop.User32;
 
 namespace System
@@ -45,39 +46,39 @@ namespace System
 
                 if (category == UserPreferenceCategory.Accessibility)
                 {
-                    wParam = (int)SPI.SETHIGHCONTRAST;
+                    wParam = (int)SPI_SETHIGHCONTRAST;
                 }
                 else if (category == UserPreferenceCategory.Desktop)
                 {
-                    wParam = (int)SPI.SETDESKWALLPAPER;
+                    wParam = (int)SPI_SETDESKWALLPAPER;
                 }
                 else if (category == UserPreferenceCategory.Icon)
                 {
-                    wParam = (int)SPI.ICONHORIZONTALSPACING;
+                    wParam = (int)SPI_ICONHORIZONTALSPACING;
                 }
                 else if (category == UserPreferenceCategory.Mouse)
                 {
-                    wParam = (int)SPI.SETDOUBLECLICKTIME;
+                    wParam = (int)SPI_SETDOUBLECLICKTIME;
                 }
                 else if (category == UserPreferenceCategory.Keyboard)
                 {
-                    wParam = (int)SPI.SETKEYBOARDDELAY;
+                    wParam = (int)SPI_SETKEYBOARDDELAY;
                 }
                 else if (category == UserPreferenceCategory.Menu)
                 {
-                    wParam = (int)SPI.SETMENUDROPALIGNMENT;
+                    wParam = (int)SPI_SETMENUDROPALIGNMENT;
                 }
                 else if (category == UserPreferenceCategory.Power)
                 {
-                    wParam = (int)SPI.SETLOWPOWERACTIVE;
+                    wParam = (int)SPI_SETLOWPOWERACTIVE;
                 }
                 else if (category == UserPreferenceCategory.Screensaver)
                 {
-                    wParam = (int)SPI.SETMENUDROPALIGNMENT;
+                    wParam = (int)SPI_SETMENUDROPALIGNMENT;
                 }
                 else if (category == UserPreferenceCategory.Window)
                 {
-                    wParam = (int)SPI.SETMENUDROPALIGNMENT;
+                    wParam = (int)SPI_SETMENUDROPALIGNMENT;
                 }
                 else
                 {
