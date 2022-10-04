@@ -409,7 +409,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int cyhscroll = User32.GetSystemMetrics(User32.SystemMetric.SM_CYHSCROLL);
+                int cyhscroll = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYHSCROLL);
                 return ((cyhscroll * 8) / 3);
             }
         }

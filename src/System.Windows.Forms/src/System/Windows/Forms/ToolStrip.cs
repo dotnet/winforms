@@ -4969,16 +4969,18 @@ namespace System.Windows.Forms
 
             if (m.MsgInternal == User32.WM.MOUSEACTIVATE)
             {
-                // we want to prevent taking focus if someone clicks on the toolstrip dropdown
-                // itself.  the mouse message will still go through, but focus won't be taken.
-                // if someone clicks on a child control (combobox, textbox, etc) focus will
-                // be taken - but we'll handle that in WM_NCACTIVATE handler.
+                // We want to prevent taking focus if someone clicks on the toolstrip dropdown itself. The mouse message
+                // will still go through, but focus won't be taken. If someone clicks on a child control (combobox,
+                // textbox, etc) focus will be taken - but we'll handle that in WM_NCACTIVATE handler.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
-                IntPtr hwndClicked = User32.ChildWindowFromPointEx(this, pt, User32.CWP.SKIPINVISIBLE | User32.CWP.SKIPDISABLED | User32.CWP.SKIPTRANSPARENT);
+                HWND hwndClicked = PInvoke.ChildWindowFromPointEx(
+                    this,
+                    pt,
+                    CWP_FLAGS.CWP_SKIPINVISIBLE | CWP_FLAGS.CWP_SKIPDISABLED | CWP_FLAGS.CWP_SKIPTRANSPARENT);
 
-                // if we click on the toolstrip itself, eat the activation.
-                // if we click on a child control, allow the toolstrip to activate.
-                if (hwndClicked == Handle)
+                // If we click on the toolstrip itself, eat the activation.
+                // If we click on a child control, allow the toolstrip to activate.
+                if (hwndClicked == HWND)
                 {
                     _lastMouseDownedItem = null;
                     m.ResultInternal = (LRESULT)(nint)User32.MA.NOACTIVATE;

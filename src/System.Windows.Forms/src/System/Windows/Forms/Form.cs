@@ -4179,11 +4179,7 @@ namespace System.Windows.Forms
         protected override void OnVisibleChanged(EventArgs e)
         {
             UpdateRenderSizeGrip();
-            Form? mdiParent = MdiParentInternal;
-            if (mdiParent is not null)
-            {
-                mdiParent.UpdateMdiWindowListStrip();
-            }
+            MdiParentInternal?.UpdateMdiWindowListStrip();
 
             base.OnVisibleChanged(e);
 
@@ -4193,10 +4189,10 @@ namespace System.Windows.Forms
             // we have to respect that setting each time our form is made visible.
             bool data = false;
             if (IsHandleCreated
-                    && Visible
-                    && (AcceptButton is not null)
-                    && User32.SystemParametersInfoW(User32.SPI.GETSNAPTODEFBUTTON, ref data)
-                    && data)
+                && Visible
+                && (AcceptButton is not null)
+                && PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETSNAPTODEFBUTTON, ref data)
+                && data)
             {
                 Control button = (Control)AcceptButton;
                 var ptToSnap = new Point(button.Left + button.Width / 2, button.Top + button.Height / 2);

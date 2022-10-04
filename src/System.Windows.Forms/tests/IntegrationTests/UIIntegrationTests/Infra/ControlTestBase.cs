@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Threading;
+using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit;
 using Xunit.Abstractions;
 using static Interop;
@@ -16,7 +17,7 @@ namespace System.Windows.Forms.UITests
     {
         private const int SPIF_SENDCHANGE = 0x0002;
 
-        private bool clientAreaAnimation;
+        private bool _clientAreaAnimation;
         private DenyExecutionSynchronizationContext? _denyExecutionSynchronizationContext;
         private JoinableTaskCollection _joinableTaskCollection = null!;
 
@@ -25,11 +26,11 @@ namespace System.Windows.Forms.UITests
             TestOutputHelper = testOutputHelper;
 
             Application.EnableVisualStyles();
-
+            
             // Disable animations for maximum test performance
             bool disabled = false;
-            Assert.True(User32.SystemParametersInfoW(User32.SPI.GETCLIENTAREAANIMATION, ref clientAreaAnimation));
-            Assert.True(User32.SystemParametersInfoW(User32.SPI.SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
+            Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETCLIENTAREAANIMATION, ref _clientAreaAnimation));
+            Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref disabled, SPIF_SENDCHANGE));
         }
 
         protected ITestOutputHelper TestOutputHelper { get; }
@@ -38,7 +39,7 @@ namespace System.Windows.Forms.UITests
 
         protected JoinableTaskFactory JoinableTaskFactory { get; private set; } = null!;
 
-        protected SendInput InputSimulator => new SendInput(WaitForIdleAsync);
+        protected SendInput InputSimulator => new(WaitForIdleAsync);
 
         public virtual Task InitializeAsync()
         {
@@ -71,7 +72,7 @@ namespace System.Windows.Forms.UITests
 
         public virtual void Dispose()
         {
-            Assert.True(User32.SystemParametersInfoW(User32.SPI.SETCLIENTAREAANIMATION, ref clientAreaAnimation));
+            Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_SETCLIENTAREAANIMATION, ref _clientAreaAnimation));
         }
 
         protected async Task WaitForIdleAsync()
@@ -113,18 +114,16 @@ namespace System.Windows.Forms.UITests
 
         protected Point ToVirtualPoint(Point point)
         {
-            int horizontalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
-            int verticalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
-            return new Point((int)Math.Round((65535.0 / horizontalResolution) * point.X), (int)Math.Round((65535.0 / verticalResolution) * point.Y));
+            Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
+            return new Point((int)Math.Round((65535.0 / primaryMonitor.Width) * point.X), (int)Math.Round((65535.0 / primaryMonitor.Height) * point.Y));
         }
 
         protected async Task MoveMouseAsync(Form window, Point point, bool assertCorrectLocation = true)
         {
             TestOutputHelper.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
-            int horizontalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
-            int verticalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
-            var virtualPoint = new Point((int)Math.Round((65535.0 / horizontalResolution) * point.X), (int)Math.Round((65535.0 / verticalResolution) * point.Y));
-            TestOutputHelper.WriteLine($"Screen resolution of ({horizontalResolution}, {verticalResolution}) translates mouse to ({virtualPoint.X}, {virtualPoint.Y}).");
+            Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
+            var virtualPoint = new Point((int)Math.Round((65535.0 / primaryMonitor.Width) * point.X), (int)Math.Round((65535.0 / primaryMonitor.Height) * point.Y));
+            TestOutputHelper.WriteLine($"Screen resolution of ({primaryMonitor.Width}, {primaryMonitor.Height}) translates mouse to ({virtualPoint.X}, {virtualPoint.Y}).");
 
             await InputSimulator.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X + 1, virtualPoint.Y + 1));
 

@@ -2480,7 +2480,7 @@ namespace System.Windows.Forms
                 case WM.LBUTTONUP:
                     Point point = PARAM.ToPoint(m.LParamInternal);
                     bool captured = Capture;
-                    if (captured && WindowFromPoint(PointToScreen(point)) == Handle)
+                    if (captured && PInvoke.WindowFromPoint(PointToScreen(point)) == HWND)
                     {
                         if (!_doubleClickFired && !ValidationCancelled)
                         {
@@ -2520,7 +2520,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.RBUTTONUP:
-                    if (Capture && WindowFromPoint(PointToScreen(PARAM.ToPoint(m.LParamInternal))) == Handle)
+                    if (Capture && PInvoke.WindowFromPoint(PointToScreen((Point)m.LParamInternal)) == HWND)
                     {
                         _selectedItems?.Dirty();
                     }

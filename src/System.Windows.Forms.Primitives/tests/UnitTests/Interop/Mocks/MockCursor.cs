@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
     public class MockCursor : IDisposable
     {
         private IntPtr _handle = IntPtr.Zero;       // handle to loaded image
-        private bool _ownHandle = true;
+        private readonly bool _ownHandle = true;
         private readonly PCWSTR _resourceId;
 
         internal MockCursor(PCWSTR nResourceId)
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
 
         public Size Size
         {
-            get => new Size(GetSystemMetrics(SystemMetric.SM_CXCURSOR), GetSystemMetrics(SystemMetric.SM_CYCURSOR));
+            get => SystemInformation.CursorSize;
         }
     }
 }

@@ -209,19 +209,16 @@ public class DragDropTests : ControlTestBase
                     endRect.Top + ((endRect.Bottom - endRect.Top) / 2));
                 Point endCoordinates = dragDropForm.RichTextBoxDropTarget.PointToScreen(centerOfEndtRect);
 
-                int vscreenWidth = User32.GetSystemMetrics(User32.SystemMetric.SM_CXVIRTUALSCREEN);
-                int vscreenHeight = User32.GetSystemMetrics(User32.SystemMetric.SM_CYVIRTUALSCREEN);
-                int vscreenLeft = User32.GetSystemMetrics(User32.SystemMetric.SM_XVIRTUALSCREEN);
-                int vscreenTop = User32.GetSystemMetrics(User32.SystemMetric.SM_YVIRTUALSCREEN);
+                Rectangle vscreen = SystemInformation.VirtualScreen;
                 Point virtualPointStart = new()
                 {
-                    X = (startCoordinates.X - vscreenLeft) * DesktopNormalizedMax / vscreenWidth + DesktopNormalizedMax / (vscreenWidth * 2),
-                    Y = (startCoordinates.Y - vscreenTop) * DesktopNormalizedMax / vscreenHeight + DesktopNormalizedMax / (vscreenHeight * 2)
+                    X = (startCoordinates.X - vscreen.Left) * DesktopNormalizedMax / vscreen.Width + DesktopNormalizedMax / (vscreen.Width * 2),
+                    Y = (startCoordinates.Y - vscreen.Top) * DesktopNormalizedMax / vscreen.Height + DesktopNormalizedMax / (vscreen.Height * 2)
                 };
                 Point virtualPointEnd = new()
                 {
-                    X = (endCoordinates.X - vscreenLeft) * DesktopNormalizedMax / vscreenWidth + DesktopNormalizedMax / (vscreenWidth * 2),
-                    Y = (endCoordinates.Y - vscreenTop) * DesktopNormalizedMax / vscreenHeight + DesktopNormalizedMax / (vscreenHeight * 2)
+                    X = (endCoordinates.X - vscreen.Left) * DesktopNormalizedMax / vscreen.Width + DesktopNormalizedMax / (vscreen.Width * 2),
+                    Y = (endCoordinates.Y - vscreen.Top) * DesktopNormalizedMax / vscreen.Height + DesktopNormalizedMax / (vscreen.Height * 2)
                 };
 
                 TestOutputHelper.WriteLine($"virtualPointStart: {virtualPointStart}");

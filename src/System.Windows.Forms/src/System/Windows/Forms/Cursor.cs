@@ -184,9 +184,7 @@ namespace System.Windows.Forms
             {
                 if (s_cursorSize.IsEmpty)
                 {
-                    s_cursorSize = new Size(
-                        User32.GetSystemMetrics(User32.SystemMetric.SM_CXCURSOR),
-                        User32.GetSystemMetrics(User32.SystemMetric.SM_CYCURSOR));
+                    s_cursorSize = SystemInformation.CursorSize;
                 }
 
                 return s_cursorSize;
@@ -384,7 +382,7 @@ namespace System.Windows.Forms
         ///  Hides the cursor. For every call to Cursor.hide() there must be a
         ///  balancing call to Cursor.show().
         /// </summary>
-        public static void Hide() => User32.ShowCursor(false);
+        public static void Hide() => PInvoke.ShowCursor(bShow: false);
 
         // this code is adapted from Icon.GetIconSize please take this into account when changing this
         private Size GetIconSize(IntPtr iconHandle)
@@ -478,7 +476,7 @@ namespace System.Windows.Forms
         ///  Displays the cursor. For every call to Cursor.show() there must have been
         ///  a previous call to Cursor.hide().
         /// </summary>
-        public static void Show() => User32.ShowCursor(true);
+        public static void Show() => PInvoke.ShowCursor(bShow: true);
 
         /// <summary>
         ///  Retrieves a human readable string representing this <see cref="Cursor"/>.

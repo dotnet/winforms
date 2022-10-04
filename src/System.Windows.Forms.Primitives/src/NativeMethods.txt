@@ -14,6 +14,8 @@ BROWSEINFOW
 CallNextHookEx
 CallWindowProc
 CB_*
+ChildWindowFromPointEx
+CloseDesktop
 CloseEnhMetaFile
 CloseHandle
 CloseThemeData
@@ -48,6 +50,7 @@ DefWindowProc
 DeleteDC
 DeleteEnhMetaFile
 DeleteObject
+DESKTOP_ACCESS_FLAGS
 DestroyWindow
 DISP_E_DIVBYZERO
 DISP_E_EXCEPTION
@@ -84,7 +87,9 @@ EC_*
 Ellipse
 EM_*
 EndPaint
+EnumDisplaySettings
 EnumEnhMetaFile
+WIN32_ERROR
 EVENTMSG
 ExtTextOut
 FDAP
@@ -99,6 +104,7 @@ GetBkColor
 GetBkMode
 GetBrushOrgEx
 GetCapture
+GetCaretBlinkTime
 GetClassInfo
 GetClassName
 GetClientRect
@@ -114,6 +120,7 @@ GetCurrentThreadId
 GetDeviceCaps
 GetDIBits
 GetDlgItem
+GetDoubleClickTime
 GetDpiForSystem
 GetDpiForWindow
 GetExitCodeThread
@@ -141,6 +148,8 @@ GetShortPathName
 GetStartupInfo
 GetStockObject
 GetSystemMenu
+GetSystemMetrics
+GetSystemMetricsForDpi
 GetSystemPaletteEntries
 GetSystemPowerStatus
 GetTextAlign
@@ -190,6 +199,7 @@ LOCALE_IMEASURE
 LOCALE_NAME_SYSTEM_DEFAULT
 HC_*
 HFONT
+HIGHCONTRASTW
 HitTestThemeBackground
 HWND_*
 ICM_MODE
@@ -247,6 +257,7 @@ MoveToEx
 MSFTEDIT_CLASS
 MultiByteToWideChar
 NMHDR
+NONCLIENTMETRICSW
 NTSTATUS
 OffsetViewportOrgEx
 OLE_E_ADVISENOTSUPPORTED
@@ -256,6 +267,7 @@ OLE_E_PROMPTSAVECANCELLED
 OleFlushClipboard
 OleInitialize
 OleUninitialize
+OpenInputDesktop
 OpenThemeData
 PatBlt
 PeekMessage
@@ -310,6 +322,7 @@ ShellExecute
 SHGetKnownFolderPath
 SHGetPathFromIDList
 SHGetSpecialFolderLocation
+ShowCaret
 ShowCursor
 SHGetSpecialFolderLocation
 SHLoadIndirectString
@@ -326,14 +339,19 @@ STG_E_INVALIDFLAG
 STG_E_INVALIDFUNCTION
 STG_E_INVALIDPOINTER
 StretchDIBits
+SystemParametersInfo
+SystemParametersInfoForDpi
 SYSTEMTIME
 THEME_PROPERTY_SYMBOL_ID
 TOOLTIPS_CLASS
 TRACKBAR_CLASS
 TYPE_E_BADMODULEKIND
+UpdateWindow
 USEROBJECTFLAGS
 ValidateRect
 VIEW_E_DRAW
+VkKeyScan
+WaitMessage
 WC_BUTTON
 WC_COMBOBOX
 WC_EDIT
@@ -346,5 +364,7 @@ WC_TREEVIEW
 WideCharToMultiByte
 WIN32_ERROR
 WINDOW_LONG_PTR_INDEX
+WindowFromDC
+WindowFromPoint
 WINDOWPOS
 WSF_VISIBLE
