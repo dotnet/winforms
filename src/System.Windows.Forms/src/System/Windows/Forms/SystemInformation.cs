@@ -515,7 +515,7 @@ namespace System.Windows.Forms
                         USER_OBJECT_INFORMATION_INDEX.UOI_FLAGS,
                         &flags,
                         (uint)sizeof(USEROBJECTFLAGS),
-                        null))
+                        lpnLengthNeeded: null))
                     {
                         if ((flags.dwFlags & PInvoke.WSF_VISIBLE) == 0)
                         {
@@ -761,7 +761,7 @@ namespace System.Windows.Forms
                     dmSize = (ushort)sizeof(DEVMODEW),
                 };
 
-                PInvoke.EnumDisplaySettings(null, ENUM_DISPLAY_SETTINGS_MODE.ENUM_CURRENT_SETTINGS, ref dm);
+                PInvoke.EnumDisplaySettings(lpszDeviceName: null, ENUM_DISPLAY_SETTINGS_MODE.ENUM_CURRENT_SETTINGS, ref dm);
                 if ((dm.dmFields & DEVMODE_FIELD_FLAGS.DM_DISPLAYORIENTATION) > 0)
                 {
                     so = (ScreenOrientation)dm.Anonymous1.Anonymous2.dmDisplayOrientation;

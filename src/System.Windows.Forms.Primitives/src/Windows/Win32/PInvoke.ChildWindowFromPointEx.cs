@@ -12,7 +12,7 @@ namespace Windows.Win32
             where T : IHandle<HWND>
         {
             HWND result = ChildWindowFromPointEx(hwndParent.Handle, pt, uFlags);
-            GC.KeepAlive(hwndParent);
+            GC.KeepAlive(hwndParent.Wrapper);
             return result;
         }
     }

@@ -26,7 +26,7 @@ namespace System.Windows.Forms.UITests
             TestOutputHelper = testOutputHelper;
 
             Application.EnableVisualStyles();
-            
+
             // Disable animations for maximum test performance
             bool disabled = false;
             Assert.True(PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETCLIENTAREAANIMATION, ref _clientAreaAnimation));
