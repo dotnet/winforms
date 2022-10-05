@@ -14,10 +14,9 @@ namespace System.Windows.Forms
             private readonly UpDownBase _parent;
             private bool _doubleClickFired;
 
-            internal UpDownEdit(UpDownBase parent) : base()
+            internal UpDownEdit(UpDownBase parent)
             {
                 SetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth, true);
-                SetStyle(ControlStyles.Selectable, false);
 
                 _parent = parent;
             }
@@ -50,6 +49,15 @@ namespace System.Windows.Forms
                 }
 
                 _parent.OnMouseDown(_parent.TranslateMouseEvent(this, e));
+
+                if (IsHandleCreated && IsAccessibilityObjectCreated)
+                {
+                    // As there is no corresponding windows notification
+                    // about text selection changed for TextBox assuming
+                    // that any mouse down on textbox leads to change of
+                    // the caret position and thereby change the selection.
+                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                }
             }
 
             protected override void OnMouseUp(MouseEventArgs e)
@@ -97,12 +105,22 @@ namespace System.Windows.Forms
             protected override void OnKeyUp(KeyEventArgs e)
             {
                 _parent.OnKeyUp(e);
+
+                if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode))
+                {
+                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                }
             }
 
             protected override void OnGotFocus(EventArgs e)
             {
                 _parent.SetActiveControl(this);
                 _parent.InvokeGotFocus(_parent, e);
+
+                if (IsAccessibilityObjectCreated)
+                {
+                    AccessibilityObject.SetFocus();
+                }
             }
 
             protected override void OnLostFocus(EventArgs e)

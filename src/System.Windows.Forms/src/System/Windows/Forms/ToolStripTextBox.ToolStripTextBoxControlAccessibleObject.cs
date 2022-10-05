@@ -27,13 +27,6 @@ namespace System.Windows.Forms
                     UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(Owner.ToolStripControlHost?.Placement, Bounds),
                     _ => base.GetPropertyValue(propertyID)
                 };
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
-                patternId switch
-                {
-                    UiaCore.UIA.ValuePatternId => true,
-                    _ => base.IsPatternSupported(patternId)
-                };
         }
     }
 }

@@ -177,6 +177,11 @@
         <target state="translated">부모 행</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="new">Access denied</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">선택</target>

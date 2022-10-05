@@ -759,12 +759,13 @@ namespace System.Windows.Forms.Tests
         {
             using TextBox control = new();
             control.CreateControl();
-            TextBoxBase.TextBoxBaseUiaTextProvider provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
+            var textBoxBaseAccessibleObject = (TextBoxBase.TextBoxBaseAccessibleObject)control.AccessibilityObject;
+            TextBoxBase.TextBoxBaseUiaTextProvider provider = textBoxBaseAccessibleObject.TestAccessor().Dynamic._textProvider;
 
             Assert.IsType<TextBoxBase.TextBoxBaseUiaTextProvider>(provider);
 
             control.Dispose();
-            provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
+            provider = textBoxBaseAccessibleObject.TestAccessor().Dynamic._textProvider;
 
             Assert.Null(provider);
         }
