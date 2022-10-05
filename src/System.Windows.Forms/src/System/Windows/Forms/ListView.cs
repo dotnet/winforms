@@ -5160,7 +5160,7 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(nint handle)
         {
-            if (!OsVersion.IsWindows8OrGreater || !IsAccessibilityObjectCreated)
+            if (!OsVersion.IsWindows8OrGreater() || !IsAccessibilityObjectCreated)
             {
                 return;
             }

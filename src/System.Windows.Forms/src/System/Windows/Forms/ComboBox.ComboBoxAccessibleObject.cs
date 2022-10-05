@@ -222,7 +222,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (OsVersion.IsWindows8OrGreater)
+                if (OsVersion.IsWindows8OrGreater())
                 {
                     UiaCore.UiaDisconnectProvider(ItemAccessibleObjects[item]);
                 }
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
 
             internal void ReleaseDropDownButtonUiaProvider()
             {
-                if (OsVersion.IsWindows8OrGreater)
+                if (OsVersion.IsWindows8OrGreater())
                 {
                     UiaCore.UiaDisconnectProvider(_dropDownButtonUiaProvider);
                 }
@@ -242,7 +242,7 @@ namespace System.Windows.Forms
 
             internal void ResetListItemAccessibleObjects()
             {
-                if (OsVersion.IsWindows8OrGreater)
+                if (OsVersion.IsWindows8OrGreater())
                 {
                     foreach (ComboBoxItemAccessibleObject itemAccessibleObject in ItemAccessibleObjects.Values)
                     {

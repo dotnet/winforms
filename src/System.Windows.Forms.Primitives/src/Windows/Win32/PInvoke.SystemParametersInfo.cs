@@ -72,7 +72,7 @@ namespace Windows.Win32
         /// </summary>
         public unsafe static bool TrySystemParametersInfoForDpi(ref NONCLIENTMETRICSW metrics, uint dpi)
         {
-            if (OsVersion.IsWindows10_1607OrGreater)
+            if (OsVersion.IsWindows10_1607OrGreater())
             {
                 fixed (void* p = &metrics)
                 {

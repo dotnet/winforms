@@ -86,7 +86,7 @@ namespace System.Windows.Forms
 
             cont.Add(this);
 
-            IsPersistent = OsVersion.IsWindows11_OrGreater;
+            IsPersistent = OsVersion.IsWindows11_OrGreater();
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace System.Windows.Forms
             _auto = true;
             _delayTimes[(int)TTDT.AUTOMATIC] = DefaultDelay;
 
-            IsPersistent = OsVersion.IsWindows11_OrGreater;
+            IsPersistent = OsVersion.IsWindows11_OrGreater();
 
             AdjustBaseFromAuto();
         }

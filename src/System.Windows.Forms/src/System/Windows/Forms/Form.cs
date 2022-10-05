@@ -6002,7 +6002,7 @@ namespace System.Windows.Forms
                     SuspendLayoutForMinimize();
                 }
 
-                if (!OsVersion.IsWindows11_OrGreater)
+                if (!OsVersion.IsWindows11_OrGreater())
                 {
                     _restoredWindowBounds.Size = ClientSize;
                     _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 1;

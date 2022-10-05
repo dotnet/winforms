@@ -22,7 +22,7 @@ namespace Windows.Win32
                 return true;
             }
 
-            if (OsVersion.IsWindows10_1607OrGreater)
+            if (OsVersion.IsWindows10_1607OrGreater())
             {
                 return AreDpiAwarenessContextsEqual(dpiContextA, dpiContextB);
             }

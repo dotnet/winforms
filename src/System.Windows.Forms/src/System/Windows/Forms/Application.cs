@@ -1215,7 +1215,7 @@ namespace System.Windows.Forms
         /// <param name="textScaleFactor">The scaling factor in the range [1.0, 2.25].</param>
         internal static void ScaleDefaultFont(float textScaleFactor)
         {
-            if (s_defaultFont is null || !OsVersion.IsWindows10_1507OrGreater)
+            if (s_defaultFont is null || !OsVersion.IsWindows10_1507OrGreater())
             {
                 return;
             }

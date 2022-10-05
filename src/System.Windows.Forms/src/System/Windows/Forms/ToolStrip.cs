@@ -4263,7 +4263,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (OsVersion.IsWindows8OrGreater)
+            if (OsVersion.IsWindows8OrGreater())
             {
                 ReleaseToolStripItemsProviders(Items);
 

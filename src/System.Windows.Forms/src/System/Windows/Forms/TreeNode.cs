@@ -2091,7 +2091,7 @@ namespace System.Windows.Forms
 
         internal virtual void ReleaseUiaProvider()
         {
-            if (OsVersion.IsWindows8OrGreater)
+            if (OsVersion.IsWindows8OrGreater())
             {
                 UiaCore.UiaDisconnectProvider(_accessibleObject);
             }

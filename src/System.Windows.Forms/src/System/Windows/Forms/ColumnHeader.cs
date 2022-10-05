@@ -485,7 +485,7 @@ namespace System.Windows.Forms
 
         internal void ReleaseUiaProvider()
         {
-            if (OsVersion.IsWindows8OrGreater && _accessibilityObject is not null)
+            if (OsVersion.IsWindows8OrGreater() && _accessibilityObject is not null)
             {
                 UiaCore.UiaDisconnectProvider(_accessibilityObject);
                 _accessibilityObject = null;

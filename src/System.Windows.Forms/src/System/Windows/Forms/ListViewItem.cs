@@ -999,7 +999,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (OsVersion.IsWindows8OrGreater)
+            if (OsVersion.IsWindows8OrGreater())
             {
                 if (_accessibilityObject is ListViewItemBaseAccessibleObject itemAccessibleObject)
                 {

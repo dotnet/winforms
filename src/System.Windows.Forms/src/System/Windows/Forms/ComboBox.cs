@@ -3246,7 +3246,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (OsVersion.IsWindows8OrGreater)
+            if (OsVersion.IsWindows8OrGreater())
             {
                 UiaCore.UiaDisconnectProvider(_childTextAccessibleObject);
             }
