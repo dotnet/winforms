@@ -117,46 +117,55 @@ namespace System.Drawing.Design
 
                 _topLeft.TabIndex = 8;
                 _topLeft.Text = string.Empty;
+                _topLeft.Name = "_topLeft";
                 _topLeft.Appearance = Appearance.Button;
                 _topLeft.AccessibleName = SR.ContentAlignmentEditorTopLeftAccName;
 
                 _topCenter.TabIndex = 0;
                 _topCenter.Text = string.Empty;
+                _topCenter.Name = "_topCenter";
                 _topCenter.Appearance = Appearance.Button;
                 _topCenter.AccessibleName = SR.ContentAlignmentEditorTopCenterAccName;
 
                 _topRight.TabIndex = 1;
                 _topRight.Text = string.Empty;
+                _topRight.Name = "_topRight";
                 _topRight.Appearance = Appearance.Button;
                 _topRight.AccessibleName = SR.ContentAlignmentEditorTopRightAccName;
 
                 _middleLeft.TabIndex = 2;
                 _middleLeft.Text = string.Empty;
+                _middleLeft.Name = "_middleLeft";
                 _middleLeft.Appearance = Appearance.Button;
                 _middleLeft.AccessibleName = SR.ContentAlignmentEditorMiddleLeftAccName;
 
                 _middleCenter.TabIndex = 3;
                 _middleCenter.Text = string.Empty;
+                _middleCenter.Name = "_middleCenter";
                 _middleCenter.Appearance = Appearance.Button;
                 _middleCenter.AccessibleName = SR.ContentAlignmentEditorMiddleCenterAccName;
 
                 _middleRight.TabIndex = 4;
                 _middleRight.Text = string.Empty;
+                _middleRight.Name = "_middleRight";
                 _middleRight.Appearance = Appearance.Button;
                 _middleRight.AccessibleName = SR.ContentAlignmentEditorMiddleRightAccName;
 
                 _bottomLeft.TabIndex = 5;
                 _bottomLeft.Text = string.Empty;
+                _bottomLeft.Name = "_bottomLeft";
                 _bottomLeft.Appearance = Appearance.Button;
                 _bottomLeft.AccessibleName = SR.ContentAlignmentEditorBottomLeftAccName;
 
                 _bottomCenter.TabIndex = 6;
                 _bottomCenter.Text = string.Empty;
+                _bottomCenter.Name = "_bottomCenter";
                 _bottomCenter.Appearance = Appearance.Button;
                 _bottomCenter.AccessibleName = SR.ContentAlignmentEditorBottomCenterAccName;
 
                 _bottomRight.TabIndex = 7;
                 _bottomRight.Text = string.Empty;
+                _bottomRight.Name = "_bottomRight";
                 _bottomRight.Appearance = Appearance.Button;
                 _bottomRight.AccessibleName = SR.ContentAlignmentEditorBottomRightAccName;
 

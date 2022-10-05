@@ -143,6 +143,7 @@ namespace System.Windows.Forms.Design
 
                 _none.Dock = DockStyle.Bottom;
                 _none.Size = new Size(s_noneWidth, s_noneHeight);
+                _none.Name = "_none";
                 _none.Text = DockStyle.None.ToString();
                 _none.TabIndex = 0;
                 _none.TabStop = true;
@@ -160,6 +161,7 @@ namespace System.Windows.Forms.Design
                 _right.Size = s_buttonSize;
                 _right.TabIndex = 4;
                 _right.TabStop = true;
+                _right.Name = "_right";
                 _right.Text = " "; // Needs at least one character so focus rect will show.
                 _right.Appearance = Appearance.Button;
                 _right.AccessibleName = SR.DockEditorRightAccName;
@@ -168,6 +170,7 @@ namespace System.Windows.Forms.Design
                 _left.Size = s_buttonSize;
                 _left.TabIndex = 2;
                 _left.TabStop = true;
+                _left.Name = "_left";
                 _left.Text = " ";
                 _left.Appearance = Appearance.Button;
                 _left.AccessibleName = SR.DockEditorLeftAccName;
@@ -176,6 +179,7 @@ namespace System.Windows.Forms.Design
                 _top.Size = s_buttonSize;
                 _top.TabIndex = 1;
                 _top.TabStop = true;
+                _top.Name = "_top";
                 _top.Text = " ";
                 _top.Appearance = Appearance.Button;
                 _top.AccessibleName = SR.DockEditorTopAccName;
@@ -184,6 +188,7 @@ namespace System.Windows.Forms.Design
                 _bottom.Size = s_buttonSize;
                 _bottom.TabIndex = 5;
                 _bottom.TabStop = true;
+                _bottom.Name = "_bottom";
                 _bottom.Text = " ";
                 _bottom.Appearance = Appearance.Button;
                 _bottom.AccessibleName = SR.DockEditorBottomAccName;
@@ -192,6 +197,7 @@ namespace System.Windows.Forms.Design
                 _fill.Size = s_buttonSize;
                 _fill.TabIndex = 3;
                 _fill.TabStop = true;
+                _fill.Name = "_fill";
                 _fill.Text = " ";
                 _fill.Appearance = Appearance.Button;
                 _fill.AccessibleName = SR.DockEditorFillAccName;
