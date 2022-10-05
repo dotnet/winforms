@@ -21,6 +21,6 @@
     "Microsoft.NET.Sdk.IL": "7.0.0-rtm.22504.4"
   },
   "native-tools": {
-    "cmake": "3.21.0"
+    "cmake": "3"
   }
 }
