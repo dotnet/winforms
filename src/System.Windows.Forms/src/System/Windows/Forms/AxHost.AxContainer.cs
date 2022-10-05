@@ -214,10 +214,7 @@ namespace System.Windows.Forms
             {
                 lock (this)
                 {
-                    if (_containerCache.ContainsKey(ctl))
-                    {
-                        _containerCache.Remove(ctl);
-                    }
+                    _containerCache.Remove(ctl);
                 }
             }
 

@@ -2534,13 +2534,8 @@ namespace System.Windows.Forms.Design
             HookChildControls(Control);
         }
 
-        internal void RemoveSubclassedWindow(IntPtr hwnd)
-        {
-            if (SubclassedChildWindows.ContainsKey(hwnd))
-            {
-                SubclassedChildWindows.Remove(hwnd);
-            }
-        }
+        internal void RemoveSubclassedWindow(IntPtr hwnd) =>
+            SubclassedChildWindows.Remove(hwnd);
 
         internal void SetUnhandledException(Control owner, Exception exception)
         {
