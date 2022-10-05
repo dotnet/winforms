@@ -1131,7 +1131,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Wraps a StreamWriter and keeps a reference count. This enables multiple
         ''' FileLogTraceListeners on multiple threads to access the same file.
         ''' </summary>
-        Friend Class ReferencedStream
+        Friend NotInheritable Class ReferencedStream
             Implements IDisposable
 
             ''' <summary>

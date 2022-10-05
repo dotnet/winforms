@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 
 namespace System.Windows.Forms.PrivateSourceGenerators
 {
-    internal class EnumValidationInfo
+    internal sealed class EnumValidationInfo
     {
         public ITypeSymbol EnumType { get; }
         public List<int> Values { get; }

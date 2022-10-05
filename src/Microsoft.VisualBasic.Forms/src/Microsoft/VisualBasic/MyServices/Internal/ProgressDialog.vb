@@ -15,7 +15,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     ''' <summary>
     '''  A dialog that shows progress used for Network.Download and Network.Upload
     ''' </summary>
-    Friend Class ProgressDialog
+    Friend NotInheritable Class ProgressDialog
         Inherits Form
 
         ''' <summary>
