@@ -3814,9 +3814,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         for (int i = 0; i < rgItems.Length; i++)
                         {
+                            Size textSize = default;
                             string value = gridEntry.GetPropertyTextValue(rgItems[i]);
                             DropDownListBox.Items.Add(value);
-                            PInvoke.GetTextExtentPoint32W(hdc.HDC, value, value.Length, out Size textSize);
+                            PInvoke.GetTextExtentPoint32W(hdc.HDC, value, value.Length, textSize);
                             maxWidth = Math.Max(textSize.Width, maxWidth);
                         }
                     }

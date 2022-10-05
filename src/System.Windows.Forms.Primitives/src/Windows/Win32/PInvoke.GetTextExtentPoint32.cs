@@ -7,12 +7,15 @@ using System.Drawing;
 namespace Windows.Win32
 {
     internal static partial class PInvoke
-    {   
-        public static BOOL GetTextExtentPoint32W<T>(T hdc, string lpString, int c, out Size size) where T : IHandle<HDC>
+    {
+        public static unsafe BOOL GetTextExtentPoint32W<T>(T hdc, string lpString, int c, Size size) where T : IHandle<HDC>
         {
-            BOOL result = GetTextExtentPoint32W(hdc.Handle, lpString, c, out size);
-            GC.KeepAlive(hdc.Wrapper);
-            return result;
+            fixed (char* pString = lpString)
+            {
+                BOOL result = GetTextExtentPoint32W(hdc.Handle, pString, c, (SIZE*)(void*)&size);
+                GC.KeepAlive(hdc.Wrapper);
+                return result;
+            }
         }
     }
 }
