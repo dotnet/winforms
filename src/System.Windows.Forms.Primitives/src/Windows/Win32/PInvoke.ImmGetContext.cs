@@ -8,7 +8,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static HIMC ImmGetContext<T>(in T hWnd) where T : IHandle<HWND>
+        public static HIMC ImmGetContext<T>(T hWnd) where T : IHandle<HWND>
         {
             HIMC result = ImmGetContext(hWnd.Handle);
             GC.KeepAlive(hWnd.Wrapper);

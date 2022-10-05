@@ -7,7 +7,7 @@ namespace Windows.Win32
     internal static partial class PInvoke
     {
         public static BOOL BitBlt<T>(
-            in T hdc,
+            T hdc,
             int x,
             int y,
             int cx,
@@ -27,7 +27,7 @@ namespace Windows.Win32
                 x1,
                 y1,
                 rop);
-            GC.KeepAlive(hdc.Handle);
+            GC.KeepAlive(hdc.Wrapper);
             return result;
         }
 
@@ -37,7 +37,7 @@ namespace Windows.Win32
             int y,
             int cx,
             int cy,
-            in T hdcSrc,
+            T hdcSrc,
             int x1,
             int y1,
             ROP_CODE rop) where T : IHandle<HDC>
@@ -52,7 +52,7 @@ namespace Windows.Win32
                 x1,
                 y1,
                 rop);
-            GC.KeepAlive(hdcSrc.Handle);
+            GC.KeepAlive(hdcSrc.Wrapper);
             return result;
         }
     }

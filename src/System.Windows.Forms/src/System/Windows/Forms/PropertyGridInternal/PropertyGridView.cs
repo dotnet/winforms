@@ -3812,14 +3812,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     selectionIndex = GetCurrentValueIndex(gridEntry);
                     if (rgItems is not null && rgItems.Length > 0)
                     {
-                        string value;
-                        Size textSize = default;
-
                         for (int i = 0; i < rgItems.Length; i++)
                         {
-                            value = gridEntry.GetPropertyTextValue(rgItems[i]);
+                            string value = gridEntry.GetPropertyTextValue(rgItems[i]);
                             DropDownListBox.Items.Add(value);
-                            PInvoke.GetTextExtentPoint32W(hdc.HDC, value, value.Length, textSize);
+                            PInvoke.GetTextExtentPoint32W(hdc.HDC, value, value.Length, out Size textSize);
                             maxWidth = Math.Max(textSize.Width, maxWidth);
                         }
                     }

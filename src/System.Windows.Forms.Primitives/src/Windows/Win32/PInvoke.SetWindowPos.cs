@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static BOOL SetWindowPos<T1, T2>(in T1 hWnd, in T2 hWndInsertAfter, int X, int Y, int cx, int cy, SET_WINDOW_POS_FLAGS uFlags)
+        public static BOOL SetWindowPos<T1, T2>(T1 hWnd, T2 hWndInsertAfter, int X, int Y, int cx, int cy, SET_WINDOW_POS_FLAGS uFlags)
             where T1 : IHandle<HWND>
             where T2 : IHandle<HWND>
         {

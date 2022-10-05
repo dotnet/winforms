@@ -8,21 +8,21 @@ namespace Windows.Win32
     {
         public static class ImageList
         {
-            public static int Add<T>(in T himl, HBITMAP hbmImage, HBITMAP hbmMask) where T : IHandle<HIMAGELIST>
+            public static int Add<T>(T himl, HBITMAP hbmImage, HBITMAP hbmMask) where T : IHandle<HIMAGELIST>
             {
                 int result = ImageList_Add(himl.Handle, hbmImage, hbmMask);
                 GC.KeepAlive(himl.Wrapper);
                 return result;
             }
 
-            public static bool Destroy<T>(in T himl) where T: IHandle<HIMAGELIST>
+            public static bool Destroy<T>(T himl) where T: IHandle<HIMAGELIST>
             {
                 bool result = ImageList_Destroy(himl.Handle);
                 GC.KeepAlive(himl.Wrapper);
                 return result;
             }
 
-            public static bool Draw<T>(in T himl, int i, HDC hdcDst, int x, int y, IMAGE_LIST_DRAW_STYLE fStyle)
+            public static bool Draw<T>(T himl, int i, HDC hdcDst, int x, int y, IMAGE_LIST_DRAW_STYLE fStyle)
                 where T : IHandle<HIMAGELIST>
             {
                 BOOL result = ImageList_Draw(himl.Handle, i, hdcDst, x, y, fStyle);
@@ -31,9 +31,9 @@ namespace Windows.Win32
             }
 
             public static bool DrawEx<THIML, THDC>(
-                in THIML himl,
+                THIML himl,
                 int i,
-                in THDC hdcDst,
+                THDC hdcDst,
                 int x,
                 int y,
                 int dx,
@@ -48,7 +48,7 @@ namespace Windows.Win32
                 return result;
             }
 
-            public static unsafe bool GetIconSize<T>(in T himl, out int x, out int y) where T : IHandle<HIMAGELIST>
+            public static unsafe bool GetIconSize<T>(T himl, out int x, out int y) where T : IHandle<HIMAGELIST>
             {
                 fixed (int* px = &x)
                 fixed (int* py = &y)
@@ -59,28 +59,28 @@ namespace Windows.Win32
                 }
             }
 
-            public static int GetImageCount<T>(in T himl) where T : IHandle<HIMAGELIST>
+            public static int GetImageCount<T>(T himl) where T : IHandle<HIMAGELIST>
             {
                 int result = ImageList_GetImageCount(himl.Handle);
                 GC.KeepAlive(himl.Wrapper);
                 return result;
             }
 
-            public static bool GetImageInfo<T>(in T himl, int i, out IMAGEINFO pImageInfo) where T : IHandle<HIMAGELIST>
+            public static bool GetImageInfo<T>(T himl, int i, out IMAGEINFO pImageInfo) where T : IHandle<HIMAGELIST>
             {
                 bool result = ImageList_GetImageInfo(himl.Handle, i, out pImageInfo);
                 GC.KeepAlive(himl.Wrapper);
                 return result;
             }
 
-            public static bool Remove<T>(in T himl, int i) where T : IHandle<HIMAGELIST>
+            public static bool Remove<T>(T himl, int i) where T : IHandle<HIMAGELIST>
             {
                 bool result = ImageList_Remove(himl.Handle, i);
                 GC.KeepAlive(himl.Wrapper);
                 return result;
             }
 
-            public static bool Replace<T>(in T himl, int i, HBITMAP hbmImage, HBITMAP hbmMask) where T : IHandle<HIMAGELIST>
+            public static bool Replace<T>(T himl, int i, HBITMAP hbmImage, HBITMAP hbmMask) where T : IHandle<HIMAGELIST>
             {
                 bool result = ImageList_Replace(himl.Handle, i, hbmImage, hbmMask);
                 GC.KeepAlive(himl.Wrapper);
@@ -88,9 +88,9 @@ namespace Windows.Win32
             }
 
             public static int ReplaceIcon<THIML, THICON>(
-                in THIML himl,
+                THIML himl,
                 int i,
-                in THICON hicon) where THIML : IHandle<HIMAGELIST> where THICON : IHandle<HICON>
+                THICON hicon) where THIML : IHandle<HIMAGELIST> where THICON : IHandle<HICON>
             {
                 int result = ImageList_ReplaceIcon(himl.Handle, i, hicon.Handle);
                 GC.KeepAlive(himl.Wrapper);
@@ -98,7 +98,7 @@ namespace Windows.Win32
                 return result;
             }
 
-            public static COLORREF SetBkColor<T>(in T himl, COLORREF clrBk) where T : IHandle<HIMAGELIST>
+            public static COLORREF SetBkColor<T>(T himl, COLORREF clrBk) where T : IHandle<HIMAGELIST>
             {
                 COLORREF result = ImageList_SetBkColor(himl.Handle, clrBk);
                 GC.KeepAlive(himl.Wrapper);

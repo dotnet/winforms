@@ -15,7 +15,7 @@ namespace Windows.Win32
         [DllImport(Libraries.User32, SetLastError = true)]
         private static extern nint GetWindowLongPtrW(HWND hWnd, WINDOW_LONG_PTR_INDEX nIndex);
 
-        public static nint GetWindowLong<T>(in T hWnd, WINDOW_LONG_PTR_INDEX nIndex)
+        public static nint GetWindowLong<T>(T hWnd, WINDOW_LONG_PTR_INDEX nIndex)
             where T : IHandle<HWND>
         {
             nint result = Environment.Is64BitProcess
