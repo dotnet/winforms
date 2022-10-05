@@ -2,10 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.Drawing.Design
 {
@@ -14,21 +11,19 @@ namespace System.Drawing.Design
         /// <summary>
         ///  Control we use to provide the content alignment UI.
         /// </summary>
-        private class ContentUI : Control
+        private sealed class ContentUI : SelectionPanelBase
         {
-            private IWindowsFormsEditorService _editorService;
             private double _pixelFactor;
-            private bool _allowExit = true;
 
-            private readonly RadioButton _topLeft = new();
-            private readonly RadioButton _topCenter = new();
-            private readonly RadioButton _topRight = new();
-            private readonly RadioButton _middleLeft = new();
-            private readonly RadioButton _middleCenter = new();
-            private readonly RadioButton _middleRight = new();
-            private readonly RadioButton _bottomLeft = new();
-            private readonly RadioButton _bottomCenter = new();
-            private readonly RadioButton _bottomRight = new();
+            private readonly SelectionPanelRadioButton _topLeft = new();
+            private readonly SelectionPanelRadioButton _topCenter = new();
+            private readonly SelectionPanelRadioButton _topRight = new();
+            private readonly SelectionPanelRadioButton _middleLeft = new();
+            private readonly SelectionPanelRadioButton _middleCenter = new();
+            private readonly SelectionPanelRadioButton _middleRight = new();
+            private readonly SelectionPanelRadioButton _bottomLeft = new();
+            private readonly SelectionPanelRadioButton _bottomCenter = new();
+            private readonly SelectionPanelRadioButton _bottomRight = new();
 
             public ContentUI()
             {
@@ -40,35 +35,35 @@ namespace System.Drawing.Design
             {
                 get
                 {
-                    if (_topLeft.Checked)
+                    if (CheckedControl == _topLeft)
                     {
                         return ContentAlignment.TopLeft;
                     }
-                    else if (_topCenter.Checked)
+                    else if (CheckedControl == _topCenter)
                     {
                         return ContentAlignment.TopCenter;
                     }
-                    else if (_topRight.Checked)
+                    else if (CheckedControl == _topRight)
                     {
                         return ContentAlignment.TopRight;
                     }
-                    else if (_middleLeft.Checked)
+                    else if (CheckedControl == _middleLeft)
                     {
                         return ContentAlignment.MiddleLeft;
                     }
-                    else if (_middleCenter.Checked)
+                    else if (CheckedControl == _middleCenter)
                     {
                         return ContentAlignment.MiddleCenter;
                     }
-                    else if (_middleRight.Checked)
+                    else if (CheckedControl == _middleRight)
                     {
                         return ContentAlignment.MiddleRight;
                     }
-                    else if (_bottomLeft.Checked)
+                    else if (CheckedControl == _bottomLeft)
                     {
                         return ContentAlignment.BottomLeft;
                     }
-                    else if (_bottomCenter.Checked)
+                    else if (CheckedControl == _bottomCenter)
                     {
                         return ContentAlignment.BottomCenter;
                     }
@@ -112,17 +107,69 @@ namespace System.Drawing.Design
                 }
             }
 
-            protected override bool ShowFocusCues
+            protected override ControlCollection SelectionOptions => Controls;
+            
+            private void InitComponent()
             {
-                get => true;
+                BackColor = SystemColors.Control;
+                ForeColor = SystemColors.ControlText;
+                AccessibleName = SR.ContentAlignmentEditorAccName;
+
+                _topLeft.TabIndex = 8;
+                _topLeft.Text = string.Empty;
+                _topLeft.Appearance = Appearance.Button;
+                _topLeft.AccessibleName = SR.ContentAlignmentEditorTopLeftAccName;
+
+                _topCenter.TabIndex = 0;
+                _topCenter.Text = string.Empty;
+                _topCenter.Appearance = Appearance.Button;
+                _topCenter.AccessibleName = SR.ContentAlignmentEditorTopCenterAccName;
+
+                _topRight.TabIndex = 1;
+                _topRight.Text = string.Empty;
+                _topRight.Appearance = Appearance.Button;
+                _topRight.AccessibleName = SR.ContentAlignmentEditorTopRightAccName;
+
+                _middleLeft.TabIndex = 2;
+                _middleLeft.Text = string.Empty;
+                _middleLeft.Appearance = Appearance.Button;
+                _middleLeft.AccessibleName = SR.ContentAlignmentEditorMiddleLeftAccName;
+
+                _middleCenter.TabIndex = 3;
+                _middleCenter.Text = string.Empty;
+                _middleCenter.Appearance = Appearance.Button;
+                _middleCenter.AccessibleName = SR.ContentAlignmentEditorMiddleCenterAccName;
+
+                _middleRight.TabIndex = 4;
+                _middleRight.Text = string.Empty;
+                _middleRight.Appearance = Appearance.Button;
+                _middleRight.AccessibleName = SR.ContentAlignmentEditorMiddleRightAccName;
+
+                _bottomLeft.TabIndex = 5;
+                _bottomLeft.Text = string.Empty;
+                _bottomLeft.Appearance = Appearance.Button;
+                _bottomLeft.AccessibleName = SR.ContentAlignmentEditorBottomLeftAccName;
+
+                _bottomCenter.TabIndex = 6;
+                _bottomCenter.Text = string.Empty;
+                _bottomCenter.Appearance = Appearance.Button;
+                _bottomCenter.AccessibleName = SR.ContentAlignmentEditorBottomCenterAccName;
+
+                _bottomRight.TabIndex = 7;
+                _bottomRight.Text = string.Empty;
+                _bottomRight.Appearance = Appearance.Button;
+                _bottomRight.AccessibleName = SR.ContentAlignmentEditorBottomRightAccName;
+
+                SetDimensions();
+                ConfigureButtons();
             }
 
-            public object Value { get; private set; }
-
-            public void End()
+            protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
             {
-                _editorService = null;
-                Value = null;
+                var factor = (double)deviceDpiNew / deviceDpiOld;
+                _pixelFactor *= factor;
+                ResetAnchorStyle(toNone: true);
+                SetDimensions();
             }
 
             private void ResetAnchorStyle(bool toNone = false)
@@ -215,195 +262,7 @@ namespace System.Drawing.Design
                     ResumeLayout();
                 }
             }
-
-            private void InitComponent()
-            {
-                BackColor = SystemColors.Control;
-                ForeColor = SystemColors.ControlText;
-                AccessibleName = SR.ContentAlignmentEditorAccName;
-
-                _topLeft.TabIndex = 8;
-                _topLeft.Text = string.Empty;
-                _topLeft.Appearance = Appearance.Button;
-                _topLeft.Click += new EventHandler(OptionClick);
-                _topLeft.AccessibleName = SR.ContentAlignmentEditorTopLeftAccName;
-
-                _topCenter.TabIndex = 0;
-                _topCenter.Text = string.Empty;
-                _topCenter.Appearance = Appearance.Button;
-                _topCenter.Click += new EventHandler(OptionClick);
-                _topCenter.AccessibleName = SR.ContentAlignmentEditorTopCenterAccName;
-
-                _topRight.TabIndex = 1;
-                _topRight.Text = string.Empty;
-                _topRight.Appearance = Appearance.Button;
-                _topRight.Click += new EventHandler(OptionClick);
-                _topRight.AccessibleName = SR.ContentAlignmentEditorTopRightAccName;
-
-                _middleLeft.TabIndex = 2;
-                _middleLeft.Text = string.Empty;
-                _middleLeft.Appearance = Appearance.Button;
-                _middleLeft.Click += new EventHandler(OptionClick);
-                _middleLeft.AccessibleName = SR.ContentAlignmentEditorMiddleLeftAccName;
-
-                _middleCenter.TabIndex = 3;
-                _middleCenter.Text = string.Empty;
-                _middleCenter.Appearance = Appearance.Button;
-                _middleCenter.Click += new EventHandler(OptionClick);
-                _middleCenter.AccessibleName = SR.ContentAlignmentEditorMiddleCenterAccName;
-
-                _middleRight.TabIndex = 4;
-                _middleRight.Text = string.Empty;
-                _middleRight.Appearance = Appearance.Button;
-                _middleRight.Click += new EventHandler(OptionClick);
-                _middleRight.AccessibleName = SR.ContentAlignmentEditorMiddleRightAccName;
-
-                _bottomLeft.TabIndex = 5;
-                _bottomLeft.Text = string.Empty;
-                _bottomLeft.Appearance = Appearance.Button;
-                _bottomLeft.Click += new EventHandler(OptionClick);
-                _bottomLeft.AccessibleName = SR.ContentAlignmentEditorBottomLeftAccName;
-
-                _bottomCenter.TabIndex = 6;
-                _bottomCenter.Text = string.Empty;
-                _bottomCenter.Appearance = Appearance.Button;
-                _bottomCenter.Click += new EventHandler(OptionClick);
-                _bottomCenter.AccessibleName = SR.ContentAlignmentEditorBottomCenterAccName;
-
-                _bottomRight.TabIndex = 7;
-                _bottomRight.Text = string.Empty;
-                _bottomRight.Appearance = Appearance.Button;
-                _bottomRight.Click += new EventHandler(OptionClick);
-                _bottomRight.AccessibleName = SR.ContentAlignmentEditorBottomRightAccName;
-                SetDimensions();
-            }
-
-            protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
-            {
-                var factor = (double)deviceDpiNew / deviceDpiOld;
-                _pixelFactor *= factor;
-                ResetAnchorStyle(toNone: true);
-                SetDimensions();
-            }
-
-            protected override bool IsInputKey(Keys keyData)
-                => keyData switch
-                {
-                    // here, we will return false, because we want the arrow keys
-                    // to get picked up by the process key method below
-                    Keys.Left => false,
-                    Keys.Right => false,
-                    Keys.Up => false,
-                    Keys.Down => false,
-                    _ => base.IsInputKey(keyData),
-                };
-
-            private void OptionClick(object sender, EventArgs e)
-            {
-                // We allow dialog exit if allowExit is set to true
-                // and don't want the unintended Click event to close the dialog
-                if (_allowExit)
-                {
-                    Value = Align;
-                    _editorService.CloseDropDown();
-                }
-            }
-
-            protected override void OnGotFocus(EventArgs e)
-            {
-                base.OnGotFocus(e);
-
-                // Refresh current selection - this moves the focus to selected control, on editor launch
-                Align = Align;
-            }
-
-            public void Start(IWindowsFormsEditorService edSvc, object value)
-            {
-                _editorService = edSvc;
-                Value = value;
-
-                Align = (value is null) ? ContentAlignment.MiddleLeft : (ContentAlignment)value;
-            }
-
-            /// <summary>
-            ///  Here we handle the return, tab, and escape keys appropriately.
-            /// </summary>
-            protected override bool ProcessDialogKey(Keys keyData)
-            {
-                var checkedControl = CheckedControl;
-
-                switch (keyData & Keys.KeyCode)
-                {
-                    case Keys.Left:
-                        ProcessLeftKey(checkedControl);
-                        return true;
-
-                    case Keys.Right:
-                        ProcessRightKey(checkedControl);
-                        return true;
-
-                    case Keys.Up:
-                        ProcessUpKey(checkedControl);
-                        return true;
-
-                    case Keys.Down:
-                        ProcessDownKey(checkedControl);
-                        return true;
-
-                    case Keys.Space:
-                        OptionClick(this, EventArgs.Empty);
-                        return true;
-
-                    case Keys.Return:
-                        if ((keyData & (Keys.Alt | Keys.Control)) == 0)
-                        {
-                            OptionClick(this, EventArgs.Empty);
-                            return true;
-                        }
-
-                        goto default;
-
-                    case Keys.Escape:
-                        if ((keyData & (Keys.Alt | Keys.Control)) == 0)
-                        {
-                            _editorService.CloseDropDown();
-                            return true;
-                        }
-
-                        goto default;
-
-                    case Keys.Tab:
-                        if ((keyData & (Keys.Alt | Keys.Control)) == 0)
-                        {
-                            int nextTabIndex = CheckedControl.TabIndex + ((keyData & Keys.Shift) == 0 ? 1 : -1);
-                            if (nextTabIndex < 0)
-                            {
-                                nextTabIndex = Controls.Count - 1;
-                            }
-                            else if (nextTabIndex >= Controls.Count)
-                            {
-                                nextTabIndex = 0;
-                            }
-
-                            for (int i = 0; i < Controls.Count; i++)
-                            {
-                                if (Controls[i] is RadioButton button && Controls[i].TabIndex == nextTabIndex)
-                                {
-                                    CheckedControl = button;
-                                    return true;
-                                }
-                            }
-
-                            return true;
-                        }
-
-                        goto default;
-
-                    default:
-                        return base.ProcessDialogKey(keyData);
-                }
-            }
-
+            
             /// <summary>
             ///  Imagine a grid to choose alignment:
             ///
@@ -414,32 +273,34 @@ namespace System.Drawing.Design
             ///  Pressing Down on any of these will lead to the same column but
             ///  a lower row; and pressing Down on the bottom row is meaningless
             /// </summary>
-            private void ProcessDownKey(RadioButton checkedControl)
+            protected override RadioButton ProcessDownKey(RadioButton checkedControl)
             {
                 if (checkedControl == _topRight)
                 {
-                    CheckedControl = _middleRight;
+                    return _middleRight;
                 }
                 else if (checkedControl == _middleRight)
                 {
-                    CheckedControl = _bottomRight;
+                    return _bottomRight;
                 }
                 else if (checkedControl == _topCenter)
                 {
-                    CheckedControl = _middleCenter;
+                    return _middleCenter;
                 }
                 else if (checkedControl == _middleCenter)
                 {
-                    CheckedControl = _bottomCenter;
+                    return _bottomCenter;
                 }
                 else if (checkedControl == _topLeft)
                 {
-                    CheckedControl = _middleLeft;
+                    return _middleLeft;
                 }
                 else if (checkedControl == _middleLeft)
                 {
-                    CheckedControl = _bottomLeft;
+                    return _bottomLeft;
                 }
+
+                return checkedControl;
             }
 
             /// <summary>
@@ -452,32 +313,34 @@ namespace System.Drawing.Design
             ///  Pressing Up on any of these will lead to the same column but
             ///  a higher row; and pressing Up on the top row is meaningless
             /// </summary>
-            private void ProcessUpKey(RadioButton checkedControl)
+            protected override RadioButton ProcessUpKey(RadioButton checkedControl)
             {
                 if (checkedControl == _bottomRight)
                 {
-                    CheckedControl = _middleRight;
+                    return _middleRight;
                 }
                 else if (checkedControl == _middleRight)
                 {
-                    CheckedControl = _topRight;
+                    return _topRight;
                 }
                 else if (checkedControl == _bottomCenter)
                 {
-                    CheckedControl = _middleCenter;
+                    return _middleCenter;
                 }
                 else if (checkedControl == _middleCenter)
                 {
-                    CheckedControl = _topCenter;
+                    return _topCenter;
                 }
                 else if (checkedControl == _bottomLeft)
                 {
-                    CheckedControl = _middleLeft;
+                    return _middleLeft;
                 }
                 else if (checkedControl == _middleLeft)
                 {
-                    CheckedControl = _topLeft;
+                    return _topLeft;
                 }
+
+                return checkedControl;
             }
 
             /// <summary>
@@ -490,32 +353,34 @@ namespace System.Drawing.Design
             ///  Pressing Right on any of these will lead to the same row but a farther Right column;
             ///  and pressing right on the right-most column is meaningless.
             /// </summary>
-            private void ProcessRightKey(RadioButton checkedControl)
+            protected override RadioButton ProcessRightKey(RadioButton checkedControl)
             {
                 if (checkedControl == _bottomLeft)
                 {
-                    CheckedControl = _bottomCenter;
+                    return _bottomCenter;
                 }
                 else if (checkedControl == _middleLeft)
                 {
-                    CheckedControl = _middleCenter;
+                    return _middleCenter;
                 }
                 else if (checkedControl == _topLeft)
                 {
-                    CheckedControl = _topCenter;
+                    return _topCenter;
                 }
                 else if (checkedControl == _bottomCenter)
                 {
-                    CheckedControl = _bottomRight;
+                    return _bottomRight;
                 }
                 else if (checkedControl == _middleCenter)
                 {
-                    CheckedControl = _middleRight;
+                    return _middleRight;
                 }
                 else if (checkedControl == _topCenter)
                 {
-                    CheckedControl = _topRight;
+                    return _topRight;
                 }
+
+                return checkedControl;
             }
 
             /// <summary>
@@ -528,71 +393,63 @@ namespace System.Drawing.Design
             ///  Pressing Left on any of these will lead to the same row but a farther left column; and pressing Left
             ///  on the left-most column is meaningless
             /// </summary>
-            private void ProcessLeftKey(RadioButton checkedControl)
+            protected override RadioButton ProcessLeftKey(RadioButton checkedControl)
             {
                 if (checkedControl == _bottomRight)
                 {
-                    CheckedControl = _bottomCenter;
+                    return _bottomCenter;
                 }
                 else if (checkedControl == _middleRight)
                 {
-                    CheckedControl = _middleCenter;
+                    return _middleCenter;
                 }
                 else if (checkedControl == _topRight)
                 {
-                    CheckedControl = _topCenter;
+                    return _topCenter;
                 }
                 else if (checkedControl == _bottomCenter)
                 {
-                    CheckedControl = _bottomLeft;
+                    return _bottomLeft;
                 }
                 else if (checkedControl == _middleCenter)
                 {
-                    CheckedControl = _middleLeft;
+                    return _middleLeft;
                 }
                 else if (checkedControl == _topCenter)
                 {
-                    CheckedControl = _topLeft;
+                    return _topLeft;
                 }
+
+                return checkedControl;
             }
 
-            /// <summary>
-            ///  Gets/Sets the checked control value of our editor
-            /// </summary>
-            private RadioButton CheckedControl
+            protected override RadioButton ProcessTabKey(Keys keyData)
             {
-                get
+                int nextTabIndex = CheckedControl.TabIndex + ((keyData & Keys.Shift) == 0 ? 1 : -1);
+                if (nextTabIndex < 0)
                 {
-                    foreach (var control in Controls)
-                    {
-                        if (control is RadioButton radioButton && radioButton.Checked)
-                        {
-                            return radioButton;
-                        }
-                    }
-
-                    return _middleLeft;
+                    nextTabIndex = Controls.Count - 1;
                 }
-                set
+                else if (nextTabIndex >= Controls.Count)
                 {
-                    CheckedControl.Checked = false;
-                    value.Checked = true;
+                    nextTabIndex = 0;
+                }
 
-                    // To actually move focus to a radio button, we need to call Focus() method.
-                    // However, that would raise OnClick event, which would close the editor.
-                    // We set allowExit to false, to block editor exit, on radio button selection change.
-                    _allowExit = false;
-                    value.Focus();
-                    _allowExit = true;
-
-                    // RadioButton::Checked will tell Accessibility that State and Name changed.
-                    // Tell Accessibility that focus changed as well.
-                    if (value.IsHandleCreated)
+                for (int i = 0; i < Controls.Count; i++)
+                {
+                    if (Controls[i] is RadioButton button && Controls[i].TabIndex == nextTabIndex)
                     {
-                        User32.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(value, value.Handle), User32.OBJID.CLIENT, 0);
+                        return button;
                     }
                 }
+
+                return CheckedControl;
             }
+
+            protected override void SetInitialCheckedControl()
+                => Align = Value is ContentAlignment contentAligment ? contentAligment : ContentAlignment.MiddleLeft;
+
+            protected override void UpdateValue() => Value = Align;
         }
     }
 }
