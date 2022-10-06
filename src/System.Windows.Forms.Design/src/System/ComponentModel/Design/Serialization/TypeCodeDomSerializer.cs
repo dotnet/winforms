@@ -154,9 +154,8 @@ namespace System.ComponentModel.Design.Serialization
                         // Ok, we must do the more expensive work of validating the statements we get.
                         foreach (string name in _nameTable.Keys)
                         {
-                            if (!name.Equals(declaration.Name) && _statementTable.ContainsKey(name))
+                            if (!name.Equals(declaration.Name) && _statementTable.TryGetValue(name, out OrderedCodeStatementCollection statements))
                             {
-                                CodeStatementCollection statements = _statementTable[name];
                                 bool acceptStatement = false;
                                 foreach (CodeStatement statement in statements)
                                 {
@@ -292,9 +291,9 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        if (statements is null && _statementTable.ContainsKey(name))
+                        if (statements is null && _statementTable.TryGetValue(name, out OrderedCodeStatementCollection statementOut))
                         {
-                            statements = _statementTable[name];
+                            statements = statementOut;
                         }
 
                         if (statements is not null && statements.Count > 0)

@@ -966,9 +966,8 @@ namespace System.ComponentModel.Design.Serialization
                             DeserializeModifier(manager, name, state[StateModifier]);
                         }
 
-                        if (_expressions.ContainsKey(name))
+                        if (_expressions.TryGetValue(name, out ArrayList exps))
                         {
-                            ArrayList exps = _expressions[name];
                             foreach (CodeExpression exp in exps)
                             {
                                 object exValue = DeserializeExpression(manager, name, exp);
@@ -984,9 +983,8 @@ namespace System.ComponentModel.Design.Serialization
                         if (!resolved)
                         {
                             // this is condition 2 of the comment at the start of this method.
-                            if (_expressions.ContainsKey(name))
+                            if (_expressions.TryGetValue(name, out ArrayList exps))
                             {
-                                ArrayList exps = _expressions[name];
                                 foreach (CodeExpression exp in exps)
                                 {
                                     object exValue = DeserializeExpression(manager, name, exp);

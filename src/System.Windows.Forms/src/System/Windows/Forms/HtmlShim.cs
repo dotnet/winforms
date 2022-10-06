@@ -166,9 +166,8 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            if (attachedEventList.ContainsKey(eventHandler))
+            if (attachedEventList.TryGetValue(eventHandler, out HtmlToClrEventProxy proxy))
             {
-                HtmlToClrEventProxy proxy = attachedEventList[eventHandler] as HtmlToClrEventProxy;
                 attachedEventList.Remove(eventHandler);
                 return proxy;
             }
