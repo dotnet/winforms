@@ -257,7 +257,7 @@ dotnet_diagnostic.CA1724.severity = none
 dotnet_diagnostic.CA1725.severity = suggestion
 
 # CA1727: Use PascalCase for named placeholders
-dotnet_diagnostic.CA1727.severity = suggestion # TODO: warning
+dotnet_diagnostic.CA1727.severity = warning
 
 # CA1802: Use literals where appropriate
 dotnet_diagnostic.CA1802.severity = warning
@@ -270,7 +270,7 @@ dotnet_diagnostic.CA1805.severity = warning
 dotnet_diagnostic.CA1806.severity = none
 
 # CA1810: Initialize reference type static fields inline
-dotnet_diagnostic.CA1810.severity = none # TODO: warning
+dotnet_diagnostic.CA1810.severity = warning
 
 # CA1812: Avoid uninstantiated internal classes
 dotnet_diagnostic.CA1812.severity = warning
@@ -391,7 +391,7 @@ dotnet_diagnostic.CA1851.severity = suggestion
 dotnet_diagnostic.CA1852.severity = warning
 
 # CA1853: Unnecessary call to 'Dictionary.ContainsKey(key)'
-dotnet_diagnostic.CA1853.severity =  none # TODO: warning
+dotnet_diagnostic.CA1853.severity =  warning
 
 # CA1854: Prefer the 'IDictionary.TryGetValue(TKey, out TValue)' method
 dotnet_diagnostic.CA1854.severity =  none # TODO: warning
@@ -554,7 +554,7 @@ dotnet_diagnostic.CA2251.severity = warning
 dotnet_diagnostic.CA2252.severity = error
 
 # CA2253: Named placeholders should not be numeric values
-dotnet_diagnostic.CA2253.severity = none # TODO: warning
+dotnet_diagnostic.CA2253.severity = warning
 
 # CA2254: Template should be a static expression
 dotnet_diagnostic.CA2254.severity = none
@@ -909,7 +909,7 @@ dotnet_diagnostic.SA1012.severity = none
 dotnet_diagnostic.SA1013.severity = none
 
 # SA1014: Opening generic brackets should not be preceded by a space
-dotnet_diagnostic.SA1014.severity = none # TODO: warning
+dotnet_diagnostic.SA1014.severity = warning
 
 # SA1015: Closing generic bracket should not be followed by a space
 dotnet_diagnostic.SA1015.severity = none
@@ -921,13 +921,13 @@ dotnet_diagnostic.SA1016.severity = none
 dotnet_diagnostic.SA1017.severity = none
 
 # SA1018: Nullable type symbol should not be preceded by a space
-dotnet_diagnostic.SA1018.severity = none # TODO: warning
+dotnet_diagnostic.SA1018.severity = warning
 
 # SA1019: Member access symbols should be spaced correctly
 dotnet_diagnostic.SA1019.severity = none
 
 # SA1020: Increment symbol should not be preceded by a space
-dotnet_diagnostic.SA1020.severity = none # TODO: warning
+dotnet_diagnostic.SA1020.severity = warning
 
 # SA1021: Negative sign should be preceded by a space
 dotnet_diagnostic.SA1021.severity = none
@@ -945,10 +945,10 @@ dotnet_diagnostic.SA1024.severity = none
 dotnet_diagnostic.SA1025.severity = none
 
 # SA1026: Keyword followed by span or blank line
-dotnet_diagnostic.SA1026.severity = none # TODO: warning
+dotnet_diagnostic.SA1026.severity = warning
 
 # SA1027: Tabs and spaces should be used correctly
-dotnet_diagnostic.SA1027.severity = none # TODO: warning
+dotnet_diagnostic.SA1027.severity = warning
 
 # SA1028: Code should not contain trailing whitespace
 dotnet_diagnostic.SA1028.severity = none # TODO: warning
@@ -960,10 +960,10 @@ dotnet_diagnostic.SA1100.severity = none
 dotnet_diagnostic.SA1101.severity = none
 
 # SA1102: Query clause should follow previous clause
-dotnet_diagnostic.SA1102.severity = none # TODO: warning
+dotnet_diagnostic.SA1102.severity = warning
 
 # SA1105: Query clauses spanning multiple lines should begin on own line
-dotnet_diagnostic.SA1105.severity = none # TODO: warning
+dotnet_diagnostic.SA1105.severity = warning
 
 # SA1104: Query clause should begin on new line when previous clause spans multiple lines
 dotnet_diagnostic.SA1104.severity = none
@@ -993,13 +993,13 @@ dotnet_diagnostic.SA1111.severity = none
 dotnet_diagnostic.SA1112.severity = none
 
 # SA1113: Comma should be on the same line as previous parameter
-dotnet_diagnostic.SA1113.severity = none # TODO: warning
+dotnet_diagnostic.SA1113.severity = warning
 
 # SA1114: Parameter list should follow declaration
 dotnet_diagnostic.SA1114.severity = none
 
 # SA1115: Parameter should begin on the line after the previous parameter
-dotnet_diagnostic.SA1115.severity = none # TODO: warning
+dotnet_diagnostic.SA1115.severity = warning
 
 # SA1116: Split parameters should start on line after declaration
 dotnet_diagnostic.SA1116.severity = none
@@ -1071,10 +1071,10 @@ dotnet_diagnostic.SA1137.severity = none
 dotnet_diagnostic.SA1139.severity = none
 
 # SA1141: Use tuple syntax
-dotnet_diagnostic.SA1141.severity = none # TODO: warning
+dotnet_diagnostic.SA1141.severity = warning
 
 # SA1142: Refer to tuple elements by name
-dotnet_diagnostic.SA1142.severity = none # TODO: warning
+dotnet_diagnostic.SA1142.severity = warning
 
 # SA1200: Using directive should appear within a namespace declaration
 dotnet_diagnostic.SA1200.severity = none
@@ -1200,7 +1200,7 @@ dotnet_diagnostic.SA1406.severity = none
 dotnet_diagnostic.SA1407.severity = none
 
 # SA1408: Conditional expressions should declare precedence
-dotnet_diagnostic.SA1408.severity = none # TODO: warning
+dotnet_diagnostic.SA1408.severity = warning
 
 # SA1409: Remove unnecessary code
 dotnet_diagnostic.SA1409.severity = none

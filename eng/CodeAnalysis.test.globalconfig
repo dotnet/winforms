@@ -133,7 +133,7 @@ dotnet_diagnostic.CA1064.severity = none
 dotnet_diagnostic.CA1065.severity = none
 
 # CA1066: Implement IEquatable when overriding Object.Equals
-dotnet_diagnostic.CA1066.severity = none # TODO: warning
+dotnet_diagnostic.CA1066.severity = warning
 
 # CA1067: Override Object.Equals(object) when implementing IEquatable<T>
 dotnet_diagnostic.CA1067.severity = warning
@@ -526,7 +526,7 @@ dotnet_diagnostic.CA2243.severity = warning
 dotnet_diagnostic.CA2244.severity = warning
 
 # CA2245: Do not assign a property to itself
-dotnet_diagnostic.CA2245.severity = none # TODO: warning
+dotnet_diagnostic.CA2245.severity = warning
 
 # CA2246: Assigning symbol and its member in the same statement
 dotnet_diagnostic.CA2246.severity = warning
