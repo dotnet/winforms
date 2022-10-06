@@ -221,7 +221,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    User32.GetCursorPos(out Point point);
+                    PInvoke.GetCursorPos(out Point point);
                     point = PointToClient(point);
                     _behaviorService.PropagateHitTest(point);
                 }
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    User32.GetCursorPos(out Point point);
+                    PInvoke.GetCursorPos(out Point point);
                     point = PointToClient(point);
                     _behaviorService.PropagateHitTest(point);
                 }

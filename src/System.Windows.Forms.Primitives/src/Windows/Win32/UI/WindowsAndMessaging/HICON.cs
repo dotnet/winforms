@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-
-internal static partial class Interop
+namespace Windows.Win32.UI.WindowsAndMessaging
 {
-    internal static partial class User32
+    internal partial struct HICON : IHandle<HICON>
     {
-        [DllImport(Libraries.User32)]
-        public static extern BOOL GetClipCursor(out RECT lpRect);
+        HICON IHandle<HICON>.Handle => this;
+        object? IHandle<HICON>.Wrapper => null;
     }
 }

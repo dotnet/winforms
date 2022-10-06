@@ -1913,8 +1913,10 @@ namespace System.Windows.Forms
                         lParam = 0x20180001,
                         time = PInvoke.GetTickCount()
                     };
-                    User32.GetCursorPos(out Point p);
+
+                    PInvoke.GetCursorPos(out Point p);
                     msg.pt = p;
+
                     if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                     {
                         GetOleControl().OnMnemonic(&msg);

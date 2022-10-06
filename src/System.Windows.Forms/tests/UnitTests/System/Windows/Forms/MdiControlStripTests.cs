@@ -329,9 +329,9 @@ namespace System.Windows.Forms.Tests
             MdiControlStrip originalMdiControlStrip = mdiParent.TestAccessor().Dynamic.MdiControlStrip;
 
             // Force size change with large icon
-            IntPtr hicon = new Bitmap(256, 256).GetHicon();
+            HICON hicon = (HICON)new Bitmap(256, 256).GetHicon();
             Icon largeIcon = (Icon)Icon.FromHandle(hicon).Clone();
-            User32.DestroyIcon(hicon);
+            PInvoke.DestroyIcon(hicon);
             mdiChild.Icon = largeIcon;
 
             MdiControlStrip currentMdiControlStrip = mdiParent.TestAccessor().Dynamic.MdiControlStrip;

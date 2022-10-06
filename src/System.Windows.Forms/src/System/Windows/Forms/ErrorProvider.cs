@@ -582,7 +582,7 @@ namespace System.Windows.Forms
                         }
                         finally
                         {
-                            User32.DestroyIcon(sii.hIcon);
+                            PInvoke.DestroyIcon((HICON)sii.hIcon);
                         }
                     }
 

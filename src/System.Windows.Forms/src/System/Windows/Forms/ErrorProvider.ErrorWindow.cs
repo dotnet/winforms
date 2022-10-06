@@ -212,7 +212,7 @@ namespace System.Windows.Forms
                 {
                     ControlItem item = _items[i];
                     Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
-                    User32.DrawIconEx(
+                    PInvoke.DrawIconEx(
                         hdc,
                         bounds.X - _windowBounds.X,
                         bounds.Y - _windowBounds.Y,

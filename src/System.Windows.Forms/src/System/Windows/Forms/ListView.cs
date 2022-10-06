@@ -5489,7 +5489,7 @@ namespace System.Windows.Forms
 
             // Native ListView expects tooltip HWND as a wParam and ignores lParam
             HWND oldHandle = (HWND)PInvoke.SendMessage(this, (User32.WM)LVM.SETTOOLTIPS, toolTip);
-            User32.DestroyWindow(oldHandle);
+            PInvoke.DestroyWindow(oldHandle);
         }
 
         internal void SetItemImage(int itemIndex, int imageIndex)
