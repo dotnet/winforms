@@ -491,10 +491,7 @@ namespace System.Windows.Forms.Design
                     if (host != null)
                     {
                         ISplitWindowService sws = (ISplitWindowService)GetService(typeof(ISplitWindowService));
-                        if (sws != null)
-                        {
-                            sws.RemoveSplitWindow(componentTray);
-                        }
+                        sws?.RemoveSplitWindow(componentTray);
                     }
 
                     componentTray.Dispose();
@@ -550,10 +547,7 @@ namespace System.Windows.Forms.Design
                     designerExtenders = null;
                 }
 
-                if (axTools != null)
-                {
-                    axTools.Clear();
-                }
+                axTools?.Clear();
 
                 if (host != null)
                 {
@@ -899,11 +893,9 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (key != null)
-                    key.Close();
+                key?.Close();
 
-                if (designtimeKey != null)
-                    designtimeKey.Close();
+                designtimeKey?.Close();
             }
         }
 
@@ -1057,10 +1049,7 @@ namespace System.Windows.Forms.Design
                     {
                         sws.RemoveSplitWindow(componentTray);
                         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                        if (host != null)
-                        {
-                            host.RemoveService(typeof(ComponentTray));
-                        }
+                        host?.RemoveService(typeof(ComponentTray));
 
                         componentTray.Dispose();
                         componentTray = null;
@@ -1485,10 +1474,7 @@ namespace System.Windows.Forms.Design
             }
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null)
-            {
-                host.Activate();
-            }
+            host?.Activate();
 
             // Just find the currently selected frame designer and ask it to create the tool.
             //
@@ -1499,10 +1485,7 @@ namespace System.Windows.Forms.Design
                 {
                     InvokeCreateTool(designer, tool);
                     IToolboxService toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
-                    if (toolboxService != null)
-                    {
-                        toolboxService.SelectedToolboxItemUsed();
-                    }
+                    toolboxService?.SelectedToolboxItemUsed();
                 }
             }
             catch (Exception e)

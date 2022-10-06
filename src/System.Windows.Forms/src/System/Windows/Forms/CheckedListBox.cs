@@ -836,10 +836,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject? checkedItem = AccessibilityObject.GetChild(ice.Index);
 
-                if (checkedItem is not null)
-                {
-                    checkedItem.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, ice.CurrentValue, ice.NewValue);
-                }
+                checkedItem?.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, ice.CurrentValue, ice.NewValue);
             }
         }
 

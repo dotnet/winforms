@@ -88,10 +88,7 @@ namespace System.Windows.Forms.Design
                 bounds.Y = location.Y;
             }
 
-            if (StatusRectCommand is not null)
-            {
-                StatusRectCommand.Invoke(bounds);
-            }
+            StatusRectCommand?.Invoke(bounds);
         }
 
         /// <summary>
@@ -118,10 +115,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (StatusRectCommand is not null)
-            {
-                StatusRectCommand.Invoke(bounds);
-            }
+            StatusRectCommand?.Invoke(bounds);
         }
 
         /// <summary>
@@ -129,10 +123,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void SetStatusInformation(Rectangle bounds)
         {
-            if (StatusRectCommand is not null)
-            {
-                StatusRectCommand.Invoke(bounds);
-            }
+            StatusRectCommand?.Invoke(bounds);
         }
     }
 }

@@ -217,10 +217,7 @@ namespace System.Windows.Forms
                         // Simply update the index and return the current row without cloning it.
                         dataGridViewRow.Index = 0;
                         dataGridViewRow.State = SharedRowState(0);
-                        if (DataGridView is not null)
-                        {
-                            DataGridView.OnRowUnshared(dataGridViewRow);
-                        }
+                        DataGridView?.OnRowUnshared(dataGridViewRow);
 
                         return dataGridViewRow;
                     }
@@ -246,10 +243,7 @@ namespace System.Windows.Forms
                         newDataGridViewRow.HeaderCell.OwningRow = newDataGridViewRow;
                     }
 
-                    if (DataGridView is not null)
-                    {
-                        DataGridView.OnRowUnshared(newDataGridViewRow);
-                    }
+                    DataGridView?.OnRowUnshared(newDataGridViewRow);
 
                     return newDataGridViewRow;
                 }

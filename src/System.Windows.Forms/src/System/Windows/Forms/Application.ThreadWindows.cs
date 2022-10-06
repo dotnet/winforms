@@ -79,10 +79,7 @@ namespace System.Windows.Forms
                     if (PInvoke.IsWindow(hWnd))
                     {
                         Control c = Control.FromHandle(hWnd);
-                        if (c is not null)
-                        {
-                            c.Dispose();
-                        }
+                        c?.Dispose();
                     }
                 }
             }

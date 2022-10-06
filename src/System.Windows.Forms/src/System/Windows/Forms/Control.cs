@@ -360,12 +360,12 @@ namespace System.Windows.Forms
         /*
         example usage
 
-        #if DEBUG
+#if DEBUG
                 int dbgLayoutCheck = LayoutSuspendCount;
-        #endif
-        #if DEBUG
+#endif
+#if DEBUG
                 AssertLayoutSuspendCount(dbgLayoutCheck);
-        #endif
+#endif
         */
 #endif
 
@@ -920,7 +920,7 @@ namespace System.Windows.Forms
                 {
                     return Properties.GetObject(s_dataContextProperty);
                 }
-                
+
                 return ParentInternal?.DataContext;
             }
             set
@@ -929,7 +929,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
-                
+
                 // When DataContext was different than its parent before, but now it is about to become the same,
                 // we're removing it altogether, so it can inherit the value from its parent.
                 if (Properties.ContainsObject(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
@@ -1136,10 +1136,7 @@ namespace System.Windows.Forms
         public void ResetBindings()
         {
             ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
-            if (bindings is not null)
-            {
-                bindings.Clear();
-            }
+            bindings?.Clear();
         }
 
         /// <summary>
@@ -3059,10 +3056,8 @@ namespace System.Windows.Forms
                 {
                     value.Controls.Add(this);
                 }
-                else if (_parent is not null)
-                {
-                    _parent.Controls.Remove(this);
-                }
+                else
+                    _parent?.Controls.Remove(this);
             }
         }
 
@@ -3123,10 +3118,7 @@ namespace System.Windows.Forms
             get => _reflectParent;
             set
             {
-                if (value is not null)
-                {
-                    value.AddReflectChild();
-                }
+                value?.AddReflectChild();
 
                 Control? existing = _reflectParent as Control;
                 _reflectParent = value;
@@ -4716,10 +4708,7 @@ namespace System.Windows.Forms
             }
 
             SetState(States.CheckedHost, false);
-            if (ParentInternal is not null)
-            {
-                ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.All);
-            }
+            ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
@@ -4899,10 +4888,7 @@ namespace System.Windows.Forms
                 ActiveXOnFocus(true);
             }
 
-            if (_parent is not null)
-            {
-                _parent.ChildGotFocus(child);
-            }
+            _parent?.ChildGotFocus(child);
         }
 
         /// <summary>
@@ -5258,10 +5244,7 @@ namespace System.Windows.Forms
                         DestroyHandle();
                     }
 
-                    if (_parent is not null)
-                    {
-                        _parent.Controls.Remove(this);
-                    }
+                    _parent?.Controls.Remove(this);
 
                     ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
@@ -5293,10 +5276,7 @@ namespace System.Windows.Forms
             {
                 // This same post is done in NativeWindow's finalize method, so if you change
                 // it, change it there too.
-                if (_window is not null)
-                {
-                    _window.ForceExitMessageLoop();
-                }
+                _window?.ForceExitMessageLoop();
 
                 base.Dispose(disposing);
             }
@@ -7220,10 +7200,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeOnClick(Control toInvoke, EventArgs e)
         {
-            if (toInvoke is not null)
-            {
-                toInvoke.OnClick(e);
-            }
+            toInvoke?.OnClick(e);
         }
 
         protected virtual void OnAutoSizeChanged(EventArgs e)
@@ -7362,10 +7339,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal virtual void OnChildLayoutResuming(Control child, bool performLayout)
         {
-            if (ParentInternal is not null)
-            {
-                ParentInternal.OnChildLayoutResuming(child, performLayout);
-            }
+            ParentInternal?.OnChildLayoutResuming(child, performLayout);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -8295,10 +8269,7 @@ namespace System.Windows.Forms
                 ActiveXOnFocus(true);
             }
 
-            if (_parent is not null)
-            {
-                _parent.ChildGotFocus(this);
-            }
+            _parent?.ChildGotFocus(this);
 
             ((EventHandler)Events[s_gotFocusEvent])?.Invoke(this, e);
         }
@@ -10944,14 +10915,9 @@ namespace System.Windows.Forms
             // to update the layout engine's state with the new control bounds.
 #if DEBUG
             int suspendCount = -44371;      // Arbitrary negative prime to surface bugs.
+            suspendCount = ParentInternal is not null ? ParentInternal.LayoutSuspendCount : suspendCount;
 #endif
-            if (ParentInternal is not null)
-            {
-#if DEBUG
-                suspendCount = ParentInternal.LayoutSuspendCount;
-#endif
-                ParentInternal.SuspendLayout();
-            }
+            ParentInternal?.SuspendLayout();
 
             try
             {
@@ -10989,7 +10955,7 @@ namespace System.Windows.Forms
 
                             // Give a chance for derived controls to do what they want, just before we resize.
                             OnBoundsUpdate(x, y, width, height);
-                            
+
                             PInvoke.SetWindowPos(this, HWND.Null, x, y, width, height, flags);
 
                             // NOTE: SetWindowPos causes a WM_WINDOWPOSCHANGED which is processed
@@ -11112,10 +11078,7 @@ namespace System.Windows.Forms
                                 throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                             }
 
-                            if (_parent is not null)
-                            {
-                                _parent.UpdateChildZOrder(this);
-                            }
+                            _parent?.UpdateChildZOrder(this);
 
                             Application.UnparkHandle(this, _window.DpiAwarenessContext);
                         }
@@ -11847,10 +11810,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void UpdateZOrder()
         {
-            if (_parent is not null)
-            {
-                _parent.UpdateChildZOrder(this);
-            }
+            _parent?.UpdateChildZOrder(this);
         }
 
         /// <summary>
@@ -12278,10 +12238,7 @@ namespace System.Windows.Forms
         {
             DefWndProc(ref m);
 
-            if (_parent is not null)
-            {
-                _parent.UpdateChildZOrder(this);
-            }
+            _parent?.UpdateChildZOrder(this);
 
             UpdateBounds();
 

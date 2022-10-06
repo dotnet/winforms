@@ -2005,10 +2005,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (region is not null)
-                {
-                    region.Dispose();
-                }
+                region?.Dispose();
             }
 
             // fire accessibility
@@ -2041,10 +2038,7 @@ namespace System.Windows.Forms
             if (IsSelectionSuspended)
             {
                 SetToolStripState(STATE_LASTMOUSEDOWNEDITEMCAPTURE, false);
-                if (lastItem is not null)
-                {
-                    lastItem.Invalidate();
-                }
+                lastItem?.Invalidate();
             }
         }
 
@@ -2060,10 +2054,7 @@ namespace System.Windows.Forms
                 try
                 {
                     SuspendLayout();
-                    if (overflow is not null)
-                    {
-                        overflow.SuspendLayout();
-                    }
+                    overflow?.SuspendLayout();
 
                     // if there's a problem in config, don't be a leaker.
                     SetToolStripState(STATE_DISPOSINGITEMS, true);
@@ -2076,21 +2067,12 @@ namespace System.Windows.Forms
                         toolStripPanelCell.Dispose();
                     }
 
-                    if (_cachedItemHdcInfo is not null)
-                    {
-                        _cachedItemHdcInfo.Dispose();
-                    }
+                    _cachedItemHdcInfo?.Dispose();
 
-                    if (_mouseHoverTimer is not null)
-                    {
-                        _mouseHoverTimer.Dispose();
-                    }
+                    _mouseHoverTimer?.Dispose();
 
                     ToolTip toolTip = (ToolTip)Properties.GetObject(ToolStrip.s_propToolTip);
-                    if (toolTip is not null)
-                    {
-                        toolTip.Dispose();
-                    }
+                    toolTip?.Dispose();
 
                     if (!Items.IsReadOnly)
                     {
@@ -2104,15 +2086,9 @@ namespace System.Windows.Forms
                     }
 
                     // clean up items not in the Items list
-                    if (_toolStripGrip is not null)
-                    {
-                        _toolStripGrip.Dispose();
-                    }
+                    _toolStripGrip?.Dispose();
 
-                    if (_toolStripOverflowButton is not null)
-                    {
-                        _toolStripOverflowButton.Dispose();
-                    }
+                    _toolStripOverflowButton?.Dispose();
 
                     // remove the restore focus filter
                     if (_restoreFocusFilter is not null)
@@ -2143,10 +2119,7 @@ namespace System.Windows.Forms
                 finally
                 {
                     ResumeLayout(false);
-                    if (overflow is not null)
-                    {
-                        overflow.ResumeLayout(false);
-                    }
+                    overflow?.ResumeLayout(false);
 
                     SetToolStripState(STATE_DISPOSINGITEMS, false);
                 }
@@ -3485,11 +3458,8 @@ namespace System.Windows.Forms
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            if (DropTargetManager is not null)
-            {
-                // Make sure we unregister ourselves as a drop target
-                DropTargetManager.EnsureUnRegistered();
-            }
+            // Make sure we unregister ourselves as a drop target
+            DropTargetManager?.EnsureUnRegistered();
 
             base.OnHandleDestroyed(e);
         }
@@ -3571,10 +3541,7 @@ namespace System.Windows.Forms
             OnLayoutCompleted(EventArgs.Empty);
             Invalidate();
 
-            if (overflow is not null)
-            {
-                overflow.ResumeLayout();
-            }
+            overflow?.ResumeLayout();
         }
 
         protected virtual void OnLayoutCompleted(EventArgs e)
@@ -3903,10 +3870,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (itemGraphics is not null)
-                        {
-                            itemGraphics.Dispose();
-                        }
+                        itemGraphics?.Dispose();
                     }
                 }
             }
@@ -3941,15 +3905,9 @@ namespace System.Windows.Forms
                     Items[i].OnParentRightToLeftChanged(e);
                 }
 
-                if (_toolStripOverflowButton is not null)
-                {
-                    _toolStripOverflowButton.OnParentRightToLeftChanged(e);
-                }
+                _toolStripOverflowButton?.OnParentRightToLeftChanged(e);
 
-                if (_toolStripGrip is not null)
-                {
-                    _toolStripGrip.OnParentRightToLeftChanged(e);
-                }
+                _toolStripGrip?.OnParentRightToLeftChanged(e);
             }
         }
 
@@ -4065,10 +4023,7 @@ namespace System.Windows.Forms
                     ResetScaling(deviceDpiNew);
 
                     // We need to scale the one Grip per ToolStrip as well (if present).
-                    if (_toolStripGrip is not null)
-                    {
-                        _toolStripGrip.ToolStrip_RescaleConstants(deviceDpiOld, deviceDpiNew);
-                    }
+                    _toolStripGrip?.ToolStrip_RescaleConstants(deviceDpiOld, deviceDpiNew);
 
                     // ToolStripItems are components and have Font property. Components do not receive WM_DPICHANGED messages, nor they have
                     // parent-child relationship with owners and, thus, do not get scaled by parent/Container. For these reasons, they need the font
@@ -4457,10 +4412,7 @@ namespace System.Windows.Forms
 
                 _lastMouseDownedItem = null;
 
-                if (lastInfo is not null)
-                {
-                    lastInfo.Dispose();
-                }
+                lastInfo?.Dispose();
             }
 
             base.SetVisibleCore(visible);
@@ -5028,10 +4980,7 @@ namespace System.Windows.Forms
                 // that point our handle is not actually destroyed so
                 // destroying our parent actually causes a recursive
                 // WM_DESTROY.
-                if (_dropDownOwnerWindow is not null)
-                {
-                    _dropDownOwnerWindow.DestroyHandle();
-                }
+                _dropDownOwnerWindow?.DestroyHandle();
             }
         }
 

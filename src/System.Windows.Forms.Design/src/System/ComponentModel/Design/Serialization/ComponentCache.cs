@@ -135,10 +135,7 @@ namespace System.ComponentModel.Design.Serialization
         private void OnComponentRename(object source, ComponentRenameEventArgs args)
         {
             // we might have a symbolic rename that has side effects beyond our control, so we don't have a choice but to clear the whole cache when a component gets renamed...
-            if (_cache is not null)
-            {
-                _cache.Clear();
-            }
+            _cache?.Clear();
         }
 
         private void OnComponentChanging(object source, ComponentChangingEventArgs ce)

@@ -159,10 +159,7 @@ namespace System.Windows.Forms
                         value.Disposed += disposedHandler;
                     }
 
-                    if (DataGridView is not null)
-                    {
-                        DataGridView.OnCellContextMenuStripChanged(this);
-                    }
+                    DataGridView?.OnCellContextMenuStripChanged(this);
                 }
             }
         }
@@ -704,10 +701,7 @@ namespace System.Windows.Forms
                     State &= ~DataGridViewElementStates.Selected;
                 }
 
-                if (DataGridView is not null)
-                {
-                    DataGridView.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.Selected);
-                }
+                DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.Selected);
             }
         }
 
@@ -769,10 +763,7 @@ namespace System.Windows.Forms
 
                 if (value is not null || Properties.ContainsObject(s_propCellStyle))
                 {
-                    if (value is not null)
-                    {
-                        value.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
-                    }
+                    value?.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
 
                     Properties.SetObject(s_propCellStyle, value);
                 }

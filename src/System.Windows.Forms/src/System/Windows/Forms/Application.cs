@@ -1114,10 +1114,7 @@ namespace System.Windows.Forms
         internal static void UnparkHandle(IHandle<HWND> handle, DPI_AWARENESS_CONTEXT context)
         {
             ThreadContext threadContext = GetContextForHandle(handle);
-            if (threadContext is not null)
-            {
-                threadContext.GetParkingWindow(context).UnparkHandle(handle);
-            }
+            threadContext?.GetParkingWindow(context).UnparkHandle(handle);
         }
 
         /// <summary>

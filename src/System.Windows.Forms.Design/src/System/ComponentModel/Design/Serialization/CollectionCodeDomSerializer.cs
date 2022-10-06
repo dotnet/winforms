@@ -102,11 +102,8 @@ namespace System.ComponentModel.Design.Serialization
                         originalValues[value] = count;
                     }
                 }
-                else if (result is not null)
-                {
-                    // this one isn't in the old list, so add it to our  result list.
-                    result.Add(value);
-                }
+                else                     // this one isn't in the old list, so add it to our  result list.
+                    result?.Add(value);
 
                 // this item isn't in the list and we haven't yet created our array list so just keep on going.
             }

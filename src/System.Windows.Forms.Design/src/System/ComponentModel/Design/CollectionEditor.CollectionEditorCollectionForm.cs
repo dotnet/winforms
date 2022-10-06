@@ -271,10 +271,7 @@ namespace System.ComponentModel.Design
                         _createdItems.Clear();
                     }
 
-                    if (_removedItems is not null)
-                    {
-                        _removedItems.Clear();
-                    }
+                    _removedItems?.Clear();
 
                     // Restore the original contents. Because objects get parented during CreateAndAddInstance, the underlying collection
                     // gets changed during add, but not other operations. Not all consumers of this dialog can roll back every single change,

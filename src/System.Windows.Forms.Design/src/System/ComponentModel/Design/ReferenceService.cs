@@ -140,10 +140,7 @@ namespace System.ComponentModel.Design
             if (!(compAdded.Site is INestedSite))
             {
                 _addedComponents.Add(compAdded);
-                if (_removedComponents is not null)
-                {
-                    _removedComponents.Remove(compAdded);
-                }
+                _removedComponents?.Remove(compAdded);
             }
         }
 
@@ -161,10 +158,7 @@ namespace System.ComponentModel.Design
             if (!(compRemoved.Site is INestedSite))
             {
                 _removedComponents.Add(compRemoved);
-                if (_addedComponents is not null)
-                {
-                    _addedComponents.Remove(compRemoved);
-                }
+                _addedComponents?.Remove(compRemoved);
             }
         }
 

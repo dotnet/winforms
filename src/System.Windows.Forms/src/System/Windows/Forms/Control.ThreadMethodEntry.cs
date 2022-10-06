@@ -45,10 +45,7 @@ namespace System.Windows.Forms
 
             ~ThreadMethodEntry()
             {
-                if (_resetEvent is not null)
-                {
-                    _resetEvent.Close();
-                }
+                _resetEvent?.Close();
             }
 
             public object? AsyncState
@@ -106,10 +103,7 @@ namespace System.Windows.Forms
                 lock (_invokeSyncObject)
                 {
                     IsCompleted = true;
-                    if (_resetEvent is not null)
-                    {
-                        _resetEvent.Set();
-                    }
+                    _resetEvent?.Set();
                 }
             }
         }

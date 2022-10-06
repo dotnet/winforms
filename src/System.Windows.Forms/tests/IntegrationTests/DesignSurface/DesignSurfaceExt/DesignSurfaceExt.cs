@@ -123,8 +123,7 @@ namespace DesignSurfaceExt
                     PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(ctrl);
                     //- Sets a PropertyDescriptor to the specific property.
                     PropertyDescriptor pdS = pdc.Find("Size", false);
-                    if (null != pdS)
-                        pdS.SetValue(ihost.RootComponent, controlSize);
+                    pdS?.SetValue(ihost.RootComponent, controlSize);
                 }
                 else if (hostType == typeof(UserControl))
                 {
@@ -134,8 +133,7 @@ namespace DesignSurfaceExt
                     PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(ctrl);
                     //- Sets a PropertyDescriptor to the specific property.
                     PropertyDescriptor pdS = pdc.Find("Size", false);
-                    if (null != pdS)
-                        pdS.SetValue(ihost.RootComponent, controlSize);
+                    pdS?.SetValue(ihost.RootComponent, controlSize);
                 }
                 else if (hostType == typeof(Component))
                 {
@@ -173,11 +171,9 @@ namespace DesignSurfaceExt
                 PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(newComp);
                 //- Sets a PropertyDescriptor to the specific property.
                 PropertyDescriptor pdS = pdc.Find("Size", false);
-                if (null != pdS)
-                    pdS.SetValue(newComp, controlSize);
+                pdS?.SetValue(newComp, controlSize);
                 PropertyDescriptor pdL = pdc.Find("Location", false);
-                if (null != pdL)
-                    pdL.SetValue(newComp, controlLocation);
+                pdL?.SetValue(newComp, controlLocation);
                 //-
                 //-
                 //- step.4

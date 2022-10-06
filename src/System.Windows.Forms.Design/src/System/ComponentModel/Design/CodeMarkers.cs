@@ -277,10 +277,7 @@ namespace System.ComponentModel.Design
             byte[] bufferWithCorrelation = new byte[s_correlationMarkBytes.Length + correlationIdBytes.Length + (buffer is not null ? buffer.Length : 0)];
             s_correlationMarkBytes.CopyTo(bufferWithCorrelation, 0);
             correlationIdBytes.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length);
-            if (buffer is not null)
-            {
-                buffer.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length + correlationIdBytes.Length);
-            }
+            buffer?.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length + correlationIdBytes.Length);
 
             return bufferWithCorrelation;
         }

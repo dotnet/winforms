@@ -93,10 +93,7 @@ namespace System.Windows.Forms.Design
 
         public void Dispose()
         {
-            if (_tooltip != null)
-            {
-                _tooltip.Dispose();
-            }
+            _tooltip?.Dispose();
         }
 
         /// <summary>

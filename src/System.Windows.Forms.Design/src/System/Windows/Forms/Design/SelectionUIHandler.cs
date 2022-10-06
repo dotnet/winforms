@@ -103,10 +103,7 @@ namespace System.Windows.Forms.Design
                 // Suspend parent layout so that we don't continuously re-arrange components
                 // while we move.
                 //
-                if (parent != null)
-                {
-                    parent.SuspendLayout();
-                }
+                parent?.SuspendLayout();
 
                 b.X = bounds[i].X;
                 b.Y = bounds[i].Y;
@@ -121,10 +118,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < controls.Length; i++)
             {
                 Control parent = controls[i].Parent;
-                if (parent != null)
-                {
-                    parent.ResumeLayout();
-                }
+                parent?.ResumeLayout();
             }
         }
 
@@ -277,10 +271,7 @@ namespace System.Windows.Forms.Design
                 // Suspend parent layout so that we don't continuously re-arrange components
                 // while we move.
                 //
-                if (parent != null)
-                {
-                    parent.SuspendLayout();
-                }
+                parent?.SuspendLayout();
 
                 BoundsInfo ctlBounds = bounds[i];
 

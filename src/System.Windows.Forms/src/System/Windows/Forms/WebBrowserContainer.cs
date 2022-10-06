@@ -459,10 +459,7 @@ namespace System.Windows.Forms
             {
                 siteActive = null;
                 ContainerControl parentContainer = parent.FindContainerControlInternal();
-                if (parentContainer is not null)
-                {
-                    parentContainer.SetActiveControl(null);
-                }
+                parentContainer?.SetActiveControl(null);
             }
         }
 

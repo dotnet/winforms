@@ -448,10 +448,7 @@ namespace System.Windows.Forms.Design
                 ctl = ctl.Parent;
             }
 
-            if (fsd != null)
-            {
-                fsd.FormatControlFinishedLoading();
-            }
+            fsd?.FormatControlFinishedLoading();
         }
 
         private class DateTimeFormatsListBoxItem

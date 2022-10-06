@@ -62,10 +62,7 @@ namespace System.Windows.Forms.Design
                         selManager = GetService(typeof(SelectionManager)) as SelectionManager;
                     }
 
-                    if (selManager != null)
-                    {
-                        selManager.Refresh();
-                    }
+                    selManager?.Refresh();
 
                     // Now we must paint our adornments, since the scroll does not
                     // trigger a paint event

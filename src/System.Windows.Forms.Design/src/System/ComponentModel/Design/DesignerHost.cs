@@ -394,10 +394,7 @@ namespace System.ComponentModel.Design
             }
             else
             {
-                if (nameCreate is not null)
-                {
-                    nameCreate.ValidateName(name);
-                }
+                nameCreate?.ValidateName(name);
             }
 
             return new Site(component, this, name, this);
@@ -472,10 +469,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void Flush()
         {
-            if (_loader is not null)
-            {
-                _loader.Flush();
-            }
+            _loader?.Flush();
         }
 
         /// <summary>
@@ -706,10 +700,7 @@ namespace System.ComponentModel.Design
             }
 
             ISelectionService selectionService = (ISelectionService)GetService(typeof(ISelectionService));
-            if (selectionService is not null)
-            {
-                selectionService.SetSelectedComponents(null, SelectionTypes.Replace);
-            }
+            selectionService?.SetSelectedComponents(null, SelectionTypes.Replace);
 
             // Now remove all the designers and their components.  We save the root for last.  Note that we eat any exceptions that components or their designers generate.  A bad component or designer should not prevent an unload from happening.  We do all of this in a transaction to help reduce the number of events we generate.
             _state[s_stateUnloading] = true;
@@ -1251,10 +1242,7 @@ namespace System.ComponentModel.Design
                         errorCollection = errorList;
                         successful = false;
 
-                        if (_surface is not null)
-                        {
-                            _surface.OnLoaded(successful, errorCollection);
-                        }
+                        _surface?.OnLoaded(successful, errorCollection);
 
                         // We re-throw.  If this was a synchronous load this will error back to BeginLoad (and, as a side effect, may call us again).  For asynchronous loads we need to throw so the caller knows what happened.
                         throw;

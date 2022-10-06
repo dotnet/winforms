@@ -423,10 +423,7 @@ namespace System.Windows.Forms
             public void Clear()
             {
                 AssertInvariant();
-                if (_owner._originals is not null)
-                {
-                    _owner._originals.Clear();
-                }
+                _owner._originals?.Clear();
 
                 _imageInfoCollection.Clear();
 

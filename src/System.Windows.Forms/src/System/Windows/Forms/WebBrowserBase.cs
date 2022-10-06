@@ -474,10 +474,7 @@ namespace System.Windows.Forms
                     // up to InPlaceActivate that the ActiveX control grabs our handle).
                     TransitionDownTo(WebBrowserHelper.AXState.Running);
 
-                    if (axWindow is not null)
-                    {
-                        axWindow.ReleaseHandle();
-                    }
+                    axWindow?.ReleaseHandle();
 
                     OnHandleDestroyed(EventArgs.Empty);
                     break;
@@ -835,10 +832,7 @@ namespace System.Windows.Forms
         {
             PInvoke.SetParent(hwnd, this);
 
-            if (axWindow is not null)
-            {
-                axWindow.ReleaseHandle();
-            }
+            axWindow?.ReleaseHandle();
 
             axWindow = new WebBrowserBaseNativeWindow(this);
             axWindow.AssignHandle(hwnd, false);
@@ -991,10 +985,7 @@ namespace System.Windows.Forms
                 //
                 // Remove ourselves from our parent container...
                 WebBrowserContainer parentContainer = GetParentContainer();
-                if (parentContainer is not null)
-                {
-                    parentContainer.RemoveControl(this);
-                }
+                parentContainer?.RemoveControl(this);
 
                 //
                 // Now inform the ActiveX control that it's been un-sited.

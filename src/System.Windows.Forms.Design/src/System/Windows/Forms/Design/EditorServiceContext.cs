@@ -180,10 +180,7 @@ namespace System.Windows.Forms.Design
             CollectionEditor itemsEditor = TypeDescriptor.GetEditor(propertyValue, typeof(UITypeEditor)) as CollectionEditor;
 
             Debug.Assert(itemsEditor != null, "Didn't get a collection editor for type '" + _targetProperty.PropertyType.FullName + "'");
-            if (itemsEditor != null)
-            {
-                itemsEditor.EditValue(this, this, propertyValue);
-            }
+            itemsEditor?.EditValue(this, this, propertyValue);
         }
     }
 }

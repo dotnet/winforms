@@ -1085,10 +1085,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (htmlShimManager is not null)
-                {
-                    htmlShimManager.Dispose();
-                }
+                htmlShimManager?.Dispose();
 
                 DetachSink();
                 ActiveXSite.Dispose();
@@ -1390,10 +1387,7 @@ namespace System.Windows.Forms
 
                 if (ClientRectangle.Contains(client))
                 {
-                    if (contextMenuStrip is not null)
-                    {
-                        contextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                    }
+                    contextMenuStrip?.ShowInternal(this, client, keyboardActivated);
 
                     return true;
                 }

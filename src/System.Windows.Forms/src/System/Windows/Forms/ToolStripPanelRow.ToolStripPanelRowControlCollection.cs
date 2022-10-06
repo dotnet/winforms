@@ -98,10 +98,7 @@ namespace System.Windows.Forms
 
                 ToolStripPanel currentOwner = ToolStripPanel;
 
-                if (currentOwner is not null)
-                {
-                    currentOwner.SuspendLayout();
-                }
+                currentOwner?.SuspendLayout();
 
                 try
                 {
@@ -112,10 +109,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner is not null)
-                    {
-                        currentOwner.ResumeLayout();
-                    }
+                    currentOwner?.ResumeLayout();
                 }
             }
 
@@ -273,10 +267,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (layoutTransaction is not null)
-                        {
-                            layoutTransaction.Dispose();
-                        }
+                        layoutTransaction?.Dispose();
                     }
                 }
             }

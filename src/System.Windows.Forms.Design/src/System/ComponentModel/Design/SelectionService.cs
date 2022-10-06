@@ -176,10 +176,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void RemoveSelection(object sel)
         {
-            if (_selection is not null)
-            {
-                _selection.Remove(sel);
-            }
+            _selection?.Remove(sel);
         }
 
         private void ApplicationIdle(object source, EventArgs args)

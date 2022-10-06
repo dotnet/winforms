@@ -505,10 +505,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             public void Dispose()
             {
-                if (traceScope is not null)
-                {
-                    traceScope.Pop();
-                }
+                traceScope?.Pop();
             }
         }
 

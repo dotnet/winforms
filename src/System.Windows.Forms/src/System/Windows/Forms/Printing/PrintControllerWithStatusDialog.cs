@@ -67,10 +67,7 @@ namespace System.Windows.Forms
             }
             catch
             {
-                if (_backgroundThread is not null)
-                {
-                    _backgroundThread.Stop();
-                }
+                _backgroundThread?.Stop();
 
                 throw;
             }
@@ -90,10 +87,7 @@ namespace System.Windows.Forms
         {
             base.OnStartPage(document, e);
 
-            if (_backgroundThread is not null)
-            {
-                _backgroundThread.UpdateLabel();
-            }
+            _backgroundThread?.UpdateLabel();
 
             Graphics? result = _underlyingController.OnStartPage(document, e);
             if (_backgroundThread is not null && _backgroundThread._canceled)
@@ -131,10 +125,7 @@ namespace System.Windows.Forms
                 e.Cancel = true;
             }
 
-            if (_backgroundThread is not null)
-            {
-                _backgroundThread.Stop();
-            }
+            _backgroundThread?.Stop();
 
             base.OnEndPrint(document, e);
         }

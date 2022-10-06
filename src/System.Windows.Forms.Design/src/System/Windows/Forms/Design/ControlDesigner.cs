@@ -502,10 +502,7 @@ namespace System.Windows.Forms.Design
                     UnhookChildControls(Control);
                 }
 
-                if (DesignerTarget != null)
-                {
-                    DesignerTarget.Dispose();
-                }
+                DesignerTarget?.Dispose();
 
                 _downPos = Point.Empty;
 
@@ -682,11 +679,8 @@ namespace System.Windows.Forms.Design
 
         private void OnDragEnter(object s, DragEventArgs e)
         {
-            if (BehaviorService != null)
-            {
-                // Tell the BehaviorService to monitor mouse messages so it can send appropriate drag notifications.
-                BehaviorService.StartDragNotification();
-            }
+            // Tell the BehaviorService to monitor mouse messages so it can send appropriate drag notifications.
+            BehaviorService?.StartDragNotification();
 
             OnDragEnter(e);
         }
@@ -695,11 +689,8 @@ namespace System.Windows.Forms.Design
 
         private void OnDragDrop(object s, DragEventArgs e)
         {
-            if (BehaviorService != null)
-            {
-                // This will cause the Behavior Service to return from 'drag mode'
-                BehaviorService.EndDragNotification();
-            }
+            // This will cause the Behavior Service to return from 'drag mode'
+            BehaviorService?.EndDragNotification();
 
             OnDragDrop(e);
         }

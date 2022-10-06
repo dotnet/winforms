@@ -222,10 +222,7 @@ namespace System.Windows.Forms.Design
 
         private void OnEditItemsMenuItemClick(object sender, EventArgs e)
         {
-            if (verbManager != null)
-            {
-                verbManager.EditItemsVerb.Invoke();
-            }
+            verbManager?.EditItemsVerb.Invoke();
         }
 
         private void OnImageToolStripMenuItemClick(object sender, EventArgs e)
@@ -397,10 +394,7 @@ namespace System.Windows.Forms.Design
                 parent.Items.Insert(dummyIndex, (ToolStripItem)component);
                 // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
                 ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
-                if (selSvc != null)
-                {
-                    selSvc.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
-                }
+                selSvc?.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
             }
             catch (Exception ex)
             {
@@ -423,10 +417,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (newItemTransaction != null)
-                {
-                    newItemTransaction.Commit();
-                }
+                newItemTransaction?.Commit();
             }
         }
 
@@ -453,10 +444,7 @@ namespace System.Windows.Forms.Design
                 parent.Items.Insert(dummyIndex, (ToolStripItem)component);
                 // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
                 ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
-                if (selSvc != null)
-                {
-                    selSvc.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
-                }
+                selSvc?.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
             }
             catch (Exception ex)
             {
@@ -468,10 +456,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (newItemTransaction != null)
-                {
-                    newItemTransaction.Commit();
-                }
+                newItemTransaction?.Commit();
             }
         }
 
@@ -498,10 +483,7 @@ namespace System.Windows.Forms.Design
                 parent.Items.Insert(dummyIndex, (ToolStripItem)component);
                 // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
                 ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
-                if (selSvc != null)
-                {
-                    selSvc.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
-                }
+                selSvc?.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
             }
             catch (Exception ex)
             {
@@ -513,10 +495,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (newItemTransaction != null)
-                {
-                    newItemTransaction.Commit();
-                }
+                newItemTransaction?.Commit();
             }
         }
 
@@ -565,10 +544,7 @@ namespace System.Windows.Forms.Design
                 parent.Items.Insert(dummyIndex, (ToolStripItem)component);
                 // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
                 ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
-                if (selSvc != null)
-                {
-                    selSvc.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
-                }
+                selSvc?.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
             }
             catch (Exception ex)
             {
@@ -586,10 +562,7 @@ namespace System.Windows.Forms.Design
 
             finally
             {
-                if (newItemTransaction != null)
-                {
-                    newItemTransaction.Commit();
-                }
+                newItemTransaction?.Commit();
             }
         }
 
@@ -633,10 +606,7 @@ namespace System.Windows.Forms.Design
             Debug.Assert(changingProperty != null, "Could not find given property in control.");
             try
             {
-                if (changingProperty != null)
-                {
-                    changingProperty.SetValue(target, value);
-                }
+                changingProperty?.SetValue(target, value);
             }
             catch (InvalidOperationException ex)
             {

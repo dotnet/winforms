@@ -228,10 +228,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void InvalidateLinkFonts()
         {
-            if (_linkFont is not null)
-            {
-                _linkFont.Dispose();
-            }
+            _linkFont?.Dispose();
 
             if (_hoverLinkFont is not null && _hoverLinkFont != _linkFont)
             {

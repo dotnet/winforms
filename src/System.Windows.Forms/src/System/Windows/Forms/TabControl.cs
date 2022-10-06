@@ -1380,10 +1380,7 @@ namespace System.Windows.Forms
         protected override void OnEnter(EventArgs e)
         {
             base.OnEnter(e);
-            if (SelectedTab is not null)
-            {
-                SelectedTab.FireEnter(e);
-            }
+            SelectedTab?.FireEnter(e);
         }
 
         /// <summary>
@@ -1402,10 +1399,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnLeave(EventArgs e)
         {
-            if (SelectedTab is not null)
-            {
-                SelectedTab.FireLeave(e);
-            }
+            SelectedTab?.FireLeave(e);
 
             base.OnLeave(e);
         }
@@ -1516,10 +1510,7 @@ namespace System.Windows.Forms
             ((TabControlEventHandler)Events[s_selectedEvent])?.Invoke(this, e);
 
             // Raise the enter event for this tab.
-            if (SelectedTab is not null)
-            {
-                SelectedTab.FireEnter(EventArgs.Empty);
-            }
+            SelectedTab?.FireEnter(EventArgs.Empty);
         }
 
         /// <summary>
@@ -1916,10 +1907,7 @@ namespace System.Windows.Forms
                                             c = (IContainerControl)c.ActiveControl;
                                         }
 
-                                        if (c.ActiveControl is not null)
-                                        {
-                                            c.ActiveControl.Focus();
-                                        }
+                                        c.ActiveControl?.Focus();
                                     }
                                 }
                             }

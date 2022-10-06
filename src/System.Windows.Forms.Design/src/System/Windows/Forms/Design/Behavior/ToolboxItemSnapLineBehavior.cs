@@ -361,10 +361,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         Point adornerServiceOrigin = behaviorService.MapAdornerWindowPoint(baseControl.Handle, new Point(0, 0));
                         Rectangle statusRect = new Rectangle(newRectangle.X - adornerServiceOrigin.X, newRectangle.Y - adornerServiceOrigin.Y, 0, 0);
-                        if (statusCommandUI != null)
-                        {
-                            statusCommandUI.SetStatusInformation(statusRect);
-                        }
+                        statusCommandUI?.SetStatusInformation(statusRect);
                     }
                 }
 

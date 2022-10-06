@@ -315,10 +315,7 @@ namespace System.Windows.Forms
                     ExitMenuMode();
 
                     // Make sure we roll selection off  the toplevel toolstrip.
-                    if (activeToolStripDropDown.OwnerItem is not null)
-                    {
-                        activeToolStripDropDown.OwnerItem.Unselect();
-                    }
+                    activeToolStripDropDown.OwnerItem?.Unselect();
                 }
             }
 

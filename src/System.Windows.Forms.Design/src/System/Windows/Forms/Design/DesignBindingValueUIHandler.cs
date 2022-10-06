@@ -67,10 +67,7 @@ namespace System.Windows.Forms.Design
 
         public void Dispose()
         {
-            if (dataBitmap != null)
-            {
-                dataBitmap.Dispose();
-            }
+            dataBitmap?.Dispose();
         }
     }
 }

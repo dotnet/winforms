@@ -815,11 +815,9 @@ public class DragDropTests : ControlTestBase
                         }
 
                         // Dispose of the cursors since they are no longer needed.
-                        if (MyNormalCursor != null)
-                            MyNormalCursor.Dispose();
+                        MyNormalCursor?.Dispose();
 
-                        if (MyNoDropCursor != null)
-                            MyNoDropCursor.Dispose();
+                        MyNoDropCursor?.Dispose();
                     }
                 }
             }

@@ -431,10 +431,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             IUIService uis = (IUIService)_serviceProvider.GetService(typeof(IUIService));
 
-                            if (uis is not null)
-                            {
-                                uis.ShowMessage(SR.LocalizationProviderManualReload);
-                            }
+                            uis?.ShowMessage(SR.LocalizationProviderManualReload);
                         }
                     }
                 }

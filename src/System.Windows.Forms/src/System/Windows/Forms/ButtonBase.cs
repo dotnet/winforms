@@ -964,10 +964,7 @@ namespace System.Windows.Forms
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             SetFlag(FlagMouseOver, false);
-            if (_textToolTip is not null)
-            {
-                _textToolTip.Hide(this);
-            }
+            _textToolTip?.Hide(this);
 
             Invalidate();
             // call base last, so if it invokes any listeners that disable the button, we

@@ -186,10 +186,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            if (_designerList is not null)
-            {
-                _designerList.Remove(host);
-            }
+            _designerList?.Remove(host);
         }
 
         /// <summary>

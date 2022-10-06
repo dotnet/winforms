@@ -495,10 +495,7 @@ namespace System.Windows.Forms
                 if (cc is not null && cc.ActiveControl == this)
                 {
                     Form? f = FindForm();
-                    if (f is not null)
-                    {
-                        f.SelectNextControl(this, true, true, true, true);
-                    }
+                    f?.SelectNextControl(this, true, true, true, true);
                 }
             }
 
@@ -568,10 +565,7 @@ namespace System.Windows.Forms
                 if (_activeControl == value)
                 {
                     Form? form = FindForm();
-                    if (form is not null)
-                    {
-                        form.UpdateDefaultButton();
-                    }
+                    form?.UpdateDefaultButton();
                 }
             }
             else
