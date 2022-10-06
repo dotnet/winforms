@@ -5876,7 +5876,7 @@ namespace System.Windows.Forms
             // We would need to get adornments metrics for both (old and new) Dpi in case application is in PerMonitorV2 mode and Dpi changed.
             AdjustWindowRectExForControlDpi(ref adornmentsAfterDpiChange, (WINDOW_STYLE)cp.Style, bMenu: false, (WINDOW_EX_STYLE)cp.ExStyle);
 
-            if (_oldDeviceDpi != _deviceDpi && OsVersion.IsWindows10_1703OrGreater)
+            if (_oldDeviceDpi != _deviceDpi && OsVersion.IsWindows10_1703OrGreater())
             {
                 AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, (WINDOW_STYLE)cp.Style, bMenu: false, (WINDOW_EX_STYLE)cp.ExStyle, _oldDeviceDpi);
             }
@@ -7046,7 +7046,7 @@ namespace System.Windows.Forms
 
         private static void AdjustWindowRectExForDpi(ref RECT rect, WINDOW_STYLE style, bool bMenu, WINDOW_EX_STYLE exStyle, int dpi)
         {
-            if ((DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired) && OsVersion.IsWindows10_1703OrGreater)
+            if ((DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired) && OsVersion.IsWindows10_1703OrGreater())
             {
                 PInvoke.AdjustWindowRectExForDpi(ref rect, style, bMenu, exStyle, (uint)dpi);
             }
@@ -8382,7 +8382,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyUp(KeyEventArgs e)
         {
-            if (OsVersion.IsWindows11_OrGreater &&
+            if (OsVersion.IsWindows11_OrGreater() &&
                 (e.KeyCode.HasFlag(Keys.ControlKey) || e.KeyCode == Keys.Escape))
             {
                 KeyboardToolTipStateMachine.HidePersistentTooltip();
@@ -10167,7 +10167,7 @@ namespace System.Windows.Forms
                 UiaCore.UiaReturnRawElementProvider(handle, 0, 0, null);
             }
 
-            if (OsVersion.IsWindows8OrGreater && TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
+            if (OsVersion.IsWindows8OrGreater() && TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
             {
                 UiaCore.UiaDisconnectProvider(accessibleObject);
             }

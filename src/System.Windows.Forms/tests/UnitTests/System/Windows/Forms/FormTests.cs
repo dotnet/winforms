@@ -978,7 +978,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Form_Restore_RestoresPosition_User()
         {
-            if (!OsVersion.IsWindows11_OrGreater)
+            if (!OsVersion.IsWindows11_OrGreater())
             {
                 return;
             }
@@ -1007,7 +1007,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Form_Restore_RestoresPosition_WindowState()
         {
-            if (!OsVersion.IsWindows11_OrGreater)
+            if (!OsVersion.IsWindows11_OrGreater())
             {
                 return;
             }

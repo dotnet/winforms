@@ -713,7 +713,7 @@ namespace System.Windows.Forms
             {
                 DPI_AWARENESS_CONTEXT dpiAwarenessContext = DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
 
-                if (OsVersion.IsWindows10_1607OrGreater)
+                if (OsVersion.IsWindows10_1607OrGreater())
                 {
                     // Works only >= Windows 10/1607
                     DPI_AWARENESS_CONTEXT awarenessContext = PInvoke.GetWindowDpiAwarenessContext(hwnd);

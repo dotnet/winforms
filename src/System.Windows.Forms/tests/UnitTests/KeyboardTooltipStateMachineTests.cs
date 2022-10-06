@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Tests
             IKeyboardToolTip currentTool = instance.TestAccessor().Dynamic._currentTool;
             string currentState = instance.TestAccessor().Dynamic._currentState.ToString();
 
-            Assert.Equal(isPersistent && OsVersion.IsWindows11_OrGreater ? "Hidden" : "Shown", currentState);
+            Assert.Equal(isPersistent && OsVersion.IsWindows11_OrGreater() ? "Hidden" : "Shown", currentState);
         }
 
         private class TestControl : Control

@@ -340,7 +340,7 @@ namespace System.Windows.Forms
             internal override void ReleaseUiaProvider(IntPtr handle)
             {
                 if (IsAccessibilityObjectCreated
-                    && OsVersion.IsWindows8OrGreater
+                    && OsVersion.IsWindows8OrGreater()
                     && AccessibilityObject is UpDownButtonsAccessibleObject buttonsAccessibilityObject)
                 {
                     buttonsAccessibilityObject.ReleaseChildUiaProviders();
