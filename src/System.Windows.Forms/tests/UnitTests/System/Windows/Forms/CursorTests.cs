@@ -322,7 +322,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Cursor_Dispose_InvokeNotOwned_Success()
         {
-            var cursor = new Cursor((IntPtr)2);
+            var cursor = new Cursor(2);
             cursor.Dispose();
             Assert.Throws<ObjectDisposedException>(() => cursor.Handle);
             Assert.Throws<ObjectDisposedException>(() => cursor.HotSpot);

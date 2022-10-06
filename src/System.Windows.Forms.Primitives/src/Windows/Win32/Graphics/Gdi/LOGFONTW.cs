@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace Windows.Win32.Graphics.Gdi
@@ -14,7 +15,8 @@ namespace Windows.Win32.Graphics.Gdi
         // We should never reference lfFaceName directly and use this property instead.
         public ReadOnlySpan<char> FaceName
         {
-            get => new Span<char>(lfFaceName.ToArray()).SliceAtFirstNull();
+            [UnscopedRef]
+            get => lfFaceName.AsSpan().SliceAtFirstNull();
             set => SpanHelpers.CopyAndTerminate(value, lfFaceName.AsSpan());
         }
 

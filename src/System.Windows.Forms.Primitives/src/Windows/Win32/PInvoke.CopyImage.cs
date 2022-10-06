@@ -6,10 +6,11 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static HRESULT SHAutoComplete<T>(T hwndEdit, SHELL_AUTOCOMPLETE_FLAGS flags) where T : IHandle<HWND>
+        public static HANDLE CopyImage<T>(T hImage, GDI_IMAGE_TYPE type, int cx, int cy, IMAGE_FLAGS flags)
+            where T : IHandle<HANDLE>
         {
-            HRESULT result = SHAutoComplete(hwndEdit.Handle, flags);
-            GC.KeepAlive(hwndEdit.Wrapper);
+            HANDLE result = CopyImage(hImage.Handle, type, cx, cy, flags);
+            GC.KeepAlive(hImage.Wrapper);
             return result;
         }
     }

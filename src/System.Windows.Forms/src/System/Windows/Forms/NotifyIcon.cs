@@ -615,7 +615,7 @@ namespace System.Windows.Forms
         {
             if (_contextMenuStrip is not null)
             {
-                User32.GetCursorPos(out Point pt);
+                PInvoke.GetCursorPos(out Point pt);
 
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be

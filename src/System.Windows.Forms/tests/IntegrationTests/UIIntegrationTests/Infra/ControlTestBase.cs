@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.Threading;
 using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit;
 using Xunit.Abstractions;
-using static Interop;
 
 namespace System.Windows.Forms.UITests
 {
@@ -128,7 +127,7 @@ namespace System.Windows.Forms.UITests
             await InputSimulator.SendAsync(window, inputSimulator => inputSimulator.Mouse.MoveMouseTo(virtualPoint.X + 1, virtualPoint.Y + 1));
 
             // ⚠ The call to GetCursorPos is required for correct behavior.
-            if (!User32.GetCursorPos(out Point actualPoint))
+            if (!PInvoke.GetCursorPos(out Point actualPoint))
             {
 #pragma warning disable CS8597 // Thrown value may be null.
                 throw Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
@@ -139,7 +138,7 @@ namespace System.Windows.Forms.UITests
             {
                 // Wait and try again
                 await Task.Delay(15);
-                if (!User32.GetCursorPos(out Point _))
+                if (!PInvoke.GetCursorPos(out Point _))
                 {
 #pragma warning disable CS8597 // Thrown value may be null.
                     throw Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());

@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static BOOL GetWindowRect<T>(in T hWnd, out RECT lpRect) where T : IHandle<HWND>
+        public static BOOL GetWindowRect<T>(T hWnd, out RECT lpRect) where T : IHandle<HWND>
         {
             BOOL result = GetWindowRect(hWnd.Handle, out lpRect);
             GC.KeepAlive(hWnd.Wrapper);

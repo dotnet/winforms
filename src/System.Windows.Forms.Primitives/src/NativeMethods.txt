@@ -15,6 +15,7 @@ CallNextHookEx
 CallWindowProc
 CB_*
 ChildWindowFromPointEx
+ClipCursor
 CloseDesktop
 CloseEnhMetaFile
 CloseHandle
@@ -24,6 +25,7 @@ COLOR_*
 CombineRgn
 COMDLG_FILTERSPEC
 CommDlgExtendedError
+CopyImage
 CP_ACP
 CreateActCtx
 CreateBitmap
@@ -36,6 +38,7 @@ CreateEnhMetaFileW
 CreateFontIndirectW
 CreateHalftonePalette
 CreateICW
+CreateMenu
 CreatePatternBrush
 CreatePen
 CreateRectRgn
@@ -51,6 +54,10 @@ DeleteDC
 DeleteEnhMetaFile
 DeleteObject
 DESKTOP_ACCESS_FLAGS
+DestroyCursor
+DestroyIcon
+DestroyMenu
+DestroyWindow
 DestroyWindow
 DISP_E_DIVBYZERO
 DISP_E_EXCEPTION
@@ -65,6 +72,8 @@ DRAGDROP_S_CANCEL
 DRAGDROP_S_DROP
 DRAGDROP_S_USEDEFAULTCURSORS
 DragQueryFile
+DrawIcon
+DrawIconEx
 DrawThemeBackground
 DrawThemeEdge
 DrawThemeParentBackground
@@ -109,6 +118,7 @@ GetClassInfo
 GetClassName
 GetClientRect
 GetClipBox
+GetClipCursor
 GetClipRgn
 GetCurrentActCtx
 GetCurrentObject
@@ -117,6 +127,8 @@ GetCurrentProcessId
 GetCurrentThemeName
 GetCurrentThread
 GetCurrentThreadId
+GetCursor
+GetCursorPos
 GetDeviceCaps
 GetDIBits
 GetDlgItem
@@ -126,6 +138,7 @@ GetDpiForWindow
 GetExitCodeThread
 GetFocus
 GetForegroundWindow
+GetIconInfo
 GetKeyState
 GetKeyboardLayout
 GetKeyboardLayoutList
@@ -293,6 +306,8 @@ SendMessage
 SetActiveWindow
 SetBkColor
 SetBkMode
+SetCursor
+SetCursorPos
 SetFocus
 SetMapMode
 SetParent

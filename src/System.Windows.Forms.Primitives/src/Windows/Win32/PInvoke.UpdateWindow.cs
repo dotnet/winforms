@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static BOOL UpdateWindow<T>(in T hWnd) where T : IHandle<HWND>
+        public static BOOL UpdateWindow<T>(T hWnd) where T : IHandle<HWND>
         {
             BOOL result = UpdateWindow(hWnd.Handle);
             GC.KeepAlive(hWnd.Wrapper);

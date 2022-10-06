@@ -1801,7 +1801,7 @@ namespace System.Windows.Forms
                 {
                     // We want to instantly change the cursor if the mouse is within our bounds.
                     // This includes the case where the mouse is over one of our children.
-                    User32.GetCursorPos(out Point p);
+                    PInvoke.GetCursorPos(out Point p);
                     PInvoke.GetWindowRect(this, out RECT r);
                     if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                     {
@@ -2987,7 +2987,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                User32.GetCursorPos(out Point pt);
+                PInvoke.GetCursorPos(out Point pt);
                 return pt;
             }
         }
@@ -3933,7 +3933,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            nint threadHandle = ((IHandle)ctx).Handle;
+            HANDLE threadHandle = ctx.Handle;
             bool processed = false;
             // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
             uint exitCode = 0;
@@ -3943,7 +3943,7 @@ namespace System.Windows.Forms
                 //Get the thread's exit code, if we found the thread as expected
                 if (threadHandle != 0)
                 {
-                    returnValue = PInvoke.GetExitCodeThread((HANDLE)threadHandle, &exitCode);
+                    returnValue = PInvoke.GetExitCodeThread(threadHandle, &exitCode);
                 }
 
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:

@@ -6,11 +6,12 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static HRESULT SHAutoComplete<T>(T hwndEdit, SHELL_AUTOCOMPLETE_FLAGS flags) where T : IHandle<HWND>
+        public static ICONINFO GetIconInfo<T>(T cursor)
+            where T : IHandle<HICON>
         {
-            HRESULT result = SHAutoComplete(hwndEdit.Handle, flags);
-            GC.KeepAlive(hwndEdit.Wrapper);
-            return result;
+            GetIconInfo(cursor.Handle, out ICONINFO info);
+            GC.KeepAlive(cursor.Wrapper);
+            return info;
         }
     }
 }

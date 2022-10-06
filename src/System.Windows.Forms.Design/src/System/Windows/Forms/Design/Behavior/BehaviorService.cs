@@ -626,7 +626,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void SetAppropriateCursor(Cursor cursor)
         {
-            //default cursors will let the toolbox svc set a cursor if needed
+            // Default cursors will let the toolbox svc set a cursor if needed
             if (cursor == Cursors.Default)
             {
                 if (_toolboxSvc is null)
@@ -634,9 +634,9 @@ namespace System.Windows.Forms.Design.Behavior
                     _toolboxSvc = (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
                 }
 
-                if (_toolboxSvc != null && _toolboxSvc.SetCursor())
+                if (_toolboxSvc is not null && _toolboxSvc.SetCursor())
                 {
-                    cursor = new Cursor(User32.GetCursor());
+                    cursor = new Cursor(PInvoke.GetCursor());
                 }
             }
 

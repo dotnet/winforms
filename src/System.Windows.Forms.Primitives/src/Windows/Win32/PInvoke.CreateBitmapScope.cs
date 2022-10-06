@@ -31,7 +31,7 @@ namespace Windows.Win32
             }
 
             /// <summary>
-            ///  Creates a bitmap compatible with the given <see cref="HDC"/> via <see cref="CreateCompatibleBitmap(Windows.Win32.Graphics.Gdi.HDC, int, int)"/>
+            ///  Creates a bitmap compatible with the given <see cref="HDC"/> via <see cref="CreateCompatibleBitmap(HDC, int, int)"/>
             /// </summary>
             public CreateBitmapScope(HDC hdc, int cx, int cy)
             {

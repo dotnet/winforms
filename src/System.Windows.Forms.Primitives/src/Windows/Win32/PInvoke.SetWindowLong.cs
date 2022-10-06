@@ -15,7 +15,7 @@ namespace Windows.Win32
         [DllImport(Libraries.User32, SetLastError = true)]
         private static extern nint SetWindowLongPtrW(HWND hWnd, WINDOW_LONG_PTR_INDEX nIndex, nint dwNewLong);
 
-        public static nint SetWindowLong<T>(in T hWnd, WINDOW_LONG_PTR_INDEX nIndex, nint newValue)
+        public static nint SetWindowLong<T>(T hWnd, WINDOW_LONG_PTR_INDEX nIndex, nint newValue)
             where T : IHandle<HWND>
         {
             nint result = Environment.Is64BitProcess
@@ -25,7 +25,7 @@ namespace Windows.Win32
             return result;
         }
 
-        public static nint SetWindowLong<THwnd, TNewValue>(in THwnd hWnd, WINDOW_LONG_PTR_INDEX nIndex, TNewValue newValue)
+        public static nint SetWindowLong<THwnd, TNewValue>(THwnd hWnd, WINDOW_LONG_PTR_INDEX nIndex, TNewValue newValue)
             where THwnd : IHandle<HWND>
             where TNewValue : IHandle<HWND>
         {

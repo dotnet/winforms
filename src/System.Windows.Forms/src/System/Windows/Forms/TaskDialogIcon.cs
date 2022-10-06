@@ -188,19 +188,19 @@ namespace System.Windows.Forms
 
         private static Icon BitmapToIcon(Bitmap bitmap)
         {
-            IntPtr handle = IntPtr.Zero;
+            HICON handle = HICON.Null;
             try
             {
-                handle = bitmap.GetHicon();
+                handle = (HICON)bitmap.GetHicon();
                 var icon = Icon.FromHandle(handle);
 
                 return (Icon)icon.Clone();
             }
             finally
             {
-                if (handle != IntPtr.Zero)
+                if (!handle.IsNull)
                 {
-                    Interop.User32.DestroyIcon(handle);
+                    PInvoke.DestroyIcon(handle);
                 }
             }
         }
