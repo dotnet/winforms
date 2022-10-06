@@ -1491,7 +1491,7 @@ dotnet_diagnostic.IDE0018.severity = suggestion
 dotnet_diagnostic.IDE0019.severity = suggestion
 
 # IDE0020: Use pattern matching to avoid is check followed by a cast (with variable)
-dotnet_diagnostic.IDE0020.severity = none # TODO: warning
+dotnet_diagnostic.IDE0020.severity = warning
 
 # IDE0021: Use expression body for constructors
 dotnet_diagnostic.IDE0021.severity = silent
@@ -1518,7 +1518,7 @@ dotnet_diagnostic.IDE0027.severity = silent
 dotnet_diagnostic.IDE0028.severity = suggestion
 
 # IDE0029: Use coalesce expression
-dotnet_diagnostic.IDE0029.severity = none # TODO: warning
+dotnet_diagnostic.IDE0029.severity = warning
 
 # IDE0030: Use coalesce expression
 dotnet_diagnostic.IDE0030.severity = warning
@@ -1590,7 +1590,7 @@ dotnet_diagnostic.IDE0052.severity = suggestion
 dotnet_diagnostic.IDE0053.severity = silent
 
 # IDE0054: Use compound assignment
-dotnet_diagnostic.IDE0054.severity = none # TODO: warning
+dotnet_diagnostic.IDE0054.severity = warning
 
 # IDE0055: Fix formatting
 dotnet_diagnostic.IDE0055.severity = suggestion

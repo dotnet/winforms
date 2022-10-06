@@ -547,7 +547,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            return selection == null ? Array.Empty<object>() : selection;
+            return selection ?? Array.Empty<object>();
         }
 
         /// <summary>
@@ -2041,9 +2041,8 @@ namespace System.Windows.Forms.Design
                                     }
                                 }
                             }
-                            else if (commonParent is Control)
+                            else if (commonParent is Control controlCommonParent)
                             {
-                                Control controlCommonParent = (Control)commonParent;
                                 // if we have a common parent, select it's first child
                                 //
                                 if (controlCommonParent.Controls.Count > 0)

@@ -159,8 +159,8 @@ namespace System.Windows.Forms.Design
         {
             return string.Format(CultureInfo.CurrentCulture, "{0}<Name={1}, Mask={2}, ValidatingType={3}",
                 GetType(),
-                Name != null ? Name : "null",
-                Mask != null ? Mask : "null",
+                Name ?? "null",
+                Mask ?? "null",
                 ValidatingType != null ? ValidatingType.ToString() : "null");
         }
     }

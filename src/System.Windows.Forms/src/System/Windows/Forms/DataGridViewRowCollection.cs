@@ -304,7 +304,7 @@ namespace System.Windows.Forms
                 // Note that we allow the 'new' row to be frozen.
                 Debug.Assert((dataGridViewRow.State & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
                 // Make sure the 'new row' is visible even when the row template isn't
-                dataGridViewRow.State = dataGridViewRow.State | DataGridViewElementStates.Visible;
+                dataGridViewRow.State |= DataGridViewElementStates.Visible;
                 foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
                 {
                     dataGridViewCell.Value = dataGridViewCell.DefaultNewRowValue;

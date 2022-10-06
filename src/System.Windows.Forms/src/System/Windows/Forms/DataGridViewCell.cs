@@ -609,11 +609,11 @@ namespace System.Windows.Forms
             {
                 if (value)
                 {
-                    State = State | DataGridViewElementStates.ReadOnly;
+                    State |= DataGridViewElementStates.ReadOnly;
                 }
                 else
                 {
-                    State = State & ~DataGridViewElementStates.ReadOnly;
+                    State &= ~DataGridViewElementStates.ReadOnly;
                 }
 
                 DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.ReadOnly);
@@ -697,11 +697,11 @@ namespace System.Windows.Forms
                 Debug.Assert(value != Selected);
                 if (value)
                 {
-                    State = State | DataGridViewElementStates.Selected;
+                    State |= DataGridViewElementStates.Selected;
                 }
                 else
                 {
-                    State = State & ~DataGridViewElementStates.Selected;
+                    State &= ~DataGridViewElementStates.Selected;
                 }
 
                 if (DataGridView is not null)
