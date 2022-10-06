@@ -107,9 +107,9 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            if (htmlDocumentShims.ContainsKey(document))
+            if (htmlDocumentShims.TryGetValue(document, out HtmlDocument.HtmlDocumentShim value))
             {
-                return htmlDocumentShims[document];
+                return value;
             }
 
             return null;
@@ -122,9 +122,9 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            if (htmlElementShims.ContainsKey(element))
+            if (htmlElementShims.TryGetValue(element, out HtmlElement.HtmlElementShim elementShim))
             {
-                return htmlElementShims[element];
+                return elementShim;
             }
 
             return null;
@@ -137,9 +137,9 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            if (htmlWindowShims.ContainsKey(window))
+            if (htmlWindowShims.TryGetValue(window, out HtmlWindow.HtmlWindowShim windowShim))
             {
-                return htmlWindowShims[window];
+                return windowShim;
             }
 
             return null;
@@ -211,9 +211,8 @@ namespace System.Windows.Forms
                 //
                 if (htmlWindowShims is not null)
                 {
-                    if (htmlWindowShims.ContainsKey(unloadedWindow))
+                    if (htmlWindowShims.TryGetValue(unloadedWindow, out HtmlWindow.HtmlWindowShim shim))
                     {
-                        HtmlWindow.HtmlWindowShim shim = htmlWindowShims[unloadedWindow];
                         htmlWindowShims.Remove(unloadedWindow);
                         shim.Dispose();
                     }

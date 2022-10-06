@@ -3321,9 +3321,8 @@ namespace System.ComponentModel.Design.Serialization
         internal static Type GetType(IDesignerSerializationManager manager, string name, Dictionary<string, string> names)
         {
             Type type = null;
-            if (names is not null && names.ContainsKey(name))
+            if (names is not null && names.TryGetValue(name, out string typeName))
             {
-                string typeName = names[name];
                 if (manager is not null && !string.IsNullOrEmpty(typeName))
                 {
                     type = manager.GetType(typeName);

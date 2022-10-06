@@ -124,9 +124,9 @@ namespace System.Windows.Forms
             {
                 if (accessibleChildIndex == ImageAccessibleObjectIndex && HasImage)
                 {
-                    if (_listViewSubItemAccessibleObjects.ContainsKey(accessibleChildIndex))
+                    if (_listViewSubItemAccessibleObjects.TryGetValue(accessibleChildIndex, out AccessibleObject? childAO))
                     {
-                        return _listViewSubItemAccessibleObjects[accessibleChildIndex];
+                        return childAO;
                     }
 
                     ListViewItemImageAccessibleObject imageAccessibleObject = new(_owningItem);
@@ -142,9 +142,9 @@ namespace System.Windows.Forms
                     return _owningItem.SubItems[subItemIndex].AccessibilityObject;
                 }
 
-                if (_listViewSubItemAccessibleObjects.ContainsKey(accessibleChildIndex))
+                if (_listViewSubItemAccessibleObjects.TryGetValue(accessibleChildIndex, out AccessibleObject? childAO2))
                 {
-                    return _listViewSubItemAccessibleObjects[accessibleChildIndex];
+                    return childAO2;
                 }
 
                 ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessibleObject = new(owningSubItem: null, _owningItem);

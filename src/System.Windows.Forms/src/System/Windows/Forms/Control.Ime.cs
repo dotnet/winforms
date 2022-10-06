@@ -1241,12 +1241,10 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (ImeModeConversion.ImeModeConversionBits.ContainsKey(imeMode))
+                    if (ImeModeConversion.ImeModeConversionBits.TryGetValue(imeMode, out ImeModeConversion conversionEntry))
                     {
                         // Update the conversion status
                         //
-                        ImeModeConversion conversionEntry = (ImeModeConversion)ImeModeConversion.ImeModeConversionBits[imeMode];
-
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetContext(" + handle + ")");
                         HIMC inputContext = PInvoke.ImmGetContext((HWND)handle);
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "context = " + inputContext);
