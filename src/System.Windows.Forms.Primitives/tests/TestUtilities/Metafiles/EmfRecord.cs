@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Metafiles
         }
 
         public ENHANCED_METAFILE_RECORD_TYPE Type => _lpmr->iType;
-        public ReadOnlySpan<uint> Params => new(_lpmr->dParm.ToArray());
+        public ReadOnlySpan<uint> Params => _lpmr->dParm.AsReadOnlySpan();
         public ReadOnlySpan<HGDIOBJ> Handles => new(_lpht, _nHandles);
 
         public ENHMETAHEADER* HeaderRecord => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_HEADER ? (ENHMETAHEADER*)_lpmr : null;
