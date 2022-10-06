@@ -1,6 +1,6 @@
 {
   "tools": {
-    "dotnet": "3.1.420",
+    "dotnet": "3.1.423",
     "vs": {
       "version": "16.0"
     },
@@ -12,11 +12,11 @@
     }
   },
   "sdk": {
-    "version": "3.1.420"
+    "version": "3.1.423"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.22378.5",
-    "Microsoft.DotNet.Helix.Sdk": "2.0.0-beta.22378.5",
+    "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.22505.4",
+    "Microsoft.DotNet.Helix.Sdk": "2.0.0-beta.22505.4",
     "Microsoft.NET.Sdk.IL": "3.1.9-servicing.20458.2"
   },
   "native-tools": {
