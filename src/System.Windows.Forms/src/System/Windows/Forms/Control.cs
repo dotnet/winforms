@@ -1801,7 +1801,7 @@ namespace System.Windows.Forms
                 {
                     // We want to instantly change the cursor if the mouse is within our bounds.
                     // This includes the case where the mouse is over one of our children.
-                    User32.GetCursorPos(out Point p);
+                    PInvoke.GetCursorPos(out Point p);
                     PInvoke.GetWindowRect(this, out RECT r);
                     if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                     {
@@ -2987,7 +2987,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                User32.GetCursorPos(out Point pt);
+                PInvoke.GetCursorPos(out Point pt);
                 return pt;
             }
         }

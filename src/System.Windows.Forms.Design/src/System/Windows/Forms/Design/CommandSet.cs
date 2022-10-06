@@ -766,7 +766,7 @@ namespace System.Windows.Forms.Design
             // The base implementation here just checks to see if we are dragging.
             // If we are, then we abort the drag.
             //
-            if (BehaviorService != null && BehaviorService.HasCapture)
+            if (BehaviorService is not null && BehaviorService.HasCapture)
             {
                 BehaviorService.OnLoseCapture();
                 handled = true;
@@ -774,11 +774,11 @@ namespace System.Windows.Forms.Design
             else
             {
                 IToolboxService tbx = (IToolboxService)GetService(typeof(IToolboxService));
-                if (tbx != null && tbx.GetSelectedToolboxItem((IDesignerHost)GetService(typeof(IDesignerHost))) != null)
+                if (tbx is not null && tbx.GetSelectedToolboxItem((IDesignerHost)GetService(typeof(IDesignerHost))) is not null)
                 {
                     tbx.SelectedToolboxItemUsed();
 
-                    User32.GetCursorPos(out Point p);
+                    PInvoke.GetCursorPos(out Point p);
                     HWND hwnd = PInvoke.WindowFromPoint(p);
                     if (!hwnd.IsNull)
                     {

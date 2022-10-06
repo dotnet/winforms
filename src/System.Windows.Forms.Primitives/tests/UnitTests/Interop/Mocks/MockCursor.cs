@@ -3,13 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
 {
     public class MockCursor : IDisposable
     {
-        private IntPtr _handle = IntPtr.Zero;       // handle to loaded image
+        private HCURSOR _handle;
         private readonly bool _ownHandle = true;
         private readonly PCWSTR _resourceId;
 
@@ -23,22 +22,22 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
 
         public void Dispose()
         {
-            if (_handle != IntPtr.Zero)
+            if (!_handle.IsNull)
             {
                 if (_ownHandle)
                 {
-                    DestroyCursor(_handle);
+                    PInvoke.DestroyCursor(_handle);
                 }
 
-                _handle = IntPtr.Zero;
+                _handle = HCURSOR.Null;
             }
         }
 
-        public IntPtr Handle
+        internal HCURSOR Handle
         {
             get
             {
-                if (_handle == IntPtr.Zero)
+                if (_handle.IsNull)
                 {
                     throw new ObjectDisposedException(nameof(MockCursor));
                 }

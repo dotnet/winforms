@@ -543,7 +543,7 @@ namespace System.Windows.Forms
             {
                 if (!HWND.IsNull)
                 {
-                    if (!User32.DestroyWindow(this))
+                    if (!PInvoke.DestroyWindow(HWND))
                     {
                         UnSubclass();
 

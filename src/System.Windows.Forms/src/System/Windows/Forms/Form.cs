@@ -3409,11 +3409,10 @@ namespace System.Windows.Forms
                 base.Dispose(disposing);
                 _ctlClient = null;
 
-                var dummyMenu = Properties.GetObject(PropDummyMdiMenu) as IntPtr?;
-                if (dummyMenu.HasValue && dummyMenu.Value != IntPtr.Zero)
+                if (Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
                 {
                     Properties.SetObject(PropDummyMdiMenu, null);
-                    User32.DestroyMenu(new HandleRef(this, dummyMenu.Value));
+                    PInvoke.DestroyMenu(dummyMenu);
                 }
             }
             else
@@ -5636,10 +5635,9 @@ namespace System.Windows.Forms
                     // (set to null) so that duplicate control buttons are not placed on the menu bar when
                     // an ole menu is being removed.
                     // Make MDI forget the mdi item position.
-                    IntPtr? dummyMenu = Properties.GetObject(PropDummyMdiMenu) as IntPtr?;
-                    if (!dummyMenu.HasValue || dummyMenu.Value == IntPtr.Zero || recreateMenu)
+                    if (!Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
                     {
-                        dummyMenu = User32.CreateMenu();
+                        dummyMenu = PInvoke.CreateMenu();
                         Properties.SetObject(PropDummyMdiMenu, dummyMenu);
                     }
 
