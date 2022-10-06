@@ -294,9 +294,8 @@ namespace System.Windows.Forms.Design
                     ArrayList topComps = new ArrayList();
                     for (int i = 0; i < components.Length; i++)
                     {
-                        if (components[i] is Control)
+                        if (components[i] is Control c)
                         {
-                            Control c = (Control)components[i];
                             if (c.Parent == null)
                             {
                                 topComps.Add(components[i]);

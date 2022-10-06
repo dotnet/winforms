@@ -375,7 +375,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (persistSettings)
                             {
-                                reflectionType = reflectionType ?? GetReflectionTypeHelper(manager, value);
+                                reflectionType ??= GetReflectionTypeHelper(manager, value);
                                 persistSettings = GetReflectionTypeFromTypeHelper(manager, typeof(IPersistComponentSettings)).IsAssignableFrom(reflectionType);
                             }
 

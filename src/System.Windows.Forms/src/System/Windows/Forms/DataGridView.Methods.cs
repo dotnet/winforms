@@ -5494,7 +5494,7 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
                 if (dataGridViewRow.Index >= 0)
                 {
-                    dataGridViewRow.Index = dataGridViewRow.Index - 1;
+                    dataGridViewRow.Index--;
                     Debug.Assert(dataGridViewRow.Index == rowIndex);
                 }
             }
@@ -5520,7 +5520,7 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
                 if (dataGridViewRow.Index >= 0)
                 {
-                    dataGridViewRow.Index = dataGridViewRow.Index + insertionCount;
+                    dataGridViewRow.Index += insertionCount;
                     Debug.Assert(dataGridViewRow.Index == rowIndex);
                 }
             }
