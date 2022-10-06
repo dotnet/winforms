@@ -8,7 +8,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public unsafe static int MapWindowPoints<TFrom, TTo>(in TFrom hWndFrom, in TTo hWndTo, ref RECT lpRect)
+        public unsafe static int MapWindowPoints<TFrom, TTo>(TFrom hWndFrom, TTo hWndTo, ref RECT lpRect)
             where TFrom : IHandle<HWND>
             where TTo : IHandle<HWND>
         {
@@ -21,7 +21,7 @@ namespace Windows.Win32
             }
         }
 
-        public unsafe static int MapWindowPoints<TFrom, TTo>(in TFrom hWndFrom, in TTo hWndTo, ref Point lpPoint)
+        public unsafe static int MapWindowPoints<TFrom, TTo>(TFrom hWndFrom, TTo hWndTo, ref Point lpPoint)
             where TFrom : IHandle<HWND>
             where TTo : IHandle<HWND>
         {

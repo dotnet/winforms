@@ -3933,7 +3933,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            nint threadHandle = ((IHandle)ctx).Handle;
+            HANDLE threadHandle = ctx.Handle;
             bool processed = false;
             // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
             uint exitCode = 0;
@@ -3943,7 +3943,7 @@ namespace System.Windows.Forms
                 //Get the thread's exit code, if we found the thread as expected
                 if (threadHandle != 0)
                 {
-                    returnValue = PInvoke.GetExitCodeThread((HANDLE)threadHandle, &exitCode);
+                    returnValue = PInvoke.GetExitCodeThread(threadHandle, &exitCode);
                 }
 
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:

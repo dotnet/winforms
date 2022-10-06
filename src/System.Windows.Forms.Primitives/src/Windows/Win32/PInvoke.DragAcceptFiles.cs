@@ -6,10 +6,10 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static void DragAcceptFiles(IHandle hWnd, BOOL fAccept)
+        public static void DragAcceptFiles<T>(T hWnd, BOOL fAccept) where T : IHandle<HWND>
         {
-            DragAcceptFiles((HWND)hWnd.Handle, fAccept);
-            GC.KeepAlive(hWnd);
+            DragAcceptFiles(hWnd.Handle, fAccept);
+            GC.KeepAlive(hWnd.Wrapper);
         }
     }
 }

@@ -246,7 +246,7 @@ namespace System.Windows.Forms
             targetRect.X += (int)graphics.Transform.OffsetX;
             targetRect.Y += (int)graphics.Transform.OffsetY;
 
-            IntPtr dc = graphics.GetHdc();
+            HDC dc = (HDC)graphics.GetHdc();
 
             // want finally clause to release dc
             try
@@ -328,9 +328,9 @@ namespace System.Windows.Forms
                 // The ROP is SRCCOPY, so we can be simple here and take
                 // advantage of clipping regions.  Drawing the cursor
                 // is merely a matter of offsetting and clipping.
-                PInvoke.IntersectClipRect(this, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
+                PInvoke.IntersectClipRect(new HandleRef<HDC>(this, dc), targetX, targetY, targetX + clipWidth, targetY + clipHeight);
                 User32.DrawIconEx(
-                    (HDC)dc,
+                    dc,
                     targetX - imageX,
                     targetY - imageY,
                     this,

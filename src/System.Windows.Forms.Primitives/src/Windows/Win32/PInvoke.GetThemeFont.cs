@@ -8,7 +8,7 @@ namespace Windows.Win32
     {
         public static unsafe HRESULT GetThemeFont(IHandle hTheme, HDC hdc, int iPartId, int iStateId, int iPropId, out LOGFONTW pFont)
         {
-            HRESULT result = (HRESULT)GetThemeFont(hTheme.Handle, hdc, iPartId, iStateId, iPropId, out pFont).Value;
+            HRESULT result = GetThemeFont(hTheme.Handle, hdc, iPartId, iStateId, iPropId, out pFont);
             GC.KeepAlive(hTheme);
             return result;
         }

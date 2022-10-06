@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         ///  TLS is really just an unfortunate artifact of using Win 32.  We want the world to be free
         ///  threaded.
         /// </summary>
-        internal sealed class ThreadContext : MarshalByRefObject, IMsoComponent, IHandle
+        internal sealed class ThreadContext : MarshalByRefObject, IMsoComponent, IHandle<HANDLE>
         {
             private const int STATE_OLEINITIALIZED = 0x00000001;
             private const int STATE_EXTERNALOLEINIT = 0x00000002;
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
             private List<IMessageFilter> _messageFilters;
             private List<IMessageFilter> _messageFilterSnapshot;
             private int _inProcessFilters;
-            private IntPtr _handle;
+            private HANDLE _handle;
             private readonly uint _id;
             private int _messageLoopCount;
             private int _threadState;
@@ -518,10 +518,10 @@ namespace System.Windows.Forms
                                 finally
                                 {
                                     // We can always clean up this handle, though
-                                    if (_handle != IntPtr.Zero)
+                                    if (!_handle.IsNull)
                                     {
                                         PInvoke.CloseHandle(this);
-                                        _handle = IntPtr.Zero;
+                                        _handle = HANDLE.Null;
                                     }
 
                                     try
@@ -708,10 +708,10 @@ namespace System.Windows.Forms
             {
                 // Don't call OleUninitialize as the finalizer is called on the wrong thread.
                 // We can always clean up this handle, though.
-                if (_handle != IntPtr.Zero)
+                if (!_handle.IsNull)
                 {
-                    PInvoke.CloseHandle((HANDLE)_handle);
-                    _handle = IntPtr.Zero;
+                    PInvoke.CloseHandle(_handle);
+                    _handle = HANDLE.Null;
                 }
             }
 
@@ -777,7 +777,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the handle to this thread.
             /// </summary>
-            public nint Handle => _handle;
+            public HANDLE Handle => _handle;
+
+            HANDLE IHandle<HANDLE>.Handle => Handle;
 
             /// <summary>
             ///  Retrieves the ID of this thread.

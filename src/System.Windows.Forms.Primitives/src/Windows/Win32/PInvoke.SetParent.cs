@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static HWND SetParent<TChild, TParent>(in TChild hWndChild, in TParent hWndNewParent)
+        public static HWND SetParent<TChild, TParent>(TChild hWndChild, TParent hWndNewParent)
             where TChild : IHandle<HWND>
             where TParent : IHandle<HWND>
         {
