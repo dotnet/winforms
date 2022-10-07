@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop.Shell32;
+using IFileDialogEvents = Interop.Shell32.IFileDialogEvents;
 
 namespace System.Windows.Forms
 {

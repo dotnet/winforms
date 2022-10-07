@@ -2,10 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Com = Windows.Win32.System.Com;
 
 internal partial class Interop
 {
@@ -15,85 +15,81 @@ internal partial class Interop
         {
             public static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
             {
-                IntPtr* vtblRaw = (IntPtr*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IEnumStringVtbl), IntPtr.Size * 7);
-                vtblRaw[0] = fpQueryInterface;
-                vtblRaw[1] = fpAddRef;
-                vtblRaw[2] = fpRelease;
-                vtblRaw[3] = (IntPtr)(delegate* unmanaged<IntPtr, int, IntPtr*, int*, int>)&Next;
-                vtblRaw[4] = (IntPtr)(delegate* unmanaged<IntPtr, int, int>)&Skip;
-                vtblRaw[5] = (IntPtr)(delegate* unmanaged<IntPtr, int>)&Reset;
-                vtblRaw[6] = (IntPtr)(delegate* unmanaged<IntPtr, IntPtr*, int>)&Clone;
+                Com.IEnumString.Vtbl* vtblRaw = (Com.IEnumString.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IEnumStringVtbl), sizeof(Com.IEnumString.Vtbl));
+                vtblRaw->QueryInterface_1 = (delegate* unmanaged[Stdcall]<Com.IEnumString*, Guid*, void**, HRESULT>)fpQueryInterface;
+                vtblRaw->AddRef_2 = (delegate* unmanaged[Stdcall]<Com.IEnumString*, uint>)fpAddRef;
+                vtblRaw->Release_3 = (delegate* unmanaged[Stdcall]<Com.IEnumString*, uint>)fpRelease;
+                vtblRaw->Next_4 = &Next;
+                vtblRaw->Skip_5 = &Skip;
+                vtblRaw->Reset_6 = &Reset;
+                vtblRaw->Clone_7 = &Clone;
 
                 return (IntPtr)vtblRaw;
             }
 
-            [UnmanagedCallersOnly]
-            private static int Next(IntPtr thisPtr, int celt, IntPtr* rgelt, int* pceltFetched)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT Next(Com.IEnumString* @this, uint celt, PWSTR* rgelt, uint* pceltFetched)
             {
                 try
                 {
-                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
+                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)@this);
                     string[] elt = new string[celt];
-                    var result = instance.Next(celt, elt, (IntPtr)pceltFetched);
+                    var result = instance.Next((int)celt, elt, (nint)pceltFetched);
                     for (var i = 0; i < *pceltFetched; i++)
                     {
-                        rgelt[i] = Marshal.StringToCoTaskMemUni(elt[i]);
+                        rgelt[i] = (char*)Marshal.StringToCoTaskMemUni(elt[i]);
                     }
 
-                    return result;
+                    return (HRESULT)result;
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
-                    return ex.HResult;
+                    return ex;
                 }
             }
 
-            [UnmanagedCallersOnly]
-            private static int Skip(IntPtr thisPtr, int celt)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT Skip(Com.IEnumString* @this, uint celt)
             {
                 try
                 {
-                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
-                    return instance.Skip(celt);
+                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)@this);
+                    return (HRESULT)instance.Skip((int)celt);
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
-                    return ex.HResult;
+                    return ex;
                 }
             }
 
-            [UnmanagedCallersOnly]
-            private static int Reset(IntPtr thisPtr)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT Reset(Com.IEnumString* @this)
             {
                 try
                 {
-                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
+                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)@this);
                     instance.Reset();
-                    return S_OK;
+                    return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
-                    return ex.HResult;
+                    return ex;
                 }
             }
 
-            [UnmanagedCallersOnly]
-            private static int Clone(IntPtr thisPtr, IntPtr* ppenum)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT Clone(Com.IEnumString* @this, Com.IEnumString** ppenum)
             {
                 try
                 {
-                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)thisPtr);
+                    IEnumString instance = ComInterfaceDispatch.GetInstance<IEnumString>((ComInterfaceDispatch*)@this);
                     instance.Clone(out var cloned);
-                    *ppenum = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(cloned, CreateComInterfaceFlags.None);
-                    return S_OK;
+                    *ppenum = (Com.IEnumString*)WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(cloned, CreateComInterfaceFlags.None);
+                    return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
-                    return ex.HResult;
+                    return ex;
                 }
             }
         }

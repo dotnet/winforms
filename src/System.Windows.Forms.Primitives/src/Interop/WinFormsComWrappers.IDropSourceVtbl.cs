@@ -2,9 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
+using Windows.Win32.System.SystemServices;
 
 internal partial class Interop
 {
@@ -14,43 +15,41 @@ internal partial class Interop
         {
             public static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
             {
-                IntPtr* vtblRaw = (IntPtr*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDropSourceVtbl), IntPtr.Size * 5);
-                vtblRaw[0] = fpQueryInterface;
-                vtblRaw[1] = fpAddRef;
-                vtblRaw[2] = fpRelease;
-                vtblRaw[3] = (IntPtr)(delegate* unmanaged<IntPtr, BOOL, User32.MK, HRESULT>)&QueryContinueDrag;
-                vtblRaw[4] = (IntPtr)(delegate* unmanaged<IntPtr, Ole32.DROPEFFECT, HRESULT>)&GiveFeedback;
+                IDropSource.Vtbl* vtblRaw = (IDropSource.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDropSourceVtbl), sizeof(IDropSource.Vtbl));
+                vtblRaw->QueryInterface_1 = (delegate* unmanaged[Stdcall]<IDropSource*, Guid*, void**, HRESULT>)fpQueryInterface;
+                vtblRaw->AddRef_2 = (delegate* unmanaged[Stdcall]<IDropSource*, uint>)fpAddRef;
+                vtblRaw->Release_3 = (delegate* unmanaged[Stdcall]<IDropSource*, uint>)fpRelease;
+                vtblRaw->QueryContinueDrag_4 = &QueryContinueDrag;
+                vtblRaw->GiveFeedback_5 = &GiveFeedback;
 
                 return (IntPtr)vtblRaw;
             }
 
-            [UnmanagedCallersOnly]
-            private static HRESULT QueryContinueDrag(IntPtr thisPtr, BOOL fEscapePressed, User32.MK grfKeyState)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT QueryContinueDrag(IDropSource* @this, BOOL fEscapePressed, MODIFIERKEYS_FLAGS grfKeyState)
             {
                 try
                 {
-                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSource>((ComInterfaceDispatch*)thisPtr);
-                    return instance.QueryContinueDrag(fEscapePressed, grfKeyState);
+                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSource>((ComInterfaceDispatch*)@this);
+                    return instance.QueryContinueDrag(fEscapePressed, (User32.MK)grfKeyState);
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
-                    return (HRESULT)ex.HResult;
+                    return ex;
                 }
             }
 
-            [UnmanagedCallersOnly]
-            private static HRESULT GiveFeedback(IntPtr thisPtr, Ole32.DROPEFFECT dwEffect)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT GiveFeedback(IDropSource* @this, DROPEFFECT dwEffect)
             {
                 try
                 {
-                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSource>((ComInterfaceDispatch*)thisPtr);
-                    return instance.GiveFeedback(dwEffect);
+                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSource>((ComInterfaceDispatch*)@this);
+                    return instance.GiveFeedback((Ole32.DROPEFFECT)dwEffect);
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
-                    return (HRESULT)ex.HResult;
+                    return ex;
                 }
             }
         }

@@ -2,10 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Com = Windows.Win32.System.Com;
 
 internal partial class Interop
 {
@@ -15,30 +15,30 @@ internal partial class Interop
         {
             public static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
             {
-                IntPtr* vtblRaw = (IntPtr*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IEnumFORMATETCVtbl), IntPtr.Size * 7);
-                vtblRaw[0] = fpQueryInterface;
-                vtblRaw[1] = fpAddRef;
-                vtblRaw[2] = fpRelease;
-                vtblRaw[3] = (IntPtr)(delegate* unmanaged<IntPtr, int, FORMATETC*, int*, int>)&Next;
-                vtblRaw[4] = (IntPtr)(delegate* unmanaged<IntPtr, int, int>)&Skip;
-                vtblRaw[5] = (IntPtr)(delegate* unmanaged<IntPtr, int>)&Reset;
-                vtblRaw[6] = (IntPtr)(delegate* unmanaged<IntPtr, IntPtr*, int>)&Clone;
+                Com.IEnumFORMATETC.Vtbl* vtblRaw = (Com.IEnumFORMATETC.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IEnumFORMATETCVtbl), sizeof(Com.IEnumFORMATETC.Vtbl));
+                vtblRaw->QueryInterface_1 = (delegate* unmanaged[Stdcall]<Com.IEnumFORMATETC*, Guid*, void**, HRESULT>)fpQueryInterface;
+                vtblRaw->AddRef_2 = (delegate* unmanaged[Stdcall]<Com.IEnumFORMATETC*, uint>)fpAddRef;
+                vtblRaw->Release_3 = (delegate* unmanaged[Stdcall]<Com.IEnumFORMATETC*, uint>)fpRelease;
+                vtblRaw->Next_4 = &Next;
+                vtblRaw->Skip_5 = &Skip;
+                vtblRaw->Reset_6 = &Reset;
+                vtblRaw->Clone_7 = &Clone;
 
                 return (IntPtr)vtblRaw;
             }
 
-            [UnmanagedCallersOnly]
-            private static int Next(IntPtr thisPtr, int celt, FORMATETC* rgelt, int* pceltFetched)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT Next(Com.IEnumFORMATETC* @this, uint celt, Com.FORMATETC* rgelt, uint* pceltFetched)
             {
                 try
                 {
-                    IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)thisPtr);
+                    IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)@this);
                     FORMATETC[] elt = new FORMATETC[celt];
                     int[] celtFetched = new int[1];
 
                     // Eliminate null bang after https://github.com/dotnet/runtime/pull/68537 lands, or 
                     // IEnumFORMATETC annotations would be corrected.
-                    var result = instance.Next(celt, elt, pceltFetched is null ? null! : celtFetched);
+                    var result = instance.Next((int)celt, elt, pceltFetched is null ? null! : celtFetched);
                     for (var i = 0; i < celt; i++)
                     {
                         rgelt[i] = elt[i];
@@ -46,63 +46,59 @@ internal partial class Interop
 
                     if (pceltFetched is not null)
                     {
-                        *pceltFetched = celtFetched[0];
+                        *pceltFetched = (uint)celtFetched[0];
                     }
 
-                    return result;
+                    return (HRESULT)result;
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
-                    return ex.HResult;
+                    return ex;
                 }
             }
 
-            [UnmanagedCallersOnly]
-            private static int Skip(IntPtr thisPtr, int celt)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT Skip(Com.IEnumFORMATETC* @this, uint celt)
             {
-                IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)thisPtr);
+                IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)@this);
                 try
                 {
-                    return instance.Skip(celt);
+                    return (HRESULT)instance.Skip((int)celt);
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
-                    return ex.HResult;
+                    return ex;
                 }
             }
 
-            [UnmanagedCallersOnly]
-            private static int Reset(IntPtr thisPtr)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT Reset(Com.IEnumFORMATETC* @this)
             {
                 try
                 {
-                    IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)thisPtr);
+                    IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)@this);
                     instance.Reset();
-                    return S_OK;
+                    return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
-                    return ex.HResult;
+                    return ex;
                 }
             }
 
-            [UnmanagedCallersOnly]
-            private static int Clone(IntPtr thisPtr, IntPtr* ppenum)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT Clone(Com.IEnumFORMATETC* @this, Com.IEnumFORMATETC** ppenum)
             {
                 try
                 {
-                    IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)thisPtr);
+                    IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)@this);
                     instance.Clone(out var cloned);
-                    *ppenum = WinFormsComWrappers.Instance.GetComPointer(cloned, IID.IEnumFORMATETC);
-                    return S_OK;
+                    *ppenum = (Com.IEnumFORMATETC*)WinFormsComWrappers.Instance.GetComPointer(cloned, IID.IEnumFORMATETC);
+                    return HRESULT.S_OK;
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine(ex);
-                    return ex.HResult;
+                    return ex;
                 }
             }
         }

@@ -13,6 +13,10 @@
     -->
     <NoWarn>$(NoWarn);CS8981</NoWarn>
     <!--
+      We don't care about CLS compliance since everything here is internal and we want to match native types.
+    -->
+    <NoWarn>$(NoWarn);CS3016</NoWarn>
+    <!--
       IL Trim warnings which should be removed in order to make WinForms trimmable
       See https://github.com/dotnet/winforms/issues/4649
     -->
