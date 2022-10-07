@@ -179,7 +179,7 @@
       </trans-unit>
       <trans-unit id="AccessDenied">
         <source>Access denied</source>
-        <target state="new">Access denied</target>
+        <target state="translated">Zugriff verweigert</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionCheck">
