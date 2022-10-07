@@ -4,6 +4,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 
 internal partial class Interop
 {
@@ -13,41 +14,41 @@ internal partial class Interop
         {
             public static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
             {
-                IntPtr* vtblRaw = (IntPtr*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDropSourceNotifyVtbl), IntPtr.Size * 5);
-                vtblRaw[0] = fpQueryInterface;
-                vtblRaw[1] = fpAddRef;
-                vtblRaw[2] = fpRelease;
-                vtblRaw[3] = (IntPtr)(delegate* unmanaged<IntPtr, IntPtr, HRESULT>)&DragEnterTarget;
-                vtblRaw[4] = (IntPtr)(delegate* unmanaged<IntPtr, HRESULT>)&DragLeaveTarget;
+                IDropSourceNotify.Vtbl* vtblRaw = (IDropSourceNotify.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDropSourceNotifyVtbl), sizeof(IDropSourceNotify.Vtbl));
+                vtblRaw->QueryInterface_1 = (delegate* unmanaged[Stdcall]<IDropSourceNotify*, Guid*, void**, HRESULT>)fpQueryInterface;
+                vtblRaw->AddRef_2 = (delegate* unmanaged[Stdcall]<IDropSourceNotify*, uint>)fpAddRef;
+                vtblRaw->Release_3 = (delegate* unmanaged[Stdcall]<IDropSourceNotify*, uint>)fpRelease;
+                vtblRaw->DragEnterTarget_4 = &DragEnterTarget;
+                vtblRaw->DragLeaveTarget_5 = &DragLeaveTarget;
 
                 return (IntPtr)vtblRaw;
             }
 
-            [UnmanagedCallersOnly]
-            private static HRESULT DragEnterTarget(IntPtr thisPtr, IntPtr hwndTarget)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT DragEnterTarget(IDropSourceNotify* @this, HWND hwndTarget)
             {
                 try
                 {
-                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)thisPtr);
+                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)@this);
                     return instance.DragEnterTarget(hwndTarget);
                 }
                 catch (Exception ex)
                 {
-                    return (HRESULT)ex.HResult;
+                    return ex;
                 }
             }
 
-            [UnmanagedCallersOnly]
-            private static HRESULT DragLeaveTarget(IntPtr thisPtr)
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+            private static HRESULT DragLeaveTarget(IDropSourceNotify* @this)
             {
                 try
                 {
-                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)thisPtr);
+                    var instance = ComInterfaceDispatch.GetInstance<Ole32.IDropSourceNotify>((ComInterfaceDispatch*)@this);
                     return instance.DragLeaveTarget();
                 }
                 catch (Exception ex)
                 {
-                    return (HRESULT)ex.HResult;
+                    return ex;
                 }
             }
         }

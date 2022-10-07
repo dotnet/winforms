@@ -219,6 +219,11 @@ ICM_MODE
 ICON_*
 IDC_*
 IDI_*
+IDropSource
+IDropSourceNotify
+IEnumString
+IEnumFORMATETC
+IFileDialogEvents
 ImageList_Add
 ImageList_Create
 ImageList_Draw
@@ -250,6 +255,7 @@ IsChild
 IsProcessDPIAware
 IsThemeBackgroundPartiallyTransparent
 IsThemePartDefined
+IStream
 IsValidDpiAwarenessContext
 IsWindow
 IsWindowVisible
