@@ -663,9 +663,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            RECT rect = new RECT();
-            User32.GetClientRect(this, ref rect);
-
+            PInvoke.GetClientRect(this, out RECT rect);
             Color backColor = BackColor;
 
             if (backColor.HasTransparency())
@@ -677,7 +675,7 @@ namespace System.Windows.Forms
             else
             {
                 using var hbrush = new PInvoke.CreateBrushScope(backColor);
-                User32.FillRect((HDC)m.WParamInternal, ref rect, hbrush);
+                PInvoke.FillRect((HDC)m.WParamInternal, rect, hbrush);
             }
 
             m.ResultInternal = (LRESULT)1;

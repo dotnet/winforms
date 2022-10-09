@@ -100,14 +100,14 @@ namespace System.Drawing.Design
                             (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN),
                             0);
                         HWND hwndCtl = PInvoke.GetDlgItem((HWND)hwnd, (int)PInvoke.COLOR_MIX);
-                        User32.EnableWindow(hwndCtl, false);
+                        PInvoke.EnableWindow(hwndCtl, false);
                         PInvoke.SetWindowPos(
                             hwndCtl,
                             HWND.HWND_TOP,
                             0, 0, 0, 0,
                             SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW);
                         hwndCtl = PInvoke.GetDlgItem((HWND)hwnd, (int)User32.ID.OK);
-                        User32.EnableWindow(hwndCtl, false);
+                        PInvoke.EnableWindow(hwndCtl, false);
                         PInvoke.SetWindowPos(
                             hwndCtl,
                             HWND.HWND_TOP,
@@ -120,13 +120,13 @@ namespace System.Drawing.Design
                         if (PARAM.LOWORD(wParam) == (int)PInvoke.COLOR_ADD)
                         {
                             BOOL success = false;
-                            byte red = (byte)User32.GetDlgItemInt(hwnd, (int)PInvoke.COLOR_RED, &success, false);
+                            byte red = (byte)PInvoke.GetDlgItemInt((HWND)hwnd, (int)PInvoke.COLOR_RED, &success, false);
                             Debug.Assert(!success, "Couldn't find dialog member COLOR_RED");
 
-                            byte green = (byte)User32.GetDlgItemInt(hwnd, (int)PInvoke.COLOR_GREEN, &success, false);
+                            byte green = (byte)PInvoke.GetDlgItemInt((HWND)hwnd, (int)PInvoke.COLOR_GREEN, &success, false);
                             Debug.Assert(!success, "Couldn't find dialog member COLOR_GREEN");
 
-                            byte blue = (byte)User32.GetDlgItemInt(hwnd, (int)PInvoke.COLOR_BLUE, &success, false);
+                            byte blue = (byte)PInvoke.GetDlgItemInt((HWND)hwnd, (int)PInvoke.COLOR_BLUE, &success, false);
                             Debug.Assert(!success, "Couldn't find dialog member COLOR_BLUE");
 
                             Color = Color.FromArgb(red, green, blue);

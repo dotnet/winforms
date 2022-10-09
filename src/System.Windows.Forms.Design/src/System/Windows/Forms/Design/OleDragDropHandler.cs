@@ -581,7 +581,7 @@ namespace System.Windows.Forms.Design
             MSG msg = default;
             while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
             {
-                User32.TranslateMessage(ref msg);
+                PInvoke.TranslateMessage(msg);
                 User32.DispatchMessageW(ref msg);
             }
 

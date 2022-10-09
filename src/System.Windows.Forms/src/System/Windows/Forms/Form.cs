@@ -2613,7 +2613,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    User32.SetForegroundWindow(this);
+                    PInvoke.SetForegroundWindow(this);
                 }
             }
         }
@@ -2752,7 +2752,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void AdjustSystemMenu(IntPtr hmenu)
+        private void AdjustSystemMenu(HMENU hmenu)
         {
             UpdateWindowState();
             FormWindowState winState = WindowState;
@@ -2769,47 +2769,47 @@ namespace System.Windows.Forms
 
             if (!showMin)
             {
-                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.MINIMIZE, User32.MF.BYCOMMAND | User32.MF.GRAYED);
+                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.MINIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
             }
             else
             {
-                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.MINIMIZE, User32.MF.BYCOMMAND | User32.MF.ENABLED);
+                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.MINIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
             }
 
             if (!showMax)
             {
-                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.MAXIMIZE, User32.MF.BYCOMMAND | User32.MF.GRAYED);
+                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.MAXIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
             }
             else
             {
-                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.MAXIMIZE, User32.MF.BYCOMMAND | User32.MF.ENABLED);
+                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.MAXIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
             }
 
             if (!showClose)
             {
-                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.CLOSE, User32.MF.BYCOMMAND | User32.MF.GRAYED);
+                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.CLOSE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
             }
             else
             {
-                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.CLOSE, User32.MF.BYCOMMAND | User32.MF.ENABLED);
+                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.CLOSE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
             }
 
             if (!showRestore)
             {
-                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.RESTORE, User32.MF.BYCOMMAND | User32.MF.GRAYED);
+                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.RESTORE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
             }
             else
             {
-                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.RESTORE, User32.MF.BYCOMMAND | User32.MF.ENABLED);
+                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.RESTORE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
             }
 
             if (!showSize)
             {
-                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.SIZE, User32.MF.BYCOMMAND | User32.MF.GRAYED);
+                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.SIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
             }
             else
             {
-                User32.EnableMenuItem(new HandleRef(this, hmenu), User32.SC.SIZE, User32.MF.BYCOMMAND | User32.MF.ENABLED);
+                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.SIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
             }
         }
 
@@ -2916,11 +2916,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            IntPtr h = Handle;
-            RECT rc = new RECT();
-            User32.GetClientRect(new HandleRef(this, h), ref rc);
-            Rectangle currentClient = Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
-
+            PInvoke.GetClientRect(this, out RECT currentClient);
             Rectangle bounds = Bounds;
 
             // If the width is incorrect, compute the correct size with
@@ -2947,8 +2943,7 @@ namespace System.Windows.Forms
                 bounds.Width = correct.Width;
                 bounds.Height = correct.Height;
                 Bounds = bounds;
-                User32.GetClientRect(new HandleRef(this, h), ref rc);
-                currentClient = Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
+                PInvoke.GetClientRect(this, out currentClient);
             }
 
             // If it still isn't correct, then we assume that the problem is
@@ -4183,7 +4178,7 @@ namespace System.Windows.Forms
             {
                 Control button = (Control)AcceptButton;
                 var ptToSnap = new Point(button.Left + button.Width / 2, button.Top + button.Height / 2);
-                User32.ClientToScreen(new HandleRef(this, Handle), ref ptToSnap);
+                PInvoke.ClientToScreen(this, ref ptToSnap);
                 if (!button.IsWindowObscured)
                 {
                     Cursor.Position = ptToSnap;
@@ -4438,7 +4433,7 @@ namespace System.Windows.Forms
             bool retValue = false;
             MSG win32Message = msg;
             if (_ctlClient is not null && _ctlClient.Handle != IntPtr.Zero &&
-                User32.TranslateMDISysAccel(_ctlClient.Handle, ref win32Message))
+                PInvoke.TranslateMDISysAccel(_ctlClient.HWND, win32Message))
             {
                 retValue = true;
             }
@@ -5255,7 +5250,7 @@ namespace System.Windows.Forms
             if (!captureHwnd.IsNull)
             {
                 PInvoke.SendMessage(captureHwnd, User32.WM.CANCELMODE);
-                User32.ReleaseCapture();
+                PInvoke.ReleaseCapture();
             }
 
             HWND activeHwnd = PInvoke.GetActiveWindow();
@@ -5569,16 +5564,16 @@ namespace System.Windows.Forms
 
                 if (transparencyKey.IsEmpty)
                 {
-                    result = User32.SetLayeredWindowAttributes(this, 0, OpacityAsByte, User32.LWA.ALPHA);
+                    result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)0, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA);
                 }
                 else if (OpacityAsByte == 255)
                 {
                     // Windows doesn't do so well setting colorkey and alpha, so avoid it if we can
-                    result = User32.SetLayeredWindowAttributes(this, ColorTranslator.ToWin32(transparencyKey), 0, User32.LWA.COLORKEY);
+                    result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)transparencyKey, 0, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
                 }
                 else
                 {
-                    result = User32.SetLayeredWindowAttributes(this, ColorTranslator.ToWin32(transparencyKey), OpacityAsByte, User32.LWA.ALPHA | User32.LWA.COLORKEY);
+                    result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)transparencyKey, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA | LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
                 }
 
                 if (!result)
@@ -5597,7 +5592,7 @@ namespace System.Windows.Forms
 
             if (_ctlClient is null || !_ctlClient.IsHandleCreated)
             {
-                User32.SetMenu(this, IntPtr.Zero);
+                PInvoke.SetMenu(this, HMENU.Null);
             }
             else
             {
@@ -5627,11 +5622,11 @@ namespace System.Windows.Forms
                 if (mainMenuStrip is not null)
                 {
                     // If MainMenuStrip, we need to remove any Win32 Menu to make room for it.
-                    IntPtr hMenu = User32.GetMenu(this);
-                    if (hMenu != IntPtr.Zero)
+                    HMENU hMenu = PInvoke.GetMenu(this);
+                    if (hMenu != HMENU.Null)
                     {
                         // Remove the current menu.
-                        User32.SetMenu(this, IntPtr.Zero);
+                        PInvoke.SetMenu(this, HMENU.Null);
 
                         // because we have messed with the child's system menu by shoving in our own dummy menu,
                         // once we clear the main menu we're in trouble - this eats the close, minimize, maximize gadgets
@@ -5649,7 +5644,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            User32.DrawMenuBar(this);
+            PInvoke.DrawMenuBar(this);
             _formStateEx[FormStateExUpdateMenuHandlesDeferred] = 0;
         }
 
@@ -5774,8 +5769,8 @@ namespace System.Windows.Forms
 
                         // determine if we need to add control gadgets into the MenuStrip
                         // double check GetMenu incase someone is using interop
-                        IntPtr hMenu = User32.GetMenu(this);
-                        if (hMenu == IntPtr.Zero)
+                        HMENU hMenu = PInvoke.GetMenu(this);
+                        if (hMenu == HMENU.Null)
                         {
                             MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
                             if (sourceMenuStrip is not null)

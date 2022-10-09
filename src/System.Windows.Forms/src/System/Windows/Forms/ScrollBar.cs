@@ -598,10 +598,10 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SCROLLINFO si = new()
+            SCROLLINFO si = new()
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL,
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL,
                 nMin = _minimum,
                 nMax = _maximum,
                 nPage = (uint)LargeChange
@@ -618,8 +618,7 @@ namespace System.Windows.Forms
             }
 
             si.nTrackPos = 0;
-
-            User32.SetScrollInfo(this, User32.SB.CTL, ref si, true);
+            PInvoke.SetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_CTL, ref si, true);
         }
 
         private void WmReflectScroll(ref Message m)
@@ -695,13 +694,13 @@ namespace System.Windows.Forms
 
                 case ScrollEventType.ThumbPosition:
                 case ScrollEventType.ThumbTrack:
-                    User32.SCROLLINFO si = new()
+                    SCROLLINFO si = new()
                     {
-                        cbSize = (uint)sizeof(User32.SCROLLINFO),
-                        fMask = User32.SIF.TRACKPOS
+                        cbSize = (uint)sizeof(SCROLLINFO),
+                        fMask = SCROLLINFO_MASK.SIF_TRACKPOS
                     };
 
-                    User32.GetScrollInfo(this, User32.SB.CTL, ref si);
+                    PInvoke.GetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_CTL, ref si);
 
                     if (RightToLeft == RightToLeft.Yes)
                     {

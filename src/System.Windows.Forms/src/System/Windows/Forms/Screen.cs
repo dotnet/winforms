@@ -99,7 +99,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets an array of all of the displays on the system.
         /// </summary>
-        public unsafe static Screen[] AllScreens
+        public static unsafe Screen[] AllScreens
         {
             get
             {
@@ -137,47 +137,23 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets Bits per Pixel value.
         /// </summary>
-        public int BitsPerPixel
-        {
-            get
-            {
-                return _bitDepth;
-            }
-        }
+        public int BitsPerPixel => _bitDepth;
 
         /// <summary>
         ///  Gets the bounds of the display.
         /// </summary>
-        public Rectangle Bounds
-        {
-            get
-            {
-                return _bounds;
-            }
-        }
+        public Rectangle Bounds => _bounds;
 
         /// <summary>
         ///  Gets the device name associated with a display.
         /// </summary>
-        public string DeviceName
-        {
-            get
-            {
-                return _deviceName;
-            }
-        }
+        public string DeviceName => _deviceName;
 
         /// <summary>
         ///  Gets a value indicating whether a particular display is
         ///  the primary device.
         /// </summary>
-        public bool Primary
-        {
-            get
-            {
-                return _primary;
-            }
-        }
+        public bool Primary => _primary;
 
         /// <summary>
         ///  Gets the
@@ -274,33 +250,15 @@ namespace System.Windows.Forms
         ///  Specifies a value that indicates whether the specified object is equal to
         ///  this one.
         /// </summary>
-        public override bool Equals(object? obj)
-        {
-            if (obj is Screen comp)
-            {
-                if (_hmonitor == comp._hmonitor)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        public override bool Equals(object? obj) => obj is Screen comp && _hmonitor == comp._hmonitor;
 
         /// <summary>
         ///  Retrieves a <see cref="Screen"/> for the monitor that contains the specified point.
         /// </summary>
         public static Screen FromPoint(Point point)
-        {
-            if (SystemInformation.MultiMonitorSupport)
-            {
-                return new Screen(User32.MonitorFromPoint(point, User32.MONITOR.DEFAULTTONEAREST));
-            }
-            else
-            {
-                return new Screen((IntPtr)PRIMARY_MONITOR);
-            }
-        }
+            => SystemInformation.MultiMonitorSupport
+            ? new Screen(PInvoke.MonitorFromPoint(point, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST))
+            : new Screen((IntPtr)PRIMARY_MONITOR);
 
         /// <summary>
         ///  Retrieves a <see cref="Screen"/>
@@ -308,17 +266,9 @@ namespace System.Windows.Forms
         ///  largest region of the rectangle.
         /// </summary>
         public static Screen FromRectangle(Rectangle rect)
-        {
-            if (SystemInformation.MultiMonitorSupport)
-            {
-                RECT rc = rect;
-                return new Screen(User32.MonitorFromRect(ref rc, User32.MONITOR.DEFAULTTONEAREST));
-            }
-            else
-            {
-                return new Screen((IntPtr)PRIMARY_MONITOR, default);
-            }
-        }
+            => SystemInformation.MultiMonitorSupport
+            ? new Screen(PInvoke.MonitorFromRect(rect, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST))
+            : new Screen((IntPtr)PRIMARY_MONITOR, default);
 
         /// <summary>
         ///  Retrieves a <see cref="Screen"/> for the monitor that contains
@@ -336,70 +286,45 @@ namespace System.Windows.Forms
         ///  the largest region of the window.
         /// </summary>
         public static Screen FromHandle(IntPtr hwnd)
-        {
-            if (SystemInformation.MultiMonitorSupport)
-            {
-                return new Screen(User32.MonitorFromWindow(hwnd, User32.MONITOR.DEFAULTTONEAREST));
-            }
-            else
-            {
-                return new Screen((IntPtr)PRIMARY_MONITOR, default);
-            }
-        }
+            => SystemInformation.MultiMonitorSupport
+            ? new Screen(PInvoke.MonitorFromWindow((HWND)hwnd, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST))
+            : new Screen((IntPtr)PRIMARY_MONITOR, default);
 
         /// <summary>
         ///  Retrieves the working area for the monitor that is closest to the
         ///  specified point.
         /// </summary>
-        public static Rectangle GetWorkingArea(Point pt)
-        {
-            return FromPoint(pt).WorkingArea;
-        }
+        public static Rectangle GetWorkingArea(Point pt) => FromPoint(pt).WorkingArea;
 
         /// <summary>
         ///  Retrieves the working area for the monitor that contains the largest region
         ///  of the specified rectangle.
         /// </summary>
-        public static Rectangle GetWorkingArea(Rectangle rect)
-        {
-            return FromRectangle(rect).WorkingArea;
-        }
+        public static Rectangle GetWorkingArea(Rectangle rect) => FromRectangle(rect).WorkingArea;
 
         /// <summary>
         ///  Retrieves the working area for the monitor that contains the largest
         ///  region of the specified control.
         /// </summary>
-        public static Rectangle GetWorkingArea(Control ctl)
-        {
-            return FromControl(ctl).WorkingArea;
-        }
+        public static Rectangle GetWorkingArea(Control ctl) => FromControl(ctl).WorkingArea;
 
         /// <summary>
         ///  Retrieves the bounds of the monitor that is closest to the specified
         ///  point.
         /// </summary>
-        public static Rectangle GetBounds(Point pt)
-        {
-            return FromPoint(pt).Bounds;
-        }
+        public static Rectangle GetBounds(Point pt) => FromPoint(pt).Bounds;
 
         /// <summary>
         ///  Retrieves the bounds of the monitor that contains the largest region of the
         ///  specified rectangle.
         /// </summary>
-        public static Rectangle GetBounds(Rectangle rect)
-        {
-            return FromRectangle(rect).Bounds;
-        }
+        public static Rectangle GetBounds(Rectangle rect) => FromRectangle(rect).Bounds;
 
         /// <summary>
         ///  Retrieves the bounds of the monitor
         ///  that contains the largest region of the specified control.
         /// </summary>
-        public static Rectangle GetBounds(Control ctl)
-        {
-            return FromControl(ctl).Bounds;
-        }
+        public static Rectangle GetBounds(Control ctl) => FromControl(ctl).Bounds;
 
         /// <summary>
         ///  Computes and retrieves a hash code for an object.
@@ -437,9 +362,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves a string representing this object.
         /// </summary>
-        public override string ToString()
-        {
-            return GetType().Name + "[Bounds=" + _bounds.ToString() + " WorkingArea=" + WorkingArea.ToString() + " Primary=" + _primary.ToString() + " DeviceName=" + _deviceName;
-        }
+        public override string ToString() => $"{GetType().Name}[Bounds={_bounds} WorkingArea={WorkingArea} Primary={_primary} DeviceName={_deviceName}";
     }
 }

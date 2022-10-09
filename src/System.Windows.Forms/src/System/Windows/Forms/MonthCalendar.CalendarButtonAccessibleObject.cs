@@ -64,9 +64,7 @@ namespace System.Windows.Forms
 
             private static void RaiseMouseClick(int x, int y)
             {
-                Point previousPosition = new();
-                BOOL setOldCursorPos = User32.GetPhysicalCursorPos(ref previousPosition);
-
+                BOOL setOldCursorPos = PInvoke.GetPhysicalCursorPos(out Point previousPosition);
                 bool mouseSwapped = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_SWAPBUTTON) != 0;
 
                 SendMouseInput(x, y, User32.MOUSEEVENTF.MOVE | User32.MOUSEEVENTF.ABSOLUTE);

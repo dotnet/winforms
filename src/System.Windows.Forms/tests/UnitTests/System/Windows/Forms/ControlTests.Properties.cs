@@ -9283,13 +9283,13 @@ namespace System.Windows.Forms.Tests
             var keyState = new byte[256];
             fixed (byte* b = keyState)
             {
-                Assert.True(User32.GetKeyboardState(b));
+                Assert.True(PInvoke.GetKeyboardState(b));
                 keyState[(int)Keys.LButton] = lState;
                 keyState[(int)Keys.MButton] = mState;
                 keyState[(int)Keys.RButton] = rState;
                 keyState[(int)Keys.XButton1] = xState1;
                 keyState[(int)Keys.XButton2] = xState2;
-                User32.SetKeyboardState(b);
+                PInvoke.SetKeyboardState(b);
             }
 
             Assert.Equal(expected, Control.MouseButtons);

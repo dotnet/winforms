@@ -286,7 +286,7 @@ namespace System.Windows.Forms
 
                         if (peeked)
                         {
-                            useAnsi = msg.hwnd != IntPtr.Zero && !User32.IsWindowUnicode(msg.hwnd);
+                            useAnsi = msg.hwnd != IntPtr.Zero && !PInvoke.IsWindowUnicode(msg.hwnd);
                             if (useAnsi)
                             {
                                 peeked = User32.PeekMessageA(ref msg);
@@ -303,12 +303,12 @@ namespace System.Windows.Forms
                                 if (useAnsi)
                                 {
                                     User32.GetMessageA(ref msg);
-                                    Debug.Assert(!User32.IsWindowUnicode(msg.hwnd));
+                                    Debug.Assert(!PInvoke.IsWindowUnicode(msg.hwnd));
                                 }
                                 else
                                 {
                                     User32.GetMessageW(ref msg);
-                                    Debug.Assert(msg.hwnd == IntPtr.Zero || User32.IsWindowUnicode(msg.hwnd));
+                                    Debug.Assert(msg.hwnd == IntPtr.Zero || PInvoke.IsWindowUnicode(msg.hwnd));
                                 }
 
                                 if (msg.message == (uint)User32.WM.QUIT)
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
 
                                     if (uReason != msoloop.Main)
                                     {
-                                        User32.PostQuitMessage(PARAM.ToInt((nint)(nuint)msg.wParam));
+                                        PInvoke.PostQuitMessage(PARAM.ToInt((nint)(nuint)msg.wParam));
                                     }
 
                                     continueLoop = false;
@@ -335,7 +335,7 @@ namespace System.Windows.Forms
                                 // on the active component.
                                 if (!component.FPreTranslateMessage(&msg))
                                 {
-                                    User32.TranslateMessage(ref msg);
+                                    PInvoke.TranslateMessage(msg);
                                     if (useAnsi)
                                     {
                                         User32.DispatchMessageA(ref msg);

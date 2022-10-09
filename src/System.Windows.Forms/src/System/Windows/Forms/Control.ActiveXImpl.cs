@@ -692,7 +692,7 @@ namespace System.Windows.Forms
 
                         if (_accelTable != IntPtr.Zero)
                         {
-                            User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
+                            PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(this, (HACCEL)_accelTable));
                             _accelTable = IntPtr.Zero;
                         }
 
@@ -1940,7 +1940,7 @@ namespace System.Windows.Forms
 
                 if (_clientSite is null && _accelTable != IntPtr.Zero)
                 {
-                    User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
+                    PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(this, (HACCEL)_accelTable));
                     _accelTable = IntPtr.Zero;
                     _accelCount = -1;
                 }
@@ -2224,8 +2224,8 @@ namespace System.Windows.Forms
                                 // otherwise the host may never send the key to our wndproc.
 
                                 // Someone returned true from IsInputKey or IsInputChar
-                                User32.TranslateMessage(ref *lpmsg);
-                                if (User32.IsWindowUnicode(lpmsg->hwnd))
+                                PInvoke.TranslateMessage(*lpmsg);
+                                if (PInvoke.IsWindowUnicode(lpmsg->hwnd))
                                 {
                                     User32.DispatchMessageW(ref *lpmsg);
                                 }

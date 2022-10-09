@@ -11,7 +11,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
@@ -609,7 +608,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // Translate rect to screen coordinates
             var pt = new Point(rect.X, rect.Y);
-            User32.ClientToScreen(new HandleRef(this, Handle), ref pt);
+            PInvoke.ClientToScreen(this, ref pt);
 
             Rectangle parent = gridEntry.OwnerGrid.GridViewAccessibleObject.Bounds;
 

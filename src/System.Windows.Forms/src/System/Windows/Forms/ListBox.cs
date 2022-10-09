@@ -1551,8 +1551,7 @@ namespace System.Windows.Forms
         {
             // NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
             // call Sendmessage.
-            RECT r = new RECT();
-            GetClientRect(new HandleRef(this, Handle), ref r);
+            PInvoke.GetClientRect(this, out RECT r);
             if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
             {
                 int index = (int)PInvoke.SendMessage(this, (WM)LB.ITEMFROMPOINT, 0, PARAM.FromLowHigh(x, y));

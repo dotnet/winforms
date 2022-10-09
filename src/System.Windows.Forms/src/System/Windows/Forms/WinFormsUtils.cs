@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int lastXY = (int)User32.GetMessagePos();
+                int lastXY = (int)PInvoke.GetMessagePos();
                 return new Point(PARAM.SignedLOWORD(lastXY), PARAM.SignedHIWORD(lastXY));
             }
         }

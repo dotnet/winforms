@@ -2243,13 +2243,13 @@ namespace System.Windows.Forms
                 pt = PointToClient(point)
             };
 
-            User32.SCROLLINFO si = new()
+            SCROLLINFO si = new()
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.POS
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_POS
             };
 
-            if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si))
+            if (PInvoke.GetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_HORZ, ref si))
             {
                 lvhi.pt.X += si.nPos;
             }
@@ -4988,10 +4988,8 @@ namespace System.Windows.Forms
             HWND headerWindow = PInvoke.GetWindow(this, GET_WINDOW_CMD.GW_CHILD);
             if (!headerWindow.IsNull)
             {
-                RECT clientRect = default;
                 WINDOWPOS position = default;
-                User32.GetClientRect(this, ref clientRect);
-
+                PInvoke.GetClientRect(this, out RECT clientRect);
                 var hd = new User32.HDLAYOUT
                 {
                     prc = &clientRect,

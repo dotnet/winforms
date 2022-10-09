@@ -242,7 +242,7 @@ namespace System.Windows.Forms
         internal bool IsHandleCreated => _handle != IntPtr.Zero;
 
         internal bool InvokeRequired => IsHandleCreated &&
-            User32.GetWindowThreadProcessId(_handle, out _) != PInvoke.GetCurrentThreadId();
+            PInvoke.GetWindowThreadProcessId(_handle, out _) != PInvoke.GetCurrentThreadId();
 
         /// <summary>
         ///   Gets or sets the current count of stack frames that are in the

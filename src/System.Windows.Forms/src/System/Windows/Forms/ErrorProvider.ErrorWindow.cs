@@ -408,7 +408,7 @@ namespace System.Windows.Forms
 
                 using Graphics g = hdc.CreateGraphics();
                 using PInvoke.RegionScope windowRegionHandle = new(windowRegion, g);
-                if (User32.SetWindowRgn(this, windowRegionHandle, fRedraw: true) != 0)
+                if (PInvoke.SetWindowRgn(this, windowRegionHandle, fRedraw: true) != 0)
                 {
                     // The HWnd owns the region.
                     windowRegionHandle.RelinquishOwnership();

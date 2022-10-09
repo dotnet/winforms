@@ -406,7 +406,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// <remarks>Throws an ArgumentException if the given key(s) is null or the empty string.</remarks>
         /// <returns>Whether or not the key(s) were pressed on the process</returns>
         /// <seealso cref="System.Diagnostics.Process.MainWindowHandle"/>
-        /// <seealso cref="SetForegroundWindow(IntPtr)"/>
+        /// <seealso cref="PInvoke.SetForegroundWindow{T}(T)"/>
         /// <seealso cref="PInvoke.GetForegroundWindow()"/>
         /// <seealso cref="System.Windows.Forms.SendKeys.SendWait(string)"/>
         /// <seealso cref="System.Threading.Thread.Sleep(int)"/>
@@ -427,18 +427,18 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 throw new ArgumentException(nameof(keys) + " must not be null or empty.");
             }
 
-            IntPtr mainWindowHandle = process.MainWindowHandle;
+            HWND mainWindowHandle = (HWND)process.MainWindowHandle;
 
             if (switchToMainWindow)
             {
-                SetForegroundWindow(mainWindowHandle);
+                PInvoke.SetForegroundWindow(mainWindowHandle);
             }
 
             HWND foregroundWindow = PInvoke.GetForegroundWindow();
 
             string windowTitle = GetWindowText(foregroundWindow);
 
-            if (GetWindowThreadProcessId(foregroundWindow, out uint processId) == 0 ||
+            if (PInvoke.GetWindowThreadProcessId(foregroundWindow, out uint processId) == 0 ||
                 processId != process.Id)
             {
                 Debug.WriteLine($"ForegroundWindow doesn't belong the test process! The current window is {windowTitle}.");

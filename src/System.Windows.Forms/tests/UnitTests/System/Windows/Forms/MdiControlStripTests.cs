@@ -305,8 +305,8 @@ namespace System.Windows.Forms.Tests
             mdiParent.MainMenuStrip = null;
             mdiParent.MainMenuStrip = menuStrip;
             mdiParent.MainMenuStrip = null;
-            IntPtr menuHandle = User32.GetMenu(mdiParent.Handle);
-            int menuItemCount = User32.GetMenuItemCount(menuHandle);
+            IntPtr menuHandle = PInvoke.GetMenu((HWND)mdiParent.Handle);
+            int menuItemCount = PInvoke.GetMenuItemCount((HMENU)menuHandle);
             // Four buttons: System, Minimize, Maximize, Close
             Assert.True(menuItemCount == 4);
         }

@@ -90,7 +90,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (_thisProcessId == 0)
                     {
-                        User32.GetWindowThreadProcessId(_control, out _thisProcessId);
+                        PInvoke.GetWindowThreadProcessId(_control, out _thisProcessId);
                     }
 
                     _callBack = MouseHookProc;
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            private bool ProcessMouseDown(IntPtr hwnd)
+            private bool ProcessMouseDown(HWND hwnd)
             {
                 // If we put up the "invalid" message box, it appears this method is getting called reentrantly
                 // when it shouldn't be. This prevents us from recursing.
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Debug.Assert(_thisProcessId != 0, "Didn't get our process id!");
 
                     // Make sure the window is in our process.
-                    User32.GetWindowThreadProcessId(hwnd, out uint pid);
+                    PInvoke.GetWindowThreadProcessId(hwnd, out uint pid);
 
                     // If this isn't our process, unhook the mouse.
                     if (pid != _thisProcessId)
