@@ -11,12 +11,21 @@ namespace System.Windows.Forms.Primitives
     internal static partial class LocalAppContextSwitches
     {
         private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
+        private const string EnableImprovedAnchorLayoutSwitchName = "System.Windows.Forms.EnableImprovedAnchorLayout";
 
         private static int s_scaleTopLevelFormMinMaxSizeForDpi;
+        private static int s_enableImprovedAnchorLayout;
+
         public static bool ScaleTopLevelFormMinMaxSizeForDpi
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => GetCachedSwitchValue(ScaleTopLevelFormMinMaxSizeForDpiSwitchName, ref s_scaleTopLevelFormMinMaxSizeForDpi);
+        }
+
+        public static bool EnableImprovedAnchorLayout
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => GetCachedSwitchValue(EnableImprovedAnchorLayoutSwitchName, ref s_enableImprovedAnchorLayout);
         }
 
         private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();

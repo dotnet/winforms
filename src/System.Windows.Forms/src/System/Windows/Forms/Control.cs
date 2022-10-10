@@ -15,6 +15,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 using static Interop;
 using Encoding = System.Text.Encoding;
@@ -2223,6 +2224,25 @@ namespace System.Windows.Forms
             }
 
             _dpiFonts.Clear();
+        }
+
+        /// <summary>
+        /// Updates anchor calculations if the control is parented and both control's and its parent's handle are created.
+        /// This is the new behavior introduced in .NET 8.0. Please refer to
+        /// https://github.com/microsoft/winforms-designer/blob/main/docs/ImprovedAnchorLayout.md for more details.
+        /// Developers may opt-out of this new behavior using switch <see cref="LocalAppContextSwitches.EnableImprovedAnchorLayout"/>.
+        /// </summary>
+        private void UpdateAnchorsIfRequired()
+        {
+            if (!LocalAppContextSwitches.EnableImprovedAnchorLayout)
+            {
+                return;
+            }
+
+            if (IsHandleCreated && Parent is not null && Parent.IsHandleCreated)
+            {
+                DefaultLayout.UpdateAnchorInfo(this, enableImprovedAnchorLayout: true);
+            }
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
@@ -7714,8 +7734,7 @@ namespace System.Windows.Forms
                 {
                     for (int i = 0; i < controlsCollection.Count; i++)
                     {
-                        Control ctl = controlsCollection[i];
-                        ctl.OnParentBecameInvisible();
+                        controlsCollection[i].OnParentBecameInvisible();
                     }
                 }
             }
@@ -7862,6 +7881,8 @@ namespace System.Windows.Forms
             {
                 OnTopMostActiveXParentChanged(EventArgs.Empty);
             }
+
+            UpdateAnchorsIfRequired();
         }
 
         /// <summary>
@@ -7907,6 +7928,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCreateControl()
         {
+            UpdateAnchorsIfRequired();
         }
 
         /// <summary>
@@ -10210,8 +10232,9 @@ namespace System.Windows.Forms
                 {
                     for (int i = 0; i < controlsCollection.Count; i++)
                     {
-                        LayoutEngine.InitLayout(controlsCollection[i], BoundsSpecified.All);
-                        CommonProperties.xClearPreferredSizeCache(controlsCollection[i]);
+                        Control control = controlsCollection[i];
+                        LayoutEngine.InitLayout(control, BoundsSpecified.All);
+                        CommonProperties.xClearPreferredSizeCache(control);
                     }
                 }
             }
@@ -10586,7 +10609,7 @@ namespace System.Windows.Forms
             if (DpiHelper.IsScalingRequirementMet && (ParentInternal is not null) && (ParentInternal.LayoutEngine == DefaultLayout.Instance))
             {
                 // We need to scale AnchorInfo to update distances to container edges
-                DefaultLayout.ScaleAnchorInfo((IArrangedElement)this, factor);
+                DefaultLayout.ScaleAnchorInfo(this, factor);
             }
 
             // Set in the scaled bounds as constrained by the newly scaled min/max size.
@@ -10837,6 +10860,7 @@ namespace System.Windows.Forms
                 _height != height)
             {
                 SetBoundsCore(x, y, width, height, specified);
+                UpdateAnchorsIfRequired();
 
                 // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
                 // have refreshed the interior layout or the resized control.  We only need to layout

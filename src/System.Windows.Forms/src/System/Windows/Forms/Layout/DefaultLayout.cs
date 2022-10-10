@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms.Layout
 {
@@ -84,7 +85,7 @@ namespace System.Windows.Forms.Layout
             Rectangle oldBounds = GetCachedBounds(element);
             Point location = oldBounds.Location;
 
-            Debug.Assert((CommonProperties.GetAutoSizeMode(element) == AutoSizeMode.GrowAndShrink || (newSize.Height >= oldBounds.Height && newSize.Width >= oldBounds.Width)),
+            Debug.Assert(CommonProperties.GetAutoSizeMode(element) == AutoSizeMode.GrowAndShrink || (newSize.Height >= oldBounds.Height && newSize.Width >= oldBounds.Width),
                 "newSize expected to be >= current size.");
 
             if ((direction & GrowthDirection.Left) != GrowthDirection.None)
@@ -101,7 +102,7 @@ namespace System.Windows.Forms.Layout
 
             Rectangle newBounds = new Rectangle(location, newSize);
 
-            Debug.Assert((CommonProperties.GetAutoSizeMode(element) == AutoSizeMode.GrowAndShrink || newBounds.Contains(oldBounds)), "How did we resize in such a way we no longer contain our old bounds?");
+            Debug.Assert(CommonProperties.GetAutoSizeMode(element) == AutoSizeMode.GrowAndShrink || newBounds.Contains(oldBounds), "How did we resize in such a way we no longer contain our old bounds?");
 
             return newBounds;
         }
@@ -162,6 +163,75 @@ namespace System.Windows.Forms.Layout
                 Debug.WriteLine($"\t\t'{element}' is anchored at {GetCachedBounds(element)}");
             }
 
+            return LocalAppContextSwitches.EnableImprovedAnchorLayout
+                ? ComputeAnchorDestination(element, displayRect)
+                : ComputeLegacyAnchorDestination(element, displayRect, measureOnly);
+        }
+
+        private static Rectangle ComputeAnchorDestination(IArrangedElement element, Rectangle displayRect)
+        {
+            var anchorInfo = GetAnchorInfo(element);
+
+            if (anchorInfo is null || displayRect.IsEmpty)
+            {
+                return element.Bounds;
+            }
+
+            Rectangle elementBounds = element.Bounds;
+            int x = anchorInfo.Left;
+            int width = elementBounds.Width;
+            int y = anchorInfo.Top;
+            int height = elementBounds.Height;
+
+            if (x < 0 || width < 0 || y < 0 || height < 0)
+            {
+                Debug.WriteLine($"\t\t'{element}' destination bounds resulted in negative");
+            }
+
+            AnchorStyles anchor = GetAnchor(element);
+            if (IsAnchored(anchor, AnchorStyles.Left))
+            {
+                if (IsAnchored(anchor, AnchorStyles.Right))
+                {
+                    width = displayRect.Width - (anchorInfo.Right + x);
+                }
+            }
+            else
+            {
+                x = IsAnchored(anchor, AnchorStyles.Right)
+                    ? displayRect.Width - elementBounds.Width - anchorInfo.Right
+                    : (int)(anchorInfo.Left * (((float)displayRect.Width - elementBounds.Width) / (anchorInfo.Left + anchorInfo.Right)));
+            }
+
+            if (IsAnchored(anchor, AnchorStyles.Top))
+            {
+                if (IsAnchored(anchor, AnchorStyles.Bottom))
+                {
+                    height = displayRect.Height - (anchorInfo.Bottom + y);
+                }
+            }
+            else
+            {
+                y = IsAnchored(anchor, AnchorStyles.Bottom)
+                    ? displayRect.Height - elementBounds.Height - anchorInfo.Bottom
+                    : (int)(anchorInfo.Top * (((float)displayRect.Height - elementBounds.Height) / (anchorInfo.Top + anchorInfo.Bottom)));
+            }
+
+            if (x < 0)
+            {
+                x = 0;
+            }
+
+            if (y < 0)
+            {
+                y = 0;
+            }
+
+            return new Rectangle(x, y, width, height);
+        }
+
+        private static Rectangle ComputeLegacyAnchorDestination(IArrangedElement element, Rectangle displayRect, bool measureOnly)
+        {
             AnchorInfo layout = GetAnchorInfo(element);
 
             int left = layout.Left + displayRect.X;
@@ -170,10 +240,10 @@ namespace System.Windows.Forms.Layout
             int bottom = layout.Bottom + displayRect.Y;
 
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...anchor dim (l,t,r,b) {"
-                              + (left)
-                              + ", " + (top)
-                              + ", " + (right)
-                              + ", " + (bottom)
+                              + left
+                              + ", " + top
+                              + ", " + right
+                              + ", " + bottom
                               + "}");
 
             AnchorStyles anchor = GetAnchor(element);
@@ -192,8 +262,8 @@ namespace System.Windows.Forms.Layout
             else if (!IsAnchored(anchor, AnchorStyles.Left))
             {
                 Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting left & right");
-                right += (displayRect.Width / 2);
-                left += (displayRect.Width / 2);
+                right += displayRect.Width / 2;
+                left += displayRect.Width / 2;
             }
 
             if (IsAnchored(anchor, AnchorStyles.Bottom))
@@ -210,8 +280,8 @@ namespace System.Windows.Forms.Layout
             else if (!IsAnchored(anchor, AnchorStyles.Top))
             {
                 Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting top & bottom");
-                bottom += (displayRect.Height / 2);
-                top += (displayRect.Height / 2);
+                bottom += displayRect.Height / 2;
+                top += displayRect.Height / 2;
             }
 
             if (!measureOnly)
@@ -271,10 +341,10 @@ namespace System.Windows.Forms.Layout
             }
 
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...new anchor dim (l,t,r,b) {"
-                                                                      + (left)
-                                                                      + ", " + (top)
-                                                                      + ", " + (right)
-                                                                      + ", " + (bottom)
+                                                                      + left
+                                                                      + ", " + top
+                                                                      + ", " + right
+                                                                      + ", " + bottom
                                                                       + "}");
 
             return new Rectangle(left, top, right - left, bottom - top);
@@ -284,6 +354,11 @@ namespace System.Windows.Forms.Layout
         {
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\tAnchor Processing");
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\tdisplayRect: " + container.DisplayRectangle.ToString());
+
+            if(!IsReadyForAnchorLayout(container))
+            {
+                return;
+            }
 
             Rectangle displayRectangle = container.DisplayRectangle;
             if (CommonProperties.GetAutoSize(container) && ((displayRectangle.Width == 0) || (displayRectangle.Height == 0)))
@@ -297,11 +372,18 @@ namespace System.Windows.Forms.Layout
             for (int i = children.Count - 1; i >= 0; i--)
             {
                 IArrangedElement element = children[i];
-                if (CommonProperties.GetNeedsAnchorLayout(element))
+                if (!IsReadyForAnchorLayout(container) || !CommonProperties.GetNeedsAnchorLayout(element))
                 {
-                    Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
-                    SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, /*measureOnly=*/false));
+                    continue;
                 }
+
+                Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
+                SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, /*measureOnly=*/false));
+            }
+
+            static bool IsReadyForAnchorLayout(IArrangedElement element)
+            {
+                return LocalAppContextSwitches.EnableImprovedAnchorLayout ? element is not Control control || control.IsHandleCreated : true;
             }
         }
 
@@ -518,7 +600,7 @@ namespace System.Windows.Forms.Layout
                 desiredSize = element.Bounds.Size;
             }
 
-            Debug.Assert((desiredSize.Width >= 0 && desiredSize.Height >= 0), "Error detected in xGetDockSize: Element size was negative.");
+            Debug.Assert(desiredSize.Width >= 0 && desiredSize.Height >= 0, "Error detected in xGetDockSize: Element size was negative.");
             return desiredSize;
         }
 
@@ -626,9 +708,14 @@ namespace System.Windows.Forms.Layout
         ///  Updates the Anchor information based on the controls current bounds. This should only be called
         ///  when the parent control changes or the anchor mode changes.
         /// </summary>
-        private static void UpdateAnchorInfo(IArrangedElement element)
+        internal static void UpdateAnchorInfo(IArrangedElement element, bool enableImprovedAnchorLayout = false)
         {
             Debug.Assert(!HasCachedBounds(element.Container), "Do not call this method with an active cached bounds list.");
+
+            if (!CommonProperties.GetNeedsAnchorLayout(element))
+            {
+                return;
+            }
 
             AnchorInfo anchorInfo = GetAnchorInfo(element);
             if (anchorInfo is null)
@@ -641,96 +728,124 @@ namespace System.Windows.Forms.Layout
             Debug.Indent();
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, element.Container is null ? "No parent" : "Parent");
 
-            if (CommonProperties.GetNeedsAnchorLayout(element) && element.Container is not null)
+            if (element.Container is null)
             {
-                Rectangle bounds = GetCachedBounds(element);
-                AnchorInfo oldAnchorInfo = new AnchorInfo
-                {
-                    Left = anchorInfo.Left,
-                    Top = anchorInfo.Top,
-                    Right = anchorInfo.Right,
-                    Bottom = anchorInfo.Bottom
-                };
-
-                anchorInfo.Left = element.Bounds.Left;
-                anchorInfo.Top = element.Bounds.Top;
-                anchorInfo.Right = element.Bounds.Right;
-                anchorInfo.Bottom = element.Bounds.Bottom;
-
-                Rectangle parentDisplayRect = element.Container.DisplayRectangle;
-                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "Parent displayRectangle" + parentDisplayRect);
-                int parentWidth = parentDisplayRect.Width;
-                int parentHeight = parentDisplayRect.Height;
-
-                // The anchor is relative to the parent DisplayRectangle, so offset the anchor
-                // by the DisplayRect origin
-                anchorInfo.Left -= parentDisplayRect.X;
-                anchorInfo.Top -= parentDisplayRect.Y;
-                anchorInfo.Right -= parentDisplayRect.X;
-                anchorInfo.Bottom -= parentDisplayRect.Y;
-
-                AnchorStyles anchor = GetAnchor(element);
-                if (IsAnchored(anchor, AnchorStyles.Right))
-                {
-                    if (DpiHelper.IsScalingRequirementMet && (anchorInfo.Right - parentWidth > 0) && (oldAnchorInfo.Right < 0))
-                    {
-                        // Parent was resized to fit its parent, or screen, we need to reuse old anchor info to prevent losing control beyond right edge.
-                        anchorInfo.Right = oldAnchorInfo.Right;
-                        if (!IsAnchored(anchor, AnchorStyles.Left))
-                        {
-                            // Control might have been resized, update Left anchor.
-                            anchorInfo.Left = oldAnchorInfo.Right - bounds.Width;
-                        }
-                    }
-                    else
-                    {
-                        anchorInfo.Right -= parentWidth;
-
-                        if (!IsAnchored(anchor, AnchorStyles.Left))
-                        {
-                            anchorInfo.Left -= parentWidth;
-                        }
-                    }
-                }
-                else if (!IsAnchored(anchor, AnchorStyles.Left))
-                {
-                    anchorInfo.Right -= (parentWidth / 2);
-                    anchorInfo.Left -= (parentWidth / 2);
-                }
-
-                if (IsAnchored(anchor, AnchorStyles.Bottom))
-                {
-                    if (DpiHelper.IsScalingRequirementMet && (anchorInfo.Bottom - parentHeight > 0) && (oldAnchorInfo.Bottom < 0))
-                    {
-                        // Parent was resized to fit its parent, or screen, we need to reuse old anchor info to prevent losing control beyond bottom edge.
-                        anchorInfo.Bottom = oldAnchorInfo.Bottom;
-
-                        if (!IsAnchored(anchor, AnchorStyles.Top))
-                        {
-                            // Control might have been resized, update Top anchor.
-                            anchorInfo.Top = oldAnchorInfo.Bottom - bounds.Height;
-                        }
-                    }
-                    else
-                    {
-                        anchorInfo.Bottom -= parentHeight;
-
-                        if (!IsAnchored(anchor, AnchorStyles.Top))
-                        {
-                            anchorInfo.Top -= parentHeight;
-                        }
-                    }
-                }
-                else if (!IsAnchored(anchor, AnchorStyles.Top))
-                {
-                    anchorInfo.Bottom -= (parentHeight / 2);
-                    anchorInfo.Top -= (parentHeight / 2);
-                }
-
-                Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "anchor info (l,t,r,b): (" + anchorInfo.Left + ", " + anchorInfo.Top + ", " + anchorInfo.Right + ", " + anchorInfo.Bottom + ")");
+                return;
             }
 
+            if (enableImprovedAnchorLayout)
+            {
+                ComputeAnchorInfo(element, anchorInfo);
+            }
+            else
+            {
+                ComputeLegacyAnchorInfo(element, anchorInfo);
+            }
+        }
+
+        private static void ComputeLegacyAnchorInfo(IArrangedElement element, AnchorInfo anchorInfo)
+        {
+            Rectangle bounds = GetCachedBounds(element);
+            AnchorInfo oldAnchorInfo = new AnchorInfo
+            {
+                Left = anchorInfo.Left,
+                Top = anchorInfo.Top,
+                Right = anchorInfo.Right,
+                Bottom = anchorInfo.Bottom
+            };
+
+            anchorInfo.Left = element.Bounds.Left;
+            anchorInfo.Top = element.Bounds.Top;
+            anchorInfo.Right = element.Bounds.Right;
+            anchorInfo.Bottom = element.Bounds.Bottom;
+
+            Rectangle parentDisplayRect = element.Container.DisplayRectangle;
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "Parent displayRectangle" + parentDisplayRect);
+            int parentWidth = parentDisplayRect.Width;
+            int parentHeight = parentDisplayRect.Height;
+
+            // The anchor is relative to the parent DisplayRectangle, so offset the anchor
+            // by the DisplayRect origin
+            anchorInfo.Left -= parentDisplayRect.X;
+            anchorInfo.Top -= parentDisplayRect.Y;
+            anchorInfo.Right -= parentDisplayRect.X;
+            anchorInfo.Bottom -= parentDisplayRect.Y;
+
+            AnchorStyles anchor = GetAnchor(element);
+            if (IsAnchored(anchor, AnchorStyles.Right))
+            {
+                if (DpiHelper.IsScalingRequirementMet && (anchorInfo.Right - parentWidth > 0) && (oldAnchorInfo.Right < 0))
+                {
+                    // Parent was resized to fit its parent, or screen, we need to reuse old anchor info to prevent losing control beyond right edge.
+                    anchorInfo.Right = oldAnchorInfo.Right;
+                    if (!IsAnchored(anchor, AnchorStyles.Left))
+                    {
+                        // Control might have been resized, update Left anchor.
+                        anchorInfo.Left = oldAnchorInfo.Right - bounds.Width;
+                    }
+                }
+                else
+                {
+                    anchorInfo.Right -= parentWidth;
+
+                    if (!IsAnchored(anchor, AnchorStyles.Left))
+                    {
+                        anchorInfo.Left -= parentWidth;
+                    }
+                }
+            }
+            else if (!IsAnchored(anchor, AnchorStyles.Left))
+            {
+                anchorInfo.Right -= parentWidth / 2;
+                anchorInfo.Left -= parentWidth / 2;
+            }
+
+            if (IsAnchored(anchor, AnchorStyles.Bottom))
+            {
+                if (DpiHelper.IsScalingRequirementMet && (anchorInfo.Bottom - parentHeight > 0) && (oldAnchorInfo.Bottom < 0))
+                {
+                    // Parent was resized to fit its parent, or screen, we need to reuse old anchor info to prevent losing control beyond bottom edge.
+                    anchorInfo.Bottom = oldAnchorInfo.Bottom;
+
+                    if (!IsAnchored(anchor, AnchorStyles.Top))
+                    {
+                        // Control might have been resized, update Top anchor.
+                        anchorInfo.Top = oldAnchorInfo.Bottom - bounds.Height;
+                    }
+                }
+                else
+                {
+                    anchorInfo.Bottom -= parentHeight;
+
+                    if (!IsAnchored(anchor, AnchorStyles.Top))
+                    {
+                        anchorInfo.Top -= parentHeight;
+                    }
+                }
+            }
+            else if (!IsAnchored(anchor, AnchorStyles.Top))
+            {
+                anchorInfo.Bottom -= parentHeight / 2;
+                anchorInfo.Top -= parentHeight / 2;
+            }
+
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "anchor info (l,t,r,b): (" + anchorInfo.Left + ", " + anchorInfo.Top + ", " + anchorInfo.Right + ", " + anchorInfo.Bottom + ")");
             Debug.Unindent();
+        }
+
+        private static void ComputeAnchorInfo(IArrangedElement element, AnchorInfo anchorInfo)
+        {
+            Rectangle displayRect = element.Container.DisplayRectangle;
+            Rectangle elementBounds = element.Bounds;
+
+            int x = elementBounds.X;
+            int y = elementBounds.Y;
+
+            anchorInfo.Left = x;
+            anchorInfo.Top = y;
+
+            anchorInfo.Right = displayRect.Width - (x + elementBounds.Width);
+            anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
         }
 
         public static AnchorStyles GetAnchor(IArrangedElement element) => CommonProperties.xGetAnchor(element);
@@ -989,13 +1104,17 @@ namespace System.Windows.Forms.Layout
                         // If we are right anchored, see what the anchor distance between our right edge and
                         // the container is, and make sure our container is large enough to accomodate us.
                         Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, /*measureOnly=*/true);
-                        if (anchorDest.Width < 0)
+
+                        if (LocalAppContextSwitches.EnableImprovedAnchorLayout)
                         {
-                            prefSize.Width = Math.Max(prefSize.Width, elementSpace.Right + anchorDest.Width);
+                            AnchorInfo anchorInfo = GetAnchorInfo(element);
+                            prefSize.Width = anchorInfo is null ? anchorDest.Right : anchorDest.Right + anchorInfo.Right;
                         }
                         else
                         {
-                            prefSize.Width = Math.Max(prefSize.Width, anchorDest.Right);
+                            prefSize.Width = anchorDest.Width < 0
+                                ? Math.Max(prefSize.Width, elementSpace.Right + anchorDest.Width)
+                                : Math.Max(prefSize.Width, anchorDest.Right);
                         }
                     }
 
@@ -1004,13 +1123,16 @@ namespace System.Windows.Forms.Layout
                         // If we are right anchored, see what the anchor distance between our right edge and
                         // the container is, and make sure our container is large enough to accomodate us.
                         Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, /*measureOnly=*/true);
-                        if (anchorDest.Height < 0)
+                        if (LocalAppContextSwitches.EnableImprovedAnchorLayout)
                         {
-                            prefSize.Height = Math.Max(prefSize.Height, elementSpace.Bottom + anchorDest.Height);
+                            AnchorInfo anchorInfo = GetAnchorInfo(element);
+                            prefSize.Height = anchorInfo is null ? anchorDest.Bottom : anchorDest.Bottom + anchorInfo.Bottom;
                         }
                         else
                         {
-                            prefSize.Height = Math.Max(prefSize.Height, anchorDest.Bottom);
+                            prefSize.Height = anchorDest.Height < 0
+                            ? Math.Max(prefSize.Height, elementSpace.Bottom + anchorDest.Height)
+                            : Math.Max(prefSize.Height, anchorDest.Bottom);
                         }
                     }
                 }
