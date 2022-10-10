@@ -11,8 +11,8 @@ internal static partial class Interop
             public NMHDR hdr;
             public int iFrom;
             public int iTo;
-            public ComCtl32.LVIS uNewState;
-            public ComCtl32.LVIS uOldState;
+            public LIST_VIEW_ITEM_STATE_FLAGS uNewState;
+            public LIST_VIEW_ITEM_STATE_FLAGS uOldState;
         }
     }
 }

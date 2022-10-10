@@ -16,8 +16,8 @@ internal static partial class Interop
         public unsafe struct MCGRIDINFO
         {
             public uint cbSize;
-            public MCGIP dwPart;
-            public MCGIF dwFlags;
+            public MCGRIDINFO_PART dwPart;
+            public MCGRIDINFO_FLAGS dwFlags;
             public int iCalendar;
             public int iRow;
             public int iCol;

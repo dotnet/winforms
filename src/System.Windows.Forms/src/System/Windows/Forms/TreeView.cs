@@ -214,12 +214,12 @@ namespace System.Windows.Forms
                 base.BackColor = value;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)TVM.SETBKCOLOR, 0, BackColor.ToWin32());
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETBKCOLOR, 0, BackColor.ToWin32());
 
                     // This is to get around a problem in the comctl control where the lines
                     // connecting nodes don't get the new BackColor.  This messages forces
                     // reconstruction of the line bitmaps without changing anything else.
-                    PInvoke.SendMessage(this, (User32.WM)TVM.SETINDENT, (WPARAM)Indent);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETINDENT, (WPARAM)Indent);
                 }
             }
         }
@@ -346,61 +346,61 @@ namespace System.Windows.Forms
 
                 if (!Scrollable)
                 {
-                    cp.Style |= (int)LVS.NOSCROLL;
+                    cp.Style |= (int)PInvoke.LVS_NOSCROLL;
                 }
 
                 if (!HideSelection)
                 {
-                    cp.Style |= (int)TVS.SHOWSELALWAYS;
+                    cp.Style |= (int)PInvoke.TVS_SHOWSELALWAYS;
                 }
 
                 if (LabelEdit)
                 {
-                    cp.Style |= (int)TVS.EDITLABELS;
+                    cp.Style |= (int)PInvoke.TVS_EDITLABELS;
                 }
 
                 if (ShowLines)
                 {
-                    cp.Style |= (int)TVS.HASLINES;
+                    cp.Style |= (int)PInvoke.TVS_HASLINES;
                 }
 
                 if (ShowPlusMinus)
                 {
-                    cp.Style |= (int)TVS.HASBUTTONS;
+                    cp.Style |= (int)PInvoke.TVS_HASBUTTONS;
                 }
 
                 if (ShowRootLines)
                 {
-                    cp.Style |= (int)TVS.LINESATROOT;
+                    cp.Style |= (int)PInvoke.TVS_LINESATROOT;
                 }
 
                 if (HotTracking)
                 {
-                    cp.Style |= (int)TVS.TRACKSELECT;
+                    cp.Style |= (int)PInvoke.TVS_TRACKSELECT;
                 }
 
                 if (FullRowSelect)
                 {
-                    cp.Style |= (int)TVS.FULLROWSELECT;
+                    cp.Style |= (int)PInvoke.TVS_FULLROWSELECT;
                 }
 
                 if (setOddHeight)
                 {
-                    cp.Style |= (int)TVS.NONEVENHEIGHT;
+                    cp.Style |= (int)PInvoke.TVS_NONEVENHEIGHT;
                 }
 
                 // Don't set TVS_CHECKBOXES here if the window isn't created yet.
                 // See OnHandleCreated for explanation
                 if (ShowNodeToolTips && IsHandleCreated && !DesignMode)
                 {
-                    cp.Style |= (int)TVS.INFOTIP;
+                    cp.Style |= (int)PInvoke.TVS_INFOTIP;
                 }
 
                 // Don't set TVS_CHECKBOXES here if the window isn't created yet.
                 // See OnHandleCreated for explanation
                 if (CheckBoxes && IsHandleCreated)
                 {
-                    cp.Style |= (int)TVS.CHECKBOXES;
+                    cp.Style |= (int)PInvoke.TVS_CHECKBOXES;
                 }
 
                 // Don't call IsMirrored from CreateParams. That will lead to some nasty problems, since
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        cp.Style |= (int)TVS.RTLREADING;
+                        cp.Style |= (int)PInvoke.TVS_RTLREADING;
                     }
                 }
 
@@ -478,7 +478,7 @@ namespace System.Windows.Forms
                 base.ForeColor = value;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)TVM.SETTEXTCOLOR, 0, ForeColor.ToWin32());
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETTEXTCOLOR, 0, ForeColor.ToWin32());
                 }
             }
         }
@@ -678,7 +678,7 @@ namespace System.Windows.Forms
                     // Update TreeView's images
                     if (IsHandleCreated)
                     {
-                        PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, 0, value is null ? 0 : value.Handle);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETIMAGELIST, 0, value is null ? 0 : value.Handle);
                         if (StateImageList is not null && StateImageList.Images.Count > 0 && internalStateImageList is not null)
                         {
                             SetStateImageList(internalStateImageList.Handle);
@@ -795,7 +795,7 @@ namespace System.Windows.Forms
                 }
                 else if (IsHandleCreated)
                 {
-                    return (int)PInvoke.SendMessage(this, (User32.WM)TVM.GETINDENT);
+                    return (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETINDENT);
                 }
 
                 return DefaultTreeViewIndent;
@@ -817,8 +817,8 @@ namespace System.Windows.Forms
                     indent = value;
                     if (IsHandleCreated)
                     {
-                        PInvoke.SendMessage(this, (User32.WM)TVM.SETINDENT, (WPARAM)value);
-                        indent = (int)PInvoke.SendMessage(this, (User32.WM)TVM.GETINDENT);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETINDENT, (WPARAM)value);
+                        indent = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETINDENT);
                     }
                 }
             }
@@ -840,7 +840,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    return (int)PInvoke.SendMessage(this, (User32.WM)TVM.GETITEMHEIGHT);
+                    return (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETITEMHEIGHT);
                 }
                 else
                 {
@@ -882,8 +882,8 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        PInvoke.SendMessage(this, (User32.WM)TVM.SETITEMHEIGHT, (WPARAM)value);
-                        itemHeight = (int)PInvoke.SendMessage(this, (User32.WM)TVM.GETITEMHEIGHT);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETITEMHEIGHT, (WPARAM)value);
+                        itemHeight = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETITEMHEIGHT);
                     }
                 }
             }
@@ -929,7 +929,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    int intColor = (int)PInvoke.SendMessage(this, (User32.WM)TVM.GETLINECOLOR);
+                    int intColor = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETLINECOLOR);
                     return ColorTranslator.FromWin32(intColor);
                 }
 
@@ -942,7 +942,7 @@ namespace System.Windows.Forms
                     lineColor = value;
                     if (IsHandleCreated)
                     {
-                        PInvoke.SendMessage(this, (User32.WM)TVM.SETLINECOLOR, 0, lineColor.ToWin32());
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETLINECOLOR, 0, lineColor.ToWin32());
                     }
                 }
             }
@@ -1184,7 +1184,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    IntPtr hItem = PInvoke.SendMessage(this, (User32.WM)TVM.GETNEXTITEM, (WPARAM)(uint)TVGN.CARET);
+                    IntPtr hItem = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETNEXTITEM, (WPARAM)(uint)PInvoke.TVGN_CARET);
                     if (hItem == IntPtr.Zero)
                     {
                         return null;
@@ -1211,7 +1211,7 @@ namespace System.Windows.Forms
                     Debug.Assert(selectedNode is null || selectedNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
                     nint hnode = (value is null ? 0 : value.Handle);
-                    PInvoke.SendMessage(this, (User32.WM)TVM.SELECTITEM, (WPARAM)(uint)TVGN.CARET, (LPARAM)hnode);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SELECTITEM, (WPARAM)(uint)PInvoke.TVGN_CARET, (LPARAM)hnode);
                     selectedNode = null;
                 }
                 else
@@ -1406,7 +1406,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    IntPtr hitem = PInvoke.SendMessage(this, (User32.WM)TVM.GETNEXTITEM, (WPARAM)(uint)TVGN.FIRSTVISIBLE);
+                    IntPtr hitem = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETNEXTITEM, (WPARAM)(uint)PInvoke.TVGN_FIRSTVISIBLE);
                     return (hitem == IntPtr.Zero ? null : NodeFromHandle(hitem));
                 }
 
@@ -1422,7 +1422,7 @@ namespace System.Windows.Forms
                     Debug.Assert(topNode is null || topNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
                     nint hnode = (value is null ? 0 : value.Handle);
-                    PInvoke.SendMessage(this, (User32.WM)TVM.SELECTITEM, (WPARAM)(uint)TVGN.FIRSTVISIBLE, (LPARAM)hnode);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SELECTITEM, (WPARAM)(uint)PInvoke.TVGN_FIRSTVISIBLE, (LPARAM)hnode);
                     topNode = null;
                 }
                 else
@@ -1442,7 +1442,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.TreeViewVisibleCountDescr))]
-        public int VisibleCount => IsHandleCreated ? (int)PInvoke.SendMessage(this, (User32.WM)TVM.GETVISIBLECOUNT) : 0;
+        public int VisibleCount => IsHandleCreated ? (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETVISIBLECOUNT) : 0;
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.TreeViewBeforeEditDescr))]
@@ -1624,7 +1624,7 @@ namespace System.Windows.Forms
                 {
                     var icc = new INITCOMMONCONTROLSEX
                     {
-                        dwICC = ICC.TREEVIEW_CLASSES
+                        dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TREEVIEW_CLASSES
                     };
                     InitCommonControlsEx(ref icc);
                 }
@@ -1732,8 +1732,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            PInvoke.SendMessage(toolTip, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
-            PInvoke.SendMessage(this, (User32.WM)TVM.SETTOOLTIPS, (WPARAM)toolTip.Handle);
+            PInvoke.SendMessage(toolTip, (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETTOOLTIPS, (WPARAM)toolTip.Handle);
             controlToolTipText = toolTip.GetToolTip(this);
         }
 
@@ -1755,7 +1755,7 @@ namespace System.Windows.Forms
                 pt = new Point(x, y)
             };
 
-            nint hnode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhi);
+            nint hnode = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_HITTEST, 0, ref tvhi);
             TreeNode node = hnode == 0 ? null : NodeFromHandle(hnode);
             TreeViewHitTestLocations loc = (TreeViewHitTestLocations)tvhi.flags;
             return (new TreeViewHitTestInfo(node, loc));
@@ -1802,7 +1802,7 @@ namespace System.Windows.Forms
                 pt = new Point(x, y)
             };
 
-            nint hnode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhi);
+            nint hnode = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_HITTEST, 0, ref tvhi);
             return (hnode == 0 ? null : NodeFromHandle(hnode));
         }
 
@@ -1811,7 +1811,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr handle = (ImageList is null) ? IntPtr.Zero : ImageList.Handle;
-                PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, 0, handle);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETIMAGELIST, 0, handle);
             }
         }
 
@@ -1975,10 +1975,10 @@ namespace System.Windows.Forms
             // The TreeView extended styles are independent of the window extended styles.
             UpdateTreeViewExtendedStyles();
 
-            int version = (int)PInvoke.SendMessage(this, (User32.WM)CCM.GETVERSION);
+            int version = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.CCM_GETVERSION);
             if (version < 5)
             {
-                PInvoke.SendMessage(this, (User32.WM)CCM.SETVERSION, 5);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.CCM_SETVERSION, 5);
             }
 
             // Workaround for problem in TreeView where it doesn't recognize the TVS_CHECKBOXES
@@ -1989,39 +1989,39 @@ namespace System.Windows.Forms
             if (CheckBoxes)
             {
                 int style = (int)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
-                style |= (int)TVS.CHECKBOXES;
+                style |= (int)PInvoke.TVS_CHECKBOXES;
                 PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, style);
             }
 
             if (ShowNodeToolTips && !DesignMode)
             {
                 int style = (int)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
-                style |= (int)TVS.INFOTIP;
+                style |= (int)PInvoke.TVS_INFOTIP;
                 PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, style);
             }
 
             Color c = BackColor;
             if (c != SystemColors.Window)
             {
-                PInvoke.SendMessage(this, (User32.WM)TVM.SETBKCOLOR, 0, c.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETBKCOLOR, 0, c.ToWin32());
             }
 
             c = ForeColor;
 
             if (c != SystemColors.WindowText)
             {
-                PInvoke.SendMessage(this, (User32.WM)TVM.SETTEXTCOLOR, 0, c.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETTEXTCOLOR, 0, c.ToWin32());
             }
 
             // Put the linecolor into the native control only if set.
             if (lineColor != Color.Empty)
             {
-                PInvoke.SendMessage(this, (User32.WM)TVM.SETLINECOLOR, 0, lineColor.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETLINECOLOR, 0, lineColor.ToWin32());
             }
 
             if (imageList is not null)
             {
-                PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, 0, imageList.Handle);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETIMAGELIST, 0, imageList.Handle);
             }
 
             if (stateImageList is not null)
@@ -2031,12 +2031,12 @@ namespace System.Windows.Forms
 
             if (indent != -1)
             {
-                PInvoke.SendMessage(this, (User32.WM)TVM.SETINDENT, (WPARAM)indent);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETINDENT, (WPARAM)indent);
             }
 
             if (itemHeight != -1)
             {
-                PInvoke.SendMessage(this, (User32.WM)TVM.SETITEMHEIGHT, (WPARAM)ItemHeight);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETITEMHEIGHT, (WPARAM)ItemHeight);
             }
 
             // Essentially we are setting the width to be infinite so that the
@@ -2103,7 +2103,7 @@ namespace System.Windows.Forms
                 }
 
                 newImageList.Images.AddRange(images);
-                PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, (WPARAM)(uint)TVSIL.STATE, (LPARAM)newImageList.Handle);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.TVSIL_STATE, (LPARAM)newImageList.Handle);
 
                 internalStateImageList?.Dispose();
                 internalStateImageList = newImageList;
@@ -2114,7 +2114,7 @@ namespace System.Windows.Forms
         {
             // In certain cases (TREEVIEWSTATE_checkBoxes) e.g., the Native TreeView leaks the imagelist
             // even if set by us. To prevent any leaks, we always destroy what was there after setting a new list.
-            IntPtr handleOld = PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, (WPARAM)(uint)TVSIL.STATE, (LPARAM)handle);
+            IntPtr handleOld = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.TVSIL_STATE, (LPARAM)handle);
             if ((handleOld != IntPtr.Zero) && (handleOld != handle))
             {
                 PInvoke.ImageList.Destroy(new HandleRef<HIMAGELIST>(this, (HIMAGELIST)handleOld));
@@ -2125,13 +2125,13 @@ namespace System.Windows.Forms
         // We must destroy it explicitly.
         private void DestroyNativeStateImageList(bool reset)
         {
-            IntPtr handle = PInvoke.SendMessage(this, (User32.WM)TVM.GETIMAGELIST, (WPARAM)(uint)TVSIL.STATE);
+            IntPtr handle = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETIMAGELIST, (WPARAM)(uint)PInvoke.TVSIL_STATE);
             if (handle != IntPtr.Zero)
             {
                 PInvoke.ImageList.Destroy(new HandleRef<HIMAGELIST>(this, (HIMAGELIST)handle));
                 if (reset)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, (WPARAM)(uint)TVSIL.STATE);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.TVSIL_STATE);
                 }
             }
         }
@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms
                 pt = PointToClient(Cursor.Position)
             };
 
-            nint hnode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
+            nint hnode = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_HITTEST, 0, ref tvhip);
             if (hnode != 0 && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
@@ -2628,11 +2628,11 @@ namespace System.Windows.Forms
             TreeViewAction action = TreeViewAction.Unknown;
             switch (nmtv->action)
             {
-                case TVC.BYKEYBOARD:
+                case NM_TREEVIEW_ACTION.TVC_BYKEYBOARD:
                     action = TreeViewAction.ByKeyboard;
                     NotifyAboutLostFocus(SelectedNode);
                     break;
-                case TVC.BYMOUSE:
+                case NM_TREEVIEW_ACTION.TVC_BYMOUSE:
                     action = TreeViewAction.ByMouse;
                     break;
             }
@@ -2657,11 +2657,11 @@ namespace System.Windows.Forms
                 TreeViewAction action = TreeViewAction.Unknown;
                 switch (nmtv->action)
                 {
-                    case TVC.BYKEYBOARD:
+                    case NM_TREEVIEW_ACTION.TVC_BYKEYBOARD:
                         action = TreeViewAction.ByKeyboard;
                         NotifyAboutGotFocus(node);
                         break;
-                    case TVC.BYMOUSE:
+                    case NM_TREEVIEW_ACTION.TVC_BYMOUSE:
                         action = TreeViewAction.ByMouse;
                         break;
                 }
@@ -2674,7 +2674,7 @@ namespace System.Windows.Forms
             *((IntPtr*)&rc.left) = nmtv->itemOld.hItem;
             if (nmtv->itemOld.hItem != IntPtr.Zero)
             {
-                if (PInvoke.SendMessage(this, (User32.WM)TVM.GETITEMRECT, 1, ref rc) != 0)
+                if (PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETITEMRECT, 1, ref rc) != 0)
                 {
                     PInvoke.InvalidateRect(this, &rc, bErase: true);
                 }
@@ -2755,12 +2755,12 @@ namespace System.Windows.Forms
             // This stops the style from being removed for any derived classes that set it using P/Invoke.
             if (treeViewState[TREEVIEWSTATE_doubleBufferedPropertySet])
             {
-                PInvoke.SendMessage(this, (User32.WM)TVM.SETEXTENDEDSTYLE, (WPARAM)(nint)TVS_EX.DOUBLEBUFFER, (LPARAM)(nint)(DoubleBuffered ? TVS_EX.DOUBLEBUFFER : 0)); 
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)(nint)PInvoke.TVS_EX_DOUBLEBUFFER, (LPARAM)(nint)(DoubleBuffered ? PInvoke.TVS_EX_DOUBLEBUFFER : 0)); 
             }
         }
 
         /// <remarks>
-        ///  Setting the TVS.CHECKBOXES style clears the checked state
+        ///  Setting the PInvoke.TVS_CHECKBOXES style clears the checked state
         /// </remarks>
         private void UpdateCheckedState(TreeNode node, bool update)
         {
@@ -2790,7 +2790,7 @@ namespace System.Windows.Forms
             // If the user shows the ContextMenu bu overriding the WndProc( ), then the treeview
             // goes into the weird state where the high-light gets locked to the node on which the ContextMenu was shown.
             // So we need to get the native TREEVIEW out of this weird state.
-            PInvoke.SendMessage(this, (User32.WM)TVM.SELECTITEM, (WPARAM)(uint)TVGN.DROPHILITE);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SELECTITEM, (WPARAM)(uint)PInvoke.TVGN_DROPHILITE);
 
             // Windows TreeView pushes its own message loop in WM_xBUTTONDOWN, so fire the
             // event before calling defWndProc or else it won't get fired until the button
@@ -2815,24 +2815,24 @@ namespace System.Windows.Forms
             switch (nmtvcd->nmcd.dwDrawStage)
             {
                 // Do we want OwnerDraw for this paint cycle?
-                case CDDS.PREPAINT:
-                    m.ResultInternal = (LRESULT)(nint)CDRF.NOTIFYITEMDRAW; // yes, we do...
+                case NMCUSTOMDRAW_DRAW_STAGE.CDDS_PREPAINT:
+                    m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NOTIFYITEMDRAW; // yes, we do...
                     return;
                 // We've got opt-in on owner draw for items - so handle each one.
-                case CDDS.ITEMPREPAINT:
+                case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT:
                     // get the node
-                    Debug.Assert(nmtvcd->nmcd.dwItemSpec != IntPtr.Zero, "Invalid node handle in ITEMPREPAINT");
-                    TreeNode node = NodeFromHandle(nmtvcd->nmcd.dwItemSpec);
+                    Debug.Assert(nmtvcd->nmcd.dwItemSpec != 0, "Invalid node handle in ITEMPREPAINT");
+                    TreeNode node = NodeFromHandle((nint)nmtvcd->nmcd.dwItemSpec);
 
                     if (node is null)
                     {
                         // this can happen if we are presently inserting the node - it hasn't yet
                         // been added to the handle table
-                        m.ResultInternal = (LRESULT)(nint)(CDRF.SKIPDEFAULT);
+                        m.ResultInternal = (LRESULT)(nint)(PInvoke.CDRF_SKIPDEFAULT);
                         return;
                     }
 
-                    CDIS state = nmtvcd->nmcd.uItemState;
+                    NMCUSTOMDRAW_DRAW_STATE_FLAGS state = nmtvcd->nmcd.uItemState;
 
                     // The commctrl TreeView allows you to draw the whole row of a node
                     // or nothing at all. The way we provide OwnerDrawText is by asking it
@@ -2841,7 +2841,7 @@ namespace System.Windows.Forms
                     if (drawMode == TreeViewDrawMode.OwnerDrawText)
                     {
                         nmtvcd->clrText = nmtvcd->clrTextBk;
-                        m.ResultInternal = (LRESULT)(nint)(CDRF.NEWFONT | CDRF.NOTIFYPOSTPAINT);
+                        m.ResultInternal = (LRESULT)(nint)(PInvoke.CDRF_NEWFONT | PInvoke.CDRF_NOTIFYPOSTPAINT);
                         return;
                     }
                     else if (drawMode == TreeViewDrawMode.OwnerDrawAll)
@@ -2882,7 +2882,7 @@ namespace System.Windows.Forms
 
                         if (!e.DrawDefault)
                         {
-                            m.ResultInternal = (LRESULT)(nint)CDRF.SKIPDEFAULT;
+                            m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_SKIPDEFAULT;
                             return;
                         }
                     }
@@ -2912,21 +2912,21 @@ namespace System.Windows.Forms
 
                         // There is a problem in winctl that clips node fonts if the fontsize
                         // is larger than the treeview font size. The behavior is much better in comctl 5 and above.
-                        m.ResultInternal = (LRESULT)(nint)CDRF.NEWFONT;
+                        m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NEWFONT;
                         return;
                     }
 
                     // fall through and do the default drawing work
                     goto default;
 
-                case CDDS.ITEMPOSTPAINT:
+                case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPOSTPAINT:
                     //User draws only the text in OwnerDrawText mode, as explained in comments above
                     if (drawMode == TreeViewDrawMode.OwnerDrawText)
                     {
-                        Debug.Assert(nmtvcd->nmcd.dwItemSpec != IntPtr.Zero, "Invalid node handle in ITEMPOSTPAINT");
+                        Debug.Assert(nmtvcd->nmcd.dwItemSpec != 0, "Invalid node handle in ITEMPOSTPAINT");
 
                         // Get the node
-                        node = NodeFromHandle(nmtvcd->nmcd.dwItemSpec);
+                        node = NodeFromHandle((nint)nmtvcd->nmcd.dwItemSpec);
 
                         if (node is null)
                         {
@@ -2970,7 +2970,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        m.ResultInternal = (LRESULT)(nint)CDRF.NOTIFYSUBITEMDRAW;
+                        m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NOTIFYSUBITEMDRAW;
                         return;
                     }
 
@@ -2978,7 +2978,7 @@ namespace System.Windows.Forms
 
                 default:
                     // just in case we get a spurious message, tell it to do the right thing
-                    m.ResultInternal = (LRESULT)(nint)CDRF.DODEFAULT;
+                    m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
                     return;
             }
         }
@@ -2996,7 +2996,11 @@ namespace System.Windows.Forms
             }
 
             // we only change colors if we're displaying things normally
-            if ((state & (int)(CDIS.SELECTED | CDIS.GRAYED | CDIS.HOT | CDIS.DISABLED)) == 0)
+            if ((state &
+                (int)(NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED |
+                NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_GRAYED |
+                NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_HOT |
+                NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_DISABLED)) == 0)
             {
                 retval.ForeColor = node.propBag.ForeColor;
                 retval.BackColor = node.propBag.BackColor;
@@ -3006,7 +3010,7 @@ namespace System.Windows.Forms
             return retval;
         }
 
-        internal unsafe override ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TTF flags, string caption, ToolTip tooltip)
+        internal unsafe override ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string caption, ToolTip tooltip)
         {
             // The "ShowNodeToolTips" flag is required so that when the user hovers over the TreeNode,
             // their own tooltip is displayed, not the TreeView tooltip.
@@ -3030,13 +3034,13 @@ namespace System.Windows.Forms
                 pt = PointToClient(Cursor.Position)
             };
 
-            nint hnode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
+            nint hnode = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_HITTEST, 0, ref tvhip);
             if (hnode != 0 && tvhip.flags.HasFlag(TVHT.ONITEM) && NodeFromHandle(hnode) is { } tn && !ShowNodeToolTips)
             {
                 Rectangle bounds = tn.Bounds;
                 bounds.Location = PointToScreen(bounds.Location);
 
-                PInvoke.SendMessage(tooltipHandle, (User32.WM)TTM.ADJUSTRECT, (WPARAM)(BOOL)true, ref bounds);
+                PInvoke.SendMessage(tooltipHandle, (User32.WM)PInvoke.TTM_ADJUSTRECT, (WPARAM)(BOOL)true, ref bounds);
                 PInvoke.SetWindowPos(
                     tooltipHandle,
                     HWND.HWND_TOPMOST,
@@ -3061,7 +3065,7 @@ namespace System.Windows.Forms
                 pt = PointToClient(Cursor.Position)
             };
 
-            nint hnode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
+            nint hnode = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_HITTEST, 0, ref tvhip);
             if (hnode != 0 && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
@@ -3086,7 +3090,7 @@ namespace System.Windows.Forms
             // RightToLeft reading order
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt->uFlags |= TTF.RTLREADING;
+                ttt->uFlags |= TOOLTIP_FLAGS.TTF_RTLREADING;
             }
         }
 
@@ -3138,7 +3142,7 @@ namespace System.Windows.Forms
                             pt = pos
                         };
 
-                        nint hnode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
+                        nint hnode = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_HITTEST, 0, ref tvhip);
                         if ((int)nmtv->nmhdr.code != (int)NM.CLICK || (tvhip.flags & TVHT.ONITEM) != 0)
                         {
                             button = (int)nmtv->nmhdr.code == (int)NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
@@ -3220,7 +3224,7 @@ namespace System.Windows.Forms
                 ContextMenuStrip menu = treeNode.ContextMenuStrip;
 
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
-                User32.PostMessageW(this, (User32.WM)TVM.SELECTITEM, (nint)TVGN.DROPHILITE, treeNode.Handle);
+                User32.PostMessageW(this, (User32.WM)PInvoke.TVM_SELECTITEM, (nint)PInvoke.TVGN_DROPHILITE, treeNode.Handle);
                 menu.ShowInternal(this, PointToClient(MousePosition), /*keyboardActivated*/false);
                 menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             }
@@ -3232,7 +3236,7 @@ namespace System.Windows.Forms
             ContextMenuStrip strip = sender as ContextMenuStrip;
             // Unhook the Event.
             strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
-            PInvoke.SendMessage(this, (User32.WM)TVM.SELECTITEM, (WPARAM)(uint)TVGN.DROPHILITE);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SELECTITEM, (WPARAM)(uint)PInvoke.TVGN_DROPHILITE);
         }
 
         private void UnhookNodes()
@@ -3292,7 +3296,7 @@ namespace System.Windows.Forms
                 case User32.WM.PRINT:
                     WmPrint(ref m);
                     break;
-                case (User32.WM)TVM.SETITEMW:
+                case (User32.WM)PInvoke.TVM_SETITEMW:
                     base.WndProc(ref m);
                     if (CheckBoxes)
                     {
@@ -3303,12 +3307,12 @@ namespace System.Windows.Forms
                         {
                             var item1 = new TVITEMW
                             {
-                                mask = TVIF.HANDLE | TVIF.STATE,
+                                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                                 hItem = item->hItem,
                                 stateMask = TVIS.STATEIMAGEMASK
                             };
 
-                            PInvoke.SendMessage(this, (User32.WM)TVM.GETITEMW, 0, ref item1);
+                            PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETITEMW, 0, ref item1);
 
                             TreeNode node = NodeFromHandle(item->hItem);
                             node.CheckedStateInternal = (((int)item1.state >> TreeNode.SHIFTVAL) > 1);
@@ -3322,7 +3326,7 @@ namespace System.Windows.Forms
                     {
                         case TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling multiline tool tips
-                            PInvoke.SendMessage(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                            PInvoke.SendMessage(nmhdr->hwndFrom, (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.ResultInternal = (LRESULT)1;
                             return;
@@ -3377,7 +3381,7 @@ namespace System.Windows.Forms
                         pt = PARAM.ToPoint(m.LParamInternal)
                     };
 
-                    _mouseDownNode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
+                    _mouseDownNode = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_HITTEST, 0, ref tvhip);
 
                     // This gets around the TreeView behavior of temporarily moving the selection
                     // highlight to a node when the user clicks on its checkbox.
@@ -3414,7 +3418,7 @@ namespace System.Windows.Forms
                         pt = point
                     };
 
-                    nint hnode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhi);
+                    nint hnode = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_HITTEST, 0, ref tvhi);
 
                     // Important for CheckBoxes. Click needs to be fired.
                     if (hnode != 0)
@@ -3495,13 +3499,13 @@ namespace System.Windows.Forms
                         pt = PARAM.ToPoint(m.LParamInternal)
                     };
 
-                    _mouseDownNode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhit);
+                    _mouseDownNode = PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_HITTEST, 0, ref tvhit);
 
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
                     break;
                 case User32.WM.SYSCOLORCHANGE:
-                    PInvoke.SendMessage(this, (User32.WM)TVM.SETINDENT, (WPARAM)Indent);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETINDENT, (WPARAM)Indent);
                     base.WndProc(ref m);
                     break;
                 case User32.WM.SETFOCUS:

@@ -15,7 +15,7 @@ internal static partial class Interop
         {
             public uint cbSize;
             public Point pt;
-            public MCHT uHit;
+            public MCHITTESTINFO_HIT_FLAGS uHit;
             public SYSTEMTIME st;
             public RECT rc;
             public int iOffset;

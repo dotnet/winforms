@@ -6,7 +6,6 @@ using System.Drawing;
 using Xunit;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -130,10 +129,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> CalendarCellAccessibleObject_Name_ReturnsExpected_TestData()
         {
-            yield return new object[] { MCMV.MONTH, "Wednesday, June 16, 2021" };
-            yield return new object[] { MCMV.YEAR, "November 2021" };
-            yield return new object[] { MCMV.DECADE, "2029" };
-            yield return new object[] { MCMV.CENTURY, "2090 - 2099" };
+            yield return new object[] { MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH, "Wednesday, June 16, 2021" };
+            yield return new object[] { MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR, "November 2021" };
+            yield return new object[] { MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE, "2029" };
+            yield return new object[] { MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY, "2090 - 2099" };
         }
 
         [WinFormsTheory]
@@ -145,7 +144,7 @@ namespace System.Windows.Forms.Tests
             control.SelectionStart = new DateTime(2021, 6, 16); // Set a date to have a stable test case
 
             control.CreateControl();
-            PInvoke.SendMessage(control, (User32.WM)MCM.SETCURRENTVIEW, 0, view);
+            PInvoke.SendMessage(control, (User32.WM)PInvoke.MCM_SETCURRENTVIEW, 0, view);
 
             CalendarCellAccessibleObject cellAccessibleObject = CreateCalendarCellAccessibleObject(control, 0, 2, 2);
 

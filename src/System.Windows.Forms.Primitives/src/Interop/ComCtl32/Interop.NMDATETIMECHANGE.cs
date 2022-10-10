@@ -9,7 +9,7 @@ internal static partial class Interop
         public struct NMDATETIMECHANGE
         {
             public NMHDR nmhdr;
-            public GDT dwFlags;
+            public NMDATETIMECHANGE_FLAGS dwFlags;
             public SYSTEMTIME st;
         }
     }

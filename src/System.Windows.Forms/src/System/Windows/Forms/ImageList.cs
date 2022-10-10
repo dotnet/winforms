@@ -460,7 +460,7 @@ namespace System.Windows.Forms
                 ThemingScope.Deactivate(userCookie);
             }
 
-            PInvoke.ImageList.SetBkColor(this, Color.FromArgb(ComCtl32.CLR.NONE));
+            PInvoke.ImageList.SetBkColor(this, Color.FromArgb(PInvoke.CLR_NONE));
 
             Debug.Assert(_originals is not null, "Handle not yet created, yet original images are gone");
             for (int i = 0; i < _originals.Count; i++)
@@ -567,8 +567,8 @@ namespace System.Windows.Forms
                     y,
                     width,
                     height,
-                    Color.FromArgb(ComCtl32.CLR.NONE),
-                    Color.FromArgb(ComCtl32.CLR.NONE),
+                    Color.FromArgb(PInvoke.CLR_NONE),
+                    Color.FromArgb(PInvoke.CLR_NONE),
                     (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
             }
             finally
@@ -714,8 +714,8 @@ namespace System.Windows.Forms
                             0,
                             _imageSize.Width,
                             _imageSize.Height,
-                            Color.FromArgb(ComCtl32.CLR.NONE),
-                            Color.FromArgb(ComCtl32.CLR.NONE),
+                            Color.FromArgb(PInvoke.CLR_NONE),
+                            Color.FromArgb(PInvoke.CLR_NONE),
                             (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
                     }
                     finally

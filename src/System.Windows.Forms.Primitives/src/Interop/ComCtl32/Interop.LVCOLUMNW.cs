@@ -11,8 +11,8 @@ internal static partial class Interop
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct LVCOLUMNW
         {
-            public LVCF mask;
-            public LVCFMT fmt;
+            public LVCOLUMNW_MASK mask;
+            public LVCOLUMNW_FORMAT fmt;
             public int cx;
             public char* /* LPWSTR */ pszText;
             public int cchTextMax;

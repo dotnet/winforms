@@ -271,7 +271,7 @@ namespace System.Windows.Forms
 
             try
             {
-                HRESULT hr = ComCtl32.ImageList.WriteEx(new HandleRef(this, handle), ComCtl32.ILP.DOWNLEVEL, new Ole32.GPStream(stream));
+                HRESULT hr = ComCtl32.ImageList.WriteEx(new HandleRef(this, handle), IMAGE_LIST_WRITE_STREAM_FLAGS.ILP_DOWNLEVEL, new Ole32.GPStream(stream));
                 return hr == HRESULT.S_OK;
             }
             catch (EntryPointNotFoundException)

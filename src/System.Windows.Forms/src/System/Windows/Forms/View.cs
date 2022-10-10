@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop.ComCtl32;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -14,7 +12,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Each item appears as a full-sized icon with a label below it.
         /// </summary>
-        LargeIcon = (int)LV_VIEW.ICON,
+        LargeIcon = (int)PInvoke.LV_VIEW_ICON,
 
         /// <summary>
         ///  Each item appears on a separate line with further
@@ -25,23 +23,23 @@ namespace System.Windows.Forms
         ///  column displays a header which can display a caption for the
         ///  column. The user can resize each column at runtime.
         /// </summary>
-        Details = (int)LV_VIEW.DETAILS,
+        Details = (int)PInvoke.LV_VIEW_DETAILS,
 
         /// <summary>
         ///  Each item appears as a small icon with a label to its right.
         /// </summary>
-        SmallIcon = (int)LV_VIEW.SMALLICON,
+        SmallIcon = (int)PInvoke.LV_VIEW_SMALLICON,
 
         /// <summary>
         ///  Each item
         ///  appears as a small icon with a label to its right.
         ///  Items are arranged in columns with no column headers.
         /// </summary>
-        List = (int)LV_VIEW.LIST,
+        List = (int)PInvoke.LV_VIEW_LIST,
 
         /// <summary>
         ///  Tile view.
         /// </summary>
-        Tile = (int)LV_VIEW.TILE,
+        Tile = (int)PInvoke.LV_VIEW_TILE,
     }
 }

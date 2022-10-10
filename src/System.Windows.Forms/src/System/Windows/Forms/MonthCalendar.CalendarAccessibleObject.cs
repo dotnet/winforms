@@ -53,7 +53,7 @@ namespace System.Windows.Forms
             }
 
             public override Rectangle Bounds
-                => _monthCalendarAccessibleObject.GetCalendarPartRectangle(MCGIP.CALENDAR, _calendarIndex);
+                => _monthCalendarAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_CALENDAR, _calendarIndex);
 
             internal CalendarBodyAccessibleObject CalendarBodyAccessibleObject
                 => _calendarBodyAccessibleObject ??= new(this, _monthCalendarAccessibleObject, _calendarIndex);
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
                 {
                     if (_dateRange is null && _monthCalendarAccessibleObject.IsHandleCreated)
                     {
-                        SelectionRange? dateRange = _monthCalendarAccessibleObject.GetCalendarPartDateRange(MCGIP.CALENDAR, _calendarIndex);
+                        SelectionRange? dateRange = _monthCalendarAccessibleObject.GetCalendarPartDateRange(MCGRIDINFO_PART.MCGIP_CALENDAR, _calendarIndex);
                         if (dateRange is null)
                         {
                             return null;
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
                     return this;
                 }
 
-                if (hitTestInfo.uHit == MCHT.CALENDARWEEKNUM)
+                if (hitTestInfo.uHit == MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARWEEKNUM)
                 {
                     return rowAccessibleObject.WeekNumberCellAccessibleObject ?? (MonthCalendarChildAccessibleObject)this;
                 }

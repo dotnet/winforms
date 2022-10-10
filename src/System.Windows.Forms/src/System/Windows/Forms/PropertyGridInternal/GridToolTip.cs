@@ -67,7 +67,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     for (int i = 0; i < _controls.Length; i++)
                     {
                         ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(_controls[i]);
-                        info.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATETIPTEXTW);
+                        info.SendMessage(this, (User32.WM)PInvoke.TTM_UPDATETIPTEXTW);
                     }
 
                     if (visible && !_dontShow)
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 var icc = new ComCtl32.INITCOMMONCONTROLSEX
                 {
-                    dwICC = ComCtl32.ICC.TAB_CLASSES
+                    dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
                 };
 
                 ComCtl32.InitCommonControlsEx(ref icc);
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     ClassName = PInvoke.TOOLTIPS_CLASS
                 };
 
-                cp.Style |= (int)(ComCtl32.TTS.ALWAYSTIP | ComCtl32.TTS.NOPREFIX);
+                cp.Style |= (int)(PInvoke.TTS_ALWAYSTIP | PInvoke.TTS_NOPREFIX);
                 cp.ExStyle = 0;
                 cp.Caption = ToolTip;
                 return cp;
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         private ComCtl32.ToolInfoWrapper<Control> GetTOOLINFO(Control c)
-            => new(c, ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS, _toolTipText);
+            => new(c, TOOLTIP_FLAGS.TTF_TRANSPARENT | TOOLTIP_FLAGS.TTF_SUBCLASS, _toolTipText);
 
         private void OnControlCreateHandle(object sender, EventArgs e) => SetupToolTip((Control)sender);
 
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (IsHandleCreated)
             {
-                GetTOOLINFO((Control)sender).SendMessage(this, (User32.WM)ComCtl32.TTM.DELTOOLW);
+                GetTOOLINFO((Control)sender).SendMessage(this, (User32.WM)PInvoke.TTM_DELTOOLW);
             }
         }
 
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
 
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(control);
-                if (info.SendMessage(this, (User32.WM)ComCtl32.TTM.ADDTOOLW) == 0)
+                if (info.SendMessage(this, (User32.WM)PInvoke.TTM_ADDTOOLW) == 0)
                 {
                     Debug.Fail($"TTM_ADDTOOL failed for {control.GetType().Name}");
                 }
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Setting the max width has the added benefit of enabling multiline tool tips
                 PInvoke.SendMessage(
                     this,
-                    (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
+                    (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH,
                     (WPARAM)0,
                     (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
             }
@@ -167,11 +167,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             for (int i = 0; i < _controls.Length; i++)
             {
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(_controls[i]);
-                info.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATETIPTEXTW);
+                info.SendMessage(this, (User32.WM)PInvoke.TTM_UPDATETIPTEXTW);
             }
 
             _toolTipText = oldText;
-            PInvoke.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATE);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TTM_UPDATE);
         }
 
         protected override void WndProc(ref Message msg)

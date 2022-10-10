@@ -109,8 +109,8 @@ namespace System.Windows.Forms
         private DateTime _focusedDate;
         private SelectionRange _currentDisplayRange;
         private Day _firstDayOfWeek = DefaultFirstDayOfWeek;
-        private MCMV _mcCurView = MCMV.MONTH;
-        private MCMV _mcOldView = MCMV.MONTH;
+        private MONTH_CALDENDAR_MESSAGES_VIEW _mcCurView = MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH;
+        private MONTH_CALDENDAR_MESSAGES_VIEW _mcOldView = MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH;
 
         /// <summary>
         ///  Bitmask for the annually bolded dates. Months start on January.
@@ -294,20 +294,20 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = PInvoke.MONTHCAL_CLASS;
-                cp.Style |= (int)MCS.MULTISELECT | (int)MCS.DAYSTATE;
+                cp.Style |= (int)PInvoke.MCS_MULTISELECT | (int)PInvoke.MCS_DAYSTATE;
                 if (!_showToday)
                 {
-                    cp.Style |= (int)MCS.NOTODAY;
+                    cp.Style |= (int)PInvoke.MCS_NOTODAY;
                 }
 
                 if (!_showTodayCircle)
                 {
-                    cp.Style |= (int)MCS.NOTODAYCIRCLE;
+                    cp.Style |= (int)PInvoke.MCS_NOTODAYCIRCLE;
                 }
 
                 if (_showWeekNumbers)
                 {
-                    cp.Style |= (int)MCS.WEEKNUMBERS;
+                    cp.Style |= (int)PInvoke.MCS_WEEKNUMBERS;
                 }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, 0, (nint)value);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETFIRSTDAYOFWEEK, 0, (nint)value);
                     }
 
                     UpdateDisplayRange();
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    if (PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, (WPARAM)value) == 0)
+                    if (PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETMAXSELCOUNT, (WPARAM)value) == 0)
                     {
                         throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, value.ToString("D")), nameof(value));
                     }
@@ -655,7 +655,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETMONTHDELTA, (WPARAM)value);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETMONTHDELTA, (WPARAM)value);
                 }
 
                 _scrollChange = value;
@@ -861,7 +861,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     RECT rect = new RECT();
-                    if (PInvoke.SendMessage(this, (User32.WM)MCM.GETMINREQRECT, 0, ref rect) == 0)
+                    if (PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_GETMINREQRECT, 0, ref rect) == 0)
                     {
                         throw new InvalidOperationException(SR.InvalidSingleMonthSize);
                     }
@@ -924,7 +924,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     SYSTEMTIME systemTime = new();
-                    int result = (int)PInvoke.SendMessage(this, (User32.WM)User32.MCM.GETTODAY, 0, ref systemTime);
+                    int result = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_GETTODAY, 0, ref systemTime);
                     Debug.Assert(result != 0, "MCM_GETTODAY failed");
                     return ((DateTime)systemTime).Date;
                 }
@@ -988,7 +988,7 @@ namespace System.Windows.Forms
                 }
 
                 _titleBackColor = value;
-                SetControlColor(MCSC.TITLEBK, value);
+                SetControlColor(PInvoke.MCSC_TITLEBK, value);
             }
         }
 
@@ -1009,7 +1009,7 @@ namespace System.Windows.Forms
                 }
 
                 _titleForeColor = value;
-                SetControlColor(MCSC.TITLETEXT, value);
+                SetControlColor(PInvoke.MCSC_TITLETEXT, value);
             }
         }
 
@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms
                 }
 
                 _trailingForeColor = value;
-                SetControlColor(MCSC.TRAILINGTEXT, value);
+                SetControlColor(PInvoke.MCSC_TRAILINGTEXT, value);
             }
         }
 
@@ -1197,7 +1197,7 @@ namespace System.Windows.Forms
                 {
                     var icc = new INITCOMMONCONTROLSEX
                     {
-                        dwICC = ICC.DATE_CLASSES
+                        dwICC = INITCOMMONCONTROLSEX_ICC.ICC_DATE_CLASSES
                     };
                     InitCommonControlsEx(ref icc);
                 }
@@ -1225,42 +1225,42 @@ namespace System.Windows.Forms
         {
             if (visible)
             {
-                return GetMonthRange(GMR.VISIBLE);
+                return GetMonthRange(PInvoke.GMR_VISIBLE);
             }
 
-            return GetMonthRange(GMR.DAYSTATE);
+            return GetMonthRange(PInvoke.GMR_DAYSTATE);
         }
 
         /// <summary>
         ///  Retrieves the enumeration value corresponding to the hit area.
         /// </summary>
-        private static HitArea GetHitArea(MCHT hit)
+        private static HitArea GetHitArea(MCHITTESTINFO_HIT_FLAGS hit)
         {
             switch (hit)
             {
-                case MCHT.TITLEBK:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBK:
                     return HitArea.TitleBackground;
-                case MCHT.TITLEMONTH:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEMONTH:
                     return HitArea.TitleMonth;
-                case MCHT.TITLEYEAR:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEYEAR:
                     return HitArea.TitleYear;
-                case MCHT.TITLEBTNNEXT:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBTNNEXT:
                     return HitArea.NextMonthButton;
-                case MCHT.TITLEBTNPREV:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_TITLEBTNPREV:
                     return HitArea.PrevMonthButton;
-                case MCHT.CALENDARBK:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARBK:
                     return HitArea.CalendarBackground;
-                case MCHT.CALENDARDATE:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATE:
                     return HitArea.Date;
-                case MCHT.CALENDARDATENEXT:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATENEXT:
                     return HitArea.NextMonthDate;
-                case MCHT.CALENDARDATEPREV:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDATEPREV:
                     return HitArea.PrevMonthDate;
-                case MCHT.CALENDARDAY:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARDAY:
                     return HitArea.DayOfWeek;
-                case MCHT.CALENDARWEEKNUM:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_CALENDARWEEKNUM:
                     return HitArea.WeekNumbers;
-                case MCHT.TODAYLINK:
+                case MCHITTESTINFO_HIT_FLAGS.MCHT_TODAYLINK:
                     return HitArea.TodayLink;
                 default:
                     return HitArea.Nowhere;
@@ -1274,7 +1274,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Used internally to get the minimum size needed to display the MonthCalendar.
-        ///  This is needed because MCM.GETMINREQRECT returns an incorrect value if
+        ///  This is needed because PInvoke.MCM_GETMINREQRECT returns an incorrect value if
         ///  showToday is set to false. If updateRows is true, then the number of
         ///  rows will be updated according to height.
         /// </summary>
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms
             // If the width we've calculated is too small to fit the Today string, enlarge the width to fit
             if (IsHandleCreated)
             {
-                int maxTodayWidth = (int)PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.GETMAXTODAYWIDTH);
+                int maxTodayWidth = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_GETMAXTODAYWIDTH);
                 if (maxTodayWidth > minSize.Width)
                 {
                     minSize.Width = maxTodayWidth;
@@ -1346,10 +1346,10 @@ namespace System.Windows.Forms
             return minSize;
         }
 
-        private SelectionRange GetMonthRange(GMR flag)
+        private SelectionRange GetMonthRange(uint flag)
         {
             Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
-            PInvoke.SendMessage(this, (User32.WM)MCM.GETMONTHRANGE, (WPARAM)(int)flag, ref times[0]);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_GETMONTHRANGE, (WPARAM)(int)flag, ref times[0]);
             return new SelectionRange
             {
                 Start = (DateTime)times[0],
@@ -1397,7 +1397,7 @@ namespace System.Windows.Forms
                 st = new SYSTEMTIME()
             };
 
-            PInvoke.SendMessage(this, (User32.WM)MCM.HITTEST, 0, ref mchi);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_HITTEST, 0, ref mchi);
 
             // If the hit area has an associated valid date, get it.
             HitArea hitArea = GetHitArea(mchi.uHit);
@@ -1460,7 +1460,7 @@ namespace System.Windows.Forms
             SetSelRange(_selectionStart, _selectionEnd);
             if (_maxSelectionCount != DefaultMaxSelectionCount)
             {
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, (WPARAM)_maxSelectionCount);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETMAXSELCOUNT, (WPARAM)_maxSelectionCount);
             }
 
             AdjustSize();
@@ -1468,14 +1468,14 @@ namespace System.Windows.Forms
             if (_todayDateSet)
             {
                 SYSTEMTIME systemTime = (SYSTEMTIME)_todaysDate;
-                PInvoke.SendMessage(this, (User32.WM)User32.MCM.SETTODAY, (WPARAM)0, ref systemTime);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETTODAY, (WPARAM)0, ref systemTime);
             }
 
-            SetControlColor(MCSC.TEXT, ForeColor);
-            SetControlColor(MCSC.MONTHBK, BackColor);
-            SetControlColor(MCSC.TITLEBK, _titleBackColor);
-            SetControlColor(MCSC.TITLETEXT, _titleForeColor);
-            SetControlColor(MCSC.TRAILINGTEXT, _trailingForeColor);
+            SetControlColor(PInvoke.MCSC_TEXT, ForeColor);
+            SetControlColor(PInvoke.MCSC_MONTHBK, BackColor);
+            SetControlColor(PInvoke.MCSC_TITLEBK, _titleBackColor);
+            SetControlColor(PInvoke.MCSC_TITLETEXT, _titleForeColor);
+            SetControlColor(PInvoke.MCSC_TRAILINGTEXT, _trailingForeColor);
 
             int firstDay;
             if (_firstDayOfWeek == Day.Default)
@@ -1487,12 +1487,12 @@ namespace System.Windows.Forms
                 firstDay = (int)_firstDayOfWeek;
             }
 
-            PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, (WPARAM)0, (LPARAM)firstDay);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETFIRSTDAYOFWEEK, (WPARAM)0, (LPARAM)firstDay);
 
             SetRange();
             if (_scrollChange != DefaultScrollChange)
             {
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETMONTHDELTA, (WPARAM)_scrollChange);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETMONTHDELTA, (WPARAM)_scrollChange);
             }
 
             SystemEvents.UserPreferenceChanged += MarshaledUserPreferenceChanged;
@@ -1549,13 +1549,13 @@ namespace System.Windows.Forms
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
-            SetControlColor(MCSC.TEXT, ForeColor);
+            SetControlColor(PInvoke.MCSC_TEXT, ForeColor);
         }
 
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
-            SetControlColor(MCSC.MONTHBK, BackColor);
+            SetControlColor(PInvoke.MCSC_MONTHBK, BackColor);
         }
 
         protected override void OnResize(EventArgs e)
@@ -1784,11 +1784,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  If the handle has been created, this applies the color to the control
         /// </summary>
-        private void SetControlColor(MCSC colorIndex, Color value)
+        private void SetControlColor(uint colorIndex, Color value)
         {
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
             }
         }
 
@@ -1841,8 +1841,8 @@ namespace System.Windows.Forms
                 Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
                 times[0] = (SYSTEMTIME)minDate;
                 times[1] = (SYSTEMTIME)maxDate;
-                GDTR flags = GDTR.MIN | GDTR.MAX;
-                if (PInvoke.SendMessage(this, (User32.WM)MCM.SETRANGE, (WPARAM)(uint)flags, ref times[0]) == 0)
+                uint flags = PInvoke.GDTR_MIN | PInvoke.GDTR_MAX;
+                if (PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETRANGE, (WPARAM)(uint)flags, ref times[0]) == 0)
                 {
                     throw new InvalidOperationException(
                         string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
@@ -1916,7 +1916,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void SetMonthViewBoldedDates()
         {
-            Debug.Assert(_mcCurView == MCMV.MONTH, "This logic should work only in the Month view.");
+            Debug.Assert(_mcCurView == MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH, "This logic should work only in the Month view.");
 
             // Get the first and the last visible dates even they are in not fully displayed months
             SelectionRange displayRange = GetDisplayRange(false);
@@ -1932,7 +1932,7 @@ namespace System.Windows.Forms
             {
                 // Update display dates states.
                 // For more info see docs: https://docs.microsoft.com/windows/win32/controls/mcm-setdaystate
-                PInvoke.SendMessage(HWND, (User32.WM)ComCtl32.MCM.SETDAYSTATE, (WPARAM)monthsCount, (LPARAM)arr);
+                PInvoke.SendMessage(HWND, (User32.WM)PInvoke.MCM_SETDAYSTATE, (WPARAM)monthsCount, (LPARAM)arr);
             }
         }
 
@@ -2011,7 +2011,7 @@ namespace System.Windows.Forms
                 Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
                 times[0] = (SYSTEMTIME)lower;
                 times[1] = (SYSTEMTIME)upper;
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.MCM.SETSELRANGE, 0, ref times[0]);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETSELRANGE, 0, ref times[0]);
             }
 
             if (changed)
@@ -2078,7 +2078,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void UpdateBoldedDates()
         {
-            if (IsHandleCreated && _mcCurView == MCMV.MONTH)
+            if (IsHandleCreated && _mcCurView == MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH)
             {
                 // Use a specific implementation in the Month view
                 // to avoid MonthCalendar display dates range resets
@@ -2129,11 +2129,11 @@ namespace System.Windows.Forms
                 if (_todayDateSet)
                 {
                     SYSTEMTIME systemTime = (SYSTEMTIME)_todaysDate;
-                    PInvoke.SendMessage(this, (User32.WM)User32.MCM.SETTODAY, 0, ref systemTime);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETTODAY, 0, ref systemTime);
                 }
                 else
                 {
-                    PInvoke.SendMessage(this, (User32.WM)User32.MCM.SETTODAY, 0, 0);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_SETTODAY, 0, 0);
                 }
             }
         }
@@ -2336,7 +2336,7 @@ namespace System.Windows.Forms
                 case User32.WM.PAINT:
                     base.WndProc(ref m);
 
-                    if (_mcCurView != MCMV.MONTH)
+                    if (_mcCurView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH)
                     {
                         // Check if the display range is changed and update it.
                         // Win32 doesn't provide a notification about the display range is changed,

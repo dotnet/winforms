@@ -72,8 +72,8 @@ namespace System.Windows.Forms
 
                 if (_tipWindow is not null)
                 {
-                    var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
-                    toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.ADDTOOLW);
+                    var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, TOOLTIP_FLAGS.TTF_SUBCLASS, item.Error);
+                    toolInfo.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_ADDTOOLW);
                 }
 
                 Update(timerCaused: false);
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
 
                     var icc = new ComCtl32.INITCOMMONCONTROLSEX
                     {
-                        dwICC = ComCtl32.ICC.TAB_CLASSES
+                        dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
                     };
                     ComCtl32.InitCommonControlsEx(ref icc);
 
@@ -131,14 +131,14 @@ namespace System.Windows.Forms
                     {
                         Parent = Handle,
                         ClassName = PInvoke.TOOLTIPS_CLASS,
-                        Style = (int)ComCtl32.TTS.ALWAYSTIP
+                        Style = (int)PInvoke.TTS_ALWAYSTIP
                     };
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
 
                     PInvoke.SendMessage(
                         _tipWindow,
-                        (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
+                        (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH,
                         (WPARAM)0,
                         (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
                     PInvoke.SetWindowPos(
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
                         HWND.HWND_TOP,
                         0, 0, 0, 0,
                         SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
-                    PInvoke.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (WPARAM)(uint)ComCtl32.TTDT.INITIAL);
+                    PInvoke.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_SETDELAYTIME, (WPARAM)(uint)PInvoke.TTDT_INITIAL);
                 }
 
                 return true;
@@ -286,7 +286,7 @@ namespace System.Windows.Forms
                 if (_tipWindow is not null)
                 {
                     var info = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id);
-                    info.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.DELTOOLW);
+                    info.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_DELTOOLW);
                 }
 
                 if (_items.Count == 0)
@@ -381,14 +381,14 @@ namespace System.Windows.Forms
 
                     if (_tipWindow is not null)
                     {
-                        ComCtl32.TTF flags = ComCtl32.TTF.SUBCLASS;
+                        TOOLTIP_FLAGS flags = TOOLTIP_FLAGS.TTF_SUBCLASS;
                         if (_provider.RightToLeft)
                         {
-                            flags |= ComCtl32.TTF.RTLREADING;
+                            flags |= TOOLTIP_FLAGS.TTF_RTLREADING;
                         }
 
                         var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
-                        toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETTOOLINFOW);
+                        toolInfo.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_SETTOOLINFOW);
                     }
 
                     if (timerCaused && item.BlinkPhase > 0)

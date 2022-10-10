@@ -30355,7 +30355,7 @@ namespace System.Windows.Forms
                 if (!string.IsNullOrEmpty(toolTip))
                 {
                     // Setting the max width has the added benefit of enabling multiline tool tips
-                    PInvoke.SendMessage(nmhdr->hwndFrom, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                    PInvoke.SendMessage(nmhdr->hwndFrom, (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
                     ComCtl32.NMTTDISPINFOW* ttt = (ComCtl32.NMTTDISPINFOW*)(nint)m.LParamInternal;
                     _toolTipBuffer.SetText(toolTip);
@@ -30364,7 +30364,7 @@ namespace System.Windows.Forms
 
                     if (RightToLeft == RightToLeft.Yes)
                     {
-                        ttt->uFlags |= ComCtl32.TTF.RTLREADING;
+                        ttt->uFlags |= TOOLTIP_FLAGS.TTF_RTLREADING;
                     }
 
                     return true;

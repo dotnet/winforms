@@ -11,7 +11,7 @@ internal static partial class Interop
         public struct NMTREEVIEW
         {
             public NMHDR nmhdr;
-            public TVC action;
+            public NM_TREEVIEW_ACTION action;
             public TVITEMW itemOld;
             public TVITEMW itemNew;
             public Point ptDrag;

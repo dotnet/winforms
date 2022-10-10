@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop;
-using static Interop.ComCtl32;
 using static Interop.User32;
 
 namespace System.Windows.Forms
@@ -178,7 +177,7 @@ namespace System.Windows.Forms
             {
                 if (Owner.IsHandleCreated && ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
                 {
-                    PInvoke.SendMessage(Owner, (WM)DTM.CLOSEMONTHCAL);
+                    PInvoke.SendMessage(Owner, (WM)PInvoke.DTM_CLOSEMONTHCAL);
                 }
             }
 

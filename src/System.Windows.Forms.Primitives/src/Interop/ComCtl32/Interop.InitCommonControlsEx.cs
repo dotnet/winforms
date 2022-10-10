@@ -20,7 +20,7 @@ internal partial class Interop
         public struct INITCOMMONCONTROLSEX
         {
             public uint dwSize;
-            public ICC dwICC;
+            public INITCOMMONCONTROLSEX_ICC dwICC;
         }
     }
 }

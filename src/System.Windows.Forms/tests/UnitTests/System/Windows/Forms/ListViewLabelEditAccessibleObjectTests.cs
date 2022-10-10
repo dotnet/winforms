@@ -5,7 +5,6 @@
 using System.Drawing;
 using Xunit;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests;
 
@@ -168,7 +167,7 @@ public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExcept
 
         PInvoke.SetFocus(listView);
 
-        PInvoke.SendMessage(listView, (User32.WM)LVM.EDITLABELW, wParam: 0);
+        PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_EDITLABELW, wParam: 0);
 
         return listView;
     }
@@ -180,7 +179,7 @@ public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExcept
             if (disposing)
             {
                 // End the label edit because ListView cannot be correctly disposed with an active label edit when AccessibilityObject is created for the ListView
-                PInvoke.SendMessage(this, (User32.WM)LVM.CANCELEDITLABEL);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.LVM_CANCELEDITLABEL);
             }
 
             base.Dispose(disposing);
