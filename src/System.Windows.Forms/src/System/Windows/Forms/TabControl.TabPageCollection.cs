@@ -354,7 +354,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            public void RemoveAt(int index) => _owner.Controls.RemoveAt(index);
+            public void RemoveAt(int index)
+            {
+                // We have to be careful in choosing the correct page to remove.
+                // Calling _owner.Controls.RemoveAt(index) may remove the wrong page
+                // because _owner.Controls may be ordered differently to _owner._tabPages.
+                Remove(this[index]);
+            }
 
             /// <summary>
             ///  Removes the child control with the specified key.
