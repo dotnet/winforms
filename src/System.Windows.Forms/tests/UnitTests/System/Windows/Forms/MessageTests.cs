@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Equals_TestData()
         {
-            Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam, IntPtr result)
+            static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam, IntPtr result)
             {
                 Message message = Message.Create(hWnd, msg, wparam, lparam);
                 message.Result = result;

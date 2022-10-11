@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Tests.Serialization
             // ensure we can deserialise NET Fx serialised data and continue to match the payload
             ValidateResult(ClassicListViewGroup);
 
-            void ValidateResult(string blob)
+            static void ValidateResult(string blob)
             {
                 ListViewGroup result = BinarySerialization.EnsureDeserialize<ListViewGroup>(blob);
 
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.Tests.Serialization
             // ensure we can deserialise NET Fx serialised data and continue to match the payload
             ValidateResult(ClassicListViewItem);
 
-            void ValidateResult(string blob)
+            static void ValidateResult(string blob)
             {
                 ListViewItem result = BinarySerialization.EnsureDeserialize<ListViewItem>(blob);
 
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Tests.Serialization
             // ensure we can deserialise NET Fx serialised data and continue to match the payload
             ValidateResult(ClassicListViewSubItem);
 
-            void ValidateResult(string blob)
+            static void ValidateResult(string blob)
             {
                 ListViewSubItem result = BinarySerialization.EnsureDeserialize<ListViewSubItem>(blob);
 
@@ -354,7 +354,7 @@ namespace System.Windows.Forms.Tests.Serialization
             // ensure we can deserialise NET Fx serialised data and continue to match the payload
             ValidateResult(ClassicTreeNode);
 
-            void ValidateResult(string blob)
+            static void ValidateResult(string blob)
             {
                 TreeNode result = BinarySerialization.EnsureDeserialize<TreeNode>(blob);
 
