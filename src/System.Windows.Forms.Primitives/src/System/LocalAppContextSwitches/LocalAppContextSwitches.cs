@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Primitives
     internal static partial class LocalAppContextSwitches
     {
         private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
-        private const string EnableImprovedAnchorLayoutSwitchName = "System.Windows.Forms.EnableImprovedAnchorLayout";
+        internal const string EnableImprovedAnchorLayoutSwitchName = "System.Windows.Forms.EnableImprovedAnchorLayout";
 
         private static int s_scaleTopLevelFormMinMaxSizeForDpi;
         private static int s_enableImprovedAnchorLayout;

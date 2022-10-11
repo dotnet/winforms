@@ -717,13 +717,6 @@ namespace System.Windows.Forms.Layout
                 return;
             }
 
-            AnchorInfo anchorInfo = GetAnchorInfo(element);
-            if (anchorInfo is null)
-            {
-                anchorInfo = new AnchorInfo();
-                SetAnchorInfo(element, anchorInfo);
-            }
-
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "Update anchor info");
             Debug.Indent();
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, element.Container is null ? "No parent" : "Parent");
@@ -735,16 +728,23 @@ namespace System.Windows.Forms.Layout
 
             if (enableImprovedAnchorLayout)
             {
-                ComputeAnchorInfo(element, anchorInfo);
+                ComputeAnchorInfo(element);
             }
             else
             {
-                ComputeLegacyAnchorInfo(element, anchorInfo);
+                ComputeLegacyAnchorInfo(element);
             }
         }
 
-        private static void ComputeLegacyAnchorInfo(IArrangedElement element, AnchorInfo anchorInfo)
+        private static void ComputeLegacyAnchorInfo(IArrangedElement element)
         {
+            AnchorInfo anchorInfo = GetAnchorInfo(element);
+            if (anchorInfo is null)
+            {
+                anchorInfo = new AnchorInfo();
+                SetAnchorInfo(element, anchorInfo);
+            }
+
             Rectangle bounds = GetCachedBounds(element);
             AnchorInfo oldAnchorInfo = new AnchorInfo
             {
@@ -833,8 +833,15 @@ namespace System.Windows.Forms.Layout
             Debug.Unindent();
         }
 
-        private static void ComputeAnchorInfo(IArrangedElement element, AnchorInfo anchorInfo)
+        private static void ComputeAnchorInfo(IArrangedElement element)
         {
+            AnchorInfo anchorInfo = GetAnchorInfo(element);
+            if (anchorInfo is null)
+            {
+                anchorInfo = new AnchorInfo();
+                SetAnchorInfo(element, anchorInfo);
+            }
+
             Rectangle displayRect = element.Container.DisplayRectangle;
             Rectangle elementBounds = element.Bounds;
 
@@ -1042,7 +1049,7 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        private static AnchorInfo GetAnchorInfo(IArrangedElement element)
+        internal static AnchorInfo GetAnchorInfo(IArrangedElement element)
         {
             return (AnchorInfo)element.Properties.GetObject(s_layoutInfoProperty);
         }
