@@ -6,12 +6,11 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.ComponentModel.Design.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ByteViewerTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

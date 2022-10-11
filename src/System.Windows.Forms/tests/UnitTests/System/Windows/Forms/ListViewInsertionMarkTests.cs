@@ -7,11 +7,10 @@ using Microsoft.DotNet.RemoteExecutor;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Point = System.Drawing.Point;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-
     public class ListViewInsertionMarkTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

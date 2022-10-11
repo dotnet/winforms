@@ -9,12 +9,11 @@ using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static System.Windows.Forms.ComboBox;
 using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ComboBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

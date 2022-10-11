@@ -13,11 +13,10 @@ using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop.User32;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Point = System.Drawing.Point;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-
     // NB: doesn't require thread affinity
     public class DataObjectTests : IClassFixture<ThreadExceptionFixture>
     {

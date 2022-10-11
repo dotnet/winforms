@@ -8,11 +8,10 @@ using System.Runtime.Versioning;
 using System.Windows.Forms.DataBinding.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public partial class ToolStripButtonTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
