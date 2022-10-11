@@ -9,7 +9,8 @@ using System.Drawing;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  This class provides a single entrypoint used by the Behaviors, KeySize and KeyMoves (in CommandSets) and SelectionService to update the StatusBar Information.
+    ///  This class provides a single entrypoint used by the Behaviors, KeySize and KeyMoves (in CommandSets) and
+    ///  SelectionService to update the StatusBar Information.
     /// </summary>
     internal class StatusCommandUI
     {
@@ -47,7 +48,7 @@ namespace System.Windows.Forms.Design
             {
                 if (_statusRectCommand is null)
                 {
-                    if (MenuService != null)
+                    if (MenuService is not null)
                     {
                         _statusRectCommand = MenuService.FindCommand(MenuCommands.SetStatusRectangle);
                     }
@@ -75,7 +76,7 @@ namespace System.Windows.Forms.Design
             else
             {
                 PropertyDescriptor BoundsProp = TypeDescriptor.GetProperties(selectedComponent)["Bounds"];
-                if (BoundsProp != null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
+                if (BoundsProp is not null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
                 {
                     bounds = (Rectangle)BoundsProp.GetValue(selectedComponent);
                 }
@@ -87,7 +88,7 @@ namespace System.Windows.Forms.Design
                 bounds.Y = location.Y;
             }
 
-            if (StatusRectCommand != null)
+            if (StatusRectCommand is not null)
             {
                 StatusRectCommand.Invoke(bounds);
             }
@@ -111,13 +112,13 @@ namespace System.Windows.Forms.Design
             else
             {
                 PropertyDescriptor BoundsProp = TypeDescriptor.GetProperties(selectedComponent)["Bounds"];
-                if (BoundsProp != null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
+                if (BoundsProp is not null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
                 {
                     bounds = (Rectangle)BoundsProp.GetValue(selectedComponent);
                 }
             }
 
-            if (StatusRectCommand != null)
+            if (StatusRectCommand is not null)
             {
                 StatusRectCommand.Invoke(bounds);
             }
@@ -128,7 +129,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void SetStatusInformation(Rectangle bounds)
         {
-            if (StatusRectCommand != null)
+            if (StatusRectCommand is not null)
             {
                 StatusRectCommand.Invoke(bounds);
             }
