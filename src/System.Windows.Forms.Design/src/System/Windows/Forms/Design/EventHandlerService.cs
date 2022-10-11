@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design
 
             Debug.Assert(_handlers.Count > 0, "Should have handlers to look through.");
 
-            object handler = _handlers.FirstOrDefault(h => handlerType.IsInstanceOfType(h));
+            object handler = _handlers.FirstOrDefault(handlerType.IsInstanceOfType);
 
             if (handler != null)
             {
