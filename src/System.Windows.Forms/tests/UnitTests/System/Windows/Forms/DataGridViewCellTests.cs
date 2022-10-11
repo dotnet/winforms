@@ -9,11 +9,10 @@ using System.Windows.Forms.Automation;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class DataGridViewCellTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

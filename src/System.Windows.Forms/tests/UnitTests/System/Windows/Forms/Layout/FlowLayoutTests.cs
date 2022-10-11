@@ -4,11 +4,10 @@
 
 using System.Drawing;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Layout.Tests
 {
-    using Size = System.Drawing.Size;
-
     public partial class FlowLayoutTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

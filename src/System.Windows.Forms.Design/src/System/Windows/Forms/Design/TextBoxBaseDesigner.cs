@@ -2,14 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Forms.Design.Behavior;
+
 namespace System.Windows.Forms.Design
 {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Windows.Forms.Design.Behavior;
-
     /// <summary>
     /// Provides a designer that can design components
     /// that extend TextBoxBase.

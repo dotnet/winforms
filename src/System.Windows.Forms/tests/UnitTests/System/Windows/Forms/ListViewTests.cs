@@ -11,12 +11,11 @@ using Xunit;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.ComCtl32;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ListViewTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
