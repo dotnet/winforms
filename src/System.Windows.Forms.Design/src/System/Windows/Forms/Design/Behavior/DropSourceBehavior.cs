@@ -516,11 +516,8 @@ namespace System.Windows.Forms.Design.Behavior
                         // Rearrange the Component Tray - if we have to
                         if (performCopy)
                         {
-                            if (tray is null)
-                            {
-                                // the target did not have a tray already, so let's go get it - if there is one
-                                tray = serviceProviderTarget.GetService(typeof(ComponentTray)) as ComponentTray;
-                            }
+                            // the target did not have a tray already, so let's go get it - if there is one
+                            tray ??= serviceProviderTarget.GetService(typeof(ComponentTray)) as ComponentTray;
 
                             if (tray != null)
                             {

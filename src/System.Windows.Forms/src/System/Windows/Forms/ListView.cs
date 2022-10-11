@@ -597,10 +597,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedIndexCollection is null)
-                {
-                    _checkedIndexCollection = new CheckedIndexCollection(this);
-                }
+                _checkedIndexCollection ??= new CheckedIndexCollection(this);
 
                 return _checkedIndexCollection;
             }
@@ -617,10 +614,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedListViewItemCollection is null)
-                {
-                    _checkedListViewItemCollection = new CheckedListViewItemCollection(this);
-                }
+                _checkedListViewItemCollection ??= new CheckedListViewItemCollection(this);
 
                 return _checkedListViewItemCollection;
             }
@@ -1008,10 +1002,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_groups is null)
-                {
-                    _groups = new ListViewGroupCollection(this);
-                }
+                _groups ??= new ListViewGroupCollection(this);
 
                 return _groups;
             }
@@ -1152,10 +1143,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_insertionMark is null)
-                {
-                    _insertionMark = new ListViewInsertionMark(this);
-                }
+                _insertionMark ??= new ListViewInsertionMark(this);
 
                 return _insertionMark;
             }
@@ -1426,10 +1414,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_selectedIndexCollection is null)
-                {
-                    _selectedIndexCollection = new SelectedIndexCollection(this);
-                }
+                _selectedIndexCollection ??= new SelectedIndexCollection(this);
 
                 return _selectedIndexCollection;
             }
@@ -1446,10 +1431,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_selectedListViewItemCollection is null)
-                {
-                    _selectedListViewItemCollection = new SelectedListViewItemCollection(this);
-                }
+                _selectedListViewItemCollection ??= new SelectedListViewItemCollection(this);
 
                 return _selectedListViewItemCollection;
             }
@@ -2421,10 +2403,7 @@ namespace System.Windows.Forms
         {
             if (selected)
             {
-                if (_savedSelectedItems is null)
-                {
-                    _savedSelectedItems = new List<ListViewItem>();
-                }
+                _savedSelectedItems ??= new List<ListViewItem>();
 
                 if (!_savedSelectedItems.Contains(lvi))
                 {

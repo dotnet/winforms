@@ -70,10 +70,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_behaviorService is null)
-                {
-                    _behaviorService = (BehaviorService)_serviceProvider.GetService(typeof(BehaviorService));
-                }
+                _behaviorService ??= (BehaviorService)_serviceProvider.GetService(typeof(BehaviorService));
 
                 return _behaviorService;
             }
@@ -824,10 +821,7 @@ namespace System.Windows.Forms.Design.Behavior
                                     DesignerUtils.DrawResizeBorder(graphics, newRegion, backColor);
                                 }
 
-                                if (_lastResizeRegion is null)
-                                {
-                                    _lastResizeRegion = newRegion.Clone(); //we will need to dispose it later.
-                                }
+                                _lastResizeRegion ??= newRegion.Clone(); //we will need to dispose it later.
                             }
                         }
                     }

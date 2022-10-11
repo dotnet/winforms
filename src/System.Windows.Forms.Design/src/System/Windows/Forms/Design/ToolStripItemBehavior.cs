@@ -37,10 +37,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_dropSource is null)
-                {
-                    _dropSource = new Control();
-                }
+                _dropSource ??= new Control();
 
                 return _dropSource;
             }
@@ -171,10 +168,7 @@ namespace System.Windows.Forms.Design
         private bool MouseHandlerPresent(ToolStripItem item)
         {
             IMouseHandler mouseHandler = null;
-            if (_eventSvc is null)
-            {
-                _eventSvc = (IEventHandlerService)item.Site.GetService(typeof(IEventHandlerService));
-            }
+            _eventSvc ??= (IEventHandlerService)item.Site.GetService(typeof(IEventHandlerService));
 
             if (_eventSvc != null)
             {

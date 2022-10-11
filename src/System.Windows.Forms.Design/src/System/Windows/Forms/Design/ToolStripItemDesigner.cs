@@ -91,10 +91,7 @@ namespace System.Windows.Forms.Design
                     toolStripContextMenu.GroupOrdering.Clear();
                     toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
                     toolStripContextMenu.Text = "CustomContextMenu";
-                    if (toolStripItemCustomMenuItemCollection is null)
-                    {
-                        toolStripItemCustomMenuItemCollection = new ToolStripItemCustomMenuItemCollection(Component.Site, ToolStripItem);
-                    }
+                    toolStripItemCustomMenuItemCollection ??= new ToolStripItemCustomMenuItemCollection(Component.Site, ToolStripItem);
 
                     foreach (ToolStripItem item in toolStripItemCustomMenuItemCollection)
                     {
@@ -605,10 +602,7 @@ namespace System.Windows.Forms.Design
                 if (ToolStripItem.IsOnDropDown)
                 {
                     ToolStrip parent = ToolStripItem.GetCurrentParent();
-                    if (parent is null)
-                    {
-                        parent = ToolStripItem.Owner;
-                    }
+                    parent ??= ToolStripItem.Owner;
 
                     if (parent != null && parent.Visible)
                     {
@@ -703,10 +697,7 @@ namespace System.Windows.Forms.Design
                 ISite site = Component.Site;
                 if (site != null && Component is ToolStripDropDownItem)
                 {
-                    if (defaultValues is null)
-                    {
-                        defaultValues = new Hashtable();
-                    }
+                    defaultValues ??= new Hashtable();
 
                     defaultValues["Text"] = site.Name;
                     IComponent component = Component;

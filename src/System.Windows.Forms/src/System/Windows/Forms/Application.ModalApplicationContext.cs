@@ -40,10 +40,7 @@ namespace System.Windows.Forms
                 if (_parentWindowContext is not null)
                 {
                     // In case we've already torn down, ask the context for this.
-                    if (parentControl is null)
-                    {
-                        parentControl = _parentWindowContext.ApplicationContext.MainForm;
-                    }
+                    parentControl ??= _parentWindowContext.ApplicationContext.MainForm;
 
                     parentControl.Invoke(
                         disable ? new ThreadWindowCallback(DisableThreadWindowsCallback) : new ThreadWindowCallback(EnableThreadWindowsCallback),

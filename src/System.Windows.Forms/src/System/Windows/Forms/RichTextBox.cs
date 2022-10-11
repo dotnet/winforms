@@ -32,10 +32,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (richTextDbg is null)
-                {
-                    richTextDbg = new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
-                }
+                richTextDbg ??= new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
 
                 return richTextDbg;
             }
@@ -602,10 +599,7 @@ namespace System.Windows.Forms
             get { return richTextBoxFlags[richTextShortcutsEnabledSection] != 0; }
             set
             {
-                if (shortcutsToDisable is null)
-                {
-                    shortcutsToDisable = new int[] { (int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ };
-                }
+                shortcutsToDisable ??= new int[] { (int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ };
 
                 richTextBoxFlags[richTextShortcutsEnabledSection] = value ? 1 : 0;
             }
@@ -677,10 +671,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (value.Equals(Rtf))
                 {
@@ -1187,10 +1178,7 @@ namespace System.Windows.Forms
             set
             {
                 ForceHandleCreate();
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 StreamIn(value, SF.F_SELECTION | SF.RTF);
             }
@@ -1441,10 +1429,7 @@ namespace System.Windows.Forms
                     else
                     {
                         textPlain = null;
-                        if (value is null)
-                        {
-                            value = string.Empty;
-                        }
+                        value ??= string.Empty;
 
                         StreamIn(value, SF.TEXT | SF.UNICODE);
                         // reset Modified
@@ -1722,10 +1707,7 @@ namespace System.Windows.Forms
                 {
                     case RichTextBox.OUTPUT:
                         {
-                            if (editStream is null)
-                            {
-                                editStream = new MemoryStream();
-                            }
+                            editStream ??= new MemoryStream();
 
                             switch (cookieVal & KINDMASK)
                             {

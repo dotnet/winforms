@@ -307,10 +307,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_childEditAccessibleObject is null)
-                {
-                    _childEditAccessibleObject = new ComboBoxChildEditUiaProvider(this, _childEdit.Handle);
-                }
+                _childEditAccessibleObject ??= new ComboBoxChildEditUiaProvider(this, _childEdit.Handle);
 
                 return _childEditAccessibleObject;
             }
@@ -320,11 +317,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_childListAccessibleObject is null)
-                {
-                    _childListAccessibleObject =
+                _childListAccessibleObject ??=
                         new ComboBoxChildListUiaProvider(this, DropDownStyle == ComboBoxStyle.Simple ? _childListBox.Handle : _dropDownHandle);
-                }
 
                 return _childListAccessibleObject;
             }
@@ -334,10 +328,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_childTextAccessibleObject is null)
-                {
-                    _childTextAccessibleObject = new ComboBoxChildTextUiaProvider(this);
-                }
+                _childTextAccessibleObject ??= new ComboBoxChildTextUiaProvider(this);
 
                 return _childTextAccessibleObject;
             }
@@ -722,10 +713,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_itemsCollection is null)
-                {
-                    _itemsCollection = new ObjectCollection(this);
-                }
+                _itemsCollection ??= new ObjectCollection(this);
 
                 return _itemsCollection;
             }

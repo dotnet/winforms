@@ -61,10 +61,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_domainItems is null)
-                {
-                    _domainItems = new DomainUpDownItemCollection(this);
-                }
+                _domainItems ??= new DomainUpDownItemCollection(this);
 
                 return _domainItems;
             }

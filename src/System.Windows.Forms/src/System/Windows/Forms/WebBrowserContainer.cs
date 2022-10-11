@@ -296,10 +296,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (components is null)
-            {
-                components = new Hashtable();
-            }
+            components ??= new Hashtable();
 
             if (ctl != parent && !components.Contains(ctl))
             {

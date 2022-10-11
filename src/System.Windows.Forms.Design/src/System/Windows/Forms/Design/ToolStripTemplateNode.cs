@@ -342,10 +342,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_toolStripKeyBoardService is null)
-                {
-                    _toolStripKeyBoardService = (ToolStripKeyboardHandlingService)_component.Site.GetService(typeof(ToolStripKeyboardHandlingService));
-                }
+                _toolStripKeyBoardService ??= (ToolStripKeyboardHandlingService)_component.Site.GetService(typeof(ToolStripKeyboardHandlingService));
 
                 return _toolStripKeyBoardService;
             }
@@ -358,10 +355,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_selectionService is null)
-                {
-                    _selectionService = (ISelectionService)_component.Site.GetService(typeof(ISelectionService));
-                }
+                _selectionService ??= (ISelectionService)_component.Site.GetService(typeof(ISelectionService));
 
                 return _selectionService;
             }
@@ -371,10 +365,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_behaviorService is null)
-                {
-                    _behaviorService = (BehaviorService)_component.Site.GetService(typeof(BehaviorService));
-                }
+                _behaviorService ??= (BehaviorService)_component.Site.GetService(typeof(BehaviorService));
 
                 return _behaviorService;
             }

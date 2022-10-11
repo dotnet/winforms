@@ -415,10 +415,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (currentSnapComponent == null)
-            {
-                currentSnapComponent = host.RootComponent;
-            }
+            currentSnapComponent ??= host.RootComponent;
 
             props = TypeDescriptor.GetProperties(currentSnapComponent);
 
@@ -1551,10 +1548,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (targetSelection == null)
-                {
-                    targetSelection = baseCtl;
-                }
+                targetSelection ??= baseCtl;
             }
 
             selSvc.SetSelectedComponents(new object[] { targetSelection }, SelectionTypes.Replace);

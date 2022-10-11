@@ -19,10 +19,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_default is null)
-                {
-                    s_default = new EventMemberCodeDomSerializer();
-                }
+                s_default ??= new EventMemberCodeDomSerializer();
 
                 return s_default;
             }

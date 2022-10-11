@@ -57,10 +57,7 @@ namespace System.Windows.Forms.Design
                     // When we scroll, we reposition a control without causing a
                     // property change event.  Therefore, we must tell the
                     // SelectionManager to refresh its glyphs.
-                    if (selManager == null)
-                    {
-                        selManager = GetService(typeof(SelectionManager)) as SelectionManager;
-                    }
+                    selManager ??= GetService(typeof(SelectionManager)) as SelectionManager;
 
                     if (selManager != null)
                     {

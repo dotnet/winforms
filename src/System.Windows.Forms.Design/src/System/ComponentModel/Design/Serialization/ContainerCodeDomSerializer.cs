@@ -22,10 +22,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_defaultSerializer is null)
-                {
-                    s_defaultSerializer = new ContainerCodeDomSerializer();
-                }
+                s_defaultSerializer ??= new ContainerCodeDomSerializer();
 
                 return s_defaultSerializer;
             }

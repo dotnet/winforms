@@ -257,10 +257,7 @@ namespace System.ComponentModel.Design
         public InheritanceAttribute GetInheritanceAttribute(IComponent component)
         {
             InheritanceAttribute attr = (InheritanceAttribute)_inheritedComponents[component];
-            if (attr is null)
-            {
-                attr = InheritanceAttribute.Default;
-            }
+            attr ??= InheritanceAttribute.Default;
 
             return attr;
         }

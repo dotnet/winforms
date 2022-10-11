@@ -46,10 +46,7 @@ namespace System.Windows.Forms
             {
                 // OleInitialize needs to be called before we can call ActivateKeyboardLayout.
                 Application.OleRequired();
-                if (value is null)
-                {
-                    value = DefaultInputLanguage;
-                }
+                value ??= DefaultInputLanguage;
 
                 HKL handleOld = PInvoke.ActivateKeyboardLayout(new HKL(value.Handle), 0);
                 if (handleOld == default)
@@ -215,10 +212,7 @@ namespace System.Windows.Forms
 
                             // Default back to our legacy codepath and obtain the name
                             // directly through the registry value
-                            if (layoutName is null)
-                            {
-                                layoutName = (string?)key.GetValue("Layout Text");
-                            }
+                            layoutName ??= (string?)key.GetValue("Layout Text");
 
                             if (layoutName is not null)
                             {
@@ -255,10 +249,7 @@ namespace System.Windows.Forms
 
                                 // Default back to our legacy codepath and obtain the name
                                 // directly through the registry value
-                                if (layoutName is null)
-                                {
-                                    layoutName = (string?)key.GetValue("Layout Text");
-                                }
+                                layoutName ??= (string?)key.GetValue("Layout Text");
 
                                 if (layoutName is not null)
                                 {

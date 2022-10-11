@@ -1354,10 +1354,7 @@ namespace System.Windows.Forms
                     if (cacheTextCounter == 0)
                     {
                         Properties.SetObject(s_acheTextFieldProperty, _text);
-                        if (_text is null)
-                        {
-                            _text = WindowText;
-                        }
+                        _text ??= WindowText;
                     }
 
                     cacheTextCounter++;
@@ -1559,10 +1556,7 @@ namespace System.Windows.Forms
 
                 // In a typical control this is accessed ten times to create and show a control.
                 // It is a net memory savings, then, to maintain a copy on control.
-                if (_createParams is null)
-                {
-                    _createParams = new CreateParams();
-                }
+                _createParams ??= new CreateParams();
 
                 CreateParams cp = _createParams;
                 cp.Style = 0;
@@ -2255,10 +2249,7 @@ namespace System.Windows.Forms
                 // if application is in PerMonitorV2 mode and font is scaled when application moved between monitor.
                 if (ScaledControlFont is not null)
                 {
-                    if (_scaledFontWrapper is null)
-                    {
-                        _scaledFontWrapper = new FontHandleWrapper(ScaledControlFont);
-                    }
+                    _scaledFontWrapper ??= new FontHandleWrapper(ScaledControlFont);
 
                     return _scaledFontWrapper.Handle;
                 }
@@ -3011,10 +3002,7 @@ namespace System.Windows.Forms
                         name = Site.Name;
                     }
 
-                    if (name is null)
-                    {
-                        name = string.Empty;
-                    }
+                    name ??= string.Empty;
                 }
 
                 return name;
@@ -3577,10 +3565,7 @@ namespace System.Windows.Forms
             get => CacheTextInternal ? _text ?? string.Empty : WindowText;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (value == Text)
                 {
@@ -5811,10 +5796,7 @@ namespace System.Windows.Forms
         // Essentially an Hfont; see inner class for details.
         private static FontHandleWrapper GetDefaultFontHandleWrapper()
         {
-            if (s_defaultFontHandleWrapper is null)
-            {
-                s_defaultFontHandleWrapper = new FontHandleWrapper(DefaultFont);
-            }
+            s_defaultFontHandleWrapper ??= new FontHandleWrapper(DefaultFont);
 
             return s_defaultFontHandleWrapper;
         }
@@ -6603,10 +6585,7 @@ namespace System.Windows.Forms
         {
             if (tme._executionContext is not null)
             {
-                if (s_invokeMarshaledCallbackHelperDelegate is null)
-                {
-                    s_invokeMarshaledCallbackHelperDelegate = new ContextCallback(InvokeMarshaledCallbackHelper);
-                }
+                s_invokeMarshaledCallbackHelperDelegate ??= new ContextCallback(InvokeMarshaledCallbackHelper);
 
                 // If there's no ExecutionContext, make sure we have a SynchronizationContext.  There's no
                 // direct check for ExecutionContext: this is as close as we can get.
@@ -7095,10 +7074,7 @@ namespace System.Windows.Forms
 
             lock (this)
             {
-                if (_threadCallbackList is null)
-                {
-                    _threadCallbackList = new Queue<ThreadMethodEntry>();
-                }
+                _threadCallbackList ??= new Queue<ThreadMethodEntry>();
             }
 
             lock (_threadCallbackList)
@@ -9817,10 +9793,7 @@ namespace System.Windows.Forms
                 // We've detected some state we need to unset, usually clearing the hidden state of
                 // the accelerators.  We need to get the topmost parent and call CHANGEUISTATE so
                 // that the entire tree of controls is
-                if (topMostParent is null)
-                {
-                    topMostParent = TopMostParent;
-                }
+                topMostParent ??= TopMostParent;
 
                 // A) if we're parented to a native dialog - REFRESH our child states ONLY
                 //       Then we've got to send a WM_UPDATEUISTATE to the topmost managed control (which will be non-toplevel)
@@ -12162,10 +12135,7 @@ namespace System.Windows.Forms
                 name = Name;
             }
 
-            if (name is null)
-            {
-                name = string.Empty;
-            }
+            name ??= string.Empty;
 
             MarshalStringToMessage(name, ref m);
         }

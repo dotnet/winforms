@@ -129,10 +129,7 @@ namespace System.ComponentModel.Design
         {
             ArgumentNullException.ThrowIfNull(verb);
 
-            if (_globalVerbs is null)
-            {
-                _globalVerbs = new ArrayList();
-            }
+            _globalVerbs ??= new ArrayList();
 
             _globalVerbs.Add(verb);
             OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandAdded, verb));

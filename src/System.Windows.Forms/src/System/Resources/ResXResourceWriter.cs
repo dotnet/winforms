@@ -266,10 +266,7 @@ namespace System.Resources
         {
             ArgumentNullException.ThrowIfNull(assemblyName);
 
-            if (_cachedAliases is null)
-            {
-                _cachedAliases = new Hashtable();
-            }
+            _cachedAliases ??= new Hashtable();
 
             _cachedAliases[assemblyName.FullName] = aliasName;
         }
@@ -515,10 +512,7 @@ namespace System.Resources
 
         private string GetAliasFromName(AssemblyName assemblyName)
         {
-            if (_cachedAliases is null)
-            {
-                _cachedAliases = new Hashtable();
-            }
+            _cachedAliases ??= new Hashtable();
 
             string alias = (string)_cachedAliases[assemblyName.FullName];
 

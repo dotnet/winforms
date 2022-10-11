@@ -364,6 +364,7 @@ namespace System.Windows.Forms
                 {
                     lock (this)
                     {
+#pragma warning disable IDE0074 // disabled because of debug block
                         if (_marshalingControl is null)
                         {
 #if DEBUG
@@ -378,6 +379,7 @@ namespace System.Windows.Forms
                         }
 
                         return _marshalingControl;
+#pragma warning restore IDE0074
                     }
                 }
             }
@@ -388,15 +390,9 @@ namespace System.Windows.Forms
             /// </summary>
             internal void AddMessageFilter(IMessageFilter f)
             {
-                if (_messageFilters is null)
-                {
-                    _messageFilters = new List<IMessageFilter>();
-                }
+                _messageFilters ??= new List<IMessageFilter>();
 
-                if (_messageFilterSnapshot is null)
-                {
-                    _messageFilterSnapshot = new List<IMessageFilter>();
-                }
+                _messageFilterSnapshot ??= new List<IMessageFilter>();
 
                 if (f is not null)
                 {

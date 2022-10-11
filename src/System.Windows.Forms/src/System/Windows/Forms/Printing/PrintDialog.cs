@@ -144,10 +144,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_printerSettings is null)
-                {
-                    _printerSettings = new PrinterSettings();
-                }
+                _printerSettings ??= new PrinterSettings();
 
                 return _printerSettings;
             }

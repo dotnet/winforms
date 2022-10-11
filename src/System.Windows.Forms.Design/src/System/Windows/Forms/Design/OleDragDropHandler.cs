@@ -88,10 +88,7 @@ namespace System.Windows.Forms.Design
 
         private static void AddCurrentDrag(IDataObject data, IComponent component)
         {
-            if (currentDrags == null)
-            {
-                currentDrags = new Hashtable();
-            }
+            currentDrags ??= new Hashtable();
 
             currentDrags[data] = component;
         }
@@ -322,10 +319,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    if (comps == null)
-                    {
-                        comps = Array.Empty<IComponent>();
-                    }
+                    comps ??= Array.Empty<IComponent>();
                 }
                 finally
                 {
@@ -904,11 +898,8 @@ namespace System.Windows.Forms.Design
 
                                     // First check if the component we are dropping have a TrayLocation, and if so, use it
                                     PropertyDescriptor loc = TypeDescriptor.GetProperties(comp)["TrayLocation"];
-                                    if (loc == null)
-                                    {
-                                        // it didn't, so let's check for the regular Location
-                                        loc = TypeDescriptor.GetProperties(comp)["Location"];
-                                    }
+                                    // it didn't, so let's check for the regular Location
+                                    loc ??= TypeDescriptor.GetProperties(comp)["Location"];
 
                                     if (loc != null && !loc.IsReadOnly)
                                     {

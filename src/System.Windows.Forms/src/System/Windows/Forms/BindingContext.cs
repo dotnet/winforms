@@ -186,10 +186,7 @@ namespace System.Windows.Forms
             internal HashKey(object dataSource, string dataMember)
             {
                 ArgumentNullException.ThrowIfNull(dataSource);
-                if (dataMember is null)
-                {
-                    dataMember = string.Empty;
-                }
+                dataMember ??= string.Empty;
 
                 // The dataMember should be case insensitive, so convert the
                 // dataMember to lower case
@@ -253,10 +250,7 @@ namespace System.Windows.Forms
         {
             BindingManagerBase bindingManagerBase = null;
 
-            if (dataMember is null)
-            {
-                dataMember = string.Empty;
-            }
+            dataMember ??= string.Empty;
 
             // Check whether data source wants to provide its own binding managers
             // (but fall through to old logic if it fails to provide us with one)
@@ -373,10 +367,7 @@ namespace System.Windows.Forms
                 WeakReference wRef = (WeakReference)de.Value;
                 if (wRef.Target is null)
                 {
-                    if (cleanupList is null)
-                    {
-                        cleanupList = new ArrayList();
-                    }
+                    cleanupList ??= new ArrayList();
 
                     cleanupList.Add(de.Key);
                 }

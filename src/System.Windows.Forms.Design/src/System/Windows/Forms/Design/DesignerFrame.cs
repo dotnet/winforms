@@ -75,10 +75,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_behaviorService is null)
-                {
-                    _behaviorService = _designerSite.GetService(typeof(BehaviorService)) as BehaviorService;
-                }
+                _behaviorService ??= _designerSite.GetService(typeof(BehaviorService)) as BehaviorService;
 
                 return _behaviorService;
             }
@@ -422,10 +419,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (_behaviorService is null)
-                    {
-                        _behaviorService = _provider.GetService(typeof(BehaviorService)) as BehaviorService;
-                    }
+                    _behaviorService ??= _provider.GetService(typeof(BehaviorService)) as BehaviorService;
 
                     return _behaviorService;
                 }

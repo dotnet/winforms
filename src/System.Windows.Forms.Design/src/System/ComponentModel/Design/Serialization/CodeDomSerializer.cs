@@ -24,10 +24,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_default is null)
-                {
-                    s_default = new CodeDomSerializer();
-                }
+                s_default ??= new CodeDomSerializer();
 
                 return s_default;
             }

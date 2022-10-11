@@ -139,10 +139,7 @@ namespace System.ComponentModel.Design
             IDesignerHost host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;
             Debug.Assert(host is not null, "Design surface did not provide us with a designer host");
 
-            if (_designerList is null)
-            {
-                _designerList = new ArrayList();
-            }
+            _designerList ??= new ArrayList();
 
             _designerList.Add(host);
 
@@ -344,15 +341,9 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_designerList is null)
-                {
-                    _designerList = new ArrayList();
-                }
+                _designerList ??= new ArrayList();
 
-                if (_designerCollection is null)
-                {
-                    _designerCollection = new DesignerCollection(_designerList);
-                }
+                _designerCollection ??= new DesignerCollection(_designerList);
 
                 return _designerCollection;
             }
@@ -366,10 +357,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_events is null)
-                {
-                    _events = new EventHandlerList();
-                }
+                _events ??= new EventHandlerList();
 
                 _events[s_eventActiveDesignerChanged] = Delegate.Combine(_events[s_eventActiveDesignerChanged], value);
             }
@@ -391,10 +379,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_events is null)
-                {
-                    _events = new EventHandlerList();
-                }
+                _events ??= new EventHandlerList();
 
                 _events[s_eventDesignerCreated] = Delegate.Combine(_events[s_eventDesignerCreated], value);
             }
@@ -416,10 +401,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_events is null)
-                {
-                    _events = new EventHandlerList();
-                }
+                _events ??= new EventHandlerList();
 
                 _events[s_eventDesignerDisposed] = Delegate.Combine(_events[s_eventDesignerDisposed], value);
             }
@@ -441,10 +423,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_events is null)
-                {
-                    _events = new EventHandlerList();
-                }
+                _events ??= new EventHandlerList();
 
                 _events[s_eventSelectionChanged] = Delegate.Combine(_events[s_eventSelectionChanged], value);
             }

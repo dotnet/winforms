@@ -242,10 +242,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_errorBmp is null)
-                {
-                    s_errorBmp = GetBitmap("DataGridViewRow.error");
-                }
+                s_errorBmp ??= GetBitmap("DataGridViewRow.error");
 
                 return s_errorBmp;
             }

@@ -362,10 +362,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 tool = new AxToolboxItem(clsid);
-                if (axTools == null)
-                {
-                    axTools = new Hashtable();
-                }
+                axTools ??= new Hashtable();
 
                 axTools.Add(clsid, tool);
                 Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "\tAdded AxToolboxItem");
@@ -717,10 +714,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (parentControlDesigner == null)
-            {
-                parentControlDesigner = this;
-            }
+            parentControlDesigner ??= this;
 
             return parentControlDesigner;
         }
@@ -1132,10 +1126,7 @@ namespace System.Windows.Forms.Design
         {
             if (serviceType == typeof(IEventHandlerService))
             {
-                if (eventHandlerService == null)
-                {
-                    eventHandlerService = new EventHandlerService(frame);
-                }
+                eventHandlerService ??= new EventHandlerService(frame);
 
                 return eventHandlerService;
             }

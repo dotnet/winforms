@@ -25,10 +25,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_defaultSerializer is null)
-                {
-                    s_defaultSerializer = new CollectionCodeDomSerializer();
-                }
+                s_defaultSerializer ??= new CollectionCodeDomSerializer();
 
                 return s_defaultSerializer;
             }
@@ -335,10 +332,7 @@ namespace System.ComponentModel.Design.Serialization
                 Trace("Searching for AddRange or Add");
                 // Use the TargetFrameworkProviderService to create a provider, or use the default for the collection if the service is not available.  Since TargetFrameworkProvider reflection types are not compatible with RuntimeTypes, they can only be used with other reflection types from the same provider.
                 TypeDescriptionProvider provider = GetTargetFrameworkProvider(manager, originalCollection);
-                if (provider is null)
-                {
-                    provider = TypeDescriptor.GetProvider(originalCollection);
-                }
+                provider ??= TypeDescriptor.GetProvider(originalCollection);
 
                 MethodInfo[] methods = provider.GetReflectionType(originalCollection).GetMethods(BindingFlags.Public | BindingFlags.Instance);
                 ParameterInfo[] parameters;

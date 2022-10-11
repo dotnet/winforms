@@ -106,10 +106,7 @@ namespace System.Windows.Forms
                             if (value)
                             {
                                 // Create the timer window if needed.
-                                if (_timerWindow is null)
-                                {
-                                    _timerWindow = new TimerNativeWindow(this);
-                                }
+                                _timerWindow ??= new TimerNativeWindow(this);
 
                                 _timerRoot = GCHandle.Alloc(this);
                                 _timerWindow.StartTimer(_interval);

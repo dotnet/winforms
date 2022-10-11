@@ -108,10 +108,7 @@ namespace System.Windows.Forms
                 SetFlag(FlagAutoEllipsis, value);
                 if (value)
                 {
-                    if (_textToolTip is null)
-                    {
-                        _textToolTip = new ToolTip();
-                    }
+                    _textToolTip ??= new ToolTip();
                 }
 
                 Invalidate();
@@ -395,10 +392,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_flatAppearance is null)
-                {
-                    _flatAppearance = new FlatButtonAppearance(this);
-                }
+                _flatAppearance ??= new FlatButtonAppearance(this);
 
                 return _flatAppearance;
             }

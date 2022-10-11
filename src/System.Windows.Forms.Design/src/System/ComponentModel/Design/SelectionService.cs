@@ -393,10 +393,7 @@ namespace System.ComponentModel.Design
             bool fAuto = !(fToggle | fAdd | fRemove | fReplace);
 
             // We always want to allow NULL arrays coming in.
-            if (components is null)
-            {
-                components = Array.Empty<object>();
-            }
+            components ??= Array.Empty<object>();
 
             // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifier keys.  This creates the "Auto" selection type for us by default.
             if (fAuto)

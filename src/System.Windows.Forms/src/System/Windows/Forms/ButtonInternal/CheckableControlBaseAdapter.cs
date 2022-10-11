@@ -24,10 +24,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             get
             {
-                if (_buttonAdapter is null)
-                {
-                    _buttonAdapter = CreateButtonAdapter();
-                }
+                _buttonAdapter ??= CreateButtonAdapter();
 
                 return _buttonAdapter;
             }

@@ -231,10 +231,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_errors is null)
-                    {
-                        _errors = Array.Empty<object>();
-                    }
+                    _errors ??= Array.Empty<object>();
 
                     object[] errors = new object[_errors.Count];
                     _errors.CopyTo(errors, 0);
@@ -249,10 +246,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_resources is null)
-                    {
-                        _resources = new LocalResourceManager();
-                    }
+                    _resources ??= new LocalResourceManager();
 
                     return _resources;
                 }
@@ -1243,10 +1237,7 @@ namespace System.ComponentModel.Design.Serialization
                                     {
                                         if (prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content) || !prop.IsReadOnly)
                                         {
-                                            if (defaultPropList is null)
-                                            {
-                                                defaultPropList = new ArrayList(data.Members.Count);
-                                            }
+                                            defaultPropList ??= new ArrayList(data.Members.Count);
 
                                             Trace("Adding default for {0}.{1}", data._name, prop.Name);
                                             defaultPropList.Add(prop.Name);
@@ -1266,10 +1257,7 @@ namespace System.ComponentModel.Design.Serialization
 
                                         if (eventProp.GetValue(data._value) is null)
                                         {
-                                            if (defaultEventList is null)
-                                            {
-                                                defaultEventList = new List<string>();
-                                            }
+                                            defaultEventList ??= new List<string>();
 
                                             defaultEventList.Add(eventProp.Name);
                                         }
@@ -1285,19 +1273,13 @@ namespace System.ComponentModel.Design.Serialization
                                         if (ebs is not null && ebs.GetEvent(prop) is not null)
                                         {
                                             Debug.Assert(prop.GetValue(data._value) is null, "ShouldSerializeValue and GetValue are differing");
-                                            if (defaultEventList is null)
-                                            {
-                                                defaultEventList = new List<string>();
-                                            }
+                                            defaultEventList ??= new List<string>();
 
                                             defaultEventList.Add(prop.Name);
                                         }
                                         else
                                         {
-                                            if (defaultPropList is null)
-                                            {
-                                                defaultPropList = new ArrayList(data.Members.Count);
-                                            }
+                                            defaultPropList ??= new ArrayList(data.Members.Count);
 
                                             Trace("Adding default for {0}.{1}", data._name, prop.Name);
                                             defaultPropList.Add(prop.Name);
@@ -1412,10 +1394,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     get
                     {
-                        if (_members is null)
-                        {
-                            _members = new ArrayList();
-                        }
+                        _members ??= new ArrayList();
 
                         return _members;
                     }
@@ -1436,10 +1415,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     get
                     {
-                        if (_hashtable is null)
-                        {
-                            _hashtable = new Hashtable();
-                        }
+                        _hashtable ??= new Hashtable();
 
                         return _hashtable;
                     }

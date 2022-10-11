@@ -100,7 +100,7 @@ namespace System.ComponentModel.Design
 
             if (serviceType == typeof(IServiceContainer))
             {
-                return _services ?? (_services = new ServiceContainer(_host));
+                return _services ??= new ServiceContainer(_host);
             }
 
             if (_services is not null)

@@ -112,10 +112,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_serviceContainer is null)
-                {
-                    _serviceContainer = new ServiceContainer(_parentProvider);
-                }
+                _serviceContainer ??= new ServiceContainer(_parentProvider);
 
                 return _serviceContainer;
             }
@@ -461,10 +458,7 @@ namespace System.ComponentModel.Design
 
                 object service = _primaryProvider.GetService(serviceType);
 
-                if (service is null)
-                {
-                    service = _secondaryProvider.GetService(serviceType);
-                }
+                service ??= _secondaryProvider.GetService(serviceType);
 
                 return service;
             }

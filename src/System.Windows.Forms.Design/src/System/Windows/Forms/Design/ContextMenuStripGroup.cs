@@ -15,10 +15,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_items is null)
-                {
-                    _items = new List<ToolStripItem>();
-                }
+                _items ??= new List<ToolStripItem>();
 
                 return _items;
             }

@@ -86,10 +86,7 @@ namespace System.Windows.Forms.Design
             //
             if (Inherited)
             {
-                if (inheritanceUI == null)
-                {
-                    inheritanceUI = (InheritanceUI)GetService(typeof(InheritanceUI));
-                }
+                inheritanceUI ??= (InheritanceUI)GetService(typeof(InheritanceUI));
 
                 if (inheritanceUI != null)
                 {

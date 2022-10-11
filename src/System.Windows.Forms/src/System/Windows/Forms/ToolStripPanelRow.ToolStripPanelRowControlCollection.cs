@@ -58,10 +58,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_cellCollection is null)
-                    {
-                        _cellCollection = new ArrangedElementCollection(InnerList);
-                    }
+                    _cellCollection ??= new ArrangedElementCollection(InnerList);
 
                     return _cellCollection;
                 }

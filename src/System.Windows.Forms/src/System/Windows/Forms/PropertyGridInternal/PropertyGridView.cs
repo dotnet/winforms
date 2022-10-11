@@ -4253,10 +4253,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return new ArrayList();
             }
 
-            if (expandedItems is null)
-            {
-                expandedItems = new ArrayList();
-            }
+            expandedItems ??= new ArrayList();
 
             for (int i = 0; i < entries.Count; i++)
             {

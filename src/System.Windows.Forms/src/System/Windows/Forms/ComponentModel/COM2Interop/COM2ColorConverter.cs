@@ -52,10 +52,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             cancelSet = false;
 
             // we default to black.
-            if (managedValue is null)
-            {
-                managedValue = Color.Black;
-            }
+            managedValue ??= Color.Black;
 
             if (managedValue is Color managedValueAsColor)
             {

@@ -87,10 +87,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedIndexCollection is null)
-                {
-                    _checkedIndexCollection = new CheckedIndexCollection(this);
-                }
+                _checkedIndexCollection ??= new CheckedIndexCollection(this);
 
                 return _checkedIndexCollection;
             }
@@ -105,10 +102,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedItemCollection is null)
-                {
-                    _checkedItemCollection = new CheckedItemCollection(this);
-                }
+                _checkedItemCollection ??= new CheckedItemCollection(this);
 
                 return _checkedItemCollection;
             }

@@ -88,10 +88,7 @@ namespace System.ComponentModel.Design.Serialization
             get
             {
                 CheckSession();
-                if (errorList is null)
-                {
-                    errorList = new ArrayList();
-                }
+                errorList ??= new ArrayList();
 
                 return errorList;
             }
@@ -449,10 +446,7 @@ namespace System.ComponentModel.Design.Serialization
                     // And stash this little guy for later, but only if we're in a session. If we're outside of a session this should still be useable for resolving serializers, but we don't cache them.
                     if (serializer is not null && session is not null)
                     {
-                        if (serializers is null)
-                        {
-                            serializers = new Hashtable();
-                        }
+                        serializers ??= new Hashtable();
 
                         serializers[objectType] = serializer;
                     }
@@ -475,10 +469,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (defaultProviderTable is null)
-                {
-                    defaultProviderTable = new Hashtable();
-                }
+                defaultProviderTable ??= new Hashtable();
 
                 defaultProviderTable[serializerType] = defaultSerializerType;
             }
@@ -704,10 +695,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         void IDesignerSerializationManager.AddSerializationProvider(IDesignerSerializationProvider provider)
         {
-            if (designerSerializationProviders is null)
-            {
-                designerSerializationProviders = new ArrayList();
-            }
+            designerSerializationProviders ??= new ArrayList();
 
             if (!designerSerializationProviders.Contains(provider))
             {

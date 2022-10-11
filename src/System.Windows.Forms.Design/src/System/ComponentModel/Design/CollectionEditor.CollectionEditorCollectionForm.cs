@@ -129,10 +129,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void AddItems(IList instances)
             {
-                if (_createdItems is null)
-                {
-                    _createdItems = new ArrayList();
-                }
+                _createdItems ??= new ArrayList();
 
                 _listbox.BeginUpdate();
                 try
@@ -759,10 +756,7 @@ namespace System.ComponentModel.Design
                 }
 
                 // Remember these contents for cancellation
-                if (_originalItems is null)
-                {
-                    _originalItems = new ArrayList();
-                }
+                _originalItems ??= new ArrayList();
 
                 _originalItems.Clear();
 
@@ -910,10 +904,7 @@ namespace System.ComponentModel.Design
                         {
                             if (CanRemoveInstance(item.Value))
                             {
-                                if (_removedItems is null)
-                                {
-                                    _removedItems = new ArrayList();
-                                }
+                                _removedItems ??= new ArrayList();
 
                                 _removedItems.Add(item.Value);
                                 _listbox.Items.Remove(item);
@@ -1376,10 +1367,7 @@ namespace System.ComponentModel.Design
                         if (_uiTypeEditor is null)
                         {
                             _uiTypeEditor = TypeDescriptor.GetEditor(_value, typeof(UITypeEditor));
-                            if (_uiTypeEditor is null)
-                            {
-                                _uiTypeEditor = this;
-                            }
+                            _uiTypeEditor ??= this;
                         }
 
                         if (_uiTypeEditor != this)

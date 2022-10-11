@@ -268,8 +268,7 @@ namespace DesignSurfaceExt
         {
             get
             {
-                if (_tabOrder == null)
-                    _tabOrder = new TabOrderHooker();
+                _tabOrder ??= new TabOrderHooker();
                 return _tabOrder;
             }
             set { _tabOrder = value; }

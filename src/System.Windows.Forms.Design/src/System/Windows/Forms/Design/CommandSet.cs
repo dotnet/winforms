@@ -244,10 +244,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (behaviorService == null)
-                {
-                    behaviorService = GetService(typeof(BehaviorService)) as BehaviorService;
-                }
+                behaviorService ??= GetService(typeof(BehaviorService)) as BehaviorService;
 
                 return behaviorService;
             }
@@ -261,10 +258,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (menuService == null)
-                {
-                    menuService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-                }
+                menuService ??= (IMenuCommandService)GetService(typeof(IMenuCommandService));
 
                 return menuService;
             }
@@ -1473,10 +1467,7 @@ namespace System.Windows.Forms.Design
 
                             //cache the first parent we see - if there's a mix of different parents - we'll
                             //just center based on the first one
-                            if (viewParent == null)
-                            {
-                                viewParent = ((Control)comp).Parent;
-                            }
+                            viewParent ??= ((Control)comp).Parent;
 
                             if (loc.X < left)
                                 left = loc.X;
@@ -2197,10 +2188,7 @@ namespace System.Windows.Forms.Design
                             IComponent baseComponent = host.RootComponent;
                             selectedComponent = (IComponent)SelectionService.PrimarySelection;
 
-                            if (selectedComponent == null)
-                            {
-                                selectedComponent = baseComponent;
-                            }
+                            selectedComponent ??= baseComponent;
 
                             dragClient = false;
                             ITreeDesigner tree = host.GetDesigner(selectedComponent) as ITreeDesigner;
@@ -2430,11 +2418,8 @@ namespace System.Windows.Forms.Design
                             // Rather than fixing this up in ToolStripKeyboardHandlingService.OnCommandPaste,
                             // we do it here, since doing it in the service, wouldn't handle cross-form paste.
 
-                            if (tray == null)
-                            {
-                                // the paste target did not have a tray already, so let's go get it - if there is one
-                                tray = GetService(typeof(ComponentTray)) as ComponentTray;
-                            }
+                            // the paste target did not have a tray already, so let's go get it - if there is one
+                            tray ??= GetService(typeof(ComponentTray)) as ComponentTray;
 
                             if (tray != null)
                             {
@@ -3948,10 +3933,7 @@ namespace System.Windows.Forms.Design
                     //
                     lock (typeof(CommandSetItem))
                     {
-                        if (commandStatusHash == null)
-                        {
-                            commandStatusHash = new Hashtable();
-                        }
+                        commandStatusHash ??= new Hashtable();
                     }
 
                     //

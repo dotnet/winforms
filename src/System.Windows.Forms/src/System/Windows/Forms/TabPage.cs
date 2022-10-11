@@ -442,10 +442,7 @@ namespace System.Windows.Forms
             get => _toolTipText;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (value == _toolTipText)
                 {

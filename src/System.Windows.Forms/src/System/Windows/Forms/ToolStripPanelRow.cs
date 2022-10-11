@@ -498,10 +498,7 @@ namespace System.Windows.Forms
                         // we're not re-performing a layout, so we need to adjust the next cell
                         for (int j = i + 1; j < Cells.Count; j++)
                         {
-                            if (cellOffsets is null)
-                            {
-                                cellOffsets = new int[Cells.Count];
-                            }
+                            cellOffsets ??= new int[Cells.Count];
 
                             cellOffsets[j] += Math.Max(0, currentCell.CachedBounds.Width - cachedBounds.Width);
                         }
@@ -592,10 +589,7 @@ namespace System.Windows.Forms
                         // we're not re-performing a layout, so we need to adjust the next cell
                         for (int j = i + 1; j < Cells.Count; j++)
                         {
-                            if (cellOffsets is null)
-                            {
-                                cellOffsets = new int[Cells.Count];
-                            }
+                            cellOffsets ??= new int[Cells.Count];
 
                             cellOffsets[j] += Math.Max(0, currentCell.CachedBounds.Height - cachedBounds.Height);
                         }

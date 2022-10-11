@@ -1944,20 +1944,14 @@ namespace System.Windows.Forms
 
         private bool ValidateThroughAncestor(Control? ancestorControl, bool preventFocusChangeOnError)
         {
-            if (ancestorControl is null)
-            {
-                ancestorControl = this;
-            }
+            ancestorControl ??= this;
 
             if (_state[s_stateValidating])
             {
                 return false;
             }
 
-            if (_unvalidatedControl is null)
-            {
-                _unvalidatedControl = _focusedControl;
-            }
+            _unvalidatedControl ??= _focusedControl;
 
             // Return true for a Container Control with no controls to validate.
             if (_unvalidatedControl is null)

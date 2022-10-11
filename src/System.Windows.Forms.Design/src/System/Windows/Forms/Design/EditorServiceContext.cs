@@ -80,10 +80,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_componentChangeSvc is null)
-                {
-                    _componentChangeSvc = (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
-                }
+                _componentChangeSvc ??= (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
 
                 return _componentChangeSvc;
             }

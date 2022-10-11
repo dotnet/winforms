@@ -558,13 +558,10 @@ namespace System.Windows.Forms
                     return base.Font;
                 }
 
-                if (_defaultFont is null)
-                {
-                    // since toolstrip manager default font is thread static, hold onto a copy of the
-                    // pointer in an instance variable for perf so we don't have to keep fishing into
-                    // thread local storage for it.
-                    _defaultFont = ToolStripManager.DefaultFont;
-                }
+                // since toolstrip manager default font is thread static, hold onto a copy of the
+                // pointer in an instance variable for perf so we don't have to keep fishing into
+                // thread local storage for it.
+                _defaultFont ??= ToolStripManager.DefaultFont;
 
                 return _defaultFont;
             }
@@ -736,10 +733,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dropDownOwnerWindow is null)
-                {
-                    _dropDownOwnerWindow = new NativeWindow();
-                }
+                _dropDownOwnerWindow ??= new NativeWindow();
 
                 if (_dropDownOwnerWindow.Handle == IntPtr.Zero)
                 {
@@ -763,10 +757,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dropTargetManager is null)
-                {
-                    _dropTargetManager = new ToolStripDropTargetManager(this);
-                }
+                _dropTargetManager ??= new ToolStripDropTargetManager(this);
 
                 return _dropTargetManager;
             }
@@ -783,10 +774,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_displayedItems is null)
-                {
-                    _displayedItems = new ToolStripItemCollection(this, false);
-                }
+                _displayedItems ??= new ToolStripItemCollection(this, false);
 
                 return _displayedItems;
             }
@@ -857,9 +845,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_toolStripGrip is null)
-                {
-                    _toolStripGrip = new ToolStripGrip
+                _toolStripGrip ??= new ToolStripGrip
                     {
                         Overflow = ToolStripItemOverflow.Never,
                         Visible = _toolStripGripStyle == ToolStripGripStyle.Visible,
@@ -867,7 +853,6 @@ namespace System.Windows.Forms
                         ParentInternal = this,
                         Margin = DefaultGripMargin
                     };
-                }
 
                 return _toolStripGrip;
             }
@@ -1123,10 +1108,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_toolStripItemCollection is null)
-                {
-                    _toolStripItemCollection = new ToolStripItemCollection(this, true);
-                }
+                _toolStripItemCollection ??= new ToolStripItemCollection(this, true);
 
                 return _toolStripItemCollection;
             }
@@ -1169,10 +1151,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_cachedItemHdcInfo is null)
-                {
-                    _cachedItemHdcInfo = new CachedItemHdcInfo();
-                }
+                _cachedItemHdcInfo ??= new CachedItemHdcInfo();
 
                 return _cachedItemHdcInfo;
             }
@@ -1416,10 +1395,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_mergeHistoryStack is null)
-                {
-                    _mergeHistoryStack = new Stack<MergeHistory>();
-                }
+                _mergeHistoryStack ??= new Stack<MergeHistory>();
 
                 return _mergeHistoryStack;
             }
@@ -1429,10 +1405,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_mouseHoverTimer is null)
-                {
-                    _mouseHoverTimer = new MouseHoverTimer();
-                }
+                _mouseHoverTimer ??= new MouseHoverTimer();
 
                 return _mouseHoverTimer;
             }
@@ -1466,10 +1439,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_overflowItems is null)
-                {
-                    _overflowItems = new ToolStripItemCollection(this, false);
-                }
+                _overflowItems ??= new ToolStripItemCollection(this, false);
 
                 return _overflowItems;
             }
@@ -1490,10 +1460,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_restoreFocusFilter is null)
-                {
-                    _restoreFocusFilter = new RestoreFocusMessageFilter(this);
-                }
+                _restoreFocusFilter ??= new RestoreFocusMessageFilter(this);
 
                 return _restoreFocusFilter;
             }
@@ -1781,10 +1748,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_shortcuts is null)
-                {
-                    _shortcuts = new Hashtable(1);
-                }
+                _shortcuts ??= new Hashtable(1);
 
                 return _shortcuts;
             }
@@ -1982,10 +1946,7 @@ namespace System.Windows.Forms
                     if (invalidate)
                     {
                         // since regions are heavy weight - only use if we need it.
-                        if (region is null)
-                        {
-                            region = new Region(regionRect);
-                        }
+                        region ??= new Region(regionRect);
 
                         region.Union(DisplayedItems[i].Bounds);
                     }
@@ -2272,14 +2233,11 @@ namespace System.Windows.Forms
 
             ToolStripDropDown dropDown = this as ToolStripDropDown;
 
-            if (start is null)
-            {
-                // The navigation should be consistent when navigating in forward and
-                // backward direction entering the toolstrip, it means that the first
-                // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
-                // is pressed.
-                start = GetStartItem(forward, dropDown is not null);
-            }
+            // The navigation should be consistent when navigating in forward and
+            // backward direction entering the toolstrip, it means that the first
+            // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
+            // is pressed.
+            start ??= GetStartItem(forward, dropDown is not null);
 
             int current = DisplayedItems.IndexOf(start);
             if (current == -1)

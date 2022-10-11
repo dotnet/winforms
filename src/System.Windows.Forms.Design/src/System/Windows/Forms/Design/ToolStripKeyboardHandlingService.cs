@@ -1207,10 +1207,7 @@ namespace System.Windows.Forms.Design
                 currentSelection = ShiftPrimaryItem;
             }
 
-            if (currentSelection is null)
-            {
-                currentSelection = SelectedDesignerControl;
-            }
+            currentSelection ??= SelectedDesignerControl;
 
             ctl = currentSelection as Control;
             if (targetSelection is null && ctl is null)
@@ -1221,10 +1218,7 @@ namespace System.Windows.Forms.Design
                     toolStripItem = ShiftPrimaryItem as ToolStripItem;
                 }
 
-                if (toolStripItem is null)
-                {
-                    toolStripItem = SelectedDesignerControl as ToolStripItem;
-                }
+                toolStripItem ??= SelectedDesignerControl as ToolStripItem;
 
                 if (toolStripItem is DesignerToolStripControlHost && toolStripItem.GetCurrentParent() is ToolStripDropDown parent)
                 {
@@ -1261,10 +1255,7 @@ namespace System.Windows.Forms.Design
                         item = ShiftPrimaryItem as ToolStripDropDownItem;
                     }
 
-                    if (item is null)
-                    {
-                        item = SelectedDesignerControl as ToolStripDropDownItem;
-                    }
+                    item ??= SelectedDesignerControl as ToolStripDropDownItem;
 
                     if (item != null && item.IsOnDropDown)
                     {
@@ -1350,10 +1341,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            if (currentSelection is null)
-            {
-                currentSelection = SelectedDesignerControl;
-            }
+            currentSelection ??= SelectedDesignerControl;
 
             ctl = currentSelection as Control;
 
@@ -1365,10 +1353,7 @@ namespace System.Windows.Forms.Design
                     item = ShiftPrimaryItem as ToolStripItem;
                 }
 
-                if (item is null)
-                {
-                    item = SelectedDesignerControl as ToolStripItem;
-                }
+                item ??= SelectedDesignerControl as ToolStripItem;
 
                 ToolStripDropDown parentToMoveOn = null;
                 if (item != null)
@@ -1499,10 +1484,7 @@ namespace System.Windows.Forms.Design
         // caches the old commands from the menuCommand service.
         private void PopulateOldCommands()
         {
-            if (_oldCommands is null)
-            {
-                _oldCommands = new ArrayList();
-            }
+            _oldCommands ??= new ArrayList();
 
             IMenuCommandService mcs = MenuService;
             if (mcs != null)
@@ -1540,10 +1522,7 @@ namespace System.Windows.Forms.Design
         // populates a list of our custom commands to be added to menu command service.
         private void PopulateNewCommands()
         {
-            if (_newCommands is null)
-            {
-                _newCommands = new ArrayList();
-            }
+            _newCommands ??= new ArrayList();
 
             _newCommands.Add(new MenuCommand(new EventHandler(OnKeySelect), MenuCommands.KeySelectNext));
             _newCommands.Add(new MenuCommand(new EventHandler(OnKeySelect), MenuCommands.KeySelectPrevious));
@@ -1725,10 +1704,7 @@ namespace System.Windows.Forms.Design
             else
             {
                 toolStripItem = selSvc.PrimarySelection as ToolStripItem;
-                if (toolStripItem is null)
-                {
-                    toolStripItem = SelectedDesignerControl as ToolStripItem;
-                }
+                toolStripItem ??= SelectedDesignerControl as ToolStripItem;
 
                 if (toolStripItem is null)
                 {
@@ -1863,10 +1839,7 @@ namespace System.Windows.Forms.Design
                                     }
                                 }
 
-                                if (targetSelection is null)
-                                {
-                                    targetSelection = baseCtl;
-                                }
+                                targetSelection ??= baseCtl;
                             }
                         }
                     }
@@ -1900,10 +1873,7 @@ namespace System.Windows.Forms.Design
                     item = ShiftPrimaryItem as ToolStripItem;
                 }
 
-                if (item is null)
-                {
-                    item = SelectedDesignerControl as ToolStripItem;
-                }
+                item ??= SelectedDesignerControl as ToolStripItem;
 
                 if (item != null && item.IsOnDropDown && item.Placement != ToolStripItemPlacement.Overflow)
                 {
@@ -1985,10 +1955,7 @@ namespace System.Windows.Forms.Design
                                         }
                                     }
 
-                                    if (targetSelection is null)
-                                    {
-                                        targetSelection = baseCtl;
-                                    }
+                                    targetSelection ??= baseCtl;
                                 }
                             }
                             else
@@ -2017,10 +1984,7 @@ namespace System.Windows.Forms.Design
 
                                 targetSelection = GetNextControlInTab(baseCtl, parent, !backwards);
                                 // this is the First control in TabOrder... Select the Form..
-                                if (targetSelection is null)
-                                {
-                                    targetSelection = baseCtl;
-                                }
+                                targetSelection ??= baseCtl;
                             }
                             else
                             {

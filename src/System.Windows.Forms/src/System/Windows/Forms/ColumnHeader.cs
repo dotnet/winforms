@@ -81,10 +81,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_accessibilityObject is null)
-                {
-                    _accessibilityObject = new ListViewColumnHeaderAccessibleObject(this);
-                }
+                _accessibilityObject ??= new ListViewColumnHeaderAccessibleObject(this);
 
                 return _accessibilityObject;
             }

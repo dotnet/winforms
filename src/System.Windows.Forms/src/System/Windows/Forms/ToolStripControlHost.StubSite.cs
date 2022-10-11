@@ -118,10 +118,7 @@ namespace System.Windows.Forms
             /// </summary>
             void IDictionaryService.SetValue(object key, object value)
             {
-                if (_dictionary is null)
-                {
-                    _dictionary = new Hashtable();
-                }
+                _dictionary ??= new Hashtable();
 
                 if (value is null)
                 {

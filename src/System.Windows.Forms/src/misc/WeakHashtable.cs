@@ -96,10 +96,7 @@ namespace System.ComponentModel
                 {
                     if (o is WeakReference wr && !wr.IsAlive)
                     {
-                        if (cleanupList is null)
-                        {
-                            cleanupList = new ArrayList();
-                        }
+                        cleanupList ??= new ArrayList();
 
                         cleanupList.Add(wr);
                     }

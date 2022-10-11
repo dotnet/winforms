@@ -198,10 +198,7 @@ namespace System.Windows.Forms
 
                 if (tempList is IList)
                 {
-                    if (finalType is null)
-                    {
-                        finalType = tempList.GetType();
-                    }
+                    finalType ??= tempList.GetType();
 
                     list = (IList)tempList;
                     WireEvents(list);

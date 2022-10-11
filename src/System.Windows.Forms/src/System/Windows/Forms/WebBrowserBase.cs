@@ -752,20 +752,14 @@ namespace System.Windows.Forms
 
         internal WebBrowserContainer CreateWebBrowserContainer()
         {
-            if (wbContainer is null)
-            {
-                wbContainer = new WebBrowserContainer(this);
-            }
+            wbContainer ??= new WebBrowserContainer(this);
 
             return wbContainer;
         }
 
         internal WebBrowserContainer GetParentContainer()
         {
-            if (container is null)
-            {
-                container = WebBrowserContainer.FindContainerForControl(this);
-            }
+            container ??= WebBrowserContainer.FindContainerForControl(this);
 
             if (container is null)
             {
@@ -1089,10 +1083,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (axSite is null)
-                {
-                    axSite = CreateWebBrowserSiteBase();
-                }
+                axSite ??= CreateWebBrowserSiteBase();
 
                 return axSite;
             }
@@ -1129,10 +1120,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectionChangeHandler is null)
-                {
-                    selectionChangeHandler = new EventHandler(OnNewSelection);
-                }
+                selectionChangeHandler ??= new EventHandler(OnNewSelection);
 
                 return selectionChangeHandler;
             }

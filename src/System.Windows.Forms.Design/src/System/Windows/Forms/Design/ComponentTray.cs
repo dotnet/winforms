@@ -581,10 +581,7 @@ namespace System.Windows.Forms.Design
 
         internal virtual OleDragDropHandler GetOleDragHandler()
         {
-            if (oleDragDropHandler is null)
-            {
-                oleDragDropHandler = new TrayOleDragDropHandler(DragHandler, serviceProvider, this);
-            }
+            oleDragDropHandler ??= new TrayOleDragDropHandler(DragHandler, serviceProvider, this);
 
             return oleDragDropHandler;
         }
@@ -593,10 +590,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (dragHandler is null)
-                {
-                    dragHandler = new TraySelectionUIHandler(this);
-                }
+                dragHandler ??= new TraySelectionUIHandler(this);
 
                 return dragHandler;
             }
@@ -1137,10 +1131,7 @@ namespace System.Windows.Forms.Design
             if (!TabOrderActive)
             {
                 SuspendLayout();
-                if (toolboxService is null)
-                {
-                    toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
-                }
+                toolboxService ??= (IToolboxService)GetService(typeof(IToolboxService));
 
                 OleDragDropHandler dragDropHandler = GetOleDragHandler();
                 object[] dragComps = OleDragDropHandler.GetDraggingObjects(de);
@@ -1252,10 +1243,7 @@ namespace System.Windows.Forms.Design
             base.OnMouseDown(e);
             if (!TabOrderActive)
             {
-                if (toolboxService is null)
-                {
-                    toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
-                }
+                toolboxService ??= (IToolboxService)GetService(typeof(IToolboxService));
 
                 FocusDesigner();
                 if (e.Button == MouseButtons.Left && toolboxService != null)
@@ -1534,10 +1522,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual void OnSetCursor()
         {
-            if (toolboxService is null)
-            {
-                toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
-            }
+            toolboxService ??= (IToolboxService)GetService(typeof(IToolboxService));
 
             if (toolboxService is null || !toolboxService.SetCursor())
             {
@@ -1733,10 +1718,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (inheritanceUI is null)
-                {
-                    inheritanceUI = new InheritanceUI();
-                }
+                inheritanceUI ??= new InheritanceUI();
 
                 return inheritanceUI;
             }
@@ -1746,10 +1728,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (menuCommandService is null)
-                {
-                    menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-                }
+                menuCommandService ??= (IMenuCommandService)GetService(typeof(IMenuCommandService));
 
                 return menuCommandService;
             }
@@ -2008,11 +1987,8 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (name is null)
-                {
-                    // We always want name to have something in it, so we default to the class name.  This way the design instance contains something semi-intuitive if we don't have a site.
-                    name = component.GetType().Name;
-                }
+                // We always want name to have something in it, so we default to the class name.  This way the design instance contains something semi-intuitive if we don't have a site.
+                name ??= component.GetType().Name;
 
                 Text = name;
                 _inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(component)[typeof(InheritanceAttribute)];

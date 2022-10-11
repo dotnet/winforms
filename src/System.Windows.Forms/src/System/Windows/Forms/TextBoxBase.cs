@@ -156,16 +156,13 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (s_shortcutsToDisable is null)
-                {
-                    s_shortcutsToDisable = new int[]
+                s_shortcutsToDisable ??= new int[]
                     {
                         (int)Shortcut.CtrlZ, (int)Shortcut.CtrlC, (int)Shortcut.CtrlX,
                         (int)Shortcut.CtrlV, (int)Shortcut.CtrlA, (int)Shortcut.CtrlL, (int)Shortcut.CtrlR,
                         (int)Shortcut.CtrlE, (int)Shortcut.CtrlY, (int)Keys.Control + (int)Keys.Back,
                         (int)Shortcut.CtrlDel, (int)Shortcut.ShiftDel, (int)Shortcut.ShiftIns, (int)Shortcut.CtrlJ
                     };
-                }
 
                 _textBoxFlags[shortcutsEnabled] = value;
             }
@@ -1035,10 +1032,7 @@ namespace System.Windows.Forms
                 CreateHandle();
             }
 
-            if (text is null)
-            {
-                text = string.Empty;
-            }
+            text ??= string.Empty;
 
             // The EM_LIMITTEXT message limits only the text the user can enter. It does not affect any text
             // already in the edit control when the message is sent, nor does it affect the length of the text
@@ -1165,10 +1159,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!WindowText.Equals(value))
                 {

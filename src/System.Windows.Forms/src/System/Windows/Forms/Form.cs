@@ -891,10 +891,7 @@ namespace System.Windows.Forms
                     {
                         // Once we grab the lock, we re-check the value to avoid a
                         // race condition.
-                        if (defaultIcon is null)
-                        {
-                            defaultIcon = new Icon(typeof(Form), "wfc");
-                        }
+                        defaultIcon ??= new Icon(typeof(Form), "wfc");
                     }
                 }
 
@@ -4245,10 +4242,7 @@ namespace System.Windows.Forms
                 Size size = ClientSize;
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (_sizeGripRenderer is null)
-                    {
-                        _sizeGripRenderer = new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
-                    }
+                    _sizeGripRenderer ??= new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
 
                     using var hdc = new DeviceContextHdcScope(e);
                     _sizeGripRenderer.DrawBackground(
@@ -5830,10 +5824,7 @@ namespace System.Windows.Forms
                 MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
                 if (sourceMenuStrip is not null && sourceMenuStrip.MdiWindowListItem is not null)
                 {
-                    if (MdiWindowListStrip is null)
-                    {
-                        MdiWindowListStrip = new MdiWindowListStrip();
-                    }
+                    MdiWindowListStrip ??= new MdiWindowListStrip();
 
                     int nSubItems = sourceMenuStrip.MdiWindowListItem.DropDownItems.Count;
                     bool shouldIncludeSeparator = (nSubItems > 0 &&

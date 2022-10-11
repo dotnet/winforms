@@ -328,7 +328,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the forms collection associated with this application.
         /// </summary>
-        public static FormCollection OpenForms => s_forms ?? (s_forms = new FormCollection());
+        public static FormCollection OpenForms => s_forms ??= new FormCollection();
 
         /// <summary>
         ///  Gets
@@ -464,19 +464,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_safeTopLevelCaptionSuffix is null)
-                {
-                    s_safeTopLevelCaptionSuffix = SR.SafeTopLevelCaptionFormat; // 0 - original, 1 - zone, 2 - site
-                }
+                s_safeTopLevelCaptionSuffix ??= SR.SafeTopLevelCaptionFormat; // 0 - original, 1 - zone, 2 - site
 
                 return s_safeTopLevelCaptionSuffix;
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 s_safeTopLevelCaptionSuffix = value;
             }
@@ -489,12 +483,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_startupPath is null)
-                {
-                    // StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
-                    // startupPath = Path.GetDirectoryName(sb.ToString());
-                    s_startupPath = AppContext.BaseDirectory;
-                }
+                // StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
+                // startupPath = Path.GetDirectoryName(sb.ToString());
+                s_startupPath ??= AppContext.BaseDirectory;
 
                 return s_startupPath;
             }
@@ -646,10 +637,7 @@ namespace System.Windows.Forms
         {
             lock (s_internalSyncObject)
             {
-                if (s_eventHandlers is null)
-                {
-                    s_eventHandlers = new EventHandlerList();
-                }
+                s_eventHandlers ??= new EventHandlerList();
 
                 s_eventHandlers.AddHandler(key, value);
             }
