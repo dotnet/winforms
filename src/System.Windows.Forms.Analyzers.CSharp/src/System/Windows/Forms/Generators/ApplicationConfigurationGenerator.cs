@@ -90,37 +90,19 @@ namespace System.Windows.Forms.Generators
 #pragma warning disable SA1513 // Closing brace should be followed by blank line
             if (syntaxNode is InvocationExpressionSyntax
                 {
-                    ArgumentList:
-                    {
-                        Arguments: { Count: 0 }
-                    },
+                    ArgumentList.Arguments.Count: 0,
                     Expression: MemberAccessExpressionSyntax
                     {
-                        Name:
-                        {
-                            Identifier:
-                            {
-                                ValueText: "Initialize"
-                            }
-                        },
+                        Name.Identifier.ValueText: "Initialize",
                         Expression:
                             MemberAccessExpressionSyntax  // For: SourceGenerated.ApplicationConfiguration.Initialize()
                             {
-                                Name:
-                                {
-                                    Identifier:
-                                    {
-                                        ValueText: "ApplicationConfiguration"
-                                    }
-                                }
+                                Name.Identifier.ValueText: "ApplicationConfiguration"
                             }
                             or
                             IdentifierNameSyntax           // For: ApplicationConfiguration.Initialize() with a using statement
                             {
-                                Identifier:
-                                {
-                                    ValueText: "ApplicationConfiguration"
-                                }
+                                Identifier.ValueText: "ApplicationConfiguration"
                             }
                     }
                 })

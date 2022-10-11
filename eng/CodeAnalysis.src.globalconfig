@@ -1702,7 +1702,7 @@ dotnet_diagnostic.IDE0160.severity = silent
 dotnet_diagnostic.IDE0161.severity = silent
 
 # IDE0170: Simplify property pattern
-dotnet_diagnostic.IDE0170.severity = none # TODO: warning
+dotnet_diagnostic.IDE0170.severity = warning
 
 # IDE0180: Use tuple swap
 dotnet_diagnostic.IDE0180.severity = suggestion
