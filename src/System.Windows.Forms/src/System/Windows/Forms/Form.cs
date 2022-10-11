@@ -6518,7 +6518,7 @@ namespace System.Windows.Forms
                 case User32.SC.CONTEXTHELP:
                     CancelEventArgs e = new CancelEventArgs(false);
                     OnHelpButtonClicked(e);
-                    if (e.Cancel == true)
+                    if (e.Cancel)
                     {
                         callDefault = false;
                     }

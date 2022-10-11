@@ -404,7 +404,7 @@ namespace System.Windows.Forms.Design.Behavior
             // do not add snaplines if we are resizing the control is a container control with AutoSize set to true and the control is the parent of the targetControl
             if (_resizing &&
                 (designer is ParentControlDesigner) &&
-                (control.AutoSize == true) &&
+                (control.AutoSize) &&
                 (targetControl != null) &&
                 (targetControl.Parent != null) &&
                 (targetControl.Parent.Equals(control)))

@@ -305,7 +305,7 @@ namespace System.Windows.Forms.Design
                     object value = pd.GetValue(component);
 
                     // Make sure that value is a boolean, in case someone else added this property
-                    if (value is bool boolean && boolean == true)
+                    if (value is bool boolean && boolean)
                     {
                         rules = SelectionRules.Locked | SelectionRules.Visible;
                     }

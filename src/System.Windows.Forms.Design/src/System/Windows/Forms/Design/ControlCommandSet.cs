@@ -790,7 +790,7 @@ namespace System.Windows.Forms.Design
                                                 if (propIntegralHeight != null)
                                                 {
                                                     object value = propIntegralHeight.GetValue(component);
-                                                    if (value is bool && (bool)value == true)
+                                                    if (value is bool && (bool)value)
                                                     {
                                                         PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(component)["ItemHeight"];
                                                         if (propItemHeight != null)
@@ -1215,7 +1215,7 @@ namespace System.Windows.Forms.Design
             //Get the locked property of the base control first...
             //
             PropertyDescriptor lockedProp = TypeDescriptor.GetProperties(baseControl)["Locked"];
-            if (lockedProp != null && ((bool)lockedProp.GetValue(baseControl)) == true)
+            if (lockedProp != null && ((bool)lockedProp.GetValue(baseControl)))
             {
                 cmd.Checked = true;
                 return;
@@ -1233,7 +1233,7 @@ namespace System.Windows.Forms.Design
             foreach (object component in baseDesigner.AssociatedComponents)
             {
                 lockedProp = TypeDescriptor.GetProperties(component)["Locked"];
-                if (lockedProp != null && ((bool)lockedProp.GetValue(component)) == true)
+                if (lockedProp != null && ((bool)lockedProp.GetValue(component)))
                 {
                     cmd.Checked = true;
                     return;

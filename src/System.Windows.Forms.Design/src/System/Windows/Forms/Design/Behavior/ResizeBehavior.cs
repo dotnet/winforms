@@ -430,7 +430,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (propIntegralHeight != null)
             {
                 object value = propIntegralHeight.GetValue(control);
-                if (value is bool && (bool)value == true)
+                if (value is bool && (bool)value)
                 {
                     PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(control)["ItemHeight"];
                     if (propItemHeight != null)
@@ -566,7 +566,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (propIntegralHeight != null)
                 {
                     object value = propIntegralHeight.GetValue(targetControl);
-                    if (value is bool && (bool)value == true)
+                    if (value is bool && (bool)value)
                     {
                         shouldSnapHorizontally = false;
                     }
