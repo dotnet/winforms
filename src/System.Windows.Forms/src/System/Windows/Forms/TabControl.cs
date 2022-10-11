@@ -279,7 +279,7 @@ namespace System.Windows.Forms
 
                 // set up window styles
                 //
-                if (Multiline == true)
+                if (Multiline)
                 {
                     cp.Style |= (int)ComCtl32.TCS.MULTILINE;
                 }

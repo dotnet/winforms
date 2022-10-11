@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Design
                         if (propAuto != null)
                         {
                             object auto = propAuto.GetValue(component);
-                            if (auto is bool && (bool)auto == true)
+                            if (auto is bool && (bool)auto)
                             {
                                 rules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);
                             }

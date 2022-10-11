@@ -1524,7 +1524,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmDropDown()
         {
-            if (RightToLeftLayout == true && RightToLeft == RightToLeft.Yes)
+            if (RightToLeftLayout && RightToLeft == RightToLeft.Yes)
             {
                 HWND handle = (HWND)PInvoke.SendMessage(this, (User32.WM)DTM.GETMONTHCAL);
                 if (handle != IntPtr.Zero)

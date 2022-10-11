@@ -582,12 +582,12 @@ namespace System.Windows.Forms
                 _displayRect = ClientRectangle;
             }
 
-            if (!AutoScroll && HorizontalScroll._visible == true)
+            if (!AutoScroll && HorizontalScroll._visible)
             {
                 _displayRect = new Rectangle(_displayRect.X, _displayRect.Y, HorizontalScroll.Maximum, _displayRect.Height);
             }
 
-            if (!AutoScroll && VerticalScroll._visible == true)
+            if (!AutoScroll && VerticalScroll._visible)
             {
                 _displayRect = new Rectangle(_displayRect.X, _displayRect.Y, _displayRect.Width, VerticalScroll.Maximum);
             }

@@ -279,7 +279,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override void Collapse()
             {
-                if (_owningGridEntry.Expandable && _owningGridEntry.Expanded == true)
+                if (_owningGridEntry.Expandable && _owningGridEntry.Expanded)
                 {
                     _owningGridEntry.Expanded = false;
                 }

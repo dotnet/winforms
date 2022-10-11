@@ -457,7 +457,7 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.Selection, index);
 
             //# VS7 86
-            if (!_killnextselect && (index == _lastSelected || CheckOnClick == true))
+            if (!_killnextselect && (index == _lastSelected || CheckOnClick))
             {
                 CheckState currentValue = CheckedItems.GetCheckedState(index);
                 CheckState newValue = (currentValue != CheckState.Unchecked)

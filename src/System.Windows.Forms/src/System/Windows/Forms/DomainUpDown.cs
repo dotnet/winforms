@@ -426,7 +426,7 @@ namespace System.Windows.Forms
                 UserEdit = true;
             }
 
-            Debug.Assert(_domainIndex >= 0 || UserEdit == true, "UserEdit should be true when domainIndex < 0 " + UserEdit);
+            Debug.Assert(_domainIndex >= 0 || UserEdit, "UserEdit should be true when domainIndex < 0 " + UserEdit);
         }
 
         /// <summary>

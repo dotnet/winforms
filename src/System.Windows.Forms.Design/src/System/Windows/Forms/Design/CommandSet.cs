@@ -1313,7 +1313,7 @@ namespace System.Windows.Forms.Design
                     {
                         // first check to see if the component is locked, if so - don't move it...
                         PropertyDescriptor lockedProp = GetProperty(comp, "Locked");
-                        if (lockedProp != null && ((bool)lockedProp.GetValue(comp)) == true)
+                        if (lockedProp != null && ((bool)lockedProp.GetValue(comp)))
                         {
                             continue;
                         }
@@ -1463,7 +1463,7 @@ namespace System.Windows.Forms.Design
                             // Also, skip all locked components...
                             //
                             PropertyDescriptor lockProp = props["Locked"];
-                            if (lockProp != null && (bool)lockProp.GetValue(comp) == true)
+                            if (lockProp != null && (bool)lockProp.GetValue(comp))
                             {
                                 continue;
                             }

@@ -695,7 +695,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             bool shouldClear = false;
             PropertyDescriptor clearProp = manager.Properties["ClearCollections"];
-            if (clearProp is not null && clearProp.PropertyType == typeof(bool) && ((bool)clearProp.GetValue(manager) == true))
+            if (clearProp is not null && clearProp.PropertyType == typeof(bool) && ((bool)clearProp.GetValue(manager)))
             {
                 shouldClear = true;
             }

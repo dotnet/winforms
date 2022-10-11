@@ -2470,7 +2470,7 @@ namespace System.Windows.Forms.Design
                     return;
                 }
 
-                if (prop != null && ((bool)prop.GetValue(_component)) == true)
+                if (prop != null && ((bool)prop.GetValue(_component)))
                 {
                     Cursor.Current = Cursors.Default;
                     return;

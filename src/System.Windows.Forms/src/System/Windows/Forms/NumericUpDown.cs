@@ -540,7 +540,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected void ParseEditText()
         {
-            Debug.Assert(UserEdit == true, "ParseEditText() - UserEdit == false");
+            Debug.Assert(UserEdit, "ParseEditText() - UserEdit == false");
 
             try
             {
