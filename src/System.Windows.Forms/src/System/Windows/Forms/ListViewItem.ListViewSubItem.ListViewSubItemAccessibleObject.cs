@@ -160,7 +160,7 @@ namespace System.Windows.Forms
                 }
 
                 private protected override string AutomationId
-                    => $"{typeof(ListViewItem.ListViewSubItem).Name}-{ParentInternal.GetChildIndex(this)}";
+                    => $"{nameof(ListViewSubItem)}-{ParentInternal.GetChildIndex(this)}";
             }
         }
     }

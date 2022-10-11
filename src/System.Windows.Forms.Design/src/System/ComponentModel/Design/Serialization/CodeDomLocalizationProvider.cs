@@ -80,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
 
             if (_providerService is null)
             {
-                throw new NotSupportedException(string.Format(SR.LocalizationProviderMissingService, typeof(IExtenderProviderService).Name));
+                throw new NotSupportedException(string.Format(SR.LocalizationProviderMissingService, nameof(IExtenderProviderService)));
             }
 
             _extender = new LanguageExtenders(provider, _supportedCultures);

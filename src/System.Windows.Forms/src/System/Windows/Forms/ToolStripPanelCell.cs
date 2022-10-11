@@ -52,7 +52,7 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(control);
             if (_wrappedToolStrip is null)
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip))), control.GetType().Name);
             }
 
             CommonProperties.SetAutoSize(this, true);
