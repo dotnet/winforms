@@ -126,7 +126,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!(codeObject is CodeStatement statement))
                         {
                             Debug.Fail("ResourceCodeDomSerializer::Deserialize requires a CodeExpression, CodeStatement or CodeStatementCollection to parse");
-                            string supportedTypes = string.Format(CultureInfo.CurrentCulture, "{0}, {1}, {2}", typeof(CodeExpression).Name, typeof(CodeStatement).Name, typeof(CodeStatementCollection).Name);
+                            string supportedTypes = string.Format(CultureInfo.CurrentCulture, "{0}, {1}, {2}", nameof(CodeExpression), nameof(CodeStatement), nameof(CodeStatementCollection));
                             throw new ArgumentException(string.Format(SR.SerializerBadElementTypes, codeObject.GetType().Name, supportedTypes));
                         }
                     }

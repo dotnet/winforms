@@ -82,7 +82,7 @@ namespace System.Windows.Forms
 
                 if (!(value is ISupportToolStripPanel control))
                 {
-                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
+                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip)));
                 }
 
                 int index = InnerList.Add(control.ToolStripPanelCell);
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
 
                 if (!(value is ISupportToolStripPanel control))
                 {
-                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
+                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip)));
                 }
 
                 InnerList.Insert(index, control.ToolStripPanelCell);

@@ -1666,7 +1666,7 @@ dotnet_diagnostic.IDE0080.severity = warning
 dotnet_diagnostic.IDE0081.severity = none
 
 # IDE0082: 'typeof' can be converted  to 'nameof'
-dotnet_diagnostic.IDE0082.severity = none # TODO: warning
+dotnet_diagnostic.IDE0082.severity = warning
 
 # IDE0083: Use pattern matching
 dotnet_diagnostic.IDE0083.severity = silent

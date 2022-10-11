@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                 : null;
 
             private protected override string AutomationId
-                => string.Format("{0}-{1}", typeof(ListViewItem).Name, CurrentIndex);
+                => $"{nameof(ListViewItem)}-{CurrentIndex}";
 
             public override Rectangle Bounds
                 => !_owningListView.IsHandleCreated || OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
