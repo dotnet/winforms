@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Design
     ///  This class provides a single entrypoint used by the Behaviors, KeySize and KeyMoves (in CommandSets) and
     ///  SelectionService to update the StatusBar Information.
     /// </summary>
-    internal class StatusCommandUI
+    internal sealed class StatusCommandUI
     {
         private MenuCommand _statusRectCommand;
         private IMenuCommandService _menuService;
