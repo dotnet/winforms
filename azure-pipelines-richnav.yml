@@ -26,6 +26,7 @@ stages:
         - script: eng\cibuild.cmd
             -restore
             -build
+            -NativeToolsOnMachine
             -configuration Debug
             /p:Platform=x64
             /p:TargetArchitecture=x64
