@@ -26,6 +26,8 @@ variables:
     value: true
   - name: EnableLoc
     value: false
+  - name: NativeToolsOnMachine
+    value: true
   - name: isPublic
     value: ${{ eq(variables['System.TeamProject'], 'public') }}
   - name: isPR
@@ -126,8 +128,8 @@ stages:
       parameters:
         publishUsingPipelines: true
         pool:
-          name: NetCore1ESPool-Internal
-          demands: ImageOverride -equals Build.Server.Amd64.VS2019
+          name: NetCore1ESPool-Svc-Internal
+          demands: ImageOverride -equals windows.vs2019.amd64
 
 
 # Copied from the arcade repo and modified for winforms
