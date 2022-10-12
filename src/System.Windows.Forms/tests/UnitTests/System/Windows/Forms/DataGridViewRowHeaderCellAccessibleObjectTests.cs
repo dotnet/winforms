@@ -167,5 +167,84 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(row.Cells[0].AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
             Assert.False(control.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfFirstColumnHidden()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            control.Columns.Add("Column 2", "Header text 2");
+            control.Columns[0].Visible = false;
+            DataGridViewRow row = control.Rows[0];
+
+            AccessibleObject accessibleObject = (DataGridViewRowHeaderCellAccessibleObject)row.HeaderCell.AccessibilityObject;
+            AccessibleObject expected = row.Cells[1].AccessibilityObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfCustomOrder()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            control.Columns.Add("Column 2", "Header text 2");
+            control.Columns[0].DisplayIndex = 1;
+            control.Columns[1].DisplayIndex = 0;
+            DataGridViewRow row = control.Rows[0];
+
+            AccessibleObject accessibleObject = (DataGridViewRowHeaderCellAccessibleObject)row.HeaderCell.AccessibilityObject;
+            AccessibleObject expected = row.Cells[1].AccessibilityObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfCustomOrderAndFirstDisplayedColumnHidden()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            control.Columns.Add("Column 2", "Header text 2");
+            control.Columns[0].DisplayIndex = 1;
+            control.Columns[1].DisplayIndex = 0;
+            control.Columns[1].Visible = false;
+            DataGridViewRow row = control.Rows[0];
+
+            AccessibleObject accessibleObject = (DataGridViewRowHeaderCellAccessibleObject)row.HeaderCell.AccessibilityObject;
+            AccessibleObject expected = row.Cells[0].AccessibilityObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_Child_ReturnsNull()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            DataGridViewRow row = control.Rows[0];
+
+            var accessibleObject = (DataGridViewRowHeaderCellAccessibleObject)row.HeaderCell.AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            DataGridViewRow row = control.Rows[0];
+
+            var accessibleObject = (DataGridViewRowHeaderCellAccessibleObject)row.HeaderCell.AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(control.IsHandleCreated);
+        }
     }
 }

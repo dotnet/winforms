@@ -1013,6 +1013,483 @@ namespace System.Windows.Forms.Tests
             Assert.False(dataGridView.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            var cellAccessibleObject = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            var rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
+
+            Assert.Equal(rowAccessibleObject, cellAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Parent_IsNull_IfOwningRowIsNull()
+        {
+            using var owner = new SubDataGridViewCell();
+            var accessibleObject = new DataGridViewCellAccessibleObject(owner);
+
+            Assert.Null(accessibleObject.Owner.OwningRow);
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject rowHeaderAccessibleObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(rowHeaderAccessibleObject, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject rowHeaderAccessibleObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject2, rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(rowHeaderAccessibleObject, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject rowHeaderAccessibleObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject1, rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(rowHeaderAccessibleObject, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfLastColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[2].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject rowHeaderAccessibleObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject1, rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(rowHeaderAccessibleObject, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfRowHeadersAndFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns.Add("Column 4", "Header text 4");
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject cellAccessibleObject4 = dataGridView.Rows[0].Cells[3].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject4, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfRowHeadersAndSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns.Add("Column 4", "Header text 4");
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject cellAccessibleObject4 = dataGridView.Rows[0].Cells[3].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject4, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfRowHeadersAndLastColumnHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns.Add("Column 4", "Header text 4");
+            dataGridView.Columns[3].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfCustomOrder()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject rowHeaderAccessibleObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject1, rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(rowHeaderAccessibleObject, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfCustomOrderAndFirstColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject rowHeaderAccessibleObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject1, rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(rowHeaderAccessibleObject, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfCustomOrderAndSecondColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject rowHeaderAccessibleObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject1, rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(rowHeaderAccessibleObject, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfCustomOrderAndLastColumnHidden()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[2].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject rowHeaderAccessibleObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject2, rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(rowHeaderAccessibleObject, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(rowHeaderAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfCustomOrderAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfCustomOrderAndFirstColumnAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[0].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfCustomOrderAndSecondColumnAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[1].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject cellAccessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject1, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(cellAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfCustomOrderAndLastColumnAndRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.Columns.Add("Column 3", "Header text 3");
+            dataGridView.Columns[0].DisplayIndex = 2;
+            dataGridView.Columns[1].DisplayIndex = 1;
+            dataGridView.Columns[2].DisplayIndex = 0;
+            dataGridView.Columns[2].Visible = false;
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject cellAccessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+            AccessibleObject cellAccessibleObject3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Equal(cellAccessibleObject3, cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(cellAccessibleObject2, cellAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(cellAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Child_ReturnsNull()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.Columns.Add("Column 2", "Header text 2");
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
+
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+
+            Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_FragmentNavigate_Child_ReturnsNull_IfRowHeadersHidden()
+        {
+            using DataGridView dataGridView = new() { RowHeadersVisible = false };
+            dataGridView.Columns.Add("Column 1", "Header text 1");
+            dataGridView.CreateControl(); // DataGridViewCellAccessibleObject.FragmentNavigate method needs Handle no provide non-empty results
+
+            AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
+
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+
+            Assert.True(dataGridView.IsHandleCreated);
+        }
+
         private class SubDataGridViewCell : DataGridViewCell
         {
         }

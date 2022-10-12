@@ -194,5 +194,73 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
             Assert.False(control.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void DataGridViewTopLeftHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfFirstColumnHidden()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            control.Columns.Add("Column 2", "Header text 2");
+            control.Columns[0].Visible = false;
+
+            using DataGridViewTopLeftHeaderCell cell = new();
+            control.TopLeftHeaderCell = cell;
+
+            AccessibleObject expected = control.Columns[1].HeaderCell.AccessibilityObject;
+
+            Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewTopLeftHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfCustomOrder()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            control.Columns.Add("Column 2", "Header text 2");
+            control.Columns[0].DisplayIndex = 1;
+            control.Columns[1].DisplayIndex = 0;
+
+            using DataGridViewTopLeftHeaderCell cell = new();
+            control.TopLeftHeaderCell = cell;
+
+            AccessibleObject expected = control.Columns[1].HeaderCell.AccessibilityObject;
+
+            Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewTopLeftHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfCustomOrderAndFirstDisplayedColumnHidden()
+        {
+            using DataGridView control = new();
+            control.Columns.Add("Column 1", "Header text 1");
+            control.Columns.Add("Column 1", "Header text 1");
+            control.Columns[0].DisplayIndex = 1;
+            control.Columns[1].DisplayIndex = 0;
+            control.Columns[1].Visible = false;
+
+            using DataGridViewTopLeftHeaderCell cell = new();
+            control.TopLeftHeaderCell = cell;
+
+            AccessibleObject expected = control.Columns[0].HeaderCell.AccessibilityObject;
+
+            Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewTopLeftHeaderCellAccessibleObject_FragmentNavigate_Child_ReturnsNull()
+        {
+            using DataGridView control = new();
+
+            using DataGridViewTopLeftHeaderCell cell = new();
+            control.TopLeftHeaderCell = cell;
+
+            Assert.Null(cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+
+            Assert.False(control.IsHandleCreated);
+        }
     }
 }
