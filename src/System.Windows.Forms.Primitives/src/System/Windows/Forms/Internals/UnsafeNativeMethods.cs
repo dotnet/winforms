@@ -18,9 +18,6 @@ namespace System.Windows.Forms
         [DllImport(Libraries.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern HRESULT PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 
-        [DllImport(Libraries.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool GetOpenFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
-
         [DllImport(Libraries.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
 #pragma warning disable CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
@@ -45,14 +42,6 @@ namespace System.Windows.Forms
             buffer.Length = length;
             return buffer;
         }
-
-        [DllImport(Libraries.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern bool GetSaveFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
-
-        [DllImport(Libraries.Kernel32, CharSet = CharSet.Auto)]
-#pragma warning disable CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
-        public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
-#pragma warning restore CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
 
         [DllImport(Libraries.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object? pAcc);

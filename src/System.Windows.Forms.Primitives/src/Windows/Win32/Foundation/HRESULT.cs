@@ -16,5 +16,8 @@ namespace Windows.Win32.Foundation
             Debug.WriteLine(ex);
             return (HRESULT)ex.HResult;
         }
+
+        // COR_* HRESULTs are .NET HRESULTs
+        internal static readonly HRESULT COR_E_OBJECTDISPOSED = (HRESULT)unchecked((int)0x80131622);
     }
 }

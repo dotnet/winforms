@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
 
 internal static partial class UiaClient
 {

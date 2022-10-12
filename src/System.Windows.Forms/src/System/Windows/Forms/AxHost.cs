@@ -2426,10 +2426,10 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Creating object without license: {clsid}");
             HRESULT hr = Ole32.CoCreateInstance(
-                ref clsid,
+                in clsid,
                 IntPtr.Zero,
                 Ole32.CLSCTX.INPROC_SERVER,
-                ref NativeMethods.ActiveX.IID_IUnknown,
+                in NativeMethods.ActiveX.IID_IUnknown,
                 out object ret);
             hr.ThrowOnFailure();
 

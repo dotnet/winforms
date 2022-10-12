@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public unsafe static IShellItem SHCreateItemFromParsingName(string path)
+        public static unsafe IShellItem* SHCreateItemFromParsingName(string path)
         {
             Guid shellItemIID = IID.IShellItem;
             HRESULT hr = SHCreateItemFromParsingName(path, pbc: null, in shellItemIID, out void* ppv);
@@ -19,8 +18,7 @@ namespace Windows.Win32
                 throw new Win32Exception((int)hr);
             }
 
-            return (IShellItem)WinFormsComWrappers.Instance
-                .GetOrCreateObjectForComInstance((nint)ppv, CreateObjectFlags.None);
+            return (IShellItem*)ppv;
         }
     }
 }
