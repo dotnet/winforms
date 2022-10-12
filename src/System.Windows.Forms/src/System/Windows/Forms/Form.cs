@@ -2769,48 +2769,51 @@ namespace System.Windows.Forms
 
             if (!showMin)
             {
-                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.MINIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
+                PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.MINIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
             }
             else
             {
-                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.MINIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
+                PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.MINIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
             }
 
             if (!showMax)
             {
-                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.MAXIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
+                PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.MAXIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
             }
             else
             {
-                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.MAXIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
+                PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.MAXIMIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
             }
 
             if (!showClose)
             {
-                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.CLOSE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
+                PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.CLOSE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
             }
             else
             {
-                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.CLOSE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
+                PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.CLOSE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
             }
 
             if (!showRestore)
             {
-                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.RESTORE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
+                PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.RESTORE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
             }
             else
             {
-                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.RESTORE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
+                PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.RESTORE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
             }
 
             if (!showSize)
             {
-                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.SIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
+                PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.SIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_GRAYED);
             }
             else
             {
-                PInvoke.EnableMenuItem(new HandleRef<HMENU>(this, hmenu), User32.SC.SIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
+                PInvoke.EnableMenuItem(hmenu, (uint)User32.SC.SIZE, MENU_ITEM_FLAGS.MF_BYCOMMAND | MENU_ITEM_FLAGS.MF_ENABLED);
             }
+
+            // Prevent the finalizer running to avoid closing the handle.
+            GC.KeepAlive(this);
         }
 
         /// <summary>

@@ -1072,7 +1072,7 @@ namespace System.Windows.Forms
             // Windows just draws the border to size, and then shrinks the rectangle so the user can paint the client
             // area. We can't really do that, so we do the opposite: We precalculate the size of the border and enlarge
             // the rectangle so the client size is preserved.
-            if ((flags & (DRAW_EDGE_FLAGS)Border3DStyle.Adjust) == (DRAW_EDGE_FLAGS)Border3DStyle.Adjust)
+            if (flags.HasFlag((DRAW_EDGE_FLAGS)Border3DStyle.Adjust))
             {
                 Size sz = SystemInformation.Border3DSize;
                 rc.left -= sz.Width;
