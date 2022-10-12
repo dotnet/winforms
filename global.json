@@ -21,6 +21,7 @@
     "Microsoft.NET.Sdk.IL": "5.0.17-servicing.22213.14"
   },
   "native-tools": {
-    "cmake": "3"
+    "cmake": "3",
+    "dotnet-api-docs_net5.0": "0.0.0.3"
   }
 }
