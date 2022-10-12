@@ -2108,7 +2108,7 @@ namespace System.Windows.Forms.Design
                     return;   // nothing we can do here!
 
                 IDataObject dataObj = null;
-                bool clipboardOperationSuccessful = ExecuteSafely(() => Clipboard.GetDataObject(), false, out dataObj);
+                bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out dataObj);
 
                 if (clipboardOperationSuccessful)
                 {
@@ -3505,7 +3505,7 @@ namespace System.Windows.Forms.Design
             // Not being inherited.  Now look at the contents of the data
             //
             IDataObject dataObj = null;
-            bool clipboardOperationSuccessful = ExecuteSafely(() => Clipboard.GetDataObject(), false, out dataObj);
+            bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out dataObj);
 
             bool enable = false;
 

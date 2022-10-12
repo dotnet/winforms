@@ -1708,7 +1708,7 @@ dotnet_diagnostic.IDE0170.severity = warning
 dotnet_diagnostic.IDE0180.severity = suggestion
 
 # IDE0200: Remove unnecessary lambda expression
-dotnet_diagnostic.IDE0200.severity = none # TODO: warning
+dotnet_diagnostic.IDE0200.severity = warning
 
 # IDE0210: Use top-level statements
 dotnet_diagnostic.IDE0210.severity = silent
