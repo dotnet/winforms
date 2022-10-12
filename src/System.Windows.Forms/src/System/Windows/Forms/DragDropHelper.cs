@@ -12,6 +12,7 @@ using static Interop.Shell32;
 using static Interop.User32;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Com = Windows.Win32.System.Com;
 using Shell = Windows.Win32.UI.Shell;
 
 namespace System.Windows.Forms
@@ -528,10 +529,10 @@ namespace System.Windows.Forms
             try
             {
                 HRESULT hr = Ole32.CoCreateInstance(
-                    ref CLSID.DragDropHelper,
+                    in Com.CLSID.DragDropHelper,
                     IntPtr.Zero,
                     Ole32.CLSCTX.INPROC_SERVER,
-                    ref NativeMethods.ActiveX.IID_IUnknown,
+                    in NativeMethods.ActiveX.IID_IUnknown,
                     out object obj);
                 if (hr.Succeeded)
                 {

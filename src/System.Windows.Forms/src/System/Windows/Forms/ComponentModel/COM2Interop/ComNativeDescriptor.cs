@@ -102,9 +102,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return string.Empty;
             }
 
-            using var nameBstr = new BSTR();
+            using BSTR nameBstr = new();
             pTypeInfo.GetDocumentation(DispatchID.MEMBERID_NIL, &nameBstr, null, null, null);
-            return nameBstr.String.TrimStart('_').ToString();
+            return nameBstr.AsSpan().TrimStart('_').ToString();
         }
 
         internal static TypeConverter GetConverter()
@@ -119,9 +119,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal static string GetName(object component)
         {
-            if (!(component is Oleaut32.IDispatch))
+            if (component is not Oleaut32.IDispatch)
             {
-                return "";
+                return string.Empty;
             }
 
             DispatchID dispid = Com2TypeInfoProcessor.GetNameDispId((Oleaut32.IDispatch)component);

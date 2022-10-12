@@ -6,6 +6,7 @@ AdjustWindowRectExForDpi
 AreDpiAwarenessContextsEqual
 AUTOCOMPLETEOPTIONS
 BeginPaint
+BFFM_*
 BIF_*
 BitBlt
 BITMAP
@@ -14,6 +15,7 @@ BROWSEINFOW
 CallNextHookEx
 CallWindowProc
 CB_*
+CDM_GETSPEC
 ChildWindowFromPointEx
 ClipCursor
 CloseDesktop
@@ -21,6 +23,7 @@ CloseEnhMetaFile
 CloseHandle
 CloseThemeData
 cmb4
+CoCreateInstance
 COLOR_*
 CombineRgn
 COMDLG_FILTERSPEC
@@ -95,6 +98,7 @@ E_POINTER
 EC_*
 Ellipse
 EM_*
+EndDialog
 EndPaint
 EnumDisplaySettings
 EnumEnhMetaFile
@@ -221,9 +225,14 @@ IDC_*
 IDI_*
 IDropSource
 IDropSourceNotify
+IDropTarget
 IEnumString
 IEnumFORMATETC
+IFileDialog
+IFileDialogCustomize
 IFileDialogEvents
+IFileOpenDialog
+IFileSaveDialog
 ImageList_Add
 ImageList_Create
 ImageList_Draw
@@ -252,6 +261,7 @@ IntersectClipRect
 InvalidateRect
 IsAppThemed
 IsChild
+IShellItem
 IsProcessDPIAware
 IsThemeBackgroundPartiallyTransparent
 IsThemePartDefined
@@ -259,6 +269,7 @@ IStream
 IsValidDpiAwarenessContext
 IsWindow
 IsWindowVisible
+IUnknown
 LineTo
 LoadCursor
 LoadIcon
@@ -286,6 +297,8 @@ OLE_E_PROMPTSAVECANCELLED
 OleFlushClipboard
 OleInitialize
 OleUninitialize
+OPEN_FILENAME_FLAGS
+OPEN_FILENAME_FLAGS_EX
 OpenInputDesktop
 OpenThemeData
 PatBlt
@@ -297,6 +310,7 @@ RealizePalette
 Rectangle
 RedrawWindow
 RegisterClass
+RegisterDragDrop
 RestoreDC
 RevokeDragDrop
 RoundRect

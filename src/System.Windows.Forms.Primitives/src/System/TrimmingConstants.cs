@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,7 +12,7 @@ namespace System
 
         internal const string EditorRequiresUnreferencedCode = "Editors registered in TypeDescriptor.AddEditorTable may be trimmed.";
 
-        internal const string EventDescriptorRequiresUnreferencedCodeMessage = "The built-in EventDescriptor implementation uses Reflection which requires unreferenced code.";        
+        internal const string EventDescriptorRequiresUnreferencedCodeMessage = "The built-in EventDescriptor implementation uses Reflection which requires unreferenced code.";
 
         internal const string FilterRequiresUnreferencedCodeMessage = "The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.";
 

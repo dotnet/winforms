@@ -11062,7 +11062,7 @@ namespace System.Windows.Forms
 
         private void SetParentHandle(HWND value)
         {
-            Debug.Assert(value != NativeMethods.InvalidIntPtr, "Outdated call to SetParentHandle");
+            Debug.Assert(value != -1, "Outdated call to SetParentHandle");
 
             if (IsHandleCreated)
             {

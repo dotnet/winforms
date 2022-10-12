@@ -582,7 +582,7 @@ public class DragDropTests : ControlTestBase
     {
         if (element.get_CurrentName(out BSTR retVal) == 0)
         {
-            return retVal.String.ToString();
+            return retVal.AsSpan().ToString();
         }
 
         return string.Empty;
@@ -620,10 +620,10 @@ public class DragDropTests : ControlTestBase
         Guid CLSID_CUIAutomation = new("FF48DBA4-60EF-4201-AA87-54103EEF594E");
         Guid IID_IUIAutomation = new("30CBE57D-D9D0-452A-AB13-7AC5AC4825EE");
         HRESULT hr = Ole32.CoCreateInstance(
-            ref CLSID_CUIAutomation,
+            in CLSID_CUIAutomation,
             IntPtr.Zero,
             Ole32.CLSCTX.INPROC_SERVER,
-            ref IID_IUIAutomation,
+            in IID_IUIAutomation,
             out object obj);
         if (hr.Succeeded)
         {

@@ -2,15 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-internal partial class Interop
+namespace Windows.Win32.UI.Shell;
+
+internal interface IPopulateVTable<TVTable>
+    where TVTable : unmanaged
 {
-    internal static partial class Shell32
-    {
-        public enum FDEOR : uint
-        {
-            DEFAULT = 0,
-            ACCEPT = 1,
-            REFUSE = 2
-        }
-    }
+    protected internal static unsafe abstract void PopulateVTable(TVTable* vtable);
 }

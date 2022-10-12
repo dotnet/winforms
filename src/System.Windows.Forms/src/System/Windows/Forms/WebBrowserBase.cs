@@ -900,10 +900,10 @@ namespace System.Windows.Forms
                 // First, create the ActiveX control
                 Debug.Assert(activeXInstance is null, "activeXInstance must be null");
                 HRESULT hr = Ole32.CoCreateInstance(
-                    ref clsid,
+                    in clsid,
                     IntPtr.Zero,
                     Ole32.CLSCTX.INPROC_SERVER,
-                    ref NativeMethods.ActiveX.IID_IUnknown,
+                    in NativeMethods.ActiveX.IID_IUnknown,
                     out activeXInstance);
                 hr.ThrowOnFailure();
 

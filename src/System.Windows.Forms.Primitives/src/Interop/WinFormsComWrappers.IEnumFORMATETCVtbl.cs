@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -93,8 +94,16 @@ internal partial class Interop
                 {
                     IEnumFORMATETC instance = ComInterfaceDispatch.GetInstance<IEnumFORMATETC>((ComInterfaceDispatch*)@this);
                     instance.Clone(out var cloned);
-                    *ppenum = (Com.IEnumFORMATETC*)WinFormsComWrappers.Instance.GetComPointer(cloned, IID.IEnumFORMATETC);
-                    return HRESULT.S_OK;
+                    *ppenum = null;
+
+                    if (Instance.TryGetComPointer(cloned, IID.IEnumFORMATETC, out Com.IEnumFORMATETC* p))
+                    {
+                        *ppenum = p;
+                        return HRESULT.S_OK;
+                    }
+
+                    Debug.Fail("Why couldn't we get a COM pointer for the cloned object?");
+                    return HRESULT.E_FAIL;
                 }
                 catch (Exception ex)
                 {
