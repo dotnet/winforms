@@ -7,7 +7,9 @@
 
   <PropertyGroup>
     <TargetFrameworkName>net</TargetFrameworkName>
-    <TargetFrameworkVersion>8.0</TargetFrameworkVersion>
+	<TargetFrameworkMajorVersion>8</TargetFrameworkMajorVersion>
+	<TargetFrameworkMinorVersion>0</TargetFrameworkMinorVersion>
+    <TargetFrameworkVersion>$(TargetFrameworkMajorVersion)$(TargetFrameworkMinorVersion)</TargetFrameworkVersion>
     <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
     <Product>Microsoft&#xAE; .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
