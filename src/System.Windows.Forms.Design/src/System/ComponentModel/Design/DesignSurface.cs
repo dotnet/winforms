@@ -382,10 +382,7 @@ namespace System.ComponentModel.Design
                 {
                     try
                     {
-                        if (_host is not null)
-                        {
-                            _host.DisposeHost();
-                        }
+                        _host?.DisposeHost();
                     }
                     finally
                     {
@@ -409,10 +406,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Flush()
         {
-            if (_host is not null)
-            {
-                _host.Flush();
-            }
+            _host?.Flush();
 
             Flushed?.Invoke(this, EventArgs.Empty);
         }

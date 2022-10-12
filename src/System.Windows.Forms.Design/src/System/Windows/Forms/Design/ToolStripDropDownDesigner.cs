@@ -147,10 +147,7 @@ namespace System.Windows.Forms.Design
                         }
 
                         ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(menuItem);
-                        if (itemDesigner != null)
-                        {
-                            itemDesigner.InitializeDropDown();
-                        }
+                        itemDesigner?.InitializeDropDown();
                     }
                 }
             }
@@ -208,10 +205,7 @@ namespace System.Windows.Forms.Design
                 if (selComp is ToolStripItem item)
                 {
                     ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)host.GetDesigner(item);
-                    if (itemDesigner != null)
-                    {
-                        itemDesigner.GetGlyphs(ref glyphs, new ResizeBehavior(item.Site));
-                    }
+                    itemDesigner?.GetGlyphs(ref glyphs, new ResizeBehavior(item.Site));
                 }
             }
 

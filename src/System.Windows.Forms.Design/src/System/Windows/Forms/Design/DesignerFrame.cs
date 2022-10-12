@@ -192,10 +192,7 @@ namespace System.Windows.Forms.Design
             Size selectionSize = DesignerUtils.GetAdornmentDimensions(AdornmentType.Maximum);
             _designerRegion.AutoScrollMargin = selectionSize;
             _designer.Location = new Point(selectionSize.Width, selectionSize.Height);
-            if (BehaviorService != null)
-            {
-                BehaviorService.SyncSelection();
-            }
+            BehaviorService?.SyncSelection();
         }
 
         /// <summary>
@@ -447,10 +444,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 // We've reparented everything, which means that our selection UI is probably out of sync.  Ask it to sync.
-                if (BehaviorService != null)
-                {
-                    BehaviorService.SyncSelection();
-                }
+                BehaviorService?.SyncSelection();
             }
 
             /// <summary>
@@ -612,10 +606,7 @@ namespace System.Windows.Forms.Design
                 else if ((m.Msg == (int)User32.WM.MOUSEWHEEL))
                 {
                     _messageMouseWheelProcessed = false;
-                    if (BehaviorService != null)
-                    {
-                        BehaviorService.SyncSelection();
-                    }
+                    BehaviorService?.SyncSelection();
                 }
             }
 

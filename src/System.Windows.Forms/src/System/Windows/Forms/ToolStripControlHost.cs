@@ -699,10 +699,7 @@ namespace System.Windows.Forms
                 // politely remove ourselves from the control collection
                 ReadOnlyControlCollection oldControlCollection
                                 = GetControlCollection(Control.ParentInternal as ToolStrip);
-                if (oldControlCollection is not null)
-                {
-                    oldControlCollection.RemoveInternal(Control);
-                }
+                oldControlCollection?.RemoveInternal(Control);
             }
             else
             {
@@ -818,10 +815,7 @@ namespace System.Windows.Forms
         private void SyncControlParent()
         {
             ReadOnlyControlCollection newControls = GetControlCollection(ParentInternal);
-            if (newControls is not null)
-            {
-                newControls.AddInternal(Control);
-            }
+            newControls?.AddInternal(Control);
         }
 
         protected virtual void OnHostedControlResize(EventArgs e)

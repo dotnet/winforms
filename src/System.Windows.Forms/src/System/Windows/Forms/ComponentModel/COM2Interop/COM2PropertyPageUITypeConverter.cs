@@ -57,10 +57,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             catch (Exception ex)
             {
                 IUIService? uiSvc = (IUIService?)provider?.GetService(typeof(IUIService));
-                if (uiSvc is not null)
-                {
-                    uiSvc.ShowError(ex, SR.ErrorTypeConverterFailed);
-                }
+                uiSvc?.ShowError(ex, SR.ErrorTypeConverterFailed);
             }
 
             return value;

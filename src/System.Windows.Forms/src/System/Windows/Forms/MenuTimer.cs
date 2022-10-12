@@ -159,10 +159,7 @@ namespace System.Windows.Forms
                 // we're about to fall off the edge of the toolstrip, something should be selected
                 // at all times while we're InTransition mode - otherwise it looks really funny
                 // to have an auto expanded item
-                if (CurrentItem is not null)
-                {
-                    CurrentItem.Select();
-                }
+                CurrentItem?.Select();
             }
             else
             {

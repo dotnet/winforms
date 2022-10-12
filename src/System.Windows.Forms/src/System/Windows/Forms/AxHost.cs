@@ -2820,10 +2820,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            if (axPropDesc is not null)
-                            {
-                                axPropDesc.UpdateAttributes();
-                            }
+                            axPropDesc?.UpdateAttributes();
 
                             returnProperties.Add(propDesc);
                         }
@@ -3336,10 +3333,7 @@ namespace System.Windows.Forms
                     ((Ole32.IPropertyNotifySink)_oleSite).OnChanged(Ole32.DispatchID.UNKNOWN);
                 }
 
-                if (trans is not null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
 
                 if (uuids.pElems is not null)
                 {
@@ -3729,15 +3723,9 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 TransitionDownTo(OC_PASSIVE);
-                if (_newParent is not null)
-                {
-                    _newParent.Dispose();
-                }
+                _newParent?.Dispose();
 
-                if (_oleSite is not null)
-                {
-                    _oleSite.Dispose();
-                }
+                _oleSite?.Dispose();
             }
 
             base.Dispose(disposing);
@@ -3750,10 +3738,7 @@ namespace System.Windows.Forms
 
         private void DisposeAxControl()
         {
-            if (GetParentContainer() is not null)
-            {
-                GetParentContainer().RemoveControl(this);
-            }
+            GetParentContainer()?.RemoveControl(this);
 
             TransitionDownTo(OC_RUNNING);
             if (GetOcState() == OC_RUNNING)

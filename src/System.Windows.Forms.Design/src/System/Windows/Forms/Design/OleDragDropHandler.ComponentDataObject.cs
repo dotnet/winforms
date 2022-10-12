@@ -267,10 +267,7 @@ namespace System.Windows.Forms.Design
                                 }
                             }
 
-                            if (host != null)
-                            {
-                                host.DestroyComponent(removeComp);
-                            }
+                            host?.DestroyComponent(removeComp);
                         }
 
                         components = null;
@@ -311,10 +308,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    trans?.Commit();
                 }
             }
 

@@ -1065,15 +1065,9 @@ namespace System.Windows.Forms.Design.Behavior
                 _edgePen.Dispose();
             }
 
-            if (_baselinePen != null)
-            {
-                _baselinePen.Dispose();
-            }
+            _baselinePen?.Dispose();
 
-            if (_backgroundImage != null)
-            {
-                _backgroundImage.Dispose();
-            }
+            _backgroundImage?.Dispose();
         }
 
         /// <summary>

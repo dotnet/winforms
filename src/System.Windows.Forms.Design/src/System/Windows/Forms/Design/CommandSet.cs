@@ -231,10 +231,7 @@ namespace System.Windows.Forms.Design
             //
             IDictionaryService ds = site.GetService(typeof(IDictionaryService)) as IDictionaryService;
             Debug.Assert(ds != null, "No dictionary service");
-            if (ds != null)
-            {
-                ds.SetValue(typeof(CommandID), new CommandID(new Guid("BA09E2AF-9DF2-4068-B2F0-4C7E5CC19E2F"), 0));
-            }
+            ds?.SetValue(typeof(CommandID), new CommandID(new Guid("BA09E2AF-9DF2-4068-B2F0-4C7E5CC19E2F"), 0));
         }
 
         /// <summary>
@@ -450,10 +447,7 @@ namespace System.Windows.Forms.Design
         {
             if (dragManager != null)
             {
-                if (snapLineTimer != null)
-                {
-                    snapLineTimer.Stop();
-                }
+                snapLineTimer?.Stop();
 
                 dragManager.EraseSnapLines();
                 dragManager.OnMouseUp();
@@ -816,10 +810,7 @@ namespace System.Windows.Forms.Design
                     {
                         IDesigner designer = host.GetDesigner(pri);
 
-                        if (designer != null)
-                        {
-                            designer.DoDefaultAction();
-                        }
+                        designer?.DoDefaultAction();
                     }
                 }
             }
@@ -1064,10 +1055,7 @@ namespace System.Windows.Forms.Design
                             }
                             finally
                             {
-                                if (trans != null)
-                                {
-                                    trans.Commit();
-                                }
+                                trans?.Commit();
 
                                 if (dragManager != null)
                                 {
@@ -1249,10 +1237,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    trans?.Commit();
                 }
             }
             finally
@@ -1378,10 +1363,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    trans?.Commit();
                 }
             }
             finally
@@ -1569,10 +1551,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    trans?.Commit();
                 }
             }
             finally
@@ -1767,14 +1746,10 @@ namespace System.Windows.Forms.Design
                             }
                             finally
                             {
-                                if (trans != null)
-                                    trans.Commit();
+                                trans?.Commit();
                                 foreach (ParentControlDesigner des in designerList)
                                 {
-                                    if (des != null)
-                                    {
-                                        des.ResumeChangingEvents();
-                                    }
+                                    des?.ResumeChangingEvents();
                                 }
                             }
 
@@ -2010,17 +1985,11 @@ namespace System.Windows.Forms.Design
                         }
                         finally
                         {
-                            if (trans != null)
-                            {
-                                trans.Commit();
-                            }
+                            trans?.Commit();
 
                             foreach (ParentControlDesigner des in designerList)
                             {
-                                if (des != null)
-                                {
-                                    des.ResumeChangingEvents();
-                                }
+                                des?.ResumeChangingEvents();
                             }
                         }
 
@@ -2470,10 +2439,7 @@ namespace System.Windows.Forms.Design
                             if (parentControlDesigner != null && parentControlDesigner.AllowSetChildIndexOnDrop)
                             {
                                 MenuCommand btf = MenuService.FindCommand(StandardCommands.BringToFront);
-                                if (btf != null)
-                                {
-                                    btf.Invoke();
-                                }
+                                btf?.Invoke();
                             }
 
                             trans.Commit();
@@ -2490,10 +2456,7 @@ namespace System.Windows.Forms.Design
                 Cursor.Current = oldCursor;
                 foreach (ParentControlDesigner des in designerList)
                 {
-                    if (des != null)
-                    {
-                        des.ResumeChangingEvents();
-                    }
+                    des?.ResumeChangingEvents();
                 }
             }
         }
@@ -2582,8 +2545,7 @@ namespace System.Windows.Forms.Design
                     }
                     finally
                     {
-                        if (trans != null)
-                            trans.Commit();
+                        trans?.Commit();
                     }
                 }
             }
@@ -2696,10 +2658,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    trans?.Commit();
                 }
             }
             finally
@@ -2792,10 +2751,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (trans != null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
 
                 Cursor.Current = oldCursor;
             }
@@ -2857,8 +2813,7 @@ namespace System.Windows.Forms.Design
                     }
                     finally
                     {
-                        if (trans != null)
-                            trans.Commit();
+                        trans?.Commit();
                     }
                 }
             }
@@ -3252,10 +3207,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (trans != null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
 
                 Cursor.Current = oldCursor;
             }
@@ -3831,10 +3783,7 @@ namespace System.Windows.Forms.Design
             // Now, for each control, update the offset.
             //
 
-            if (parentControl != null)
-            {
-                parentControl.SuspendLayout();
-            }
+            parentControl?.SuspendLayout();
 
             try
             {
@@ -3847,10 +3796,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (parentControl != null)
-                {
-                    parentControl.ResumeLayout();
-                }
+                parentControl?.ResumeLayout();
             }
         }
 
@@ -4047,10 +3993,7 @@ namespace System.Windows.Forms.Design
                 }
                 catch (Exception e)
                 {
-                    if (uiService != null)
-                    {
-                        uiService.ShowError(e, string.Format(SR.CommandSetError, e.Message));
-                    }
+                    uiService?.ShowError(e, string.Format(SR.CommandSetError, e.Message));
 
                     if (ClientUtils.IsCriticalException(e))
                     {

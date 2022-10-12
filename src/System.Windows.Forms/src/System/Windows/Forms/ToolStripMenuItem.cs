@@ -1062,10 +1062,7 @@ namespace System.Windows.Forms
             Keys shortcut = ShortcutKeys;
             if (shortcut != Keys.None)
             {
-                if (_lastOwner is not null)
-                {
-                    _lastOwner.Shortcuts.Remove(shortcut);
-                }
+                _lastOwner?.Shortcuts.Remove(shortcut);
 
                 if (Owner is not null)
                 {

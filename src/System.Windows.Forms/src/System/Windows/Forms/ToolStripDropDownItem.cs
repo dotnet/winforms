@@ -422,10 +422,7 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            if (dropDown is not null)
-            {
-                dropDown.OnOwnerItemFontChanged(EventArgs.Empty);
-            }
+            dropDown?.OnOwnerItemFontChanged(EventArgs.Empty);
         }
 
         protected override void OnBoundsChanged()

@@ -1992,10 +1992,7 @@ namespace System.Windows.Forms
                 //childwindow could be null if the handle was recreated while within a message handler
                 // and then whoever recreated the handle allowed the message to continue to be processed
                 //we cannot really be sure the new child will properly handle this window message, so we eat it.
-                if (childWindow is not null)
-                {
-                    childWindow.DefWndProc(ref m);
-                }
+                childWindow?.DefWndProc(ref m);
             }
         }
 

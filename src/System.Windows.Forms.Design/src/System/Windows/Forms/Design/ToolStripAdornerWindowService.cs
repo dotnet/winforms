@@ -34,10 +34,7 @@ namespace System.Windows.Forms.Design
 
             //use the adornerWindow as an overlay
             _overlayService = (IOverlayService)serviceProvider.GetService(typeof(IOverlayService));
-            if (_overlayService != null)
-            {
-                _overlayService.InsertOverlay(_toolStripAdornerWindow, indexToInsert);
-            }
+            _overlayService?.InsertOverlay(_toolStripAdornerWindow, indexToInsert);
 
             _dropDownAdorner = new Adorner();
             int count = _behaviorService.Adorners.Count;
@@ -75,10 +72,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void Dispose()
         {
-            if (_overlayService != null)
-            {
-                _overlayService.RemoveOverlay(_toolStripAdornerWindow);
-            }
+            _overlayService?.RemoveOverlay(_toolStripAdornerWindow);
 
             _toolStripAdornerWindow.Dispose();
             if (_behaviorService != null)

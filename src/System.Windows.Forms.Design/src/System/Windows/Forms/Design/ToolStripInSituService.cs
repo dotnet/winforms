@@ -28,10 +28,7 @@ namespace System.Windows.Forms.Design
             _sp = provider;
             _designerHost = (IDesignerHost)provider.GetService(typeof(IDesignerHost));
             Debug.Assert(_designerHost != null, "ToolStripKeyboardHandlingService relies on the selection service, which is unavailable.");
-            if (_designerHost != null)
-            {
-                _designerHost.AddService(typeof(ISupportInSituService), this);
-            }
+            _designerHost?.AddService(typeof(ISupportInSituService), this);
 
             _componentChangeSvc = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
             Debug.Assert(_componentChangeSvc != null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");

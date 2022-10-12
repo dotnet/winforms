@@ -519,15 +519,9 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (invalidateRegion != null)
-                {
-                    invalidateRegion.Dispose();
-                }
+                invalidateRegion?.Dispose();
 
-                if (itemRegion != null)
-                {
-                    itemRegion.Dispose();
-                }
+                itemRegion?.Dispose();
             }
         }
 

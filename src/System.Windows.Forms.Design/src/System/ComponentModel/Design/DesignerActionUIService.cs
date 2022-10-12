@@ -34,10 +34,7 @@ namespace System.ComponentModel.Design
             if (_serviceProvider is not null)
             {
                 IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-                if (host is not null)
-                {
-                    host.RemoveService(typeof(DesignerActionUIService));
-                }
+                host?.RemoveService(typeof(DesignerActionUIService));
             }
         }
 

@@ -860,10 +860,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         void IDesignerSerializationManager.RemoveSerializationProvider(IDesignerSerializationProvider provider)
         {
-            if (designerSerializationProviders is not null)
-            {
-                designerSerializationProviders.Remove(provider);
-            }
+            designerSerializationProviders?.Remove(provider);
         }
 
         /// <summary>

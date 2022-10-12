@@ -213,10 +213,7 @@ namespace System.Windows.Forms.Design
                     break;
             }
 
-            if (oldTarget != null)
-            {
-                oldTarget.OnMessage(ref m);
-            }
+            oldTarget?.OnMessage(ref m);
         }
     }
 }

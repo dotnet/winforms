@@ -821,10 +821,7 @@ namespace System.Windows.Forms.Design
 
                             finally
                             {
-                                if (trans != null)
-                                {
-                                    trans.Commit();
-                                }
+                                trans?.Commit();
 
                                 if (dragManager != null)
                                 {
@@ -917,8 +914,7 @@ namespace System.Windows.Forms.Design
                         }
                         finally
                         {
-                            if (trans != null)
-                                trans.Commit();
+                            trans?.Commit();
                         }
                     }
                 }
@@ -1083,8 +1079,7 @@ namespace System.Windows.Forms.Design
                                             if (ex == CheckoutException.Canceled)
                                             {
                                                 // If the user canceled the check out then cancel the transaction
-                                                if (trans != null)
-                                                    trans.Cancel();
+                                                trans?.Cancel();
                                                 return;
                                             }
 
@@ -1113,18 +1108,12 @@ namespace System.Windows.Forms.Design
                                 // we do this backwards to maintain zorder
                                 Control otherControl = selectedComponents[len - i - 1] as Control;
 
-                                if (otherControl != null)
-                                {
-                                    otherControl.BringToFront();
-                                }
+                                otherControl?.BringToFront();
                             }
                             else if (cmdID == StandardCommands.SendToBack)
                             {
                                 Control control = selectedComponents[i] as Control;
-                                if (control != null)
-                                {
-                                    control.SendToBack();
-                                }
+                                control?.SendToBack();
                             }
                         }
                     }

@@ -276,10 +276,7 @@ namespace System.Windows.Forms
                      dwSaveOption == OLECLOSE.PROMPTSAVE) &&
                     _activeXState[s_isDirty])
                 {
-                    if (_clientSite is not null)
-                    {
-                        _clientSite.SaveObject();
-                    }
+                    _clientSite?.SaveObject();
 
                     SendOnSave();
                 }
@@ -928,10 +925,7 @@ namespace System.Windows.Forms
                     // set ourselves up in the host.
                     Debug.Assert(_inPlaceFrame is not null, "Setting us to visible should have created the in place frame");
                     _inPlaceFrame.SetActiveObject(_control, null);
-                    if (_inPlaceUiWindow is not null)
-                    {
-                        _inPlaceUiWindow.SetActiveObject(_control, null);
-                    }
+                    _inPlaceUiWindow?.SetActiveObject(_control, null);
 
                     // we have to explicitly say we don't wany any border space.
                     HRESULT hr = _inPlaceFrame.SetBorderSpace(null);

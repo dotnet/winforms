@@ -425,10 +425,7 @@ namespace System.Windows.Forms
                 try
                 {
                     IMsoComponentManager cm = ComponentManager;
-                    if (cm is not null)
-                    {
-                        cm.OnComponentEnterState(_componentID, msocstate.Modal, msoccontext.All, 0, null, 0);
-                    }
+                    cm?.OnComponentEnterState(_componentID, msocstate.Modal, msoccontext.All, 0, null, 0);
                 }
                 finally
                 {
@@ -654,10 +651,7 @@ namespace System.Windows.Forms
                 {
                     // If We started the ModalMessageLoop .. this will call us back on the IMSOComponent.OnStateEnter and not do anything ...
                     IMsoComponentManager cm = ComponentManager;
-                    if (cm is not null)
-                    {
-                        cm.FOnComponentExitState(_componentID, msocstate.Modal, msoccontext.All, 0, null);
-                    }
+                    cm?.FOnComponentExitState(_componentID, msocstate.Modal, msoccontext.All, 0, null);
                 }
                 finally
                 {

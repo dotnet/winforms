@@ -56,10 +56,7 @@ namespace System.Windows.Forms
                 ArgumentNullException.ThrowIfNull(value);
 
                 ToolStripPanel currentOwner = _owner;
-                if (currentOwner is not null)
-                {
-                    currentOwner.SuspendLayout();
-                }
+                currentOwner?.SuspendLayout();
 
                 try
                 {
@@ -70,10 +67,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner is not null)
-                    {
-                        currentOwner.ResumeLayout();
-                    }
+                    currentOwner?.ResumeLayout();
                 }
             }
 
@@ -82,10 +76,7 @@ namespace System.Windows.Forms
                 ArgumentNullException.ThrowIfNull(value);
 
                 ToolStripPanel currentOwner = _owner;
-                if (currentOwner is not null)
-                {
-                    currentOwner.SuspendLayout();
-                }
+                currentOwner?.SuspendLayout();
 
                 try
                 {
@@ -97,10 +88,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner is not null)
-                    {
-                        currentOwner.ResumeLayout();
-                    }
+                    currentOwner?.ResumeLayout();
                 }
             }
 
@@ -111,10 +99,7 @@ namespace System.Windows.Forms
 
             public virtual void Clear()
             {
-                if (_owner is not null)
-                {
-                    _owner.SuspendLayout();
-                }
+                _owner?.SuspendLayout();
 
                 try
                 {
@@ -125,10 +110,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (_owner is not null)
-                    {
-                        _owner.ResumeLayout();
-                    }
+                    _owner?.ResumeLayout();
                 }
             }
 

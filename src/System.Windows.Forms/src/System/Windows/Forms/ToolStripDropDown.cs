@@ -1670,10 +1670,7 @@ namespace System.Windows.Forms
 
                 foreach (Control control in Controls)
                 {
-                    if (control is not null)
-                    {
-                        control.Scale(dx, dy);
-                    }
+                    control?.Scale(dx, dy);
                 }
             }
             finally

@@ -349,10 +349,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             }
             finally
             {
-                if (pipeClient != null)
-                {
-                    pipeClient.Dispose();
-                }
+                pipeClient?.Dispose();
             }
         }
 

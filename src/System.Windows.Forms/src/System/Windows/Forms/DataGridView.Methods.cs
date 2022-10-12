@@ -13765,10 +13765,7 @@ namespace System.Windows.Forms
             _dataGridViewState2[State2_RaiseSelectionChanged] = _selectedBandIndexes.Count > 0 ||
                                                                                 _individualSelectedCells.Count > 0;
             _selectedBandIndexes.Clear();
-            if (_selectedBandSnapshotIndexes is not null)
-            {
-                _selectedBandSnapshotIndexes.Clear();
-            }
+            _selectedBandSnapshotIndexes?.Clear();
 
             _individualSelectedCells.Clear();
             _individualReadOnlyCells.Clear();

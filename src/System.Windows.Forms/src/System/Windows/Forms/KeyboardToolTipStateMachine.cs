@@ -297,10 +297,7 @@ namespace System.Windows.Forms
             if (_currentState == SmState.Shown && _currentTool is not null)
             {
                 ToolTip? currentToolTip = _toolToTip[_currentTool];
-                if (currentToolTip is not null)
-                {
-                    currentToolTip.HideToolTip(_currentTool);
-                }
+                currentToolTip?.HideToolTip(_currentTool);
             }
 
             ResetTimer();

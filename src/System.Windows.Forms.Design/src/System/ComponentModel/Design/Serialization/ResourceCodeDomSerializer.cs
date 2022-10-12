@@ -671,17 +671,11 @@ namespace System.ComponentModel.Design.Serialization
 
                 // .NET Framework 4.0 (Dev10 #425129): Control location moves due to incorrect anchor info when resource files are reloaded.
                 Windows.Forms.Control control = value as Windows.Forms.Control;
-                if (control is not null)
-                {
-                    control.SuspendLayout();
-                }
+                control?.SuspendLayout();
 
                 base.ApplyResources(value, objectName, culture);
 
-                if (control is not null)
-                {
-                    control.ResumeLayout(false);
-                }
+                control?.ResumeLayout(false);
             }
 
             /// <summary>

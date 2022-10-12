@@ -335,10 +335,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             //remove the associated designeractionpanel
-            if (_designerActionUI != null)
-            {
-                _designerActionUI.RemoveActionGlyph(ce.Component);
-            }
+            _designerActionUI?.RemoveActionGlyph(ce.Component);
         }
 
         /// <summary>

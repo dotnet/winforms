@@ -2389,10 +2389,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (e.KeyCode == Keys.Return)
             {
                 OnListClick(null, null);
-                if (_selectedGridEntry is not null)
-                {
-                    _selectedGridEntry.OnValueReturnKey();
-                }
+                _selectedGridEntry?.OnValueReturnKey();
             }
 
             OnKeyDown(sender, e);
@@ -5223,10 +5220,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _dropDownHolder.FocusComponent();
                 return;
             }
-            else if (_currentEditor is not null)
-            {
-                _currentEditor.Focus();
-            }
+            else _currentEditor?.Focus();
 
             return;
         }

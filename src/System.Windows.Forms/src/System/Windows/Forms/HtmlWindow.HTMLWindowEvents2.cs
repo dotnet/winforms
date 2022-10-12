@@ -78,18 +78,12 @@ namespace System.Windows.Forms
             {
                 HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.s_eventUnload, e);
-                if (_parent is not null)
-                {
-                    _parent.WindowShim.OnWindowUnload();
-                }
+                _parent?.WindowShim.OnWindowUnload();
             }
 
             private void FireEvent(object key, EventArgs e)
             {
-                if (_parent is not null)
-                {
-                    _parent.WindowShim.FireEvent(key, e);
-                }
+                _parent?.WindowShim.FireEvent(key, e);
             }
         }
     }

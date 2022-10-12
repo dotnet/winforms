@@ -1817,17 +1817,11 @@ namespace System.Windows.Forms
 
                 Properties.SetObject(PropOwner, null);
 
-                if (ownerOld is not null)
-                {
-                    ownerOld.RemoveOwnedForm(this);
-                }
+                ownerOld?.RemoveOwnedForm(this);
 
                 Properties.SetObject(PropOwner, value);
 
-                if (value is not null)
-                {
-                    value.AddOwnedForm(this);
-                }
+                value?.AddOwnedForm(this);
 
                 UpdateHandleWithOwner();
             }
@@ -3166,10 +3160,7 @@ namespace System.Windows.Forms
             // child is created maximized, the menu ends up with two sets of
             // MDI child ornaments.
             Form? form = (Form?)Properties.GetObject(PropFormMdiParent);
-            if (form is not null)
-            {
-                form.SuspendUpdateMenuHandles();
-            }
+            form?.SuspendUpdateMenuHandles();
 
             try
             {
@@ -3248,10 +3239,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (form is not null)
-                {
-                    form.ResumeUpdateMenuHandles();
-                }
+                form?.ResumeUpdateMenuHandles();
 
                 // We need to reset the styles in case Windows tries to set us up
                 // with "correct" styles
@@ -4901,10 +4889,7 @@ namespace System.Windows.Forms
 
                 foreach (Control control in Controls)
                 {
-                    if (control is not null)
-                    {
-                        control.Scale(x, y);
-                    }
+                    control?.Scale(x, y);
                 }
             }
             finally
@@ -5084,16 +5069,10 @@ namespace System.Windows.Forms
 
             if (defaultButton != button)
             {
-                if (defaultButton is not null)
-                {
-                    defaultButton.NotifyDefault(false);
-                }
+                defaultButton?.NotifyDefault(false);
 
                 Properties.SetObject(PropDefaultButton, button);
-                if (button is not null)
-                {
-                    button.NotifyDefault(true);
-                }
+                button?.NotifyDefault(true);
             }
         }
 

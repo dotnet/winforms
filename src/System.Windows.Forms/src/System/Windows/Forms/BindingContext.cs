@@ -401,10 +401,7 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(binding);
 
             BindingManagerBase oldManager = binding.BindingManagerBase;
-            if (oldManager is not null)
-            {
-                oldManager.Bindings.Remove(binding);
-            }
+            oldManager?.Bindings.Remove(binding);
 
             if (newBindingContext is not null)
             {

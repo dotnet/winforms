@@ -323,10 +323,7 @@ namespace System.Windows.Forms
                     _text = value;
                 }
 
-                if (ListView is not null)
-                {
-                    ListView.SetColumnInfo(LVCF.TEXT, this);
-                }
+                ListView?.SetColumnInfo(LVCF.TEXT, this);
             }
         }
 
@@ -423,10 +420,7 @@ namespace System.Windows.Forms
             set
             {
                 _width = value;
-                if (ListView is not null)
-                {
-                    ListView.SetColumnWidth(Index, ColumnHeaderAutoResizeStyle.None);
-                }
+                ListView?.SetColumnWidth(Index, ColumnHeaderAutoResizeStyle.None);
             }
         }
 
@@ -437,10 +431,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
             }
 
-            if (ListView is not null)
-            {
-                ListView.AutoResizeColumn(Index, headerAutoResize);
-            }
+            ListView?.AutoResizeColumn(Index, headerAutoResize);
         }
 
         /// <summary>

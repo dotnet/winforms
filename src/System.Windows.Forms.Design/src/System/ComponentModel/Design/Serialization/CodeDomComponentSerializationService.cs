@@ -793,10 +793,7 @@ namespace System.ComponentModel.Design.Serialization
                             foreach (DictionaryEntry de in (IDictionary)state)
                             {
                                 PropertyDescriptor prop = props[(string)de.Key];
-                                if (prop is not null)
-                                {
-                                    prop.SetValue(comp, de.Value);
-                                }
+                                prop?.SetValue(comp, de.Value);
                             }
                         }
                     }
@@ -1051,10 +1048,7 @@ namespace System.ComponentModel.Design.Serialization
                                 {
                                     PropertyDescriptor prop = eventProps[eventName];
 
-                                    if (prop is not null)
-                                    {
-                                        prop.SetValue(comp, null);
-                                    }
+                                    prop?.SetValue(comp, null);
                                 }
                             }
                         }
@@ -1069,10 +1063,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         MemberAttributes modifierValue = (MemberAttributes)state;
                         PropertyDescriptor modifierProp = TypeDescriptor.GetProperties(comp)["Modifiers"];
-                        if (modifierProp is not null)
-                        {
-                            modifierProp.SetValue(comp, modifierValue);
-                        }
+                        modifierProp?.SetValue(comp, modifierValue);
                     }
                 }
 

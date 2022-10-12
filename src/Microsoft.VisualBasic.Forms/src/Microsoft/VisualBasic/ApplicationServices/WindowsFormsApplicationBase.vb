@@ -258,9 +258,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     _processingUnhandledExceptionEvent = True
 
                     For Each handler As UnhandledExceptionEventHandler In _unhandledExceptionHandlers
-                        If handler IsNot Nothing Then
-                            handler.Invoke(sender, e)
-                        End If
+                        handler?.Invoke(sender, e)
                     Next
 
                     ' Now that we are out of the unhandled exception handler, treat exceptions normally again.
@@ -747,9 +745,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' Dispose on the Splash screen. (we're just swapping the order of the two If blocks.)
                 ' This is to fix the issue where the main form doesn't come to the front after the
                 ' Splash screen disappears.
-                If MainForm IsNot Nothing Then
-                    MainForm.Activate()
-                End If
+                MainForm?.Activate()
 
                 If _splashScreen IsNot Nothing AndAlso Not _splashScreen.IsDisposed Then
                     Dim disposeSplashDelegate As New DisposeDelegate(AddressOf _splashScreen.Dispose)

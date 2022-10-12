@@ -214,9 +214,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         'Form overrides dispose to clean up the component list.
         Protected Overloads Overrides Sub Dispose(disposing As Boolean)
             If disposing Then
-                If Not (_components Is Nothing) Then
-                    _components.Dispose()
-                End If
+                _components?.Dispose()
                 If _formClosableSemaphore IsNot Nothing Then
                     _formClosableSemaphore.Dispose()
                     _formClosableSemaphore = Nothing

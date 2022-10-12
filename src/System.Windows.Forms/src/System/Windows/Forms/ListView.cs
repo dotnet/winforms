@@ -2981,10 +2981,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            if (_odCacheFontHandleWrapper is not null)
-                            {
-                                _odCacheFontHandleWrapper.Dispose();
-                            }
+                            _odCacheFontHandleWrapper?.Dispose();
 
                             _odCacheFontHandleWrapper = new FontHandleWrapper(subItemFont);
                             PInvoke.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
@@ -4129,10 +4126,7 @@ namespace System.Windows.Forms
 
                 ArrayList? itemList = (ArrayList?)Properties.GetObject(PropDelayedUpdateItems);
                 Debug.Assert(itemList is not null, "In Begin/EndUpdate with no delayed array!");
-                if (itemList is not null)
-                {
-                    itemList.AddRange(items);
-                }
+                itemList?.AddRange(items);
 
                 // add the list view item to the list view
                 // this way we can retrieve the item's index inside BeginUpdate/EndUpdate

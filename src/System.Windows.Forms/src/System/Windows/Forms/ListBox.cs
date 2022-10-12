@@ -1836,10 +1836,7 @@ namespace System.Windows.Forms
 
                     if (_selectionMode != SelectionMode.None)
                     {
-                        if (_selectedItems is not null)
-                        {
-                            _selectedItems.PushSelectionIntoNativeListBox(i);
-                        }
+                        _selectedItems?.PushSelectionIntoNativeListBox(i);
                     }
                 }
             }
@@ -2394,10 +2391,7 @@ namespace System.Windows.Forms
             switch ((User32.LBN)m.WParamInternal.HIWORD)
             {
                 case User32.LBN.SELCHANGE:
-                    if (_selectedItems is not null)
-                    {
-                        _selectedItems.Dirty();
-                    }
+                    _selectedItems?.Dirty();
 
                     OnSelectedIndexChanged(EventArgs.Empty);
                     break;

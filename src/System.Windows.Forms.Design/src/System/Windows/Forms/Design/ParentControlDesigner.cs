@@ -217,10 +217,7 @@ namespace System.Windows.Forms.Design
 
                     //invalidate the control to remove or draw the grid based on the new value
                     Control control = Control;
-                    if (control != null)
-                    {
-                        control.Invalidate(true);
-                    }
+                    control?.Invalidate(true);
 
                     //now, notify all child parent control designers that we have changed our setting
                     // 'cause they might to change along with us, unless the user has explicitly set
@@ -232,10 +229,7 @@ namespace System.Windows.Forms.Design
                         foreach (Control child in Control.Controls)
                         {
                             ParentControlDesigner designer = host.GetDesigner(child) as ParentControlDesigner;
-                            if (designer != null)
-                            {
-                                designer.DrawGridOfParentChanged(_drawGrid);
-                            }
+                            designer?.DrawGridOfParentChanged(_drawGrid);
                         }
                     }
                 }
@@ -316,10 +310,7 @@ namespace System.Windows.Forms.Design
 
                 //invalidate the control
                 Control control = Control;
-                if (control != null)
-                {
-                    control.Invalidate(true);
-                }
+                control?.Invalidate(true);
 
                 //now, notify all child parent control designers that we have changed our setting
                 // 'cause they might to change along with us, unless the user has explicitly set
@@ -330,10 +321,7 @@ namespace System.Windows.Forms.Design
                     foreach (Control child in Control.Controls)
                     {
                         ParentControlDesigner designer = host.GetDesigner(child) as ParentControlDesigner;
-                        if (designer != null)
-                        {
-                            designer.GridSizeOfParentChanged(_gridSize);
-                        }
+                        designer?.GridSizeOfParentChanged(_gridSize);
                     }
                 }
             }
@@ -491,10 +479,7 @@ namespace System.Windows.Forms.Design
                         foreach (Control child in Control.Controls)
                         {
                             ParentControlDesigner designer = host.GetDesigner(child) as ParentControlDesigner;
-                            if (designer != null)
-                            {
-                                designer.GridSnapOfParentChanged(_gridSnap);
-                            }
+                            designer?.GridSnapOfParentChanged(_gridSnap);
                         }
                     }
                 }
@@ -660,10 +645,7 @@ namespace System.Windows.Forms.Design
                 //
                 //
                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(Control)["Controls"];
-                if (_changeService != null)
-                {
-                    _changeService.OnComponentChanging(Control, controlsProp);
-                }
+                _changeService?.OnComponentChanging(Control, controlsProp);
 
                 AddChildControl(newChild);
 
@@ -674,10 +656,7 @@ namespace System.Windows.Forms.Design
                 if (props != null)
                 {
                     PropertyDescriptor prop = props["Size"];
-                    if (prop != null)
-                    {
-                        prop.SetValue(newChild, new Size(bounds.Width, bounds.Height));
-                    }
+                    prop?.SetValue(newChild, new Size(bounds.Width, bounds.Height));
 
                     //VSWhidbey# 364133 - ControlDesigner shadows the Location property. If the control is parented
                     //and the parent is a scrollable control, then it expects the Location to be in displayrectangle coordinates.
@@ -695,16 +674,10 @@ namespace System.Windows.Forms.Design
                     }
 
                     prop = props["Location"];
-                    if (prop != null)
-                    {
-                        prop.SetValue(newChild, pt);
-                    }
+                    prop?.SetValue(newChild, pt);
                 }
 
-                if (_changeService != null)
-                {
-                    _changeService.OnComponentChanged(Control, controlsProp, Control.Controls, Control.Controls);
-                }
+                _changeService?.OnComponentChanged(Control, controlsProp, Control.Controls, Control.Controls);
 
                 newChild.Update();
             }
@@ -754,10 +727,7 @@ namespace System.Windows.Forms.Design
                         continue;
                     }
 
-                    if (childContainer != null)
-                    {
-                        childContainer.Remove(children[i]);
-                    }
+                    childContainer?.Remove(children[i]);
 
                     if (name != null)
                     {
@@ -782,10 +752,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     IComponentInitializer init = host.GetDesigner(component) as IComponentInitializer;
-                    if (init != null)
-                    {
-                        init.InitializeExistingComponent(null);
-                    }
+                    init?.InitializeExistingComponent(null);
 
                     // recurse;
                     AddChildComponents(children[i], container, host);
@@ -1519,10 +1486,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragComplete(DragEventArgs de)
         {
             DropSourceBehavior.BehaviorDataObject data = de.Data as DropSourceBehavior.BehaviorDataObject;
-            if (data != null)
-            {
-                data.CleanupDrag();
-            }
+            data?.CleanupDrag();
         }
 
         /// <summary>
@@ -1574,22 +1538,16 @@ namespace System.Windows.Forms.Design
             if (_mouseDragTool != null)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
-                {
-                    host.Activate();
-                }
+                host?.Activate();
 
                 try
                 {
                     //There may be a wizard displaying as a result of CreateTool.
                     //we do not want the behavior service thinking there he is dragging while this wizard is up
                     //it causes the cursor to constantly flicker to the toolbox cursor.
-                    if (BehaviorService != null)
-                    {
-                        //this will cause the BehSvc to return from 'drag mode'
-                        //
-                        BehaviorService.EndDragNotification();
-                    }
+                    //this will cause the BehSvc to return from 'drag mode'
+                    //
+                    BehaviorService?.EndDragNotification();
 
                     CreateTool(_mouseDragTool, new Point(de.X, de.Y));
                 }
@@ -1785,19 +1743,13 @@ namespace System.Windows.Forms.Design
                 // This must be called last. Tell the behavior that we are beginning a drag.
                 // Yeah, this is OnDragEnter, but to the behavior this is as if we are starting a drag.
                 // VSWhidbey 487816
-                if (_toolboxItemSnapLineBehavior != null)
-                {
-                    _toolboxItemSnapLineBehavior.OnBeginDrag();
-                }
+                _toolboxItemSnapLineBehavior?.OnBeginDrag();
             }
         }
 
         private void PerformDragEnter(DragEventArgs de, IDesignerHost host)
         {
-            if (host != null)
-            {
-                host.Activate();
-            }
+            host?.Activate();
 
             Debug.Assert(0 != (de.AllowedEffect & (DragDropEffects.Move | DragDropEffects.Copy)), "DragDropEffect.Move | .Copy isn't allowed?");
             if ((de.AllowedEffect & DragDropEffects.Move) != 0)
@@ -1819,10 +1771,7 @@ namespace System.Windows.Forms.Design
             // Also, select this parent control to indicate it will be the drop target.
             //
             ISelectionService sel = (ISelectionService)GetService(typeof(ISelectionService));
-            if (sel != null)
-            {
-                sel.SetSelectedComponents(new object[] { Component }, SelectionTypes.Replace);
-            }
+            sel?.SetSelectedComponents(new object[] { Component }, SelectionTypes.Replace);
         }
 
         /// <summary>
@@ -1937,10 +1886,7 @@ namespace System.Windows.Forms.Design
             // Select the given object.
             ISelectionService selsvc = (ISelectionService)GetService(typeof(ISelectionService));
 
-            if (selsvc != null)
-            {
-                selsvc.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
-            }
+            selsvc?.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
 
             // Get the event handler service.  We push a handler to handle the escape
             // key.
@@ -2047,10 +1993,7 @@ namespace System.Windows.Forms.Design
                     try
                     {
                         CreateTool(tool, baseVar);
-                        if (_toolboxService != null)
-                        {
-                            _toolboxService.SelectedToolboxItemUsed();
-                        }
+                        _toolboxService?.SelectedToolboxItemUsed();
                     }
                     catch (Exception e)
                     {
@@ -2095,10 +2038,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     CreateTool(tool, offset);
-                    if (_toolboxService != null)
-                    {
-                        _toolboxService.SelectedToolboxItemUsed();
-                    }
+                    _toolboxService?.SelectedToolboxItemUsed();
                 }
                 catch (Exception e)
                 {
@@ -2424,10 +2364,7 @@ namespace System.Windows.Forms.Design
                     //fire comp changing on parent and control
                     if (oldParent != null)
                     {
-                        if (changeService != null)
-                        {
-                            changeService.OnComponentChanging(oldParent, controlsProp);
-                        }
+                        changeService?.OnComponentChanging(oldParent, controlsProp);
 
                         //remove control from the old parent
                         oldParent.Controls.Remove(control);
@@ -2463,10 +2400,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (changeService != null)
-                {
-                    changeService.OnComponentChanged(newParent, controlsProp);
-                }
+                changeService?.OnComponentChanged(newParent, controlsProp);
 
                 //commit the transaction
                 dt.Commit();
@@ -2539,10 +2473,7 @@ namespace System.Windows.Forms.Design
             _parentCanSetGridSize = true;
             //invalidate the control
             Control control = Control;
-            if (control != null)
-            {
-                control.Invalidate(true);
-            }
+            control?.Invalidate(true);
         }
 
         private void ResetDrawGrid()
@@ -2551,10 +2482,7 @@ namespace System.Windows.Forms.Design
             _parentCanSetDrawGrid = true;
             //invalidate the control
             Control control = Control;
-            if (control != null)
-            {
-                control.Invalidate(true);
-            }
+            control?.Invalidate(true);
         }
 
         private void ResetSnapToGrid()
@@ -2645,10 +2573,7 @@ namespace System.Windows.Forms.Design
                     {
                         // move it back.
                         container.Remove(component);
-                        if (oldContainer != null)
-                        {
-                            oldContainer.Add(component);
-                        }
+                        oldContainer?.Add(component);
                     }
                     else
                     {
@@ -2686,16 +2611,10 @@ namespace System.Windows.Forms.Design
                         if (c.Parent != null)
                         {
                             Control cParent = c.Parent;
-                            if (_changeService != null)
-                            {
-                                _changeService.OnComponentChanging(cParent, controlsProp);
-                            }
+                            _changeService?.OnComponentChanging(cParent, controlsProp);
 
                             cParent.Controls.Remove(c);
-                            if (_changeService != null)
-                            {
-                                _changeService.OnComponentChanged(cParent, controlsProp, cParent.Controls, cParent.Controls);
-                            }
+                            _changeService?.OnComponentChanged(cParent, controlsProp, cParent.Controls, cParent.Controls);
                         }
 
                         if (_suspendChanging == 0 && _changeService != null)
@@ -2708,10 +2627,7 @@ namespace System.Windows.Forms.Design
                         // z-order, but do we need that?
                         //
                         //parent.Controls.SetChildIndex(c, 0);
-                        if (_changeService != null)
-                        {
-                            _changeService.OnComponentChanged(parent, controlsProp, parent.Controls, parent.Controls);
-                        }
+                        _changeService?.OnComponentChanged(parent, controlsProp, parent.Controls, parent.Controls);
                     }
                     else
                     {
@@ -2732,10 +2648,7 @@ namespace System.Windows.Forms.Design
                 // handled properly.  if we respected the boolean before, the ui selection handlers
                 // would cache designers, handlers, etc. and cause problems.
                 IComponentInitializer init = localDesignerHost.GetDesigner(component) as IComponentInitializer;
-                if (init != null)
-                {
-                    init.InitializeExistingComponent(null);
-                }
+                init?.InitializeExistingComponent(null);
 
                 AddChildComponents(component, container, localDesignerHost);
             }

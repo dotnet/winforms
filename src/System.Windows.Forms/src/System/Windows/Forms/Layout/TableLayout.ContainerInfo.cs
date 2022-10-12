@@ -204,10 +204,7 @@ namespace System.Windows.Forms.Layout
                 set
                 {
                     _rowStyles = value;
-                    if (_rowStyles is not null)
-                    {
-                        _rowStyles.EnsureOwnership(_container);
-                    }
+                    _rowStyles?.EnsureOwnership(_container);
                 }
             }
 
@@ -225,10 +222,7 @@ namespace System.Windows.Forms.Layout
                 set
                 {
                     _colStyles = value;
-                    if (_colStyles is not null)
-                    {
-                        _colStyles.EnsureOwnership(_container);
-                    }
+                    _colStyles?.EnsureOwnership(_container);
                 }
             }
 

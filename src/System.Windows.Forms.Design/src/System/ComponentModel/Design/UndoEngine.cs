@@ -675,10 +675,7 @@ namespace System.ComponentModel.Design
                     AddEvent(new AddRemoveUndoEvent(UndoEngine, e.Component, true));
                 }
 
-                if (_ignoreAddingList is not null)
-                {
-                    _ignoreAddingList.Remove(e.Component);
-                }
+                _ignoreAddingList?.Remove(e.Component);
 
                 if (_ignoreAddedList is null)
                 {
@@ -975,10 +972,7 @@ namespace System.ComponentModel.Design
                 }
                 finally
                 {
-                    if (transaction is not null)
-                    {
-                        transaction.Commit();
-                    }
+                    transaction?.Commit();
 
                     UndoEngine._executingUnit = savedUnit;
                     if (savedUnit is null)

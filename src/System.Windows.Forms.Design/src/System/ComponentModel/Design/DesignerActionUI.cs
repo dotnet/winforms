@@ -130,10 +130,7 @@ namespace System.ComponentModel.Design
                 if (_cmdShowDesignerActions is not null)
                 {
                     IMenuCommandService mcs = (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
-                    if (mcs is not null)
-                    {
-                        mcs.RemoveCommand(_cmdShowDesignerActions);
-                    }
+                    mcs?.RemoveCommand(_cmdShowDesignerActions);
                 }
             }
 
@@ -568,10 +565,7 @@ namespace System.ComponentModel.Design
                     host.TransactionClosed -= new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);
                 }
 
-                if (_relatedGlyphTransaction is not null)
-                {
-                    _relatedGlyphTransaction.InvalidateOwnerLocation();
-                }
+                _relatedGlyphTransaction?.InvalidateOwnerLocation();
 
                 _relatedGlyphTransaction = null;
             }
