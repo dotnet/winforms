@@ -1107,10 +1107,7 @@ namespace System.Windows.Forms
 
                 ResetDataConnectionState();
 
-                if (dataMember is null)
-                {
-                    dataMember = string.Empty;
-                }
+                dataMember ??= string.Empty;
 
                 if (this.DataSource is ISupportInitializeNotification dsInit && _dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp])
                 {

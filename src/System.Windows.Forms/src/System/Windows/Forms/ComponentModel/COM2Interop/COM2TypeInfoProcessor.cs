@@ -244,10 +244,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         defaultProp = temp;
                     }
 
-                    if (processedLibraries is null)
-                    {
-                        processedLibraries = new Hashtable();
-                    }
+                    processedLibraries ??= new Hashtable();
 
                     if (typeGuid != Guid.Empty)
                     {

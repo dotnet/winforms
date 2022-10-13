@@ -142,10 +142,7 @@ namespace System.Windows.Forms.Design
             get => _dropDownCollection;
             set
             {
-                if (_dropDownCollection is null)
-                {
-                    _dropDownCollection = new ArrayList();
-                }
+                _dropDownCollection ??= new ArrayList();
             }
         }
 

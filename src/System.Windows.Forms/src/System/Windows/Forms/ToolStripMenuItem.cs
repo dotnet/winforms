@@ -865,10 +865,7 @@ namespace System.Windows.Forms
 
         internal string GetShortcutText()
         {
-            if (_cachedShortcutText is null)
-            {
-                _cachedShortcutText = ShortcutToText(ShortcutKeys, ShortcutKeyDisplayString);
-            }
+            _cachedShortcutText ??= ShortcutToText(ShortcutKeys, ShortcutKeyDisplayString);
 
             return _cachedShortcutText;
         }

@@ -937,10 +937,7 @@ namespace System.Windows.Forms
                             numVisibleFillColumns++;
                             requiredWidthSum += dataGridViewColumn.DesiredMinimumWidth > 0 ? dataGridViewColumn.DesiredMinimumWidth : dataGridViewColumn.MinimumWidth;
                             weightSum += dataGridViewColumn.FillWeight;
-                            if (autoFillColumns is null)
-                            {
-                                autoFillColumns = new ArrayList(Columns.Count);
-                            }
+                            autoFillColumns ??= new ArrayList(Columns.Count);
 
                             autoFillColumns.Add(dataGridViewColumn);
                         }

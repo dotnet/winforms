@@ -131,10 +131,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnComponentAdded(object sender, ComponentEventArgs cevent)
         {
-            if (_addedComponents is null)
-            {
-                _addedComponents = new ArrayList();
-            }
+            _addedComponents ??= new ArrayList();
 
             IComponent compAdded = cevent.Component;
             if (!(compAdded.Site is INestedSite))
@@ -149,10 +146,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnComponentRemoved(object sender, ComponentEventArgs cevent)
         {
-            if (_removedComponents is null)
-            {
-                _removedComponents = new ArrayList();
-            }
+            _removedComponents ??= new ArrayList();
 
             IComponent compRemoved = cevent.Component;
             if (!(compRemoved.Site is INestedSite))
@@ -370,23 +364,13 @@ namespace System.ComponentModel.Design
                             {
                                 _fullName = string.Format(CultureInfo.CurrentCulture, "{0}{1}", siteName, _trailingName);
                             }
-                        }
-
-                        if (_fullName is null)
-                        {
-                            _fullName = string.Empty;
 #if DEBUG
-                            if (_sitedComponent is not null)
-                            {
-                                Debug.Assert(_sitedComponent.Site is not null, "Sited component is not really sited: " + _sitedComponent.ToString());
-                            }
-
-                            if (_sitedComponent is not null)
-                            {
-                                Debug.Assert(TypeDescriptor.GetComponentName(_sitedComponent) is not null, "Sited component has no name: " + _sitedComponent.ToString());
-                            }
+                            Debug.Assert(_sitedComponent.Site is not null, "Sited component is not really sited: " + _sitedComponent.ToString());
+                            Debug.Assert(TypeDescriptor.GetComponentName(_sitedComponent) is not null, "Sited component has no name: " + _sitedComponent.ToString());
 #endif // DEBUG
                         }
+
+                        _fullName = string.Empty;
                     }
 
                     return _fullName;

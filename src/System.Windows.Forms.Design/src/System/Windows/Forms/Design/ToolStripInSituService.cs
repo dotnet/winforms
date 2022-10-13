@@ -66,10 +66,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_toolStripKeyBoardService is null)
-                {
-                    _toolStripKeyBoardService = (ToolStripKeyboardHandlingService)_sp.GetService(typeof(ToolStripKeyboardHandlingService));
-                }
+                _toolStripKeyBoardService ??= (ToolStripKeyboardHandlingService)_sp.GetService(typeof(ToolStripKeyboardHandlingService));
 
                 return _toolStripKeyBoardService;
             }
@@ -187,10 +184,7 @@ namespace System.Windows.Forms.Design
                         if (selService != null)
                         {
                             object comp = selService.PrimarySelection;
-                            if (comp is null)
-                            {
-                                comp = ToolStripKeyBoardService.SelectedDesignerControl;
-                            }
+                            comp ??= ToolStripKeyBoardService.SelectedDesignerControl;
 
                             DesignerToolStripControlHost designerItem = comp as DesignerToolStripControlHost;
                             if (designerItem != null || comp is ToolStripDropDown)

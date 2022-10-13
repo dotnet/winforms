@@ -104,11 +104,8 @@ namespace System.Windows.Forms
                             {
                                 // Default to menu font
                                 sysFont = SystemFonts.MenuFont;
-                                if (sysFont is null)
-                                {
-                                    // ...or to control font if menu font unavailable
-                                    sysFont = Control.DefaultFont;
-                                }
+                                // ...or to control font if menu font unavailable
+                                sysFont ??= Control.DefaultFont;
 
                                 if (sysFont is not null)
                                 {
@@ -509,10 +506,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (t_defaultRenderer is null)
-                {
-                    t_defaultRenderer = CreateRenderer(RenderMode);
-                }
+                t_defaultRenderer ??= CreateRenderer(RenderMode);
 
                 return t_defaultRenderer;
             }

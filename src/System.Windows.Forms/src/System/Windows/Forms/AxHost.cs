@@ -2108,10 +2108,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_containingControl is null)
-                {
-                    _containingControl = FindContainerControlInternal();
-                }
+                _containingControl ??= FindContainerControlInternal();
 
                 return _containingControl;
             }
@@ -2285,10 +2282,7 @@ namespace System.Windows.Forms
                     return null;
                 case Ole32.DispatchID.AMBIENT_DISPLAYNAME:
                     string rval = AxContainer.GetNameForControl(this);
-                    if (rval is null)
-                    {
-                        rval = string.Empty;
-                    }
+                    rval ??= string.Empty;
 
                     return rval;
                 case Ole32.DispatchID.AMBIENT_LOCALEID:
@@ -2751,10 +2745,7 @@ namespace System.Windows.Forms
 
             ArrayList returnProperties = new ArrayList();
 
-            if (_properties is null)
-            {
-                _properties = new Hashtable();
-            }
+            _properties ??= new Hashtable();
 
             if (_propertyInfos is null)
             {
@@ -3825,10 +3816,7 @@ namespace System.Windows.Forms
 
         private AxContainer GetParentContainer()
         {
-            if (_container is null)
-            {
-                _container = AxContainer.FindContainerForControl(this);
-            }
+            _container ??= AxContainer.FindContainerForControl(this);
 
             if (_container is null)
             {

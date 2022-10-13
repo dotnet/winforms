@@ -375,10 +375,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 // It is much faster to dig through the resources first, and then map these resources to properties than it is to filter properties at each turn.  Why?  Because filtering properties requires a separate filter call for each object (because designers get a chance to filter, the cache is per-component), while resources are loaded once per document.
                 IDictionaryEnumerator de = ResourceCodeDomSerializer.GetMetadataEnumerator(manager);
-                if (de is null)
-                {
-                    de = ResourceCodeDomSerializer.GetEnumerator(manager, CultureInfo.InvariantCulture);
-                }
+                de ??= ResourceCodeDomSerializer.GetEnumerator(manager, CultureInfo.InvariantCulture);
 
                 if (de is not null)
                 {
@@ -456,10 +453,7 @@ namespace System.ComponentModel.Design.Serialization
         internal static IDisposable TraceScope(string name)
         {
 #if DEBUG
-            if (traceScope is null)
-            {
-                traceScope = new Stack();
-            }
+            traceScope ??= new Stack();
 
             Trace(name);
             traceScope.Push(name);
@@ -2608,10 +2602,7 @@ namespace System.ComponentModel.Design.Serialization
                 PropertyDescriptorCollection properties = GetFilteredProperties(manager, value, filter).Sort();
                 InheritanceAttribute inheritance = (InheritanceAttribute)GetAttributesHelper(manager, value)[typeof(InheritanceAttribute)];
 
-                if (inheritance is null)
-                {
-                    inheritance = InheritanceAttribute.NotInherited;
-                }
+                inheritance ??= InheritanceAttribute.NotInherited;
 
                 manager.Context.Push(inheritance);
                 try
@@ -2869,10 +2860,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             Trace("Serialization produced additional statements");
                             // See if we have a place for these statements to be stored.  If not, then check the context.
-                            if (saveStatements is null)
-                            {
-                                saveStatements = manager.Context[typeof(CodeStatementCollection)] as CodeStatementCollection;
-                            }
+                            saveStatements ??= manager.Context[typeof(CodeStatementCollection)] as CodeStatementCollection;
 
                             if (saveStatements is not null)
                             {
@@ -2887,10 +2875,7 @@ namespace System.ComponentModel.Design.Serialization
                                 if (value is not null)
                                 {
                                     valueName = manager.GetName(value);
-                                    if (valueName is null)
-                                    {
-                                        valueName = value.GetType().Name;
-                                    }
+                                    valueName ??= value.GetType().Name;
                                 }
 
                                 TraceError("Serialization produced a set of statements but there is no statement collection on the stack to receive them.");

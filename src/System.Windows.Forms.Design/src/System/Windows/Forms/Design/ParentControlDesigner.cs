@@ -356,10 +356,7 @@ namespace System.Windows.Forms.Design
         // So its ok to Suppress this.
         protected void AddPaddingSnapLines(ref ArrayList snapLines)
         {
-            if (snapLines == null)
-            {
-                snapLines = new ArrayList(4);
-            }
+            snapLines ??= new ArrayList(4);
 
             //In order to add padding, we need to get the offset from the usable client area of our control
             //and the actual origin of our control.  In other words: how big is the non-client area here?
@@ -1161,10 +1158,7 @@ namespace System.Windows.Forms.Design
 
         internal OleDragDropHandler GetOleDragHandler()
         {
-            if (_oleDragDropHandler == null)
-            {
-                _oleDragDropHandler = new OleDragDropHandler(null, (IServiceProvider)GetService(typeof(IDesignerHost)), this);
-            }
+            _oleDragDropHandler ??= new OleDragDropHandler(null, (IServiceProvider)GetService(typeof(IDesignerHost)), this);
 
             return _oleDragDropHandler;
         }
@@ -1707,10 +1701,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (_toolboxService == null)
-            {
-                _toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
-            }
+            _toolboxService ??= (IToolboxService)GetService(typeof(IToolboxService));
 
             // Only assume the items came from the ToolBox if dragComps == null
             //
@@ -1723,10 +1714,7 @@ namespace System.Windows.Forms.Design
                 if ((_mouseDragTool != null) && BehaviorService != null && BehaviorService.UseSnapLines)
                 {
                     //demand create
-                    if (_toolboxItemSnapLineBehavior == null)
-                    {
-                        _toolboxItemSnapLineBehavior = new ToolboxItemSnapLineBehavior(Component.Site, BehaviorService, this, AllowGenericDragBox);
-                    }
+                    _toolboxItemSnapLineBehavior ??= new ToolboxItemSnapLineBehavior(Component.Site, BehaviorService, this, AllowGenericDragBox);
 
                     if (!_toolboxItemSnapLineBehavior.IsPushed)
                     {
@@ -1864,10 +1852,7 @@ namespace System.Windows.Forms.Design
             //
             if (!InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
             {
-                if (_toolboxService == null)
-                {
-                    _toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
-                }
+                _toolboxService ??= (IToolboxService)GetService(typeof(IToolboxService));
 
                 if (_toolboxService != null)
                 {
@@ -2148,10 +2133,7 @@ namespace System.Windows.Forms.Design
                 _mouseDragOffset = Control.RectangleToScreen(_mouseDragOffset);
             }
 
-            if (_graphics == null)
-            {
-                _graphics = BehaviorService.AdornerWindowGraphics;
-            }
+            _graphics ??= BehaviorService.AdornerWindowGraphics;
 
             // And draw the new drag frame
             if (!_mouseDragOffset.IsEmpty && _graphics != null)
@@ -2252,10 +2234,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void OnSetCursor()
         {
-            if (_toolboxService == null)
-            {
-                _toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
-            }
+            _toolboxService ??= (IToolboxService)GetService(typeof(IToolboxService));
 
             try
             {

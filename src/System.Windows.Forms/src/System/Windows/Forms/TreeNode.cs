@@ -67,10 +67,7 @@ namespace System.Windows.Forms
             get
             {
                 //Demand create the imageIndexer
-                if (imageIndexer is null)
-                {
-                    imageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
-                }
+                imageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
 
                 return imageIndexer;
             }
@@ -81,10 +78,7 @@ namespace System.Windows.Forms
             get
             {
                 //Demand create the imageIndexer
-                if (selectedImageIndexer is null)
-                {
-                    selectedImageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
-                }
+                selectedImageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
 
                 return selectedImageIndexer;
             }
@@ -95,10 +89,7 @@ namespace System.Windows.Forms
             get
             {
                 //Demand create the imageIndexer
-                if (stateImageIndexer is null)
-                {
-                    stateImageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.State);
-                }
+                stateImageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.State);
 
                 return stateImageIndexer;
             }
@@ -215,10 +206,7 @@ namespace System.Windows.Forms
 
                 // Not the default, so if necessary create a new propBag, and fill it with the backcolor
 
-                if (propBag is null)
-                {
-                    propBag = new OwnerDrawPropertyBag();
-                }
+                propBag ??= new OwnerDrawPropertyBag();
 
                 propBag.BackColor = value;
                 if (!value.Equals(oldbk))
@@ -454,10 +442,7 @@ namespace System.Windows.Forms
 
                 // Not the default, so if necessary create a new propBag, and fill it with the new forecolor
 
-                if (propBag is null)
-                {
-                    propBag = new OwnerDrawPropertyBag();
-                }
+                propBag ??= new OwnerDrawPropertyBag();
 
                 propBag.ForeColor = value;
                 if (!value.Equals(oldfc))
@@ -813,10 +798,7 @@ namespace System.Windows.Forms
 
                 // Not the default, so if necessary create a new propBag, and fill it with the font
 
-                if (propBag is null)
-                {
-                    propBag = new OwnerDrawPropertyBag();
-                }
+                propBag ??= new OwnerDrawPropertyBag();
 
                 propBag.Font = value;
                 if (!value.Equals(oldfont))
@@ -832,10 +814,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (nodes is null)
-                {
-                    nodes = new TreeNodeCollection(this);
-                }
+                nodes ??= new TreeNodeCollection(this);
 
                 return nodes;
             }
@@ -1187,10 +1166,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (treeView is null)
-                {
-                    treeView = FindTreeView();
-                }
+                treeView ??= FindTreeView();
 
                 return treeView;
             }

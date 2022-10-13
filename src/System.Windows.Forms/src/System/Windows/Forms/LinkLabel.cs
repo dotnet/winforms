@@ -327,10 +327,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_linkCollection is null)
-                {
-                    _linkCollection = new LinkCollection(this);
-                }
+                _linkCollection ??= new LinkCollection(this);
 
                 return _linkCollection;
             }
@@ -655,10 +652,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (g is null)
-                    {
-                        g = created = CreateGraphicsInternal();
-                    }
+                    g ??= created = CreateGraphicsInternal();
 
                     if (UseCompatibleTextRendering)
                     {

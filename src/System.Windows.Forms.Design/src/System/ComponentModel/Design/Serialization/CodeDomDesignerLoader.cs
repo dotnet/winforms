@@ -248,10 +248,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (t is null)
                             {
-                                if (failures is null)
-                                {
-                                    failures = new ArrayList();
-                                }
+                                failures ??= new ArrayList();
 
                                 failures.Add(string.Format(SR.CodeDomDesignerLoaderDocumentFailureTypeNotFound, typeDecl.Name, typeRef.BaseType));
                             }
@@ -314,10 +311,7 @@ namespace System.ComponentModel.Design.Serialization
                             // If we didn't find a serializer for this type, report it.
                             if (_rootSerializer is null && _typeSerializer is null)
                             {
-                                if (failures is null)
-                                {
-                                    failures = new ArrayList();
-                                }
+                                failures ??= new ArrayList();
 
                                 if (foundAttribute)
                                 {
@@ -1075,10 +1069,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         object IDesignerSerializationService.Serialize(ICollection objects)
         {
-            if (objects is null)
-            {
-                objects = Array.Empty<object>();
-            }
+            objects ??= Array.Empty<object>();
 
             ComponentSerializationService css = GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
 

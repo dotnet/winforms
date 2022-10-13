@@ -313,10 +313,7 @@ namespace System.Windows.Forms
                     {
                         // add the space we freed to the first guy.
                         cell = GetNextVisibleCell(index, /*forward*/true);
-                        if (cell is null)
-                        {
-                            cell = Row.Cells[index] as ToolStripPanelCell;
-                        }
+                        cell ??= Row.Cells[index] as ToolStripPanelCell;
 
                         Debug.Assert(cell is not null, "Don't expect cell to be null here, what's going on?");
 

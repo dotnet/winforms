@@ -127,10 +127,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (c.Site != null)
                     {
-                        if (sitedChildren is null)
-                        {
-                            sitedChildren = new ArrayList();
-                        }
+                        sitedChildren ??= new ArrayList();
 
                         sitedChildren.Add(c);
                     }
@@ -2536,10 +2533,7 @@ namespace System.Windows.Forms.Design
             }
 
             _thrownException = exception;
-            if (owner is null)
-            {
-                owner = Control;
-            }
+            owner ??= Control;
 
             string stack = string.Empty;
             string[] exceptionLines = exception.StackTrace.Split('\r', '\n');

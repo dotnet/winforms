@@ -36,13 +36,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (mergeItem is null)
-                {
-                    mergeItem = new ToolStripMenuItem
+                mergeItem ??= new ToolStripMenuItem
                     {
                         MergeAction = MergeAction.MatchOnly
                     };
-                }
 
                 if (mergeItem.Owner is null)
                 {

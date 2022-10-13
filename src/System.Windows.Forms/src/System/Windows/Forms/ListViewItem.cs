@@ -814,10 +814,7 @@ namespace System.Windows.Forms
             get => toolTipText;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!WindowsFormsUtils.SafeCompareStrings(toolTipText, value, ignoreCase: false))
                 {

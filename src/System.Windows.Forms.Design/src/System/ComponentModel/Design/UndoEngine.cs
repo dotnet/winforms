@@ -473,10 +473,7 @@ namespace System.ComponentModel.Design
                                 {
                                     propsToUpdate = new List<ReferencingComponent>();
 
-                                    if (_refToRemovedComponent is null)
-                                    {
-                                        _refToRemovedComponent = new Dictionary<IComponent, List<ReferencingComponent>>();
-                                    }
+                                    _refToRemovedComponent ??= new Dictionary<IComponent, List<ReferencingComponent>>();
 
                                     _refToRemovedComponent[e.Component] = propsToUpdate;
                                 }
@@ -584,10 +581,7 @@ namespace System.ComponentModel.Design
 
             public UndoUnit(UndoEngine engine, string name)
             {
-                if (name is null)
-                {
-                    name = string.Empty;
-                }
+                name ??= string.Empty;
 
                 UndoEngine.Trace("Creating undo unit '{0}'", name);
 
@@ -624,10 +618,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void AddEvent(UndoEvent e)
             {
-                if (_events is null)
-                {
-                    _events = new ArrayList();
-                }
+                _events ??= new ArrayList();
 
                 _events.Add(e);
             }
@@ -677,10 +668,7 @@ namespace System.ComponentModel.Design
 
                 _ignoreAddingList?.Remove(e.Component);
 
-                if (_ignoreAddedList is null)
-                {
-                    _ignoreAddedList = new ArrayList();
-                }
+                _ignoreAddedList ??= new ArrayList();
 
                 _ignoreAddedList.Add(e.Component);
             }
@@ -690,10 +678,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public virtual void ComponentAdding(ComponentEventArgs e)
             {
-                if (_ignoreAddingList is null)
-                {
-                    _ignoreAddingList = new ArrayList();
-                }
+                _ignoreAddingList ??= new ArrayList();
 
                 _ignoreAddingList.Add(e.Component);
             }
@@ -770,10 +755,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                if (_changeEvents is null)
-                {
-                    _changeEvents = new ArrayList();
-                }
+                _changeEvents ??= new ArrayList();
 
                 // The site check here is done because the data team is calling us for components that are not yet sited.  We end up writing them out as Guid-named locals.  That's fine, except that we cannot capture after state for these types of things so we assert.
                 if (UndoEngine.GetName(e.Component, false) is not null)
@@ -906,10 +888,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                if (_removeEvents is null)
-                {
-                    _removeEvents = new ArrayList();
-                }
+                _removeEvents ??= new ArrayList();
 
                 try
                 {

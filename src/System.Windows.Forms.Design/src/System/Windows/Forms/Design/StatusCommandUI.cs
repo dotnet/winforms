@@ -30,10 +30,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_menuService is null)
-                {
-                    _menuService = (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
-                }
+                _menuService ??= (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
 
                 return _menuService;
             }

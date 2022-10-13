@@ -27,10 +27,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_default is null)
-                {
-                    s_default = new TypeCodeDomSerializer();
-                }
+                s_default ??= new TypeCodeDomSerializer();
 
                 return s_default;
             }
@@ -442,10 +439,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
 #if DEBUG
                             string memberName = manager.GetName(member);
-                            if (memberName is null)
-                            {
-                                memberName = member.ToString();
-                            }
+                            memberName ??= member.ToString();
 
                             Trace("--------------------------------------------------------------------");
                             Trace("     Beginning serialization of {0}", memberName);
@@ -460,10 +454,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Now do the root object last.
 #if DEBUG
                 string rootName = manager.GetName(root);
-                if (rootName is null)
-                {
-                    rootName = root.ToString();
-                }
+                rootName ??= root.ToString();
 
                 Trace("--------------------------------------------------------------------");
                 Trace("     Beginning serialization of root object {0}", rootName);

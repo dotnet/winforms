@@ -781,10 +781,7 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     //create our transaction
-                    if (newMenuItemTransaction is null)
-                    {
-                        newMenuItemTransaction = _designerHost.CreateTransaction(SR.ToolStripCreatingNewItemTransaction);
-                    }
+                    newMenuItemTransaction ??= _designerHost.CreateTransaction(SR.ToolStripCreatingNewItemTransaction);
 
                     fireComponentChanged = true;
                     newItem = (ToolStripItem)_designerHost.CreateComponent(t);

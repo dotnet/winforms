@@ -27,10 +27,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_instance is null)
-                {
-                    s_instance = new KeyboardToolTipStateMachine();
-                }
+                s_instance ??= new KeyboardToolTipStateMachine();
 
                 return s_instance;
             }

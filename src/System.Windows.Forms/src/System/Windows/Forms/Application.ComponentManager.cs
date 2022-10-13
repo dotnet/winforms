@@ -43,10 +43,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_oleComponents is null)
-                    {
-                        _oleComponents = new Dictionary<UIntPtr, ComponentHashtableEntry>();
-                    }
+                    _oleComponents ??= new Dictionary<UIntPtr, ComponentHashtableEntry>();
 
                     return _oleComponents;
                 }

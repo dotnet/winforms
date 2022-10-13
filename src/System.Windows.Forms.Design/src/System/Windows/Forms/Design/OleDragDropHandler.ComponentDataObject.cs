@@ -95,10 +95,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (toolboxitemdata == null)
-                    {
-                        toolboxitemdata = new CfCodeToolboxItem(GetData(DataFormat));
-                    }
+                    toolboxitemdata ??= new CfCodeToolboxItem(GetData(DataFormat));
 
                     return toolboxitemdata;
                 }
@@ -235,10 +232,7 @@ namespace System.Windows.Forms.Design
 
             public void Deserialize(IServiceProvider serviceProvider, bool removeCurrentComponents)
             {
-                if (serviceProvider == null)
-                {
-                    serviceProvider = this.serviceProvider;
-                }
+                serviceProvider ??= this.serviceProvider;
 
                 IDesignerSerializationService ds = (IDesignerSerializationService)serviceProvider.GetService(typeof(IDesignerSerializationService));
                 IDesignerHost host = null;

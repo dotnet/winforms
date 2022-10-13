@@ -41,10 +41,7 @@ namespace System.ComponentModel.Design
         {
             ArgumentNullException.ThrowIfNull(provider);
 
-            if (_providers is null)
-            {
-                _providers = new ArrayList(4);
-            }
+            _providers ??= new ArrayList(4);
 
             if (_providers.Contains(provider))
             {

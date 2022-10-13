@@ -38,10 +38,7 @@ namespace System.Windows.Forms.Design
             }
 
             Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collection editor with.");
-            if (text is null)
-            {
-                text = SR.ToolStripItemCollectionEditorVerb;
-            }
+            text ??= SR.ToolStripItemCollectionEditorVerb;
 
             _editItemsVerb = new DesignerVerb(text, new EventHandler(OnEditItems));
 
@@ -58,10 +55,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_componentChangeSvc is null)
-                {
-                    _componentChangeSvc = (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
-                }
+                _componentChangeSvc ??= (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
 
                 return _componentChangeSvc;
             }

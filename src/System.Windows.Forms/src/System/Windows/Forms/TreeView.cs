@@ -105,10 +105,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndexer is null)
-                {
-                    imageIndexer = new ImageList.Indexer();
-                }
+                imageIndexer ??= new ImageList.Indexer();
 
                 imageIndexer.ImageList = ImageList;
                 return imageIndexer;
@@ -119,10 +116,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectedImageIndexer is null)
-                {
-                    selectedImageIndexer = new ImageList.Indexer();
-                }
+                selectedImageIndexer ??= new ImageList.Indexer();
 
                 selectedImageIndexer.ImageList = ImageList;
 
@@ -966,10 +960,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (nodes is null)
-                {
-                    nodes = new TreeNodeCollection(root);
-                }
+                nodes ??= new TreeNodeCollection(root);
 
                 return nodes;
             }

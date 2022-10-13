@@ -53,10 +53,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_converter is null)
-                    {
-                        _converter = new EventConverter(Event);
-                    }
+                    _converter ??= new EventConverter(Event);
 
                     return _converter;
                 }

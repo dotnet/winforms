@@ -777,10 +777,7 @@ namespace System.Windows.Forms.Design
             Control ctl = ctlHover;
             Control form = (Control)host.RootComponent;
 
-            if (ctl == null)
-            {
-                ctl = form;
-            }
+            ctl ??= form;
 
             while (null != (ctl = form.GetNextControl(ctl, forward)))
             {

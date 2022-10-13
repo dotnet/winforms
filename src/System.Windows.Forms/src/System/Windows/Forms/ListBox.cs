@@ -645,10 +645,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_itemsCollection is null)
-                {
-                    _itemsCollection = CreateItemCollection();
-                }
+                _itemsCollection ??= CreateItemCollection();
 
                 return _itemsCollection;
             }
@@ -944,10 +941,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_selectedIndices is null)
-                {
-                    _selectedIndices = new SelectedIndexCollection(this);
-                }
+                _selectedIndices ??= new SelectedIndexCollection(this);
 
                 return _selectedIndices;
             }
@@ -1006,10 +1000,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_selectedItems is null)
-                {
-                    _selectedItems = new SelectedObjectCollection(this);
-                }
+                _selectedItems ??= new SelectedObjectCollection(this);
 
                 return _selectedItems;
             }
@@ -1197,10 +1188,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_customTabOffsets is null)
-                {
-                    _customTabOffsets = new IntegerCollection(this);
-                }
+                _customTabOffsets ??= new IntegerCollection(this);
 
                 return _customTabOffsets;
             }

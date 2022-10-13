@@ -46,10 +46,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (handler is null)
-                {
-                    handler = new ComNativeDescriptor();
-                }
+                handler ??= new ComNativeDescriptor();
 
                 return handler;
             }
@@ -265,10 +262,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         if (entry is not null && entry.TooOld)
                         {
-                            if (disposeList is null)
-                            {
-                                disposeList = new List<object>(3);
-                            }
+                            disposeList ??= new List<object>(3);
 
                             disposeList.Add(de.Key);
                         }

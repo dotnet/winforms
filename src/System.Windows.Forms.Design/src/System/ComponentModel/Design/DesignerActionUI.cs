@@ -176,10 +176,7 @@ namespace System.ComponentModel.Design
             }
 
             // we didnt get on, fetch it
-            if (dalColl is null)
-            {
-                dalColl = _designerActionService.GetComponentActions(comp);
-            }
+            dalColl ??= _designerActionService.GetComponentActions(comp);
 
             if (dalColl is not null && dalColl.Count > 0)
             {
@@ -204,11 +201,8 @@ namespace System.ComponentModel.Design
                     }
 
                     //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyph.
-                    if (dag is null)
-                    {
-                        //if the related comp is a control, then this shortcut will be off its bounds
-                        dag = new DesignerActionGlyph(dab, _designerActionAdorner);
-                    }
+                    //if the related comp is a control, then this shortcut will be off its bounds
+                    dag ??= new DesignerActionGlyph(dab, _designerActionAdorner);
 
                     if (dag is not null)
                     {
@@ -644,10 +638,7 @@ namespace System.ComponentModel.Design
 
         internal Point UpdateDAPLocation(IComponent component, DesignerActionGlyph glyph)
         {
-            if (component is null)
-            { // in case of a resize...
-                component = _lastPanelComponent;
-            }
+            component ??= _lastPanelComponent;
 
             if (designerActionHost is null)
             {

@@ -474,10 +474,7 @@ namespace System.Windows.Forms
             get => _toolTipTitle;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (_toolTipTitle != value)
                 {

@@ -93,10 +93,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_licenseCtx is null)
-                {
-                    _licenseCtx = new HostDesigntimeLicenseContext(this);
-                }
+                _licenseCtx ??= new HostDesigntimeLicenseContext(this);
 
                 return _licenseCtx;
             }
@@ -246,10 +243,7 @@ namespace System.ComponentModel.Design
 
                 _rootComponent = component;
                 // Check and see if anyone has set the class name of the root component. we default to the component name.
-                if (_rootComponentClassName is null)
-                {
-                    _rootComponentClassName = component.Site.Name;
-                }
+                _rootComponentClassName ??= component.Site.Name;
             }
             else
             {
@@ -1085,10 +1079,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         DesignerTransaction IDesignerHost.CreateTransaction(string description)
         {
-            if (description is null)
-            {
-                description = SR.DesignerHostGenericTransactionName;
-            }
+            description ??= SR.DesignerHostGenericTransactionName;
 
             return new DesignerHostTransaction(this, description);
         }
@@ -1517,10 +1508,7 @@ namespace System.ComponentModel.Design
             public DesignerHostTransaction(DesignerHost host, string description) : base(description)
             {
                 _host = host;
-                if (_host._transactions is null)
-                {
-                    _host._transactions = new Stack();
-                }
+                _host._transactions ??= new Stack();
 
                 _host._transactions.Push(this);
                 _host.OnTransactionOpening(EventArgs.Empty);
@@ -1660,10 +1648,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             void IDictionaryService.SetValue(object key, object value)
             {
-                if (_dictionary is null)
-                {
-                    _dictionary = new Hashtable();
-                }
+                _dictionary ??= new Hashtable();
 
                 if (value is null)
                 {
@@ -1810,10 +1795,7 @@ namespace System.ComponentModel.Design
                 get => _name;
                 set
                 {
-                    if (value is null)
-                    {
-                        value = string.Empty;
-                    }
+                    value ??= string.Empty;
 
                     if (_name != value)
                     {

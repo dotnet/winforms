@@ -90,10 +90,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_accelerations is null)
-                {
-                    _accelerations = new NumericUpDownAccelerationCollection();
-                }
+                _accelerations ??= new NumericUpDownAccelerationCollection();
 
                 return _accelerations;
             }

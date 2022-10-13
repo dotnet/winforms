@@ -36,10 +36,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 ICom2PropertyPageDisplayService? propPageSvc = (ICom2PropertyPageDisplayService?)provider.GetService(typeof(ICom2PropertyPageDisplayService));
 
-                if (propPageSvc is null)
-                {
-                    propPageSvc = this;
-                }
+                propPageSvc ??= this;
 
                 object? instance = context?.Instance;
 

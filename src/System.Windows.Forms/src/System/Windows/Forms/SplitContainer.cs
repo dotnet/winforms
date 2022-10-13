@@ -2105,10 +2105,7 @@ namespace System.Windows.Forms
             _initialSplitterDistance = _splitterDistance;
             _initialSplitterRectangle = SplitterRectangle;
 
-            if (_splitContainerMessageFilter is null)
-            {
-                _splitContainerMessageFilter = new SplitContainerMessageFilter(this);
-            }
+            _splitContainerMessageFilter ??= new SplitContainerMessageFilter(this);
 
             Application.AddMessageFilter(_splitContainerMessageFilter);
 

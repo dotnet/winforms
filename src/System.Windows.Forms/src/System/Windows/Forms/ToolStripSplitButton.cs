@@ -266,10 +266,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_splitButtonButton is null)
-                {
-                    _splitButtonButton = new ToolStripSplitButtonButton(this);
-                }
+                _splitButtonButton ??= new ToolStripSplitButtonButton(this);
 
                 _splitButtonButton.Image = Image;
                 _splitButtonButton.Text = Text;

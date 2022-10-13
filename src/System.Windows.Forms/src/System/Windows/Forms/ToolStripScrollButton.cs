@@ -72,10 +72,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (downScrollImage is null)
-                {
-                    downScrollImage = DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown", defaultBitmapSize);
-                }
+                downScrollImage ??= DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown", defaultBitmapSize);
 
                 return downScrollImage;
             }
@@ -88,10 +85,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (upScrollImage is null)
-                {
-                    upScrollImage = DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp", defaultBitmapSize);
-                }
+                upScrollImage ??= DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp", defaultBitmapSize);
 
                 return upScrollImage;
             }
@@ -101,10 +95,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (mouseDownTimer is null)
-                {
-                    mouseDownTimer = new Timer();
-                }
+                mouseDownTimer ??= new Timer();
 
                 return mouseDownTimer;
             }

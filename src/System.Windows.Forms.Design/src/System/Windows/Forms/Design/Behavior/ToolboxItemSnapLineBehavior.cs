@@ -79,10 +79,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                 if (isPushed)
                 {
-                    if (dragManager == null)
-                    {
-                        dragManager = new DragAssistanceManager(serviceProvider);
-                    }
+                    dragManager ??= new DragAssistanceManager(serviceProvider);
                 }
                 else
                 {

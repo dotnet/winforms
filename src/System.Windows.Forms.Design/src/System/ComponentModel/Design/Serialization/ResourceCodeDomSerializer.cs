@@ -26,10 +26,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_defaultSerializer is null)
-                {
-                    s_defaultSerializer = new ResourceCodeDomSerializer();
-                }
+                s_defaultSerializer ??= new ResourceCodeDomSerializer();
 
                 return s_defaultSerializer;
             }
@@ -551,10 +548,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_resourceSets is null)
-                    {
-                        _resourceSets = new Hashtable();
-                    }
+                    _resourceSets ??= new Hashtable();
 
                     return _resourceSets;
                 }
@@ -664,10 +658,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public override void ApplyResources(object value, string objectName, CultureInfo culture)
             {
-                if (culture is null)
-                {
-                    culture = ReadCulture;
-                }
+                culture ??= ReadCulture;
 
                 // .NET Framework 4.0 (Dev10 #425129): Control location moves due to incorrect anchor info when resource files are reloaded.
                 Windows.Forms.Control control = value as Windows.Forms.Control;
@@ -1299,10 +1290,7 @@ namespace System.ComponentModel.Design.Serialization
                         expressionName = null;
                     }
 
-                    if (nameBase is null)
-                    {
-                        nameBase = "resource";
-                    }
+                    nameBase ??= "resource";
 
                     if (expressionName is not null)
                     {

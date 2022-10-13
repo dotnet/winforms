@@ -327,10 +327,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            if (instance is null)
-            {
-                instance = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.CreateInstance, null, null, null);
-            }
+            instance ??= Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.CreateInstance, null, null, null);
 
             return instance;
         }

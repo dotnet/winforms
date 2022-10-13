@@ -61,10 +61,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_items is null)
-                    {
-                        _items = new ItemArray(_owner);
-                    }
+                    _items ??= new ItemArray(_owner);
 
                     return _items;
                 }

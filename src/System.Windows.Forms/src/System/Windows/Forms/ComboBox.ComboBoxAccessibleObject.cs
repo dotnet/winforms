@@ -133,10 +133,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_dropDownButtonUiaProvider is null)
-                    {
-                        _dropDownButtonUiaProvider = new ComboBoxChildDropDownButtonUiaProvider(_owningComboBox, _owningComboBox.InternalHandle);
-                    }
+                    _dropDownButtonUiaProvider ??= new ComboBoxChildDropDownButtonUiaProvider(_owningComboBox, _owningComboBox.InternalHandle);
 
                     return _dropDownButtonUiaProvider;
                 }

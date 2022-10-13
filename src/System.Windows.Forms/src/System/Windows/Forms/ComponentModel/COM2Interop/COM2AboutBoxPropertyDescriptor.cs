@@ -44,10 +44,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
             get
             {
-                if (converter is null)
-                {
-                    converter = new TypeConverter();
-                }
+                converter ??= new TypeConverter();
 
                 return converter;
             }
@@ -96,10 +93,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (editorBaseType == typeof(UITypeEditor))
             {
-                if (editor is null)
-                {
-                    editor = new AboutBoxUITypeEditor();
-                }
+                editor ??= new AboutBoxUITypeEditor();
             }
 
             return editor;

@@ -623,10 +623,7 @@ namespace System.Windows.Forms.Design.Behavior
             // Default cursors will let the toolbox svc set a cursor if needed
             if (cursor == Cursors.Default)
             {
-                if (_toolboxSvc is null)
-                {
-                    _toolboxSvc = (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
-                }
+                _toolboxSvc ??= (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
 
                 if (_toolboxSvc is not null && _toolboxSvc.SetCursor())
                 {

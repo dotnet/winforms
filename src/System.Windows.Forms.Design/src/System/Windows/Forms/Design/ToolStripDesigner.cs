@@ -68,10 +68,7 @@ namespace System.Windows.Forms.Design
             {
                 DesignerActionListCollection actionLists = new DesignerActionListCollection();
                 actionLists.AddRange(base.ActionLists);
-                if (_actionLists is null)
-                {
-                    _actionLists = new ToolStripActionList(this);
-                }
+                _actionLists ??= new ToolStripActionList(this);
 
                 actionLists.Add(_actionLists);
 
@@ -210,13 +207,10 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_toolStripContextMenu is null)
-                {
-                    _toolStripContextMenu = new BaseContextMenuStrip(ToolStrip.Site, ToolStrip)
+                _toolStripContextMenu ??= new BaseContextMenuStrip(ToolStrip.Site, ToolStrip)
                     {
                         Text = "CustomContextMenu"
                     };
-                }
 
                 return _toolStripContextMenu;
             }
@@ -355,10 +349,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_items is null)
-                {
-                    _items = new ArrayList();
-                }
+                _items ??= new ArrayList();
 
                 return _items;
             }
@@ -429,10 +420,7 @@ namespace System.Windows.Forms.Design
                 {
                     // Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
                     _keyboardHandlingService = GetService<ToolStripKeyboardHandlingService>();
-                    if (_keyboardHandlingService is null)
-                    {
-                        _keyboardHandlingService = new ToolStripKeyboardHandlingService(Component.Site);
-                    }
+                    _keyboardHandlingService ??= new ToolStripKeyboardHandlingService(Component.Site);
                 }
 
                 return _keyboardHandlingService;
@@ -756,10 +744,7 @@ namespace System.Windows.Forms.Design
         {
             bool showToolStrip = false;
             object comp = SelectionService.PrimarySelection;
-            if (comp is null)
-            {
-                comp = (IComponent)KeyboardHandlingService.SelectedDesignerControl;
-            }
+            comp ??= (IComponent)KeyboardHandlingService.SelectedDesignerControl;
 
             if (comp is ToolStripItem item)
             {

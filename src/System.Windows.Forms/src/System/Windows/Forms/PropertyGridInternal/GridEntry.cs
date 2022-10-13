@@ -1409,10 +1409,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Fail($"Bad Type Converter! {t.GetType().Name}, {t.Message},{converter}", t.ToString());
             }
 
-            if (textValue is null)
-            {
-                textValue = string.Empty;
-            }
+            textValue ??= string.Empty;
 
             return textValue;
         }

@@ -3529,10 +3529,7 @@ namespace System.Windows.Forms
         {
             ToolStrip parent = ParentInternal;
 
-            if (parent is null)
-            {
-                parent = (IsOnOverflow && Owner is not null) ? Owner.OverflowButton.DropDown : Owner;
-            }
+            parent ??= (IsOnOverflow && Owner is not null) ? Owner.OverflowButton.DropDown : Owner;
 
             if (parent is null)
             {

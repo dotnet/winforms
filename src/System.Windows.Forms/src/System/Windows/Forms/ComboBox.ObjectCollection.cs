@@ -53,10 +53,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_innerList is null)
-                    {
-                        _innerList = new List<Entry>();
-                    }
+                    _innerList ??= new List<Entry>();
 
                     return _innerList;
                 }
