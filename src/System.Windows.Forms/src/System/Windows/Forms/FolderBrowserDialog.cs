@@ -324,13 +324,10 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    IFileDialogCustomize* customize;
-                    Guid iid = IFileDialogCustomize.Guid;
-                    if (dialog->QueryInterface(&iid, (void**)&customize) == HRESULT.S_OK)
+                    using ComScope<IFileDialogCustomize> customize = new(null);
+                    if (dialog->QueryInterface(IFileDialogCustomize.NativeGuid, customize).Succeeded)
                     {
-                        using var customizeScope = new ComScope<IFileDialogCustomize>(customize);
-                        customize->AddText(0, _descriptionText).ThrowOnFailure();
-                        customize->Release();
+                        customize.Value->AddText(0, _descriptionText).ThrowOnFailure();
                     }
                 }
             }
@@ -339,13 +336,11 @@ namespace System.Windows.Forms
 
             if (!string.IsNullOrEmpty(_initialDirectory))
             {
-                IShellItem* initialDirectory = PInvoke.SHCreateShellItem(_initialDirectory);
-                if (initialDirectory is not null)
+                using ComScope<IShellItem> initialDirectory = new(PInvoke.SHCreateShellItem(_initialDirectory));
+                if (!initialDirectory.IsNull)
                 {
-                    using var itemScope = new ComScope<IShellItem>(initialDirectory);
                     dialog->SetDefaultFolder(initialDirectory).ThrowOnFailure();
                     dialog->SetFolder(initialDirectory).ThrowOnFailure();
-                    initialDirectory->Release();
                 }
             }
 
@@ -384,13 +379,11 @@ namespace System.Windows.Forms
 
         private unsafe void GetResult(IFileOpenDialog* dialog)
         {
-            IShellItem* item;
-            dialog->GetResult(&item).ThrowOnFailure();
-            if (item is not null)
+            using ComScope<IShellItem> item = new(null);
+            dialog->GetResult(item).ThrowOnFailure();
+            if (!item.IsNull)
             {
-                using var itemScope = new ComScope<IShellItem>(item);
-                item->GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out PWSTR ppszName).ThrowOnFailure();
-
+                item.Value->GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out PWSTR ppszName).ThrowOnFailure();
                 _selectedPath = new(ppszName);
                 Marshal.FreeCoTaskMem((nint)(void*)ppszName);
             }

@@ -129,7 +129,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Resets all dialog box options to their default        ///  values.
+        ///  Resets all dialog box options to their default values.
         /// </summary>
         public override void Reset()
         {
@@ -157,8 +157,8 @@ namespace System.Windows.Forms
 
         private protected unsafe override string[] ProcessVistaFiles(IFileDialog* dialog)
         {
-            using var item = new ComScope<IShellItem>(null);
-            dialog->GetResult((IShellItem**)&item);
+            using ComScope<IShellItem> item = new(null);
+            dialog->GetResult(item).ThrowOnFailure();
             return item.IsNull ? Array.Empty<string>() : new string[] { GetFilePathFromShellItem(item) };
         }
 

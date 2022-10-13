@@ -137,26 +137,24 @@ namespace System.Windows.Forms
         {
             if (!Multiselect)
             {
-                using var item = new ComScope<IShellItem>(null);
-                return dialog->GetResult((IShellItem**)&item).Failed
+                using ComScope<IShellItem> item = new(null);
+                return dialog->GetResult(item).Failed
                     ? Array.Empty<string>()
                     : new string[] { GetFilePathFromShellItem(item) };
             }
 
-            IShellItemArray* items;
-            if (((IFileOpenDialog*)dialog)->GetResults(&items).Failed)
+            using ComScope<IShellItemArray> items = new(null);
+            if (((IFileOpenDialog*)dialog)->GetResults(items).Failed)
             {
                 return Array.Empty<string>();
             }
 
-            using var itemsScope = new ComScope<IShellItemArray>(items);
-
-            items->GetCount(out uint count).ThrowOnFailure();
+            items.Value->GetCount(out uint count).ThrowOnFailure();
             string[] files = new string[count];
             for (uint i = 0; i < count; ++i)
             {
-                using var item = new ComScope<IShellItem>(null);
-                items->GetItemAt(i, (IShellItem**)&item).ThrowOnFailure();
+                using ComScope<IShellItem> item = new(null);
+                items.Value->GetItemAt(i, item).ThrowOnFailure();
                 files[i] = GetFilePathFromShellItem(item);
             }
 

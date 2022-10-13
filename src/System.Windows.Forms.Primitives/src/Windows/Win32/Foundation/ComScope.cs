@@ -2,25 +2,32 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using Windows.Win32.System.Com;
 
 namespace Windows.Win32.Foundation
 {
-    internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IUnknown.Interface
+    internal readonly unsafe ref struct ComScope<T> where T : unmanaged
     {
-        required public T* Value { get; init; }
+        // Keeping internal as nint allows us to use Unsafe methods to get significantly better generated code.
+        private readonly nint _value;
+        public T* Value => (T*)_value;
 
-        [SetsRequiredMembers]
-        public ComScope(T* value) => Value = value;
+        public ComScope(T* value) => _value = (nint)value;
 
-        public static implicit operator T*(ComScope<T> scope) => scope.Value;
+        public static implicit operator T*(in ComScope<T> scope) => (T*)scope._value;
 
-        public bool IsNull => Value is null;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator T**(in ComScope<T> scope) => (T**)Unsafe.AsPointer(ref Unsafe.AsRef(scope._value));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator void**(in ComScope<T> scope) => (void**)Unsafe.AsPointer(ref Unsafe.AsRef(scope._value));
+
+        public bool IsNull => _value != 0;
 
         public void Dispose()
         {
-            IUnknown* unknown = (IUnknown*)Value;
+            IUnknown* unknown = (IUnknown*)_value;
             if (unknown is not null)
             {
                 unknown->Release();
