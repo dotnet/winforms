@@ -34,7 +34,7 @@
     <_ProjectDirectoryRelativePath>$([MSBuild]::MakeRelative($(RepoRoot), $(MSBuildProjectDirectory)))</_ProjectDirectoryRelativePath>
     <_IsUnderTestsFolder>$(_ProjectDirectoryRelativePath.Contains("\tests\"))</_IsUnderTestsFolder>
     <IsShipping Condition="$(_IsUnderTestsFolder)">false</IsShipping>
-	<RedistTargetFrameworkName>$(TargetFrameworkName)$$(TargetFrameworkMajorVersion).</RedistTargetFrameworkName>
+	<RedistTargetFrameworkName>$(TargetFrameworkName)$(TargetFrameworkMajorVersion).</RedistTargetFrameworkName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true' ">
