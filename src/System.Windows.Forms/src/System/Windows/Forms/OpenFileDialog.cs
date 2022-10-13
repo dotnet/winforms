@@ -137,8 +137,8 @@ namespace System.Windows.Forms
         {
             if (!Multiselect)
             {
-                IShellItem* item;
-                return dialog->GetResult(&item).Failed
+                using var item = new ComScope<IShellItem>(null);
+                return dialog->GetResult((IShellItem**)&item).Failed
                     ? Array.Empty<string>()
                     : new string[] { GetFilePathFromShellItem(item) };
             }
@@ -149,23 +149,18 @@ namespace System.Windows.Forms
                 return Array.Empty<string>();
             }
 
-            try
-            {
-                items->GetCount(out uint count);
-                string[] files = new string[count];
-                for (uint i = 0; i < count; ++i)
-                {
-                    IShellItem* item;
-                    items->GetItemAt(i, &item).ThrowOnFailure();
-                    files[i] = GetFilePathFromShellItem(item);
-                }
+            using var itemsScope = new ComScope<IShellItemArray>(items);
 
-                return files;
-            }
-            finally
+            items->GetCount(out uint count).ThrowOnFailure();
+            string[] files = new string[count];
+            for (uint i = 0; i < count; ++i)
             {
-                items->Release();
+                using var item = new ComScope<IShellItem>(null);
+                items->GetItemAt(i, (IShellItem**)&item).ThrowOnFailure();
+                files[i] = GetFilePathFromShellItem(item);
             }
+
+            return files;
         }
 
         private protected unsafe override IFileDialog* CreateVistaDialog()

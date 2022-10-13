@@ -530,7 +530,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 pi.DispId = dispid;
                 pi.Attributes.Add(new DispIdAttribute((int)pi.DispId));
             }
-            
+
             var helpString = helpStringBstr.AsSpan();
             if (!helpString.IsEmpty)
             {

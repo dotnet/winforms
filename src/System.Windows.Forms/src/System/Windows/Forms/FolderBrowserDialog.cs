@@ -325,9 +325,10 @@ namespace System.Windows.Forms
                 else
                 {
                     IFileDialogCustomize* customize;
-                    Guid iid = IID.IFileDialogCustomize;
+                    Guid iid = IFileDialogCustomize.Guid;
                     if (dialog->QueryInterface(&iid, (void**)&customize) == HRESULT.S_OK)
                     {
+                        using var customizeScope = new ComScope<IFileDialogCustomize>(customize);
                         customize->AddText(0, _descriptionText).ThrowOnFailure();
                         customize->Release();
                     }
@@ -341,6 +342,7 @@ namespace System.Windows.Forms
                 IShellItem* initialDirectory = PInvoke.SHCreateShellItem(_initialDirectory);
                 if (initialDirectory is not null)
                 {
+                    using var itemScope = new ComScope<IShellItem>(initialDirectory);
                     dialog->SetDefaultFolder(initialDirectory).ThrowOnFailure();
                     dialog->SetFolder(initialDirectory).ThrowOnFailure();
                     initialDirectory->Release();
@@ -383,9 +385,10 @@ namespace System.Windows.Forms
         private unsafe void GetResult(IFileOpenDialog* dialog)
         {
             IShellItem* item;
-            dialog->GetResult(&item);
+            dialog->GetResult(&item).ThrowOnFailure();
             if (item is not null)
             {
+                using var itemScope = new ComScope<IShellItem>(item);
                 item->GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out PWSTR ppszName).ThrowOnFailure();
 
                 _selectedPath = new(ppszName);
