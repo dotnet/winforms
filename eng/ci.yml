@@ -1,8 +1,8 @@
 parameters:
   # parameters should default to values for running in the External / Public
   # be read from a user-defined variable (Azure DevOps limitation)
-  agentPoolName: NetCore1ESPool-Svc-Public
-  agentPool: 'Build.Windows.10.Amd64.VS2019.Pre.Open'
+  agentPoolName: NetCore-Svc-Public
+  agentPool: windows.vs2019.amd64.open
   repoName: dotnet/winforms
 
 stages:
@@ -23,11 +23,11 @@ stages:
       - job: Windows
         pool:
           ${{ if eq(variables['System.TeamProject'], 'public') }}:
-            name: NetCore1ESPool-Svc-Public
-            demands: ImageOverride -equals Build.Windows.10.Amd64.VS2019.Pre.Open
+            name: NetCore-Svc-Public
+            demands: ImageOverride -equals windows.vs2019.amd64.open
           ${{ if ne(variables['System.TeamProject'], 'public') }}:
             name: NetCore1ESPool-Svc-Internal
-            demands: ImageOverride -equals Build.Windows.10.Amd64.VS2019.Pre
+            demands: ImageOverride -equals windows.vs2019.amd64
 
         variables:
 
