@@ -23,7 +23,7 @@ namespace Windows.Win32.Foundation
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator void**(in ComScope<T> scope) => (void**)Unsafe.AsPointer(ref Unsafe.AsRef(scope._value));
 
-        public bool IsNull => _value != 0;
+        public bool IsNull => _value == 0;
 
         public void Dispose()
         {
