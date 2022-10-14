@@ -398,5 +398,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
             Assert.False(listView.IsHandleCreated);
         }
+
+        // More tests for this class has been created already in ListViewItem_ListViewItemAccessibleObjectTests
     }
 }
