@@ -13,8 +13,8 @@ namespace System.Windows.Forms
             for (int i = Items.Count - 1; i >= 0; --i)
             {
                 FileDialogCustomPlace customPlace = Items[i];
-                IShellItem* shellItem = customPlace.GetNativePath();
-                if (shellItem is not null)
+                using ComScope<IShellItem> shellItem = new(customPlace.GetNativePath());
+                if (!shellItem.IsNull)
                 {
                     dialog->AddPlace(shellItem, 0).ThrowOnFailure();
                 }

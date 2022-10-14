@@ -59,7 +59,7 @@ internal partial class Interop
             TComInterface.PopulateVTable(vtable);
 
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = TComInterface.Guid;
+            wrapperEntry->IID = *TComInterface.NativeGuid;
             wrapperEntry->Vtable = (nint)(void*)vtable;
             return wrapperEntry;
         }

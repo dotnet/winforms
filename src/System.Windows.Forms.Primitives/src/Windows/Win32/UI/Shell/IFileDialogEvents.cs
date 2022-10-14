@@ -5,12 +5,13 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using ComWrappers = Interop.WinFormsComWrappers;
+using Windows.Win32.System.Com;
 
 namespace Windows.Win32.UI.Shell;
 
-internal unsafe partial struct IFileDialogEvents : INativeGuid, IPopulateVTable<IFileDialogEvents.Vtbl>
+internal unsafe partial struct IFileDialogEvents : INativeGuid, IPopulateVTable<IFileDialogEvents.Vtbl>, IUnknown.Interface
 {
-    static Guid INativeGuid.Guid => Guid;
+    static Guid* INativeGuid.NativeGuid => (Guid*)Unsafe.AsPointer(ref Unsafe.AsRef(in Guid));
 
     public static void PopulateVTable(Vtbl* vtable)
     {

@@ -24,6 +24,7 @@
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
+    <RootNamespace/>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,6 +43,7 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
+      <ManifestResourceName>System.Windows.Forms.Primitives.Resources.SR</ManifestResourceName>
       <GenerateSource>true</GenerateSource>
     </EmbeddedResource>
   </ItemGroup>
