@@ -299,10 +299,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < count; i++)
                     {
                         ListViewItem item = _owner.Items[i];
-                        if (item is not null)
-                        {
-                            item.UnHost(i, true);
-                        }
+                        item?.UnHost(i, true);
                     }
 
                     Debug.Assert(_owner._listViewItems is not null, "listItemsArray is null, but the handle isn't created");

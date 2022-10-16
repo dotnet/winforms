@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Text;
 using Xunit;
 using static System.Windows.Forms.ImageList;
@@ -93,11 +92,10 @@ namespace System.Windows.Forms.Tests.Serialization
                 using ImageListStreamer result = BinarySerialization.EnsureDeserialize<ImageListStreamer>(blob);
                 using (NativeImageList nativeImageList = result.GetNativeImageList())
                 {
-                    Assert.True(ComCtl32.ImageList.GetIconSize(new HandleRef(this, nativeImageList.Handle), out int x, out int y));
+                    Assert.True(PInvoke.ImageList.GetIconSize(new HandleRef<HIMAGELIST>(this, nativeImageList.HIMAGELIST), out int x, out int y));
                     Assert.Equal(16, x);
                     Assert.Equal(16, y);
-                    var imageInfo = new ComCtl32.IMAGEINFO();
-                    Assert.True(ComCtl32.ImageList.GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, ref imageInfo));
+                    Assert.True(PInvoke.ImageList.GetImageInfo(new HandleRef<HIMAGELIST>(this, nativeImageList.HIMAGELIST), 0, out IMAGEINFO imageInfo));
                     Assert.False(imageInfo.hbmImage.IsNull);
                 }
             }
@@ -139,7 +137,7 @@ namespace System.Windows.Forms.Tests.Serialization
             // ensure we can deserialise NET Fx serialised data and continue to match the payload
             ValidateResult(ClassicListViewGroup);
 
-            void ValidateResult(string blob)
+            static void ValidateResult(string blob)
             {
                 ListViewGroup result = BinarySerialization.EnsureDeserialize<ListViewGroup>(blob);
 
@@ -176,7 +174,7 @@ namespace System.Windows.Forms.Tests.Serialization
             // ensure we can deserialise NET Fx serialised data and continue to match the payload
             ValidateResult(ClassicListViewItem);
 
-            void ValidateResult(string blob)
+            static void ValidateResult(string blob)
             {
                 ListViewItem result = BinarySerialization.EnsureDeserialize<ListViewItem>(blob);
 
@@ -224,7 +222,7 @@ namespace System.Windows.Forms.Tests.Serialization
             // ensure we can deserialise NET Fx serialised data and continue to match the payload
             ValidateResult(ClassicListViewSubItem);
 
-            void ValidateResult(string blob)
+            static void ValidateResult(string blob)
             {
                 ListViewSubItem result = BinarySerialization.EnsureDeserialize<ListViewSubItem>(blob);
 
@@ -356,7 +354,7 @@ namespace System.Windows.Forms.Tests.Serialization
             // ensure we can deserialise NET Fx serialised data and continue to match the payload
             ValidateResult(ClassicTreeNode);
 
-            void ValidateResult(string blob)
+            static void ValidateResult(string blob)
             {
                 TreeNode result = BinarySerialization.EnsureDeserialize<TreeNode>(blob);
 

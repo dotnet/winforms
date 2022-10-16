@@ -350,10 +350,12 @@ namespace System.Windows.Forms.Design
                 {
                     try
                     {
-                        IntPtr pTlibAttr = NativeMethods.InvalidIntPtr;
+                        nint pTlibAttr = -1;
                         pTLB.GetLibAttr(out pTlibAttr);
-                        if (pTlibAttr == NativeMethods.InvalidIntPtr)
+                        if (pTlibAttr == -1)
+                        {
                             throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
+                        }
                         else
                         {
                             // Marshal the returned int as a TLibAttr structure

@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Accessibility;
 using static Interop;
 
@@ -37,7 +36,7 @@ namespace System.Windows.Forms
                 : null;
 
             private protected override string AutomationId
-                => string.Format("{0}-{1}", typeof(ListViewItem).Name, CurrentIndex);
+                => $"{nameof(ListViewItem)}-{CurrentIndex}";
 
             public override Rectangle Bounds
                 => !_owningListView.IsHandleCreated || OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
@@ -269,7 +268,7 @@ namespace System.Windows.Forms
                 if (_owningListView.IsHandleCreated)
                 {
                     _owningListView.SelectedIndices.Add(CurrentIndex);
-                    User32.InvalidateRect(new HandleRef(this, _owningListView.Handle), null, false);
+                    PInvoke.InvalidateRect(_owningListView, lpRect: null, bErase: false);
                 }
 
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);

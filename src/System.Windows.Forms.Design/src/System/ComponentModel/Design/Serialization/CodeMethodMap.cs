@@ -42,10 +42,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_begin is null)
-                {
-                    _begin = new CodeStatementCollection();
-                }
+                _begin ??= new CodeStatementCollection();
 
                 return _begin;
             }
@@ -55,10 +52,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_end is null)
-                {
-                    _end = new CodeStatementCollection();
-                }
+                _end ??= new CodeStatementCollection();
 
                 return _end;
             }
@@ -68,10 +62,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_container is null)
-                {
-                    _container = new CodeStatementCollection();
-                }
+                _container ??= new CodeStatementCollection();
 
                 return _container;
             }
@@ -86,10 +77,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_statements is null)
-                {
-                    _statements = new CodeStatementCollection();
-                }
+                _statements ??= new CodeStatementCollection();
 
                 return _statements;
             }
@@ -99,10 +87,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_locals is null)
-                {
-                    _locals = new CodeStatementCollection();
-                }
+                _locals ??= new CodeStatementCollection();
 
                 return _locals;
             }
@@ -112,10 +97,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_fields is null)
-                {
-                    _fields = new CodeStatementCollection();
-                }
+                _fields ??= new CodeStatementCollection();
 
                 return _fields;
             }
@@ -126,10 +108,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_variables is null)
-                {
-                    _variables = new CodeStatementCollection();
-                }
+                _variables ??= new CodeStatementCollection();
 
                 return _variables;
             }

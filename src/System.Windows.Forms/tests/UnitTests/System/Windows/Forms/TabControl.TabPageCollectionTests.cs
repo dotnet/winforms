@@ -9,11 +9,10 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class TabControlTabPageCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Add_TestData()

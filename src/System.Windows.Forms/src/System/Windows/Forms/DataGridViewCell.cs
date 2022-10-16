@@ -159,10 +159,7 @@ namespace System.Windows.Forms
                         value.Disposed += disposedHandler;
                     }
 
-                    if (DataGridView is not null)
-                    {
-                        DataGridView.OnCellContextMenuStripChanged(this);
-                    }
+                    DataGridView?.OnCellContextMenuStripChanged(this);
                 }
             }
         }
@@ -242,10 +239,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_errorBmp is null)
-                {
-                    s_errorBmp = GetBitmap("DataGridViewRow.error");
-                }
+                s_errorBmp ??= GetBitmap("DataGridViewRow.error");
 
                 return s_errorBmp;
             }
@@ -609,11 +603,11 @@ namespace System.Windows.Forms
             {
                 if (value)
                 {
-                    State = State | DataGridViewElementStates.ReadOnly;
+                    State |= DataGridViewElementStates.ReadOnly;
                 }
                 else
                 {
-                    State = State & ~DataGridViewElementStates.ReadOnly;
+                    State &= ~DataGridViewElementStates.ReadOnly;
                 }
 
                 DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.ReadOnly);
@@ -697,17 +691,14 @@ namespace System.Windows.Forms
                 Debug.Assert(value != Selected);
                 if (value)
                 {
-                    State = State | DataGridViewElementStates.Selected;
+                    State |= DataGridViewElementStates.Selected;
                 }
                 else
                 {
-                    State = State & ~DataGridViewElementStates.Selected;
+                    State &= ~DataGridViewElementStates.Selected;
                 }
 
-                if (DataGridView is not null)
-                {
-                    DataGridView.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.Selected);
-                }
+                DataGridView?.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.Selected);
             }
         }
 
@@ -769,10 +760,7 @@ namespace System.Windows.Forms
 
                 if (value is not null || Properties.ContainsObject(s_propCellStyle))
                 {
-                    if (value is not null)
-                    {
-                        value.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
-                    }
+                    value?.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
 
                     Properties.SetObject(s_propCellStyle, value);
                 }

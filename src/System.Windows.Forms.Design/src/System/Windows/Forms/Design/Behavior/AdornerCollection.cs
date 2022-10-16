@@ -96,7 +96,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <seealso cref="Add"/>
         public void AddRange(Adorner[] value)
         {
-            for (int i = 0; (i < value.Length); i = (i + 1))
+            for (int i = 0; (i < value.Length); i++)
             {
                 Add(value[i]);
             }
@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <seealso cref="Add"/>
         public void AddRange(BehaviorServiceAdornerCollection value)
         {
-            for (int i = 0; (i < value.Count); i = (i + 1))
+            for (int i = 0; (i < value.Count); i++)
             {
                 Add(value[i]);
             }

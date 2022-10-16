@@ -106,10 +106,7 @@ namespace System.Windows.Forms
                             if (value)
                             {
                                 // Create the timer window if needed.
-                                if (_timerWindow is null)
-                                {
-                                    _timerWindow = new TimerNativeWindow(this);
-                                }
+                                _timerWindow ??= new TimerNativeWindow(this);
 
                                 _timerRoot = GCHandle.Alloc(this);
                                 _timerWindow.StartTimer(_interval);
@@ -221,7 +218,7 @@ namespace System.Windows.Forms
 
                         // Message only windows are cheaper and have fewer issues than
                         // full blown invisible windows.
-                        Parent = User32.HWND_MESSAGE
+                        Parent = HWND.HWND_MESSAGE
                     };
 
                     CreateHandle(cp);

@@ -5,11 +5,10 @@
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class DataGridViewHeaderCellTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

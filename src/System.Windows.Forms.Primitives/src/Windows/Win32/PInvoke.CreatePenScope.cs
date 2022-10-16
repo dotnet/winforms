@@ -33,7 +33,7 @@ namespace Windows.Win32
                 HPEN = CreatePen(
                     width > 1 ? (PEN_STYLE.PS_GEOMETRIC | PEN_STYLE.PS_SOLID) : default,
                     width,
-                    (COLORREF)(uint)ColorTranslator.ToWin32(color));
+                    color);
             }
 
             public static implicit operator HPEN(in CreatePenScope scope) => scope.HPEN;

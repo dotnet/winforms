@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 
 internal partial class Interop
 {
@@ -14,16 +15,15 @@ internal partial class Interop
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
         public static extern HRESULT RegisterDragDrop(IntPtr hwnd, IDropTarget pDropTarget);
 
-        public static HRESULT RegisterDragDrop(IHandle hwnd, IDropTarget pDropTarget)
+        public static unsafe HRESULT RegisterDragDrop(IHandle hwnd, IDropTarget pDropTarget)
         {
-            HRESULT result = WinFormsComWrappers.Instance.TryGetComPointer(pDropTarget, IID.IDropTarget, out var dropTargetPtr);
-            if (result.Failed)
+            if (!WinFormsComWrappers.Instance.TryGetComPointer(pDropTarget, IID.IDropTarget, out IUnknown* dropTargetPtr))
             {
-                return result;
+                return HRESULT.E_NOINTERFACE;
             }
 
-            result = RegisterDragDrop(hwnd.Handle, dropTargetPtr);
-            Marshal.Release(dropTargetPtr);
+            HRESULT result = RegisterDragDrop(hwnd.Handle, (nint)(void*)dropTargetPtr);
+            Marshal.Release((nint)(void*)dropTargetPtr);
             GC.KeepAlive(hwnd);
             return result;
         }

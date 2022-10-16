@@ -161,10 +161,7 @@ namespace System.Windows.Forms.Design
                         break;
                     }
 
-                    if (bufferedChars == null)
-                    {
-                        bufferedChars = new ArrayList();
-                    }
+                    bufferedChars ??= new ArrayList();
 
                     bufferedChars.Add(new BufferedKey(lastKeyDown, m, lastKeyDown));
 
@@ -213,10 +210,7 @@ namespace System.Windows.Forms.Design
                     break;
             }
 
-            if (oldTarget != null)
-            {
-                oldTarget.OnMessage(ref m);
-            }
+            oldTarget?.OnMessage(ref m);
         }
     }
 }

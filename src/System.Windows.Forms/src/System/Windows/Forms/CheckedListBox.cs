@@ -87,10 +87,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedIndexCollection is null)
-                {
-                    _checkedIndexCollection = new CheckedIndexCollection(this);
-                }
+                _checkedIndexCollection ??= new CheckedIndexCollection(this);
 
                 return _checkedIndexCollection;
             }
@@ -105,10 +102,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedItemCollection is null)
-                {
-                    _checkedItemCollection = new CheckedItemCollection(this);
-                }
+                _checkedItemCollection ??= new CheckedItemCollection(this);
 
                 return _checkedItemCollection;
             }
@@ -457,7 +451,7 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.Selection, index);
 
             //# VS7 86
-            if (!_killnextselect && (index == _lastSelected || CheckOnClick == true))
+            if (!_killnextselect && (index == _lastSelected || CheckOnClick))
             {
                 CheckState currentValue = CheckedItems.GetCheckedState(index);
                 CheckState newValue = (currentValue != CheckState.Unchecked)
@@ -836,10 +830,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject? checkedItem = AccessibilityObject.GetChild(ice.Index);
 
-                if (checkedItem is not null)
-                {
-                    checkedItem.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, ice.CurrentValue, ice.NewValue);
-                }
+                checkedItem?.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, ice.CurrentValue, ice.NewValue);
             }
         }
 

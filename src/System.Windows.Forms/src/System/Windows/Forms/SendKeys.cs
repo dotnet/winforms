@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             bool startNewChar,
             int cGrp)
         {
-            int vk = User32.VkKeyScanW(character);
+            int vk = PInvoke.VkKeyScan(character);
 
             if (vk != -1)
             {

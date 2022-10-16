@@ -61,11 +61,7 @@ namespace System.ComponentModel.Design
                 _descriptors ??= new Hashtable();
 
                 PropertyDescriptor property = (PropertyDescriptor)_descriptors[propertyName];
-                if (property is null)
-                {
-                    property = TypeDescriptor.GetProperties(_designer.Component.GetType())[propertyName];
-                    //_descriptors[propertyName] = property ?? throw new ArgumentException(SR.GetResourceString(SR.DesignerPropNotFound, propertyName));
-                }
+                property ??= TypeDescriptor.GetProperties(_designer.Component.GetType())[propertyName];
 
                 return property;
             }

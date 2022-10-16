@@ -231,10 +231,7 @@ namespace System.Windows.Forms.Design
             //
             IDictionaryService ds = site.GetService(typeof(IDictionaryService)) as IDictionaryService;
             Debug.Assert(ds != null, "No dictionary service");
-            if (ds != null)
-            {
-                ds.SetValue(typeof(CommandID), new CommandID(new Guid("BA09E2AF-9DF2-4068-B2F0-4C7E5CC19E2F"), 0));
-            }
+            ds?.SetValue(typeof(CommandID), new CommandID(new Guid("BA09E2AF-9DF2-4068-B2F0-4C7E5CC19E2F"), 0));
         }
 
         /// <summary>
@@ -244,10 +241,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (behaviorService == null)
-                {
-                    behaviorService = GetService(typeof(BehaviorService)) as BehaviorService;
-                }
+                behaviorService ??= GetService(typeof(BehaviorService)) as BehaviorService;
 
                 return behaviorService;
             }
@@ -261,10 +255,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (menuService == null)
-                {
-                    menuService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-                }
+                menuService ??= (IMenuCommandService)GetService(typeof(IMenuCommandService));
 
                 return menuService;
             }
@@ -450,10 +441,7 @@ namespace System.Windows.Forms.Design
         {
             if (dragManager != null)
             {
-                if (snapLineTimer != null)
-                {
-                    snapLineTimer.Stop();
-                }
+                snapLineTimer?.Stop();
 
                 dragManager.EraseSnapLines();
                 dragManager.OnMouseUp();
@@ -547,7 +535,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            return selection == null ? Array.Empty<object>() : selection;
+            return selection ?? Array.Empty<object>();
         }
 
         /// <summary>
@@ -766,7 +754,7 @@ namespace System.Windows.Forms.Design
             // The base implementation here just checks to see if we are dragging.
             // If we are, then we abort the drag.
             //
-            if (BehaviorService != null && BehaviorService.HasCapture)
+            if (BehaviorService is not null && BehaviorService.HasCapture)
             {
                 BehaviorService.OnLoseCapture();
                 handled = true;
@@ -774,12 +762,12 @@ namespace System.Windows.Forms.Design
             else
             {
                 IToolboxService tbx = (IToolboxService)GetService(typeof(IToolboxService));
-                if (tbx != null && tbx.GetSelectedToolboxItem((IDesignerHost)GetService(typeof(IDesignerHost))) != null)
+                if (tbx is not null && tbx.GetSelectedToolboxItem((IDesignerHost)GetService(typeof(IDesignerHost))) is not null)
                 {
                     tbx.SelectedToolboxItemUsed();
 
-                    User32.GetCursorPos(out Point p);
-                    HWND hwnd = (HWND)User32.WindowFromPoint(p);
+                    PInvoke.GetCursorPos(out Point p);
+                    HWND hwnd = PInvoke.WindowFromPoint(p);
                     if (!hwnd.IsNull)
                     {
                         PInvoke.SendMessage(hwnd, User32.WM.SETCURSOR, hwnd, (nint)User32.HT.CLIENT);
@@ -816,10 +804,7 @@ namespace System.Windows.Forms.Design
                     {
                         IDesigner designer = host.GetDesigner(pri);
 
-                        if (designer != null)
-                        {
-                            designer.DoDefaultAction();
-                        }
+                        designer?.DoDefaultAction();
                     }
                 }
             }
@@ -1064,10 +1049,7 @@ namespace System.Windows.Forms.Design
                             }
                             finally
                             {
-                                if (trans != null)
-                                {
-                                    trans.Commit();
-                                }
+                                trans?.Commit();
 
                                 if (dragManager != null)
                                 {
@@ -1249,10 +1231,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    trans?.Commit();
                 }
             }
             finally
@@ -1313,7 +1292,7 @@ namespace System.Windows.Forms.Design
                     {
                         // first check to see if the component is locked, if so - don't move it...
                         PropertyDescriptor lockedProp = GetProperty(comp, "Locked");
-                        if (lockedProp != null && ((bool)lockedProp.GetValue(comp)) == true)
+                        if (lockedProp != null && ((bool)lockedProp.GetValue(comp)))
                         {
                             continue;
                         }
@@ -1378,10 +1357,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    trans?.Commit();
                 }
             }
             finally
@@ -1463,7 +1439,7 @@ namespace System.Windows.Forms.Design
                             // Also, skip all locked components...
                             //
                             PropertyDescriptor lockProp = props["Locked"];
-                            if (lockProp != null && (bool)lockProp.GetValue(comp) == true)
+                            if (lockProp != null && (bool)lockProp.GetValue(comp))
                             {
                                 continue;
                             }
@@ -1473,10 +1449,7 @@ namespace System.Windows.Forms.Design
 
                             //cache the first parent we see - if there's a mix of different parents - we'll
                             //just center based on the first one
-                            if (viewParent == null)
-                            {
-                                viewParent = ((Control)comp).Parent;
-                            }
+                            viewParent ??= ((Control)comp).Parent;
 
                             if (loc.X < left)
                                 left = loc.X;
@@ -1569,10 +1542,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    trans?.Commit();
                 }
             }
             finally
@@ -1767,14 +1737,10 @@ namespace System.Windows.Forms.Design
                             }
                             finally
                             {
-                                if (trans != null)
-                                    trans.Commit();
+                                trans?.Commit();
                                 foreach (ParentControlDesigner des in designerList)
                                 {
-                                    if (des != null)
-                                    {
-                                        des.ResumeChangingEvents();
-                                    }
+                                    des?.ResumeChangingEvents();
                                 }
                             }
 
@@ -2010,17 +1976,11 @@ namespace System.Windows.Forms.Design
                         }
                         finally
                         {
-                            if (trans != null)
-                            {
-                                trans.Commit();
-                            }
+                            trans?.Commit();
 
                             foreach (ParentControlDesigner des in designerList)
                             {
-                                if (des != null)
-                                {
-                                    des.ResumeChangingEvents();
-                                }
+                                des?.ResumeChangingEvents();
                             }
                         }
 
@@ -2041,9 +2001,8 @@ namespace System.Windows.Forms.Design
                                     }
                                 }
                             }
-                            else if (commonParent is Control)
+                            else if (commonParent is Control controlCommonParent)
                             {
-                                Control controlCommonParent = (Control)commonParent;
                                 // if we have a common parent, select it's first child
                                 //
                                 if (controlCommonParent.Controls.Count > 0)
@@ -2109,7 +2068,7 @@ namespace System.Windows.Forms.Design
                     return;   // nothing we can do here!
 
                 IDataObject dataObj = null;
-                bool clipboardOperationSuccessful = ExecuteSafely(() => Clipboard.GetDataObject(), false, out dataObj);
+                bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out dataObj);
 
                 if (clipboardOperationSuccessful)
                 {
@@ -2198,10 +2157,7 @@ namespace System.Windows.Forms.Design
                             IComponent baseComponent = host.RootComponent;
                             selectedComponent = (IComponent)SelectionService.PrimarySelection;
 
-                            if (selectedComponent == null)
-                            {
-                                selectedComponent = baseComponent;
-                            }
+                            selectedComponent ??= baseComponent;
 
                             dragClient = false;
                             ITreeDesigner tree = host.GetDesigner(selectedComponent) as ITreeDesigner;
@@ -2431,11 +2387,8 @@ namespace System.Windows.Forms.Design
                             // Rather than fixing this up in ToolStripKeyboardHandlingService.OnCommandPaste,
                             // we do it here, since doing it in the service, wouldn't handle cross-form paste.
 
-                            if (tray == null)
-                            {
-                                // the paste target did not have a tray already, so let's go get it - if there is one
-                                tray = GetService(typeof(ComponentTray)) as ComponentTray;
-                            }
+                            // the paste target did not have a tray already, so let's go get it - if there is one
+                            tray ??= GetService(typeof(ComponentTray)) as ComponentTray;
 
                             if (tray != null)
                             {
@@ -2471,10 +2424,7 @@ namespace System.Windows.Forms.Design
                             if (parentControlDesigner != null && parentControlDesigner.AllowSetChildIndexOnDrop)
                             {
                                 MenuCommand btf = MenuService.FindCommand(StandardCommands.BringToFront);
-                                if (btf != null)
-                                {
-                                    btf.Invoke();
-                                }
+                                btf?.Invoke();
                             }
 
                             trans.Commit();
@@ -2491,10 +2441,7 @@ namespace System.Windows.Forms.Design
                 Cursor.Current = oldCursor;
                 foreach (ParentControlDesigner des in designerList)
                 {
-                    if (des != null)
-                    {
-                        des.ResumeChangingEvents();
-                    }
+                    des?.ResumeChangingEvents();
                 }
             }
         }
@@ -2583,8 +2530,7 @@ namespace System.Windows.Forms.Design
                     }
                     finally
                     {
-                        if (trans != null)
-                            trans.Commit();
+                        trans?.Commit();
                     }
                 }
             }
@@ -2697,10 +2643,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    trans?.Commit();
                 }
             }
             finally
@@ -2793,10 +2736,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (trans != null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
 
                 Cursor.Current = oldCursor;
             }
@@ -2858,8 +2798,7 @@ namespace System.Windows.Forms.Design
                     }
                     finally
                     {
-                        if (trans != null)
-                            trans.Commit();
+                        trans?.Commit();
                     }
                 }
             }
@@ -3253,10 +3192,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (trans != null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
 
                 Cursor.Current = oldCursor;
             }
@@ -3506,7 +3442,7 @@ namespace System.Windows.Forms.Design
             // Not being inherited.  Now look at the contents of the data
             //
             IDataObject dataObj = null;
-            bool clipboardOperationSuccessful = ExecuteSafely(() => Clipboard.GetDataObject(), false, out dataObj);
+            bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out dataObj);
 
             bool enable = false;
 
@@ -3832,10 +3768,7 @@ namespace System.Windows.Forms.Design
             // Now, for each control, update the offset.
             //
 
-            if (parentControl != null)
-            {
-                parentControl.SuspendLayout();
-            }
+            parentControl?.SuspendLayout();
 
             try
             {
@@ -3848,10 +3781,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (parentControl != null)
-                {
-                    parentControl.ResumeLayout();
-                }
+                parentControl?.ResumeLayout();
             }
         }
 
@@ -3949,10 +3879,7 @@ namespace System.Windows.Forms.Design
                     //
                     lock (typeof(CommandSetItem))
                     {
-                        if (commandStatusHash == null)
-                        {
-                            commandStatusHash = new Hashtable();
-                        }
+                        commandStatusHash ??= new Hashtable();
                     }
 
                     //
@@ -4048,10 +3975,7 @@ namespace System.Windows.Forms.Design
                 }
                 catch (Exception e)
                 {
-                    if (uiService != null)
-                    {
-                        uiService.ShowError(e, string.Format(SR.CommandSetError, e.Message));
-                    }
+                    uiService?.ShowError(e, string.Format(SR.CommandSetError, e.Message));
 
                     if (ClientUtils.IsCriticalException(e))
                     {

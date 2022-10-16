@@ -597,10 +597,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedIndexCollection is null)
-                {
-                    _checkedIndexCollection = new CheckedIndexCollection(this);
-                }
+                _checkedIndexCollection ??= new CheckedIndexCollection(this);
 
                 return _checkedIndexCollection;
             }
@@ -617,10 +614,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedListViewItemCollection is null)
-                {
-                    _checkedListViewItemCollection = new CheckedListViewItemCollection(this);
-                }
+                _checkedListViewItemCollection ??= new CheckedListViewItemCollection(this);
 
                 return _checkedListViewItemCollection;
             }
@@ -1008,10 +1002,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_groups is null)
-                {
-                    _groups = new ListViewGroupCollection(this);
-                }
+                _groups ??= new ListViewGroupCollection(this);
 
                 return _groups;
             }
@@ -1152,10 +1143,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_insertionMark is null)
-                {
-                    _insertionMark = new ListViewInsertionMark(this);
-                }
+                _insertionMark ??= new ListViewInsertionMark(this);
 
                 return _insertionMark;
             }
@@ -1426,10 +1414,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_selectedIndexCollection is null)
-                {
-                    _selectedIndexCollection = new SelectedIndexCollection(this);
-                }
+                _selectedIndexCollection ??= new SelectedIndexCollection(this);
 
                 return _selectedIndexCollection;
             }
@@ -1446,10 +1431,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_selectedListViewItemCollection is null)
-                {
-                    _selectedListViewItemCollection = new SelectedListViewItemCollection(this);
-                }
+                _selectedListViewItemCollection ??= new SelectedListViewItemCollection(this);
 
                 return _selectedListViewItemCollection;
             }
@@ -2421,10 +2403,7 @@ namespace System.Windows.Forms
         {
             if (selected)
             {
-                if (_savedSelectedItems is null)
-                {
-                    _savedSelectedItems = new List<ListViewItem>();
-                }
+                _savedSelectedItems ??= new List<ListViewItem>();
 
                 if (!_savedSelectedItems.Contains(lvi))
                 {
@@ -2981,10 +2960,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            if (_odCacheFontHandleWrapper is not null)
-                            {
-                                _odCacheFontHandleWrapper.Dispose();
-                            }
+                            _odCacheFontHandleWrapper?.Dispose();
 
                             _odCacheFontHandleWrapper = new FontHandleWrapper(subItemFont);
                             PInvoke.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
@@ -3903,10 +3879,10 @@ namespace System.Windows.Forms
         {
             if (_viewStyle == View.Details && IsHandleCreated)
             {
-                IntPtr hwndHdr = PInvoke.SendMessage(this, (User32.WM)LVM.GETHEADER);
-                if (hwndHdr != IntPtr.Zero)
+                HWND header = (HWND)PInvoke.SendMessage(this, (User32.WM)LVM.GETHEADER);
+                if (!header.IsNull)
                 {
-                    User32.InvalidateRect(new HandleRef(this, hwndHdr), null, true);
+                    PInvoke.InvalidateRect(new HandleRef<HWND>(this, header), lpRect: null, bErase: true);
                 }
             }
         }
@@ -4129,10 +4105,7 @@ namespace System.Windows.Forms
 
                 ArrayList? itemList = (ArrayList?)Properties.GetObject(PropDelayedUpdateItems);
                 Debug.Assert(itemList is not null, "In Begin/EndUpdate with no delayed array!");
-                if (itemList is not null)
-                {
-                    itemList.AddRange(items);
-                }
+                itemList?.AddRange(items);
 
                 // add the list view item to the list view
                 // this way we can retrieve the item's index inside BeginUpdate/EndUpdate
@@ -4991,31 +4964,31 @@ namespace System.Windows.Forms
 
         private unsafe void PositionHeader()
         {
-            HWND hdrHWND = PInvoke.GetWindow(this, GET_WINDOW_CMD.GW_CHILD);
-            if (!hdrHWND.IsNull)
+            HWND headerWindow = PInvoke.GetWindow(this, GET_WINDOW_CMD.GW_CHILD);
+            if (!headerWindow.IsNull)
             {
-                var rc = new RECT();
-                var wpos = new User32.WINDOWPOS();
-                User32.GetClientRect(this, ref rc);
+                RECT clientRect = default;
+                WINDOWPOS position = default;
+                User32.GetClientRect(this, ref clientRect);
 
                 var hd = new User32.HDLAYOUT
                 {
-                    prc = &rc,
-                    pwpos = &wpos
+                    prc = &clientRect,
+                    pwpos = &position
                 };
 
                 // Get the layout information.
-                PInvoke.SendMessage(hdrHWND, (User32.WM)HDM.LAYOUT, (WPARAM)0, ref hd);
+                PInvoke.SendMessage(headerWindow, (User32.WM)HDM.LAYOUT, (WPARAM)0, ref hd);
 
                 // Position the header control.
-                User32.SetWindowPos(
-                    hdrHWND,
-                    wpos.hwndInsertAfter,
-                    wpos.x,
-                    wpos.y,
-                    wpos.cx,
-                    wpos.cy,
-                    wpos.flags | User32.SWP.SHOWWINDOW);
+                PInvoke.SetWindowPos(
+                    headerWindow,
+                    position.hwndInsertAfter,
+                    position.x,
+                    position.y,
+                    position.cx,
+                    position.cy,
+                    position.flags | SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW);
 
                 GC.KeepAlive(this);
             }
@@ -5160,7 +5133,7 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(nint handle)
         {
-            if (!OsVersion.IsWindows8OrGreater || !IsAccessibilityObjectCreated)
+            if (!OsVersion.IsWindows8OrGreater() || !IsAccessibilityObjectCreated)
             {
                 return;
             }
@@ -5489,7 +5462,7 @@ namespace System.Windows.Forms
 
             // Native ListView expects tooltip HWND as a wParam and ignores lParam
             HWND oldHandle = (HWND)PInvoke.SendMessage(this, (User32.WM)LVM.SETTOOLTIPS, toolTip);
-            User32.DestroyWindow(oldHandle);
+            PInvoke.DestroyWindow(oldHandle);
         }
 
         internal void SetItemImage(int itemIndex, int imageIndex)

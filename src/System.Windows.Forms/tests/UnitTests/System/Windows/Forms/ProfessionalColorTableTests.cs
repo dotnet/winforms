@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> Properties_TestData()
         {
             // Helper function to avoid casting.
-            Func<ProfessionalColorTable, T> I<T>(Func<ProfessionalColorTable, T> t) => t;
+            static Func<ProfessionalColorTable, T> I<T>(Func<ProfessionalColorTable, T> t) => t;
 
             yield return new object[] { I(t => t.ButtonCheckedGradientBegin) };
             yield return new object[] { I(t => t.ButtonCheckedGradientEnd) };

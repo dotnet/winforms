@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
 {
@@ -175,10 +176,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void RemoveSelection(object sel)
         {
-            if (_selection is not null)
-            {
-                _selection.Remove(sel);
-            }
+            _selection?.Remove(sel);
         }
 
         private void ApplicationIdle(object source, EventArgs args)
@@ -392,10 +390,7 @@ namespace System.ComponentModel.Design
             bool fAuto = !(fToggle | fAdd | fRemove | fReplace);
 
             // We always want to allow NULL arrays coming in.
-            if (components is null)
-            {
-                components = Array.Empty<object>();
-            }
+            components ??= Array.Empty<object>();
 
             // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifier keys.  This creates the "Auto" selection type for us by default.
             if (fAuto)

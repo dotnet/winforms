@@ -11,7 +11,11 @@
       users won't be impacted. If some name becomes difficult to adapt to with the @ symbol we can
       cross that bridge when we hit it (if ever).
     -->
-    <NoWarn>$(NoWarn);CS8981</NoWarn>
+    <NoWarn>$(NoWarn);CS8981;CS3016</NoWarn>
+    <!--
+      We don't care about CLS compliance since everything here is internal and we want to match native types.
+    -->
+    <NoWarn>$(NoWarn);CS3016</NoWarn>
     <!--
       IL Trim warnings which should be removed in order to make WinForms trimmable
       See https://github.com/dotnet/winforms/issues/4649
@@ -20,6 +24,7 @@
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
+    <RootNamespace/>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,11 +38,12 @@
     <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
     <PackageReference Include="System.Resources.Extensions" Version="$(SystemResourcesExtensionsPackageVersion)" />
     <PackageReference Include="System.Windows.Extensions" Version="$(SystemWindowsExtensionsPackageVersion)" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.1" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="$(SystemRuntimeCompilerServicesUnsafePackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
+      <ManifestResourceName>System.Windows.Forms.Primitives.Resources.SR</ManifestResourceName>
       <GenerateSource>true</GenerateSource>
     </EmbeddedResource>
   </ItemGroup>

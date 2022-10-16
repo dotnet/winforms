@@ -1506,7 +1506,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             PInvoke.SetWindowLong(_dropDownHolder, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, this);
             _dropDownHolder.SetBounds(location.X, location.Y, size.Width, size.Height);
-            User32.ShowWindow(_dropDownHolder, User32.SW.SHOWNA);
+            PInvoke.ShowWindow(_dropDownHolder, SHOW_WINDOW_CMD.SW_SHOWNA);
             EditTextBox.Filter = true;
             _dropDownHolder.Visible = true;
             _dropDownHolder.FocusComponent();
@@ -2389,10 +2389,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (e.KeyCode == Keys.Return)
             {
                 OnListClick(null, null);
-                if (_selectedGridEntry is not null)
-                {
-                    _selectedGridEntry.OnValueReturnKey();
-                }
+                _selectedGridEntry?.OnValueReturnKey();
             }
 
             OnKeyDown(sender, e);
@@ -3812,12 +3809,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     selectionIndex = GetCurrentValueIndex(gridEntry);
                     if (rgItems is not null && rgItems.Length > 0)
                     {
-                        string value;
-                        Size textSize = default;
-
                         for (int i = 0; i < rgItems.Length; i++)
                         {
-                            value = gridEntry.GetPropertyTextValue(rgItems[i]);
+                            Size textSize = default;
+                            string value = gridEntry.GetPropertyTextValue(rgItems[i]);
                             DropDownListBox.Items.Add(value);
                             PInvoke.GetTextExtentPoint32W(hdc.HDC, value, value.Length, textSize);
                             maxWidth = Math.Max(textSize.Width, maxWidth);
@@ -4255,10 +4250,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return new ArrayList();
             }
 
-            if (expandedItems is null)
-            {
-                expandedItems = new ArrayList();
-            }
+            expandedItems ??= new ArrayList();
 
             for (int i = 0; i < entries.Count; i++)
             {
@@ -5225,10 +5217,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _dropDownHolder.FocusComponent();
                 return;
             }
-            else if (_currentEditor is not null)
-            {
-                _currentEditor.Focus();
-            }
+            else _currentEditor?.Focus();
 
             return;
         }

@@ -177,6 +177,11 @@
         <target state="translated">Nadřazené řádky</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="translated">Přístup byl odepřen.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">Zaškrtnout</target>

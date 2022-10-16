@@ -59,10 +59,7 @@ namespace System.Resources
                     }
 
                     type = _typeResolver.GetType(partialName);
-                    if (type is null)
-                    {
-                        type = _typeResolver.GetType(typeParts[0].Trim());
-                    }
+                    type ??= _typeResolver.GetType(typeParts[0].Trim());
                 }
             }
 

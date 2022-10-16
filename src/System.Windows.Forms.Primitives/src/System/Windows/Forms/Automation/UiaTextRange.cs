@@ -809,7 +809,7 @@ namespace System.Windows.Forms.Automation
                         ValidateEndpoints();
 
                         moved = Math.Min(count, limit - index);
-                        index = index + moved;
+                        index += moved;
 
                         index = index > limit ? limit : index;
                     }
@@ -924,7 +924,7 @@ namespace System.Windows.Forms.Automation
                         ValidateEndpoints();
                         int oneBasedIndex = index + 1;
                         moved = Math.Max(count, -oneBasedIndex);
-                        index = index + moved;
+                        index += moved;
                         index = index < 0 ? 0 : index;
                     }
 

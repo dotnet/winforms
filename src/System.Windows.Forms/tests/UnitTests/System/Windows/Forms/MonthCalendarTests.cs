@@ -9,12 +9,11 @@ using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.ComCtl32;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     [UseDefaultXunitCulture]
     public class MonthCalendarTests : IClassFixture<ThreadExceptionFixture>
     {

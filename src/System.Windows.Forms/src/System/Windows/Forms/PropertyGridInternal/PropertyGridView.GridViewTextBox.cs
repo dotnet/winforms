@@ -41,8 +41,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 set => _filter = value;
             }
 
-            internal override bool SupportsUiaProviders => true;
-
             public override bool Focused => !HideFocusState && base.Focused;
 
             [AllowNull]

@@ -68,10 +68,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_flowLayoutSettings is null)
-                    {
-                        _flowLayoutSettings = new FlowLayoutSettings(Row);
-                    }
+                    _flowLayoutSettings ??= new FlowLayoutSettings(Row);
 
                     return _flowLayoutSettings;
                 }

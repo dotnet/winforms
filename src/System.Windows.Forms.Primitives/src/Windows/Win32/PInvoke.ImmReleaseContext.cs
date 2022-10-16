@@ -8,7 +8,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static BOOL ImmReleaseContext<T>(in T hWnd, HIMC hIMC) where T : IHandle<HWND>
+        public static BOOL ImmReleaseContext<T>(T hWnd, HIMC hIMC) where T : IHandle<HWND>
         {
             BOOL result = ImmReleaseContext(hWnd.Handle, hIMC);
             GC.KeepAlive(hWnd.Wrapper);

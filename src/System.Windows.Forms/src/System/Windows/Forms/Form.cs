@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -891,10 +891,7 @@ namespace System.Windows.Forms
                     {
                         // Once we grab the lock, we re-check the value to avoid a
                         // race condition.
-                        if (defaultIcon is null)
-                        {
-                            defaultIcon = new Icon(typeof(Form), "wfc");
-                        }
+                        defaultIcon ??= new Icon(typeof(Form), "wfc");
                     }
                 }
 
@@ -1445,14 +1442,14 @@ namespace System.Windows.Forms
                 {
                     // "Move" the form to the same size and position to prevent windows from moving it
                     // when the user tries to grab a resizing border.
-                    User32.SetWindowPos(
-                        new HandleRef(this, Handle),
-                        User32.HWND_TOP,
+                    PInvoke.SetWindowPos(
+                        this,
+                        HWND.HWND_TOP,
                         Location.X,
                         Location.Y,
                         Size.Width,
                         Size.Height,
-                        User32.SWP.NOZORDER);
+                        SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
                 }
             }
 
@@ -1817,17 +1814,11 @@ namespace System.Windows.Forms
 
                 Properties.SetObject(PropOwner, null);
 
-                if (ownerOld is not null)
-                {
-                    ownerOld.RemoveOwnedForm(this);
-                }
+                ownerOld?.RemoveOwnedForm(this);
 
                 Properties.SetObject(PropOwner, value);
 
-                if (value is not null)
-                {
-                    value.AddOwnedForm(this);
-                }
+                value?.AddOwnedForm(this);
 
                 UpdateHandleWithOwner();
             }
@@ -1955,33 +1946,42 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override User32.SW ShowParams
+        internal override SHOW_WINDOW_CMD ShowParams
         {
             get
             {
                 // From MSDN:
-                //      The first time an application calls ShowWindow, it should use the WinMain function's nCmdShow parameter as its nCmdShow parameter. Subsequent calls to ShowWindow must use one of the values in the given list, instead of the one specified by the WinMain function's nCmdShow parameter.
+                //
+                //  The first time an application calls ShowWindow, it should use the WinMain function's nCmdShow parameter
+                //  as its nCmdShow parameter. Subsequent calls to ShowWindow must use one of the values in the given list,
+                //  instead of the one specified by the WinMain function's nCmdShow parameter.
 
-                //      As noted in the discussion of the nCmdShow parameter, the nCmdShow value is ignored in the first call to ShowWindow if the program that launched the application specifies startup information in the STARTUPINFO structure. In this case, ShowWindow uses the information specified in the STARTUPINFO structure to show the window. On subsequent calls, the application must call ShowWindow with nCmdShow set to SW_SHOWDEFAULT to use the startup information provided by the program that launched the application. This behavior is designed for the following situations:
+                //  As noted in the discussion of the nCmdShow parameter, the nCmdShow value is ignored in the first call
+                //  to ShowWindow if the program that launched the application specifies startup information in the
+                //  STARTUPINFO structure. In this case, ShowWindow uses the information specified in the STARTUPINFO
+                //  structure to show the window. On subsequent calls, the application must call ShowWindow with nCmdShow
+                //  set to SW_SHOWDEFAULT to use the startup information provided by the program that launched the
+                //  application. This behavior is designed for the following situations:
                 //
-                //      Applications create their main window by calling CreateWindow with the WS_VISIBLE flag set.
-                //      Applications create their main window by calling CreateWindow with the WS_VISIBLE flag cleared, and later call ShowWindow with the SW_SHOW flag set to make it visible.
+                //    Applications create their main window by calling CreateWindow with the WS_VISIBLE flag set.
                 //
+                //    Applications create their main window by calling CreateWindow with the WS_VISIBLE flag cleared, and
+                //    later call ShowWindow with the SW_SHOW flag set to make it visible.
 
                 switch (WindowState)
                 {
                     case FormWindowState.Maximized:
-                        return User32.SW.SHOWMAXIMIZED;
+                        return SHOW_WINDOW_CMD.SW_SHOWMAXIMIZED;
                     case FormWindowState.Minimized:
-                        return User32.SW.SHOWMINIMIZED;
+                        return SHOW_WINDOW_CMD.SW_SHOWMINIMIZED;
                 }
 
                 if (ShowWithoutActivation)
                 {
-                    return User32.SW.SHOWNOACTIVATE;
+                    return SHOW_WINDOW_CMD.SW_SHOWNOACTIVATE;
                 }
 
-                return User32.SW.SHOW;
+                return SHOW_WINDOW_CMD.SW_SHOW;
             }
         }
 
@@ -2166,10 +2166,11 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated && TopLevel)
                 {
-                    User32.SetWindowPos(
-                        new HandleRef(this, Handle),
-                        value ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
-                        flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE);
+                    PInvoke.SetWindowPos(
+                        this,
+                        value ? HWND.HWND_TOPMOST : HWND.HWND_NOTOPMOST,
+                        0, 0, 0, 0,
+                        SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE);
                 }
 
                 _formState[FormStateTopMost] = value ? 1 : 0;
@@ -2328,7 +2329,7 @@ namespace System.Windows.Forms
                         SuspendLayout();
                         try
                         {
-                            User32.ShowWindow(this, User32.SW.SHOW);
+                            PInvoke.ShowWindow(this, SHOW_WINDOW_CMD.SW_SHOW);
                             CreateControl();
 
                             // If this form is mdichild and maximized, we need to redraw the MdiParent non-client area to
@@ -2391,13 +2392,13 @@ namespace System.Windows.Forms
                     switch (value)
                     {
                         case FormWindowState.Normal:
-                            User32.ShowWindow(this, User32.SW.NORMAL);
+                            PInvoke.ShowWindow(this, SHOW_WINDOW_CMD.SW_NORMAL);
                             break;
                         case FormWindowState.Maximized:
-                            User32.ShowWindow(this, User32.SW.MAXIMIZE);
+                            PInvoke.ShowWindow(this, SHOW_WINDOW_CMD.SW_MAXIMIZE);
                             break;
                         case FormWindowState.Minimized:
-                            User32.ShowWindow(this, User32.SW.MINIMIZE);
+                            PInvoke.ShowWindow(this, SHOW_WINDOW_CMD.SW_MINIMIZE);
                             break;
                     }
                 }
@@ -3156,10 +3157,7 @@ namespace System.Windows.Forms
             // child is created maximized, the menu ends up with two sets of
             // MDI child ornaments.
             Form? form = (Form?)Properties.GetObject(PropFormMdiParent);
-            if (form is not null)
-            {
-                form.SuspendUpdateMenuHandles();
-            }
+            form?.SuspendUpdateMenuHandles();
 
             try
             {
@@ -3238,10 +3236,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (form is not null)
-                {
-                    form.ResumeUpdateMenuHandles();
-                }
+                form?.ResumeUpdateMenuHandles();
 
                 // We need to reset the styles in case Windows tries to set us up
                 // with "correct" styles
@@ -3399,11 +3394,10 @@ namespace System.Windows.Forms
                 base.Dispose(disposing);
                 _ctlClient = null;
 
-                var dummyMenu = Properties.GetObject(PropDummyMdiMenu) as IntPtr?;
-                if (dummyMenu.HasValue && dummyMenu.Value != IntPtr.Zero)
+                if (Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
                 {
                     Properties.SetObject(PropDummyMdiMenu, null);
-                    User32.DestroyMenu(new HandleRef(this, dummyMenu.Value));
+                    PInvoke.DestroyMenu(dummyMenu);
                 }
             }
             else
@@ -4169,11 +4163,7 @@ namespace System.Windows.Forms
         protected override void OnVisibleChanged(EventArgs e)
         {
             UpdateRenderSizeGrip();
-            Form? mdiParent = MdiParentInternal;
-            if (mdiParent is not null)
-            {
-                mdiParent.UpdateMdiWindowListStrip();
-            }
+            MdiParentInternal?.UpdateMdiWindowListStrip();
 
             base.OnVisibleChanged(e);
 
@@ -4183,10 +4173,10 @@ namespace System.Windows.Forms
             // we have to respect that setting each time our form is made visible.
             bool data = false;
             if (IsHandleCreated
-                    && Visible
-                    && (AcceptButton is not null)
-                    && User32.SystemParametersInfoW(User32.SPI.GETSNAPTODEFBUTTON, ref data)
-                    && data)
+                && Visible
+                && (AcceptButton is not null)
+                && PInvoke.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETSNAPTODEFBUTTON, ref data)
+                && data)
             {
                 Control button = (Control)AcceptButton;
                 var ptToSnap = new Point(button.Left + button.Width / 2, button.Top + button.Height / 2);
@@ -4240,10 +4230,7 @@ namespace System.Windows.Forms
                 Size size = ClientSize;
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (_sizeGripRenderer is null)
-                    {
-                        _sizeGripRenderer = new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
-                    }
+                    _sizeGripRenderer ??= new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
 
                     using var hdc = new DeviceContextHdcScope(e);
                     _sizeGripRenderer.DrawBackground(
@@ -4640,14 +4627,17 @@ namespace System.Windows.Forms
             return e.Cancel;
         }
 
-        internal override void RecreateHandleCore()
+        internal unsafe override void RecreateHandleCore()
         {
-            var wp = new User32.WINDOWPLACEMENT();
+            WINDOWPLACEMENT wp = default;
+
             FormStartPosition oldStartPosition = FormStartPosition.Manual;
 
             if (!IsMdiChild && (WindowState == FormWindowState.Minimized || WindowState == FormWindowState.Maximized))
             {
-                User32.GetWindowPlacement(Handle, out wp);
+                wp.length = (uint)sizeof(WINDOWPLACEMENT);
+                bool result = PInvoke.GetWindowPlacement(HWND, &wp);
+                Debug.Assert(result);
             }
 
             if (StartPosition != FormStartPosition.Manual)
@@ -4675,8 +4665,6 @@ namespace System.Windows.Forms
             // Set the owner of the windows in the list back to the new Form's handle
             callback?.SetOwners(Handle);
 
-            GC.KeepAlive(this);
-
             if (oldStartPosition != FormStartPosition.Manual)
             {
                 StartPosition = oldStartPosition;
@@ -4684,8 +4672,11 @@ namespace System.Windows.Forms
 
             if (wp.length > 0)
             {
-                User32.SetWindowPlacement(this, ref wp);
+                bool result = PInvoke.SetWindowPlacement(HWND, &wp);
+                Debug.Assert(result);
             }
+
+            GC.KeepAlive(this);
         }
 
         /// <summary>
@@ -4892,10 +4883,7 @@ namespace System.Windows.Forms
 
                 foreach (Control control in Controls)
                 {
-                    if (control is not null)
-                    {
-                        control.Scale(x, y);
-                    }
+                    control?.Scale(x, y);
                 }
             }
             finally
@@ -5075,16 +5063,10 @@ namespace System.Windows.Forms
 
             if (defaultButton != button)
             {
-                if (defaultButton is not null)
-                {
-                    defaultButton.NotifyDefault(false);
-                }
+                defaultButton?.NotifyDefault(false);
 
                 Properties.SetObject(PropDefaultButton, button);
-                if (button is not null)
-                {
-                    button.NotifyDefault(true);
-                }
+                button?.NotifyDefault(true);
             }
         }
 
@@ -5626,10 +5608,9 @@ namespace System.Windows.Forms
                     // (set to null) so that duplicate control buttons are not placed on the menu bar when
                     // an ole menu is being removed.
                     // Make MDI forget the mdi item position.
-                    IntPtr? dummyMenu = Properties.GetObject(PropDummyMdiMenu) as IntPtr?;
-                    if (!dummyMenu.HasValue || dummyMenu.Value == IntPtr.Zero || recreateMenu)
+                    if (!Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
                     {
-                        dummyMenu = User32.CreateMenu();
+                        dummyMenu = PInvoke.CreateMenu();
                         Properties.SetObject(PropDummyMdiMenu, dummyMenu);
                     }
 
@@ -5822,10 +5803,7 @@ namespace System.Windows.Forms
                 MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
                 if (sourceMenuStrip is not null && sourceMenuStrip.MdiWindowListItem is not null)
                 {
-                    if (MdiWindowListStrip is null)
-                    {
-                        MdiWindowListStrip = new MdiWindowListStrip();
-                    }
+                    MdiWindowListStrip ??= new MdiWindowListStrip();
 
                     int nSubItems = sourceMenuStrip.MdiWindowListItem.DropDownItems.Count;
                     bool shouldIncludeSeparator = (nSubItems > 0 &&
@@ -5923,104 +5901,110 @@ namespace System.Windows.Forms
 
                 if (redrawFrame)
                 {
-                    User32.RedrawWindow(this, flags: User32.RDW.INVALIDATE | User32.RDW.FRAME);
+                    PInvoke.RedrawWindow(this, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_FRAME);
                 }
             }
         }
 
         /// <summary>
-        ///  Updated the window state from the handle, if created.
+        ///  Update the window state from the handle, if created.
         /// </summary>
-        //
-        // This function is called from all over the place, including my personal favorite,
-        // WM_ERASEBKGRND.  Seems that's one of the first messages we get when a user clicks the min/max
-        // button, even before WM_WINDOWPOSCHANGED.
-        private void UpdateWindowState()
+        private unsafe void UpdateWindowState()
         {
-            if (IsHandleCreated)
+            // This function is called from all over the place, including my personal favorite,
+            // WM_ERASEBKGRND.  Seems that's one of the first messages we get when a user clicks the min/max
+            // button, even before WM_WINDOWPOSCHANGED.
+
+            if (!IsHandleCreated)
             {
-                FormWindowState oldState = WindowState;
-                User32.GetWindowPlacement(this, out User32.WINDOWPLACEMENT wp);
+                return;
+            }
 
-                switch (wp.showCmd)
-                {
-                    case User32.SW.NORMAL:
-                    case User32.SW.RESTORE:
-                    case User32.SW.SHOW:
-                    case User32.SW.SHOWNA:
-                    case User32.SW.SHOWNOACTIVATE:
-                        if (_formState[FormStateWindowState] != (int)FormWindowState.Normal)
-                        {
-                            _formState[FormStateWindowState] = (int)FormWindowState.Normal;
-                        }
+            FormWindowState oldState = WindowState;
+            WINDOWPLACEMENT wp = new()
+            {
+                length = (uint)sizeof(WINDOWPLACEMENT)
+            };
+            PInvoke.GetWindowPlacement(HWND, &wp);
 
-                        break;
-                    case User32.SW.SHOWMAXIMIZED:
-                        if (_formState[FormStateMdiChildMax] == 0)
-                        {
-                            _formState[FormStateWindowState] = (int)FormWindowState.Maximized;
-                        }
-
-                        break;
-                    case User32.SW.SHOWMINIMIZED:
-                    case User32.SW.MINIMIZE:
-                    case User32.SW.SHOWMINNOACTIVE:
-                        if (_formState[FormStateMdiChildMax] == 0)
-                        {
-                            _formState[FormStateWindowState] = (int)FormWindowState.Minimized;
-                        }
-
-                        break;
-                    case User32.SW.HIDE:
-                    default:
-                        break;
-                }
-
-                // If we used to be normal and we just became minimized or maximized,
-                // stash off our current bounds so we can properly restore.
-                if (oldState == FormWindowState.Normal && WindowState != FormWindowState.Normal)
-                {
-                    if (WindowState == FormWindowState.Minimized)
+            switch (wp.showCmd)
+            {
+                case SHOW_WINDOW_CMD.SW_NORMAL:
+                case SHOW_WINDOW_CMD.SW_RESTORE:
+                case SHOW_WINDOW_CMD.SW_SHOW:
+                case SHOW_WINDOW_CMD.SW_SHOWNA:
+                case SHOW_WINDOW_CMD.SW_SHOWNOACTIVATE:
+                    if (_formState[FormStateWindowState] != (int)FormWindowState.Normal)
                     {
-                        SuspendLayoutForMinimize();
+                        _formState[FormStateWindowState] = (int)FormWindowState.Normal;
                     }
 
-                    if (!OsVersion.IsWindows11_OrGreater)
+                    break;
+                case SHOW_WINDOW_CMD.SW_SHOWMAXIMIZED:
+                    if (_formState[FormStateMdiChildMax] == 0)
                     {
-                        _restoredWindowBounds.Size = ClientSize;
-                        _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 1;
-                        _formStateEx[FormStateExWindowBoundsHeightIsClientSize] = 1;
-                        _restoredWindowBoundsSpecified = BoundsSpecified.Size;
-                        _restoredWindowBounds.Location = Location;
-                        _restoredWindowBoundsSpecified |= BoundsSpecified.Location;
+                        _formState[FormStateWindowState] = (int)FormWindowState.Maximized;
                     }
 
-                    // stash off restoreBounds As well...
-                    _restoreBounds.Size = Size;
-                    _restoreBounds.Location = Location;
+                    break;
+                case SHOW_WINDOW_CMD.SW_SHOWMINIMIZED:
+                case SHOW_WINDOW_CMD.SW_MINIMIZE:
+                case SHOW_WINDOW_CMD.SW_SHOWMINNOACTIVE:
+                    if (_formState[FormStateMdiChildMax] == 0)
+                    {
+                        _formState[FormStateWindowState] = (int)FormWindowState.Minimized;
+                    }
+
+                    break;
+                case SHOW_WINDOW_CMD.SW_HIDE:
+                default:
+                    break;
+            }
+
+            // If we used to be normal and we just became minimized or maximized,
+            // stash off our current bounds so we can properly restore.
+            if (oldState == FormWindowState.Normal && WindowState != FormWindowState.Normal)
+            {
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    SuspendLayoutForMinimize();
                 }
 
-                // If we just became normal or maximized resume
-                if (oldState == FormWindowState.Minimized && WindowState != FormWindowState.Minimized)
+                if (!OsVersion.IsWindows11_OrGreater())
                 {
-                    ResumeLayoutFromMinimize();
+                    _restoredWindowBounds.Size = ClientSize;
+                    _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 1;
+                    _formStateEx[FormStateExWindowBoundsHeightIsClientSize] = 1;
+                    _restoredWindowBoundsSpecified = BoundsSpecified.Size;
+                    _restoredWindowBounds.Location = Location;
+                    _restoredWindowBoundsSpecified |= BoundsSpecified.Location;
                 }
 
-                switch (WindowState)
-                {
-                    case FormWindowState.Normal:
-                        SetState(States.SizeLockedByOS, false);
-                        break;
-                    case FormWindowState.Maximized:
-                    case FormWindowState.Minimized:
-                        SetState(States.SizeLockedByOS, true);
-                        break;
-                }
+                // stash off restoreBounds As well...
+                _restoreBounds.Size = Size;
+                _restoreBounds.Location = Location;
+            }
 
-                if (oldState != WindowState)
-                {
-                    AdjustSystemMenu();
-                }
+            // If we just became normal or maximized resume
+            if (oldState == FormWindowState.Minimized && WindowState != FormWindowState.Minimized)
+            {
+                ResumeLayoutFromMinimize();
+            }
+
+            switch (WindowState)
+            {
+                case FormWindowState.Normal:
+                    SetState(States.SizeLockedByOS, false);
+                    break;
+                case FormWindowState.Maximized:
+                case FormWindowState.Minimized:
+                    SetState(States.SizeLockedByOS, true);
+                    break;
+            }
+
+            if (oldState != WindowState)
+            {
+                AdjustSystemMenu();
             }
         }
 
@@ -6088,12 +6072,12 @@ namespace System.Windows.Forms
             // the specified state, unless it's _specified_ max or min
             if (TopLevel && (si.dwFlags & STARTUPINFOW_FLAGS.STARTF_USESHOWWINDOW) != 0)
             {
-                switch ((User32.SW)si.wShowWindow)
+                switch ((SHOW_WINDOW_CMD)si.wShowWindow)
                 {
-                    case User32.SW.MAXIMIZE:
+                    case SHOW_WINDOW_CMD.SW_MAXIMIZE:
                         WindowState = FormWindowState.Maximized;
                         break;
-                    case User32.SW.MINIMIZE:
+                    case SHOW_WINDOW_CMD.SW_MINIMIZE:
                         WindowState = FormWindowState.Minimized;
                         break;
                 }
@@ -6504,7 +6488,7 @@ namespace System.Windows.Forms
                 case User32.SC.CONTEXTHELP:
                     CancelEventArgs e = new CancelEventArgs(false);
                     OnHelpButtonClicked(e);
-                    if (e.Cancel == true)
+                    if (e.Cancel)
                     {
                         callDefault = false;
                     }

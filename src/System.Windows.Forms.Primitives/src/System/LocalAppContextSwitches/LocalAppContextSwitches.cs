@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Primitives
                     return false;
                 }
 
-                if (OsVersion.IsWindows10_1703OrGreater)
+                if (OsVersion.IsWindows10_1703OrGreater())
                 {
                     if (s_targetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
                     {

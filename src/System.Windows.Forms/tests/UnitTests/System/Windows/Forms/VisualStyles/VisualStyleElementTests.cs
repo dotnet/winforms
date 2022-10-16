@@ -34,7 +34,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         public static IEnumerable<object[]> KnownElements_TestData()
         {
             // Identity function to avoid constant casting
-            Func<VisualStyleElement> I(Func<VisualStyleElement> factory) => factory;
+            static Func<VisualStyleElement> I(Func<VisualStyleElement> factory) => factory;
 
             yield return new object[] { I(() => VisualStyleElement.Button.PushButton.Normal), "BUTTON", 1, 1 };
             yield return new object[] { I(() => VisualStyleElement.Button.PushButton.Hot), "BUTTON", 1, 2 };

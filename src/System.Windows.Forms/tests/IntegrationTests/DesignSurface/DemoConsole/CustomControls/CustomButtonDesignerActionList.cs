@@ -89,7 +89,7 @@ namespace TestConsole
             PropertyDescriptor pd = TypeDescriptor.GetProperties(_control)[propertyName];
             if (pd is null)
             {
-                throw new ArgumentException("Property " + propertyName + " not found in " + typeof(CustomButton).Name);
+                throw new ArgumentException("Property " + propertyName + " not found in " + nameof(CustomButton));
             }
             else
             {

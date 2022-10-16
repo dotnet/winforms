@@ -199,20 +199,11 @@ namespace System.Windows.Forms.Design.Behavior
                 Rectangle rect = dragImageRect;
                 rect.Location = MapPointFromSourceToTarget(rect.Location);
 
-                if (graphicsTarget != null)
-                {
-                    graphicsTarget.SetClip(rect);
-                }
+                graphicsTarget?.SetClip(rect);
 
-                if (behaviorServiceTarget != null)
-                {
-                    behaviorServiceTarget.Invalidate(rect);
-                }
+                behaviorServiceTarget?.Invalidate(rect);
 
-                if (graphicsTarget != null)
-                {
-                    graphicsTarget.ResetClip();
-                }
+                graphicsTarget?.ResetClip();
             }
         }
 
@@ -249,11 +240,8 @@ namespace System.Windows.Forms.Design.Behavior
                 // Hook the control to its new designerHost
                 SetDesignerHost(currentControl);
                 currentControl.Parent = dragTarget;
-                if (propLoc != null)
-                {
-                    //Make sure and set the Visible property to the correct value
-                    propLoc.SetValue(currentControl, visibleState);
-                }
+                //Make sure and set the Visible property to the correct value
+                propLoc?.SetValue(currentControl, visibleState);
             }
             else if (!localDrag && currentControl.Parent.Equals(dragSource))
             {
@@ -341,10 +329,7 @@ namespace System.Windows.Forms.Design.Behavior
             IComponentChangeService componentChangeSvcSource = (IComponentChangeService)serviceProviderSource.GetService(typeof(IComponentChangeService));
             IComponentChangeService componentChangeSvcTarget = (IComponentChangeService)serviceProviderTarget.GetService(typeof(IComponentChangeService));
 
-            if (dragAssistanceManager != null)
-            {
-                dragAssistanceManager.OnMouseUp();
-            }
+            dragAssistanceManager?.OnMouseUp();
 
             // If we are dropping between hosts, we want to set the selection in the new host to be the components that we are dropping. ... or if we are copying
             ISelectionService selSvc = null;
@@ -469,10 +454,7 @@ namespace System.Windows.Forms.Design.Behavior
                         // everything is fine, carry on...
                         SetLocationPropertyAndChildIndex(primaryComponentIndex, dragTarget, initialDropPoint,
                                                             shareParent ? dragComponents[primaryComponentIndex].zorderIndex : 0, allowSetChildIndexOnDrop);
-                        if (selSvc != null)
-                        {
-                            selSvc.SetSelectedComponents(new object[] { dragComponents[primaryComponentIndex].dragComponent }, SelectionTypes.Primary | SelectionTypes.Replace);
-                        }
+                        selSvc?.SetSelectedComponents(new object[] { dragComponents[primaryComponentIndex].dragComponent }, SelectionTypes.Primary | SelectionTypes.Replace);
 
                         for (int i = 0; i < dragComponents.Length; i++)
                         {
@@ -487,10 +469,7 @@ namespace System.Windows.Forms.Design.Behavior
                                                             initialDropPoint.Y + dragComponents[i].positionOffset.Y);
                             SetLocationPropertyAndChildIndex(i, dragTarget, dropPoint,
                                                                 shareParent ? dragComponents[i].zorderIndex : 0, allowSetChildIndexOnDrop);
-                            if (selSvc != null)
-                            {
-                                selSvc.SetSelectedComponents(new object[] { dragComponents[i].dragComponent }, SelectionTypes.Add);
-                            }
+                            selSvc?.SetSelectedComponents(new object[] { dragComponents[i].dragComponent }, SelectionTypes.Add);
                         }
 
                         if ((!localDrag || performCopy) && componentChangeSvcSource != null && componentChangeSvcTarget != null)
@@ -516,11 +495,8 @@ namespace System.Windows.Forms.Design.Behavior
                         // Rearrange the Component Tray - if we have to
                         if (performCopy)
                         {
-                            if (tray is null)
-                            {
-                                // the target did not have a tray already, so let's go get it - if there is one
-                                tray = serviceProviderTarget.GetService(typeof(ComponentTray)) as ComponentTray;
-                            }
+                            // the target did not have a tray already, so let's go get it - if there is one
+                            tray ??= serviceProviderTarget.GetService(typeof(ComponentTray)) as ComponentTray;
 
                             if (tray != null)
                             {
@@ -556,15 +532,9 @@ namespace System.Windows.Forms.Design.Behavior
 
                     finally
                     {
-                        if (transSource != null)
-                        {
-                            transSource.Cancel();
-                        }
+                        transSource?.Cancel();
 
-                        if (transTarget != null)
-                        {
-                            transTarget.Cancel();
-                        }
+                        transTarget?.Cancel();
                     }
                 }
             }
@@ -581,12 +551,9 @@ namespace System.Windows.Forms.Design.Behavior
 
                 // Even though we call CleanupDrag(false) twice (see above), this method guards against doing the wrong thing.
                 CleanupDrag(false);
-                if (statusCommandUITarget != null)
-                {
-                    // if selSvs is not null, then we either did a copy, or moved between forms, so use it to set the right info
-                    statusCommandUITarget.SetStatusInformation(selSvc is null ? dragComponents[primaryComponentIndex].dragComponent as Component :
-                                                                                selSvc.PrimarySelection as Component);
-                }
+                // if selSvs is not null, then we either did a copy, or moved between forms, so use it to set the right info
+                statusCommandUITarget?.SetStatusInformation(selSvc is null ? dragComponents[primaryComponentIndex].dragComponent as Component :
+                                                                            selSvc.PrimarySelection as Component);
             }
 
             // clear the last feedback loc
@@ -610,10 +577,7 @@ namespace System.Windows.Forms.Design.Behavior
                     clearDragImageRect = dragImageRect;
                 }
 
-                if (dragAssistanceManager != null)
-                {
-                    dragAssistanceManager.EraseSnapLines();
-                }
+                dragAssistanceManager?.EraseSnapLines();
 
                 return;
             }
@@ -702,10 +666,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 controlRect.Location = behaviorServiceTarget.MapAdornerWindowPoint(IntPtr.Zero, controlRect.Location);
                                 if (i == 0)
                                 {
-                                    if (dragImageRegion != null)
-                                    {
-                                        dragImageRegion.Dispose();
-                                    }
+                                    dragImageRegion?.Dispose();
 
                                     dragImageRegion = new Region(controlRect);
                                 }
@@ -716,10 +677,7 @@ namespace System.Windows.Forms.Design.Behavior
                             }
                         }
 
-                        if (graphicsTarget != null)
-                        {
-                            graphicsTarget.Dispose();
-                        }
+                        graphicsTarget?.Dispose();
 
                         graphicsTarget = behaviorServiceTarget.AdornerWindowGraphics;
 
@@ -739,11 +697,8 @@ namespace System.Windows.Forms.Design.Behavior
                 // Create new dragassistancemanager if needed
                 if (createNewDragAssistance && behaviorServiceTarget.UseSnapLines)
                 {
-                    if (dragAssistanceManager != null)
-                    {
-                        //erase any snaplines (if we had any)
-                        dragAssistanceManager.EraseSnapLines();
-                    }
+                    //erase any snaplines (if we had any)
+                    dragAssistanceManager?.EraseSnapLines();
 
                     dragAssistanceManager = new DragAssistanceManager(serviceProviderTarget, graphicsTarget, dragObjects, null, lastEffect == DragDropEffects.Copy);
                 }
@@ -832,10 +787,7 @@ namespace System.Windows.Forms.Design.Behavior
                         dropPoint.Offset(-c.Width, 0);
                     }
 
-                    if (statusCommandUITarget != null)
-                    {
-                        statusCommandUITarget.SetStatusInformation(c, dropPoint);
-                    }
+                    statusCommandUITarget?.SetStatusInformation(c, dropPoint);
                 }
 
                 // allow any snaplines to be drawn above our drag images as long as the alt key is not pressed and the mouse is over the root comp
@@ -1137,10 +1089,7 @@ namespace System.Windows.Forms.Design.Behavior
                 ShowHideDragControls(true);
                 try
                 {
-                    if (suspendedParent != null)
-                    {
-                        suspendedParent.ResumeLayout();
-                    }
+                    suspendedParent?.ResumeLayout();
                 }
 
                 finally
@@ -1155,10 +1104,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
 
                     // Layout may have caused controls to resize, which would mean their BodyGlyphs are wrong.  We need to sync these.
-                    if (behaviorServiceSource != null)
-                    {
-                        behaviorServiceSource.SyncSelection();
-                    }
+                    behaviorServiceSource?.SyncSelection();
 
                     if (dragImageRegion != null)
                     {

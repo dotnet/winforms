@@ -40,10 +40,7 @@ namespace System.Windows.Forms.Design
         public void InsertItems()
         {
             DesignerActionUIService actionUIService = (DesignerActionUIService)_host.GetService(typeof(DesignerActionUIService));
-            if (actionUIService != null)
-            {
-                actionUIService.HideUI(_designer.Component);
-            }
+            actionUIService?.HideUI(_designer.Component);
 
             Cursor current = Cursor.Current;
             try
@@ -178,10 +175,7 @@ namespace System.Windows.Forms.Design
                             {
                                 PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(item)["Image"];
                                 Debug.Assert(imageProperty != null, "Could not find 'Image' property in ToolStripItem.");
-                                if (imageProperty != null)
-                                {
-                                    imageProperty.SetValue(item, image);
-                                }
+                                imageProperty?.SetValue(item, image);
 
                                 item.ImageTransparentColor = Color.Magenta;
                             }
@@ -247,17 +241,11 @@ namespace System.Windows.Forms.Design
                 tool.ResumeLayout();
                 // Select the Main Menu...
                 ISelectionService selSvc = (ISelectionService)_provider.GetService(typeof(ISelectionService));
-                if (selSvc != null)
-                {
-                    selSvc.SetSelectedComponents(new object[] { _designer.Component });
-                }
+                selSvc?.SetSelectedComponents(new object[] { _designer.Component });
 
                 //Refresh the Glyph
                 DesignerActionUIService actionUIService = (DesignerActionUIService)_provider.GetService(typeof(DesignerActionUIService));
-                if (actionUIService != null)
-                {
-                    actionUIService.Refresh(_designer.Component);
-                }
+                actionUIService?.Refresh(_designer.Component);
 
                 // this will invalidate the Selection Glyphs.
                 SelectionManager selMgr = (SelectionManager)_provider.GetService(typeof(SelectionManager));
@@ -333,17 +321,11 @@ namespace System.Windows.Forms.Design
 
                         PropertyDescriptor displayStyleProperty = TypeDescriptor.GetProperties(item)["DisplayStyle"];
                         Debug.Assert(displayStyleProperty != null, "Could not find 'Text' property in ToolStripItem.");
-                        if (displayStyleProperty != null)
-                        {
-                            displayStyleProperty.SetValue(item, ToolStripItemDisplayStyle.Image);
-                        }
+                        displayStyleProperty?.SetValue(item, ToolStripItemDisplayStyle.Image);
 
                         PropertyDescriptor textProperty = TypeDescriptor.GetProperties(item)["Text"];
                         Debug.Assert(textProperty != null, "Could not find 'Text' property in ToolStripItem.");
-                        if (textProperty != null)
-                        {
-                            textProperty.SetValue(item, itemText);
-                        }
+                        textProperty?.SetValue(item, itemText);
 
                         Bitmap image = null;
                         try
@@ -359,10 +341,7 @@ namespace System.Windows.Forms.Design
                         {
                             PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(item)["Image"];
                             Debug.Assert(imageProperty != null, "Could not find 'Image' property in ToolStripItem.");
-                            if (imageProperty != null)
-                            {
-                                imageProperty.SetValue(item, image);
-                            }
+                            imageProperty?.SetValue(item, image);
 
                             item.ImageTransparentColor = Color.Magenta;
                         }
@@ -405,17 +384,11 @@ namespace System.Windows.Forms.Design
                 tool.ResumeLayout();
                 // Select the Main Menu...
                 ISelectionService selSvc = (ISelectionService)_provider.GetService(typeof(ISelectionService));
-                if (selSvc != null)
-                {
-                    selSvc.SetSelectedComponents(new object[] { _designer.Component });
-                }
+                selSvc?.SetSelectedComponents(new object[] { _designer.Component });
 
                 //Refresh the Glyph
                 DesignerActionUIService actionUIService = (DesignerActionUIService)_provider.GetService(typeof(DesignerActionUIService));
-                if (actionUIService != null)
-                {
-                    actionUIService.Refresh(_designer.Component);
-                }
+                actionUIService?.Refresh(_designer.Component);
 
                 // this will invalidate the Selection Glyphs.
                 SelectionManager selMgr = (SelectionManager)_provider.GetService(typeof(SelectionManager));

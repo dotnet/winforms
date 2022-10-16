@@ -27,7 +27,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Mask))]
     [Designer("System.Windows.Forms.Design.MaskedTextBoxDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionMaskedTextBox))]
-    public class MaskedTextBox : TextBoxBase
+    public partial class MaskedTextBox : TextBoxBase
     {
         // Consider: The MaskedTextBox control, when initialized with a non-null/empty mask, processes all
         // WM_CHAR messages and always sets the text using the SetWindowText Windows function in the furthest base
@@ -1136,6 +1136,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+        
         /// <summary>
         ///  The Text setter validates the input char by char, raising the MaskInputRejected event for invalid chars.
         ///  The Text getter returns the formatted text according to the IncludeLiterals and IncludePrompt properties.
@@ -1481,6 +1483,8 @@ namespace System.Windows.Forms
         {
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance() => new MaskedTextBoxAccessibleObject(this);
+
         /// <summary>
         ///  Creates a handle for this control. This method is called by the framework, this should
         ///  not be called directly. Inheriting classes should always call <c>base.CreateHandle</c> when overriding this method.
@@ -1800,7 +1804,17 @@ namespace System.Windows.Forms
             // Force repainting of the entire window frame.
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                RedrawWindow(this, flags: RDW.INVALIDATE | RDW.FRAME);
+                PInvoke.RedrawWindow(this, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_FRAME);
+            }
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.SetFocus();
             }
         }
 
@@ -2030,6 +2044,11 @@ namespace System.Windows.Forms
             {
                 _flagState[IME_ENDING_COMPOSITION] = false;
             }
+
+            if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode))
+            {
+                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            }
         }
 
         /// <summary>
@@ -2060,6 +2079,20 @@ namespace System.Windows.Forms
             if (Events[EVENT_MASKINPUTREJECTED] is MaskInputRejectedEventHandler eh)
             {
                 eh(this, e);
+            }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            if (IsHandleCreated && IsAccessibilityObjectCreated)
+            {
+                // As there is no corresponding windows notification
+                // about text selection changed for TextBox assuming
+                // that any mouse down on textbox leads to change of
+                // the caret position and thereby change the selection.
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
         }
 

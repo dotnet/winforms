@@ -23,11 +23,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject? Parent => _parentAccessibleObject;
 
-            public override string? Name
-            {
-                get => Owner.AccessibleName ?? SR.DataGridView_AccEditingControlAccName;
-                set => base.Name = value;
-            }
+            public override string Name => Owner.AccessibleName ?? SR.DataGridView_AccEditingControlAccName;
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
@@ -60,13 +56,6 @@ namespace System.Windows.Forms
                         Owner.AccessibleRole == AccessibleRole.Default
                         => UiaCore.UIA.EditControlTypeId,
                     _ => base.GetPropertyValue(propertyID)
-                };
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => patternId switch
-                {
-                    UiaCore.UIA.ValuePatternId => true,
-                    _ => base.IsPatternSupported(patternId)
                 };
 
             /// <summary>

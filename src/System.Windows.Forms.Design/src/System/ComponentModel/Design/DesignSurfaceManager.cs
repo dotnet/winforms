@@ -112,10 +112,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_serviceContainer is null)
-                {
-                    _serviceContainer = new ServiceContainer(_parentProvider);
-                }
+                _serviceContainer ??= new ServiceContainer(_parentProvider);
 
                 return _serviceContainer;
             }
@@ -303,10 +300,7 @@ namespace System.ComponentModel.Design
             // the ones providing the event service, then whoever is providing
             // it will be responsible for updating it when new designers are created.
             DesignerEventService eventService = GetService(typeof(IDesignerEventService)) as DesignerEventService;
-            if (eventService is not null)
-            {
-                eventService.OnCreateDesigner(surface);
-            }
+            eventService?.OnCreateDesigner(surface);
 
             return surface;
         }
@@ -461,10 +455,7 @@ namespace System.ComponentModel.Design
 
                 object service = _primaryProvider.GetService(serviceType);
 
-                if (service is null)
-                {
-                    service = _secondaryProvider.GetService(serviceType);
-                }
+                service ??= _secondaryProvider.GetService(serviceType);
 
                 return service;
             }

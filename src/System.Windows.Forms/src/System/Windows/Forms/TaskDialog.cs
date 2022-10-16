@@ -1002,10 +1002,7 @@ namespace System.Windows.Forms
                                 // AllowCancel but not adding a "Cancel" button), we need
                                 // to create a new instance and save it, so that we can
                                 // return that instance after TaskDialogIndirect() returns.
-                                if (button is null)
-                                {
-                                    button = CreatePlaceholderButton((TaskDialogResult)buttonID);
-                                }
+                                button ??= CreatePlaceholderButton((TaskDialogResult)buttonID);
 
                                 // Cache the result button if we return S_OK.
                                 _resultButton = (button, buttonID);

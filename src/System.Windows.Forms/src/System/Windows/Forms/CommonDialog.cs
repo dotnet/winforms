@@ -93,12 +93,11 @@ namespace System.Windows.Forms
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
             int x = screen.X + (screen.Width - r.right + r.left) / 2;
             int y = screen.Y + (screen.Height - r.bottom + r.top) / 3;
-            User32.SetWindowPos(
+            PInvoke.SetWindowPos(
                 hwnd,
-                User32.HWND_TOP,
-                x,
-                y,
-                flags: User32.SWP.NOSIZE | User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
+                HWND.HWND_TOP,
+                x, y, 0, 0,
+                SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
         }
 
         /// <summary>

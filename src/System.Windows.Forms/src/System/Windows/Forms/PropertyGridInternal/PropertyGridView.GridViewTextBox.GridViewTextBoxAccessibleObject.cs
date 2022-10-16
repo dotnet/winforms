@@ -75,12 +75,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _ => base.GetPropertyValue(propertyID)
                 };
 
-                internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
-                {
-                    UiaCore.UIA.ValuePatternId => true,
-                    _ => base.IsPatternSupported(patternId)
-                };
-
                 internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
                 {
                     get
@@ -102,18 +96,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return name;
                         }
-                        else
-                        {
-                            GridEntry selectedGridEntry = _owningPropertyGridView.SelectedGridEntry;
-                            if (selectedGridEntry is not null)
-                            {
-                                return selectedGridEntry.AccessibilityObject.Name;
-                            }
-                        }
 
-                        return base.Name;
+                        return _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject.Name ?? base.Name;
                     }
-                    set => base.Name = value;
                 }
 
                 internal override int[] RuntimeId
@@ -127,12 +112,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 internal override bool IsReadOnly
                     => _owningPropertyGridView.SelectedGridEntry is not PropertyDescriptorGridEntry propertyDescriptorGridEntry
                         || propertyDescriptorGridEntry.IsPropertyReadOnly;
-
-                internal override void SetFocus()
-                {
-                    RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-                    base.SetFocus();
-                }
             }
         }
     }

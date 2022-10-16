@@ -6,10 +6,10 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static BOOL CloseHandle(IHandle handle)
+        public static BOOL CloseHandle<T>(T handle) where T : IHandle<HANDLE>
         {
-            BOOL result = CloseHandle((HANDLE)handle.Handle);
-            GC.KeepAlive(handle);
+            BOOL result = CloseHandle(handle.Handle);
+            GC.KeepAlive(handle.Wrapper);
             return result;
         }
     }

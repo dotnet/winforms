@@ -16,10 +16,7 @@ namespace System.Windows.Forms.Layout
 
             internal SorterObjectArray(object[] keys, IComparer comparer)
             {
-                if (comparer is null)
-                {
-                    comparer = Comparer.Default;
-                }
+                comparer ??= Comparer.Default;
 
                 this.keys = keys;
                 this.comparer = comparer;

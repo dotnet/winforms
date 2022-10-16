@@ -108,10 +108,7 @@ namespace System.Windows.Forms
                 SetFlag(FlagAutoEllipsis, value);
                 if (value)
                 {
-                    if (_textToolTip is null)
-                    {
-                        _textToolTip = new ToolTip();
-                    }
+                    _textToolTip ??= new ToolTip();
                 }
 
                 Invalidate();
@@ -395,10 +392,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_flatAppearance is null)
-                {
-                    _flatAppearance = new FlatButtonAppearance(this);
-                }
+                _flatAppearance ??= new FlatButtonAppearance(this);
 
                 return _flatAppearance;
             }
@@ -964,10 +958,7 @@ namespace System.Windows.Forms
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             SetFlag(FlagMouseOver, false);
-            if (_textToolTip is not null)
-            {
-                _textToolTip.Hide(this);
-            }
+            _textToolTip?.Hide(this);
 
             Invalidate();
             // call base last, so if it invokes any listeners that disable the button, we

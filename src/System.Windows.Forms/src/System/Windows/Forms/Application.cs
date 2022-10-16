@@ -328,7 +328,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the forms collection associated with this application.
         /// </summary>
-        public static FormCollection OpenForms => s_forms ?? (s_forms = new FormCollection());
+        public static FormCollection OpenForms => s_forms ??= new FormCollection();
 
         /// <summary>
         ///  Gets
@@ -464,19 +464,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_safeTopLevelCaptionSuffix is null)
-                {
-                    s_safeTopLevelCaptionSuffix = SR.SafeTopLevelCaptionFormat; // 0 - original, 1 - zone, 2 - site
-                }
+                s_safeTopLevelCaptionSuffix ??= SR.SafeTopLevelCaptionFormat; // 0 - original, 1 - zone, 2 - site
 
                 return s_safeTopLevelCaptionSuffix;
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 s_safeTopLevelCaptionSuffix = value;
             }
@@ -489,12 +483,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_startupPath is null)
-                {
-                    // StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
-                    // startupPath = Path.GetDirectoryName(sb.ToString());
-                    s_startupPath = AppContext.BaseDirectory;
-                }
+                // StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
+                // startupPath = Path.GetDirectoryName(sb.ToString());
+                s_startupPath ??= AppContext.BaseDirectory;
 
                 return s_startupPath;
             }
@@ -599,15 +590,19 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe static BOOL SendThemeChanged(HWND hwnd)
         {
-            uint thisPID = PInvoke.GetCurrentProcessId();
             uint processId;
             PInvoke.GetWindowThreadProcessId(hwnd, &processId);
-            if (processId == thisPID && PInvoke.IsWindowVisible(hwnd))
+            if (processId == PInvoke.GetCurrentProcessId() && PInvoke.IsWindowVisible(hwnd))
             {
                 SendThemeChangedRecursive(hwnd);
-                User32.RedrawWindow(
+                PInvoke.RedrawWindow(
                     hwnd,
-                    flags: User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
+                    lprcUpdate: (RECT*)null,
+                    HRGN.Null,
+                    REDRAW_WINDOW_FLAGS.RDW_INVALIDATE
+                        | REDRAW_WINDOW_FLAGS.RDW_FRAME
+                        | REDRAW_WINDOW_FLAGS.RDW_ERASE
+                        | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN);
             }
 
             return true;
@@ -642,10 +637,7 @@ namespace System.Windows.Forms
         {
             lock (s_internalSyncObject)
             {
-                if (s_eventHandlers is null)
-                {
-                    s_eventHandlers = new EventHandlerList();
-                }
+                s_eventHandlers ??= new EventHandlerList();
 
                 s_eventHandlers.AddHandler(key, value);
             }
@@ -1110,10 +1102,7 @@ namespace System.Windows.Forms
         internal static void UnparkHandle(IHandle<HWND> handle, DPI_AWARENESS_CONTEXT context)
         {
             ThreadContext threadContext = GetContextForHandle(handle);
-            if (threadContext is not null)
-            {
-                threadContext.GetParkingWindow(context).UnparkHandle(handle);
-            }
+            threadContext?.GetParkingWindow(context).UnparkHandle(handle);
         }
 
         /// <summary>
@@ -1211,7 +1200,7 @@ namespace System.Windows.Forms
         /// <param name="textScaleFactor">The scaling factor in the range [1.0, 2.25].</param>
         internal static void ScaleDefaultFont(float textScaleFactor)
         {
-            if (s_defaultFont is null || !OsVersion.IsWindows10_1507OrGreater)
+            if (s_defaultFont is null || !OsVersion.IsWindows10_1507OrGreater())
             {
                 return;
             }

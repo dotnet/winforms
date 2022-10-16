@@ -58,10 +58,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_menuCommandService is null)
-                {
-                    _menuCommandService = (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
-                }
+                _menuCommandService ??= (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
 
                 return _menuCommandService;
             }

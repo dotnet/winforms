@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Globalization;
+
 namespace System.Windows.Forms
 {
-    using System.ComponentModel;
-    using System.Globalization;
-
     /// <summary>
     ///  TreeViewImageIndexConverter is a class that can be used to convert
     ///  image index values one data type to another.

@@ -194,20 +194,14 @@ namespace System.Windows.Forms.Layout
             {
                 get
                 {
-                    if (_rowStyles is null)
-                    {
-                        _rowStyles = new TableLayoutRowStyleCollection(_container);
-                    }
+                    _rowStyles ??= new TableLayoutRowStyleCollection(_container);
 
                     return _rowStyles;
                 }
                 set
                 {
                     _rowStyles = value;
-                    if (_rowStyles is not null)
-                    {
-                        _rowStyles.EnsureOwnership(_container);
-                    }
+                    _rowStyles?.EnsureOwnership(_container);
                 }
             }
 
@@ -215,20 +209,14 @@ namespace System.Windows.Forms.Layout
             {
                 get
                 {
-                    if (_colStyles is null)
-                    {
-                        _colStyles = new TableLayoutColumnStyleCollection(_container);
-                    }
+                    _colStyles ??= new TableLayoutColumnStyleCollection(_container);
 
                     return _colStyles;
                 }
                 set
                 {
                     _colStyles = value;
-                    if (_colStyles is not null)
-                    {
-                        _colStyles.EnsureOwnership(_container);
-                    }
+                    _colStyles?.EnsureOwnership(_container);
                 }
             }
 

@@ -65,8 +65,7 @@ namespace System
 
             // To make it easier to write a class wrapper with a number of delegates,
             // we'll take the name from the delegate itself when unspecified.
-            if (methodName is null)
-                methodName = type.Name;
+            methodName ??= type.Name;
 
             MethodInfo methodInfo = s_type.GetMethod(
                 methodName,

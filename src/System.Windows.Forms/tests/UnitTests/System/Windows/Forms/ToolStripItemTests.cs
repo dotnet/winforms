@@ -9,11 +9,10 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class ToolStripItemTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

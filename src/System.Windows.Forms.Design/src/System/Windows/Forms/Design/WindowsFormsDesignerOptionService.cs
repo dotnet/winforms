@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design
     {
         private DesignerOptions _options;
 
-        public virtual DesignerOptions CompatibilityOptions => _options ?? (_options = new DesignerOptions());
+        public virtual DesignerOptions CompatibilityOptions => _options ??= new DesignerOptions();
 
         /// <summary>
         ///  This method is called on demand the first time a user asks for child options or

@@ -415,10 +415,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (currentSnapComponent == null)
-            {
-                currentSnapComponent = host.RootComponent;
-            }
+            currentSnapComponent ??= host.RootComponent;
 
             props = TypeDescriptor.GetProperties(currentSnapComponent);
 
@@ -790,7 +787,7 @@ namespace System.Windows.Forms.Design
                                                 if (propIntegralHeight != null)
                                                 {
                                                     object value = propIntegralHeight.GetValue(component);
-                                                    if (value is bool && (bool)value == true)
+                                                    if (value is bool && (bool)value)
                                                     {
                                                         PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(component)["ItemHeight"];
                                                         if (propItemHeight != null)
@@ -821,10 +818,7 @@ namespace System.Windows.Forms.Design
 
                             finally
                             {
-                                if (trans != null)
-                                {
-                                    trans.Commit();
-                                }
+                                trans?.Commit();
 
                                 if (dragManager != null)
                                 {
@@ -917,8 +911,7 @@ namespace System.Windows.Forms.Design
                         }
                         finally
                         {
-                            if (trans != null)
-                                trans.Commit();
+                            trans?.Commit();
                         }
                     }
                 }
@@ -1083,8 +1076,7 @@ namespace System.Windows.Forms.Design
                                             if (ex == CheckoutException.Canceled)
                                             {
                                                 // If the user canceled the check out then cancel the transaction
-                                                if (trans != null)
-                                                    trans.Cancel();
+                                                trans?.Cancel();
                                                 return;
                                             }
 
@@ -1113,18 +1105,12 @@ namespace System.Windows.Forms.Design
                                 // we do this backwards to maintain zorder
                                 Control otherControl = selectedComponents[len - i - 1] as Control;
 
-                                if (otherControl != null)
-                                {
-                                    otherControl.BringToFront();
-                                }
+                                otherControl?.BringToFront();
                             }
                             else if (cmdID == StandardCommands.SendToBack)
                             {
                                 Control control = selectedComponents[i] as Control;
-                                if (control != null)
-                                {
-                                    control.SendToBack();
-                                }
+                                control?.SendToBack();
                             }
                         }
                     }
@@ -1215,7 +1201,7 @@ namespace System.Windows.Forms.Design
             //Get the locked property of the base control first...
             //
             PropertyDescriptor lockedProp = TypeDescriptor.GetProperties(baseControl)["Locked"];
-            if (lockedProp != null && ((bool)lockedProp.GetValue(baseControl)) == true)
+            if (lockedProp != null && ((bool)lockedProp.GetValue(baseControl)))
             {
                 cmd.Checked = true;
                 return;
@@ -1233,7 +1219,7 @@ namespace System.Windows.Forms.Design
             foreach (object component in baseDesigner.AssociatedComponents)
             {
                 lockedProp = TypeDescriptor.GetProperties(component)["Locked"];
-                if (lockedProp != null && ((bool)lockedProp.GetValue(component)) == true)
+                if (lockedProp != null && ((bool)lockedProp.GetValue(component)))
                 {
                     cmd.Checked = true;
                     return;
@@ -1551,10 +1537,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (targetSelection == null)
-                {
-                    targetSelection = baseCtl;
-                }
+                targetSelection ??= baseCtl;
             }
 
             selSvc.SetSelectedComponents(new object[] { targetSelection }, SelectionTypes.Replace);

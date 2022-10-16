@@ -239,10 +239,7 @@ namespace System.Drawing.Design
         {
             get
             {
-                if (_properties is null)
-                {
-                    _properties = new LockableDictionary(this, 8 /* # of properties we have */);
-                }
+                _properties ??= new LockableDictionary(this, 8 /* # of properties we have */);
 
                 return _properties;
             }
@@ -427,20 +424,17 @@ namespace System.Drawing.Design
                 }
             }
 
-            if (propertyNames is null)
+            // For backwards compat, here are the default property
+            // names we use
+            propertyNames ??= new string[]
             {
-                // For backwards compat, here are the default property
-                // names we use
-                propertyNames = new string[]
-                {
                     "AssemblyName",
                     "Bitmap",
                     "DisplayName",
                     "Filter",
                     "IsTransient",
                     "TypeName"
-                };
-            }
+            };
 
             foreach (SerializationEntry entry in info)
             {
@@ -514,26 +508,17 @@ namespace System.Drawing.Design
 
                 case "DisplayName":
                 case "TypeName":
-                    if (value is null)
-                    {
-                        value = string.Empty;
-                    }
+                    value ??= string.Empty;
 
                     break;
 
                 case "Filter":
-                    if (value is null)
-                    {
-                        value = Array.Empty<ToolboxItemFilterAttribute>();
-                    }
+                    value ??= Array.Empty<ToolboxItemFilterAttribute>();
 
                     break;
 
                 case "IsTransient":
-                    if (value is null)
-                    {
-                        value = false;
-                    }
+                    value ??= false;
 
                     break;
             }
@@ -584,10 +569,7 @@ namespace System.Drawing.Design
                         // Just try loading the type.  If we succeed, then use this as the
                         // reference.
                         type = ts.GetType(typeName);
-                        if (type is null)
-                        {
-                            type = Type.GetType(typeName);
-                        }
+                        type ??= Type.GetType(typeName);
 
                         if (type != null)
                         {
@@ -606,10 +588,7 @@ namespace System.Drawing.Design
                         }
                     }
 
-                    if (type is null)
-                    {
-                        type = ts.GetType(typeName);
-                    }
+                    type ??= ts.GetType(typeName);
                 }
             }
             else
@@ -658,10 +637,7 @@ namespace System.Drawing.Design
                         }
                     }
 
-                    if (type is null)
-                    {
-                        type = Type.GetType(typeName, false);
-                    }
+                    type ??= Type.GetType(typeName, false);
                 }
             }
 
@@ -920,10 +896,7 @@ namespace System.Drawing.Design
                 case "DisplayName":
                 case "TypeName":
                     ValidatePropertyType(propertyName, value, typeof(string), true);
-                    if (value is null)
-                    {
-                        value = string.Empty;
-                    }
+                    value ??= string.Empty;
 
                     break;
 

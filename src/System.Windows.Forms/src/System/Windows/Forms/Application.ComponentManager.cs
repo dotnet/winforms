@@ -43,10 +43,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_oleComponents is null)
-                    {
-                        _oleComponents = new Dictionary<UIntPtr, ComponentHashtableEntry>();
-                    }
+                    _oleComponents ??= new Dictionary<UIntPtr, ComponentHashtableEntry>();
 
                     return _oleComponents;
                 }
@@ -392,7 +389,7 @@ namespace System.Windows.Forms
                                     // by calling PeekMessage.
                                     if (!User32.PeekMessageW(ref msg, IntPtr.Zero, 0, 0, User32.PM.NOREMOVE))
                                     {
-                                        User32.WaitMessage();
+                                        PInvoke.WaitMessage();
                                     }
                                 }
                             }

@@ -47,7 +47,7 @@ namespace System.Windows.Forms
             // set the DPI have no effect after making the first call. Depending on what the DPI awareness settings are
             // we'll get either the actual DPI of the primary display at process startup or the default LogicalDpi;
 
-            if (!OsVersion.IsWindows10_1607OrGreater)
+            if (!OsVersion.IsWindows10_1607OrGreater())
             {
                 using var dc = User32.GetDcScope.ScreenDC;
                 return PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
 
         private static bool GetPerMonitorAware()
         {
-            if (!OsVersion.IsWindows10_1607OrGreater)
+            if (!OsVersion.IsWindows10_1607OrGreater())
             {
                 return false;
             }
@@ -370,7 +370,7 @@ namespace System.Windows.Forms
         internal static HighDpiMode GetWinformsApplicationDpiAwareness()
         {
             // For Windows 10 RS2 and above
-            if (OsVersion.IsWindows10_1607OrGreater)
+            if (OsVersion.IsWindows10_1607OrGreater())
             {
                 DPI_AWARENESS_CONTEXT dpiAwareness = PInvoke.GetThreadDpiAwarenessContextInternal();
 
@@ -399,7 +399,7 @@ namespace System.Windows.Forms
                     return HighDpiMode.DpiUnawareGdiScaled;
                 }
             }
-            else if (OsVersion.IsWindows8_1OrGreater)
+            else if (OsVersion.IsWindows8_1OrGreater())
             {
                 PInvoke.GetProcessDpiAwareness(HANDLE.Null, out PROCESS_DPI_AWARENESS processDpiAwareness);
                 switch (processDpiAwareness)
@@ -430,7 +430,7 @@ namespace System.Windows.Forms
         {
             bool success = false;
 
-            if (OsVersion.IsWindows10_1703OrGreater)
+            if (OsVersion.IsWindows10_1703OrGreater())
             {
                 var rs2AndAboveDpiFlag = highDpiMode switch
                 {
@@ -451,7 +451,7 @@ namespace System.Windows.Forms
 
                 success = PInvoke.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag);
             }
-            else if (OsVersion.IsWindows8_1OrGreater)
+            else if (OsVersion.IsWindows8_1OrGreater())
             {
                 var dpiFlag = highDpiMode switch
                 {

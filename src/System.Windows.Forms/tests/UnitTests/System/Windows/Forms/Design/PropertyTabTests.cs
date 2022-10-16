@@ -7,11 +7,10 @@ using System.Drawing;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Design.Tests
 {
-    using Size = System.Drawing.Size;
-
     // NB: doesn't require thread affinity
     public class PropertyTabTests : IClassFixture<ThreadExceptionFixture>
     {

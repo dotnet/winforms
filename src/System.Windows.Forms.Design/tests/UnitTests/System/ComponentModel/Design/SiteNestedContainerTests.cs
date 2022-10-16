@@ -12,7 +12,7 @@ namespace System.ComponentModel.Design.Tests
     {
         public static IEnumerable<object[]> CreateNestedContainer_TestData()
         {
-            ISite CreateSite(string name)
+            static ISite CreateSite(string name)
             {
                 var mockSite = new Mock<ISite>(MockBehavior.Strict);
                 mockSite

@@ -512,7 +512,7 @@ namespace System.Windows.Forms.Tests
                 foreach (View view in Enum.GetValues(typeof(View)))
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (virtualMode == true && View.Tile == view)
+                    if (virtualMode && View.Tile == view)
                     {
                         continue;
                     }
@@ -589,7 +589,7 @@ namespace System.Windows.Forms.Tests
                 foreach (View view in Enum.GetValues(typeof(View)))
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (virtualMode == true && View.Tile == view)
+                    if (virtualMode && View.Tile == view)
                     {
                         continue;
                     }

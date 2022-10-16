@@ -13,10 +13,7 @@ namespace System.Windows.Forms
 
         public BindingMemberInfo(string dataMember)
         {
-            if (dataMember is null)
-            {
-                dataMember = string.Empty;
-            }
+            dataMember ??= string.Empty;
 
             int lastDot = dataMember.LastIndexOf('.');
             if (lastDot != -1)

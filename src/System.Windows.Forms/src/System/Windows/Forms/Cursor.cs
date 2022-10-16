@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     /// </summary>
     [TypeConverter(typeof(CursorConverter))]
     [Editor($"System.Drawing.Design.CursorEditor, {AssemblyRef.SystemDrawingDesign}", typeof(UITypeEditor))]
-    public sealed class Cursor : IDisposable, ISerializable, IHandle
+    public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle<HANDLE>
     {
         private static Size s_cursorSize = Size.Empty;
 
@@ -54,8 +54,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref="Cursor"/>
-        ///  class with the specified filename.
+        ///  Initializes a new instance of the <see cref="Cursor"/> class with the specified filename.
         /// </summary>
         public Cursor(string fileName)
         {
@@ -93,23 +92,23 @@ namespace System.Windows.Forms
         ///  Gets or sets a <see cref="Rectangle"/> that represents the current clipping
         ///  rectangle for this <see cref="Cursor"/> in screen coordinates.
         /// </summary>
-        public unsafe static Rectangle Clip
+        public static unsafe Rectangle Clip
         {
             get
             {
-                User32.GetClipCursor(out RECT rect);
+                PInvoke.GetClipCursor(out RECT rect);
                 return rect;
             }
             set
             {
                 if (value.IsEmpty)
                 {
-                    User32.ClipCursor(null);
+                    PInvoke.ClipCursor((RECT*)null);
                 }
                 else
                 {
                     RECT rect = value;
-                    User32.ClipCursor(&rect);
+                    PInvoke.ClipCursor(&rect);
                 }
             }
         }
@@ -122,32 +121,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                IntPtr curHandle = User32.GetCursor();
-                if (curHandle == IntPtr.Zero)
-                {
-                    return null;
-                }
-
-                return new Cursor(curHandle);
+                HCURSOR cursor = PInvoke.GetCursor();
+                return cursor.IsNull ? null : new Cursor(cursor);
             }
-            set => User32.SetCursor(value);
+            set => PInvoke.SetCursor(value?._handle ?? HCURSOR.Null);
         }
 
         /// <summary>
         ///  Gets the Win32 handle for this <see cref="Cursor"/>.
         /// </summary>
-        public IntPtr Handle
-        {
-            get
-            {
-                if (_handle == IntPtr.Zero)
-                {
-                    throw new ObjectDisposedException(string.Format(SR.ObjectDisposed, GetType().Name));
-                }
-
-                return _handle;
-            }
-        }
+        public IntPtr Handle => _handle.IsNull
+            ? throw new ObjectDisposedException(string.Format(SR.ObjectDisposed, GetType().Name))
+            : (nint)_handle;
 
         /// <summary>
         ///  Returns the "hot" location of the cursor.
@@ -156,23 +141,22 @@ namespace System.Windows.Forms
         {
             get
             {
-                using User32.ICONINFO info = User32.GetIconInfo(this);
+                using ICONINFO info = PInvoke.GetIconInfo(this);
                 return new Point((int)info.xHotspot, (int)info.yHotspot);
             }
         }
 
         /// <summary>
-        ///  Gets or sets a <see cref="Point"/> that specifies the current cursor
-        ///  position in screen coordinates.
+        ///  Gets or sets a <see cref="Point"/> that specifies the current cursor position in screen coordinates.
         /// </summary>
         public static Point Position
         {
             get
             {
-                User32.GetCursorPos(out Point p);
+                PInvoke.GetCursorPos(out Point p);
                 return p;
             }
-            set => User32.SetCursorPos(value.X, value.Y);
+            set => PInvoke.SetCursorPos(value.X, value.Y);
         }
 
         /// <summary>
@@ -184,9 +168,7 @@ namespace System.Windows.Forms
             {
                 if (s_cursorSize.IsEmpty)
                 {
-                    s_cursorSize = new Size(
-                        User32.GetSystemMetrics(User32.SystemMetric.SM_CXCURSOR),
-                        User32.GetSystemMetrics(User32.SystemMetric.SM_CYCURSOR));
+                    s_cursorSize = SystemInformation.CursorSize;
                 }
 
                 return s_cursorSize;
@@ -201,18 +183,21 @@ namespace System.Windows.Forms
         [TypeConverter(typeof(StringConverter))]
         public object? Tag { get; set; }
 
+        HICON IHandle<HICON>.Handle => (HICON)Handle;
+
+        HANDLE IHandle<HANDLE>.Handle => (HANDLE)Handle;
+
         /// <summary>
         ///  Duplicates this the Win32 handle of this <see cref="Cursor"/>.
         /// </summary>
         public IntPtr CopyHandle()
         {
             Size sz = Size;
-            return User32.CopyImage(this, User32.IMAGE.CURSOR, sz.Width, sz.Height, User32.LR.DEFAULTCOLOR);
+            return PInvoke.CopyImage(this, GDI_IMAGE_TYPE.IMAGE_CURSOR, sz.Width, sz.Height, IMAGE_FLAGS.LR_DEFAULTCOLOR);
         }
 
         /// <summary>
-        ///  Cleans up the resources allocated by this object.  Once called, the cursor
-        ///  object is no longer useful.
+        ///  Cleans up the resources allocated by this object. Once called, the cursor object is no longer useful.
         /// </summary>
         public void Dispose()
         {
@@ -226,10 +211,10 @@ namespace System.Windows.Forms
             {
                 if (_ownHandle)
                 {
-                    User32.DestroyCursor(_handle);
+                    PInvoke.DestroyCursor(_handle);
                 }
 
-                _handle = default;
+                _handle = HCURSOR.Null;
             }
         }
 
@@ -239,7 +224,6 @@ namespace System.Windows.Forms
         ///  it passes the call to the actual image.  This version crops the image to the given
         ///  dimensions and allows the user to specify a rectangle within the image to draw.
         /// </summary>
-        // This method is way more powerful than what we expose, but I'll leave it in place.
         private void DrawImageCore(Graphics graphics, Rectangle imageRect, Rectangle targetRect, bool stretch)
         {
             ArgumentNullException.ThrowIfNull(graphics);
@@ -248,104 +232,95 @@ namespace System.Windows.Forms
             targetRect.X += (int)graphics.Transform.OffsetX;
             targetRect.Y += (int)graphics.Transform.OffsetY;
 
-            IntPtr dc = graphics.GetHdc();
+            using var dc = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
 
-            // want finally clause to release dc
-            try
+            int imageX = 0;
+            int imageY = 0;
+            int imageWidth;
+            int imageHeight;
+            int targetX = 0;
+            int targetY = 0;
+            int targetWidth = 0;
+            int targetHeight = 0;
+
+            Size cursorSize = Size;
+
+            // compute the dimensions of the icon, if needed
+            if (!imageRect.IsEmpty)
             {
-                int imageX = 0;
-                int imageY = 0;
-                int imageWidth;
-                int imageHeight;
-                int targetX = 0;
-                int targetY = 0;
-                int targetWidth = 0;
-                int targetHeight = 0;
-
-                Size cursorSize = Size;
-
-                // compute the dimensions of the icon, if needed
-                if (!imageRect.IsEmpty)
-                {
-                    imageX = imageRect.X;
-                    imageY = imageRect.Y;
-                    imageWidth = imageRect.Width;
-                    imageHeight = imageRect.Height;
-                }
-                else
-                {
-                    imageWidth = cursorSize.Width;
-                    imageHeight = cursorSize.Height;
-                }
-
-                if (!targetRect.IsEmpty)
-                {
-                    targetX = targetRect.X;
-                    targetY = targetRect.Y;
-                    targetWidth = targetRect.Width;
-                    targetHeight = targetRect.Height;
-                }
-                else
-                {
-                    targetWidth = cursorSize.Width;
-                    targetHeight = cursorSize.Height;
-                }
-
-                int drawWidth, drawHeight;
-                int clipWidth, clipHeight;
-
-                if (stretch)
-                {
-                    // Short circuit the simple case of blasting an icon to the screen
-                    if (targetWidth == imageWidth && targetHeight == imageHeight
-                        && imageX == 0 && imageY == 0
-                        && imageWidth == cursorSize.Width && imageHeight == cursorSize.Height)
-                    {
-                        User32.DrawIcon(dc, targetX, targetY, this);
-                        return;
-                    }
-
-                    drawWidth = cursorSize.Width * targetWidth / imageWidth;
-                    drawHeight = cursorSize.Height * targetHeight / imageHeight;
-                    clipWidth = targetWidth;
-                    clipHeight = targetHeight;
-                }
-                else
-                {
-                    // Short circuit the simple case of blasting an icon to the screen
-                    if (imageX == 0 && imageY == 0
-                        && cursorSize.Width <= targetWidth && cursorSize.Height <= targetHeight
-                        && cursorSize.Width == imageWidth && cursorSize.Height == imageHeight)
-                    {
-                        User32.DrawIcon(dc, targetX, targetY, this);
-                        return;
-                    }
-
-                    drawWidth = cursorSize.Width;
-                    drawHeight = cursorSize.Height;
-                    clipWidth = targetWidth < imageWidth ? targetWidth : imageWidth;
-                    clipHeight = targetHeight < imageHeight ? targetHeight : imageHeight;
-                }
-
-                // The ROP is SRCCOPY, so we can be simple here and take
-                // advantage of clipping regions.  Drawing the cursor
-                // is merely a matter of offsetting and clipping.
-                PInvoke.IntersectClipRect(this, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
-                User32.DrawIconEx(
-                    (HDC)dc,
-                    targetX - imageX,
-                    targetY - imageY,
-                    this,
-                    drawWidth,
-                    drawHeight);
-
-                // Let GDI+ restore clipping
-                return;
+                imageX = imageRect.X;
+                imageY = imageRect.Y;
+                imageWidth = imageRect.Width;
+                imageHeight = imageRect.Height;
             }
-            finally
+            else
             {
-                graphics.ReleaseHdcInternal(dc);
+                imageWidth = cursorSize.Width;
+                imageHeight = cursorSize.Height;
             }
+
+            if (!targetRect.IsEmpty)
+            {
+                targetX = targetRect.X;
+                targetY = targetRect.Y;
+                targetWidth = targetRect.Width;
+                targetHeight = targetRect.Height;
+            }
+            else
+            {
+                targetWidth = cursorSize.Width;
+                targetHeight = cursorSize.Height;
+            }
+
+            int drawWidth, drawHeight;
+            int clipWidth, clipHeight;
+
+            if (stretch)
+            {
+                // Short circuit the simple case of blasting an icon to the screen
+                if (targetWidth == imageWidth && targetHeight == imageHeight
+                    && imageX == 0 && imageY == 0
+                    && imageWidth == cursorSize.Width && imageHeight == cursorSize.Height)
+                {
+                    PInvoke.DrawIcon(dc, targetX, targetY, this);
+                    return;
+                }
+
+                drawWidth = cursorSize.Width * targetWidth / imageWidth;
+                drawHeight = cursorSize.Height * targetHeight / imageHeight;
+                clipWidth = targetWidth;
+                clipHeight = targetHeight;
+            }
+            else
+            {
+                // Short circuit the simple case of blasting an icon to the screen
+                if (imageX == 0 && imageY == 0
+                    && cursorSize.Width <= targetWidth && cursorSize.Height <= targetHeight
+                    && cursorSize.Width == imageWidth && cursorSize.Height == imageHeight)
+                {
+                    PInvoke.DrawIcon(dc, targetX, targetY, this);
+                    return;
+                }
+
+                drawWidth = cursorSize.Width;
+                drawHeight = cursorSize.Height;
+                clipWidth = targetWidth < imageWidth ? targetWidth : imageWidth;
+                clipHeight = targetHeight < imageHeight ? targetHeight : imageHeight;
+            }
+
+            // The ROP is SRCCOPY, so we can be simple here and take advantage of clipping regions.
+            // Drawing the cursor is merely a matter of offsetting and clipping.
+            PInvoke.IntersectClipRect(dc, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
+            PInvoke.DrawIconEx(
+                (HDC)dc,
+                targetX - imageX,
+                targetY - imageY,
+                this,
+                drawWidth,
+                drawHeight);
+
+            // Let GDI+ restore clipping
+            return;
         }
 
         /// <summary>
@@ -353,7 +328,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Draw(Graphics g, Rectangle targetRect)
         {
-            DrawImageCore(g, Rectangle.Empty, targetRect, false);
+            DrawImageCore(g, Rectangle.Empty, targetRect, stretch: false);
         }
 
         /// <summary>
@@ -361,7 +336,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawStretched(Graphics g, Rectangle targetRect)
         {
-            DrawImageCore(g, Rectangle.Empty, targetRect, true);
+            DrawImageCore(g, Rectangle.Empty, targetRect, stretch: true);
         }
 
         /// <summary>
@@ -381,15 +356,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Hides the cursor. For every call to Cursor.hide() there must be a
-        ///  balancing call to Cursor.show().
+        ///  Hides the cursor. For every call to Cursor.hide() there must be a balancing call to Cursor.show().
         /// </summary>
-        public static void Hide() => User32.ShowCursor(false);
+        public static void Hide() => PInvoke.ShowCursor(bShow: false);
 
-        // this code is adapted from Icon.GetIconSize please take this into account when changing this
-        private Size GetIconSize(IntPtr iconHandle)
+        private Size GetIconSize(HICON iconHandle)
         {
-            using User32.ICONINFO info = User32.GetIconInfo(iconHandle);
+            // this code is adapted from Icon.GetIconSize please take this into account when changing this
+
+            using ICONINFO info = PInvoke.GetIconInfo(iconHandle);
             if (!info.hbmColor.IsNull)
             {
                 PInvoke.GetObject(info.hbmColor, out BITMAP bitmap);
@@ -416,38 +391,32 @@ namespace System.Windows.Forms
             try
             {
                 Guid iid = IID.IPicture;
-                Ole32.IPicture picture = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(&iid);
-                try
+                var picture = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(&iid);
+
+                Ole32.IPersistStream iPersistStream = (Ole32.IPersistStream)picture;
+                iPersistStream.Load(stream);
+
+                if (picture.Type == (short)Ole32.PICTYPE.ICON)
                 {
-                    Ole32.IPersistStream ipictureAsIPersist = (Ole32.IPersistStream)picture;
-                    ipictureAsIPersist.Load(stream);
-
-                    if (picture.Type == (short)Ole32.PICTYPE.ICON)
+                    HICON cursorHandle = (HICON)picture.Handle;
+                    Size picSize = GetIconSize(cursorHandle);
+                    if (DpiHelper.IsScalingRequired)
                     {
-                        IntPtr cursorHandle = (IntPtr)picture.Handle;
-                        Size picSize = GetIconSize(cursorHandle);
-                        if (DpiHelper.IsScalingRequired)
-                        {
-                            picSize = DpiHelper.LogicalToDeviceUnits(picSize);
-                        }
-
-                        _handle = (HCURSOR)User32.CopyImage(
-                            cursorHandle,
-                            User32.IMAGE.CURSOR,
-                            picSize.Width,
-                            picSize.Height,
-                            User32.LR.DEFAULTCOLOR);
-
-                        _ownHandle = true;
+                        picSize = DpiHelper.LogicalToDeviceUnits(picSize);
                     }
-                    else
-                    {
-                        throw new ArgumentException(string.Format(SR.InvalidPictureType, nameof(picture), nameof(Cursor)), paramName);
-                    }
+
+                    _handle = (HCURSOR)PInvoke.CopyImage(
+                        (HANDLE)cursorHandle.Value,
+                        GDI_IMAGE_TYPE.IMAGE_CURSOR,
+                        picSize.Width,
+                        picSize.Height,
+                        IMAGE_FLAGS.LR_DEFAULTCOLOR).Value;
+
+                    _ownHandle = true;
                 }
-                finally
+                else
                 {
-                    ((IDisposable)picture).Dispose();
+                    throw new ArgumentException(string.Format(SR.InvalidPictureType, nameof(picture), nameof(Cursor)), paramName);
                 }
             }
             catch (COMException e)
@@ -461,7 +430,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal unsafe byte[] GetData()
         {
-            if (_resourceId.Value != null)
+            if (_resourceId.Value is not null)
             {
                 throw new FormatException(SR.CursorCannotCovertToBytes);
             }
@@ -478,61 +447,34 @@ namespace System.Windows.Forms
         ///  Displays the cursor. For every call to Cursor.show() there must have been
         ///  a previous call to Cursor.hide().
         /// </summary>
-        public static void Show() => User32.ShowCursor(true);
+        public static void Show() => PInvoke.ShowCursor(bShow: true);
 
         /// <summary>
         ///  Retrieves a human readable string representing this <see cref="Cursor"/>.
         /// </summary>
         public override string ToString()
         {
-            string? s = null;
-
-            if (!_ownHandle)
-            {
-                s = TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this);
-            }
-            else
-            {
-                s = base.ToString();
-            }
+            string? s = !_ownHandle
+                ? TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this)
+                : base.ToString();
 
             return $"[Cursor: {s}]";
         }
 
         public static bool operator ==(Cursor? left, Cursor? right)
         {
-            if (right is null)
+            if (right is null || left is null)
             {
-                return left is null;
-            }
-
-            if (left is null)
-            {
-                return false;
+                return left is null && right is null;
             }
 
             return left._handle == right._handle;
         }
 
-        public static bool operator !=(Cursor? left, Cursor? right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(Cursor? left, Cursor? right) => !(left == right);
 
-        public override int GetHashCode()
-        {
-            // Handle is a 64-bit value in 64-bit machines, uncheck here to avoid overflow exceptions.
-            return unchecked(PARAM.ToInt(_handle));
-        }
+        public override int GetHashCode() => (int)_handle.Value;
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is not Cursor)
-            {
-                return false;
-            }
-
-            return this == (Cursor)obj;
-        }
+        public override bool Equals(object? obj) => obj is Cursor cursor && this == cursor;
     }
 }

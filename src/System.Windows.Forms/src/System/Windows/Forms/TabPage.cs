@@ -442,10 +442,7 @@ namespace System.Windows.Forms
             get => _toolTipText;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (value == _toolTipText)
                 {
@@ -625,7 +622,7 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider(IntPtr handle)
         {
-            if (OsVersion.IsWindows8OrGreater)
+            if (OsVersion.IsWindows8OrGreater())
             {
                 UiaCore.UiaDisconnectProvider(_tabAccessibilityObject);
             }

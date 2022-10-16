@@ -127,10 +127,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (c.Site != null)
                     {
-                        if (sitedChildren is null)
-                        {
-                            sitedChildren = new ArrayList();
-                        }
+                        sitedChildren ??= new ArrayList();
 
                         sitedChildren.Add(c);
                     }
@@ -305,7 +302,7 @@ namespace System.Windows.Forms.Design
                     object value = pd.GetValue(component);
 
                     // Make sure that value is a boolean, in case someone else added this property
-                    if (value is bool boolean && boolean == true)
+                    if (value is bool boolean && boolean)
                     {
                         rules = SelectionRules.Locked | SelectionRules.Visible;
                     }
@@ -502,10 +499,7 @@ namespace System.Windows.Forms.Design
                     UnhookChildControls(Control);
                 }
 
-                if (DesignerTarget != null)
-                {
-                    DesignerTarget.Dispose();
-                }
+                DesignerTarget?.Dispose();
 
                 _downPos = Point.Empty;
 
@@ -549,7 +543,7 @@ namespace System.Windows.Forms.Design
             if (e.Control.IsHandleCreated)
             {
                 Application.OleRequired();
-                Ole32.RevokeDragDrop(e.Control.Handle);
+                PInvoke.RevokeDragDrop(e.Control);
 
                 // We only hook the control's children if there was no designer. We leave it up to the designer
                 // to hook its own children.
@@ -682,11 +676,8 @@ namespace System.Windows.Forms.Design
 
         private void OnDragEnter(object s, DragEventArgs e)
         {
-            if (BehaviorService != null)
-            {
-                // Tell the BehaviorService to monitor mouse messages so it can send appropriate drag notifications.
-                BehaviorService.StartDragNotification();
-            }
+            // Tell the BehaviorService to monitor mouse messages so it can send appropriate drag notifications.
+            BehaviorService?.StartDragNotification();
 
             OnDragEnter(e);
         }
@@ -695,11 +686,8 @@ namespace System.Windows.Forms.Design
 
         private void OnDragDrop(object s, DragEventArgs e)
         {
-            if (BehaviorService != null)
-            {
-                // This will cause the Behavior Service to return from 'drag mode'
-                BehaviorService.EndDragNotification();
-            }
+            // This will cause the Behavior Service to return from 'drag mode'
+            BehaviorService?.EndDragNotification();
 
             OnDragDrop(e);
         }
@@ -911,7 +899,7 @@ namespace System.Windows.Forms.Design
                 if (child.IsHandleCreated)
                 {
                     Application.OleRequired();
-                    Ole32.RevokeDragDrop(child.Handle);
+                    PInvoke.RevokeDragDrop(child);
                     HookChildHandles((HWND)child.Handle);
                 }
                 else
@@ -1256,7 +1244,7 @@ namespace System.Windows.Forms.Design
             OnHandleChange();
             if (_revokeDragDrop)
             {
-                Ole32.RevokeDragDrop(Control.Handle);
+                PInvoke.RevokeDragDrop(Control);
             }
         }
 
@@ -2480,7 +2468,7 @@ namespace System.Windows.Forms.Design
                         // have a Windows Forms control associated with them, we have to RevokeDragDrop()
                         // for them so that the ParentControlDesigner()'s drag-drop support can work
                         // correctly.
-                        Ole32.RevokeDragDrop(hwndChild);
+                        PInvoke.RevokeDragDrop(hwndChild);
                         new ChildSubClass(this, hwndChild);
                         SubclassedChildWindows[hwndChild] = true;
                     }
@@ -2534,13 +2522,8 @@ namespace System.Windows.Forms.Design
             HookChildControls(Control);
         }
 
-        internal void RemoveSubclassedWindow(IntPtr hwnd)
-        {
-            if (SubclassedChildWindows.ContainsKey(hwnd))
-            {
-                SubclassedChildWindows.Remove(hwnd);
-            }
-        }
+        internal void RemoveSubclassedWindow(IntPtr hwnd) =>
+            SubclassedChildWindows.Remove(hwnd);
 
         internal void SetUnhandledException(Control owner, Exception exception)
         {
@@ -2550,10 +2533,7 @@ namespace System.Windows.Forms.Design
             }
 
             _thrownException = exception;
-            if (owner is null)
-            {
-                owner = Control;
-            }
+            owner ??= Control;
 
             string stack = string.Empty;
             string[] exceptionLines = exception.StackTrace.Split('\r', '\n');

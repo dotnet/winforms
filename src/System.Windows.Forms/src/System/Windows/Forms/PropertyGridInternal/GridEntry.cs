@@ -463,7 +463,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _hasFocus = value;
 
                     // Notify accessibility applications that keyboard focus has changed.
-                    if (OwnerGridView.IsAccessibilityObjectCreated && value == true)
+                    if (OwnerGridView.IsAccessibilityObjectCreated && value)
                     {
                         int id = OwnerGridView.AccessibilityGetGridEntryChildID(this);
                         if (id >= 0)
@@ -1409,10 +1409,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Fail($"Bad Type Converter! {t.GetType().Name}, {t.Message},{converter}", t.ToString());
             }
 
-            if (textValue is null)
-            {
-                textValue = string.Empty;
-            }
+            textValue ??= string.Empty;
 
             return textValue;
         }

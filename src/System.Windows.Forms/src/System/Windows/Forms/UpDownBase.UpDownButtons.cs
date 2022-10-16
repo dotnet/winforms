@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -219,13 +218,10 @@ namespace System.Windows.Forms
                     !(_pushed != ButtonID.None && _captured == ButtonID.None),
                     "Invalid button pushed/captured combination");
 
-                Point pt = new Point(e.X, e.Y);
-                pt = PointToScreen(pt);
-
                 MouseEventArgs me = _parent.TranslateMouseEvent(this, e);
                 if (e.Button == MouseButtons.Left)
                 {
-                    if (!_parent.ValidationCancelled && User32.WindowFromPoint(pt) == Handle)
+                    if (!_parent.ValidationCancelled && PInvoke.WindowFromPoint(PointToScreen(e.Location)) == HWND)
                     {
                         if (!_doubleClickFired)
                         {
@@ -344,7 +340,7 @@ namespace System.Windows.Forms
             internal override void ReleaseUiaProvider(IntPtr handle)
             {
                 if (IsAccessibilityObjectCreated
-                    && OsVersion.IsWindows8OrGreater
+                    && OsVersion.IsWindows8OrGreater()
                     && AccessibilityObject is UpDownButtonsAccessibleObject buttonsAccessibilityObject)
                 {
                     buttonsAccessibilityObject.ReleaseChildUiaProviders();

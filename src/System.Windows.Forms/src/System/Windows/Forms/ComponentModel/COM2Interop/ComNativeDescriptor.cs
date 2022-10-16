@@ -46,10 +46,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (handler is null)
-                {
-                    handler = new ComNativeDescriptor();
-                }
+                handler ??= new ComNativeDescriptor();
 
                 return handler;
             }
@@ -102,9 +99,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return string.Empty;
             }
 
-            using var nameBstr = new BSTR();
+            using BSTR nameBstr = new();
             pTypeInfo.GetDocumentation(DispatchID.MEMBERID_NIL, &nameBstr, null, null, null);
-            return nameBstr.String.TrimStart('_').ToString();
+            return nameBstr.AsSpan().TrimStart('_').ToString();
         }
 
         internal static TypeConverter GetConverter()
@@ -119,9 +116,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal static string GetName(object component)
         {
-            if (!(component is Oleaut32.IDispatch))
+            if (component is not Oleaut32.IDispatch)
             {
-                return "";
+                return string.Empty;
             }
 
             DispatchID dispid = Com2TypeInfoProcessor.GetNameDispId((Oleaut32.IDispatch)component);
@@ -265,10 +262,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         if (entry is not null && entry.TooOld)
                         {
-                            if (disposeList is null)
-                            {
-                                disposeList = new List<object>(3);
-                            }
+                            disposeList ??= new List<object>(3);
 
                             disposeList.Add(de.Key);
                         }

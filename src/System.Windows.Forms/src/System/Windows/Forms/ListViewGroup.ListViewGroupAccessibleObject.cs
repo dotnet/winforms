@@ -36,7 +36,7 @@ namespace System.Windows.Forms
             }
 
             private protected override string AutomationId
-                => string.Format("{0}-{1}", typeof(ListViewGroup).Name, CurrentIndex);
+                => $"{nameof(ListViewGroup)}-{CurrentIndex}";
 
             public override Rectangle Bounds
             {

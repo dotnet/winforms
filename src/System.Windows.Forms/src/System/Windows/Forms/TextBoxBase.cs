@@ -156,16 +156,13 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (s_shortcutsToDisable is null)
-                {
-                    s_shortcutsToDisable = new int[]
+                s_shortcutsToDisable ??= new int[]
                     {
                         (int)Shortcut.CtrlZ, (int)Shortcut.CtrlC, (int)Shortcut.CtrlX,
                         (int)Shortcut.CtrlV, (int)Shortcut.CtrlA, (int)Shortcut.CtrlL, (int)Shortcut.CtrlR,
                         (int)Shortcut.CtrlE, (int)Shortcut.CtrlY, (int)Keys.Control + (int)Keys.Back,
                         (int)Shortcut.CtrlDel, (int)Shortcut.ShiftDel, (int)Shortcut.ShiftIns, (int)Shortcut.CtrlJ
                     };
-                }
 
                 _textBoxFlags[shortcutsEnabled] = value;
             }
@@ -1035,10 +1032,7 @@ namespace System.Windows.Forms
                 CreateHandle();
             }
 
-            if (text is null)
-            {
-                text = string.Empty;
-            }
+            text ??= string.Empty;
 
             // The EM_LIMITTEXT message limits only the text the user can enter. It does not affect any text
             // already in the edit control when the message is sent, nor does it affect the length of the text
@@ -1165,10 +1159,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!WindowText.Equals(value))
                 {
@@ -1338,6 +1329,24 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 PInvoke.SendMessage(this, (WM)EM.EMPTYUNDOBUFFER);
+            }
+        }
+
+        protected bool ContainsNavigationKeyCode(Keys keyCode)
+        {
+            switch (keyCode)
+            {
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.PageUp:
+                case Keys.PageDown:
+                case Keys.Home:
+                case Keys.End:
+                case Keys.Left:
+                case Keys.Right:
+                    return true;
+                default:
+                    return false;
             }
         }
 
@@ -1533,29 +1542,24 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            if (mevent is not null)
+            if (mevent is not null && mevent.Button == MouseButtons.Left)
             {
-                Point pt = PointToScreen(mevent.Location);
-
-                if (mevent.Button == MouseButtons.Left)
+                if (!ValidationCancelled && PInvoke.WindowFromPoint(PointToScreen(mevent.Location)) == HWND)
                 {
-                    if (!ValidationCancelled && WindowFromPoint(pt) == Handle)
+                    if (!_doubleClickFired)
                     {
-                        if (!_doubleClickFired)
-                        {
-                            OnClick(mevent);
-                            OnMouseClick(mevent);
-                        }
-                        else
-                        {
-                            _doubleClickFired = false;
-                            OnDoubleClick(mevent);
-                            OnMouseDoubleClick(mevent);
-                        }
+                        OnClick(mevent);
+                        OnMouseClick(mevent);
                     }
-
-                    _doubleClickFired = false;
+                    else
+                    {
+                        _doubleClickFired = false;
+                        OnDoubleClick(mevent);
+                        OnMouseDoubleClick(mevent);
+                    }
                 }
+
+                _doubleClickFired = false;
             }
 
             base.OnMouseUp(mevent);
@@ -2204,23 +2208,13 @@ namespace System.Windows.Forms
 
                     break;
                 case WM.DESTROY:
-                    base.WndProc(ref m);
-
-                    if (TryGetAccessibilityObject(out AccessibleObject? @object) && !RecreatingHandle)
+                    if (TryGetAccessibilityObject(out AccessibleObject? @object) && @object is TextBoxBaseAccessibleObject accessibleObject &&
+                        !RecreatingHandle)
                     {
-                        // The SupportsUiaProviders check prevents double disconnection after Control.ReleaseUiaProvider.
-                        // ReleaseUiaProvider works only for controls that support UIA, so this check allows to avoid
-                        // double disconnection when TextBoxBase will start UIA supporting.
-                        if (OsVersion.IsWindows8OrGreater && !SupportsUiaProviders)
-                        {
-                            UiaCore.UiaDisconnectProvider(@object);
-                        }
-
-                        if (@object is TextBoxBaseAccessibleObject accessibleObject)
-                        {
-                            accessibleObject.ClearObjects();
-                        }
+                        accessibleObject.ClearObjects();
                     }
+
+                    base.WndProc(ref m);
 
                     break;
                 default:

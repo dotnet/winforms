@@ -9,7 +9,7 @@ namespace Windows.Win32
     internal static partial class PInvoke
     {
         public static BOOL PostMessage(
-           in IHandle<HWND> hWnd,
+           IHandle<HWND> hWnd,
            WM Msg,
            WPARAM wParam = default,
            LPARAM lParam = default)

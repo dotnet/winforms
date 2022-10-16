@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static HRESULT SHAutoComplete<T>(in T hwndEdit, SHELL_AUTOCOMPLETE_FLAGS flags) where T : IHandle<HWND>
+        public static HRESULT SHAutoComplete<T>(T hwndEdit, SHELL_AUTOCOMPLETE_FLAGS flags) where T : IHandle<HWND>
         {
             HRESULT result = SHAutoComplete(hwndEdit.Handle, flags);
             GC.KeepAlive(hwndEdit.Wrapper);

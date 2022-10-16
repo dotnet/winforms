@@ -1415,10 +1415,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvcpe is null)
-                {
-                    _dgvcpe = new DataGridViewCellPaintingEventArgs(this);
-                }
+                _dgvcpe ??= new DataGridViewCellPaintingEventArgs(this);
 
                 return _dgvcpe;
             }
@@ -1428,10 +1425,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvcsce is null)
-                {
-                    _dgvcsce = new DataGridViewCellStyleChangedEventArgs();
-                }
+                _dgvcsce ??= new DataGridViewCellStyleChangedEventArgs();
 
                 return _dgvcsce;
             }
@@ -1441,10 +1435,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvcve is null)
-                {
-                    _dgvcve = new DataGridViewCellValueEventArgs();
-                }
+                _dgvcve ??= new DataGridViewCellValueEventArgs();
 
                 return _dgvcve;
             }
@@ -1616,10 +1607,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_columnHeadersDefaultCellStyle is null)
-                {
-                    _columnHeadersDefaultCellStyle = DefaultColumnHeadersDefaultCellStyle;
-                }
+                _columnHeadersDefaultCellStyle ??= DefaultColumnHeadersDefaultCellStyle;
 
                 return _columnHeadersDefaultCellStyle;
             }
@@ -1812,10 +1800,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dataGridViewColumns is null)
-                {
-                    _dataGridViewColumns = CreateColumnsInstance();
-                }
+                _dataGridViewColumns ??= CreateColumnsInstance();
 
                 return _dataGridViewColumns;
             }
@@ -2018,10 +2003,7 @@ namespace System.Windows.Forms
                 if (value != DataMember)
                 {
                     CurrentCell = null;
-                    if (DataConnection is null)
-                    {
-                        DataConnection = new DataGridViewDataConnection(this);
-                    }
+                    DataConnection ??= new DataGridViewDataConnection(this);
 
                     DataConnection.SetDataConnection(DataSource, value);
                     OnDataMemberChanged(EventArgs.Empty);
@@ -2430,13 +2412,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_editingPanel is null)
-                {
-                    _editingPanel = new DataGridViewEditingPanel(this)
+                _editingPanel ??= new DataGridViewEditingPanel(this)
                     {
                         AccessibleName = SR.DataGridView_AccEditingPanelAccName
                     };
-                }
 
                 return _editingPanel;
             }
@@ -2446,10 +2425,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_editingPanelAccessibleObject is null)
-                {
-                    _editingPanelAccessibleObject = new DataGridViewEditingPanelAccessibleObject(this, EditingPanel);
-                }
+                _editingPanelAccessibleObject ??= new DataGridViewEditingPanelAccessibleObject(this, EditingPanel);
 
                 return _editingPanelAccessibleObject;
             }
@@ -3541,10 +3517,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_rowHeadersDefaultCellStyle is null)
-                {
-                    _rowHeadersDefaultCellStyle = DefaultRowHeadersDefaultCellStyle;
-                }
+                _rowHeadersDefaultCellStyle ??= DefaultRowHeadersDefaultCellStyle;
 
                 return _rowHeadersDefaultCellStyle;
             }
@@ -3732,10 +3705,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dataGridViewRows is null)
-                {
-                    _dataGridViewRows = CreateRowsInstance();
-                }
+                _dataGridViewRows ??= CreateRowsInstance();
 
                 return _dataGridViewRows;
             }
@@ -3790,10 +3760,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_rowTemplate is null)
-                {
-                    _rowTemplate = new DataGridViewRow();
-                }
+                _rowTemplate ??= new DataGridViewRow();
 
                 return _rowTemplate;
             }
@@ -5071,10 +5038,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvrhine is null)
-                {
-                    _dgvrhine = new DataGridViewRowHeightInfoNeededEventArgs();
-                }
+                _dgvrhine ??= new DataGridViewRowHeightInfoNeededEventArgs();
 
                 return _dgvrhine;
             }
@@ -5117,10 +5081,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvrpope is null)
-                {
-                    _dgvrpope = new DataGridViewRowPostPaintEventArgs(this);
-                }
+                _dgvrpope ??= new DataGridViewRowPostPaintEventArgs(this);
 
                 return _dgvrpope;
             }
@@ -5138,10 +5099,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvrprpe is null)
-                {
-                    _dgvrprpe = new DataGridViewRowPrePaintEventArgs(this);
-                }
+                _dgvrprpe ??= new DataGridViewRowPrePaintEventArgs(this);
 
                 return _dgvrprpe;
             }

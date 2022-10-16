@@ -327,10 +327,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            if (instance is null)
-            {
-                instance = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.CreateInstance, null, null, null);
-            }
+            instance ??= Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.CreateInstance, null, null, null);
 
             return instance;
         }
@@ -382,10 +379,7 @@ namespace System.ComponentModel.Design
                 {
                     try
                     {
-                        if (_host is not null)
-                        {
-                            _host.DisposeHost();
-                        }
+                        _host?.DisposeHost();
                     }
                     finally
                     {
@@ -409,10 +403,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Flush()
         {
-            if (_host is not null)
-            {
-                _host.Flush();
-            }
+            _host?.Flush();
 
             Flushed?.Invoke(this, EventArgs.Empty);
         }
