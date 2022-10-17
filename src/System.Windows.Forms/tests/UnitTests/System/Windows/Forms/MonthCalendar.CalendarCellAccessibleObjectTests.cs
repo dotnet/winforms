@@ -152,5 +152,105 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cellAccessibleObject.Name);
             Assert.True(control.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void CalendarCellAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
+            CalendarBodyAccessibleObject body = new(calendar, controlAccessibleObject, 0);
+            CalendarRowAccessibleObject row = new(body, controlAccessibleObject, 0, 2);
+            CalendarCellAccessibleObject cell = new(row, body, controlAccessibleObject, 0, 0, 0);
+
+            Assert.Equal(row, cell.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected()
+        {
+            using MonthCalendar control = new()
+            {
+                SelectionStart = new DateTime(2022, 10, 1) // Set a date to have a stable test case
+            };
+            control.CreateControl();
+
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+
+            CalendarAccessibleObject calendar = controlAccessibleObject.CalendarsAccessibleObjects.First?.Value;
+            Assert.NotNull(calendar);
+
+            CalendarBodyAccessibleObject body = calendar.CalendarBodyAccessibleObject;
+            Assert.NotNull(body);
+
+            CalendarRowAccessibleObject secondWeek = body.RowsAccessibleObjects?.First?.Next?.Next?.Value;
+            Assert.NotNull(secondWeek);
+
+            CalendarCellAccessibleObject sunday = secondWeek.CellsAccessibleObjects?.First?.Value;
+            CalendarCellAccessibleObject monday = secondWeek.CellsAccessibleObjects?.First?.Next?.Value;
+            CalendarCellAccessibleObject tuesday = secondWeek.CellsAccessibleObjects?.First?.Next?.Next?.Value;
+            CalendarCellAccessibleObject friday = secondWeek.CellsAccessibleObjects?.Last?.Previous?.Value;
+            CalendarCellAccessibleObject saturday = secondWeek.CellsAccessibleObjects?.Last?.Value;
+
+            Assert.NotNull(sunday);
+            Assert.NotNull(monday);
+            Assert.NotNull(tuesday);
+            Assert.NotNull(friday);
+            Assert.NotNull(saturday);
+
+            Assert.Null(sunday.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(monday, sunday.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(sunday, monday.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(tuesday, monday.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            Assert.Equal(friday, saturday.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(saturday.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        }
+
+        [WinFormsFact]
+        public void CalendarCellAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_IfWeekNumbersVisible()
+        {
+            using MonthCalendar control = new()
+            {
+                ShowWeekNumbers = true,
+                SelectionStart = new DateTime(2022, 10, 1) // Set a date to have a stable test case
+            };
+            control.CreateControl();
+
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+
+            CalendarAccessibleObject calendar = controlAccessibleObject.CalendarsAccessibleObjects.First?.Value;
+            Assert.NotNull(calendar);
+
+            CalendarBodyAccessibleObject body = calendar.CalendarBodyAccessibleObject;
+            Assert.NotNull(body);
+
+            CalendarRowAccessibleObject secondWeek = body.RowsAccessibleObjects?.First?.Next?.Next?.Value;
+            Assert.NotNull(secondWeek);
+
+            CalendarWeekNumberCellAccessibleObject weekNumber = secondWeek.WeekNumberCellAccessibleObject;
+            CalendarCellAccessibleObject sunday = secondWeek.CellsAccessibleObjects?.First?.Value;
+            CalendarCellAccessibleObject monday = secondWeek.CellsAccessibleObjects?.First?.Next?.Value;
+
+            Assert.NotNull(weekNumber);
+            Assert.NotNull(sunday);
+            Assert.NotNull(monday);
+
+            Assert.Equal(weekNumber, sunday.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(monday, sunday.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        }
+
+        [WinFormsFact]
+        public void CalendarCellAccessibleObject_FragmentNavigate_Child_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            CalendarCellAccessibleObject cell = CreateCalendarCellAccessibleObject(control, 0, 0, 0);
+
+            Assert.Null(cell.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(cell.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+            Assert.False(control.IsHandleCreated);
+        }
     }
 }

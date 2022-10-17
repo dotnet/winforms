@@ -188,6 +188,56 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void CalendarBodyAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
+            CalendarBodyAccessibleObject calendarBody = new(calendar, controlAccessibleObject, 0);
+
+            Assert.Equal(calendar, calendarBody.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarBodyAccessibleObject_FragmentNavigate_NextSibling_ReturnsNull()
+        {
+            using MonthCalendar control = new();
+            CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control, 0);
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarBodyAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
+            CalendarBodyAccessibleObject calendarBody = new(calendar, controlAccessibleObject, 0);
+
+            AccessibleObject expected = calendar.CalendarHeaderAccessibleObject;
+
+            Assert.Equal(expected, calendarBody.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarBodyAccessibleObject_FragmentNavigate_Child_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control, 0);
+
+            AccessibleObject firstRow = accessibleObject.RowsAccessibleObjects?.First();
+            AccessibleObject lastRow = accessibleObject.RowsAccessibleObjects?.Last();
+
+            Assert.Equal(firstRow, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(lastRow, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+            Assert.False(control.IsHandleCreated);
+        }
+
         private CalendarBodyAccessibleObject CreateCalendarBodyAccessibleObject(MonthCalendar control, int calendarIndex = 0)
         {
             MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
