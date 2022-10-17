@@ -79,10 +79,7 @@ namespace System.Drawing.Design
         /// </summary>
         public override void PaintValue(PaintValueEventArgs e)
         {
-            if (_innerEditor is not null)
-            {
-                _innerEditor.PaintValue(e);
-            }
+            _innerEditor?.PaintValue(e);
 
             base.PaintValue(e);
         }

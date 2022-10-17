@@ -102,11 +102,8 @@ namespace System.ComponentModel.Design
                 return value;
             }
 
-            if (_binaryUI is null)
-            {
-                // Child modal dialog- launching in SystemAware mode.
-                _binaryUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new BinaryUI(this));
-            }
+            // Child modal dialog- launching in SystemAware mode.
+            _binaryUI ??= DpiHelper.CreateInstanceInSystemAwareContext(() => new BinaryUI(this));
 
             _binaryUI.Value = value;
             if (editorService.ShowDialog(_binaryUI) == DialogResult.OK)

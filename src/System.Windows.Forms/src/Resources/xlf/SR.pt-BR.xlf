@@ -177,6 +177,11 @@
         <target state="translated">Linhas Pai</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="translated">Acesso negado</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">Seleção</target>

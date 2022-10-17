@@ -51,10 +51,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_topRowAccessibilityObject is null)
-                    {
-                        _topRowAccessibilityObject = new DataGridViewTopRowAccessibleObject(_ownerDataGridView);
-                    }
+                    _topRowAccessibilityObject ??= new DataGridViewTopRowAccessibleObject(_ownerDataGridView);
 
                     return _topRowAccessibilityObject;
                 }
@@ -64,10 +61,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_selectedCellsAccessibilityObject is null)
-                    {
-                        _selectedCellsAccessibilityObject = new DataGridViewSelectedCellsAccessibleObject(_ownerDataGridView);
-                    }
+                    _selectedCellsAccessibilityObject ??= new DataGridViewSelectedCellsAccessibleObject(_ownerDataGridView);
 
                     return _selectedCellsAccessibilityObject;
                 }

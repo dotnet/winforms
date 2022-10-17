@@ -281,7 +281,7 @@ namespace System.Windows.Forms.ButtonInternal
                         e,
                         new Point(layout.CheckBounds.Left, layout.CheckBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver),
-                        Control.HandleInternal);
+                        Control.HWNDInternal);
                 }
                 else
                 {
@@ -296,7 +296,7 @@ namespace System.Windows.Forms.ButtonInternal
                         e,
                         new Point(layout.CheckBounds.Left, layout.CheckBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver),
-                        Control.HandleInternal);
+                        Control.HWNDInternal);
                 }
                 else
                 {

@@ -135,10 +135,7 @@ namespace System.ComponentModel.Design.Serialization
         private void OnComponentRename(object source, ComponentRenameEventArgs args)
         {
             // we might have a symbolic rename that has side effects beyond our control, so we don't have a choice but to clear the whole cache when a component gets renamed...
-            if (_cache is not null)
-            {
-                _cache.Clear();
-            }
+            _cache?.Clear();
         }
 
         private void OnComponentChanging(object source, ComponentChangingEventArgs ce)
@@ -309,20 +306,14 @@ namespace System.ComponentModel.Design.Serialization
 
             internal void AddLocalName(string name)
             {
-                if (_localNames is null)
-                {
-                    _localNames = new List<string>();
-                }
+                _localNames ??= new List<string>();
 
                 _localNames.Add(name);
             }
 
             public void AddDependency(object dep)
             {
-                if (_dependencies is null)
-                {
-                    _dependencies = new List<object>();
-                }
+                _dependencies ??= new List<object>();
 
                 if (!_dependencies.Contains(dep))
                 {
@@ -332,20 +323,14 @@ namespace System.ComponentModel.Design.Serialization
 
             public void AddMetadata(ResourceEntry re)
             {
-                if (_metadata is null)
-                {
-                    _metadata = new List<ResourceEntry>();
-                }
+                _metadata ??= new List<ResourceEntry>();
 
                 _metadata.Add(re);
             }
 
             public void AddResource(ResourceEntry re)
             {
-                if (_resources is null)
-                {
-                    _resources = new List<ResourceEntry>();
-                }
+                _resources ??= new List<ResourceEntry>();
 
                 _resources.Add(re);
             }

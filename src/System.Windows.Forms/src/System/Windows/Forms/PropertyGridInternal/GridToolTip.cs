@@ -134,10 +134,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (IsHandleCreated)
             {
-                User32.SetWindowPos(
+                PInvoke.SetWindowPos(
                     this,
-                    User32.HWND_TOPMOST,
-                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
+                    HWND.HWND_TOPMOST,
+                    0, 0, 0, 0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
 
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(control);
                 if (info.SendMessage(this, (User32.WM)ComCtl32.TTM.ADDTOOLW) == 0)

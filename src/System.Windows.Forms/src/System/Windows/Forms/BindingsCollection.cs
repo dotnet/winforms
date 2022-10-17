@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the bindings in the collection as an object.
         /// </summary>
-        protected override ArrayList List => _list ?? (_list = new ArrayList());
+        protected override ArrayList List => _list ??= new ArrayList();
 
         /// <summary>
         ///  Gets the <see cref="Binding"/> at the specified index.

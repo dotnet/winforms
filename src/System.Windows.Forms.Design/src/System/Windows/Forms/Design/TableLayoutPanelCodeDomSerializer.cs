@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Design
                     if (IsLocalizable(host))
                     {
                         PropertyDescriptor lsProp = TypeDescriptor.GetProperties(tlp)[LayoutSettingsPropName];
-                        object val = (lsProp != null) ? lsProp.GetValue(tlp) : null;
+                        object val = lsProp?.GetValue(tlp);
 
                         if (val != null)
                         {

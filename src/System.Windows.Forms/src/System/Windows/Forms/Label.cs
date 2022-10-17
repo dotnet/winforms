@@ -143,10 +143,7 @@ namespace System.Windows.Forms
 
                     if (value)
                     {
-                        if (_textToolTip is null)
-                        {
-                            _textToolTip = new ToolTip();
-                        }
+                        _textToolTip ??= new ToolTip();
                     }
 
                     if (ParentInternal is not null)

@@ -11,13 +11,10 @@ namespace TestConsole
         {
             get
             {
-                if (_actionLists is null)
-                {
-                    _actionLists = new DesignerActionListCollection
+                _actionLists ??= new DesignerActionListCollection
                     {
                         new CustomButtonDesignerActionList(Component)
                     };
-                }
 
                 return _actionLists;
             }

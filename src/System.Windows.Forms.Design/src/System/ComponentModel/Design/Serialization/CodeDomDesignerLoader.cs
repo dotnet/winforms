@@ -248,10 +248,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (t is null)
                             {
-                                if (failures is null)
-                                {
-                                    failures = new ArrayList();
-                                }
+                                failures ??= new ArrayList();
 
                                 failures.Add(string.Format(SR.CodeDomDesignerLoaderDocumentFailureTypeNotFound, typeDecl.Name, typeRef.BaseType));
                             }
@@ -271,13 +268,10 @@ namespace System.ComponentModel.Design.Serialization
 
                             foreach (Attribute attr in attributes)
                             {
-                                if (attr is RootDesignerSerializerAttribute)
+                                if (attr is RootDesignerSerializerAttribute ra)
                                 {
-                                    RootDesignerSerializerAttribute ra = (RootDesignerSerializerAttribute)attr;
-                                    string typeName = ra.SerializerBaseTypeName;
-
                                     // This serializer must support a CodeDomSerializer or we're not interested.
-                                    if (typeName is not null && LoaderHost.GetType(typeName) == typeof(CodeDomSerializer))
+                                    if (ra.SerializerBaseTypeName is not null && LoaderHost.GetType(ra.SerializerBaseTypeName) == typeof(CodeDomSerializer))
                                     {
                                         Type serializerType = LoaderHost.GetType(ra.SerializerTypeName);
 
@@ -317,10 +311,7 @@ namespace System.ComponentModel.Design.Serialization
                             // If we didn't find a serializer for this type, report it.
                             if (_rootSerializer is null && _typeSerializer is null)
                             {
-                                if (failures is null)
-                                {
-                                    failures = new ArrayList();
-                                }
+                                failures ??= new ArrayList();
 
                                 if (foundAttribute)
                                 {
@@ -516,13 +507,10 @@ namespace System.ComponentModel.Design.Serialization
                         continue;
                     }
 
-                    if (member is CodeMemberField)
+                    if (member is CodeMemberField newField)
                     {
-                        if (existingMember is CodeMemberField)
+                        if (existingMember is CodeMemberField docField)
                         {
-                            CodeMemberField docField = (CodeMemberField)existingMember;
-                            CodeMemberField newField = (CodeMemberField)member;
-
                             // We will be case-sensitive always in working out whether to replace the field
                             if ((string.Equals(newField.Name, docField.Name)) && newField.Attributes == docField.Attributes && TypesEqual(newField.Type, docField.Type))
                             {
@@ -540,22 +528,18 @@ namespace System.ComponentModel.Design.Serialization
                             newElements.Add(member);
                         }
                     }
-                    else if (member is CodeMemberMethod)
+                    else if (member is CodeMemberMethod newMethod)
                     {
-                        if (existingMember is CodeMemberMethod)
+                        if (existingMember is CodeMemberMethod and not CodeConstructor)
                         {
                             // If there is an existing constructor, preserve it.
-                            if (!(existingMember is CodeConstructor))
-                            {
-                                // For methods, we do not want to replace the method; rather, we
-                                // just want to replace its contents.  This helps to preserve
-                                // the layout of the file.
-                                CodeMemberMethod existingMethod = (CodeMemberMethod)existingMember;
-                                CodeMemberMethod newMethod = (CodeMemberMethod)member;
+                            // For methods, we do not want to replace the method; rather, we
+                            // just want to replace its contents.  This helps to preserve
+                            // the layout of the file.
+                            CodeMemberMethod existingMethod = (CodeMemberMethod)existingMember;
 
-                                existingMethod.Statements.Clear();
-                                existingMethod.Statements.AddRange(newMethod.Statements);
-                            }
+                            existingMethod.Statements.Clear();
+                            existingMethod.Statements.AddRange(newMethod.Statements);
                         }
                     }
                     else
@@ -1085,10 +1069,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         object IDesignerSerializationService.Serialize(ICollection objects)
         {
-            if (objects is null)
-            {
-                objects = Array.Empty<object>();
-            }
+            objects ??= Array.Empty<object>();
 
             ComponentSerializationService css = GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
 

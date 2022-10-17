@@ -360,12 +360,12 @@ namespace System.Windows.Forms
         /*
         example usage
 
-        #if DEBUG
+#if DEBUG
                 int dbgLayoutCheck = LayoutSuspendCount;
-        #endif
-        #if DEBUG
+#endif
+#if DEBUG
                 AssertLayoutSuspendCount(dbgLayoutCheck);
-        #endif
+#endif
         */
 #endif
 
@@ -920,7 +920,7 @@ namespace System.Windows.Forms
                 {
                     return Properties.GetObject(s_dataContextProperty);
                 }
-                
+
                 return ParentInternal?.DataContext;
             }
             set
@@ -929,7 +929,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
-                
+
                 // When DataContext was different than its parent before, but now it is about to become the same,
                 // we're removing it altogether, so it can inherit the value from its parent.
                 if (Properties.ContainsObject(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
@@ -1136,10 +1136,7 @@ namespace System.Windows.Forms
         public void ResetBindings()
         {
             ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
-            if (bindings is not null)
-            {
-                bindings.Clear();
-            }
+            bindings?.Clear();
         }
 
         /// <summary>
@@ -1354,10 +1351,7 @@ namespace System.Windows.Forms
                     if (cacheTextCounter == 0)
                     {
                         Properties.SetObject(s_acheTextFieldProperty, _text);
-                        if (_text is null)
-                        {
-                            _text = WindowText;
-                        }
+                        _text ??= WindowText;
                     }
 
                     cacheTextCounter++;
@@ -1559,10 +1553,7 @@ namespace System.Windows.Forms
 
                 // In a typical control this is accessed ten times to create and show a control.
                 // It is a net memory savings, then, to maintain a copy on control.
-                if (_createParams is null)
-                {
-                    _createParams = new CreateParams();
-                }
+                _createParams ??= new CreateParams();
 
                 CreateParams cp = _createParams;
                 cp.Style = 0;
@@ -1801,7 +1792,7 @@ namespace System.Windows.Forms
                 {
                     // We want to instantly change the cursor if the mouse is within our bounds.
                     // This includes the case where the mouse is over one of our children.
-                    User32.GetCursorPos(out Point p);
+                    PInvoke.GetCursorPos(out Point p);
                     PInvoke.GetWindowRect(this, out RECT r);
                     if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                     {
@@ -2255,10 +2246,7 @@ namespace System.Windows.Forms
                 // if application is in PerMonitorV2 mode and font is scaled when application moved between monitor.
                 if (ScaledControlFont is not null)
                 {
-                    if (_scaledFontWrapper is null)
-                    {
-                        _scaledFontWrapper = new FontHandleWrapper(ScaledControlFont);
-                    }
+                    _scaledFontWrapper ??= new FontHandleWrapper(ScaledControlFont);
 
                     return _scaledFontWrapper.Handle;
                 }
@@ -2987,7 +2975,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                User32.GetCursorPos(out Point pt);
+                PInvoke.GetCursorPos(out Point pt);
                 return pt;
             }
         }
@@ -3011,10 +2999,7 @@ namespace System.Windows.Forms
                         name = Site.Name;
                     }
 
-                    if (name is null)
-                    {
-                        name = string.Empty;
-                    }
+                    name ??= string.Empty;
                 }
 
                 return name;
@@ -3059,10 +3044,8 @@ namespace System.Windows.Forms
                 {
                     value.Controls.Add(this);
                 }
-                else if (_parent is not null)
-                {
-                    _parent.Controls.Remove(this);
-                }
+                else
+                    _parent?.Controls.Remove(this);
             }
         }
 
@@ -3123,10 +3106,7 @@ namespace System.Windows.Forms
             get => _reflectParent;
             set
             {
-                if (value is not null)
-                {
-                    value.AddReflectChild();
-                }
+                value?.AddReflectChild();
 
                 Control? existing = _reflectParent as Control;
                 _reflectParent = value;
@@ -3577,10 +3557,7 @@ namespace System.Windows.Forms
             get => CacheTextInternal ? _text ?? string.Empty : WindowText;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (value == Text)
                 {
@@ -3792,7 +3769,7 @@ namespace System.Windows.Forms
         }
 
         // The parameter used in the call to ShowWindow for this control
-        internal virtual User32.SW ShowParams => User32.SW.SHOW;
+        internal virtual SHOW_WINDOW_CMD ShowParams => SHOW_WINDOW_CMD.SW_SHOW;
 
         /// <summary>
         ///  When this property in true the Cursor Property is set to WaitCursor as well as the Cursor Property
@@ -3933,7 +3910,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            nint threadHandle = ((IHandle)ctx).Handle;
+            HANDLE threadHandle = ctx.Handle;
             bool processed = false;
             // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
             uint exitCode = 0;
@@ -3943,7 +3920,7 @@ namespace System.Windows.Forms
                 //Get the thread's exit code, if we found the thread as expected
                 if (threadHandle != 0)
                 {
-                    returnValue = PInvoke.GetExitCodeThread((HANDLE)threadHandle, &exitCode);
+                    returnValue = PInvoke.GetExitCodeThread(threadHandle, &exitCode);
                 }
 
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
@@ -4628,7 +4605,7 @@ namespace System.Windows.Forms
         ///  Helper method for retrieving an ActiveX property.  We abstract these
         ///  to another method so we do not force JIT the ActiveX codebase.
         /// </summary>
-        private void ActiveXUpdateBounds(ref int x, ref int y, ref int width, ref int height, User32.SWP flags)
+        private void ActiveXUpdateBounds(ref int x, ref int y, ref int width, ref int height, SET_WINDOW_POS_FLAGS flags)
         {
             ActiveXInstance.UpdateBounds(ref x, ref y, ref width, ref height, flags);
         }
@@ -4716,10 +4693,7 @@ namespace System.Windows.Forms
             }
 
             SetState(States.CheckedHost, false);
-            if (ParentInternal is not null)
-            {
-                ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.All);
-            }
+            ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
@@ -4800,10 +4774,11 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated && GetTopLevel() && User32.IsWindowEnabled(this))
             {
-                User32.SetWindowPos(
-                    new HandleRef(_window, Handle),
-                    User32.HWND_TOP,
-                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE);
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOP,
+                    0, 0, 0, 0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE);
             }
         }
 
@@ -4898,10 +4873,7 @@ namespace System.Windows.Forms
                 ActiveXOnFocus(true);
             }
 
-            if (_parent is not null)
-            {
-                _parent.ChildGotFocus(child);
-            }
+            _parent?.ChildGotFocus(child);
         }
 
         /// <summary>
@@ -5257,10 +5229,7 @@ namespace System.Windows.Forms
                         DestroyHandle();
                     }
 
-                    if (_parent is not null)
-                    {
-                        _parent.Controls.Remove(this);
-                    }
+                    _parent?.Controls.Remove(this);
 
                     ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
 
@@ -5292,10 +5261,7 @@ namespace System.Windows.Forms
             {
                 // This same post is done in NativeWindow's finalize method, so if you change
                 // it, change it there too.
-                if (_window is not null)
-                {
-                    _window.ForceExitMessageLoop();
-                }
+                _window?.ForceExitMessageLoop();
 
                 base.Dispose(disposing);
             }
@@ -5734,22 +5700,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves the child control that is located at the specified client
-        ///  coordinates.
+        ///  Retrieves the child control that is located at the specified client coordinates.
         /// </summary>
         public Control? GetChildAtPoint(Point pt, GetChildAtPointSkip skipValue)
         {
             int value = (int)skipValue;
-            // Since this is a Flags Enumeration... the only way to validate skipValue is by checking if its within the range.
+
+            // Since this is a flags enumeration the only way to validate skipValue is by checking if its within the range.
             if (value < 0 || value > 7)
             {
                 throw new InvalidEnumArgumentException(nameof(skipValue), value, typeof(GetChildAtPointSkip));
             }
 
-            IntPtr hwnd = User32.ChildWindowFromPointEx(this, pt, (User32.CWP)value);
-            Control? ctl = FromChildHandle(hwnd);
+            HWND hwnd = PInvoke.ChildWindowFromPointEx(this, pt, (CWP_FLAGS)value);
+            Control? control = FromChildHandle(hwnd);
 
-            return (ctl == this) ? null : ctl;
+            return (control == this) ? null : control;
         }
 
         private protected virtual string GetCaptionForTool(ToolTip toolTip)
@@ -5810,10 +5776,7 @@ namespace System.Windows.Forms
         // Essentially an Hfont; see inner class for details.
         private static FontHandleWrapper GetDefaultFontHandleWrapper()
         {
-            if (s_defaultFontHandleWrapper is null)
-            {
-                s_defaultFontHandleWrapper = new FontHandleWrapper(DefaultFont);
-            }
+            s_defaultFontHandleWrapper ??= new FontHandleWrapper(DefaultFont);
 
             return s_defaultFontHandleWrapper;
         }
@@ -5875,7 +5838,7 @@ namespace System.Windows.Forms
             // We would need to get adornments metrics for both (old and new) Dpi in case application is in PerMonitorV2 mode and Dpi changed.
             AdjustWindowRectExForControlDpi(ref adornmentsAfterDpiChange, (WINDOW_STYLE)cp.Style, bMenu: false, (WINDOW_EX_STYLE)cp.ExStyle);
 
-            if (_oldDeviceDpi != _deviceDpi && OsVersion.IsWindows10_1703OrGreater)
+            if (_oldDeviceDpi != _deviceDpi && OsVersion.IsWindows10_1703OrGreater())
             {
                 AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, (WINDOW_STYLE)cp.Style, bMenu: false, (WINDOW_EX_STYLE)cp.ExStyle, _oldDeviceDpi);
             }
@@ -6421,11 +6384,11 @@ namespace System.Windows.Forms
 
                 if (invalidateChildren)
                 {
-                    User32.RedrawWindow(
+                    PInvoke.RedrawWindow(
                         this,
-                        null,
+                        lprcUpdate: null,
                         regionHandle,
-                        User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
+                        REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_ERASE | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN);
                 }
                 else
                 {
@@ -6434,7 +6397,7 @@ namespace System.Windows.Forms
                     User32.InvalidateRgn(
                         this,
                         regionHandle,
-                        (!GetStyle(ControlStyles.Opaque)));
+                        !GetStyle(ControlStyles.Opaque));
                 }
 
                 OnInvalidated(new InvalidateEventArgs(Rectangle.Ceiling(region.GetBounds(graphics))));
@@ -6462,18 +6425,20 @@ namespace System.Windows.Forms
             {
                 if (invalidateChildren)
                 {
-                    User32.RedrawWindow(
+                    PInvoke.RedrawWindow(
                         _window,
-                        flags: User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
+                        lprcUpdate: null,
+                        HRGN.Null,
+                        REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_ERASE | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN);
                 }
                 else
                 {
                     // It's safe to invoke InvalidateRect from a separate thread.
                     using var scope = MultithreadSafeCallScope.Create();
-                    User32.InvalidateRect(
-                        new HandleRef(_window, Handle),
-                        null,
-                        (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque ? true : false);
+                    PInvoke.InvalidateRect(
+                        this,
+                        lpRect: null,
+                        bErase: !_controlStyle.HasFlag(ControlStyles.Opaque));
                 }
 
                 NotifyInvalidate(ClientRectangle);
@@ -6508,20 +6473,20 @@ namespace System.Windows.Forms
                 RECT rcArea = rc;
                 if (invalidateChildren)
                 {
-                    User32.RedrawWindow(
+                    PInvoke.RedrawWindow(
                         _window,
                         &rcArea,
-                        default,
-                        User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
+                        HRGN.Null,
+                        REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_ERASE | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN);
                 }
                 else
                 {
                     // It's safe to invoke InvalidateRect from a separate thread.
                     using var scope = MultithreadSafeCallScope.Create();
-                    User32.InvalidateRect(
-                        new HandleRef(_window, Handle),
+                    PInvoke.InvalidateRect(
+                        this,
                         &rcArea,
-                        (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque ? true : false);
+                        bErase: !_controlStyle.HasFlag(ControlStyles.Opaque));
                 }
 
                 NotifyInvalidate(rc);
@@ -6600,10 +6565,7 @@ namespace System.Windows.Forms
         {
             if (tme._executionContext is not null)
             {
-                if (s_invokeMarshaledCallbackHelperDelegate is null)
-                {
-                    s_invokeMarshaledCallbackHelperDelegate = new ContextCallback(InvokeMarshaledCallbackHelper);
-                }
+                s_invokeMarshaledCallbackHelperDelegate ??= new ContextCallback(InvokeMarshaledCallbackHelper);
 
                 // If there's no ExecutionContext, make sure we have a SynchronizationContext.  There's no
                 // direct check for ExecutionContext: this is as close as we can get.
@@ -7043,7 +7005,7 @@ namespace System.Windows.Forms
 
         private static void AdjustWindowRectExForDpi(ref RECT rect, WINDOW_STYLE style, bool bMenu, WINDOW_EX_STYLE exStyle, int dpi)
         {
-            if ((DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired) && OsVersion.IsWindows10_1703OrGreater)
+            if ((DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired) && OsVersion.IsWindows10_1703OrGreater())
             {
                 PInvoke.AdjustWindowRectExForDpi(ref rect, style, bMenu, exStyle, (uint)dpi);
             }
@@ -7092,10 +7054,7 @@ namespace System.Windows.Forms
 
             lock (this)
             {
-                if (_threadCallbackList is null)
-                {
-                    _threadCallbackList = new Queue<ThreadMethodEntry>();
-                }
+                _threadCallbackList ??= new Queue<ThreadMethodEntry>();
             }
 
             lock (_threadCallbackList)
@@ -7217,10 +7176,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeOnClick(Control toInvoke, EventArgs e)
         {
-            if (toInvoke is not null)
-            {
-                toInvoke.OnClick(e);
-            }
+            toInvoke?.OnClick(e);
         }
 
         protected virtual void OnAutoSizeChanged(EventArgs e)
@@ -7359,10 +7315,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal virtual void OnChildLayoutResuming(Control child, bool performLayout)
         {
-            if (ParentInternal is not null)
-            {
-                ParentInternal.OnChildLayoutResuming(child, performLayout);
-            }
+            ParentInternal?.OnChildLayoutResuming(child, performLayout);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -8292,10 +8245,7 @@ namespace System.Windows.Forms
                 ActiveXOnFocus(true);
             }
 
-            if (_parent is not null)
-            {
-                _parent.ChildGotFocus(this);
-            }
+            _parent?.ChildGotFocus(this);
 
             ((EventHandler)Events[s_gotFocusEvent])?.Invoke(this, e);
         }
@@ -8379,7 +8329,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyUp(KeyEventArgs e)
         {
-            if (OsVersion.IsWindows11_OrGreater &&
+            if (OsVersion.IsWindows11_OrGreater() &&
                 (e.KeyCode.HasFlag(Keys.ControlKey) || e.KeyCode == Keys.Escape))
             {
                 KeyboardToolTipStateMachine.HidePersistentTooltip();
@@ -9814,10 +9764,7 @@ namespace System.Windows.Forms
                 // We've detected some state we need to unset, usually clearing the hidden state of
                 // the accelerators.  We need to get the topmost parent and call CHANGEUISTATE so
                 // that the entire tree of controls is
-                if (topMostParent is null)
-                {
-                    topMostParent = TopMostParent;
-                }
+                topMostParent ??= TopMostParent;
 
                 // A) if we're parented to a native dialog - REFRESH our child states ONLY
                 //       Then we've got to send a WM_UPDATEUISTATE to the topmost managed control (which will be non-toplevel)
@@ -10164,7 +10111,7 @@ namespace System.Windows.Forms
                 UiaCore.UiaReturnRawElementProvider(handle, 0, 0, null);
             }
 
-            if (OsVersion.IsWindows8OrGreater && TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
+            if (OsVersion.IsWindows8OrGreater() && TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
             {
                 UiaCore.UiaDisconnectProvider(accessibleObject);
             }
@@ -10316,7 +10263,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Revoking drop target: {Handle}");
 
                         // Revoke
-                        HRESULT n = Ole32.RevokeDragDrop(new HandleRef(this, Handle));
+                        HRESULT n = PInvoke.RevokeDragDrop(this);
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{n}");
                         if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_NOTREGISTERED)
                         {
@@ -10847,10 +10794,11 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated && GetTopLevel())
             {
-                User32.SetWindowPos(
-                    new HandleRef(_window, Handle),
-                    User32.HWND_BOTTOM,
-                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE);
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_BOTTOM,
+                    0, 0, 0, 0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE);
             }
         }
 
@@ -10918,11 +10866,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Performs the work of setting the bounds of this control. Inheriting
-        ///  classes can override this function to add size restrictions. Inheriting
-        ///  classes must call base.setBoundsCore to actually cause the bounds
-        ///  of the control to change.
+        ///  Performs the work of setting the specified bounds of this control.
         /// </summary>
+        /// <param name="x">The new <see cref="Left" /> property value of the control.</param>
+        /// <param name="y">The new <see cref="Top" /> property value of the control.</param>
+        /// <param name="width">The new <see cref="Width" /> property value of the control.</param>
+        /// <param name="height">The new <see cref="Height" /> property value of the control.</param>
+        /// <param name="specified">A bitwise combination of the <see cref="BoundsSpecified"/> values.</param>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
@@ -10938,14 +10888,9 @@ namespace System.Windows.Forms
             // to update the layout engine's state with the new control bounds.
 #if DEBUG
             int suspendCount = -44371;      // Arbitrary negative prime to surface bugs.
+            suspendCount = ParentInternal is not null ? ParentInternal.LayoutSuspendCount : suspendCount;
 #endif
-            if (ParentInternal is not null)
-            {
-#if DEBUG
-                suspendCount = ParentInternal.LayoutSuspendCount;
-#endif
-                ParentInternal.SuspendLayout();
-            }
+            ParentInternal?.SuspendLayout();
 
             try
             {
@@ -10969,35 +10914,28 @@ namespace System.Windows.Forms
                     {
                         if (!GetState(States.SizeLockedByOS))
                         {
-                            User32.SWP flags = User32.SWP.NOZORDER | User32.SWP.NOACTIVATE;
+                            SET_WINDOW_POS_FLAGS flags = SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE;
 
                             if (_x == x && _y == y)
                             {
-                                flags |= User32.SWP.NOMOVE;
+                                flags |= SET_WINDOW_POS_FLAGS.SWP_NOMOVE;
                             }
 
                             if (_width == width && _height == height)
                             {
-                                flags |= User32.SWP.NOSIZE;
+                                flags |= SET_WINDOW_POS_FLAGS.SWP_NOSIZE;
                             }
 
                             // Give a chance for derived controls to do what they want, just before we resize.
                             OnBoundsUpdate(x, y, width, height);
 
-                            User32.SetWindowPos(
-                                new HandleRef(_window, Handle),
-                                IntPtr.Zero,
-                                x,
-                                y,
-                                width,
-                                height,
-                                flags);
+                            PInvoke.SetWindowPos(this, HWND.Null, x, y, width, height, flags);
 
                             // NOTE: SetWindowPos causes a WM_WINDOWPOSCHANGED which is processed
                             // synchonously so we effectively end up in UpdateBounds immediately following
                             // SetWindowPos.
                             //
-                            //UpdateBounds(x, y, width, height);
+                            // UpdateBounds(x, y, width, height);
                         }
                     }
                 }
@@ -11063,7 +11001,7 @@ namespace System.Windows.Forms
 
         private void SetParentHandle(HWND value)
         {
-            Debug.Assert(value != NativeMethods.InvalidIntPtr, "Outdated call to SetParentHandle");
+            Debug.Assert(value != -1, "Outdated call to SetParentHandle");
 
             if (IsHandleCreated)
             {
@@ -11113,10 +11051,7 @@ namespace System.Windows.Forms
                                 throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                             }
 
-                            if (_parent is not null)
-                            {
-                                _parent.UpdateChildZOrder(this);
-                            }
+                            _parent?.UpdateChildZOrder(this);
 
                             Application.UnparkHandle(this, _window.DpiAwarenessContext);
                         }
@@ -11221,7 +11156,7 @@ namespace System.Windows.Forms
                     // bit and call CreateControl()
                     if (IsHandleCreated || value)
                     {
-                        User32.ShowWindow(Handle, value ? ShowParams : User32.SW.HIDE);
+                        PInvoke.ShowWindow(this, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                     }
                 }
                 else if (IsHandleCreated || (value && _parent?.Created == true))
@@ -11239,14 +11174,15 @@ namespace System.Windows.Forms
                             CreateControl();
                         }
 
-                        User32.SetWindowPos(
-                            new HandleRef(_window, Handle),
-                            IntPtr.Zero,
-                            flags: User32.SWP.NOSIZE
-                                | User32.SWP.NOMOVE
-                                | User32.SWP.NOZORDER
-                                | User32.SWP.NOACTIVATE
-                                | (value ? User32.SWP.SHOWWINDOW : User32.SWP.HIDEWINDOW));
+                        PInvoke.SetWindowPos(
+                            this,
+                            HWND.Null,
+                            0, 0, 0, 0,
+                            SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                                | SET_WINDOW_POS_FLAGS.SWP_NOMOVE
+                                | SET_WINDOW_POS_FLAGS.SWP_NOZORDER
+                                | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                                | (value ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
                     }
                     catch
                     {
@@ -11299,14 +11235,15 @@ namespace System.Windows.Forms
                 // but the child control has already been created.
                 if (IsHandleCreated)
                 {
-                    User32.SetWindowPos(
-                        new HandleRef(_window, Handle),
-                        User32.HWND_TOP,
-                        flags: User32.SWP.NOSIZE
-                            | User32.SWP.NOMOVE
-                            | User32.SWP.NOZORDER
-                            | User32.SWP.NOACTIVATE
-                            | (value ? User32.SWP.SHOWWINDOW : User32.SWP.HIDEWINDOW));
+                    PInvoke.SetWindowPos(
+                        this,
+                        HWND.HWND_TOP,
+                        0, 0, 0, 0,
+                        SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                            | SET_WINDOW_POS_FLAGS.SWP_NOMOVE
+                            | SET_WINDOW_POS_FLAGS.SWP_NOZORDER
+                            | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                            | (value ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
                 }
             }
         }
@@ -11646,7 +11583,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.UpdateWindow(this);
+                PInvoke.UpdateWindow(this);
             }
         }
 
@@ -11846,42 +11783,40 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void UpdateZOrder()
         {
-            if (_parent is not null)
-            {
-                _parent.UpdateChildZOrder(this);
-            }
+            _parent?.UpdateChildZOrder(this);
         }
 
         /// <summary>
         ///  Syncs the ZOrder of child control to the index we want it to be.
         /// </summary>
-        private void UpdateChildZOrder(Control ctl)
+        private void UpdateChildZOrder(Control control)
         {
-            if (!IsHandleCreated || !ctl.IsHandleCreated || ctl._parent != this)
+            if (!IsHandleCreated || !control.IsHandleCreated || control._parent != this)
             {
                 return;
             }
 
-            HWND prevHandle = (HWND)User32.HWND_TOP;
-            for (int i = Controls.GetChildIndex(ctl); --i >= 0;)
+            HWND previous = HWND.HWND_TOP;
+            for (int i = Controls.GetChildIndex(control); --i >= 0;)
             {
-                Control c = Controls[i];
-                if (c.IsHandleCreated && c._parent == this)
+                Control child = Controls[i];
+                if (child.IsHandleCreated && child._parent == this)
                 {
-                    prevHandle = c.HWND;
+                    previous = child.HWND;
                     break;
                 }
             }
 
-            if (PInvoke.GetWindow(ctl, GET_WINDOW_CMD.GW_HWNDPREV) != prevHandle)
+            if (PInvoke.GetWindow(control, GET_WINDOW_CMD.GW_HWNDPREV) != previous)
             {
                 _state |= States.NoZOrder;
                 try
                 {
-                    User32.SetWindowPos(
-                        new HandleRef(ctl._window, ctl.Handle),
-                        prevHandle,
-                        flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE);
+                    PInvoke.SetWindowPos(
+                        control,
+                        previous,
+                        0, 0, 0, 0,
+                        SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE);
                 }
                 finally
                 {
@@ -11939,14 +11874,15 @@ namespace System.Windows.Forms
                 SetState(States.Mirrored, ((WINDOW_EX_STYLE)cp.ExStyle).HasFlag(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL));
             }
 
-            User32.SetWindowPos(
-                new HandleRef(this, Handle),
-                User32.HWND_TOP,
-                flags: User32.SWP.DRAWFRAME
-                    | User32.SWP.NOACTIVATE
-                    | User32.SWP.NOMOVE
-                    | User32.SWP.NOSIZE
-                    | User32.SWP.NOZORDER);
+            PInvoke.SetWindowPos(
+                this,
+                HWND.HWND_TOP,
+                0, 0, 0, 0,
+                SET_WINDOW_POS_FLAGS.SWP_DRAWFRAME
+                    | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOMOVE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
 
             Invalidate(true);
         }
@@ -12159,10 +12095,7 @@ namespace System.Windows.Forms
                 name = Name;
             }
 
-            if (name is null)
-            {
-                name = string.Empty;
-            }
+            name ??= string.Empty;
 
             MarshalStringToMessage(name, ref m);
         }
@@ -12275,10 +12208,7 @@ namespace System.Windows.Forms
         {
             DefWndProc(ref m);
 
-            if (_parent is not null)
-            {
-                _parent.UpdateChildZOrder(this);
-            }
+            _parent?.UpdateChildZOrder(this);
 
             UpdateBounds();
 
@@ -12572,15 +12502,10 @@ namespace System.Windows.Forms
                     }
                 }
 
-                bool fireClick = false;
-
-                if (_controlStyle.HasFlag(ControlStyles.StandardClick))
-                {
-                    if (GetState(States.MousePressed) && !IsDisposed && User32.WindowFromPoint(screenLocation) == Handle)
-                    {
-                        fireClick = true;
-                    }
-                }
+                bool fireClick = _controlStyle.HasFlag(ControlStyles.StandardClick)
+                    && GetState(States.MousePressed)
+                    && !IsDisposed
+                    && PInvoke.WindowFromPoint(screenLocation) == HWND;
 
                 if (fireClick && !ValidationCancelled)
                 {
@@ -12683,33 +12608,33 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles the WM_DRAWITEM\WM_MEASUREITEM messages for controls other than menus
+        ///  Handles the WM_DRAWITEM\WM_MEASUREITEM messages for controls other than menus.
         /// </summary>
         private void WmOwnerDraw(ref Message m)
         {
             bool reflectCalled = false;
 
             int ctrlId = (int)m.WParamInternal;
-            IntPtr p = User32.GetDlgItem(m.HWnd, (User32.DialogItemID)ctrlId);
-            if (p == IntPtr.Zero)
+            HWND p = PInvoke.GetDlgItem(m.HWND, ctrlId);
+            if (p.IsNull)
             {
                 // On 64-bit platforms wParam is already 64 bit but the control ID stored in it is only 32-bit
                 // Empirically, we have observed that the 64 bit HWND is just a sign extension of the 32-bit ctrl ID
                 // Since WParam is already 64-bit, we need to discard the high dword first and then re-extend the
                 // 32-bit value treating it as signed.
-                p = ctrlId;
+                p = (HWND)(nint)ctrlId;
             }
 
             if (!ReflectMessage(p, ref m))
             {
-                // Additional Check For Control .... TabControl truncates the Hwnd value...
+                // Additional check For Control. TabControl truncates the HWND value.
                 HWND handle = NativeWindow.GetHandleFromWindowId((short)m.WParamInternal.LOWORD);
-                if (handle != IntPtr.Zero)
+                if (!handle.IsNull)
                 {
                     Control? control = FromHandle(handle);
                     if (control is not null)
                     {
-                        m.ResultInternal = (LRESULT)PInvoke.SendMessage(
+                        m.ResultInternal = PInvoke.SendMessage(
                             control,
                             User32.WM.REFLECT | m.MsgInternal,
                             (WPARAM)handle, m.LParamInternal);
@@ -12910,17 +12835,17 @@ namespace System.Windows.Forms
             // manipulate our bounds here.
             if (IsActiveX)
             {
-                User32.WINDOWPOS* wp = (User32.WINDOWPOS*)(nint)m.LParamInternal;
+                WINDOWPOS* wp = (WINDOWPOS*)(nint)m.LParamInternal;
 
                 // Only call UpdateBounds if the new bounds are different.
                 bool different = false;
 
-                if ((wp->flags & User32.SWP.NOMOVE) == 0 && (wp->x != Left || wp->y != Top))
+                if ((wp->flags & SET_WINDOW_POS_FLAGS.SWP_NOMOVE) == 0 && (wp->x != Left || wp->y != Top))
                 {
                     different = true;
                 }
 
-                if ((wp->flags & User32.SWP.NOSIZE) == 0 && (wp->cx != Width || wp->cy != Height))
+                if ((wp->flags & SET_WINDOW_POS_FLAGS.SWP_NOSIZE) == 0 && (wp->cx != Width || wp->cy != Height))
                 {
                     different = true;
                 }
@@ -12940,20 +12865,20 @@ namespace System.Windows.Forms
         private void WmParentNotify(ref Message m)
         {
             User32.WM msg = (User32.WM)m.WParamInternal.LOWORD;
-            IntPtr hWnd = IntPtr.Zero;
+            HWND hWnd = HWND.Null;
             switch (msg)
             {
                 case User32.WM.CREATE:
-                    hWnd = m.LParamInternal;
+                    hWnd = (HWND)m.LParamInternal;
                     break;
                 case User32.WM.DESTROY:
                     break;
                 default:
-                    hWnd = User32.GetDlgItem(this, (User32.DialogItemID)m.WParamInternal.HIWORD);
+                    hWnd = PInvoke.GetDlgItem(this, m.WParamInternal.HIWORD);
                     break;
             }
 
-            if (hWnd == IntPtr.Zero || !ReflectMessage(hWnd, ref m))
+            if (hWnd.IsNull || !ReflectMessage(hWnd, ref m))
             {
                 DefWndProc(ref m);
             }
@@ -13165,8 +13090,8 @@ namespace System.Windows.Forms
                 && PInvoke.GetParent(this) == _parent.InternalHandle
                 && (_state & States.NoZOrder) == 0)
             {
-                User32.WINDOWPOS* wp = (User32.WINDOWPOS*)(nint)m.LParamInternal;
-                if ((wp->flags & User32.SWP.NOZORDER) == 0)
+                WINDOWPOS* wp = (WINDOWPOS*)(nint)m.LParamInternal;
+                if ((wp->flags & SET_WINDOW_POS_FLAGS.SWP_NOZORDER) == 0)
                 {
                     _parent.UpdateChildControlIndex(this);
                 }
@@ -14084,7 +14009,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleObject.SetColorScheme(Gdi32.LOGPALETTE* pLogpal)
+        unsafe HRESULT Ole32.IOleObject.SetColorScheme(LOGPALETTE* pLogpal)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetColorScheme");
             return HRESULT.S_OK;
@@ -14313,7 +14238,7 @@ namespace System.Windows.Forms
             IntPtr pvAspect,
             Ole32.DVTARGETDEVICE* ptd,
             IntPtr hicTargetDev,
-            Gdi32.LOGPALETTE* ppColorSet)
+            LOGPALETTE* ppColorSet)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetColorSet");
 
@@ -14380,7 +14305,7 @@ namespace System.Windows.Forms
             IntPtr pvAspect,
             Ole32.DVTARGETDEVICE* ptd,
             IntPtr hicTargetDev,
-            Gdi32.LOGPALETTE* ppColorSet)
+            LOGPALETTE* ppColorSet)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetColorSet");
 
@@ -14572,6 +14497,7 @@ namespace System.Windows.Forms
         HWND IHandle<HWND>.Handle => HWND;
 
         internal HWND HWND => (HWND)Handle;
+        internal HWND HWNDInternal => (HWND)HandleInternal;
 
         internal virtual bool AllowsChildrenToShowToolTips() => true;
     }

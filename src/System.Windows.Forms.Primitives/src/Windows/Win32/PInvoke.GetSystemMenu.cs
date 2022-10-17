@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static HMENU GetSystemMenu<T>(in T hwnd, BOOL bRevert) where T : IHandle<HWND>
+        public static HMENU GetSystemMenu<T>(T hwnd, BOOL bRevert) where T : IHandle<HWND>
         {
             HMENU result = GetSystemMenu(hwnd.Handle, bRevert);
             GC.KeepAlive(hwnd.Wrapper);

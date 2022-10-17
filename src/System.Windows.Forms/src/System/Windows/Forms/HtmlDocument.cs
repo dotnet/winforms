@@ -486,19 +486,13 @@ namespace System.Windows.Forms
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
-            if (shim is not null)
-            {
-                shim.AttachEventHandler(eventName, eventHandler);
-            }
+            shim?.AttachEventHandler(eventName, eventHandler);
         }
 
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
-            if (shim is not null)
-            {
-                shim.DetachEventHandler(eventName, eventHandler);
-            }
+            shim?.DetachEventHandler(eventName, eventHandler);
         }
 
         public event HtmlElementEventHandler Click

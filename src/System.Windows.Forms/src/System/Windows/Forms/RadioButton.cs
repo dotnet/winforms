@@ -535,26 +535,19 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Raises the <see cref="ButtonBase.OnMouseUp"/> event.
-        /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            if (mevent.Button == MouseButtons.Left && GetStyle(ControlStyles.UserPaint))
+            if (mevent.Button == MouseButtons.Left
+                && GetStyle(ControlStyles.UserPaint)
+                && MouseIsDown
+                && PInvoke.WindowFromPoint(PointToScreen(mevent.Location)) == HWND)
             {
-                if (base.MouseIsDown)
+                // Paint in raised state.
+                ResetFlagsandPaint();
+                if (!ValidationCancelled)
                 {
-                    Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (User32.WindowFromPoint(pt) == Handle)
-                    {
-                        //Paint in raised state...
-                        ResetFlagsandPaint();
-                        if (!ValidationCancelled)
-                        {
-                            OnClick(mevent);
-                            OnMouseClick(mevent);
-                        }
-                    }
+                    OnClick(mevent);
+                    OnMouseClick(mevent);
                 }
             }
 
@@ -562,15 +555,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Generates a <see cref="Control.Click"/> event for the
-        ///  button, simulating a click by a user.
+        ///  Generates a <see cref="Control.Click"/> event for the button, simulating a click by a user.
         /// </summary>
         public void PerformClick()
         {
             if (CanSelect)
             {
-                //Paint in raised state...
-                //
+                // Paint in raised state.
                 ResetFlagsandPaint();
                 if (!ValidationCancelled)
                 {
@@ -585,11 +576,13 @@ namespace System.Windows.Forms
             {
                 if (!Focused)
                 {
-                    Focus();    // This will cause an OnEnter event, which in turn will fire the click event
+                    // This will cause an OnEnter event, which in turn will fire the click event.
+                    Focus();
                 }
                 else
                 {
-                    PerformClick();     // Generate a click if already focused
+                    // Generate a click if already focused.
+                    PerformClick();
                 }
 
                 return true;

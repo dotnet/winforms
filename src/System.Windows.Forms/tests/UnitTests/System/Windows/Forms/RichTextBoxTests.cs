@@ -14,12 +14,11 @@ using Xunit;
 using static Interop;
 using static Interop.Richedit;
 using static Interop.User32;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class RichTextBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;

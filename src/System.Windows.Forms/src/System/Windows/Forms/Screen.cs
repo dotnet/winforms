@@ -49,7 +49,6 @@ namespace System.Windows.Forms
         // non-multimon OSes.
         private const int PRIMARY_MONITOR = unchecked((int)0xBAADF00D);
 
-        private static readonly bool s_multiMonitorSupport = (User32.GetSystemMetrics(User32.SystemMetric.SM_CMONITORS) != 0);
         private static Screen[]? s_screens;
 
         internal Screen(IntPtr monitor) : this(monitor, default)
@@ -60,7 +59,7 @@ namespace System.Windows.Forms
         {
             HDC screenDC = hdc;
 
-            if (!s_multiMonitorSupport || monitor == (IntPtr)PRIMARY_MONITOR)
+            if (!SystemInformation.MultiMonitorSupport || monitor == (IntPtr)PRIMARY_MONITOR)
             {
                 // Single monitor system
                 _bounds = SystemInformation.VirtualScreen;
@@ -106,7 +105,7 @@ namespace System.Windows.Forms
             {
                 if (s_screens is null)
                 {
-                    if (s_multiMonitorSupport)
+                    if (SystemInformation.MultiMonitorSupport)
                     {
                         MonitorEnumCallback closure = new MonitorEnumCallback();
                         var proc = new User32.MONITORENUMPROC(closure.Callback);
@@ -188,7 +187,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_multiMonitorSupport)
+                if (SystemInformation.MultiMonitorSupport)
                 {
                     Screen[] screens = AllScreens;
                     for (int i = 0; i < screens.Length; i++)
@@ -221,7 +220,7 @@ namespace System.Windows.Forms
                 {
                     Interlocked.Exchange(ref _currentDesktopChangedCount, Screen.DesktopChangedCount);
 
-                    if (!s_multiMonitorSupport || _hmonitor == (IntPtr)PRIMARY_MONITOR)
+                    if (!SystemInformation.MultiMonitorSupport || _hmonitor == (IntPtr)PRIMARY_MONITOR)
                     {
                         // Single monitor system
                         _workingArea = SystemInformation.WorkingArea;
@@ -289,12 +288,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a <see cref="Screen"/>
-        ///  for the monitor that contains the specified point.
+        ///  Retrieves a <see cref="Screen"/> for the monitor that contains the specified point.
         /// </summary>
         public static Screen FromPoint(Point point)
         {
-            if (s_multiMonitorSupport)
+            if (SystemInformation.MultiMonitorSupport)
             {
                 return new Screen(User32.MonitorFromPoint(point, User32.MONITOR.DEFAULTTONEAREST));
             }
@@ -311,7 +309,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static Screen FromRectangle(Rectangle rect)
         {
-            if (s_multiMonitorSupport)
+            if (SystemInformation.MultiMonitorSupport)
             {
                 RECT rc = rect;
                 return new Screen(User32.MonitorFromRect(ref rc, User32.MONITOR.DEFAULTTONEAREST));
@@ -339,7 +337,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static Screen FromHandle(IntPtr hwnd)
         {
-            if (s_multiMonitorSupport)
+            if (SystemInformation.MultiMonitorSupport)
             {
                 return new Screen(User32.MonitorFromWindow(hwnd, User32.MONITOR.DEFAULTTONEAREST));
             }

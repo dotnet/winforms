@@ -363,17 +363,11 @@ namespace System.Windows.Forms
 
         private void ThreadExceptionDialog_DpiChanged(object? sender, DpiChangedEventArgs e)
         {
-            if (_expandImage is not null)
-            {
-                _expandImage.Dispose();
-            }
+            _expandImage?.Dispose();
 
             _expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
 
-            if (_collapseImage is not null)
-            {
-                _collapseImage.Dispose();
-            }
+            _collapseImage?.Dispose();
 
             _collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
 

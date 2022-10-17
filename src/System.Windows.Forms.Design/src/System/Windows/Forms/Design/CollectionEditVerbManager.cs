@@ -38,10 +38,7 @@ namespace System.Windows.Forms.Design
             }
 
             Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collection editor with.");
-            if (text is null)
-            {
-                text = SR.ToolStripItemCollectionEditorVerb;
-            }
+            text ??= SR.ToolStripItemCollectionEditorVerb;
 
             _editItemsVerb = new DesignerVerb(text, new EventHandler(OnEditItems));
 
@@ -58,10 +55,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_componentChangeSvc is null)
-                {
-                    _componentChangeSvc = (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
-                }
+                _componentChangeSvc ??= (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
 
                 return _componentChangeSvc;
             }
@@ -190,10 +184,7 @@ namespace System.Windows.Forms.Design
         private void OnEditItems(object sender, EventArgs e)
         {
             DesignerActionUIService actionUIService = (DesignerActionUIService)((IServiceProvider)this).GetService(typeof(DesignerActionUIService));
-            if (actionUIService != null)
-            {
-                actionUIService.HideUI(_designer.Component);
-            }
+            actionUIService?.HideUI(_designer.Component);
 
             object propertyValue = _targetProperty.GetValue(_designer.Component);
             if (propertyValue is null)
@@ -203,10 +194,7 @@ namespace System.Windows.Forms.Design
 
             CollectionEditor itemsEditor = TypeDescriptor.GetEditor(propertyValue, typeof(UITypeEditor)) as CollectionEditor;
             Debug.Assert(itemsEditor != null, "Didn't get a collection editor for type '" + _targetProperty.PropertyType.FullName + "'");
-            if (itemsEditor != null)
-            {
-                itemsEditor.EditValue(this, this, propertyValue);
-            }
+            itemsEditor?.EditValue(this, this, propertyValue);
         }
     }
 }

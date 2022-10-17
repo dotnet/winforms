@@ -37,10 +37,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_dropSource is null)
-                {
-                    _dropSource = new Control();
-                }
+                _dropSource ??= new Control();
 
                 return _dropSource;
             }
@@ -171,10 +168,7 @@ namespace System.Windows.Forms.Design
         private bool MouseHandlerPresent(ToolStripItem item)
         {
             IMouseHandler mouseHandler = null;
-            if (_eventSvc is null)
-            {
-                _eventSvc = (IEventHandlerService)item.Site.GetService(typeof(IEventHandlerService));
-            }
+            _eventSvc ??= (IEventHandlerService)item.Site.GetService(typeof(IEventHandlerService));
 
             if (_eventSvc != null)
             {
@@ -426,10 +420,7 @@ namespace System.Windows.Forms.Design
                             {
                                 //Invalidate glyph only if we are in ShiftState...
                                 ToolStripDesigner.s_shiftState = false;
-                                if (bSvc != null)
-                                {
-                                    bSvc.Invalidate(glyphItem.Owner.Bounds);
-                                }
+                                bSvc?.Invalidate(glyphItem.Owner.Bounds);
                             }
 
                             selSvc.SetSelectedComponents(new IComponent[] { glyphItem }, SelectionTypes.Auto);
@@ -799,10 +790,7 @@ namespace System.Windows.Forms.Design
 
                         // Refresh on SelectionManager...
                         BehaviorService bSvc = GetBehaviorService(currentDropItem);
-                        if (bSvc != null)
-                        {
-                            bSvc.SyncSelection();
-                        }
+                        bSvc?.SyncSelection();
                     }
                     catch (Exception ex)
                     {
@@ -819,10 +807,7 @@ namespace System.Windows.Forms.Design
                     }
                     finally
                     {
-                        if (designerTransaction != null)
-                        {
-                            designerTransaction.Commit();
-                        }
+                        designerTransaction?.Commit();
                     }
                 }
             }
@@ -947,10 +932,7 @@ namespace System.Windows.Forms.Design
                 ToolStripItem item = sender as ToolStripItem;
                 SetParentDesignerValuesForDragDrop(item, false, Point.Empty);
                 ISelectionService selSvc = GetSelectionService(item);
-                if (selSvc != null)
-                {
-                    selSvc.SetSelectedComponents(new IComponent[] { item }, SelectionTypes.Auto);
-                }
+                selSvc?.SetSelectedComponents(new IComponent[] { item }, SelectionTypes.Auto);
 
                 ToolStripDesigner.s_dragItem = null;
             }

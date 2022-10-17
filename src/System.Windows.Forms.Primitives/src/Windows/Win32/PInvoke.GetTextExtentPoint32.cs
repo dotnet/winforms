@@ -7,8 +7,8 @@ using System.Drawing;
 namespace Windows.Win32
 {
     internal static partial class PInvoke
-    {   
-        public static unsafe BOOL GetTextExtentPoint32W<T>(in T hdc, string lpString, int c, Size size) where T : IHandle<HDC>
+    {
+        public static unsafe BOOL GetTextExtentPoint32W<T>(T hdc, string lpString, int c, Size size) where T : IHandle<HDC>
         {
             fixed (char* pString = lpString)
             {

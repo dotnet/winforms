@@ -32,16 +32,13 @@ namespace WinformsControlsTest
 
             public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
             {
-                if (_values is null)
+                // chose from two GUIDs we pregenerated for testing
+                _values ??= new StandardValuesCollection(new Guid?[]
                 {
-                    // chose from two GUIDs we pregenerated for testing
-                    _values = new StandardValuesCollection(new Guid?[]
-                    {
                         null,
                         new Guid("38EA9AE9-13BE-4992-9482-DAD370894BBD"),
                         new Guid("46DFEE70-A89E-4D9A-8842-6D46DBC1F195"),
-                    });
-                }
+                });
 
                 return _values;
             }

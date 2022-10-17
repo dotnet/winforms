@@ -792,18 +792,12 @@ namespace System.ComponentModel.Design
                                     }
                                     finally
                                     {
-                                        if (attrs is not null)
-                                        {
-                                            attrs.Dispose();
-                                        }
+                                        attrs?.Dispose();
                                     }
                                 }
                                 finally
                                 {
-                                    if (icon is not null)
-                                    {
-                                        icon.Dispose();
-                                    }
+                                    icon?.Dispose();
                                 }
                             }
                             catch

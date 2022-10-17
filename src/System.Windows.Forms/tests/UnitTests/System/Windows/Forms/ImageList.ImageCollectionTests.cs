@@ -7,11 +7,10 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     [Collection("Sequential")] // ImageList doesn't appear to behave well under stress in multi-threaded env
     public class ImageCollectionTests : IClassFixture<ThreadExceptionFixture>
     {

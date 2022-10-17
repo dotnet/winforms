@@ -7,7 +7,6 @@ using System.Diagnostics;
 #endif
 using System.Drawing;
 using System.Drawing.Text;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -23,7 +22,7 @@ namespace System.Windows.Forms
         internal static TextFormatFlags SkipAssertFlag = (TextFormatFlags)0x4000_0000;
 #endif
 
-        internal static Gdi32.QUALITY DefaultQuality { get; } = GetDefaultFontQuality();
+        internal static FONT_QUALITY DefaultQuality { get; } = GetDefaultFontQuality();
 
         internal static Size MaxSize { get; } = new Size(int.MaxValue, int.MaxValue);
 
@@ -307,7 +306,7 @@ namespace System.Windows.Forms
                 return;
 
             // This MUST come before retrieving the HDC, which locks the Graphics object
-            Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
+            FONT_QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
             using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
 
@@ -336,7 +335,7 @@ namespace System.Windows.Forms
             if (hdc.IsNull)
             {
                 // This MUST come before retrieving the HDC, which locks the Graphics object
-                Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(e.GraphicsInternal);
+                FONT_QUALITY quality = FontQualityFromTextRenderingHint(e.GraphicsInternal);
 
                 using var graphicsHdc = new DeviceContextHdcScope(e.GraphicsInternal, applyGraphicsState: false);
                 DrawTextInternal(graphicsHdc, text, font, bounds, foreColor, quality, backColor, flags);
@@ -353,7 +352,7 @@ namespace System.Windows.Forms
             Font? font,
             Rectangle bounds,
             Color foreColor,
-            Gdi32.QUALITY fontQuality,
+            FONT_QUALITY fontQuality,
             TextFormatFlags flags)
             => DrawTextInternal(hdc, text, font, bounds, foreColor, fontQuality, Color.Empty, flags);
 
@@ -363,11 +362,11 @@ namespace System.Windows.Forms
             Font? font,
             Rectangle bounds,
             Color foreColor,
-            Gdi32.QUALITY fontQuality,
+            FONT_QUALITY fontQuality,
             Color backColor,
             TextFormatFlags flags)
         {
-            using var hfont = GdiCache.GetHFONT(font, (FONT_QUALITY)fontQuality, hdc);
+            using var hfont = GdiCache.GetHFONT(font, fontQuality, hdc);
             hdc.DrawText(text, hfont, bounds, foreColor, flags, backColor);
         }
 
@@ -539,12 +538,12 @@ namespace System.Windows.Forms
                 return Size.Empty;
 
             // This MUST come before retrieving the HDC, which locks the Graphics object
-            Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
+            FONT_QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
             // Applying state may not impact text size measurements. Rather than risk missing some
             // case we'll apply as we have historically to avoid surprise regressions.
             using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
-            using var hfont = GdiCache.GetHFONT(font, (FONT_QUALITY)quality, hdc);
+            using var hfont = GdiCache.GetHFONT(font, quality, hdc);
             return hdc.HDC.MeasureText(text, hfont, proposedSize, flags);
         }
 
@@ -566,27 +565,27 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Attempts to match the TextRenderingHint of the specified Graphics object with a LOGFONT.lfQuality value.
         /// </summary>
-        internal static Gdi32.QUALITY FontQualityFromTextRenderingHint(IDeviceContext? deviceContext)
+        internal static FONT_QUALITY FontQualityFromTextRenderingHint(IDeviceContext? deviceContext)
         {
-            if (!(deviceContext is Graphics g))
+            if (deviceContext is not Graphics g)
             {
-                return Gdi32.QUALITY.DEFAULT;
+                return FONT_QUALITY.DEFAULT_QUALITY;
             }
 
             switch (g.TextRenderingHint)
             {
                 case TextRenderingHint.ClearTypeGridFit:
-                    return Gdi32.QUALITY.CLEARTYPE;
+                    return FONT_QUALITY.CLEARTYPE_QUALITY;
                 case TextRenderingHint.AntiAliasGridFit:
                 case TextRenderingHint.AntiAlias:
-                    return Gdi32.QUALITY.ANTIALIASED;
+                    return FONT_QUALITY.ANTIALIASED_QUALITY;
                 case TextRenderingHint.SingleBitPerPixelGridFit:
-                    return Gdi32.QUALITY.PROOF;
+                    return FONT_QUALITY.PROOF_QUALITY;
                 case TextRenderingHint.SingleBitPerPixel:
-                    return Gdi32.QUALITY.DRAFT;
+                    return FONT_QUALITY.DRAFT_QUALITY;
                 default:
                 case TextRenderingHint.SystemDefault:
-                    return Gdi32.QUALITY.DEFAULT;
+                    return FONT_QUALITY.DEFAULT_QUALITY;
             }
         }
 
@@ -594,16 +593,16 @@ namespace System.Windows.Forms
         ///  Returns what <see cref="FontQualityFromTextRenderingHint(IDeviceContext?)"/> would return in an
         ///  unmodified <see cref="Graphics"/> object (i.e. the default).
         /// </summary>
-        private static Gdi32.QUALITY GetDefaultFontQuality()
+        private static FONT_QUALITY GetDefaultFontQuality()
         {
             if (!SystemInformation.IsFontSmoothingEnabled)
             {
-                return Gdi32.QUALITY.PROOF;
+                return FONT_QUALITY.PROOF_QUALITY;
             }
 
             // FE_FONTSMOOTHINGCLEARTYPE = 0x0002
             return SystemInformation.FontSmoothingType == 0x0002
-                ? Gdi32.QUALITY.CLEARTYPE : Gdi32.QUALITY.ANTIALIASED;
+                ? FONT_QUALITY.CLEARTYPE_QUALITY : FONT_QUALITY.ANTIALIASED_QUALITY;
         }
 
         /// <summary>

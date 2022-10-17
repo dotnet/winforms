@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static HWND SetActiveWindow<T>(in T hWnd) where T : IHandle<HWND>
+        public static HWND SetActiveWindow<T>(T hWnd) where T : IHandle<HWND>
         {
             HWND result = SetActiveWindow(hWnd.Handle);
             GC.KeepAlive(hWnd.Wrapper);

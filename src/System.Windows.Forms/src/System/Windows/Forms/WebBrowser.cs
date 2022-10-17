@@ -340,10 +340,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 //string length is a good initial guess for capacity --
                 //if it needs more room, it'll take it.
@@ -1085,10 +1082,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (htmlShimManager is not null)
-                {
-                    htmlShimManager.Dispose();
-                }
+                htmlShimManager?.Dispose();
 
                 DetachSink();
                 ActiveXSite.Dispose();
@@ -1269,10 +1263,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (htmlShimManager is null)
-                {
-                    htmlShimManager = new HtmlShimManager();
-                }
+                htmlShimManager ??= new HtmlShimManager();
 
                 return htmlShimManager;
             }
@@ -1390,10 +1381,7 @@ namespace System.Windows.Forms
 
                 if (ClientRectangle.Contains(client))
                 {
-                    if (contextMenuStrip is not null)
-                    {
-                        contextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                    }
+                    contextMenuStrip?.ShowInternal(this, client, keyboardActivated);
 
                     return true;
                 }

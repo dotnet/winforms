@@ -362,10 +362,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 tool = new AxToolboxItem(clsid);
-                if (axTools == null)
-                {
-                    axTools = new Hashtable();
-                }
+                axTools ??= new Hashtable();
 
                 axTools.Add(clsid, tool);
                 Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "\tAdded AxToolboxItem");
@@ -491,10 +488,7 @@ namespace System.Windows.Forms.Design
                     if (host != null)
                     {
                         ISplitWindowService sws = (ISplitWindowService)GetService(typeof(ISplitWindowService));
-                        if (sws != null)
-                        {
-                            sws.RemoveSplitWindow(componentTray);
-                        }
+                        sws?.RemoveSplitWindow(componentTray);
                     }
 
                     componentTray.Dispose();
@@ -550,10 +544,7 @@ namespace System.Windows.Forms.Design
                     designerExtenders = null;
                 }
 
-                if (axTools != null)
-                {
-                    axTools.Clear();
-                }
+                axTools?.Clear();
 
                 if (host != null)
                 {
@@ -717,10 +708,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (parentControlDesigner == null)
-            {
-                parentControlDesigner = this;
-            }
+            parentControlDesigner ??= this;
 
             return parentControlDesigner;
         }
@@ -899,11 +887,9 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (key != null)
-                    key.Close();
+                key?.Close();
 
-                if (designtimeKey != null)
-                    designtimeKey.Close();
+                designtimeKey?.Close();
             }
         }
 
@@ -1057,10 +1043,7 @@ namespace System.Windows.Forms.Design
                     {
                         sws.RemoveSplitWindow(componentTray);
                         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                        if (host != null)
-                        {
-                            host.RemoveService(typeof(ComponentTray));
-                        }
+                        host?.RemoveService(typeof(ComponentTray));
 
                         componentTray.Dispose();
                         componentTray = null;
@@ -1132,10 +1115,7 @@ namespace System.Windows.Forms.Design
         {
             if (serviceType == typeof(IEventHandlerService))
             {
-                if (eventHandlerService == null)
-                {
-                    eventHandlerService = new EventHandlerService(frame);
-                }
+                eventHandlerService ??= new EventHandlerService(frame);
 
                 return eventHandlerService;
             }
@@ -1209,7 +1189,7 @@ namespace System.Windows.Forms.Design
             if (control is not null && control.IsHandleCreated)
             {
                 PInvoke.SendMessage(control, User32.WM.NCACTIVATE, (WPARAM)(BOOL)false);
-                User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
+                PInvoke.RedrawWindow(control, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
             }
         }
 
@@ -1485,10 +1465,7 @@ namespace System.Windows.Forms.Design
             }
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null)
-            {
-                host.Activate();
-            }
+            host?.Activate();
 
             // Just find the currently selected frame designer and ask it to create the tool.
             //
@@ -1499,10 +1476,7 @@ namespace System.Windows.Forms.Design
                 {
                     InvokeCreateTool(designer, tool);
                     IToolboxService toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
-                    if (toolboxService != null)
-                    {
-                        toolboxService.SelectedToolboxItemUsed();
-                    }
+                    toolboxService?.SelectedToolboxItemUsed();
                 }
             }
             catch (Exception e)

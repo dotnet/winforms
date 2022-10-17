@@ -784,7 +784,7 @@ namespace System.Windows.Forms.Automation
             return Math.Round((double)(-logfont.lfHeight) * 72 / lpy);
         }
 
-        private static Gdi32.FW GetFontWeight(LOGFONTW logfont) => (Gdi32.FW)logfont.lfWeight;
+        private static FW GetFontWeight(LOGFONTW logfont) => (FW)logfont.lfWeight;
 
         private static COLORREF GetForegroundColor() => GetSysColor(COLOR.WINDOWTEXT);
 
@@ -809,7 +809,7 @@ namespace System.Windows.Forms.Automation
                         ValidateEndpoints();
 
                         moved = Math.Min(count, limit - index);
-                        index = index + moved;
+                        index += moved;
 
                         index = index > limit ? limit : index;
                     }
@@ -924,7 +924,7 @@ namespace System.Windows.Forms.Automation
                         ValidateEndpoints();
                         int oneBasedIndex = index + 1;
                         moved = Math.Max(count, -oneBasedIndex);
-                        index = index + moved;
+                        index += moved;
                         index = index < 0 ? 0 : index;
                     }
 

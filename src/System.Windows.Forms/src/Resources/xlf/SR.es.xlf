@@ -177,6 +177,11 @@
         <target state="translated">Filas primarias</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="translated">Acceso denegado</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">Activar</target>

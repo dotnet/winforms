@@ -253,10 +253,7 @@ namespace System.Resources
                     }
                     else if (_fileName is not null || _stream is not null)
                     {
-                        if (_stream is null)
-                        {
-                            _stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-                        }
+                        _stream ??= new FileStream(_fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
 
                         contentReader = new XmlTextReader(_stream);
                     }

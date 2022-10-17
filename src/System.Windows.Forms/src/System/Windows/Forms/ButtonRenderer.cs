@@ -93,13 +93,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Method to draw visualstyle themes in case of per-monitor scenarios where Hwnd is necessary
         /// </summary>
-        /// <param name="hwnd"> handle to the control</param>
+        /// <param name="hwnd">Handle to the control.</param>
         internal static void DrawButtonForHandle(
             IDeviceContext deviceContext,
             Rectangle bounds,
             bool focused,
             PushButtonState state,
-            IntPtr hwnd)
+            HWND hwnd)
         {
             Rectangle contentBounds;
 
@@ -136,7 +136,7 @@ namespace System.Windows.Forms
         ///  Renders a Button control.
         /// </summary>
         public static void DrawButton(Graphics g, Rectangle bounds, bool focused, PushButtonState state)
-            => DrawButtonForHandle(g, bounds, focused, state, IntPtr.Zero);
+            => DrawButtonForHandle(g, bounds, focused, state, HWND.Null);
 
         /// <summary>
         ///  Renders a Button control.

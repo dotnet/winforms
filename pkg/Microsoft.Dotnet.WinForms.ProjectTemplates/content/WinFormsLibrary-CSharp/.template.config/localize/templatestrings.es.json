@@ -1,4 +1,4 @@
-{
+﻿{
   "author": "Microsoft",
   "name": "Biblioteca de clases de Windows Forms",
   "description": "Plantilla de proyecto para crear una biblioteca de clases para Windows Forms (WinForms) de .NET.",
@@ -13,9 +13,9 @@
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net7.0/description": "Objetivo net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
-  "symbols/Framework/choices/net8.0/description": "Target net8.0",
+  "symbols/Framework/choices/net8.0/description": "Net8.0 de destino",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
-  "symbols/Framework/displayName": ".NET 7.0",
+  "symbols/Framework/displayName": ".NET 8.0",
   "symbols/langVersion/description": "Establece langVersion en el archivo de proyecto creado.",
   "symbols/langVersion/displayName": "Versión de lenguaje",
   "symbols/skipRestore/description": "Si se especifica, se omite la restauración automática del proyecto durante la creación.",

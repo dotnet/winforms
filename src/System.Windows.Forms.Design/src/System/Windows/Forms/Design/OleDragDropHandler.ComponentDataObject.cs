@@ -95,10 +95,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (toolboxitemdata == null)
-                    {
-                        toolboxitemdata = new CfCodeToolboxItem(GetData(DataFormat));
-                    }
+                    toolboxitemdata ??= new CfCodeToolboxItem(GetData(DataFormat));
 
                     return toolboxitemdata;
                 }
@@ -235,10 +232,7 @@ namespace System.Windows.Forms.Design
 
             public void Deserialize(IServiceProvider serviceProvider, bool removeCurrentComponents)
             {
-                if (serviceProvider == null)
-                {
-                    serviceProvider = this.serviceProvider;
-                }
+                serviceProvider ??= this.serviceProvider;
 
                 IDesignerSerializationService ds = (IDesignerSerializationService)serviceProvider.GetService(typeof(IDesignerSerializationService));
                 IDesignerHost host = null;
@@ -267,10 +261,7 @@ namespace System.Windows.Forms.Design
                                 }
                             }
 
-                            if (host != null)
-                            {
-                                host.DestroyComponent(removeComp);
-                            }
+                            host?.DestroyComponent(removeComp);
                         }
 
                         components = null;
@@ -294,9 +285,8 @@ namespace System.Windows.Forms.Design
                     ArrayList topComps = new ArrayList();
                     for (int i = 0; i < components.Length; i++)
                     {
-                        if (components[i] is Control)
+                        if (components[i] is Control c)
                         {
-                            Control c = (Control)components[i];
                             if (c.Parent == null)
                             {
                                 topComps.Add(components[i]);
@@ -312,10 +302,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    trans?.Commit();
                 }
             }
 

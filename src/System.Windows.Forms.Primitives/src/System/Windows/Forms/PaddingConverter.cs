@@ -51,10 +51,7 @@ namespace System.Windows.Forms
                 }
 
                 // Parse 4 integer values.
-                if (culture is null)
-                {
-                    culture = CultureInfo.CurrentCulture;
-                }
+                culture ??= CultureInfo.CurrentCulture;
 
                 string[] tokens = stringValue.Split(new char[] { culture.TextInfo.ListSeparator[0] });
                 int[] values = new int[tokens.Length];
@@ -82,10 +79,7 @@ namespace System.Windows.Forms
             {
                 if (destinationType == typeof(string))
                 {
-                    if (culture is null)
-                    {
-                        culture = CultureInfo.CurrentCulture;
-                    }
+                    culture ??= CultureInfo.CurrentCulture;
 
                     string sep = culture.TextInfo.ListSeparator + " ";
                     TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));

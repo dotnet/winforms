@@ -117,10 +117,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (changeParent != null)
-                {
-                    changeParent.Commit();
-                }
+                changeParent?.Commit();
 
                 Cursor.Current = current;
             }

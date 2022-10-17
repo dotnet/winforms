@@ -18,10 +18,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_expressions is null)
-                {
-                    _expressions = new Hashtable(new ReferenceComparer());
-                }
+                _expressions ??= new Hashtable(new ReferenceComparer());
 
                 return _expressions;
             }

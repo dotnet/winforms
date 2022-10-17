@@ -22,8 +22,7 @@ namespace System.Windows.Forms
                     get => _parent.AccessibilityObject.Name
                         ?? _parent switch
                         {
-                            NumericUpDown _ => SR.EditDefaultAccessibleName,
-                            DomainUpDown _ => SR.EditDefaultAccessibleName,
+                            NumericUpDown or DomainUpDown => SR.EditDefaultAccessibleName,
                             _ => null
                         };
                     set => _parent.AccessibilityObject.Name = value;

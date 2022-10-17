@@ -400,6 +400,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
         {
             Size scrollBarPadding = Size.Empty;
@@ -561,7 +563,7 @@ namespace System.Windows.Forms
             // Force repainting of the entire window frame.
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                RedrawWindow(this, flags: RDW.INVALIDATE | RDW.FRAME);
+                PInvoke.RedrawWindow(this, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_FRAME);
             }
         }
 
@@ -592,6 +594,11 @@ namespace System.Windows.Forms
                 {
                     SelectAll();
                 }
+            }
+
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.SetFocus();
             }
         }
 
@@ -654,24 +661,6 @@ namespace System.Windows.Forms
             }
         }
 
-        private static bool ContainsNavigationKeyCode(Keys keyCode)
-        {
-            switch (keyCode)
-            {
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.PageUp:
-                case Keys.PageDown:
-                case Keys.Home:
-                case Keys.End:
-                case Keys.Left:
-                case Keys.Right:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
@@ -682,7 +671,7 @@ namespace System.Windows.Forms
                 // about text selection changed for TextBox assuming
                 // that any mouse down on textbox leads to change of
                 // the caret position and thereby change the selection.
-                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
         }
 
@@ -799,24 +788,24 @@ namespace System.Windows.Forms
                 {
                     if (IsHandleCreated)
                     {
-                        Shlwapi.SHACF mode = Shlwapi.SHACF.DEFAULT;
+                        SHELL_AUTOCOMPLETE_FLAGS mode = SHELL_AUTOCOMPLETE_FLAGS.SHACF_DEFAULT;
                         if (AutoCompleteMode == AutoCompleteMode.Suggest)
                         {
-                            mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
+                            mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_ON | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF;
                         }
 
                         if (AutoCompleteMode == AutoCompleteMode.Append)
                         {
-                            mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
+                            mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_ON | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF;
                         }
 
                         if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                         {
-                            mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
-                            mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON;
+                            mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_ON;
+                            mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_ON;
                         }
 
-                        Shlwapi.SHAutoComplete(this, (Shlwapi.SHACF)AutoCompleteSource | mode);
+                        PInvoke.SHAutoComplete(this, (SHELL_AUTOCOMPLETE_FLAGS)AutoCompleteSource | mode);
                     }
                 }
             }
@@ -833,7 +822,7 @@ namespace System.Windows.Forms
         {
             if ((AutoCompleteMode != AutoCompleteMode.None || force) && IsHandleCreated)
             {
-                Shlwapi.SHAutoComplete(this, (Shlwapi.SHACF)AutoCompleteSource.AllSystemSources | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                PInvoke.SHAutoComplete(this, (SHELL_AUTOCOMPLETE_FLAGS)AutoCompleteSource.AllSystemSources | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
             }
         }
 
@@ -873,10 +862,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (_placeholderText != value)
                 {
@@ -978,7 +964,7 @@ namespace System.Windows.Forms
                         // Invalidate the whole control to make sure the native control doesn't make any assumptions over what it has to paint
                         if (ShouldRenderPlaceHolderText())
                         {
-                            User32.InvalidateRect(Handle, null, bErase: true);
+                            PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
                         }
 
                         // Let the native implementation draw the background and animate the frame
@@ -987,13 +973,13 @@ namespace System.Windows.Forms
                         if (ShouldRenderPlaceHolderText())
                         {
                             // Invalidate again because the native WM_PAINT already validated everything by calling BeginPaint itself.
-                            User32.InvalidateRect(Handle, null, bErase: true);
+                            PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
 
                             // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
                             using var paintScope = new PInvoke.BeginPaintScope((HWND)Handle);
                             DrawPlaceholderText(paintScope);
 
-                            User32.ValidateRect(this, null);
+                            PInvoke.ValidateRect(this, lpRect: null);
                         }
                     }
 

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     public sealed partial class Application
@@ -30,9 +28,8 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = base.CreateParams;
 
-                    // Message only windows are cheaper and have fewer issues than
-                    // full blown invisible windows.
-                    cp.Parent = User32.HWND_MESSAGE;
+                    // Message only windows are cheaper and have fewer issues than full blown invisible windows.
+                    cp.Parent = HWND.HWND_MESSAGE;
                     return cp;
                 }
             }
@@ -43,7 +40,7 @@ namespace System.Windows.Forms
 
             protected override void OnSizeChanged(EventArgs e)
             {
-                // don't do anything here -- small perf game of avoiding layout, etc.
+                // Don't do anything here -- small perf game of avoiding layout, etc.
             }
         }
     }

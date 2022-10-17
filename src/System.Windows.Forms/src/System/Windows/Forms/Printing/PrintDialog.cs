@@ -144,10 +144,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_printerSettings is null)
-                {
-                    _printerSettings = new PrinterSettings();
-                }
+                _printerSettings ??= new PrinterSettings();
 
                 return _printerSettings;
             }
@@ -564,10 +561,7 @@ namespace System.Windows.Forms
             settings.SetHdevmode(hDevMode);
             settings.SetHdevnames(hDevNames);
 
-            if (pageSettings is not null)
-            {
-                pageSettings.SetHdevmode(hDevMode);
-            }
+            pageSettings?.SetHdevmode(hDevMode);
 
             //Check for Copies == 1 since we might get the Right number of Copies from hdevMode.dmCopies...
             if (settings.Copies == 1)

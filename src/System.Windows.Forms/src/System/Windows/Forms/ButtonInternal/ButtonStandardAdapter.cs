@@ -70,7 +70,7 @@ namespace System.Windows.Forms.ButtonInternal
                 Control.ClientRectangle,
                 false,
                 pbState,
-                DpiHelper.IsScalingRequirementMet ? Control.HandleInternal : IntPtr.Zero);
+                DpiHelper.IsScalingRequirementMet ? Control.HWNDInternal : HWND.Null);
 
             // Now overlay the background image or backcolor (the former overrides the latter), leaving a margin.
             // We hardcode this margin for now since GetThemeMargins returns 0 all the time.

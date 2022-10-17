@@ -296,10 +296,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (components is null)
-            {
-                components = new Hashtable();
-            }
+            components ??= new Hashtable();
 
             if (ctl != parent && !components.Contains(ctl))
             {
@@ -459,10 +456,7 @@ namespace System.Windows.Forms
             {
                 siteActive = null;
                 ContainerControl parentContainer = parent.FindContainerControlInternal();
-                if (parentContainer is not null)
-                {
-                    parentContainer.SetActiveControl(null);
-                }
+                parentContainer?.SetActiveControl(null);
             }
         }
 

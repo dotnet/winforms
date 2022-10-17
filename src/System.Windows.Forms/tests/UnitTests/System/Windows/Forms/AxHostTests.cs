@@ -11,12 +11,11 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
     public class AxHostTests : IClassFixture<ThreadExceptionFixture>
     {

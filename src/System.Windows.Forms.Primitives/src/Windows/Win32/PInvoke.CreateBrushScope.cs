@@ -35,7 +35,7 @@ namespace Windows.Win32
             {
                 HBRUSH = color.IsSystemColor
                     ? User32.GetSysColorBrush(color)
-                    : CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(color));
+                    : CreateSolidBrush(color);
                 ValidateBrushHandle();
             }
 

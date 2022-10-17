@@ -151,10 +151,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    if (_selectedCellsAccessibilityObject is null)
-                    {
-                        _selectedCellsAccessibilityObject = new DataGridViewSelectedRowCellsAccessibleObject(_owningDataGridViewRow);
-                    }
+                    _selectedCellsAccessibilityObject ??= new DataGridViewSelectedRowCellsAccessibleObject(_owningDataGridViewRow);
 
                     return _selectedCellsAccessibilityObject;
                 }

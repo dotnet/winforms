@@ -20,10 +20,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_defaultSerializer is null)
-                {
-                    s_defaultSerializer = new PrimitiveCodeDomSerializer();
-                }
+                s_defaultSerializer ??= new PrimitiveCodeDomSerializer();
 
                 return s_defaultSerializer;
             }

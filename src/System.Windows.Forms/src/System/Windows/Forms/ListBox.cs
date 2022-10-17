@@ -645,10 +645,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_itemsCollection is null)
-                {
-                    _itemsCollection = CreateItemCollection();
-                }
+                _itemsCollection ??= CreateItemCollection();
 
                 return _itemsCollection;
             }
@@ -944,10 +941,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_selectedIndices is null)
-                {
-                    _selectedIndices = new SelectedIndexCollection(this);
-                }
+                _selectedIndices ??= new SelectedIndexCollection(this);
 
                 return _selectedIndices;
             }
@@ -1006,10 +1000,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_selectedItems is null)
-                {
-                    _selectedItems = new SelectedObjectCollection(this);
-                }
+                _selectedItems ??= new SelectedObjectCollection(this);
 
                 return _selectedItems;
             }
@@ -1197,10 +1188,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_customTabOffsets is null)
-                {
-                    _customTabOffsets = new IntegerCollection(this);
-                }
+                _customTabOffsets ??= new IntegerCollection(this);
 
                 return _customTabOffsets;
             }
@@ -1836,10 +1824,7 @@ namespace System.Windows.Forms
 
                     if (_selectionMode != SelectionMode.None)
                     {
-                        if (_selectedItems is not null)
-                        {
-                            _selectedItems.PushSelectionIntoNativeListBox(i);
-                        }
+                        _selectedItems?.PushSelectionIntoNativeListBox(i);
                     }
                 }
             }
@@ -2394,10 +2379,7 @@ namespace System.Windows.Forms
             switch ((User32.LBN)m.WParamInternal.HIWORD)
             {
                 case User32.LBN.SELCHANGE:
-                    if (_selectedItems is not null)
-                    {
-                        _selectedItems.Dirty();
-                    }
+                    _selectedItems?.Dirty();
 
                     OnSelectedIndexChanged(EventArgs.Empty);
                     break;
@@ -2480,7 +2462,7 @@ namespace System.Windows.Forms
                 case WM.LBUTTONUP:
                     Point point = PARAM.ToPoint(m.LParamInternal);
                     bool captured = Capture;
-                    if (captured && WindowFromPoint(PointToScreen(point)) == Handle)
+                    if (captured && PInvoke.WindowFromPoint(PointToScreen(point)) == HWND)
                     {
                         if (!_doubleClickFired && !ValidationCancelled)
                         {
@@ -2520,7 +2502,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.RBUTTONUP:
-                    if (Capture && WindowFromPoint(PointToScreen(PARAM.ToPoint(m.LParamInternal))) == Handle)
+                    if (Capture && PInvoke.WindowFromPoint(PointToScreen((Point)m.LParamInternal)) == HWND)
                     {
                         _selectedItems?.Dirty();
                     }

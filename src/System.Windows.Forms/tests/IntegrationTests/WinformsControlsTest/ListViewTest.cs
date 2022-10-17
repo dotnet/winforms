@@ -81,7 +81,7 @@ namespace WinformsControlsTest
             item2.SubItems.Add("4");
             item2.SubItems.Add("5");
             item2.SubItems.Add("6");
-            ListViewItem item3 = new("item3", 0)
+            ListViewItem item3 = new("item3")
             {
                 // Place a check mark next to the item.
                 Checked = true

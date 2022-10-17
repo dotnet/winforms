@@ -42,7 +42,7 @@ namespace System.Drawing.Design
             /// <summary>
             ///  Array of standard colors.
             /// </summary>
-            private object[] ColorValues => colorConstants ?? (colorConstants = GetConstants(typeof(Color)));
+            private object[] ColorValues => colorConstants ??= GetConstants(typeof(Color));
 
             /// <summary>
             ///  Retrieves the array of custom colors for our use.
@@ -78,7 +78,7 @@ namespace System.Drawing.Design
             /// <summary>
             ///  Array of system colors.
             /// </summary>
-            private object[] SystemColorValues => systemColorConstants ?? (systemColorConstants = GetConstants(typeof(SystemColors)));
+            private object[] SystemColorValues => systemColorConstants ??= GetConstants(typeof(SystemColors));
 
             public object Value => value;
 

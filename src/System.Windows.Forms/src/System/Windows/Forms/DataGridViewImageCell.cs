@@ -95,10 +95,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_errorBitmap is null)
-                {
-                    s_errorBitmap = DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
-                }
+                s_errorBitmap ??= DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
 
                 return s_errorBitmap;
             }
@@ -108,10 +105,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_errorIcon is null)
-                {
-                    s_errorIcon = new Icon(typeof(DataGridView), "IconInError");
-                }
+                s_errorIcon ??= new Icon(typeof(DataGridView), "IconInError");
 
                 return s_errorIcon;
             }

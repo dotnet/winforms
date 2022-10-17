@@ -1913,8 +1913,10 @@ namespace System.Windows.Forms
                         lParam = 0x20180001,
                         time = PInvoke.GetTickCount()
                     };
-                    User32.GetCursorPos(out Point p);
+
+                    PInvoke.GetCursorPos(out Point p);
                     msg.pt = p;
+
                     if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                     {
                         GetOleControl().OnMnemonic(&msg);
@@ -2106,10 +2108,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_containingControl is null)
-                {
-                    _containingControl = FindContainerControlInternal();
-                }
+                _containingControl ??= FindContainerControlInternal();
 
                 return _containingControl;
             }
@@ -2283,10 +2282,7 @@ namespace System.Windows.Forms
                     return null;
                 case Ole32.DispatchID.AMBIENT_DISPLAYNAME:
                     string rval = AxContainer.GetNameForControl(this);
-                    if (rval is null)
-                    {
-                        rval = string.Empty;
-                    }
+                    rval ??= string.Empty;
 
                     return rval;
                 case Ole32.DispatchID.AMBIENT_LOCALEID:
@@ -2424,10 +2420,10 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Creating object without license: {clsid}");
             HRESULT hr = Ole32.CoCreateInstance(
-                ref clsid,
+                in clsid,
                 IntPtr.Zero,
                 Ole32.CLSCTX.INPROC_SERVER,
-                ref NativeMethods.ActiveX.IID_IUnknown,
+                in NativeMethods.ActiveX.IID_IUnknown,
                 out object ret);
             hr.ThrowOnFailure();
 
@@ -2749,10 +2745,7 @@ namespace System.Windows.Forms
 
             ArrayList returnProperties = new ArrayList();
 
-            if (_properties is null)
-            {
-                _properties = new Hashtable();
-            }
+            _properties ??= new Hashtable();
 
             if (_propertyInfos is null)
             {
@@ -2818,10 +2811,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            if (axPropDesc is not null)
-                            {
-                                axPropDesc.UpdateAttributes();
-                            }
+                            axPropDesc?.UpdateAttributes();
 
                             returnProperties.Add(propDesc);
                         }
@@ -3334,10 +3324,7 @@ namespace System.Windows.Forms
                     ((Ole32.IPropertyNotifySink)_oleSite).OnChanged(Ole32.DispatchID.UNKNOWN);
                 }
 
-                if (trans is not null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
 
                 if (uuids.pElems is not null)
                 {
@@ -3727,15 +3714,9 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 TransitionDownTo(OC_PASSIVE);
-                if (_newParent is not null)
-                {
-                    _newParent.Dispose();
-                }
+                _newParent?.Dispose();
 
-                if (_oleSite is not null)
-                {
-                    _oleSite.Dispose();
-                }
+                _oleSite?.Dispose();
             }
 
             base.Dispose(disposing);
@@ -3748,10 +3729,7 @@ namespace System.Windows.Forms
 
         private void DisposeAxControl()
         {
-            if (GetParentContainer() is not null)
-            {
-                GetParentContainer().RemoveControl(this);
-            }
+            GetParentContainer()?.RemoveControl(this);
 
             TransitionDownTo(OC_RUNNING);
             if (GetOcState() == OC_RUNNING)
@@ -3838,10 +3816,7 @@ namespace System.Windows.Forms
 
         private AxContainer GetParentContainer()
         {
-            if (_container is null)
-            {
-                _container = AxContainer.FindContainerForControl(this);
-            }
+            _container ??= AxContainer.FindContainerForControl(this);
 
             if (_container is null)
             {

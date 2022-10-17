@@ -51,15 +51,9 @@ namespace System.Windows.Forms
                     // If during running interop code, the variant.bstr value gets set
                     // to -1 on return back to native code, if the original value was null, we
                     // have to set targetFrameName and headers to string.Empty.
-                    if (targetFrameName is null)
-                    {
-                        targetFrameName = string.Empty;
-                    }
+                    targetFrameName ??= string.Empty;
 
-                    if (headers is null)
-                    {
-                        headers = string.Empty;
-                    }
+                    headers ??= string.Empty;
 
                     string urlString = urlObject is null ? string.Empty : (string)urlObject;
                     WebBrowserNavigatingEventArgs e = new WebBrowserNavigatingEventArgs(

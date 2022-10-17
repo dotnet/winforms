@@ -52,9 +52,9 @@ namespace System.Windows.Forms
                         // When we need to get bounds for first sub item it will return width of all item.
                         int width = bounds.Width;
 
-                        if (!_owningListView.FullRowSelect && index == 0 && _owningListView.Columns.Count > 1)
+                        if (!_owningListView.FullRowSelect && index == ParentInternal.FirstSubItemIndex && _owningListView.Columns.Count > 1)
                         {
-                            width = ParentInternal.GetSubItemBounds(subItemIndex: 1).X - bounds.X;
+                            width = ParentInternal.GetSubItemBounds(ParentInternal.FirstSubItemIndex + 1).X - bounds.X;
                         }
 
                         if (width <= 0)
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
                 }
 
                 private protected override string AutomationId
-                    => $"{typeof(ListViewItem.ListViewSubItem).Name}-{ParentInternal.GetChildIndex(this)}";
+                    => $"{nameof(ListViewSubItem)}-{ParentInternal.GetChildIndex(this)}";
             }
         }
     }

@@ -442,19 +442,21 @@ namespace System.Windows.Forms
             get => _overrideCursor;
             set
             {
-                if (_overrideCursor != value)
+                if (_overrideCursor == value)
                 {
-                    _overrideCursor = value;
+                    return;
+                }
 
-                    if (IsHandleCreated)
+                _overrideCursor = value;
+
+                if (IsHandleCreated)
+                {
+                    // We want to instantly change the cursor if the mouse is within our bounds.
+                    PInvoke.GetCursorPos(out Point p);
+                    PInvoke.GetWindowRect(this, out var r);
+                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                     {
-                        // We want to instantly change the cursor if the mouse is within our bounds.
-                        User32.GetCursorPos(out Point p);
-                        PInvoke.GetWindowRect(this, out var r);
-                        if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
-                        {
-                            PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
-                        }
+                        PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
                     }
                 }
             }
@@ -2103,10 +2105,7 @@ namespace System.Windows.Forms
             _initialSplitterDistance = _splitterDistance;
             _initialSplitterRectangle = SplitterRectangle;
 
-            if (_splitContainerMessageFilter is null)
-            {
-                _splitContainerMessageFilter = new SplitContainerMessageFilter(this);
-            }
+            _splitContainerMessageFilter ??= new SplitContainerMessageFilter(this);
 
             Application.AddMessageFilter(_splitContainerMessageFilter);
 

@@ -170,10 +170,7 @@ namespace System.Windows.Forms
             get
             {
                 ToolStrip parent = ParentInternal;
-                if (parent is null)
-                {
-                    parent = Owner;
-                }
+                parent ??= Owner;
 
                 if (parent is ToolStripDropDownMenu dropDownMenu)
                 {
@@ -262,10 +259,7 @@ namespace System.Windows.Forms
         public override Size GetPreferredSize(Size constrainingSize)
         {
             ToolStrip parent = ParentInternal;
-            if (parent is null)
-            {
-                parent = Owner;
-            }
+            parent ??= Owner;
 
             if (parent is null)
             {

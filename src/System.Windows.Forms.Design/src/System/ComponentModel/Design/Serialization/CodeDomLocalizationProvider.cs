@@ -80,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
 
             if (_providerService is null)
             {
-                throw new NotSupportedException(string.Format(SR.LocalizationProviderMissingService, typeof(IExtenderProviderService).Name));
+                throw new NotSupportedException(string.Format(SR.LocalizationProviderMissingService, nameof(IExtenderProviderService)));
             }
 
             _extender = new LanguageExtenders(provider, _supportedCultures);
@@ -185,15 +185,9 @@ namespace System.ComponentModel.Design.Serialization
                 model = CodeDomLocalizationModel.None;
             }
 
-            if (_memberSerializers is null)
-            {
-                _memberSerializers = new Hashtable();
-            }
+            _memberSerializers ??= new Hashtable();
 
-            if (_nopMemberSerializers is null)
-            {
-                _nopMemberSerializers = new Hashtable();
-            }
+            _nopMemberSerializers ??= new Hashtable();
 
             object newSerializer;
             if (model == CodeDomLocalizationModel.None)
@@ -289,10 +283,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_defaultLanguage is null)
-                    {
-                        _defaultLanguage = Application.CurrentCulture;
-                    }
+                    _defaultLanguage ??= Application.CurrentCulture;
 
                     return _defaultLanguage;
                 }
@@ -360,10 +351,7 @@ namespace System.ComponentModel.Design.Serialization
                 CheckRoot();
 
                 // If we never configured the load language, we're always invariant.
-                if (_loadLanguage is null)
-                {
-                    _loadLanguage = CultureInfo.InvariantCulture;
-                }
+                _loadLanguage ??= CultureInfo.InvariantCulture;
 
                 return _loadLanguage;
             }
@@ -390,10 +378,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 CheckRoot();
 
-                if (language is null)
-                {
-                    language = CultureInfo.InvariantCulture;
-                }
+                language ??= CultureInfo.InvariantCulture;
 
                 bool isInvariantCulture = (language.Equals(CultureInfo.InvariantCulture));
 
@@ -431,10 +416,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             IUIService uis = (IUIService)_serviceProvider.GetService(typeof(IUIService));
 
-                            if (uis is not null)
-                            {
-                                uis.ShowMessage(SR.LocalizationProviderManualReload);
-                            }
+                            uis?.ShowMessage(SR.LocalizationProviderManualReload);
                         }
                     }
                 }
@@ -548,10 +530,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (values is null)
-                {
-                    values = base.GetStandardValues(context);
-                }
+                values ??= base.GetStandardValues(context);
 
                 return values;
             }

@@ -181,10 +181,7 @@ namespace System.Windows.Forms
             {
                 _owner.SuspendLayout();
                 overflow = _owner.GetOverflow();
-                if (overflow is not null)
-                {
-                    overflow.SuspendLayout();
-                }
+                overflow?.SuspendLayout();
             }
 
             try
@@ -196,10 +193,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (overflow is not null)
-                {
-                    overflow.ResumeLayout(false);
-                }
+                overflow?.ResumeLayout(false);
 
                 if (_owner is not null && !_owner.IsDisposingItems)
                 {
@@ -514,16 +508,10 @@ namespace System.Windows.Forms
             {
                 if (item is not null)
                 {
-                    if (item.Owner is not null)
-                    {
-                        item.Owner.Items.Remove(item);
-                    }
+                    item.Owner?.Items.Remove(item);
 
                     item.SetOwner(_owner);
-                    if (item.Renderer is not null)
-                    {
-                        item.Renderer.InitializeItem(item);
-                    }
+                    item.Renderer?.InitializeItem(item);
                 }
             }
         }

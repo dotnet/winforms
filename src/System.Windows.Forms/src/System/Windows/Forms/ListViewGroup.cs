@@ -424,7 +424,7 @@ namespace System.Windows.Forms
 
         internal void ReleaseUiaProvider()
         {
-            if (OsVersion.IsWindows8OrGreater && _accessibilityObject is ListViewGroupAccessibleObject accessibleObject)
+            if (OsVersion.IsWindows8OrGreater() && _accessibilityObject is ListViewGroupAccessibleObject accessibleObject)
             {
                 UiaCore.UiaDisconnectProvider(accessibleObject);
             }

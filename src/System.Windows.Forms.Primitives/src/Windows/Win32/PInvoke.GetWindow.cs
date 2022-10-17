@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static HWND GetWindow<T>(in T hWnd, GET_WINDOW_CMD uCmd) where T : IHandle<HWND>
+        public static HWND GetWindow<T>(T hWnd, GET_WINDOW_CMD uCmd) where T : IHandle<HWND>
         {
             HWND result = GetWindow(hWnd.Handle, uCmd);
             GC.KeepAlive(hWnd.Wrapper);

@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static BOOL IsWindowVisible<T>(in T hWnd) where T : IHandle<HWND>
+        public static BOOL IsWindowVisible<T>(T hWnd) where T : IHandle<HWND>
         {
             BOOL result = IsWindowVisible(hWnd.Handle);
             GC.KeepAlive(hWnd.Wrapper);

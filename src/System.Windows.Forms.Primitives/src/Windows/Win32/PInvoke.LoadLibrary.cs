@@ -11,7 +11,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public unsafe static IntPtr LoadComctl32(string startupPath)
+        public static HINSTANCE LoadComctl32(string startupPath)
         {
             // NOTE: we don't look for the loaded module!
 
@@ -23,8 +23,8 @@ namespace Windows.Win32
                 if (Path.IsPathFullyQualified(customPath))
                 {
                     // OS will validate the path for us
-                    HINSTANCE result = LoadLibraryEx(customPath, (HANDLE)0, 0);
-                    if (result != 0)
+                    HINSTANCE result = LoadLibraryEx(customPath, HANDLE.Null, 0);
+                    if (!result.IsNull)
                     {
                         return result;
                     }
@@ -41,17 +41,17 @@ namespace Windows.Win32
         /// </summary>
         /// <param name="libraryName">The assembly name to load.</param>
         /// <returns>A handle to the loaded module, if successful; <see cref="IntPtr.Zero"/> otherwise.</returns>
-        public unsafe static nint LoadLibraryFromSystemPathIfAvailable(string libraryName)
+        public static HINSTANCE LoadLibraryFromSystemPathIfAvailable(string libraryName)
         {
-            if (GetModuleHandle(Libraries.Kernel32) == 0)
+            if (GetModuleHandle(Libraries.Kernel32).IsNull)
             {
-                return 0;
+                return HINSTANCE.Null;
             }
 
             // LOAD_LIBRARY_SEARCH_SYSTEM32 was introduced in KB2533623. Check for its presence
             // to preserve compat with Windows 7 SP1 without this patch.
-            HINSTANCE result = LoadLibraryEx(libraryName, (HANDLE)0, LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_SEARCH_SYSTEM32);
-            if (result != 0)
+            HINSTANCE result = LoadLibraryEx(libraryName, HANDLE.Null, LOAD_LIBRARY_FLAGS.LOAD_LIBRARY_SEARCH_SYSTEM32);
+            if (!result.IsNull)
             {
                 return result;
             }
@@ -59,10 +59,10 @@ namespace Windows.Win32
             // Load without this flag.
             if (Marshal.GetLastWin32Error() != ERROR.INVALID_PARAMETER)
             {
-                return (HINSTANCE)0;
+                return HINSTANCE.Null;
             }
 
-            return LoadLibraryEx(libraryName, (HANDLE)0, 0);
+            return LoadLibraryEx(libraryName, HANDLE.Null, 0);
         }
     }
 }

@@ -27,10 +27,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_instance is null)
-                {
-                    s_instance = new KeyboardToolTipStateMachine();
-                }
+                s_instance ??= new KeyboardToolTipStateMachine();
 
                 return s_instance;
             }
@@ -297,10 +294,7 @@ namespace System.Windows.Forms
             if (_currentState == SmState.Shown && _currentTool is not null)
             {
                 ToolTip? currentToolTip = _toolToTip[_currentTool];
-                if (currentToolTip is not null)
-                {
-                    currentToolTip.HideToolTip(_currentTool);
-                }
+                currentToolTip?.HideToolTip(_currentTool);
             }
 
             ResetTimer();

@@ -248,7 +248,7 @@ namespace System.Windows.Forms
 
                 return;
 
-                bool IsDegenerate(Rectangle rect)
+                static bool IsDegenerate(Rectangle rect)
                     => rect.IsEmpty || rect.Width <= 0 || rect.Height <= 0;
             }
 

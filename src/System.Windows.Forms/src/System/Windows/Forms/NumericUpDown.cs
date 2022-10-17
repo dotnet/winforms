@@ -90,10 +90,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_accelerations is null)
-                {
-                    _accelerations = new NumericUpDownAccelerationCollection();
-                }
+                _accelerations ??= new NumericUpDownAccelerationCollection();
 
                 return _accelerations;
             }
@@ -540,7 +537,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected void ParseEditText()
         {
-            Debug.Assert(UserEdit == true, "ParseEditText() - UserEdit == false");
+            Debug.Assert(UserEdit, "ParseEditText() - UserEdit == false");
 
             try
             {

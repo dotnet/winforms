@@ -11,7 +11,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
-using static Interop;
 using static Interop.Ole32;
 using static Interop.Oleaut32;
 
@@ -27,7 +26,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal static class Com2TypeInfoProcessor
     {
-        private static readonly TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
+        private static readonly TraceSwitch DbgTypeInfoProcessorSwitch = new(
+            "DbgTypeInfoProcessor",
+             "Com2TypeInfoProcessor: debug Com2 type info processing");
+
         private static ModuleBuilder moduleBuilder;
 
         private static ModuleBuilder ModuleBuilder
@@ -242,10 +244,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         defaultProp = temp;
                     }
 
-                    if (processedLibraries is null)
-                    {
-                        processedLibraries = new Hashtable();
-                    }
+                    processedLibraries ??= new Hashtable();
 
                     if (typeGuid != Guid.Empty)
                     {
@@ -495,7 +494,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return props;
         }
 
-        private unsafe static PropInfo ProcessDataCore(ITypeInfo typeInfo, IDictionary propInfoList, DispatchID dispid, DispatchID nameDispID, in TYPEDESC typeDesc, VARFLAGS flags)
+        private static unsafe PropInfo ProcessDataCore(ITypeInfo typeInfo, IDictionary propInfoList, DispatchID dispid, DispatchID nameDispID, in TYPEDESC typeDesc, VARFLAGS flags)
         {
             // get the name and the helpstring
             using var nameBstr = new BSTR();
@@ -507,14 +506,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, ComNativeDescriptor.GetClassName(typeInfo)), (int)hr);
             }
 
-            string name = nameBstr.String.ToString();
+            string name = nameBstr.AsSpan().ToString();
             if (string.IsNullOrEmpty(name))
             {
                 Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCCEEDED(hr),  Component=" + ComNativeDescriptor.GetClassName(typeInfo), dispid));
                 return null;
             }
 
-            // now we can create our struct... make sure we don't already have one
+            // Now we can create our struct. Make sure we don't already have one.
             PropInfo pi = (PropInfo)propInfoList[name];
 
             if (pi is null)
@@ -529,13 +528,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 pi.Attributes.Add(new DispIdAttribute((int)pi.DispId));
             }
 
-            string helpString = helpStringBstr.String.ToString();
-            if (!string.IsNullOrEmpty(helpString))
+            var helpString = helpStringBstr.AsSpan();
+            if (!helpString.IsEmpty)
             {
-                pi.Attributes.Add(new DescriptionAttribute(helpString));
+                pi.Attributes.Add(new DescriptionAttribute(helpString.ToString()));
             }
 
-            // figure out the value type
+            // Figure out the value type.
             if (pi.ValueType is null)
             {
                 object[] pTypeData = new object[1];
@@ -545,12 +544,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Hiding property " + pi.Name + " because value Type could not be resolved: " + ex.ToString());
+                    Debug.WriteLineIf(
+                        DbgTypeInfoProcessorSwitch.TraceVerbose,
+                         $"Hiding property {pi.Name} because value Type could not be resolved: {ex}");
                 }
 
-                // if we can't resolve the type, mark the property as nonbrowsable
-                // from the browser
-                //
+                // If we can't resolve the type, mark the property as nonbrowsable from the browser.
                 if (pi.ValueType is null)
                 {
                     pi.NonBrowsable = true;
@@ -567,7 +566,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            // check the flags
+            // Check the flags.
             if ((flags & VARFLAGS.FREADONLY) != 0)
             {
                 pi.ReadOnly = PropInfo.ReadOnlyTrue;
@@ -593,12 +592,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 pi.Attributes.Add(new BindableAttribute(true));
             }
 
-            // lastly, if it's DISPID_Name, add the ParenthesizeNameAttribute
+            // Lastly, if it's DISPID_Name, add the ParenthesizeNameAttribute.
             if (dispid == nameDispID)
             {
                 pi.Attributes.Add(new ParenthesizePropertyNameAttribute(true));
 
-                // don't allow merges on the name
+                // Don't allow merges on the name.
                 pi.Attributes.Add(new MergablePropertyAttribute(false));
             }
 
@@ -753,45 +752,53 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             varValue = null;
 
                             // get the name and the helpstring
-                            using var nameBstr = new BSTR();
-                            using var helpBstr = new BSTR();
+                            using BSTR nameBstr = new();
+                            using BSTR helpBstr = new();
                             hr = enumTypeInfo.GetDocumentation(pVarDesc->memid, &nameBstr, &helpBstr, null, null);
                             if (!hr.Succeeded)
                             {
-                                Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", i, hr));
+                                Debug.WriteLineIf(
+                                    DbgTypeInfoProcessorSwitch.TraceVerbose,
+                                    $"ProcessTypeInfoEnum: ignoring item 0x{i:X} because ITypeInfo::GetDocumentation returned hr=0x{(int)hr:X} or NULL");
                                 continue;
                             }
 
-                            string name = nameBstr.String.ToString();
-                            string helpString = helpBstr.String.ToString();
-                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum got name=" + (name ?? "(null)") + ", helpstring=" + (helpString ?? "(null)"));
+                            var name = nameBstr.AsSpan();
+                            var helpString = helpBstr.AsSpan();
+                            Debug.WriteLineIf(
+                                DbgTypeInfoProcessorSwitch.TraceVerbose,
+                                $"ProcessTypeInfoEnum got name={name}, helpstring={helpString}");
 
-                            // get the value
+                            // Get the value.
                             try
                             {
                                 varValue = Marshal.GetObjectForNativeVariant(pVarDesc->unionMember);
                             }
                             catch (Exception ex)
                             {
-                                Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: PtrtoStructFailed " + ex.GetType().Name + "," + ex.Message);
+                                Debug.WriteLineIf(
+                                    DbgTypeInfoProcessorSwitch.TraceVerbose,
+                                    $"ProcessTypeInfoEnum: PtrtoStructFailed {ex.GetType().Name},{ex.Message}");
                             }
 
-                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: adding variable value=" + Convert.ToString(varValue, CultureInfo.InvariantCulture));
+                            Debug.WriteLineIf(
+                                DbgTypeInfoProcessorSwitch.TraceVerbose,
+                                $"ProcessTypeInfoEnum: adding variable value={Convert.ToString(varValue, CultureInfo.InvariantCulture)}");
                             vars.Add(varValue);
 
-                            // if we have a helpstring, use it, otherwise use name
+                            // If we have a helpstring, use it, otherwise use name.
                             string nameString;
-                            if (!string.IsNullOrEmpty(helpString))
+                            if (!helpString.IsEmpty)
                             {
-                                nameString = helpString;
+                                nameString = helpString.ToString();
                             }
                             else
                             {
-                                Debug.Assert(name is not null, "No name for VARDESC member, but GetDocumentation returned S_OK!");
-                                nameString = name;
+                                Debug.Assert(!name.IsEmpty, "No name for VARDESC member, but GetDocumentation returned S_OK!");
+                                nameString = name.ToString();
                             }
 
-                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: adding name value=" + nameString);
+                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, $"ProcessTypeInfoEnum: adding name value={nameString}");
                             strs.Add(nameString);
                         }
                         finally
@@ -800,17 +807,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                     }
 
-                    Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: returning enum with " + strs.Count.ToString(CultureInfo.InvariantCulture) + " items");
+                    Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, $"ProcessTypeInfoEnum: returning enum with {strs.Count} items");
 
-                    // just build our enumerator
+                    // Just build our enumerator.
                     if (strs.Count > 0)
                     {
-                        // get the IUnknown value of the ITypeInfo
+                        // Get the IUnknown value of the ITypeInfo.
                         IntPtr pTypeInfoUnk = Marshal.GetIUnknownForObject(enumTypeInfo);
 
                         try
                         {
-                            string enumName = pTypeInfoUnk.ToString() + "_" + enumNameBstr.String.ToString();
+                            string enumName = $"{pTypeInfoUnk}_{enumNameBstr.AsSpan()}";
 
                             if (builtEnums is null)
                             {

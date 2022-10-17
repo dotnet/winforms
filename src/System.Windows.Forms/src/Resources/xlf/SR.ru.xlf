@@ -177,6 +177,11 @@
         <target state="translated">Родительские строки</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="translated">Отказано в доступе</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">Пометить</target>

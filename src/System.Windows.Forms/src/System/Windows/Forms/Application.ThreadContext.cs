@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         ///  TLS is really just an unfortunate artifact of using Win 32.  We want the world to be free
         ///  threaded.
         /// </summary>
-        internal sealed class ThreadContext : MarshalByRefObject, IMsoComponent, IHandle
+        internal sealed class ThreadContext : MarshalByRefObject, IMsoComponent, IHandle<HANDLE>
         {
             private const int STATE_OLEINITIALIZED = 0x00000001;
             private const int STATE_EXTERNALOLEINIT = 0x00000002;
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
             private List<IMessageFilter> _messageFilters;
             private List<IMessageFilter> _messageFilterSnapshot;
             private int _inProcessFilters;
-            private IntPtr _handle;
+            private HANDLE _handle;
             private readonly uint _id;
             private int _messageLoopCount;
             private int _threadState;
@@ -364,6 +364,7 @@ namespace System.Windows.Forms
                 {
                     lock (this)
                     {
+#pragma warning disable IDE0074 // disabled because of debug block
                         if (_marshalingControl is null)
                         {
 #if DEBUG
@@ -378,6 +379,7 @@ namespace System.Windows.Forms
                         }
 
                         return _marshalingControl;
+#pragma warning restore IDE0074
                     }
                 }
             }
@@ -388,15 +390,9 @@ namespace System.Windows.Forms
             /// </summary>
             internal void AddMessageFilter(IMessageFilter f)
             {
-                if (_messageFilters is null)
-                {
-                    _messageFilters = new List<IMessageFilter>();
-                }
+                _messageFilters ??= new List<IMessageFilter>();
 
-                if (_messageFilterSnapshot is null)
-                {
-                    _messageFilterSnapshot = new List<IMessageFilter>();
-                }
+                _messageFilterSnapshot ??= new List<IMessageFilter>();
 
                 if (f is not null)
                 {
@@ -425,10 +421,7 @@ namespace System.Windows.Forms
                 try
                 {
                     IMsoComponentManager cm = ComponentManager;
-                    if (cm is not null)
-                    {
-                        cm.OnComponentEnterState(_componentID, msocstate.Modal, msoccontext.All, 0, null, 0);
-                    }
+                    cm?.OnComponentEnterState(_componentID, msocstate.Modal, msoccontext.All, 0, null, 0);
                 }
                 finally
                 {
@@ -510,7 +503,7 @@ namespace System.Windows.Forms
                                             if (GetState(STATE_OLEINITIALIZED) && !GetState(STATE_EXTERNALOLEINIT))
                                             {
                                                 SetState(STATE_OLEINITIALIZED, false);
-                                                Ole32.OleUninitialize();
+                                                PInvoke.OleUninitialize();
                                             }
                                         }
                                     }
@@ -518,10 +511,10 @@ namespace System.Windows.Forms
                                 finally
                                 {
                                     // We can always clean up this handle, though
-                                    if (_handle != IntPtr.Zero)
+                                    if (!_handle.IsNull)
                                     {
                                         PInvoke.CloseHandle(this);
-                                        _handle = IntPtr.Zero;
+                                        _handle = HANDLE.Null;
                                     }
 
                                     try
@@ -654,10 +647,7 @@ namespace System.Windows.Forms
                 {
                     // If We started the ModalMessageLoop .. this will call us back on the IMSOComponent.OnStateEnter and not do anything ...
                     IMsoComponentManager cm = ComponentManager;
-                    if (cm is not null)
-                    {
-                        cm.FOnComponentExitState(_componentID, msocstate.Modal, msoccontext.All, 0, null);
-                    }
+                    cm?.FOnComponentExitState(_componentID, msocstate.Modal, msoccontext.All, 0, null);
                 }
                 finally
                 {
@@ -708,10 +698,10 @@ namespace System.Windows.Forms
             {
                 // Don't call OleUninitialize as the finalizer is called on the wrong thread.
                 // We can always clean up this handle, though.
-                if (_handle != IntPtr.Zero)
+                if (!_handle.IsNull)
                 {
-                    PInvoke.CloseHandle((HANDLE)_handle);
-                    _handle = IntPtr.Zero;
+                    PInvoke.CloseHandle(_handle);
+                    _handle = HANDLE.Null;
                 }
             }
 
@@ -777,7 +767,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the handle to this thread.
             /// </summary>
-            public nint Handle => _handle;
+            public HANDLE Handle => _handle;
+
+            HANDLE IHandle<HANDLE>.Handle => Handle;
 
             /// <summary>
             ///  Retrieves the ID of this thread.
@@ -848,7 +840,11 @@ namespace System.Windows.Forms
                 _ = Thread.CurrentThread;
                 if (!GetState(STATE_OLEINITIALIZED))
                 {
-                    HRESULT ret = Ole32.OleInitialize(IntPtr.Zero);
+                    HRESULT ret;
+                    unsafe
+                    {
+                        ret = PInvoke.OleInitialize(pvReserved:(void*)null);
+                    }
 
                     SetState(STATE_OLEINITIALIZED, true);
                     if (ret == HRESULT.RPC_E_CHANGED_MODE)
@@ -1233,7 +1229,7 @@ namespace System.Windows.Forms
                         }
                         else if (!User32.PeekMessageW(ref msg))
                         {
-                            User32.WaitMessage();
+                            PInvoke.WaitMessage();
                         }
                     }
 

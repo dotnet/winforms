@@ -94,10 +94,7 @@ namespace System.Windows.Forms
 
             public void OnWindowUnload()
             {
-                if (_htmlWindow is not null)
-                {
-                    _htmlWindow.ShimManager.OnWindowUnloaded(_htmlWindow);
-                }
+                _htmlWindow?.ShimManager.OnWindowUnloaded(_htmlWindow);
             }
 
             protected override void Dispose(bool disposing)

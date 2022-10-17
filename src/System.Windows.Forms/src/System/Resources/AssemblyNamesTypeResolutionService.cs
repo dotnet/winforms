@@ -35,10 +35,7 @@ namespace System.Resources
         {
             Assembly result = null;
 
-            if (_cachedAssemblies is null)
-            {
-                _cachedAssemblies = Hashtable.Synchronized(new Hashtable());
-            }
+            _cachedAssemblies ??= Hashtable.Synchronized(new Hashtable());
 
             if (_cachedAssemblies.Contains(name))
             {
@@ -101,10 +98,7 @@ namespace System.Resources
             Type result = null;
 
             // Check type cache first
-            if (_cachedTypes is null)
-            {
-                _cachedTypes = Hashtable.Synchronized(new Hashtable(StringComparer.Ordinal));
-            }
+            _cachedTypes ??= Hashtable.Synchronized(new Hashtable(StringComparer.Ordinal));
 
             if (_cachedTypes.Contains(name))
             {

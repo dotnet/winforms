@@ -254,10 +254,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // if we are forcing a hide
                 if (typeHide && canShow)
                 {
-                    if (newAttributes is null)
-                    {
-                        newAttributes = new ArrayList(AttributeArray);
-                    }
+                    newAttributes ??= new ArrayList(AttributeArray);
 
                     newAttributes.Add(new BrowsableAttribute(false));
                 }
@@ -273,10 +270,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         if (hr.Succeeded)
                         {
                             // make it browsable
-                            if (newAttributes is null)
-                            {
-                                newAttributes = new ArrayList(AttributeArray);
-                            }
+                            newAttributes ??= new ArrayList(AttributeArray);
 
                             newAttributes.Add(new BrowsableAttribute(true));
                             hrHidden = false;
@@ -457,10 +451,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (events is null)
-                {
-                    events = new EventHandlerList();
-                }
+                events ??= new EventHandlerList();
 
                 return events;
             }
@@ -749,10 +740,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (localConverter is null)
-            {
-                localConverter = new TypeConverter();
-            }
+            localConverter ??= new TypeConverter();
 
             return localConverter;
         }
@@ -795,10 +783,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (localEditor is null)
-            {
-                localEditor = base.GetEditor(editorBaseType);
-            }
+            localEditor ??= base.GetEditor(editorBaseType);
 
             return localEditor;
         }
@@ -966,15 +951,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             TypeConverter localConverter = typeConverter;
             object localEditor = typeEditor;
 
-            if (localConverter is null)
-            {
-                localConverter = GetBaseTypeConverter();
-            }
+            localConverter ??= GetBaseTypeConverter();
 
-            if (localEditor is null)
-            {
-                localEditor = GetBaseTypeEditor(editorBaseType);
-            }
+            localEditor ??= GetBaseTypeEditor(editorBaseType);
 
             // if this is a object, get the value and attempt to create the correct value editor based on that value.
             // we don't do this if the state came from an attribute
@@ -1007,15 +986,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // just in case one of the handlers removed our editor...
             //
-            if (localConverter is null)
-            {
-                localConverter = GetBaseTypeConverter();
-            }
+            localConverter ??= GetBaseTypeConverter();
 
-            if (localEditor is null)
-            {
-                localEditor = GetBaseTypeEditor(editorBaseType);
-            }
+            localEditor ??= GetBaseTypeEditor(editorBaseType);
 
             // wrap the value editor in our main value editor, but only if it isn't "TypeConverter" or already a Com2PropDescMainTypeConverter
             //

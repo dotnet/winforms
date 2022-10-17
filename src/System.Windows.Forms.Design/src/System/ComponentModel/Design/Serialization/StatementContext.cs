@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public ObjectStatementCollection StatementCollection
         {
-            get => _statements ?? (_statements = new ObjectStatementCollection());
+            get => _statements ??= new ObjectStatementCollection();
         }
     }
 

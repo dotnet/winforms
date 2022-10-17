@@ -61,10 +61,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_owner is not null)
-                    {
-                        _owner.ClearInsertionMark();
-                    }
+                    _owner?.ClearInsertionMark();
 
                     e.Effect = DragDropEffects.None;
                 }

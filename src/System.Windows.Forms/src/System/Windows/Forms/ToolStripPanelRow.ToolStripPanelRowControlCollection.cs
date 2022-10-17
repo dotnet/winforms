@@ -58,10 +58,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_cellCollection is null)
-                    {
-                        _cellCollection = new ArrangedElementCollection(InnerList);
-                    }
+                    _cellCollection ??= new ArrangedElementCollection(InnerList);
 
                     return _cellCollection;
                 }
@@ -82,7 +79,7 @@ namespace System.Windows.Forms
 
                 if (!(value is ISupportToolStripPanel control))
                 {
-                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
+                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip)));
                 }
 
                 int index = InnerList.Add(control.ToolStripPanelCell);
@@ -98,10 +95,7 @@ namespace System.Windows.Forms
 
                 ToolStripPanel currentOwner = ToolStripPanel;
 
-                if (currentOwner is not null)
-                {
-                    currentOwner.SuspendLayout();
-                }
+                currentOwner?.SuspendLayout();
 
                 try
                 {
@@ -112,10 +106,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner is not null)
-                    {
-                        currentOwner.ResumeLayout();
-                    }
+                    currentOwner?.ResumeLayout();
                 }
             }
 
@@ -223,7 +214,7 @@ namespace System.Windows.Forms
 
                 if (!(value is ISupportToolStripPanel control))
                 {
-                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
+                    throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip)));
                 }
 
                 InnerList.Insert(index, control.ToolStripPanelCell);
@@ -273,10 +264,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (layoutTransaction is not null)
-                        {
-                            layoutTransaction.Dispose();
-                        }
+                        layoutTransaction?.Dispose();
                     }
                 }
             }

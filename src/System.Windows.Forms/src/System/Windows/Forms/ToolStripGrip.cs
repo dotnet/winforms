@@ -143,10 +143,7 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             // all the grip painting should be on the ToolStrip itself.
-            if (ParentInternal is not null)
-            {
-                ParentInternal.OnPaintGrip(e);
-            }
+            ParentInternal?.OnPaintGrip(e);
         }
 
         /// <summary>

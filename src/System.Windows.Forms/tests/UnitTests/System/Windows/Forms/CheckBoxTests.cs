@@ -6,13 +6,12 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using static Interop.UiaCore;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using static Interop.UiaCore;
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class CheckBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

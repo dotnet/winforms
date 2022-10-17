@@ -19,10 +19,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_default is null)
-                {
-                    s_default = new PropertyMemberCodeDomSerializer();
-                }
+                s_default ??= new PropertyMemberCodeDomSerializer();
 
                 return s_default;
             }
@@ -163,10 +160,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 string name = manager.GetName(value);
 
-                if (name is null)
-                {
-                    name = value.GetType().FullName;
-                }
+                name ??= value.GetType().FullName;
 
                 manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNullNestedProperty, name, property.Name), manager));
             }

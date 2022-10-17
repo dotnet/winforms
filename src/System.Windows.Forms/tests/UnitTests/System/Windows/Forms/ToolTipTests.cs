@@ -297,7 +297,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ToolTip_IsPersistent_Get_ReturnsExpected()
         {
-            bool persistentToolTipSupported = OsVersion.IsWindows11_OrGreater;
+            bool persistentToolTipSupported = OsVersion.IsWindows11_OrGreater();
 
             using var toolTip = new ToolTip();
             Assert.Equal(persistentToolTipSupported, toolTip.IsPersistent);
@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ToolTip_IsPersistent_Get_ReturnsExpected_AutoPopChanged()
         {
-            bool persistentToolTipSupported = OsVersion.IsWindows11_OrGreater;
+            bool persistentToolTipSupported = OsVersion.IsWindows11_OrGreater();
 
             using var toolTip = new ToolTip();
             // IsPersistent is not set until the tooltip window is created.

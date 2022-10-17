@@ -36,13 +36,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (mergeItem is null)
-                {
-                    mergeItem = new ToolStripMenuItem
+                mergeItem ??= new ToolStripMenuItem
                     {
                         MergeAction = MergeAction.MatchOnly
                     };
-                }
 
                 if (mergeItem.Owner is null)
                 {
@@ -118,7 +115,7 @@ namespace System.Windows.Forms
                             {
                                 // there's always room for activeMdiChild
                                 string text = WindowsFormsUtils.EscapeTextWithAmpersands(mdiParent.MdiChildren[i].Text);
-                                text = text ?? string.Empty;
+                                text ??= string.Empty;
                                 ToolStripMenuItem windowListItem = new ToolStripMenuItem(mdiParent.MdiChildren[i])
                                 {
                                     Text = string.Format(CultureInfo.CurrentCulture, "&{0} {1}", accel, text),

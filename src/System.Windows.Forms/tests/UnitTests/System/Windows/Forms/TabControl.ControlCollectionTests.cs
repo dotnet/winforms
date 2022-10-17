@@ -7,11 +7,10 @@ using System.Drawing;
 using Moq;
 using Xunit;
 using static Interop;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class TabControlControlCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

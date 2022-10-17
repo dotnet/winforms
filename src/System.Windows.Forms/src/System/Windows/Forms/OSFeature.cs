@@ -33,7 +33,7 @@ namespace System.Windows.Forms
         ///  Represents the <see langword="static"/> instance of <see cref="OSFeature"/>
         ///  to use for feature queries. This property is read-only.
         /// </summary>
-        public static OSFeature Feature => _feature ?? (_feature = new OSFeature());
+        public static OSFeature Feature => _feature ??= new OSFeature();
 
         /// <summary>
         ///  Retrieves the version of the specified feature currently available on the system.

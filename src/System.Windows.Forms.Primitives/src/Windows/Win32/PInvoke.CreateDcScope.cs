@@ -37,21 +37,16 @@ namespace Windows.Win32
                 HDC = CreateCompatibleDC(hdc);
             }
 
-            public unsafe CreateDcScope(
+            public CreateDcScope(
                 string lpszDriverName,
                 string? lpszDeviceName = null,
                 string? lpszOutput = null,
                 DEVMODEW lpInitData = default,
                 bool informationOnly = true)
             {
-                fixed (char* pDriver = lpszDriverName)
-                fixed (char* pDevice = lpszDeviceName)
-                fixed (char* pOutput = lpszOutput)
-                {
-                    HDC = informationOnly
-                        ? CreateICW(pDriver, pDevice, pOutput, &lpInitData)
-                        : CreateDCW(pDriver, pDevice, pOutput, &lpInitData);
-                }
+                HDC = informationOnly
+                    ? CreateICW(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData)
+                    : CreateDCW(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData);
             }
 
             public static implicit operator HDC(in CreateDcScope scope) => scope.HDC;

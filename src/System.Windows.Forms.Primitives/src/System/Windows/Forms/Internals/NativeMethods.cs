@@ -9,16 +9,11 @@ namespace System.Windows.Forms
 {
     internal static class NativeMethods
     {
-        public static IntPtr InvalidIntPtr = (IntPtr)(-1);
         public static HandleRef NullHandleRef = new HandleRef(null, IntPtr.Zero);
 
         public const int CW_USEDEFAULT = (unchecked((int)0x80000000));
 
-        public const int
-        GDI_ERROR = (unchecked((int)0xFFFFFFFF));
-
-        public const int
-        HCF_HIGHCONTRASTON = 0x00000001;
+        public const int GDI_ERROR = (unchecked((int)0xFFFFFFFF));
 
         public const int HLP_FILE = 1,
         HLP_KEYWORD = 2,
@@ -92,34 +87,6 @@ namespace System.Windows.Forms
 
             public int nStartPage;
             public Comdlg32.PD_RESULT dwResultAction;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class OPENFILENAME_I
-        {
-            public int lStructSize = Marshal.SizeOf<OPENFILENAME_I>(); //ndirect.DllLib.sizeOf(this);
-            public IntPtr hwndOwner;
-            public IntPtr hInstance;
-            public string? lpstrFilter;   // use embedded nulls to separate filters
-            public IntPtr lpstrCustomFilter = IntPtr.Zero;
-            public int nMaxCustFilter;
-            public int nFilterIndex;
-            public IntPtr lpstrFile;
-            public int nMaxFile = PInvoke.MAX_PATH;
-            public IntPtr lpstrFileTitle = IntPtr.Zero;
-            public int nMaxFileTitle = PInvoke.MAX_PATH;
-            public string? lpstrInitialDir;
-            public string? lpstrTitle;
-            public int Flags;
-            public short nFileOffset;
-            public short nFileExtension;
-            public string? lpstrDefExt;
-            public IntPtr lCustData = IntPtr.Zero;
-            public WndProc? lpfnHook;
-            public string? lpTemplateName;
-            public IntPtr pvReserved = IntPtr.Zero;
-            public int dwReserved;
-            public int FlagsEx;
         }
 
         public static class ActiveX
