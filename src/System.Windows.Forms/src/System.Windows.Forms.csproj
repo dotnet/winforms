@@ -696,6 +696,9 @@
     <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildNativeWindow.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="System\Windows\Forms\TextBox.TextBoxAccessibleObject.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup Condition="Exists('comctl32.dll')">
