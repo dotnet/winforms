@@ -193,7 +193,6 @@ namespace System.Windows.Forms
 
             // We optimize for the "same" value (never & always) to avoid creating an
             // extra font object.
-            //
             if (underlineHover == underlineLink)
             {
                 FontStyle style = f.Style;

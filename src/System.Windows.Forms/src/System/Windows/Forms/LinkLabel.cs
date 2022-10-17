@@ -1257,6 +1257,8 @@ namespace System.Windows.Forms
                             if (optimizeBackgroundRendering)
                             {
                                 g.Clip = originalClip;
+
+                                // Because the code has been like that since long time, we assume that _textRegion is not null.
                                 g.ExcludeClip(_textRegion!);
                                 PaintLinkBackground(g);
                             }
@@ -1283,6 +1285,8 @@ namespace System.Windows.Forms
                         // ClientRectWithPadding which in some cases is smaller that ClientRectangle.
 
                         PaintLinkBackground(g);
+
+                        // Because the code has been like that since long time, we assume that _textRegion is not null.
                         g.IntersectClip(_textRegion!);
 
                         if (UseCompatibleTextRendering)
@@ -1529,6 +1533,7 @@ namespace System.Windows.Forms
             else
             {
                 // Painting with no link.
+                // Because the code has been like that since long time, we assume that _textRegion is not null.
                 g.IntersectClip(_textRegion!);
 
                 if (optimizeBackgroundRendering)
