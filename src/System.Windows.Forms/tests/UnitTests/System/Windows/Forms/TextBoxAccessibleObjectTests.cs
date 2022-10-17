@@ -105,6 +105,19 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("Placeholder text", "Placeholder text")]
+        public void TextBoxAccessibleObject_GetPropertyValue_HelpText_IsExpected(string placeholderText, string expectedHelpText)
+        {
+            using TextBox textBox = new() { PlaceholderText = placeholderText };
+
+            object helpText = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.HelpTextPropertyId);
+
+            Assert.Equal(expectedHelpText, helpText);
+        }
+
+        [WinFormsTheory]
         [InlineData('\0')]
         [InlineData('*')]
         public void TextBoxAccessibleObject_IsPassword_IsExpected_WithPasswordChar(char passwordChar)
