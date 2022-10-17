@@ -3610,8 +3610,7 @@ namespace System.Windows.Forms
         {
             if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal is not null)
             {
-                RECT rect = default;
-                GetClientRect(this, ref rect);
+                PInvoke.GetClientRect(this, out RECT rect);
                 HDC hdc = (HDC)m.WParamInternal;
                 using var hbrush = new PInvoke.CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
                 hdc.FillRectangle(rect, hbrush);
@@ -3898,7 +3897,7 @@ namespace System.Windows.Forms
                         using PInvoke.RegionScope windowRegion = new(Bounds);
 
                         // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
-                        bool getRegionSucceeded = GetUpdateRgn(Handle, windowRegion, bErase: true) != RegionType.ERROR;
+                        bool getRegionSucceeded = PInvoke.GetUpdateRgn(HWND, windowRegion, bErase: true) != GDI_REGION_TYPE.RGN_ERROR;
 
                         PInvoke.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, RGN_COMBINE_MODE.RGN_DIFF);
                         RECT updateRegionBoundingRect = default;

@@ -612,7 +612,7 @@ namespace System.ComponentModel.Design
                         if (!hWndCapture.IsNull)
                         {
                             PInvoke.SendMessage(hWndCapture, User32.WM.CANCELMODE);
-                            User32.ReleaseCapture();
+                            PInvoke.ReleaseCapture();
                         }
 
                         Visible = true; // NOTE: Do this AFTER creating handle and setting parent

@@ -1810,7 +1810,7 @@ namespace System.Windows.Forms
                             {
                                 ApplyTopMost(true);
                             }
-                            else if (IsHandleCreated && User32.IsWindowEnabled(this))
+                            else if (IsHandleCreated && PInvoke.IsWindowEnabled(this))
                             {
                                 PInvoke.SetWindowPos(
                                     this,
@@ -1997,7 +1997,7 @@ namespace System.Windows.Forms
         {
             if (state[stateLayered] && IsHandleCreated && TopLevel)
             {
-                if (!User32.SetLayeredWindowAttributes(this, 0, OpacityAsByte, User32.LWA.ALPHA))
+                if (!PInvoke.SetLayeredWindowAttributes(this, (COLORREF)0, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA))
                 {
                     throw new Win32Exception();
                 }

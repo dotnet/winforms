@@ -81,7 +81,7 @@ namespace System
                     continue;
                 }
 
-                COLORREF colorRef = User32.GetSysColor((User32.COLOR)i);
+                COLORREF colorRef = (COLORREF)PInvoke.GetSysColor((SYS_COLOR_INDEX)i);
 
                 if (dictionary.TryGetValue(colorRef, out List<User32.COLOR> colors))
                 {

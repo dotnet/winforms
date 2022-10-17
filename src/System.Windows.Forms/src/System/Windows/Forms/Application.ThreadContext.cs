@@ -565,7 +565,7 @@ namespace System.Windows.Forms
                     // and do not call Dispose.  Otherwise we would destroy
                     // controls that are living on the parking window.
 
-                    uint hwndThread = User32.GetWindowThreadProcessId(_parkingWindows[0], out _);
+                    uint hwndThread = PInvoke.GetWindowThreadProcessId(_parkingWindows[0], out _);
                     uint currentThread = PInvoke.GetCurrentThreadId();
 
                     for (int i = 0; i < _parkingWindows.Count; i++)
@@ -1069,9 +1069,9 @@ namespace System.Windows.Forms
                     hwndOwner = (HWND)PInvoke.GetWindowLong(_currentForm, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                     if (!hwndOwner.IsNull)
                     {
-                        if (User32.IsWindowEnabled(hwndOwner))
+                        if (PInvoke.IsWindowEnabled(hwndOwner))
                         {
-                            User32.EnableWindow(hwndOwner, false);
+                            PInvoke.EnableWindow(hwndOwner, false);
                         }
                         else
                         {
@@ -1082,9 +1082,9 @@ namespace System.Windows.Forms
 
                     // The second half of the modalEnabled flag above.  Here, if we were previously
                     // enabled, make sure that's still the case.
-                    if (_currentForm is not null && _currentForm.IsHandleCreated && User32.IsWindowEnabled(_currentForm) != modalEnabled)
+                    if (_currentForm is not null && _currentForm.IsHandleCreated && PInvoke.IsWindowEnabled(_currentForm) != modalEnabled)
                     {
-                        User32.EnableWindow(new HandleRef(_currentForm, _currentForm.Handle), modalEnabled);
+                        PInvoke.EnableWindow(_currentForm, modalEnabled);
                     }
                 }
 
@@ -1141,7 +1141,7 @@ namespace System.Windows.Forms
                         // Again, if the hwndOwner was valid and disabled above, re-enable it.
                         if (hwndOwner != IntPtr.Zero)
                         {
-                            User32.EnableWindow(hwndOwner, true);
+                            PInvoke.EnableWindow(hwndOwner, true);
                         }
                     }
 
@@ -1188,7 +1188,7 @@ namespace System.Windows.Forms
                             // If the component wants us to process the message, do it.
                             // The component manager hosts windows from many places.  We must be sensitive
                             // to ansi / Unicode windows here.
-                            if (!msg.hwnd.IsNull && User32.IsWindowUnicode(msg.hwnd))
+                            if (!msg.hwnd.IsNull && PInvoke.IsWindowUnicode(msg.hwnd))
                             {
                                 unicodeWindow = true;
                                 if (!User32.GetMessageW(ref msg))
@@ -1207,7 +1207,7 @@ namespace System.Windows.Forms
 
                             if (!PreTranslateMessage(ref msg))
                             {
-                                User32.TranslateMessage(ref msg);
+                                PInvoke.TranslateMessage(msg);
                                 if (unicodeWindow)
                                 {
                                     User32.DispatchMessageW(ref msg);
@@ -1529,7 +1529,7 @@ namespace System.Windows.Forms
                         case msoloop.FocusWait:
 
                             // For focus wait, check to see if we are now the active application.
-                            User32.GetWindowThreadProcessId(PInvoke.GetActiveWindow(), out uint pid);
+                            PInvoke.GetWindowThreadProcessId(PInvoke.GetActiveWindow(), out uint pid);
                             if (pid == PInvoke.GetCurrentProcessId())
                             {
                                 continueLoop = false;

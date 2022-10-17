@@ -53,7 +53,7 @@ namespace System
 
             if (backgroundBrush.IsNull)
             {
-                backgroundBrush = User32.GetSysColorBrush(User32.COLOR.WINDOW);
+                backgroundBrush = PInvoke.GetSysColorBrush(SYS_COLOR_INDEX.COLOR_WINDOW);
             }
             else if (backgroundBrush == (HBRUSH)(-1))
             {
@@ -205,7 +205,7 @@ namespace System
 
                 if (!Atom.IsValid)
                 {
-                    Atom = User32.GetClassLong(window, User32.GCL.ATOM);
+                    Atom = PInvoke.GetClassLong(window, GET_CLASS_LONG_INDEX.GCW_ATOM);
                 }
 
                 if (isMainWindow)
@@ -224,7 +224,7 @@ namespace System
                 case User32.WM.DESTROY:
                     if (hWnd == MainWindow)
                     {
-                        User32.PostQuitMessage(0);
+                        PInvoke.PostQuitMessage(0);
                     }
 
                     return (LRESULT)0;

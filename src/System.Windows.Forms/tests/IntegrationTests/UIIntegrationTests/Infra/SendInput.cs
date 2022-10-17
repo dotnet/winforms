@@ -105,10 +105,10 @@ namespace System.Windows.Forms.UITests
             PInvoke.SetWindowPos(window, HWND.HWND_TOPMOST, 0, 0, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
 
             // Move the window into the foreground as it may not have been achieved by the 'SetWindowPos' call
-            if (!User32.SetForegroundWindow(window))
+            if (!PInvoke.SetForegroundWindow(window))
             {
                 string windowTitle = User32.GetWindowText(window);
-                if (User32.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)
+                if (PInvoke.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)
                 {
                     string message = $"ForegroundWindow doesn't belong the test process! The current window HWND: {window}, title:{windowTitle}.";
                     throw new InvalidOperationException(message);

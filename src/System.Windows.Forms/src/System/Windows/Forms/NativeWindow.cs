@@ -108,7 +108,7 @@ namespace System.Windows.Forms
                 // when control finally reaches us.
                 if (PInvoke.IsWindow(handle))
                 {
-                    uint id = User32.GetWindowThreadProcessId(handle, out _);
+                    uint id = PInvoke.GetWindowThreadProcessId(handle, out _);
                     Application.ThreadContext context = Application.ThreadContext.FromId(id);
                     nint threadHandle = context is null ? 0 : context.Handle;
 
@@ -633,7 +633,7 @@ namespace System.Windows.Forms
                         if (!handle.IsNull && handle != (HWND)(-1))
                         {
                             PInvoke.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, DefaultWindowProc);
-                            User32.SetClassLong(handle, User32.GCL.WNDPROC, DefaultWindowProc);
+                            PInvoke.SetClassLong(handle, GET_CLASS_LONG_INDEX.GCL_WNDPROC, DefaultWindowProc);
                             User32.PostMessageW(handle, User32.WM.CLOSE);
 
                             // Fish out the Window object, if it is valid, and NULL the handle pointer.  This

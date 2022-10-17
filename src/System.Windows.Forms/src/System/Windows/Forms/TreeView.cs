@@ -2854,13 +2854,13 @@ namespace System.Windows.Forms
                         {
                             Rectangle bounds = node.RowBounds;
 
-                            User32.SCROLLINFO si = new()
+                            SCROLLINFO si = new()
                             {
-                                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                                fMask = User32.SIF.POS
+                                cbSize = (uint)sizeof(SCROLLINFO),
+                                fMask = SCROLLINFO_MASK.SIF_POS
                             };
 
-                            if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si))
+                            if (PInvoke.GetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_HORZ, ref si))
                             {
                                 // need to get the correct bounds if horizontal scroll bar is shown.
                                 // In this case the bounds.X needs to be negative and width needs to be updated to the increased width (scrolled region).
@@ -3168,7 +3168,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = true;
-                                PInvoke.SendMessage(this, User32.WM.CONTEXTMENU, (WPARAM)HWND, (LPARAM)User32.GetMessagePos());
+                                PInvoke.SendMessage(this, User32.WM.CONTEXTMENU, (WPARAM)HWND, (LPARAM)PInvoke.GetMessagePos());
                             }
 
                             m.ResultInternal = (LRESULT)1;

@@ -308,7 +308,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }
 
-            if (User32.SetWindowRgn(this, rgn1, true) == 0)
+            if (PInvoke.SetWindowRgn(this, rgn1, true) == 0)
             {
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }

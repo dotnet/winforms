@@ -996,8 +996,8 @@ namespace System.Windows.Forms
                 toplevelControl = intendedControl.TopLevelControlInternal;
                 if (toplevelControl is not null)
                 {
-                    IntPtr hMenu = User32.GetMenu(toplevelControl);
-                    if (hMenu == IntPtr.Zero)
+                    HMENU hMenu = PInvoke.GetMenu(toplevelControl);
+                    if (hMenu == HMENU.Null)
                     {
                         // Only activate the menu if there's no win32 menu. Win32 menus trump menustrips.
                         menuStripToActivate = GetMainMenuStrip(toplevelControl);

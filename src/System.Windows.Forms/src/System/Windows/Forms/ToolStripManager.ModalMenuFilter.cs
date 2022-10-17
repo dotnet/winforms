@@ -501,7 +501,7 @@ namespace System.Windows.Forms
                 if (!_caretHidden && toolStrip.IsDropDown && InMenuMode)
                 {
                     _caretHidden = true;
-                    User32.HideCaret(IntPtr.Zero);
+                    PInvoke.HideCaret(HWND.Null);
                 }
             }
 

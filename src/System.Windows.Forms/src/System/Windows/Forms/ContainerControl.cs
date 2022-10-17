@@ -6,7 +6,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
 using static Interop;
@@ -719,10 +718,9 @@ namespace System.Windows.Forms
             if (GetTopLevel())
             {
                 // Get window's client rectangle (i.e. without chrome) expressed in screen coordinates
-                var clientRectangle = new RECT();
-                User32.GetClientRect(new HandleRef(this, Handle), ref clientRectangle);
+                PInvoke.GetClientRect(this, out RECT clientRectangle);
                 var topLeftPoint = new Point();
-                User32.ClientToScreen(new HandleRef(this, Handle), ref topLeftPoint);
+                PInvoke.ClientToScreen(this, ref topLeftPoint);
                 return new Rectangle(topLeftPoint.X, topLeftPoint.Y, clientRectangle.right, clientRectangle.bottom);
             }
 

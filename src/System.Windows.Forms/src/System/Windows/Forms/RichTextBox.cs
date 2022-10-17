@@ -3464,7 +3464,7 @@ namespace System.Windows.Forms
 
                                 // Beep and disallow change for all other messages
                                 default:
-                                    User32.MessageBeep(User32.MB.OK);
+                                    PInvoke.MessageBeep(MESSAGEBOX_STYLE.MB_OK);
                                     break;
                             }
 

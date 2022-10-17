@@ -352,7 +352,7 @@ namespace System.Windows.Forms
                     hbmpDragImage = hbmpDragImage,
                     sizeDragImage = dragImage is not null ? dragImage.Size : default,
                     ptOffset = cursorOffset,
-                    crColorKey = GetSysColor(COLOR.WINDOW)
+                    crColorKey = (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW)
                 };
 
                 // Allow text specified in DROPDESCRIPTION to be displayed on the drag image. If you pass a drag image into an IDragSourceHelper

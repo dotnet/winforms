@@ -617,7 +617,7 @@ namespace System.Windows.Forms
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
                 // forced after the call.
-                User32.SetForegroundWindow(_window);
+                PInvoke.SetForegroundWindow(_window);
 
                 // this will set the context menu strip to be toplevel
                 // and will allow us to overlap the system tray

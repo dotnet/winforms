@@ -241,7 +241,7 @@ namespace System.Windows.Forms
             ToolStripDropDownMenu managedDropDown = new ToolStripDropDownMenu();
             managedDropDown.SuspendLayout();
 
-            int count = User32.GetMenuItemCount(hmenu);
+            int count = PInvoke.GetMenuItemCount((HMENU)hmenu);
 
             ToolStripItem itemToAdd;
 

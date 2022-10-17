@@ -337,22 +337,14 @@ namespace System.Windows.Forms
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
-                    User32.SCROLLINFO si = new()
+                    SCROLLINFO si = new()
                     {
-                        cbSize = (uint)sizeof(User32.SCROLLINFO),
-                        fMask = User32.SIF.TRACKPOS
+                        cbSize = (uint)sizeof(SCROLLINFO),
+                        fMask = SCROLLINFO_MASK.SIF_TRACKPOS
                     };
 
-                    User32.SB direction = horizontal ? User32.SB.HORZ : User32.SB.VERT;
-                    if (User32.GetScrollInfo(m.HWnd, direction, ref si))
-                    {
-                        pos = si.nTrackPos;
-                    }
-                    else
-                    {
-                        pos = m.WParamInternal.HIWORD;
-                    }
-
+                    SCROLLBAR_CONSTANTS direction = horizontal ? SCROLLBAR_CONSTANTS.SB_HORZ : SCROLLBAR_CONSTANTS.SB_VERT;
+                    pos = PInvoke.GetScrollInfo(m.HWND, direction, ref si) ? si.nTrackPos : m.WParamInternal.HIWORD;
                     break;
                 case User32.SBH.LINELEFT:
                     if (pos > SCROLL_LINE)
@@ -765,8 +757,8 @@ namespace System.Windows.Forms
                 ref scroll,
                 ref scroll);
 
-            User32.SetScrollPos(this, User32.SB.HORZ, position.X, true);
-            User32.SetScrollPos(this, User32.SB.VERT, position.Y, true);
+            PInvoke.SetScrollPos(this, SCROLLBAR_CONSTANTS.SB_HORZ, position.X, true);
+            PInvoke.SetScrollPos(this, SCROLLBAR_CONSTANTS.SB_VERT, position.Y, true);
         }
 
         internal unsafe void SetVirtualSizeNoInvalidate(Size value)
@@ -774,22 +766,22 @@ namespace System.Windows.Forms
             virtualSize = value;
             SetPositionNoInvalidate(position); // Make sure it's within range
 
-            User32.SCROLLINFO info = new()
+            SCROLLINFO info = new()
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.RANGE | User32.SIF.PAGE,
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_RANGE | SCROLLINFO_MASK.SIF_PAGE,
                 nMin = 0,
                 nMax = Math.Max(Height, virtualSize.Height) - 1,
                 nPage = (uint)Height
             };
 
-            User32.SetScrollInfo(this, User32.SB.VERT, ref info, true);
+            PInvoke.SetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_VERT, ref info, true);
 
-            info.fMask = User32.SIF.RANGE | User32.SIF.PAGE;
+            info.fMask = SCROLLINFO_MASK.SIF_RANGE | SCROLLINFO_MASK.SIF_PAGE;
             info.nMin = 0;
             info.nMax = Math.Max(Width, virtualSize.Width) - 1;
             info.nPage = (uint)Width;
-            User32.SetScrollInfo(this, User32.SB.HORZ, ref info, true);
+            PInvoke.SetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_HORZ, ref info, true);
         }
 
         /// <summary>

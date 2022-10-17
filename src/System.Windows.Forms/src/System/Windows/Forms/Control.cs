@@ -881,7 +881,7 @@ namespace System.Windows.Forms
 
                 if (color.IsSystemColor)
                 {
-                    backBrush = User32.GetSysColorBrush(color);
+                    backBrush = PInvoke.GetSysColorBrush(color);
                     SetState(States.OwnCtlBrush, false);
                 }
                 else
@@ -1243,8 +1243,8 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                return User32.IsWindowVisible(this)
-                    && User32.IsWindowEnabled(this);
+                return PInvoke.IsWindowVisible(this)
+                    && PInvoke.IsWindowEnabled(this);
             }
         }
 
@@ -1283,11 +1283,11 @@ namespace System.Windows.Forms
                 {
                     if (value)
                     {
-                        User32.SetCapture(this);
+                        PInvoke.SetCapture(this);
                     }
                     else
                     {
-                        User32.ReleaseCapture();
+                        PInvoke.ReleaseCapture();
                     }
                 }
             }
@@ -1730,7 +1730,7 @@ namespace System.Windows.Forms
         ///  created yet, this method will return the current thread's ID.
         /// </summary>
         internal uint CreateThreadId => IsHandleCreated
-            ? User32.GetWindowThreadProcessId(this, out _)
+            ? PInvoke.GetWindowThreadProcessId(this, out _)
             : PInvoke.GetCurrentThreadId();
 
         /// <summary>
@@ -2699,7 +2699,7 @@ namespace System.Windows.Forms
                     control = marshalingControl;
                 }
 
-                return User32.GetWindowThreadProcessId(control, out _) != PInvoke.GetCurrentThreadId();
+                return PInvoke.GetWindowThreadProcessId(control, out _) != PInvoke.GetCurrentThreadId();
             }
         }
 
@@ -3150,7 +3150,7 @@ namespace System.Windows.Forms
 
             if (region is null)
             {
-                User32.SetWindowRgn(this, default, User32.IsWindowVisible(this));
+                PInvoke.SetWindowRgn(this, default, PInvoke.IsWindowVisible(this));
                 return;
             }
 
@@ -3158,7 +3158,7 @@ namespace System.Windows.Forms
             using Region? regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
             using PInvoke.RegionScope regionHandle = new(regionCopy ?? region, Handle);
 
-            if (User32.SetWindowRgn(this, regionHandle, User32.IsWindowVisible(this)) != 0)
+            if (PInvoke.SetWindowRgn(this, regionHandle, PInvoke.IsWindowVisible(this)) != 0)
             {
                 // Success, the window now owns the region
                 regionHandle.RelinquishOwnership();
@@ -4772,7 +4772,7 @@ namespace System.Windows.Forms
             {
                 _parent.Controls.SetChildIndex(this, 0);
             }
-            else if (IsHandleCreated && GetTopLevel() && User32.IsWindowEnabled(this))
+            else if (IsHandleCreated && GetTopLevel() && PInvoke.IsWindowEnabled(this))
             {
                 PInvoke.SetWindowPos(
                     this,
@@ -5437,7 +5437,7 @@ namespace System.Windows.Forms
             if (!asyncResult.IsCompleted)
             {
                 Control marshaler = FindMarshalingControl();
-                if (User32.GetWindowThreadProcessId(marshaler, out _) == PInvoke.GetCurrentThreadId())
+                if (PInvoke.GetWindowThreadProcessId(marshaler, out _) == PInvoke.GetCurrentThreadId())
                 {
                     marshaler.InvokeMarshaledCallbacks();
                 }
@@ -6394,7 +6394,7 @@ namespace System.Windows.Forms
                 {
                     // It's safe to invoke InvalidateRgn from a separate thread.
                     using var scope = MultithreadSafeCallScope.Create();
-                    User32.InvalidateRgn(
+                    PInvoke.InvalidateRgn(
                         this,
                         regionHandle,
                         !GetStyle(ControlStyles.Opaque));
@@ -7039,7 +7039,7 @@ namespace System.Windows.Forms
 
             // We don't want to wait if we're on the same thread, or else we'll deadlock.
             // It is important that syncSameThread always be false for asynchronous calls.
-            bool syncSameThread = synchronous && User32.GetWindowThreadProcessId(this, out _) == PInvoke.GetCurrentThreadId();
+            bool syncSameThread = synchronous && PInvoke.GetWindowThreadProcessId(this, out _) == PInvoke.GetCurrentThreadId();
 
             // Store the compressed stack information from the thread that is calling the Invoke()
             // so we can assign the same security context to the thread that will actually execute
@@ -7396,7 +7396,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.EnableWindow(new HandleRef(this, Handle), Enabled);
+                PInvoke.EnableWindow(this, Enabled);
 
                 // User-paint controls should repaint when their enabled state changes
                 if (GetStyle(ControlStyles.UserPaint))
@@ -8050,13 +8050,13 @@ namespace System.Windows.Forms
         {
             if (!(this is ScrollableControl) && !IsMirrored)
             {
-                User32.SCROLLINFO si = new()
+                SCROLLINFO si = new()
                 {
-                    cbSize = (uint)sizeof(User32.SCROLLINFO),
-                    fMask = User32.SIF.RANGE
+                    cbSize = (uint)sizeof(SCROLLINFO),
+                    fMask = SCROLLINFO_MASK.SIF_RANGE
                 };
 
-                if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si))
+                if (PInvoke.GetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_HORZ, ref si))
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
                     PInvoke.SendMessage(this, User32.WM.HSCROLL, WPARAM.MAKEWPARAM((int)User32.SBH.THUMBPOSITION, si.nPos));
@@ -8576,10 +8576,8 @@ namespace System.Windows.Forms
         protected virtual void OnPaintBackground(PaintEventArgs pevent)
         {
             // We need the true client rectangle as clip rectangle causes problems on "Windows Classic" theme.
-            RECT rect = new RECT();
-            User32.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
-
-            PaintBackground(pevent, new Rectangle(rect.left, rect.top, rect.right, rect.bottom));
+            PInvoke.GetClientRect(new HandleRef<HWND>(_window, InternalHandle), out RECT rect);
+            PaintBackground(pevent, rect);
         }
 
         // Transparent control support
@@ -11221,7 +11219,7 @@ namespace System.Windows.Forms
                     // PERF - setting Visible=false twice can get us into this else block
                     // which makes us process WM_WINDOWPOS* messages - make sure we've already
                     // visible=false - if not, make it so.
-                    if (!User32.IsWindowVisible(this))
+                    if (!PInvoke.IsWindowVisible(this))
                     {
                         // we're already invisible - bail.
                         return;
@@ -12065,8 +12063,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    RECT rc = new RECT();
-                    User32.GetClientRect(this, ref rc);
+                    PInvoke.GetClientRect(this, out RECT rc);
                     using PaintEventArgs pevent = new PaintEventArgs(dc, Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom));
                     PaintWithErrorHandling(pevent, PaintLayerBackground);
                 }
@@ -14462,7 +14459,7 @@ namespace System.Windows.Forms
 
             fixed (byte* b = stateArray)
             {
-                User32.GetKeyboardState(b);
+                PInvoke.GetKeyboardState(b);
                 return IsKeyDown(Keys.Tab, stateArray)
                     || IsKeyDown(Keys.Up, stateArray)
                     || IsKeyDown(Keys.Down, stateArray)

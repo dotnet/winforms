@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -423,7 +422,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // Convert to client coordinates
                 var point = new Point(x, y);
-                User32.ScreenToClient(new HandleRef(Owner, Owner.Handle), ref point);
+                PInvoke.ScreenToClient(Owner, ref point);
 
                 // Find the grid entry at the given client coordinates
                 Point position = ((PropertyGridView)Owner).FindPosition(point.X, point.Y);

@@ -2102,7 +2102,7 @@ namespace System.Windows.Forms.Design
 
                         RECT clip = new();
                         using var hrgn = new PInvoke.RegionScope(0, 0, 0, 0);
-                        User32.GetUpdateRgn(m.HWnd, hrgn, false);
+                        PInvoke.GetUpdateRgn(m.HWND, hrgn, false);
                         PInvoke.GetUpdateRect(m.HWND, &clip, false);
                         using Region region = hrgn.CreateGdiPlusRegion();
 
@@ -2487,9 +2487,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private static bool IsWindowInCurrentProcess(IntPtr hwnd)
+        private static bool IsWindowInCurrentProcess(HWND hwnd)
         {
-            User32.GetWindowThreadProcessId(hwnd, out uint pid);
+            PInvoke.GetWindowThreadProcessId(hwnd, out uint pid);
             return pid == CurrentProcessId;
         }
 

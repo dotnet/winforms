@@ -296,8 +296,7 @@ namespace System.Windows.Forms.Automation
                 || (_provider.IsMultiline && End < _provider.TextLength
                     && End - Start == 1 && text[End] == '\n'))
             {
-                Point endlinePoint;
-                User32.GetCaretPos(out endlinePoint);
+                PInvoke.GetCaretPos(out Point endlinePoint);
                 endlinePoint = _provider.PointToScreen(endlinePoint);
                 Rectangle endlineRectangle = new Rectangle(endlinePoint.X, endlinePoint.Y + 2, UiaTextProvider.EndOfLineWidth, Math.Abs(_provider.Logfont.lfHeight) + 1);
                 return new double[] { endlineRectangle.X, endlineRectangle.Y, endlineRectangle.Width, endlineRectangle.Height };
@@ -771,7 +770,7 @@ namespace System.Windows.Forms.Automation
 
         private bool GetReadOnly() => _provider.IsReadOnly;
 
-        private static COLORREF GetBackgroundColor() => GetSysColor(COLOR.WINDOW);
+        private static COLORREF GetBackgroundColor() => (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
 
         private static string GetFontName(LOGFONTW logfont) => logfont.FaceName.ToString();
 
@@ -786,7 +785,7 @@ namespace System.Windows.Forms.Automation
 
         private static FW GetFontWeight(LOGFONTW logfont) => (FW)logfont.lfWeight;
 
-        private static COLORREF GetForegroundColor() => GetSysColor(COLOR.WINDOWTEXT);
+        private static COLORREF GetForegroundColor() => (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
 
         private static bool GetItalic(LOGFONTW logfont) => logfont.lfItalic != 0;
 
