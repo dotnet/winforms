@@ -219,6 +219,7 @@ HFONT
 HIGHCONTRASTW
 HitTestThemeBackground
 HWND_*
+IAutoComplete2
 ICM_MODE
 ICON_*
 IDC_*
