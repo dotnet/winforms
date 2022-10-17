@@ -1,5 +1,4 @@
-﻿using Xunit;
-using Xunit.Abstractions;
+﻿using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests
 {
@@ -10,13 +9,16 @@ namespace System.Windows.Forms.UITests
         {
         }
 
+#if VISUAL_STYLES_OFF
+
         [Fact]
         public void Application_VisualStylesOff_EnableVisualStyles_Success()
         {
-            // Typically, EnableVisualStyles() is the first line in the Main function.
-            Application.EnableVisualStyles();
-            Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
-            Assert.True(Application.RenderWithVisualStyles);
+            Assert.False(Application.UseVisualStyles);
+            Assert.False(Application.RenderWithVisualStyles);
         }
+
+#endif
+
     }
 }

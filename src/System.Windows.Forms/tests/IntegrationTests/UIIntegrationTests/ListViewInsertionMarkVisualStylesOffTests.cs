@@ -1,5 +1,4 @@
-﻿using Xunit;
-using Xunit.Abstractions;
+﻿using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests
 {
@@ -10,10 +9,15 @@ namespace System.Windows.Forms.UITests
         {
         }
 
+#if VISUAL_STYLES_OFF
+
         [WinFormsFact]
         public unsafe void ListViewInsertionMark_VisualStylesOff_NotAvailable()
         {
             Assert.False(Application.UseVisualStyles);
         }
+
+#endif
+
     }
 }
