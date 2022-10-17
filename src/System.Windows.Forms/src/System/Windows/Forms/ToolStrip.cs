@@ -1917,29 +1917,31 @@ namespace System.Windows.Forms
             Rectangle regionRect = (item is null) ? Rectangle.Empty : item.Bounds;
             Region region = null;
 
+            // Copy displayed items collection so it doesn't mutate when we begin to hide items
+            ToolStripItem[] displayedItems = new ToolStripItem[DisplayedItems.Count];
+            DisplayedItems.CopyTo(displayedItems, 0);
+
             try
             {
-                for (int i = 0; i < DisplayedItems.Count; i++)
+                for (int i = 0; i < displayedItems.Length; i++)
                 {
-                    if (DisplayedItems[i] == item)
+                    if (displayedItems[i] == item)
                     {
                         continue;
                     }
-                    else if (item is not null && DisplayedItems[i].Pressed)
+                    else if (item is not null && displayedItems[i].Pressed)
                     {
-                        //
-
-                        if (DisplayedItems[i] is ToolStripDropDownItem dropDownItem && dropDownItem.HasDropDownItems)
+                        if (displayedItems[i] is ToolStripDropDownItem dropDownItem && dropDownItem.HasDropDownItems)
                         {
                             dropDownItem.AutoHide(item);
                         }
                     }
 
                     bool invalidate = false;
-                    if (DisplayedItems[i].Selected)
+                    if (displayedItems[i].Selected)
                     {
-                        DisplayedItems[i].Unselect();
-                        Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG ClearAllSelectionsExcept] Unselecting " + DisplayedItems[i].Text);
+                        displayedItems[i].Unselect();
+                        Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG ClearAllSelectionsExcept] Unselecting " + displayedItems[i].Text);
                         invalidate = true;
                     }
 
@@ -1948,7 +1950,7 @@ namespace System.Windows.Forms
                         // since regions are heavy weight - only use if we need it.
                         region ??= new Region(regionRect);
 
-                        region.Union(DisplayedItems[i].Bounds);
+                        region.Union(displayedItems[i].Bounds);
                     }
                 }
 
@@ -1972,7 +1974,7 @@ namespace System.Windows.Forms
             // fire accessibility
             if (IsHandleCreated && item is not null)
             {
-                int focusIndex = DisplayedItems.IndexOf(item);
+                int focusIndex = Array.IndexOf(displayedItems, item);
                 AccessibilityNotifyClients(AccessibleEvents.Focus, focusIndex);
             }
         }
