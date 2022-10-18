@@ -12,11 +12,6 @@ internal unsafe readonly partial struct BSTR : IDisposable
     {
     }
 
-    /// <summary>
-    ///  Returns the length of the native BSTR.
-    /// </summary>
-    public unsafe uint Length => Value is null ? 0 : *(((uint*)Value) - 1) / 2;
-
     public void Dispose()
     {
         Marshal.FreeBSTR((nint)Value);
