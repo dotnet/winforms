@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
 using static Interop.User32;
@@ -736,7 +735,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the AutoComplete mode in TextBox.
         /// </summary>
-        private void SetAutoComplete(bool reset)
+        private unsafe void SetAutoComplete(bool reset)
         {
             // Autocomplete Not Enabled for Password enabled and MultiLine Textboxes.
             if (Multiline || _passwordChar != 0 || _useSystemPasswordChar || AutoCompleteSource == AutoCompleteSource.None)
@@ -769,7 +768,7 @@ namespace System.Windows.Forms
                             if (_stringSource is null)
                             {
                                 _stringSource = new StringSource(GetStringsForAutoComplete());
-                                if (!_stringSource.Bind(new HandleRef(this, Handle), (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
+                                if (!_stringSource.Bind(this, (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                 {
                                     throw new ArgumentException(SR.AutoCompleteFailure);
                                 }

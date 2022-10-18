@@ -21,7 +21,7 @@ internal partial class Interop
         private const int S_OK = 0;
         private static readonly ComInterfaceEntry* s_streamEntry = InitializeIStreamEntry();
         private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeEntry<IFileDialogEvents, IFileDialogEvents.Vtbl>();
-        private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeIEnumStringEntry();
+        private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeEntry<IEnumString, IEnumString.Vtbl>();
         private static readonly ComInterfaceEntry* s_enumFormatEtcEntry = InitializeIEnumFORMATETCEntry();
         private static readonly ComInterfaceEntry* s_dropSourceEntry = InitializeIDropSourceEntry();
         private static readonly ComInterfaceEntry* s_dropTargetEntry = InitializeIDropTargetEntry();
@@ -61,18 +61,6 @@ internal partial class Interop
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
             wrapperEntry->IID = *TComInterface.NativeGuid;
             wrapperEntry->Vtable = (nint)(void*)vtable;
-            return wrapperEntry;
-        }
-
-        private static ComInterfaceEntry* InitializeIEnumStringEntry()
-        {
-            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
-
-            IntPtr iEnumStringVtbl = IEnumStringVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
-
-            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = IID.IEnumString;
-            wrapperEntry->Vtable = iEnumStringVtbl;
             return wrapperEntry;
         }
 
@@ -153,7 +141,7 @@ internal partial class Interop
                 return s_dropTargetEntry;
             }
 
-            if (obj is ComTypes.IEnumString)
+            if (obj is IEnumString.Interface)
             {
                 count = 1;
                 return s_enumStringEntry;
@@ -212,14 +200,6 @@ internal partial class Interop
                 return new LockBytesWrapper(lockBytesComObject);
             }
 
-            Guid autoCompleteIID = IID.IAutoComplete2;
-            hr = Marshal.QueryInterface(externalComObject, ref autoCompleteIID, out IntPtr autoCompleteComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new AutoCompleteWrapper(autoCompleteComObject);
-            }
-
             Guid enumVariantIID = IID.IEnumVariant;
             hr = Marshal.QueryInterface(externalComObject, ref enumVariantIID, out IntPtr enumVariantComObject);
             if (hr == S_OK)
@@ -261,6 +241,12 @@ internal partial class Interop
 
             return result == HRESULT.S_OK;
         }
+
+        /// <summary>
+        ///  Attempts to get the specified <typeparamref name="T"/> interface for the given <paramref name="obj"/>.
+        /// </summary>
+        internal bool TryGetComPointer<T>(object? obj, out T* ppvObject) where T : unmanaged, INativeGuid
+            => TryGetComPointer(obj, *T.NativeGuid, out ppvObject);
 
         private IUnknown* GetOrCreateComInterfaceForObject(object obj)
         {

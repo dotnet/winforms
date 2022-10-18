@@ -11,7 +11,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
@@ -3296,14 +3295,14 @@ namespace System.Windows.Forms
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {
-                            PInvoke.SHAutoComplete(new HandleRef<HWND>(this, _childEdit.HWND), SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
+                            PInvoke.SHAutoComplete(_childEdit, SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
                         }
                         else
                         {
                             if (_stringSource is null)
                             {
                                 _stringSource = new StringSource(GetStringsForAutoComplete(AutoCompleteCustomSource));
-                                if (!_stringSource.Bind(new HandleRef(this, _childEdit.Handle), (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
+                                if (!_stringSource.Bind(_childEdit, (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                 {
                                     throw new ArgumentException(SR.AutoCompleteFailure);
                                 }
@@ -3323,14 +3322,14 @@ namespace System.Windows.Forms
                         {
                             if (_itemsCollection.Count == 0)
                             {
-                                PInvoke.SHAutoComplete(new HandleRef<HWND>(this, _childEdit.HWND), SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
+                                PInvoke.SHAutoComplete(_childEdit, SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
                             }
                             else
                             {
                                 if (_stringSource is null)
                                 {
                                     _stringSource = new StringSource(GetStringsForAutoComplete(Items));
-                                    if (!_stringSource.Bind(new HandleRef(this, _childEdit.Handle), (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
+                                    if (!_stringSource.Bind(_childEdit, (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                     {
                                         throw new ArgumentException(SR.AutoCompleteFailureListItems);
                                     }
@@ -3346,7 +3345,7 @@ namespace System.Windows.Forms
                     {
                         // Drop Down List special handling
                         Debug.Assert(DropDownStyle == ComboBoxStyle.DropDownList);
-                        PInvoke.SHAutoComplete(new HandleRef<HWND>(this, _childEdit.HWND), SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
+                        PInvoke.SHAutoComplete(_childEdit, SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
                     }
                 }
                 else
@@ -3368,13 +3367,15 @@ namespace System.Windows.Forms
                         mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_ON;
                     }
 
-                    PInvoke.SHAutoComplete(new HandleRef<HWND>(this, _childEdit.HWND), (SHELL_AUTOCOMPLETE_FLAGS)AutoCompleteSource | mode);
+                    PInvoke.SHAutoComplete(_childEdit.HWND, (SHELL_AUTOCOMPLETE_FLAGS)AutoCompleteSource | mode);
                 }
             }
             else if (reset)
             {
-                PInvoke.SHAutoComplete(new HandleRef<HWND>(this, _childEdit.HWND), SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
+                PInvoke.SHAutoComplete(_childEdit, SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
             }
+
+            GC.KeepAlive(this);
         }
 
         /// <summary>

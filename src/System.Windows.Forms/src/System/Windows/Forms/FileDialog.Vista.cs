@@ -42,7 +42,6 @@ namespace System.Windows.Forms
             OnBeforeVistaDialog(dialog);
             bool success = WinFormsComWrappers.Instance.TryGetComPointer(
                 new VistaDialogEvents(this),
-                IID.IFileDialogEvents,
                 out IFileDialogEvents* events);
 
             Debug.Assert(success);
