@@ -154,22 +154,22 @@ namespace System.Windows.Forms
                 switch (_tickStyle)
                 {
                     case TickStyle.None:
-                        cp.Style |= (int)TBS.NOTICKS;
+                        cp.Style |= (int)PInvoke.TBS_NOTICKS;
                         break;
                     case TickStyle.TopLeft:
-                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.TOP);
+                        cp.Style |= (int)(PInvoke.TBS_AUTOTICKS | PInvoke.TBS_TOP);
                         break;
                     case TickStyle.BottomRight:
-                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.BOTTOM);
+                        cp.Style |= (int)(PInvoke.TBS_AUTOTICKS | PInvoke.TBS_BOTTOM);
                         break;
                     case TickStyle.Both:
-                        cp.Style |= (int)(TBS.AUTOTICKS | TBS.BOTH);
+                        cp.Style |= (int)(PInvoke.TBS_AUTOTICKS | PInvoke.TBS_BOTH);
                         break;
                 }
 
                 if (_orientation == Orientation.Vertical)
                 {
-                    cp.Style |= (int)TBS.VERT;
+                    cp.Style |= (int)PInvoke.TBS_VERT;
                 }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                 _largeChange = value;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)TBM.SETPAGESIZE, 0, value);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPAGESIZE, 0, value);
                 }
             }
         }
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            PInvoke.SendMessage(this, (User32.WM)TBM.SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
             Invalidate();
         }
 
@@ -482,7 +482,7 @@ namespace System.Windows.Forms
                 _smallChange = value;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)TBM.SETLINESIZE, 0, value);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETLINESIZE, 0, value);
                 }
             }
         }
@@ -559,7 +559,7 @@ namespace System.Windows.Forms
                 _tickFrequency = value;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)TBM.SETTICFREQ, (WPARAM)value);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)value);
                     Invalidate();
                 }
             }
@@ -731,7 +731,7 @@ namespace System.Windows.Forms
                 {
                     var icc = new INITCOMMONCONTROLSEX
                     {
-                        dwICC = ICC.BAR_CLASSES
+                        dwICC = INITCOMMONCONTROLSEX_ICC.ICC_BAR_CLASSES
                     };
                     InitCommonControlsEx(ref icc);
                 }
@@ -759,7 +759,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                _value = (int)PInvoke.SendMessage(this, (User32.WM)TBM.GETPOS);
+                _value = (int)PInvoke.SendMessage(this, User32.WM.USER);
 
                 // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
                 if (_orientation == Orientation.Vertical)
@@ -807,11 +807,11 @@ namespace System.Windows.Forms
                 return;
             }
 
-            PInvoke.SendMessage(this, (User32.WM)TBM.SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
-            PInvoke.SendMessage(this, (User32.WM)TBM.SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
-            PInvoke.SendMessage(this, (User32.WM)TBM.SETTICFREQ, (WPARAM)_tickFrequency);
-            PInvoke.SendMessage(this, (User32.WM)TBM.SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
-            PInvoke.SendMessage(this, (User32.WM)TBM.SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
             SetTrackBarPosition();
             AdjustSize();
         }
@@ -992,10 +992,10 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)TBM.SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
 
                     // We must repaint the trackbar after changing the range.
-                    PInvoke.SendMessage(this, (User32.WM)TBM.SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
 
                     Invalidate();
                 }
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms
                     reflectedValue = Minimum + Maximum - _value;
                 }
 
-                PInvoke.SendMessage(this, (User32.WM)TBM.SETPOS, (WPARAM)(BOOL)true, (LPARAM)reflectedValue);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPOS, (WPARAM)(BOOL)true, (LPARAM)reflectedValue);
             }
         }
 

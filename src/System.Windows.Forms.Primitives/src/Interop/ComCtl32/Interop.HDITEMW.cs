@@ -11,7 +11,7 @@ internal static partial class Interop
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct HDITEMW
         {
-            public HDI mask;
+            public HDI_MASK mask;
             public int cxy;
             public char* /* LPWSTR */ pszText;
             public IntPtr /* HBITMAP */ hbm;

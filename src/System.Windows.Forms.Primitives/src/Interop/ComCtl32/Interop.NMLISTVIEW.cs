@@ -13,9 +13,9 @@ internal static partial class Interop
             public NMHDR hdr;
             public int iItem;
             public int iSubItem;
-            public LVIS uNewState;
-            public LVIS uOldState;
-            public LVIF uChanged;
+            public LIST_VIEW_ITEM_STATE_FLAGS uNewState;
+            public LIST_VIEW_ITEM_STATE_FLAGS uOldState;
+            public LIST_VIEW_ITEM_FLAGS uChanged;
             public Point ptAction;
             public IntPtr lParam;
         }

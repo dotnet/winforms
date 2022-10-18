@@ -889,8 +889,8 @@ namespace System.Windows.Forms.Design
         private static int ScaleLogicalToDeviceUnitsX(int unit)
             => DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(unit) : unit;
 
-        private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(HWND handle)
-            => (ComCtl32.TVS_EX)(uint)PInvoke.SendMessage(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
+        private static uint TreeView_GetExtendedStyle(HWND handle)
+            => (uint)PInvoke.SendMessage(handle, (User32.WM)PInvoke.TVM_GETEXTENDEDSTYLE);
 
         /// <summary>
         ///  Modify a WinForms TreeView control to use the new Explorer style theme
@@ -904,9 +904,9 @@ namespace System.Windows.Forms.Design
             treeView.ShowLines = false;
             HWND hwnd = (HWND)treeView.Handle;
             PInvoke.SetWindowTheme(hwnd, "Explorer", pszSubIdList: null);
-            ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
-            exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            PInvoke.SendMessage(treeView, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
+            uint exstyle = TreeView_GetExtendedStyle(hwnd);
+            exstyle |= PInvoke.TVS_EX_DOUBLEBUFFER | PInvoke.TVS_EX_FADEINOUTEXPANDOS;
+            PInvoke.SendMessage(treeView, (User32.WM)PInvoke.TVM_SETEXTENDEDSTYLE, 0, (nint)exstyle);
         }
 
         /// <summary>
@@ -921,9 +921,9 @@ namespace System.Windows.Forms.Design
             PInvoke.SetWindowTheme(hwnd, "Explorer", null);
             PInvoke.SendMessage(
                 listView,
-                (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE,
-                (WPARAM)(uint)ComCtl32.LVS_EX.DOUBLEBUFFER,
-                (LPARAM)(uint)ComCtl32.LVS_EX.DOUBLEBUFFER);
+                (User32.WM)PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
+                (WPARAM)(uint)PInvoke.LVS_EX_DOUBLEBUFFER,
+                (LPARAM)(uint)PInvoke.LVS_EX_DOUBLEBUFFER);
         }
     }
 }

@@ -49,7 +49,7 @@ namespace System.Windows.Forms
 
         private static readonly string s_dateTimePickerLocalizedControlTypeString = SR.DateTimePickerLocalizedControlType;
 
-        private const DTS TIMEFORMAT_NOUPDOWN = DTS.TIMEFORMAT & (~DTS.UPDOWN);
+        private const uint TIMEFORMAT_NOUPDOWN = PInvoke.DTS_TIMEFORMAT & (~PInvoke.DTS_UPDOWN);
         private EventHandler? _onCloseUp;
         private EventHandler? _onDropDown;
         private EventHandler? _onValueChanged;
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DateTime MaxDateTime = new(9998, 12, 31);
 
-        private DTS _style;
+        private uint _style;
         private short _prefHeightCache = -1;
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(_calendarForeColor))
                 {
                     _calendarForeColor = value;
-                    SetControlColor(MCSC.TEXT, value);
+                    SetControlColor(PInvoke.MCSC_TEXT, value);
                 }
             }
         }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(_calendarTitleBackColor))
                 {
                     _calendarTitleBackColor = value;
-                    SetControlColor(MCSC.TITLEBK, value);
+                    SetControlColor(PInvoke.MCSC_TITLEBK, value);
                 }
             }
         }
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(_calendarTitleForeColor))
                 {
                     _calendarTitleForeColor = value;
-                    SetControlColor(MCSC.TITLETEXT, value);
+                    SetControlColor(PInvoke.MCSC_TITLETEXT, value);
                 }
             }
         }
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(_calendarTrailingText))
                 {
                     _calendarTrailingText = value;
-                    SetControlColor(MCSC.TRAILINGTEXT, value);
+                    SetControlColor(PInvoke.MCSC_TRAILINGTEXT, value);
                 }
             }
         }
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(_calendarMonthBackground))
                 {
                     _calendarMonthBackground = value;
-                    SetControlColor(MCSC.MONTHBK, value);
+                    SetControlColor(PInvoke.MCSC_MONTHBK, value);
                 }
             }
         }
@@ -341,8 +341,8 @@ namespace System.Windows.Forms
                 if (ShowCheckBox && IsHandleCreated)
                 {
                     var sys = new SYSTEMTIME();
-                    GDT gdt = (GDT)PInvoke.SendMessage(this, (User32.WM)DTM.GETSYSTEMTIME, 0, ref sys);
-                    return gdt == GDT.VALID;
+                    NMDATETIMECHANGE_FLAGS gdt = (NMDATETIMECHANGE_FLAGS)PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_GETSYSTEMTIME, 0, ref sys);
+                    return gdt == NMDATETIMECHANGE_FLAGS.GDT_VALID;
                 }
                 else
                 {
@@ -359,11 +359,11 @@ namespace System.Windows.Forms
                         if (value)
                         {
                             SYSTEMTIME systemTime = (SYSTEMTIME)_value;
-                            PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (WPARAM)(uint)GDT.VALID, ref systemTime);
+                            PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
                         }
                         else
                         {
-                            PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (WPARAM)(uint)GDT.NONE);
+                            PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_NONE);
                         }
                     }
 
@@ -398,7 +398,7 @@ namespace System.Windows.Forms
                 switch (_format)
                 {
                     case DateTimePickerFormat.Long:
-                        cp.Style |= (int)DTS.LONGDATEFORMAT;
+                        cp.Style |= (int)PInvoke.DTS_LONGDATEFORMAT;
                         break;
                     case DateTimePickerFormat.Short:
                         break;
@@ -445,7 +445,7 @@ namespace System.Windows.Forms
                     {
                         if (_format == DateTimePickerFormat.Custom)
                         {
-                            PInvoke.SendMessage(this, (User32.WM)DTM.SETFORMATW, 0, _customFormat);
+                            PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETFORMATW, 0, _customFormat);
                         }
                     }
                 }
@@ -478,13 +478,13 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DateTimePickerDropDownAlignDescr))]
         public LeftRightAlignment DropDownAlign
         {
-            get => (_style & DTS.RIGHTALIGN) != 0 ? LeftRightAlignment.Right : LeftRightAlignment.Left;
+            get => (_style & PInvoke.DTS_RIGHTALIGN) != 0 ? LeftRightAlignment.Right : LeftRightAlignment.Left;
             set
             {
                 // Valid values are 0x0 to 0x1
                 SourceGenerated.EnumValidator.Validate(value);
 
-                SetStyleBit(value == LeftRightAlignment.Right, DTS.RIGHTALIGN);
+                SetStyleBit(value == LeftRightAlignment.Right, PInvoke.DTS_RIGHTALIGN);
             }
         }
 
@@ -797,8 +797,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DateTimePickerShowNoneDescr))]
         public bool ShowCheckBox
         {
-            get => (_style & DTS.SHOWNONE) != 0;
-            set => SetStyleBit(value, DTS.SHOWNONE);
+            get => (_style & PInvoke.DTS_SHOWNONE) != 0;
+            set => SetStyleBit(value, PInvoke.DTS_SHOWNONE);
         }
 
         /// <summary>
@@ -809,12 +809,12 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DateTimePickerShowUpDownDescr))]
         public bool ShowUpDown
         {
-            get => (_style & DTS.UPDOWN) != 0;
+            get => (_style & PInvoke.DTS_UPDOWN) != 0;
             set
             {
                 if (ShowUpDown != value)
                 {
-                    SetStyleBit(value, DTS.UPDOWN);
+                    SetStyleBit(value, PInvoke.DTS_UPDOWN);
                 }
             }
         }
@@ -903,7 +903,7 @@ namespace System.Windows.Forms
                 {
                     // Make sure any changes to this code get propagated to createHandle
                     SYSTEMTIME systemTime = (SYSTEMTIME)value;
-                    PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (WPARAM)(uint)GDT.VALID, ref systemTime);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
                 }
 
                 if (valueChanged)
@@ -974,7 +974,7 @@ namespace System.Windows.Forms
                 {
                     var icc = new INITCOMMONCONTROLSEX
                     {
-                        dwICC = ICC.DATE_CLASSES
+                        dwICC = INITCOMMONCONTROLSEX_ICC.ICC_DATE_CLASSES
                     };
                     InitCommonControlsEx(ref icc);
                 }
@@ -992,16 +992,16 @@ namespace System.Windows.Forms
             {
                 // Make sure any changes to this code get propagated to setValue
                 SYSTEMTIME systemTime = (SYSTEMTIME)Value;
-                PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (uint)GDT.VALID, ref systemTime);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
             }
             else if (!_validTime)
             {
-                PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (uint)GDT.NONE);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_NONE);
             }
 
             if (_format == DateTimePickerFormat.Custom)
             {
-                PInvoke.SendMessage(this, (User32.WM)DTM.SETFORMATW, 0, _customFormat);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETFORMATW, 0, _customFormat);
             }
 
             UpdateUpDown();
@@ -1282,7 +1282,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 SYSTEMTIME systemTime = (SYSTEMTIME)_value;
-                PInvoke.SendMessage(this, (User32.WM)DTM.SETSYSTEMTIME, (uint)GDT.VALID, ref systemTime);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
             }
 
             // Updating Checked to false will set the control to "no date" and clear its checkbox.
@@ -1295,11 +1295,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  If the handle has been created, this applies the color to the control
         /// </summary>
-        private void SetControlColor(MCSC colorIndex, Color value)
+        private void SetControlColor(uint colorIndex, Color value)
         {
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)DTM.SETMCCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETMCCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
             }
         }
 
@@ -1310,7 +1310,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)DTM.SETMCFONT, (WPARAM)CalendarFontHandle, (LPARAM)(-1));
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETMCFONT, (WPARAM)CalendarFontHandle, (LPARAM)(-1));
             }
         }
 
@@ -1319,11 +1319,11 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetAllControlColors()
         {
-            SetControlColor(MCSC.MONTHBK, _calendarMonthBackground);
-            SetControlColor(MCSC.TEXT, _calendarForeColor);
-            SetControlColor(MCSC.TITLEBK, _calendarTitleBackColor);
-            SetControlColor(MCSC.TITLETEXT, _calendarTitleForeColor);
-            SetControlColor(MCSC.TRAILINGTEXT, _calendarTrailingText);
+            SetControlColor(PInvoke.MCSC_MONTHBK, _calendarMonthBackground);
+            SetControlColor(PInvoke.MCSC_TEXT, _calendarForeColor);
+            SetControlColor(PInvoke.MCSC_TITLEBK, _calendarTitleBackColor);
+            SetControlColor(PInvoke.MCSC_TITLETEXT, _calendarTitleForeColor);
+            SetControlColor(PInvoke.MCSC_TRAILINGTEXT, _calendarTrailingText);
         }
 
         /// <summary>
@@ -1341,15 +1341,15 @@ namespace System.Windows.Forms
                 Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
                 times[0] = (SYSTEMTIME)min;
                 times[1] = (SYSTEMTIME)max;
-                GDTR flags = GDTR.MIN | GDTR.MAX;
-                PInvoke.SendMessage(this, (User32.WM)DTM.SETRANGE, (WPARAM)(uint)flags, ref times[0]);
+                uint flags = PInvoke.GDTR_MIN | PInvoke.GDTR_MAX;
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETRANGE, (WPARAM)(uint)flags, ref times[0]);
             }
         }
 
         /// <summary>
         ///  Turns on or off a given style bit.
         /// </summary>
-        private void SetStyleBit(bool flag, DTS bit)
+        private void SetStyleBit(bool flag, uint bit)
         {
             if (((_style & bit) != 0) == flag)
             {
@@ -1501,7 +1501,7 @@ namespace System.Windows.Forms
             NMDATETIMECHANGE* nmdtc = (NMDATETIMECHANGE*)(nint)m.LParamInternal;
             DateTime temp = _value;
             bool oldvalid = _validTime;
-            if (nmdtc->dwFlags != GDT.NONE)
+            if (nmdtc->dwFlags != NMDATETIMECHANGE_FLAGS.GDT_NONE)
             {
                 _validTime = true;
                 _value = (DateTime)nmdtc->st;
@@ -1526,7 +1526,7 @@ namespace System.Windows.Forms
         {
             if (RightToLeftLayout && RightToLeft == RightToLeft.Yes)
             {
-                HWND handle = (HWND)PInvoke.SendMessage(this, (User32.WM)DTM.GETMONTHCAL);
+                HWND handle = (HWND)PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_GETMONTHCAL);
                 if (handle != IntPtr.Zero)
                 {
                     WINDOW_EX_STYLE style = (WINDOW_EX_STYLE)PInvoke.GetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);

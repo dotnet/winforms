@@ -3889,7 +3889,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             RECT rect = itemRect;
 
-            PInvoke.SendMessage(toolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, (WPARAM)1, ref rect);
+            PInvoke.SendMessage(toolTip, (User32.WM)PInvoke.TTM_ADJUSTRECT, (WPARAM)1, ref rect);
 
             // Now offset it back to screen coords.
             Point location = parent.PointToScreen(new(rect.left, rect.top));

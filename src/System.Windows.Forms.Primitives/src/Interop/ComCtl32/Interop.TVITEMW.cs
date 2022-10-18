@@ -8,7 +8,7 @@ internal static partial class Interop
     {
         public struct TVITEMW
         {
-            public TVIF mask;
+            public TVITEM_MASK mask;
             public IntPtr hItem;
             public TVIS state;
             public TVIS stateMask;

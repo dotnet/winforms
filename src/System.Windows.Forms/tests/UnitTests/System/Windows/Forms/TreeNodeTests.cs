@@ -670,11 +670,11 @@ namespace System.Windows.Forms.Tests
             node.Checked = @checked;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.STATE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal((TVIS)expectedValue, item.state);
         }
 
@@ -938,11 +938,11 @@ namespace System.Windows.Forms.Tests
 
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.STATE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal((TVIS)expectedValue, item.state);
         }
 
@@ -1212,10 +1212,10 @@ namespace System.Windows.Forms.Tests
             node.ImageIndex = value;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.IMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iImage);
         }
 
@@ -1239,10 +1239,10 @@ namespace System.Windows.Forms.Tests
             node.ImageIndex = value;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.IMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iImage);
         }
 
@@ -1270,10 +1270,10 @@ namespace System.Windows.Forms.Tests
             node.ImageIndex = value;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.IMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iImage);
         }
 
@@ -1485,10 +1485,10 @@ namespace System.Windows.Forms.Tests
             node.ImageKey = value;
             var column = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.IMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref column));
             Assert.Equal(0, column.iImage);
         }
 
@@ -1515,10 +1515,10 @@ namespace System.Windows.Forms.Tests
             node.ImageKey = value;
             var column = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.IMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref column));
             Assert.Equal(expected, column.iImage);
         }
 
@@ -1547,10 +1547,10 @@ namespace System.Windows.Forms.Tests
             node.ImageKey = value;
             var column = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.IMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref column));
             Assert.Equal(expected, column.iImage);
         }
 
@@ -2393,9 +2393,9 @@ namespace System.Windows.Forms.Tests
 
             protected override void WndProc(ref Message m)
             {
-                if (MakeCustom && m.Msg == (int)TVM.GETNEXTITEM)
+                if (MakeCustom && m.Msg == (int)PInvoke.TVM_GETNEXTITEM)
                 {
-                    Assert.Equal((IntPtr)TVGN.NEXTVISIBLE, m.WParam);
+                    Assert.Equal((IntPtr)PInvoke.TVGN_NEXTVISIBLE, m.WParam);
                     Assert.NotEqual(IntPtr.Zero, m.LParam);
                     m.Result = GetNextItemResult;
                     return;
@@ -2786,9 +2786,9 @@ namespace System.Windows.Forms.Tests
 
             protected override void WndProc(ref Message m)
             {
-                if (MakeCustom && m.Msg == (int)TVM.GETNEXTITEM)
+                if (MakeCustom && m.Msg == (int)PInvoke.TVM_GETNEXTITEM)
                 {
-                    Assert.Equal((IntPtr)TVGN.PREVIOUSVISIBLE, m.WParam);
+                    Assert.Equal((IntPtr)PInvoke.TVGN_PREVIOUSVISIBLE, m.WParam);
                     Assert.NotEqual(IntPtr.Zero, m.LParam);
                     m.Result = GetPreviousItemResult;
                     return;
@@ -3194,10 +3194,10 @@ namespace System.Windows.Forms.Tests
             node.SelectedImageIndex = value;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.IMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iSelectedImage);
         }
 
@@ -3223,10 +3223,10 @@ namespace System.Windows.Forms.Tests
             node.SelectedImageIndex = value;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.SELECTEDIMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iSelectedImage);
         }
 
@@ -3254,10 +3254,10 @@ namespace System.Windows.Forms.Tests
             node.SelectedImageIndex = value;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.SELECTEDIMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iSelectedImage);
         }
 
@@ -3469,10 +3469,10 @@ namespace System.Windows.Forms.Tests
             node.SelectedImageKey = value;
             var column = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.SELECTEDIMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref column));
             Assert.Equal(0, column.iSelectedImage);
         }
 
@@ -3499,10 +3499,10 @@ namespace System.Windows.Forms.Tests
             node.SelectedImageKey = value;
             var column = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.SELECTEDIMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref column));
             Assert.Equal(expected, column.iSelectedImage);
         }
 
@@ -3531,10 +3531,10 @@ namespace System.Windows.Forms.Tests
             node.SelectedImageKey = value;
             var column = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.SELECTEDIMAGE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref column));
             Assert.Equal(expected, column.iSelectedImage);
         }
 
@@ -3858,11 +3858,11 @@ namespace System.Windows.Forms.Tests
             node.StateImageIndex = value;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.STATE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal((TVIS)expected, item.state);
         }
 
@@ -3888,11 +3888,11 @@ namespace System.Windows.Forms.Tests
             node.StateImageIndex = value;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.STATE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal((TVIS)expected, item.state);
         }
 
@@ -3920,11 +3920,11 @@ namespace System.Windows.Forms.Tests
             node.StateImageIndex = value;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.STATE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal((TVIS)expected, item.state);
         }
 
@@ -4221,11 +4221,11 @@ namespace System.Windows.Forms.Tests
             node.StateImageKey = value;
             var column = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.STATE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref column));
             Assert.Equal((TVIS)0, column.state);
         }
 
@@ -4259,11 +4259,11 @@ namespace System.Windows.Forms.Tests
             node.StateImageKey = value;
             var column = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.STATE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref column));
             Assert.Equal((TVIS)expected, column.state);
         }
 
@@ -4299,11 +4299,11 @@ namespace System.Windows.Forms.Tests
             node.StateImageKey = value;
             var column = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.STATE,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref column));
             Assert.Equal((TVIS)expected, column.state);
         }
 
@@ -4456,12 +4456,12 @@ namespace System.Windows.Forms.Tests
             node.Text = value;
             var item = new TVITEMW
             {
-                mask = TVIF.HANDLE | TVIF.TEXT,
+                mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_TEXT,
                 hItem = node.Handle,
                 cchTextMax = 256,
                 pszText = (IntPtr)textBuffer
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)TVM.GETITEMW, 0, ref item));
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (WM)PInvoke.TVM_GETITEMW, 0, ref item));
             Assert.Equal(expected, new string((char*)item.pszText));
         }
 
@@ -4642,7 +4642,7 @@ namespace System.Windows.Forms.Tests
 
             protected override void WndProc(ref Message m)
             {
-                if (MakeInvalid && m.Msg == (int)TVM.SETITEMW)
+                if (MakeInvalid && m.Msg == (int)PInvoke.TVM_SETITEMW)
                 {
                     m.Result = IntPtr.Zero;
                     return;
@@ -4658,7 +4658,7 @@ namespace System.Windows.Forms.Tests
 
             protected unsafe override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)TVM.GETITEMW)
+                if (m.Msg == (int)PInvoke.TVM_GETITEMW)
                 {
                     TVITEMW* pItem = (TVITEMW*)m.LParam;
                     pItem->state = GetItemStateResult;
@@ -4679,7 +4679,7 @@ namespace System.Windows.Forms.Tests
 
             protected unsafe override void WndProc(ref Message m)
             {
-                if (MakeInvalid && m.Msg == (int)TVM.GETITEMW)
+                if (MakeInvalid && m.Msg == (int)PInvoke.TVM_GETITEMW)
                 {
                     TVITEMW* pItem = (TVITEMW*)m.LParam;
                     pItem->state = GetItemStateResult;
@@ -4698,7 +4698,7 @@ namespace System.Windows.Forms.Tests
 
             protected unsafe override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)TVM.GETITEMRECT)
+                if (m.Msg == (int)PInvoke.TVM_GETITEMRECT)
                 {
                     RECT* pRect = (RECT*)m.LParam;
                     *pRect = GetItemRectResult;
@@ -4717,7 +4717,7 @@ namespace System.Windows.Forms.Tests
 
             protected unsafe override void WndProc(ref Message m)
             {
-                if (MakeInvalid && m.Msg == (int)TVM.GETITEMRECT)
+                if (MakeInvalid && m.Msg == (int)PInvoke.TVM_GETITEMRECT)
                 {
                     RECT* pRect = (RECT*)m.LParam;
                     *pRect = new RECT(1, 2, 3, 4);

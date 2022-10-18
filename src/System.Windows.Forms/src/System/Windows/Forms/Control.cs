@@ -14472,7 +14472,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(ComCtl32.TTF flags, string caption, ToolTip tooltip)
+        internal virtual ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string caption, ToolTip tooltip)
             => new(this, flags, caption);
 
         private readonly WeakReference<ToolStripControlHost?> toolStripControlHostReference

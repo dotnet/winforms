@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -34,7 +33,7 @@ namespace System.Windows.Forms
                 {
                     if (_owner.IsHandleCreated)
                     {
-                        int cnt = (int)PInvoke.SendMessage(_owner, (User32.WM)LVM.GETSELECTEDCOUNT);
+                        int cnt = (int)PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_GETSELECTEDCOUNT);
 
                         ListViewItem[] lvitems = new ListViewItem[cnt];
 
@@ -44,9 +43,9 @@ namespace System.Windows.Forms
                         {
                             int fidx = (int)PInvoke.SendMessage(
                                 _owner,
-                                (User32.WM)LVM.GETNEXTITEM,
+                                (User32.WM)PInvoke.LVM_GETNEXTITEM,
                                 (WPARAM)displayIndex,
-                                (LPARAM)(uint)LVNI.SELECTED);
+                                (LPARAM)(uint)PInvoke.LVNI_SELECTED);
 
                             if (fidx > -1)
                             {
@@ -96,7 +95,7 @@ namespace System.Windows.Forms
 
                     if (_owner.IsHandleCreated)
                     {
-                        return (int)PInvoke.SendMessage(_owner, (User32.WM)LVM.GETSELECTEDCOUNT);
+                        return (int)PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_GETSELECTEDCOUNT);
                     }
                     else
                     {
@@ -135,9 +134,9 @@ namespace System.Windows.Forms
                         {
                             fidx = (int)PInvoke.SendMessage(
                                 _owner,
-                                (User32.WM)LVM.GETNEXTITEM,
+                                (User32.WM)PInvoke.LVM_GETNEXTITEM,
                                 (WPARAM)fidx,
-                                (LPARAM)(uint)LVNI.SELECTED);
+                                (LPARAM)(uint)PInvoke.LVNI_SELECTED);
 
                             Debug.Assert(fidx != -1, "Invalid index returned from LVM_GETNEXTITEM");
                         }

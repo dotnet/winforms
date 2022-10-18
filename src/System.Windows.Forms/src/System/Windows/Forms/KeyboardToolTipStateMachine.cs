@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -178,7 +176,7 @@ namespace System.Windows.Forms
         {
             _currentTool = tool;
             ResetTimer();
-            StartTimer(toolTip.GetDelayTime(ComCtl32.TTDT.RESHOW),
+            StartTimer(toolTip.GetDelayTime(PInvoke.TTDT_RESHOW),
                 GetOneRunTickHandler((Timer sender) => Transit(SmEvent.ReshowDelayTimerExpired, tool)));
             return SmState.ReadyForReshow;
         }
@@ -189,7 +187,7 @@ namespace System.Windows.Forms
 
             int autoPopDelay = toolTip.IsPersistent ?
                 0 :
-                toolTip.GetDelayTime(ComCtl32.TTDT.AUTOPOP);
+                toolTip.GetDelayTime(PInvoke.TTDT_AUTOPOP);
 
             if (_currentTool is null)
             {
@@ -215,7 +213,7 @@ namespace System.Windows.Forms
         {
             _currentTool = tool;
             ResetTimer();
-            StartTimer(toolTip.GetDelayTime(ComCtl32.TTDT.INITIAL),
+            StartTimer(toolTip.GetDelayTime(PInvoke.TTDT_INITIAL),
                 GetOneRunTickHandler((Timer sender) => Transit(SmEvent.InitialDelayTimerExpired, _currentTool)));
 
             return SmState.ReadyForInitShow;

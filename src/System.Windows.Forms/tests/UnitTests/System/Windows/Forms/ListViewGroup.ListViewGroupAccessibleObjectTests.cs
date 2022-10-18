@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Tests
                 Assert.True(list.IsHandleCreated);
 
                 RECT groupRect = new RECT();
-                PInvoke.SendMessage(list, (User32.WM)ComCtl32.LVM.GETGROUPRECT, (WPARAM)listGroup.ID, ref groupRect);
+                PInvoke.SendMessage(list, (User32.WM)PInvoke.LVM_GETGROUPRECT, (WPARAM)listGroup.ID, ref groupRect);
 
                 int actualWidth = group1AccObj.Bounds.Width;
                 int expectedWidth = groupRect.Width;
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(new ListViewItem("a", group));
 
             RECT groupRect = new RECT();
-            PInvoke.SendMessage(listView, (User32.WM)ComCtl32.LVM.GETGROUPRECT, (WPARAM)group.ID, ref groupRect);
+            PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETGROUPRECT, (WPARAM)group.ID, ref groupRect);
 
             AccessibleObject groupAccObj = group.AccessibilityObject;
 

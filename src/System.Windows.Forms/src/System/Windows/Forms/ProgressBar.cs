@@ -52,11 +52,11 @@ namespace System.Windows.Forms
                 cp.ClassName = PInvoke.PROGRESS_CLASS;
                 if (Style == ProgressBarStyle.Continuous)
                 {
-                    cp.Style |= (int)ComCtl32.PBS.SMOOTH;
+                    cp.Style |= (int)PInvoke.PBS_SMOOTH;
                 }
                 else if (Style == ProgressBarStyle.Marquee && !DesignMode)
                 {
-                    cp.Style |= (int)ComCtl32.PBS.MARQUEE;
+                    cp.Style |= (int)PInvoke.PBS_MARQUEE;
                 }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
@@ -237,11 +237,11 @@ namespace System.Windows.Forms
             {
                 if (_marqueeAnimationSpeed == 0)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETMARQUEE, (WPARAM)(BOOL)false, (LPARAM)_marqueeAnimationSpeed);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETMARQUEE, (WPARAM)(BOOL)false, (LPARAM)_marqueeAnimationSpeed);
                 }
                 else
                 {
-                    PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETMARQUEE, (WPARAM)(BOOL)true, (LPARAM)_marqueeAnimationSpeed);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETMARQUEE, (WPARAM)(BOOL)true, (LPARAM)_marqueeAnimationSpeed);
                 }
             }
         }
@@ -280,7 +280,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETRANGE32, (WPARAM)_minimum, (LPARAM)_maximum);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETRANGE32, (WPARAM)_minimum, (LPARAM)_maximum);
                         UpdatePos();
                     }
                 }
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETRANGE32, (WPARAM)_minimum, (LPARAM)_maximum);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETRANGE32, (WPARAM)_minimum, (LPARAM)_maximum);
                         UpdatePos();
                     }
                 }
@@ -333,7 +333,7 @@ namespace System.Windows.Forms
             base.OnBackColorChanged(e);
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, 0, BackColor.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETBKCOLOR, 0, BackColor.ToWin32());
             }
         }
 
@@ -342,7 +342,7 @@ namespace System.Windows.Forms
             base.OnForeColorChanged(e);
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, 0, ForeColor.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETBARCOLOR, 0, ForeColor.ToWin32());
             }
         }
 
@@ -411,7 +411,7 @@ namespace System.Windows.Forms
                 _step = value;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETSTEP, (WPARAM)_step);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETSTEP, (WPARAM)_step);
                 }
             }
         }
@@ -548,7 +548,7 @@ namespace System.Windows.Forms
                 {
                     var icc = new ComCtl32.INITCOMMONCONTROLSEX
                     {
-                        dwICC = ComCtl32.ICC.PROGRESS_CLASS
+                        dwICC = INITCOMMONCONTROLSEX_ICC.ICC_PROGRESS_CLASS
                     };
                     ComCtl32.InitCommonControlsEx(ref icc);
                 }
@@ -596,11 +596,11 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETRANGE32, (WPARAM)_minimum, (LPARAM)_maximum);
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETSTEP, (WPARAM)_step);
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETPOS, (WPARAM)_value);
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, (WPARAM)0, (LPARAM)ForeColor);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETRANGE32, (WPARAM)_minimum, (LPARAM)_maximum);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETSTEP, (WPARAM)_step);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETPOS, (WPARAM)_value);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETBARCOLOR, (WPARAM)0, (LPARAM)ForeColor);
             }
 
             StartMarquee();
@@ -680,7 +680,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETPOS, (WPARAM)_value);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETPOS, (WPARAM)_value);
             }
         }
 
@@ -692,8 +692,8 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, 0, ForeColor.ToWin32());
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, 0, BackColor.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETBARCOLOR, 0, ForeColor.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.PBM_SETBKCOLOR, 0, BackColor.ToWin32());
             }
         }
 

@@ -4,11 +4,10 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Xunit;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -223,7 +222,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
             listView.Columns[columnIndex].DisplayIndex = value;
             var result = new int[3];
-            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)LVM.GETCOLUMNORDERARRAY, 3, ref result[0]));
+            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETCOLUMNORDERARRAY, 3, ref result[0]));
             Assert.Equal(expectedDisplayIndices, result);
         }
 
@@ -447,9 +446,9 @@ namespace System.Windows.Forms.Tests
             header.ImageIndex = value;
             var column = new ComCtl32.LVCOLUMNW
             {
-                mask = ComCtl32.LVCF.IMAGE
+                mask = LVCOLUMNW_MASK.LVCF_IMAGE
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)LVM.GETCOLUMNW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETCOLUMNW, 0, ref column));
             Assert.Equal(0, column.iImage);
         }
 
@@ -476,10 +475,10 @@ namespace System.Windows.Forms.Tests
             header.ImageIndex = value;
             var column = new ComCtl32.LVCOLUMNW
             {
-                mask = ComCtl32.LVCF.IMAGE | ComCtl32.LVCF.FMT,
-                fmt = ComCtl32.LVCFMT.IMAGE
+                mask = LVCOLUMNW_MASK.LVCF_IMAGE | LVCOLUMNW_MASK.LVCF_FMT,
+                fmt = LVCOLUMNW_FORMAT.LVCFMT_IMAGE
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)LVM.GETCOLUMNW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETCOLUMNW, 0, ref column));
             Assert.Equal(expected, column.iImage);
         }
 
@@ -667,9 +666,9 @@ namespace System.Windows.Forms.Tests
             header.ImageKey = value;
             var column = new ComCtl32.LVCOLUMNW
             {
-                mask = ComCtl32.LVCF.IMAGE
+                mask = LVCOLUMNW_MASK.LVCF_IMAGE
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)LVM.GETCOLUMNW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETCOLUMNW, 0, ref column));
             Assert.Equal(0, column.iImage);
         }
 
@@ -698,10 +697,10 @@ namespace System.Windows.Forms.Tests
             header.ImageKey = value;
             var column = new ComCtl32.LVCOLUMNW
             {
-                mask = ComCtl32.LVCF.IMAGE | ComCtl32.LVCF.FMT,
-                fmt = ComCtl32.LVCFMT.IMAGE
+                mask = LVCOLUMNW_MASK.LVCF_IMAGE | LVCOLUMNW_MASK.LVCF_FMT,
+                fmt = LVCOLUMNW_FORMAT.LVCFMT_IMAGE
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)LVM.GETCOLUMNW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETCOLUMNW, 0, ref column));
             Assert.Equal(expected, column.iImage);
         }
 
@@ -1013,11 +1012,11 @@ namespace System.Windows.Forms.Tests
             char* buffer = stackalloc char[256];
             var column = new ComCtl32.LVCOLUMNW
             {
-                mask = ComCtl32.LVCF.TEXT,
+                mask = LVCOLUMNW_MASK.LVCF_TEXT,
                 pszText = buffer,
                 cchTextMax = 256
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)LVM.GETCOLUMNW, 0, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETCOLUMNW, 0, ref column));
             Assert.Equal(expected, new string(column.pszText));
         }
 
@@ -1204,9 +1203,9 @@ namespace System.Windows.Forms.Tests
             listView.Columns[columnIndex].TextAlign = value;
             var column = new ComCtl32.LVCOLUMNW
             {
-                mask = ComCtl32.LVCF.FMT
+                mask = LVCOLUMNW_MASK.LVCF_FMT
             };
-            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)LVM.GETCOLUMNW, (WPARAM)columnIndex, ref column));
+            Assert.Equal(1, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETCOLUMNW, (WPARAM)columnIndex, ref column));
             Assert.Equal(expected, (int)column.fmt);
         }
 
@@ -1364,7 +1363,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
             header.Width = value;
-            Assert.Equal(value, (int)PInvoke.SendMessage(listView, (User32.WM)LVM.GETCOLUMNWIDTH));
+            Assert.Equal(value, (int)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETCOLUMNWIDTH));
         }
 
         [WinFormsTheory]
@@ -1382,7 +1381,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
             header.Width = value;
-            Assert.True(PInvoke.SendMessage(listView, (User32.WM)LVM.GETCOLUMNWIDTH) > 0);
+            Assert.True(PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETCOLUMNWIDTH) > 0);
         }
 
         [WinFormsTheory]
@@ -1615,7 +1614,7 @@ namespace System.Windows.Forms.Tests
 
             protected override void WndProc(ref Message m)
             {
-                if (MakeInvalid && m.Msg == (int)LVM.SETCOLUMNW)
+                if (MakeInvalid && m.Msg == (int)PInvoke.LVM_SETCOLUMNW)
                 {
                     m.Result = IntPtr.Zero;
                 }

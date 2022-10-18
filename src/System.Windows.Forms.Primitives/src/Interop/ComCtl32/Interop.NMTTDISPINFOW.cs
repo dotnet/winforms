@@ -15,7 +15,7 @@ internal static partial class Interop
             public IntPtr lpszText;
             public fixed char szText[80];
             public IntPtr hinst;
-            public TTF uFlags;
+            public TOOLTIP_FLAGS uFlags;
             public IntPtr lParam;
         }
     }

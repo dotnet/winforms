@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Globalization;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -58,7 +57,7 @@ namespace System.Windows.Forms
 
             public override Rectangle Bounds
                 => _monthCalendarAccessibleObject
-                .GetCalendarPartRectangle(MCGIP.CALENDARCELL, _calendarIndex, _rowIndex, _columnIndex);
+                .GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_CALENDARCELL, _calendarIndex, _rowIndex, _columnIndex);
 
             internal int CalendarIndex => _calendarIndex;
 
@@ -68,7 +67,7 @@ namespace System.Windows.Forms
 
             internal virtual SelectionRange? DateRange
                 => _dateRange ??= _monthCalendarAccessibleObject
-                .GetCalendarPartDateRange(MCGIP.CALENDARCELL, _calendarIndex, _rowIndex, _columnIndex);
+                .GetCalendarPartDateRange(MCGRIDINFO_PART.MCGIP_CALENDARCELL, _calendarIndex, _rowIndex, _columnIndex);
 
             public override string? Description
             {
@@ -76,7 +75,7 @@ namespace System.Windows.Forms
                 {
                     // Only date cells in the Month view have Descriptions that based on cells date ranges
                     if (!_monthCalendarAccessibleObject.IsHandleCreated
-                        || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH
+                        || _monthCalendarAccessibleObject.CalendarView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH
                         || DateRange is null)
                     {
                         return null;
@@ -111,7 +110,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
             {
                 if (!_monthCalendarAccessibleObject.IsHandleCreated
-                    || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH)
+                    || _monthCalendarAccessibleObject.CalendarView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH)
                 {
                     // Column headers are available only in the "Month" view
                     return null;
@@ -171,10 +170,10 @@ namespace System.Windows.Forms
 
                     return _monthCalendarAccessibleObject.CalendarView switch
                     {
-                        MCMV.MONTH => $"{DateRange.Start:D}",
-                        MCMV.YEAR => $"{DateRange.Start:Y}",
-                        MCMV.DECADE => $"{DateRange.Start:yyy}",
-                        MCMV.CENTURY => $"{DateRange.Start:yyy} - {DateRange.End:yyy}",
+                        MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH => $"{DateRange.Start:D}",
+                        MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR => $"{DateRange.Start:Y}",
+                        MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE => $"{DateRange.Start:yyy}",
+                        MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY => $"{DateRange.Start:yyy} - {DateRange.End:yyy}",
                         _ => string.Empty,
                     };
                 }
@@ -211,7 +210,7 @@ namespace System.Windows.Forms
                     // then the calendar selection range in the rest views.
                     // But in the rest views a user can select only one cell. It means that a focused cell equals one selected cell,
                     // so the correct state will be returned in the condition above for the rest views.
-                    if (DateRange is not null && _monthCalendarAccessibleObject.CalendarView == MCMV.MONTH
+                    if (DateRange is not null && _monthCalendarAccessibleObject.CalendarView == MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH
                         && DateRange.Start >= _monthCalendarAccessibleObject.SelectionRange.Start
                         && DateRange.End <= _monthCalendarAccessibleObject.SelectionRange.End)
                     {

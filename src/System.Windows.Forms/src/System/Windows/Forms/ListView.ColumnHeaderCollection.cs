@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -345,7 +344,7 @@ namespace System.Windows.Forms
                             int w = _owner._columnHeaders[colIdx].Width; // Update width before detaching from ListView
                             if (_owner.IsHandleCreated)
                             {
-                                PInvoke.SendMessage(_owner, (User32.WM)LVM.DELETECOLUMN, (WPARAM)colIdx);
+                                PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_DELETECOLUMN, (WPARAM)colIdx);
                             }
 
                             _owner._columnHeaders[colIdx].OwnerListview = null;
@@ -523,7 +522,7 @@ namespace System.Windows.Forms
                 // in Tile view our ListView uses the column header collection to update the Tile Information
                 if (_owner.IsHandleCreated && _owner.View != View.Tile)
                 {
-                    int retval = (int)PInvoke.SendMessage(_owner, (User32.WM)LVM.DELETECOLUMN, (WPARAM)index);
+                    int retval = (int)PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_DELETECOLUMN, (WPARAM)index);
                     if (0 == retval)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));

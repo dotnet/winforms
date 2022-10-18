@@ -182,9 +182,9 @@ namespace System.Windows.Forms.Design
             {
                 base.OnHandleCreated(e);
 
-                int itemHeight = (int)PInvoke.SendMessage(this, (User32.WM)ComCtl32.TVM.GETITEMHEIGHT);
+                int itemHeight = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_GETITEMHEIGHT);
                 itemHeight += 2 * PADDING_VERT;
-                PInvoke.SendMessage(this, (User32.WM)ComCtl32.TVM.SETITEMHEIGHT, (WPARAM)itemHeight);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETITEMHEIGHT, (WPARAM)itemHeight);
 
                 if (_hbrushDither.IsNull)
                 {
@@ -194,25 +194,27 @@ namespace System.Windows.Forms.Design
 
             private unsafe void OnCustomDraw(ref Message m)
             {
-                ComCtl32.NMTVCUSTOMDRAW* nmtvcd = (ComCtl32.NMTVCUSTOMDRAW*)(nint)m.LParamInternal;
+                NMTVCUSTOMDRAW* nmtvcd = (NMTVCUSTOMDRAW*)(nint)m.LParamInternal;
+                
                 switch (nmtvcd->nmcd.dwDrawStage)
                 {
-                    case ComCtl32.CDDS.PREPAINT:
-                        m.ResultInternal = (LRESULT)(nint)(ComCtl32.CDRF.NOTIFYITEMDRAW | ComCtl32.CDRF.NOTIFYPOSTPAINT);
+                    case NMCUSTOMDRAW_DRAW_STAGE.CDDS_PREPAINT:
+                        m.ResultInternal = (LRESULT)(nint)(PInvoke.CDRF_NOTIFYITEMDRAW | PInvoke.CDRF_NOTIFYPOSTPAINT);
                         break;
-                    case ComCtl32.CDDS.ITEMPREPAINT:
+                    case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT:
                         {
-                            TreeNode itemNode = TreeNode.FromHandle(this, nmtvcd->nmcd.dwItemSpec);
+                            TreeNode itemNode = TreeNode.FromHandle(this, (nint)nmtvcd->nmcd.dwItemSpec);
                             if (itemNode is not null)
                             {
                                 int state = STATE_NORMAL;
-                                ComCtl32.CDIS itemState = nmtvcd->nmcd.uItemState;
-                                if (((itemState & ComCtl32.CDIS.HOT) != 0) || ((itemState & ComCtl32.CDIS.FOCUS) != 0))
+                                NMCUSTOMDRAW_DRAW_STATE_FLAGS itemState = nmtvcd->nmcd.uItemState;
+                                if (((itemState & NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_HOT) != 0) ||
+                                    ((itemState & NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_FOCUS) != 0))
                                 {
                                     state |= STATE_HOT;
                                 }
 
-                                if ((itemState & ComCtl32.CDIS.SELECTED) != 0)
+                                if ((itemState & NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED) != 0)
                                 {
                                     state |= STATE_SELECTED;
                                 }
@@ -227,15 +229,15 @@ namespace System.Windows.Forms.Design
                                     (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
 
-                            m.ResultInternal = (LRESULT)(nint)ComCtl32.CDRF.SKIPDEFAULT;
+                            m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_SKIPDEFAULT;
                         }
 
                         break;
-                    case ComCtl32.CDDS.POSTPAINT:
-                        m.ResultInternal = (LRESULT)(nint)ComCtl32.CDRF.SKIPDEFAULT;
+                    case NMCUSTOMDRAW_DRAW_STAGE.CDDS_POSTPAINT:
+                        m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_SKIPDEFAULT;
                         break;
                     default:
-                        m.ResultInternal = (LRESULT)(nint)ComCtl32.CDRF.DODEFAULT;
+                        m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
                         break;
                 }
             }

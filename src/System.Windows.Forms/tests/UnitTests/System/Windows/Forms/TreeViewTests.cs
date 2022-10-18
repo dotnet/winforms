@@ -5,11 +5,10 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Xunit;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -1680,7 +1679,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int version = Application.UseVisualStyles ? 6 : 5;
-            Assert.Equal(version, (int)PInvoke.SendMessage(control, (User32.WM)CCM.GETVERSION));
+            Assert.Equal(version, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.CCM_GETVERSION));
         }
 
         public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()
@@ -1710,14 +1709,14 @@ namespace System.Windows.Forms.Tests
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)CCM.GETVERSION)
+                if (m.Msg == (int)PInvoke.CCM_GETVERSION)
                 {
                     Assert.Equal(IntPtr.Zero, m.WParam);
                     Assert.Equal(IntPtr.Zero, m.LParam);
                     m.Result = GetVersionResult;
                     return;
                 }
-                else if (m.Msg == (int)CCM.SETVERSION)
+                else if (m.Msg == (int)PInvoke.CCM_SETVERSION)
                 {
                     Assert.Equal((IntPtr)5, m.WParam);
                     Assert.Equal(IntPtr.Zero, m.LParam);
@@ -6606,7 +6605,7 @@ namespace System.Windows.Forms.Tests
             using var treeView = new TreeView();
             treeView.ShowNodeToolTips = showNodeToolTips;
             ToolTip toolTip = useKeyboardToolTip ? treeView.KeyboardToolTip : new ToolTip();
-            ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TTF.ABSOLUTE, "Test caption", toolTip);
+            ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
 
             Assert.Equal("Test caption", wrapper.Text);
             // Assert.Equal method does not work because char* cannot be used as an argument to it
@@ -6619,7 +6618,7 @@ namespace System.Windows.Forms.Tests
             using var treeView = new TreeView();
             treeView.ShowNodeToolTips = true;
             ToolTip toolTip = new ToolTip();
-            ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TTF.ABSOLUTE, "Test caption", toolTip);
+            ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
             char* expected = (char*)(-1);
 
             Assert.Null(wrapper.Text);

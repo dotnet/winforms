@@ -11,9 +11,9 @@ internal partial class Interop
         public static partial class ImageList
         {
             [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_WriteEx")]
-            public static extern HRESULT WriteEx(IntPtr himl, ILP dwFlags, Ole32.IStream pstm);
+            public static extern HRESULT WriteEx(IntPtr himl, IMAGE_LIST_WRITE_STREAM_FLAGS dwFlags, Ole32.IStream pstm);
 
-            public static HRESULT WriteEx(HandleRef himl, ILP dwFlags, Ole32.IStream pstm)
+            public static HRESULT WriteEx(HandleRef himl, IMAGE_LIST_WRITE_STREAM_FLAGS dwFlags, Ole32.IStream pstm)
             {
                 HRESULT result = WriteEx(himl.Handle, dwFlags, pstm);
                 GC.KeepAlive(himl);
