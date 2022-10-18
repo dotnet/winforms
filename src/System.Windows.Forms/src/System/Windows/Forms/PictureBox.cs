@@ -233,10 +233,7 @@ namespace System.Windows.Forms
                     if (_defaultErrorImage is null)
                     {
                         // Can't share images across threads.
-                        if (t_defaultErrorImageForThread is null)
-                        {
-                            t_defaultErrorImageForThread = DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "ImageInError");
-                        }
+                        t_defaultErrorImageForThread ??= DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "ImageInError");
 
                         _defaultErrorImage = t_defaultErrorImageForThread;
                     }
@@ -394,10 +391,7 @@ namespace System.Windows.Forms
                     if (_defaultInitialImage is null)
                     {
                         // Can't share images across threads.
-                        if (t_defaultInitialImageForThread is null)
-                        {
-                            t_defaultInitialImageForThread = DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "PictureBox.Loading");
-                        }
+                        t_defaultInitialImageForThread ??= DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "PictureBox.Loading");
 
                         _defaultInitialImage = t_defaultInitialImageForThread;
                     }
@@ -627,10 +621,7 @@ namespace System.Windows.Forms
         {
             AsyncOperation temp = _currentAsyncLoadOperation;
             _currentAsyncLoadOperation = null;
-            if (temp is not null)
-            {
-                temp.PostOperationCompleted(_loadCompletedDelegate, new AsyncCompletedEventArgs(error, cancelled, null));
-            }
+            temp?.PostOperationCompleted(_loadCompletedDelegate, new AsyncCompletedEventArgs(error, cancelled, null));
         }
 
         private void LoadCompletedDelegate(object arg)
@@ -732,21 +723,15 @@ namespace System.Windows.Forms
                     if (_contentLength != -1)
                     {
                         int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
-                        if (_currentAsyncLoadOperation is not null)
-                        {
-                            _currentAsyncLoadOperation.Post(_loadProgressDelegate,
+                        _currentAsyncLoadOperation?.Post(_loadProgressDelegate,
                                     new ProgressChangedEventArgs(progress, null));
-                        }
                     }
                 }
                 else
                 {
                     _tempDownloadStream.Seek(0, SeekOrigin.Begin);
-                    if (_currentAsyncLoadOperation is not null)
-                    {
-                        _currentAsyncLoadOperation.Post(_loadProgressDelegate,
+                    _currentAsyncLoadOperation?.Post(_loadProgressDelegate,
                                     new ProgressChangedEventArgs(100, null));
-                    }
 
                     PostCompleted(null, false);
 

@@ -107,8 +107,6 @@ namespace System.Windows.Forms
 
             public ToolStripTextBox? Owner { get; set; }
 
-            internal override bool SupportsUiaProviders => true;
-
             private unsafe void InvalidateNonClient()
             {
                 if (!IsPopupTextBox)
@@ -128,14 +126,14 @@ namespace System.Windows.Forms
                 using PInvoke.RegionScope hNonClientRegion = new(0, 0, 0, 0);
 
                 PInvoke.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, RGN_COMBINE_MODE.RGN_XOR);
-
+                
                 // Call RedrawWindow with the region.
-                User32.RedrawWindow(
+                PInvoke.RedrawWindow(
                     this,
-                    null,
+                    lprcUpdate: null,
                     hNonClientRegion,
-                    User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.UPDATENOW
-                        | User32.RDW.ERASENOW | User32.RDW.FRAME);
+                    REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_ERASE | REDRAW_WINDOW_FLAGS.RDW_UPDATENOW
+                        | REDRAW_WINDOW_FLAGS.RDW_ERASENOW | REDRAW_WINDOW_FLAGS.RDW_FRAME);
             }
 
             protected override void OnGotFocus(EventArgs e)

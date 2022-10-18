@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static HWND GetParent<T>(in T hwnd) where T : IHandle<HWND>
+        public static HWND GetParent<T>(T hwnd) where T : IHandle<HWND>
         {
             HWND result = GetParent(hwnd.Handle);
             GC.KeepAlive(hwnd.Wrapper);

@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Design
         {
             // make a reasonable guess what user control should be shown
             string formatString = _dgvCellStyle != null ? _dgvCellStyle.Format : _listControl.FormatString;
-            object nullValue = _dgvCellStyle != null ? _dgvCellStyle.NullValue : null;
+            object nullValue = _dgvCellStyle?.NullValue;
             string formatType = string.Empty;
 
             if (!string.IsNullOrEmpty(formatString))

@@ -937,10 +937,7 @@ namespace System.Windows.Forms
                             numVisibleFillColumns++;
                             requiredWidthSum += dataGridViewColumn.DesiredMinimumWidth > 0 ? dataGridViewColumn.DesiredMinimumWidth : dataGridViewColumn.MinimumWidth;
                             weightSum += dataGridViewColumn.FillWeight;
-                            if (autoFillColumns is null)
-                            {
-                                autoFillColumns = new ArrayList(Columns.Count);
-                            }
+                            autoFillColumns ??= new ArrayList(Columns.Count);
 
                             autoFillColumns.Add(dataGridViewColumn);
                         }
@@ -5494,7 +5491,7 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
                 if (dataGridViewRow.Index >= 0)
                 {
-                    dataGridViewRow.Index = dataGridViewRow.Index - 1;
+                    dataGridViewRow.Index--;
                     Debug.Assert(dataGridViewRow.Index == rowIndex);
                 }
             }
@@ -5520,7 +5517,7 @@ namespace System.Windows.Forms
                 DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
                 if (dataGridViewRow.Index >= 0)
                 {
-                    dataGridViewRow.Index = dataGridViewRow.Index + insertionCount;
+                    dataGridViewRow.Index += insertionCount;
                     Debug.Assert(dataGridViewRow.Index == rowIndex);
                 }
             }
@@ -13765,10 +13762,7 @@ namespace System.Windows.Forms
             _dataGridViewState2[State2_RaiseSelectionChanged] = _selectedBandIndexes.Count > 0 ||
                                                                                 _individualSelectedCells.Count > 0;
             _selectedBandIndexes.Clear();
-            if (_selectedBandSnapshotIndexes is not null)
-            {
-                _selectedBandSnapshotIndexes.Clear();
-            }
+            _selectedBandSnapshotIndexes?.Clear();
 
             _individualSelectedCells.Clear();
             _individualReadOnlyCells.Clear();

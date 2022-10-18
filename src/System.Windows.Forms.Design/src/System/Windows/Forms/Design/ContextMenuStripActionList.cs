@@ -36,10 +36,7 @@ namespace System.Windows.Forms.Design
         {
             PropertyDescriptor changingProperty = TypeDescriptor.GetProperties(_toolStripDropDown)[propertyName];
             Debug.Assert(changingProperty != null, "Could not find given property in control.");
-            if (changingProperty != null)
-            {
-                changingProperty.SetValue(_toolStripDropDown, value);
-            }
+            changingProperty?.SetValue(_toolStripDropDown, value);
         }
 
         /// <summary>

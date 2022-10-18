@@ -814,10 +814,7 @@ namespace System.Windows.Forms
             get => toolTipText;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!WindowsFormsUtils.SafeCompareStrings(toolTipText, value, ignoreCase: false))
                 {
@@ -999,7 +996,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (OsVersion.IsWindows8OrGreater)
+            if (OsVersion.IsWindows8OrGreater())
             {
                 if (_accessibilityObject is ListViewItemBaseAccessibleObject itemAccessibleObject)
                 {

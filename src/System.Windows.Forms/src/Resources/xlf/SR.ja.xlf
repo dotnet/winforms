@@ -177,6 +177,11 @@
         <target state="translated">親行</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="translated">アクセスが拒否されました</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">オン</target>

@@ -177,6 +177,11 @@
         <target state="translated">父資料列</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessDenied">
+        <source>Access denied</source>
+        <target state="translated">拒絕存取</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
         <target state="translated">核取</target>

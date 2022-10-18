@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
-
 namespace Windows.Win32
 {
     internal static partial class PInvoke
@@ -27,13 +25,12 @@ namespace Windows.Win32
             ///  Sets text color <paramref name="color"/> in the given <paramref name="hdc"/> using
             ///  <see cref="SetBkColor(HDC, COLORREF)"/>.
             /// </summary>
-            public SetBackgroundColorScope(HDC hdc, Color color)
+            public SetBackgroundColorScope(HDC hdc, COLORREF color)
             {
-                COLORREF colorref = (COLORREF)(uint)ColorTranslator.ToWin32(color);
-                _previousColor = SetBkColor(hdc, colorref);
+                _previousColor = SetBkColor(hdc, color);
 
                 // If we didn't actually change the color, don't keep the HDC so we skip putting back the same state.
-                _hdc = colorref == _previousColor ? default : hdc;
+                _hdc = color == _previousColor ? default : hdc;
             }
 
             public void Dispose()

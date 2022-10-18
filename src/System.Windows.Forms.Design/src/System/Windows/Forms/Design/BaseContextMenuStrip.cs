@@ -293,10 +293,7 @@ namespace System.Windows.Forms.Design
                         }
 
                         // if all else fails, throw up a default image.
-                        if (_image is null)
-                        {
-                            _image = ToolboxBitmapAttribute.GetImageFromResource(_comp.GetType(), null, false);
-                        }
+                        _image ??= ToolboxBitmapAttribute.GetImageFromResource(_comp.GetType(), null, false);
                     }
 
                     return _image;

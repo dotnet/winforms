@@ -131,10 +131,7 @@ namespace System.Windows.Forms
                 get => _error;
                 set
                 {
-                    if (value is null)
-                    {
-                        value = string.Empty;
-                    }
+                    value ??= string.Empty;
 
                     // If the error is the same and the blinkStyle is not AlwaysBlink, then
                     // we should not add the error and not start blinking.

@@ -92,18 +92,12 @@ namespace System.Windows.Forms.Design
             //
             IOverlayService os = (IOverlayService)host.GetService(typeof(IOverlayService));
             Debug.Assert(os != null, "No overlay service -- tab order UI cannot be shown");
-            if (os != null)
-            {
-                os.PushOverlay(this);
-            }
+            os?.PushOverlay(this);
 
             // Push a help keyword so the help system knows we're in place.
             //
             IHelpService hs = (IHelpService)host.GetService(typeof(IHelpService));
-            if (hs != null)
-            {
-                hs.AddContextAttribute("Keyword", "TabOrderView", HelpKeywordType.FilterKeyword);
-            }
+            hs?.AddContextAttribute("Keyword", "TabOrderView", HelpKeywordType.FilterKeyword);
 
             commands = new MenuCommand[]
             {
@@ -151,10 +145,7 @@ namespace System.Windows.Forms.Design
             // above array of menu commands, so this must come after we initialize the array.
             //
             IEventHandlerService ehs = (IEventHandlerService)host.GetService(typeof(IEventHandlerService));
-            if (ehs != null)
-            {
-                ehs.PushHandler(this);
-            }
+            ehs?.PushHandler(this);
 
             // We sync add, remove and change events so we remain in sync with any nastiness that the
             // form may pull on us.
@@ -184,16 +175,10 @@ namespace System.Windows.Forms.Design
                 if (host != null)
                 {
                     IOverlayService os = (IOverlayService)host.GetService(typeof(IOverlayService));
-                    if (os != null)
-                    {
-                        os.RemoveOverlay(this);
-                    }
+                    os?.RemoveOverlay(this);
 
                     IEventHandlerService ehs = (IEventHandlerService)host.GetService(typeof(IEventHandlerService));
-                    if (ehs != null)
-                    {
-                        ehs.PopHandler(this);
-                    }
+                    ehs?.PopHandler(this);
 
                     IMenuCommandService mcs = (IMenuCommandService)host.GetService(typeof(IMenuCommandService));
                     if (mcs != null)
@@ -216,10 +201,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     IHelpService hs = (IHelpService)host.GetService(typeof(IHelpService));
-                    if (hs != null)
-                    {
-                        hs.RemoveContextAttribute("Keyword", "TabOrderView");
-                    }
+                    hs?.RemoveContextAttribute("Keyword", "TabOrderView");
 
                     host = null;
                 }
@@ -518,15 +500,9 @@ namespace System.Windows.Forms.Design
             tabControls = null;
             tabGlyphs = null;
 
-            if (tabComplete != null)
-            {
-                tabComplete.Clear();
-            }
+            tabComplete?.Clear();
 
-            if (tabNext != null)
-            {
-                tabNext.Clear();
-            }
+            tabNext?.Clear();
 
             if (region != null)
             {
@@ -565,10 +541,7 @@ namespace System.Windows.Forms.Design
             {
                 MenuCommand mc = mcs.FindCommand(StandardCommands.TabOrder);
                 Debug.Assert(mc != null, "No tab order menu command, can't get out of tab order UI");
-                if (mc != null)
-                {
-                    mc.Invoke();
-                }
+                mc?.Invoke();
             }
         }
 
@@ -804,10 +777,7 @@ namespace System.Windows.Forms.Design
             Control ctl = ctlHover;
             Control form = (Control)host.RootComponent;
 
-            if (ctl == null)
-            {
-                ctl = form;
-            }
+            ctl ??= form;
 
             while (null != (ctl = form.GetNextControl(ctl, forward)))
             {

@@ -142,10 +142,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (rtlLayoutGrip is null)
-                {
-                    rtlLayoutGrip = new RightToLeftLayoutGrip();
-                }
+                rtlLayoutGrip ??= new RightToLeftLayoutGrip();
 
                 return rtlLayoutGrip;
             }
@@ -175,7 +172,7 @@ namespace System.Windows.Forms
                     HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
                     if (!rootHwnd.IsNull)
                     {
-                        return !User32.IsZoomed(rootHwnd);
+                        return !PInvoke.IsZoomed(rootHwnd);
                     }
                 }
 
@@ -586,12 +583,11 @@ namespace System.Windows.Forms
 
                     // if the main window isn't maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
-                    if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd))
+                    if (!rootHwnd.IsNull && !PInvoke.IsZoomed(rootHwnd))
                     {
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
-                        RECT rootHwndClientArea = new RECT();
-                        User32.GetClientRect(rootHwnd, ref rootHwndClientArea);
+                        PInvoke.GetClientRect(rootHwnd, out RECT rootHwndClientArea);
 
                         // map the size grip FROM statusStrip coords TO the toplevel window coords.
                         Point gripLocation;

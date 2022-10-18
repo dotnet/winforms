@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace Windows.Win32
 {
@@ -34,8 +33,8 @@ namespace Windows.Win32
             public CreateBrushScope(Color color)
             {
                 HBRUSH = color.IsSystemColor
-                    ? User32.GetSysColorBrush(color)
-                    : CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(color));
+                    ? PInvoke.GetSysColorBrush(color)
+                    : CreateSolidBrush(color);
                 ValidateBrushHandle();
             }
 

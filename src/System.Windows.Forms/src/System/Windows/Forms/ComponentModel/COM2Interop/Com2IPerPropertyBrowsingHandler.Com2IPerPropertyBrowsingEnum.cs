@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Globalization;
 using static Interop;
@@ -18,13 +16,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private class Com2IPerPropertyBrowsingEnum : Com2Enum
         {
             internal Com2PropertyDescriptor _target;
-            private readonly string[] _names;
+            private readonly string?[] _names;
             private readonly uint[] _cookies;
             internal bool _arraysFetched;
 
             public Com2IPerPropertyBrowsingEnum(
                 Com2PropertyDescriptor targetObject,
-                string[] names,
+                string?[] names,
                 uint[] cookies)
             {
                 _target = targetObject;
@@ -103,7 +101,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             HRESULT hr = ppb.GetPredefinedValue(_target.DISPID, cookie, &variant);
                             if (hr == HRESULT.S_OK && variant.vt != Ole32.VARENUM.EMPTY)
                             {
-                                valueItems[i] = variant.ToObject();
+                                valueItems[i] = variant.ToObject()!;
                                 if (valueItems[i].GetType() != targetType)
                                 {
                                     if (targetType.IsEnum)
@@ -158,21 +156,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return base.FromString(s);
             }
 
-            public override string ToString(object v)
+            public override string ToString(object? v)
             {
                 // If the value is the object's current value, then ask GetDisplay string first. This is a perf
                 // improvement because this way we don't populate the arrays when an object is selected, only
                 // when the dropdown is actually opened.
-
                 if (_target.IsCurrentValue(v))
                 {
                     bool success = false;
 
-                    string displayString = GetDisplayString((Oleaut32.IPerPropertyBrowsing)_target.TargetObject, _target.DISPID, ref success);
+                    string? displayString = GetDisplayString((Oleaut32.IPerPropertyBrowsing)_target.TargetObject, _target.DISPID, ref success);
 
                     if (success)
                     {
-                        return displayString;
+                        return displayString!;
                     }
                 }
 

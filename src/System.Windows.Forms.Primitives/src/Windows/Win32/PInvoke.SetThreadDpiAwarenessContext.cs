@@ -17,7 +17,7 @@ namespace Windows.Win32
         /// </returns>
         public static DPI_AWARENESS_CONTEXT SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT dpiContext)
         {
-            if (OsVersion.IsWindows10_1607OrGreater)
+            if (OsVersion.IsWindows10_1607OrGreater())
             {
                 if (dpiContext == DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT)
                 {

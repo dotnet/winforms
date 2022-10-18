@@ -4,8 +4,6 @@
 
 #nullable enable
 
-using static Interop;
-
 namespace System.Windows.Forms.Metafiles
 {
     internal sealed class RepeatValidator : IEmfValidator
@@ -19,7 +17,7 @@ namespace System.Windows.Forms.Metafiles
             _count = count;
         }
 
-        public bool ShouldValidate(Gdi32.EMR recordType) => _validator.ShouldValidate(recordType);
+        public bool ShouldValidate(ENHANCED_METAFILE_RECORD_TYPE recordType) => _validator.ShouldValidate(recordType);
 
         public void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
         {

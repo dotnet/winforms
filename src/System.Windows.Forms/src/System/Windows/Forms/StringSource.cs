@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -13,7 +14,7 @@ namespace System.Windows.Forms
     ///  This class is responsible for initializing the SHAutoComplete COM object and setting options in it.
     ///  The StringSource contains an array of Strings which is passed to the COM object as the custom source.
     /// </summary>
-    internal class StringSource : IEnumString
+    internal class StringSource : ComTypes.IEnumString
     {
         private string[] strings;
         private int current;
@@ -82,14 +83,12 @@ namespace System.Windows.Forms
             size = strings.Length;
         }
 
-        #region IEnumString Members
-
-        void IEnumString.Clone(out IEnumString ppenum)
+        void ComTypes.IEnumString.Clone(out ComTypes.IEnumString ppenum)
         {
             ppenum = new StringSource(strings);
         }
 
-        int IEnumString.Next(int celt, string[] rgelt, IntPtr pceltFetched)
+        int ComTypes.IEnumString.Next(int celt, string[] rgelt, IntPtr pceltFetched)
         {
             if (celt < 0)
             {
@@ -114,12 +113,12 @@ namespace System.Windows.Forms
             return celt == 0 ? (int)HRESULT.S_OK : (int)HRESULT.S_FALSE;
         }
 
-        void IEnumString.Reset()
+        void ComTypes.IEnumString.Reset()
         {
             current = 0;
         }
 
-        int IEnumString.Skip(int celt)
+        int ComTypes.IEnumString.Skip(int celt)
         {
             current += celt;
             if (current >= size)
@@ -129,7 +128,5 @@ namespace System.Windows.Forms
 
             return (int)HRESULT.S_OK;
         }
-
-        #endregion
     }
 }

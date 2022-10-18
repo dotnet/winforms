@@ -161,7 +161,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                int lastXY = (int)User32.GetMessagePos();
+                int lastXY = (int)PInvoke.GetMessagePos();
                 return new Point(PARAM.SignedLOWORD(lastXY), PARAM.SignedHIWORD(lastXY));
             }
         }
@@ -903,7 +903,7 @@ namespace System.Windows.Forms.Design
             treeView.HotTracking = true;
             treeView.ShowLines = false;
             HWND hwnd = (HWND)treeView.Handle;
-            UxTheme.SetWindowTheme(hwnd, "Explorer", null);
+            PInvoke.SetWindowTheme(hwnd, "Explorer", pszSubIdList: null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
             PInvoke.SendMessage(treeView, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
@@ -918,7 +918,7 @@ namespace System.Windows.Forms.Design
             ArgumentNullException.ThrowIfNull(listView);
 
             HWND hwnd = (HWND)listView.Handle;
-            UxTheme.SetWindowTheme(hwnd, "Explorer", null);
+            PInvoke.SetWindowTheme(hwnd, "Explorer", null);
             PInvoke.SendMessage(
                 listView,
                 (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE,

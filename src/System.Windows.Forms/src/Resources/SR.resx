@@ -6949,4 +6949,7 @@ Stack trace where the illegal operation occurred was:
   <data name="CommandComponentCommandParameterDescr" xml:space="preserve">
     <value>Gets or sets the parameter that is passed to the Command property's object on execution or on execution context request.</value>
   </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>Access denied</value>
+  </data>
 </root>

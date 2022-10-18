@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit;
 using Xunit.Abstractions;
 using static Interop;
@@ -59,6 +60,81 @@ public class DragDropTests : ControlTestBase
 
             Assert.Equal(1, form.ListDragTarget.Items.Count);
         });
+    }
+
+    [WinFormsFact]
+    public async Task DragDrop_NonSerializedObject_ReturnsExpected_Async()
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/7864, and it verifies that we can successfully drag and drop a
+        // non-serialized object.
+
+        Button? button = null;
+        object? data = null;
+        await RunFormWithoutControlAsync(() => new Form(), async (form) =>
+        {
+            form.AllowDrop = true;
+            form.ClientSize = new Size(100, 100);
+            form.DragEnter += (s, e) =>
+            {
+                if (e.Data?.GetDataPresent(typeof(Button)) ?? false)
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+            };
+            form.DragOver += (s, e) =>
+            {
+                if (e.Data?.GetDataPresent(typeof(Button)) ?? false)
+                {
+                    // Get the non-serialized Button.
+                    data = e.Data?.GetData(typeof(Button));
+                    e.Effect = DragDropEffects.Copy;
+                }
+            };
+            form.MouseDown += (s, e) =>
+            {
+                DataObject data = new();
+
+                // Button does not participate in serialization scenarios.
+                // Store a non-serialized Button in the DataObject.
+                button = new()
+                {
+                    Name = "button1",
+                    Text = "Click"
+                };
+                data.SetData(typeof(Button), button);
+                form.DoDragDrop(data, DragDropEffects.Copy);
+            };
+
+            var startRect = form.DisplayRectangle;
+            var centerOfStartRect = new Point(startRect.Left, startRect.Top) + new Size(startRect.Width / 2, startRect.Height / 2);
+            var startCoordinates = form.PointToScreen(centerOfStartRect);
+            var endCoordinates = new Point(startCoordinates.X + 5, startCoordinates.Y + 5);
+            var virtualPointStart = ToVirtualPoint(startCoordinates);
+            var virtualPointEnd = ToVirtualPoint(endCoordinates);
+
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator
+                    => inputSimulator
+                        .Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
+                        .LeftButtonDown()
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
+                        .Sleep(DragDropDelayMS)
+                        .LeftButtonClick()
+                        .Sleep(DragDropDelayMS));
+        });
+
+        Assert.NotNull(data);
+        Assert.True(data is Button);
+        Assert.Equal(button?.Name, ((Button)data).Name);
+        Assert.Equal(button?.Text, ((Button)data).Text);
     }
 
     [WinFormsFact]
@@ -133,19 +209,16 @@ public class DragDropTests : ControlTestBase
                     endRect.Top + ((endRect.Bottom - endRect.Top) / 2));
                 Point endCoordinates = dragDropForm.RichTextBoxDropTarget.PointToScreen(centerOfEndtRect);
 
-                int vscreenWidth = User32.GetSystemMetrics(User32.SystemMetric.SM_CXVIRTUALSCREEN);
-                int vscreenHeight = User32.GetSystemMetrics(User32.SystemMetric.SM_CYVIRTUALSCREEN);
-                int vscreenLeft = User32.GetSystemMetrics(User32.SystemMetric.SM_XVIRTUALSCREEN);
-                int vscreenTop = User32.GetSystemMetrics(User32.SystemMetric.SM_YVIRTUALSCREEN);
+                Rectangle vscreen = SystemInformation.VirtualScreen;
                 Point virtualPointStart = new()
                 {
-                    X = (startCoordinates.X - vscreenLeft) * DesktopNormalizedMax / vscreenWidth + DesktopNormalizedMax / (vscreenWidth * 2),
-                    Y = (startCoordinates.Y - vscreenTop) * DesktopNormalizedMax / vscreenHeight + DesktopNormalizedMax / (vscreenHeight * 2)
+                    X = (startCoordinates.X - vscreen.Left) * DesktopNormalizedMax / vscreen.Width + DesktopNormalizedMax / (vscreen.Width * 2),
+                    Y = (startCoordinates.Y - vscreen.Top) * DesktopNormalizedMax / vscreen.Height + DesktopNormalizedMax / (vscreen.Height * 2)
                 };
                 Point virtualPointEnd = new()
                 {
-                    X = (endCoordinates.X - vscreenLeft) * DesktopNormalizedMax / vscreenWidth + DesktopNormalizedMax / (vscreenWidth * 2),
-                    Y = (endCoordinates.Y - vscreenTop) * DesktopNormalizedMax / vscreenHeight + DesktopNormalizedMax / (vscreenHeight * 2)
+                    X = (endCoordinates.X - vscreen.Left) * DesktopNormalizedMax / vscreen.Width + DesktopNormalizedMax / (vscreen.Width * 2),
+                    Y = (endCoordinates.Y - vscreen.Top) * DesktopNormalizedMax / vscreen.Height + DesktopNormalizedMax / (vscreen.Height * 2)
                 };
 
                 TestOutputHelper.WriteLine($"virtualPointStart: {virtualPointStart}");
@@ -224,6 +297,79 @@ public class DragDropTests : ControlTestBase
                 }
             }
         });
+    }
+
+    [WinFormsFact]
+    public async Task DragDrop_SerializedObject_ReturnsExpected_Async()
+    {
+        // Verifies that we can successfully drag and drop a serialized object.
+
+        ListViewItem? listViewItem = null;
+        object? data = null;
+        await RunFormWithoutControlAsync(() => new Form(), async (form) =>
+        {
+            form.AllowDrop = true;
+            form.ClientSize = new Size(100, 100);
+            form.DragEnter += (s, e) =>
+            {
+                if (e.Data?.GetDataPresent(DataFormats.Serializable) ?? false)
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+            };
+            form.DragOver += (s, e) =>
+            {
+                if (e.Data?.GetDataPresent(DataFormats.Serializable) ?? false)
+                {
+                    // Get the serialized ListViewItem.
+                    data = e.Data?.GetData(DataFormats.Serializable);
+                    e.Effect = DragDropEffects.Copy;
+                }
+            };
+            form.MouseDown += (s, e) =>
+            {
+                DataObject data = new();
+
+                // ListViewItem participates in resx serialization scenarios.
+                // Store a serialized ListViewItem in the DataObject.
+                listViewItem = new("listViewItem1")
+                {
+                    Text = "View"
+                };
+                data.SetData(DataFormats.Serializable, listViewItem);
+                form.DoDragDrop(data, DragDropEffects.Copy);
+            };
+
+            var startRect = form.DisplayRectangle;
+            var centerOfStartRect = new Point(startRect.Left, startRect.Top) + new Size(startRect.Width / 2, startRect.Height / 2);
+            var startCoordinates = form.PointToScreen(centerOfStartRect);
+            var endCoordinates = new Point(startCoordinates.X + 5, startCoordinates.Y + 5);
+            var virtualPointStart = ToVirtualPoint(startCoordinates);
+            var virtualPointEnd = ToVirtualPoint(endCoordinates);
+
+            await InputSimulator.SendAsync(
+                form,
+                inputSimulator
+                    => inputSimulator
+                        .Mouse.MoveMouseTo(virtualPointStart.X + 6, virtualPointStart.Y + 6)
+                        .LeftButtonDown()
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X, virtualPointEnd.Y)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X + 2, virtualPointEnd.Y + 2)
+                        .Sleep(DragDropDelayMS)
+                        .MoveMouseTo(virtualPointEnd.X + 4, virtualPointEnd.Y + 4)
+                        .Sleep(DragDropDelayMS)
+                        .LeftButtonClick()
+                        .Sleep(DragDropDelayMS));
+        });
+
+        Assert.NotNull(data);
+        Assert.True(data is ListViewItem);
+        Assert.Equal(listViewItem?.Name, ((ListViewItem)data).Name);
+        Assert.Equal(listViewItem?.Text, ((ListViewItem)data).Text);
     }
 
     [WinFormsFact]
@@ -436,7 +582,7 @@ public class DragDropTests : ControlTestBase
     {
         if (element.get_CurrentName(out BSTR retVal) == 0)
         {
-            return retVal.String.ToString();
+            return retVal.AsSpan().ToString();
         }
 
         return string.Empty;
@@ -474,10 +620,10 @@ public class DragDropTests : ControlTestBase
         Guid CLSID_CUIAutomation = new("FF48DBA4-60EF-4201-AA87-54103EEF594E");
         Guid IID_IUIAutomation = new("30CBE57D-D9D0-452A-AB13-7AC5AC4825EE");
         HRESULT hr = Ole32.CoCreateInstance(
-            ref CLSID_CUIAutomation,
+            in CLSID_CUIAutomation,
             IntPtr.Zero,
             Ole32.CLSCTX.INPROC_SERVER,
-            ref IID_IUIAutomation,
+            in IID_IUIAutomation,
             out object obj);
         if (hr.Succeeded)
         {
@@ -502,12 +648,14 @@ public class DragDropTests : ControlTestBase
         {
             if (process.ProcessName == Explorer && process.MainWindowTitle == directory)
             {
-                User32.SetWindowPos(
-                    process.MainWindowHandle,
-                    User32.HWND_TOP,
+                PInvoke.SetWindowPos(
+                    (HWND)process.MainWindowHandle,
+                    HWND.HWND_TOP,
                     startPosition.X,
                     startPosition.Y,
-                    flags: User32.SWP.NOSIZE | User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
+                    0,
+                    0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
             }
         }
     }
@@ -667,11 +815,9 @@ public class DragDropTests : ControlTestBase
                         }
 
                         // Dispose of the cursors since they are no longer needed.
-                        if (MyNormalCursor != null)
-                            MyNormalCursor.Dispose();
+                        MyNormalCursor?.Dispose();
 
-                        if (MyNoDropCursor != null)
-                            MyNoDropCursor.Dispose();
+                        MyNoDropCursor?.Dispose();
                     }
                 }
             }

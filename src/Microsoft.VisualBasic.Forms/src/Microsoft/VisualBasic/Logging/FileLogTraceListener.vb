@@ -584,9 +584,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Flushes the underlying stream
         ''' </summary>
         Public Overrides Sub Flush()
-            If _stream IsNot Nothing Then
-                _stream.Flush()
-            End If
+            _stream?.Flush()
         End Sub
 
         ''' <summary>
@@ -894,9 +892,7 @@ Namespace Microsoft.VisualBasic.Logging
                         Return Reader.CurrentEncoding
                     End If
                 Finally
-                    If Reader IsNot Nothing Then
-                        Reader.Close()
-                    End If
+                    Reader?.Close()
                 End Try
             End If
 
@@ -1131,7 +1127,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Wraps a StreamWriter and keeps a reference count. This enables multiple
         ''' FileLogTraceListeners on multiple threads to access the same file.
         ''' </summary>
-        Friend Class ReferencedStream
+        Friend NotInheritable Class ReferencedStream
             Implements IDisposable
 
             ''' <summary>
@@ -1226,9 +1222,7 @@ Namespace Microsoft.VisualBasic.Logging
             Private Overloads Sub Dispose(disposing As Boolean)
                 If disposing Then
                     If Not _disposed Then
-                        If _stream IsNot Nothing Then
-                            _stream.Close()
-                        End If
+                        _stream?.Close()
                         _disposed = True
                     End If
                 End If

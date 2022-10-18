@@ -60,13 +60,10 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void AddInheritedControl(Control c, InheritanceLevel level)
         {
-            if (_tooltip is null)
-            {
-                _tooltip = new ToolTip
+            _tooltip ??= new ToolTip
                 {
                     ShowAlways = true
                 };
-            }
 
             Debug.Assert(level != InheritanceLevel.NotInherited, "This should only be called for inherited components.");
             string text;
@@ -93,10 +90,7 @@ namespace System.Windows.Forms.Design
 
         public void Dispose()
         {
-            if (_tooltip != null)
-            {
-                _tooltip.Dispose();
-            }
+            _tooltip?.Dispose();
         }
 
         /// <summary>

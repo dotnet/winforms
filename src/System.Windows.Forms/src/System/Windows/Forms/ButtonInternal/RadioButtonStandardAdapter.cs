@@ -77,7 +77,7 @@ namespace System.Windows.Forms.ButtonInternal
                 layout.CheckSize = RadioButtonRenderer.GetGlyphSize(
                     screen,
                     RadioButtonRenderer.ConvertFromButtonState(GetState(), b.MouseIsOver),
-                    b.HandleInternal).Width;
+                    b.HWNDInternal).Width;
             }
             else
             {

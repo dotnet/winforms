@@ -38,10 +38,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_image is null)
-                {
-                    _image = ToolStripDesignerUtils.GetToolboxBitmap(ItemType);
-                }
+                _image ??= ToolStripDesignerUtils.GetToolboxBitmap(ItemType);
 
                 return _image;
             }

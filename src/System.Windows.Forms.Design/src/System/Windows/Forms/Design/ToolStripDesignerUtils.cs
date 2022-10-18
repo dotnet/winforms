@@ -117,11 +117,8 @@ namespace System.Windows.Forms.Design
             }
 
             // no cache hit - load the item.
-            if (tbxItem is null)
-            {
-                // create a toolbox item to match
-                tbxItem = new ToolboxItem(itemType);
-            }
+            // create a toolbox item to match
+            tbxItem ??= new ToolboxItem(itemType);
 
             s_cachedToolboxItems[itemType] = tbxItem;
             if (s_customToolStripItemCount > 0 && (s_customToolStripItemCount * 2 < s_cachedToolboxItems.Count))
@@ -136,10 +133,7 @@ namespace System.Windows.Forms.Design
         // only call this for well known items.
         private static Bitmap GetKnownToolboxBitmap(Type itemType)
         {
-            if (s_cachedWinformsImages is null)
-            {
-                s_cachedWinformsImages = new Dictionary<Type, Bitmap>();
-            }
+            s_cachedWinformsImages ??= new Dictionary<Type, Bitmap>();
 
             if (!s_cachedWinformsImages.ContainsKey(itemType))
             {
@@ -182,10 +176,7 @@ namespace System.Windows.Forms.Design
                 currentName = tbxItem.DisplayName;
             }
 
-            if (currentName is null)
-            {
-                currentName = itemType.Name;
-            }
+            currentName ??= itemType.Name;
 
             if (currentName.StartsWith("ToolStrip"))
             {
@@ -519,15 +510,9 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (invalidateRegion != null)
-                {
-                    invalidateRegion.Dispose();
-                }
+                invalidateRegion?.Dispose();
 
-                if (itemRegion != null)
-                {
-                    itemRegion.Dispose();
-                }
+                itemRegion?.Dispose();
             }
         }
 

@@ -193,10 +193,7 @@ namespace System.Windows.Forms.Design
 
                         // Listen to command and key events
                         IEventHandlerService ehs = (IEventHandlerService)_component.Site.GetService(typeof(IEventHandlerService));
-                        if (ehs != null)
-                        {
-                            ehs.PushHandler(this);
-                        }
+                        ehs?.PushHandler(this);
                     }
                     else
                     {
@@ -227,10 +224,7 @@ namespace System.Windows.Forms.Design
 
                         // Stop listening to command and key events
                         IEventHandlerService ehs = (IEventHandlerService)_component.Site.GetService(typeof(IEventHandlerService));
-                        if (ehs != null)
-                        {
-                            ehs.PopHandler(this);
-                        }
+                        ehs?.PopHandler(this);
                     }
                 }
             }
@@ -342,10 +336,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_toolStripKeyBoardService is null)
-                {
-                    _toolStripKeyBoardService = (ToolStripKeyboardHandlingService)_component.Site.GetService(typeof(ToolStripKeyboardHandlingService));
-                }
+                _toolStripKeyBoardService ??= (ToolStripKeyboardHandlingService)_component.Site.GetService(typeof(ToolStripKeyboardHandlingService));
 
                 return _toolStripKeyBoardService;
             }
@@ -358,10 +349,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_selectionService is null)
-                {
-                    _selectionService = (ISelectionService)_component.Site.GetService(typeof(ISelectionService));
-                }
+                _selectionService ??= (ISelectionService)_component.Site.GetService(typeof(ISelectionService));
 
                 return _selectionService;
             }
@@ -371,10 +359,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_behaviorService is null)
-                {
-                    _behaviorService = (BehaviorService)_component.Site.GetService(typeof(BehaviorService));
-                }
+                _behaviorService ??= (BehaviorService)_component.Site.GetService(typeof(BehaviorService));
 
                 return _behaviorService;
             }
@@ -836,10 +821,7 @@ namespace System.Windows.Forms.Design
                         Region rgn = new Region(invalidateBounds);
                         invalidateBounds.Inflate(-GLYPHINSET, -GLYPHINSET);
                         rgn.Exclude(invalidateBounds);
-                        if (BehaviorService != null)
-                        {
-                            BehaviorService.Invalidate(rgn);
-                        }
+                        BehaviorService?.Invalidate(rgn);
 
                         rgn.Dispose();
                     }
@@ -855,10 +837,7 @@ namespace System.Windows.Forms.Design
             if (!_inSituMode)
             {
                 // Listen For Commands....
-                if (_miniToolStrip.Parent != null)
-                {
-                    _miniToolStrip.Parent.SuspendLayout();
-                }
+                _miniToolStrip.Parent?.SuspendLayout();
 
                 try
                 {
@@ -919,10 +898,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (_miniToolStrip.Parent != null)
-                    {
-                        _miniToolStrip.Parent.ResumeLayout();
-                    }
+                    _miniToolStrip.Parent?.ResumeLayout();
                 }
             }
         }
@@ -935,10 +911,7 @@ namespace System.Windows.Forms.Design
             // put the ToolStripTemplateNode back into "non edit state"
             if (_centerTextBox != null && _inSituMode)
             {
-                if (_miniToolStrip.Parent != null)
-                {
-                    _miniToolStrip.Parent.SuspendLayout();
-                }
+                _miniToolStrip.Parent?.SuspendLayout();
 
                 try
                 {
@@ -965,10 +938,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (_miniToolStrip.Parent != null)
-                    {
-                        _miniToolStrip.Parent.ResumeLayout();
-                    }
+                    _miniToolStrip.Parent?.ResumeLayout();
 
                     // POP of the Handler !!!
                     Active = false;
@@ -1078,10 +1048,7 @@ namespace System.Windows.Forms.Design
             {
                 case Keys.Up:
                     Commit(false, true);
-                    if (KeyboardService != null)
-                    {
-                        KeyboardService.ProcessUpDown(false);
-                    }
+                    KeyboardService?.ProcessUpDown(false);
 
                     break;
                 case Keys.Down:
@@ -1640,10 +1607,7 @@ namespace System.Windows.Forms.Design
             private void CommitAndSelectNext(bool forward)
             {
                 owner.Commit(false, true);
-                if (owner.KeyboardService != null)
-                {
-                    owner.KeyboardService.ProcessKeySelect(!forward, null);
-                }
+                owner.KeyboardService?.ProcessKeySelect(!forward, null);
             }
 
             /// <summary>

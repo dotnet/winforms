@@ -6,7 +6,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
 using static Interop;
@@ -495,10 +494,7 @@ namespace System.Windows.Forms
                 if (cc is not null && cc.ActiveControl == this)
                 {
                     Form? f = FindForm();
-                    if (f is not null)
-                    {
-                        f.SelectNextControl(this, true, true, true, true);
-                    }
+                    f?.SelectNextControl(this, true, true, true, true);
                 }
             }
 
@@ -568,10 +564,7 @@ namespace System.Windows.Forms
                 if (_activeControl == value)
                 {
                     Form? form = FindForm();
-                    if (form is not null)
-                    {
-                        form.UpdateDefaultButton();
-                    }
+                    form?.UpdateDefaultButton();
                 }
             }
             else
@@ -725,10 +718,9 @@ namespace System.Windows.Forms
             if (GetTopLevel())
             {
                 // Get window's client rectangle (i.e. without chrome) expressed in screen coordinates
-                var clientRectangle = new RECT();
-                User32.GetClientRect(new HandleRef(this, Handle), ref clientRectangle);
+                PInvoke.GetClientRect(this, out RECT clientRectangle);
                 var topLeftPoint = new Point();
-                User32.ClientToScreen(new HandleRef(this, Handle), ref topLeftPoint);
+                PInvoke.ClientToScreen(this, ref topLeftPoint);
                 return new Rectangle(topLeftPoint.X, topLeftPoint.Y, clientRectangle.right, clientRectangle.bottom);
             }
 
@@ -1453,14 +1445,17 @@ namespace System.Windows.Forms
 
                 // Note: SuggestedRectangle supplied  by WM_DPICHANGED event is Dpi (not Font) scaled. if top-level window is
                 // Font scaled, we might see deviations in the expected bounds and may result in adding Scrollbars (horizontal/vertical)
-                User32.SetWindowPos(
-                    new HandleRef(this, HandleInternal),
-                    User32.HWND_TOP,
-                    suggestedRectangle.X,
-                    suggestedRectangle.Y,
-                    suggestedRectangle.Width,
-                    suggestedRectangle.Height,
-                    User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
+                if (IsHandleCreated)
+                {
+                    PInvoke.SetWindowPos(
+                        this,
+                        HWND.HWND_TOP,
+                        suggestedRectangle.X,
+                        suggestedRectangle.Y,
+                        suggestedRectangle.Width,
+                        suggestedRectangle.Height,
+                        SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+                }
 
                 // Bounds are already scaled for the top-level window. We would need to skip scaling of
                 // this control further by the 'OnFontChanged' event.
@@ -1941,20 +1936,14 @@ namespace System.Windows.Forms
 
         private bool ValidateThroughAncestor(Control? ancestorControl, bool preventFocusChangeOnError)
         {
-            if (ancestorControl is null)
-            {
-                ancestorControl = this;
-            }
+            ancestorControl ??= this;
 
             if (_state[s_stateValidating])
             {
                 return false;
             }
 
-            if (_unvalidatedControl is null)
-            {
-                _unvalidatedControl = _focusedControl;
-            }
+            _unvalidatedControl ??= _focusedControl;
 
             // Return true for a Container Control with no controls to validate.
             if (_unvalidatedControl is null)

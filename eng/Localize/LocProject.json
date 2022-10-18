@@ -171,6 +171,7 @@
                          "LanguageSet":  "VS_Main_Languages"
                      },
                      {
+                         "LanguageSet":  "VS_Main_Languages",
                          "CloneLanguageSet":  "WiX_CloneLanguages",
                          "LocItems":  [
 

@@ -221,7 +221,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    User32.GetCursorPos(out Point point);
+                    PInvoke.GetCursorPos(out Point point);
                     point = PointToClient(point);
                     _behaviorService.PropagateHitTest(point);
                 }
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    User32.GetCursorPos(out Point point);
+                    PInvoke.GetCursorPos(out Point point);
                     point = PointToClient(point);
                     _behaviorService.PropagateHitTest(point);
                 }
@@ -306,7 +306,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             // Stash off the region we have to update.
                             using PInvoke.RegionScope hrgn = new(0, 0, 0, 0);
-                            User32.GetUpdateRgn(m.HWnd, hrgn, true);
+                            PInvoke.GetUpdateRgn(m.HWND, hrgn, true);
 
                             // The region we have to update in terms of the smallest rectangle that completely encloses
                             // the update region of the window gives us the clip rectangle.

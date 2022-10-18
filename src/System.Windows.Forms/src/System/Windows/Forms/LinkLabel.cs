@@ -327,10 +327,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_linkCollection is null)
-                {
-                    _linkCollection = new LinkCollection(this);
-                }
+                _linkCollection ??= new LinkCollection(this);
 
                 return _linkCollection;
             }
@@ -381,26 +378,25 @@ namespace System.Windows.Forms
 
         protected Cursor OverrideCursor
         {
-            get
-            {
-                return _overrideCursor;
-            }
+            get => _overrideCursor;
             set
             {
-                if (_overrideCursor != value)
+                if (_overrideCursor == value)
                 {
-                    _overrideCursor = value;
+                    return;
+                }
 
-                    if (IsHandleCreated)
+                _overrideCursor = value;
+
+                if (IsHandleCreated)
+                {
+                    // We want to instantly change the cursor if the mouse is within our bounds.
+                    // This includes the case where the mouse is over one of our children
+                    PInvoke.GetCursorPos(out Point p);
+                    PInvoke.GetWindowRect(this, out var r);
+                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                     {
-                        // We want to instantly change the cursor if the mouse is within our bounds.
-                        // This includes the case where the mouse is over one of our children
-                        User32.GetCursorPos(out Point p);
-                        PInvoke.GetWindowRect(this, out var r);
-                        if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
-                        {
-                            PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
-                        }
+                        PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
                     }
                 }
             }
@@ -656,10 +652,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (g is null)
-                    {
-                        g = created = CreateGraphicsInternal();
-                    }
+                    g ??= created = CreateGraphicsInternal();
 
                     if (UseCompatibleTextRendering)
                     {
@@ -729,10 +722,7 @@ namespace System.Windows.Forms
                 {
                     alwaysUnderlined.Dispose();
 
-                    if (created is not null)
-                    {
-                        created.Dispose();
-                    }
+                    created?.Dispose();
                 }
 
                 _textLayoutValid = true;
@@ -864,10 +854,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void InvalidateLinkFonts()
         {
-            if (_linkFont is not null)
-            {
-                _linkFont.Dispose();
-            }
+            _linkFont?.Dispose();
 
             if (_hoverLinkFont is not null && _hoverLinkFont != _linkFont)
             {

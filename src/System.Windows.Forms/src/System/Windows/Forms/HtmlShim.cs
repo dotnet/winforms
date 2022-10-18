@@ -31,10 +31,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (events is null)
-                {
-                    events = new EventHandlerList();
-                }
+                events ??= new EventHandlerList();
 
                 return events;
             }
@@ -52,10 +49,7 @@ namespace System.Windows.Forms
 
         protected HtmlToClrEventProxy AddEventProxy(string eventName, EventHandler eventHandler)
         {
-            if (attachedEventList is null)
-            {
-                attachedEventList = new Dictionary<EventHandler, HtmlToClrEventProxy>();
-            }
+            attachedEventList ??= new Dictionary<EventHandler, HtmlToClrEventProxy>();
 
             HtmlToClrEventProxy proxy = new HtmlToClrEventProxy(this, eventName, eventHandler);
             attachedEventList[eventHandler] = proxy;
@@ -166,9 +160,8 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            if (attachedEventList.ContainsKey(eventHandler))
+            if (attachedEventList.TryGetValue(eventHandler, out HtmlToClrEventProxy proxy))
             {
-                HtmlToClrEventProxy proxy = attachedEventList[eventHandler] as HtmlToClrEventProxy;
                 attachedEventList.Remove(eventHandler);
                 return proxy;
             }

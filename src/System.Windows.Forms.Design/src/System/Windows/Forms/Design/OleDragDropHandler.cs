@@ -88,10 +88,7 @@ namespace System.Windows.Forms.Design
 
         private static void AddCurrentDrag(IDataObject data, IComponent component)
         {
-            if (currentDrags == null)
-            {
-                currentDrags = new Hashtable();
-            }
+            currentDrags ??= new Hashtable();
 
             currentDrags[data] = component;
         }
@@ -241,10 +238,7 @@ namespace System.Windows.Forms.Design
                         if (host != null && CurrentlyLocalizing(host.RootComponent))
                         {
                             IUIService uiService = (IUIService)GetService(typeof(IUIService));
-                            if (uiService != null)
-                            {
-                                uiService.ShowMessage(SR.LocalizingCannotAdd);
-                            }
+                            uiService?.ShowMessage(SR.LocalizingCannotAdd);
 
                             comps = Array.Empty<IComponent>();
                             return comps;
@@ -287,10 +281,7 @@ namespace System.Windows.Forms.Design
                     catch (ArgumentException argumentEx)
                     {
                         IUIService uiService = (IUIService)GetService(typeof(IUIService));
-                        if (uiService != null)
-                        {
-                            uiService.ShowError(argumentEx);
-                        }
+                        uiService?.ShowError(argumentEx);
                     }
                     catch (Exception ex)
                     {
@@ -322,10 +313,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    if (comps == null)
-                    {
-                        comps = Array.Empty<IComponent>();
-                    }
+                    comps ??= Array.Empty<IComponent>();
                 }
                 finally
                 {
@@ -337,10 +325,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (trans != null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
 
                 Cursor.Current = oldCursor;
             }
@@ -349,10 +334,7 @@ namespace System.Windows.Forms.Design
             //
             if (selSvc != null && comps.Length > 0)
             {
-                if (host != null)
-                {
-                    host.Activate();
-                }
+                host?.Activate();
 
                 ArrayList selectComps = new ArrayList(comps);
 
@@ -593,7 +575,7 @@ namespace System.Windows.Forms.Design
             MSG msg = default;
             while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
             {
-                User32.TranslateMessage(ref msg);
+                PInvoke.TranslateMessage(msg);
                 User32.DispatchMessageW(ref msg);
             }
 
@@ -632,10 +614,7 @@ namespace System.Windows.Forms.Design
             try
             {
                 effect = c.DoDragDrop(data, allowedEffects);
-                if (trans != null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
             }
             finally
             {
@@ -904,11 +883,8 @@ namespace System.Windows.Forms.Design
 
                                     // First check if the component we are dropping have a TrayLocation, and if so, use it
                                     PropertyDescriptor loc = TypeDescriptor.GetProperties(comp)["TrayLocation"];
-                                    if (loc == null)
-                                    {
-                                        // it didn't, so let's check for the regular Location
-                                        loc = TypeDescriptor.GetProperties(comp)["Location"];
-                                    }
+                                    // it didn't, so let's check for the regular Location
+                                    loc ??= TypeDescriptor.GetProperties(comp)["Location"];
 
                                     if (loc != null && !loc.IsReadOnly)
                                     {
@@ -969,10 +945,7 @@ namespace System.Windows.Forms.Design
                                 }
                             }
 
-                            if (host != null)
-                            {
-                                host.Activate();
-                            }
+                            host?.Activate();
 
                             // select the newly added components
                             ISelectionService selService = (ISelectionService)GetService(typeof(ISelectionService));
@@ -982,8 +955,7 @@ namespace System.Windows.Forms.Design
                         }
                         finally
                         {
-                            if (trans != null)
-                                trans.Commit();
+                            trans?.Commit();
                         }
                     }
                 }

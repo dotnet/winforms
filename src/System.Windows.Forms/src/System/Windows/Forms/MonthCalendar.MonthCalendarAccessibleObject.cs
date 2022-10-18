@@ -82,7 +82,7 @@ namespace System.Windows.Forms
             // This function should be called from a single place in the root of MonthCalendar object that already tests for availability of this API
             internal void DisconnectChildren()
             {
-                Debug.Assert(OsVersion.IsWindows8OrGreater);
+                Debug.Assert(OsVersion.IsWindows8OrGreater());
 
                 UiaCore.UiaDisconnectProvider(_previousButtonAccessibleObject);
                 _previousButtonAccessibleObject = null;

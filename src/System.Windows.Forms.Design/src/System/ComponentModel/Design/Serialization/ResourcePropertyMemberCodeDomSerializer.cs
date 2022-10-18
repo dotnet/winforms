@@ -124,10 +124,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (inheritance is null)
                         {
                             inheritance = (InheritanceAttribute)TypeDescriptor.GetAttributes(value)[typeof(InheritanceAttribute)];
-                            if (inheritance is null)
-                            {
-                                inheritance = InheritanceAttribute.NotInherited;
-                            }
+                            inheritance ??= InheritanceAttribute.NotInherited;
                         }
 
                         if (inheritance.InheritanceLevel != InheritanceLevel.InheritedReadOnly)

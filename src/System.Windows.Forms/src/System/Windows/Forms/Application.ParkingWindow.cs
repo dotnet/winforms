@@ -40,9 +40,8 @@ namespace System.Windows.Forms
                 {
                     CreateParams cp = base.CreateParams;
 
-                    // Message only windows are cheaper and have fewer issues than
-                    // full blown invisible windows.
-                    cp.Parent = User32.HWND_MESSAGE;
+                    // Message only windows are cheaper and have fewer issues than full blown invisible windows.
+                    cp.Parent = HWND.HWND_MESSAGE;
                     return cp;
                 }
             }
@@ -78,7 +77,7 @@ namespace System.Windows.Forms
                 // messagepump is gone and then decide to clean them up.  We should clean
                 // up the parkingwindow in this case and a postmessage won't do it.
 
-                uint id = User32.GetWindowThreadProcessId(HandleInternal, out _);
+                uint id = PInvoke.GetWindowThreadProcessId(HWNDInternal, out _);
                 ThreadContext context = ThreadContext.FromId(id);
 
                 // We only do this if the ThreadContext tells us that we are currently

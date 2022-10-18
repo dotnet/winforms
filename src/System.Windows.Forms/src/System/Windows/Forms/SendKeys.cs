@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             bool startNewChar,
             int cGrp)
         {
-            int vk = User32.VkKeyScanW(character);
+            int vk = PInvoke.VkKeyScan(character);
 
             if (vk != -1)
             {
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                uint oemVal = User32.OemKeyScan((ushort)(0xFF & character));
+                uint oemVal = PInvoke.OemKeyScan((ushort)(0xFF & character));
                 for (int i = 0; i < repeat; i++)
                 {
                     AddEvent(new SKEvent(User32.WM.CHAR, character, (oemVal & 0xFFFF), hwnd));
@@ -317,7 +317,7 @@ namespace System.Windows.Forms
 
             fixed (byte* b = keystate)
             {
-                User32.GetKeyboardState(b);
+                PInvoke.GetKeyboardState(b);
             }
         }
 
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
 
             fixed (byte* b = keystate)
             {
-                User32.SetKeyboardState(b);
+                PInvoke.SetKeyboardState(b);
             }
         }
 

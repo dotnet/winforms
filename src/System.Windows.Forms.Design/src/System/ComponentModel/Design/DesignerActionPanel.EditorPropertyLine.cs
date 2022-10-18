@@ -612,7 +612,7 @@ namespace System.ComponentModel.Design
                         if (!hWndCapture.IsNull)
                         {
                             PInvoke.SendMessage(hWndCapture, User32.WM.CANCELMODE);
-                            User32.ReleaseCapture();
+                            PInvoke.ReleaseCapture();
                         }
 
                         Visible = true; // NOTE: Do this AFTER creating handle and setting parent
@@ -792,18 +792,12 @@ namespace System.ComponentModel.Design
                                     }
                                     finally
                                     {
-                                        if (attrs is not null)
-                                        {
-                                            attrs.Dispose();
-                                        }
+                                        attrs?.Dispose();
                                     }
                                 }
                                 finally
                                 {
-                                    if (icon is not null)
-                                    {
-                                        icon.Dispose();
-                                    }
+                                    icon?.Dispose();
                                 }
                             }
                             catch

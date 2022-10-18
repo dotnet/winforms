@@ -61,10 +61,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_items is null)
-                    {
-                        _items = new ItemArray(_owner);
-                    }
+                    _items ??= new ItemArray(_owner);
 
                     return _items;
                 }
@@ -136,11 +133,8 @@ namespace System.Windows.Forms
                         {
                             _owner.NativeInsert(index, item);
                             _owner.UpdateMaxItemWidth(item, false);
-                            if (_owner._selectedItems is not null)
-                            {
-                                // Sorting may throw the LB contents and the selectedItem array out of synch.
-                                _owner._selectedItems.Dirty();
-                            }
+                            // Sorting may throw the LB contents and the selectedItem array out of synch.
+                            _owner._selectedItems?.Dirty();
                         }
                     }
                     else

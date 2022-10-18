@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
             if (listView.View == View.Details)
             {
                 Point listViewPoint = Control.PointToClient(point);
-                HWND hwndHit = (HWND)User32.ChildWindowFromPointEx(listView, listViewPoint, User32.CWP.SKIPINVISIBLE);
+                HWND hwndHit = PInvoke.ChildWindowFromPointEx(listView, listViewPoint, CWP_FLAGS.CWP_SKIPINVISIBLE);
 
                 if (!hwndHit.IsNull && hwndHit != listView.Handle)
                 {

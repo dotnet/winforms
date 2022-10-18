@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         ///  TLS is really just an unfortunate artifact of using Win 32.  We want the world to be free
         ///  threaded.
         /// </summary>
-        internal sealed class ThreadContext : MarshalByRefObject, IMsoComponent, IHandle
+        internal sealed class ThreadContext : MarshalByRefObject, IMsoComponent, IHandle<HANDLE>
         {
             private const int STATE_OLEINITIALIZED = 0x00000001;
             private const int STATE_EXTERNALOLEINIT = 0x00000002;
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
             private List<IMessageFilter> _messageFilters;
             private List<IMessageFilter> _messageFilterSnapshot;
             private int _inProcessFilters;
-            private IntPtr _handle;
+            private HANDLE _handle;
             private readonly uint _id;
             private int _messageLoopCount;
             private int _threadState;
@@ -364,6 +364,7 @@ namespace System.Windows.Forms
                 {
                     lock (this)
                     {
+#pragma warning disable IDE0074 // disabled because of debug block
                         if (_marshalingControl is null)
                         {
 #if DEBUG
@@ -378,6 +379,7 @@ namespace System.Windows.Forms
                         }
 
                         return _marshalingControl;
+#pragma warning restore IDE0074
                     }
                 }
             }
@@ -388,15 +390,9 @@ namespace System.Windows.Forms
             /// </summary>
             internal void AddMessageFilter(IMessageFilter f)
             {
-                if (_messageFilters is null)
-                {
-                    _messageFilters = new List<IMessageFilter>();
-                }
+                _messageFilters ??= new List<IMessageFilter>();
 
-                if (_messageFilterSnapshot is null)
-                {
-                    _messageFilterSnapshot = new List<IMessageFilter>();
-                }
+                _messageFilterSnapshot ??= new List<IMessageFilter>();
 
                 if (f is not null)
                 {
@@ -425,10 +421,7 @@ namespace System.Windows.Forms
                 try
                 {
                     IMsoComponentManager cm = ComponentManager;
-                    if (cm is not null)
-                    {
-                        cm.OnComponentEnterState(_componentID, msocstate.Modal, msoccontext.All, 0, null, 0);
-                    }
+                    cm?.OnComponentEnterState(_componentID, msocstate.Modal, msoccontext.All, 0, null, 0);
                 }
                 finally
                 {
@@ -510,7 +503,7 @@ namespace System.Windows.Forms
                                             if (GetState(STATE_OLEINITIALIZED) && !GetState(STATE_EXTERNALOLEINIT))
                                             {
                                                 SetState(STATE_OLEINITIALIZED, false);
-                                                Ole32.OleUninitialize();
+                                                PInvoke.OleUninitialize();
                                             }
                                         }
                                     }
@@ -518,10 +511,10 @@ namespace System.Windows.Forms
                                 finally
                                 {
                                     // We can always clean up this handle, though
-                                    if (_handle != IntPtr.Zero)
+                                    if (!_handle.IsNull)
                                     {
                                         PInvoke.CloseHandle(this);
-                                        _handle = IntPtr.Zero;
+                                        _handle = HANDLE.Null;
                                     }
 
                                     try
@@ -572,7 +565,7 @@ namespace System.Windows.Forms
                     // and do not call Dispose.  Otherwise we would destroy
                     // controls that are living on the parking window.
 
-                    uint hwndThread = User32.GetWindowThreadProcessId(_parkingWindows[0], out _);
+                    uint hwndThread = PInvoke.GetWindowThreadProcessId(_parkingWindows[0], out _);
                     uint currentThread = PInvoke.GetCurrentThreadId();
 
                     for (int i = 0; i < _parkingWindows.Count; i++)
@@ -654,10 +647,7 @@ namespace System.Windows.Forms
                 {
                     // If We started the ModalMessageLoop .. this will call us back on the IMSOComponent.OnStateEnter and not do anything ...
                     IMsoComponentManager cm = ComponentManager;
-                    if (cm is not null)
-                    {
-                        cm.FOnComponentExitState(_componentID, msocstate.Modal, msoccontext.All, 0, null);
-                    }
+                    cm?.FOnComponentExitState(_componentID, msocstate.Modal, msoccontext.All, 0, null);
                 }
                 finally
                 {
@@ -708,10 +698,10 @@ namespace System.Windows.Forms
             {
                 // Don't call OleUninitialize as the finalizer is called on the wrong thread.
                 // We can always clean up this handle, though.
-                if (_handle != IntPtr.Zero)
+                if (!_handle.IsNull)
                 {
-                    PInvoke.CloseHandle((HANDLE)_handle);
-                    _handle = IntPtr.Zero;
+                    PInvoke.CloseHandle(_handle);
+                    _handle = HANDLE.Null;
                 }
             }
 
@@ -777,7 +767,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the handle to this thread.
             /// </summary>
-            public nint Handle => _handle;
+            public HANDLE Handle => _handle;
+
+            HANDLE IHandle<HANDLE>.Handle => Handle;
 
             /// <summary>
             ///  Retrieves the ID of this thread.
@@ -848,7 +840,11 @@ namespace System.Windows.Forms
                 _ = Thread.CurrentThread;
                 if (!GetState(STATE_OLEINITIALIZED))
                 {
-                    HRESULT ret = Ole32.OleInitialize(IntPtr.Zero);
+                    HRESULT ret;
+                    unsafe
+                    {
+                        ret = PInvoke.OleInitialize(pvReserved:(void*)null);
+                    }
 
                     SetState(STATE_OLEINITIALIZED, true);
                     if (ret == HRESULT.RPC_E_CHANGED_MODE)
@@ -1073,9 +1069,9 @@ namespace System.Windows.Forms
                     hwndOwner = (HWND)PInvoke.GetWindowLong(_currentForm, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                     if (!hwndOwner.IsNull)
                     {
-                        if (User32.IsWindowEnabled(hwndOwner))
+                        if (PInvoke.IsWindowEnabled(hwndOwner))
                         {
-                            User32.EnableWindow(hwndOwner, false);
+                            PInvoke.EnableWindow(hwndOwner, false);
                         }
                         else
                         {
@@ -1086,9 +1082,9 @@ namespace System.Windows.Forms
 
                     // The second half of the modalEnabled flag above.  Here, if we were previously
                     // enabled, make sure that's still the case.
-                    if (_currentForm is not null && _currentForm.IsHandleCreated && User32.IsWindowEnabled(_currentForm) != modalEnabled)
+                    if (_currentForm is not null && _currentForm.IsHandleCreated && PInvoke.IsWindowEnabled(_currentForm) != modalEnabled)
                     {
-                        User32.EnableWindow(new HandleRef(_currentForm, _currentForm.Handle), modalEnabled);
+                        PInvoke.EnableWindow(_currentForm, modalEnabled);
                     }
                 }
 
@@ -1145,7 +1141,7 @@ namespace System.Windows.Forms
                         // Again, if the hwndOwner was valid and disabled above, re-enable it.
                         if (hwndOwner != IntPtr.Zero)
                         {
-                            User32.EnableWindow(hwndOwner, true);
+                            PInvoke.EnableWindow(hwndOwner, true);
                         }
                     }
 
@@ -1192,7 +1188,7 @@ namespace System.Windows.Forms
                             // If the component wants us to process the message, do it.
                             // The component manager hosts windows from many places.  We must be sensitive
                             // to ansi / Unicode windows here.
-                            if (!msg.hwnd.IsNull && User32.IsWindowUnicode(msg.hwnd))
+                            if (!msg.hwnd.IsNull && PInvoke.IsWindowUnicode(msg.hwnd))
                             {
                                 unicodeWindow = true;
                                 if (!User32.GetMessageW(ref msg))
@@ -1211,7 +1207,7 @@ namespace System.Windows.Forms
 
                             if (!PreTranslateMessage(ref msg))
                             {
-                                User32.TranslateMessage(ref msg);
+                                PInvoke.TranslateMessage(msg);
                                 if (unicodeWindow)
                                 {
                                     User32.DispatchMessageW(ref msg);
@@ -1233,7 +1229,7 @@ namespace System.Windows.Forms
                         }
                         else if (!User32.PeekMessageW(ref msg))
                         {
-                            User32.WaitMessage();
+                            PInvoke.WaitMessage();
                         }
                     }
 
@@ -1533,7 +1529,7 @@ namespace System.Windows.Forms
                         case msoloop.FocusWait:
 
                             // For focus wait, check to see if we are now the active application.
-                            User32.GetWindowThreadProcessId(PInvoke.GetActiveWindow(), out uint pid);
+                            PInvoke.GetWindowThreadProcessId(PInvoke.GetActiveWindow(), out uint pid);
                             if (pid == PInvoke.GetCurrentProcessId())
                             {
                                 continueLoop = false;

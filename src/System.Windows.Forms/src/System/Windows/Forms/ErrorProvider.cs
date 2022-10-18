@@ -348,10 +348,7 @@ namespace System.Windows.Forms
             get => _dataMember;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 SetErrorManager(DataSource, value, false);
             }
@@ -485,10 +482,7 @@ namespace System.Windows.Forms
                 Binding dataBinding = errBindings[j];
                 string error = ((IDataErrorInfo)value)[dataBinding.BindingMemberInfo.BindingField];
 
-                if (error is null)
-                {
-                    error = string.Empty;
-                }
+                error ??= string.Empty;
 
                 string outputError = string.Empty;
                 if (controlError.ContainsKey(dataBinding.Control))
@@ -582,7 +576,7 @@ namespace System.Windows.Forms
                         }
                         finally
                         {
-                            User32.DestroyIcon(sii.hIcon);
+                            PInvoke.DestroyIcon((HICON)sii.hIcon);
                         }
                     }
 

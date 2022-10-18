@@ -32,10 +32,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_propDesc is null)
-                    {
-                        _propDesc = TypeDescriptor.GetProperties(_actionList)[_propertyItem.MemberName];
-                    }
+                    _propDesc ??= TypeDescriptor.GetProperties(_actionList)[_propertyItem.MemberName];
 
                     return _propDesc;
                 }
@@ -50,10 +47,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_typeDescriptorContext is null)
-                    {
-                        _typeDescriptorContext = new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList);
-                    }
+                    _typeDescriptorContext ??= new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList);
 
                     return _typeDescriptorContext;
                 }

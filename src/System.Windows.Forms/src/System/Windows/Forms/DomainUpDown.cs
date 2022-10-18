@@ -61,10 +61,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_domainItems is null)
-                {
-                    _domainItems = new DomainUpDownItemCollection(this);
-                }
+                _domainItems ??= new DomainUpDownItemCollection(this);
 
                 return _domainItems;
             }
@@ -426,7 +423,7 @@ namespace System.Windows.Forms
                 UserEdit = true;
             }
 
-            Debug.Assert(_domainIndex >= 0 || UserEdit == true, "UserEdit should be true when domainIndex < 0 " + UserEdit);
+            Debug.Assert(_domainIndex >= 0 || UserEdit, "UserEdit should be true when domainIndex < 0 " + UserEdit);
         }
 
         /// <summary>

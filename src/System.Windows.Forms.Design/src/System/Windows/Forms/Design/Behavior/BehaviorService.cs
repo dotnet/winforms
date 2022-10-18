@@ -184,10 +184,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             // Remove adorner window from overlay service
             IOverlayService os = (IOverlayService)_serviceProvider.GetService(typeof(IOverlayService));
-            if (os != null)
-            {
-                os.RemoveOverlay(_adornerWindow);
-            }
+            os?.RemoveOverlay(_adornerWindow);
 
             MenuCommandHandler menuCommandHandler = null;
             if (_serviceProvider.GetService(typeof(IMenuCommandService)) is IMenuCommandService menuCommandService)
@@ -263,10 +260,7 @@ namespace System.Windows.Forms.Design.Behavior
                 // It's possible we did not receive an EndDrag, and therefore we weren't able to cleanup the drag.
                 // We will do that here. Scenarios where this happens: dragging from designer to recycle-bin,
                 // or over the taskbar.
-                if (dropSourceBehavior != null)
-                {
-                    dropSourceBehavior.CleanupDrag();
-                }
+                dropSourceBehavior?.CleanupDrag();
             }
 
             return res;
@@ -626,17 +620,14 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void SetAppropriateCursor(Cursor cursor)
         {
-            //default cursors will let the toolbox svc set a cursor if needed
+            // Default cursors will let the toolbox svc set a cursor if needed
             if (cursor == Cursors.Default)
             {
-                if (_toolboxSvc is null)
-                {
-                    _toolboxSvc = (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
-                }
+                _toolboxSvc ??= (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
 
-                if (_toolboxSvc != null && _toolboxSvc.SetCursor())
+                if (_toolboxSvc is not null && _toolboxSvc.SetCursor())
                 {
-                    cursor = new Cursor(User32.GetCursor());
+                    cursor = new Cursor(PInvoke.GetCursor());
                 }
             }
 

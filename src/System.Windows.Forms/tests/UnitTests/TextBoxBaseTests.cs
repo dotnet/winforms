@@ -10,12 +10,11 @@ using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.User32;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public partial class TextBoxBaseTests : IClassFixture<ThreadExceptionFixture>
     {
         private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
@@ -759,12 +758,13 @@ namespace System.Windows.Forms.Tests
         {
             using TextBox control = new();
             control.CreateControl();
-            TextBoxBase.TextBoxBaseUiaTextProvider provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
+            var textBoxBaseAccessibleObject = (TextBoxBase.TextBoxBaseAccessibleObject)control.AccessibilityObject;
+            TextBoxBase.TextBoxBaseUiaTextProvider provider = textBoxBaseAccessibleObject.TestAccessor().Dynamic._textProvider;
 
             Assert.IsType<TextBoxBase.TextBoxBaseUiaTextProvider>(provider);
 
             control.Dispose();
-            provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
+            provider = textBoxBaseAccessibleObject.TestAccessor().Dynamic._textProvider;
 
             Assert.Null(provider);
         }
@@ -5799,7 +5799,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(0, clickCallCount);
             Assert.Equal(0, mouseClickCallCount);
-            Assert.Equal(eventArgs != null, control.IsHandleCreated);
+            Assert.Equal(eventArgs != null && eventArgs.Button == MouseButtons.Left, control.IsHandleCreated);
 
             // Remove handler.
             control.MouseUp -= handler;
@@ -5807,7 +5807,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(0, clickCallCount);
             Assert.Equal(0, mouseClickCallCount);
-            Assert.Equal(eventArgs != null, control.IsHandleCreated);
+            Assert.Equal(eventArgs != null && eventArgs.Button == MouseButtons.Left, control.IsHandleCreated);
         }
 
         [WinFormsTheory]

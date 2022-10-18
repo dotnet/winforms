@@ -394,7 +394,7 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(item);
             var accessibleObject = (ListViewItemBaseAccessibleObject)item.AccessibilityObject;
 
-            var expected = string.Format("{0}-{1}", typeof(ListViewItem).Name, accessibleObject.CurrentIndex);
+            var expected = string.Format("{0}-{1}", nameof(ListViewItem), accessibleObject.CurrentIndex);
             Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
             Assert.False(listView.IsHandleCreated);
         }

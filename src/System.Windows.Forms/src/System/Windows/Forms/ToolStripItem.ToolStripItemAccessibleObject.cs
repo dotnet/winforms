@@ -196,10 +196,7 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                if (Owner is not null)
-                {
-                    Owner.PerformClick();
-                }
+                Owner?.PerformClick();
             }
 
             public override int GetHelpTopic(out string? fileName)

@@ -25,7 +25,7 @@ namespace Windows.Win32.Graphics.Gdi
                     return Array.Empty<RECT>();
                 }
 
-                RECT[] result = Interop.Gdi32.RGNDATAHEADER.GetRegionRects((Interop.Gdi32.RGNDATAHEADER*)b);
+                RECT[] result = RGNDATAHEADER.GetRegionRects((RGNDATAHEADER*)b);
                 ArrayPool<byte>.Shared.Return(buffer);
                 return result;
             }

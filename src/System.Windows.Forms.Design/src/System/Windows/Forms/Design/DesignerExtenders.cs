@@ -22,14 +22,11 @@ namespace System.Windows.Forms.Design
         public DesignerExtenders(IExtenderProviderService ex)
         {
             extenderService = ex;
-            if (providers == null)
-            {
-                providers = new IExtenderProvider[]
+            providers ??= new IExtenderProvider[]
                 {
                     new NameExtenderProvider(),
                     new NameInheritedExtenderProvider()
                 };
-            }
 
             for (int i = 0; i < providers.Length; i++)
             {

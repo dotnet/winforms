@@ -71,37 +71,37 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawRadioButton(Graphics g, Point glyphLocation, RadioButtonState state)
         {
-            DrawRadioButton(g, glyphLocation, state, IntPtr.Zero);
+            DrawRadioButton(g, glyphLocation, state, HWND.Null);
         }
 
         internal static void DrawRadioButtonWithVisualStyles(
             HDC hdc,
             Point glyphLocation,
             RadioButtonState state,
-            IntPtr hWnd)
+            HWND hwnd)
         {
             InitializeRenderer((int)state);
-            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
-            t_visualStyleRenderer.DrawBackground(hdc, glyphBounds, hWnd);
+            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
+            t_visualStyleRenderer.DrawBackground(hdc, glyphBounds, hwnd);
         }
 
         internal static void DrawRadioButton(
             Graphics graphics,
             Point glyphLocation,
             RadioButtonState state,
-            IntPtr hWnd)
+            HWND hwnd)
         {
             Rectangle glyphBounds;
             if (RenderWithVisualStyles)
             {
                 using var hdc = new DeviceContextHdcScope(graphics);
-                DrawRadioButtonWithVisualStyles(hdc, glyphLocation, state, hWnd);
+                DrawRadioButtonWithVisualStyles(hdc, glyphLocation, state, hwnd);
             }
             else
             {
                 using (var hdc = new DeviceContextHdcScope(graphics))
                 {
-                    glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
+                    glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
                 }
 
                 ControlPaint.DrawRadioButton(graphics, glyphBounds, ConvertToButtonState(state));
@@ -111,7 +111,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a RadioButton control.
         /// </summary>
-        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, bool focused, RadioButtonState state)
+        public static void DrawRadioButton(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string? radioButtonText,
+            Font? font,
+            bool focused,
+            RadioButtonState state)
         {
             DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font,
                        TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
@@ -121,17 +128,34 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a RadioButton control.
         /// </summary>
-        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, TextFormatFlags flags, bool focused, RadioButtonState state)
+        public static void DrawRadioButton(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string? radioButtonText,
+            Font? font,
+            TextFormatFlags flags,
+            bool focused,
+            RadioButtonState state)
         {
-            DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font, flags, focused, state, IntPtr.Zero);
+            DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font, flags, focused, state, HWND.Null);
         }
 
-        internal static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, TextFormatFlags flags, bool focused, RadioButtonState state, IntPtr hWnd)
+        internal static void DrawRadioButton(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string? radioButtonText,
+            Font? font,
+            TextFormatFlags flags,
+            bool focused,
+            RadioButtonState state,
+            HWND hwnd)
         {
             Rectangle glyphBounds;
             using (var hdc = new DeviceContextHdcScope(g))
             {
-                glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
+                glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
             }
 
             Color textColor;
@@ -160,27 +184,70 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a RadioButton control.
         /// </summary>
-        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, Image image, Rectangle imageBounds, bool focused, RadioButtonState state)
-        {
-            DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font,
-                       TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
-                       image, imageBounds, focused, state);
-        }
+        public static void DrawRadioButton(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string? radioButtonText,
+            Font? font,
+            Image image,
+            Rectangle imageBounds,
+            bool focused,
+            RadioButtonState state) => DrawRadioButton(
+                g,
+                glyphLocation,
+                textBounds,
+                radioButtonText,
+                font,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
+                image,
+                imageBounds,
+                focused,
+                state);
 
         /// <summary>
         ///  Renders a RadioButton control.
         /// </summary>
-        public static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, RadioButtonState state)
-        {
-            DrawRadioButton(g, glyphLocation, textBounds, radioButtonText, font, flags, image, imageBounds, focused, state, IntPtr.Zero);
-        }
+        public static void DrawRadioButton(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string? radioButtonText,
+            Font? font,
+            TextFormatFlags flags,
+            Image image,
+            Rectangle imageBounds,
+            bool focused,
+            RadioButtonState state) => DrawRadioButton(
+                g,
+                glyphLocation,
+                textBounds,
+                radioButtonText,
+                font,
+                flags,
+                image,
+                imageBounds,
+                focused,
+                state,
+                HWND.Null);
 
-        internal static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string? radioButtonText, Font? font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, RadioButtonState state, IntPtr hWnd)
+        internal static void DrawRadioButton(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string? radioButtonText,
+            Font? font,
+            TextFormatFlags flags,
+            Image image,
+            Rectangle imageBounds,
+            bool focused,
+            RadioButtonState state,
+            HWND hwnd)
         {
             Rectangle glyphBounds;
             using (var hdc = new DeviceContextHdcScope(g))
             {
-                glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
+                glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
             }
 
             Color textColor;
@@ -215,42 +282,30 @@ namespace System.Windows.Forms
         public static Size GetGlyphSize(Graphics g, RadioButtonState state)
         {
             using var hdc = new DeviceContextHdcScope(g);
-            return GetGlyphSize(hdc, state, IntPtr.Zero);
+            return GetGlyphSize(hdc, state, HWND.Null);
         }
 
-        internal static Size GetGlyphSize(HDC hdc, RadioButtonState state, IntPtr hWnd)
+        internal static Size GetGlyphSize(HDC hdc, RadioButtonState state, HWND hwnd)
         {
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
 
-                return t_visualStyleRenderer.GetPartSize(hdc, ThemeSizeType.Draw, hWnd);
+                return t_visualStyleRenderer.GetPartSize(hdc, ThemeSizeType.Draw, hwnd);
             }
 
             return new Size(13, 13);
         }
 
-        internal static ButtonState ConvertToButtonState(RadioButtonState state)
+        internal static ButtonState ConvertToButtonState(RadioButtonState state) => state switch
         {
-            switch (state)
-            {
-                case RadioButtonState.CheckedNormal:
-                case RadioButtonState.CheckedHot:
-                    return ButtonState.Checked;
-                case RadioButtonState.CheckedPressed:
-                    return (ButtonState.Checked | ButtonState.Pushed);
-                case RadioButtonState.CheckedDisabled:
-                    return (ButtonState.Checked | ButtonState.Inactive);
-
-                case RadioButtonState.UncheckedPressed:
-                    return ButtonState.Pushed;
-                case RadioButtonState.UncheckedDisabled:
-                    return ButtonState.Inactive;
-
-                default:
-                    return ButtonState.Normal;
-            }
-        }
+            RadioButtonState.CheckedNormal or RadioButtonState.CheckedHot => ButtonState.Checked,
+            RadioButtonState.CheckedPressed => ButtonState.Checked | ButtonState.Pushed,
+            RadioButtonState.CheckedDisabled => ButtonState.Checked | ButtonState.Inactive,
+            RadioButtonState.UncheckedPressed => ButtonState.Pushed,
+            RadioButtonState.UncheckedDisabled => ButtonState.Inactive,
+            _ => ButtonState.Normal,
+        };
 
         internal static RadioButtonState ConvertFromButtonState(ButtonState state, bool isHot)
         {
@@ -272,7 +327,8 @@ namespace System.Windows.Forms
                 return RadioButtonState.CheckedNormal;
             }
             else
-            { //unchecked
+            {
+                // Unchecked
                 if ((state & ButtonState.Pushed) == ButtonState.Pushed)
                 {
                     return RadioButtonState.UncheckedPressed;

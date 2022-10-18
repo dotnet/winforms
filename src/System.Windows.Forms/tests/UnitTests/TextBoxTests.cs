@@ -7,12 +7,11 @@ using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public partial class TextBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;

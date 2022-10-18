@@ -2,16 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop.User32;
-
 namespace System.Windows.Forms
 {
     [Flags]
     public enum GetChildAtPointSkip
     {
-        None = (int)CWP.ALL,
-        Invisible = (int)CWP.SKIPINVISIBLE,
-        Disabled = (int)CWP.SKIPDISABLED,
-        Transparent = (int)CWP.SKIPTRANSPARENT
+        None = (int)CWP_FLAGS.CWP_ALL,
+        Invisible = (int)CWP_FLAGS.CWP_SKIPINVISIBLE,
+        Disabled = (int)CWP_FLAGS.CWP_SKIPDISABLED,
+        Transparent = (int)CWP_FLAGS.CWP_SKIPTRANSPARENT
     }
 }

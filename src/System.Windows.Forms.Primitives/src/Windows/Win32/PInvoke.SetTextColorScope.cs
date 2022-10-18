@@ -4,7 +4,6 @@
 
 #if DEBUG
 #endif
-using System.Drawing;
 
 namespace Windows.Win32
 {
@@ -33,13 +32,12 @@ namespace Windows.Win32
             ///  Sets text color <paramref name="color"/> in the given <paramref name="hdc"/> using
             ///  <see cref="SetTextColor(HDC, COLORREF)"/>.
             /// </summary>
-            public SetTextColorScope(HDC hdc, Color color)
+            public SetTextColorScope(HDC hdc, COLORREF color)
             {
-                COLORREF colorref = (COLORREF)(uint)ColorTranslator.ToWin32(color);
-                _previousColor = SetTextColor(hdc, colorref);
+                _previousColor = SetTextColor(hdc, color);
 
                 // If we didn't actually change the color, don't keep the HDC so we skip putting back the same state.
-                _hdc = colorref == _previousColor ? default : hdc;
+                _hdc = color == _previousColor ? default : hdc;
             }
 
             public void Dispose()

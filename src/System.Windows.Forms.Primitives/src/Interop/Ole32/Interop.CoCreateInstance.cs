@@ -10,10 +10,10 @@ internal partial class Interop
     {
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
         public static extern HRESULT CoCreateInstance(
-            ref Guid rclsid,
+            in Guid rclsid,
             IntPtr punkOuter,
             CLSCTX dwClsContext,
-            ref Guid riid,
+            in Guid riid,
             [MarshalAs(UnmanagedType.Interface)] out object ppv);
 
         [DllImport(Libraries.Ole32, ExactSpelling = true)]

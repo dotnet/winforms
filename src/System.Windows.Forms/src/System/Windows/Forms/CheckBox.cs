@@ -539,26 +539,22 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            if (mevent.Button == MouseButtons.Left && MouseIsPressed)
+            // It's best not to have the mouse captured while running Click events
+            if (mevent.Button == MouseButtons.Left
+                && MouseIsPressed
+                && MouseIsDown
+                && PInvoke.WindowFromPoint(PointToScreen(mevent.Location)) == HWND)
             {
-                // It's best not to have the mouse captured while running Click events
-                if (base.MouseIsDown)
+                // Paint in raised state.
+                ResetFlagsandPaint();
+                if (!ValidationCancelled)
                 {
-                    Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (User32.WindowFromPoint(pt) == Handle)
+                    if (Capture)
                     {
-                        //Paint in raised state...
-                        ResetFlagsandPaint();
-                        if (!ValidationCancelled)
-                        {
-                            if (Capture)
-                            {
-                                OnClick(mevent);
-                            }
-
-                            OnMouseClick(mevent);
-                        }
+                        OnClick(mevent);
                     }
+
+                    OnMouseClick(mevent);
                 }
             }
 

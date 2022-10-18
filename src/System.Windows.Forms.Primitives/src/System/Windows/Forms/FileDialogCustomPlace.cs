@@ -54,12 +54,7 @@ namespace System.Windows.Forms
             return $"{base.ToString()} Path: {Path} KnownFolderGuid: {KnownFolderGuid}";
         }
 
-        /// <remarks>
-        ///  This can throw in a multitude of ways if the path or Guid doesn't correspond
-        ///  to an actual filesystem directory.
-        ///  The caller is responsible for handling these situations.
-        /// </remarks>
-        internal unsafe IShellItem? GetNativePath()
+        internal unsafe IShellItem* GetNativePath()
         {
             string filePathString;
             if (!string.IsNullOrEmpty(_path))

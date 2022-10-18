@@ -70,10 +70,7 @@ namespace System.Windows.Forms
                 }
 
                 // Remove the new control from its old parent (if any)
-                if (value._parent is not null)
-                {
-                    value._parent.Controls.Remove(value);
-                }
+                value._parent?.Controls.Remove(value);
 
                 // Add the control
                 InnerList.Add(value);

@@ -285,10 +285,7 @@ namespace System.Windows.Forms
                 try
                 {
                     data = GetDataFromOleOther(format);
-                    if (data is null)
-                    {
-                        data = GetDataFromOleHGLOBAL(format, out done);
-                    }
+                    data ??= GetDataFromOleHGLOBAL(format, out done);
 
                     if (data is null && !done)
                     {

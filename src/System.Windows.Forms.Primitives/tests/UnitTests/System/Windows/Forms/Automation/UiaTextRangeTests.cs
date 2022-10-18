@@ -8,7 +8,6 @@ using System.Windows.Forms.Automation;
 using Moq;
 using Xunit;
 using static Interop;
-using static Interop.Gdi32;
 using static Interop.UiaCore;
 using static Interop.User32;
 
@@ -455,7 +454,7 @@ this is the third line.";
 
         public static IEnumerable<object[]> UiaTextRange_ITextRangeProvider_GetAttributeValue_Returns_Correct_TestData()
         {
-            yield return new object[] { TextAttributeIdentifier.BackgroundColorAttributeId, GetSysColor(COLOR.WINDOW) };
+            yield return new object[] { TextAttributeIdentifier.BackgroundColorAttributeId, (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW) };
             yield return new object[] { TextAttributeIdentifier.CapStyleAttributeId, CapStyle.None };
             yield return new object[] { TextAttributeIdentifier.FontNameAttributeId, "Segoe UI" };
             yield return new object[] { TextAttributeIdentifier.FontSizeAttributeId, 9.0 };

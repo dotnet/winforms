@@ -47,9 +47,9 @@ namespace System.Windows.Forms
         {
             Debug.Assert(!hbrush.IsNull);
             RECT rect = rectangle;
-            User32.FillRect(
+            PInvoke.FillRect(
                 hdc,
-                ref rect,
+                rect,
                 hbrush);
         }
 
@@ -157,9 +157,9 @@ namespace System.Windows.Forms
         {
             Debug.Assert(!hbrush.IsNull, "HBRUSH is null");
             RECT rect = rectangle;
-            User32.FillRect(
+            PInvoke.FillRect(
                 hdc,
-                ref rect,
+                rect,
                 hbrush);
         }
 

@@ -28,10 +28,7 @@ namespace System.Windows.Forms.Design
             _sp = provider;
             _designerHost = (IDesignerHost)provider.GetService(typeof(IDesignerHost));
             Debug.Assert(_designerHost != null, "ToolStripKeyboardHandlingService relies on the selection service, which is unavailable.");
-            if (_designerHost != null)
-            {
-                _designerHost.AddService(typeof(ISupportInSituService), this);
-            }
+            _designerHost?.AddService(typeof(ISupportInSituService), this);
 
             _componentChangeSvc = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
             Debug.Assert(_componentChangeSvc != null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
@@ -69,10 +66,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_toolStripKeyBoardService is null)
-                {
-                    _toolStripKeyBoardService = (ToolStripKeyboardHandlingService)_sp.GetService(typeof(ToolStripKeyboardHandlingService));
-                }
+                _toolStripKeyBoardService ??= (ToolStripKeyboardHandlingService)_sp.GetService(typeof(ToolStripKeyboardHandlingService));
 
                 return _toolStripKeyBoardService;
             }
@@ -190,10 +184,7 @@ namespace System.Windows.Forms.Design
                         if (selService != null)
                         {
                             object comp = selService.PrimarySelection;
-                            if (comp is null)
-                            {
-                                comp = ToolStripKeyBoardService.SelectedDesignerControl;
-                            }
+                            comp ??= ToolStripKeyBoardService.SelectedDesignerControl;
 
                             DesignerToolStripControlHost designerItem = comp as DesignerToolStripControlHost;
                             if (designerItem != null || comp is ToolStripDropDown)

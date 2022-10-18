@@ -23,10 +23,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (t_visualStyleRenderer is null)
-                    {
-                        t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxReadOnlyButton);
-                    }
+                    t_visualStyleRenderer ??= new VisualStyleRenderer(s_comboBoxReadOnlyButton);
 
                     return t_visualStyleRenderer;
                 }

@@ -70,10 +70,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public override object? ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {
             // we default to black.
-            if (managedValue is null)
-            {
-                managedValue = Control.DefaultFont;
-            }
+            managedValue ??= Control.DefaultFont;
 
             cancelSet = true;
 

@@ -168,7 +168,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     ' But the user may be doing an AddHandler of their own in which case we need
                     ' to make sure to honor the request.  If we aren't past OnInitialize() yet
                     ' we shouldn't do it but the flag above catches that case.
-                    If _networkObject Is Nothing And _finishedOnInitialize = True Then
+                    If _networkObject Is Nothing AndAlso _finishedOnInitialize Then
                         _networkObject = New Devices.Network
                         Dim windowsFormsApplicationBase As WindowsFormsApplicationBase = Me
                         AddHandler _networkObject.NetworkAvailabilityChanged,
@@ -258,9 +258,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     _processingUnhandledExceptionEvent = True
 
                     For Each handler As UnhandledExceptionEventHandler In _unhandledExceptionHandlers
-                        If handler IsNot Nothing Then
-                            handler.Invoke(sender, e)
-                        End If
+                        handler?.Invoke(sender, e)
                     Next
 
                     ' Now that we are out of the unhandled exception handler, treat exceptions normally again.
@@ -567,7 +565,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' during the NetworkAvailabilityChanged event.  This problem would just extend itself to any future
             ' callback that involved the asyncOperationsManager so this is where we need to create objects that
             ' have a asyncOperationsContext in them.
-            If _turnOnNetworkListener = True And _networkObject Is Nothing Then
+            If _turnOnNetworkListener And _networkObject Is Nothing Then
 
                 ' The is-nothing-check is to avoid hooking the object more than once.
                 _networkObject = New Devices.Network
@@ -590,7 +588,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RaiseEvent StartupNextInstance(Me, eventArgs)
 
             ' Activate the original instance.
-            If eventArgs.BringToForeground = True AndAlso MainForm IsNot Nothing Then
+            If eventArgs.BringToForeground AndAlso MainForm IsNot Nothing Then
                 If MainForm.WindowState = FormWindowState.Minimized Then
                     MainForm.WindowState = FormWindowState.Normal
                 End If
@@ -681,7 +679,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' We don't put a try/catch around the handler event so that exceptions in there will
                 ' bubble out - else we will have a recursive exception handler.
                 RaiseEvent UnhandledException(Me, e)
-                If e.ExitApplication = True Then Application.Exit()
+                If e.ExitApplication Then Application.Exit()
 
                 ' User handled the event.
                 Return True
@@ -747,9 +745,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' Dispose on the Splash screen. (we're just swapping the order of the two If blocks.)
                 ' This is to fix the issue where the main form doesn't come to the front after the
                 ' Splash screen disappears.
-                If MainForm IsNot Nothing Then
-                    MainForm.Activate()
-                End If
+                MainForm?.Activate()
 
                 If _splashScreen IsNot Nothing AndAlso Not _splashScreen.IsDisposed Then
                     Dim disposeSplashDelegate As New DisposeDelegate(AddressOf _splashScreen.Dispose)
@@ -960,7 +956,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' need to be mirrored in the ELSE debugger attached clause below.
                 Try
                     If OnInitialize(CommandLineArgs) Then
-                        If OnStartup(EventArgs) = True Then
+                        If OnStartup(EventArgs) Then
                             OnRun()
                             OnShutdown()
                         End If
@@ -978,7 +974,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                         ' We had an exception, but not during the OnUnhandledException handler so give the user
                         ' a chance to look at what happened in the UnhandledException event handler
-                        If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) = True Then
+                        If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) Then
 
                             ' The user didn't write a handler so throw the error out to the system
                             Throw
@@ -991,7 +987,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' We also don't hook up the Application.ThreadException event because WinForms ignores it
                 ' when we are running under the debugger.
                 If OnInitialize(CommandLineArgs) Then
-                    If OnStartup(EventArgs) = True Then
+                    If OnStartup(EventArgs) Then
                         OnRun()
                         OnShutdown()
                     End If

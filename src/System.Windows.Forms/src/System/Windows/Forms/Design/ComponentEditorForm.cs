@@ -378,7 +378,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual void OnSelChangeSelector(object? source, TreeViewEventArgs e)
         {
-            if (_firstActivate == true)
+            if (_firstActivate)
             {
                 // treeview seems to fire a change event when it is first setup before
                 // the form is activated

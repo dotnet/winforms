@@ -35,7 +35,7 @@ internal partial class Interop
                 IntPtr pvAspect,
                 Ole32.DVTARGETDEVICE* ptd,
                 IntPtr hicTargetDev,
-                Gdi32.LOGPALETTE* ppColorSet);
+                LOGPALETTE* ppColorSet);
 
             [PreserveSig]
             HRESULT Freeze(

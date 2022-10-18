@@ -90,10 +90,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnControlPropertyChanged(object sender, EventArgs e)
         {
-            if (BehaviorService != null)
-            {
-                BehaviorService.SyncSelection();
-            }
+            BehaviorService?.SyncSelection();
         }
 
         /// <summary>

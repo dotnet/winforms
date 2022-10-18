@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Design.Behavior
                         if (_thisProcessID == 0)
                         {
                             AdornerWindow adornerWindow = s_adornerWindowList[0];
-                            User32.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
+                            PInvoke.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
                         }
 
                         _callBack = MouseHookProc;
@@ -165,7 +165,7 @@ namespace System.Windows.Forms.Design.Behavior
                             Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
 
                             // Make sure the window is in our process
-                            User32.GetWindowThreadProcessId(hwnd, out uint pid);
+                            PInvoke.GetWindowThreadProcessId(hwnd, out uint pid);
 
                             // If this isn't our process, bail
                             if (pid != _thisProcessID)
@@ -183,11 +183,11 @@ namespace System.Windows.Forms.Design.Behavior
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
                                 if (m.Msg == (int)User32.WM.LBUTTONDOWN)
                                 {
-                                    _lastLButtonDownTimeStamp = User32.GetMessageTime();
+                                    _lastLButtonDownTimeStamp = PInvoke.GetMessageTime();
                                 }
                                 else if (m.Msg == (int)User32.WM.LBUTTONDBLCLK)
                                 {
-                                    int lButtonDoubleClickTimeStamp = User32.GetMessageTime();
+                                    int lButtonDoubleClickTimeStamp = PInvoke.GetMessageTime();
                                     if (lButtonDoubleClickTimeStamp == _lastLButtonDownTimeStamp)
                                     {
                                         return true;

@@ -38,7 +38,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            internal bool Visible => IsWindowVisible(this);
+            internal bool Visible => PInvoke.IsWindowVisible(this);
 
             static internal bool AutoCompleteActive
             {

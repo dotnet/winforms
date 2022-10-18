@@ -2,28 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-using Shell = Windows.Win32.UI.Shell;
-
 namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public unsafe static IShellItem SHCreateShellItem(string path)
+        /// <inheritdoc cref="SHCreateShellItem(ITEMIDLIST*, IShellFolder*, ITEMIDLIST*, IShellItem**)"/>
+        public static unsafe IShellItem* SHCreateShellItem(string path)
         {
+            IShellItem* ppsi = default;
             if (SHParseDisplayName(path, pbc: null, out ITEMIDLIST* ppidl, sfgaoIn: 0, psfgaoOut: null).Succeeded)
             {
                 // No parent specified
-                Shell.IShellItem* ppsi = default;
-                if (SHCreateShellItem(pidlParent: null, psfParent: null, ppidl, &ppsi).Succeeded)
-                {
-                    var obj = Interop.WinFormsComWrappers.Instance
-                        .GetOrCreateObjectForComInstance((nint)ppsi, CreateObjectFlags.None);
-                    return (IShellItem)obj;
-                }
+                SHCreateShellItem(pidlParent: null, psfParent: null, ppidl, &ppsi);
             }
 
-            throw new FileNotFoundException();
+            return ppsi;
         }
     }
 }

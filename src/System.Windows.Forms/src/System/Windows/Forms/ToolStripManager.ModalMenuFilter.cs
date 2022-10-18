@@ -185,61 +185,63 @@ namespace System.Windows.Forms
 
             private void ExitMenuModeCore()
             {
-                // ensure we've cleaned up the timer.
-                ProcessMessages(false);
+                // Ensure we've cleaned up the timer.
+                ProcessMessages(process: false);
 
-                if (InMenuMode)
+                if (!InMenuMode)
                 {
-                    try
+                    return;
+                }
+
+                try
+                {
+                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "___________Exiting MenuMode....");
+
+                    if (_messageHook is not null)
                     {
-                        Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "___________Exiting MenuMode....");
+                        // Message filter isn't going to help as we don't own the message pump
+                        // Switch over to a MessageHook
+                        _messageHook.HookMessages = false;
+                    }
 
-                        if (_messageHook is not null)
-                        {
-                            // message filter isn't going to help as we don't own the message pump
-                            // switch over to a MessageHook
-                            _messageHook.HookMessages = false;
-                        }
-
-                        Application.ThreadContext.FromCurrent().RemoveMessageFilter(this);
-                        Application.ThreadContext.FromCurrent().TrackInput(false);
+                    Application.ThreadContext.FromCurrent().RemoveMessageFilter(this);
+                    Application.ThreadContext.FromCurrent().TrackInput(false);
 
 #if DEBUG
-                        _justEnteredMenuMode = false;
+                    _justEnteredMenuMode = false;
 #endif
-                        if (!ActiveHwnd.Handle.IsNull)
-                        {
-                            // Unsubscribe from handle creates
-                            Control control = Control.FromHandle(ActiveHwnd.Handle);
-                            if (control is not null)
-                            {
-                                control.HandleCreated -= OnActiveHwndHandleCreated;
-                            }
-
-                            ActiveHwndInternal = default;
-                        }
-
-                        _inputFilterQueue?.Clear();
-                        if (_caretHidden)
-                        {
-                            _caretHidden = false;
-                            User32.ShowCaret(IntPtr.Zero);
-                        }
-
-                        if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool is not null)
-                        {
-                            KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(tool);
-                        }
-                    }
-                    finally
+                    if (!ActiveHwnd.Handle.IsNull)
                     {
-                        _inMenuMode = false;
+                        // Unsubscribe from handle creates
+                        Control control = Control.FromHandle(ActiveHwnd.Handle);
+                        if (control is not null)
+                        {
+                            control.HandleCreated -= OnActiveHwndHandleCreated;
+                        }
 
-                        // Skip the setter here so we only iterate through the toolstrips once.
-                        bool textStyleChanged = _showUnderlines;
-                        _showUnderlines = false;
-                        ToolStripManager.NotifyMenuModeChange(invalidateText: textStyleChanged, activationChange: true);
+                        ActiveHwndInternal = default;
                     }
+
+                    _inputFilterQueue?.Clear();
+                    if (_caretHidden)
+                    {
+                        _caretHidden = false;
+                        PInvoke.ShowCaret(HWND.Null);
+                    }
+
+                    if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool is not null)
+                    {
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(tool);
+                    }
+                }
+                finally
+                {
+                    _inMenuMode = false;
+
+                    // Skip the setter here so we only iterate through the toolstrips once.
+                    bool textStyleChanged = _showUnderlines;
+                    _showUnderlines = false;
+                    ToolStripManager.NotifyMenuModeChange(invalidateText: textStyleChanged, activationChange: true);
                 }
             }
 
@@ -313,10 +315,7 @@ namespace System.Windows.Forms
                     ExitMenuMode();
 
                     // Make sure we roll selection off  the toplevel toolstrip.
-                    if (activeToolStripDropDown.OwnerItem is not null)
-                    {
-                        activeToolStripDropDown.OwnerItem.Unselect();
-                    }
+                    activeToolStripDropDown.OwnerItem?.Unselect();
                 }
             }
 
@@ -502,7 +501,7 @@ namespace System.Windows.Forms
                 if (!_caretHidden && toolStrip.IsDropDown && InMenuMode)
                 {
                     _caretHidden = true;
-                    User32.HideCaret(IntPtr.Zero);
+                    PInvoke.HideCaret(HWND.Null);
                 }
             }
 
@@ -711,7 +710,7 @@ namespace System.Windows.Forms
             {
                 DPI_AWARENESS_CONTEXT dpiAwarenessContext = DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
 
-                if (OsVersion.IsWindows10_1607OrGreater)
+                if (OsVersion.IsWindows10_1607OrGreater())
                 {
                     // Works only >= Windows 10/1607
                     DPI_AWARENESS_CONTEXT awarenessContext = PInvoke.GetWindowDpiAwarenessContext(hwnd);

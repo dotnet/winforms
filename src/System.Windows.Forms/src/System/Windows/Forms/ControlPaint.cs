@@ -178,12 +178,12 @@ namespace System.Windows.Forms
             {
                 *((BITMAPINFOHEADER*)bi) = new BITMAPINFOHEADER
                 {
-                    biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
+                    biSize = (uint)sizeof(BITMAPINFOHEADER),
                     biWidth = bitmap.Width,
                     biHeight = bitmap.Height,
                     biPlanes = 1,
                     biBitCount = 16,
-                    biCompression = (uint)Gdi32.BI.RGB
+                    biCompression = BI_COMPRESSION.BI_RGB
                 };
 
                 Span<RGBQUAD> colors = new(bi + sizeof(BITMAPINFOHEADER), (int)entryCount);
@@ -349,7 +349,7 @@ namespace System.Windows.Forms
 
             LOGBRUSH lb = new()
             {
-                lbStyle = (BRUSH_STYLE)(uint)Gdi32.BS.PATTERN,
+                lbStyle = BRUSH_STYLE.BS_PATTERN,
                 lbColor = default, // color is ignored since style is BS.PATTERN
                 lbHatch = (nuint)(IntPtr)hBitmap
             };
@@ -1064,27 +1064,27 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(graphics);
 
-            User32.EDGE edge = (User32.EDGE)((uint)style & 0x0F);
-            User32.BF flags = (User32.BF)sides | (User32.BF)((uint)style & ~0x0F);
+            DRAWEDGE_FLAGS edge = (DRAWEDGE_FLAGS)((uint)style & 0x0F);
+            DRAW_EDGE_FLAGS flags = (DRAW_EDGE_FLAGS)sides | (DRAW_EDGE_FLAGS)((uint)style & ~0x0F);
 
             RECT rc = new Rectangle(x, y, width, height);
 
             // Windows just draws the border to size, and then shrinks the rectangle so the user can paint the client
             // area. We can't really do that, so we do the opposite: We precalculate the size of the border and enlarge
             // the rectangle so the client size is preserved.
-            if ((flags & (User32.BF)Border3DStyle.Adjust) == (User32.BF)Border3DStyle.Adjust)
+            if (flags.HasFlag((DRAW_EDGE_FLAGS)Border3DStyle.Adjust))
             {
                 Size sz = SystemInformation.Border3DSize;
                 rc.left -= sz.Width;
                 rc.right += sz.Width;
                 rc.top -= sz.Height;
                 rc.bottom += sz.Height;
-                flags &= ~(User32.BF)Border3DStyle.Adjust;
+                flags &= ~(DRAW_EDGE_FLAGS)Border3DStyle.Adjust;
             }
 
             // Get Win32 dc with Graphics properties applied to it.
             using var hdc = new DeviceContextHdcScope(graphics);
-            User32.DrawEdge(hdc, ref rc, edge, flags);
+            PInvoke.DrawEdge(hdc, ref rc, edge, flags);
         }
 
         /// <summary>
@@ -1227,8 +1227,8 @@ namespace System.Windows.Forms
             DrawFrameControl(
                 graphics,
                 x, y, width, height,
-                User32.DFC.BUTTON,
-                User32.DFCS.BUTTONPUSH | (User32.DFCS)state,
+                DFC_TYPE.DFC_BUTTON,
+                DFCS_STATE.DFCS_BUTTONPUSH | (DFCS_STATE)state,
                 Color.Empty,
                 Color.Empty);
         }
@@ -1256,8 +1256,8 @@ namespace System.Windows.Forms
             ButtonState state) => DrawFrameControl(
                 graphics,
                 x, y, width, height,
-                User32.DFC.CAPTION,
-                (User32.DFCS)button | (User32.DFCS)state,
+                DFC_TYPE.DFC_CAPTION,
+                (DFCS_STATE)button | (DFCS_STATE)state,
                 Color.Empty,
                 Color.Empty);
 
@@ -1282,8 +1282,8 @@ namespace System.Windows.Forms
                 DrawFrameControl(
                     graphics,
                     x, y, width, height,
-                    User32.DFC.BUTTON,
-                    User32.DFCS.BUTTONCHECK | (User32.DFCS)state,
+                    DFC_TYPE.DFC_BUTTON,
+                    DFCS_STATE.DFCS_BUTTONCHECK | (DFCS_STATE)state,
                     Color.Empty,
                     Color.Empty);
             }
@@ -1302,8 +1302,8 @@ namespace System.Windows.Forms
             => DrawFrameControl(
                 graphics,
                 x, y, width, height,
-                User32.DFC.SCROLL,
-                User32.DFCS.SCROLLCOMBOBOX | (User32.DFCS)state,
+                DFC_TYPE.DFC_SCROLL,
+                DFCS_STATE.DFCS_SCROLLCOMBOBOX | (DFCS_STATE)state,
                 Color.Empty,
                 Color.Empty);
 
@@ -1412,7 +1412,7 @@ namespace System.Windows.Forms
                     {
                         g2.Clear(Color.Transparent);
                         using var dc = new DeviceContextHdcScope(g2, applyGraphicsState: false);
-                        User32.DrawFrameControl(dc, ref rcCheck, User32.DFC.MENU, User32.DFCS.MENUCHECK);
+                        PInvoke.DrawFrameControl(dc, ref rcCheck, DFC_TYPE.DFC_MENU, DFCS_STATE.DFCS_MENUCHECK);
                     }
 
                     bitmap.MakeTransparent();
@@ -1468,8 +1468,8 @@ namespace System.Windows.Forms
         private static void DrawFrameControl(
             Graphics graphics,
             int x, int y, int width, int height,
-            User32.DFC kind,
-            User32.DFCS state,
+            DFC_TYPE kind,
+            DFCS_STATE state,
             Color foreColor,
             Color backColor)
         {
@@ -1487,7 +1487,7 @@ namespace System.Windows.Forms
             using (var hdc = new DeviceContextHdcScope(g2, applyGraphicsState: false))
             {
                 // Get Win32 dc with Graphics properties applied to it.
-                User32.DrawFrameControl(hdc, ref rcFrame, kind, state);
+                PInvoke.DrawFrameControl(hdc, ref rcFrame, kind, state);
             }
 
             if (foreColor == Color.Empty || backColor == Color.Empty)
@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms
         ///  Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
         /// </summary>
         public static void DrawMenuGlyph(Graphics graphics, int x, int y, int width, int height, MenuGlyph glyph)
-            => DrawFrameControl(graphics, x, y, width, height, User32.DFC.MENU, (User32.DFCS)glyph, Color.Empty, Color.Empty);
+            => DrawFrameControl(graphics, x, y, width, height, DFC_TYPE.DFC_MENU, (DFCS_STATE)glyph, Color.Empty, Color.Empty);
 
         /// <summary>
         ///  Draws a menu glyph for a Win32 menu in the given rectangle with the given state. White color is replaced
@@ -1787,8 +1787,8 @@ namespace System.Windows.Forms
             Color backColor) => DrawFrameControl(
                 graphics,
                 x, y, width, height,
-                User32.DFC.MENU,
-                (User32.DFCS)glyph,
+                DFC_TYPE.DFC_MENU,
+                (DFCS_STATE)glyph,
                 foreColor,
                 backColor);
 
@@ -1803,8 +1803,8 @@ namespace System.Windows.Forms
             DrawFrameControl(
                 graphics,
                 x, y, width, height,
-                User32.DFC.BUTTON,
-                User32.DFCS.BUTTON3STATE | (User32.DFCS)state,
+                DFC_TYPE.DFC_BUTTON,
+                DFCS_STATE.DFCS_BUTTON3STATE | (DFCS_STATE)state,
                 Color.Empty,
                 Color.Empty);
         }
@@ -1823,8 +1823,8 @@ namespace System.Windows.Forms
             DrawFrameControl(
                 graphics,
                 x, y, width, height,
-                User32.DFC.BUTTON,
-                User32.DFCS.BUTTONRADIO | (User32.DFCS)state,
+                DFC_TYPE.DFC_BUTTON,
+                DFCS_STATE.DFCS_BUTTONRADIO | (DFCS_STATE)state,
                 Color.Empty,
                 Color.Empty);
         }
@@ -1851,7 +1851,7 @@ namespace System.Windows.Forms
             }
 
             using User32.GetDcScope desktopDC = new(
-                User32.GetDesktopWindow(),
+                PInvoke.GetDesktopWindow(),
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
@@ -1878,7 +1878,7 @@ namespace System.Windows.Forms
             R2_MODE rop2 = (R2_MODE)GetColorRop(backColor, (int)R2_MODE.R2_NOTXORPEN, (int)R2_MODE.R2_XORPEN);
 
             using User32.GetDcScope desktopDC = new(
-                User32.GetDesktopWindow(),
+                PInvoke.GetDesktopWindow(),
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
@@ -1907,8 +1907,8 @@ namespace System.Windows.Forms
             ButtonState state) => DrawFrameControl(
                 graphics,
                 x, y, width, height,
-                User32.DFC.SCROLL,
-                (User32.DFCS)button | (User32.DFCS)state,
+                DFC_TYPE.DFC_SCROLL,
+                (DFCS_STATE)button | (DFCS_STATE)state,
                 Color.Empty,
                 Color.Empty);
 
@@ -2036,7 +2036,7 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(dc);
 
             // This must come before creating the scope.
-            Gdi32.QUALITY quality = TextRenderer.FontQualityFromTextRenderingHint(dc);
+            FONT_QUALITY quality = TextRenderer.FontQualityFromTextRenderingHint(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             DrawStringDisabled(hdc, s, font, color, layoutRectangle, format, quality);
@@ -2049,7 +2049,7 @@ namespace System.Windows.Forms
             Color color,
             Rectangle layoutRectangle,
             TextFormatFlags format,
-            Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)
+            FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY)
         {
             if (SystemInformation.HighContrast)
             {
@@ -2093,7 +2093,7 @@ namespace System.Windows.Forms
             R2_MODE rop2 = R2_MODE.R2_NOT;
 
             using var desktopDC = new User32.GetDcScope(
-                User32.GetDesktopWindow(),
+                PInvoke.GetDesktopWindow(),
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             using PInvoke.ObjectScope brush = new(PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
@@ -2158,7 +2158,7 @@ namespace System.Windows.Forms
             }
 
             bool fontBold = target.Bold;
-            bool isBold = logfont.lfWeight >= (int)Gdi32.FW.BOLD;
+            bool isBold = logfont.lfWeight >= (int)FW.BOLD;
             if (fontBold != isBold)
             {
                 target.Bold = isBold;

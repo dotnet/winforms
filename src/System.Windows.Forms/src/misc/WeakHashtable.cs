@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+
 namespace System.ComponentModel
 {
-    using System;
-    using System.Collections;
-
     /// <summary>
     ///  This is a hashtable that stores object keys as weak references.
     ///  It monitors memory usage and will periodically scavenge the
@@ -97,10 +96,7 @@ namespace System.ComponentModel
                 {
                     if (o is WeakReference wr && !wr.IsAlive)
                     {
-                        if (cleanupList is null)
-                        {
-                            cleanupList = new ArrayList();
-                        }
+                        cleanupList ??= new ArrayList();
 
                         cleanupList.Add(wr);
                     }

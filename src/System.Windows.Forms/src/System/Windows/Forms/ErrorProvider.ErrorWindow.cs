@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -142,10 +141,11 @@ namespace System.Windows.Forms
                         (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
                         (WPARAM)0,
                         (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
-                    User32.SetWindowPos(
-                        new HandleRef(_tipWindow, _tipWindow.Handle),
-                        User32.HWND_TOP,
-                        flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE | User32.SWP.NOACTIVATE);
+                    PInvoke.SetWindowPos(
+                        _tipWindow,
+                        HWND.HWND_TOP,
+                        0, 0, 0, 0,
+                        SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
                     PInvoke.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (WPARAM)(uint)ComCtl32.TTDT.INITIAL);
                 }
 
@@ -169,17 +169,16 @@ namespace System.Windows.Forms
                     _tipWindow = null;
                 }
 
-                // Hide the window and invalidate the parent to ensure
-                // that we leave no visual artifacts. given that we
-                // have a bizarre region window, this is needed.
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    User32.HWND_TOP,
+                // Hide the window and invalidate the parent to ensure that we leave no visual artifacts.
+                // Given that we have an unusual region window, this is needed.
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOP,
                     _windowBounds.X,
                     _windowBounds.Y,
                     _windowBounds.Width,
                     _windowBounds.Height,
-                    User32.SWP.HIDEWINDOW | User32.SWP.NOSIZE | User32.SWP.NOMOVE);
+                    SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
                 _parent?.Invalidate(true);
                 DestroyHandle();
             }
@@ -213,7 +212,7 @@ namespace System.Windows.Forms
                 {
                     ControlItem item = _items[i];
                     Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
-                    User32.DrawIconEx(
+                    PInvoke.DrawIconEx(
                         hdc,
                         bounds.X - _windowBounds.X,
                         bounds.Y - _windowBounds.Y,
@@ -409,21 +408,22 @@ namespace System.Windows.Forms
 
                 using Graphics g = hdc.CreateGraphics();
                 using PInvoke.RegionScope windowRegionHandle = new(windowRegion, g);
-                if (User32.SetWindowRgn(this, windowRegionHandle, true) != 0)
+                if (PInvoke.SetWindowRgn(this, windowRegionHandle, fRedraw: true) != 0)
                 {
                     // The HWnd owns the region.
                     windowRegionHandle.RelinquishOwnership();
                 }
 
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    User32.HWND_TOP,
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOP,
                     _windowBounds.X,
                     _windowBounds.Y,
                     _windowBounds.Width,
                     _windowBounds.Height,
-                    User32.SWP.NOACTIVATE);
-                User32.InvalidateRect(new HandleRef(this, Handle), null, false);
+                    SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+
+                PInvoke.InvalidateRect(this, lpRect: null, bErase: false);
             }
 
             /// <summary>

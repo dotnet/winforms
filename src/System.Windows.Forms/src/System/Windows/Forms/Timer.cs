@@ -106,10 +106,7 @@ namespace System.Windows.Forms
                             if (value)
                             {
                                 // Create the timer window if needed.
-                                if (_timerWindow is null)
-                                {
-                                    _timerWindow = new TimerNativeWindow(this);
-                                }
+                                _timerWindow ??= new TimerNativeWindow(this);
 
                                 _timerRoot = GCHandle.Alloc(this);
                                 _timerWindow.StartTimer(_interval);
@@ -189,7 +186,7 @@ namespace System.Windows.Forms
             private nuint _timerID;
 
             // An arbitrary timer ID.
-            private static nint s_timerID = 1;
+            private static nuint s_timerID = 1;
 
             // Setting this when we are stopping the timer so someone can't restart it in the process.
             private bool _stoppingTimer;
@@ -221,7 +218,7 @@ namespace System.Windows.Forms
 
                         // Message only windows are cheaper and have fewer issues than
                         // full blown invisible windows.
-                        Parent = User32.HWND_MESSAGE
+                        Parent = HWND.HWND_MESSAGE
                     };
 
                     CreateHandle(cp);
@@ -238,7 +235,7 @@ namespace System.Windows.Forms
             {
                 if (!hwnd.IsNull)
                 {
-                    return User32.GetWindowThreadProcessId(hwnd, out _) != PInvoke.GetCurrentThreadId();
+                    return PInvoke.GetWindowThreadProcessId(hwnd, out _) != PInvoke.GetCurrentThreadId();
                 }
 
                 return false;
@@ -259,7 +256,7 @@ namespace System.Windows.Forms
                 {
                     if (EnsureHandle())
                     {
-                        _timerID = (nuint)User32.SetTimer(this, s_timerID, (uint)interval, 0);
+                        _timerID = PInvoke.SetTimer(this, s_timerID, (uint)interval);
                         s_timerID++;
                     }
                 }
@@ -298,7 +295,7 @@ namespace System.Windows.Forms
                         try
                         {
                             _stoppingTimer = true;
-                            User32.KillTimer(hwnd, (nint)_timerID);
+                            PInvoke.KillTimer(hwnd, _timerID);
                         }
                         finally
                         {

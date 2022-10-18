@@ -214,10 +214,7 @@ namespace System.Windows.Forms
             {
                 lock (this)
                 {
-                    if (_containerCache.ContainsKey(ctl))
-                    {
-                        _containerCache.Remove(ctl);
-                    }
+                    _containerCache.Remove(ctl);
                 }
             }
 
@@ -446,10 +443,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (_components is null)
-                {
-                    _components = new();
-                }
+                _components ??= new();
 
                 if (ctl != _parent && !_components.ContainsKey(ctl))
                 {
@@ -1185,10 +1179,7 @@ namespace System.Windows.Forms
                 PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
                 {
                     PropertyInfo prop = GetP().GetType().GetProperty(name, bindingAttr);
-                    if (prop is null)
-                    {
-                        prop = GetType().GetProperty(name, bindingAttr);
-                    }
+                    prop ??= GetType().GetProperty(name, bindingAttr);
 
                     return prop;
                 }
@@ -1202,10 +1193,7 @@ namespace System.Windows.Forms
                     ParameterModifier[] modifiers)
                 {
                     PropertyInfo prop = GetP().GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-                    if (prop is null)
-                    {
-                        prop = GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-                    }
+                    prop ??= GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
 
                     return prop;
                 }
@@ -1245,10 +1233,7 @@ namespace System.Windows.Forms
                 MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
                 {
                     MemberInfo[] memb = GetP().GetType().GetMember(name, bindingAttr);
-                    if (memb is null)
-                    {
-                        memb = GetType().GetMember(name, bindingAttr);
-                    }
+                    memb ??= GetType().GetMember(name, bindingAttr);
 
                     return memb;
                 }

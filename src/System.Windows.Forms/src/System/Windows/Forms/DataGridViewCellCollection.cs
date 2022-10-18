@@ -134,10 +134,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridViewRow);
                 }
 
-                if (_owner.DataGridView is not null)
-                {
-                    _owner.DataGridView.OnReplacingCell(_owner, index);
-                }
+                _owner.DataGridView?.OnReplacingCell(_owner, index);
 
                 DataGridViewCell oldDataGridViewCell = (DataGridViewCell)_items[index];
                 _items[index] = dataGridViewCell;

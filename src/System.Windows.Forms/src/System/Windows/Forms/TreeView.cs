@@ -105,10 +105,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndexer is null)
-                {
-                    imageIndexer = new ImageList.Indexer();
-                }
+                imageIndexer ??= new ImageList.Indexer();
 
                 imageIndexer.ImageList = ImageList;
                 return imageIndexer;
@@ -119,10 +116,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectedImageIndexer is null)
-                {
-                    selectedImageIndexer = new ImageList.Indexer();
-                }
+                selectedImageIndexer ??= new ImageList.Indexer();
 
                 selectedImageIndexer.ImageList = ImageList;
 
@@ -966,10 +960,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (nodes is null)
-                {
-                    nodes = new TreeNodeCollection(root);
-                }
+                nodes ??= new TreeNodeCollection(root);
 
                 return nodes;
             }
@@ -2053,28 +2044,30 @@ namespace System.Windows.Forms
             // during the first handle creation.
             //
             // This is set back to the oldSize after the Realize method.
-            int oldSize = 0;
             try
             {
                 treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs] = true;
-                oldSize = Width;
-                User32.SWP flags = User32.SWP.NOZORDER | User32.SWP.NOACTIVATE | User32.SWP.NOMOVE;
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    User32.HWND_TOP,
+                int oldSize = Width;
+                SET_WINDOW_POS_FLAGS flags = SET_WINDOW_POS_FLAGS.SWP_NOZORDER
+                    | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+                    | SET_WINDOW_POS_FLAGS.SWP_NOMOVE;
+
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOP,
                     Left,
                     Top,
                     int.MaxValue,
                     Height,
                     flags);
 
-                root.Realize(false);
+                root.Realize(insertFirst: false);
 
                 if (oldSize != 0)
                 {
-                    User32.SetWindowPos(
-                        new HandleRef(this, Handle),
-                        User32.HWND_TOP,
+                    PInvoke.SetWindowPos(
+                        this,
+                        HWND.HWND_TOP,
                         Left,
                         Top,
                         oldSize,
@@ -2112,11 +2105,7 @@ namespace System.Windows.Forms
                 newImageList.Images.AddRange(images);
                 PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, (WPARAM)(uint)TVSIL.STATE, (LPARAM)newImageList.Handle);
 
-                if (internalStateImageList is not null)
-                {
-                    internalStateImageList.Dispose();
-                }
-
+                internalStateImageList?.Dispose();
                 internalStateImageList = newImageList;
             }
         }
@@ -2128,7 +2117,7 @@ namespace System.Windows.Forms
             IntPtr handleOld = PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, (WPARAM)(uint)TVSIL.STATE, (LPARAM)handle);
             if ((handleOld != IntPtr.Zero) && (handleOld != handle))
             {
-                ComCtl32.ImageList.Destroy(new HandleRef(this, handleOld));
+                PInvoke.ImageList.Destroy(new HandleRef<HIMAGELIST>(this, (HIMAGELIST)handleOld));
             }
         }
 
@@ -2139,7 +2128,7 @@ namespace System.Windows.Forms
             IntPtr handle = PInvoke.SendMessage(this, (User32.WM)TVM.GETIMAGELIST, (WPARAM)(uint)TVSIL.STATE);
             if (handle != IntPtr.Zero)
             {
-                ComCtl32.ImageList.Destroy(new HandleRef(this, handle));
+                PInvoke.ImageList.Destroy(new HandleRef<HIMAGELIST>(this, (HIMAGELIST)handle));
                 if (reset)
                 {
                     PInvoke.SendMessage(this, (User32.WM)TVM.SETIMAGELIST, (WPARAM)(uint)TVSIL.STATE);
@@ -2687,7 +2676,7 @@ namespace System.Windows.Forms
             {
                 if (PInvoke.SendMessage(this, (User32.WM)TVM.GETITEMRECT, 1, ref rc) != 0)
                 {
-                    User32.InvalidateRect(new HandleRef(this, Handle), &rc, true);
+                    PInvoke.InvalidateRect(this, &rc, bErase: true);
                 }
             }
         }
@@ -2865,13 +2854,13 @@ namespace System.Windows.Forms
                         {
                             Rectangle bounds = node.RowBounds;
 
-                            User32.SCROLLINFO si = new()
+                            SCROLLINFO si = new()
                             {
-                                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                                fMask = User32.SIF.POS
+                                cbSize = (uint)sizeof(SCROLLINFO),
+                                fMask = SCROLLINFO_MASK.SIF_POS
                             };
 
-                            if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si))
+                            if (PInvoke.GetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_HORZ, ref si))
                             {
                                 // need to get the correct bounds if horizontal scroll bar is shown.
                                 // In this case the bounds.X needs to be negative and width needs to be updated to the increased width (scrolled region).
@@ -3042,26 +3031,21 @@ namespace System.Windows.Forms
             };
 
             nint hnode = PInvoke.SendMessage(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
-            if (hnode != 0 && ((tvhip.flags & TVHT.ONITEM) != 0))
+            if (hnode != 0 && tvhip.flags.HasFlag(TVHT.ONITEM) && NodeFromHandle(hnode) is { } tn && !ShowNodeToolTips)
             {
-                TreeNode tn = NodeFromHandle(hnode);
-                if (tn is not null)
-                {
-                    if (!ShowNodeToolTips) // default ToolTips
-                    {
-                        Rectangle bounds = tn.Bounds;
-                        bounds.Location = PointToScreen(bounds.Location);
+                Rectangle bounds = tn.Bounds;
+                bounds.Location = PointToScreen(bounds.Location);
 
-                        PInvoke.SendMessage(tooltipHandle, (User32.WM)TTM.ADJUSTRECT, (WPARAM)(BOOL)true, ref bounds);
-                        User32.SetWindowPos(
-                            new HandleRef(this, tooltipHandle),
-                            User32.HWND_TOPMOST,
-                            bounds.Left,
-                            bounds.Top,
-                            flags: User32.SWP.NOACTIVATE | User32.SWP.NOSIZE | User32.SWP.NOZORDER);
-                        return true;
-                    }
-                }
+                PInvoke.SendMessage(tooltipHandle, (User32.WM)TTM.ADJUSTRECT, (WPARAM)(BOOL)true, ref bounds);
+                PInvoke.SetWindowPos(
+                    tooltipHandle,
+                    HWND.HWND_TOPMOST,
+                    bounds.Left,
+                    bounds.Top,
+                    0,
+                    0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+                return true;
             }
 
             return false;
@@ -3184,7 +3168,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = true;
-                                PInvoke.SendMessage(this, User32.WM.CONTEXTMENU, (WPARAM)HWND, (LPARAM)User32.GetMessagePos());
+                                PInvoke.SendMessage(this, User32.WM.CONTEXTMENU, (WPARAM)HWND, (LPARAM)PInvoke.GetMessagePos());
                             }
 
                             m.ResultInternal = (LRESULT)1;

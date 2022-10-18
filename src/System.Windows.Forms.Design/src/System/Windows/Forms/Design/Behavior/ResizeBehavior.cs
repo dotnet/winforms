@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -70,10 +69,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_behaviorService is null)
-                {
-                    _behaviorService = (BehaviorService)_serviceProvider.GetService(typeof(BehaviorService));
-                }
+                _behaviorService ??= (BehaviorService)_serviceProvider.GetService(typeof(BehaviorService));
 
                 return _behaviorService;
             }
@@ -430,7 +426,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (propIntegralHeight != null)
             {
                 object value = propIntegralHeight.GetValue(control);
-                if (value is bool && (bool)value == true)
+                if (value is bool && (bool)value)
                 {
                     PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(control)["ItemHeight"];
                     if (propItemHeight != null)
@@ -478,7 +474,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (_lastMouseAbs != Point.Empty)
             {
                 var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
-                User32.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref mouseLocAbs);
+                PInvoke.ClientToScreen(_behaviorService.AdornerWindowControl, ref mouseLocAbs);
                 if (mouseLocAbs.X == _lastMouseAbs.X && mouseLocAbs.Y == _lastMouseAbs.Y)
                 {
                     return true;
@@ -542,7 +538,7 @@ namespace System.Windows.Forms.Design.Behavior
             Control targetControl = _resizeComponents[0].resizeControl as Control;
             _lastMouseLoc = mouseLoc;
             _lastMouseAbs = new Point(mouseLoc.X, mouseLoc.Y);
-            User32.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref _lastMouseAbs);
+            PInvoke.ClientToScreen(_behaviorService.AdornerWindowControl, ref _lastMouseAbs);
             int minHeight = Math.Max(targetControl.MinimumSize.Height, MINSIZE);
             int minWidth = Math.Max(targetControl.MinimumSize.Width, MINSIZE);
             if (_dragManager != null)
@@ -566,7 +562,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (propIntegralHeight != null)
                 {
                     object value = propIntegralHeight.GetValue(targetControl);
-                    if (value is bool && (bool)value == true)
+                    if (value is bool && (bool)value)
                     {
                         shouldSnapHorizontally = false;
                     }
@@ -824,10 +820,7 @@ namespace System.Windows.Forms.Design.Behavior
                                     DesignerUtils.DrawResizeBorder(graphics, newRegion, backColor);
                                 }
 
-                                if (_lastResizeRegion is null)
-                                {
-                                    _lastResizeRegion = newRegion.Clone(); //we will need to dispose it later.
-                                }
+                                _lastResizeRegion ??= newRegion.Clone(); //we will need to dispose it later.
                             }
                         }
                     }

@@ -7,12 +7,11 @@ using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ScrollBarTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -432,14 +431,14 @@ namespace System.Windows.Forms.Tests
             };
 
             // Enable.
-            var si = new User32.SCROLLINFO
+            var si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.Enabled = true;
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo(control.HWND, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(15u, si.nPage);
         }
 
@@ -611,12 +610,12 @@ namespace System.Windows.Forms.Tests
             };
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            var si = new User32.SCROLLINFO
+            var si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(5, si.nMin);
             Assert.Equal(105, si.nMax);
             Assert.Equal(25, si.nPos);
@@ -741,12 +740,12 @@ namespace System.Windows.Forms.Tests
 
             control.LargeChange = value;
             Assert.Equal(value, control.LargeChange);
-            var si = new User32.SCROLLINFO
+            var si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal((uint)value, si.nPage);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -756,12 +755,12 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.LargeChange = value;
             Assert.Equal(value, control.LargeChange);
-            si = new User32.SCROLLINFO
+            si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal((uint)value, si.nPage);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -791,12 +790,12 @@ namespace System.Windows.Forms.Tests
 
             control.LargeChange = value;
             Assert.Equal(value, control.LargeChange);
-            var si = new User32.SCROLLINFO
+            var si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(0u, si.nPage);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -806,12 +805,12 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.LargeChange = value;
             Assert.Equal(value, control.LargeChange);
-            si = new User32.SCROLLINFO
+            si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(0u, si.nPage);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -877,12 +876,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Value);
             Assert.Equal(expectedLargeChange, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            var si = new User32.SCROLLINFO
+            var si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(value, si.nMax);
             Assert.Equal(0, si.nMin);
             Assert.Equal(0, si.nPos);
@@ -899,12 +898,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Value);
             Assert.Equal(expectedLargeChange, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            si = new User32.SCROLLINFO
+            si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(value, si.nMax);
             Assert.Equal(0, si.nMin);
             Assert.Equal(0, si.nPos);
@@ -940,12 +939,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.Value);
             Assert.Equal(expectedLargeChange, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            var si = new User32.SCROLLINFO
+            var si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(0, si.nMax);
             Assert.Equal(0, si.nMin);
             Assert.Equal(0, si.nPos);
@@ -963,12 +962,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedLargeChange, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
             Assert.Equal(0, createdCallCount);
-            si = new User32.SCROLLINFO
+            si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(0, si.nMax);
             Assert.Equal(0, si.nMin);
             Assert.Equal(0, si.nPos);
@@ -1063,12 +1062,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(5, control.Value);
             Assert.Equal(10, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            var si = new User32.SCROLLINFO
+            var si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(100, si.nMax);
             Assert.Equal(value, si.nMin);
             Assert.Equal(5, si.nPos);
@@ -1085,12 +1084,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(5, control.Value);
             Assert.Equal(10, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            si = new User32.SCROLLINFO
+            si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(100, si.nMax);
             Assert.Equal(value, si.nMin);
             Assert.Equal(5, si.nPos);
@@ -1126,12 +1125,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(5, control.Value);
             Assert.Equal(10, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            var si = new User32.SCROLLINFO
+            var si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(0, si.nMax);
             Assert.Equal(0, si.nMin);
             Assert.Equal(0, si.nPos);
@@ -1148,12 +1147,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(5, control.Value);
             Assert.Equal(10, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            si = new User32.SCROLLINFO
+            si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(0, si.nMax);
             Assert.Equal(0, si.nMin);
             Assert.Equal(0, si.nPos);
@@ -1608,12 +1607,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Value);
             Assert.Equal(10, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            var si = new User32.SCROLLINFO
+            var si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(100, si.nMax);
             Assert.Equal(0, si.nMin);
             Assert.Equal(expectedPos, si.nPos);
@@ -1630,12 +1629,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Value);
             Assert.Equal(10, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            si = new User32.SCROLLINFO
+            si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(100, si.nMax);
             Assert.Equal(0, si.nMin);
             Assert.Equal(expectedPos, si.nPos);
@@ -1672,12 +1671,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Value);
             Assert.Equal(10, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            var si = new User32.SCROLLINFO
+            var si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(0, si.nMax);
             Assert.Equal(0, si.nMin);
             Assert.Equal(0, si.nPos);
@@ -1694,12 +1693,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Value);
             Assert.Equal(10, control.LargeChange);
             Assert.Equal(1, control.SmallChange);
-            si = new User32.SCROLLINFO
+            si = new SCROLLINFO
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL
             };
-            Assert.True(User32.GetScrollInfo(control.Handle, User32.SB.CTL, ref si));
+            Assert.True(PInvoke.GetScrollInfo((HWND)control.Handle, SCROLLBAR_CONSTANTS.SB_CTL, ref si));
             Assert.Equal(0, si.nMax);
             Assert.Equal(0, si.nMin);
             Assert.Equal(0, si.nPos);

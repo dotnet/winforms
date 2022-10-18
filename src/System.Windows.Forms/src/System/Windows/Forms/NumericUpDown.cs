@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -90,10 +89,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_accelerations is null)
-                {
-                    _accelerations = new NumericUpDownAccelerationCollection();
-                }
+                _accelerations ??= new NumericUpDownAccelerationCollection();
 
                 return _accelerations;
             }
@@ -496,7 +492,7 @@ namespace System.Windows.Forms
             {
                 // Eat this invalid key and beep
                 e.Handled = true;
-                User32.MessageBeep(User32.MB.OK);
+                PInvoke.MessageBeep(MESSAGEBOX_STYLE.MB_OK);
             }
         }
 
@@ -540,7 +536,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected void ParseEditText()
         {
-            Debug.Assert(UserEdit == true, "ParseEditText() - UserEdit == false");
+            Debug.Assert(UserEdit, "ParseEditText() - UserEdit == false");
 
             try
             {

@@ -242,7 +242,7 @@ namespace System.Windows.Forms
         internal bool IsHandleCreated => _handle != IntPtr.Zero;
 
         internal bool InvokeRequired => IsHandleCreated &&
-            User32.GetWindowThreadProcessId(_handle, out _) != PInvoke.GetCurrentThreadId();
+            PInvoke.GetWindowThreadProcessId(_handle, out _) != PInvoke.GetCurrentThreadId();
 
         /// <summary>
         ///   Gets or sets the current count of stack frames that are in the
@@ -1002,10 +1002,7 @@ namespace System.Windows.Forms
                                 // AllowCancel but not adding a "Cancel" button), we need
                                 // to create a new instance and save it, so that we can
                                 // return that instance after TaskDialogIndirect() returns.
-                                if (button is null)
-                                {
-                                    button = CreatePlaceholderButton((TaskDialogResult)buttonID);
-                                }
+                                button ??= CreatePlaceholderButton((TaskDialogResult)buttonID);
 
                                 // Cache the result button if we return S_OK.
                                 _resultButton = (button, buttonID);

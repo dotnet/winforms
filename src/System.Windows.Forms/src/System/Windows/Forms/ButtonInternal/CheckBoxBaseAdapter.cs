@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
 {
@@ -124,7 +123,7 @@ namespace System.Windows.Forms.ButtonInternal
             using PInvoke.CreateBrushScope hbrush = new(color);
 
             RECT rect = bounds;
-            User32.FillRect(hdc, ref rect, hbrush);
+            PInvoke.FillRect(hdc, rect, hbrush);
         }
 
         protected void DrawCheckBackground(
@@ -281,7 +280,7 @@ namespace System.Windows.Forms.ButtonInternal
                         e,
                         new Point(layout.CheckBounds.Left, layout.CheckBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver),
-                        Control.HandleInternal);
+                        Control.HWNDInternal);
                 }
                 else
                 {
@@ -296,7 +295,7 @@ namespace System.Windows.Forms.ButtonInternal
                         e,
                         new Point(layout.CheckBounds.Left, layout.CheckBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver),
-                        Control.HandleInternal);
+                        Control.HWNDInternal);
                 }
                 else
                 {
@@ -327,11 +326,11 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 offscreen.Clear(Color.Transparent);
                 using var hdc = new DeviceContextHdcScope(offscreen, applyGraphicsState: false);
-                User32.DrawFrameControl(
+                PInvoke.DrawFrameControl(
                     hdc,
                     ref rcCheck,
-                    User32.DFC.MENU,
-                    User32.DFCS.MENUCHECK);
+                    DFC_TYPE.DFC_MENU,
+                    DFCS_STATE.DFCS_MENUCHECK);
             }
 
             bitmap.MakeTransparent();

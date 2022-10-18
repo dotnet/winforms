@@ -22,9 +22,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData((int)Interop.UiaCore.UIA.LegacyIAccessiblePatternId)]
         [InlineData((int)Interop.UiaCore.UIA.TextPatternId)]
         [InlineData((int)Interop.UiaCore.UIA.TextPattern2Id)]
-        public void TextBoxAccessibleObject_TextPatternSupported(int patternId)
+        [InlineData((int)Interop.UiaCore.UIA.ValuePatternId)]
+        public void TextBoxAccessibleObject_PatternSupported(int patternId)
         {
             using TextBox textBox = new TextBox();
             AccessibleObject textBoxAccessibleObject = textBox.AccessibilityObject;
@@ -87,6 +89,19 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, actual);
             Assert.False(textBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxAccessibleObject_GetPropertyValue_Value_AccessDenied_WithUseSystemPasswordChar()
+        {
+            using TextBox textBox = new TextBox();
+            textBox.UseSystemPasswordChar = true;
+            textBox.Text = "some text";
+
+            object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.ValueValuePropertyId);
+
+            Assert.Equal(SR.AccessDenied, actual);
+            Assert.True(textBox.IsHandleCreated);
         }
 
         [WinFormsTheory]

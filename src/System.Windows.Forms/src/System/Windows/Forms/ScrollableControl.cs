@@ -582,12 +582,12 @@ namespace System.Windows.Forms
                 _displayRect = ClientRectangle;
             }
 
-            if (!AutoScroll && HorizontalScroll._visible == true)
+            if (!AutoScroll && HorizontalScroll._visible)
             {
                 _displayRect = new Rectangle(_displayRect.X, _displayRect.Y, HorizontalScroll.Maximum, _displayRect.Height);
             }
 
-            if (!AutoScroll && VerticalScroll._visible == true)
+            if (!AutoScroll && VerticalScroll._visible)
             {
                 _displayRect = new Rectangle(_displayRect.X, _displayRect.Y, _displayRect.Width, VerticalScroll.Maximum);
             }
@@ -929,15 +929,15 @@ namespace System.Windows.Forms
             return new Point(xCalc, yCalc);
         }
 
-        private unsafe int ScrollThumbPosition(User32.SB fnBar)
+        private unsafe int ScrollThumbPosition(SCROLLBAR_CONSTANTS fnBar)
         {
-            User32.SCROLLINFO si = new()
+            SCROLLINFO si = new()
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.TRACKPOS
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_TRACKPOS
             };
 
-            User32.GetScrollInfo(this, fnBar, ref si);
+            PInvoke.GetScrollInfo(this, fnBar, ref si);
             return si.nTrackPos;
         }
 
@@ -1306,7 +1306,7 @@ namespace System.Windows.Forms
             {
                 case User32.SBV.THUMBPOSITION:
                 case User32.SBV.THUMBTRACK:
-                    pos = ScrollThumbPosition(User32.SB.VERT);
+                    pos = ScrollThumbPosition(SCROLLBAR_CONSTANTS.SB_VERT);
                     break;
                 case User32.SBV.LINEUP:
                     if (pos > 0)
@@ -1400,7 +1400,7 @@ namespace System.Windows.Forms
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
-                    pos = ScrollThumbPosition(User32.SB.HORZ);
+                    pos = ScrollThumbPosition(SCROLLBAR_CONSTANTS.SB_HORZ);
                     break;
                 case User32.SBH.LINELEFT:
                     if (pos > HorizontalScroll.SmallChange)

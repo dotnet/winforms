@@ -1464,10 +1464,7 @@ namespace System.Windows.Forms
 
         void OnprintToolStripButtonClick(object? sender, EventArgs e)
         {
-            if (_previewControl.Document is not null)
-            {
-                _previewControl.Document.Print();
-            }
+            _previewControl.Document?.Print();
         }
 
         void OnzoomToolStripSplitButtonClick(object? sender, EventArgs e)

@@ -205,10 +205,7 @@ namespace System.Windows.Forms
             get => _formatString;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!value.Equals(_formatString))
                 {
@@ -295,10 +292,7 @@ namespace System.Windows.Forms
             get => _valueMember.BindingMember;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 BindingMemberInfo newValueMember = new BindingMemberInfo(value);
                 BindingMemberInfo oldValueMember = _valueMember;
@@ -534,10 +528,7 @@ namespace System.Windows.Forms
             }
 
             // Try Formatter.FormatObject
-            if (_stringTypeConverter is null)
-            {
-                _stringTypeConverter = TypeDescriptor.GetConverter(typeof(string));
-            }
+            _stringTypeConverter ??= TypeDescriptor.GetConverter(typeof(string));
 
             try
             {

@@ -6,7 +6,6 @@ using System.Drawing;
 using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
-using static Interop;
 
 namespace System.Windows.Forms.UITests
 {
@@ -257,9 +256,11 @@ namespace System.Windows.Forms.UITests
                 Rectangle rect = control2.DisplayRectangle;
                 Point centerOfRect = GetCenter(rect);
                 Point centerOnScreen = control2.PointToScreen(centerOfRect);
-                int horizontalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
-                int verticalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
-                var virtualPoint = new Point((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen.X), (int)Math.Round(65535.0 / verticalResolution * centerOnScreen.Y));
+                Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
+                int horizontalResolution = primaryMonitor.Width;
+                int verticalResolution = primaryMonitor.Height;
+                Point virtualPoint = new((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen.X),
+                    (int)Math.Round(65535.0 / verticalResolution * centerOnScreen.Y));
 
                 await InputSimulator.SendAsync(
                     form,
@@ -291,12 +292,11 @@ namespace System.Windows.Forms.UITests
                 Rectangle rect1 = control1.DisplayRectangle;
                 Point centerOfRect1 = new Point(rect1.Left, rect1.Top) + new Size(rect1.Width / 2, rect1.Height / 2);
                 Point centerOnScreen1 = control1.PointToScreen(centerOfRect1);
-                int horizontalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
-                int verticalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
-                var virtualPoint = new Point((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen.X), (int)Math.Round(65535.0 / verticalResolution * centerOnScreen.Y));
-                int horizontalResolution1 = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
-                int verticalResolution1 = User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
-                var virtualPoint1 = new Point((int)Math.Round(65535.0 / horizontalResolution1 * centerOnScreen1.X), (int)Math.Round(65535.0 / verticalResolution1 * centerOnScreen1.Y));
+                Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
+                int horizontalResolution = primaryMonitor.Width;
+                int verticalResolution = primaryMonitor.Height;
+                Point virtualPoint = new((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen.X), (int)Math.Round(65535.0 / verticalResolution * centerOnScreen.Y));
+                Point virtualPoint1 = new((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen1.X), (int)Math.Round(65535.0 / verticalResolution * centerOnScreen1.Y));
                 await InputSimulator.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Mouse

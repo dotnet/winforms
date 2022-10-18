@@ -276,10 +276,7 @@ namespace System.Windows.Forms
                      dwSaveOption == OLECLOSE.PROMPTSAVE) &&
                     _activeXState[s_isDirty])
                 {
-                    if (_clientSite is not null)
-                    {
-                        _clientSite.SaveObject();
-                    }
+                    _clientSite?.SaveObject();
 
                     SendOnSave();
                 }
@@ -649,7 +646,7 @@ namespace System.Windows.Forms
                         {
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Mnemonic: " + ch.ToString());
 
-                            short scan = User32.VkKeyScanW(ch);
+                            short scan = PInvoke.VkKeyScan(ch);
                             ushort key = (ushort)(scan & 0x00FF);
                             if (ch >= 'A' && ch <= 'Z')
                             {
@@ -695,7 +692,7 @@ namespace System.Windows.Forms
 
                         if (_accelTable != IntPtr.Zero)
                         {
-                            User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
+                            PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(this, (HACCEL)_accelTable));
                             _accelTable = IntPtr.Zero;
                         }
 
@@ -928,10 +925,7 @@ namespace System.Windows.Forms
                     // set ourselves up in the host.
                     Debug.Assert(_inPlaceFrame is not null, "Setting us to visible should have created the in place frame");
                     _inPlaceFrame.SetActiveObject(_control, null);
-                    if (_inPlaceUiWindow is not null)
-                    {
-                        _inPlaceUiWindow.SetActiveObject(_control, null);
-                    }
+                    _inPlaceUiWindow?.SetActiveObject(_control, null);
 
                     // we have to explicitly say we don't wany any border space.
                     HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
@@ -1759,10 +1753,7 @@ namespace System.Windows.Forms
                     ComSourceInterfacesAttribute coms = (ComSourceInterfacesAttribute)custom[0];
                     string eventName = coms.Value.Split(new char[] { '\0' })[0];
                     eventInterface = controlType.Module.Assembly.GetType(eventName, false);
-                    if (eventInterface is null)
-                    {
-                        eventInterface = Type.GetType(eventName, false);
-                    }
+                    eventInterface ??= Type.GetType(eventName, false);
                 }
 
                 return eventInterface;
@@ -1946,7 +1937,7 @@ namespace System.Windows.Forms
 
                 if (_clientSite is null && _accelTable != IntPtr.Zero)
                 {
-                    User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
+                    PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(this, (HACCEL)_accelTable));
                     _accelTable = IntPtr.Zero;
                     _accelCount = -1;
                 }
@@ -2230,8 +2221,8 @@ namespace System.Windows.Forms
                                 // otherwise the host may never send the key to our wndproc.
 
                                 // Someone returned true from IsInputKey or IsInputChar
-                                User32.TranslateMessage(ref *lpmsg);
-                                if (User32.IsWindowUnicode(lpmsg->hwnd))
+                                PInvoke.TranslateMessage(*lpmsg);
+                                if (PInvoke.IsWindowUnicode(lpmsg->hwnd))
                                 {
                                     User32.DispatchMessageW(ref *lpmsg);
                                 }
@@ -2325,14 +2316,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Notifies our site that we have changed our size and location.
             /// </summary>
-            internal unsafe void UpdateBounds(ref int x, ref int y, ref int width, ref int height, User32.SWP flags)
+            internal unsafe void UpdateBounds(ref int x, ref int y, ref int width, ref int height, SET_WINDOW_POS_FLAGS flags)
             {
                 if (!_activeXState[s_adjustingRect] && _activeXState[s_inPlaceVisible])
                 {
                     if (_clientSite is IOleInPlaceSite ioleClientSite)
                     {
                         var rc = new RECT();
-                        if ((flags & User32.SWP.NOMOVE) != 0)
+                        if (flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOMOVE))
                         {
                             rc.left = _control.Left;
                             rc.top = _control.Top;
@@ -2343,7 +2334,7 @@ namespace System.Windows.Forms
                             rc.top = y;
                         }
 
-                        if ((flags & User32.SWP.NOSIZE) != 0)
+                        if (flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOSIZE))
                         {
                             rc.right = rc.left + _control.Width;
                             rc.bottom = rc.top + _control.Height;
@@ -2369,13 +2360,13 @@ namespace System.Windows.Forms
                         }
 
                         // On output, the new bounds will be reflected in  rc
-                        if ((flags & User32.SWP.NOMOVE) == 0)
+                        if (!flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOMOVE))
                         {
                             x = rc.left;
                             y = rc.top;
                         }
 
-                        if ((flags & User32.SWP.NOSIZE) == 0)
+                        if (!flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOSIZE))
                         {
                             width = rc.right - rc.left;
                             height = rc.bottom - rc.top;

@@ -889,10 +889,7 @@ namespace System.Windows.Forms
 
         private void EnsureParentDropTargetRegistered()
         {
-            if (ParentInternal is not null)
-            {
-                ParentInternal.DropTargetManager.EnsureRegistered();
-            }
+            ParentInternal?.DropTargetManager.EnsureRegistered();
         }
 
         /// <summary>
@@ -1481,15 +1478,9 @@ namespace System.Windows.Forms
             {
                 if (_owner != value)
                 {
-                    if (_owner is not null)
-                    {
-                        _owner.Items.Remove(this);
-                    }
+                    _owner?.Items.Remove(this);
 
-                    if (value is not null)
-                    {
-                        value.Items.Add(this);
-                    }
+                    value?.Items.Add(this);
                 }
             }
         }
@@ -3538,10 +3529,7 @@ namespace System.Windows.Forms
         {
             ToolStrip parent = ParentInternal;
 
-            if (parent is null)
-            {
-                parent = (IsOnOverflow && Owner is not null) ? Owner.OverflowButton.DropDown : Owner;
-            }
+            parent ??= (IsOnOverflow && Owner is not null) ? Owner.OverflowButton.DropDown : Owner;
 
             if (parent is null)
             {
@@ -3649,10 +3637,7 @@ namespace System.Windows.Forms
                 if (Available)
                 {
                     Invalidate();
-                    if (ParentInternal is not null)
-                    {
-                        ParentInternal.NotifySelectionChange(this);
-                    }
+                    ParentInternal?.NotifySelectionChange(this);
 
                     KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                 }

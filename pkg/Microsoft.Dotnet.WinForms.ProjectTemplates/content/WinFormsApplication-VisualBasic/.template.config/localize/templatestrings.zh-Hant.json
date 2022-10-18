@@ -1,4 +1,4 @@
-{
+﻿{
   "author": "Microsoft",
   "name": "Windows Forms 應用程式",
   "description": "用於建立 .NET Windows Forms (WinForms) 應用程式的專案範本。",
@@ -14,9 +14,9 @@
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net7.0/description": "目標 net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
-  "symbols/Framework/choices/net8.0/description": "Target net8.0",
+  "symbols/Framework/choices/net8.0/description": "目標 net8.0",
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
-  "symbols/Framework/displayName": ".NET 7.0",
+  "symbols/Framework/displayName": ".NET 8.0",
   "symbols/langVersion/description": "在建立的專案檔中設定 langVersion",
   "symbols/langVersion/displayName": "語言版本",
   "symbols/skipRestore/description": "若指定，會在建立時跳過專案的自動還原。",

@@ -147,10 +147,7 @@ namespace System.Windows.Forms.Design
                         }
 
                         ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(menuItem);
-                        if (itemDesigner != null)
-                        {
-                            itemDesigner.InitializeDropDown();
-                        }
+                        itemDesigner?.InitializeDropDown();
                     }
                 }
             }
@@ -208,10 +205,7 @@ namespace System.Windows.Forms.Design
                 if (selComp is ToolStripItem item)
                 {
                     ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)host.GetDesigner(item);
-                    if (itemDesigner != null)
-                    {
-                        itemDesigner.GetGlyphs(ref glyphs, new ResizeBehavior(item.Site));
-                    }
+                    itemDesigner?.GetGlyphs(ref glyphs, new ResizeBehavior(item.Site));
                 }
             }
 
@@ -357,17 +351,11 @@ namespace System.Windows.Forms.Design
 
             // Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
             ToolStripKeyboardHandlingService keyboardHandlingService = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
-            if (keyboardHandlingService is null)
-            {
-                keyboardHandlingService = new ToolStripKeyboardHandlingService(component.Site);
-            }
+            keyboardHandlingService ??= new ToolStripKeyboardHandlingService(component.Site);
 
             // Add the InsituEditService so that the ToolStrip can do its own Insitu Editing
             ISupportInSituService inSituService = (ISupportInSituService)GetService(typeof(ISupportInSituService));
-            if (inSituService is null)
-            {
-                inSituService = new ToolStripInSituService(Component.Site);
-            }
+            inSituService ??= new ToolStripInSituService(Component.Site);
 
             dropDown = (ToolStripDropDown)Component;
             dropDown.Visible = false;

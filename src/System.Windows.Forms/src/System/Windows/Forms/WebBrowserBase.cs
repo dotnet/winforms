@@ -326,51 +326,51 @@ namespace System.Windows.Forms
         //
         protected internal unsafe override bool ProcessMnemonic(char charCode)
         {
+            if (!CanSelect)
+            {
+                return false;
+            }
+
             bool processed = false;
 
-            if (CanSelect)
+            try
             {
-                try
+                var ctlInfo = new Ole32.CONTROLINFO
                 {
-                    var ctlInfo = new Ole32.CONTROLINFO
-                    {
-                        cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
-                    };
+                    cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
+                };
 
-                    HRESULT hr = axOleControl.GetControlInfo(&ctlInfo);
-                    if (hr.Succeeded)
-                    {
-                        // Sadly, we don't have a message so we must fake one ourselves.
-                        // The message we are faking is a WM_SYSKEYDOWN with the right
-                        // alt key setting.
-                        var msg = new MSG
-                        {
-                            hwnd = (HWND)0,
-                            message = (uint)User32.WM.SYSKEYDOWN,
-                            wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
-                            lParam = 0x20180001,
-                            time = PInvoke.GetTickCount()
-                        };
-
-                        User32.GetCursorPos(out Point p);
-                        msg.pt = p;
-                        if (!Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
-                        {
-                            axOleControl.OnMnemonic(&msg);
-                            Focus();
-                            processed = true;
-                        }
-                    }
-                }
-                catch (Exception ex)
+                HRESULT hr = axOleControl.GetControlInfo(&ctlInfo);
+                if (!hr.Succeeded)
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
-
-                    Debug.Fail("error in processMnemonic");
+                    return processed;
                 }
+
+                // Sadly, we don't have a message so we must fake one ourselves.
+                // The message we are faking is a WM_SYSKEYDOWN with the right alt key setting.
+                var msg = new MSG
+                {
+                    hwnd = (HWND)0,
+                    message = (uint)User32.WM.SYSKEYDOWN,
+                    wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+                    lParam = 0x20180001,
+                    time = PInvoke.GetTickCount()
+                };
+
+                PInvoke.GetCursorPos(out Point p);
+                msg.pt = p;
+                if (!Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
+                {
+                    axOleControl.OnMnemonic(&msg);
+                    Focus();
+                    processed = true;
+                }
+
+                return processed;
+            }
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            {
+                Debug.Fail("error in processMnemonic");
             }
 
             return processed;
@@ -474,10 +474,7 @@ namespace System.Windows.Forms
                     // up to InPlaceActivate that the ActiveX control grabs our handle).
                     TransitionDownTo(WebBrowserHelper.AXState.Running);
 
-                    if (axWindow is not null)
-                    {
-                        axWindow.ReleaseHandle();
-                    }
+                    axWindow?.ReleaseHandle();
 
                     OnHandleDestroyed(EventArgs.Empty);
                     break;
@@ -752,20 +749,14 @@ namespace System.Windows.Forms
 
         internal WebBrowserContainer CreateWebBrowserContainer()
         {
-            if (wbContainer is null)
-            {
-                wbContainer = new WebBrowserContainer(this);
-            }
+            wbContainer ??= new WebBrowserContainer(this);
 
             return wbContainer;
         }
 
         internal WebBrowserContainer GetParentContainer()
         {
-            if (container is null)
-            {
-                container = WebBrowserContainer.FindContainerForControl(this);
-            }
+            container ??= WebBrowserContainer.FindContainerForControl(this);
 
             if (container is null)
             {
@@ -835,10 +826,7 @@ namespace System.Windows.Forms
         {
             PInvoke.SetParent(hwnd, this);
 
-            if (axWindow is not null)
-            {
-                axWindow.ReleaseHandle();
-            }
+            axWindow?.ReleaseHandle();
 
             axWindow = new WebBrowserBaseNativeWindow(this);
             axWindow.AssignHandle(hwnd, false);
@@ -900,10 +888,10 @@ namespace System.Windows.Forms
                 // First, create the ActiveX control
                 Debug.Assert(activeXInstance is null, "activeXInstance must be null");
                 HRESULT hr = Ole32.CoCreateInstance(
-                    ref clsid,
+                    in clsid,
                     IntPtr.Zero,
                     Ole32.CLSCTX.INPROC_SERVER,
-                    ref NativeMethods.ActiveX.IID_IUnknown,
+                    in NativeMethods.ActiveX.IID_IUnknown,
                     out activeXInstance);
                 hr.ThrowOnFailure();
 
@@ -991,10 +979,7 @@ namespace System.Windows.Forms
                 //
                 // Remove ourselves from our parent container...
                 WebBrowserContainer parentContainer = GetParentContainer();
-                if (parentContainer is not null)
-                {
-                    parentContainer.RemoveControl(this);
-                }
+                parentContainer?.RemoveControl(this);
 
                 //
                 // Now inform the ActiveX control that it's been un-sited.
@@ -1089,10 +1074,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (axSite is null)
-                {
-                    axSite = CreateWebBrowserSiteBase();
-                }
+                axSite ??= CreateWebBrowserSiteBase();
 
                 return axSite;
             }
@@ -1129,10 +1111,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectionChangeHandler is null)
-                {
-                    selectionChangeHandler = new EventHandler(OnNewSelection);
-                }
+                selectionChangeHandler ??= new EventHandler(OnNewSelection);
 
                 return selectionChangeHandler;
             }

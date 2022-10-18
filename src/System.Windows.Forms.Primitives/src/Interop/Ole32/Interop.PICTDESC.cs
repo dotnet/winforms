@@ -73,12 +73,12 @@ internal static partial class Interop
                 };
 
                 desc.Union.icon.hicon = copy ?
-                    User32.CopyImage(
-                        icon.Handle,
-                        User32.IMAGE.ICON,
+                    PInvoke.CopyImage(
+                        (HANDLE)icon.Handle,
+                        GDI_IMAGE_TYPE.IMAGE_ICON,
                         icon.Width,
                         icon.Height,
-                        User32.LR.DEFAULTCOLOR)
+                        IMAGE_FLAGS.LR_DEFAULTCOLOR).Value
                     : icon.Handle;
 
                 GC.KeepAlive(icon);

@@ -104,11 +104,8 @@ namespace System.Windows.Forms
                             {
                                 // Default to menu font
                                 sysFont = SystemFonts.MenuFont;
-                                if (sysFont is null)
-                                {
-                                    // ...or to control font if menu font unavailable
-                                    sysFont = Control.DefaultFont;
-                                }
+                                // ...or to control font if menu font unavailable
+                                sysFont ??= Control.DefaultFont;
 
                                 if (sysFont is not null)
                                 {
@@ -509,10 +506,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (t_defaultRenderer is null)
-                {
-                    t_defaultRenderer = CreateRenderer(RenderMode);
-                }
+                t_defaultRenderer ??= CreateRenderer(RenderMode);
 
                 return t_defaultRenderer;
             }
@@ -1002,8 +996,8 @@ namespace System.Windows.Forms
                 toplevelControl = intendedControl.TopLevelControlInternal;
                 if (toplevelControl is not null)
                 {
-                    IntPtr hMenu = User32.GetMenu(toplevelControl);
-                    if (hMenu == IntPtr.Zero)
+                    HMENU hMenu = PInvoke.GetMenu(toplevelControl);
+                    if (hMenu == HMENU.Null)
                     {
                         // Only activate the menu if there's no win32 menu. Win32 menus trump menustrips.
                         menuStripToActivate = GetMainMenuStrip(toplevelControl);

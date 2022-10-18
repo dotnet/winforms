@@ -261,9 +261,6 @@ namespace System.Windows.Forms
             base.OnFontChanged(e);
         }
 
-        /// <summary>
-        ///  Raises the <see cref="ButtonBase.OnMouseUp"/> event.
-        /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
             if (mevent.Button == MouseButtons.Left && MouseIsPressed)
@@ -272,14 +269,13 @@ namespace System.Windows.Forms
 
                 if (GetStyle(ControlStyles.UserPaint))
                 {
-                    //Paint in raised state...
+                    // Paint in raised state.
                     ResetFlagsandPaint();
                 }
 
                 if (isMouseDown)
                 {
-                    Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (User32.WindowFromPoint(pt) == Handle && !ValidationCancelled)
+                    if (PInvoke.WindowFromPoint(PointToScreen(mevent.Location)) == HWND && !ValidationCancelled)
                     {
                         if (GetStyle(ControlStyles.UserPaint))
                         {

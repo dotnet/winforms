@@ -77,6 +77,35 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
+        public void MaskedTextBoxAccessibleObject_GetPropertyValue_Value_IsExpected_WithMask(bool useMask)
+        {
+            using MaskedTextBox maskedTextBox = new MaskedTextBox();
+            maskedTextBox.Text = "000000";
+            maskedTextBox.Mask = useMask ? "00/00/0000" : null;
+
+            var actual = (string)maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId);
+
+            Assert.Equal(maskedTextBox.WindowText, actual);
+            Assert.Equal(useMask, maskedTextBox.Mask?.Length == actual.Length);
+            Assert.False(maskedTextBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void MaskedTextBoxAccessibleObject_GetPropertyValue_Value_AccessDenied_WithUseSystemPasswordChar()
+        {
+            using MaskedTextBox maskedTextBox = new MaskedTextBox();
+            maskedTextBox.UseSystemPasswordChar = true;
+            maskedTextBox.Text = "some text";
+
+            object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId);
+
+            Assert.Equal(SR.AccessDenied, actual);
+            Assert.False(maskedTextBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void MaskedTextBoxAccessibleObject_IsPassword_IsExpected_WithUseSystemPasswordChar(bool useSystemPasswordChar)
         {
             using MaskedTextBox maskedTextBox = new MaskedTextBox();

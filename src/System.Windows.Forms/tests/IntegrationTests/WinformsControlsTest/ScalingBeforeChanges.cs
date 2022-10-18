@@ -7,7 +7,9 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Windows.Win32;
+using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
+using Windows.Win32.UI.WindowsAndMessaging;
 using static Interop;
 
 namespace WinformsControlsTest
@@ -84,13 +86,14 @@ namespace WinformsControlsTest
                     {
                         RECT suggestedRect = Marshal.PtrToStructure<RECT>(m.LParam);
 
-                        User32.SetWindowPos(
-                            new HandleRef(this, Handle),
-                            IntPtr.Zero, suggestedRect.left,
+                        PInvoke.SetWindowPos(
+                            this,
+                            HWND.Null,
+                            suggestedRect.left,
                             suggestedRect.top,
                             suggestedRect.right - suggestedRect.left,
                             suggestedRect.bottom - suggestedRect.top,
-                            User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
+                            SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
 
                         float factorX = (float)(x / deviceDpiX);
                         float factorY = (float)(y / deviceDpiY);
