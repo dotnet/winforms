@@ -196,6 +196,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.TextBoxesButton,
                 new InitInfo("TextBoxes", (obj, e) => new TextBoxes().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.MediaPlayerButton,
+                new InitInfo("MediaPlayer", (obj, e) => new MediaPlayer().Show(this))
             }
         };
 

@@ -40,6 +40,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         AnchorLayoutButton,
         DockLayoutButton,
         DragAndDrop,
-        TextBoxesButton
+        TextBoxesButton,
+        MediaPlayerButton
     }
 }
