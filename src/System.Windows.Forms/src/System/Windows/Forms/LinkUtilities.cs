@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using Microsoft.Win32;
@@ -158,7 +159,12 @@ namespace System.Windows.Forms
             return LinkBehavior.AlwaysUnderline;
         }
 
-        public static void EnsureLinkFonts(Font baseFont, LinkBehavior link, ref Font? linkFont, ref Font? hoverLinkFont, bool isActive = false)
+        public static void EnsureLinkFonts(
+            Font baseFont,
+            LinkBehavior link,
+            [AllowNull] ref Font linkFont,
+            [AllowNull] ref Font hoverLinkFont,
+            bool isActive = false)
         {
             if (linkFont is not null && hoverLinkFont is not null)
             {

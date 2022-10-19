@@ -1246,12 +1246,28 @@ namespace System.Windows.Forms
 
                             if (!IsOneLink())
                             {
-                                PaintLink(e, null, foreBrush, linkBrush, optimizeBackgroundRendering, finalrect);
+                                PaintLink(
+                                    e,
+                                    link: null,
+                                    foreBrush,
+                                    linkBrush,
+                                    _linkFont,
+                                    _hoverLinkFont,
+                                    optimizeBackgroundRendering,
+                                    finalrect);
                             }
 
                             foreach (Link link in _links)
                             {
-                                PaintLink(e, link, foreBrush, linkBrush, optimizeBackgroundRendering, finalrect);
+                                PaintLink(
+                                    e,
+                                    link,
+                                    foreBrush,
+                                    linkBrush,
+                                    _linkFont,
+                                    _hoverLinkFont,
+                                    optimizeBackgroundRendering,
+                                    finalrect);
                             }
 
                             if (optimizeBackgroundRendering)
@@ -1423,6 +1439,8 @@ namespace System.Windows.Forms
             Link? link,
             SolidBrush foreBrush,
             SolidBrush linkBrush,
+            Font linkFont,
+            Font hoverLinkFont,
             bool optimizeBackgroundRendering,
             RectangleF finalrect)
         {
@@ -1442,7 +1460,7 @@ namespace System.Windows.Forms
                     Color brushColor = Color.Empty;
                     LinkState linkState = link.State;
 
-                    font = (linkState & LinkState.Hover) == LinkState.Hover ? _hoverLinkFont! : _linkFont!;
+                    font = (linkState & LinkState.Hover) == LinkState.Hover ? hoverLinkFont : linkFont;
 
                     if (link.Enabled)
                     {
