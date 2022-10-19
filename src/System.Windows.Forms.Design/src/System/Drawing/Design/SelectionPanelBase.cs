@@ -81,7 +81,7 @@ namespace System.Drawing.Design
                     break;
                 case Keys.Return:
                     // Will tear down editor
-                    InvokeOnClick(radioButton, EventArgs.Empty); 
+                    InvokeOnClick(radioButton, EventArgs.Empty);
                     return;
                 default:
                     return;

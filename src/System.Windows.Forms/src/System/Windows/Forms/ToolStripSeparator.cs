@@ -300,7 +300,7 @@ namespace System.Windows.Forms
             // Perf: don't call base, we don't care if the font changes
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
             RaiseEvent(s_fontChangedEvent, e);
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

@@ -633,7 +633,7 @@ namespace System.Windows.Forms
                 if (AddExtension && !Path.HasExtension(fileName))
                 {
                     bool fileMustExist = CheckFileExists;
-                    
+
                     for (int j = 0; j < extensions.Length; j++)
                     {
                         var currentExtension = Path.GetExtension(fileName.AsSpan());

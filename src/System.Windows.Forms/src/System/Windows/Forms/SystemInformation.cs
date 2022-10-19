@@ -383,7 +383,7 @@ namespace System.Windows.Forms
         ///  caption and sizing borders.
         /// </summary>
         public static Size MaxWindowTrackSize => GetSize(SM_CXMAXTRACK, SM_CYMAXTRACK);
-        
+
         /// <summary>
         ///  Gets the default dimensions, in pixels, of a maximized top-left window on the
         ///  primary monitor.

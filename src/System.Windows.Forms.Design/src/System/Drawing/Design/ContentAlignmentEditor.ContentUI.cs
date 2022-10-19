@@ -108,7 +108,7 @@ namespace System.Drawing.Design
             }
 
             protected override ControlCollection SelectionOptions => Controls;
-            
+
             private void InitComponent()
             {
                 BackColor = SystemColors.Control;
@@ -271,7 +271,7 @@ namespace System.Drawing.Design
                     ResumeLayout();
                 }
             }
-            
+
             /// <summary>
             ///  Imagine a grid to choose alignment:
             ///

@@ -8,8 +8,8 @@ using System.Runtime.Versioning;
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Base class for components which provide properties which can be 
-    /// data bound with the WinForms Designer. 
+    /// Base class for components which provide properties which can be
+    /// data bound with the WinForms Designer.
     /// </summary>
     [RequiresPreviewFeatures]
     public abstract class BindableComponent : Component, IBindableComponent

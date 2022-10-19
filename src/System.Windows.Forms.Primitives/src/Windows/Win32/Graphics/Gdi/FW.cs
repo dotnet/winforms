@@ -21,5 +21,5 @@ namespace Windows.Win32.Graphics.Gdi
         ULTRABOLD = 800,
         HEAVY = 900,
         BLACK = 900
-    }  
+    }
 }

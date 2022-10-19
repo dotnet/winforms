@@ -546,7 +546,7 @@ namespace System.Windows.Forms
             OnMouseHover(e);
             RaiseEvent(ToolStripItem.s_mouseHoverEvent, e);
         }
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
 
         private void HandleMouseMove(object sender, MouseEventArgs e)
         {
@@ -638,7 +638,7 @@ namespace System.Windows.Forms
         ///  called when the control has lost focus
         /// </summary>
         protected virtual void OnLostFocus(EventArgs e) => RaiseEvent(s_lostFocusEvent, e);
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
 
         protected virtual void OnKeyDown(KeyEventArgs e) => RaiseKeyEvent(s_keyDownEvent, e);
 
@@ -804,7 +804,7 @@ namespace System.Windows.Forms
 
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
         protected virtual void OnValidated(EventArgs e) => RaiseEvent(s_validatedEvent, e);
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
 
         private static ReadOnlyControlCollection GetControlCollection(ToolStrip toolStrip)
             => (ReadOnlyControlCollection)toolStrip?.Controls;

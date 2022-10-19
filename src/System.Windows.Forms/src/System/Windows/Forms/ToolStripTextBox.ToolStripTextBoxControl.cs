@@ -126,7 +126,7 @@ namespace System.Windows.Forms
                 using PInvoke.RegionScope hNonClientRegion = new(0, 0, 0, 0);
 
                 PInvoke.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, RGN_COMBINE_MODE.RGN_XOR);
-                
+
                 // Call RedrawWindow with the region.
                 PInvoke.RedrawWindow(
                     this,

@@ -2755,7 +2755,7 @@ namespace System.Windows.Forms
             // This stops the style from being removed for any derived classes that set it using P/Invoke.
             if (treeViewState[TREEVIEWSTATE_doubleBufferedPropertySet])
             {
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)(nint)PInvoke.TVS_EX_DOUBLEBUFFER, (LPARAM)(nint)(DoubleBuffered ? PInvoke.TVS_EX_DOUBLEBUFFER : 0)); 
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)(nint)PInvoke.TVS_EX_DOUBLEBUFFER, (LPARAM)(nint)(DoubleBuffered ? PInvoke.TVS_EX_DOUBLEBUFFER : 0));
             }
         }
 

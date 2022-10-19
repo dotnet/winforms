@@ -440,7 +440,7 @@ namespace System.Windows.Forms
                         // Necessary for RS1, since this SetProcessIntPtr IS available here.
                         PInvoke.IsValidDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2)
                         ? DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
-                        : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, 
+                        : DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE,
                     HighDpiMode.DpiUnawareGdiScaled =>
                         // Let's make sure, we do not try to set a value which has been introduced in later Windows releases.
                         PInvoke.IsValidDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED)

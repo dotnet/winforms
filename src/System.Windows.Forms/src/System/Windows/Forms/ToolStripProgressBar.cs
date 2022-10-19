@@ -259,7 +259,7 @@ namespace System.Windows.Forms
         {
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
             RaiseEvent(EventRightToLeftLayoutChanged, e);
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
         }
 
         protected override void OnSubscribeControlEvents(Control control)
