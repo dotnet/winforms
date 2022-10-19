@@ -12,14 +12,14 @@ namespace System.Windows.Forms.ButtonInternal
         protected const int FlatCheckSize = 11;
 
         [ThreadStatic]
-        private static Bitmap? t_checkImageChecked = null;
+        private static Bitmap? t_checkImageChecked;
         [ThreadStatic]
-        private static Color t_checkImageCheckedBackColor = Color.Empty;
+        private static Color t_checkImageCheckedBackColor;
 
         [ThreadStatic]
-        private static Bitmap? t_checkImageIndeterminate = null;
+        private static Bitmap? t_checkImageIndeterminate;
         [ThreadStatic]
-        private static Color t_checkImageIndeterminateBackColor = Color.Empty;
+        private static Color t_checkImageIndeterminateBackColor;
 
         internal CheckBoxBaseAdapter(ButtonBase control)
             : base(control)
