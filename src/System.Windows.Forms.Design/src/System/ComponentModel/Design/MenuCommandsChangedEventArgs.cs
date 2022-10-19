@@ -34,4 +34,3 @@ namespace System.ComponentModel.Design
         public MenuCommand Command { get; }
     }
 }
-

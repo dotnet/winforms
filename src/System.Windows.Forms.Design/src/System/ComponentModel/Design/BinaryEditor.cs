@@ -132,5 +132,3 @@ namespace System.ComponentModel.Design
         }
     }
 }
-
-

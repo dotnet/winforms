@@ -25,4 +25,3 @@ namespace System.Windows.Forms.Design
         protected override string HelpTopic => "net.ComponentModel.StringCollectionEditor";
     }
 }
-

@@ -67,4 +67,3 @@ namespace System.Windows.Forms.Design
             => UITypeEditorEditStyle.Modal;
     }
 }
-
