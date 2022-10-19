@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     /// </summary>
     [Designer("System.Windows.Forms.Design.TextBoxDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionTextBox))]
-    public class TextBox : TextBoxBase
+    public partial class TextBox : TextBoxBase
     {
         private static readonly object EVENT_TEXTALIGNCHANGED = new object();
 
@@ -102,6 +102,9 @@ namespace System.Windows.Forms
                 _acceptsReturn = value;
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new TextBoxAccessibleObject(this);
 
         /// <summary>
         ///  This is the AutoCompleteMode which can be either

@@ -5,3 +5,4 @@ System.Windows.Forms.PrintPreviewControl.TabStopChanged -> System.EventHandler?
 override System.Windows.Forms.MaskedTextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.MaskedTextBox.OnGotFocus(System.EventArgs! e) -> void
 override System.Windows.Forms.MaskedTextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.TextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!

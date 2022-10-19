@@ -426,7 +426,7 @@ namespace System.Windows.Forms.Tests
             }
 
             Assert.Equal(createControl, control.IsHandleCreated);
-            Control.ControlAccessibleObject instance = Assert.IsType<TextBoxBase.TextBoxBaseAccessibleObject>(control.CreateAccessibilityInstance());
+            Control.ControlAccessibleObject instance = Assert.IsType<TextBox.TextBoxAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.Equal(createControl, control.IsHandleCreated);
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
@@ -443,7 +443,7 @@ namespace System.Windows.Forms.Tests
             {
                 AccessibleRole = AccessibleRole.HelpBalloon
             };
-            Control.ControlAccessibleObject instance = Assert.IsType<TextBoxBase.TextBoxBaseAccessibleObject>(control.CreateAccessibilityInstance());
+            Control.ControlAccessibleObject instance = Assert.IsType<TextBox.TextBoxAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
             Assert.Equal(AccessibleRole.HelpBalloon, instance.Role);
