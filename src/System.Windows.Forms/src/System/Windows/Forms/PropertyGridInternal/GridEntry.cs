@@ -1644,7 +1644,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     using var compatibleDC = new PInvoke.CreateDcScope(default);
 
                     int planes = PInvoke.GetDeviceCaps(compatibleDC, GET_DEVICE_CAPS_INDEX.PLANES);
-                    int bitsPixel = PInvoke.GetDeviceCaps(compatibleDC,GET_DEVICE_CAPS_INDEX.BITSPIXEL);
+                    int bitsPixel = PInvoke.GetDeviceCaps(compatibleDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
                     HBITMAP compatibleBitmap = PInvoke.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
                     using PInvoke.SelectObjectScope targetBitmapSelection = new(compatibleDC, compatibleBitmap);
 
