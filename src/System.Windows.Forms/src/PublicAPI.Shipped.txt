@@ -304,24 +304,24 @@
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlWindow.Equals(object obj) -> bool
-~override System.Windows.Forms.LinkLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.LinkLabel.OnAutoSizeChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnEnabledChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnLostFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnMouseMove(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnPaddingChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnTextAlignChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.OnTextChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.LinkLabel.Text.get -> string
-~override System.Windows.Forms.LinkLabel.Text.set -> void
+override System.Windows.Forms.LinkLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.LinkLabel.OnAutoSizeChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnMouseMove(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnPaddingChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnTextAlignChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.OnTextChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.LinkLabel.Text.get -> string!
+override System.Windows.Forms.LinkLabel.Text.set -> void
 ~override System.Windows.Forms.ListViewItem.ToString() -> string
 ~override System.Windows.Forms.MdiClient.ControlCollection.Add(System.Windows.Forms.Control value) -> void
 ~override System.Windows.Forms.MdiClient.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
@@ -1233,10 +1233,10 @@
 ~System.Windows.Forms.LinkLabel.LinkCollection.IndexOf(System.Windows.Forms.LinkLabel.Link link) -> int
 ~System.Windows.Forms.LinkLabel.LinkCollection.LinkCollection(System.Windows.Forms.LinkLabel owner) -> void
 ~System.Windows.Forms.LinkLabel.LinkCollection.Remove(System.Windows.Forms.LinkLabel.Link value) -> void
-~System.Windows.Forms.LinkLabel.Links.get -> System.Windows.Forms.LinkLabel.LinkCollection
-~System.Windows.Forms.LinkLabel.OverrideCursor.get -> System.Windows.Forms.Cursor
-~System.Windows.Forms.LinkLabel.OverrideCursor.set -> void
-~System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms.LinkLabel.Link
+System.Windows.Forms.LinkLabel.Links.get -> System.Windows.Forms.LinkLabel.LinkCollection!
+System.Windows.Forms.LinkLabel.OverrideCursor.get -> System.Windows.Forms.Cursor?
+System.Windows.Forms.LinkLabel.OverrideCursor.set -> void
+System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms.LinkLabel.Link?
 ~System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListView.ListViewItemCollection items) -> void
 ~System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem[] items) -> void
 ~System.Windows.Forms.ListView.ListViewItemCollection.Contains(System.Windows.Forms.ListViewItem item) -> bool
@@ -2028,7 +2028,7 @@
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].get -> System.Windows.Forms.LinkLabel.Link
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[string key].get -> System.Windows.Forms.LinkLabel.Link
-~virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs e) -> void
+virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs! e) -> void
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, int imageIndex) -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, string imageKey) -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string text) -> System.Windows.Forms.ListViewItem
@@ -8376,7 +8376,7 @@ System.Windows.Forms.LinkLabel.LinkArea.get -> System.Windows.Forms.LinkArea
 System.Windows.Forms.LinkLabel.LinkArea.set -> void
 System.Windows.Forms.LinkLabel.LinkBehavior.get -> System.Windows.Forms.LinkBehavior
 System.Windows.Forms.LinkLabel.LinkBehavior.set -> void
-System.Windows.Forms.LinkLabel.LinkClicked -> System.Windows.Forms.LinkLabelLinkClickedEventHandler
+System.Windows.Forms.LinkLabel.LinkClicked -> System.Windows.Forms.LinkLabelLinkClickedEventHandler?
 System.Windows.Forms.LinkLabel.LinkCollection
 System.Windows.Forms.LinkLabel.LinkCollection.Count.get -> int
 System.Windows.Forms.LinkLabel.LinkCollection.IsReadOnly.get -> bool
@@ -8391,7 +8391,7 @@ System.Windows.Forms.LinkLabel.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.LinkLabel.Padding.set -> void
 System.Windows.Forms.LinkLabel.TabStop.get -> bool
 System.Windows.Forms.LinkLabel.TabStop.set -> void
-System.Windows.Forms.LinkLabel.TabStopChanged -> System.EventHandler
+System.Windows.Forms.LinkLabel.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.LinkLabel.UseCompatibleTextRendering.get -> bool
 System.Windows.Forms.LinkLabel.UseCompatibleTextRendering.set -> void
 System.Windows.Forms.LinkLabel.VisitedLinkColor.get -> System.Drawing.Color
