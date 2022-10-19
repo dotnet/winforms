@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     {
         // Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer? t_visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer;
         private static readonly VisualStyleElement s_groupBoxElement = VisualStyleElement.Button.GroupBox.Normal;
         private const int TextOffset = 8;
         private const int BoxHeaderWidth = 7;    // The groupbox frame shows 7 pixels before the caption.

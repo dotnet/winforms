@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
         [ThreadStatic]
         private static Dictionary<Type, ToolboxItem> s_cachedToolboxItems;
         [ThreadStatic]
-        private static int s_customToolStripItemCount = 0;
+        private static int s_customToolStripItemCount;
         private const int TOOLSTRIPCHARCOUNT = 9;
         // used to cache in the selection. This is used when the selection is changing and we need to invalidate the original selection Especially, when the selection is changed through NON UI designer action like through propertyGrid or through Doc Outline.
         public static ArrayList originalSelComps;

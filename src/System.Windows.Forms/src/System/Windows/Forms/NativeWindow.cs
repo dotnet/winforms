@@ -33,10 +33,10 @@ namespace System.Windows.Forms
         private static bool s_anyHandleCreatedInApp;
 
         [ThreadStatic]
-        private static byte t_wndProcFlags = 0;
+        private static byte t_wndProcFlags;
 
         [ThreadStatic]
-        private static byte t_userSetProcFlags = 0;
+        private static byte t_userSetProcFlags;
         private static byte s_userSetProcFlagsForApp;
 
         // Need to Store Table of Ids and Handles

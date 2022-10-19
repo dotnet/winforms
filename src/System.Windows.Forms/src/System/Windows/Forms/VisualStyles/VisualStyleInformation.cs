@@ -20,7 +20,7 @@ namespace System.Windows.Forms.VisualStyles
     {
         // Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer? t_visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer;
 
         /// <summary>
         ///  Used to find whether visual styles are supported by the current OS. Same as
