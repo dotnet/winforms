@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Tests.Dpi
                 DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
                 Drawing.Size nonLInearSize = form.Size;
 
-                // Rollback to 96 Dpi, and chnage AutoScaleMode to check with linear size
+                // Rollback to 96 Dpi, and change AutoScaleMode to check with linear size
                 DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, (int)DpiHelper.LogicalDpi);
                 form.AutoScaleMode = AutoScaleMode.Dpi;
 
