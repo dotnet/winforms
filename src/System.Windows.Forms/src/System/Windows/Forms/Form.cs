@@ -524,7 +524,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler? AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -741,7 +741,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Localizable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        new public Size ClientSize
+        public new Size ClientSize
         {
             get => base.ClientSize;
             set => base.ClientSize = value;
@@ -2002,7 +2002,7 @@ namespace System.Windows.Forms
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [Localizable(false)]
-        new public Size Size
+        public new Size Size
         {
             get => base.Size;
             set => base.Size = value;
@@ -2060,7 +2060,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        new public int TabIndex
+        public new int TabIndex
         {
             get => base.TabIndex;
             set => base.TabIndex = value;
@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? TabIndexChanged
+        public new event EventHandler? TabIndexChanged
         {
             add => base.TabIndexChanged += value;
             remove => base.TabIndexChanged -= value;
