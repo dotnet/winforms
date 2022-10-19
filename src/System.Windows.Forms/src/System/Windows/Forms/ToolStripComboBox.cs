@@ -443,7 +443,7 @@ namespace System.Windows.Forms
         {
             RaiseEvent(s_eventTextUpdate, e);
         }
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
 
         protected override void OnSubscribeControlEvents(Control control)
         {

@@ -1137,7 +1137,7 @@ namespace System.Windows.Forms
         }
 
         internal override bool SupportsUiaProviders => true;
-        
+
         /// <summary>
         ///  The Text setter validates the input char by char, raising the MaskInputRejected event for invalid chars.
         ///  The Text getter returns the formatted text according to the IncludeLiterals and IncludePrompt properties.

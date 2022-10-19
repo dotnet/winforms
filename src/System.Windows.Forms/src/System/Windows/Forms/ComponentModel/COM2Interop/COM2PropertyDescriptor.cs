@@ -886,7 +886,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     lastValue = pVarResult[0];
                 }
-                
+
                 return lastValue;
             }
             else if (hr == HRESULT.DISP_E_EXCEPTION)

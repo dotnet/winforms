@@ -37,7 +37,7 @@ internal partial class Interop
                     FORMATETC[] elt = new FORMATETC[celt];
                     int[] celtFetched = new int[1];
 
-                    // Eliminate null bang after https://github.com/dotnet/runtime/pull/68537 lands, or 
+                    // Eliminate null bang after https://github.com/dotnet/runtime/pull/68537 lands, or
                     // IEnumFORMATETC annotations would be corrected.
                     var result = instance.Next((int)celt, elt, pceltFetched is null ? null! : celtFetched);
                     for (var i = 0; i < celt; i++)

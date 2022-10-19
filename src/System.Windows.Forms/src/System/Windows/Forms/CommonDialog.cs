@@ -236,7 +236,7 @@ namespace System.Windows.Forms
                     ThemingScope.Deactivate(userCookie);
 
                     _priorWindowProcedure = 0;
-                    
+
                     // Ensure that the subclass delegate will not be GC collected until after it has been subclassed.
                     GC.KeepAlive(ownerWindowProcedure);
                 }

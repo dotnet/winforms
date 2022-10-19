@@ -23,7 +23,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal static class DragDropHelper
     {
-        private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001; 
+        private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001;
         internal const string CF_DRAGIMAGEBITS = "DragImageBits";
         internal const string CF_DROPDESCRIPTION = "DropDescription";
         internal const string CF_INSHELLDRAGLOOP = "InShellDragLoop";

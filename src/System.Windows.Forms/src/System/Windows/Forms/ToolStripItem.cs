@@ -3742,5 +3742,5 @@ namespace System.Windows.Forms
             return local is not null;
         }
     }
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
 }

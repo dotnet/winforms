@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Design
             private unsafe void OnCustomDraw(ref Message m)
             {
                 NMTVCUSTOMDRAW* nmtvcd = (NMTVCUSTOMDRAW*)(nint)m.LParamInternal;
-                
+
                 switch (nmtvcd->nmcd.dwDrawStage)
                 {
                     case NMCUSTOMDRAW_DRAW_STAGE.CDDS_PREPAINT:

@@ -452,7 +452,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 return null;
             }
-            
+
             using DeviceContextHdcScope hdc = new(dc);
             HRGN hrgn;
             _lastHResult = PInvoke.GetThemeBackgroundRegion(Handle, hdc, Part, State, bounds, &hrgn);
