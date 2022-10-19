@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Ole = Windows.Win32.System.Ole;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms
@@ -435,7 +436,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                else if (_host.GetInPlaceObject() is IOleInPlaceObjectWindowless)
+                else if (_host.GetInPlaceObject() is Ole.IOleInPlaceObjectWindowless.Interface)
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Windowless control.");
                     throw new InvalidOperationException(SR.AXWindowlessControl);

@@ -8,6 +8,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -98,7 +99,7 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(Ole32.IOleInPlaceActiveObject pActiveObject, string pszObjName)
+        HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(IOleInPlaceActiveObject.Interface pActiveObject, string pszObjName)
         {
             if (pActiveObject is null)
             {

@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -46,8 +47,8 @@ namespace System.Windows.Forms
         private Guid clsid;
         // Pointers to the ActiveX object: Interface pointers are cached for perf.
         private Ole32.IOleObject axOleObject;
-        private Ole32.IOleInPlaceObject axOleInPlaceObject;
-        private Ole32.IOleInPlaceActiveObject axOleInPlaceActiveObject;
+        private IOleInPlaceObject.Interface axOleInPlaceObject;
+        private IOleInPlaceActiveObject.Interface axOleInPlaceActiveObject;
         private Ole32.IOleControl axOleControl;
         private WebBrowserBaseNativeWindow axWindow;
         // We need to change the size of the inner ActiveX control before the
@@ -1084,8 +1085,8 @@ namespace System.Windows.Forms
         {
             Debug.Assert(activeXInstance is not null, "The native control is null");
             axOleObject = (Ole32.IOleObject)activeXInstance;
-            axOleInPlaceObject = (Ole32.IOleInPlaceObject)activeXInstance;
-            axOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)activeXInstance;
+            axOleInPlaceObject = (IOleInPlaceObject.Interface)activeXInstance;
+            axOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)activeXInstance;
             axOleControl = (Ole32.IOleControl)activeXInstance;
 
             // Give the inheriting classes a chance to cast the ActiveX object to the
@@ -1270,7 +1271,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal Ole32.IOleInPlaceObject AXInPlaceObject => axOleInPlaceObject;
+        internal IOleInPlaceObject.Interface AXInPlaceObject => axOleInPlaceObject;
 
         // ---------------------------------------------------------------
         // The following properties implemented in the Control class don't make

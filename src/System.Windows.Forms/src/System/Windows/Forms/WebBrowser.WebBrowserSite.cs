@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Drawing;
+using Windows.Win32.System.Ole;
 using static Interop;
 using static Interop.Mshtml;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -97,7 +98,7 @@ namespace System.Windows.Forms
 
             HRESULT IDocHostUIHandler.ShowUI(
                 uint dwID,
-                Ole32.IOleInPlaceActiveObject activeObject,
+                IOleInPlaceActiveObject.Interface activeObject,
                 Ole32.IOleCommandTarget commandTarget,
                 Ole32.IOleInPlaceFrame frame,
                 Ole32.IOleInPlaceUIWindow doc)

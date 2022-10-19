@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using static Interop;
 using static Interop.Ole32;
 
@@ -776,7 +777,7 @@ namespace System.Windows.Forms
                 _controlInEditMode = null;
             }
 
-            HRESULT IOleInPlaceFrame.SetActiveObject(IOleInPlaceActiveObject pActiveObject, string pszObjName)
+            HRESULT IOleInPlaceFrame.SetActiveObject(IOleInPlaceActiveObject.Interface pActiveObject, string pszObjName)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in SetActiveObject {pszObjName ?? "<null>"}");
                 if (_siteUIActive is not null)

@@ -15,6 +15,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -26,7 +27,7 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultEvent(nameof(Enter))]
     [Designer($"System.Windows.Forms.Design.AxHostDesigner, {AssemblyRef.SystemDesign}")]
-    public abstract partial class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
+    public unsafe abstract partial class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
     {
         private static readonly TraceSwitch s_axHTraceSwitch = new("AxHTrace", "ActiveX handle tracing");
         private static readonly TraceSwitch s_axPropTraceSwitch = new("AxPropTrace", "ActiveX property tracing");
@@ -176,11 +177,11 @@ namespace System.Windows.Forms
         // Interface pointers to the ocx
 
         private object _instance;
-        private Ole32.IOleInPlaceObject _iOleInPlaceObject;
+        private IOleInPlaceObject.Interface _iOleInPlaceObject;
         private Ole32.IOleObject _iOleObject;
         private Ole32.IOleControl _iOleControl;
-        private Ole32.IOleInPlaceActiveObject _iOleInPlaceActiveObject;
-        private Ole32.IOleInPlaceActiveObject _iOleInPlaceActiveObjectExternal;
+        private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObject;
+        private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObjectExternal;
         private Oleaut32.IPerPropertyBrowsing _iPerPropertyBrowsing;
         private VSSDK.ICategorizeProperties _iCategorizeProperties;
         private Oleaut32.IPersistPropertyBag _iPersistPropBag;
@@ -1824,7 +1825,7 @@ namespace System.Windows.Forms
                 _axState[s_siteProcessedInputKey] = false;
                 try
                 {
-                    Ole32.IOleInPlaceActiveObject activeObj = GetInPlaceActiveObject();
+                    IOleInPlaceActiveObject.Interface activeObj = GetInPlaceActiveObject();
                     if (activeObj is not null)
                     {
                         HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
@@ -3439,11 +3440,11 @@ namespace System.Windows.Forms
                     // transition back to a state >= InPlaceActive.
                     if (GetOcState() >= OC_INPLACE)
                     {
-                        Ole32.IOleInPlaceObject ipo = GetInPlaceObject();
+                        IOleInPlaceObject.Interface ipo = GetInPlaceObject();
                         HWND hwnd = HWND.Null;
                         if (ipo.GetWindow(&hwnd).Succeeded)
                         {
-                            Application.ParkHandle(handle: new(ipo, hwnd), DpiAwarenessContext);
+                            Application.ParkHandle(new HandleRef<HWND>(this, hwnd), DpiAwarenessContext);
                         }
                     }
 
@@ -3849,7 +3850,7 @@ namespace System.Windows.Forms
 
         private Ole32.IOleControl GetOleControl() => _iOleControl ??= (Ole32.IOleControl)_instance;
 
-        private Ole32.IOleInPlaceActiveObject GetInPlaceActiveObject()
+        private IOleInPlaceActiveObject.Interface GetInPlaceActiveObject()
         {
             // if our AxContainer was set an external active object then use it.
             if (_iOleInPlaceActiveObjectExternal is not null)
@@ -3863,7 +3864,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_instance is not null, "must have the ocx");
                 try
                 {
-                    _iOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)_instance;
+                    _iOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)_instance;
                 }
                 catch (InvalidCastException e)
                 {
@@ -3876,15 +3877,15 @@ namespace System.Windows.Forms
 
         private Ole32.IOleObject GetOleObject() => _iOleObject ??= (Ole32.IOleObject)_instance;
 
-        private Ole32.IOleInPlaceObject GetInPlaceObject()
+        private IOleInPlaceObject.Interface GetInPlaceObject()
         {
             if (_iOleInPlaceObject is null)
             {
                 Debug.Assert(_instance is not null, "must have the ocx");
-                _iOleInPlaceObject = (Ole32.IOleInPlaceObject)_instance;
+                _iOleInPlaceObject = (IOleInPlaceObject.Interface)_instance;
 
 #if DEBUG
-                if (_iOleInPlaceObject is Ole32.IOleInPlaceObjectWindowless)
+                if (_iOleInPlaceObject is IOleInPlaceObjectWindowless.Interface)
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"{GetType().FullName} Can also be a Windowless control.");
                 }

@@ -273,6 +273,10 @@ IFileDialogCustomize
 IFileDialogEvents
 IFileOpenDialog
 IFileSaveDialog
+IOleInPlaceActiveObject
+IOleInPlaceObject
+IOleInPlaceObjectWindowless
+IOleWindow
 IMAGE_LIST_WRITE_STREAM_FLAGS
 ImageList_Add
 ImageList_Create

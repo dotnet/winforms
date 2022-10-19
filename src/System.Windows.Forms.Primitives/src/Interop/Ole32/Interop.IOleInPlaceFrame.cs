@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 
 internal static partial class Interop
 {
@@ -35,7 +36,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT SetActiveObject(
-                IOleInPlaceActiveObject? pActiveObject,
+                IOleInPlaceActiveObject.Interface? pActiveObject,
                 [MarshalAs(UnmanagedType.LPWStr)] string? pszObjName);
 
             [PreserveSig]

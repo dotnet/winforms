@@ -8,6 +8,7 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Ole = Windows.Win32.System.Ole;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms
@@ -208,7 +209,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                else if (Host.AXInPlaceObject is IOleInPlaceObjectWindowless)
+                else if (Host.AXInPlaceObject is Ole.IOleInPlaceObjectWindowless.Interface)
                 {
                     throw new InvalidOperationException(SR.AXWindowlessControl);
                 }

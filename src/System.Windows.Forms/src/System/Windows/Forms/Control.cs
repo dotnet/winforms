@@ -16,6 +16,7 @@ using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using Windows.Win32.System.Ole;
 using static Interop;
 using Encoding = System.Text.Encoding;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -42,9 +43,9 @@ namespace System.Windows.Forms
         Component,
         Ole32.IOleControl,
         Ole32.IOleObject,
-        Ole32.IOleInPlaceObject,
-        Ole32.IOleInPlaceActiveObject,
-        Ole32.IOleWindow,
+        IOleInPlaceObject.Interface,
+        IOleInPlaceActiveObject.Interface,
+        IOleWindow.Interface,
         Ole32.IViewObject,
         Ole32.IViewObject2,
         Ole32.IPersist,
@@ -13659,29 +13660,29 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceActiveObject.GetWindow(HWND* phwnd)
+        unsafe HRESULT IOleInPlaceActiveObject.Interface.GetWindow(HWND* phwnd)
         {
-            return ((Ole32.IOleInPlaceObject)this).GetWindow(phwnd);
+            return ((IOleInPlaceObject.Interface)this).GetWindow(phwnd);
         }
 
-        HRESULT Ole32.IOleInPlaceActiveObject.ContextSensitiveHelp(BOOL fEnterMode)
+        HRESULT IOleInPlaceActiveObject.Interface.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            return ((Ole32.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
+            return ((IOleInPlaceObject.Interface)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceActiveObject.TranslateAccelerator(MSG* lpmsg)
+        unsafe HRESULT IOleInPlaceActiveObject.Interface.TranslateAccelerator(MSG* lpmsg)
         {
             return ActiveXInstance.TranslateAccelerator(lpmsg);
         }
 
-        HRESULT Ole32.IOleInPlaceActiveObject.OnFrameWindowActivate(BOOL fActivate)
+        HRESULT IOleInPlaceActiveObject.Interface.OnFrameWindowActivate(BOOL fActivate)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnFrameWindowActivate");
             OnFrameWindowActivate(fActivate);
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleInPlaceActiveObject.OnDocWindowActivate(BOOL fActivate)
+        HRESULT IOleInPlaceActiveObject.Interface.OnDocWindowActivate(BOOL fActivate)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:OnDocWindowActivate.  Activate: {(bool)fActivate}");
             Debug.Indent();
@@ -13690,29 +13691,29 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceActiveObject.ResizeBorder(RECT* prcBorder, Ole32.IOleInPlaceUIWindow pUIWindow, BOOL fFrameWindow)
+        unsafe HRESULT IOleInPlaceActiveObject.Interface.ResizeBorder(RECT* prcBorder, IOleInPlaceUIWindow* pUIWindow, BOOL fFrameWindow)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ResizesBorder");
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleInPlaceActiveObject.EnableModeless(BOOL fEnable)
+        HRESULT IOleInPlaceActiveObject.Interface.EnableModeless(BOOL fEnable)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnableModeless");
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceObject.GetWindow(HWND* phwnd)
+        unsafe HRESULT IOleInPlaceObject.Interface.GetWindow(HWND* phwnd)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetWindow");
             HRESULT hr = ActiveXInstance.GetWindow(phwnd);
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "\twin == " + (phwnd is null ? IntPtr.Zero : *phwnd));
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"\twin == {(phwnd is null ? HWND.Null : *phwnd)}");
             return hr;
         }
 
-        HRESULT Ole32.IOleInPlaceObject.ContextSensitiveHelp(BOOL fEnterMode)
+        HRESULT IOleInPlaceObject.Interface.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ContextSensitiveHelp.  Mode: " + fEnterMode);
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:ContextSensitiveHelp.  Mode: {fEnterMode}");
             if (fEnterMode)
             {
                 OnHelpRequested(new HelpEventArgs(MousePosition));
@@ -13721,7 +13722,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleInPlaceObject.InPlaceDeactivate()
+        HRESULT IOleInPlaceObject.Interface.InPlaceDeactivate()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InPlaceDeactivate");
             Debug.Indent();
@@ -13730,17 +13731,18 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        HRESULT Ole32.IOleInPlaceObject.UIDeactivate()
+        HRESULT IOleInPlaceObject.Interface.UIDeactivate()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:UIDeactivate");
             return ActiveXInstance.UIDeactivate();
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceObject.SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
+        unsafe HRESULT IOleInPlaceObject.Interface.SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
         {
             if (lprcClipRect is not null)
             {
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:SetObjectRects({lprcClipRect->left}, {lprcClipRect->top}, {lprcClipRect->right}, {lprcClipRect->bottom})");
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo,
+                    $"AxSource:SetObjectRects({lprcClipRect->left}, {lprcClipRect->top}, {lprcClipRect->right}, {lprcClipRect->bottom})");
             }
 
             Debug.Indent();
@@ -13749,7 +13751,7 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        HRESULT Ole32.IOleInPlaceObject.ReactivateAndUndo()
+        HRESULT IOleInPlaceObject.Interface.ReactivateAndUndo()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ReactivateAndUndo");
             return HRESULT.S_OK;
@@ -13989,14 +13991,14 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleWindow.GetWindow(HWND* phwnd)
+        unsafe HRESULT IOleWindow.Interface.GetWindow(HWND* phwnd)
         {
-            return ((Ole32.IOleInPlaceObject)this).GetWindow(phwnd);
+            return ((IOleInPlaceObject.Interface)this).GetWindow(phwnd);
         }
 
-        HRESULT Ole32.IOleWindow.ContextSensitiveHelp(BOOL fEnterMode)
+        HRESULT IOleWindow.Interface.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            return ((Ole32.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
+            return ((IOleInPlaceObject.Interface)this).ContextSensitiveHelp(fEnterMode);
         }
 
         unsafe HRESULT Ole32.IPersist.GetClassID(Guid* pClassID)
