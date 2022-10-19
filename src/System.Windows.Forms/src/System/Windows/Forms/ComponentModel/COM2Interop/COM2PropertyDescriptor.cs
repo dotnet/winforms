@@ -487,13 +487,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal Com2Properties PropertyManager
         {
-            set
-            {
-                com2props = value;
-            }
             get
             {
                 return com2props;
+            }
+            set
+            {
+                com2props = value;
             }
         }
 

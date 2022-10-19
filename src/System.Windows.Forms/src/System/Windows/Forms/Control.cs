@@ -1678,7 +1678,6 @@ namespace System.Windows.Forms
 
         internal bool ValidationCancelled
         {
-            set => SetState(States.ValidationCancelled, value);
             get
             {
                 if (GetState(States.ValidationCancelled))
@@ -1696,6 +1695,7 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
+            set => SetState(States.ValidationCancelled, value);
         }
 
         /// <summary>
