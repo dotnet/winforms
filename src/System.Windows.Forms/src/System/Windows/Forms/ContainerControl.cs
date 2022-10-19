@@ -143,11 +143,14 @@ namespace System.Windows.Forms
 
                 // If no one has configured auto scale dimensions yet, the scaling factor
                 // is the unit scale.
-                _currentAutoScaleFactor = saved.IsEmpty ? new SizeF(1.0F, 1.0F) : new SizeF(current.Width / saved.Width, current.Height / saved.Height);
+                _currentAutoScaleFactor = GetCurrentAutoScaleFactor(current, saved);
 
                 return _currentAutoScaleFactor;
             }
         }
+
+        internal static SizeF GetCurrentAutoScaleFactor(SizeF currentAutoScaleDimensions, SizeF savedAutoScaleDimensions)
+            => savedAutoScaleDimensions.IsEmpty ? new SizeF(1.0F, 1.0F) : new SizeF(currentAutoScaleDimensions.Width / savedAutoScaleDimensions.Width, currentAutoScaleDimensions.Height / savedAutoScaleDimensions.Height);
 
         /// <summary>
         ///  Determines the scaling mode of this control. The default is no scaling.
@@ -316,34 +319,42 @@ namespace System.Windows.Forms
             {
                 if (_currentAutoScaleDimensions.IsEmpty)
                 {
-                    switch (AutoScaleMode)
-                    {
-                        case AutoScaleMode.Font:
-                            _currentAutoScaleDimensions = GetFontAutoScaleDimensions();
-                            break;
-
-                        case AutoScaleMode.Dpi:
-                            // Screen Dpi
-                            if (DpiHelper.IsPerMonitorV2Awareness)
-                            {
-                                _currentAutoScaleDimensions = new SizeF(_deviceDpi, _deviceDpi);
-                            }
-                            else
-                            {
-                                // This Dpi value comes from the primary monitor.
-                                _currentAutoScaleDimensions = new SizeF(DpiHelper.DeviceDpi, DpiHelper.DeviceDpi);
-                            }
-
-                            break;
-
-                        default:
-                            _currentAutoScaleDimensions = AutoScaleDimensions;
-                            break;
-                    }
+                    _currentAutoScaleDimensions = GetCurrentAutoScaleDimensions(FontHandle);
                 }
 
                 return _currentAutoScaleDimensions;
             }
+        }
+
+        internal SizeF GetCurrentAutoScaleDimensions(HFONT fontHandle)
+        {
+            var currentAutoScaleDimensions = SizeF.Empty;
+            switch (AutoScaleMode)
+            {
+                case AutoScaleMode.Font:
+                    currentAutoScaleDimensions = GetFontAutoScaleDimensions(fontHandle);
+                    break;
+
+                case AutoScaleMode.Dpi:
+                    // Screen Dpi
+                    if (DpiHelper.IsPerMonitorV2Awareness)
+                    {
+                        currentAutoScaleDimensions = new SizeF(_deviceDpi, _deviceDpi);
+                    }
+                    else
+                    {
+                        // This Dpi value comes from the primary monitor.
+                        currentAutoScaleDimensions = new SizeF(DpiHelper.DeviceDpi, DpiHelper.DeviceDpi);
+                    }
+
+                    break;
+
+                default:
+                    currentAutoScaleDimensions = AutoScaleDimensions;
+                    break;
+            }
+
+            return currentAutoScaleDimensions;
         }
 
         /// <summary>
@@ -730,7 +741,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This method calculates the auto scale dimensions based on the control's current font.
         /// </summary>
-        private unsafe SizeF GetFontAutoScaleDimensions()
+        private unsafe SizeF GetFontAutoScaleDimensions(HFONT fontHandle)
         {
             SizeF retval = SizeF.Empty;
 
@@ -750,7 +761,7 @@ namespace System.Windows.Forms
             // We must do the same here if our dialogs are to scale in a
             // similar fashion.
 
-            using PInvoke.SelectObjectScope fontSelection = new(dc, FontHandle);
+            using PInvoke.SelectObjectScope fontSelection = new(dc, fontHandle);
 
             TEXTMETRICW tm = default;
             PInvoke.GetTextMetrics(dc, &tm);
@@ -1422,7 +1433,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle)
+        internal void ScaleContainerForDpi(int deviceDpiNew, Rectangle suggestedRectangle)
         {
             CommonProperties.xClearAllPreferredSizeCaches(this);
             SuspendAllLayout(this);
@@ -1432,9 +1443,7 @@ namespace System.Windows.Forms
                 {
                     // The suggested rectangle comes from Windows, and it does not match with our calculations for scaling controls by AutoscaleFactor.
                     // Hence, we cannot use AutoscaleFactor here for scaling the control properties. See the below description for more details.
-                    float xScaleFactor = (float)suggestedRectangle.Width / Width;
-                    float yScaleFactor = (float)suggestedRectangle.Height / Height;
-                    ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize: false);
+                    ScaleMinMaxSize(AutoScaleFactor.Width, AutoScaleFactor.Height, updateContainerSize: false);
                 }
 
                 // If this container is a top-level window, we would receive WM_DPICHANGED message that
@@ -1461,16 +1470,8 @@ namespace System.Windows.Forms
                 // this control further by the 'OnFontChanged' event.
                 _isScaledByDpiChangedEvent = true;
 
-                // Factor is used only to scale Font. After that AutoscaleFactor kicks in to scale controls.
-                var factor = ((float)deviceDpiNew) / deviceDpiOld;
-
-                // DpiFontscache is available only in PermonitorV2 mode applications.
-                if (!TryGetDpiFont(deviceDpiNew, out Font? fontForDpi))
-                {
-                    Font currentFont = Font;
-                    fontForDpi = currentFont.WithSize(currentFont.Size * factor);
-                    AddToDpiFonts(deviceDpiNew, fontForDpi);
-                }
+                TryGetDpiFont(deviceDpiNew, out Font? fontForDpi);
+                Debug.Assert(fontForDpi != null, "We should have Font updated for Dpi from WM_GETDPISCALEDSIZE message");
 
                 ScaledControlFont = fontForDpi;
                 if (IsFontSet())

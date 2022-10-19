@@ -123,5 +123,41 @@ namespace System.Windows.Forms.Tests.Dpi
                 PInvoke.SetThreadDpiAwarenessContext(originalAwarenessContext);
             }
         }
+
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/7579")]
+        [WinFormsTheory(Skip = "Lab machines seems not setting thread's Dpi context. See https://github.com/dotnet/winforms/issues/7579")]
+        [InlineData(3.5 * DpiHelper.LogicalDpi)]
+        public void Form_DpiChanged_NonLinear_DesiredSize(int newDpi)
+        {
+            // Run tests only on Windows 10 versions that support thread dpi awareness.
+            if (!PlatformDetection.IsWindows10Version1803OrGreater)
+            {
+                return;
+            }
+
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+            try
+            {
+                using var form = new Form();
+                form.AutoScaleMode = AutoScaleMode.Font;
+                form.Show();
+
+                DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
+                Drawing.Size nonLInearSize = form.Size;
+
+                // Rollback to 96 Dpi, and chnage AutoScaleMode to check with linear size
+                DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, (int)DpiHelper.LogicalDpi);
+                form.AutoScaleMode = AutoScaleMode.Dpi;
+
+                DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
+                Assert.NotEqual(form.Size, nonLInearSize);
+                form.Close();
+            }
+            finally
+            {
+                // Reset back to original awareness context.
+                PInvoke.SetThreadDpiAwarenessContext(originalAwarenessContext);
+            }
+        }
     }
 }
