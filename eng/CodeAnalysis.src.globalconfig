@@ -1209,7 +1209,7 @@ dotnet_diagnostic.SA1409.severity = none
 dotnet_diagnostic.SA1410.severity = warning
 
 # SA1411: Attribute constructor shouldn't use unnecessary parenthesis
-dotnet_diagnostic.SA1411.severity = none # TODO: warning
+dotnet_diagnostic.SA1411.severity = warning
 
 # SA1412: Store files as UTF-8 with byte order mark
 dotnet_diagnostic.SA1412.severity = none

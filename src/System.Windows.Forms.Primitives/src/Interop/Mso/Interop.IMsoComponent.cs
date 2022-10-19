@@ -24,7 +24,7 @@ internal static partial class Interop
         ///  can query the reg info  of the active (or tracking) component at any time via
         ///  <see cref="IMsoComponentManager.FGetActiveComponent"/>.
         /// </remarks>
-        [ComImport()]
+        [ComImport]
         [Guid(ComponentIds.IID_IMsoComponent)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IMsoComponent

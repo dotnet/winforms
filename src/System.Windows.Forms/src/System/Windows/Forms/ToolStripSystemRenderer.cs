@@ -9,7 +9,7 @@ namespace System.Windows.Forms
 {
     public class ToolStripSystemRenderer : ToolStripRenderer
     {
-        [ThreadStatic()]
+        [ThreadStatic]
         private static VisualStyleRenderer? t_renderer = null;
         private ToolStripRenderer? _toolStripHighContrastRenderer;
 
