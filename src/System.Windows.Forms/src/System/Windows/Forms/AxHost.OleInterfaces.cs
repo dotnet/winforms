@@ -10,6 +10,8 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Ole = Windows.Win32.System.Ole;
+using Windows.Win32.System.Com;
+using IEnumUnknown = Interop.Ole32.IEnumUnknown;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms
@@ -22,7 +24,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class OleInterfaces :
             IOleControlSite,
-            IOleClientSite,
+            Ole.IOleClientSite.Interface,
             IOleInPlaceSite,
             ISimpleFrameSite,
             IVBGetControl,
@@ -373,13 +375,13 @@ namespace System.Windows.Forms
             }
 
             // IOleClientSite methods:
-            HRESULT IOleClientSite.SaveObject()
+            HRESULT Ole.IOleClientSite.Interface.SaveObject()
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in SaveObject");
                 return HRESULT.E_NOTIMPL;
             }
 
-            unsafe HRESULT IOleClientSite.GetMoniker(OLEGETMONIKER dwAssign, OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
+            unsafe HRESULT Ole.IOleClientSite.Interface.GetMoniker(Ole.OLEGETMONIKER dwAssign, Ole.OLEWHICHMK dwWhichMoniker, IMoniker** ppmk)
             {
                 if (ppmk is null)
                 {
@@ -387,17 +389,23 @@ namespace System.Windows.Forms
                 }
 
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMoniker");
-                *ppmk = IntPtr.Zero;
+                *ppmk = null;
                 return HRESULT.E_NOTIMPL;
             }
 
-            IOleContainer IOleClientSite.GetContainer()
+            unsafe HRESULT Ole.IOleClientSite.Interface.GetContainer(Ole.IOleContainer** ppContainer)
             {
+                if (ppContainer is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in getContainer");
-                return _host.GetParentContainer();
+                *ppContainer = (Ole.IOleContainer*)Marshal.GetComInterfaceForObject<AxContainer, Ole.IOleContainer.Interface>(_host.GetParentContainer());
+                return HRESULT.S_OK;
             }
 
-            unsafe HRESULT IOleClientSite.ShowObject()
+            unsafe HRESULT Ole.IOleClientSite.Interface.ShowObject()
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in ShowObject");
                 if (_host.GetAxState(s_fOwnWindow))
@@ -445,13 +453,13 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            HRESULT IOleClientSite.OnShowWindow(BOOL fShow)
+            HRESULT Ole.IOleClientSite.Interface.OnShowWindow(BOOL fShow)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in OnShowWindow");
                 return HRESULT.S_OK;
             }
 
-            HRESULT IOleClientSite.RequestNewObjectLayout()
+            HRESULT Ole.IOleClientSite.Interface.RequestNewObjectLayout()
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in RequestNewObjectLayout");
                 return HRESULT.E_NOTIMPL;

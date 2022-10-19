@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using static Interop;
 
@@ -46,7 +47,7 @@ namespace System.Windows.Forms
         private EventHandler selectionChangeHandler;
         private Guid clsid;
         // Pointers to the ActiveX object: Interface pointers are cached for perf.
-        private Ole32.IOleObject axOleObject;
+        private IOleObject.Interface axOleObject;
         private IOleInPlaceObject.Interface axOleInPlaceObject;
         private IOleInPlaceActiveObject.Interface axOleInPlaceActiveObject;
         private Ole32.IOleControl axOleControl;
@@ -717,9 +718,11 @@ namespace System.Windows.Forms
         internal unsafe bool DoVerb(Ole32.OLEIVERB verb)
         {
             RECT posRect = Bounds;
-            HRESULT hr = axOleObject.DoVerb(verb, null, ActiveXSite, 0, Handle, &posRect);
-            Debug.Assert(hr == HRESULT.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
-            return hr == HRESULT.S_OK;
+            bool result = ComHelpers.TryQueryInterface(ActiveXSite, out IOleClientSite* clientSite);
+            Debug.Assert(result);
+            HRESULT hr = axOleObject.DoVerb((int)verb, null, clientSite, 0, HWND, &posRect);
+            Debug.Assert(hr.Succeeded, $"DoVerb call failed for verb 0x{verb}");
+            return hr.Succeeded;
         }
 
         //
@@ -946,14 +949,15 @@ namespace System.Windows.Forms
             if (ActiveXState == WebBrowserHelper.AXState.Loaded)
             {
                 // See if the ActiveX control returns OLEMISC_SETCLIENTSITEFIRST
-                Ole32.OLEMISC bits = 0;
-                HRESULT hr = axOleObject.GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
-                if (hr.Succeeded && ((bits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0))
+                HRESULT hr = axOleObject.GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC bits);
+                if (hr.Succeeded && bits.HasFlag(OLEMISC.OLEMISC_SETCLIENTSITEFIRST))
                 {
                     //
                     // Simply setting the site to the ActiveX control should activate it.
                     // And this will take us to the Running state.
-                    axOleObject.SetClientSite(ActiveXSite);
+                    bool result = ComHelpers.TryQueryInterface(ActiveXSite, out IOleClientSite* clientSite);
+                    Debug.Assert(result);
+                    axOleObject.SetClientSite(clientSite);
                 }
 
                 //
@@ -970,7 +974,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void TransitionFromRunningToLoaded()
+        private unsafe void TransitionFromRunningToLoaded()
         {
             Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Running, "Wrong start state to transition from");
             if (ActiveXState == WebBrowserHelper.AXState.Running)
@@ -1084,7 +1088,7 @@ namespace System.Windows.Forms
         private void AttachInterfacesInternal()
         {
             Debug.Assert(activeXInstance is not null, "The native control is null");
-            axOleObject = (Ole32.IOleObject)activeXInstance;
+            axOleObject = (IOleObject.Interface)activeXInstance;
             axOleInPlaceObject = (IOleInPlaceObject.Interface)activeXInstance;
             axOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)activeXInstance;
             axOleControl = (Ole32.IOleControl)activeXInstance;
@@ -1165,7 +1169,7 @@ namespace System.Windows.Forms
             var sz = new Size(width, height);
             bool resetExtents = DesignMode;
             Pixel2hiMetric(ref sz);
-            HRESULT hr = axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
+            HRESULT hr = axOleObject.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
             if (hr != HRESULT.S_OK)
             {
                 resetExtents = true;
@@ -1173,8 +1177,8 @@ namespace System.Windows.Forms
 
             if (resetExtents)
             {
-                axOleObject.GetExtent(Ole32.DVASPECT.CONTENT, &sz);
-                axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
+                axOleObject.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
+                axOleObject.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
             }
 
             return GetExtent();
@@ -1182,10 +1186,10 @@ namespace System.Windows.Forms
 
         private unsafe Size GetExtent()
         {
-            var sz = default(Size);
-            axOleObject.GetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            HiMetric2Pixel(ref sz);
-            return sz;
+            Size size = default;
+            axOleObject.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+            HiMetric2Pixel(ref size);
+            return size;
         }
 
         private unsafe void HiMetric2Pixel(ref Size sz)

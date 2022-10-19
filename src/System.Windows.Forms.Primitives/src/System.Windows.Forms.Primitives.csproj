@@ -24,7 +24,7 @@
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
-    <RootNamespace/>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>

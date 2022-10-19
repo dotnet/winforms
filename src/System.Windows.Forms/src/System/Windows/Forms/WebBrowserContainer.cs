@@ -8,12 +8,14 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms
 {
-    internal class WebBrowserContainer : Ole32.IOleContainer, Ole32.IOleInPlaceFrame
+    internal class WebBrowserContainer : IOleContainer.Interface, Ole32.IOleInPlaceFrame
     {
         private readonly WebBrowserBase parent;
         private IContainer assocContainer;  // associated IContainer...
@@ -30,21 +32,30 @@ namespace System.Windows.Forms
             this.parent = parent;
         }
 
+        unsafe HRESULT IParseDisplayName.Interface.ParseDisplayName(IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, IMoniker** ppmkOut)
+        {
+            return ((IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
+        }
+
         // IOleContainer methods:
-        unsafe HRESULT Ole32.IOleContainer.ParseDisplayName(IntPtr pbc, string pszDisplayName, uint* pchEaten, IntPtr* ppmkOut)
+        unsafe HRESULT IOleContainer.Interface.ParseDisplayName(IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, IMoniker** ppmkOut)
         {
             if (ppmkOut is not null)
             {
-                *ppmkOut = IntPtr.Zero;
+                *ppmkOut = null;
             }
 
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT Ole32.IOleContainer.EnumObjects(Ole32.OLECONTF grfFlags, out Ole32.IEnumUnknown ppenum)
+        unsafe HRESULT IOleContainer.Interface.EnumObjects(OLECONTF grfFlags, IEnumUnknown** ppenum)
         {
-            ppenum = null;
-            if ((grfFlags & Ole32.OLECONTF.EMBEDDINGS) != 0)
+            if (ppenum is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            if ((grfFlags & OLECONTF.OLECONTF_EMBEDDINGS) != 0)
             {
                 Debug.Assert(parent is not null, "gotta have it...");
                 ArrayList list = new ArrayList();
@@ -53,16 +64,18 @@ namespace System.Windows.Forms
                 {
                     object[] temp = new object[list.Count];
                     list.CopyTo(temp, 0);
-                    ppenum = new AxHost.EnumUnknown(temp);
+                    bool hr = ComHelpers.TryQueryInterface(new AxHost.EnumUnknown(temp), out *ppenum);
+                    Debug.Assert(hr);
                     return HRESULT.S_OK;
                 }
             }
 
-            ppenum = new AxHost.EnumUnknown(null);
+            bool result = ComHelpers.TryQueryInterface(new AxHost.EnumUnknown(null), out *ppenum);
+            Debug.Assert(result);
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleContainer.LockContainer(BOOL fLock)
+        HRESULT IOleContainer.Interface.LockContainer(BOOL fLock)
         {
             return HRESULT.E_NOTIMPL;
         }
@@ -99,7 +112,7 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(IOleInPlaceActiveObject.Interface pActiveObject, string pszObjName)
+        unsafe HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(IOleInPlaceActiveObject.Interface pActiveObject, string pszObjName)
         {
             if (pActiveObject is null)
             {
@@ -113,10 +126,12 @@ namespace System.Windows.Forms
             }
 
             WebBrowserBase ctl = null;
-            if (pActiveObject is Ole32.IOleObject oleObject)
+            if (pActiveObject is IOleObject.Interface oleObject)
             {
-                oleObject.GetClientSite(out Ole32.IOleClientSite clientSite);
-                if (clientSite is WebBrowserSiteBase webBrowserSiteBase)
+                IOleClientSite* clientSite;
+                oleObject.GetClientSite(&clientSite);
+                var clientSiteObject = Marshal.GetObjectForIUnknown((nint)clientSite);
+                if (clientSiteObject is WebBrowserSiteBase webBrowserSiteBase)
                 {
                     ctl = webBrowserSiteBase.Host;
                 }

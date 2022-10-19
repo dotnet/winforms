@@ -9,7 +9,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
-using Windows.Win32.System.Com;
+using Com = Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using static Interop;
 using IAdviseSink = System.Runtime.InteropServices.ComTypes.IAdviseSink;
 
@@ -43,7 +44,7 @@ namespace System.Windows.Forms
             private readonly IWindowTarget _controlWindowTarget;
             private Rectangle? _lastClipRect;
 
-            private Ole32.IOleClientSite? _clientSite;
+            private IOleClientSite.Interface? _clientSite;
             private Ole32.IOleInPlaceUIWindow? _inPlaceUiWindow;
             private Ole32.IOleInPlaceFrame? _inPlaceFrame;
             private readonly List<IAdviseSink> _adviseList;
@@ -219,24 +220,25 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Advise
             /// </summary>
-            internal uint Advise(IAdviseSink pAdvSink)
+            internal unsafe uint Advise(Com.IAdviseSink* pAdvSink)
             {
-                _adviseList.Add(pAdvSink);
+                _adviseList.Add((IAdviseSink)Marshal.GetObjectForIUnknown((nint)pAdvSink));
                 return (uint)_adviseList.Count;
             }
 
             /// <summary>
             ///  Implements IOleObject::Close
             /// </summary>
-            internal void Close(Ole32.OLECLOSE dwSaveOption)
+            internal void Close(OLECLOSE dwSaveOption)
             {
                 if (_activeXState[s_inPlaceActive])
                 {
                     InPlaceDeactivate();
                 }
 
-                if ((dwSaveOption == Ole32.OLECLOSE.SAVEIFDIRTY || dwSaveOption == Ole32.OLECLOSE.PROMPTSAVE)
-                    && _activeXState[s_isDirty])
+                if ((dwSaveOption == OLECLOSE.OLECLOSE_SAVEIFDIRTY ||
+                     dwSaveOption == OLECLOSE.OLECLOSE_PROMPTSAVE) &&
+                    _activeXState[s_isDirty])
                 {
                     _clientSite?.SaveObject();
                     SendOnSave();
@@ -249,7 +251,7 @@ namespace System.Windows.Forms
             internal unsafe HRESULT DoVerb(
                 Ole32.OLEIVERB iVerb,
                 MSG* lpmsg,
-                Ole32.IOleClientSite pActiveSite,
+                IOleClientSite* pActiveSite,
                 int lindex,
                 HWND hwndParent,
                 RECT* lprcPosRect)
@@ -546,14 +548,14 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
 
-                    DISPPARAMS dispParams = default(DISPPARAMS);
+                    Com.DISPPARAMS dispParams = default;
                     object[] pvt = new object[1];
                     Guid g = Guid.Empty;
                     HRESULT hr = disp.Invoke(
                         dispid,
                         &g,
                         PInvoke.LCID.USER_DEFAULT,
-                        DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
+                        Com.DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                         &dispParams,
                         pvt,
                         null,
@@ -580,7 +582,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::GetClientSite.
             /// </summary>
-            internal Ole32.IOleClientSite? GetClientSite() => _clientSite;
+            internal IOleClientSite.Interface? GetClientSite() => _clientSite;
 
             internal unsafe HRESULT GetControlInfo(Ole32.CONTROLINFO* pCI)
             {
@@ -1095,7 +1097,7 @@ namespace System.Windows.Forms
                             {
                                 using BSTR bstrSource = new(_control.GetType().FullName!);
                                 using BSTR bstrDescription = new(errorString);
-                                EXCEPINFO err = new()
+                                Com.EXCEPINFO err = new()
                                 {
                                     bstrSource = bstrSource,
                                     bstrDescription = bstrDescription,
@@ -1323,16 +1325,20 @@ namespace System.Windows.Forms
                 // Now use the rest of the goo that we got passed in.
                 pQaControl->cbSize = (uint)sizeof(Ole32.QACONTROL);
 
-                SetClientSite(pQaContainer.pClientSite);
+                if (pQaContainer.pClientSite is not null)
+                {
+                    bool result = ComHelpers.TryQueryInterface(pQaContainer.pClientSite, out IOleClientSite* clientSite);
+                    Debug.Assert(result);
+                    SetClientSite(clientSite);
+                }
 
                 if (pQaContainer.pAdviseSink is not null)
                 {
                     SetAdvise(Ole32.DVASPECT.CONTENT, 0, pQaContainer.pAdviseSink);
                 }
 
-                Ole32.OLEMISC status = 0;
-                ((Ole32.IOleObject)_control).GetMiscStatus(Ole32.DVASPECT.CONTENT, &status);
-                pQaControl->dwMiscStatus = status;
+                ((IOleObject.Interface)_control).GetMiscStatus(Com.DVASPECT.DVASPECT_CONTENT, out OLEMISC status);
+                pQaControl->dwMiscStatus = (Ole32.OLEMISC)status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
                 // VB6 expects the control to do this during IQuickActivate, otherwise it will not hook events at runtime.
@@ -1457,7 +1463,7 @@ namespace System.Windows.Forms
 
                     if (converter.CanConvertFrom(typeof(string)))
                     {
-                        VARIANT variant = default(VARIANT);
+                        Com.VARIANT variant = default;
                         value = converter.ConvertToInvariantString(props[i].GetValue(_control));
                         Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
                         pPropBag.Write(props[i].Name, ref value!);
@@ -1535,7 +1541,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::SetClientSite.
             /// </summary>
-            internal void SetClientSite(Ole32.IOleClientSite? value)
+            internal void SetClientSite(IOleClientSite* value)
             {
                 if (_clientSite is not null)
                 {
@@ -1545,7 +1551,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                _clientSite = value;
+                _clientSite = value is null ? null : (IOleClientSite.Interface)Marshal.GetObjectForIUnknown((nint)value);
 
                 if (_clientSite is not null)
                 {

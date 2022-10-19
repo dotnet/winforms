@@ -276,6 +276,7 @@ IFileSaveDialog
 IOleInPlaceActiveObject
 IOleInPlaceObject
 IOleInPlaceObjectWindowless
+IOleObject
 IOleWindow
 IMAGE_LIST_WRITE_STREAM_FLAGS
 ImageList_Add
