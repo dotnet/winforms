@@ -1113,7 +1113,7 @@ dotnet_diagnostic.SA1210.severity = none
 dotnet_diagnostic.SA1211.severity = none
 
 # SA1212: A get accessor appears after a set accessor within a property or indexer
-dotnet_diagnostic.SA1212.severity = none # TODO: warning
+dotnet_diagnostic.SA1212.severity = warning
 
 # SA1213: Event accessors should follow order
 dotnet_diagnostic.SA1213.severity = none
