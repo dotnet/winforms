@@ -666,7 +666,7 @@ namespace System.Windows.Forms
         ///  the container control background is rendered on the <see cref="Label"/>.
         /// </summary>
         [Obsolete("This property has been deprecated. Use BackColor instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
-        virtual new protected bool RenderTransparent
+        protected new virtual bool RenderTransparent
         {
             get => ((Control)this).RenderTransparent;
             set { }

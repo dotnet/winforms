@@ -453,7 +453,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Called when the error window gets a windows message.
             /// </summary>
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 switch (m.MsgInternal)
                 {

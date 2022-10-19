@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         }
 
         [Conditional("DEBUG")]
-        private unsafe static void ValidateHdc(HDC hdc)
+        private static unsafe void ValidateHdc(HDC hdc)
         {
             // A few sanity checks against the HDC to see if it was left in a dirty state
 

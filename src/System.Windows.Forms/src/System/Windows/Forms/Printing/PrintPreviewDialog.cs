@@ -69,7 +69,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public IButtonControl? AcceptButton
+        public new IButtonControl? AcceptButton
         {
             get => base.AcceptButton;
             set => base.AcceptButton = value;
@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool AutoScale
+        public new bool AutoScale
         {
             get
             {
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackColorChanged
+        public new event EventHandler? BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public IButtonControl? CancelButton
+        public new IButtonControl? CancelButton
         {
             get => base.CancelButton;
             set => base.CancelButton = value;
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool ControlBox
+        public new bool ControlBox
         {
             get => base.ControlBox;
             set => base.ControlBox = value;
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public FormBorderStyle FormBorderStyle
+        public new FormBorderStyle FormBorderStyle
         {
             get => base.FormBorderStyle;
             set => base.FormBorderStyle = value;
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool HelpButton
+        public new bool HelpButton
         {
             get => base.HelpButton;
             set => base.HelpButton = value;
@@ -238,7 +238,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Icon? Icon
+        public new Icon? Icon
         {
             get => base.Icon;
             set => base.Icon = value;
@@ -250,7 +250,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool IsMdiContainer
+        public new bool IsMdiContainer
         {
             get => base.IsMdiContainer;
             set => base.IsMdiContainer = value;
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool KeyPreview
+        public new bool KeyPreview
         {
             get => base.KeyPreview;
             set => base.KeyPreview = value;
@@ -274,7 +274,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Size MaximumSize
+        public new Size MaximumSize
         {
             get => base.MaximumSize;
             set => base.MaximumSize = value;
@@ -282,7 +282,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? MaximumSizeChanged
+        public new event EventHandler? MaximumSizeChanged
         {
             add => base.MaximumSizeChanged += value;
             remove => base.MaximumSizeChanged -= value;
@@ -294,7 +294,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool MaximizeBox
+        public new bool MaximizeBox
         {
             get => base.MaximizeBox;
             set => base.MaximizeBox = value;
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Padding Margin
+        public new Padding Margin
         {
             get => base.Margin;
             set => base.Margin = value;
@@ -325,7 +325,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Size MinimumSize
+        public new Size MinimumSize
         {
             get => base.MinimumSize;
             set => base.MinimumSize = value;
@@ -333,7 +333,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? MinimumSizeChanged
+        public new event EventHandler? MinimumSizeChanged
         {
             add => base.MinimumSizeChanged += value;
             remove => base.MinimumSizeChanged -= value;
@@ -344,7 +344,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Padding Padding
+        public new Padding Padding
         {
             get => base.Padding;
             set => base.Padding = value;
@@ -363,7 +363,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Size Size
+        public new Size Size
         {
             get => base.Size;
             set => base.Size = value;
@@ -371,7 +371,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? SizeChanged
+        public new event EventHandler? SizeChanged
         {
             add => base.SizeChanged += value;
             remove => base.SizeChanged -= value;
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public FormStartPosition StartPosition
+        public new FormStartPosition StartPosition
         {
             get => base.StartPosition;
             set => base.StartPosition = value;
@@ -395,7 +395,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool TopMost
+        public new bool TopMost
         {
             get => base.TopMost;
             set => base.TopMost = value;
@@ -406,7 +406,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Color TransparencyKey
+        public new Color TransparencyKey
         {
             get => base.TransparencyKey;
             set => base.TransparencyKey = value;
@@ -417,7 +417,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool UseWaitCursor
+        public new bool UseWaitCursor
         {
             get => base.UseWaitCursor;
             set => base.UseWaitCursor = value;
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public FormWindowState WindowState
+        public new FormWindowState WindowState
         {
             get => base.WindowState;
             set => base.WindowState = value;
@@ -439,7 +439,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public AccessibleRole AccessibleRole
+        public new AccessibleRole AccessibleRole
         {
             get => base.AccessibleRole;
             set => base.AccessibleRole = value;
@@ -450,7 +450,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public string? AccessibleDescription
+        public new string? AccessibleDescription
         {
             get => base.AccessibleDescription;
             set => base.AccessibleDescription = value;
@@ -461,7 +461,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public string? AccessibleName
+        public new string? AccessibleName
         {
             get => base.AccessibleName;
             set => base.AccessibleName = value;
@@ -473,7 +473,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool CausesValidation
+        public new bool CausesValidation
         {
             get => base.CausesValidation;
             set => base.CausesValidation = value;
@@ -481,7 +481,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? CausesValidationChanged
+        public new event EventHandler? CausesValidationChanged
         {
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
@@ -492,7 +492,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public ControlBindingsCollection DataBindings
+        public new ControlBindingsCollection DataBindings
         {
             get => base.DataBindings;
         }
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool Enabled
+        public new bool Enabled
         {
             get => base.Enabled;
             set => base.Enabled = value;
@@ -515,7 +515,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? EnabledChanged
+        public new event EventHandler? EnabledChanged
         {
             add => base.EnabledChanged += value;
             remove => base.EnabledChanged -= value;
@@ -527,7 +527,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        new public Point Location
+        public new Point Location
         {
             get => base.Location;
             set => base.Location = value;
@@ -535,7 +535,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? LocationChanged
+        public new event EventHandler? LocationChanged
         {
             add => base.LocationChanged += value;
             remove => base.LocationChanged -= value;
@@ -543,7 +543,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public object? Tag
+        public new object? Tag
         {
             get => base.Tag;
             set => base.Tag = value;
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? CursorChanged
+        public new event EventHandler? CursorChanged
         {
             add => base.CursorChanged += value;
             remove => base.CursorChanged -= value;
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -614,7 +614,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -626,7 +626,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode
+        public new ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
@@ -647,7 +647,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Size AutoScrollMargin
+        public new Size AutoScrollMargin
         {
             get => base.AutoScrollMargin;
             set => base.AutoScrollMargin = value;
@@ -658,7 +658,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public Size AutoScrollMinSize
+        public new Size AutoScrollMinSize
         {
             get => base.AutoScrollMinSize;
             set => base.AutoScrollMinSize = value;
@@ -682,7 +682,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool Visible
+        public new bool Visible
         {
             get => base.Visible;
             set => base.Visible = value;
@@ -690,7 +690,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? VisibleChanged
+        public new event EventHandler? VisibleChanged
         {
             add => base.VisibleChanged += value;
             remove => base.VisibleChanged -= value;
@@ -709,7 +709,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? ForeColorChanged
+        public new event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -763,7 +763,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public bool TabStop
+        public new bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;
@@ -771,7 +771,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? TabStopChanged
+        public new event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -791,7 +791,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -813,7 +813,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? DockChanged
+        public new event EventHandler? DockChanged
         {
             add => base.DockChanged += value;
             remove => base.DockChanged -= value;
@@ -834,7 +834,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? FontChanged
+        public new event EventHandler? FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -843,7 +843,7 @@ namespace System.Windows.Forms
         // DockPadding is not relevant to UpDownBase
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public DockPaddingEdges DockPadding
+        public new DockPaddingEdges DockPadding
         {
             get => base.DockPadding;
         }

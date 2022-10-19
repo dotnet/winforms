@@ -27,7 +27,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override Type Interface => typeof(VSSDK.IVsPerPropertyBrowsing);
 
-        public unsafe static bool AllowChildProperties(Com2PropertyDescriptor propDesc)
+        public static unsafe bool AllowChildProperties(Com2PropertyDescriptor propDesc)
         {
             if (propDesc.TargetObject is VSSDK.IVsPerPropertyBrowsing)
             {

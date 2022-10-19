@@ -21,7 +21,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static CollectionCodeDomSerializer Default
+        internal static new CollectionCodeDomSerializer Default
         {
             get
             {

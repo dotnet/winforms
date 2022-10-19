@@ -569,7 +569,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Identifies where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
         /// </summary>
-        public unsafe static int GetTextBaseline(Control ctrl, ContentAlignment alignment)
+        public static unsafe int GetTextBaseline(Control ctrl, ContentAlignment alignment)
         {
             //determine the actual client area we are working in (w/padding)
             Rectangle face = ctrl.ClientRectangle;

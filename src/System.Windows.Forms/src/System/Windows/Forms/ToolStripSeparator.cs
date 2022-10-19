@@ -306,7 +306,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeForeColor() => ForeColor != SystemColors.ControlDark;
 
-        internal protected override void SetBounds(Rectangle rect)
+        protected internal override void SetBounds(Rectangle rect)
         {
             if (Owner is ToolStripDropDownMenu dropDownMenu)
             {

@@ -113,7 +113,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Displays a file open dialog.
         /// </summary>
-        private protected unsafe override bool RunFileDialog(OPENFILENAME* ofn)
+        private protected override unsafe bool RunFileDialog(OPENFILENAME* ofn)
         {
             bool result = PInvoke.GetOpenFileName(ofn);
             if (!result)
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected unsafe override string[] ProcessVistaFiles(IFileDialog* dialog)
+        private protected override unsafe string[] ProcessVistaFiles(IFileDialog* dialog)
         {
             if (!Multiselect)
             {
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
             return files;
         }
 
-        private protected unsafe override IFileDialog* CreateVistaDialog()
+        private protected override unsafe IFileDialog* CreateVistaDialog()
         {
             PInvoke.CoCreateInstance(
                 in CLSID.FileOpenDialog,

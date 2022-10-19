@@ -288,7 +288,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -296,7 +296,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -3786,7 +3786,7 @@ namespace System.Windows.Forms
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the combo continues to function properly.
         /// </summary>
-        protected unsafe override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch ((WM)m.Msg)
             {

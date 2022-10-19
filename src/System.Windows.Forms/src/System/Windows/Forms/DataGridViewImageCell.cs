@@ -91,7 +91,7 @@ namespace System.Windows.Forms
             }
         }
 
-        static internal Bitmap ErrorBitmap
+        internal static Bitmap ErrorBitmap
         {
             get
             {
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
             }
         }
 
-        static internal Icon ErrorIcon
+        internal static Icon ErrorIcon
         {
             get
             {

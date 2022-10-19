@@ -3204,19 +3204,19 @@ namespace System.Windows.Forms.Tests
 
             public new void DetachSink() => base.DetachSink();
 
-            public new static Font GetFontFromIFont(object font) => AxHost.GetFontFromIFont(font);
+            public static new Font GetFontFromIFont(object font) => AxHost.GetFontFromIFont(font);
 
-            public new static object GetIFontDispFromFont(Font font) => AxHost.GetIFontDispFromFont(font);
+            public static new object GetIFontDispFromFont(Font font) => AxHost.GetIFontDispFromFont(font);
 
-            public new static object GetIFontFromFont(Font font) => AxHost.GetIFontFromFont(font);
+            public static new object GetIFontFromFont(Font font) => AxHost.GetIFontFromFont(font);
 
-            public new static object GetIPictureFromCursor(Cursor cursor) => AxHost.GetIPictureFromCursor(cursor);
+            public static new object GetIPictureFromCursor(Cursor cursor) => AxHost.GetIPictureFromCursor(cursor);
 
-            public new static object GetIPictureDispFromPicture(Image image) => AxHost.GetIPictureDispFromPicture(image);
+            public static new object GetIPictureDispFromPicture(Image image) => AxHost.GetIPictureDispFromPicture(image);
 
-            public new static object GetIPictureFromPicture(Image image) => AxHost.GetIPictureFromPicture(image);
+            public static new object GetIPictureFromPicture(Image image) => AxHost.GetIPictureFromPicture(image);
 
-            public new static Image GetPictureFromIPicture(object picture) => AxHost.GetPictureFromIPicture(picture);
+            public static new Image GetPictureFromIPicture(object picture) => AxHost.GetPictureFromIPicture(picture);
 
             public new void OnEnter(EventArgs e) => base.OnEnter(e);
 

@@ -10,16 +10,16 @@ internal static partial class Interop
     {
         [DllImport(Libraries.Oleaut32, PreserveSig = false)]
         [return: MarshalAs(UnmanagedType.Interface)]
-        private unsafe static extern object OleCreatePictureIndirect(PICTDESC* pictdesc, in Guid refiid, BOOL fOwn);
+        private static extern unsafe object OleCreatePictureIndirect(PICTDESC* pictdesc, in Guid refiid, BOOL fOwn);
 
         [DllImport(Libraries.Oleaut32, EntryPoint = "OleCreatePictureIndirect")]
-        private static unsafe extern int OleCreatePictureIndirectRaw(PICTDESC* pictdesc, Guid* refiid, BOOL fOwn, IntPtr* lplpvObj);
+        private static extern unsafe int OleCreatePictureIndirectRaw(PICTDESC* pictdesc, Guid* refiid, BOOL fOwn, IntPtr* lplpvObj);
 
         /// <param name="fOwn">
         ///  <see langref="true"/> if the picture object is to destroy its picture when the object is destroyed.
         ///  (The picture handle in the <paramref name="pictdesc"/>.)
         /// </param>
-        public unsafe static object OleCreatePictureIndirect(ref PICTDESC pictdesc, in Guid refiid, BOOL fOwn)
+        public static unsafe object OleCreatePictureIndirect(ref PICTDESC pictdesc, in Guid refiid, BOOL fOwn)
         {
             pictdesc.cbSizeofstruct = (uint)sizeof(PICTDESC);
             fixed (PICTDESC* p = &pictdesc)
@@ -28,7 +28,7 @@ internal static partial class Interop
             }
         }
 
-        public unsafe static object OleCreatePictureIndirect(Guid* refiid)
+        public static unsafe object OleCreatePictureIndirect(Guid* refiid)
         {
             IntPtr lpPicture = IntPtr.Zero;
             int errorCode = OleCreatePictureIndirectRaw(null, refiid, true, &lpPicture);

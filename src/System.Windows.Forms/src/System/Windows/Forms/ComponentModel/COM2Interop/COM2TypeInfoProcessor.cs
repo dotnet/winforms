@@ -90,7 +90,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Given an Object, this attempts to locate its type info. If it implements IProvideMultipleClassInfo
         ///  all available type infos will be returned, otherwise the primary one will be called.
         /// </summary>
-        public unsafe static ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
+        public static unsafe ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
         {
             if (obj is IProvideMultipleClassInfo pCI)
             {
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Retrieve the dispid of the property that we are to use as the name
         ///  member.  In this case, the grid will put parens around the name.
         /// </summary>
-        public unsafe static DispatchID GetNameDispId(IDispatch obj)
+        public static unsafe DispatchID GetNameDispId(IDispatch obj)
         {
             DispatchID dispid = DispatchID.UNKNOWN;
             string[] names = null;
@@ -267,7 +267,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return new Com2Properties(obj, temp2, defaultProp);
         }
 
-        private unsafe static Guid GetGuidForTypeInfo(ITypeInfo typeInfo, uint[] versions)
+        private static unsafe Guid GetGuidForTypeInfo(ITypeInfo typeInfo, uint[] versions)
         {
             TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
@@ -297,7 +297,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  user defined, which and may be aliased into other type infos.  This function
         ///  will recursively walk the ITypeInfos to resolve the type to a clr Type.
         /// </summary>
-        private unsafe static Type GetValueTypeFromTypeDesc(in TYPEDESC typeDesc, ITypeInfo typeInfo, object[] typeData)
+        private static unsafe Type GetValueTypeFromTypeDesc(in TYPEDESC typeDesc, ITypeInfo typeInfo, object[] typeData)
         {
             uint hreftype;
             HRESULT hr = HRESULT.S_OK;
@@ -604,7 +604,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return pi;
         }
 
-        private unsafe static void ProcessFunctions(ITypeInfo typeInfo, IDictionary propInfoList, DispatchID dispidToGet, DispatchID nameDispID, ref bool addAboutBox)
+        private static unsafe void ProcessFunctions(ITypeInfo typeInfo, IDictionary propInfoList, DispatchID dispidToGet, DispatchID nameDispID, ref bool addAboutBox)
         {
             TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
@@ -696,7 +696,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  This converts a type info that describes a IDL defined enum
         ///  into one we can use
         /// </summary>
-        private unsafe static Type ProcessTypeInfoEnum(ITypeInfo enumTypeInfo)
+        private static unsafe Type ProcessTypeInfoEnum(ITypeInfo enumTypeInfo)
         {
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum entered");
 
@@ -866,7 +866,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-        private unsafe static void ProcessVariables(ITypeInfo typeInfo, IDictionary propInfoList, DispatchID dispidToGet, DispatchID nameDispID)
+        private static unsafe void ProcessVariables(ITypeInfo typeInfo, IDictionary propInfoList, DispatchID dispidToGet, DispatchID nameDispID)
         {
             TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);

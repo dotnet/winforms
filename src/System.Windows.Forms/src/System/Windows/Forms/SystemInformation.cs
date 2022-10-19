@@ -152,7 +152,7 @@ namespace System.Windows.Forms
         public static Font GetMenuFontForDpi(int dpi)
             => GetMenuFontHelper((uint)dpi, DpiHelper.IsPerMonitorV2Awareness);
 
-        private unsafe static Font GetMenuFontHelper(uint dpi, bool useDpi)
+        private static unsafe Font GetMenuFontHelper(uint dpi, bool useDpi)
         {
             // We can get the system's menu font through the NONCLIENTMETRICS structure
             // via SystemParametersInfo
@@ -500,7 +500,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets a value indicating whether the current process is running in user interactive mode.
         /// </summary>
-        public unsafe static bool UserInteractive
+        public static unsafe bool UserInteractive
         {
             get
             {
@@ -751,7 +751,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The orientation of the screen in degrees.
         /// </summary>
-        public unsafe static ScreenOrientation ScreenOrientation
+        public static unsafe ScreenOrientation ScreenOrientation
         {
             get
             {
@@ -787,7 +787,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The <see cref="Size"/>, in pixels, of the small caption buttons.
         /// </summary>
-        public unsafe static Size SmallCaptionButtonSize
+        public static unsafe Size SmallCaptionButtonSize
         {
             get
             {
@@ -802,7 +802,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The <see cref="Size"/>, in pixels, of the menu bar buttons.
         /// </summary>
-        public unsafe static Size MenuBarButtonSize
+        public static unsafe Size MenuBarButtonSize
         {
             get
             {

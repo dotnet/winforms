@@ -277,7 +277,7 @@ namespace System.Windows.Forms
             _showNetwork = true;
         }
 
-        internal unsafe static NativeMethods.PRINTDLGEX CreatePRINTDLGEX()
+        internal static unsafe NativeMethods.PRINTDLGEX CreatePRINTDLGEX()
         {
             NativeMethods.PRINTDLGEX data = new NativeMethods.PRINTDLGEX();
             data.lStructSize = Marshal.SizeOf(data);

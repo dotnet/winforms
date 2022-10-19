@@ -421,7 +421,7 @@ namespace System.Windows.Forms
         ///  should override this if they want to add more functionality, and call
         ///  base.runDialog() if necessary
         /// </summary>
-        protected unsafe override bool RunDialog(IntPtr hWndOwner)
+        protected override unsafe bool RunDialog(IntPtr hWndOwner)
         {
             WNDPROC hookProc = HookProcInternal;
             void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);

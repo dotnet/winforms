@@ -30,7 +30,7 @@ namespace Windows.Win32
             return result;
         }
 
-        public unsafe static LRESULT SendMessage<T>(
+        public static unsafe LRESULT SendMessage<T>(
             T hWnd,
             WM Msg,
             WPARAM wParam,
@@ -42,7 +42,7 @@ namespace Windows.Win32
             }
         }
 
-        public unsafe static nint SendMessage<THwnd, TLParam>(
+        public static unsafe nint SendMessage<THwnd, TLParam>(
             THwnd hWnd,
             WM Msg,
             WPARAM wParam,
@@ -56,7 +56,7 @@ namespace Windows.Win32
             }
         }
 
-        public unsafe static nint SendMessage<THwnd, TWParam, TLParam>(
+        public static unsafe nint SendMessage<THwnd, TWParam, TLParam>(
             THwnd hWnd,
             WM Msg,
             ref TWParam wParam,

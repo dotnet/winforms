@@ -1203,7 +1203,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  property so that getXXX following a setXXX should return the value
         ///  passed in if no exception was thrown in the setXXX call.
         /// </summary>
-        public unsafe override void SetValue(object component, object value)
+        public override unsafe void SetValue(object component, object value)
         {
             if (readOnly)
             {

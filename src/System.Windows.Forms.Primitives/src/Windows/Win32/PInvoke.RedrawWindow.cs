@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public unsafe static BOOL RedrawWindow<T>(T hWnd, RECT* lprcUpdate, HRGN hrgnUpdate, REDRAW_WINDOW_FLAGS flags)
+        public static unsafe BOOL RedrawWindow<T>(T hWnd, RECT* lprcUpdate, HRGN hrgnUpdate, REDRAW_WINDOW_FLAGS flags)
             where T : IHandle<HWND>
         {
             BOOL result = RedrawWindow(hWnd.Handle, lprcUpdate, hrgnUpdate, flags);

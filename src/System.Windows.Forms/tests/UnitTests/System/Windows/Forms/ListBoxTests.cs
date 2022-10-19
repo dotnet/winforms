@@ -5262,7 +5262,7 @@ namespace System.Windows.Forms.Tests
             public int ExpectedIndex { get; set; }
             public IntPtr GetItemHeightResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (MakeCustom && m.Msg == (int)LB.GETITEMHEIGHT)
                 {
@@ -5290,7 +5290,7 @@ namespace System.Windows.Forms.Tests
         {
             public bool MakeInvalid { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (MakeInvalid && m.Msg == (int)LB.GETITEMHEIGHT)
                 {
@@ -5405,7 +5405,7 @@ namespace System.Windows.Forms.Tests
         {
             public RECT GetItemRectResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)LB.GETITEMRECT)
                 {
@@ -5434,7 +5434,7 @@ namespace System.Windows.Forms.Tests
         {
             public bool MakeInvalid { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (MakeInvalid && m.Msg == (int)LB.GETITEMRECT)
                 {

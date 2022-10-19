@@ -4166,7 +4166,7 @@ namespace System.Windows.Forms.Tests
         {
             public RECT GetItemRectResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)PInvoke.LVM_GETITEMRECT)
                 {
@@ -4196,7 +4196,7 @@ namespace System.Windows.Forms.Tests
         {
             public bool MakeInvalid { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (MakeInvalid && m.Msg == (int)PInvoke.LVM_GETITEMRECT)
                 {

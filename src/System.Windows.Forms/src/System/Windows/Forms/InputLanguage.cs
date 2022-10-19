@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a list of all installed input languages.
         /// </summary>
-        public unsafe static InputLanguageCollection InstalledInputLanguages
+        public static unsafe InputLanguageCollection InstalledInputLanguages
         {
             get
             {

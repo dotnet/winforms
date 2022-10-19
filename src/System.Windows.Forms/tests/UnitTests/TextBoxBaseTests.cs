@@ -733,7 +733,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr Result { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.EM.CANUNDO)
                 {
@@ -4687,7 +4687,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr CharFromPosResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.EM.CHARFROMPOS)
                 {
@@ -4882,7 +4882,7 @@ namespace System.Windows.Forms.Tests
             public IntPtr ExpectedWParam { get; set; }
             public IntPtr LineIndexResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.EM.LINEINDEX)
                 {
@@ -4999,7 +4999,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr LineFromCharResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.EM.LINEFROMCHAR)
                 {
@@ -5156,7 +5156,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr PosFromCharResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.EM.POSFROMCHAR)
                 {
@@ -6428,7 +6428,7 @@ namespace System.Windows.Forms.Tests
 
             public IntPtr GetOleInterfaceLParam { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.GETOLEINTERFACE)
                 {

@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static ResourceCodeDomSerializer Default
+        internal static new ResourceCodeDomSerializer Default
         {
             get
             {

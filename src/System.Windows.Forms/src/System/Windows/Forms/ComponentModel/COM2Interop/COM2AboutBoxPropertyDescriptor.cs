@@ -152,7 +152,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public class AboutBoxUITypeEditor : UITypeEditor
         {
-            public unsafe override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+            public override unsafe object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
             {
                 object component = context.Instance;
 

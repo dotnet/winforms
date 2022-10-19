@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        protected unsafe override bool GetHitTest(Point point)
+        protected override unsafe bool GetHitTest(Point point)
         {
             // We override GetHitTest to make the header in report view UI-active.
 
@@ -129,7 +129,7 @@ namespace System.Windows.Forms.Design
             base.PreFilterProperties(properties);
         }
 
-        protected unsafe override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch (m.Msg)
             {

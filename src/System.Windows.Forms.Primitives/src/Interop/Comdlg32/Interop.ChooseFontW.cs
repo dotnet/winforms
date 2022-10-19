@@ -9,7 +9,7 @@ internal partial class Interop
     internal partial class Comdlg32
     {
         [DllImport(Libraries.Comdlg32, SetLastError = true, ExactSpelling = true)]
-        public unsafe static extern BOOL ChooseFontW(ref CHOOSEFONTW lpcf);
+        public static extern unsafe BOOL ChooseFontW(ref CHOOSEFONTW lpcf);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct CHOOSEFONTW

@@ -490,7 +490,7 @@ namespace System.Windows.Forms
         ///  Defines the common dialog box hook procedure that is overridden to add
         ///  specific functionality to the file dialog box.
         /// </summary>
-        protected unsafe override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
+        protected override unsafe IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
             if (msg != (int)User32.WM.NOTIFY)
             {

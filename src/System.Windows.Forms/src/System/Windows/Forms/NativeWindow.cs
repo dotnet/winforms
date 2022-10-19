@@ -166,7 +166,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Address of the Windows default WNDPROC (DefWindowProcW).
         /// </summary>
-        internal unsafe static nint DefaultWindowProc
+        internal static unsafe nint DefaultWindowProc
         {
             get
             {

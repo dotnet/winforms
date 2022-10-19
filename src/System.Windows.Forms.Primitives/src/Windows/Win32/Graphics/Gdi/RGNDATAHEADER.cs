@@ -6,7 +6,7 @@ namespace Windows.Win32.Graphics.Gdi
 {
     internal partial struct RGNDATAHEADER
     {
-        public unsafe static RECT[] GetRegionRects(RGNDATAHEADER* regionData)
+        public static unsafe RECT[] GetRegionRects(RGNDATAHEADER* regionData)
         {
             if (regionData is null || regionData->nCount == 0)
             {

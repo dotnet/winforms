@@ -9,6 +9,6 @@ internal partial class Interop
     internal static partial class Oleaut32
     {
         [DllImport(Libraries.Oleaut32)]
-        public static unsafe extern HRESULT SafeArrayLock(SAFEARRAY* psa);
+        public static extern unsafe HRESULT SafeArrayLock(SAFEARRAY* psa);
     }
 }

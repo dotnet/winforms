@@ -7,7 +7,7 @@ using Windows.Win32.UI.ColorSystem;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal unsafe readonly struct EmfRecord
+    internal readonly unsafe struct EmfRecord
     {
         public HDC HDC { get; }
         private readonly HANDLETABLE* _lpht;

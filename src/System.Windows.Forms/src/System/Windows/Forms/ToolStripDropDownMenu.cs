@@ -236,7 +236,7 @@ namespace System.Windows.Forms
         ///  targetWindow is the window to send WM_COMMAND, WM_SYSCOMMAND to
         ///  hmenu is a handle to the native menu.
         /// </summary>
-        internal unsafe static ToolStripDropDownMenu FromHMenu(IntPtr hmenu, IWin32Window targetWindow)
+        internal static unsafe ToolStripDropDownMenu FromHMenu(IntPtr hmenu, IWin32Window targetWindow)
         {
             ToolStripDropDownMenu managedDropDown = new ToolStripDropDownMenu();
             managedDropDown.SuspendLayout();

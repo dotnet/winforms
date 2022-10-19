@@ -46,7 +46,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal unsafe static Attribute[] GetComponentAttributes(VSSDK.IVSMDPerPropertyBrowsing target, Ole32.DispatchID dispid)
+        internal static unsafe Attribute[] GetComponentAttributes(VSSDK.IVSMDPerPropertyBrowsing target, Ole32.DispatchID dispid)
         {
             uint cItems = 0;
             IntPtr pbstrs = IntPtr.Zero;
@@ -255,7 +255,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private unsafe static object?[] GetVariantsFromPtr(Oleaut32.VARIANT* ptr, uint cVariants)
+        private static unsafe object?[] GetVariantsFromPtr(Oleaut32.VARIANT* ptr, uint cVariants)
         {
             var objects = new object?[cVariants];
             for (int i = 0; i < cVariants; i++)

@@ -196,7 +196,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -212,7 +212,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -1123,7 +1123,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler? TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -1779,7 +1779,7 @@ namespace System.Windows.Forms
         ///  set up a few things, like column width, etc!  Inheriting classes should
         ///  not forget to call base.OnHandleCreated().
         /// </summary>
-        protected unsafe override void OnHandleCreated(EventArgs e)
+        protected override unsafe void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
 

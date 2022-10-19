@@ -291,7 +291,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal unsafe override void SelectItem()
+            internal override unsafe void SelectItem()
             {
                 if (!_owningListBox.IsHandleCreated)
                 {

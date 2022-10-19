@@ -9,7 +9,7 @@ internal partial class Interop
     internal static partial class Oleaut32
     {
         [DllImport(Libraries.Oleaut32, CharSet = CharSet.Unicode)]
-        public static unsafe extern int OleCreatePropertyFrame(
+        public static extern unsafe int OleCreatePropertyFrame(
             IntPtr hwndOwner,
             int x,
             int y,
@@ -22,7 +22,7 @@ internal partial class Interop
             uint dwReserved,
             IntPtr pvReserved);
 
-        public unsafe static void OleCreatePropertyFrame(
+        public static unsafe void OleCreatePropertyFrame(
             HandleRef hwndOwner,
             int x,
             int y,

@@ -206,7 +206,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event UICuesEventHandler ChangeUICues
+        public new event UICuesEventHandler ChangeUICues
         {
             add => base.ChangeUICues += value;
             remove => base.ChangeUICues -= value;
@@ -408,7 +408,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler Enter
+        public new event EventHandler Enter
         {
             add => base.Enter += value;
             remove => base.Enter -= value;
@@ -436,7 +436,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler FontChanged
+        public new event EventHandler FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -444,7 +444,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -452,7 +452,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event GiveFeedbackEventHandler GiveFeedback
+        public new event GiveFeedbackEventHandler GiveFeedback
         {
             add => base.GiveFeedback += value;
             remove => base.GiveFeedback -= value;
@@ -492,7 +492,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event HelpEventHandler HelpRequested
+        public new event HelpEventHandler HelpRequested
         {
             add => base.HelpRequested += value;
             remove => base.HelpRequested -= value;
@@ -568,7 +568,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event KeyEventHandler KeyDown
+        public new event KeyEventHandler KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
@@ -584,7 +584,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event KeyEventHandler KeyUp
+        public new event KeyEventHandler KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
@@ -774,7 +774,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public Region Region
+        public new Region Region
         {
             get => base.Region;
             set => base.Region = value;
@@ -782,7 +782,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler RegionChanged
+        public new event EventHandler RegionChanged
         {
             add => base.RegionChanged += value;
             remove => base.RegionChanged -= value;
@@ -838,7 +838,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event ScrollEventHandler Scroll
+        public new event ScrollEventHandler Scroll
         {
             add => base.Scroll += value;
             remove => base.Scroll -= value;
@@ -854,7 +854,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler StyleChanged
+        public new event EventHandler StyleChanged
         {
             add => base.StyleChanged += value;
             remove => base.StyleChanged -= value;
@@ -876,7 +876,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged
+        public new event EventHandler TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -884,7 +884,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -954,7 +954,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler Validated
+        public new event EventHandler Validated
         {
             add => base.Validated += value;
             remove => base.Validated -= value;
@@ -962,7 +962,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event CancelEventHandler Validating
+        public new event CancelEventHandler Validating
         {
             add => base.Validating += value;
             remove => base.Validating -= value;

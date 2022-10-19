@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr Result { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.CANREDO)
                 {
@@ -1087,7 +1087,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr Result { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.EM.CANUNDO)
                 {
@@ -2390,7 +2390,7 @@ namespace System.Windows.Forms.Tests
             public IntPtr CanRedoResult { get; set; }
             public IntPtr GetRedoNameResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.CANREDO)
                 {
@@ -6553,7 +6553,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr SelectionTypeResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.SELECTIONTYPE)
                 {
@@ -6780,7 +6780,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr GetTextLengthExResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.GETTEXTLENGTHEX)
                 {
@@ -7699,7 +7699,7 @@ namespace System.Windows.Forms.Tests
             public IntPtr CanUndoResult { get; set; }
             public IntPtr GetUndoNameResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.EM.CANUNDO)
                 {
@@ -7783,7 +7783,7 @@ namespace System.Windows.Forms.Tests
             public int NumeratorResult { get; set; }
             public int DenominatorResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.GETZOOM)
                 {
@@ -7923,7 +7923,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr Result { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.CANPASTE)
                 {
@@ -10664,7 +10664,7 @@ namespace System.Windows.Forms.Tests
             public IntPtr ExpectedWParam { get; set; }
             public PARAFORMAT GetParaFormatResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (MakeCustom && m.Msg == (int)Richedit.EM.GETPARAFORMAT)
                 {
@@ -10685,7 +10685,7 @@ namespace System.Windows.Forms.Tests
             public IntPtr ExpectedWParam { get; set; }
             public CHARFORMAT2W GetCharFormatResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (MakeCustom && m.Msg == (int)Richedit.EM.GETCHARFORMAT)
                 {

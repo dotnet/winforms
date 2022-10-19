@@ -1204,7 +1204,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary> overridden here so we scooch over when we're in the ToolStripDropDownMenu</summary>
-        internal protected override void SetBounds(Rectangle rect)
+        protected internal override void SetBounds(Rectangle rect)
         {
             if (InternalLayout is ToolStripMenuItemInternalLayout internalLayout && internalLayout.UseMenuLayout)
             {

@@ -6,7 +6,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
-    public unsafe static uint GetPaletteEntries(HPALETTE hpal, Span<PALETTEENTRY> entries)
+    public static unsafe uint GetPaletteEntries(HPALETTE hpal, Span<PALETTEENTRY> entries)
     {
         fixed (PALETTEENTRY* entry = entries)
         {

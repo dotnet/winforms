@@ -270,7 +270,7 @@ namespace System.Windows.Forms
             pageSettings.Margins = PrinterUnitConvert.Convert(newMargins, fromUnit, PrinterUnit.Display);
         }
 
-        protected unsafe override bool RunDialog(IntPtr hwndOwner)
+        protected override unsafe bool RunDialog(IntPtr hwndOwner)
         {
             WNDPROC hookProc = HookProcInternal;
             void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);

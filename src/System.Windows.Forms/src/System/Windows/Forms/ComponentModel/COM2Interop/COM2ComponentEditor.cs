@@ -12,7 +12,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2ComponentEditor : WindowsFormsComponentEditor
     {
-        public unsafe static bool NeedsComponentEditor(object obj)
+        public static unsafe bool NeedsComponentEditor(object obj)
         {
             if (obj is Oleaut32.IPerPropertyBrowsing perPropertyBrowsing)
             {
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return false;
         }
 
-        public unsafe override bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
+        public override unsafe bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
         {
             IntPtr handle = (parent is null ? IntPtr.Zero : parent.Handle);
 

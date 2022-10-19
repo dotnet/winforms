@@ -1797,7 +1797,7 @@ namespace System.Windows.Forms
             return _maskedTextProvider.ToString(ignorePasswordChar: true, includePrompt, includeLiterals, selStart, selLength);
         }
 
-        protected unsafe override void OnBackColorChanged(EventArgs e)
+        protected override unsafe void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
 

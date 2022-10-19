@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         ///  We now use explicitactivate everywhere and use this method to determine if we
         ///  really need to activate the activationcontext.  This should be pretty fast.
         /// </summary>
-        private unsafe static bool IsContextActive()
+        private static unsafe bool IsContextActive()
         {
             HANDLE current;
             return s_contextCreationSucceeded
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
         ///  on the stack even if one is already present. In such cases, this method helps - you get to manage
         ///  the cookie yourself though.
         /// </summary>
-        public unsafe static nint Activate(bool useVisualStyles)
+        public static unsafe nint Activate(bool useVisualStyles)
         {
             nuint userCookie;
             if (IsContextActiveButNotCreated(useVisualStyles) && PInvoke.ActivateActCtx((HANDLE)s_hActCtx, &userCookie))
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
             return userCookie;
         }
 
-        public unsafe static bool CreateActivationContext(IntPtr module, int nativeResourceManifestID)
+        public static unsafe bool CreateActivationContext(IntPtr module, int nativeResourceManifestID)
         {
             lock (typeof(ThemingScope))
             {
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public unsafe static bool CreateActivationContext(Stream manifest)
+        public static unsafe bool CreateActivationContext(Stream manifest)
         {
             lock (typeof(ThemingScope))
             {

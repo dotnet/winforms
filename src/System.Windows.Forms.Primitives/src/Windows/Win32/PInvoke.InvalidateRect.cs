@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public unsafe static BOOL InvalidateRect<T>(T hWnd, RECT* lpRect, BOOL bErase)
+        public static unsafe BOOL InvalidateRect<T>(T hWnd, RECT* lpRect, BOOL bErase)
             where T : IHandle<HWND>
         {
             BOOL result = InvalidateRect(hWnd.Handle, lpRect, bErase);

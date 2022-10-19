@@ -159,7 +159,7 @@ namespace System.Windows.Forms
 
         private void ResetColor() => Color = Color.Black;
 
-        protected unsafe override bool RunDialog(IntPtr hwndOwner)
+        protected override unsafe bool RunDialog(IntPtr hwndOwner)
         {
             WNDPROC hookProc = HookProcInternal;
             void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);

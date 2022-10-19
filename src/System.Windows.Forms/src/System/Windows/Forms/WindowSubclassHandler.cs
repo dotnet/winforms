@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The function pointer created from <see cref="_windowProcDelegate"/>.
         /// </summary>
-        private unsafe readonly void* _windowProcDelegatePtr;
+        private readonly unsafe void* _windowProcDelegatePtr;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="WindowSubclassHandler"/> class.
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
         /// <exception cref="Win32Exception">The subclassing could not be undone.</exception>
         /// <exception cref="InvalidOperationException">The current window procedure is not the
         /// expected one.</exception>
-        protected unsafe virtual void Dispose(bool disposing)
+        protected virtual unsafe void Dispose(bool disposing)
         {
             if (_disposed)
             {
@@ -224,7 +224,7 @@ namespace System.Windows.Forms
         ///   Processes Windows messages for the subclassed window.
         /// </summary>
         /// <param name="m">The message to process.</param>
-        protected unsafe virtual void WndProc(ref Message m)
+        protected virtual unsafe void WndProc(ref Message m)
         {
             // Call the original window procedure to process the message.
             if (_originalWindowProc is not null)

@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Metafiles
             _hemf = hemf;
         }
 
-        private unsafe static HDC CreateEnhMetaFile(
+        private static unsafe HDC CreateEnhMetaFile(
             HDC hdc = default,
             string? lpFilename = null,
             RECT* lprc = null,
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Metafiles
             }
         }
 
-        public unsafe static EmfScope Create() => new EmfScope();
+        public static unsafe EmfScope Create() => new EmfScope();
 
         public HENHMETAFILE HENHMETAFILE
         {

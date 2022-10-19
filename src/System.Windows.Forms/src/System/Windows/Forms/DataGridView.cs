@@ -231,7 +231,7 @@ namespace System.Windows.Forms
             OperationTrackColRelocation | OperationTrackColHeadersResize | OperationTrackRowHeadersResize;
         private const int OperationKeyboardOperationMask = OperationTrackKeyboardColResize;
 
-        private readonly static Size s_dragSize = SystemInformation.DragSize;
+        private static readonly Size s_dragSize = SystemInformation.DragSize;
 
         private const byte ColumnSizingHotZone = 6;
         private const byte RowSizingHotZone = 5;
@@ -1064,7 +1064,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        public new event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -1127,7 +1127,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -2786,7 +2786,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -2802,7 +2802,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler FontChanged
+        public new event EventHandler FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -4252,7 +4252,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -5189,7 +5189,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler StyleChanged
+        public new event EventHandler StyleChanged
         {
             add => base.StyleChanged += value;
             remove => base.StyleChanged -= value;

@@ -201,7 +201,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventDropDownClosed, value);
         }
 
-        internal protected virtual Point DropDownLocation
+        protected internal virtual Point DropDownLocation
         {
             get
             {

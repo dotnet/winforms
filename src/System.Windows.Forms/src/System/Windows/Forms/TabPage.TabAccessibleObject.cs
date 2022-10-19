@@ -143,7 +143,7 @@ namespace System.Windows.Forms
                 // Do nothing, C++ implementation returns UIA_E_INVALIDOPERATION 0x80131509
             }
 
-            internal unsafe override void SelectItem() => DoDefaultAction();
+            internal override unsafe void SelectItem() => DoDefaultAction();
         }
     }
 }

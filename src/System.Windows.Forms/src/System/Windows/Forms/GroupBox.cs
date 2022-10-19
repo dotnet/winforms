@@ -69,7 +69,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler? AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public bool TabStop
+        public new bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;
@@ -234,7 +234,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler? TabStopChanged
+        public new event EventHandler? TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;

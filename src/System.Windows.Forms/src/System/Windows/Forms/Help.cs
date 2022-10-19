@@ -96,7 +96,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Displays a Help pop-up window.
         /// </summary>
-        public unsafe static void ShowPopup(Control parent, string caption, Point location)
+        public static unsafe void ShowPopup(Control parent, string caption, Point location)
         {
             Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowPopup");
 
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Displays HTML 1.0 Help with the specified parameters
         /// </summary>
-        private unsafe static void ShowHTML10Help(Control parent, string url, HelpNavigator command, object param)
+        private static unsafe void ShowHTML10Help(Control parent, string url, HelpNavigator command, object param)
         {
             Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHTML10Help:: " + url + ", " + command.ToString("G") + ", " + param);
 
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Maps one of the COMMAND_* constants to the HTML 1.0 Help equivalent.
         /// </summary>
-        private unsafe static HH MapCommandToHTMLCommand(HelpNavigator command, string param, out object htmlParam)
+        private static unsafe HH MapCommandToHTMLCommand(HelpNavigator command, string param, out object htmlParam)
         {
             htmlParam = param;
 
