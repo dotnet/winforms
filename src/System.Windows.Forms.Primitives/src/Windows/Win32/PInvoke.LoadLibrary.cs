@@ -66,4 +66,3 @@ namespace Windows.Win32
         }
     }
 }
-

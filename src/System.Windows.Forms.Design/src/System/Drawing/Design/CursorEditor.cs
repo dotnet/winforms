@@ -41,4 +41,3 @@ namespace System.Drawing.Design
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.DropDown;
     }
 }
-

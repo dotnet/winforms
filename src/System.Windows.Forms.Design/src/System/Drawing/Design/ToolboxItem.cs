@@ -1027,4 +1027,3 @@ namespace System.Drawing.Design
         }
     }
 }
-

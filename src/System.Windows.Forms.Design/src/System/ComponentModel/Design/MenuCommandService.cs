@@ -589,5 +589,3 @@ namespace System.ComponentModel.Design
         }
     }
 }
-
-

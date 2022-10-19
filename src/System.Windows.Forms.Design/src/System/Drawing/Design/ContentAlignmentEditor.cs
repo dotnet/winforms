@@ -39,4 +39,3 @@ namespace System.Drawing.Design
             => UITypeEditorEditStyle.DropDown;
     }
 }
-
