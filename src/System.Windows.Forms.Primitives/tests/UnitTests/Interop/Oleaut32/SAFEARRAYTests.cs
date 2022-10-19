@@ -408,18 +408,18 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         }
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static unsafe extern SAFEARRAY* SafeArrayCreate(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound);
+        private static extern unsafe SAFEARRAY* SafeArrayCreate(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound);
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static unsafe extern SAFEARRAY* SafeArrayCreateEx(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound, IntPtr pvExtra);
+        private static extern unsafe SAFEARRAY* SafeArrayCreateEx(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound, IntPtr pvExtra);
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static unsafe extern HRESULT SafeArrayDestroy(SAFEARRAY* psa);
+        private static extern unsafe HRESULT SafeArrayDestroy(SAFEARRAY* psa);
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private unsafe static extern HRESULT SafeArrayPutElement(SAFEARRAY* psa, int* rgIndices, void* pv);
+        private static extern unsafe HRESULT SafeArrayPutElement(SAFEARRAY* psa, int* rgIndices, void* pv);
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private unsafe static extern HRESULT SafeArrayGetElement(SAFEARRAY* psa, int* rgIndices, void* pv);
+        private static extern unsafe HRESULT SafeArrayGetElement(SAFEARRAY* psa, int* rgIndices, void* pv);
     }
 }

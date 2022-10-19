@@ -9,6 +9,6 @@ internal static partial class Interop
     internal static partial class Oleaut32
     {
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        public unsafe static extern HRESULT SafeArrayGetRecordInfo(SAFEARRAY* psa, out IRecordInfo pRecInfo);
+        public static extern unsafe HRESULT SafeArrayGetRecordInfo(SAFEARRAY* psa, out IRecordInfo pRecInfo);
     }
 }

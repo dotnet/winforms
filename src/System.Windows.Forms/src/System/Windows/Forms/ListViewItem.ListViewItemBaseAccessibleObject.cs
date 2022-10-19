@@ -263,7 +263,7 @@ namespace System.Windows.Forms
 
             internal override void ScrollIntoView() => _owningItem.EnsureVisible();
 
-            internal unsafe override void SelectItem()
+            internal override unsafe void SelectItem()
             {
                 if (_owningListView.IsHandleCreated)
                 {

@@ -134,7 +134,7 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected unsafe abstract string[] ProcessVistaFiles(IFileDialog* dialog);
+        private protected abstract unsafe string[] ProcessVistaFiles(IFileDialog* dialog);
 
         private unsafe bool HandleVistaFileOk(IFileDialog* dialog)
         {

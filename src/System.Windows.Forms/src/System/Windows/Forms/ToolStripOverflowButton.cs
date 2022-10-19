@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         }
 
         // make sure the Overflow button extends from edge-edge. (Ignore Padding/Margin).
-        internal protected override void SetBounds(Rectangle bounds)
+        protected internal override void SetBounds(Rectangle bounds)
         {
             if (ParentInternal is not null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout)
             {

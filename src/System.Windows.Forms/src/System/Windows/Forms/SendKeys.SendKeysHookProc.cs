@@ -25,7 +25,7 @@ namespace System.Windows.Forms
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
 #pragma warning restore CS3016
-            public unsafe static LRESULT Callback(int nCode, WPARAM wparam, LPARAM lparam)
+            public static unsafe LRESULT Callback(int nCode, WPARAM wparam, LPARAM lparam)
             {
                 EVENTMSG* eventmsg = (EVENTMSG*)(nint)lparam;
 

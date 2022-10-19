@@ -1714,7 +1714,7 @@ namespace System.Windows.Forms.Design
         ///  This method should be called by the extending designer for each message the control would normally
         ///  receive. This allows the designer to pre-process messages before allowing them to be routed to the control.
         /// </summary>
-        protected unsafe virtual void WndProc(ref Message m)
+        protected virtual unsafe void WndProc(ref Message m)
         {
             IMouseHandler mouseHandler = null;
 

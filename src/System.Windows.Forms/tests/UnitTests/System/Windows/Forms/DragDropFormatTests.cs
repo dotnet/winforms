@@ -167,7 +167,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        private unsafe static void SaveInDragLoopToHandle(IntPtr handle, bool inDragLoop)
+        private static unsafe void SaveInDragLoopToHandle(IntPtr handle, bool inDragLoop)
         {
             try
             {

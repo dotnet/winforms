@@ -9,7 +9,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public unsafe static bool SystemParametersInfo<T>(SYSTEM_PARAMETERS_INFO_ACTION uiAction, ref T value)
+        public static unsafe bool SystemParametersInfo<T>(SYSTEM_PARAMETERS_INFO_ACTION uiAction, ref T value)
             where T : unmanaged
         {
             fixed (void* p = &value)
@@ -18,14 +18,14 @@ namespace Windows.Win32
             }
         }
 
-        public unsafe static int SystemParametersInfoInt(SYSTEM_PARAMETERS_INFO_ACTION uiAction)
+        public static unsafe int SystemParametersInfoInt(SYSTEM_PARAMETERS_INFO_ACTION uiAction)
         {
             int value = 0;
             SystemParametersInfo(uiAction, ref value);
             return value;
         }
 
-        public unsafe static bool SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION uiAction, ref bool value, uint fWinIni = 0)
+        public static unsafe bool SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION uiAction, ref bool value, uint fWinIni = 0)
         {
             BOOL nativeBool = value;
             bool result = SystemParametersInfo(uiAction, 0, &nativeBool, (SYSTEM_PARAMETERS_INFO_UPDATE_FLAGS)fWinIni);
@@ -33,14 +33,14 @@ namespace Windows.Win32
             return result;
         }
 
-        public unsafe static bool SystemParametersInfoBool(SYSTEM_PARAMETERS_INFO_ACTION uiAction)
+        public static unsafe bool SystemParametersInfoBool(SYSTEM_PARAMETERS_INFO_ACTION uiAction)
         {
             bool value = false;
             SystemParametersInfo(uiAction, ref value);
             return value;
         }
 
-        public unsafe static bool SystemParametersInfo(ref HIGHCONTRASTW highContrast)
+        public static unsafe bool SystemParametersInfo(ref HIGHCONTRASTW highContrast)
         {
             fixed (void* p = &highContrast)
             {
@@ -53,7 +53,7 @@ namespace Windows.Win32
             }
         }
 
-        public unsafe static bool SystemParametersInfo(ref NONCLIENTMETRICSW metrics)
+        public static unsafe bool SystemParametersInfo(ref NONCLIENTMETRICSW metrics)
         {
             fixed (void* p = &metrics)
             {
@@ -70,7 +70,7 @@ namespace Windows.Win32
         ///  Tries to get system parameter info for the dpi. dpi is ignored if "SystemParametersInfoForDpi()" API
         ///  is not available on the OS that this application is running.
         /// </summary>
-        public unsafe static bool TrySystemParametersInfoForDpi(ref NONCLIENTMETRICSW metrics, uint dpi)
+        public static unsafe bool TrySystemParametersInfoForDpi(ref NONCLIENTMETRICSW metrics, uint dpi)
         {
             if (OsVersion.IsWindows10_1607OrGreater())
             {

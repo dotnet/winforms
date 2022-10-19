@@ -138,7 +138,7 @@ namespace System.Windows.Forms
             SetOption(OFN_OVERWRITEPROMPT, true);
         }
 
-        private protected unsafe override bool RunFileDialog(OPENFILENAME* ofn)
+        private protected override unsafe bool RunFileDialog(OPENFILENAME* ofn)
         {
             bool result = PInvoke.GetSaveFileName(ofn);
 
@@ -155,14 +155,14 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected unsafe override string[] ProcessVistaFiles(IFileDialog* dialog)
+        private protected override unsafe string[] ProcessVistaFiles(IFileDialog* dialog)
         {
             using ComScope<IShellItem> item = new(null);
             dialog->GetResult(item).ThrowOnFailure();
             return item.IsNull ? Array.Empty<string>() : new string[] { GetFilePathFromShellItem(item) };
         }
 
-        private protected unsafe override IFileDialog* CreateVistaDialog()
+        private protected override unsafe IFileDialog* CreateVistaDialog()
         {
             PInvoke.CoCreateInstance(
                 in CLSID.FileSaveDialog,

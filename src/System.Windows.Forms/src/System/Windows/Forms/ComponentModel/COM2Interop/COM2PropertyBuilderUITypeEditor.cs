@@ -32,7 +32,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  the user to modify the value.  Host assistance in presenting UI to the user
         ///  can be found through the valueAccess.getService function.
         /// </summary>
-        public unsafe override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+        public override unsafe object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
             HWND parentHandle = PInvoke.GetFocus();
 

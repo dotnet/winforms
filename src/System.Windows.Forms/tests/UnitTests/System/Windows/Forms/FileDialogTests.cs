@@ -793,7 +793,7 @@ namespace System.Windows.Forms.Tests
 
         private unsafe class SubFileDialog : FileDialog
         {
-            public new static readonly object EventFileOk = FileDialog.EventFileOk;
+            public static new readonly object EventFileOk = FileDialog.EventFileOk;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 

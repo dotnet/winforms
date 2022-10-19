@@ -10,9 +10,9 @@ internal partial class Interop
     internal static partial class Ole32
     {
         [DllImport(Libraries.Ole32)]
-        public static unsafe extern HRESULT PropVariantClear(VARIANT* pvarg);
+        public static extern unsafe HRESULT PropVariantClear(VARIANT* pvarg);
 
-        public unsafe static HRESULT PropVariantClear(ref VARIANT varg)
+        public static unsafe HRESULT PropVariantClear(ref VARIANT varg)
         {
             fixed (VARIANT* pvarg = &varg)
             {

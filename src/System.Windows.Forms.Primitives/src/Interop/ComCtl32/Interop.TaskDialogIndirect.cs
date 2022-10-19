@@ -13,7 +13,7 @@ internal static partial class Interop
         // accidentally marshalled by the runtime when it is no longer blittable, but we
         // also need a pointer to it for SendMessage() calls where it wouldn't be marshalled.
         [DllImport(Libraries.Comctl32)]
-        public static unsafe extern HRESULT TaskDialogIndirect(
+        public static extern unsafe HRESULT TaskDialogIndirect(
             TASKDIALOGCONFIG* pTaskConfig,
             out int pnButton,
             out int pnRadioButton,

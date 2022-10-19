@@ -100,7 +100,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private unsafe static bool InitializeComCtlSupportsVisualStyles()
+        private static unsafe bool InitializeComCtlSupportsVisualStyles()
         {
             if (UseVisualStyles)
             {
@@ -588,7 +588,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This helper broadcasts out a WM_THEMECHANGED to appropriate top level windows of this app.
         /// </summary>
-        private unsafe static BOOL SendThemeChanged(HWND hwnd)
+        private static unsafe BOOL SendThemeChanged(HWND hwnd)
         {
             uint processId;
             PInvoke.GetWindowThreadProcessId(hwnd, &processId);

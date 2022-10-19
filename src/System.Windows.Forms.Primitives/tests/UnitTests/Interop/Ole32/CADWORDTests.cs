@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Primitives.Ole32Tests
         private static Ole32.CADWORD CreateIntVector(params uint[] values)
             => CreateIntVector(allocations: null, values);
 
-        private unsafe static Ole32.CADWORD CreateIntVector(IList<IntPtr>? allocations, params uint[] values)
+        private static unsafe Ole32.CADWORD CreateIntVector(IList<IntPtr>? allocations, params uint[] values)
         {
             Ole32.CADWORD ca = new()
             {

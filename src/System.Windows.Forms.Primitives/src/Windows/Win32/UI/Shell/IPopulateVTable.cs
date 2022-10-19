@@ -7,5 +7,5 @@ namespace Windows.Win32.UI.Shell;
 internal interface IPopulateVTable<TVTable>
     where TVTable : unmanaged
 {
-    protected internal static unsafe abstract void PopulateVTable(TVTable* vtable);
+    protected internal static abstract unsafe void PopulateVTable(TVTable* vtable);
 }

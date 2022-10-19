@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32.Foundation
 {
-    internal unsafe readonly partial struct PWSTR
+    internal readonly unsafe partial struct PWSTR
     {
         public string? ToStringAndCoTaskMemFree()
         {

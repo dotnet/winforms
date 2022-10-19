@@ -136,7 +136,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackColorChanged
+        public new event EventHandler? BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -377,7 +377,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -463,7 +463,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -498,7 +498,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? ForeColorChanged
+        public new event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -567,7 +567,7 @@ namespace System.Windows.Forms
         // problems are anticipated here: I don't believe there are calendars
         // around that have max dates on them.  But if there are, we'll deal with
         // them correctly.
-        static internal DateTime EffectiveMaxDate(DateTime maxDate)
+        internal static DateTime EffectiveMaxDate(DateTime maxDate)
         {
             DateTime maxSupportedDate = MaximumDateTime;
             if (maxDate > maxSupportedDate)
@@ -708,7 +708,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler? MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -716,7 +716,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler? MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -849,7 +849,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler? TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;

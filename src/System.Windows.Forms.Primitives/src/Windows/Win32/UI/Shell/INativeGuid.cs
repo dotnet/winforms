@@ -6,5 +6,5 @@ namespace Windows.Win32.UI.Shell;
 
 internal interface INativeGuid
 {
-    protected internal static unsafe abstract Guid* NativeGuid { get; }
+    protected internal static abstract unsafe Guid* NativeGuid { get; }
 }

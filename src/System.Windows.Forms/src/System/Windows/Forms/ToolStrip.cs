@@ -248,7 +248,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler AutoSizeChanged
+        public new event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -961,7 +961,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public HScrollProperties HorizontalScroll
+        public new HScrollProperties HorizontalScroll
         {
             get => base.HorizontalScroll;
         }
@@ -1831,7 +1831,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public VScrollProperties VerticalScroll
+        public new VScrollProperties VerticalScroll
         {
             get => base.VerticalScroll;
         }
@@ -3921,7 +3921,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal protected virtual void OnPaintGrip(PaintEventArgs e)
+        protected internal virtual void OnPaintGrip(PaintEventArgs e)
         {
             Renderer.DrawGrip(new ToolStripGripRenderEventArgs(e.Graphics, this));
 
@@ -4485,7 +4485,7 @@ namespace System.Windows.Forms
         ///  Sets the size of the auto-scroll margins.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public void SetAutoScrollMargin(int x, int y)
+        public new void SetAutoScrollMargin(int x, int y)
         {
             base.SetAutoScrollMargin(x, y);
         }

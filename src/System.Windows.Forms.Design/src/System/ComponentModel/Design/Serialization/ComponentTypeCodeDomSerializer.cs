@@ -15,7 +15,7 @@ namespace System.ComponentModel.Design.Serialization
         private const string _initMethodName = "InitializeComponent";
         private static ComponentTypeCodeDomSerializer s_default;
 
-        internal new static ComponentTypeCodeDomSerializer Default
+        internal static new ComponentTypeCodeDomSerializer Default
         {
             get
             {

@@ -552,7 +552,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected unsafe override void OnBackColorChanged(EventArgs e)
+        protected override unsafe void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
 
@@ -927,7 +927,7 @@ namespace System.Windows.Forms
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the combo continues to function properly.
         /// </summary>
-        protected unsafe override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch ((User32.WM)m.Msg)
             {

@@ -1846,7 +1846,7 @@ namespace System.Windows.Forms
             return formattedValue;
         }
 
-        static internal DataGridViewFreeDimension GetFreeDimensionFromConstraint(Size constraintSize)
+        internal static DataGridViewFreeDimension GetFreeDimensionFromConstraint(Size constraintSize)
         {
             if (constraintSize.Width < 0 || constraintSize.Height < 0)
             {
@@ -3805,7 +3805,7 @@ namespace System.Windows.Forms
             return (paintParts & DataGridViewPaintParts.Focus) != 0;
         }
 
-        static internal void PaintPadding(Graphics graphics,
+        internal static void PaintPadding(Graphics graphics,
             Rectangle bounds,
             DataGridViewCellStyle cellStyle,
             Brush br,

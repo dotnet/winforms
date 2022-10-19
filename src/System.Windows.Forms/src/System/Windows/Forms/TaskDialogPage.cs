@@ -968,19 +968,19 @@ namespace System.Windows.Forms
         ///   Raises the <see cref="Created"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        internal protected void OnCreated(EventArgs e) => Created?.Invoke(this, e);
+        protected internal void OnCreated(EventArgs e) => Created?.Invoke(this, e);
 
         /// <summary>
         ///   Raises the <see cref="Destroyed"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        internal protected void OnDestroyed(EventArgs e) => Destroyed?.Invoke(this, e);
+        protected internal void OnDestroyed(EventArgs e) => Destroyed?.Invoke(this, e);
 
         /// <summary>
         ///   Raises the <see cref="HelpRequest"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-        internal protected void OnHelpRequest(EventArgs e) => HelpRequest?.Invoke(this, e);
+        protected internal void OnHelpRequest(EventArgs e) => HelpRequest?.Invoke(this, e);
 
         private bool GetFlag(TASKDIALOG_FLAGS flag) => (_flags & flag) == flag;
 

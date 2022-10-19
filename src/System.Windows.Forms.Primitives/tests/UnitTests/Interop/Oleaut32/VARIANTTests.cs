@@ -5794,7 +5794,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             AssertToObjectThrows<TypeLoadException>(variant);
         }
 
-        private unsafe static SAFEARRAY* CreateSafeArray<T>(VARENUM vt, T[] result, int lbound = 0) where T : unmanaged
+        private static unsafe SAFEARRAY* CreateSafeArray<T>(VARENUM vt, T[] result, int lbound = 0) where T : unmanaged
         {
             var saBound = new SAFEARRAYBOUND
             {
@@ -6283,55 +6283,55 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         }
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromCLSID(Guid* clsid, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromCLSID(Guid* clsid, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromFileTime(PInvoke.FILETIME* pftIn, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromFileTime(PInvoke.FILETIME* pftIn, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitVariantFromFileTime(PInvoke.FILETIME* pftIn, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitVariantFromFileTime(PInvoke.FILETIME* pftIn, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromBuffer(void* pv, uint cb, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromBuffer(void* pv, uint cb, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromInt16Vector(void* pv, uint cb, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromInt16Vector(void* pv, uint cb, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromUInt16Vector(void* pv, uint cb, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromUInt16Vector(void* pv, uint cb, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromBooleanVector(void* pv, uint cb, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromBooleanVector(void* pv, uint cb, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromInt32Vector(void* pv, uint cb, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromInt32Vector(void* pv, uint cb, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromUInt32Vector(void* pv, uint cb, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromUInt32Vector(void* pv, uint cb, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromInt64Vector(void* pv, uint cb, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromInt64Vector(void* pv, uint cb, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromUInt64Vector(void* pv, uint cb, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromUInt64Vector(void* pv, uint cb, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromDoubleVector(void* pv, uint cb, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromDoubleVector(void* pv, uint cb, VARIANT* ppropvar);
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
-        private unsafe static extern HRESULT InitPropVariantFromFileTimeVector(void* pv, uint cb, VARIANT* ppropvar);
+        private static extern unsafe HRESULT InitPropVariantFromFileTimeVector(void* pv, uint cb, VARIANT* ppropvar);
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static unsafe extern SAFEARRAY* SafeArrayCreate(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound);
+        private static extern unsafe SAFEARRAY* SafeArrayCreate(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound);
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static unsafe extern SAFEARRAY* SafeArrayCreateEx(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound, IntPtr pvExtra);
+        private static extern unsafe SAFEARRAY* SafeArrayCreateEx(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound, IntPtr pvExtra);
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static unsafe extern HRESULT SafeArrayDestroy(SAFEARRAY* psa);
+        private static extern unsafe HRESULT SafeArrayDestroy(SAFEARRAY* psa);
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private unsafe static extern HRESULT SafeArrayPutElement(SAFEARRAY* psa, int* rgIndices, void* pv);
+        private static extern unsafe HRESULT SafeArrayPutElement(SAFEARRAY* psa, int* rgIndices, void* pv);
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
         private static extern HRESULT VarDecFromI8(long i64In, out DECIMAL pdecOut);

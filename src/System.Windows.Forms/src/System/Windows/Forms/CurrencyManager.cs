@@ -886,7 +886,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Causes the CurrentChanged event to occur.
         /// </summary>
-        internal protected override void OnCurrentChanged(EventArgs e)
+        protected internal override void OnCurrentChanged(EventArgs e)
         {
             if (!inChangeRecordState)
             {
@@ -971,7 +971,7 @@ namespace System.Windows.Forms
         }
 
         //Exists in Everett
-        internal protected void OnMetaDataChanged(EventArgs e)
+        protected internal void OnMetaDataChanged(EventArgs e)
         {
             onMetaDataChangedHandler?.Invoke(this, e);
         }

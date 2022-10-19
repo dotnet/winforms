@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32.Foundation;
 
-internal unsafe readonly partial struct BSTR : IDisposable
+internal readonly unsafe partial struct BSTR : IDisposable
 {
     public BSTR(string value) : this((char*)Marshal.StringToBSTR(value))
     {

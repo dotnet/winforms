@@ -2495,7 +2495,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [DllImport("Oleacc.dll")]
-        internal unsafe static extern HRESULT AccessibleObjectFromPoint(
+        internal static extern unsafe HRESULT AccessibleObjectFromPoint(
             Point ptScreen,
             [MarshalAs(UnmanagedType.Interface)]
             out object ppacc,

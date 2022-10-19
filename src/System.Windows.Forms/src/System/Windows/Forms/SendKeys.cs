@@ -265,7 +265,7 @@ namespace System.Windows.Forms
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
 #pragma warning restore CS3016
-        private unsafe static LRESULT EmptyHookCallback(int nCode, WPARAM wparam, LPARAM lparam) => (LRESULT)0;
+        private static unsafe LRESULT EmptyHookCallback(int nCode, WPARAM wparam, LPARAM lparam) => (LRESULT)0;
 
         private static void LoadSendMethodFromConfig()
         {
@@ -310,7 +310,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private unsafe static void GetKeyboardState(Span<byte> keystate)
+        private static unsafe void GetKeyboardState(Span<byte> keystate)
         {
             if (keystate.Length < 256)
                 throw new InvalidOperationException();
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private unsafe static void SetKeyboardState(ReadOnlySpan<byte> keystate)
+        private static unsafe void SetKeyboardState(ReadOnlySpan<byte> keystate)
         {
             if (keystate.Length < 256)
                 throw new InvalidOperationException();
@@ -628,7 +628,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Uses User32 SendInput to send keystrokes.
         /// </summary>
-        private unsafe static void SendInput(ReadOnlySpan<byte> oldKeyboardState, SKEvent[]? previousEvents)
+        private static unsafe void SendInput(ReadOnlySpan<byte> oldKeyboardState, SKEvent[]? previousEvents)
         {
             // Should be a no-op most of the time
             AddCancelModifiersForPreviousEvents(previousEvents);

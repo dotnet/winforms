@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionDomainUpDown))]
     public partial class DomainUpDown : UpDownBase
     {
-        private readonly static string s_defaultValue = string.Empty;
+        private static readonly string s_defaultValue = string.Empty;
 
         /// <summary>
         ///  Allowable strings for the domain updown.

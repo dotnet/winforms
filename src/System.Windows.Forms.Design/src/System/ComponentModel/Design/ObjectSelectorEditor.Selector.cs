@@ -196,7 +196,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public void Stop() => _editorService = null;
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 switch (m.MsgInternal)
                 {

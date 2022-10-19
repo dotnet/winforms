@@ -9,7 +9,7 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32)]
-        private static unsafe extern int DrawTextExW(
+        private static extern unsafe int DrawTextExW(
             HDC hdc,
             char* lpchText,
             int cchText,

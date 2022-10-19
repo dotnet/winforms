@@ -156,7 +156,7 @@ namespace System.Windows.Forms
         ///  From MSDN:
         ///    This member supports the framework infrastructure and is not intended to be used directly from your code.
         /// </summary>
-        public unsafe static IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background)
+        public static unsafe IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background)
         {
             ArgumentNullException.ThrowIfNull(bitmap);
 
@@ -254,7 +254,7 @@ namespace System.Windows.Forms
         ///  Creates a Win32 HBITMAP out of the image. You are responsible for deleting the HBITMAP. If the image
         ///  uses transparency the background will be filled with the specified color.
         /// </summary>
-        public unsafe static IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap)
+        public static unsafe IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap)
         {
             ArgumentNullException.ThrowIfNull(bitmap);
 
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
             return (IntPtr)colorMask;
         }
 
-        internal unsafe static HBRUSH CreateHalftoneHBRUSH()
+        internal static unsafe HBRUSH CreateHalftoneHBRUSH()
         {
             short* grayPattern = stackalloc short[8];
             for (int i = 0; i < 8; i++)

@@ -11,7 +11,7 @@ internal static partial class Interop
         public delegate BOOL EnumWindowsCallback(HWND hWnd);
 
         [DllImport(Libraries.User32, SetLastError = true)]
-        private static unsafe extern BOOL EnumWindows(delegate* unmanaged<HWND, IntPtr, BOOL> lpEnumFunc, IntPtr lParam);
+        private static extern unsafe BOOL EnumWindows(delegate* unmanaged<HWND, IntPtr, BOOL> lpEnumFunc, IntPtr lParam);
 
         public static unsafe BOOL EnumWindows(EnumWindowsCallback lpEnumFunc)
         {

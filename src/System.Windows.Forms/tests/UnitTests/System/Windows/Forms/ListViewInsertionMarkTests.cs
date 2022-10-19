@@ -237,7 +237,7 @@ namespace System.Windows.Forms.Tests
         {
             public RECT GetInsertMarkRectResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)PInvoke.LVM_GETINSERTMARKRECT)
                 {
@@ -266,7 +266,7 @@ namespace System.Windows.Forms.Tests
         {
             public bool MakeInvalid { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (MakeInvalid && m.Msg == (int)PInvoke.LVM_GETINSERTMARKRECT)
                 {
@@ -610,7 +610,7 @@ namespace System.Windows.Forms.Tests
         {
             public int InsertMarkHitTestResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)PInvoke.LVM_INSERTMARKHITTEST)
                 {

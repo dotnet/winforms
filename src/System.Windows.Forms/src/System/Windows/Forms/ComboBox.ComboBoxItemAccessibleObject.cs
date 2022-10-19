@@ -232,7 +232,7 @@ namespace System.Windows.Forms
                 base.SetFocus();
             }
 
-            internal unsafe override void SelectItem()
+            internal override unsafe void SelectItem()
             {
                 if (!_owningComboBox.IsHandleCreated)
                 {

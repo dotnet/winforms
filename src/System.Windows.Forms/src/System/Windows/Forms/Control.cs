@@ -3729,7 +3729,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        protected internal unsafe virtual bool ShowFocusCues
+        protected internal virtual unsafe bool ShowFocusCues
         {
             get
             {
@@ -8046,7 +8046,7 @@ namespace System.Windows.Forms
             OnInvokedSetScrollPosition(sender, e);
         }
 
-        internal unsafe virtual void OnInvokedSetScrollPosition(object sender, EventArgs e)
+        internal virtual unsafe void OnInvokedSetScrollPosition(object sender, EventArgs e)
         {
             if (!(this is ScrollableControl) && !IsMirrored)
             {
@@ -14450,7 +14450,7 @@ namespace System.Windows.Forms
             return true;
         }
 
-        internal unsafe static bool AreCommonNavigationalKeysDown()
+        internal static unsafe bool AreCommonNavigationalKeysDown()
         {
             static bool IsKeyDown(Keys key, ReadOnlySpan<byte> stateArray)
                 => (stateArray[(int)key] & HighOrderBitMask) != 0;

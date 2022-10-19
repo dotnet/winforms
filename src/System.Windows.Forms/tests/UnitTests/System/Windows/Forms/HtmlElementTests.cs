@@ -2975,7 +2975,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        private async static Task<HtmlDocument> GetDocument(WebBrowser control, string html)
+        private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
         {
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);

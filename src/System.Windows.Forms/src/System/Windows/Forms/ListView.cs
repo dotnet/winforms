@@ -3588,7 +3588,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal unsafe override ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string caption, ToolTip tooltip)
+        internal override unsafe ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string caption, ToolTip tooltip)
         {
             // The "ShowItemToolTips" flag is required so that when the user hovers over the ListViewItem,
             // their own tooltip is displayed, not the ListViewItem tooltip.

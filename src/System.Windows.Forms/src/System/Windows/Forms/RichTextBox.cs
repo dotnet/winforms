@@ -207,7 +207,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -1454,7 +1454,7 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        public unsafe override int TextLength
+        public override unsafe int TextLength
         {
             get
             {
@@ -1687,7 +1687,7 @@ namespace System.Windows.Forms
         //DrawToBitmap doesn't work for this control, so we should hide it.  We'll
         //still call base so that this has a chance to work if it can.
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
+        public new void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
         {
             base.DrawToBitmap(bitmap, targetBounds);
         }
@@ -2330,7 +2330,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the location of the character at the given index.
         /// </summary>
-        public unsafe override Point GetPositionFromCharIndex(int index)
+        public override unsafe Point GetPositionFromCharIndex(int index)
         {
             if (richEditMajorVersion == 2)
             {

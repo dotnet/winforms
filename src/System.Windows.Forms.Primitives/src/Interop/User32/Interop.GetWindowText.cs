@@ -20,7 +20,7 @@ internal static partial class Interop
         }
 
         [DllImport(Libraries.User32)]
-        private static unsafe extern int GetWindowTextW(IntPtr hWnd, char* lpString, int nMaxCount);
+        private static extern unsafe int GetWindowTextW(IntPtr hWnd, char* lpString, int nMaxCount);
 
         public static unsafe string GetWindowText(IntPtr hWnd)
         {

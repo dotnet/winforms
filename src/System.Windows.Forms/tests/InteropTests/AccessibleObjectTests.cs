@@ -715,20 +715,20 @@ namespace System.Windows.Forms.InteropTests
         }
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IAccessibleExConvertReturnedElement(
+        private static extern unsafe string Test_IAccessibleExConvertReturnedElement(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IAccessibleExGetIAccessiblePair(
+        private static extern unsafe string Test_IAccessibleExGetIAccessiblePair(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IAccessibleExGetRuntimeId(
+        private static extern unsafe string Test_IAccessibleExGetRuntimeId(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
             int* expected);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IAccessibleExGetObjectForChild(
+        private static extern unsafe string Test_IAccessibleExGetObjectForChild(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
             int idChild);
 
@@ -794,20 +794,20 @@ namespace System.Windows.Forms.InteropTests
             double value, double expected);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IRawElementProviderFragmentGetBoundingRectangle(
+        private static extern unsafe string Test_IRawElementProviderFragmentGetBoundingRectangle(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
             UiaRect expected);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IRawElementProviderFragmentGetFragmentRoot(
+        private static extern unsafe string Test_IRawElementProviderFragmentGetFragmentRoot(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IRawElementProviderFragmentGetEmbeddedFragmentRoots(
+        private static extern unsafe string Test_IRawElementProviderFragmentGetEmbeddedFragmentRoots(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IRawElementProviderFragmentGetRuntimeId(
+        private static extern unsafe string Test_IRawElementProviderFragmentGetRuntimeId(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
             int* expected);
 
@@ -817,21 +817,21 @@ namespace System.Windows.Forms.InteropTests
             NavigateDirection expected);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IRawElementProviderFragmentSetFocus(
+        private static extern unsafe string Test_IRawElementProviderFragmentSetFocus(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IRawElementProviderFragmentRootElementProviderFromPoint(
+        private static extern unsafe string Test_IRawElementProviderFragmentRootElementProviderFromPoint(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
             double x,
             double y);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IRawElementProviderFragmentRootGetFocus(
+        private static extern unsafe string Test_IRawElementProviderFragmentRootGetFocus(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private unsafe static extern string Test_IInvokeProviderInvoke(
+        private static extern unsafe string Test_IInvokeProviderInvoke(
             [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]

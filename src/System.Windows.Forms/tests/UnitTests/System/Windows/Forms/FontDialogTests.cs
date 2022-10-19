@@ -694,7 +694,7 @@ namespace System.Windows.Forms.Tests
 
         private class CustomClass : Control
         {
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.WM.CHOOSEFONT_GETLOGFONT)
                 {

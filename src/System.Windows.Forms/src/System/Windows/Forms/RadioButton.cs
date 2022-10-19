@@ -338,7 +338,7 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => true;
 
         [DefaultValue(false)]
-        new public bool TabStop
+        public new bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;

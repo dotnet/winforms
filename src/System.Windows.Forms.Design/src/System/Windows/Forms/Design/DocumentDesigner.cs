@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Design
         private bool queriedTabOrder;
         private MenuCommand tabOrderCommand;
 
-        static internal IDesignerSerializationManager manager;
+        internal static IDesignerSerializationManager manager;
 
         // The component tray
         //

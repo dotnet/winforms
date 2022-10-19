@@ -405,7 +405,7 @@ namespace System.Windows.Forms
         // Make this event visible through the property browser.
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler TabStopChanged
+        public new event EventHandler TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public bool TabStop
+        public new bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;

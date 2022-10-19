@@ -185,7 +185,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [SRDescription(nameof(SR.ListBoxItemsDescr))]
         [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
-        new public ObjectCollection Items
+        public new ObjectCollection Items
         {
             get
             {
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? DataSourceChanged
+        public new event EventHandler? DataSourceChanged
         {
             add => base.DataSourceChanged += value;
             remove => base.DataSourceChanged -= value;
@@ -308,7 +308,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? DisplayMemberChanged
+        public new event EventHandler? DisplayMemberChanged
         {
             add => base.DisplayMemberChanged += value;
             remove => base.DisplayMemberChanged -= value;
@@ -369,7 +369,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? ValueMemberChanged
+        public new event EventHandler? ValueMemberChanged
         {
             add => base.ValueMemberChanged += value;
             remove => base.ValueMemberChanged -= value;
@@ -775,7 +775,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected unsafe override void OnBackColorChanged(EventArgs e)
+        protected override unsafe void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
 

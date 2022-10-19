@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     // Miscellaneous utilities
-    static internal class ImageListUtils
+    internal static class ImageListUtils
     {
         public static PropertyDescriptor? GetImageListProperty(PropertyDescriptor currentComponent, ref object instance)
         {

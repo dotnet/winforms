@@ -303,7 +303,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Creates an Stream from the data stored in handle.
             /// </summary>
-            private unsafe static Stream ReadByteStreamFromHandle(nint handle, out bool isSerializedObject)
+            private static unsafe Stream ReadByteStreamFromHandle(nint handle, out bool isSerializedObject)
             {
                 void* ptr = PInvoke.GlobalLock(handle);
                 if (ptr is null)
@@ -388,7 +388,7 @@ namespace System.Windows.Forms
             ///  Parses the HDROP format and returns a list of strings using
             ///  the DragQueryFile function.
             /// </summary>
-            private unsafe static string[]? ReadFileListFromHandle(HDROP hdrop)
+            private static unsafe string[]? ReadFileListFromHandle(HDROP hdrop)
             {
                 uint count = PInvoke.DragQueryFile(hdrop, iFile: 0xFFFFFFFF, lpszFile: null, cch: 0);
                 if (count == 0)

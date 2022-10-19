@@ -268,7 +268,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.MsgInternal == User32.WM.REFLECT_NOTIFY)
                 {

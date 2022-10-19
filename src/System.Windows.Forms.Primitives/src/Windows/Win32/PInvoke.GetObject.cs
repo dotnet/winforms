@@ -6,7 +6,7 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public unsafe static bool GetObject<T>(HGDIOBJ h, out T @object) where T : unmanaged
+        public static unsafe bool GetObject<T>(HGDIOBJ h, out T @object) where T : unmanaged
         {
             // HGDIOBJ isn't technically correct, but close enough to filter out bigger mistakes (HWND, etc.).
 

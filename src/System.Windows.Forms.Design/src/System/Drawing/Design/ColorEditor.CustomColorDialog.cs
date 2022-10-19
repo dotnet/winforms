@@ -58,7 +58,7 @@ namespace System.Drawing.Design
                 }
             }
 
-            protected unsafe override IntPtr HookProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
+            protected override unsafe IntPtr HookProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
             {
                 switch ((User32.WM)msg)
                 {

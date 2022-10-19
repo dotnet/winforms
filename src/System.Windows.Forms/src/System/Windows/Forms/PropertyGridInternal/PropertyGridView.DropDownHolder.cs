@@ -33,16 +33,16 @@ namespace System.Windows.Forms.PropertyGridInternal
             private int _currentMoveType = MoveTypeNone;            // what type of move are we processing? left, bottom, or both?
 
             // The size of the 4-way resize grip at outermost corner of the resize bar
-            private readonly static int s_resizeGripSize = SystemInformation.HorizontalScrollBarHeight;
+            private static readonly int s_resizeGripSize = SystemInformation.HorizontalScrollBarHeight;
 
             // The thickness of the resize bar
-            private readonly static int s_resizeBarSize = s_resizeGripSize + 1;
+            private static readonly int s_resizeBarSize = s_resizeGripSize + 1;
 
             // The thickness of the 2-way resize area along the outer edge of the resize bar
-            private readonly static int s_resizeBorderSize = s_resizeBarSize / 2;
+            private static readonly int s_resizeBorderSize = s_resizeBarSize / 2;
 
             // The minimum size for the control.
-            private readonly static Size s_minDropDownSize =
+            private static readonly Size s_minDropDownSize =
                 new(SystemInformation.VerticalScrollBarWidth * 4, SystemInformation.HorizontalScrollBarHeight * 4);
 
             // Our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.

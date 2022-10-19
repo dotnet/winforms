@@ -168,7 +168,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  specifies the default behavior of these items on ToolStripDropDowns when clicked.
         /// </summary>
-        internal protected override bool DismissWhenClicked
+        protected internal override bool DismissWhenClicked
         {
             get
             {

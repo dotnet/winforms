@@ -11,7 +11,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of controls...
         /// </summary>
-        new public class ControlCollection : Control.ControlCollection
+        public new class ControlCollection : Control.ControlCollection
         {
             private readonly MdiClient owner;
 
