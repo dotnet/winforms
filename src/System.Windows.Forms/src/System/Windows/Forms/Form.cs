@@ -4331,7 +4331,7 @@ namespace System.Windows.Forms
                 AddToDpiFonts(deviceDpiNew, fontForDpi);
             }
 
-            // If AutoScaleMode=AutoScaleMode.Dpi, We continue with the linear size we get from Windows for the top-level window.
+            // If AutoScaleMode=AutoScaleMode.Dpi then we continue with the linear size we get from Windows for the top-level window.
             if (AutoScaleMode == AutoScaleMode.Dpi)
             {
                 return false;
@@ -4346,7 +4346,7 @@ namespace System.Windows.Forms
 
             desiredSize.Width = (int)(Size.Width * autoScaleFactor.Width);
             desiredSize.Height = (int)(Size.Height * autoScaleFactor.Height);
-            Debug.WriteLine($"AutoScaleFactor computed for new Dpi = {autoScaleFactor.Width} - {autoScaleFactor.Height}");
+            Debug.WriteLine($"AutoScaleFactor computed for new DPI = {autoScaleFactor.Width} - {autoScaleFactor.Height}");
 
             // Notify Windows that the top-level window size should be based on AutoScaleMode value.
             return true;
