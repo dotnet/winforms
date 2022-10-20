@@ -413,8 +413,13 @@ RPC_E_CHANGED_MODE
 SafeArrayGetRecordInfo
 S_FALSE
 S_OK
+SafeArrayCreate
+SafeArrayCreateEx
+SafeArrayDestroy
+SafeArrayGetElement
 SafeArrayGetVartype
 SafeArrayLock
+SafeArrayPutElement
 SafeArrayUnlock
 SaveDC
 ScreenToClient

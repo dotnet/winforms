@@ -55,12 +55,17 @@ internal unsafe partial struct VARIANT : IDisposable
 
     public object? ToObject()
     {
+        if (vt == VT_DECIMAL)
+        {
+            return Anonymous.decVal.ToDecimal();
+        }
+
         fixed (VARIANT* thisVariant = &this)
         {
             void* data = &thisVariant->Anonymous.Anonymous.Anonymous;
             if (Byref)
             {
-                data = *((void**)data);
+                data = *(void**)data;
 
                 // CLR allows VT_EMPTY/NULL | VT_BYREF to have no data.
                 // In other cases, the variant is invalid.
@@ -69,25 +74,21 @@ internal unsafe partial struct VARIANT : IDisposable
                     throw new ArgumentException("Invalid Variant");
                 }
             }
-            else if (Anonymous.Anonymous.vt == VT_DECIMAL)
-            {
-                data = thisVariant;
-            }
 
             // Note that the following check also covers VT_ILLEGAL.
-            if ((Anonymous.Anonymous.vt & ~(VT_BYREF | VT_ARRAY | VT_VECTOR)) >= (VARENUM)0x80)
+            if ((vt & ~(VT_BYREF | VT_ARRAY | VT_VECTOR)) >= (VARENUM)0x80)
             {
                 throw new InvalidOleVariantTypeException();
             }
 
-            if ((Anonymous.Anonymous.vt & VT_VECTOR) != 0)
+            if ((vt & VT_VECTOR) != 0)
             {
-                return ToVector(thisVariant->Anonymous.Anonymous.Anonymous.ca, Anonymous.Anonymous.vt);
+                return ToVector(thisVariant->data.ca, vt);
             }
 
-            if ((Anonymous.Anonymous.vt & VT_ARRAY) != 0)
+            if ((vt & VT_ARRAY) != 0)
             {
-                return ToArray(*(SAFEARRAY**)data, Anonymous.Anonymous.vt);
+                return ToArray(*(SAFEARRAY**)data, vt);
             }
 
             return ToObject(Type, Byref, data);
@@ -198,8 +199,8 @@ internal unsafe partial struct VARIANT : IDisposable
                 return null;
             case VT_RECORD:
                 {
-                    VARIANTRecord* record = (VARIANTRecord*)data;
-                    if (record->pRecInfo == IntPtr.Zero)
+                    var record = (_Anonymous_e__Union._Anonymous_e__Struct._Anonymous_e__Union._Anonymous_e__Struct*)data;
+                    if (record->pRecInfo is null)
                     {
                         throw new ArgumentException("Specified OLE variant is invalid.");
                     }
@@ -906,11 +907,5 @@ internal unsafe partial struct VARIANT : IDisposable
                 public CA ca;
             }
         }
-    }
-
-    private struct VARIANTRecord
-    {
-        public void* pvRecord;
-        public IntPtr pRecInfo;
     }
 }

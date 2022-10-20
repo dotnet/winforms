@@ -1348,10 +1348,10 @@ namespace System.Windows.Forms
             /// </summary>
             internal void OnFocus(bool focus)
             {
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AXSource: SetFocus:  " + focus.ToString());
-                if (_activeXState[s_inPlaceActive] && _clientSite is Ole32.IOleControlSite)
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AXSource: SetFocus:  {focus}");
+                if (_activeXState[s_inPlaceActive] && _clientSite is Ole32.IOleControlSite oleSite)
                 {
-                    ((Ole32.IOleControlSite)_clientSite).OnFocus(focus ? true : false);
+                    oleSite.OnFocus(focus);
                 }
 
                 if (focus && _activeXState[s_inPlaceActive] && !_activeXState[s_uiActive])

@@ -7,10 +7,10 @@
 using System.Runtime.InteropServices;
 using Xunit;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using static Windows.Win32.System.Com.ADVANCED_FEATURE_FLAGS;
 using static Windows.Win32.System.Com.VARENUM;
 using static Interop;
-using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests.Interop.Oleaut32
 {
@@ -5379,7 +5379,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 };
             }
 
-            SAFEARRAY* psa = SafeArrayCreate(VT_I4, (uint)rank, saBounds);
+            SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, (uint)rank, saBounds);
             using VARIANT variant = new()
             {
                 vt = VT_ARRAY | VT_I4,
@@ -5398,7 +5398,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = (uint)result.Length,
                 lLbound = lbound
             };
-            SAFEARRAY* psa = SafeArrayCreate(vt, 1, &saBound);
+            SAFEARRAY* psa = PInvoke.SafeArrayCreate(vt, 1, &saBound);
             Assert.True(psa != null);
 
             VARENUM arrayVt = VT_EMPTY;
@@ -5413,11 +5413,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 // Insert pointers directly.
                 if (value is IntPtr valuePtr)
                 {
-                    hr = SafeArrayPutElement(psa, &index, (void*)valuePtr);
+                    hr = PInvoke.SafeArrayPutElement(psa, &index, (void*)valuePtr);
                 }
                 else
                 {
-                    hr = SafeArrayPutElement(psa, &index, &value);
+                    hr = PInvoke.SafeArrayPutElement(psa, &index, &value);
                 }
 
                 Assert.Equal(HRESULT.S_OK, hr);
@@ -5439,7 +5439,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = (uint)multiDimArray.GetLength(1),
                 lLbound = lbound2
             };
-            SAFEARRAY* psa = SafeArrayCreate(vt, 2, saBounds);
+            SAFEARRAY* psa = PInvoke.SafeArrayCreate(vt, 2, saBounds);
             Assert.True(psa != null);
 
             VARENUM arrayVt = VT_EMPTY;
@@ -5456,11 +5456,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     // Insert pointers directly.
                     if (value is IntPtr valuePtr)
                     {
-                        hr = SafeArrayPutElement(psa, indices, (void*)valuePtr);
+                        hr = PInvoke.SafeArrayPutElement(psa, indices, (void*)valuePtr);
                     }
                     else
                     {
-                        hr = SafeArrayPutElement(psa, indices, &value);
+                        hr = PInvoke.SafeArrayPutElement(psa, indices, &value);
                     }
 
                     Assert.Equal(HRESULT.S_OK, hr);
@@ -5725,7 +5725,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = (uint)result.Length,
                 lLbound = lbound
             };
-            SAFEARRAY* psa = SafeArrayCreateEx(VT_RECORD, 1, &saBound, (nint)(void*)recordInfo);
+            SAFEARRAY* psa = PInvoke.SafeArrayCreateEx(VT_RECORD, 1, &saBound, recordInfo);
             Assert.True(psa != null);
 
             VARENUM arrayVt = VT_EMPTY;
@@ -5804,18 +5804,6 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
         private static extern unsafe HRESULT InitPropVariantFromFileTimeVector(void* pv, uint cb, VARIANT* ppropvar);
-
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe SAFEARRAY* SafeArrayCreate(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound);
-
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe SAFEARRAY* SafeArrayCreateEx(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound, IntPtr pvExtra);
-
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe HRESULT SafeArrayDestroy(SAFEARRAY* psa);
-
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe HRESULT SafeArrayPutElement(SAFEARRAY* psa, int* rgIndices, void* pv);
 
         [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
         private static extern HRESULT VarDecFromI8(long i64In, out DECIMAL pdecOut);

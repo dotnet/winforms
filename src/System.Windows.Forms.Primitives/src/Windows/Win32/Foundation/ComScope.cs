@@ -17,6 +17,8 @@ namespace Windows.Win32.Foundation
 
         public static implicit operator T*(in ComScope<T> scope) => (T*)scope._value;
 
+        public static implicit operator void*(in ComScope<T> scope) => (void*)scope._value;
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator T**(in ComScope<T> scope) => (T**)Unsafe.AsPointer(ref Unsafe.AsRef(scope._value));
 
