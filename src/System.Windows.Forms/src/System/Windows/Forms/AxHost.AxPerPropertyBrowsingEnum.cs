@@ -101,7 +101,7 @@ namespace System.Windows.Forms
 
                             using VARIANT var = new();
                             HRESULT hr = ppb.GetPredefinedValue(_target.Dispid, cookie, &var);
-                            if (hr == HRESULT.S_OK && var.Type != VARENUM.VT_EMPTY)
+                            if (hr.Succeeded && var.Type != VARENUM.VT_EMPTY)
                             {
                                 values[i] = var.ToObject();
                             }
