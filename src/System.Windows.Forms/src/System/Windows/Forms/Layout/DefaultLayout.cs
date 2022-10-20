@@ -827,10 +827,10 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Updates anchor calculations if the control is parented and both control's and its parent's handle are created.
-        /// This is the new behavior introduced in .NET 8.0. Refer to
-        /// https://github.com/microsoft/winforms/blob/main/docs/AnchorLayoutChangesInNet80.md for more details.
-        /// Developers may opt-out of this new behavior using switch <see cref="LocalAppContextSwitches.EnableAnchorLayoutV2"/>.
+        ///  Updates anchor calculations if the control is parented and both control's and its parent's handle are created.
+        ///  This is the new behavior introduced in .NET 8.0. Refer to
+        ///  https://github.com/microsoft/winforms/blob/main/docs/AnchorLayoutChangesInNet80.md for more details.
+        ///  Developers may opt-out of this new behavior using switch <see cref="LocalAppContextSwitches.EnableAnchorLayoutV2"/>.
         /// </summary>
         internal static void UpdateAnchorInfoV2(IArrangedElement element)
         {
