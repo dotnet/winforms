@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -158,14 +159,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (Marshal.IsComObject(component) && component is Oleaut32.IDispatch pDisp)
                 {
-                    var pExcepInfo = new Oleaut32.EXCEPINFO();
-                    var dispParams = new Oleaut32.DISPPARAMS();
+                    EXCEPINFO pExcepInfo = new();
+                    DISPPARAMS dispParams = new();
                     Guid g = Guid.Empty;
                     HRESULT hr = pDisp.Invoke(
                         Ole32.DispatchID.ABOUTBOX,
                         &g,
                         PInvoke.GetThreadLocale(),
-                        Oleaut32.DISPATCH.METHOD,
+                        DISPATCH_FLAGS.DISPATCH_METHOD,
                         &dispParams,
                         null,
                         &pExcepInfo,

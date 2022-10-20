@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 using static Interop.Mshtml;
 
@@ -444,26 +445,29 @@ namespace System.Windows.Forms
                         Array.Reverse(args);
                     }
 
-                    using var vectorArgs = new Oleaut32.VARIANTVector(args);
-                    fixed (Oleaut32.VARIANT* pVariants = vectorArgs.Variants)
+                    using VARIANTVector vectorArgs = new(args);
+                    fixed (VARIANT* pVariants = vectorArgs.Variants)
                     {
-                        var dispParams = new Oleaut32.DISPPARAMS();
-                        dispParams.rgvarg = pVariants;
-                        dispParams.cArgs = (uint)vectorArgs.Variants.Length;
-                        dispParams.rgdispidNamedArgs = null;
-                        dispParams.cNamedArgs = 0;
+                        DISPPARAMS dispParams = new()
+                        {
+                            rgvarg = pVariants,
+                            cArgs = (uint)vectorArgs.Variants.Length,
+                            rgdispidNamedArgs = null,
+                            cNamedArgs = 0
+                        };
 
                         var retVals = new object[1];
-                        var excepInfo = new Oleaut32.EXCEPINFO();
+                        EXCEPINFO excepInfo = new();
                         hr = scriptObject.Invoke(
                             dispid,
                             &g,
                             PInvoke.GetThreadLocale(),
-                            Oleaut32.DISPATCH.METHOD,
+                            DISPATCH_FLAGS.DISPATCH_METHOD,
                             &dispParams,
                             retVals,
                             &excepInfo,
                             null);
+
                         if (hr == HRESULT.S_OK)
                         {
                             return retVals[0];

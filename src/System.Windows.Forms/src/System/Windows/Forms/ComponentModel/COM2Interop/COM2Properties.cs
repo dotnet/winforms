@@ -6,6 +6,7 @@
 
 using System.Collections;
 using System.Diagnostics;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -372,7 +373,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private unsafe (ushort, ushort, ushort, ushort) GetTypeInfoVersion(Oleaut32.ITypeInfo pTypeInfo)
         {
-            Ole32.TYPEATTR* pTypeAttr = null;
+            TYPEATTR* pTypeAttr = null;
             HRESULT hr = pTypeInfo.GetTypeAttr(&pTypeAttr);
             if (!hr.Succeeded || pTypeAttr is null)
             {
@@ -434,7 +435,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 #if DEBUG
                 if (DbgCom2PropertiesSwitch.TraceVerbose)
                 {
-                    Debug.WriteLine("Disposing reference to object " + dbgObjName + ", class=" + dbgObjClass + " (weakRef " + (weakObjRef is null ? "null" : "dead") + ")");
+                    Debug.WriteLine($"Disposing reference to object {dbgObjName}, class={dbgObjClass} (weakRef {(weakObjRef is null ? "null" : "dead")})");
                 }
 #endif
 

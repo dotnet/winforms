@@ -6,11 +6,12 @@
 
 using System.Runtime.InteropServices;
 using Xunit;
-using static Interop;
-using static Interop.Ole32;
-using static Interop.Oleaut32;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
+using static Windows.Win32.System.Com.ADVANCED_FEATURE_FLAGS;
+using static Windows.Win32.System.Com.VARENUM;
 
-namespace System.Windows.Forms.Tests.Interop.Oleaut32
+namespace System.Windows.Forms.Tests.Interop.SafeArrayTests
 {
     public unsafe class SAFEARRAYTests
     {
@@ -40,11 +41,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> Create_TestData()
         {
-            yield return new object[] { VARENUM.I4, FADF.HAVEVARTYPE, 4 };
-            yield return new object[] { VARENUM.I8, FADF.HAVEVARTYPE, 8 };
-            yield return new object[] { VARENUM.BSTR, FADF.HAVEVARTYPE | FADF.BSTR, IntPtr.Size };
-            yield return new object[] { VARENUM.UNKNOWN, FADF.HAVEIID | FADF.UNKNOWN, IntPtr.Size };
-            yield return new object[] { VARENUM.DISPATCH, FADF.HAVEIID | FADF.DISPATCH, IntPtr.Size };
+            yield return new object[] { VT_I4, FADF_HAVEVARTYPE, 4 };
+            yield return new object[] { VT_I8, FADF_HAVEVARTYPE, 8 };
+            yield return new object[] { VT_BSTR, FADF_HAVEVARTYPE | FADF_BSTR, IntPtr.Size };
+            yield return new object[] { VT_UNKNOWN, FADF_HAVEIID | FADF_UNKNOWN, IntPtr.Size };
+            yield return new object[] { VT_DISPATCH, FADF_HAVEIID | FADF_DISPATCH, IntPtr.Size };
         }
 
         [StaTheory]
@@ -56,27 +57,27 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = 1
             };
-            SAFEARRAY* psa = SafeArrayCreate((VARENUM)vt, 1, &saBound);
+            SAFEARRAY* psa = PInvoke.SafeArrayCreate((VARENUM)vt, 1, &saBound);
             Assert.True(psa != null);
 
             try
             {
                 Assert.Equal(1u, psa->cDims);
-                Assert.Equal((FADF)expectedFeatures, psa->fFeatures);
-                Assert.Equal((uint)expectedCbElements, psa->cbElements);
+                Assert.Equal((ADVANCED_FEATURE_FLAGS)expectedFeatures, psa->fFeatures);
+                Assert.Equal(expectedCbElements, psa->cbElements);
                 Assert.Equal(0u, psa->cLocks);
                 Assert.True(psa->pvData != null);
-                Assert.Equal(10u, psa->rgsabound[0].cElements);
-                Assert.Equal(1, psa->rgsabound[0].lLbound);
+                Assert.Equal(10u, psa->rgsabound._0.cElements);
+                Assert.Equal(1, psa->rgsabound._0.lLbound);
 
-                VARENUM arrayVt = VARENUM.EMPTY;
-                HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
+                VARENUM arrayVt = VT_EMPTY;
+                HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal((VARENUM)vt, arrayVt);
             }
             finally
             {
-                HRESULT hr = SafeArrayDestroy(psa);
+                HRESULT hr = PInvoke.SafeArrayDestroy(psa);
                 Assert.Equal(HRESULT.S_OK, hr);
             }
         }
@@ -89,84 +90,80 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = 1
             };
-            var record = new CustomRecordInfo();
-            IntPtr pRecord = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
+
+            using ComScope<IRecordInfo> recordInfo = new(new CustomRecordInfo().GetComInterface());
+
+            SAFEARRAY* psa = PInvoke.SafeArrayCreateEx(VT_RECORD, 1, &saBound, recordInfo);
+            Assert.True(psa != null);
+
             try
             {
-                SAFEARRAY* psa = SafeArrayCreateEx(VARENUM.RECORD, 1, &saBound, pRecord);
-                Assert.True(psa != null);
+                Assert.Equal(1u, psa->cDims);
+                Assert.Equal(FADF_RECORD, psa->fFeatures);
+                Assert.Equal((uint)sizeof(int), psa->cbElements);
+                Assert.Equal(0u, psa->cLocks);
+                Assert.True(psa->pvData != null);
+                Assert.Equal(10u, psa->rgsabound._0.cElements);
+                Assert.Equal(1, psa->rgsabound._0.lLbound);
 
-                try
-                {
-                    Assert.Equal(1u, psa->cDims);
-                    Assert.Equal(FADF.RECORD, psa->fFeatures);
-                    Assert.Equal((uint)sizeof(int), psa->cbElements);
-                    Assert.Equal(0u, psa->cLocks);
-                    Assert.True(psa->pvData != null);
-                    Assert.Equal(10u, psa->rgsabound[0].cElements);
-                    Assert.Equal(1, psa->rgsabound[0].lLbound);
-
-                    VARENUM arrayVt = VARENUM.EMPTY;
-                    HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
-                    Assert.Equal(HRESULT.S_OK, hr);
-                    Assert.Equal(VARENUM.RECORD, arrayVt);
-                }
-                finally
-                {
-                    HRESULT hr = SafeArrayDestroy(psa);
-                    Assert.Equal(HRESULT.S_OK, hr);
-                }
+                VARENUM arrayVt = VT_EMPTY;
+                HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
+                Assert.Equal(HRESULT.S_OK, hr);
+                Assert.Equal(VT_RECORD, arrayVt);
             }
             finally
             {
-                Marshal.Release(pRecord);
+                HRESULT hr = PInvoke.SafeArrayDestroy(psa);
+                Assert.Equal(HRESULT.S_OK, hr);
             }
         }
 
-        private class CustomRecordInfo : IRecordInfo
+        private class CustomRecordInfo : IRecordInfo.Interface
         {
-            HRESULT IRecordInfo.RecordInit(void* pvNew) => throw new NotImplementedException();
+            public IRecordInfo* GetComInterface() => (IRecordInfo*)Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo.Interface>(this);
 
-            HRESULT IRecordInfo.RecordClear(void* pvExisting) => throw new NotImplementedException();
+            public HRESULT RecordInit(void* pvNew) => throw new NotImplementedException();
 
-            HRESULT IRecordInfo.RecordCopy(void* pvExisting, void* pvNew) => throw new NotImplementedException();
+            public HRESULT RecordClear(void* pvExisting) => throw new NotImplementedException();
+
+            public HRESULT RecordCopy(void* pvExisting, void* pvNew) => throw new NotImplementedException();
 
             public Func<(Guid, HRESULT)> GetGuidAction { get; set; }
 
-            HRESULT IRecordInfo.GetGuid(Guid* pguid)
+            public HRESULT GetGuid(Guid* pguid)
             {
                 (Guid guid, HRESULT hr) = GetGuidAction();
                 *pguid = guid;
                 return hr;
             }
 
-            HRESULT IRecordInfo.GetName(BSTR* pbstrName) => throw new NotImplementedException();
+            public HRESULT GetName(BSTR* pbstrName) => throw new NotImplementedException();
 
-            HRESULT IRecordInfo.GetSize(uint* pcbSize)
+            public HRESULT GetSize(uint* pcbSize)
             {
                 *pcbSize = (uint)sizeof(int);
                 return HRESULT.S_OK;
             }
 
-            HRESULT IRecordInfo.GetTypeInfo(out ITypeInfo ppTypeInfo) => throw new NotImplementedException();
+            public HRESULT GetTypeInfo(ITypeInfo** ppTypeInfo) => throw new NotImplementedException();
 
-            HRESULT IRecordInfo.GetField(void* pvData, out string szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+            public HRESULT GetField(void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
 
-            HRESULT IRecordInfo.GetFieldNoCopy(void* pvData, out string szFieldName, VARIANT* pvarField, void* ppvDataCArray) => throw new NotImplementedException();
+            public HRESULT GetFieldNoCopy(void* pvData, PCWSTR szFieldName, VARIANT* pvarField, void** ppvDataCArray) => throw new NotImplementedException();
 
-            HRESULT IRecordInfo.PutField(INVOKEKIND wFlags, void* pvData, out string szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+            public HRESULT PutField(INVOKEKIND wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
 
-            HRESULT IRecordInfo.PutFieldNoCopy(INVOKEKIND wFlags, void* pvData, out string szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
+            public HRESULT PutFieldNoCopy(INVOKEKIND wFlags, void* pvData, PCWSTR szFieldName, VARIANT* pvarField) => throw new NotImplementedException();
 
-            HRESULT IRecordInfo.GetFieldNames(uint* pcNames, BSTR* rgBstrNames) => throw new NotImplementedException();
+            public HRESULT GetFieldNames(uint* pcNames, BSTR* rgBstrNames) => throw new NotImplementedException();
 
-            BOOL IRecordInfo.IsMatchingType(ref IRecordInfo pRecordInfo) => throw new NotImplementedException();
+            public BOOL IsMatchingType(IRecordInfo* pRecordInfoInfo) => throw new NotImplementedException();
 
-            void* IRecordInfo.RecordCreate() => throw new NotImplementedException();
+            public void* RecordCreate() => throw new NotImplementedException();
 
-            HRESULT IRecordInfo.RecordCreateCopy(void* pvSource, void** ppvDest) => throw new NotImplementedException();
+            public HRESULT RecordCreateCopy(void* pvSource, void** ppvDest) => throw new NotImplementedException();
 
-            HRESULT IRecordInfo.RecordDestroy(void* pvRecord) => throw new NotImplementedException();
+            public HRESULT RecordDestroy(void* pvRecord) => throw new NotImplementedException();
         }
 
         [StaTheory]
@@ -184,29 +181,29 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = 0
             };
-            SAFEARRAY* psa = SafeArrayCreate((VARENUM)vt, 2, saBounds);
+            SAFEARRAY* psa = PInvoke.SafeArrayCreate((VARENUM)vt, 2, saBounds);
             Assert.True(psa != null);
 
             try
             {
                 Assert.Equal(2u, psa->cDims);
-                Assert.Equal((FADF)expectedFeatures, psa->fFeatures);
+                Assert.Equal((ADVANCED_FEATURE_FLAGS)expectedFeatures, psa->fFeatures);
                 Assert.Equal(expectedCbElements, psa->cbElements);
                 Assert.Equal(0u, psa->cLocks);
                 Assert.True(psa->pvData != null);
-                Assert.Equal(20u, psa->rgsabound[0].cElements);
-                Assert.Equal(0, psa->rgsabound[0].lLbound);
-                Assert.Equal(10u, psa->rgsabound[1].cElements);
-                Assert.Equal(1, psa->rgsabound[1].lLbound);
+                Assert.Equal(20u, psa->rgsabound._0.cElements);
+                Assert.Equal(0, psa->rgsabound._0.lLbound);
+                Assert.Equal(10u, ((SAFEARRAYBOUND*)&psa->rgsabound)[1].cElements);
+                Assert.Equal(1, ((SAFEARRAYBOUND*)&psa->rgsabound)[1].lLbound);
 
-                VARENUM arrayVt = VARENUM.EMPTY;
-                HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
+                VARENUM arrayVt = VT_EMPTY;
+                HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal((VARENUM)vt, arrayVt);
             }
             finally
             {
-                HRESULT hr = SafeArrayDestroy(psa);
+                HRESULT hr = PInvoke.SafeArrayDestroy(psa);
                 Assert.Equal(HRESULT.S_OK, hr);
             }
         }
@@ -219,7 +216,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = 0
             };
-            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
+            SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 1, &saBound);
             Assert.True(psa != null);
 
             try
@@ -231,19 +228,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (int* pIndices2 = indices2)
                 {
                     int value1 = 1;
-                    HRESULT hr = SafeArrayPutElement(psa, pIndices1, &value1);
+                    HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
                     Assert.Equal(HRESULT.S_OK, hr);
 
                     int value2 = 2;
-                    hr = SafeArrayPutElement(psa, pIndices2, &value2);
+                    hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
                     Assert.Equal(HRESULT.S_OK, hr);
 
                     int result = -1;
-                    hr = SafeArrayGetElement(psa, pIndices1, &result);
+                    hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
                     Assert.Equal(HRESULT.S_OK, hr);
                     Assert.Equal(1, result);
 
-                    hr = SafeArrayGetElement(psa, pIndices2, &result);
+                    hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
                     Assert.Equal(HRESULT.S_OK, hr);
                     Assert.Equal(2, result);
                 }
@@ -253,7 +250,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             }
             finally
             {
-                SafeArrayDestroy(psa);
+                PInvoke.SafeArrayDestroy(psa);
             }
         }
 
@@ -265,7 +262,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = -5
             };
-            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
+            SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 1, &saBound);
             Assert.True(psa != null);
 
             try
@@ -277,19 +274,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (int* pIndices2 = indices2)
                 {
                     int value1 = 1;
-                    HRESULT hr = SafeArrayPutElement(psa, pIndices1, &value1);
+                    HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
                     Assert.Equal(HRESULT.S_OK, hr);
 
                     int value2 = 2;
-                    hr = SafeArrayPutElement(psa, pIndices2, &value2);
+                    hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
                     Assert.Equal(HRESULT.S_OK, hr);
 
                     int result = -1;
-                    hr = SafeArrayGetElement(psa, pIndices1, &result);
+                    hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
                     Assert.Equal(HRESULT.S_OK, hr);
                     Assert.Equal(1, result);
 
-                    hr = SafeArrayGetElement(psa, pIndices2, &result);
+                    hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
                     Assert.Equal(HRESULT.S_OK, hr);
                     Assert.Equal(2, result);
                 }
@@ -299,7 +296,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             }
             finally
             {
-                SafeArrayDestroy(psa);
+                PInvoke.SafeArrayDestroy(psa);
             }
         }
 
@@ -317,7 +314,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = 0
             };
-            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
+            SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 2, saBounds);
             Assert.True(psa != null);
 
             try
@@ -329,19 +326,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (int* pIndices2 = indices2)
                 {
                     int value1 = 1;
-                    HRESULT hr = SafeArrayPutElement(psa, pIndices1, &value1);
+                    HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
                     Assert.Equal(HRESULT.S_OK, hr);
 
                     int value2 = 2;
-                    hr = SafeArrayPutElement(psa, pIndices2, &value2);
+                    hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
                     Assert.Equal(HRESULT.S_OK, hr);
 
                     int result = -1;
-                    hr = SafeArrayGetElement(psa, pIndices1, &result);
+                    hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
                     Assert.Equal(HRESULT.S_OK, hr);
                     Assert.Equal(1, result);
 
-                    hr = SafeArrayGetElement(psa, pIndices2, &result);
+                    hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
                     Assert.Equal(HRESULT.S_OK, hr);
                     Assert.Equal(2, result);
                 }
@@ -351,7 +348,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             }
             finally
             {
-                SafeArrayDestroy(psa);
+                PInvoke.SafeArrayDestroy(psa);
             }
         }
 
@@ -369,7 +366,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = -4
             };
-            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
+            SAFEARRAY* psa = PInvoke.SafeArrayCreate(VT_I4, 2, saBounds);
             Assert.True(psa != null);
 
             try
@@ -381,19 +378,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 fixed (int* pIndices2 = indices2)
                 {
                     int value1 = 1;
-                    HRESULT hr = SafeArrayPutElement(psa, pIndices1, &value1);
+                    HRESULT hr = PInvoke.SafeArrayPutElement(psa, pIndices1, &value1);
                     Assert.Equal(HRESULT.S_OK, hr);
 
                     int value2 = 2;
-                    hr = SafeArrayPutElement(psa, pIndices2, &value2);
+                    hr = PInvoke.SafeArrayPutElement(psa, pIndices2, &value2);
                     Assert.Equal(HRESULT.S_OK, hr);
 
                     int result = -1;
-                    hr = SafeArrayGetElement(psa, pIndices1, &result);
+                    hr = PInvoke.SafeArrayGetElement(psa, pIndices1, &result);
                     Assert.Equal(HRESULT.S_OK, hr);
                     Assert.Equal(1, result);
 
-                    hr = SafeArrayGetElement(psa, pIndices2, &result);
+                    hr = PInvoke.SafeArrayGetElement(psa, pIndices2, &result);
                     Assert.Equal(HRESULT.S_OK, hr);
                     Assert.Equal(2, result);
                 }
@@ -403,23 +400,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             }
             finally
             {
-                SafeArrayDestroy(psa);
+                PInvoke.SafeArrayDestroy(psa);
             }
         }
-
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe SAFEARRAY* SafeArrayCreate(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound);
-
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe SAFEARRAY* SafeArrayCreateEx(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound, IntPtr pvExtra);
-
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe HRESULT SafeArrayDestroy(SAFEARRAY* psa);
-
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe HRESULT SafeArrayPutElement(SAFEARRAY* psa, int* rgIndices, void* pv);
-
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe HRESULT SafeArrayGetElement(SAFEARRAY* psa, int* rgIndices, void* pv);
     }
 }

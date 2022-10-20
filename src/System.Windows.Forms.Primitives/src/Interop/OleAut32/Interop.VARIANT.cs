@@ -3,1006 +3,900 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Resources;
-using static Interop.Ole32;
+using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Ole;
+using static Windows.Win32.System.Com.VARENUM;
 
-internal static partial class Interop
+namespace Windows.Win32.System.Com;
+
+internal unsafe partial struct VARIANT : IDisposable
 {
-    internal static partial class Oleaut32
+    public VARENUM Type => (Anonymous.Anonymous.vt & VT_TYPEMASK);
+
+    public bool Byref => (Anonymous.Anonymous.vt & VT_BYREF) != 0;
+
+    [UnscopedRef]
+    public ref VARENUM vt => ref Anonymous.Anonymous.vt;
+
+    [UnscopedRef]
+    public ref _Anonymous_e__Union._Anonymous_e__Struct._Anonymous_e__Union data => ref Anonymous.Anonymous.Anonymous;
+
+    public void Clear()
     {
-        /// <remarks>
-        ///  This implementation supports both VARIANT and VARIANTARG semantics.
-        ///  See https://devblogs.microsoft.com/oldnewthing/20171221-00/?p=97625
-        /// </remarks>
-        public unsafe struct VARIANT : IDisposable
+        // PropVariantClear is essentially a superset of VariantClear it calls CoTaskMemFree on the following types:
+        //
+        //     - VT_LPWSTR, VT_LPSTR, VT_CLSID (psvVal)
+        //     - VT_BSTR_BLOB (bstrblobVal.pData)
+        //     - VT_CF (pclipdata->pClipData, pclipdata)
+        //     - VT_BLOB, VT_BLOB_OBJECT (blob.pData)
+        //     - VT_STREAM, VT_STREAMED_OBJECT (pStream)
+        //     - VT_VERSIONED_STREAM (pVersionedStream->pStream, pVersionedStream)
+        //     - VT_STORAGE, VT_STORED_OBJECT (pStorage)
+        //
+        // If the VARTYPE is a VT_VECTOR, the contents are cleared as above and CoTaskMemFree is also called on
+        // cabstr.pElems.
+
+        // https://learn.microsoft.com/windows/win32/api/oleauto/nf-oleauto-variantclear#remarks
+
+        fixed (void* t = &this)
         {
-            public VARENUM vt;
-            public short reserved1;
-            public short reserved2;
-            public short reserved3;
-            public VARIANTUnion data;
+            PInvoke.PropVariantClear((PROPVARIANT*)t);
+        }
 
-            public VARENUM Type => (vt & VARENUM.TYPEMASK);
+        Anonymous.Anonymous.vt = VT_EMPTY;
+        Anonymous.Anonymous.Anonymous = default;
+    }
 
-            public bool Byref => (vt & VARENUM.BYREF) != 0;
+    public void Dispose() => Clear();
 
-            public void Clear()
+    public object? ToObject()
+    {
+        if (vt == VT_DECIMAL)
+        {
+            return Anonymous.decVal.ToDecimal();
+        }
+
+        fixed (VARIANT* thisVariant = &this)
+        {
+            void* data = &thisVariant->Anonymous.Anonymous.Anonymous;
+            if (Byref)
             {
-                PropVariantClear(ref this);
-                vt = VARENUM.EMPTY;
-                data = new VARIANTUnion();
-            }
+                data = *(void**)data;
 
-            public void Dispose() => Clear();
-
-            public object? ToObject()
-            {
-                fixed (VARIANT* thisVariant = &this)
+                // CLR allows VT_EMPTY/NULL | VT_BYREF to have no data.
+                // In other cases, the variant is invalid.
+                if (data is null && !(Type == VT_EMPTY || Type == VT_NULL))
                 {
-                    void* data = &thisVariant->data;
-                    if (Byref)
-                    {
-                        data = *((void**)data);
-                        // CLR allows VT_EMPTY/NULL | VT_BYREF to have no data.
-                        // In other cases, the variant is invalid.
-                        if (data is null && !(Type == VARENUM.EMPTY || Type == VARENUM.NULL))
-                        {
-                            throw new ArgumentException("Invalid Variant");
-                        }
-                    }
-                    else if (vt == VARENUM.DECIMAL)
-                    {
-                        data = thisVariant;
-                    }
-
-                    // Note that the following check also covers VT_ILLEGAL.
-                    if ((vt & ~(VARENUM.BYREF | VARENUM.ARRAY | VARENUM.VECTOR)) >= (VARENUM)0x80)
-                    {
-                        throw new InvalidOleVariantTypeException();
-                    }
-
-                    if ((vt & VARENUM.VECTOR) != 0)
-                    {
-                        return ToVector(thisVariant->data.ca, vt);
-                    }
-
-                    if ((vt & VARENUM.ARRAY) != 0)
-                    {
-                        return ToArray(*(SAFEARRAY**)data, vt);
-                    }
-
-                    return ToObject(Type, Byref, data);
+                    throw new ArgumentException("Invalid Variant");
                 }
             }
 
-            private static object? ToObject(VARENUM type, bool byRef, void* data)
+            // Note that the following check also covers VT_ILLEGAL.
+            if ((vt & ~(VT_BYREF | VT_ARRAY | VT_VECTOR)) >= (VARENUM)0x80)
             {
-                switch (type)
-                {
-                    case VARENUM.EMPTY:
-                        if (byRef)
-                        {
-                            // CLR returns VT_EMPTY | VT_BYREF data as nuint.
-                            if (IntPtr.Size == 8)
-                            {
-                                return (ulong)data;
-                            }
-
-                            return (uint)data;
-                        }
-
-                        return null;
-                    case VARENUM.NULL:
-                        return Convert.DBNull;
-                    case VARENUM.I1:
-                        return *((sbyte*)data);
-                    case VARENUM.UI1:
-                        return *((byte*)data);
-                    case VARENUM.I2:
-                        return *((short*)data);
-                    case VARENUM.UI2:
-                        return *((ushort*)data);
-                    case VARENUM.I4:
-                    case VARENUM.INT:
-                    case VARENUM.ERROR:
-                    case VARENUM.HRESULT:
-                        return *((int*)data);
-                    case VARENUM.UI4:
-                    case VARENUM.UINT:
-                        return *((uint*)data);
-                    case VARENUM.I8:
-                        return *((long*)data);
-                    case VARENUM.UI8:
-                        return *((ulong*)data);
-                    case VARENUM.R4:
-                        return *((float*)data);
-                    case VARENUM.R8:
-                        return *((double*)data);
-                    case VARENUM.CY:
-                        long cyVal = *((long*)data);
-                        return decimal.FromOACurrency(cyVal);
-                    case VARENUM.DATE:
-                        double date = *((double*)data);
-                        return DateTime.FromOADate(date);
-                    case VARENUM.BSTR:
-                    case VARENUM.LPWSTR:
-                        return Marshal.PtrToStringUni(*(IntPtr*)data);
-                    case VARENUM.LPSTR:
-                        return Marshal.PtrToStringAnsi(*(IntPtr*)data);
-                    case VARENUM.DISPATCH:
-                    case VARENUM.UNKNOWN:
-                        IntPtr pInterface = *(IntPtr*)data;
-                        if (pInterface == IntPtr.Zero)
-                        {
-                            return null;
-                        }
-
-                        return Marshal.GetObjectForIUnknown(pInterface);
-                    case VARENUM.DECIMAL:
-                        return ((DECIMAL*)data)->ToDecimal();
-                    case VARENUM.BOOL:
-                        return (*(VARIANT_BOOL*)data) != VARIANT_BOOL.FALSE;
-                    case VARENUM.VARIANT:
-                        // We only support VT_VARIANT | VT_BYREF.
-                        if (!byRef)
-                        {
-                            break;
-                        }
-
-                        // BYREF VARIANTS are not allowed to be nested.
-                        VARIANT* pVariant = (VARIANT*)data;
-                        if (pVariant->Byref)
-                        {
-                            throw new InvalidOleVariantTypeException();
-                        }
-
-                        return pVariant->ToObject();
-                    case VARENUM.CLSID:
-                        // We only support VT_CLSID.
-                        // This is the type of InitPropVariantFromCLSID.
-                        if (byRef)
-                        {
-                            break;
-                        }
-
-                        return **((Guid**)data);
-                    case VARENUM.FILETIME:
-                        // We only support VT_FILETIME.
-                        // This is the type of InitPropVariantFromFILETIME.
-                        if (byRef)
-                        {
-                            break;
-                        }
-
-                        return (*(PInvoke.FILETIME*)data).ToDateTime();
-                    case VARENUM.VOID:
-                        return null;
-                    case VARENUM.RECORD:
-                        {
-                            VARIANTRecord* record = (VARIANTRecord*)data;
-                            if (record->pRecInfo == IntPtr.Zero)
-                            {
-                                throw new ArgumentException("Specified OLE variant is invalid.");
-                            }
-
-                            if (record->pvRecord is null)
-                            {
-                                return null;
-                            }
-
-                            // TODO: cast IntPtr to IRecordInfo. Not that much of a concern
-                            // as .NET Core doesn't support records anyway.
-                            // Type recordType = GetRecordElementType(record->pvRecord);
-                            throw new ArgumentException("Record marshalling doesn't actually work in .NET Core. Matching that behaviour.");
-                        }
-                }
-
-                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, type));
+                throw new InvalidOleVariantTypeException();
             }
 
-            private static Type GetRecordElementType(IRecordInfo record)
+            if ((vt & VT_VECTOR) != 0)
             {
-                Guid guid;
-                HRESULT hr = record.GetGuid(&guid);
-                hr.ThrowOnFailure();
-
-                Type? t = System.Type.GetTypeFromCLSID(guid);
-                if (t is null || !t.IsValueType)
-                {
-                    throw new ArgumentException("The specified record cannot be mapped to a managed value class.");
-                }
-
-                return t;
+                return ToVector(thisVariant->data.ca, vt);
             }
 
-            private static object? ToArray(SAFEARRAY* psa, VARENUM vt)
+            if ((vt & VT_ARRAY) != 0)
             {
-                if (psa is null)
+                return ToArray(*(SAFEARRAY**)data, vt);
+            }
+
+            return ToObject(Type, Byref, data);
+        }
+    }
+
+    private static object? ToObject(VARENUM type, bool byRef, void* data)
+    {
+        switch (type)
+        {
+            case VT_EMPTY:
+                if (byRef)
+                {
+                    // CLR returns VT_EMPTY | VT_BYREF data as nuint.
+                    if (IntPtr.Size == 8)
+                    {
+                        return (ulong)data;
+                    }
+
+                    return (uint)data;
+                }
+
+                return null;
+            case VT_NULL:
+                return Convert.DBNull;
+            case VT_I1:
+                return *((sbyte*)data);
+            case VT_UI1:
+                return *((byte*)data);
+            case VT_I2:
+                return *((short*)data);
+            case VT_UI2:
+                return *((ushort*)data);
+            case VT_I4:
+            case VT_INT:
+            case VT_ERROR:
+            case VT_HRESULT:
+                return *((int*)data);
+            case VT_UI4:
+            case VT_UINT:
+                return *((uint*)data);
+            case VT_I8:
+                return *((long*)data);
+            case VT_UI8:
+                return *((ulong*)data);
+            case VT_R4:
+                return *((float*)data);
+            case VT_R8:
+                return *((double*)data);
+            case VT_CY:
+                long cyVal = *((long*)data);
+                return decimal.FromOACurrency(cyVal);
+            case VT_DATE:
+                double date = *((double*)data);
+                return DateTime.FromOADate(date);
+            case VT_BSTR:
+            case VT_LPWSTR:
+                return Marshal.PtrToStringUni(*(IntPtr*)data);
+            case VT_LPSTR:
+                return Marshal.PtrToStringAnsi(*(IntPtr*)data);
+            case VT_DISPATCH:
+            case VT_UNKNOWN:
+                IntPtr pInterface = *(IntPtr*)data;
+                if (pInterface == IntPtr.Zero)
                 {
                     return null;
                 }
 
-                VARENUM arrayType = vt & ~VARENUM.ARRAY;
-                Array array = CreateArrayFromSafeArray(psa, arrayType);
-
-                HRESULT hr = SafeArrayLock(psa);
-                Debug.Assert(hr == HRESULT.S_OK);
-
-                try
+                return Marshal.GetObjectForIUnknown(pInterface);
+            case VT_DECIMAL:
+                return ((DECIMAL*)data)->ToDecimal();
+            case VT_BOOL:
+                return (*(VARIANT_BOOL*)data) != VARIANT_BOOL.FALSE;
+            case VT_VARIANT:
+                // We only support VT_VARIANT | VT_BYREF.
+                if (!byRef)
                 {
-                    if (array.Rank == 1)
-                    {
-                        switch (arrayType)
-                        {
-                            case VARENUM.I1:
-                                new Span<sbyte>(psa->pvData, array.Length)
-                                    .CopyTo(GetSpan<sbyte>(array));
-                                break;
-                            case VARENUM.UI1:
-                                new Span<byte>(psa->pvData, array.Length)
-                                    .CopyTo(GetSpan<byte>(array));
-                                break;
-                            case VARENUM.I2:
-                                new Span<short>(psa->pvData, array.Length)
-                                    .CopyTo(GetSpan<short>(array));
-                                break;
-                            case VARENUM.UI2:
-                                new Span<ushort>(psa->pvData, array.Length)
-                                    .CopyTo(GetSpan<ushort>(array));
-                                break;
-                            case VARENUM.I4:
-                            case VARENUM.INT:
-                                new Span<int>(psa->pvData, array.Length)
-                                    .CopyTo(GetSpan<int>(array));
-                                break;
-                            case VARENUM.UI4:
-                            case VARENUM.UINT:
-                            case VARENUM.ERROR: // Not explicitly mentioned in the docs but trivial to implement.
-                                new Span<uint>(psa->pvData, array.Length)
-                                    .CopyTo(GetSpan<uint>(array));
-                                break;
-                            case VARENUM.I8:
-                                new Span<long>(psa->pvData, array.Length)
-                                    .CopyTo(GetSpan<long>(array));
-                                break;
-                            case VARENUM.UI8:
-                                new Span<ulong>(psa->pvData, array.Length)
-                                    .CopyTo(GetSpan<ulong>(array));
-                                break;
-                            case VARENUM.R4:
-                                new Span<float>(psa->pvData, array.Length)
-                                    .CopyTo(GetSpan<float>(array));
-                                break;
-                            case VARENUM.R8:
-                                new Span<double>(psa->pvData, array.Length)
-                                    .CopyTo(GetSpan<double>(array));
-                                break;
-                            case VARENUM.BOOL:
-                                {
-                                    var data = new Span<VARIANT_BOOL>(psa->pvData, array.Length);
-                                    var result = GetSpan<bool>(array);
-                                    for (int i = 0; i < data.Length; i++)
-                                    {
-                                        result[i] = data[i] != VARIANT_BOOL.FALSE;
-                                    }
-
-                                    break;
-                                }
-
-                            case VARENUM.DECIMAL:
-                                {
-                                    var data = new Span<DECIMAL>(psa->pvData, array.Length);
-                                    var result = GetSpan<decimal>(array);
-                                    for (int i = 0; i < data.Length; i++)
-                                    {
-                                        result[i] = data[i].ToDecimal();
-                                    }
-
-                                    break;
-                                }
-
-                            case VARENUM.CY:
-                                {
-                                    var data = new Span<long>(psa->pvData, array.Length);
-                                    var result = GetSpan<decimal>(array);
-                                    for (int i = 0; i < data.Length; i++)
-                                    {
-                                        result[i] = decimal.FromOACurrency(data[i]);
-                                    }
-
-                                    break;
-                                }
-
-                            case VARENUM.DATE:
-                                {
-                                    var data = new Span<double>(psa->pvData, array.Length);
-                                    var result = GetSpan<DateTime>(array);
-                                    for (int i = 0; i < data.Length; i++)
-                                    {
-                                        result[i] = DateTime.FromOADate(data[i]);
-                                    }
-
-                                    break;
-                                }
-
-                            case VARENUM.BSTR:
-                                {
-                                    var data = new Span<IntPtr>(psa->pvData, array.Length);
-                                    var result = GetSpan<string?>(array);
-                                    for (int i = 0; i < data.Length; i++)
-                                    {
-                                        result[i] = Marshal.PtrToStringUni(data[i]);
-                                    }
-
-                                    break;
-                                }
-
-                            case VARENUM.DISPATCH:
-                            case VARENUM.UNKNOWN:
-                                {
-                                    var data = new Span<IntPtr>(psa->pvData, array.Length);
-                                    var result = GetSpan<object?>(array);
-                                    for (int i = 0; i < data.Length; i++)
-                                    {
-                                        if (data[i] == IntPtr.Zero)
-                                        {
-                                            result[i] = null;
-                                        }
-                                        else
-                                        {
-                                            result[i] = Marshal.GetObjectForIUnknown(data[i]);
-                                        }
-                                    }
-
-                                    break;
-                                }
-
-                            case VARENUM.VARIANT:
-                                {
-                                    var data = new Span<VARIANT>(psa->pvData, array.Length);
-                                    var result = GetSpan<object?>(array);
-                                    for (int i = 0; i < data.Length; i++)
-                                    {
-                                        result[i] = data[i].ToObject();
-                                    }
-
-                                    break;
-                                }
-
-                            case VARENUM.RECORD:
-                                throw new NotImplementedException();
-                            default:
-                                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
-                        }
-                    }
-                    else if (array.Length != 0)
-                    {
-                        // CLR arrays are laid out in row-major order.
-                        // See CLI 8.9.1: https://www.ecma-international.org/publications/files/ECMA-ST/ECMA-335.pdf
-                        // However, SAFEARRAYs are laid out in column-major order.
-                        // See https://docs.microsoft.com/en-us/previous-versions/windows/desktop/automat/array-manipulation-functions
-                        // Therefore, we need to transpose data.
-                        TransposeArray(psa, array, arrayType);
-                    }
-                }
-                finally
-                {
-                    hr = SafeArrayUnlock(psa);
-                    Debug.Assert(hr == HRESULT.S_OK);
+                    break;
                 }
 
-                return array;
-            }
-
-            private static void TransposeArray(SAFEARRAY* psa, Array array, VARENUM arrayType)
-            {
-                if (array.Rank <= 32)
-                {
-                    StackTransposeArray(psa, array, arrayType);
-                }
-                else
-                {
-                    Debug.Fail("The CLR should not support arrays with more than 32 dimensions.");
-                    HeapTransposeArray(psa, array, arrayType);
-                }
-
-                static void StackTransposeArray(SAFEARRAY* psa, Array array, VARENUM arrayType)
-                {
-                    Span<int> indices = stackalloc int[array.Rank];
-                    Span<int> lower = stackalloc int[array.Rank];
-                    Span<int> upper = stackalloc int[array.Rank];
-                    InternalTransposeArray(psa, array, arrayType, indices, lower, upper);
-                }
-
-                static void HeapTransposeArray(SAFEARRAY* psa, Array array, VARENUM arrayType)
-                {
-                    var indices = new int[array.Rank];
-                    var lower = new int[array.Rank];
-                    var upper = new int[array.Rank];
-                    InternalTransposeArray(psa, array, arrayType, indices, lower, upper);
-                }
-
-                static void InternalTransposeArray(SAFEARRAY* psa, Array array, VARENUM arrayType, Span<int> indices, Span<int> lower, Span<int> upper)
-                {
-                    int lastIndex = array.Rank - 1;
-                    int i;
-                    for (i = 0; i < array.Rank; i++)
-                    {
-                        indices[i] = lower[i] = array.GetLowerBound(i);
-                        upper[i] = array.GetUpperBound(i);
-                    }
-
-                    // Loop through all the indices.
-                    while (true)
-                    {
-                    BeginMainLoop:
-
-                        SetArrayValue(psa, array, indices, lower, arrayType);
-
-                        for (i = lastIndex; i > 0;)
-                        {
-                            if (++indices[i] <= upper[i])
-                            {
-                                goto BeginMainLoop;
-                            }
-
-                            indices[i] = lower[i];
-                            --i;
-                        }
-
-                        // Special case for the first index, it must be enumerated only once
-                        if (++indices[0] > upper[0])
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            private static void SetArrayValue(SAFEARRAY* psa, Array array, Span<int> indices, Span<int> lowerBounds, VARENUM arrayType)
-            {
-                static void SetValue<T>(Array array, T value, Span<int> indices, Span<int> lowerBounds)
-                {
-                    // CLR arrays are laid out in row-major order.
-                    // See CLI 8.9.1: https://www.ecma-international.org/publications/files/ECMA-ST/ECMA-335.pdf
-                    var span = GetSpan<T>(array);
-                    int offset = 0;
-                    int multiplier = 1;
-                    for (int i = array.Rank; i >= 1; i--)
-                    {
-                        int diff = indices[i - 1] - lowerBounds[i - 1];
-                        offset += diff * multiplier;
-                        multiplier *= array.GetLength(i - 1);
-                    }
-
-                    span[offset] = value;
-                }
-
-                switch (arrayType)
-                {
-                    case VARENUM.I1:
-                        SetValue(array, psa->GetValue<sbyte>(indices), indices, lowerBounds);
-                        break;
-                    case VARENUM.UI1:
-                        SetValue(array, psa->GetValue<byte>(indices), indices, lowerBounds);
-                        break;
-                    case VARENUM.I2:
-                        SetValue(array, psa->GetValue<short>(indices), indices, lowerBounds);
-                        break;
-                    case VARENUM.UI2:
-                        SetValue(array, psa->GetValue<ushort>(indices), indices, lowerBounds);
-                        break;
-                    case VARENUM.I4:
-                    case VARENUM.INT:
-                        SetValue(array, psa->GetValue<int>(indices), indices, lowerBounds);
-                        break;
-                    case VARENUM.UI4:
-                    case VARENUM.UINT:
-                    case VARENUM.ERROR: // Not explicitly mentioned in the docs but trivial to implement.
-                        SetValue(array, psa->GetValue<uint>(indices), indices, lowerBounds);
-                        break;
-                    case VARENUM.I8:
-                        SetValue(array, psa->GetValue<long>(indices), indices, lowerBounds);
-                        break;
-                    case VARENUM.UI8:
-                        SetValue(array, psa->GetValue<ulong>(indices), indices, lowerBounds);
-                        break;
-                    case VARENUM.R4:
-                        SetValue(array, psa->GetValue<float>(indices), indices, lowerBounds);
-                        break;
-                    case VARENUM.R8:
-                        SetValue(array, psa->GetValue<double>(indices), indices, lowerBounds);
-                        break;
-                    case VARENUM.BOOL:
-                        {
-                            VARIANT_BOOL data = psa->GetValue<VARIANT_BOOL>(indices);
-                            SetValue(array, data != VARIANT_BOOL.FALSE, indices, lowerBounds);
-                            break;
-                        }
-
-                    case VARENUM.DECIMAL:
-                        {
-                            DECIMAL data = psa->GetValue<DECIMAL>(indices);
-                            SetValue(array, data.ToDecimal(), indices, lowerBounds);
-                            break;
-                        }
-
-                    case VARENUM.CY:
-                        {
-                            long data = psa->GetValue<long>(indices);
-                            SetValue(array, decimal.FromOACurrency(data), indices, lowerBounds);
-                            break;
-                        }
-
-                    case VARENUM.DATE:
-                        {
-                            double data = psa->GetValue<double>(indices);
-                            SetValue(array, DateTime.FromOADate(data), indices, lowerBounds);
-                            break;
-                        }
-
-                    case VARENUM.BSTR:
-                        {
-                            IntPtr data = psa->GetValue<IntPtr>(indices);
-                            SetValue(array, Marshal.PtrToStringUni(data), indices, lowerBounds);
-                            break;
-                        }
-
-                    case VARENUM.DISPATCH:
-                    case VARENUM.UNKNOWN:
-                        {
-                            IntPtr data = psa->GetValue<IntPtr>(indices);
-                            if (data == IntPtr.Zero)
-                            {
-                                SetValue<object?>(array, null, indices, lowerBounds);
-                            }
-                            else
-                            {
-                                SetValue(array, Marshal.GetObjectForIUnknown(data), indices, lowerBounds);
-                            }
-
-                            break;
-                        }
-
-                    case VARENUM.VARIANT:
-                        {
-                            VARIANT data = psa->GetValue<VARIANT>(indices);
-                            SetValue(array, data.ToObject(), indices, lowerBounds);
-                            break;
-                        }
-
-                    case VARENUM.RECORD:
-                        throw new NotImplementedException();
-                    default:
-                        throw new ArgumentException(string.Format(SR.COM2UnhandledVT, arrayType));
-                }
-            }
-
-            private static Array CreateArrayFromSafeArray(SAFEARRAY* psa, VARENUM vt)
-            {
-                Type elementType;
-                if (vt == VARENUM.EMPTY)
+                // BYREF VARIANTS are not allowed to be nested.
+                VARIANT* pVariant = (VARIANT*)data;
+                if (pVariant->Byref)
                 {
                     throw new InvalidOleVariantTypeException();
                 }
 
-                if (vt == VARENUM.RECORD)
+                return pVariant->ToObject();
+            case VT_CLSID:
+                // We only support VT_CLSID.
+                // This is the type of InitPropVariantFromCLSID.
+                if (byRef)
                 {
-                    HRESULT hr = SafeArrayGetRecordInfo(psa, out IRecordInfo record);
-                    hr.ThrowOnFailure();
-
-                    elementType = GetRecordElementType(record);
+                    break;
                 }
 
-                VARENUM arrayVarType = psa->VarType;
-                if (arrayVarType == VARENUM.EMPTY)
+                return **((Guid**)data);
+            case VT_FILETIME:
+                // We only support VT_FILETIME.
+                // This is the type of InitPropVariantFromFILETIME.
+                if (byRef)
                 {
-                    if (psa->cbElements != GetElementSizeForVarType(vt))
+                    break;
+                }
+
+                return (*(PInvoke.FILETIME*)data).ToDateTime();
+            case VT_VOID:
+                return null;
+            case VT_RECORD:
+                {
+                    var record = (_Anonymous_e__Union._Anonymous_e__Struct._Anonymous_e__Union._Anonymous_e__Struct*)data;
+                    if (record->pRecInfo is null)
                     {
-                        throw new SafeArrayTypeMismatchException();
+                        throw new ArgumentException("Specified OLE variant is invalid.");
                     }
+
+                    if (record->pvRecord is null)
+                    {
+                        return null;
+                    }
+
+                    // TODO: cast IntPtr to IRecordInfo. Not that much of a concern
+                    // as .NET Core doesn't support records anyway.
+                    // Type recordType = GetRecordElementType(record->pvRecord);
+                    throw new ArgumentException("Record marshalling doesn't actually work in .NET Core. Matching that behaviour.");
                 }
+        }
 
-                // Allow limited conversion between arrays of different but related types.
-                else if (arrayVarType != vt
-                    && !(vt == VARENUM.INT && arrayVarType == VARENUM.I4)
-                    && !(vt == VARENUM.UINT && arrayVarType == VARENUM.UI4)
-                    && !(vt == VARENUM.I4 && arrayVarType == VARENUM.INT)
-                    && !(vt == VARENUM.UI4 && arrayVarType == VARENUM.UINT)
-                    && !(vt == VARENUM.UNKNOWN && arrayVarType == VARENUM.DISPATCH)
-                    && !(arrayVarType == VARENUM.RECORD))
-                {
-                    // To match CLR behaviour.
-                    throw new SafeArrayTypeMismatchException();
-                }
+        throw new ArgumentException(string.Format(SR.COM2UnhandledVT, type));
+    }
 
-                switch (vt)
-                {
-                    case VARENUM.I1:
-                        elementType = typeof(sbyte);
-                        break;
-                    case VARENUM.UI1:
-                        elementType = typeof(byte);
-                        break;
-                    case VARENUM.I2:
-                        elementType = typeof(short);
-                        break;
-                    case VARENUM.UI2:
-                        elementType = typeof(ushort);
-                        break;
-                    case VARENUM.I4:
-                    case VARENUM.INT:
-                        elementType = typeof(int);
-                        break;
-                    case VARENUM.I8:
-                        elementType = typeof(long);
-                        break;
-                    case VARENUM.UI8:
-                        elementType = typeof(ulong);
-                        break;
-                    case VARENUM.UI4:
-                    case VARENUM.UINT:
-                    case VARENUM.ERROR:
-                        elementType = typeof(uint);
-                        break;
-                    case VARENUM.R4:
-                        elementType = typeof(float);
-                        break;
-                    case VARENUM.R8:
-                        elementType = typeof(double);
-                        break;
-                    case VARENUM.BOOL:
-                        elementType = typeof(bool);
-                        break;
-                    case VARENUM.DECIMAL:
-                    case VARENUM.CY:
-                        elementType = typeof(decimal);
-                        break;
-                    case VARENUM.DATE:
-                        elementType = typeof(DateTime);
-                        break;
-                    case VARENUM.BSTR:
-                        elementType = typeof(string);
-                        break;
-                    case VARENUM.DISPATCH:
-                    case VARENUM.UNKNOWN:
-                    case VARENUM.VARIANT:
-                        elementType = typeof(object);
-                        break;
-                    default:
-                        throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
-                }
+    private static Type GetRecordElementType(IRecordInfo* record)
+    {
+        Guid guid;
+        record->GetGuid(&guid).ThrowOnFailure();
 
-                if (psa->cDims == 1 && psa->rgsabound[0].lLbound == 0)
-                {
-                    // SZArray.
-                    return Array.CreateInstance(elementType, (int)psa->rgsabound[0].cElements);
-                }
+        Type? t = global::System.Type.GetTypeFromCLSID(guid);
+        if (t is null || !t.IsValueType)
+        {
+            throw new ArgumentException("The specified record cannot be mapped to a managed value class.");
+        }
 
-                var lengths = new int[psa->cDims];
-                var bounds = new int[psa->cDims];
-                int counter = 0;
-                // Copy the lower bounds and count of elements for the dimensions. These
-                // need to copied in reverse order.
-                for (int i = psa->cDims - 1; i >= 0; i--)
-                {
-                    lengths[counter] = (int)psa->rgsabound[i].cElements;
-                    bounds[counter] = (int)psa->rgsabound[i].lLbound;
-                    counter++;
-                }
+        return t;
+    }
 
-                return Array.CreateInstance(elementType, lengths, bounds);
-            }
+    private static object? ToArray(SAFEARRAY* psa, VARENUM vt)
+    {
+        if (psa is null)
+        {
+            return null;
+        }
 
-            private static uint GetElementSizeForVarType(VARENUM vt)
+        VARENUM arrayType = vt & ~VT_ARRAY;
+        Array array = CreateArrayFromSafeArray(psa, arrayType);
+
+        HRESULT hr = PInvoke.SafeArrayLock(psa);
+        Debug.Assert(hr == HRESULT.S_OK);
+
+        try
+        {
+            if (array.Rank == 1)
             {
-                switch (vt)
+                switch (arrayType)
                 {
-                    case VARENUM.EMPTY:
-                    case VARENUM.NULL:
-                    case VARENUM.VOID:
-                        return 0;
-                    case VARENUM.I1:
-                    case VARENUM.UI1:
-                        return 1;
-                    case VARENUM.I2:
-                    case VARENUM.UI2:
-                    case VARENUM.BOOL:
-                        return 2;
-                    case VARENUM.I4:
-                    case VARENUM.UI4:
-                    case VARENUM.INT:
-                    case VARENUM.UINT:
-                    case VARENUM.R4:
-                    case VARENUM.HRESULT:
-                    case VARENUM.ERROR:
-                        return 4;
-                    case VARENUM.I8:
-                    case VARENUM.UI8:
-                    case VARENUM.CY:
-                    case VARENUM.R8:
-                    case VARENUM.DATE:
-                        return 8;
-                    case VARENUM.DECIMAL:
-                        return (uint)sizeof(DECIMAL);
-                    case VARENUM.VARIANT:
-                        return (uint)sizeof(VARIANT);
-                    case VARENUM.BSTR:
-                    case VARENUM.LPSTR:
-                    case VARENUM.LPWSTR:
-                    case VARENUM.UNKNOWN:
-                    case VARENUM.DISPATCH:
-                    case VARENUM.USERDEFINED:
-                    case VARENUM.CARRAY:
-                    case VARENUM.SAFEARRAY:
-                    case VARENUM.PTR:
-                        return (uint)IntPtr.Size;
-                    default:
-                        if ((vt & VARENUM.ARRAY) != 0)
+                    case VT_I1:
+                        new Span<sbyte>(psa->pvData, array.Length)
+                            .CopyTo(GetSpan<sbyte>(array));
+                        break;
+                    case VT_UI1:
+                        new Span<byte>(psa->pvData, array.Length)
+                            .CopyTo(GetSpan<byte>(array));
+                        break;
+                    case VT_I2:
+                        new Span<short>(psa->pvData, array.Length)
+                            .CopyTo(GetSpan<short>(array));
+                        break;
+                    case VT_UI2:
+                        new Span<ushort>(psa->pvData, array.Length)
+                            .CopyTo(GetSpan<ushort>(array));
+                        break;
+                    case VT_I4:
+                    case VT_INT:
+                        new Span<int>(psa->pvData, array.Length)
+                            .CopyTo(GetSpan<int>(array));
+                        break;
+                    case VT_UI4:
+                    case VT_UINT:
+                    case VT_ERROR: // Not explicitly mentioned in the docs but trivial to implement.
+                        new Span<uint>(psa->pvData, array.Length)
+                            .CopyTo(GetSpan<uint>(array));
+                        break;
+                    case VT_I8:
+                        new Span<long>(psa->pvData, array.Length)
+                            .CopyTo(GetSpan<long>(array));
+                        break;
+                    case VT_UI8:
+                        new Span<ulong>(psa->pvData, array.Length)
+                            .CopyTo(GetSpan<ulong>(array));
+                        break;
+                    case VT_R4:
+                        new Span<float>(psa->pvData, array.Length)
+                            .CopyTo(GetSpan<float>(array));
+                        break;
+                    case VT_R8:
+                        new Span<double>(psa->pvData, array.Length)
+                            .CopyTo(GetSpan<double>(array));
+                        break;
+                    case VT_BOOL:
                         {
-                            return (uint)sizeof(SAFEARRAY*);
-                        }
-
-                        return 0;
-                }
-            }
-
-            private static object ToVector(in CA ca, VARENUM vectorType)
-            {
-                VARENUM vt = vectorType & ~VARENUM.VECTOR;
-                switch (vt)
-                {
-                    case VARENUM.I1:
-                        return new Span<sbyte>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.UI1:
-                        return new Span<byte>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.I2:
-                        return new Span<short>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.UI2:
-                        return new Span<ushort>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.BOOL:
-                        {
-                            var data = new Span<VARIANT_BOOL>(ca.pElems, (int)ca.cElems);
-                            var result = new bool[data.Length];
+                            var data = new Span<VARIANT_BOOL>(psa->pvData, array.Length);
+                            var result = GetSpan<bool>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
                                 result[i] = data[i] != VARIANT_BOOL.FALSE;
                             }
 
-                            return result;
+                            break;
                         }
 
-                    case VARENUM.I4:
-                    case VARENUM.INT: // Not explicitly mentioned in the docs but trivial to implement.
-                        return new Span<int>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.UI4:
-                    case VARENUM.ERROR:
-                    case VARENUM.UINT: // Not explicitly mentioned in the docs but trivial to implement.
-                        return new Span<uint>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.I8:
-                        return new Span<long>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.UI8:
-                        return new Span<ulong>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.R4:
-                        return new Span<float>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.R8:
-                        return new Span<double>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.CY:
+                    case VT_DECIMAL:
                         {
-                            var data = new Span<long>(ca.pElems, (int)ca.cElems);
-                            var result = new decimal[data.Length];
+                            var data = new Span<DECIMAL>(psa->pvData, array.Length);
+                            var result = GetSpan<decimal>(array);
+                            for (int i = 0; i < data.Length; i++)
+                            {
+                                result[i] = data[i].ToDecimal();
+                            }
+
+                            break;
+                        }
+
+                    case VT_CY:
+                        {
+                            var data = new Span<long>(psa->pvData, array.Length);
+                            var result = GetSpan<decimal>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
                                 result[i] = decimal.FromOACurrency(data[i]);
                             }
 
-                            return result;
+                            break;
                         }
 
-                    case VARENUM.DATE:
+                    case VT_DATE:
                         {
-                            var data = new Span<double>(ca.pElems, (int)ca.cElems);
-                            var result = new DateTime[data.Length];
+                            var data = new Span<double>(psa->pvData, array.Length);
+                            var result = GetSpan<DateTime>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
                                 result[i] = DateTime.FromOADate(data[i]);
                             }
 
-                            return result;
+                            break;
                         }
 
-                    case VARENUM.FILETIME:
+                    case VT_BSTR:
                         {
-                            var data = new Span<PInvoke.FILETIME>(ca.pElems, (int)ca.cElems);
-                            var result = new DateTime[data.Length];
-                            for (int i = 0; i < data.Length; i++)
-                            {
-                                result[i] = data[i].ToDateTime();
-                            }
-
-                            return result;
-                        }
-
-                    case VARENUM.CLSID:
-                        return new Span<Guid>(ca.pElems, (int)ca.cElems).ToArray();
-                    case VARENUM.BSTR:
-                    case VARENUM.LPWSTR:
-                        {
-                            var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
-                            var result = new string?[data.Length];
+                            var data = new Span<IntPtr>(psa->pvData, array.Length);
+                            var result = GetSpan<string?>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
                                 result[i] = Marshal.PtrToStringUni(data[i]);
                             }
 
-                            return result;
+                            break;
                         }
 
-                    case VARENUM.LPSTR:
+                    case VT_DISPATCH:
+                    case VT_UNKNOWN:
                         {
-                            var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
-                            var result = new string?[data.Length];
+                            var data = new Span<IntPtr>(psa->pvData, array.Length);
+                            var result = GetSpan<object?>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
-                                result[i] = Marshal.PtrToStringAnsi(data[i]);
+                                if (data[i] == IntPtr.Zero)
+                                {
+                                    result[i] = null;
+                                }
+                                else
+                                {
+                                    result[i] = Marshal.GetObjectForIUnknown(data[i]);
+                                }
                             }
 
-                            return result;
+                            break;
                         }
 
-                    case VARENUM.VARIANT:
+                    case VT_VARIANT:
                         {
-                            var data = new Span<VARIANT>(ca.pElems, (int)ca.cElems);
-                            var result = new object?[data.Length];
+                            var data = new Span<VARIANT>(psa->pvData, array.Length);
+                            var result = GetSpan<object?>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
                                 result[i] = data[i].ToObject();
                             }
 
-                            return result;
+                            break;
                         }
 
-                    case VARENUM.CF: // Not implemented.
-                    case VARENUM.BSTR_BLOB: // System use only.
-                    default: // Documentation does not specify any other types that are supported.
+                    case VT_RECORD:
+                        throw new NotImplementedException();
+                    default:
                         throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
                 }
             }
-
-            private static Span<T> GetSpan<T>(Array arr)
-                => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<T>(Marshal.UnsafeAddrOfPinnedArrayElement(arr, 0).ToPointer()), arr.Length);
-
-            [StructLayout(LayoutKind.Explicit)]
-            public struct VARIANTUnion
+            else if (array.Length != 0)
             {
-                [FieldOffset(0)]
-                public long llVal;
+                // CLR arrays are laid out in row-major order.
+                // See CLI 8.9.1: https://www.ecma-international.org/publications/files/ECMA-ST/ECMA-335.pdf
+                // However, SAFEARRAYs are laid out in column-major order.
+                // See https://docs.microsoft.com/en-us/previous-versions/windows/desktop/automat/array-manipulation-functions
+                // Therefore, we need to transpose data.
+                TransposeArray(psa, array, arrayType);
+            }
+        }
+        finally
+        {
+            hr = PInvoke.SafeArrayUnlock(psa);
+            Debug.Assert(hr == HRESULT.S_OK);
+        }
 
-                [FieldOffset(0)]
-                public int lVal;
+        return array;
+    }
 
-                [FieldOffset(0)]
-                public byte bVal;
+    private static void TransposeArray(SAFEARRAY* psa, Array array, VARENUM arrayType)
+    {
+        if (array.Rank <= 32)
+        {
+            StackTransposeArray(psa, array, arrayType);
+        }
+        else
+        {
+            Debug.Fail("The CLR should not support arrays with more than 32 dimensions.");
+            HeapTransposeArray(psa, array, arrayType);
+        }
 
-                [FieldOffset(0)]
-                public short iVal;
+        static void StackTransposeArray(SAFEARRAY* psa, Array array, VARENUM arrayType)
+        {
+            Span<int> indices = stackalloc int[array.Rank];
+            Span<int> lower = stackalloc int[array.Rank];
+            Span<int> upper = stackalloc int[array.Rank];
+            InternalTransposeArray(psa, array, arrayType, indices, lower, upper);
+        }
 
-                [FieldOffset(0)]
-                public float fltVal;
+        static void HeapTransposeArray(SAFEARRAY* psa, Array array, VARENUM arrayType)
+        {
+            var indices = new int[array.Rank];
+            var lower = new int[array.Rank];
+            var upper = new int[array.Rank];
+            InternalTransposeArray(psa, array, arrayType, indices, lower, upper);
+        }
 
-                [FieldOffset(0)]
-                public double dblVal;
+        static void InternalTransposeArray(SAFEARRAY* psa, Array array, VARENUM arrayType, Span<int> indices, Span<int> lower, Span<int> upper)
+        {
+            int lastIndex = array.Rank - 1;
+            int i;
+            for (i = 0; i < array.Rank; i++)
+            {
+                indices[i] = lower[i] = array.GetLowerBound(i);
+                upper[i] = array.GetUpperBound(i);
+            }
 
-                [FieldOffset(0)]
-                public short boolVal;
+            // Loop through all the indices.
+            while (true)
+            {
+            BeginMainLoop:
 
-                [FieldOffset(0)]
-                public int scode;
+                SetArrayValue(psa, array, indices, lower, arrayType);
 
-                [FieldOffset(0)]
-                public long cyVal;
+                for (i = lastIndex; i > 0;)
+                {
+                    if (++indices[i] <= upper[i])
+                    {
+                        goto BeginMainLoop;
+                    }
 
-                [FieldOffset(0)]
-                public double date;
+                    indices[i] = lower[i];
+                    --i;
+                }
 
-                [FieldOffset(0)]
-                public IntPtr bstrVal;
+                // Special case for the first index, it must be enumerated only once
+                if (++indices[0] > upper[0])
+                {
+                    break;
+                }
+            }
+        }
+    }
 
-                [FieldOffset(0)]
-                public IntPtr punkVal;
+    private static void SetArrayValue(SAFEARRAY* psa, Array array, Span<int> indices, Span<int> lowerBounds, VARENUM arrayType)
+    {
+        static void SetValue<T>(Array array, T value, Span<int> indices, Span<int> lowerBounds)
+        {
+            // CLR arrays are laid out in row-major order.
+            // See CLI 8.9.1: https://www.ecma-international.org/publications/files/ECMA-ST/ECMA-335.pdf
+            var span = GetSpan<T>(array);
+            int offset = 0;
+            int multiplier = 1;
+            for (int i = array.Rank; i >= 1; i--)
+            {
+                int diff = indices[i - 1] - lowerBounds[i - 1];
+                offset += diff * multiplier;
+                multiplier *= array.GetLength(i - 1);
+            }
 
-                [FieldOffset(0)]
-                public IntPtr pdispVal;
+            span[offset] = value;
+        }
 
-                [FieldOffset(0)]
-                public SAFEARRAY* parray;
+        switch (arrayType)
+        {
+            case VT_I1:
+                SetValue(array, psa->GetValue<sbyte>(indices), indices, lowerBounds);
+                break;
+            case VT_UI1:
+                SetValue(array, psa->GetValue<byte>(indices), indices, lowerBounds);
+                break;
+            case VT_I2:
+                SetValue(array, psa->GetValue<short>(indices), indices, lowerBounds);
+                break;
+            case VT_UI2:
+                SetValue(array, psa->GetValue<ushort>(indices), indices, lowerBounds);
+                break;
+            case VT_I4:
+            case VT_INT:
+                SetValue(array, psa->GetValue<int>(indices), indices, lowerBounds);
+                break;
+            case VT_UI4:
+            case VT_UINT:
+            case VT_ERROR: // Not explicitly mentioned in the docs but trivial to implement.
+                SetValue(array, psa->GetValue<uint>(indices), indices, lowerBounds);
+                break;
+            case VT_I8:
+                SetValue(array, psa->GetValue<long>(indices), indices, lowerBounds);
+                break;
+            case VT_UI8:
+                SetValue(array, psa->GetValue<ulong>(indices), indices, lowerBounds);
+                break;
+            case VT_R4:
+                SetValue(array, psa->GetValue<float>(indices), indices, lowerBounds);
+                break;
+            case VT_R8:
+                SetValue(array, psa->GetValue<double>(indices), indices, lowerBounds);
+                break;
+            case VT_BOOL:
+                {
+                    VARIANT_BOOL data = psa->GetValue<VARIANT_BOOL>(indices);
+                    SetValue(array, data != VARIANT_BOOL.FALSE, indices, lowerBounds);
+                    break;
+                }
 
-                [FieldOffset(0)]
-                public byte* pbVal;
+            case VT_DECIMAL:
+                {
+                    DECIMAL data = psa->GetValue<DECIMAL>(indices);
+                    SetValue(array, data.ToDecimal(), indices, lowerBounds);
+                    break;
+                }
 
-                [FieldOffset(0)]
-                public short* piVal;
+            case VT_CY:
+                {
+                    long data = psa->GetValue<long>(indices);
+                    SetValue(array, decimal.FromOACurrency(data), indices, lowerBounds);
+                    break;
+                }
 
-                [FieldOffset(0)]
-                public int* plVal;
+            case VT_DATE:
+                {
+                    double data = psa->GetValue<double>(indices);
+                    SetValue(array, DateTime.FromOADate(data), indices, lowerBounds);
+                    break;
+                }
 
-                [FieldOffset(0)]
-                public long* pllVal;
+            case VT_BSTR:
+                {
+                    IntPtr data = psa->GetValue<IntPtr>(indices);
+                    SetValue(array, Marshal.PtrToStringUni(data), indices, lowerBounds);
+                    break;
+                }
 
-                [FieldOffset(0)]
-                public float* pfltVal;
+            case VT_DISPATCH:
+            case VT_UNKNOWN:
+                {
+                    IntPtr data = psa->GetValue<IntPtr>(indices);
+                    if (data == IntPtr.Zero)
+                    {
+                        SetValue<object?>(array, null, indices, lowerBounds);
+                    }
+                    else
+                    {
+                        SetValue(array, Marshal.GetObjectForIUnknown(data), indices, lowerBounds);
+                    }
 
-                [FieldOffset(0)]
-                public double* pdblVal;
+                    break;
+                }
 
-                [FieldOffset(0)]
-                public short* pboolVal;
+            case VT_VARIANT:
+                {
+                    VARIANT data = psa->GetValue<VARIANT>(indices);
+                    SetValue(array, data.ToObject(), indices, lowerBounds);
+                    break;
+                }
 
-                [FieldOffset(0)]
-                public int* pscode;
+            case VT_RECORD:
+                throw new NotImplementedException();
+            default:
+                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, arrayType));
+        }
+    }
 
-                [FieldOffset(0)]
-                public long* pcyVal;
+    private static Array CreateArrayFromSafeArray(SAFEARRAY* psa, VARENUM vt)
+    {
+        Type elementType;
+        if (vt == VT_EMPTY)
+        {
+            throw new InvalidOleVariantTypeException();
+        }
 
-                [FieldOffset(0)]
-                public double* pdate;
+        if (vt == VT_RECORD)
+        {
+            using ComScope<IRecordInfo> record = new(null);
+            PInvoke.SafeArrayGetRecordInfo(psa, record).ThrowOnFailure();
+            elementType = GetRecordElementType(record);
+        }
 
-                [FieldOffset(0)]
-                public IntPtr* pbstrVal;
+        VARENUM arrayVarType = psa->VarType;
+        if (arrayVarType == VT_EMPTY)
+        {
+            if (psa->cbElements != GetElementSizeForVarType(vt))
+            {
+                throw new SafeArrayTypeMismatchException();
+            }
+        }
 
-                [FieldOffset(0)]
-                public IntPtr* ppunkVal;
+        // Allow limited conversion between arrays of different but related types.
+        else if (arrayVarType != vt
+            && !(vt == VT_INT && arrayVarType == VT_I4)
+            && !(vt == VT_UINT && arrayVarType == VT_UI4)
+            && !(vt == VT_I4 && arrayVarType == VT_INT)
+            && !(vt == VT_UI4 && arrayVarType == VT_UINT)
+            && !(vt == VT_UNKNOWN && arrayVarType == VT_DISPATCH)
+            && !(arrayVarType == VT_RECORD))
+        {
+            // To match CLR behaviour.
+            throw new SafeArrayTypeMismatchException();
+        }
 
-                [FieldOffset(0)]
-                public IntPtr* ppdispVal;
+        switch (vt)
+        {
+            case VT_I1:
+                elementType = typeof(sbyte);
+                break;
+            case VT_UI1:
+                elementType = typeof(byte);
+                break;
+            case VT_I2:
+                elementType = typeof(short);
+                break;
+            case VT_UI2:
+                elementType = typeof(ushort);
+                break;
+            case VT_I4:
+            case VT_INT:
+                elementType = typeof(int);
+                break;
+            case VT_I8:
+                elementType = typeof(long);
+                break;
+            case VT_UI8:
+                elementType = typeof(ulong);
+                break;
+            case VT_UI4:
+            case VT_UINT:
+            case VT_ERROR:
+                elementType = typeof(uint);
+                break;
+            case VT_R4:
+                elementType = typeof(float);
+                break;
+            case VT_R8:
+                elementType = typeof(double);
+                break;
+            case VT_BOOL:
+                elementType = typeof(bool);
+                break;
+            case VT_DECIMAL:
+            case VT_CY:
+                elementType = typeof(decimal);
+                break;
+            case VT_DATE:
+                elementType = typeof(DateTime);
+                break;
+            case VT_BSTR:
+                elementType = typeof(string);
+                break;
+            case VT_DISPATCH:
+            case VT_UNKNOWN:
+            case VT_VARIANT:
+                elementType = typeof(object);
+                break;
+            default:
+                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
+        }
 
-                [FieldOffset(0)]
-                public SAFEARRAY** pparray;
+        if (psa->cDims == 1 && psa->Bounds[0].lLbound == 0)
+        {
+            // SZArray.
+            return Array.CreateInstance(elementType, (int)psa->Bounds[0].cElements);
+        }
 
-                [FieldOffset(0)]
-                public VARIANT* pvarVal;
+        var lengths = new int[psa->cDims];
+        var bounds = new int[psa->cDims];
+        int counter = 0;
+        // Copy the lower bounds and count of elements for the dimensions. These
+        // need to copied in reverse order.
+        for (int i = psa->cDims - 1; i >= 0; i--)
+        {
+            lengths[counter] = (int)psa->Bounds[i].cElements;
+            bounds[counter] = psa->Bounds[i].lLbound;
+            counter++;
+        }
 
-                [FieldOffset(0)]
-                public void* Byref;
+        return Array.CreateInstance(elementType, lengths, bounds);
+    }
 
-                [FieldOffset(0)]
-                public sbyte cVal;
+    private static uint GetElementSizeForVarType(VARENUM vt)
+    {
+        switch (vt)
+        {
+            case VT_EMPTY:
+            case VT_NULL:
+            case VT_VOID:
+                return 0;
+            case VT_I1:
+            case VT_UI1:
+                return 1;
+            case VT_I2:
+            case VT_UI2:
+            case VT_BOOL:
+                return 2;
+            case VT_I4:
+            case VT_UI4:
+            case VT_INT:
+            case VT_UINT:
+            case VT_R4:
+            case VT_HRESULT:
+            case VT_ERROR:
+                return 4;
+            case VT_I8:
+            case VT_UI8:
+            case VT_CY:
+            case VT_R8:
+            case VT_DATE:
+                return 8;
+            case VT_DECIMAL:
+                return (uint)sizeof(DECIMAL);
+            case VT_VARIANT:
+                return (uint)sizeof(VARIANT);
+            case VT_BSTR:
+            case VT_LPSTR:
+            case VT_LPWSTR:
+            case VT_UNKNOWN:
+            case VT_DISPATCH:
+            case VT_USERDEFINED:
+            case VT_CARRAY:
+            case VT_SAFEARRAY:
+            case VT_PTR:
+                return (uint)IntPtr.Size;
+            default:
+                if ((vt & VT_ARRAY) != 0)
+                {
+                    return (uint)sizeof(SAFEARRAY*);
+                }
 
-                [FieldOffset(0)]
-                public ushort uiVal;
+                return 0;
+        }
+    }
 
-                [FieldOffset(0)]
-                public uint ulVal;
+    private static object ToVector(in CA ca, VARENUM vectorType)
+    {
+        VARENUM vt = vectorType & ~VT_VECTOR;
+        switch (vt)
+        {
+            case VT_I1:
+                return new Span<sbyte>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_UI1:
+                return new Span<byte>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_I2:
+                return new Span<short>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_UI2:
+                return new Span<ushort>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_BOOL:
+                {
+                    var data = new Span<VARIANT_BOOL>(ca.pElems, (int)ca.cElems);
+                    var result = new bool[data.Length];
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        result[i] = data[i] != VARIANT_BOOL.FALSE;
+                    }
 
-                [FieldOffset(0)]
-                public ulong ullVal;
+                    return result;
+                }
 
-                [FieldOffset(0)]
-                public DECIMAL* pdecVal;
+            case VT_I4:
+            case VT_INT: // Not explicitly mentioned in the docs but trivial to implement.
+                return new Span<int>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_UI4:
+            case VT_ERROR:
+            case VT_UINT: // Not explicitly mentioned in the docs but trivial to implement.
+                return new Span<uint>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_I8:
+                return new Span<long>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_UI8:
+                return new Span<ulong>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_R4:
+                return new Span<float>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_R8:
+                return new Span<double>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_CY:
+                {
+                    var data = new Span<long>(ca.pElems, (int)ca.cElems);
+                    var result = new decimal[data.Length];
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        result[i] = decimal.FromOACurrency(data[i]);
+                    }
 
-                [FieldOffset(0)]
-                public sbyte* pcVal;
+                    return result;
+                }
 
-                [FieldOffset(0)]
-                public ushort* puiVal;
+            case VT_DATE:
+                {
+                    var data = new Span<double>(ca.pElems, (int)ca.cElems);
+                    var result = new DateTime[data.Length];
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        result[i] = DateTime.FromOADate(data[i]);
+                    }
 
-                [FieldOffset(0)]
-                public uint* pulVal;
+                    return result;
+                }
 
-                [FieldOffset(0)]
-                public ulong* pullVal;
+            case VT_FILETIME:
+                {
+                    var data = new Span<PInvoke.FILETIME>(ca.pElems, (int)ca.cElems);
+                    var result = new DateTime[data.Length];
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        result[i] = data[i].ToDateTime();
+                    }
 
-                [FieldOffset(0)]
-                public int* pintVal;
+                    return result;
+                }
 
-                [FieldOffset(0)]
-                public uint* puintVal;
+            case VT_CLSID:
+                return new Span<Guid>(ca.pElems, (int)ca.cElems).ToArray();
+            case VT_BSTR:
+            case VT_LPWSTR:
+                {
+                    var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
+                    var result = new string?[data.Length];
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        result[i] = Marshal.PtrToStringUni(data[i]);
+                    }
 
-                [FieldOffset(0)]
-                public VARIANTRecord recordVal;
+                    return result;
+                }
 
+            case VT_LPSTR:
+                {
+                    var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
+                    var result = new string?[data.Length];
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        result[i] = Marshal.PtrToStringAnsi(data[i]);
+                    }
+
+                    return result;
+                }
+
+            case VT_VARIANT:
+                {
+                    var data = new Span<VARIANT>(ca.pElems, (int)ca.cElems);
+                    var result = new object?[data.Length];
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        result[i] = data[i].ToObject();
+                    }
+
+                    return result;
+                }
+
+            case VT_CF: // Not implemented.
+            case VT_BSTR_BLOB: // System use only.
+            default: // Documentation does not specify any other types that are supported.
+                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
+        }
+    }
+
+    private static Span<T> GetSpan<T>(Array arr)
+        => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<T>(Marshal.UnsafeAddrOfPinnedArrayElement(arr, 0).ToPointer()), arr.Length);
+
+    internal partial struct _Anonymous_e__Union
+    {
+        internal partial struct _Anonymous_e__Struct
+        {
+            internal partial struct _Anonymous_e__Union
+            {
+                // Other data types amalgamated from PROPVARIANT
                 [FieldOffset(0)]
                 public Guid* puuid;
 
@@ -1011,12 +905,6 @@ internal static partial class Interop
 
                 [FieldOffset(0)]
                 public CA ca;
-            }
-
-            public struct VARIANTRecord
-            {
-                public void* pvRecord;
-                public IntPtr pRecInfo;
             }
         }
     }

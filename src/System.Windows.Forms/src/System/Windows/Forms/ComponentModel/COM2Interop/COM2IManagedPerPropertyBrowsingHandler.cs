@@ -4,9 +4,9 @@
 
 using System.Collections;
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -29,8 +29,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
-        ///  such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
+        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.
+        ///  Hide properties such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </summary>
         private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             uint cItems = 0;
             IntPtr pbstrs = IntPtr.Zero;
-            Oleaut32.VARIANT* pvars = null;
+            VARIANT* pvars = null;
 
             HRESULT hr = target.GetPropertyAttributes(dispid, &cItems, &pbstrs, &pvars);
             if (hr != HRESULT.S_OK || cItems == 0 || pvars is null)
@@ -121,11 +121,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     if (t is null)
                     {
-                        Debug.Fail("Failed load attribute '" + attrName + assemblyName + "'.  It's Type could not be found.");
+                        Debug.Fail($"Failed load attribute '{attrName}{assemblyName}'.  It's Type could not be found.");
                         continue;
                     }
 
-                    Debug.Assert(typeof(Attribute).IsAssignableFrom(t), "Attribute type " + t.FullName + " does not derive from Attribute");
+                    Debug.Assert(typeof(Attribute).IsAssignableFrom(t), $"Attribute type {t.FullName} does not derive from Attribute");
                     if (!typeof(Attribute).IsAssignableFrom(t))
                     {
                         continue;
@@ -148,12 +148,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                         else
                         {
-                            Debug.Fail("Couldn't load field '" + fieldName + "' from type '" + attrName.Substring(0, lastDot) + "'.  It does not exist or is not static");
+                            Debug.Fail($"Couldn't load field '{fieldName}' from type '{attrName[..lastDot]}'.  It does not exist or is not static");
                         }
                     }
                 }
 
-                Debug.Assert(typeof(Attribute).IsAssignableFrom(t), "Attribute type " + t.FullName + " does not derive from Attribute");
+                Debug.Assert(typeof(Attribute).IsAssignableFrom(t), $"Attribute type {t.FullName} does not derive from Attribute");
                 if (!typeof(Attribute).IsAssignableFrom(t))
                 {
                     continue;
@@ -183,7 +183,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             catch
                             {
                                 // nevermind
-                                Debug.Fail("Attribute " + t.FullName + " did not have a initializer specified and has no default constructor");
+                                Debug.Fail($"Attribute {t.FullName} did not have a initializer specified and has no default constructor");
                                 continue;
                             }
                         }
@@ -200,7 +200,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     catch
                     {
                         // nevermind
-                        Debug.Fail("Attribute " + t.FullName + " did not have a initializer specified and has no default constructor");
+                        Debug.Fail($"Attribute {t.FullName} did not have a initializer specified and has no default constructor");
                         continue;
                     }
                 }
@@ -234,7 +234,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     catch (Exception ex)
                     {
-                        Debug.Fail("Failed to marshal component attribute BSTR " + i.ToString(CultureInfo.InvariantCulture), ex.ToString());
+                        Debug.Fail($"Failed to marshal component attribute BSTR {i}", ex.ToString());
                     }
                 }
 
@@ -255,19 +255,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private static unsafe object?[] GetVariantsFromPtr(Oleaut32.VARIANT* ptr, uint cVariants)
+        private static unsafe object?[] GetVariantsFromPtr(VARIANT* ptr, uint cVariants)
         {
             var objects = new object?[cVariants];
             for (int i = 0; i < cVariants; i++)
             {
                 try
                 {
-                    using Oleaut32.VARIANT variant = ptr[i];
+                    using VARIANT variant = ptr[i];
                     objects[i] = variant.ToObject();
                 }
                 catch (Exception ex)
                 {
-                    Debug.Fail("Failed to marshal component attribute VARIANT " + i, ex.ToString());
+                    Debug.Fail($"Failed to marshal component attribute VARIANT {i}", ex.ToString());
                 }
             }
 

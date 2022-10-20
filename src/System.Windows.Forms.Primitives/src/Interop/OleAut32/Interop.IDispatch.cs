@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 
 internal partial class Interop
 {
@@ -36,7 +37,7 @@ internal partial class Interop
                 Ole32.DispatchID dispIdMember,
                 Guid* riid,
                 PInvoke.LCID lcid,
-                DISPATCH dwFlags,
+                DISPATCH_FLAGS dwFlags,
                 DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
                 EXCEPINFO* pExcepInfo,

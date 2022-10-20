@@ -6,6 +6,7 @@
 
 using System.Diagnostics;
 using System.Windows.Forms.ComponentModel.Com2Interop;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -98,9 +99,9 @@ namespace System.Windows.Forms
                                 continue;
                             }
 
-                            using var var = new Oleaut32.VARIANT();
+                            using VARIANT var = new();
                             HRESULT hr = ppb.GetPredefinedValue(_target.Dispid, cookie, &var);
-                            if (hr == HRESULT.S_OK && var.vt != Ole32.VARENUM.EMPTY)
+                            if (hr.Succeeded && var.Type != VARENUM.VT_EMPTY)
                             {
                                 values[i] = var.ToObject();
                             }
