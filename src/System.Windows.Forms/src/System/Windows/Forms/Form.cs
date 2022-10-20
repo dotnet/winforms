@@ -4321,7 +4321,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual bool OnGetDpiScaledSize(int deviceDpiOld, int deviceDpiNew, ref Size desiredSize)
         {
-            // Compute and update Font for the current Dpi. 
+            // Compute and update Font for the current Dpi.
             var factor = ((float)deviceDpiNew) / deviceDpiOld;
 
             // Dpi specific fonts cache is available only in PermonitorV2 mode applications.
@@ -4654,7 +4654,7 @@ namespace System.Windows.Forms
             return e.Cancel;
         }
 
-        internal unsafe override void RecreateHandleCore()
+        internal override unsafe void RecreateHandleCore()
         {
             WINDOWPLACEMENT wp = default;
 
