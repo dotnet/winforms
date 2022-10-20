@@ -4349,7 +4349,7 @@ namespace System.Windows.Forms
             Debug.WriteLine($"AutoScaleFactor computed for new Dpi = {autoScaleFactor.Width} - {autoScaleFactor.Height}");
 
             // Notify Windows that the top-level window size should be based on AutoScaleMode value.
-            return true; 
+            return true;
         }
 
         /// <summary>
