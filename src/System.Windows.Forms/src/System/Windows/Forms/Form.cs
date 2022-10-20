@@ -4321,10 +4321,9 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual bool OnGetDpiScaledSize(int deviceDpiOld, int deviceDpiNew, ref Size desiredSize)
         {
-            // Compute and update Font for the current Dpi.
-            var factor = ((float)deviceDpiNew) / deviceDpiOld;
+            float factor = ((float)deviceDpiNew) / deviceDpiOld;
 
-            // Dpi specific fonts cache is available only in PermonitorV2 mode applications.
+            // Compute font for the current DPI and cache it. DPI specific fonts cache is available only in PermonitorV2 mode applications.
             if (!TryGetDpiFont(deviceDpiNew, out Font? fontForDpi))
             {
                 Font currentFont = Font;
@@ -4332,15 +4331,15 @@ namespace System.Windows.Forms
                 AddToDpiFonts(deviceDpiNew, fontForDpi);
             }
 
-            // If AutoScaleMode is Dpi, We continue with the linear size we get from Windows for the top-level window.
+            // If AutoScaleMode=AutoScaleMode.Dpi, We continue with the linear size we get from Windows for the top-level window.
             if (AutoScaleMode == AutoScaleMode.Dpi)
             {
                 return false;
             }
 
-            // Calculate AutoscaleFactor for AutoScaleMode.Font that we will be using to scale child controls and use same factor to
-            // compute desired size for top-level windows for the current Dpi. This way, we notify Windows that we
-            // need non-linear size for top-level window based on AutoScaleMode property.
+            // Calculate AutoscaleFactor for AutoScaleMode.Font. We will be using this factor to scale child controls
+            // and use same factor to compute desired size for top-level windows for the current DPI.
+            // This desired size is then used to notify Windows that we need non-linear size for top-level window.
             FontHandleWrapper fontwrapper = new FontHandleWrapper(fontForDpi);
             SizeF currentAutoScaleDimensions = GetCurrentAutoScaleDimensions(fontwrapper.Handle);
             SizeF autoScaleFactor = GetCurrentAutoScaleFactor(currentAutoScaleDimensions, AutoScaleDimensions);
@@ -4349,7 +4348,8 @@ namespace System.Windows.Forms
             desiredSize.Height = (int)(Size.Height * autoScaleFactor.Height);
             Debug.WriteLine($"AutoScaleFactor computed for new Dpi = {autoScaleFactor.Width} - {autoScaleFactor.Height}");
 
-            return true; // Notifying Windows that the top-level window size should be based on AutoScale mode.
+            // Notify Windows that the top-level window size should be based on AutoScaleMode value.
+            return true; 
         }
 
         /// <summary>

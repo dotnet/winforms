@@ -150,7 +150,9 @@ namespace System.Windows.Forms
         }
 
         internal static SizeF GetCurrentAutoScaleFactor(SizeF currentAutoScaleDimensions, SizeF savedAutoScaleDimensions)
-            => savedAutoScaleDimensions.IsEmpty ? new SizeF(1.0F, 1.0F) : new SizeF(currentAutoScaleDimensions.Width / savedAutoScaleDimensions.Width, currentAutoScaleDimensions.Height / savedAutoScaleDimensions.Height);
+            => savedAutoScaleDimensions.IsEmpty ?
+            new SizeF(1.0F, 1.0F)
+            : new SizeF(currentAutoScaleDimensions.Width / savedAutoScaleDimensions.Width, currentAutoScaleDimensions.Height / savedAutoScaleDimensions.Height);
 
         /// <summary>
         ///  Determines the scaling mode of this control. The default is no scaling.
@@ -1471,6 +1473,8 @@ namespace System.Windows.Forms
                 _isScaledByDpiChangedEvent = true;
 
                 TryGetDpiFont(deviceDpiNew, out Font? fontForDpi);
+
+                // For test scenarios, if we send WM_DPICHNAGED message but not WM_GETDPISCALEDSIZE message, fontForDpi may be null.
                 Debug.Assert(fontForDpi != null, "We should have Font updated for Dpi from WM_GETDPISCALEDSIZE message");
 
                 ScaledControlFont = fontForDpi;
