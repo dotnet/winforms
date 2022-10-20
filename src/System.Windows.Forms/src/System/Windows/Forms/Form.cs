@@ -4341,7 +4341,7 @@ namespace System.Windows.Forms
             // Calculate AutoscaleFactor for AutoScaleMode.Font that we will be using to scale child controls and use same factor to
             // compute desired size for top-level windows for the current Dpi. This way, we notify Windows that we
             // need non-linear size for top-level window based on AutoScaleMode property.
-            using FontHandleWrapper fontwrapper = new FontHandleWrapper(fontForDpi);
+            FontHandleWrapper fontwrapper = new FontHandleWrapper(fontForDpi);
             SizeF currentAutoScaleDimensions = GetCurrentAutoScaleDimensions(fontwrapper.Handle);
             SizeF autoScaleFactor = GetCurrentAutoScaleFactor(currentAutoScaleDimensions, AutoScaleDimensions);
 
@@ -4366,12 +4366,16 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
 
             Size desiredSize = new Size();
-            m.ResultInternal = OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize)
-                ? (LRESULT)1
-                : (LRESULT)0;
-            SIZE* size = (SIZE*)m.LParamInternal;
-            size->cx = desiredSize.Width;
-            size->cy = desiredSize.Height;
+            if (OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize))
+            {
+                SIZE* size = (SIZE*)m.LParamInternal;
+                size->cx = desiredSize.Width;
+                size->cy = desiredSize.Height;
+                m.ResultInternal = (LRESULT)1;
+                return;
+            }
+
+            m.ResultInternal = (LRESULT)0;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]

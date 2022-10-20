@@ -15,18 +15,20 @@ namespace System.Windows.Forms.Tests.Dpi
 
             _ = message switch
             {
-                User32.WM.DPICHANGED => SendWmDpiChangedMessage(),
+                User32.WM.DPICHANGED => SendWmDpiChangedMessage(message),
                 User32.WM.DPICHANGED_BEFOREPARENT => PInvoke.SendMessage(control, message, wParam),
                 User32.WM.DPICHANGED_AFTERPARENT => PInvoke.SendMessage(control, message),
                 _ => throw new NotImplementedException()
             };
 
-            nint SendWmDpiChangedMessage()
+            nint SendWmDpiChangedMessage(User32.WM message)
             {
                 RECT suggestedRect = new(0,
                     0,
                     (int)Math.Round(control.Width * factor),
                     (int)Math.Round(control.Height * factor));
+
+                PInvoke.SendMessage(control, User32.WM.GETDPISCALEDSIZE, wParam, ref suggestedRect);
                 return PInvoke.SendMessage(control, message, wParam, ref suggestedRect);
             }
         }
