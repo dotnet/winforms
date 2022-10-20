@@ -1475,7 +1475,7 @@ namespace System.Windows.Forms
                 TryGetDpiFont(deviceDpiNew, out Font? fontForDpi);
 
                 // For test scenarios, if we send WM_DPICHANGED message but not WM_GETDPISCALEDSIZE message, fontForDpi may be null.
-                Debug.Assert(fontForDpi is not null, "Font should have been updated for DPI from WM_GETDPISCALEDSIZE message");```
+                Debug.Assert(fontForDpi is not null, "Font should have been updated for DPI from WM_GETDPISCALEDSIZE message");
 
                 ScaledControlFont = fontForDpi;
                 if (IsFontSet())
