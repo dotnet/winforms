@@ -20,4 +20,6 @@ internal readonly unsafe partial struct BSTR : IDisposable
             *c = null;
         }
     }
+
+    public bool IsNull => Value is null;
 }

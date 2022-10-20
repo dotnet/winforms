@@ -6,11 +6,13 @@
 
 using System.Runtime.InteropServices;
 using Xunit;
-using static Interop;
-using static Interop.Ole32;
-using static Interop.Oleaut32;
+using Windows.Win32.System.Com;
+using static Windows.Win32.System.Com.ADVANCED_FEATURE_FLAGS;
+using static Windows.Win32.System.Com.VARENUM;
+using IRecordInfo = Interop.Oleaut32.IRecordInfo;
+using ITypeInfo = Interop.Oleaut32.ITypeInfo;
 
-namespace System.Windows.Forms.Tests.Interop.Oleaut32
+namespace System.Windows.Forms.Tests.Interop.SafeArrayTests
 {
     public unsafe class SAFEARRAYTests
     {
@@ -40,11 +42,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> Create_TestData()
         {
-            yield return new object[] { VARENUM.I4, FADF.HAVEVARTYPE, 4 };
-            yield return new object[] { VARENUM.I8, FADF.HAVEVARTYPE, 8 };
-            yield return new object[] { VARENUM.BSTR, FADF.HAVEVARTYPE | FADF.BSTR, IntPtr.Size };
-            yield return new object[] { VARENUM.UNKNOWN, FADF.HAVEIID | FADF.UNKNOWN, IntPtr.Size };
-            yield return new object[] { VARENUM.DISPATCH, FADF.HAVEIID | FADF.DISPATCH, IntPtr.Size };
+            yield return new object[] { VT_I4, FADF_HAVEVARTYPE, 4 };
+            yield return new object[] { VT_I8, FADF_HAVEVARTYPE, 8 };
+            yield return new object[] { VT_BSTR, FADF_HAVEVARTYPE | FADF_BSTR, IntPtr.Size };
+            yield return new object[] { VT_UNKNOWN, FADF_HAVEIID | FADF_UNKNOWN, IntPtr.Size };
+            yield return new object[] { VT_DISPATCH, FADF_HAVEIID | FADF_DISPATCH, IntPtr.Size };
         }
 
         [StaTheory]
@@ -62,15 +64,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             try
             {
                 Assert.Equal(1u, psa->cDims);
-                Assert.Equal((FADF)expectedFeatures, psa->fFeatures);
+                Assert.Equal((ADVANCED_FEATURE_FLAGS)expectedFeatures, psa->fFeatures);
                 Assert.Equal((uint)expectedCbElements, psa->cbElements);
                 Assert.Equal(0u, psa->cLocks);
                 Assert.True(psa->pvData != null);
-                Assert.Equal(10u, psa->rgsabound[0].cElements);
-                Assert.Equal(1, psa->rgsabound[0].lLbound);
+                Assert.Equal(10u, psa->rgsabound._0.cElements);
+                Assert.Equal(1, psa->rgsabound._0.lLbound);
 
-                VARENUM arrayVt = VARENUM.EMPTY;
-                HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
+                VARENUM arrayVt = VT_EMPTY;
+                HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal((VARENUM)vt, arrayVt);
             }
@@ -93,23 +95,23 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr pRecord = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
             try
             {
-                SAFEARRAY* psa = SafeArrayCreateEx(VARENUM.RECORD, 1, &saBound, pRecord);
+                SAFEARRAY* psa = SafeArrayCreateEx(VT_RECORD, 1, &saBound, pRecord);
                 Assert.True(psa != null);
 
                 try
                 {
                     Assert.Equal(1u, psa->cDims);
-                    Assert.Equal(FADF.RECORD, psa->fFeatures);
+                    Assert.Equal(FADF_RECORD, psa->fFeatures);
                     Assert.Equal((uint)sizeof(int), psa->cbElements);
                     Assert.Equal(0u, psa->cLocks);
                     Assert.True(psa->pvData != null);
-                    Assert.Equal(10u, psa->rgsabound[0].cElements);
-                    Assert.Equal(1, psa->rgsabound[0].lLbound);
+                    Assert.Equal(10u, psa->rgsabound._0.cElements);
+                    Assert.Equal(1, psa->rgsabound._0.lLbound);
 
-                    VARENUM arrayVt = VARENUM.EMPTY;
-                    HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
+                    VARENUM arrayVt = VT_EMPTY;
+                    HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
                     Assert.Equal(HRESULT.S_OK, hr);
-                    Assert.Equal(VARENUM.RECORD, arrayVt);
+                    Assert.Equal(VT_RECORD, arrayVt);
                 }
                 finally
                 {
@@ -190,17 +192,17 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             try
             {
                 Assert.Equal(2u, psa->cDims);
-                Assert.Equal((FADF)expectedFeatures, psa->fFeatures);
+                Assert.Equal((ADVANCED_FEATURE_FLAGS)expectedFeatures, psa->fFeatures);
                 Assert.Equal(expectedCbElements, psa->cbElements);
                 Assert.Equal(0u, psa->cLocks);
                 Assert.True(psa->pvData != null);
-                Assert.Equal(20u, psa->rgsabound[0].cElements);
-                Assert.Equal(0, psa->rgsabound[0].lLbound);
-                Assert.Equal(10u, psa->rgsabound[1].cElements);
-                Assert.Equal(1, psa->rgsabound[1].lLbound);
+                Assert.Equal(20u, psa->rgsabound._0.cElements);
+                Assert.Equal(0, psa->rgsabound._0.lLbound);
+                Assert.Equal(10u, ((SAFEARRAYBOUND*)&psa->rgsabound)[1].cElements);
+                Assert.Equal(1, ((SAFEARRAYBOUND*)&psa->rgsabound)[1].lLbound);
 
-                VARENUM arrayVt = VARENUM.EMPTY;
-                HRESULT hr = SafeArrayGetVartype(psa, &arrayVt);
+                VARENUM arrayVt = VT_EMPTY;
+                HRESULT hr = PInvoke.SafeArrayGetVartype(psa, &arrayVt);
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal((VARENUM)vt, arrayVt);
             }
@@ -219,7 +221,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = 0
             };
-            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
+            SAFEARRAY* psa = SafeArrayCreate(VT_I4, 1, &saBound);
             Assert.True(psa != null);
 
             try
@@ -265,7 +267,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = -5
             };
-            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
+            SAFEARRAY* psa = SafeArrayCreate(VT_I4, 1, &saBound);
             Assert.True(psa != null);
 
             try
@@ -317,7 +319,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = 0
             };
-            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
+            SAFEARRAY* psa = SafeArrayCreate(VT_I4, 2, saBounds);
             Assert.True(psa != null);
 
             try
@@ -369,7 +371,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = -4
             };
-            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
+            SAFEARRAY* psa = SafeArrayCreate(VT_I4, 2, saBounds);
             Assert.True(psa != null);
 
             try
@@ -407,19 +409,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             }
         }
 
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe SAFEARRAY* SafeArrayCreate(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound);
+        [DllImport(global::Interop.Libraries.Oleaut32, ExactSpelling = true)]
+        private static unsafe extern SAFEARRAY* SafeArrayCreate(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound);
 
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe SAFEARRAY* SafeArrayCreateEx(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound, IntPtr pvExtra);
+        [DllImport(global::Interop.Libraries.Oleaut32, ExactSpelling = true)]
+        private static unsafe extern SAFEARRAY* SafeArrayCreateEx(VARENUM vt, uint cDims, SAFEARRAYBOUND* rgsabound, IntPtr pvExtra);
 
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe HRESULT SafeArrayDestroy(SAFEARRAY* psa);
+        [DllImport(global::Interop.Libraries.Oleaut32, ExactSpelling = true)]
+        private static unsafe extern HRESULT SafeArrayDestroy(SAFEARRAY* psa);
 
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe HRESULT SafeArrayPutElement(SAFEARRAY* psa, int* rgIndices, void* pv);
+        [DllImport(global::Interop.Libraries.Oleaut32, ExactSpelling = true)]
+        private unsafe static extern HRESULT SafeArrayPutElement(SAFEARRAY* psa, int* rgIndices, void* pv);
 
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
-        private static extern unsafe HRESULT SafeArrayGetElement(SAFEARRAY* psa, int* rgIndices, void* pv);
+        [DllImport(global::Interop.Libraries.Oleaut32, ExactSpelling = true)]
+        private unsafe static extern HRESULT SafeArrayGetElement(SAFEARRAY* psa, int* rgIndices, void* pv);
     }
 }

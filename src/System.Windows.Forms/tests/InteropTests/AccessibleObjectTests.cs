@@ -3,8 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using Xunit;
-using static Interop.Oleaut32;
+using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.InteropTests
@@ -439,7 +440,7 @@ namespace System.Windows.Forms.InteropTests
             control.CreateControl();
             ComboBox.ComboBoxAccessibleObject accessibleObject = new ComboBox.ComboBoxAccessibleObject(control);
 
-            var enumVariant = (IEnumVariant)accessibleObject;
+            var enumVariant = (Oleaut32.IEnumVariant)accessibleObject;
             Assert.Equal(HRESULT.S_OK, enumVariant.Reset());
 
             VARIANT variantObject;

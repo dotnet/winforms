@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Globalization;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -97,9 +98,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 continue;
                             }
 
-                            using var variant = new Oleaut32.VARIANT();
+                            using VARIANT variant = new();
                             HRESULT hr = ppb.GetPredefinedValue(_target.DISPID, cookie, &variant);
-                            if (hr == HRESULT.S_OK && variant.vt != Ole32.VARENUM.EMPTY)
+                            if (hr == HRESULT.S_OK && variant.Type != VARENUM.VT_EMPTY)
                             {
                                 valueItems[i] = variant.ToObject()!;
                                 if (valueItems[i].GetType() != targetType)

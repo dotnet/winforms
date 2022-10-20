@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 
 internal static partial class Interop
 {
@@ -15,11 +16,11 @@ internal static partial class Interop
         {
             [PreserveSig]
             HRESULT GetTypeAttr(
-                Ole32.TYPEATTR** ppTypeAttr);
+                TYPEATTR** ppTypeAttr);
 
             /// <remarks>
-            /// This method is unused so we do not define the interface ITypeComp
-            /// and its dependencies to avoid maintenance costs and code size.
+            ///  This method is unused so we do not define the interface ITypeComp
+            ///  and its dependencies to avoid maintenance costs and code size.
             /// </remarks>
             [PreserveSig]
             HRESULT GetTypeComp(
@@ -28,12 +29,12 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT GetFuncDesc(
                 uint index,
-                Ole32.FUNCDESC** ppFuncDesc);
+                FUNCDESC** ppFuncDesc);
 
             [PreserveSig]
             HRESULT GetVarDesc(
                 uint index,
-                Ole32.VARDESC** ppVarDesc);
+                VARDESC** ppVarDesc);
 
             [PreserveSig]
             HRESULT GetNames(
@@ -50,7 +51,7 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT GetImplTypeFlags(
                 uint index,
-                Ole32.IMPLTYPEFLAG* pImplTypeFlags);
+                IMPLTYPEFLAGS* pImplTypeFlags);
 
             [PreserveSig]
             HRESULT GetIDsOfNames(
@@ -62,7 +63,7 @@ internal static partial class Interop
             HRESULT Invoke(
                 [MarshalAs(UnmanagedType.Interface)] object pvInstance,
                 Ole32.DispatchID memid,
-                DISPATCH wFlags,
+                DISPATCH_FLAGS wFlags,
                 DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
                 EXCEPINFO* pExcepInfo,
@@ -79,7 +80,7 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT GetDllEntry(
                 Ole32.DispatchID memid,
-                Ole32.INVOKEKIND invkind,
+                INVOKEKIND invkind,
                 BSTR* pBstrDllName,
                 BSTR* pBstrName,
                 ushort* pwOrdinal);
@@ -92,7 +93,7 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT AddressOfMember(
                 Ole32.DispatchID memid,
-                Ole32.INVOKEKIND invKind,
+                INVOKEKIND invKind,
                 IntPtr* ppv);
 
             [PreserveSig]
@@ -107,8 +108,8 @@ internal static partial class Interop
                 BSTR* pBstrMops);
 
             /// <remarks>
-            /// This method is unused so we do not define the interface ITypeLib
-            /// and its dependencies to avoid maintenance costs and code size.
+            ///  This method is unused so we do not define the interface ITypeLib
+            ///  and its dependencies to avoid maintenance costs and code size.
             /// </remarks>
             [PreserveSig]
             HRESULT GetContainingTypeLib(
@@ -117,15 +118,15 @@ internal static partial class Interop
 
             [PreserveSig]
             void ReleaseTypeAttr(
-                Ole32.TYPEATTR* pTypeAttr);
+                TYPEATTR* pTypeAttr);
 
             [PreserveSig]
             void ReleaseFuncDesc(
-                Ole32.FUNCDESC* pFuncDesc);
+                FUNCDESC* pFuncDesc);
 
             [PreserveSig]
             void ReleaseVarDesc(
-                Ole32.VARDESC* pVarDesc);
+                VARDESC* pVarDesc);
         }
     }
 }

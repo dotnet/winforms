@@ -6,8 +6,12 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
 using Xunit;
-using static Interop.Ole32;
-using static Interop.Oleaut32;
+using Windows.Win32.System.Com;
+using IDispatch = Interop.Oleaut32.IDispatch;
+using ITypeInfo = Interop.Oleaut32.ITypeInfo;
+using IPictureDisp = Interop.Ole32.IPictureDisp;
+using DispatchID = Interop.Ole32.DispatchID;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
 {
@@ -25,8 +29,8 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            nint pv = (nint)int.MaxValue;
-            hr = typeInfo.AddressOfMember((DispatchID)6, INVOKEKIND.FUNC, &pv);
+            nint pv = int.MaxValue;
+            hr = typeInfo.AddressOfMember((DispatchID)6, INVOKEKIND.INVOKE_FUNC, &pv);
             Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
             Assert.Equal(0, pv);
         }
@@ -71,7 +75,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             }
             finally
             {
-                Runtime.InteropServices.Marshal.Release(typeLib);
+                Marshal.Release(typeLib);
             }
         }
 
@@ -89,7 +93,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             var dllName = new BSTR("DllName");
             var name = new BSTR("Name");
             ushort wOrdinal = ushort.MaxValue;
-            hr = typeInfo.GetDllEntry((DispatchID)6, INVOKEKIND.FUNC, &dllName, &name, &wOrdinal);
+            hr = typeInfo.GetDllEntry((DispatchID)6, INVOKEKIND.INVOKE_FUNC, &dllName, &name, &wOrdinal);
             Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
             Assert.True(dllName.Length == 0);
             Assert.True(name.Length == 0);
@@ -130,25 +134,25 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            FUNCDESC* pFuncDesc = null;
+            global::Windows.Win32.System.Com.FUNCDESC* pFuncDesc = null;
             try
             {
                 hr = typeInfo.GetFuncDesc(0, &pFuncDesc);
                 Assert.Equal(HRESULT.S_OK, hr);
-                Assert.Equal((DispatchID)6, pFuncDesc->memid);
-                Assert.Equal(IntPtr.Zero, pFuncDesc->lprgscode);
+                Assert.Equal(6, pFuncDesc->memid);
+                Assert.True(pFuncDesc->lprgscode is null);
                 Assert.NotEqual(IntPtr.Zero, (IntPtr)pFuncDesc->lprgelemdescParam);
-                Assert.Equal(FUNCKIND.DISPATCH, pFuncDesc->funckind);
-                Assert.Equal(INVOKEKIND.FUNC, pFuncDesc->invkind);
-                Assert.Equal(CALLCONV.STDCALL, pFuncDesc->callconv);
+                Assert.Equal(FUNCKIND.FUNC_DISPATCH, pFuncDesc->funckind);
+                Assert.Equal(INVOKEKIND.INVOKE_FUNC, pFuncDesc->invkind);
+                Assert.Equal(CALLCONV.CC_STDCALL, pFuncDesc->callconv);
                 Assert.Equal(10, pFuncDesc->cParams);
                 Assert.Equal(0, pFuncDesc->cParamsOpt);
                 Assert.Equal(0, pFuncDesc->oVft);
                 Assert.Equal(0, pFuncDesc->cScodes);
-                Assert.Equal(VARENUM.VOID, pFuncDesc->elemdescFunc.tdesc.vt);
-                Assert.Equal(IntPtr.Zero, pFuncDesc->elemdescFunc.tdesc.union.lpadesc);
-                Assert.Equal(IntPtr.Zero, pFuncDesc->elemdescFunc.paramdesc.pparamdescex);
-                Assert.Equal(IntPtr.Zero, pFuncDesc->elemdescFunc.paramdesc.pparamdescex);
+                Assert.Equal(VARENUM.VT_VOID, pFuncDesc->elemdescFunc.tdesc.vt);
+                Assert.True(pFuncDesc->elemdescFunc.tdesc.Anonymous.lpadesc is null);
+                Assert.True(pFuncDesc->elemdescFunc.Anonymous.paramdesc.pparamdescex is null);
+                Assert.True(pFuncDesc->elemdescFunc.Anonymous.paramdesc.pparamdescex is null);
             }
             finally
             {
@@ -189,10 +193,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            IMPLTYPEFLAG implTypeFlags = (IMPLTYPEFLAG)(-1);
+            IMPLTYPEFLAGS implTypeFlags = (IMPLTYPEFLAGS)(-1);
             hr = typeInfo.GetImplTypeFlags(0, &implTypeFlags);
             Assert.Equal(HRESULT.S_OK, hr);
-            Assert.NotEqual(IMPLTYPEFLAG.FDEFAULT, implTypeFlags);
+            Assert.NotEqual(IMPLTYPEFLAGS.IMPLTYPEFLAG_FDEFAULT, implTypeFlags);
         }
 
         [StaFact]
@@ -296,11 +300,11 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
                 Assert.Equal(typeof(IPictureDisp).GUID, pTypeAttr->guid);
                 Assert.Equal(0u, pTypeAttr->lcid);
                 Assert.Equal(0u, pTypeAttr->dwReserved);
-                Assert.Equal(DispatchID.UNKNOWN, pTypeAttr->memidConstructor);
-                Assert.Equal(DispatchID.UNKNOWN, pTypeAttr->memidDestructor);
-                Assert.Equal(IntPtr.Zero, pTypeAttr->lpstrSchema);
+                Assert.Equal((int)DispatchID.UNKNOWN, pTypeAttr->memidConstructor);
+                Assert.Equal((int)DispatchID.UNKNOWN, pTypeAttr->memidDestructor);
+                Assert.True(pTypeAttr->lpstrSchema.IsNull);
                 Assert.Equal((uint)IntPtr.Size, pTypeAttr->cbSizeInstance);
-                Assert.Equal(TYPEKIND.DISPATCH, pTypeAttr->typekind);
+                Assert.Equal(TYPEKIND.TKIND_DISPATCH, pTypeAttr->typekind);
                 Assert.Equal(1, pTypeAttr->cFuncs);
                 Assert.Equal(5, pTypeAttr->cVars);
                 Assert.Equal(1, pTypeAttr->cImplTypes);
@@ -309,9 +313,9 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
                 Assert.Equal(0x1000, pTypeAttr->wTypeFlags);
                 Assert.Equal(0, pTypeAttr->wMajorVerNum);
                 Assert.Equal(0, pTypeAttr->wMinorVerNum);
-                Assert.Equal(VARENUM.EMPTY, pTypeAttr->tdescAlias.vt);
-                Assert.Equal(IntPtr.Zero, pTypeAttr->idldescType.dwReserved);
-                Assert.Equal(IDLFLAG.NONE, pTypeAttr->idldescType.wIDLFlags);
+                Assert.Equal(VARENUM.VT_EMPTY, pTypeAttr->tdescAlias.vt);
+                Assert.Equal((nuint)0, pTypeAttr->idldescType.dwReserved);
+                Assert.Equal(IDLFLAGS.IDLFLAG_NONE, pTypeAttr->idldescType.wIDLFlags);
             }
             finally
             {
@@ -359,15 +363,15 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             {
                 hr = typeInfo.GetVarDesc(3, &pVarDesc);
                 Assert.Equal(HRESULT.S_OK, hr);
-                Assert.Equal((DispatchID)4, pVarDesc->memid);
-                Assert.Equal(IntPtr.Zero, pVarDesc->lpstrSchema);
-                Assert.Equal(IntPtr.Zero, pVarDesc->unionMember);
-                Assert.Equal(VARENUM.USERDEFINED, pVarDesc->elemdescVar.tdesc.vt);
-                Assert.NotEqual(IntPtr.Zero, pVarDesc->elemdescVar.tdesc.union.lpadesc);
-                Assert.Equal(IntPtr.Zero, pVarDesc->elemdescVar.paramdesc.pparamdescex);
-                Assert.Equal(PARAMFLAG.NONE, pVarDesc->elemdescVar.paramdesc.wParamFlags);
-                Assert.Equal(VARFLAGS.FREADONLY, pVarDesc->wVarFlags);
-                Assert.Equal(VARKIND.DISPATCH, pVarDesc->varkind);
+                Assert.Equal(4, pVarDesc->memid);
+                Assert.True(pVarDesc->lpstrSchema.IsNull);
+                Assert.True(pVarDesc->Anonymous.lpvarValue  is null);
+                Assert.Equal(VARENUM.VT_USERDEFINED, pVarDesc->elemdescVar.tdesc.vt);
+                Assert.False(pVarDesc->elemdescVar.tdesc.Anonymous.lpadesc is null);
+                Assert.True(pVarDesc->elemdescVar.Anonymous.paramdesc.pparamdescex is null);
+                Assert.Equal(PARAMFLAGS.PARAMFLAG_NONE, pVarDesc->elemdescVar.Anonymous.paramdesc.wParamFlags);
+                Assert.Equal(VARFLAGS.VARFLAG_FREADONLY, pVarDesc->wVarFlags);
+                Assert.Equal(VARKIND.VAR_DISPATCH, pVarDesc->varkind);
             }
             finally
             {
@@ -393,7 +397,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             hr = typeInfo.Invoke(
                 picture,
                 (DispatchID)4,
-                DISPATCH.PROPERTYGET,
+                DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                 &dispParams,
                 varResult,
                 &excepInfo,

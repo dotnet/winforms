@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 
 internal static partial class Interop
 {
@@ -57,14 +58,14 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT PutField(
-                Ole32.INVOKEKIND wFlags,
+                INVOKEKIND wFlags,
                 void* pvData,
                 [MarshalAs(UnmanagedType.LPWStr)] out string szFieldName,
                 VARIANT* pvarField);
 
             [PreserveSig]
             HRESULT PutFieldNoCopy(
-                Ole32.INVOKEKIND wFlags,
+                INVOKEKIND wFlags,
                 void* pvData,
                 [MarshalAs(UnmanagedType.LPWStr)] out string szFieldName,
                 VARIANT* pvarField);

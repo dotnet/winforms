@@ -13,9 +13,9 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Diagnostics.Debug;
 using static Interop;
-using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  The dispid. This is also in a DispIDAttribute, but we
         ///  need it a lot.
         /// </summary>
-        private readonly DispatchID dispid;
+        private readonly Ole32.DispatchID dispid;
 
         private TypeConverter converter;
         private object editor;
@@ -126,10 +126,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private static readonly IDictionary oleConverters = new SortedList
         {
             [GUID_COLOR] = typeof(Com2ColorConverter),
-            [typeof(IFontDisp).GUID] = typeof(Com2FontConverter),
-            [typeof(IFont).GUID] = typeof(Com2FontConverter),
-            [typeof(IPictureDisp).GUID] = typeof(Com2PictureConverter),
-            [typeof(IPicture).GUID] = typeof(Com2PictureConverter)
+            [typeof(Ole32.IFontDisp).GUID] = typeof(Com2FontConverter),
+            [typeof(Ole32.IFont).GUID] = typeof(Com2FontConverter),
+            [typeof(Ole32.IPictureDisp).GUID] = typeof(Com2PictureConverter),
+            [typeof(Ole32.IPicture).GUID] = typeof(Com2PictureConverter)
         };
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Ctor.
         /// </summary>
-        public Com2PropertyDescriptor(DispatchID dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
+        public Com2PropertyDescriptor(Ole32.DispatchID dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
             : base(name, attrs)
         {
             baseReadOnly = readOnly;
@@ -405,7 +405,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves the DISPID for this item
         /// </summary>
-        public DispatchID DISPID
+        public Ole32.DispatchID DISPID
         {
             get
             {
@@ -862,15 +862,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)component;
             object[] pVarResult = new object[1];
-            var pExcepInfo = new Oleaut32.EXCEPINFO();
-            var dispParams = new Oleaut32.DISPPARAMS();
+            EXCEPINFO pExcepInfo = new();
+            DISPPARAMS dispParams = new();
             Guid g = Guid.Empty;
 
             HRESULT hr = pDisp.Invoke(
                 dispid,
                 &g,
                 PInvoke.GetThreadLocale(),
-                Oleaut32.DISPATCH.PROPERTYGET,
+                DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                 &dispParams,
                 pVarResult,
                 &pExcepInfo,
@@ -1234,16 +1234,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)owner;
 
-            var excepInfo = new Oleaut32.EXCEPINFO();
+            EXCEPINFO excepInfo = new();
             Ole32.DispatchID namedArg = Ole32.DispatchID.PROPERTYPUT;
-            var dispParams = new Oleaut32.DISPPARAMS
+            DISPPARAMS dispParams = new()
             {
                 cArgs = 1,
                 cNamedArgs = 1,
-                rgdispidNamedArgs = &namedArg
+                rgdispidNamedArgs = (int*)&namedArg
             };
 
-            using var variant = new Oleaut32.VARIANT();
+            using VARIANT variant = new();
             Marshal.GetNativeVariantForObject(value, (IntPtr)(&variant));
             dispParams.rgvarg = &variant;
             Guid g = Guid.Empty;
@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 dispid,
                 &g,
                 PInvoke.GetThreadLocale(),
-                Oleaut32.DISPATCH.PROPERTYPUT,
+                DISPATCH_FLAGS.DISPATCH_PROPERTYPUT,
                 &dispParams,
                 null,
                 &excepInfo,
@@ -1260,10 +1260,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             string errorInfo = null;
             if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
             {
-                hr = excepInfo.scode;
-                if (excepInfo.bstrDescription != IntPtr.Zero)
+                hr = (HRESULT)excepInfo.scode;
+                if (!excepInfo.bstrDescription.IsNull)
                 {
-                    errorInfo = Marshal.PtrToStringBSTR(excepInfo.bstrDescription);
+                    errorInfo = excepInfo.bstrDescription.ToString();
                 }
             }
 

@@ -4,9 +4,12 @@
 
 using System.Drawing;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
+using Windows.Win32.System.Com;
 using Xunit;
-using static Interop.Ole32;
-using static Interop.Oleaut32;
+using IDispatch = Interop.Oleaut32.IDispatch;
+using IPictureDisp = Interop.Ole32.IPictureDisp;
+using ITypeInfo = Interop.Oleaut32.ITypeInfo;
+using DispatchID = Interop.Ole32.DispatchID;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
 {
@@ -67,7 +70,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
 
             Guid riid = Guid.Empty;
-            var dispParams = new DISPPARAMS();
+            var dispParams = new global::Windows.Win32.System.Com.DISPPARAMS();
             var varResult = new object[1];
             var excepInfo = new EXCEPINFO();
             uint argErr = 0;
@@ -75,7 +78,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
                 (DispatchID)4,
                 &riid,
                 PInvoke.GetThreadLocale(),
-                DISPATCH.PROPERTYGET,
+                DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                 &dispParams,
                 varResult,
                 &excepInfo,

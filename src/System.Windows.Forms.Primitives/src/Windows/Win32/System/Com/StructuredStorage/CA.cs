@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Windows.Win32.System.Com;
-
-// https://github.com/microsoft/win32metadata/issues/1319
+namespace Windows.Win32.System.Com.StructuredStorage;
 
 /// <summary>
-///  Wrapper for a VARIANT boolean type.
+///  Untyped representation of CA* typed arrays in Windows. <see cref="CAUB"/>, etc.
 /// </summary>
-internal enum VARIANT_BOOL : short
+internal unsafe struct CA
 {
-    FALSE = 0,
-    TRUE = -1,
+    public uint cElems;
+    public void* pElems;
 }

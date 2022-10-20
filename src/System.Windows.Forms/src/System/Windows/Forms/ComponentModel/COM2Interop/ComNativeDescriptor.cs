@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 using static Interop.Ole32;
 using static System.TrimmingConstants;
@@ -81,9 +82,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             string name = null;
 
             // does IVsPerPropertyBrowsing supply us a name?
-            if (component is VSSDK.IVsPerPropertyBrowsing)
+            if (component is VSSDK.IVsPerPropertyBrowsing browsing)
             {
-                HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)component).GetClassName(ref name);
+                HRESULT hr = browsing.GetClassName(ref name);
                 if (hr.Succeeded && name is not null)
                 {
                     return name;
@@ -138,7 +139,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal static unsafe object GetPropertyValue(object component, string propertyName, ref bool succeeded)
         {
-            if (!(component is Oleaut32.IDispatch iDispatch))
+            if (component is not Oleaut32.IDispatch dispatch)
             {
                 return null;
             }
@@ -148,7 +149,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Guid g = Guid.Empty;
             try
             {
-                HRESULT hr = iDispatch.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
+                HRESULT hr = dispatch.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
                 if (dispid == DispatchID.UNKNOWN || !hr.Succeeded)
                 {
                     return null;
@@ -164,7 +165,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal static object GetPropertyValue(object component, DispatchID dispid, ref bool succeeded)
         {
-            if (!(component is Oleaut32.IDispatch))
+            if (component is not Oleaut32.IDispatch)
             {
                 return null;
             }
@@ -184,7 +185,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal static unsafe HRESULT GetPropertyValue(object component, DispatchID dispid, object[] retval)
         {
-            if (!(component is Oleaut32.IDispatch iDispatch))
+            if (component is not Oleaut32.IDispatch dispatch)
             {
                 return HRESULT.E_NOINTERFACE;
             }
@@ -192,22 +193,23 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 Guid g = Guid.Empty;
-                var pExcepInfo = new Oleaut32.EXCEPINFO();
-                var dispParams = new Oleaut32.DISPPARAMS();
+                EXCEPINFO pExcepInfo = new();
+                DISPPARAMS dispParams = new();
                 try
                 {
-                    HRESULT hr = iDispatch.Invoke(
+                    HRESULT hr = dispatch.Invoke(
                         dispid,
                         &g,
                         PInvoke.GetThreadLocale(),
-                        Oleaut32.DISPATCH.PROPERTYGET,
+                        DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                         &dispParams,
                         retval,
                         &pExcepInfo,
                         null);
+
                     if (hr == HRESULT.DISP_E_EXCEPTION)
                     {
-                        return pExcepInfo.scode;
+                        return (HRESULT)pExcepInfo.scode;
                     }
 
                     return hr;
@@ -327,9 +329,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             ArrayList attrs = new ArrayList();
 
-            if (component is VSSDK.IVSMDPerPropertyBrowsing)
+            if (component is VSSDK.IVSMDPerPropertyBrowsing browsing)
             {
-                object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes((VSSDK.IVSMDPerPropertyBrowsing)component, DispatchID.MEMBERID_NIL);
+                object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes(browsing, DispatchID.MEMBERID_NIL);
                 for (int i = 0; i < temp.Length; ++i)
                 {
                     attrs.Add(temp[i]);
@@ -574,7 +576,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             /// <summary>
             ///  ICustomTypeDescriptor implementation.
             /// </summary>
-            [RequiresUnreferencedCode(PropertyDescriptorPropertyTypeMessage + " " + FilterRequiresUnreferencedCodeMessage)]
+            [RequiresUnreferencedCode($"{PropertyDescriptorPropertyTypeMessage} {FilterRequiresUnreferencedCodeMessage}")]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
             {
                 return _handler.GetProperties(_instance);
