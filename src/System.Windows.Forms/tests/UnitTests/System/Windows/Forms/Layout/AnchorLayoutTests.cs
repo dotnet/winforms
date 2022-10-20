@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Layout.Tests
         [WinFormsFact]
         public void ConfigSwitchDisabled_NoHanldeCreated_AnchorsComputed()
         {
-            AppContext.SetSwitch(LocalAppContextSwitches.EnableImprovedAnchorLayoutSwitchName, false);
+            AppContext.SetSwitch(LocalAppContextSwitches.EnableAnchorLayoutV2SwitchName, false);
             var (form, button) = GetFormWithAnchoredButton();
             form.Controls.Add(button);
             DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
@@ -85,7 +85,6 @@ namespace System.Windows.Forms.Layout.Tests
         [InlineData(AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left, 20, 30, 220, 330)]
         public void ResizeAnchoredControlsParent_HanldeCreated_AnchorsApplied(AnchorStyles anchor, int x, int y, int width, int height)
         {
-            AppContext.SetSwitch(LocalAppContextSwitches.EnableImprovedAnchorLayoutSwitchName, true);
             var (form, button) = GetFormWithAnchoredButton();
             button.Anchor = anchor;
             DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);

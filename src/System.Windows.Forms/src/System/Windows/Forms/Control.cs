@@ -15,7 +15,6 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
-using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 using static Interop;
 using Encoding = System.Text.Encoding;
@@ -2224,25 +2223,6 @@ namespace System.Windows.Forms
             }
 
             _dpiFonts.Clear();
-        }
-
-        /// <summary>
-        /// Updates anchor calculations if the control is parented and both control's and its parent's handle are created.
-        /// This is the new behavior introduced in .NET 8.0. Please refer to
-        /// https://github.com/microsoft/winforms-designer/blob/main/docs/ImprovedAnchorLayout.md for more details.
-        /// Developers may opt-out of this new behavior using switch <see cref="LocalAppContextSwitches.EnableImprovedAnchorLayout"/>.
-        /// </summary>
-        private void UpdateAnchorsIfRequired()
-        {
-            if (!LocalAppContextSwitches.EnableImprovedAnchorLayout)
-            {
-                return;
-            }
-
-            if (IsHandleCreated && Parent is not null && Parent.IsHandleCreated)
-            {
-                DefaultLayout.UpdateAnchorInfo(this, enableImprovedAnchorLayout: true);
-            }
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
@@ -7882,7 +7862,7 @@ namespace System.Windows.Forms
                 OnTopMostActiveXParentChanged(EventArgs.Empty);
             }
 
-            UpdateAnchorsIfRequired();
+            DefaultLayout.UpdateAnchorInfoV2(this);
         }
 
         /// <summary>
@@ -7928,7 +7908,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCreateControl()
         {
-            UpdateAnchorsIfRequired();
+            DefaultLayout.UpdateAnchorInfoV2(this);
         }
 
         /// <summary>
@@ -10606,7 +10586,12 @@ namespace System.Windows.Forms
             Size scaledSize = LayoutUtils.IntersectSizes(rawScaledBounds.Size, maximumSize);
             scaledSize = LayoutUtils.UnionSizes(scaledSize, minSize);
 
-            if (DpiHelper.IsScalingRequirementMet && (ParentInternal is not null) && (ParentInternal.LayoutEngine == DefaultLayout.Instance))
+            if (DpiHelper.IsScalingRequirementMet
+                && (ParentInternal is not null)
+                && (ParentInternal.LayoutEngine == DefaultLayout.Instance)
+                // In V2(.NET 8.0 and beyond) version, anchors are updated after the controls bounds changed
+                // and doesn't need to be scaled.
+                /*&& !LocalAppContextSwitches.EnableAnchorLayoutV2*/)
             {
                 // We need to scale AnchorInfo to update distances to container edges
                 DefaultLayout.ScaleAnchorInfo(this, factor);
@@ -10860,7 +10845,7 @@ namespace System.Windows.Forms
                 _height != height)
             {
                 SetBoundsCore(x, y, width, height, specified);
-                UpdateAnchorsIfRequired();
+                DefaultLayout.UpdateAnchorInfoV2(this);
 
                 // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
                 // have refreshed the interior layout or the resized control.  We only need to layout

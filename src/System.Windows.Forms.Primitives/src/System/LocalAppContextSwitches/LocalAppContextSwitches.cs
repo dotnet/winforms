@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Primitives
     internal static partial class LocalAppContextSwitches
     {
         private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
-        internal const string EnableImprovedAnchorLayoutSwitchName = "System.Windows.Forms.EnableImprovedAnchorLayout";
+        internal const string EnableAnchorLayoutV2SwitchName = "System.Windows.Forms.EnableAnchorLayoutV2";
 
         private static int s_scaleTopLevelFormMinMaxSizeForDpi;
         private static int s_enableImprovedAnchorLayout;
@@ -22,10 +22,10 @@ namespace System.Windows.Forms.Primitives
             get => GetCachedSwitchValue(ScaleTopLevelFormMinMaxSizeForDpiSwitchName, ref s_scaleTopLevelFormMinMaxSizeForDpi);
         }
 
-        public static bool EnableImprovedAnchorLayout
+        public static bool EnableAnchorLayoutV2
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => GetCachedSwitchValue(EnableImprovedAnchorLayoutSwitchName, ref s_enableImprovedAnchorLayout);
+            get => GetCachedSwitchValue(EnableAnchorLayoutV2SwitchName, ref s_enableImprovedAnchorLayout);
         }
 
         private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
@@ -78,6 +78,11 @@ namespace System.Windows.Forms.Primitives
                     if (s_targetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
                     {
                         if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
+                        {
+                            return true;
+                        }
+
+                        if (switchName == EnableAnchorLayoutV2SwitchName)
                         {
                             return true;
                         }

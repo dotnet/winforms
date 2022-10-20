@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Layout
                 Debug.WriteLine($"\t\t'{element}' is anchored at {GetCachedBounds(element)}");
             }
 
-            return LocalAppContextSwitches.EnableImprovedAnchorLayout
+            return LocalAppContextSwitches.EnableAnchorLayoutV2
                 ? ComputeAnchorDestination(element, displayRect)
                 : ComputeLegacyAnchorDestination(element, displayRect, measureOnly);
         }
@@ -188,9 +188,12 @@ namespace System.Windows.Forms.Layout
                 Debug.WriteLine($"\t\t'{element}' destination bounds resulted in negative");
             }
 
+            // Compute element bounds according to AnchorStyles set on it.
             AnchorStyles anchor = GetAnchor(element);
             if (IsAnchored(anchor, AnchorStyles.Left))
             {
+                // If Anchored both left anf right, element's width will be forced to update according to
+                // parents DisplayRect.
                 if (IsAnchored(anchor, AnchorStyles.Right))
                 {
                     width = displayRect.Width - (anchorInfo.Right + x);
@@ -198,8 +201,10 @@ namespace System.Windows.Forms.Layout
             }
             else
             {
+                // If anchored Right but not Left, element's X- co-ordinate should be updated according to parents DisplayRect.
                 x = IsAnchored(anchor, AnchorStyles.Right)
                     ? displayRect.Width - elementBounds.Width - anchorInfo.Right
+                    // Element neither anchored Right or Left but anchored Top or Bottom,  elements X-coordinate is adjusted relative to  DisplayRect chnage.
                     : (int)(anchorInfo.Left * (((float)displayRect.Width - elementBounds.Width) / (anchorInfo.Left + anchorInfo.Right)));
             }
 
@@ -207,16 +212,21 @@ namespace System.Windows.Forms.Layout
             {
                 if (IsAnchored(anchor, AnchorStyles.Bottom))
                 {
+                    // If Anchored both Top anf Bottom, element's height will be forced to update according to
+                    // parents DisplayRect.
                     height = displayRect.Height - (anchorInfo.Bottom + y);
                 }
             }
             else
             {
+                // If anchored Bottom but not Top, element's Y- co-ordinate should be updated according to parents DisplayRect.
                 y = IsAnchored(anchor, AnchorStyles.Bottom)
                     ? displayRect.Height - elementBounds.Height - anchorInfo.Bottom
+                    // Element neither anchored Top or Bottom but anchored Right or left,  elements X-coordinate is adjusted relative to  DisplayRect chnage.
                     : (int)(anchorInfo.Top * (((float)displayRect.Height - elementBounds.Height) / (anchorInfo.Top + anchorInfo.Bottom)));
             }
 
+            // We clip element but not position at negative location with respect parents DisplayRect.
             if (x < 0)
             {
                 x = 0;
@@ -355,7 +365,7 @@ namespace System.Windows.Forms.Layout
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\tAnchor Processing");
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\tdisplayRect: " + container.DisplayRectangle.ToString());
 
-            if(!IsReadyForAnchorLayout(container))
+            if (!IsElementReadyForComputingAnchors(container))
             {
                 return;
             }
@@ -372,7 +382,7 @@ namespace System.Windows.Forms.Layout
             for (int i = children.Count - 1; i >= 0; i--)
             {
                 IArrangedElement element = children[i];
-                if (!IsReadyForAnchorLayout(container) || !CommonProperties.GetNeedsAnchorLayout(element))
+                if (!IsElementReadyForComputingAnchors(element) || !CommonProperties.GetNeedsAnchorLayout(element))
                 {
                     continue;
                 }
@@ -380,12 +390,12 @@ namespace System.Windows.Forms.Layout
                 Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
                 SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, /*measureOnly=*/false));
             }
-
-            static bool IsReadyForAnchorLayout(IArrangedElement element)
-            {
-                return LocalAppContextSwitches.EnableImprovedAnchorLayout ? element is not Control control || control.IsHandleCreated : true;
-            }
         }
+
+        // Checks if element is ready to compute anchors by checking if this element
+        // and its parents handle are created to make sure bounds are applied with current DPI.
+        private static bool IsElementReadyForComputingAnchors(IArrangedElement element
+            ) => LocalAppContextSwitches.EnableAnchorLayoutV2 ? element is not Control control || control.IsHandleCreated : true;
 
         private static Size LayoutDockedControls(IArrangedElement container, bool measureOnly)
         {
@@ -705,13 +715,13 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        ///  Updates the Anchor information based on the controls current bounds. This should only be called
-        ///  when the parent control changes or the anchor mode changes.
+        ///  Updates the element's anchors information based on element's current bounds.
         /// </summary>
-        internal static void UpdateAnchorInfo(IArrangedElement element, bool enableImprovedAnchorLayout = false)
+        private static void UpdateAnchorInfo(IArrangedElement element)
         {
             Debug.Assert(!HasCachedBounds(element.Container), "Do not call this method with an active cached bounds list.");
 
+            // Skip when element is not anchored or EnableAnchorLayoutV2 switch is enabled.
             if (!CommonProperties.GetNeedsAnchorLayout(element))
             {
                 return;
@@ -726,18 +736,13 @@ namespace System.Windows.Forms.Layout
                 return;
             }
 
-            if (enableImprovedAnchorLayout)
+            // Use AnchorLayoutV2 if application targets .NET 8.0 and beyond.
+            if (LocalAppContextSwitches.EnableAnchorLayoutV2)
             {
-                ComputeAnchorInfo(element);
+                UpdateAnchorInfoV2(element);
+                return;
             }
-            else
-            {
-                ComputeLegacyAnchorInfo(element);
-            }
-        }
 
-        private static void ComputeLegacyAnchorInfo(IArrangedElement element)
-        {
             AnchorInfo anchorInfo = GetAnchorInfo(element);
             if (anchorInfo is null)
             {
@@ -833,17 +838,41 @@ namespace System.Windows.Forms.Layout
             Debug.Unindent();
         }
 
-        private static void ComputeAnchorInfo(IArrangedElement element)
+        /// <summary>
+        /// Updates anchor calculations if the control is parented and both control's and its parent's handle are created.
+        /// This is the new behavior introduced in .NET 8.0. Refer to
+        /// (ToDo)https://github.com/microsoft/winforms/blob/main/docs/AnchorLayoutChangesInNet80.md for more details.
+        /// Developers may opt-out of this new behavior using switch <see cref="LocalAppContextSwitches.EnableAnchorLayoutV2"/>.
+        /// </summary>
+        internal static void UpdateAnchorInfoV2(IArrangedElement element)
         {
-            AnchorInfo anchorInfo = GetAnchorInfo(element);
+            if (!LocalAppContextSwitches.EnableAnchorLayoutV2 || !CommonProperties.GetNeedsAnchorLayout(element))
+            {
+                return;
+            }
+
+            Control control = element as Control;
+            Debug.Assert(control != null, "AnchorLayoutV2 and beyond are expected to be used only on Control type");
+
+            if (control is null || control.Parent is null)
+            {
+                return;
+            }
+
+            if (!control.IsHandleCreated || !control.Parent.IsHandleCreated)
+            {
+                return;
+            }
+
+            AnchorInfo anchorInfo = GetAnchorInfo(control);
             if (anchorInfo is null)
             {
                 anchorInfo = new AnchorInfo();
-                SetAnchorInfo(element, anchorInfo);
+                SetAnchorInfo(control, anchorInfo);
             }
 
-            Rectangle displayRect = element.Container.DisplayRectangle;
-            Rectangle elementBounds = element.Bounds;
+            Rectangle displayRect = control.Parent.DisplayRectangle;
+            Rectangle elementBounds = control.Bounds;
 
             int x = elementBounds.X;
             int y = elementBounds.Y;
@@ -870,10 +899,7 @@ namespace System.Windows.Forms.Layout
 
                 CommonProperties.xSetAnchor(element, value);
 
-                // Updating AnchorInfo is only needed when control is ready for layout. Oneway to check this precondition is to
-                // check if the control is parented. This helps avoid calculating AnchorInfo with default initial values of the Control.
-                // AnchorInfo is recalculated everytime there is a layout change.
-                if (CommonProperties.GetNeedsAnchorLayout(element) && element is Control control && control.Parent is not null)
+                if (CommonProperties.GetNeedsAnchorLayout(element))
                 {
                     UpdateAnchorInfo(element);
                 }
@@ -923,14 +949,8 @@ namespace System.Windows.Forms.Layout
                             // We are transitioning from docked to not docked, restore the original bounds.
                             element.SetBounds(CommonProperties.GetSpecifiedBounds(element), BoundsSpecified.None);
 
-                            // Updating AnchorInfo is only needed when control is ready for layout. InitLayoutCore() does call UpdateAnchorInfo().
-                            // At the least, we are checking if control is parented before updating AnchorInfo. This helps avoid calculating
-                            // AnchorInfo with default initial values of the Control. They are always overriden when layout happen.
-                            if (element is Control control && control.Parent is not null)
-                            {
-                                // Restore Anchor information as its now relevant again.
-                                UpdateAnchorInfo(element);
-                            }
+                            // Restore Anchor information as its now relevant again.
+                            UpdateAnchorInfo(element);
                         }
                     }
                     else
@@ -1112,7 +1132,7 @@ namespace System.Windows.Forms.Layout
                         // the container is, and make sure our container is large enough to accomodate us.
                         Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, /*measureOnly=*/true);
 
-                        if (LocalAppContextSwitches.EnableImprovedAnchorLayout)
+                        if (LocalAppContextSwitches.EnableAnchorLayoutV2)
                         {
                             AnchorInfo anchorInfo = GetAnchorInfo(element);
                             prefSize.Width = anchorInfo is null ? anchorDest.Right : anchorDest.Right + anchorInfo.Right;
@@ -1130,7 +1150,7 @@ namespace System.Windows.Forms.Layout
                         // If we are right anchored, see what the anchor distance between our right edge and
                         // the container is, and make sure our container is large enough to accomodate us.
                         Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, /*measureOnly=*/true);
-                        if (LocalAppContextSwitches.EnableImprovedAnchorLayout)
+                        if (LocalAppContextSwitches.EnableAnchorLayoutV2)
                         {
                             AnchorInfo anchorInfo = GetAnchorInfo(element);
                             prefSize.Height = anchorInfo is null ? anchorDest.Bottom : anchorDest.Bottom + anchorInfo.Bottom;
