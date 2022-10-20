@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Primitives;
 
@@ -74,14 +75,14 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(AnchorStyles.Top, 44, 30, 20, 30)]
-        [InlineData(AnchorStyles.Left, 20, 68, 20, 30)]
+        [InlineData(AnchorStyles.Top, 120, 30, 20, 30)]
+        [InlineData(AnchorStyles.Left, 20, 180, 20, 30)]
         [InlineData(AnchorStyles.Right, 220, 68, 20, 30)]
-        [InlineData(AnchorStyles.Bottom, 44, 330, 20, 30)]
+        [InlineData(AnchorStyles.Bottom, 120, 330, 20, 30)]
         [InlineData(AnchorStyles.Top | AnchorStyles.Left, 20, 30, 20, 30)]
         [InlineData(AnchorStyles.Top | AnchorStyles.Right, 220, 30, 20, 30)]
-        [InlineData(AnchorStyles.Top | AnchorStyles.Bottom, 44, 30, 20, 330)]
-        [InlineData(AnchorStyles.Left | AnchorStyles.Right, 20, 68, 220, 30)]
+        [InlineData(AnchorStyles.Top | AnchorStyles.Bottom, 120, 30, 20, 330)]
+        [InlineData(AnchorStyles.Left | AnchorStyles.Right, 20, 180, 220, 30)]
         [InlineData(AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left, 20, 30, 220, 330)]
         public void ResizeAnchoredControlsParent_HanldeCreated_AnchorsApplied(AnchorStyles anchor, int x, int y, int width, int height)
         {
@@ -106,6 +107,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal(y, button1.Bounds.Y);
                 Assert.Equal(width, button1.Bounds.Width);
                 Assert.Equal(height, button1.Bounds.Height);
+
                 form.Close();
             }
         }

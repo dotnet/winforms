@@ -15,6 +15,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 using static Interop;
 using Encoding = System.Text.Encoding;
@@ -10587,11 +10588,11 @@ namespace System.Windows.Forms
             scaledSize = LayoutUtils.UnionSizes(scaledSize, minSize);
 
             if (DpiHelper.IsScalingRequirementMet
-                && (ParentInternal is not null)
+                && ParentInternal is not null
                 && (ParentInternal.LayoutEngine == DefaultLayout.Instance)
-                // In V2(.NET 8.0 and beyond) version, anchors are updated after the controls bounds changed
+                // In V2(.NET 8.0 and beyond) version, anchors are updated/computed after the controls bounds changed
                 // and doesn't need to be scaled.
-                /*&& !LocalAppContextSwitches.EnableAnchorLayoutV2*/)
+                && !LocalAppContextSwitches.EnableAnchorLayoutV2)
             {
                 // We need to scale AnchorInfo to update distances to container edges
                 DefaultLayout.ScaleAnchorInfo(this, factor);
