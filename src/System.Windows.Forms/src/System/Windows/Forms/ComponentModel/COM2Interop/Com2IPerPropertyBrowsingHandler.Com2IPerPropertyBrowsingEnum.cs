@@ -100,7 +100,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                             using VARIANT variant = new();
                             HRESULT hr = ppb.GetPredefinedValue(_target.DISPID, cookie, &variant);
-                            if (hr == HRESULT.S_OK && variant.Type != VARENUM.VT_EMPTY)
+                            if (hr.Succeeded && variant.Type != VARENUM.VT_EMPTY)
                             {
                                 valueItems[i] = variant.ToObject()!;
                                 if (valueItems[i].GetType() != targetType)
