@@ -11,9 +11,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal partial class Com2IPerPropertyBrowsingHandler
     {
-        // This exists for perf reasons.   We delay doing this until we
-        // are actually asked for the array of values.
-        //
+        // This exists for perf reasons. We delay doing this until we are actually asked for the array of values.
         private class Com2IPerPropertyBrowsingEnum : Com2Enum
         {
             internal Com2PropertyDescriptor _target;
@@ -33,9 +31,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 _arraysFetched = false;
             }
 
-            /// <summary>
-            ///  Retrieve a copy of the value array
-            /// </summary>
             public override object[] Values
             {
                 get
@@ -45,9 +40,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            /// <summary>
-            ///  Retrieve a copy of the nme array.
-            /// </summary>
             public override string[] Names
             {
                 get
@@ -57,10 +49,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            /// <summary>
-            ///  Ensure that we have processed the caStructs into arrays
-            ///  of values and strings
-            /// </summary>
             private unsafe void EnsureArrays()
             {
                 if (_arraysFetched)
@@ -79,70 +67,72 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     Debug.Assert(_cookies is not null && _names is not null, "An item array is null");
 
-                    if (_names.Length > 0)
+                    if (_names.Length == 0)
                     {
-                        object[] valueItems = new object[_names.Length];
-                        uint cookie;
+                        return;
+                    }
 
-                        Debug.Assert(_cookies.Length == _names.Length, "Got uneven names and cookies");
+                    object[] valueItems = new object[_names.Length];
+                    uint cookie;
 
-                        // For each name item, we ask the object for it's corresponding value.
+                    Debug.Assert(_cookies.Length == _names.Length, "Got uneven names and cookies");
 
-                        Type targetType = _target.PropertyType;
-                        for (int i = _names.Length - 1; i >= 0; i--)
+                    // For each name item, we ask the object for it's corresponding value.
+
+                    Type targetType = _target.PropertyType;
+                    for (int i = _names.Length - 1; i >= 0; i--)
+                    {
+                        cookie = _cookies[i];
+                        if (_names[i] is null)
                         {
-                            cookie = _cookies[i];
-                            if (_names[i] is null)
-                            {
-                                Debug.Fail($"Bad IPerPropertyBrowsing item [{i}], name={_names?[i] ?? "(unknown)"}");
-                                continue;
-                            }
+                            Debug.Fail($"Bad IPerPropertyBrowsing item [{i}], name={_names?[i] ?? "(unknown)"}");
+                            continue;
+                        }
 
-                            using VARIANT variant = new();
-                            HRESULT hr = ppb.GetPredefinedValue(_target.DISPID, cookie, &variant);
-                            if (hr.Succeeded && variant.Type != VARENUM.VT_EMPTY)
+                        using VARIANT variant = new();
+                        HRESULT hr = ppb.GetPredefinedValue(_target.DISPID, cookie, &variant);
+                        if (hr.Succeeded && variant.Type != VARENUM.VT_EMPTY)
+                        {
+                            valueItems[i] = variant.ToObject()!;
+                            if (valueItems[i].GetType() != targetType)
                             {
-                                valueItems[i] = variant.ToObject()!;
-                                if (valueItems[i].GetType() != targetType)
+                                if (targetType.IsEnum)
                                 {
-                                    if (targetType.IsEnum)
+                                    valueItems[i] = Enum.ToObject(targetType, valueItems[i]);
+                                }
+                                else
+                                {
+                                    try
                                     {
-                                        valueItems[i] = Enum.ToObject(targetType, valueItems[i]);
+                                        valueItems[i] = Convert.ChangeType(valueItems[i], targetType, CultureInfo.InvariantCulture);
                                     }
-                                    else
+                                    catch
                                     {
-                                        try
-                                        {
-                                            valueItems[i] = Convert.ChangeType(valueItems[i], targetType, CultureInfo.InvariantCulture);
-                                        }
-                                        catch
-                                        {
-                                            // oh well...
-                                        }
+                                        // oh well...
                                     }
                                 }
                             }
-
-                            if (hr == HRESULT.S_OK)
-                            {
-                                itemCount++;
-                                continue;
-                            }
-
-                            if (itemCount > 0)
-                            {
-                                // Shorten the arrays to ignore the failed ones.  This isn't terribly
-                                // efficient but shouldn't happen very often.  It's rare for these to fail.
-                                Array.Copy(_names, i, _names, i + 1, itemCount);
-                                Array.Copy(valueItems, i, valueItems, i + 1, itemCount);
-                            }
                         }
 
-                        // Pass the data to the base Com2Enum object.
-                        string[] strings = new string[itemCount];
-                        Array.Copy(_names, 0, strings, 0, itemCount);
-                        PopulateArrays(strings, valueItems);
+                        if (hr == HRESULT.S_OK)
+                        {
+                            itemCount++;
+                            continue;
+                        }
+
+                        if (itemCount > 0)
+                        {
+                            // Shorten the arrays to ignore the failed ones.  This isn't terribly
+                            // efficient but shouldn't happen very often.  It's rare for these to fail.
+                            Array.Copy(_names, i, _names, i + 1, itemCount);
+                            Array.Copy(valueItems, i, valueItems, i + 1, itemCount);
+                        }
                     }
+
+                    // Pass the data to the base Com2Enum object.
+                    string[] strings = new string[itemCount];
+                    Array.Copy(_names, 0, strings, 0, itemCount);
+                    PopulateArrays(strings, valueItems);
                 }
                 catch (Exception ex)
                 {

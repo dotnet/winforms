@@ -16,7 +16,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (obj is Oleaut32.IPerPropertyBrowsing perPropertyBrowsing)
             {
-                // check for a property page
+                // Check for a property page
                 Guid guid = Guid.Empty;
                 HRESULT hr = perPropertyBrowsing.MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
                 if ((hr == HRESULT.S_OK) && !guid.Equals(Guid.Empty))
@@ -31,12 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 try
                 {
                     HRESULT hr = ispp.GetPages(&uuids);
-                    if (!hr.Succeeded)
-                    {
-                        return false;
-                    }
-
-                    return uuids.cElems > 0;
+                    return !hr.Succeeded ? false : uuids.cElems > 0;
                 }
                 finally
                 {
@@ -54,10 +49,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             IntPtr handle = (parent is null ? IntPtr.Zero : parent.Handle);
 
-            // try to get the page guid
+            // Try to get the page guid
             if (obj is Oleaut32.IPerPropertyBrowsing perPropertyBrowsing)
             {
-                // check for a property page
+                // Check for a property page.
                 Guid guid = Guid.Empty;
                 HRESULT hr = perPropertyBrowsing.MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
                 if (hr == HRESULT.S_OK & !guid.Equals(Guid.Empty))

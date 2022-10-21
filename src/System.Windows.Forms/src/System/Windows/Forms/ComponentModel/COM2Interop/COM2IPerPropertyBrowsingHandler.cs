@@ -12,13 +12,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
     {
-        public override Type Interface
-        {
-            get
-            {
-                return typeof(Oleaut32.IPerPropertyBrowsing);
-            }
-        }
+        public override Type Interface => typeof(Oleaut32.IPerPropertyBrowsing);
 
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
         {
@@ -38,15 +32,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private static unsafe Guid GetPropertyPageGuid(Oleaut32.IPerPropertyBrowsing target, Ole32.DispatchID dispid)
         {
-            // check for a property page
+            // Check for a property page
             Guid guid = Guid.Empty;
             HRESULT hr = target.MapPropertyToPage(dispid, &guid);
-            if (hr == HRESULT.S_OK)
-            {
-                return guid;
-            }
-
-            return Guid.Empty;
+            return hr == HRESULT.S_OK ? guid : Guid.Empty;
         }
 
         internal static string? GetDisplayString(Oleaut32.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
@@ -63,14 +52,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
-        ///  such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
+        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing. We
+        ///  hide properties such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
             if (sender.TargetObject is Oleaut32.IPerPropertyBrowsing target)
             {
-                // we hide IDispatch props by default, we we need to force showing them here
+                // We hide IDispatch props by default, we we need to force showing them here.
 
                 bool validPropPage = !Guid.Empty.Equals(GetPropertyPageGuid(target, sender.DISPID));
 
@@ -88,24 +77,25 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                if (sender.TargetObject is Oleaut32.IPerPropertyBrowsing)
+                if (sender.TargetObject is not Oleaut32.IPerPropertyBrowsing browsing)
                 {
-                    // if we are using the dropdown, don't convert the value
-                    // or the values will change when we select them and call back
-                    // for the display value.
-                    if (sender.Converter is Com2IPerPropertyEnumConverter || sender.ConvertingNativeType)
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    bool success = true;
+                // If we are using the dropdown, don't convert the value or the values will change when we select them
+                // and call back for the display value.
+                if (sender.Converter is Com2IPerPropertyEnumConverter || sender.ConvertingNativeType)
+                {
+                    return;
+                }
 
-                    string? displayString = GetDisplayString((Oleaut32.IPerPropertyBrowsing)sender.TargetObject, sender.DISPID, ref success);
+                bool success = true;
 
-                    if (success)
-                    {
-                        gnievent.Name = displayString;
-                    }
+                string? displayString = GetDisplayString(browsing, sender.DISPID, ref success);
+
+                if (success)
+                {
+                    gnievent.Name = displayString;
                 }
             }
             catch
@@ -120,7 +110,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return;
             }
 
-            // check for enums
+            // Check for enums.
             Ole32.CALPOLESTR caStrings = default;
             Ole32.CADWORD caCookies = default;
 

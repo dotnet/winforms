@@ -13,8 +13,7 @@ namespace System.Windows.Forms
         private unsafe partial class ActiveXImpl
         {
             /// <summary>
-            ///  This is a property bag implementation that sits on a stream.  It can
-            ///  read and write the bag to the stream.
+            ///  This is a property bag implementation that sits on a stream. It can read and write the bag to the stream.
             /// </summary>
             private class PropertyBagStream : Oleaut32.IPropertyBag
             {
@@ -22,9 +21,8 @@ namespace System.Windows.Forms
 
                 internal void Read(Ole32.IStream istream)
                 {
-                    // visual basic's memory streams don't support seeking, so we have to
-                    // work around this limitation here.  We do this by copying
-                    // the contents of the stream into a MemoryStream object.
+                    // Visual Basic's memory streams don't support seeking, so we have to work around this limitation
+                    // here. We do this by copying the contents of the stream into a MemoryStream object.
                     Stream stream = new DataStreamFromComStream(istream);
                     const int PAGE_SIZE = 0x1000; // one page (4096b)
                     byte[] streamData = new byte[PAGE_SIZE];

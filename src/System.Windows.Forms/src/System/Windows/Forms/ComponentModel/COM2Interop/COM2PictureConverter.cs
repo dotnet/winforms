@@ -21,26 +21,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public Com2PictureConverter(Com2PropertyDescriptor pd)
         {
-            if (pd.DISPID == DispatchID.MOUSEICON || pd.Name.IndexOf("Icon") != -1)
+            if (pd.DISPID == DispatchID.MOUSEICON || pd.Name.Contains("Icon"))
             {
                 _pictureType = typeof(Icon);
             }
         }
 
-        /// <summary>
-        ///  Returns the managed type that this editor maps the property type to.
-        /// </summary>
-        public override Type ManagedType
-        {
-            get
-            {
-                return _pictureType;
-            }
-        }
+        public override Type ManagedType => _pictureType;
 
-        /// <summary>
-        ///  Converts the native value into a managed value
-        /// </summary>
         public override object? ConvertNativeToManaged(object? nativeValue, Com2PropertyDescriptor pd)
         {
             if (nativeValue is null)
@@ -87,12 +75,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return _lastManaged;
         }
 
-        /// <summary>
-        ///  Converts the managed value into a native value
-        /// </summary>
         public override object? ConvertManagedToNative(object? managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {
-            // Don't cancel the set
+            // Don't cancel the set.
             cancelSet = false;
 
             if (_lastManaged?.Equals(managedValue) == true)
@@ -104,7 +89,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            // We have to build an IPicture
+            // We have to build an IPicture.
             if (managedValue is not null)
             {
                 BOOL own = false;
