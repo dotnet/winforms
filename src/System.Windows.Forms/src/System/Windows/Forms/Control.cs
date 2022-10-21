@@ -655,9 +655,8 @@ namespace System.Windows.Forms
         private IntPtr ActiveXHWNDParent => ActiveXInstance.HWNDParent;
 
         /// <summary>
-        ///  Retrieves the ActiveX control implementation for
-        ///  this control.  This will demand create the implementation
-        ///  if it does not already exist.
+        ///  Retrieves the ActiveX control implementation for this control.
+        ///  This will demand create the implementation if it does not already exist.
         /// </summary>
         private ActiveXImpl ActiveXInstance
         {
