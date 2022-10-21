@@ -35,7 +35,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // Check for a property page
             Guid guid = Guid.Empty;
             HRESULT hr = target.MapPropertyToPage(dispid, &guid);
-            return hr == HRESULT.S_OK ? guid : Guid.Empty;
+            return hr.Succeeded ? guid : Guid.Empty;
         }
 
         internal static string? GetDisplayString(Oleaut32.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
