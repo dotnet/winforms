@@ -494,7 +494,7 @@ namespace System.Windows.Forms
                     {
                         // Try to retrieve the path from the IDList
                         char* buffer = stackalloc char[PInvoke.MAX_PATH + 1];
-                        bool isFileSystemFolder = PInvoke.SHGetPathFromIDList(selectedPidl, (PWSTR)b);
+                        bool isFileSystemFolder = PInvoke.SHGetPathFromIDList(selectedPidl, (PWSTR)buffer);
                         PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.BFFM_ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
                     }
 
