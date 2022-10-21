@@ -4284,7 +4284,7 @@ namespace System.Windows.Forms
 
                 if (!e.Cancel)
                 {
-                    ScaleContainerForDpi(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
+                    ScaleContainerForDpi(e.DeviceDpiNew, e.SuggestedRectangle);
                 }
             }
         }
@@ -4321,7 +4321,35 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual bool OnGetDpiScaledSize(int deviceDpiOld, int deviceDpiNew, ref Size desiredSize)
         {
-            return false; // scale linearly
+            float factor = ((float)deviceDpiNew) / deviceDpiOld;
+
+            // Compute font for the current DPI and cache it. DPI specific fonts cache is available only in PermonitorV2 mode applications.
+            if (!TryGetDpiFont(deviceDpiNew, out Font? fontForDpi))
+            {
+                Font currentFont = Font;
+                fontForDpi = currentFont.WithSize(currentFont.Size * factor);
+                AddToDpiFonts(deviceDpiNew, fontForDpi);
+            }
+
+            // If AutoScaleMode=AutoScaleMode.Dpi then we continue with the linear size we get from Windows for the top-level window.
+            if (AutoScaleMode == AutoScaleMode.Dpi)
+            {
+                return false;
+            }
+
+            // Calculate AutoscaleFactor for AutoScaleMode.Font. We will be using this factor to scale child controls
+            // and use same factor to compute desired size for top-level windows for the current DPI.
+            // This desired size is then used to notify Windows that we need non-linear size for top-level window.
+            FontHandleWrapper fontwrapper = new FontHandleWrapper(fontForDpi);
+            SizeF currentAutoScaleDimensions = GetCurrentAutoScaleDimensions(fontwrapper.Handle);
+            SizeF autoScaleFactor = GetCurrentAutoScaleFactor(currentAutoScaleDimensions, AutoScaleDimensions);
+
+            desiredSize.Width = (int)(Size.Width * autoScaleFactor.Width);
+            desiredSize.Height = (int)(Size.Height * autoScaleFactor.Height);
+            Debug.WriteLine($"AutoScaleFactor computed for new DPI = {autoScaleFactor.Width} - {autoScaleFactor.Height}");
+
+            // Notify Windows that the top-level window size should be based on AutoScaleMode value.
+            return true;
         }
 
         /// <summary>
@@ -4330,19 +4358,24 @@ namespace System.Windows.Forms
         ///  This message is sent to top level windows before WM_DPICHANGED.
         ///  If the application responds to this message, the resulting size will be the candidate rectangle
         ///  sent to WM_DPICHANGED. The WPARAM contains a Dpi value. The size needs to be computed if
-        ///  the window were to switch to this Dpi. LPARAM is unused and will be zero.
-        ///  The return value is a size, where the LOWORD is the desired width of the window and the HIWORD
-        ///  is the desired height of the window. A return value of zero indicates that the app does not
-        ///  want any special behavior and the candidate rectangle will be computed linearly.
+        ///  the window were to switch to this Dpi. LPARAM is used to store the Size desired for top-level window.
+        ///  A return value of zero indicates that the app does not want any special behavior and the candidate rectangle will be computed linearly.
         /// </summary>
-        private void WmGetDpiScaledSize(ref Message m)
+        private unsafe void WmGetDpiScaledSize(ref Message m)
         {
             DefWndProc(ref m);
 
             Size desiredSize = new Size();
-            m.ResultInternal = OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize)
-                ? LRESULT.MAKELONG(Size.Width, Size.Height)
-                : (LRESULT)0;
+            if (OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize))
+            {
+                SIZE* size = (SIZE*)m.LParamInternal;
+                size->cx = desiredSize.Width;
+                size->cy = desiredSize.Height;
+                m.ResultInternal = (LRESULT)1;
+                return;
+            }
+
+            m.ResultInternal = (LRESULT)0;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
