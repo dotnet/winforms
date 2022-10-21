@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static Interop;
+using System.Windows.Forms.Tests.Dpi;
 
 namespace System.Windows.Forms.Tests
 {
@@ -19,6 +21,39 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(sc.Panel2);
             Assert.Equal(sc, sc.Panel2.Owner);
             Assert.False(sc.SplitterRectangle.IsEmpty);
+        }
+
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/7579")]
+        [WinFormsTheory(Skip = "Lab machines seems not setting thread's Dpi context. See https://github.com/dotnet/winforms/issues/7579")]
+        [InlineData(3.5 * DpiHelper.LogicalDpi)]
+        public void SplitContainer_Properties_Scaling(int newDpi)
+        {
+            // Run tests only on Windows 10 versions that support thread dpi awareness.
+            if (!PlatformDetection.IsWindows10Version1803OrGreater)
+            {
+                return;
+            }
+
+            using var form = new Form();
+            using var splitContainer = new SplitContainer();
+
+            splitContainer.FixedPanel = FixedPanel.Panel1;
+            splitContainer.Location = new Drawing.Point(0, 0);
+            splitContainer.Margin = new Padding(0);
+            splitContainer.Name = "splitContainer2";
+            splitContainer.Orientation = Orientation.Horizontal;
+            splitContainer.Size = new Drawing.Size(812, 619);
+            splitContainer.SplitterDistance = 90;
+            splitContainer.SplitterWidth = 2;
+            form.AutoScaleMode = AutoScaleMode.Dpi;
+            form.Show();
+
+            DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
+
+            Assert.Equal((int)(3.5 * 90), splitContainer.SplitterDistance);
+            Assert.Equal((int)(3.5 * 2), splitContainer.SplitterWidth);
+            Assert.Equal(splitContainer.SplitterDistance, splitContainer.Panel1.Height);
+            form.Close();
         }
     }
 }
