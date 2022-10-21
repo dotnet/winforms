@@ -31,8 +31,12 @@ The above snippet does not represent the complete set of instances where anchor 
 ## Known issues:
 We have multiple issues reported [here](https://github.com/dotnet/winforms/issues?q=is%3Aissue+is%3Aopen+anchor+-label%3Atest-bug+-label%3A%22%3Aconstruction%3A+work+in+progress%22+-label%3Aapi-suggestion+-label%3Aapi-approved+-label%3Atenet-localization) from customers and some of them are direct result of anchor miscalculations. The following are snippets of the category of issues we currently see.
 ### Missing controls:
+Calculation of control's anchors with default sizes may result in negative anchors and thus result in invalid location for the anchored controls.
+
 ![MissingControls](images/AnchorLayoutKnownIssue_MissingControl.png)
 ### Overlapped Controls:
+Along with above reason, If we happened to scale parent control to match with current monitors DPI and child control's anchor calculations happen out of sync with this scaling, we may see issues like in below pic.
+
 ![OverlappedControls](images/AnchorLayoutKnownIssue_OverlappedControl.png)
 ## Anchor Calculations:
 The following image illustrates how we calculate anchors with respect to a control’s parent’s display rectangle. Rectangle marked in `red` is Parent’s display rectangle while the rectangle marked in `green` is anchored control’s (button) bounds.
@@ -117,7 +121,7 @@ private static void ComputeAnchorInfo(IArrangedElement element)
  }
 ```
 ## Risk mitigation:
-Layout in general is complex and could impact every component in the WinForms  . In order to reduce the potential risk and provide backward compatibility, This changes are `quirked` under switch `System.Windows.Forms.EnableAnchorLayoutV2`. These changes are by default on for new/migrating applications targeting .NET 8.0 but the developers can control this by setting the above mentioned flag to `false` in the runtimeconfig .template.json for the application.
+Layout in general is complex and could impact every component in the WinForms. In order to reduce the potential risk and provide backward compatibility, These changes are `hidden` under switch `System.Windows.Forms.EnableAnchorLayoutV2` and are `ON` by default for new/migrating applications targeting .NET 8.0. Developers can disable these changes by setting the above mentioned flag to `false` in the runtimeconfig.template.json for the application.
 Snippet for runtimeconfig.template.json:
 ```JSON
 {
