@@ -11,7 +11,7 @@ namespace System.Windows.Forms
 {
     public partial class Control
     {
-private unsafe partial class ActiveXImpl
+        private unsafe partial class ActiveXImpl
         {
             /// <summary>
             ///  Helper class. Calls IConnectionPoint.Advise to hook up a native COM event sink

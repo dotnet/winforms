@@ -10,7 +10,7 @@ namespace System.Windows.Forms
 {
     public partial class Control
     {
-private unsafe partial class ActiveXImpl
+        private unsafe partial class ActiveXImpl
         {
             /// <summary>
             ///  This is a property bag implementation that sits on a stream.  It can
