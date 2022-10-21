@@ -5766,6 +5766,26 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             action(variant.ToObject());
         }
 
+        [Fact]
+        public void MarshallingFromExchangeTypes()
+        {
+            // These are the common TypeConverter types we're using.
+
+            using (VARIANT variant = new())
+            {
+                byte[] bytes = { 1, 2, 3 };
+                Marshal.GetNativeVariantForObject(bytes, (nint)(void*)&variant);
+                Assert.Equal(VT_UI1 | VT_ARRAY, variant.vt);
+            }
+
+            using (VARIANT variant = new())
+            {
+                string value = "Testing";
+                Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
+                Assert.Equal(VT_BSTR, variant.vt);
+            }
+        }
+
         [DllImport(Libraries.Propsys, ExactSpelling = true)]
         private static extern unsafe HRESULT InitPropVariantFromCLSID(Guid* clsid, VARIANT* ppropvar);
 
