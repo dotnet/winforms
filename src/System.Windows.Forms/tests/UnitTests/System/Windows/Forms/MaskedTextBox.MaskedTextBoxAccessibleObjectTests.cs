@@ -75,6 +75,37 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(null, null)]
+        [InlineData("Test", "Test")]
+        public void MaskedTextBoxAccessibleObject_Name_IsExpected_WithoutMask(string accessibleName, string expectedAccessibleName)
+        {
+            using MaskedTextBox maskedTextBox = new MaskedTextBox();
+            maskedTextBox.Text = "000000";
+            maskedTextBox.AccessibleName = accessibleName;
+
+            var actual = (string)maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+
+            Assert.Equal(expectedAccessibleName, actual);
+            Assert.False(maskedTextBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("Test", "Test")]
+        public void MaskedTextBoxAccessibleObject_Name_IsExpected_WithMask(string accessibleName, string expectedAccessibleName)
+        {
+            using MaskedTextBox maskedTextBox = new MaskedTextBox();
+            maskedTextBox.Text = "000000";
+            maskedTextBox.Mask = "00/00/0000";
+            maskedTextBox.AccessibleName = accessibleName;
+
+            var actual = (string)maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+
+            Assert.Equal(expectedAccessibleName, actual);
+            Assert.False(maskedTextBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void MaskedTextBoxAccessibleObject_GetPropertyValue_Value_IsExpected_WithMask(bool useMask)
