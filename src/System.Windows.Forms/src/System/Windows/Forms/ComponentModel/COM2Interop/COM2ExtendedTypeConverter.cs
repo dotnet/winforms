@@ -80,7 +80,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext? context)
             => _innerConverter is not null
                 ? _innerConverter.GetCreateInstanceSupported(context)
-            : base.GetCreateInstanceSupported(context);
+                : base.GetCreateInstanceSupported(context);
 
         [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
         public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
