@@ -490,15 +490,12 @@ namespace System.Windows.Forms
                 case PInvoke.BFFM_SELCHANGED:
                     // Indicates the selection has changed. The lpData parameter points to the item identifier list for the newly selected item.
                     ITEMIDLIST* selectedPidl = (ITEMIDLIST*)lParam;
-                    Span<char> buffer = stackalloc char[PInvoke.MAX_PATH + 1];
-                    fixed (char* b = buffer)
+                    if (selectedPidl is not null)
                     {
-                        if (selectedPidl is not null)
-                        {
-                            // Try to retrieve the path from the IDList
-                            bool isFileSystemFolder = PInvoke.SHGetPathFromIDList(selectedPidl, (PWSTR)b);
-                            PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.BFFM_ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
-                        }
+                        // Try to retrieve the path from the IDList
+                        char* buffer = stackalloc char[PInvoke.MAX_PATH + 1];
+                        bool isFileSystemFolder = PInvoke.SHGetPathFromIDList(selectedPidl, (PWSTR)b);
+                        PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.BFFM_ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
                     }
 
                     break;
