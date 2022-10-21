@@ -11,6 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ComponentModel.Com2Interop;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -141,14 +142,14 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    Oleaut32.IPerPropertyBrowsing ippb = _owner.GetPerPropertyBrowsing();
+                    IPerPropertyBrowsing.Interface ippb = _owner.GetPerPropertyBrowsing();
                     if (ippb is null)
                     {
                         return Guid.Empty;
                     }
 
                     Guid rval = Guid.Empty;
-                    if (ippb.MapPropertyToPage(dispid, &rval).Succeeded)
+                    if (ippb.MapPropertyToPage((int)dispid, &rval).Succeeded)
                     {
                         return rval;
                     }
@@ -310,18 +311,18 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    Oleaut32.IPerPropertyBrowsing ppb = _owner.GetPerPropertyBrowsing();
+                    IPerPropertyBrowsing.Interface ppb = _owner.GetPerPropertyBrowsing();
 
                     if (ppb is not null)
                     {
                         // Check for enums
-                        Ole32.CALPOLESTR caStrings = default;
-                        Ole32.CADWORD caCookies = default;
+                        CALPOLESTR caStrings = default;
+                        CADWORD caCookies = default;
 
                         HRESULT hr = HRESULT.S_OK;
                         try
                         {
-                            hr = ppb.GetPredefinedStrings(dispid, &caStrings, &caCookies);
+                            hr = ppb.GetPredefinedStrings((int)dispid, &caStrings, &caCookies);
                         }
                         catch (ExternalException ex)
                         {

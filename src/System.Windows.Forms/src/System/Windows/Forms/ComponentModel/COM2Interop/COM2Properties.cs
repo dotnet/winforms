@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Diagnostics;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -46,7 +47,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             typeof(VSSDK.ICategorizeProperties),
             typeof(VSSDK.IProvidePropertyBuilder),
-            typeof(Oleaut32.IPerPropertyBrowsing),
+            typeof(IPerPropertyBrowsing.Interface),
             typeof(VSSDK.IVsPerPropertyBrowsing),
             typeof(VSSDK.IVSMDPerPropertyBrowsing)
         };

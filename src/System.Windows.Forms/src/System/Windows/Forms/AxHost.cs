@@ -183,7 +183,7 @@ namespace System.Windows.Forms
         private Ole32.IOleControl _iOleControl;
         private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObject;
         private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObjectExternal;
-        private Oleaut32.IPerPropertyBrowsing _iPerPropertyBrowsing;
+        private IPerPropertyBrowsing.Interface _iPerPropertyBrowsing;
         private VSSDK.ICategorizeProperties _iCategorizeProperties;
         private Oleaut32.IPersistPropertyBag _iPersistPropBag;
         private Ole32.IPersistStream _iPersistStream;
@@ -3917,12 +3917,12 @@ namespace System.Windows.Forms
             return _iCategorizeProperties;
         }
 
-        private Oleaut32.IPerPropertyBrowsing GetPerPropertyBrowsing()
+        private IPerPropertyBrowsing.Interface GetPerPropertyBrowsing()
         {
             if (_iPerPropertyBrowsing is null && !_axState[s_checkedIppb] && _instance is not null)
             {
                 _axState[s_checkedIppb] = true;
-                if (_instance is Oleaut32.IPerPropertyBrowsing browsing)
+                if (_instance is IPerPropertyBrowsing.Interface browsing)
                 {
                     _iPerPropertyBrowsing = browsing;
                 }

@@ -308,6 +308,7 @@ INPLACE_E_NOTOOLSPACE
 IntersectClipRect
 InvalidateRect
 InvalidateRgn
+IPerPropertyBrowsing
 IRecordInfo
 IsAppThemed
 IsChild

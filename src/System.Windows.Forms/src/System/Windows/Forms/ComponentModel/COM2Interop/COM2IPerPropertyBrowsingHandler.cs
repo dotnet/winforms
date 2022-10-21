@@ -6,13 +6,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
     {
-        public override Type Interface => typeof(Oleaut32.IPerPropertyBrowsing);
+        public override Type Interface => typeof(IPerPropertyBrowsing.Interface);
 
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
         {
@@ -30,25 +31,26 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private static unsafe Guid GetPropertyPageGuid(Oleaut32.IPerPropertyBrowsing target, Ole32.DispatchID dispid)
+        private static unsafe Guid GetPropertyPageGuid(IPerPropertyBrowsing.Interface target, Ole32.DispatchID dispid)
         {
             // Check for a property page
             Guid guid = Guid.Empty;
-            HRESULT hr = target.MapPropertyToPage(dispid, &guid);
+            HRESULT hr = target.MapPropertyToPage((int)dispid, &guid);
             return hr.Succeeded ? guid : Guid.Empty;
         }
 
-        internal static string? GetDisplayString(Oleaut32.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
+        internal static unsafe string? GetDisplayString(IPerPropertyBrowsing.Interface ppb, Ole32.DispatchID dispid, ref bool success)
         {
-            HRESULT hr = ppb.GetDisplayString(dispid, out string strVal);
+            using BSTR strVal = default;
+            HRESULT hr = ppb.GetDisplayString((int)dispid, &strVal);
             if (hr != HRESULT.S_OK)
             {
                 success = false;
                 return null;
             }
 
-            success = strVal is not null;
-            return strVal;
+            success = strVal.Value is not null;
+            return strVal.ToString();
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            if (sender.TargetObject is Oleaut32.IPerPropertyBrowsing target)
+            if (sender.TargetObject is IPerPropertyBrowsing.Interface target)
             {
                 // We hide IDispatch props by default, we we need to force showing them here.
 
@@ -77,7 +79,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                if (sender.TargetObject is not Oleaut32.IPerPropertyBrowsing browsing)
+                if (sender.TargetObject is not IPerPropertyBrowsing.Interface browsing)
                 {
                     return;
                 }
@@ -105,19 +107,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
         {
-            if (sender.TargetObject is not Oleaut32.IPerPropertyBrowsing ppb)
+            if (sender.TargetObject is not IPerPropertyBrowsing.Interface ppb)
             {
                 return;
             }
 
             // Check for enums.
-            Ole32.CALPOLESTR caStrings = default;
-            Ole32.CADWORD caCookies = default;
+            CALPOLESTR caStrings = default;
+            CADWORD caCookies = default;
 
             HRESULT hr;
             try
             {
-                hr = ppb.GetPredefinedStrings(sender.DISPID, &caStrings, &caCookies);
+                hr = ppb.GetPredefinedStrings((int)sender.DISPID, &caStrings, &caCookies);
             }
             catch (ExternalException ex)
             {
