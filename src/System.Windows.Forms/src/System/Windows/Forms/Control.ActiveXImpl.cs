@@ -2,16 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Windows.Win32.System.Com;
 using static Interop;
@@ -25,7 +21,7 @@ namespace System.Windows.Forms
         ///  This class holds all of the state data for an ActiveX control and
         ///  supplies the implementation for many of the non-trivial methods.
         /// </summary>
-        private unsafe class ActiveXImpl : MarshalByRefObject, IWindowTarget
+        private unsafe partial class ActiveXImpl : MarshalByRefObject, IWindowTarget
         {
             private const int HiMetricPerInch = 2540;
             private static readonly int s_viewAdviseOnlyOnce = BitVector32.CreateMask();
@@ -92,38 +88,25 @@ namespace System.Windows.Forms
                 {
                     AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_BACKCOLOR);
 
-                    if (prop.Empty)
+                    if (prop.Empty && GetAmbientProperty(Ole32.DispatchID.AMBIENT_BACKCOLOR, out object? obj) && obj is not null)
                     {
-                        if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_BACKCOLOR, out object? obj))
+                        try
                         {
-                            if (obj is not null)
-                            {
-                                try
-                                {
-                                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object color type=" + obj.GetType().FullName);
-                                    prop.Value = ColorTranslator.FromOle(Convert.ToInt32(obj, CultureInfo.InvariantCulture));
-                                }
-                                catch (Exception e)
-                                {
-                                    Debug.Fail("Failed to massage ambient back color to a Color", e.ToString());
+                            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Object color type={obj.GetType().FullName}");
+                            prop.Value = ColorTranslator.FromOle(Convert.ToInt32(obj, CultureInfo.InvariantCulture));
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Fail("Failed to massage ambient back color to a Color", e.ToString());
 
-                                    if (ClientUtils.IsCriticalException(e))
-                                    {
-                                        throw;
-                                    }
-                                }
+                            if (ClientUtils.IsCriticalException(e))
+                            {
+                                throw;
                             }
                         }
                     }
 
-                    if (prop.Value is null)
-                    {
-                        return Color.Empty;
-                    }
-                    else
-                    {
-                        return (Color)prop.Value;
-                    }
+                    return prop.Value is null ? Color.Empty : (Color)prop.Value;
                 }
             }
 
@@ -146,7 +129,7 @@ namespace System.Windows.Forms
                             try
                             {
                                 Debug.Assert(obj is not null, "GetAmbientProperty failed");
-                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object font type=" + obj.GetType().FullName);
+                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Object font type={obj.GetType().FullName}");
                                 Ole32.IFont ifont = (Ole32.IFont)obj;
                                 prop.Value = Font.FromHfont(ifont.hFont);
                             }
@@ -174,38 +157,25 @@ namespace System.Windows.Forms
                 {
                     AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FORECOLOR);
 
-                    if (prop.Empty)
+                    if (prop.Empty && GetAmbientProperty(Ole32.DispatchID.AMBIENT_FORECOLOR, out object? obj) && obj is not null)
                     {
-                        if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_FORECOLOR, out object? obj))
+                        try
                         {
-                            if (obj is not null)
-                            {
-                                try
-                                {
-                                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object color type=" + obj.GetType().FullName);
-                                    prop.Value = ColorTranslator.FromOle(Convert.ToInt32(obj, CultureInfo.InvariantCulture));
-                                }
-                                catch (Exception e)
-                                {
-                                    Debug.Fail("Failed to massage ambient fore color to a Color", e.ToString());
+                            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Object color type={obj.GetType().FullName}");
+                            prop.Value = ColorTranslator.FromOle(Convert.ToInt32(obj, CultureInfo.InvariantCulture));
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Fail("Failed to massage ambient fore color to a Color", e.ToString());
 
-                                    if (ClientUtils.IsCriticalException(e))
-                                    {
-                                        throw;
-                                    }
-                                }
+                            if (ClientUtils.IsCriticalException(e))
+                            {
+                                throw;
                             }
                         }
                     }
 
-                    if (prop.Value is null)
-                    {
-                        return Color.Empty;
-                    }
-                    else
-                    {
-                        return (Color)prop.Value;
-                    }
+                    return prop.Value is null ? Color.Empty : (Color)prop.Value;
                 }
             }
 
@@ -217,14 +187,8 @@ namespace System.Windows.Forms
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal bool EventsFrozen
             {
-                get
-                {
-                    return _activeXState[s_eventsFrozen];
-                }
-                set
-                {
-                    _activeXState[s_eventsFrozen] = value;
-                }
+                get => _activeXState[s_eventsFrozen];
+                set => _activeXState[s_eventsFrozen] = value;
             }
 
             /// <summary>
@@ -271,12 +235,10 @@ namespace System.Windows.Forms
                     InPlaceDeactivate();
                 }
 
-                if ((dwSaveOption == Ole32.OLECLOSE.SAVEIFDIRTY ||
-                     dwSaveOption == Ole32.OLECLOSE.PROMPTSAVE) &&
-                    _activeXState[s_isDirty])
+                if ((dwSaveOption == Ole32.OLECLOSE.SAVEIFDIRTY || dwSaveOption == Ole32.OLECLOSE.PROMPTSAVE)
+                    && _activeXState[s_isDirty])
                 {
                     _clientSite?.SaveObject();
-
                     SendOnSave();
                 }
             }
@@ -302,59 +264,58 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Show, InPlaceActivate, UIActivate");
                         InPlaceActivate(iVerb);
 
-                        // Now that we're active, send the lpmsg to the control if it
-                        // is valid.
-                        if (lpmsg is not null)
+                        // Now that we're active, send the lpmsg to the control if it is valid.
+                        if (lpmsg is null)
                         {
-                            Control target = _control;
+                            break;
+                        }
 
-                            HWND hwnd = (HWND)lpmsg->hwnd;
-                            if (hwnd != _control.HWND && lpmsg->IsMouseMessage())
+                        Control target = _control;
+
+                        HWND hwnd = lpmsg->hwnd;
+                        if (hwnd != _control.HWND && lpmsg->IsMouseMessage())
+                        {
+                            // Must translate message coordinates over to our HWND.
+                            HWND hwndMap = hwnd.IsNull ? hwndParent : hwnd;
+                            var pt = new Point
                             {
-                                // Must translate message coordinates over to our HWND.  We first try
-                                HWND hwndMap = hwnd.IsNull ? hwndParent : hwnd;
-                                var pt = new Point
-                                {
-                                    X = PARAM.LOWORD(lpmsg->lParam),
-                                    Y = PARAM.HIWORD(lpmsg->lParam)
-                                };
+                                X = PARAM.LOWORD(lpmsg->lParam),
+                                Y = PARAM.HIWORD(lpmsg->lParam)
+                            };
 
-                                PInvoke.MapWindowPoints(hwndMap, _control, ref pt);
+                            PInvoke.MapWindowPoints(hwndMap, _control, ref pt);
 
-                                // check to see if this message should really go to a child
-                                //  control, and if so, map the point into that child's window
-                                //  coordinates
-                                Control? realTarget = target.GetChildAtPoint(pt);
-                                if (realTarget is not null && realTarget != target)
-                                {
-                                    pt = WindowsFormsUtils.TranslatePoint(pt, target, realTarget);
-                                    target = realTarget;
-                                }
-
-                                lpmsg->lParam = PARAM.FromPoint(pt);
+                            // Check to see if this message should really go to a child control, and if so, map the
+                            // point into that child's window coordinates.
+                            Control? realTarget = target.GetChildAtPoint(pt);
+                            if (realTarget is not null && realTarget != target)
+                            {
+                                pt = WindowsFormsUtils.TranslatePoint(pt, target, realTarget);
+                                target = realTarget;
                             }
+
+                            lpmsg->lParam = PARAM.FromPoint(pt);
+                        }
 
 #if DEBUG
-                            if (CompModSwitches.ActiveX.TraceVerbose)
-                            {
-                                Message m = Message.Create(lpmsg);
-                                Debug.WriteLine($"Valid message pointer passed, sending to control: {m}");
-                            }
+                        if (CompModSwitches.ActiveX.TraceVerbose)
+                        {
+                            Message m = Message.Create(lpmsg);
+                            Debug.WriteLine($"Valid message pointer passed, sending to control: {m}");
+                        }
 #endif
 
-                            if (lpmsg->message == (uint)User32.WM.KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)User32.VK.TAB)
-                            {
-                                target.SelectNextControl(null, ModifierKeys != Keys.Shift, tabStopOnly: true, nested: true, wrap: true);
-                            }
-                            else
-                            {
-                                PInvoke.SendMessage(target, (User32.WM)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
-                            }
+                        if (lpmsg->message == (uint)User32.WM.KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)User32.VK.TAB)
+                        {
+                            target.SelectNextControl(null, ModifierKeys != Keys.Shift, tabStopOnly: true, nested: true, wrap: true);
+                        }
+                        else
+                        {
+                            PInvoke.SendMessage(target, (User32.WM)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                         }
 
                         break;
 
-                    // These affect our visibility
                     case Ole32.OLEIVERB.HIDE:
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Hide");
                         UIDeactivate();
@@ -366,7 +327,7 @@ namespace System.Windows.Forms
 
                         break;
 
-                    // All other verbs are notimpl.
+                    // All other verbs are not implemented.
                     default:
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Other");
                         ThrowHr(HRESULT.E_NOTIMPL);
@@ -424,16 +385,14 @@ namespace System.Windows.Forms
                     _control.CreateHandle();
                 }
 
-                // if they didn't give us a rectangle, just copy over ours
+                // If they didn't give us a rectangle, just copy over ours.
                 if (prcBounds is not null)
                 {
                     RECT rc = *prcBounds;
 
-                    // To draw to a given rect, we scale the DC in such a way as to
-                    // make the values it takes match our own happy MM_TEXT.  Then,
-                    // we back-convert prcBounds so that we convert it to this coordinate
-                    // system. This puts us in the most similar coordinates as we currently
-                    // use.
+                    // To draw to a given rect, we scale the DC in such a way as to make the values it takes match our
+                    // own happy MM_TEXT. Then, we back-convert prcBounds so that we convert it to this coordinate
+                    // system. This puts us in the most similar coordinates as we currently use.
                     Point p1 = new(rc.left, rc.top);
                     Point p2 = new(rc.right - rc.left, rc.bottom - rc.top);
                     PInvoke.LPtoDP(hdc, new Point[] { p1, p2 }.AsSpan());
@@ -602,13 +561,13 @@ namespace System.Windows.Forms
 
                     if (hr.Succeeded)
                     {
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke succeeded. VT=" + pvt[0].GetType().FullName);
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"IDispatch::Invoke succeeded. VT={pvt[0].GetType().FullName}");
                         obj = pvt[0];
                         Debug.Unindent();
                         return true;
                     }
 
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke failed. HR: 0x" + string.Format(CultureInfo.CurrentCulture, "{0:X}", hr));
+                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"IDispatch::Invoke failed. HR: 0x{hr:X}");
                 }
 
                 Debug.Unindent();
@@ -1417,276 +1376,6 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Helper class. Calls IConnectionPoint.Advise to hook up a native COM event sink
-            ///  to a manage .NET event interface.
-            ///  The events are exposed to COM by the CLR-supplied COM-callable Wrapper (CCW).
-            /// </summary>
-            internal static class AdviseHelper
-            {
-                /// <summary>
-                ///  Get the COM connection point container from the CLR's CCW and advise for the given event id.
-                /// </summary>
-                public static bool AdviseConnectionPoint(object connectionPoint, object sink, Type eventInterface, out uint pdwCookie)
-                {
-                    // Note that we cannot simply cast the connectionPoint object to
-                    // System.Runtime.InteropServices.ComTypes.IConnectionPointContainer because the .NET
-                    // object doesn't implement it directly. When the object is exposed to COM, the CLR
-                    // implements IConnectionPointContainer on the proxy object called the CCW or COM-callable wrapper.
-                    // We use the helper class ComConnectionPointContainer to get to the CCW directly
-                    // to to call the interface.
-                    // It is critical to call Dispose to ensure that the IUnknown is released.
-
-                    using (ComConnectionPointContainer cpc = new ComConnectionPointContainer(connectionPoint, true))
-                    {
-                        return AdviseConnectionPoint(cpc, sink, eventInterface, out pdwCookie);
-                    }
-                }
-
-                /// <summary>
-                ///  Find the COM connection point and call Advise for the given event id.
-                /// </summary>
-                internal static bool AdviseConnectionPoint(ComConnectionPointContainer cpc, object sink, Type eventInterface, out uint pdwCookie)
-                {
-                    // Note that we cannot simply cast the returned IConnectionPoint to
-                    // System.Runtime.InteropServices.ComTypes.IConnectionPoint because the .NET
-                    // object doesn't implement it directly. When the object is exposed to COM, the CLR
-                    // implements IConnectionPoint for the proxy object via the CCW or COM-callable wrapper.
-                    // We use the helper class ComConnectionPoint to get to the CCW directly to to call the interface.
-                    // It is critical to call Dispose to ensure that the IUnknown is released.
-                    using (ComConnectionPoint cp = cpc.FindConnectionPoint(eventInterface))
-                    {
-                        using (SafeIUnknown punkEventsSink = new SafeIUnknown(sink, true))
-                        {
-                            // Finally...we can call IConnectionPoint.Advise to hook up a native COM event sink
-                            // to a managed .NET event interface.
-                            return cp.Advise(punkEventsSink.DangerousGetHandle(), out pdwCookie);
-                        }
-                    }
-                }
-
-                /// <summary>
-                ///  Wraps a native IUnknown in a SafeHandle.
-                /// </summary>
-                internal class SafeIUnknown : SafeHandle
-                {
-                    /// <summary>
-                    ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
-                    /// </summary>
-                    public SafeIUnknown(object obj, bool addRefIntPtr)
-                        : this(obj, addRefIntPtr, Guid.Empty)
-                    {
-                    }
-
-                    /// <summary>
-                    ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
-                    ///  If an iid is supplied, QI for the interface and wrap that unknown instead.
-                    /// </summary>
-                    public SafeIUnknown(object obj, bool addRefIntPtr, Guid iid)
-                        : base(IntPtr.Zero, true)
-                    {
-#pragma warning disable SYSLIB0004 // Type or member is obsolete
-                        RuntimeHelpers.PrepareConstrainedRegions();
-#pragma warning restore SYSLIB0004 // Type or member is obsolete
-                        try
-                        {
-                            // Set this.handle in a finally block to ensure the com ptr is set in the SafeHandle
-                            // even if the runtime throws a exception (such as ThreadAbortException) during the call.
-                            // This ensures that the finalizer will clean up the COM reference.
-                        }
-                        finally
-                        {
-                            // Get a raw IUnknown for this object.
-                            // We are responsible for releasing the IUnknown ourselves.
-                            IntPtr unknown;
-
-                            if (obj is IntPtr)
-                            {
-                                unknown = (IntPtr)obj;
-
-                                // The incoming IntPtr may already be reference counted or not, depending on
-                                // where it came from. The caller needs to tell us whether to add-ref or not.
-                                if (addRefIntPtr)
-                                {
-                                    Marshal.AddRef(unknown);
-                                }
-                            }
-                            else
-                            {
-                                // GetIUnknownForObject will return a reference-counted object
-                                unknown = Marshal.GetIUnknownForObject(obj);
-                            }
-
-                            // Attempt QueryInterface if an iid is specified.
-                            if (iid != Guid.Empty)
-                            {
-                                IntPtr oldUnknown = unknown;
-                                try
-                                {
-                                    unknown = InternalQueryInterface(unknown, ref iid);
-                                }
-                                finally
-                                {
-                                    // It is critical to release the original unknown if
-                                    // InternalQueryInterface throws out so we don't leak ref counts.
-                                    Marshal.Release(oldUnknown);
-                                }
-                            }
-
-                            // Preserve the com ptr in the SafeHandle.
-                            handle = unknown;
-                        }
-                    }
-
-                    /// <summary>
-                    ///  Helper function for QueryInterface.
-                    /// </summary>
-                    private static IntPtr InternalQueryInterface(IntPtr pUnk, ref Guid iid)
-                    {
-                        int hresult = Marshal.QueryInterface(pUnk, ref iid, out IntPtr ppv);
-                        if (hresult != 0 || ppv == IntPtr.Zero)
-                        {
-                            throw new InvalidCastException(SR.AxInterfaceNotSupported);
-                        }
-
-                        return ppv;
-                    }
-
-                    /// <summary>
-                    ///  Return whether the handle is invalid.
-                    /// </summary>
-                    public sealed override bool IsInvalid
-                    {
-                        get
-                        {
-                            if (!IsClosed)
-                            {
-                                return (IntPtr.Zero == handle);
-                            }
-
-                            return true;
-                        }
-                    }
-
-                    /// <summary>
-                    ///  Release the IUnknown.
-                    /// </summary>
-                    protected sealed override bool ReleaseHandle()
-                    {
-                        IntPtr ptr1 = handle;
-                        handle = IntPtr.Zero;
-                        if (IntPtr.Zero != ptr1)
-                        {
-                            Marshal.Release(ptr1);
-                        }
-
-                        return true;
-                    }
-
-                    /// <summary>
-                    ///  Helper function to load a COM v-table from a com object pointer.
-                    /// </summary>
-                    protected V LoadVtable<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]V>()
-                        where V : struct
-                    {
-                        IntPtr vtblptr = Marshal.ReadIntPtr(handle, 0);
-                        return Marshal.PtrToStructure<V>(vtblptr);
-                    }
-                }
-
-                /// <summary>
-                ///  Helper class to access IConnectionPointContainer from a .NET COM-callable wrapper.
-                ///  The IConnectionPointContainer COM pointer is wrapped in a SafeHandle.
-                /// </summary>
-                internal sealed class ComConnectionPointContainer
-                    : SafeIUnknown
-                {
-                    public ComConnectionPointContainer(object obj, bool addRefIntPtr)
-                        : base(obj, addRefIntPtr, typeof(Ole32.IConnectionPointContainer).GUID)
-                    {
-                        _vtbl = LoadVtable<VTABLE>();
-                    }
-
-                    private readonly VTABLE _vtbl;
-
-                    [StructLayout(LayoutKind.Sequential)]
-                    private struct VTABLE
-                    {
-                        public IntPtr QueryInterfacePtr;
-                        public IntPtr AddRefPtr;
-                        public IntPtr ReleasePtr;
-                        public IntPtr EnumConnectionPointsPtr;
-                        public IntPtr FindConnectionPointPtr;
-                    }
-
-                    /// <summary>
-                    ///  Call IConnectionPointContainer.FindConnectionPoint using Delegate.Invoke on the v-table slot.
-                    /// </summary>
-                    public ComConnectionPoint FindConnectionPoint(Type eventInterface)
-                    {
-                        FindConnectionPointD findConnectionPoint = (FindConnectionPointD)Marshal.GetDelegateForFunctionPointer(_vtbl.FindConnectionPointPtr, typeof(FindConnectionPointD));
-
-                        Guid iid = eventInterface.GUID;
-                        int hresult = findConnectionPoint.Invoke(handle, ref iid, out IntPtr result);
-                        if (hresult != 0 || result == IntPtr.Zero)
-                        {
-                            throw new ArgumentException(string.Format(SR.AXNoConnectionPoint, eventInterface.Name));
-                        }
-
-                        return new ComConnectionPoint(result, false);   // result is already ref-counted as an out-param so pass in false
-                    }
-
-                    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-                    private delegate int FindConnectionPointD(IntPtr This, ref Guid iid, out IntPtr ppv);
-                }
-
-                /// <summary>
-                ///  Helper class to access IConnectionPoint from a .NET COM-callable wrapper.
-                ///  The IConnectionPoint COM pointer is wrapped in a SafeHandle.
-                /// </summary>
-                internal sealed class ComConnectionPoint
-                    : SafeIUnknown
-                {
-                    public ComConnectionPoint(object obj, bool addRefIntPtr)
-                        : base(obj, addRefIntPtr, typeof(Ole32.IConnectionPoint).GUID)
-                    {
-                        _vtbl = LoadVtable<VTABLE>();
-                    }
-
-                    [StructLayout(LayoutKind.Sequential)]
-                    private struct VTABLE
-                    {
-                        public IntPtr QueryInterfacePtr;
-                        public IntPtr AddRefPtr;
-                        public IntPtr ReleasePtr;
-                        public IntPtr GetConnectionInterfacePtr;
-                        public IntPtr GetConnectionPointContainerPtr;
-                        public IntPtr AdvisePtr;
-                        public IntPtr UnadvisePtr;
-                        public IntPtr EnumConnectionsPtr;
-                    }
-
-                    private readonly VTABLE _vtbl;
-
-                    /// <summary>
-                    ///  Call IConnectionPoint.Advise using Delegate.Invoke on the v-table slot.
-                    /// </summary>
-                    public bool Advise(IntPtr punkEventSink, out uint pdwCookie)
-                    {
-                        AdviseD advise = (AdviseD)Marshal.GetDelegateForFunctionPointer(_vtbl.AdvisePtr, typeof(AdviseD));
-                        if (advise.Invoke(handle, punkEventSink, out pdwCookie) == 0)
-                        {
-                            return true;
-                        }
-
-                        return false;
-                    }
-
-                    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-                    private delegate int AdviseD(IntPtr This, IntPtr punkEventSink, out uint pdwCookie);
-                }
-            }
-
-            /// <summary>
             ///  Return the default COM events interface declared on a .NET class.
             ///  This looks for the ComSourceInterfacesAttribute and returns the .NET
             ///  interface type of the first interface declared.
@@ -1768,7 +1457,9 @@ namespace System.Windows.Forms
 
                     if (converter.CanConvertFrom(typeof(string)))
                     {
+                        VARIANT variant = new();
                         value = converter.ConvertToInvariantString(props[i].GetValue(_control));
+                        Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
                         pPropBag.Write(props[i].Name, ref value!);
                     }
                     else if (converter.CanConvertFrom(typeof(byte[])))
@@ -2395,87 +2086,6 @@ namespace System.Windows.Forms
                 }
 
                 _controlWindowTarget.OnMessage(ref m);
-            }
-
-            /// <summary>
-            ///  This is a property bag implementation that sits on a stream.  It can
-            ///  read and write the bag to the stream.
-            /// </summary>
-            private class PropertyBagStream : Oleaut32.IPropertyBag
-            {
-                private Hashtable _bag = new Hashtable();
-
-                internal void Read(Ole32.IStream istream)
-                {
-                    // visual basic's memory streams don't support seeking, so we have to
-                    // work around this limitation here.  We do this by copying
-                    // the contents of the stream into a MemoryStream object.
-                    Stream stream = new DataStreamFromComStream(istream);
-                    const int PAGE_SIZE = 0x1000; // one page (4096b)
-                    byte[] streamData = new byte[PAGE_SIZE];
-                    int offset = 0;
-
-                    int count = stream.Read(streamData, offset, PAGE_SIZE);
-                    int totalCount = count;
-
-                    while (count == PAGE_SIZE)
-                    {
-                        byte[] newChunk = new byte[streamData.Length + PAGE_SIZE];
-                        Array.Copy(streamData, newChunk, streamData.Length);
-                        streamData = newChunk;
-
-                        offset += PAGE_SIZE;
-                        count = stream.Read(streamData, offset, PAGE_SIZE);
-                        totalCount += count;
-                    }
-
-                    stream = new MemoryStream(streamData);
-
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    try
-                    {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                        _bag = (Hashtable)formatter.Deserialize(stream);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-                    }
-                    catch (Exception e)
-                    {
-                        if (ClientUtils.IsCriticalException(e))
-                        {
-                            throw;
-                        }
-
-                        // Error reading.  Just init an empty hashtable.
-                        _bag = new Hashtable();
-                    }
-                }
-
-                HRESULT Oleaut32.IPropertyBag.Read(string pszPropName, out object? pVar, Oleaut32.IErrorLog? pErrorLog)
-                {
-                    if (!_bag.Contains(pszPropName))
-                    {
-                        pVar = null;
-                        return HRESULT.E_INVALIDARG;
-                    }
-
-                    pVar = _bag[pszPropName];
-                    return HRESULT.S_OK;
-                }
-
-                HRESULT Oleaut32.IPropertyBag.Write(string pszPropName, ref object pVar)
-                {
-                    _bag[pszPropName] = pVar;
-                    return HRESULT.S_OK;
-                }
-
-                internal void Write(Ole32.IStream istream)
-                {
-                    Stream stream = new DataStreamFromComStream(istream);
-                    BinaryFormatter formatter = new BinaryFormatter();
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    formatter.Serialize(stream, _bag);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-                }
             }
         }
     }
