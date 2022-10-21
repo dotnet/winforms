@@ -31,7 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 try
                 {
                     HRESULT hr = ispp.GetPages(&uuids);
-                    return !hr.Succeeded ? false : uuids.cElems > 0;
+                    return hr.Succeeded && uuids.cElems > 0;
                 }
                 finally
                 {
