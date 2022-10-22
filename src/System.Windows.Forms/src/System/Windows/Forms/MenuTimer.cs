@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -13,8 +11,8 @@ namespace System.Windows.Forms
         private readonly Timer autoMenuExpandTimer = new Timer();
 
         // consider - weak reference?
-        private ToolStripMenuItem currentItem;
-        private ToolStripMenuItem fromItem;
+        private ToolStripMenuItem? currentItem;
+        private ToolStripMenuItem? fromItem;
         private bool inTransition;
 
         private readonly int quickShow = 1;
@@ -32,7 +30,7 @@ namespace System.Windows.Forms
         }
 
         // the current item to autoexpand.
-        private ToolStripMenuItem CurrentItem
+        private ToolStripMenuItem? CurrentItem
         {
             get
             {
@@ -61,7 +59,7 @@ namespace System.Windows.Forms
             StartCore(item);
         }
 
-        private void StartCore(ToolStripMenuItem item)
+        private void StartCore(ToolStripMenuItem? item)
         {
             if (item != CurrentItem)
             {
@@ -115,7 +113,7 @@ namespace System.Windows.Forms
         /// <summary> cancels if and only if this item was the one that
         ///  requested the timer
         /// </summary>
-        public void Cancel(ToolStripMenuItem item)
+        public void Cancel(ToolStripMenuItem? item)
         {
             if (InTransition)
             {
@@ -136,7 +134,7 @@ namespace System.Windows.Forms
 
         private void EndTransition(bool forceClose)
         {
-            ToolStripMenuItem lastSelected = fromItem;
+            ToolStripMenuItem? lastSelected = fromItem;
             fromItem = null; // immediately clear BEFORE we call user code.
             if (InTransition)
             {
@@ -153,7 +151,7 @@ namespace System.Windows.Forms
 
         internal void HandleToolStripMouseLeave(ToolStrip toolStrip)
         {
-            if (InTransition && toolStrip == fromItem.ParentInternal)
+            if (InTransition && toolStrip == fromItem?.ParentInternal)
             {
                 // restore the selection back to CurrentItem.
                 // we're about to fall off the edge of the toolstrip, something should be selected
@@ -167,7 +165,9 @@ namespace System.Windows.Forms
                 // that onmouseleave we make sure there's a selected menu item.
                 if (toolStrip.IsDropDown && toolStrip.ActiveDropDowns.Count > 0)
                 {
-                    ToolStripMenuItem menuItem = (!(toolStrip.ActiveDropDowns[0] is ToolStripDropDown dropDown)) ? null : dropDown.OwnerItem as ToolStripMenuItem;
+                    ToolStripMenuItem? menuItem = (toolStrip.ActiveDropDowns[0] is not ToolStripDropDown dropDown)
+                        ? null
+                        : dropDown.OwnerItem as ToolStripMenuItem;
                     if (menuItem is not null && menuItem.Pressed)
                     {
                         menuItem.Select();
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnTick(object sender, EventArgs e)
+        private void OnTick(object? sender, EventArgs e)
         {
             autoMenuExpandTimer.Enabled = false;
 
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            EndTransition(/*forceClose*/false);
+            EndTransition(forceClose: false);
             if (CurrentItem is not null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
             {
                 Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[MenuTimer.OnTick] calling OnMenuAutoExpand");
