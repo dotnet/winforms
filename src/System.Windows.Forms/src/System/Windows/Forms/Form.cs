@@ -4284,7 +4284,7 @@ namespace System.Windows.Forms
 
                 if (!e.Cancel)
                 {
-                    ScaleContainerForDpi(e.DeviceDpiNew, e.SuggestedRectangle);
+                    ScaleContainerForDpi(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
                 }
             }
         }
@@ -4321,15 +4321,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual bool OnGetDpiScaledSize(int deviceDpiOld, int deviceDpiNew, ref Size desiredSize)
         {
-            float factor = ((float)deviceDpiNew) / deviceDpiOld;
-
             // Compute font for the current DPI and cache it. DPI specific fonts cache is available only in PermonitorV2 mode applications.
-            if (!TryGetDpiFont(deviceDpiNew, out Font? fontForDpi))
-            {
-                Font currentFont = Font;
-                fontForDpi = currentFont.WithSize(currentFont.Size * factor);
-                AddToDpiFonts(deviceDpiNew, fontForDpi);
-            }
+            Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
 
             // If AutoScaleMode=AutoScaleMode.Dpi then we continue with the linear size we get from Windows for the top-level window.
             if (AutoScaleMode == AutoScaleMode.Dpi)

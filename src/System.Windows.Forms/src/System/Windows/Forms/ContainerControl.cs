@@ -1435,7 +1435,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void ScaleContainerForDpi(int deviceDpiNew, Rectangle suggestedRectangle)
+        internal void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle)
         {
             CommonProperties.xClearAllPreferredSizeCaches(this);
             SuspendAllLayout(this);
@@ -1472,11 +1472,7 @@ namespace System.Windows.Forms
                 // this control further by the 'OnFontChanged' event.
                 _isScaledByDpiChangedEvent = true;
 
-                TryGetDpiFont(deviceDpiNew, out Font? fontForDpi);
-
-                // For test scenarios, if we send WM_DPICHANGED message but not WM_GETDPISCALEDSIZE message, fontForDpi may be null.
-                Debug.Assert(fontForDpi is not null, "Font should have been updated for DPI from WM_GETDPISCALEDSIZE message");
-
+                Font fontForDpi = GetScaledFont(Font, deviceDpiNew, deviceDpiOld);
                 ScaledControlFont = fontForDpi;
                 if (IsFontSet())
                 {
