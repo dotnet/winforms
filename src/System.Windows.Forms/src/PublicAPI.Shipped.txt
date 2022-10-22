@@ -546,10 +546,10 @@ override System.Windows.Forms.LinkLabel.Text.set -> void
 ~override System.Windows.Forms.ToolStripStatusLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStripStatusLabel.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
 ~override System.Windows.Forms.ToolStripStatusLabel.OnTextChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripTextBox.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ToolStripTextBox.BackgroundImage.set -> void
-~override System.Windows.Forms.ToolStripTextBox.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
-~override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
+override System.Windows.Forms.ToolStripTextBox.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripTextBox.BackgroundImage.set -> void
+override System.Windows.Forms.ToolStripTextBox.OnSubscribeControlEvents(System.Windows.Forms.Control? control) -> void
+override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control? control) -> void
 ~override System.Windows.Forms.ToolTip.ToString() -> string
 ~override System.Windows.Forms.TreeNode.ToString() -> string
 ~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
@@ -1544,16 +1544,16 @@ System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms
 ~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
 ~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
 ~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(System.Drawing.Image image) -> void
-~System.Windows.Forms.ToolStripTextBox.AppendText(string text) -> void
-~System.Windows.Forms.ToolStripTextBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection
-~System.Windows.Forms.ToolStripTextBox.AutoCompleteCustomSource.set -> void
-~System.Windows.Forms.ToolStripTextBox.Lines.get -> string[]
-~System.Windows.Forms.ToolStripTextBox.Lines.set -> void
-~System.Windows.Forms.ToolStripTextBox.SelectedText.get -> string
-~System.Windows.Forms.ToolStripTextBox.SelectedText.set -> void
-~System.Windows.Forms.ToolStripTextBox.TextBox.get -> System.Windows.Forms.TextBox
-~System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(string name) -> void
-~System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(System.Windows.Forms.Control c) -> void
+System.Windows.Forms.ToolStripTextBox.AppendText(string? text) -> void
+System.Windows.Forms.ToolStripTextBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection!
+System.Windows.Forms.ToolStripTextBox.AutoCompleteCustomSource.set -> void
+System.Windows.Forms.ToolStripTextBox.Lines.get -> string![]!
+System.Windows.Forms.ToolStripTextBox.Lines.set -> void
+System.Windows.Forms.ToolStripTextBox.SelectedText.get -> string!
+System.Windows.Forms.ToolStripTextBox.SelectedText.set -> void
+System.Windows.Forms.ToolStripTextBox.TextBox.get -> System.Windows.Forms.TextBox!
+System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(string? name) -> void
+System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(System.Windows.Forms.Control! c) -> void
 ~System.Windows.Forms.ToolTip.CanExtend(object target) -> bool
 ~System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control control) -> string
 ~System.Windows.Forms.ToolTip.Hide(System.Windows.Forms.IWin32Window win) -> void
@@ -2188,12 +2188,12 @@ virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLa
 ~virtual System.Windows.Forms.ToolStripSplitButton.OnButtonClick(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripSplitButton.OnButtonDoubleClick(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripSplitButton.OnDefaultItemChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripTextBox.OnAcceptsTabChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripTextBox.OnBorderStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripTextBox.OnHideSelectionChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripTextBox.OnModifiedChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripTextBox.OnMultilineChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripTextBox.OnReadOnlyChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripTextBox.OnAcceptsTabChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripTextBox.OnBorderStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripTextBox.OnHideSelectionChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripTextBox.OnModifiedChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripTextBox.OnMultilineChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripTextBox.OnReadOnlyChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolTip.CreateParams.get -> System.Windows.Forms.CreateParams
 ~virtual System.Windows.Forms.TreeNode.Clone() -> object
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
@@ -11650,14 +11650,14 @@ System.Windows.Forms.ToolStripTextBox.AcceptsReturn.get -> bool
 System.Windows.Forms.ToolStripTextBox.AcceptsReturn.set -> void
 System.Windows.Forms.ToolStripTextBox.AcceptsTab.get -> bool
 System.Windows.Forms.ToolStripTextBox.AcceptsTab.set -> void
-System.Windows.Forms.ToolStripTextBox.AcceptsTabChanged -> System.EventHandler
+System.Windows.Forms.ToolStripTextBox.AcceptsTabChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripTextBox.AutoCompleteMode.get -> System.Windows.Forms.AutoCompleteMode
 System.Windows.Forms.ToolStripTextBox.AutoCompleteMode.set -> void
 System.Windows.Forms.ToolStripTextBox.AutoCompleteSource.get -> System.Windows.Forms.AutoCompleteSource
 System.Windows.Forms.ToolStripTextBox.AutoCompleteSource.set -> void
 System.Windows.Forms.ToolStripTextBox.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.ToolStripTextBox.BorderStyle.set -> void
-System.Windows.Forms.ToolStripTextBox.BorderStyleChanged -> System.EventHandler
+System.Windows.Forms.ToolStripTextBox.BorderStyleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripTextBox.CanUndo.get -> bool
 System.Windows.Forms.ToolStripTextBox.CharacterCasing.get -> System.Windows.Forms.CharacterCasing
 System.Windows.Forms.ToolStripTextBox.CharacterCasing.set -> void
@@ -11674,19 +11674,19 @@ System.Windows.Forms.ToolStripTextBox.GetLineFromCharIndex(int index) -> int
 System.Windows.Forms.ToolStripTextBox.GetPositionFromCharIndex(int index) -> System.Drawing.Point
 System.Windows.Forms.ToolStripTextBox.HideSelection.get -> bool
 System.Windows.Forms.ToolStripTextBox.HideSelection.set -> void
-System.Windows.Forms.ToolStripTextBox.HideSelectionChanged -> System.EventHandler
+System.Windows.Forms.ToolStripTextBox.HideSelectionChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripTextBox.MaxLength.get -> int
 System.Windows.Forms.ToolStripTextBox.MaxLength.set -> void
 System.Windows.Forms.ToolStripTextBox.Modified.get -> bool
 System.Windows.Forms.ToolStripTextBox.Modified.set -> void
-System.Windows.Forms.ToolStripTextBox.ModifiedChanged -> System.EventHandler
+System.Windows.Forms.ToolStripTextBox.ModifiedChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripTextBox.Multiline.get -> bool
 System.Windows.Forms.ToolStripTextBox.Multiline.set -> void
-System.Windows.Forms.ToolStripTextBox.MultilineChanged -> System.EventHandler
+System.Windows.Forms.ToolStripTextBox.MultilineChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripTextBox.Paste() -> void
 System.Windows.Forms.ToolStripTextBox.ReadOnly.get -> bool
 System.Windows.Forms.ToolStripTextBox.ReadOnly.set -> void
-System.Windows.Forms.ToolStripTextBox.ReadOnlyChanged -> System.EventHandler
+System.Windows.Forms.ToolStripTextBox.ReadOnlyChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripTextBox.ScrollToCaret() -> void
 System.Windows.Forms.ToolStripTextBox.Select(int start, int length) -> void
 System.Windows.Forms.ToolStripTextBox.SelectAll() -> void
@@ -11698,7 +11698,7 @@ System.Windows.Forms.ToolStripTextBox.ShortcutsEnabled.get -> bool
 System.Windows.Forms.ToolStripTextBox.ShortcutsEnabled.set -> void
 System.Windows.Forms.ToolStripTextBox.TextBoxTextAlign.get -> System.Windows.Forms.HorizontalAlignment
 System.Windows.Forms.ToolStripTextBox.TextBoxTextAlign.set -> void
-System.Windows.Forms.ToolStripTextBox.TextBoxTextAlignChanged -> System.EventHandler
+System.Windows.Forms.ToolStripTextBox.TextBoxTextAlignChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripTextBox.TextLength.get -> int
 System.Windows.Forms.ToolStripTextBox.ToolStripTextBox() -> void
 System.Windows.Forms.ToolStripTextBox.Undo() -> void
