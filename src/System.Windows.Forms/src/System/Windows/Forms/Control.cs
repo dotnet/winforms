@@ -7909,7 +7909,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCreateControl()
         {
-            DefaultLayout.UpdateAnchorInfoV2(this);
         }
 
         /// <summary>
@@ -12205,6 +12204,7 @@ namespace System.Windows.Forms
             _parent?.UpdateChildZOrder(this);
 
             UpdateBounds();
+            DefaultLayout.UpdateAnchorInfoV2(this);
 
             // Let any interested sites know that we've now created a handle
             OnHandleCreated(EventArgs.Empty);

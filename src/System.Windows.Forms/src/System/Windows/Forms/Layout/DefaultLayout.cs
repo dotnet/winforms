@@ -373,7 +373,17 @@ namespace System.Windows.Forms.Layout
                     continue;
                 }
 
-                Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
+                if (!LocalAppContextSwitches.EnableAnchorLayoutV2 || element is not Control)
+                {
+                    Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
+                }
+                else
+                {
+                    // It is possible that element's parent handle might not have created when the element's
+                    // handle was created. This case handle those scenarios and compute anchors for the element.
+                    UpdateAnchorInfoV2(element);
+                }
+
                 SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, /*measureOnly=*/false));
             }
         }
