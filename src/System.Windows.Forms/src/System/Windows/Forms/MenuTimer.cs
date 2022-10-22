@@ -8,25 +8,25 @@ namespace System.Windows.Forms
 {
     internal class MenuTimer
     {
-        private readonly Timer autoMenuExpandTimer = new Timer();
+        private readonly Timer _autoMenuExpandTimer = new Timer();
 
         // consider - weak reference?
         private ToolStripMenuItem? currentItem;
-        private ToolStripMenuItem? fromItem;
-        private bool inTransition;
+        private ToolStripMenuItem? _fromItem;
+        private bool _inTransition;
 
-        private readonly int quickShow = 1;
+        private readonly int _quickShow = 1;
 
-        private readonly int slowShow;
+        private readonly int _slowShow;
 
         public MenuTimer()
         {
             // MenuShowDelay can be set to 0.  In this case, set to something low so it's imperceptible.
-            autoMenuExpandTimer.Tick += new EventHandler(OnTick);
+            _autoMenuExpandTimer.Tick += new EventHandler(OnTick);
 
             // since MenuShowDelay is registry tweakable we've gotta make sure we've got some sort
             // of interval
-            slowShow = Math.Max(quickShow, SystemInformation.MenuShowDelay);
+            _slowShow = Math.Max(_quickShow, SystemInformation.MenuShowDelay);
         }
 
         // the current item to autoexpand.
@@ -45,8 +45,8 @@ namespace System.Windows.Forms
 
         public bool InTransition
         {
-            get { return inTransition; }
-            set { inTransition = value; }
+            get { return _inTransition; }
+            set { _inTransition = value; }
         }
 
         public void Start(ToolStripMenuItem item)
@@ -70,8 +70,8 @@ namespace System.Windows.Forms
             if (item is not null)
             {
                 CurrentItem = item;
-                autoMenuExpandTimer.Interval = item.IsOnDropDown ? slowShow : quickShow;
-                autoMenuExpandTimer.Enabled = true;
+                _autoMenuExpandTimer.Interval = item.IsOnDropDown ? _slowShow : _quickShow;
+                _autoMenuExpandTimer.Enabled = true;
             }
         }
 
@@ -88,9 +88,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (this.fromItem != fromItem)
+            if (_fromItem != fromItem)
             {
-                this.fromItem = fromItem;
+                _fromItem = fromItem;
                 CancelCore();
                 StartCore(toItem);
             }
@@ -128,14 +128,14 @@ namespace System.Windows.Forms
 
         private void CancelCore()
         {
-            autoMenuExpandTimer.Enabled = false;
+            _autoMenuExpandTimer.Enabled = false;
             CurrentItem = null;
         }
 
         private void EndTransition(bool forceClose)
         {
-            ToolStripMenuItem? lastSelected = fromItem;
-            fromItem = null; // immediately clear BEFORE we call user code.
+            ToolStripMenuItem? lastSelected = _fromItem;
+            _fromItem = null; // immediately clear BEFORE we call user code.
             if (InTransition)
             {
                 InTransition = false;
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
 
         internal void HandleToolStripMouseLeave(ToolStrip toolStrip)
         {
-            if (InTransition && toolStrip == fromItem?.ParentInternal)
+            if (InTransition && toolStrip == _fromItem?.ParentInternal)
             {
                 // restore the selection back to CurrentItem.
                 // we're about to fall off the edge of the toolstrip, something should be selected
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
 
         private void OnTick(object? sender, EventArgs e)
         {
-            autoMenuExpandTimer.Enabled = false;
+            _autoMenuExpandTimer.Enabled = false;
 
             if (CurrentItem is null)
             {
