@@ -377,7 +377,7 @@ namespace System.Windows.Forms.Layout
                 {
                     Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
                 }
-                else
+                else if (GetAnchorInfo(element) is null)
                 {
                     // It is possible that element's parent handle might not have created when the element's
                     // handle was created. This case handle those scenarios and compute anchors for the element.
