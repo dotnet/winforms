@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionMenuStrip))]
     public partial class MenuStrip : ToolStrip
     {
-        private ToolStripMenuItem? mdiWindowListItem;
+        private ToolStripMenuItem? _mdiWindowListItem;
 
         private static readonly object EventMenuActivate = new object();
         private static readonly object EventMenuDeactivate = new object();
@@ -138,8 +138,8 @@ namespace System.Windows.Forms
         [TypeConverter(typeof(MdiWindowListItemConverter))]
         public ToolStripMenuItem? MdiWindowListItem
         {
-            get => mdiWindowListItem;
-            set => mdiWindowListItem = value;
+            get => _mdiWindowListItem;
+            set => _mdiWindowListItem = value;
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
