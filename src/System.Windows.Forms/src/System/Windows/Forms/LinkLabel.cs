@@ -1195,7 +1195,7 @@ namespace System.Windows.Forms
                             {
                                 //exclude the area to draw the focus rectangle
                                 g.Clip = originalClip;
-                                RectangleF[] rects = _links[0].VisualRegion.GetRegionScans(e.GraphicsInternal.Transform);
+                                RectangleF[]? rects = _links[0].VisualRegion?.GetRegionScans(e.GraphicsInternal.Transform);
                                 if (rects is not null && rects.Length > 0)
                                 {
                                     if (UseCompatibleTextRendering)

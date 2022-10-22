@@ -33,11 +33,10 @@ namespace System.Windows.Forms
                             return Rectangle.Empty;
                         }
 
-                        Region region = _owningLink.VisualRegion;
-                        using Graphics graphics = Graphics.FromHwnd(_owningLink.Owner.Handle);
+                        Region? region = _owningLink.VisualRegion;
+                        using Graphics graphics = Graphics.FromHwnd(_owningLink.Owner?.Handle ?? IntPtr.Zero);
 
                         // Make sure we have a region for this link
-                        //
                         if (region is null)
                         {
                             _owningLinkLabel.EnsureRun(graphics);
@@ -52,7 +51,6 @@ namespace System.Windows.Forms
                         rect = Rectangle.Ceiling(region.GetBounds(graphics));
 
                         // Translate rect to screen coordinates
-                        //
                         return _owningLinkLabel.RectangleToScreen(rect);
                     }
                 }
@@ -61,7 +59,7 @@ namespace System.Windows.Forms
 
                 public override string DefaultAction => SR.AccessibleActionClick;
 
-                public override string Description => _owningLink.Description;
+                public override string? Description => _owningLink.Description;
 
                 public override void DoDefaultAction()
                 {
