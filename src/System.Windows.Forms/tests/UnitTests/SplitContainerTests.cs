@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
         [ActiveIssue("https://github.com/dotnet/winforms/issues/7579")]
         [WinFormsTheory(Skip = "Lab machines seems not setting thread's Dpi context. See https://github.com/dotnet/winforms/issues/7579")]
         [InlineData(3.5 * DpiHelper.LogicalDpi)]
-        public void SplitContainer_Properties_Scaling(int newDpi)
+        public void SplitContainer_Properties_HorizontalSplitter_Scaling(int newDpi)
         {
             // Run tests only on Windows 10 versions that support thread dpi awareness.
             if (!PlatformDetection.IsWindows10Version1803OrGreater)
@@ -35,17 +35,20 @@ namespace System.Windows.Forms.Tests
             }
 
             using var form = new Form();
-            using var splitContainer = new SplitContainer();
+            using var splitContainer = new()
+            {
+                FixedPanel = FixedPanel.Panel1,
+                Location = new Drawing.Point(0, 0),
+                Margin = new Padding(0),
+                Name = "splitContainer2",
+                Orientation = Orientation.Horizontal,
+                Size = new Drawing.Size(812, 619),
+                SplitterDistance = 90,
+                SplitterWidth = 2
+            };
 
-            splitContainer.FixedPanel = FixedPanel.Panel1;
-            splitContainer.Location = new Drawing.Point(0, 0);
-            splitContainer.Margin = new Padding(0);
-            splitContainer.Name = "splitContainer2";
-            splitContainer.Orientation = Orientation.Horizontal;
-            splitContainer.Size = new Drawing.Size(812, 619);
-            splitContainer.SplitterDistance = 90;
-            splitContainer.SplitterWidth = 2;
             form.AutoScaleMode = AutoScaleMode.Dpi;
+            form.Controls.Add(splitContainer);
             form.Show();
 
             DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
