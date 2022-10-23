@@ -497,11 +497,11 @@ override System.Windows.Forms.LinkLabel.Text.set -> void
 ~override System.Windows.Forms.ToolStripDropDownMenu.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 ~override System.Windows.Forms.ToolStripDropDownMenu.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
 ~override System.Windows.Forms.ToolStripItem.ToString() -> string
-~override System.Windows.Forms.ToolStripLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripLabel.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripLabel.OnMouseEnter(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripLabel.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripLabel.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
+override System.Windows.Forms.ToolStripLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripLabel.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripLabel.OnMouseEnter(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripLabel.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripLabel.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
 ~override System.Windows.Forms.ToolStripMenuItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStripMenuItem.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown
 ~override System.Windows.Forms.ToolStripMenuItem.OnClick(System.EventArgs e) -> void
@@ -1494,12 +1494,12 @@ System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms
 ~System.Windows.Forms.ToolStripItemCollection.Insert(int index, System.Windows.Forms.ToolStripItem value) -> void
 ~System.Windows.Forms.ToolStripItemCollection.Remove(System.Windows.Forms.ToolStripItem value) -> void
 ~System.Windows.Forms.ToolStripItemCollection.ToolStripItemCollection(System.Windows.Forms.ToolStrip owner, System.Windows.Forms.ToolStripItem[] value) -> void
-~System.Windows.Forms.ToolStripLabel.ToolStripLabel(string text) -> void
-~System.Windows.Forms.ToolStripLabel.ToolStripLabel(string text, System.Drawing.Image image) -> void
-~System.Windows.Forms.ToolStripLabel.ToolStripLabel(string text, System.Drawing.Image image, bool isLink) -> void
-~System.Windows.Forms.ToolStripLabel.ToolStripLabel(string text, System.Drawing.Image image, bool isLink, System.EventHandler onClick) -> void
-~System.Windows.Forms.ToolStripLabel.ToolStripLabel(string text, System.Drawing.Image image, bool isLink, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripLabel.ToolStripLabel(System.Drawing.Image image) -> void
+System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text) -> void
+System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text, System.Drawing.Image? image) -> void
+System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text, System.Drawing.Image? image, bool isLink) -> void
+System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text, System.Drawing.Image? image, bool isLink, System.EventHandler? onClick) -> void
+System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text, System.Drawing.Image? image, bool isLink, System.EventHandler? onClick, string? name) -> void
+System.Windows.Forms.ToolStripLabel.ToolStripLabel(System.Drawing.Image? image) -> void
 ~System.Windows.Forms.ToolStripMenuItem.ShortcutKeyDisplayString.get -> string
 ~System.Windows.Forms.ToolStripMenuItem.ShortcutKeyDisplayString.set -> void
 ~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text) -> void

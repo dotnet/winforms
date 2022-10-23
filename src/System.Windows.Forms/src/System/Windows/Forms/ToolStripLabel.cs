@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
@@ -23,8 +21,9 @@ namespace System.Windows.Forms
         private Color _linkColor = Color.Empty;
         private Color _activeLinkColor = Color.Empty;
         private Color _visitedLinkColor = Color.Empty;
-        private Font _hoverLinkFont, _linkFont;
-        private Cursor _lastCursor;
+        private Font? _hoverLinkFont;
+        private Font? _linkFont;
+        private Cursor? _lastCursor;
 
         /// <summary>
         ///  A non selectable ToolStrip item
@@ -33,27 +32,33 @@ namespace System.Windows.Forms
         {
         }
 
-        public ToolStripLabel(string text) : base(text, null, null)
+        public ToolStripLabel(string? text)
+            : base(text, image: null, onClick: null)
         {
         }
 
-        public ToolStripLabel(Image image) : base(null, image, null)
+        public ToolStripLabel(Image? image)
+            : base(text: null, image, onClick: null)
         {
         }
 
-        public ToolStripLabel(string text, Image image) : base(text, image, null)
+        public ToolStripLabel(string? text, Image? image)
+            : base(text, image, onClick: null)
         {
         }
 
-        public ToolStripLabel(string text, Image image, bool isLink) : this(text, image, isLink, null)
+        public ToolStripLabel(string? text, Image? image, bool isLink)
+            : this(text, image, isLink, onClick: null)
         {
         }
 
-        public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick) : this(text, image, isLink, onClick, null)
+        public ToolStripLabel(string? text, Image? image, bool isLink, EventHandler? onClick)
+            : this(text, image, isLink, onClick, name: null)
         {
         }
 
-        public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick, string name) : base(text, image, onClick, name)
+        public ToolStripLabel(string? text, Image? image, bool isLink, EventHandler? onClick, string? name)
+            : base(text, image, onClick, name)
         {
             IsLink = isLink;
         }
