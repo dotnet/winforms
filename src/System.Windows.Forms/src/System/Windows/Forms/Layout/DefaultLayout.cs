@@ -164,8 +164,8 @@ namespace System.Windows.Forms.Layout
             }
 
             return LocalAppContextSwitches.EnableAnchorLayoutV2
-                ? ComputeAnchorDestination(element, displayRect)
-                : ComputeLegacyAnchorDestination(element, displayRect, measureOnly);
+                ? ComputeAnchoredBoundsV2(element, displayRect)
+                : ComputeAnchoredBounds(element, displayRect, measureOnly);
         }
 
         private static Rectangle ComputeAnchoredBoundsV2(IArrangedElement element, Rectangle displayRect)
