@@ -381,8 +381,8 @@ namespace System.Windows.Forms.Layout
                 }
                 else if (GetAnchorInfo(element) is null)
                 {
-                    // It is possible that element's parent handle might not have created when the element's
-                    // handle was created. This case handle those scenarios and compute anchors for the element.
+                    // It is possible that the parent's handle might not have been created when the element's
+                    // handle was created. If that's the case, compute the element's anchors.
                     UpdateAnchorInfoV2(element);
                 }
 
@@ -391,8 +391,7 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        /// Checks if element is ready to compute anchors by checking if this element and its parents
-        /// handle are created to make sure bounds are applied with current DPI.
+        ///  Inidcates that the element is ready to compute its anchors.
         /// </summary>
         private static bool IsElementReadyForComputingAnchors(IArrangedElement element)
             => !LocalAppContextSwitches.EnableAnchorLayoutV2 || element is not Control control || control.IsHandleCreated;
@@ -715,13 +714,12 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        ///  Updates the element's anchors information based on element's current bounds.
+        ///  Updates the element's anchors information based on the element's current bounds.
         /// </summary>
         private static void UpdateAnchorInfo(IArrangedElement element)
         {
             Debug.Assert(!HasCachedBounds(element.Container), "Do not call this method with an active cached bounds list.");
 
-            // Skip when element is not anchored or EnableAnchorLayoutV2 switch is enabled.
             if (!CommonProperties.GetNeedsAnchorLayout(element))
             {
                 return;
@@ -751,7 +749,7 @@ namespace System.Windows.Forms.Layout
             }
 
             Rectangle bounds = GetCachedBounds(element);
-            AnchorInfo oldAnchorInfo = new AnchorInfo
+            AnchorInfo oldAnchorInfo = new()
             {
                 Left = anchorInfo.Left,
                 Top = anchorInfo.Top,
