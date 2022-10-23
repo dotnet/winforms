@@ -33,27 +33,27 @@ namespace System.Windows.Forms
         }
 
         public ToolStripLabel(string? text)
-            : base(text, null, null)
+            : base(text, image: null, onClick: null)
         {
         }
 
         public ToolStripLabel(Image? image)
-            : base(null, image, null)
+            : base(text: null, image, onClick: null)
         {
         }
 
         public ToolStripLabel(string? text, Image? image)
-            : base(text, image, null)
+            : base(text, image, onClick: null)
         {
         }
 
         public ToolStripLabel(string? text, Image? image, bool isLink)
-            : this(text, image, isLink, null)
+            : this(text, image, isLink, onClick: null)
         {
         }
 
         public ToolStripLabel(string? text, Image? image, bool isLink, EventHandler? onClick)
-            : this(text, image, isLink, onClick, null)
+            : this(text, image, isLink, onClick, name: null)
         {
         }
 
