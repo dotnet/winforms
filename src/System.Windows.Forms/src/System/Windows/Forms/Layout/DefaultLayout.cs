@@ -168,7 +168,7 @@ namespace System.Windows.Forms.Layout
                 : ComputeLegacyAnchorDestination(element, displayRect, measureOnly);
         }
 
-        private static Rectangle ComputeAnchorDestination(IArrangedElement element, Rectangle displayRect)
+        private static Rectangle ComputeAnchoredBoundsV2(IArrangedElement element, Rectangle displayRect)
         {
             var anchorInfo = GetAnchorInfo(element);
 
@@ -189,8 +189,8 @@ namespace System.Windows.Forms.Layout
             AnchorStyles anchor = GetAnchor(element);
             if (IsAnchored(anchor, AnchorStyles.Left))
             {
-                // If anchored both left and right, element's width will be forced to update according to
-                // parent's DisplayRect.
+                // If anchored both Left and Right, the element's width will be forced to update according to
+                // the parent's DisplayRect.
                 if (IsAnchored(anchor, AnchorStyles.Right))
                 {
                     width = displayRect.Width - (anchorInfo.Right + x);
@@ -198,10 +198,11 @@ namespace System.Windows.Forms.Layout
             }
             else
             {
-                // If anchored Right but not Left, element's X- co-ordinate should be updated according to parent's DisplayRect.
+                // If anchored Right but not Left, the element's X-coordinate should be updated according to the parent's DisplayRect.
                 x = IsAnchored(anchor, AnchorStyles.Right)
                     ? displayRect.Width - elementBounds.Width - anchorInfo.Right
-                    // Element neither anchored Right or Left but anchored Top or Bottom,  elements X-coordinate is adjusted relative to parent's DisplayRect change.
+                    // The element neither anchored Right or Left but anchored Top or Bottom, the element's X-coordinate
+                    // is adjusted relative to the parent's DisplayRect.
                     : (int)(anchorInfo.Left * (((float)displayRect.Width - elementBounds.Width) / (anchorInfo.Left + anchorInfo.Right)));
             }
 
@@ -209,20 +210,21 @@ namespace System.Windows.Forms.Layout
             {
                 if (IsAnchored(anchor, AnchorStyles.Bottom))
                 {
-                    // If anchored both Top and Bottom, element's height will be forced to update according to parent's DisplayRect.
+                    // If anchored both Top and Bottom, the element's height will be forced to update according to the parent's DisplayRect.
                     height = displayRect.Height - (anchorInfo.Bottom + y);
                 }
             }
             else
             {
-                // If anchored Bottom but not Top, element's Y- co-ordinate should be updated according to parent's DisplayRect.
+                // If anchored Bottom but not Top, the element's Y-coordinate will be updated according to the parent's DisplayRect.
                 y = IsAnchored(anchor, AnchorStyles.Bottom)
                     ? displayRect.Height - elementBounds.Height - anchorInfo.Bottom
-                    // Element neither anchored Top or Bottom but anchored Right or left,  elements X-coordinate is adjusted relative to parent's DisplayRect change.
+                    // The element neither anchored Top or Bottom but anchored Right or Left, the element's X-coordinate
+                    // is adjusted relative to the parent's DisplayRect.
                     : (int)(anchorInfo.Top * (((float)displayRect.Height - elementBounds.Height) / (anchorInfo.Top + anchorInfo.Bottom)));
             }
 
-            // We clip the element but does not position element at negative location with respect to parents DisplayRect.
+            // Clip the element but don't position it at a negative location with respect to the parent's DisplayRect.
             if (x < 0)
             {
                 x = 0;
@@ -236,7 +238,7 @@ namespace System.Windows.Forms.Layout
             return new Rectangle(x, y, width, height);
         }
 
-        private static Rectangle ComputeLegacyAnchorDestination(IArrangedElement element, Rectangle displayRect, bool measureOnly)
+        private static Rectangle ComputeAnchoredBounds(IArrangedElement element, Rectangle displayRect, bool measureOnly)
         {
             AnchorInfo layout = GetAnchorInfo(element);
 

@@ -10589,8 +10589,8 @@ namespace System.Windows.Forms
             if (DpiHelper.IsScalingRequirementMet
                 && ParentInternal is not null
                 && (ParentInternal.LayoutEngine == DefaultLayout.Instance)
-                // In V2(.NET 8.0 and beyond) version, anchors are updated/computed after the controls bounds changed
-                // and doesn't need to be scaled.
+                // In the v2 layout, anchors are updated/computed after the controls bounds changed
+                // and, thus, don't need scaling.
                 && !LocalAppContextSwitches.EnableAnchorLayoutV2)
             {
                 // We need to scale AnchorInfo to update distances to container edges
