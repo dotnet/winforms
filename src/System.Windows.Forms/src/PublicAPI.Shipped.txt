@@ -325,8 +325,8 @@ override System.Windows.Forms.LinkLabel.Text.set -> void
 ~override System.Windows.Forms.ListViewItem.ToString() -> string
 ~override System.Windows.Forms.MdiClient.ControlCollection.Add(System.Windows.Forms.Control value) -> void
 ~override System.Windows.Forms.MdiClient.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
-~override System.Windows.Forms.MenuStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.MenuStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
+override System.Windows.Forms.MenuStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.MenuStrip.CreateDefaultItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
 ~override System.Windows.Forms.MonthCalendar.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.MonthCalendar.BackgroundImage.set -> void
 ~override System.Windows.Forms.MonthCalendar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -1291,8 +1291,8 @@ System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms
 ~System.Windows.Forms.ListViewItem.ToolTipText.get -> string
 ~System.Windows.Forms.ListViewItem.ToolTipText.set -> void
 ~System.Windows.Forms.MdiClient.ControlCollection.ControlCollection(System.Windows.Forms.MdiClient owner) -> void
-~System.Windows.Forms.MenuStrip.MdiWindowListItem.get -> System.Windows.Forms.ToolStripMenuItem
-~System.Windows.Forms.MenuStrip.MdiWindowListItem.set -> void
+System.Windows.Forms.MenuStrip.MdiWindowListItem.get -> System.Windows.Forms.ToolStripMenuItem?
+System.Windows.Forms.MenuStrip.MdiWindowListItem.set -> void
 ~System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.get -> System.DateTime[]
 ~System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.set -> void
 ~System.Windows.Forms.MonthCalendar.BoldedDates.get -> System.DateTime[]
@@ -2047,8 +2047,8 @@ virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLa
 ~virtual System.Windows.Forms.ListViewItem.Clone() -> object
 ~virtual System.Windows.Forms.ListViewItem.Deserialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.ListViewItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-~virtual System.Windows.Forms.MenuStrip.OnMenuActivate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.MenuStrip.OnMenuDeactivate(System.EventArgs e) -> void
+virtual System.Windows.Forms.MenuStrip.OnMenuActivate(System.EventArgs! e) -> void
+virtual System.Windows.Forms.MenuStrip.OnMenuDeactivate(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.MonthCalendar.OnDateChanged(System.Windows.Forms.DateRangeEventArgs drevent) -> void
 ~virtual System.Windows.Forms.MonthCalendar.OnDateSelected(System.Windows.Forms.DateRangeEventArgs drevent) -> void
 ~virtual System.Windows.Forms.MonthCalendar.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
@@ -9021,8 +9021,8 @@ System.Windows.Forms.MenuStrip.CanOverflow.get -> bool
 System.Windows.Forms.MenuStrip.CanOverflow.set -> void
 System.Windows.Forms.MenuStrip.GripStyle.get -> System.Windows.Forms.ToolStripGripStyle
 System.Windows.Forms.MenuStrip.GripStyle.set -> void
-System.Windows.Forms.MenuStrip.MenuActivate -> System.EventHandler
-System.Windows.Forms.MenuStrip.MenuDeactivate -> System.EventHandler
+System.Windows.Forms.MenuStrip.MenuActivate -> System.EventHandler?
+System.Windows.Forms.MenuStrip.MenuDeactivate -> System.EventHandler?
 System.Windows.Forms.MenuStrip.MenuStrip() -> void
 System.Windows.Forms.MenuStrip.ShowItemToolTips.get -> bool
 System.Windows.Forms.MenuStrip.ShowItemToolTips.set -> void

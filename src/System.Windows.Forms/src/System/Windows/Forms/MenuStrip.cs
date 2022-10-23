@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -14,7 +12,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionMenuStrip))]
     public partial class MenuStrip : ToolStrip
     {
-        private ToolStripMenuItem mdiWindowListItem;
+        private ToolStripMenuItem? _mdiWindowListItem;
 
         private static readonly object EventMenuActivate = new object();
         private static readonly object EventMenuDeactivate = new object();
@@ -101,7 +99,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MenuStripMenuActivateDescr))]
-        public event EventHandler MenuActivate
+        public event EventHandler? MenuActivate
         {
             add => Events.AddHandler(EventMenuActivate, value);
             remove => Events.RemoveHandler(EventMenuActivate, value);
@@ -109,7 +107,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MenuStripMenuDeactivateDescr))]
-        public event EventHandler MenuDeactivate
+        public event EventHandler? MenuDeactivate
         {
             add => Events.AddHandler(EventMenuDeactivate, value);
             remove => Events.RemoveHandler(EventMenuDeactivate, value);
@@ -138,16 +136,16 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.MenuStripMdiWindowListItem))]
         [SRCategory(nameof(SR.CatBehavior))]
         [TypeConverter(typeof(MdiWindowListItemConverter))]
-        public ToolStripMenuItem MdiWindowListItem
+        public ToolStripMenuItem? MdiWindowListItem
         {
-            get => mdiWindowListItem;
-            set => mdiWindowListItem = value;
+            get => _mdiWindowListItem;
+            set => _mdiWindowListItem = value;
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
             => new MenuStripAccessibleObject(this);
 
-        protected internal override ToolStripItem CreateDefaultItem(string text, Image image, EventHandler onClick)
+        protected internal override ToolStripItem CreateDefaultItem(string? text, Image? image, EventHandler? onClick)
         {
             if (text == "-")
             {
@@ -177,7 +175,7 @@ namespace System.Windows.Forms
                 AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, -1);
             }
 
-            ((EventHandler)Events[EventMenuActivate])?.Invoke(this, e);
+            ((EventHandler?)Events[EventMenuActivate])?.Invoke(this, e);
         }
 
         protected virtual void OnMenuDeactivate(EventArgs e)
@@ -187,7 +185,7 @@ namespace System.Windows.Forms
                 AccessibilityNotifyClients(AccessibleEvents.SystemMenuEnd, -1);
             }
 
-            ((EventHandler)Events[EventMenuDeactivate])?.Invoke(this, e);
+            ((EventHandler?)Events[EventMenuDeactivate])?.Invoke(this, e);
         }
 
         /// <summary>
