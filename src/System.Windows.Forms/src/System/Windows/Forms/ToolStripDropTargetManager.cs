@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal class ToolStripDropTargetManager : IDropTarget
     {
-        private IDropTarget lastDropTarget;
+        private IDropTarget? lastDropTarget;
         private readonly ToolStrip owner;
 
 #if DEBUG
@@ -85,7 +83,7 @@ namespace System.Windows.Forms
 
             // If we are supporting Item Reordering
             // and this is a ToolStripItem - snitch it.
-            if (owner.AllowItemReorder && e.Data.GetDataPresent(typeof(ToolStripItem)))
+            if (owner.AllowItemReorder && e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ItemReorderTarget taking this...");
                 lastDropTarget = owner.ItemReorderDropTarget;
@@ -137,11 +135,11 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG OVER] ==============");
 
-            IDropTarget newDropTarget = null;
+            IDropTarget? newDropTarget = null;
 
             // If we are supporting Item Reordering
             // and this is a ToolStripItem - snitch it.
-            if (owner.AllowItemReorder && e.Data.GetDataPresent(typeof(ToolStripItem)))
+            if (owner.AllowItemReorder && e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ItemReorderTarget taking this...");
                 newDropTarget = owner.ItemReorderDropTarget;
@@ -245,7 +243,7 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{n}");
                     if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                     {
-                        throw Marshal.GetExceptionForHR((int)n);
+                        throw Marshal.GetExceptionForHR((int)n)!;
                     }
                 }
                 catch (Exception e)
@@ -259,7 +257,7 @@ namespace System.Windows.Forms
         ///  If we have a new active item, fire drag leave and enter. This corresponds to the case
         ///  where you are dragging between items and haven't actually left the ToolStrip's client area.
         /// </summary>
-        private void UpdateDropTarget(IDropTarget newTarget, DragEventArgs e)
+        private void UpdateDropTarget(IDropTarget? newTarget, DragEventArgs e)
         {
             if (newTarget != lastDropTarget)
             {

@@ -7203,7 +7203,7 @@ System.Windows.Forms.DragEventArgs
 System.Windows.Forms.DragEventArgs.AllowedEffect.get -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.DragEventArgs.Data.get -> System.Windows.Forms.IDataObject?
 System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect) -> void
-System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect, System.Windows.Forms.DropImageType dropImageType, string! message, string! messageReplacementToken) -> void
+System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect, System.Windows.Forms.DropImageType dropImageType, string? message, string? messageReplacementToken) -> void
 System.Windows.Forms.DragEventArgs.DropImageType.get -> System.Windows.Forms.DropImageType
 System.Windows.Forms.DragEventArgs.DropImageType.set -> void
 System.Windows.Forms.DragEventArgs.Effect.get -> System.Windows.Forms.DragDropEffects
