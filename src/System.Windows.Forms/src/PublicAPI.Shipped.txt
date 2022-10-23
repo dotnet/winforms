@@ -448,9 +448,9 @@ override System.Windows.Forms.LinkLabel.Text.set -> void
 ~override System.Windows.Forms.ToolStrip.OnTabStopChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStrip.OnVisibleChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStrip.ToString() -> string
-~override System.Windows.Forms.ToolStripButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripButton.OnClick(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripButton.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
+override System.Windows.Forms.ToolStripButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripButton.OnClick(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripButton.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
 ~override System.Windows.Forms.ToolStripComboBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripComboBox.BackgroundImage.set -> void
 ~override System.Windows.Forms.ToolStripComboBox.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
@@ -1407,11 +1407,11 @@ System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms
 ~System.Windows.Forms.ToolStrip.SetItemLocation(System.Windows.Forms.ToolStripItem item, System.Drawing.Point location) -> void
 ~System.Windows.Forms.ToolStrip.ToolStrip(params System.Windows.Forms.ToolStripItem[] items) -> void
 ~System.Windows.Forms.ToolStrip.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
-~System.Windows.Forms.ToolStripButton.ToolStripButton(string text) -> void
-~System.Windows.Forms.ToolStripButton.ToolStripButton(string text, System.Drawing.Image image) -> void
-~System.Windows.Forms.ToolStripButton.ToolStripButton(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
-~System.Windows.Forms.ToolStripButton.ToolStripButton(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripButton.ToolStripButton(System.Drawing.Image image) -> void
+System.Windows.Forms.ToolStripButton.ToolStripButton(string? text) -> void
+System.Windows.Forms.ToolStripButton.ToolStripButton(string? text, System.Drawing.Image? image) -> void
+System.Windows.Forms.ToolStripButton.ToolStripButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
+System.Windows.Forms.ToolStripButton.ToolStripButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
+System.Windows.Forms.ToolStripButton.ToolStripButton(System.Drawing.Image? image) -> void
 ~System.Windows.Forms.ToolStripComboBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection
 ~System.Windows.Forms.ToolStripComboBox.AutoCompleteCustomSource.set -> void
 ~System.Windows.Forms.ToolStripComboBox.ComboBox.get -> System.Windows.Forms.ComboBox
@@ -2097,8 +2097,8 @@ virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLa
 ~virtual System.Windows.Forms.ToolStrip.OnLayoutStyleChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStrip.OnPaintGrip(System.Windows.Forms.PaintEventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStrip.OnRendererChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripButton.OnCheckedChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripButton.OnCheckStateChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripButton.OnCheckedChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripButton.OnCheckStateChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripComboBox.OnDropDown(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripComboBox.OnDropDownClosed(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripComboBox.OnDropDownStyleChanged(System.EventArgs e) -> void
@@ -10968,12 +10968,12 @@ System.Windows.Forms.ToolStripButton.AutoToolTip.get -> bool
 System.Windows.Forms.ToolStripButton.AutoToolTip.set -> void
 System.Windows.Forms.ToolStripButton.Checked.get -> bool
 System.Windows.Forms.ToolStripButton.Checked.set -> void
-System.Windows.Forms.ToolStripButton.CheckedChanged -> System.EventHandler
+System.Windows.Forms.ToolStripButton.CheckedChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripButton.CheckOnClick.get -> bool
 System.Windows.Forms.ToolStripButton.CheckOnClick.set -> void
 System.Windows.Forms.ToolStripButton.CheckState.get -> System.Windows.Forms.CheckState
 System.Windows.Forms.ToolStripButton.CheckState.set -> void
-System.Windows.Forms.ToolStripButton.CheckStateChanged -> System.EventHandler
+System.Windows.Forms.ToolStripButton.CheckStateChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripButton.ToolStripButton() -> void
 System.Windows.Forms.ToolStripComboBox
 System.Windows.Forms.ToolStripComboBox.AutoCompleteMode.get -> System.Windows.Forms.AutoCompleteMode
