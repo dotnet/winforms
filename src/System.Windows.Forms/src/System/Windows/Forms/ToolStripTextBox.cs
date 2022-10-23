@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         public ToolStripTextBox()
             : base(CreateControlInstance())
         {
-            ToolStripTextBoxControl textBox = (Control as ToolStripTextBoxControl)!;
+            ToolStripTextBoxControl textBox = (ToolStripTextBoxControl)Control;
             textBox.Owner = this;
 
             if (DpiHelper.IsScalingRequirementMet)
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Control as TextBox)!;
+                return (TextBox)Control;
             }
         }
 
