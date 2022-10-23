@@ -519,12 +519,12 @@ override System.Windows.Forms.LinkLabel.Text.set -> void
 ~override System.Windows.Forms.ToolStripOverflow.Items.get -> System.Windows.Forms.ToolStripItemCollection
 ~override System.Windows.Forms.ToolStripOverflow.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 ~override System.Windows.Forms.ToolStripOverflow.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ToolStripProgressBar.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ToolStripProgressBar.BackgroundImage.set -> void
-~override System.Windows.Forms.ToolStripProgressBar.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
-~override System.Windows.Forms.ToolStripProgressBar.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
-~override System.Windows.Forms.ToolStripProgressBar.Text.get -> string
-~override System.Windows.Forms.ToolStripProgressBar.Text.set -> void
+override System.Windows.Forms.ToolStripProgressBar.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripProgressBar.BackgroundImage.set -> void
+override System.Windows.Forms.ToolStripProgressBar.OnSubscribeControlEvents(System.Windows.Forms.Control? control) -> void
+override System.Windows.Forms.ToolStripProgressBar.OnUnsubscribeControlEvents(System.Windows.Forms.Control? control) -> void
+override System.Windows.Forms.ToolStripProgressBar.Text.get -> string!
+override System.Windows.Forms.ToolStripProgressBar.Text.set -> void
 ~override System.Windows.Forms.ToolStripSeparator.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripSeparator.BackgroundImage.set -> void
 ~override System.Windows.Forms.ToolStripSeparator.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -1525,8 +1525,8 @@ System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms
 ~System.Windows.Forms.ToolStripPanelRow.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 ~System.Windows.Forms.ToolStripPanelRow.ToolStripPanel.get -> System.Windows.Forms.ToolStripPanel
 ~System.Windows.Forms.ToolStripPanelRow.ToolStripPanelRow(System.Windows.Forms.ToolStripPanel parent) -> void
-~System.Windows.Forms.ToolStripProgressBar.ProgressBar.get -> System.Windows.Forms.ProgressBar
-~System.Windows.Forms.ToolStripProgressBar.ToolStripProgressBar(string name) -> void
+System.Windows.Forms.ToolStripProgressBar.ProgressBar.get -> System.Windows.Forms.ProgressBar!
+System.Windows.Forms.ToolStripProgressBar.ToolStripProgressBar(string? name) -> void
 ~System.Windows.Forms.ToolStripSeparator.ImageKey.get -> string
 ~System.Windows.Forms.ToolStripSeparator.ImageKey.set -> void
 ~System.Windows.Forms.ToolStripSeparator.ToolTipText.get -> string
@@ -2184,7 +2184,7 @@ virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLa
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlAdded(System.Windows.Forms.Control control, int index) -> void
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlRemoved(System.Windows.Forms.Control control, int index) -> void
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripProgressBar.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripProgressBar.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripSplitButton.OnButtonClick(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripSplitButton.OnButtonDoubleClick(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripSplitButton.OnDefaultItemChanged(System.EventArgs e) -> void
@@ -11497,27 +11497,27 @@ System.Windows.Forms.ToolStripProfessionalRenderer.ToolStripProfessionalRenderer
 System.Windows.Forms.ToolStripProfessionalRenderer.ToolStripProfessionalRenderer(System.Windows.Forms.ProfessionalColorTable! professionalColorTable) -> void
 System.Windows.Forms.ToolStripProgressBar
 System.Windows.Forms.ToolStripProgressBar.Increment(int value) -> void
-System.Windows.Forms.ToolStripProgressBar.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.ToolStripProgressBar.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.ToolStripProgressBar.KeyUp -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.ToolStripProgressBar.LocationChanged -> System.EventHandler
+System.Windows.Forms.ToolStripProgressBar.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.ToolStripProgressBar.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.ToolStripProgressBar.KeyUp -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.ToolStripProgressBar.LocationChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripProgressBar.MarqueeAnimationSpeed.get -> int
 System.Windows.Forms.ToolStripProgressBar.MarqueeAnimationSpeed.set -> void
 System.Windows.Forms.ToolStripProgressBar.Maximum.get -> int
 System.Windows.Forms.ToolStripProgressBar.Maximum.set -> void
 System.Windows.Forms.ToolStripProgressBar.Minimum.get -> int
 System.Windows.Forms.ToolStripProgressBar.Minimum.set -> void
-System.Windows.Forms.ToolStripProgressBar.OwnerChanged -> System.EventHandler
+System.Windows.Forms.ToolStripProgressBar.OwnerChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripProgressBar.PerformStep() -> void
-System.Windows.Forms.ToolStripProgressBar.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.ToolStripProgressBar.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripProgressBar.Step.get -> int
 System.Windows.Forms.ToolStripProgressBar.Step.set -> void
 System.Windows.Forms.ToolStripProgressBar.Style.get -> System.Windows.Forms.ProgressBarStyle
 System.Windows.Forms.ToolStripProgressBar.Style.set -> void
-System.Windows.Forms.ToolStripProgressBar.TextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripProgressBar.TextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripProgressBar.ToolStripProgressBar() -> void
-System.Windows.Forms.ToolStripProgressBar.Validated -> System.EventHandler
-System.Windows.Forms.ToolStripProgressBar.Validating -> System.ComponentModel.CancelEventHandler
+System.Windows.Forms.ToolStripProgressBar.Validated -> System.EventHandler?
+System.Windows.Forms.ToolStripProgressBar.Validating -> System.ComponentModel.CancelEventHandler?
 System.Windows.Forms.ToolStripProgressBar.Value.get -> int
 System.Windows.Forms.ToolStripProgressBar.Value.set -> void
 System.Windows.Forms.ToolStripRenderer
