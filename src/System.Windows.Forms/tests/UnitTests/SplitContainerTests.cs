@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests
             }
 
             using var form = new Form();
-            using var splitContainer = new()
+            using SplitContainer splitContainer = new()
             {
                 FixedPanel = FixedPanel.Panel1,
                 Location = new Drawing.Point(0, 0),
