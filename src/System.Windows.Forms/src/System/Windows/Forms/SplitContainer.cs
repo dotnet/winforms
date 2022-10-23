@@ -1785,6 +1785,14 @@ namespace System.Windows.Forms
                 }
 
                 SplitterWidth = (int)Math.Round((float)SplitterWidth * scale);
+                _splitterDistance = (int)Math.Round((float)_splitterDistance * scale);
+                _splitDistance = _splitterDistance;
+
+                // If FixedPanel property is set.
+                if (_panelSize != 0)
+                {
+                    _panelSize = (int)Math.Round((float)_panelSize * scale);
+                }
             }
             finally
             {
