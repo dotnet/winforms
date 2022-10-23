@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -33,10 +31,10 @@ namespace System.Windows.Forms
                 public MSOCRINFO componentInfo;
             }
 
-            private Dictionary<UIntPtr, ComponentHashtableEntry> _oleComponents;
+            private Dictionary<UIntPtr, ComponentHashtableEntry>? _oleComponents;
             private UIntPtr _cookieCounter = UIntPtr.Zero;
-            private IMsoComponent _activeComponent;
-            private IMsoComponent _trackingComponent;
+            private IMsoComponent? _activeComponent;
+            private IMsoComponent? _trackingComponent;
             private msocstate _currentState;
 
             private Dictionary<UIntPtr, ComponentHashtableEntry> OleComponents
@@ -260,7 +258,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                IMsoComponent prevActive = _activeComponent;
+                IMsoComponent? prevActive = _activeComponent;
 
                 try
                 {
@@ -443,7 +441,7 @@ namespace System.Windows.Forms
                 MSOCRINFO* pcrinfo,
                 uint dwReserved)
             {
-                IMsoComponent component = dwgac switch
+                IMsoComponent? component = dwgac switch
                 {
                     msogac.Active => _activeComponent,
                     msogac.Tracking => _trackingComponent,
