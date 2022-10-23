@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using Windows.Win32.System.Com;
@@ -103,7 +101,7 @@ namespace System.Windows.Forms
                             HRESULT hr = ppb.GetPredefinedValue(_target.Dispid, cookie, &var);
                             if (hr.Succeeded && var.Type != VARENUM.VT_EMPTY)
                             {
-                                values[i] = var.ToObject();
+                                values[i] = var.ToObject()!;
                             }
 
                             itemCount++;
@@ -137,7 +135,7 @@ namespace System.Windows.Forms
                 return base.FromString(s);
             }
 
-            public override string ToString(object v)
+            public override string ToString(object? v)
             {
                 EnsureArrays();
                 return base.ToString(v);
