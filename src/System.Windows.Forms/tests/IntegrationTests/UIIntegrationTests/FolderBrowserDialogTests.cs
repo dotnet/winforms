@@ -28,13 +28,12 @@ namespace System.Windows.Forms.UITests
             timer.Interval = 3000;
             timer.Tick += (s, e) =>
             {
-                ((Timer)s).Stop();
+                timer.Stop();
                 new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.ESCAPE);
             };
 
             timer.Start();
             form.ShowDialog();
         }
-
     }
 }
