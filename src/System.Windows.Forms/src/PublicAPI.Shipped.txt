@@ -490,12 +490,12 @@ override System.Windows.Forms.ToolStripButton.OnPaint(System.Windows.Forms.Paint
 ~override System.Windows.Forms.ToolStripDropDownItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStripDropDownItem.OnFontChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStripDropDownItem.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDownMenu.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripDropDownMenu.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
-~override System.Windows.Forms.ToolStripDropDownMenu.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
-~override System.Windows.Forms.ToolStripDropDownMenu.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDownMenu.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDownMenu.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
+override System.Windows.Forms.ToolStripDropDownMenu.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripDropDownMenu.CreateDefaultItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
+override System.Windows.Forms.ToolStripDropDownMenu.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
+override System.Windows.Forms.ToolStripDropDownMenu.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDownMenu.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDownMenu.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 ~override System.Windows.Forms.ToolStripItem.ToString() -> string
 override System.Windows.Forms.ToolStripLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripLabel.OnFontChanged(System.EventArgs! e) -> void
