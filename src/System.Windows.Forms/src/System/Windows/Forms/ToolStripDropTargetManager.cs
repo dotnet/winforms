@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -19,56 +17,55 @@ namespace System.Windows.Forms
     /// </summary>
     internal class ToolStripDropTargetManager : IDropTarget
     {
-        private IDropTarget lastDropTarget;
-        private readonly ToolStrip owner;
+        private IDropTarget? _lastDropTarget;
+        private readonly ToolStrip _owner;
 
 #if DEBUG
-        private bool dropTargetIsEntered;
+        private bool _dropTargetIsEntered;
 #endif
 
 #if DEBUG
         internal static readonly TraceSwitch DragDropDebug = new TraceSwitch("DragDropDebug", "Debug ToolStrip DragDrop code");
 #else
-        internal static readonly TraceSwitch DragDropDebug;
+        internal static readonly TraceSwitch? DragDropDebug;
 #endif
 
         public ToolStrip Owner
         {
-            get => owner;
+            get => _owner;
         }
 
         public ToolStripDropTargetManager(ToolStrip owner)
         {
-            this.owner = owner;
-            ArgumentNullException.ThrowIfNull(owner);
+            _owner = owner.OrThrowIfNull();
         }
 
         public void EnsureRegistered()
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Ensuring drop target registered");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "Ensuring drop target registered");
             SetAcceptDrops(true);
         }
 
         public void EnsureUnRegistered()
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Attempting to unregister droptarget");
-            for (int i = 0; i < owner.Items.Count; i++)
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "Attempting to unregister droptarget");
+            for (int i = 0; i < _owner.Items.Count; i++)
             {
-                if (owner.Items[i].AllowDrop)
+                if (_owner.Items[i].AllowDrop)
                 {
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "An item still has allowdrop set to true - can't unregister");
                     return; // can't unregister this as a drop target unless everyone is done.
                 }
             }
 
-            if (owner.AllowDrop || owner.AllowItemReorder)
+            if (_owner.AllowDrop || _owner.AllowItemReorder)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "The ToolStrip has AllowDrop or AllowItemReorder set to true - can't unregister");
                 return;  // can't unregister this as a drop target if ToolStrip is still accepting drops
             }
 
             SetAcceptDrops(false);
-            owner.DropTargetManager = null;
+            _owner.DropTargetManager = null;
         }
 
         /// <summary>
@@ -76,19 +73,19 @@ namespace System.Windows.Forms
         /// </summary>
         private ToolStripItem FindItemAtPoint(int x, int y)
         {
-            return owner.GetItemAt(owner.PointToClient(new Point(x, y)));
+            return _owner.GetItemAt(_owner.PointToClient(new Point(x, y)));
         }
 
         public void OnDragEnter(DragEventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG ENTER] ==============");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG ENTER] ==============");
 
             // If we are supporting Item Reordering
             // and this is a ToolStripItem - snitch it.
-            if (owner.AllowItemReorder && e.Data.GetDataPresent(typeof(ToolStripItem)))
+            if (_owner.AllowItemReorder && e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ItemReorderTarget taking this...");
-                lastDropTarget = owner.ItemReorderDropTarget;
+                _lastDropTarget = _owner.ItemReorderDropTarget;
             }
             else
             {
@@ -99,13 +96,13 @@ namespace System.Windows.Forms
                     // the item wants this event
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStripItem taking this: " + item.ToString());
 
-                    lastDropTarget = ((IDropTarget)item);
+                    _lastDropTarget = ((IDropTarget)item);
                 }
-                else if (owner.AllowDrop)
+                else if (_owner.AllowDrop)
                 {
                     // the ToolStrip wants this event
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStrip taking this because AllowDrop set to true.");
-                    lastDropTarget = ((IDropTarget)owner);
+                    _lastDropTarget = ((IDropTarget)_owner);
                 }
                 else
                 {
@@ -119,32 +116,32 @@ namespace System.Windows.Forms
 
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "No one wanted it.");
 
-                    lastDropTarget = null;
+                    _lastDropTarget = null;
                 }
             }
 
-            if (lastDropTarget is not null)
+            if (_lastDropTarget is not null)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragEnter on target...");
 #if DEBUG
-                dropTargetIsEntered = true;
+                _dropTargetIsEntered = true;
 #endif
-                lastDropTarget.OnDragEnter(e);
+                _lastDropTarget.OnDragEnter(e);
             }
         }
 
         public void OnDragOver(DragEventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG OVER] ==============");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG OVER] ==============");
 
-            IDropTarget newDropTarget = null;
+            IDropTarget? newDropTarget = null;
 
             // If we are supporting Item Reordering
             // and this is a ToolStripItem - snitch it.
-            if (owner.AllowItemReorder && e.Data.GetDataPresent(typeof(ToolStripItem)))
+            if (_owner.AllowItemReorder && e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
-                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ItemReorderTarget taking this...");
-                newDropTarget = owner.ItemReorderDropTarget;
+                Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "ItemReorderTarget taking this...");
+                newDropTarget = _owner.ItemReorderDropTarget;
             }
             else
             {
@@ -156,11 +153,11 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStripItem taking this: " + item.ToString());
                     newDropTarget = ((IDropTarget)item);
                 }
-                else if (owner.AllowDrop)
+                else if (_owner.AllowDrop)
                 {
                     // the ToolStrip wants this event
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStrip taking this because AllowDrop set to true.");
-                    newDropTarget = ((IDropTarget)owner);
+                    newDropTarget = ((IDropTarget)_owner);
                 }
                 else
                 {
@@ -171,57 +168,57 @@ namespace System.Windows.Forms
 
             // if we've switched drop targets - then
             // we need to create drag enter and leave events
-            if (newDropTarget != lastDropTarget)
+            if (newDropTarget != _lastDropTarget)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "NEW DROP TARGET!");
                 UpdateDropTarget(newDropTarget, e);
             }
 
             // now call drag over
-            if (lastDropTarget is not null)
+            if (_lastDropTarget is not null)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragOver on target...");
-                lastDropTarget.OnDragOver(e);
+                _lastDropTarget.OnDragOver(e);
             }
         }
 
         public void OnDragLeave(EventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG LEAVE] ==============");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG LEAVE] ==============");
 
-            if (lastDropTarget is not null)
+            if (_lastDropTarget is not null)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragLeave on current target...");
 #if DEBUG
-                dropTargetIsEntered = false;
+                _dropTargetIsEntered = false;
 #endif
-                lastDropTarget.OnDragLeave(e);
+                _lastDropTarget.OnDragLeave(e);
             }
 #if DEBUG
             else
             {
-                Debug.Assert(!dropTargetIsEntered, "Why do we have an entered droptarget and NO lastDropTarget?");
+                Debug.Assert(!_dropTargetIsEntered, "Why do we have an entered droptarget and NO lastDropTarget?");
             }
 #endif
-            lastDropTarget = null;
+            _lastDropTarget = null;
         }
 
         public void OnDragDrop(DragEventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG DROP] ==============");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG DROP] ==============");
 
-            if (lastDropTarget is not null)
+            if (_lastDropTarget is not null)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragDrop on current target...");
 
-                lastDropTarget.OnDragDrop(e);
+                _lastDropTarget.OnDragDrop(e);
             }
             else
             {
                 Debug.Assert(false, "Why is lastDropTarget null?");
             }
 
-            lastDropTarget = null;
+            _lastDropTarget = null;
         }
 
         /// <summary>
@@ -229,7 +226,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetAcceptDrops(bool accept)
         {
-            if (accept && owner.IsHandleCreated)
+            if (accept && _owner.IsHandleCreated)
             {
                 try
                 {
@@ -238,14 +235,14 @@ namespace System.Windows.Forms
                         throw new ThreadStateException(SR.ThreadMustBeSTA);
                     }
 
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + owner.Handle.ToString());
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {_owner.Handle}");
 
                     // Register
-                    HRESULT n = Ole32.RegisterDragDrop(owner, new DropTarget(this));
+                    HRESULT n = Ole32.RegisterDragDrop(_owner, new DropTarget(this));
                     Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{n}");
                     if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
                     {
-                        throw Marshal.GetExceptionForHR((int)n);
+                        throw Marshal.GetExceptionForHR((int)n)!;
                     }
                 }
                 catch (Exception e)
@@ -259,12 +256,12 @@ namespace System.Windows.Forms
         ///  If we have a new active item, fire drag leave and enter. This corresponds to the case
         ///  where you are dragging between items and haven't actually left the ToolStrip's client area.
         /// </summary>
-        private void UpdateDropTarget(IDropTarget newTarget, DragEventArgs e)
+        private void UpdateDropTarget(IDropTarget? newTarget, DragEventArgs e)
         {
-            if (newTarget != lastDropTarget)
+            if (newTarget != _lastDropTarget)
             {
                 // tell the last drag target you've left
-                if (lastDropTarget is not null)
+                if (_lastDropTarget is not null)
                 {
                     OnDragLeave(EventArgs.Empty);
 
@@ -276,7 +273,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                lastDropTarget = newTarget;
+                _lastDropTarget = newTarget;
                 if (newTarget is not null)
                 {
                     DragEventArgs dragEnterArgs = new DragEventArgs(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, e.Effect, e.DropImageType, e.Message, e.MessageReplacementToken)
@@ -291,7 +288,7 @@ namespace System.Windows.Forms
                     OnDragEnter(dragEnterArgs);
 
                     // tell the drag image manager you've entered
-                    if (dragEnterArgs.DropImageType > DropImageType.Invalid && owner is ToolStrip toolStrip && toolStrip.IsHandleCreated)
+                    if (dragEnterArgs.DropImageType > DropImageType.Invalid && _owner is ToolStrip toolStrip && toolStrip.IsHandleCreated)
                     {
                         DragDropHelper.SetDropDescription(dragEnterArgs);
                         DragDropHelper.DragEnter(toolStrip.Handle, dragEnterArgs);

@@ -35,8 +35,8 @@ namespace System.Windows.Forms
             DragDropEffects allowedEffect,
             DragDropEffects effect,
             DropImageType dropImageType,
-            string message,
-            string messageReplacementToken)
+            string? message,
+            string? messageReplacementToken)
         {
             Data = data;
             KeyState = keyState;
