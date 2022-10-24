@@ -58,7 +58,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private static Hashtable processedLibraries;
 
         /// <summary>
-        ///  Given an Object, this attempts to locate its type ifo
+        ///  Given an Object, this attempts to locate its type info.
         /// </summary>
         public static Oleaut32.ITypeInfo FindTypeInfo(object obj, bool wantCoClass)
         {
@@ -120,12 +120,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             Oleaut32.ITypeInfo temp = FindTypeInfo(obj, wantCoClass);
-            if (temp is not null)
-            {
-                return new Oleaut32.ITypeInfo[] { temp };
-            }
-
-            return null;
+            return temp is not null ? (new Oleaut32.ITypeInfo[] { temp }) : null;
         }
 
         /// <summary>
@@ -266,7 +261,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, $"Com2TypeInfoProcessor.GetProperties : returning {propList.Count} properties");
 
-            // done!
+            // Done!
             Com2PropertyDescriptor[] temp2 = new Com2PropertyDescriptor[propList.Count];
             propList.CopyTo(temp2, 0);
 
@@ -315,20 +310,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 case VT_UNKNOWN:
                 case VT_DISPATCH:
-                    // get the guid
+                    // Get the guid.
                     typeData[0] = GetGuidForTypeInfo(typeInfo, null);
 
-                    // return the type
+                    // Return the type.
                     return VTToType(typeDesc.vt);
 
                 case VT_USERDEFINED:
-                    // we'll need to recurse into a user defined reference typeinfo
+                    // We'll need to recurse into a user defined reference typeinfo.
                     Debug.Assert(typeDesc.Anonymous.hreftype != 0u, "typeDesc doesn't contain an hreftype!");
                     hreftype = typeDesc.Anonymous.hreftype;
                     break;
 
                 case VT_PTR:
-                    // we'll need to recurse into a user defined reference typeinfo
+                    // We'll need to recurse into a user defined reference typeinfo.
                     Debug.Assert(typeDesc.Anonymous.lptdesc is not null, "typeDesc doesn't contain an refTypeDesc!");
                     if (typeDesc.Anonymous.lptdesc->vt == VT_VARIANT)
                     {
@@ -339,7 +334,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     break;
             }
 
-            // get the reference type info
+            // Get the reference type info.
             hr = typeInfo.GetRefTypeInfo(hreftype, out Oleaut32.ITypeInfo refTypeInfo);
             if (!hr.Succeeded)
             {
@@ -348,59 +343,62 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                // here is where we look at the next level type info.
-                // if we get an enum, process it, otherwise we will recurse
-                // or get a dispatch.
-                if (refTypeInfo is not null)
+                // Here is where we look at the next level type info. If we get an enum, process it, otherwise we will
+                // recurse or get a dispatch.
+                if (refTypeInfo is null)
                 {
-                    TYPEATTR* pTypeAttr = null;
-                    hr = refTypeInfo.GetTypeAttr(&pTypeAttr);
-                    if (!hr.Succeeded)
+                    return null;
+                }
+
+                TYPEATTR* pTypeAttr = null;
+                hr = refTypeInfo.GetTypeAttr(&pTypeAttr);
+                if (!hr.Succeeded)
+                {
+                    throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
+                }
+
+                try
+                {
+                    Guid g = pTypeAttr->guid;
+
+                    // Save the guid if we've got one here.
+                    if (!Guid.Empty.Equals(g))
                     {
-                        throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
+                        typeData[0] = g;
                     }
 
-                    try
+                    switch (pTypeAttr->typekind)
                     {
-                        Guid g = pTypeAttr->guid;
-
-                        // save the guid if we've got one here
-                        if (!Guid.Empty.Equals(g))
-                        {
-                            typeData[0] = g;
-                        }
-
-                        switch (pTypeAttr->typekind)
-                        {
-                            case TKIND_ENUM:
-                                return ProcessTypeInfoEnum(refTypeInfo);
-                            case TKIND_ALIAS:
-                                // recurse here
-                                return GetValueTypeFromTypeDesc(pTypeAttr->tdescAlias, refTypeInfo, typeData);
-                            case TKIND_DISPATCH:
-                                return VTToType(VT_DISPATCH);
-                            case TKIND_INTERFACE:
-                            case TKIND_COCLASS:
-                                return VTToType(VT_UNKNOWN);
-                            default:
-                                return null;
-                        }
+                        case TKIND_ENUM:
+                            return ProcessTypeInfoEnum(refTypeInfo);
+                        case TKIND_ALIAS:
+                            // Recurse here.
+                            return GetValueTypeFromTypeDesc(pTypeAttr->tdescAlias, refTypeInfo, typeData);
+                        case TKIND_DISPATCH:
+                            return VTToType(VT_DISPATCH);
+                        case TKIND_INTERFACE:
+                        case TKIND_COCLASS:
+                            return VTToType(VT_UNKNOWN);
+                        default:
+                            return null;
                     }
-                    finally
-                    {
-                        refTypeInfo.ReleaseTypeAttr(pTypeAttr);
-                    }
+                }
+                finally
+                {
+                    refTypeInfo.ReleaseTypeAttr(pTypeAttr);
                 }
             }
             finally
             {
                 refTypeInfo = null;
             }
-
-            return null;
         }
 
-        private static PropertyDescriptor[] InternalGetProperties(object obj, Oleaut32.ITypeInfo typeInfo, Ole32.DispatchID dispidToGet, ref int defaultIndex)
+        private static PropertyDescriptor[] InternalGetProperties(
+            object obj,
+            Oleaut32.ITypeInfo typeInfo,
+            Ole32.DispatchID dispidToGet,
+            ref int defaultIndex)
         {
             if (typeInfo is null)
             {
@@ -412,11 +410,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Ole32.DispatchID nameDispID = GetNameDispId((Oleaut32.IDispatch)obj);
             bool addAboutBox = false;
 
-            // properties can live as functions with get_ and put_ or
-            // as variables, so we do two steps here.
+            // Properties can live as functions with get_ and put_ or as variables, so we do two steps here.
             try
             {
-                // DO FUNCDESC things
+                // Do FUNCDESC things.
                 ProcessFunctions(typeInfo, propInfos, dispidToGet, nameDispID, ref addAboutBox);
             }
             catch (ExternalException ex)
@@ -426,7 +423,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                // DO VARDESC things.
+                // Do VARDESC things.
                 ProcessVariables(typeInfo, propInfos, dispidToGet, nameDispID);
             }
             catch (ExternalException ex)
@@ -436,8 +433,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             typeInfo = null;
 
-            // now we take the propertyInfo structures we built up
-            // and use them to create the actual descriptors.
+            // Now we take the propertyInfo structures we built up and use them to create the actual descriptors.
             int cProps = propInfos.Count;
 
             if (addAboutBox)
@@ -452,14 +448,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             object[] pvar = new object[1];
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
 
-            // for each item in our list, create the descriptor an check
-            // if it's the default one.
+            // For each item in our list, create the descriptor an check if it's the default one.
             foreach (PropInfo pi in propInfos.Values)
             {
                 if (!pi.NonBrowsable)
                 {
-                    // finally, for each property, make sure we can get the value
-                    // if we can't then we should mark it non-browsable
+                    // Finally, for each property, make sure we can get the value
+                    // if we can't then we should mark it non-browsable.
 
                     try
                     {
@@ -496,15 +491,21 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (addAboutBox)
             {
-                props[props.Length - 1] = new Com2AboutBoxPropertyDescriptor();
+                props[^1] = new Com2AboutBoxPropertyDescriptor();
             }
 
             return props;
         }
 
-        private static unsafe PropInfo ProcessDataCore(Oleaut32.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in TYPEDESC typeDesc, VARFLAGS flags)
+        private static unsafe PropInfo ProcessDataCore(
+            Oleaut32.ITypeInfo typeInfo,
+            IDictionary propInfoList,
+            Ole32.DispatchID dispid,
+            Ole32.DispatchID nameDispID,
+            in TYPEDESC typeDesc,
+            VARFLAGS flags)
         {
-            // get the name and the helpstring
+            // Get the name and the helpstring.
             using var nameBstr = new BSTR();
             using var helpStringBstr = new BSTR();
             HRESULT hr = typeInfo.GetDocumentation(dispid, &nameBstr, &helpStringBstr, null, null);
@@ -703,8 +704,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  This converts a type info that describes a IDL defined enum
-        ///  into one we can use
+        ///  This converts a type info that describes a IDL defined enum into one we can use
         /// </summary>
         private static unsafe Type ProcessTypeInfoEnum(Oleaut32.ITypeInfo enumTypeInfo)
         {
@@ -1008,50 +1008,29 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal class CachedProperties
         {
-            private readonly PropertyDescriptor[] props;
+            private readonly PropertyDescriptor[] _properties;
 
             public readonly uint MajorVersion;
             public readonly uint MinorVersion;
-            private readonly int defaultIndex;
 
             internal CachedProperties(PropertyDescriptor[] props, int defIndex, uint majVersion, uint minVersion)
             {
-                this.props = ClonePropertyDescriptors(props);
+                _properties = ClonePropertyDescriptors(props);
                 MajorVersion = majVersion;
                 MinorVersion = minVersion;
-                defaultIndex = defIndex;
+                DefaultIndex = defIndex;
             }
 
-            public PropertyDescriptor[] Properties
-            {
-                get
-                {
-                    return ClonePropertyDescriptors(props);
-                }
-            }
+            public PropertyDescriptor[] Properties => ClonePropertyDescriptors(_properties);
 
-            public int DefaultIndex
-            {
-                get
-                {
-                    return defaultIndex;
-                }
-            }
+            public int DefaultIndex { get; }
 
             private static PropertyDescriptor[] ClonePropertyDescriptors(PropertyDescriptor[] props)
             {
                 PropertyDescriptor[] retProps = new PropertyDescriptor[props.Length];
                 for (int i = 0; i < props.Length; i++)
                 {
-                    if (props[i] is ICloneable)
-                    {
-                        retProps[i] = (PropertyDescriptor)((ICloneable)props[i]).Clone();
-                        ;
-                    }
-                    else
-                    {
-                        retProps[i] = props[i];
-                    }
+                    retProps[i] = props[i] is ICloneable cloneable ? (PropertyDescriptor)cloneable.Clone() : props[i];
                 }
 
                 return retProps;

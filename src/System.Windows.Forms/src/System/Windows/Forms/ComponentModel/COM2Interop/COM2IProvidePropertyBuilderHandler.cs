@@ -14,7 +14,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public override Type Interface => typeof(VSSDK.IProvidePropertyBuilder);
 
-        private unsafe bool GetBuilderGuidString(VSSDK.IProvidePropertyBuilder target, Ole32.DispatchID dispid, [NotNullWhen(true)] ref string? strGuidBldr, VSSDK.CTLBLDTYPE* bldrType)
+        private unsafe bool GetBuilderGuidString(
+            VSSDK.IProvidePropertyBuilder target,
+            Ole32.DispatchID dispid,
+            [NotNullWhen(true)] ref string? strGuidBldr,
+            VSSDK.CTLBLDTYPE* bldrType)
         {
             BOOL valid = false;
             var pGuidBldr = new string[1];
@@ -49,23 +53,26 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
-        ///  such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
+        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing. We
+        ///  hide properties such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </summary>
         private unsafe void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            if (sender.TargetObject is VSSDK.IProvidePropertyBuilder target)
+            if (sender.TargetObject is not VSSDK.IProvidePropertyBuilder target)
             {
-                string? s = null;
-                VSSDK.CTLBLDTYPE bldrType = 0;
-                bool builderValid = GetBuilderGuidString(target, sender.DISPID, ref s, &bldrType);
-                // we hide IDispatch props by default, we we need to force showing them here
-                if (sender.CanShow && builderValid)
+                return;
+            }
+
+            string? s = null;
+            VSSDK.CTLBLDTYPE bldrType = 0;
+            bool builderValid = GetBuilderGuidString(target, sender.DISPID, ref s, &bldrType);
+
+            // We hide IDispatch props by default, we we need to force showing them here
+            if (sender.CanShow && builderValid)
+            {
+                if (typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
                 {
-                    if (typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
-                    {
-                        attrEvent.Add(BrowsableAttribute.Yes);
-                    }
+                    attrEvent.Add(BrowsableAttribute.Yes);
                 }
             }
         }

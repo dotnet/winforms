@@ -29,77 +29,41 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             _allowExpand = allowExpand;
         }
 
-        /// <summary>
-        ///  Determines if this converter can convert an object in the given source
-        ///  type to the native type of the converter.
-        /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
-        {
-            return false;
-        }
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) => false;
 
-        /// <summary>
-        ///  Determines if this converter can convert an object to the given destination
-        ///  type.
-        /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
-        {
-            return destinationType == typeof(string);
-        }
+            => destinationType == typeof(string);
 
-        /// <summary>
-        ///  Converts the given object to another type.  The most common types to convert
-        ///  are to and from a string object.  The default implementation will make a call
-        ///  to ToString on the object if the object is valid and if the destination
-        ///  type is string.  If this cannot convert to the destination type, this will
-        ///  throw a NotSupportedException.
-        /// </summary>
         public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
-            if (destinationType == typeof(string))
+            if (destinationType != typeof(string))
             {
-                if (value is null)
-                {
-                    return s_none;
-                }
-
-                string text = ComNativeDescriptor.GetName(value);
-
-                if (text is null || text.Length == 0)
-                {
-                    text = ComNativeDescriptor.GetClassName(value);
-                }
-
-                if (text is null)
-                {
-                    return "(Object)";
-                }
-
-                return text;
+                return base.ConvertTo(context, culture, value, destinationType);
             }
 
-            return base.ConvertTo(context, culture, value, destinationType);
+            if (value is null)
+            {
+                return s_none;
+            }
+
+            string text = ComNativeDescriptor.GetName(value);
+
+            if (string.IsNullOrEmpty(text))
+            {
+                text = ComNativeDescriptor.GetClassName(value);
+            }
+
+            return text is null ? "(Object)" : (object)text;
         }
 
         [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
-        {
-            return TypeDescriptor.GetProperties(value, attributes);
-        }
+            => TypeDescriptor.GetProperties(value, attributes);
 
-        /// <summary>
-        ///  Determines if this object supports properties.  By default, this
-        ///  is false.
-        /// </summary>
-        public override bool GetPropertiesSupported(ITypeDescriptorContext? context)
-        {
-            return _allowExpand;
-        }
+        public override bool GetPropertiesSupported(ITypeDescriptorContext? context) => _allowExpand;
 
-        // no dropdown, please!
         public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
-        {
-            return false;
-        }
+            // No dropdown, please!
+            => false;
     }
 }

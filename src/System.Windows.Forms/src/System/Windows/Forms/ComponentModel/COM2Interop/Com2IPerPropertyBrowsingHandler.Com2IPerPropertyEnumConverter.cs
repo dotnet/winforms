@@ -30,14 +30,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     if (curValue == value || (curValue is not null && curValue.Equals(value)))
                     {
                         bool success = false;
-                        string? val = GetDisplayString(
+                        string? result = GetDisplayString(
                             (Oleaut32.IPerPropertyBrowsing)_itemsEnum._target.TargetObject,
                             _itemsEnum._target.DISPID,
                             ref success);
 
                         if (success)
                         {
-                            return val;
+                            return result;
                         }
                     }
                 }

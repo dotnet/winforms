@@ -21,16 +21,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             _guid = guid;
         }
 
-        /// <summary>
-        ///  Takes the value returned from valueAccess.getValue() and modifies or replaces
-        ///  the value, passing the result into valueAccess.setValue().  This is where
-        ///  an editor can launch a modal dialog or create a drop down editor to allow
-        ///  the user to modify the value.  Host assistance in presenting UI to the user
-        ///  can be found through the valueAccess.getService function.
-        /// </summary>
         public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            IntPtr hWndParent = PInvoke.GetFocus(); // Windows.GetForegroundWindow
+            HWND hWndParent = PInvoke.GetFocus();
 
             try
             {
@@ -60,14 +53,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return value;
         }
 
-        /// <summary>
-        ///  Retrieves the editing style of the Edit method.  If the method
-        ///  is not supported, this will return None.
-        /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
-        {
-            return UITypeEditorEditStyle.Modal;
-        }
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 
         public unsafe void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, IntPtr parentHandle)
         {

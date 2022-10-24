@@ -1024,7 +1024,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                com2props.AlwaysValid = com2props.CheckValid();
+                com2props.AlwaysValid = com2props.CheckValidity();
 
                 ((GetAttributesEventHandler)Events[EventGetBaseAttributes])?.Invoke(this, e);
             }
@@ -1057,7 +1057,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                com2props.AlwaysValid = com2props.CheckValid();
+                com2props.AlwaysValid = com2props.CheckValidity();
                 ((GetAttributesEventHandler)Events[EventGetDynamicAttributes])?.Invoke(this, e);
             }
             finally
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                com2props.AlwaysValid = com2props.CheckValid();
+                com2props.AlwaysValid = com2props.CheckValidity();
                 ((GetTypeConverterAndTypeEditorEventHandler)Events[EventGetTypeConverterAndTypeEditor])?.Invoke(this, e);
             }
             finally
@@ -1118,7 +1118,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                com2props.AlwaysValid = com2props.CheckValid();
+                com2props.AlwaysValid = com2props.CheckValidity();
                 ((GetBoolValueEventHandler)Events[key])?.Invoke(this, e);
             }
             finally
@@ -1134,7 +1134,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                com2props.AlwaysValid = com2props.CheckValid();
+                com2props.AlwaysValid = com2props.CheckValidity();
                 ((Com2EventHandler)Events[key])?.Invoke(this, e);
             }
             finally
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                com2props.AlwaysValid = com2props.CheckValid();
+                com2props.AlwaysValid = com2props.CheckValidity();
                 ((GetNameItemEventHandler)Events[key])?.Invoke(this, e);
             }
             finally

@@ -69,12 +69,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return Array.Empty<Attribute>();
             }
 
-            // get the types
+            // Get the types.
             for (int i = 0; i < attrTypeNames.Length; i++)
             {
                 string attrName = attrTypeNames[i];
 
-                // try the name first
+                // Try the name first.
                 Type? t = null;
                 if (attrName.Length > 0)
                 {
@@ -85,39 +85,33 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (t is null)
                 {
-                    // check for an assembly name.
+                    // Check for an assembly name.
                     string assemblyName = string.Empty;
 
                     int comma = attrName.LastIndexOf(',');
 
                     if (comma != -1)
                     {
-                        assemblyName = attrName.Substring(comma);
-                        attrName = attrName.Substring(0, comma);
+                        assemblyName = attrName[comma..];
+                        attrName = attrName[..comma];
                     }
 
                     string fieldName;
                     int lastDot = attrName.LastIndexOf('.');
                     if (lastDot != -1)
                     {
-                        fieldName = attrName.Substring(lastDot + 1);
+                        fieldName = attrName[(lastDot + 1)..];
                     }
                     else
                     {
-                        // something's odd
                         Debug.Fail("No dot in class name?");
                         continue;
                     }
 
-                    // try to get the field value
-                    if (a is null)
-                    {
-                        t = Type.GetType(string.Concat(attrName.AsSpan(0, lastDot), assemblyName));
-                    }
-                    else
-                    {
-                        t = a.GetType(string.Concat(attrName.AsSpan(0, lastDot), assemblyName));
-                    }
+                    // Try to get the field value
+                    t = a is null
+                        ? Type.GetType(string.Concat(attrName.AsSpan(0, lastDot), assemblyName))
+                        : a.GetType(string.Concat(attrName.AsSpan(0, lastDot), assemblyName));
 
                     if (t is null)
                     {
@@ -161,8 +155,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 Attribute? attr;
 
-                // okay, if we got here, we need to build the attribute...
-                // get the initializer value if we've got a one item ctor
+                // Okay, if we got here, we need to build the attribute.
+                // Get the initializer value if we've got a one item constructor.
 
                 var varParam = varParams[i];
                 if (!Convert.IsDBNull(varParam) && varParam is not null)
@@ -173,8 +167,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         ParameterInfo[] pis = ctors[c].GetParameters();
                         if (pis.Length == 1 && pis[0].ParameterType.IsAssignableFrom(varParam.GetType()))
                         {
-                            // found a one-parameter ctor, use it
-                            // try to construct a default one
+                            // Found a one-parameter ctor, use it to try to construct a default one.
                             try
                             {
                                 attr = (Attribute?)Activator.CreateInstance(t, new object[] { varParam });
@@ -182,7 +175,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                             catch
                             {
-                                // nevermind
                                 Debug.Fail($"Attribute {t.FullName} did not have a initializer specified and has no default constructor");
                                 continue;
                             }
@@ -191,7 +183,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 else
                 {
-                    // try to construct a default one
+                    // Try to construct a default one.
                     try
                     {
                         attr = (Attribute?)Activator.CreateInstance(t);
@@ -199,7 +191,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     catch
                     {
-                        // nevermind
                         Debug.Fail($"Attribute {t.FullName} did not have a initializer specified and has no default constructor");
                         continue;
                     }
@@ -213,46 +204,44 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private static string[] GetStringsFromPtr(IntPtr ptr, uint cStrings)
         {
-            if (ptr != IntPtr.Zero)
-            {
-                string[] strs = new string[cStrings];
-                IntPtr bstr;
-                for (int i = 0; i < cStrings; i++)
-                {
-                    try
-                    {
-                        bstr = Marshal.ReadIntPtr(ptr, i * 4);
-                        if (bstr != IntPtr.Zero)
-                        {
-                            strs[i] = Marshal.PtrToStringUni(bstr)!;
-                            Oleaut32.SysFreeString(bstr);
-                        }
-                        else
-                        {
-                            strs[i] = string.Empty;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.Fail($"Failed to marshal component attribute BSTR {i}", ex.ToString());
-                    }
-                }
-
-                try
-                {
-                    Marshal.FreeCoTaskMem(ptr);
-                }
-                catch (Exception ex)
-                {
-                    Debug.Fail("Failed to free BSTR array memory", ex.ToString());
-                }
-
-                return strs;
-            }
-            else
+            if (ptr == IntPtr.Zero)
             {
                 return Array.Empty<string>();
             }
+
+            string[] strs = new string[cStrings];
+            IntPtr bstr;
+            for (int i = 0; i < cStrings; i++)
+            {
+                try
+                {
+                    bstr = Marshal.ReadIntPtr(ptr, i * 4);
+                    if (bstr != IntPtr.Zero)
+                    {
+                        strs[i] = Marshal.PtrToStringUni(bstr)!;
+                        Oleaut32.SysFreeString(bstr);
+                    }
+                    else
+                    {
+                        strs[i] = string.Empty;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.Fail($"Failed to marshal component attribute BSTR {i}", ex.ToString());
+                }
+            }
+
+            try
+            {
+                Marshal.FreeCoTaskMem(ptr);
+            }
+            catch (Exception ex)
+            {
+                Debug.Fail("Failed to free BSTR array memory", ex.ToString());
+            }
+
+            return strs;
         }
 
         private static unsafe object?[] GetVariantsFromPtr(VARIANT* ptr, uint cVariants)

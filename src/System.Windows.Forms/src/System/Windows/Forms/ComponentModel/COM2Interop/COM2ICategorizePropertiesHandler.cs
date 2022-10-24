@@ -73,11 +73,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            string? cat = GetCategoryFromObject(sender.TargetObject, sender.DISPID);
+            string? category = GetCategoryFromObject(sender.TargetObject, sender.DISPID);
 
-            if (cat?.Length > 0)
+            if (category?.Length > 0)
             {
-                attrEvent.Add(new CategoryAttribute(cat));
+                attrEvent.Add(new CategoryAttribute(category));
             }
         }
     }

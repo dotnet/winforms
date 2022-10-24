@@ -262,7 +262,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         entry = de.Value as Com2Properties;
 
-                        if (entry is not null && entry.TooOld)
+                        if (entry is not null && entry.NeedsRefreshed)
                         {
                             disposeList ??= new List<object>(3);
 
@@ -308,7 +308,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // if we don't have one, create one and set it up
             //
-            if (propsInfo is null || !propsInfo.CheckValid())
+            if (propsInfo is null || !propsInfo.CheckValidity())
             {
                 propsInfo = Com2TypeInfoProcessor.GetProperties(component);
                 if (propsInfo is not null)
