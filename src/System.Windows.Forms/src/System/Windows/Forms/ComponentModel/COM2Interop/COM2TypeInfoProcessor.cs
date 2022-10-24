@@ -27,7 +27,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     ///  This class only knows how to process things that are natively in the typeinfo.  Other property
     ///  information such as IPerPropertyBrowsing is handled elsewhere.
     /// </summary>
-    internal static class Com2TypeInfoProcessor
+    internal static partial class Com2TypeInfoProcessor
     {
         private static readonly TraceSwitch DbgTypeInfoProcessorSwitch = new(
             "DbgTypeInfoProcessor",
@@ -1005,70 +1005,5 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, ((int)vt).ToString(CultureInfo.InvariantCulture)));
             }
         }
-
-        internal class CachedProperties
-        {
-            private readonly PropertyDescriptor[] _properties;
-
-            public readonly uint MajorVersion;
-            public readonly uint MinorVersion;
-
-            internal CachedProperties(PropertyDescriptor[] props, int defIndex, uint majVersion, uint minVersion)
-            {
-                _properties = ClonePropertyDescriptors(props);
-                MajorVersion = majVersion;
-                MinorVersion = minVersion;
-                DefaultIndex = defIndex;
-            }
-
-            public PropertyDescriptor[] Properties => ClonePropertyDescriptors(_properties);
-
-            public int DefaultIndex { get; }
-
-            private static PropertyDescriptor[] ClonePropertyDescriptors(PropertyDescriptor[] props)
-            {
-                PropertyDescriptor[] retProps = new PropertyDescriptor[props.Length];
-                for (int i = 0; i < props.Length; i++)
-                {
-                    retProps[i] = props[i] is ICloneable cloneable ? (PropertyDescriptor)cloneable.Clone() : props[i];
-                }
-
-                return retProps;
-            }
-        }
-
-        private class PropInfo
-        {
-            public const int ReadOnlyUnknown = 0;
-            public const int ReadOnlyTrue = 1;
-            public const int ReadOnlyFalse = 2;
-
-            public string Name { get; set; }
-
-            public Ole32.DispatchID DispId { get; set; } = Ole32.DispatchID.UNKNOWN;
-
-            public Type ValueType { get; set; }
-
-            public ArrayList Attributes { get; } = new ArrayList();
-
-            public int ReadOnly { get; set; } = ReadOnlyUnknown;
-
-            public bool IsDefault { get; set; }
-
-            public object TypeData { get; set; }
-
-            public bool NonBrowsable { get; set; }
-
-            public int Index { get; set; }
-
-            public override int GetHashCode() => Name?.GetHashCode() ?? base.GetHashCode();
-        }
-    }
-
-    /// <summary>
-    ///  A class included so we can recognize a variant properly.
-    /// </summary>
-    public class Com2Variant
-    {
     }
 }
