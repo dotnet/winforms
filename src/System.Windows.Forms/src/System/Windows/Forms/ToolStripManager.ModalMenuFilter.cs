@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -34,26 +32,26 @@ namespace System.Windows.Forms
             private HandleRef<HWND> _activeHwnd;
             // The window that was last known to be active
             private HandleRef<HWND> _lastActiveWindow;
-            private List<ToolStrip> _inputFilterQueue;
+            private List<ToolStrip>? _inputFilterQueue;
             private bool _inMenuMode;
             private bool _caretHidden;
             private bool _showUnderlines;
             private bool _menuKeyToggle;
             private bool _suspendMenuMode;
-            private HostedWindowsFormsMessageHook _messageHook;
-            private Timer _ensureMessageProcessingTimer;
+            private HostedWindowsFormsMessageHook? _messageHook;
+            private Timer? _ensureMessageProcessingTimer;
             private const int MessageProcessingInterval = 500;
 
-            private ToolStrip _toplevelToolStrip;
+            private ToolStrip? _toplevelToolStrip;
 
-            private readonly WeakReference<IKeyboardToolTip> _lastFocusedTool = new WeakReference<IKeyboardToolTip>(null);
+            private readonly WeakReference<IKeyboardToolTip?> _lastFocusedTool = new WeakReference<IKeyboardToolTip?>(null);
 
 #if DEBUG
             private bool _justEnteredMenuMode;
 #endif
 
             [ThreadStatic]
-            private static ModalMenuFilter t_instance;
+            private static ModalMenuFilter? t_instance;
 
             internal static ModalMenuFilter Instance => t_instance ??= new ModalMenuFilter();
 
@@ -87,7 +85,7 @@ namespace System.Windows.Forms
                 {
                     if (_activeHwnd.Handle != value.Handle)
                     {
-                        Control control = null;
+                        Control? control = null;
 
                         // Unsubscribe from handle recreate.
                         if (_activeHwnd.Handle != IntPtr.Zero)
@@ -173,7 +171,7 @@ namespace System.Windows.Forms
 
             internal void NotifyLastLastFocusedToolAboutFocusLoss()
             {
-                IKeyboardToolTip lastFocusedTool = KeyboardToolTipStateMachine.Instance.LastFocusedTool;
+                IKeyboardToolTip? lastFocusedTool = KeyboardToolTipStateMachine.Instance.LastFocusedTool;
                 if (lastFocusedTool is not null)
                 {
                     _lastFocusedTool.SetTarget(lastFocusedTool);
@@ -213,7 +211,7 @@ namespace System.Windows.Forms
                     if (!ActiveHwnd.Handle.IsNull)
                     {
                         // Unsubscribe from handle creates
-                        Control control = Control.FromHandle(ActiveHwnd.Handle);
+                        Control? control = Control.FromHandle(ActiveHwnd.Handle);
                         if (control is not null)
                         {
                             control.HandleCreated -= OnActiveHwndHandleCreated;
@@ -229,7 +227,7 @@ namespace System.Windows.Forms
                         PInvoke.ShowCaret(HWND.Null);
                     }
 
-                    if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool is not null)
+                    if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip? tool) && tool is not null)
                     {
                         KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(tool);
                     }
@@ -245,9 +243,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal static ToolStrip GetActiveToolStrip() => Instance.GetActiveToolStripInternal();
+            internal static ToolStrip? GetActiveToolStrip() => Instance.GetActiveToolStripInternal();
 
-            internal ToolStrip GetActiveToolStripInternal()
+            internal ToolStrip? GetActiveToolStripInternal()
             {
                 if (_inputFilterQueue is not null && _inputFilterQueue.Count > 0)
                 {
@@ -260,11 +258,11 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns the ToolStrip that is at the root.
             /// </summary>
-            private ToolStrip GetCurrentTopLevelToolStrip()
+            private ToolStrip? GetCurrentTopLevelToolStrip()
             {
                 if (_toplevelToolStrip is null)
                 {
-                    ToolStrip activeToolStrip = GetActiveToolStripInternal();
+                    ToolStrip? activeToolStrip = GetActiveToolStripInternal();
                     if (activeToolStrip is not null)
                     {
                         _toplevelToolStrip = activeToolStrip.GetToplevelOwnerToolStrip();
@@ -274,7 +272,7 @@ namespace System.Windows.Forms
                 return _toplevelToolStrip;
             }
 
-            private void OnActiveHwndHandleCreated(object sender, EventArgs e)
+            private void OnActiveHwndHandleCreated(object? sender, EventArgs e)
             {
                 ActiveHwndInternal = new(sender as Control);
             }
@@ -342,10 +340,10 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.ProcessMouseButtonPressed] Found a mouse down.");
 
-                int countDropDowns = _inputFilterQueue.Count;
+                int countDropDowns = _inputFilterQueue?.Count ?? 0;
                 for (int i = 0; i < countDropDowns; i++)
                 {
-                    ToolStrip activeToolStrip = GetActiveToolStripInternal();
+                    ToolStrip? activeToolStrip = GetActiveToolStripInternal();
 
                     if (activeToolStrip is not null)
                     {
@@ -395,7 +393,7 @@ namespace System.Windows.Forms
 
             private bool ProcessActivationChange()
             {
-                int countDropDowns = _inputFilterQueue.Count;
+                int countDropDowns = _inputFilterQueue?.Count ?? 0;
                 for (int i = 0; i < countDropDowns; i++)
                 {
                     if (GetActiveToolStripInternal() is ToolStripDropDown activeDropDown && activeDropDown.AutoClose)
@@ -431,7 +429,7 @@ namespace System.Windows.Forms
                 if (toolStrip.IsDropDown)
                 {
                     // For something that never closes, don't use menu mode.
-                    ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
+                    ToolStripDropDown dropDown = (ToolStripDropDown)toolStrip;
 
                     if (dropDown.AutoClose == false)
                     {
@@ -456,7 +454,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    ToolStrip currentActiveToolStrip = GetActiveToolStripInternal();
+                    ToolStrip? currentActiveToolStrip = GetActiveToolStripInternal();
 
                     // ToolStrip dropdowns push/pull their activation based on visibility.
                     // we have to account for the toolstrips that aren't dropdowns
@@ -475,7 +473,7 @@ namespace System.Windows.Forms
                                 "[ModalMenuFilter.SetActiveToolStripCore] Detected a new dropdown not in this chain opened, Dismissing everything in the old chain. ");
                             _inputFilterQueue.Remove(currentActiveToolStrip);
 
-                            ToolStripDropDown currentActiveToolStripDropDown = currentActiveToolStrip as ToolStripDropDown;
+                            ToolStripDropDown currentActiveToolStripDropDown = (ToolStripDropDown)currentActiveToolStrip;
                             currentActiveToolStripDropDown.DismissAll();
                         }
                     }
@@ -565,7 +563,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                ToolStrip activeToolStrip = GetActiveToolStrip();
+                ToolStrip? activeToolStrip = GetActiveToolStrip();
                 if (activeToolStrip is null)
                 {
                     return false;
@@ -624,7 +622,7 @@ namespace System.Windows.Forms
                             // Mouse move messages should be eaten if they aren't for a dropdown.
                             // this prevents things like ToolTips and mouse over highlights from
                             // being processed.
-                            Control control = Control.FromChildHandle(m.HWnd);
+                            Control? control = Control.FromChildHandle(m.HWnd);
                             if (control is null || control.TopLevelControlInternal is not ToolStripDropDown)
                             {
                                 // Double check it's not a child control of the active toolstrip.
@@ -632,7 +630,7 @@ namespace System.Windows.Forms
                                 {
                                     // It is NOT a child of the current active toolstrip.
 
-                                    ToolStrip toplevelToolStrip = GetCurrentTopLevelToolStrip();
+                                    ToolStrip? toplevelToolStrip = GetCurrentTopLevelToolStrip();
                                     if (toplevelToolStrip is not null && IsChildOrSameWindow<IHandle<HWND>>(toplevelToolStrip, m))
                                     {
                                         // Don't eat mouse message.
