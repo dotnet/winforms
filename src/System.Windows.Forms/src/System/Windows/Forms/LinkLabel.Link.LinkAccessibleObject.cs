@@ -28,13 +28,13 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        if (!_owningLinkLabel.IsHandleCreated)
+                        if (!_owningLinkLabel.IsHandleCreated || _owningLink.Owner is null)
                         {
                             return Rectangle.Empty;
                         }
 
                         Region? region = _owningLink.VisualRegion;
-                        using Graphics graphics = Graphics.FromHwnd(_owningLink.Owner?.Handle ?? IntPtr.Zero);
+                        using Graphics graphics = Graphics.FromHwnd(_owningLink.Owner.Handle);
 
                         // Make sure we have a region for this link
                         if (region is null)
