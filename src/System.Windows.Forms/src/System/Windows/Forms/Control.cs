@@ -2197,7 +2197,7 @@ namespace System.Windows.Forms
                 $"Fonts need to be cached only for PermonitorV2 mode applications : {DpiHelper.IsPerMonitorV2Awareness} : {DpiAwarenessContext}");
 
             _dpiFonts ??= new Dictionary<int, Font>();
-            if (_dpiFonts.TryGetValue(dpiNew, out Font? scaledFont))
+            if (_dpiFonts.TryGetValue(newDpi, out Font? scaledFont))
             {
                 return scaledFont!;
             }
@@ -2205,7 +2205,7 @@ namespace System.Windows.Forms
             float factor = ((float)newDpi / oldDpi);
             scaledFont = font.WithSize(font.Size * factor);
 
-            _dpiFonts.Add(dpiNew, scaledFont);
+            _dpiFonts.Add(newDpi, scaledFont);
 
             return scaledFont;
         }
