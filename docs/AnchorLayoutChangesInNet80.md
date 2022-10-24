@@ -8,7 +8,7 @@ We have multiple [issues](https://github.com/dotnet/winforms/issues?q=is%3Aissue
 
 ## Problem in Scope
 
-Anchored control’s position with respect to its parent should be able to determine at the design time and would only need to be changed   if there were explicit changes in the control’s Bounds or when the control is scaled in response to a DPI changed event. Bounds changes as result of Parent’s bounds change shouldn’t alter control’s relative position in the parent’s rectangle. However, the layout engine computes the anchored control’s position every time there are changes to the control’s bounds or the control's location-related properties.
+Anchored control's position with respect to its parent should be able to determine at the design time and would only need to be changed   if there were explicit changes in the control's Bounds or when the control is scaled in response to a DPI changed event. Bounds changes as result of Parent's bounds change shouldn’t alter control's relative position in the parent's rectangle. However, the layout engine computes the anchored control's position every time there are changes to the control's bounds or the control's location-related properties.
 
 For example, the following somewhat trivial code snippet copide from an `InitializeComponent` method demonstrates the impact of the "over-eager" computations. The number of unncessary computations can increase quite dramatically for nested layouts.
 
@@ -58,22 +58,22 @@ Related to the above reason, if the parent control is caled to match the current
 
 ## Anchor Calculations
 
-The following image illustrates anchors calculation with respect to a control’s parent’s display rectangle. The "red" rectangle is the parent’s display rectangle, and the "green" rectangle is the anchored control’s (button) bounds.
+The following image illustrates anchors calculation with respect to a control's parent's display rectangle. The "red" rectangle is the parent's display rectangle, and the "green" rectangle is the anchored control's (button) bounds.
 - `Left` arrow indicates the X coordinate of the button location with respect to parents display rectangle.
 - `Top` arrow indicates the Y coordinate of the button location with respect to parents display rectangle.
-- `Right` arrow indicates the distance from right edge of parent’s rectangle where button is placed.
-- `Right` arrow indicates the distance from bottom edge of parent’s rectangle where button is placed.
+- `Right` arrow indicates the distance from right edge of parent's rectangle where button is placed.
+- `Right` arrow indicates the distance from bottom edge of parent's rectangle where button is placed.
 
     ![AnchorCalculations](images/AnchorCalculations.png)
 
-In the above picture the boundary marked in `red` is a container hosting the control (boundary marked with `green`). The control can define its anchor property to explicitly tell the layout engine how its bounds change relative to its parent’s bounds. For example: 
+In the above picture the boundary marked in `red` is a container hosting the control (boundary marked with `green`). The control can define its anchor property to explicitly tell the layout engine how its bounds change relative to its parent's bounds. For example: 
 ```CS
 this.button14.Anchor = (System.Windows.Forms.AnchorStyles.Bottom
  | System.Windows.Forms.AnchorStyles.Left
  | System.Windows.Forms.AnchorStyles.Top
  | System.Windows.Forms.AnchorStyles.Right );
 ```
-When the control’s `Anchor` property is set, the anchors (that is, left, top, right, bottom values) are computed and stored in an internal struct `AnchorInfo`. The only time the anchor values can be negative is when the control is placed/position outside/overlapped with the hosting controls bounds.
+When the control's `Anchor` property is set, the anchors (that is, left, top, right, bottom values) are computed and stored in an internal struct `AnchorInfo`. The only time the anchor values can be negative is when the control is placed/position outside/overlapped with the hosting controls bounds.
 
 
 ## Proposed solution
