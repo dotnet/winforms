@@ -16,18 +16,6 @@ namespace System.Windows.Forms.UITests
         {
         }
 
-        private static (Form, Button) GetFormWithAnchoredButton()
-        {
-            Form form = new();
-            form.Size = new Size(200, 300);
-            Button button = new();
-            button.Location = new Point(20, 30);
-            button.Size = new Size(20, 30);
-            button.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
-
-            return (form, button);
-        }
-
         [WinFormsTheory]
         [InlineData(AnchorStyles.Top, 120, 30, 20, 30)]
         [InlineData(AnchorStyles.Left, 20, 180, 20, 30)]
@@ -38,32 +26,52 @@ namespace System.Windows.Forms.UITests
         [InlineData(AnchorStyles.Top | AnchorStyles.Bottom, 120, 30, 20, 330)]
         [InlineData(AnchorStyles.Left | AnchorStyles.Right, 20, 180, 220, 30)]
         [InlineData(AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left, 20, 30, 220, 330)]
-        public void ResizeAnchoredControlsParent_HanldeCreated_AnchorsApplied(AnchorStyles anchor, int x, int y, int width, int height)
+        public void ResizeAnchoredControlsParent_HanldeCreated_NewAnchorsApplied(AnchorStyles anchor, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
         {
-            var (form, button) = GetFormWithAnchoredButton();
-            button.Anchor = anchor;
-            DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
-            Assert.Null(anchorInfo);
-            form.Controls.Add(button);
+            var (form, button) = GetFormWithAnchoredButton(anchor);
             form.Shown += OnFormShown;
+
+            // Showing the dialog will execute the assertions
             form.ShowDialog();
+
             button?.Dispose();
             form?.Dispose();
+            return;
 
             void OnFormShown(object? sender, EventArgs e)
             {
                 Form formLocal = (Form)sender!;
                 Control button1 = formLocal.Controls[0];
 
-                //Resize Form to compute button anchors.
+                //Resize the form to compute button anchors.
                 formLocal.Size = new Size(400, 600);
 
-                Assert.Equal(x, button1.Bounds.X);
-                Assert.Equal(y, button1.Bounds.Y);
-                Assert.Equal(width, button1.Bounds.Width);
-                Assert.Equal(height, button1.Bounds.Height);                
+                Assert.Equal(expectedX, button1.Bounds.X);
+                Assert.Equal(expectedY, button1.Bounds.Y);
+                Assert.Equal(expectedWidth, button1.Bounds.Width);
+                Assert.Equal(expectedHeight, button1.Bounds.Height);
                 form.Close();
             }
+        }
+
+        private static (Form, Button) GetFormWithAnchoredButton(AnchorStyles buttonAnchors)
+        {
+            Form form = new();
+            form.Size = new Size(200, 300);
+
+            Button button = new()
+            {
+                Location = new Point(20, 30),
+                Size = new Size(20, 30),
+                Anchor = buttonAnchors
+            };
+
+            DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
+            Assert.Null(anchorInfo);
+
+            form.Controls.Add(button);
+
+            return (form, button);
         }
     }
 }

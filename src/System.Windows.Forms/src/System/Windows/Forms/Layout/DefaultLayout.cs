@@ -1155,8 +1155,8 @@ namespace System.Windows.Forms.Layout
                         else
                         {
                             prefSize.Height = anchorDest.Height < 0
-                            ? Math.Max(prefSize.Height, elementSpace.Bottom + anchorDest.Height)
-                            : Math.Max(prefSize.Height, anchorDest.Bottom);
+                                ? Math.Max(prefSize.Height, elementSpace.Bottom + anchorDest.Height)
+                                : Math.Max(prefSize.Height, anchorDest.Bottom);
                         }
                     }
                 }
