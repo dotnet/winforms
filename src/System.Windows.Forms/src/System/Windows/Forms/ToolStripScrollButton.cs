@@ -11,20 +11,20 @@ namespace System.Windows.Forms
     /// </summary>
     internal partial class ToolStripScrollButton : ToolStripControlHost
     {
-        private readonly bool up = true;
+        private readonly bool _up = true;
 
         private static readonly Size defaultBitmapSize = new(16, 16);
 
         [ThreadStatic]
-        private static Bitmap? upScrollImage;
+        private static Bitmap? t_upScrollImage;
 
         [ThreadStatic]
-        private static Bitmap? downScrollImage;
+        private static Bitmap? t_downScrollImage;
 
         const int AUTOSCROLL_UPDATE = 50;
         private static readonly int AUTOSCROLL_PAUSE = SystemInformation.DoubleClickTime;
 
-        private Timer? mouseDownTimer;
+        private Timer? _mouseDownTimer;
 
         public ToolStripScrollButton(bool up)
             : base(CreateControlInstance(up))
@@ -34,11 +34,11 @@ namespace System.Windows.Forms
                 stickyLabel.OwnerScrollButton = this;
             }
 
-            this.up = up;
+            _up = up;
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
-           => this.Control.AccessibilityObject;
+           => Control.AccessibilityObject;
 
         private static Control CreateControlInstance(bool up)
             => new StickyLabel(up)
@@ -71,9 +71,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                downScrollImage ??= DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown", defaultBitmapSize);
+                t_downScrollImage ??= DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown", defaultBitmapSize);
 
-                return downScrollImage;
+                return t_downScrollImage;
             }
         }
 
@@ -84,9 +84,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                upScrollImage ??= DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp", defaultBitmapSize);
+                t_upScrollImage ??= DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp", defaultBitmapSize);
 
-                return upScrollImage;
+                return t_upScrollImage;
             }
         }
 
@@ -94,9 +94,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                mouseDownTimer ??= new Timer();
+                _mouseDownTimer ??= new Timer();
 
-                return mouseDownTimer;
+                return _mouseDownTimer;
             }
         }
 
@@ -104,11 +104,11 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (mouseDownTimer is not null)
+                if (_mouseDownTimer is not null)
                 {
-                    mouseDownTimer.Enabled = false;
-                    mouseDownTimer.Dispose();
-                    mouseDownTimer = null;
+                    _mouseDownTimer.Enabled = false;
+                    _mouseDownTimer.Dispose();
+                    _mouseDownTimer = null;
                 }
             }
 
@@ -171,7 +171,7 @@ namespace System.Windows.Forms
         {
             if (ParentInternal is ToolStripDropDownMenu parent && Label.Enabled)
             {
-                parent.ScrollInternal(up);
+                parent.ScrollInternal(_up);
             }
         }
     }
