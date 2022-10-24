@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Automation;
@@ -34,27 +32,32 @@ namespace System.Windows.Forms
             Initialize();
         }
 
-        public ToolStripStatusLabel(string text) : base(text, null, false, null)
+        public ToolStripStatusLabel(string? text)
+            : base(text, image: null, isLink: false, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripStatusLabel(Image image) : base(null, image, false, null)
+        public ToolStripStatusLabel(Image? image)
+            : base(text: null, image, isLink: false, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripStatusLabel(string text, Image image) : base(text, image, false, null)
+        public ToolStripStatusLabel(string? text, Image? image)
+            : base(text, image, isLink: false, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripStatusLabel(string text, Image image, EventHandler onClick) : base(text, image, /*isLink=*/false, onClick, null)
+        public ToolStripStatusLabel(string? text, Image? image, EventHandler? onClick)
+            : base(text, image, isLink: false, onClick, name: null)
         {
             Initialize();
         }
 
-        public ToolStripStatusLabel(string text, Image image, EventHandler onClick, string name) : base(text, image, /*isLink=*/false, onClick, name)
+        public ToolStripStatusLabel(string? text, Image? image, EventHandler? onClick, string? name)
+            : base(text, image, isLink: false, onClick, name)
         {
             Initialize();
         }

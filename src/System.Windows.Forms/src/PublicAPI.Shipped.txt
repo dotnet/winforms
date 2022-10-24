@@ -543,9 +543,9 @@ override System.Windows.Forms.ToolStripProgressBar.Text.set -> void
 ~override System.Windows.Forms.ToolStripSplitButton.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
 ~override System.Windows.Forms.ToolStripSplitButton.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
 ~override System.Windows.Forms.ToolStripSplitButton.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripStatusLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripStatusLabel.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStripStatusLabel.OnTextChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStripStatusLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripStatusLabel.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStripStatusLabel.OnTextChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripTextBox.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.ToolStripTextBox.BackgroundImage.set -> void
 override System.Windows.Forms.ToolStripTextBox.OnSubscribeControlEvents(System.Windows.Forms.Control? control) -> void
@@ -1539,11 +1539,11 @@ System.Windows.Forms.ToolStripProgressBar.ToolStripProgressBar(string? name) -> 
 ~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
 ~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
 ~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(System.Drawing.Image image) -> void
-~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string text) -> void
-~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string text, System.Drawing.Image image) -> void
-~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
-~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(System.Drawing.Image image) -> void
+System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string? text) -> void
+System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string? text, System.Drawing.Image? image) -> void
+System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
+System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
+System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(System.Drawing.Image? image) -> void
 System.Windows.Forms.ToolStripTextBox.AppendText(string? text) -> void
 System.Windows.Forms.ToolStripTextBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection!
 System.Windows.Forms.ToolStripTextBox.AutoCompleteCustomSource.set -> void
