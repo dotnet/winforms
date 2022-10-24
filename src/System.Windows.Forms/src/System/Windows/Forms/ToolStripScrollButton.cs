@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -18,17 +16,18 @@ namespace System.Windows.Forms
         private static readonly Size defaultBitmapSize = new(16, 16);
 
         [ThreadStatic]
-        private static Bitmap upScrollImage;
+        private static Bitmap? upScrollImage;
 
         [ThreadStatic]
-        private static Bitmap downScrollImage;
+        private static Bitmap? downScrollImage;
 
         const int AUTOSCROLL_UPDATE = 50;
         private static readonly int AUTOSCROLL_PAUSE = SystemInformation.DoubleClickTime;
 
-        private Timer mouseDownTimer;
+        private Timer? mouseDownTimer;
 
-        public ToolStripScrollButton(bool up) : base(CreateControlInstance(up))
+        public ToolStripScrollButton(bool up)
+            : base(CreateControlInstance(up))
         {
             if (Control is StickyLabel stickyLabel)
             {
@@ -79,7 +78,7 @@ namespace System.Windows.Forms
         }
 
         internal StickyLabel Label
-            => Control as StickyLabel;
+            => (StickyLabel)Control;
 
         private static Image UpImage
         {
@@ -146,12 +145,12 @@ namespace System.Windows.Forms
             MouseDownTimer.Tick -= new EventHandler(OnAutoScrollAccelerate);
         }
 
-        private void OnAutoScrollAccelerate(object sender, EventArgs e)
+        private void OnAutoScrollAccelerate(object? sender, EventArgs e)
         {
             Scroll();
         }
 
-        private void OnInitialAutoScrollMouseDown(object sender, EventArgs e)
+        private void OnInitialAutoScrollMouseDown(object? sender, EventArgs e)
         {
             MouseDownTimer.Tick -= new EventHandler(OnInitialAutoScrollMouseDown);
 
