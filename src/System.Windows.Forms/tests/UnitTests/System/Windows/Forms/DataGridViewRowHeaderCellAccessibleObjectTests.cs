@@ -133,17 +133,20 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_Parent_ReturnsExpected(bool createControl)
         {
-            using DataGridView control = CreateDataGridView(columnCount: 1);
+            using DataGridView control = CreateDataGridView(columnCount: 1, createControl);
             DataGridViewRow row = control.Rows[0];
 
             var accessibleObject = (DataGridViewRowHeaderCellAccessibleObject)row.HeaderCell.AccessibilityObject;
             AccessibleObject expected = row.AccessibilityObject;
 
             Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
-            Assert.False(control.IsHandleCreated);
+
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -155,23 +158,28 @@ namespace System.Windows.Forms.Tests
             Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
         }
 
-        [WinFormsFact]
-        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected(bool createControl)
         {
-            using DataGridView control = CreateDataGridView(columnCount: 1);
+            using DataGridView control = CreateDataGridView(columnCount: 1, createControl);
             DataGridViewRow row = control.Rows[0];
 
             AccessibleObject accessibleObject = (DataGridViewRowHeaderCellAccessibleObject)row.HeaderCell.AccessibilityObject;
             AccessibleObject expected = row.Cells[0].AccessibilityObject;
 
             Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            Assert.False(control.IsHandleCreated);
+
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfFirstColumnHidden()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfFirstColumnHidden(bool createControl)
         {
-            using DataGridView control = CreateDataGridView(columnCount: 2);
+            using DataGridView control = CreateDataGridView(columnCount: 2, createControl);
             control.Columns[0].Visible = false;
             DataGridViewRow row = control.Rows[0];
 
@@ -179,13 +187,16 @@ namespace System.Windows.Forms.Tests
             AccessibleObject expected = row.Cells[1].AccessibilityObject;
 
             Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            Assert.False(control.IsHandleCreated);
+
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfCustomOrder()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfCustomOrder(bool createControl)
         {
-            using DataGridView control = CreateDataGridView(columnCount: 2);
+            using DataGridView control = CreateDataGridView(columnCount: 2, createControl);
             control.Columns[0].DisplayIndex = 1;
             control.Columns[1].DisplayIndex = 0;
             DataGridViewRow row = control.Rows[0];
@@ -194,13 +205,16 @@ namespace System.Windows.Forms.Tests
             AccessibleObject expected = row.Cells[1].AccessibilityObject;
 
             Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            Assert.False(control.IsHandleCreated);
+
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfCustomOrderAndFirstDisplayedColumnHidden()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfCustomOrderAndFirstDisplayedColumnHidden(bool createControl)
         {
-            using DataGridView control = CreateDataGridView(columnCount: 2);
+            using DataGridView control = CreateDataGridView(columnCount: 2, createControl);
             control.Columns[0].DisplayIndex = 1;
             control.Columns[1].DisplayIndex = 0;
             control.Columns[1].Visible = false;
@@ -210,25 +224,31 @@ namespace System.Windows.Forms.Tests
             AccessibleObject expected = row.Cells[0].AccessibilityObject;
 
             Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            Assert.False(control.IsHandleCreated);
+
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected(bool createControl)
         {
-            using DataGridView control = CreateDataGridView(columnCount: 1);
+            using DataGridView control = CreateDataGridView(columnCount: 1, createControl);
             DataGridViewRow row = control.Rows[0];
 
             var accessibleObject = (DataGridViewRowHeaderCellAccessibleObject)row.HeaderCell.AccessibilityObject;
 
             Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-            Assert.False(control.IsHandleCreated);
+
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_Child_ReturnsNull()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DataGridViewRowHeaderCellAccessibleObject_FragmentNavigate_Child_ReturnsNull(bool createControl)
         {
-            using DataGridView control = CreateDataGridView(columnCount: 1);
+            using DataGridView control = CreateDataGridView(columnCount: 1, createControl);
             DataGridViewRow row = control.Rows[0];
 
             var accessibleObject = (DataGridViewRowHeaderCellAccessibleObject)row.HeaderCell.AccessibilityObject;
@@ -236,16 +256,21 @@ namespace System.Windows.Forms.Tests
             Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
             Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
 
-            Assert.False(control.IsHandleCreated);
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
-        private DataGridView CreateDataGridView(int columnCount)
+        private DataGridView CreateDataGridView(int columnCount, bool createControl)
         {
             DataGridView dataGridView = new();
 
             for (int i = 0; i < columnCount; i++)
             {
                 dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            }
+
+            if (createControl)
+            {
+                dataGridView.CreateControl();
             }
 
             return dataGridView;
