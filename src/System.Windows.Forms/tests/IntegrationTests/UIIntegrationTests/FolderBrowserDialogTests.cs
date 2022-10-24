@@ -25,15 +25,22 @@ namespace System.Windows.Forms.UITests
             };
 
             Timer timer = new();
-            timer.Interval = 3000;
+            timer.Interval = 1_000;
+            int counter = 0;
             timer.Tick += (s, e) =>
             {
-                timer.Stop();
+                counter++;
+                if (counter > 2)
+                    throw new TimeoutException("Failed to close the dialog");
+
                 new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.ESCAPE);
             };
 
             timer.Start();
             form.ShowDialog();
+
+            // The dialog has opened and closed successfully
+            Assert.True(true);
         }
     }
 }
