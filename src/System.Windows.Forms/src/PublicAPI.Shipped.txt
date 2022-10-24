@@ -451,11 +451,11 @@ override System.Windows.Forms.MenuStrip.CreateDefaultItem(string? text, System.D
 override System.Windows.Forms.ToolStripButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripButton.OnClick(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripButton.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
-~override System.Windows.Forms.ToolStripComboBox.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ToolStripComboBox.BackgroundImage.set -> void
-~override System.Windows.Forms.ToolStripComboBox.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
-~override System.Windows.Forms.ToolStripComboBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
-~override System.Windows.Forms.ToolStripComboBox.ToString() -> string
+override System.Windows.Forms.ToolStripComboBox.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripComboBox.BackgroundImage.set -> void
+override System.Windows.Forms.ToolStripComboBox.OnSubscribeControlEvents(System.Windows.Forms.Control? control) -> void
+override System.Windows.Forms.ToolStripComboBox.OnUnsubscribeControlEvents(System.Windows.Forms.Control? control) -> void
+override System.Windows.Forms.ToolStripComboBox.ToString() -> string!
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripControlHost.BackgroundImage.set -> void
 ~override System.Windows.Forms.ToolStripControlHost.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -1412,20 +1412,20 @@ System.Windows.Forms.ToolStripButton.ToolStripButton(string? text, System.Drawin
 System.Windows.Forms.ToolStripButton.ToolStripButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
 System.Windows.Forms.ToolStripButton.ToolStripButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
 System.Windows.Forms.ToolStripButton.ToolStripButton(System.Drawing.Image? image) -> void
-~System.Windows.Forms.ToolStripComboBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection
-~System.Windows.Forms.ToolStripComboBox.AutoCompleteCustomSource.set -> void
-~System.Windows.Forms.ToolStripComboBox.ComboBox.get -> System.Windows.Forms.ComboBox
-~System.Windows.Forms.ToolStripComboBox.FindString(string s) -> int
-~System.Windows.Forms.ToolStripComboBox.FindString(string s, int startIndex) -> int
-~System.Windows.Forms.ToolStripComboBox.FindStringExact(string s) -> int
-~System.Windows.Forms.ToolStripComboBox.FindStringExact(string s, int startIndex) -> int
-~System.Windows.Forms.ToolStripComboBox.Items.get -> System.Windows.Forms.ComboBox.ObjectCollection
-~System.Windows.Forms.ToolStripComboBox.SelectedItem.get -> object
-~System.Windows.Forms.ToolStripComboBox.SelectedItem.set -> void
-~System.Windows.Forms.ToolStripComboBox.SelectedText.get -> string
-~System.Windows.Forms.ToolStripComboBox.SelectedText.set -> void
-~System.Windows.Forms.ToolStripComboBox.ToolStripComboBox(string name) -> void
-~System.Windows.Forms.ToolStripComboBox.ToolStripComboBox(System.Windows.Forms.Control c) -> void
+System.Windows.Forms.ToolStripComboBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection!
+System.Windows.Forms.ToolStripComboBox.AutoCompleteCustomSource.set -> void
+System.Windows.Forms.ToolStripComboBox.ComboBox.get -> System.Windows.Forms.ComboBox!
+System.Windows.Forms.ToolStripComboBox.FindString(string? s) -> int
+System.Windows.Forms.ToolStripComboBox.FindString(string? s, int startIndex) -> int
+System.Windows.Forms.ToolStripComboBox.FindStringExact(string? s) -> int
+System.Windows.Forms.ToolStripComboBox.FindStringExact(string? s, int startIndex) -> int
+System.Windows.Forms.ToolStripComboBox.Items.get -> System.Windows.Forms.ComboBox.ObjectCollection!
+System.Windows.Forms.ToolStripComboBox.SelectedItem.get -> object?
+System.Windows.Forms.ToolStripComboBox.SelectedItem.set -> void
+System.Windows.Forms.ToolStripComboBox.SelectedText.get -> string!
+System.Windows.Forms.ToolStripComboBox.SelectedText.set -> void
+System.Windows.Forms.ToolStripComboBox.ToolStripComboBox(string? name) -> void
+System.Windows.Forms.ToolStripComboBox.ToolStripComboBox(System.Windows.Forms.Control! c) -> void
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
@@ -2099,12 +2099,12 @@ virtual System.Windows.Forms.MenuStrip.OnMenuDeactivate(System.EventArgs! e) -> 
 ~virtual System.Windows.Forms.ToolStrip.OnRendererChanged(System.EventArgs e) -> void
 virtual System.Windows.Forms.ToolStripButton.OnCheckedChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripButton.OnCheckStateChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.ToolStripComboBox.OnDropDown(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripComboBox.OnDropDownClosed(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripComboBox.OnDropDownStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripComboBox.OnSelectedIndexChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripComboBox.OnTextUpdate(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripComboBox.OnDropDown(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripComboBox.OnDropDownClosed(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripComboBox.OnDropDownStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripComboBox.OnSelectedIndexChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripComboBox.OnSelectionChangeCommitted(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripComboBox.OnTextUpdate(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnEnter(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnGotFocus(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnHostedControlResize(System.EventArgs e) -> void
@@ -10981,14 +10981,14 @@ System.Windows.Forms.ToolStripComboBox.AutoCompleteMode.set -> void
 System.Windows.Forms.ToolStripComboBox.AutoCompleteSource.get -> System.Windows.Forms.AutoCompleteSource
 System.Windows.Forms.ToolStripComboBox.AutoCompleteSource.set -> void
 System.Windows.Forms.ToolStripComboBox.BeginUpdate() -> void
-System.Windows.Forms.ToolStripComboBox.DoubleClick -> System.EventHandler
-System.Windows.Forms.ToolStripComboBox.DropDown -> System.EventHandler
-System.Windows.Forms.ToolStripComboBox.DropDownClosed -> System.EventHandler
+System.Windows.Forms.ToolStripComboBox.DoubleClick -> System.EventHandler?
+System.Windows.Forms.ToolStripComboBox.DropDown -> System.EventHandler?
+System.Windows.Forms.ToolStripComboBox.DropDownClosed -> System.EventHandler?
 System.Windows.Forms.ToolStripComboBox.DropDownHeight.get -> int
 System.Windows.Forms.ToolStripComboBox.DropDownHeight.set -> void
 System.Windows.Forms.ToolStripComboBox.DropDownStyle.get -> System.Windows.Forms.ComboBoxStyle
 System.Windows.Forms.ToolStripComboBox.DropDownStyle.set -> void
-System.Windows.Forms.ToolStripComboBox.DropDownStyleChanged -> System.EventHandler
+System.Windows.Forms.ToolStripComboBox.DropDownStyleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripComboBox.DropDownWidth.get -> int
 System.Windows.Forms.ToolStripComboBox.DropDownWidth.set -> void
 System.Windows.Forms.ToolStripComboBox.DroppedDown.get -> bool
@@ -11007,14 +11007,14 @@ System.Windows.Forms.ToolStripComboBox.Select(int start, int length) -> void
 System.Windows.Forms.ToolStripComboBox.SelectAll() -> void
 System.Windows.Forms.ToolStripComboBox.SelectedIndex.get -> int
 System.Windows.Forms.ToolStripComboBox.SelectedIndex.set -> void
-System.Windows.Forms.ToolStripComboBox.SelectedIndexChanged -> System.EventHandler
+System.Windows.Forms.ToolStripComboBox.SelectedIndexChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripComboBox.SelectionLength.get -> int
 System.Windows.Forms.ToolStripComboBox.SelectionLength.set -> void
 System.Windows.Forms.ToolStripComboBox.SelectionStart.get -> int
 System.Windows.Forms.ToolStripComboBox.SelectionStart.set -> void
 System.Windows.Forms.ToolStripComboBox.Sorted.get -> bool
 System.Windows.Forms.ToolStripComboBox.Sorted.set -> void
-System.Windows.Forms.ToolStripComboBox.TextUpdate -> System.EventHandler
+System.Windows.Forms.ToolStripComboBox.TextUpdate -> System.EventHandler?
 System.Windows.Forms.ToolStripComboBox.ToolStripComboBox() -> void
 System.Windows.Forms.ToolStripContainer
 System.Windows.Forms.ToolStripContainer.AutoScrollMargin.get -> System.Drawing.Size
