@@ -16,8 +16,8 @@ namespace System.Windows.Forms
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip)]
     public partial class ToolStripDropDownButton : ToolStripDropDownItem
     {
-        private bool showDropDownArrow = true;
-        private byte openMouseId;
+        private bool _showDropDownArrow = true;
+        private byte _openMouseId;
 
         /// <summary>
         ///  Constructs a ToolStripButton that can display a popup.
@@ -90,13 +90,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return showDropDownArrow;
+                return _showDropDownArrow;
             }
             set
             {
-                if (showDropDownArrow != value)
+                if (_showDropDownArrow != value)
                 {
-                    showDropDownArrow = value;
+                    _showDropDownArrow = value;
                     InvalidateItemLayout(PropertyNames.ShowDropDownArrow);
                 }
             }
@@ -141,7 +141,7 @@ namespace System.Windows.Forms
                 {
                     // opening should happen on mouse down.
                     Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
-                    openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
+                    _openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                     ShowDropDown(/*mousePush =*/true);
                 }
             }
@@ -156,9 +156,9 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
                 byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
-                if (closeMouseId != openMouseId)
+                if (closeMouseId != _openMouseId)
                 {
-                    openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
+                    _openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
                     ToolStripManager.ModalMenuFilter.CloseActiveDropDown(DropDown, ToolStripDropDownCloseReason.AppClicked);
                     Select();
                 }
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseLeave(EventArgs e)
         {
-            openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
+            _openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
             base.OnMouseLeave(e);
         }
 
