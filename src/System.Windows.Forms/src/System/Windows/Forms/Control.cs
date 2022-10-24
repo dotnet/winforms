@@ -2191,28 +2191,23 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected void AddToDpiFonts(int dpi, Font font)
+        internal Font GetScaledFont(Font font, int newDpi, int oldDpi)
         {
-            if (!PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
-            {
-                Debug.Assert(false, "Fonts need to be cached only for PerMonitorV2 mode applications");
-                return;
-            }
+            Debug.Assert(PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2),
+                $"Fonts need to be cached only for PermonitorV2 mode applications : {DpiHelper.IsPerMonitorV2Awareness} : {DpiAwarenessContext}");
 
             _dpiFonts ??= new Dictionary<int, Font>();
-            _dpiFonts.Add(dpi, font);
-        }
-
-        private protected bool TryGetDpiFont(int dpi, [NotNullWhen(true)] out Font? font)
-        {
-            font = null;
-            if (!PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+            if (_dpiFonts.TryGetValue(newDpi, out Font? scaledFont))
             {
-                Debug.Assert(false, $"Fonts need to be cached only for PermonitorV2 mode applications : {DpiHelper.IsPerMonitorV2Awareness} : {DpiAwarenessContext}");
-                return false;
+                return scaledFont!;
             }
 
-            return _dpiFonts?.TryGetValue(dpi, out font) ?? false;
+            float factor = ((float)newDpi / oldDpi);
+            scaledFont = font.WithSize(font.Size * factor);
+
+            _dpiFonts.Add(newDpi, scaledFont);
+
+            return scaledFont;
         }
 
         private void ClearDpiFonts()
@@ -7941,14 +7936,7 @@ namespace System.Windows.Forms
                         {
                             // Controls are by default font scaled.
                             // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
-                            var factor = (float)_deviceDpi / fontDpi;
-
-                            if (!TryGetDpiFont(_deviceDpi, out Font fontForDpi))
-                            {
-                                fontForDpi = localFont.WithSize(localFont.Size * factor);
-                                AddToDpiFonts(_deviceDpi, fontForDpi);
-                            }
-
+                            Font fontForDpi = GetScaledFont(localFont, _deviceDpi, fontDpi);
                             ScaledControlFont = fontForDpi;
 
                             // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
@@ -7956,7 +7944,7 @@ namespace System.Windows.Forms
                             // 'OnFontChanged' event explicitly. ex: winforms designer natively hosted in VS.
                             if (IsFontSet())
                             {
-                                SetScaledFont(ScaledControlFont);
+                                SetScaledFont(fontForDpi);
                             }
                         }
 
@@ -12395,23 +12383,13 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Controls are by default font scaled.
-            // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
-
-            var factor = (float)_deviceDpi / fontDpi;
-
-            if (!TryGetDpiFont(_deviceDpi, out Font? fontForDpi))
-            {
-                fontForDpi = localFont.WithSize(localFont.Size * factor);
-                AddToDpiFonts(_deviceDpi, fontForDpi);
-            }
-
             // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
             // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
             // 'OnFontChanged' event explicitly. ex: winforms designer in VS.
             var container = this as ContainerControl;
             var isLocalFontSet = IsFontSet();
-            ScaledControlFont = fontForDpi;
+
+            ScaledControlFont = GetScaledFont(localFont, _deviceDpi, fontDpi);
 
             if (isLocalFontSet || container is null || !IsScaledByParent(this))
             {
