@@ -3,33 +3,33 @@
 
 ## Description
 
-We have multiple [issues](https://github.com/dotnet/winforms/issues?q=is%3Aissue+is%3Aopen+anchor+label%3A%22area%3A+anchor%2Fscaling%22) reported in WinForms around the anchor layout being problematic on higher DPI scale monitors, irrespective of application DPI mode. This document outlines the changes being made in .NET 8.0 to address these issues along with setting the goal to support all supported application DPI modes in WinForms.
+We have multiple [issues](https://github.com/dotnet/winforms/issues?q=is%3Aissue+is%3Aopen+anchor+label%3A%22area%3A+anchor%2Fscaling%22) reported in WinForms around the anchor layout being problematic on higher DPI scale monitors, irrespective of application DPI mode. This document outlines the changes being made in .NET 8.0 to address these issues, which is aligned with the larger goal to support all supported application DPI modes in WinForms.
 
 
 ## Problem in Scope
 
-Anchored control's position with respect to its parent should be able to determine at the design time and would only need to be changed   if there were explicit changes in the control's Bounds or when the control is scaled in response to a DPI changed event. Bounds changes as result of Parent's bounds change shouldn’t alter control's relative position in the parent's rectangle. However, the layout engine computes the anchored control's position every time there are changes to the control's bounds or the control's location-related properties.
+The position of an anchored control with respect to its parent should be able to determined at design time and should only need to be changed  if there were explicit changes in the control's bounds or when the control is scaled in response to a DPI changed event. Bounds changes as result of the parent control's bounds changing shouldn’t alter a control's relative position in the parent's rectangle. However, currently the layout engine computes the anchored control's position every time there are changes to the control's bounds or the control's location-related properties.
 
-For example, the following somewhat trivial code snippet copide from an `InitializeComponent` method demonstrates the impact of the "over-eager" computations. The number of unncessary computations can increase quite dramatically for nested layouts.
+For example, the following simple code snippet copied from an `InitializeComponent` method demonstrates the impact of the "over-eager" computations. The number of unnecessaryy computations can increase quite dramatically for nested layouts.
 
 ```CS
-// Following line trigger layout to compute anchors with default button size and without parent.
+// The following line triggers layout to compute anchors with default button size and without parent.
 this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 
-// Following line trigger layout again to compute anchors with default button size with new location and still without parent.
+// The following line triggers layout again to compute anchors with default button size with new location but still without parent.
 this.button7.Location = new System.Drawing.Point(9, 47);
 
-// Following line trigger layout again to compute anchors with button's new size and still without parent.
+// The following line triggers layout once again to compute anchors with button's new size but still without parent.
 this.button7.Size = new System.Drawing.Size(134, 23);
 
-// Following line trigger layout to compute anchors with button's current size and default size for parent.
+// The following line triggers layout to compute anchors with button's current size and the default size for parent.
 this.Controls.Add(button7);
 
-// Following line trigger layout to compute anchors with button's current size and new size for parent.
-// These size still may be changed for the DPI on the monitor depending on application's DPI mode
+// The following line triggers layout to compute anchors with button's current size and new size for parent.
+// These sizes still may be changed for the DPI on the monitor depending on application's DPI mode
 this.Size = new System.Drawing.Size(828, 146);
 
-// Following line trigger layout to compute anchors with button's
+// The following line triggers layout to compute anchors with button's
 current size and new size for parent.
 // DPI on the monitor still not applied.
 this.ResumeLayout(false)
@@ -78,9 +78,9 @@ When the control's `Anchor` property is set, the anchors (that is, left, top, ri
 
 ## Proposed solution
 
-Additionally there may be cases where developers could be force-creating handle out of order, but those cases are not expected to be main stream, and such cases will have to be handled by application developer. 
+There may be cases where developers could be force-creating handles out of order, but those cases are not expected to be mainstream, and such cases will have to be handled by application developer. 
 	
-The following are the events we would be using to compute anchors and replacing the current set of events mentioned in Scope section above.
+The following are the events we will be using to compute anchors and replacing the current set of events mentioned in Scope section above.
 
 - `WmCreate`,
 - `OnParentChanged`,
@@ -125,7 +125,7 @@ internal static void UpdateAnchorInfoV2(IArrangedElement element)
 
 ## Simplifying Anchor calculations
 
-The current anchor calculation implementation is designed prior to adding high DPI support to winforms. This proposal is replacing the current implementation with the one described in Figure 1 above. Following is the source snippet that computes the anchors.
+The current anchor calculation implementation was designed prior to adding high DPI support to WinForms. This proposal is replacing the current implementation with the one described in Figure 1 above. Following is the source snippet that computes the anchors.
 
 ```CS
 private static void ComputeAnchorInfo(IArrangedElement element)
