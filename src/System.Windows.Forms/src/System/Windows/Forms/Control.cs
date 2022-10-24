@@ -2196,7 +2196,8 @@ namespace System.Windows.Forms
             Debug.Assert(PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2),
                 $"Fonts need to be cached only for PermonitorV2 mode applications : {DpiHelper.IsPerMonitorV2Awareness} : {DpiAwarenessContext}");
 
-            if(_dpiFonts is not null && _dpiFonts.TryGetValue(dpiNew, out Font? scaledFont))
+            _dpiFonts ??= new Dictionary<int, Font>();
+            if (_dpiFonts.TryGetValue(dpiNew, out Font? scaledFont))
             {
                 return scaledFont!;
             }
@@ -2204,7 +2205,6 @@ namespace System.Windows.Forms
             float factor = ((float)newDpi / oldDpi);
             scaledFont = font.WithSize(font.Size * factor);
 
-            _dpiFonts ??= new Dictionary<int, Font>();
             _dpiFonts.Add(dpiNew, scaledFont);
 
             return scaledFont;
