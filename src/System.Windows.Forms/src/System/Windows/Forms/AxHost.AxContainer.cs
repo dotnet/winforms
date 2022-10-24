@@ -692,9 +692,7 @@ namespace System.Windows.Forms
             }
 
             unsafe HRESULT Ole.IParseDisplayName.Interface.ParseDisplayName(Com.IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, Com.IMoniker** ppmkOut)
-            {
-                return ((Ole.IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
-            }
+                => ((Ole.IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
 
             // IOleContainer methods:
             unsafe HRESULT Ole.IOleContainer.Interface.ParseDisplayName(Com.IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, Com.IMoniker** ppmkOut)

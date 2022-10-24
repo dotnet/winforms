@@ -9,10 +9,10 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Ole = Windows.Win32.System.Ole;
 using Windows.Win32.System.Com;
-using IEnumUnknown = Interop.Ole32.IEnumUnknown;
 using static Interop.Ole32;
+using IEnumUnknown = Interop.Ole32.IEnumUnknown;
+using Ole = Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms
 {
@@ -401,7 +401,8 @@ namespace System.Windows.Forms
                 }
 
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in getContainer");
-                *ppContainer = (Ole.IOleContainer*)Marshal.GetComInterfaceForObject<AxContainer, Ole.IOleContainer.Interface>(_host.GetParentContainer());
+                bool result = ComHelpers.TryQueryInterface(_host.GetParentContainer(), out *ppContainer);
+                Debug.Assert(result);
                 return HRESULT.S_OK;
             }
 

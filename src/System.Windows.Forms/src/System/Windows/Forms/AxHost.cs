@@ -2321,11 +2321,9 @@ namespace System.Windows.Forms
         {
             Control parent = ParentInternal;
             RECT posRect = Bounds;
-            GetOleObject().DoVerb(verb,
-                null,
-                (IOleClientSite*)Marshal.GetComInterfaceForObject<OleInterfaces, IOleClientSite.Interface>(_oleSite),
-                -1,
-                parent is null ? HWND.Null : parent.HWND, &posRect);
+            bool result = ComHelpers.TryQueryInterface(_oleSite, out IOleClientSite* pClientSite);
+            Debug.Assert(result);
+            GetOleObject().DoVerb(verb, lpmsg: null, pClientSite, -1, parent is null ? HWND.Null : parent.HWND, &posRect);
         }
 
         private bool AwaitingDefreezing()

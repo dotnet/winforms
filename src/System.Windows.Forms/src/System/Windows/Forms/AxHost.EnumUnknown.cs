@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 
@@ -98,7 +99,8 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                *ppenum = (IEnumUnknown*)Marshal.GetComInterfaceForObject<EnumUnknown, IEnumUnknown.Interface>(new EnumUnknown(_array, _location));
+                bool result = ComHelpers.TryQueryInterface(new EnumUnknown(_array, _location), out *ppenum);
+                Debug.Assert(result);
                 return HRESULT.S_OK;
             }
         }

@@ -17,8 +17,8 @@ using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using Windows.Win32.System.Ole;
-using Com = Windows.Win32.System.Com;
 using static Interop;
+using Com = Windows.Win32.System.Com;
 using Encoding = System.Text.Encoding;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -13911,6 +13911,11 @@ namespace System.Windows.Forms
 
         unsafe HRESULT IOleObject.Interface.GetUserType(USERCLASSTYPE dwFormOfType, PWSTR* pszUserType)
         {
+            if (pszUserType is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserType");
             *pszUserType = (char*)Marshal.StringToCoTaskMemUni(
                 dwFormOfType == USERCLASSTYPE.USERCLASSTYPE_FULL ? GetType().FullName : GetType().Name);
