@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
@@ -17,7 +15,7 @@ namespace System.Windows.Forms
     public partial class ToolStripOverflowButton : ToolStripDropDownButton
     {
         // we need to cache this away as the Parent property gets reset a lot.
-        private readonly ToolStrip parentToolStrip;
+        private readonly ToolStrip _parentToolStrip;
 
         private static bool isScalingInitialized;
         private const int MAX_WIDTH = 16;
@@ -39,7 +37,7 @@ namespace System.Windows.Forms
             }
 
             SupportsItemClick = false;
-            this.parentToolStrip = parentToolStrip;
+            _parentToolStrip = parentToolStrip;
         }
 
         protected override void Dispose(bool disposing)
@@ -75,7 +73,7 @@ namespace System.Windows.Forms
 
         internal ToolStrip ParentToolStrip
         {
-            get { return parentToolStrip; }
+            get { return _parentToolStrip; }
         }
 
         [Browsable(false)]
