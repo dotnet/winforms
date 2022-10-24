@@ -199,8 +199,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewTopLeftHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfFirstColumnHidden()
         {
             using DataGridView control = new();
-            control.Columns.Add("Column 1", "Header text 1");
-            control.Columns.Add("Column 2", "Header text 2");
+            control.Columns.AddRange(new DataGridViewTextBoxColumn(), new DataGridViewTextBoxColumn());
             control.Columns[0].Visible = false;
 
             using DataGridViewTopLeftHeaderCell cell = new();
@@ -216,8 +215,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewTopLeftHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfCustomOrder()
         {
             using DataGridView control = new();
-            control.Columns.Add("Column 1", "Header text 1");
-            control.Columns.Add("Column 2", "Header text 2");
+            control.Columns.AddRange(new DataGridViewTextBoxColumn(), new DataGridViewTextBoxColumn());
             control.Columns[0].DisplayIndex = 1;
             control.Columns[1].DisplayIndex = 0;
 
@@ -234,8 +232,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewTopLeftHeaderCellAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected_IfCustomOrderAndFirstDisplayedColumnHidden()
         {
             using DataGridView control = new();
-            control.Columns.Add("Column 1", "Header text 1");
-            control.Columns.Add("Column 1", "Header text 1");
+            control.Columns.AddRange(new DataGridViewTextBoxColumn(), new DataGridViewTextBoxColumn());
             control.Columns[0].DisplayIndex = 1;
             control.Columns[1].DisplayIndex = 0;
             control.Columns[1].Visible = false;
