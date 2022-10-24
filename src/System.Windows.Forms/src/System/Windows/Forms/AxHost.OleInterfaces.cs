@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using static Interop.Ole32;
-using IEnumUnknown = Interop.Ole32.IEnumUnknown;
 using Ole = Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms
@@ -142,7 +141,7 @@ namespace System.Windows.Forms
 
             // IVBGetControl methods:
 
-            unsafe HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out IEnumUnknown ppenum)
+            unsafe HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out IEnumUnknown.Interface ppenum)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnumControls");
                 ppenum = _host.GetParentContainer().EnumControls(_host, dwOleContF, dwWhich);

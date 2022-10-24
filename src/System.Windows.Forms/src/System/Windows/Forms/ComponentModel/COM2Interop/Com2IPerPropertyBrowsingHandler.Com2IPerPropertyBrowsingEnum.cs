@@ -89,8 +89,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             continue;
                         }
 
-                        using VARIANT variant = default(VARIANT);
-                        HRESULT hr = ppb.GetPredefinedValue((int)_target.DISPID, cookie, (VARIANT*)&variant);
+                        using VARIANT variant = default;
+                        HRESULT hr = ppb.GetPredefinedValue((int)_target.DISPID, cookie, &variant);
                         if (hr.Succeeded && variant.Type != VARENUM.VT_EMPTY)
                         {
                             valueItems[i] = variant.ToObject()!;

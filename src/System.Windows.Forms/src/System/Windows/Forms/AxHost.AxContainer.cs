@@ -234,7 +234,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal IEnumUnknown EnumControls(Control ctl, OLECONTF dwOleContF, GC_WCH dwWhich)
+            internal Com.IEnumUnknown.Interface EnumControls(Control ctl, OLECONTF dwOleContF, GC_WCH dwWhich)
             {
                 GetComponents();
 
@@ -354,7 +354,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    return (IEnumUnknown)new EnumUnknown(rval);
+                    return new EnumUnknown(rval);
                 }
                 finally
                 {
@@ -915,7 +915,7 @@ namespace System.Windows.Forms
 
                 private AxContainer GetC() => (AxContainer)_pContainer.Target;
 
-                HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out IEnumUnknown ppenum)
+                HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out Com.IEnumUnknown.Interface ppenum)
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnumControls for proxy");
                     ppenum = GetC().EnumControls(GetP(), dwOleContF, dwWhich);

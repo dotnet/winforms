@@ -5,6 +5,7 @@
 using System.Runtime.InteropServices;
 
 namespace Windows.Win32.System.Ole;
+
 internal partial struct CADWORD
 {
     public unsafe uint[] ConvertAndFree()
