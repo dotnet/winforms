@@ -625,6 +625,8 @@ namespace System.Windows.Forms
             }
 
             AdjustFormScrollbars(AutoScroll);
+
+            // Because the code has been like that since long time, we assume that levent is not null.
             base.OnLayout(levent!);
         }
 

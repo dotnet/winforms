@@ -1562,6 +1562,7 @@ namespace System.Windows.Forms
                 _doubleClickFired = false;
             }
 
+            // Because the code has been like that since long time, we assume that mevent is not null.
             base.OnMouseUp(mevent!);
         }
 
