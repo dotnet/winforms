@@ -473,8 +473,7 @@ namespace System.Windows.Forms
             {
                 case PInvoke.BFFM_INITIALIZED:
                     // Indicates the browse dialog box has finished initializing. The lpData value is zero.
-
-                    var instance = (FolderBrowserDialog)GCHandle.FromIntPtr(lParam).Target!;
+                    var instance = (FolderBrowserDialog)GCHandle.FromIntPtr(lpData).Target!;
                     if (instance._initialDirectory.Length != 0)
                     {
                         // Try to expand the folder specified by initialDir
@@ -494,7 +493,8 @@ namespace System.Windows.Forms
                     if (selectedPidl is not null)
                     {
                         // Try to retrieve the path from the IDList
-                        bool isFileSystemFolder = PInvoke.SHGetPathFromIDList(selectedPidl, null);
+                        char* buffer = stackalloc char[PInvoke.MAX_PATH + 1];
+                        bool isFileSystemFolder = PInvoke.SHGetPathFromIDList(selectedPidl, (PWSTR)buffer);
                         PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.BFFM_ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
                     }
 
