@@ -27,7 +27,7 @@ namespace System.Windows.Forms
 #if DEBUG
         internal static readonly TraceSwitch DragDropDebug = new TraceSwitch("DragDropDebug", "Debug ToolStrip DragDrop code");
 #else
-        internal static readonly TraceSwitch DragDropDebug;
+        internal static readonly TraceSwitch? DragDropDebug;
 #endif
 
         public ToolStrip Owner
@@ -37,19 +37,18 @@ namespace System.Windows.Forms
 
         public ToolStripDropTargetManager(ToolStrip owner)
         {
-            this._owner = owner;
-            ArgumentNullException.ThrowIfNull(owner);
+            _owner = owner.OrThrowIfNull();
         }
 
         public void EnsureRegistered()
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Ensuring drop target registered");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "Ensuring drop target registered");
             SetAcceptDrops(true);
         }
 
         public void EnsureUnRegistered()
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Attempting to unregister droptarget");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "Attempting to unregister droptarget");
             for (int i = 0; i < _owner.Items.Count; i++)
             {
                 if (_owner.Items[i].AllowDrop)
@@ -79,7 +78,7 @@ namespace System.Windows.Forms
 
         public void OnDragEnter(DragEventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG ENTER] ==============");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG ENTER] ==============");
 
             // If we are supporting Item Reordering
             // and this is a ToolStripItem - snitch it.
@@ -133,7 +132,7 @@ namespace System.Windows.Forms
 
         public void OnDragOver(DragEventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG OVER] ==============");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG OVER] ==============");
 
             IDropTarget? newDropTarget = null;
 
@@ -141,7 +140,7 @@ namespace System.Windows.Forms
             // and this is a ToolStripItem - snitch it.
             if (_owner.AllowItemReorder && e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
-                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ItemReorderTarget taking this...");
+                Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "ItemReorderTarget taking this...");
                 newDropTarget = _owner.ItemReorderDropTarget;
             }
             else
@@ -185,7 +184,7 @@ namespace System.Windows.Forms
 
         public void OnDragLeave(EventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG LEAVE] ==============");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG LEAVE] ==============");
 
             if (_lastDropTarget is not null)
             {
@@ -206,7 +205,7 @@ namespace System.Windows.Forms
 
         public void OnDragDrop(DragEventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG DROP] ==============");
+            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG DROP] ==============");
 
             if (_lastDropTarget is not null)
             {
@@ -236,7 +235,7 @@ namespace System.Windows.Forms
                         throw new ThreadStateException(SR.ThreadMustBeSTA);
                     }
 
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + _owner.Handle.ToString());
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {_owner.Handle}");
 
                     // Register
                     HRESULT n = Ole32.RegisterDragDrop(_owner, new DropTarget(this));
