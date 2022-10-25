@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    partial class ErrorProvider
+    public partial class ErrorProvider
     {
         /// <summary>
         ///  There is one ControlItem for each control that the ErrorProvider is tracking state for.

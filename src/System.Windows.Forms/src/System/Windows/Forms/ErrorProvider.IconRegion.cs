@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    partial class ErrorProvider
+    public partial class ErrorProvider
     {
         /// <summary>
         ///  This represents the HRGN of icon. The region is calculate from the icon's mask.
