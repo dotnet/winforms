@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Automation
 
         public unsafe int SendKeyboardInputVK(short vk, bool press)
         {
-            INPUT keyboardInput = new INPUT();
+            INPUT keyboardInput = default(INPUT);
 
             keyboardInput.type = INPUTENUM.KEYBOARD;
             keyboardInput.inputUnion.ki.wVk = (ushort)vk;

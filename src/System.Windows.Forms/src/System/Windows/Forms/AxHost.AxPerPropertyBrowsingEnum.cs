@@ -97,7 +97,7 @@ namespace System.Windows.Forms
                                 continue;
                             }
 
-                            using VARIANT var = new();
+                            using VARIANT var = default(VARIANT);
                             HRESULT hr = ppb.GetPredefinedValue(_target.Dispid, cookie, &var);
                             if (hr.Succeeded && var.Type != VARENUM.VT_EMPTY)
                             {

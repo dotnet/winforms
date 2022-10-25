@@ -970,7 +970,7 @@ namespace System.Windows.Forms.Design
             if (c is null)
             {
                 Debug.Fail("Anything we're extending should have a component view.");
-                return new Point();
+                return default(Point);
             }
 
             Point loc = c.Location;
@@ -2536,7 +2536,7 @@ namespace System.Windows.Forms.Design
                         {
                             // Make sure tha we send our glyphs hit test messages over the TrayControls too
                             Point pt = PARAM.ToPoint(m.LParamInternal);
-                            var pt1 = new Point();
+                            var pt1 = default(Point);
                             pt1 = PointToClient(pt1);
                             pt.Offset(pt1.X, pt1.Y);
                             pt.Offset(Location.X, Location.Y); //offset the loc of the traycontrol -so now we're in comptray coords
@@ -2788,7 +2788,7 @@ namespace System.Windows.Forms.Design
             public TraySelectionUIHandler(ComponentTray tray)
             {
                 _tray = tray;
-                _snapSize = new Size();
+                _snapSize = default(Size);
             }
 
             /// <summary>

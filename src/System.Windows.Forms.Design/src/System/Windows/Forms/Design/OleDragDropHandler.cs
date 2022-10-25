@@ -888,7 +888,7 @@ namespace System.Windows.Forms.Design
 
                                     if (loc != null && !loc.IsReadOnly)
                                     {
-                                        Rectangle bounds = new Rectangle();
+                                        Rectangle bounds = default(Rectangle);
                                         Point pt = (Point)loc.GetValue(comp);
                                         bounds.X = dropPt.X + pt.X;
                                         bounds.Y = dropPt.Y + pt.Y;

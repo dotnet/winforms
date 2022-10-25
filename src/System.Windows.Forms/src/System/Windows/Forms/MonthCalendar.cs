@@ -860,7 +860,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    RECT rect = new RECT();
+                    RECT rect = default(RECT);
                     if (PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_GETMINREQRECT, 0, ref rect) == 0)
                     {
                         throw new InvalidOperationException(SR.InvalidSingleMonthSize);
@@ -923,7 +923,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SYSTEMTIME systemTime = new();
+                    SYSTEMTIME systemTime = default(SYSTEMTIME);
                     int result = (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_GETTODAY, 0, ref systemTime);
                     Debug.Assert(result != 0, "MCM_GETTODAY failed");
                     return ((DateTime)systemTime).Date;
@@ -1394,7 +1394,7 @@ namespace System.Windows.Forms
             {
                 cbSize = (uint)sizeof(MCHITTESTINFO),
                 pt = new Point(x, y),
-                st = new SYSTEMTIME()
+                st = default(SYSTEMTIME)
             };
 
             PInvoke.SendMessage(this, (User32.WM)PInvoke.MCM_HITTEST, 0, ref mchi);

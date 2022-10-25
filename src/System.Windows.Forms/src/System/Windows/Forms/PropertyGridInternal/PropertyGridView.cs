@@ -5065,7 +5065,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            var mouseMessage = new MSG();
+            var mouseMessage = default(MSG);
             while (User32.PeekMessageW(ref mouseMessage,
                 IntPtr.Zero,
                 User32.WM.MOUSEFIRST,
@@ -5141,7 +5141,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            var mouseMsg = new MSG();
+            var mouseMsg = default(MSG);
             while (User32.PeekMessageW(ref mouseMsg, IntPtr.Zero, User32.WM.MOUSEFIRST, User32.WM.MOUSELAST, User32.PM.REMOVE))
             {
                 // No-op.

@@ -2621,7 +2621,7 @@ namespace System.Windows.Forms
 
         internal static TextFormatFlags TextFormatFlagsForAlignmentGDI(ContentAlignment align)
         {
-            TextFormatFlags output = new TextFormatFlags();
+            TextFormatFlags output = default(TextFormatFlags);
             output |= TranslateAlignmentForGDI(align);
             output |= TranslateLineAlignmentForGDI(align);
             return output;

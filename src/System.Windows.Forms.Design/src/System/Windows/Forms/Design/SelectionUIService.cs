@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Design
             _mouseDragAnchor = anchor;
             _mouseDragging = true;
             _mouseDragHitTest = hitTest;
-            _mouseDragOffset = new Rectangle();
+            _mouseDragOffset = default(Rectangle);
             _savedVisible = Visible;
         }
 

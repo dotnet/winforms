@@ -95,8 +95,8 @@ namespace System.Windows.Forms.Design
                 COLORREF backColor,
                 COLORREF textColor)
             {
-                Size size = new();
-                RECT rc2 = new();
+                Size size = default(Size);
+                RECT rc2 = default(RECT);
                 RECT rc = rcIn;
                 ImageList imagelist = ImageList;
 

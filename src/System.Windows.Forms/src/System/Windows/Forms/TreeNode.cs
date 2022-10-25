@@ -115,7 +115,7 @@ namespace System.Windows.Forms
         /// </summary>
         public TreeNode()
         {
-            treeNodeState = new Collections.Specialized.BitVector32();
+            treeNodeState = default(Collections.Specialized.BitVector32);
         }
 
         internal TreeNode(TreeView treeView) : this()
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
                     return Rectangle.Empty;
                 }
 
-                RECT rc = new RECT();
+                RECT rc = default(RECT);
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
@@ -254,7 +254,7 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                RECT rc = new RECT();
+                RECT rc = default(RECT);
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
 
@@ -646,7 +646,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                RECT rc = new RECT();
+                RECT rc = default(RECT);
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
 

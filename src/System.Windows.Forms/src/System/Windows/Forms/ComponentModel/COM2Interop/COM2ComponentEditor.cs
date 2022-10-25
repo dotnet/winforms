@@ -27,7 +27,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (obj is ISpecifyPropertyPages ispp)
             {
-                var uuids = new CAUUID();
+                var uuids = default(CAUUID);
                 try
                 {
                     HRESULT hr = ispp.GetPages(&uuids);
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 try
                 {
-                    var uuids = new CAUUID();
+                    var uuids = default(CAUUID);
                     HRESULT hr = ispp.GetPages(&uuids);
                     if (!hr.Succeeded || uuids.cElems == 0)
                     {

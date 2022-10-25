@@ -25,14 +25,14 @@ namespace Windows.Win32.Graphics.Gdi
 
         public static LOGFONTW FromFont(Font font)
         {
-            object logFont = new LOGFONTW();
+            object logFont = default(LOGFONTW);
             font.ToLogFont(logFont);
             return (LOGFONTW)logFont;
         }
 
         public static LOGFONTW FromFont(Font font, global::System.Drawing.Graphics graphics)
         {
-            object logFont = new LOGFONTW();
+            object logFont = default(LOGFONTW);
             font.ToLogFont(logFont, graphics);
             return (LOGFONTW)logFont;
         }

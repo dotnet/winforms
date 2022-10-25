@@ -50,8 +50,8 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe object? GetDataFromOleIStream(string format)
             {
-                FORMATETC formatetc = new FORMATETC();
-                STGMEDIUM medium = new STGMEDIUM();
+                FORMATETC formatetc = default(FORMATETC);
+                STGMEDIUM medium = default(STGMEDIUM);
 
                 formatetc.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
                 formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
@@ -164,8 +164,8 @@ namespace System.Windows.Forms
                 done = false;
                 Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
 
-                FORMATETC formatetc = new FORMATETC();
-                STGMEDIUM medium = new STGMEDIUM();
+                FORMATETC formatetc = default(FORMATETC);
+                STGMEDIUM medium = default(STGMEDIUM);
 
                 formatetc.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
                 formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
@@ -210,8 +210,8 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
 
-                FORMATETC formatetc = new FORMATETC();
-                STGMEDIUM medium = new STGMEDIUM();
+                FORMATETC formatetc = default(FORMATETC);
+                STGMEDIUM medium = default(STGMEDIUM);
 
                 TYMED tymed = (TYMED)0;
 
@@ -614,7 +614,7 @@ namespace System.Windows.Forms
                 {
                     enumFORMATETC.Reset();
 
-                    FORMATETC[] formatetc = new FORMATETC[] { new FORMATETC() };
+                    FORMATETC[] formatetc = new FORMATETC[] { default(FORMATETC) };
                     int[] retrieved = new int[] { 1 };
 
                     while (retrieved[0] > 0)

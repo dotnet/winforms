@@ -862,8 +862,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)component;
             object[] pVarResult = new object[1];
-            EXCEPINFO pExcepInfo = new();
-            DISPPARAMS dispParams = new();
+            EXCEPINFO pExcepInfo = default(EXCEPINFO);
+            DISPPARAMS dispParams = default(DISPPARAMS);
             Guid g = Guid.Empty;
 
             HRESULT hr = pDisp.Invoke(
@@ -1234,7 +1234,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)owner;
 
-            EXCEPINFO excepInfo = new();
+            EXCEPINFO excepInfo = default(EXCEPINFO);
             Ole32.DispatchID namedArg = Ole32.DispatchID.PROPERTYPUT;
             DISPPARAMS dispParams = new()
             {
@@ -1243,7 +1243,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 rgdispidNamedArgs = (int*)&namedArg
             };
 
-            using VARIANT variant = new();
+            using VARIANT variant = default(VARIANT);
             Marshal.GetNativeVariantForObject(value, (IntPtr)(&variant));
             dispParams.rgvarg = &variant;
             Guid g = Guid.Empty;

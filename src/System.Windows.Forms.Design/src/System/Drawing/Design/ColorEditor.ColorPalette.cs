@@ -210,7 +210,7 @@ namespace System.Drawing.Design
                     {
                         if (SelectedColor.Equals(GetColorFromCell(x, y)))
                         {
-                            Rectangle r = new Rectangle();
+                            Rectangle r = default(Rectangle);
                             FillRectWithCellBounds(x, y, ref r);
                             Invalidate(Rectangle.Inflate(r, 5, 5));
                             break;
@@ -221,7 +221,7 @@ namespace System.Drawing.Design
 
             private void InvalidateFocus()
             {
-                Rectangle r = new Rectangle();
+                Rectangle r = default(Rectangle);
                 FillRectWithCellBounds(_focus.X, _focus.Y, ref r);
                 Invalidate(Rectangle.Inflate(r, 5, 5));
                 NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), OBJID.CLIENT, 1 + Get1DFrom2D(_focus.X, _focus.Y));

@@ -1470,7 +1470,7 @@ namespace System.Windows.Forms
         public Rectangle GetItemRectangle(int index)
         {
             CheckIndex(index);
-            var rect = new RECT();
+            var rect = default(RECT);
             if (PInvoke.SendMessage(this, (WM)LB.GETITEMRECT, (uint)index, ref rect) == 0)
             {
                 return Rectangle.Empty;

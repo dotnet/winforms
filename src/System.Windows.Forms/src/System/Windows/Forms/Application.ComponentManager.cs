@@ -239,7 +239,7 @@ namespace System.Windows.Forms
             BOOL IMsoComponentManager.FContinueIdle()
             {
                 // If we have a message on queue, then don't continue idle processing.
-                var msg = new MSG();
+                var msg = default(MSG);
                 return User32.PeekMessageW(ref msg);
             }
 
@@ -262,7 +262,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    MSG msg = new MSG();
+                    MSG msg = default(MSG);
                     IMsoComponent requestingComponent = entry.component;
                     _activeComponent = requestingComponent;
 

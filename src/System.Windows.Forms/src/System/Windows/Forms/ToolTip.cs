@@ -1987,7 +1987,7 @@ namespace System.Windows.Forms
 
         private HWND GetCurrentToolHwnd()
         {
-            var toolInfo = new ToolInfoWrapper<Control>();
+            var toolInfo = default(ToolInfoWrapper<Control>);
             if (toolInfo.SendMessage(this, (User32.WM)PInvoke.TTM_GETCURRENTTOOLW) != 0)
             {
                 return (HWND)toolInfo.Info.hwnd;

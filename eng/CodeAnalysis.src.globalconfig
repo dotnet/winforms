@@ -1041,7 +1041,7 @@ dotnet_diagnostic.SA1127.severity = none
 dotnet_diagnostic.SA1128.severity = none
 
 # SA1129: Do not use default value type constructor
-dotnet_diagnostic.SA1129.severity = none # TODO: warning
+dotnet_diagnostic.SA1129.severity = warning
 
 # SA1130: Use lambda syntax
 dotnet_diagnostic.SA1130.severity = none

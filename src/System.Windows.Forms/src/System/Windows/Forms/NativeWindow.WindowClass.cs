@@ -130,7 +130,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void RegisterClass()
             {
-                WNDCLASSW windowClass = new();
+                WNDCLASSW windowClass = default(WNDCLASSW);
 
                 string? localClassName = _className;
 

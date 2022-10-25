@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public virtual bool BeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
         {
-            dragOffset = new Rectangle();
+            dragOffset = default(Rectangle);
             originalCoords = null;
             this.rules = rules;
 
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Design
         {
             Debug.Assert(bounds != null && controls != null && bounds.Length == controls.Length, "bounds->controls mismatch");
 
-            Rectangle b = new Rectangle();
+            Rectangle b = default(Rectangle);
 
             // Whip through each of the controls.
             //
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.Design
             Control[] controls = dragControls;
             Rectangle offset = dragOffset;
             BoundsInfo[] bounds = originalCoords;
-            Point adjustedLoc = new Point();
+            Point adjustedLoc = default(Point);
 
             // Erase the clipping and other state if this is the final move.
             //

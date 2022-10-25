@@ -1129,7 +1129,7 @@ namespace System.Windows.Forms
             }
 
             SetState(State.GetTabRectfromItemSize, false);
-            RECT rect = new RECT();
+            RECT rect = default(RECT);
 
             // normally, we would not want to create the handle for this, but since
             // it is dependent on the actual physical display, we simply must.
@@ -2062,7 +2062,7 @@ namespace System.Windows.Forms
             Invalidate(true);
 
             // Remove other TabBaseReLayout messages from the message queue
-            var msg = new MSG();
+            var msg = default(MSG);
             while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage, User32.PM.REMOVE))
             {
                 // No-op.
@@ -2156,7 +2156,7 @@ namespace System.Windows.Forms
 
         private unsafe int SendMessage(uint msg, int wParam, TabPage tabPage)
         {
-            var tcitem = new ComCtl32.TCITEMW();
+            var tcitem = default(ComCtl32.TCITEMW);
             string text = tabPage.Text;
             PrefixAmpersands(ref text);
             if (text is not null)

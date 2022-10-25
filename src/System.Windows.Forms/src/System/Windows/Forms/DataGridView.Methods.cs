@@ -10575,7 +10575,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                _layout.ResizeBoxRect = new Rectangle();
+                _layout.ResizeBoxRect = default(Rectangle);
                 if (needVertScrollbar && needHorizScrollbar)
                 {
                     _layout.ResizeBoxRect = new Rectangle(

@@ -309,7 +309,7 @@ namespace System.Windows.Forms
         private RECT GetFormattingRectangle()
         {
             // Send an EM_GETRECT message to find out the bounding rectangle.
-            RECT rectangle = new RECT();
+            RECT rectangle = default(RECT);
             PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.GETRECT, 0, ref rectangle);
 
             return rectangle;
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
 
         private unsafe bool GetTextExtentPoint32(char item, out Size size)
         {
-            size = new Size();
+            size = default(Size);
 
             using var hdc = new User32.GetDcScope(_owningChildEdit.Handle);
             if (hdc.IsNull)

@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                medium = new();
+                medium = default(STGMEDIUM);
                 dataObject.GetData(ref formatEtc, out medium);
                 void* basePtr = PInvoke.GlobalLock(medium.unionmember);
                 return (basePtr is not null) && (*(BOOL*)basePtr == true);

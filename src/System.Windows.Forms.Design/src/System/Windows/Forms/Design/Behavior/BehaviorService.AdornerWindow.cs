@@ -331,7 +331,7 @@ namespace System.Windows.Forms.Design.Behavior
                     case User32.WM.NCHITTEST:
                         Point pt = PARAM.ToPoint(m.LParamInternal);
 
-                        var pt1 = new Point();
+                        var pt1 = default(Point);
                         pt1 = PointToClient(pt1);
                         pt.Offset(pt1.X, pt1.Y);
 

@@ -83,7 +83,11 @@ namespace System.Windows.Forms
         public static FontCache.Scope GetHFONT(Font? font, FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY)
         {
             Debug.Assert(font is not null);
+#if DEBUG
             return font is null ? new FontCache.Scope() : s_fontCache.GetEntry(font, quality);
+#else
+            return font is null ? default : s_fontCache.GetEntry(font, quality);
+#endif
         }
 
         public static FontCache.Scope GetHFONT(Font? font, FONT_QUALITY quality, HDC hdc)

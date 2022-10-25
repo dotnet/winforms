@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms
         private unsafe void HiMetric2Pixel(ref Size sz)
         {
             var phm = new Point(sz.Width, sz.Height);
-            var pcont = new PointF();
+            var pcont = default(PointF);
             ((Ole32.IOleControlSite)_oleSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.HIMETRICTOCONTAINER);
             sz.Width = (int)pcont.X;
             sz.Height = (int)pcont.Y;
@@ -1190,7 +1190,7 @@ namespace System.Windows.Forms
 
         private unsafe void Pixel2hiMetric(ref Size sz)
         {
-            var phm = new Point();
+            var phm = default(Point);
             var pcont = new PointF(sz.Width, sz.Height);
             ((Ole32.IOleControlSite)_oleSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.CONTAINERTOHIMETRIC);
             sz.Width = phm.X;
@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms
 
         private unsafe Size GetExtent()
         {
-            var sz = new Size();
+            var sz = default(Size);
             GetOleObject().GetExtent(Ole32.DVASPECT.CONTENT, &sz);
             HiMetric2Pixel(ref sz);
             return sz;
@@ -3191,7 +3191,7 @@ namespace System.Windows.Forms
             }
 
             Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
-            var uuids = new Ole32.CAUUID();
+            var uuids = default(Ole32.CAUUID);
             try
             {
                 HRESULT hr = ispp.GetPages(&uuids);
@@ -3274,7 +3274,7 @@ namespace System.Windows.Forms
             }
 
             Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
-            var uuids = new Ole32.CAUUID();
+            var uuids = default(Ole32.CAUUID);
             HRESULT hr = ispp.GetPages(&uuids);
             if (!hr.Succeeded || uuids.cElems == 0)
             {

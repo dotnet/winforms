@@ -401,7 +401,7 @@ namespace System.Windows.Forms
                         // We don't need to delete it and this causes BAD problems w/ the Win32 list view control.
                         fixed (char* pBackgroundImageFileName = _backgroundImageFileName)
                         {
-                            var lvbkImage = new LVBKIMAGEW();
+                            var lvbkImage = default(LVBKIMAGEW);
                             if (BackgroundImageTiled)
                             {
                                 lvbkImage.ulFlags = LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_STYLE_TILE;
@@ -3372,7 +3372,7 @@ namespace System.Windows.Forms
             {
                 fixed (char* pText = text)
                 {
-                    var lvFindInfo = new LVFINDINFOW();
+                    var lvFindInfo = default(LVFINDINFOW);
                     if (isTextSearch)
                     {
                         lvFindInfo.flags = LVFINDINFOW_FLAGS.LVFI_STRING;
@@ -3624,7 +3624,7 @@ namespace System.Windows.Forms
 
         internal Point GetItemPosition(int index)
         {
-            var pt = new Point();
+            var pt = default(Point);
             PInvoke.SendMessage(this, (User32.WM)PInvoke.LVM_GETITEMPOSITION, (WPARAM)index, ref pt);
             return pt;
         }
@@ -5002,7 +5002,7 @@ namespace System.Windows.Forms
 
         private void RealizeAllSubItems()
         {
-            var lvItem = new LVITEMW();
+            var lvItem = default(LVITEMW);
             for (int i = 0; i < _itemCount; i++)
             {
                 int subItemCount = Items[i].SubItems.Count;
@@ -5210,7 +5210,7 @@ namespace System.Windows.Forms
             // needed for OleInitialize
             Application.OleRequired();
 
-            var lvbkImage = new LVBKIMAGEW();
+            var lvbkImage = default(LVBKIMAGEW);
 
             // first, is there an existing temporary file to delete, remember its name
             // so that we can delete it if the list control doesn't...
@@ -5557,7 +5557,7 @@ namespace System.Windows.Forms
 
         internal void SetItemText(int itemIndex, int subItemIndex, string text)
         {
-            var lvItem = new LVITEMW();
+            var lvItem = default(LVITEMW);
             SetItemText(itemIndex, subItemIndex, text, ref lvItem);
         }
 

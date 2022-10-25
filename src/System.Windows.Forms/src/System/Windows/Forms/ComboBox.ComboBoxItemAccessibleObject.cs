@@ -42,7 +42,7 @@ namespace System.Windows.Forms
                 {
                     int currentIndex = GetCurrentIndex();
                     var listHandle = _owningComboBox.GetListHandle();
-                    RECT itemRect = new();
+                    RECT itemRect = default(RECT);
 
                     int result = (int)PInvoke.SendMessage(
                         listHandle,

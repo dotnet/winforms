@@ -195,7 +195,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                var rect = new RECT();
+                var rect = default(RECT);
                 PInvoke.SystemParametersInfo(SPI_GETWORKAREA, ref rect);
                 return rect;
             }

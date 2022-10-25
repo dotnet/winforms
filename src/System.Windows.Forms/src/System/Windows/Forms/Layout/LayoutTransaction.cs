@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Layout
             else
             {
                 CommonProperties.xClearPreferredSizeCache(elementCausingLayout);
-                return new NullLayoutTransaction();
+                return default(NullLayoutTransaction);
             }
         }
 

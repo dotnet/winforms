@@ -102,7 +102,7 @@ namespace System.Windows.Forms
             // either the right or bottom panel - LTR
             // either the left or bottom panel - RTL
             Panel2 = new SplitterPanel(this);
-            _splitterRect = new Rectangle();
+            _splitterRect = default(Rectangle);
 
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -1391,7 +1391,7 @@ namespace System.Windows.Forms
         /// </summary>
         private Rectangle CalcSplitLine(int splitSize, int minWeight)
         {
-            Rectangle r = new Rectangle();
+            Rectangle r = default(Rectangle);
             switch (Orientation)
             {
                 case Orientation.Vertical:

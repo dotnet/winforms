@@ -457,7 +457,7 @@ namespace System.Windows.Forms
                         };
 
                         var retVals = new object[1];
-                        EXCEPINFO excepInfo = new();
+                        EXCEPINFO excepInfo = default(EXCEPINFO);
                         hr = scriptObject.Invoke(
                             dispid,
                             &g,

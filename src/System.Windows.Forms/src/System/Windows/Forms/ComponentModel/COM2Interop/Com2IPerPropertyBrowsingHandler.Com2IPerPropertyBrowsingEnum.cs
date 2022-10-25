@@ -89,7 +89,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             continue;
                         }
 
-                        using VARIANT variant = new();
+                        using VARIANT variant = default(VARIANT);
                         HRESULT hr = ppb.GetPredefinedValue(_target.DISPID, cookie, &variant);
                         if (hr.Succeeded && variant.Type != VARENUM.VT_EMPTY)
                         {

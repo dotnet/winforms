@@ -30,7 +30,7 @@ namespace System.Drawing.Design
                         get
                         {
                             Point cellPt = Get2DFrom1D(_cell);
-                            Rectangle rect = new Rectangle();
+                            Rectangle rect = default(Rectangle);
                             FillRectWithCellBounds(cellPt.X, cellPt.Y, ref rect);
 
                             // Translate rect to screen coordinates

@@ -506,8 +506,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             VARFLAGS flags)
         {
             // Get the name and the helpstring.
-            using var nameBstr = new BSTR();
-            using var helpStringBstr = new BSTR();
+            using var nameBstr = default(BSTR);
+            using var helpStringBstr = default(BSTR);
             HRESULT hr = typeInfo.GetDocumentation(dispid, &nameBstr, &helpStringBstr, null, null);
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
             if (!hr.Succeeded)
@@ -736,8 +736,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     object varValue = null;
 
-                    using var enumNameBstr = new BSTR();
-                    using var enumHelpStringBstr = new BSTR();
+                    using var enumNameBstr = default(BSTR);
+                    using var enumHelpStringBstr = default(BSTR);
                     enumTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, &enumNameBstr, &enumHelpStringBstr, null, null);
 
                     // For each item in the enum type info, we just need it's name and value and
@@ -764,8 +764,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             varValue = null;
 
                             // get the name and the helpstring
-                            using BSTR nameBstr = new();
-                            using BSTR helpBstr = new();
+                            using BSTR nameBstr = default(BSTR);
+                            using BSTR helpBstr = default(BSTR);
                             hr = enumTypeInfo.GetDocumentation((Ole32.DispatchID)pVarDesc->memid, &nameBstr, &helpBstr, null, null);
                             if (!hr.Succeeded)
                             {
