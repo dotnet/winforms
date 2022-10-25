@@ -3659,7 +3659,7 @@ namespace System.Windows.Forms
                 bool found = false;
                 while (!found && i < count)
                 {
-                    found = Object.ReferenceEquals(items[i], this);
+                    found = object.ReferenceEquals(items[i], this);
                     if (found)
                     {
                         int previousIndex = i - 1;
