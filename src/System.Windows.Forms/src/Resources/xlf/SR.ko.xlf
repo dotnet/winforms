@@ -6616,11 +6616,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">현재 접근성 개체는 {0} 보기의 ListView에만 해당됩니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">현재 접근성 개체는 {0}, {1} 또는 {2} 보기의 ListView에만 해당됩니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">ListView 항목이 ListView에 연결되어 있지 않으면 접근성 개체를 가져올 수 없습니다.</target>

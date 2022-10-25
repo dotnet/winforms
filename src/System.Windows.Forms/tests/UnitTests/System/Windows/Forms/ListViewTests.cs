@@ -5764,6 +5764,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubListViewItemAccessibleObject : ListViewItemBaseAccessibleObject
         {
+            protected override View View => View.List;
+
             public int RaiseAutomationEventCalls;
 
             public SubListViewItemAccessibleObject(ListViewItem owningItem) : base(owningItem)

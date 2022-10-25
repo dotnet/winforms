@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ListViewItemBaseAccessibleObject_Ctor_OwnerListViewItemCannotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ListViewItemBaseAccessibleObject(null));
+            Assert.Throws<ArgumentNullException>(() => new SubListViewItemBaseAccessibleObject(null));
         }
 
         [WinFormsFact]
@@ -397,6 +397,15 @@ namespace System.Windows.Forms.Tests
             var expected = string.Format("{0}-{1}", nameof(ListViewItem), accessibleObject.CurrentIndex);
             Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
             Assert.False(listView.IsHandleCreated);
+        }
+
+        private class SubListViewItemBaseAccessibleObject : ListViewItemBaseAccessibleObject
+        {
+            protected override View View => View.List;
+
+            public SubListViewItemBaseAccessibleObject(ListViewItem owningItem) : base(owningItem)
+            {
+            }
         }
 
         // More tests for this class has been created already in ListViewItem_ListViewItemAccessibleObjectTests

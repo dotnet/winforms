@@ -6616,11 +6616,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">当前的可访问性对象仅适用于 {0} 视图中的 ListView</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">当前的可访问性对象仅适用于 {0}、{1} 或 {2} 视图中的 ListView</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">ListViewItem 未附加到 ListView 时，无法获取 accessiblity 对象。</target>

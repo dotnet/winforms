@@ -1663,11 +1663,13 @@ namespace System.Windows.Forms.Tests
                     Assert.IsType<ListViewItemDetailsAccessibleObject>(listView.Items[0].AccessibilityObject);
                     break;
                 case View.LargeIcon:
-                case View.SmallIcon:
-                    Assert.IsType<ListViewItemBaseAccessibleObject>(listView.Items[0].AccessibilityObject);
+                    Assert.IsType<ListViewItemLargeIconAccessibleObject>(listView.Items[0].AccessibilityObject);
                     break;
                 case View.List:
                     Assert.IsType<ListViewItemListAccessibleObject>(listView.Items[0].AccessibilityObject);
+                    break;
+                case View.SmallIcon:
+                    Assert.IsType<ListViewItemSmallIconAccessibleObject>(listView.Items[0].AccessibilityObject);
                     break;
                 case View.Tile:
                     Assert.IsType<ListViewItemTileAccessibleObject>(listView.Items[0].AccessibilityObject);
@@ -1709,11 +1711,13 @@ namespace System.Windows.Forms.Tests
                         Assert.IsType<ListViewItemDetailsAccessibleObject>(listView.Items[0].AccessibilityObject);
                         break;
                     case View.LargeIcon:
-                    case View.SmallIcon:
-                        Assert.IsType<ListViewItemBaseAccessibleObject>(listView.Items[0].AccessibilityObject);
+                        Assert.IsType<ListViewItemLargeIconAccessibleObject>(listView.Items[0].AccessibilityObject);
                         break;
                     case View.List:
                         Assert.IsType<ListViewItemListAccessibleObject>(listView.Items[0].AccessibilityObject);
+                        break;
+                    case View.SmallIcon:
+                        Assert.IsType<ListViewItemSmallIconAccessibleObject>(listView.Items[0].AccessibilityObject);
                         break;
                     case View.Tile:
                         Assert.IsType<ListViewItemTileAccessibleObject>(listView.Items[0].AccessibilityObject);
@@ -1728,10 +1732,16 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.Details, View.SmallIcon)]
         [InlineData(View.Details, View.Tile)]
         [InlineData(View.LargeIcon, View.Details)]
+        [InlineData(View.LargeIcon, View.List)]
+        [InlineData(View.LargeIcon, View.SmallIcon)]
         [InlineData(View.LargeIcon, View.Tile)]
         [InlineData(View.List, View.Details)]
+        [InlineData(View.List, View.LargeIcon)]
+        [InlineData(View.List, View.SmallIcon)]
         [InlineData(View.List, View.Tile)]
         [InlineData(View.SmallIcon, View.Details)]
+        [InlineData(View.SmallIcon, View.LargeIcon)]
+        [InlineData(View.SmallIcon, View.List)]
         [InlineData(View.SmallIcon, View.Tile)]
         [InlineData(View.Tile, View.Details)]
         [InlineData(View.Tile, View.LargeIcon)]
@@ -1750,34 +1760,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(View.LargeIcon, View.List)]
-        [InlineData(View.LargeIcon, View.SmallIcon)]
-        [InlineData(View.List, View.LargeIcon)]
-        [InlineData(View.List, View.SmallIcon)]
-        [InlineData(View.SmallIcon, View.LargeIcon)]
-        [InlineData(View.SmallIcon, View.List)]
-        public void ListViewItemAccessibleObject_GetChild_DoesNotReturnException_AfterChangingView(View oldView, View newView)
-        {
-            using ListView listView = new() { View = oldView };
-            listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
-            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
-            Assert.Null(accessibleObject.GetChild(0));
-
-            listView.View = newView;
-
-            Assert.Null(accessibleObject.GetChild(0));
-        }
-
-        [WinFormsTheory]
         [InlineData(View.Details, View.LargeIcon)]
         [InlineData(View.Details, View.List)]
         [InlineData(View.Details, View.SmallIcon)]
         [InlineData(View.Details, View.Tile)]
         [InlineData(View.LargeIcon, View.Details)]
+        [InlineData(View.LargeIcon, View.List)]
+        [InlineData(View.LargeIcon, View.SmallIcon)]
         [InlineData(View.LargeIcon, View.Tile)]
         [InlineData(View.List, View.Details)]
+        [InlineData(View.List, View.LargeIcon)]
+        [InlineData(View.List, View.SmallIcon)]
         [InlineData(View.List, View.Tile)]
         [InlineData(View.SmallIcon, View.Details)]
+        [InlineData(View.SmallIcon, View.LargeIcon)]
+        [InlineData(View.SmallIcon, View.List)]
         [InlineData(View.SmallIcon, View.Tile)]
         [InlineData(View.Tile, View.Details)]
         [InlineData(View.Tile, View.LargeIcon)]
@@ -1793,25 +1790,6 @@ namespace System.Windows.Forms.Tests
             listView.View = newView;
 
             Assert.Throws<InvalidOperationException>(() => accessibleObject.GetChildCount());
-        }
-
-        [WinFormsTheory]
-        [InlineData(View.LargeIcon, View.List)]
-        [InlineData(View.LargeIcon, View.SmallIcon)]
-        [InlineData(View.List, View.LargeIcon)]
-        [InlineData(View.List, View.SmallIcon)]
-        [InlineData(View.SmallIcon, View.LargeIcon)]
-        [InlineData(View.SmallIcon, View.List)]
-        public void ListViewItemAccessibleObject_GetChildCount_DoesNotReturnException_AfterChangingView(View oldView, View newView)
-        {
-            using ListView listView = new() { View = oldView };
-            listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
-            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
-            Assert.NotEqual(2, accessibleObject.GetChildCount());
-
-            listView.View = newView;
-
-            Assert.NotEqual(2, accessibleObject.GetChildCount());
         }
 
         public static IEnumerable<object[]> ListViewItemAccessibleObject_GetPropertyValue_TestData()

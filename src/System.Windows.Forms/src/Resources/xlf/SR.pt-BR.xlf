@@ -6616,11 +6616,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">O objeto de acessibilidade atual é somente para a ListView no modo de exibição {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">O objeto de acessibilidade atual é apenas para ListView no modo de exibição {0}, {1} ou {2}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">Não é possível obter o objeto de acessibilidade quando o Item ListView não está anexado a um ListView.</target>

@@ -6616,11 +6616,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Bieżący obiekt ułatwień dostępu jest przeznaczony tylko dla elementu ListView w widoku {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">Bieżący obiekt ułatwień dostępu jest przeznaczony tylko dla elementu ListView w widoku {0}, {1} lub {2}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">Nie można uzyskać obiektu dostępności, gdy element ListViewItem nie jest dołączony do elementu ListView.</target>

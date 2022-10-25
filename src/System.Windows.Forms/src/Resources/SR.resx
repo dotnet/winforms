@@ -6832,9 +6832,6 @@ Stack trace where the illegal operation occurred was:
   <data name="ListViewItemAccessibilityObjectInvalidViewException" xml:space="preserve">
     <value>The current accessibility object is only for the ListView in {0} view</value>
   </data>
-  <data name="ListViewItemAccessibilityObjectInvalidViewsException" xml:space="preserve">
-    <value>The current accessibility object is only for the ListView in {0}, {1} or {2} view</value>
-  </data>
   <data name="TrackBarLargeDecreaseButtonName" xml:space="preserve">
     <value>Large decrease</value>
   </data>

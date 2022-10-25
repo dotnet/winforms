@@ -237,10 +237,10 @@ namespace System.Windows.Forms
                     _accessibilityObjectView = owningListView.View;
                     _accessibilityObject = _accessibilityObjectView switch
                     {
-                        View.Details => new ListViewItem.ListViewItemDetailsAccessibleObject(this),
-                        View.LargeIcon => new ListViewItem.ListViewItemBaseAccessibleObject(this),
+                        View.Details => new ListViewItemDetailsAccessibleObject(this),
+                        View.LargeIcon => new ListViewItemLargeIconAccessibleObject(this),
                         View.List => new ListViewItemListAccessibleObject(this),
-                        View.SmallIcon => new ListViewItem.ListViewItemBaseAccessibleObject(this),
+                        View.SmallIcon => new ListViewItemSmallIconAccessibleObject(this),
                         View.Tile => new ListViewItemTileAccessibleObject(this),
                         _ => throw new Exception()
                     };

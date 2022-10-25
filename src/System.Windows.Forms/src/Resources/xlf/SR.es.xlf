@@ -6616,11 +6616,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">El objeto de accesibilidad actual solo es para la vista ListView {0} vista</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">El objeto de accesibilidad actual solo es para la vista ListView en {0}, {1} o {2} Vista</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">No se puede obtener el objeto accessiblity cuando ListViewItem no está asociado a listView.</target>

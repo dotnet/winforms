@@ -21,9 +21,9 @@ namespace System.Windows.Forms
 
             internal override int FirstSubItemIndex => HasImage ? 1 : 0;
 
-            private bool HasImage => _owningItem.ImageIndex != ImageList.Indexer.DefaultIndex;
-
             private int LastChildIndex => HasImage ? _owningListView.Columns.Count : _owningListView.Columns.Count - 1;
+
+            protected override View View => View.Details;
 
             /// <summary>
             ///  Converts the provided index of the <see cref="AccessibleObject"/>'s child to an index of a <see cref="ListViewSubItem"/>.
