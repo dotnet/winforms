@@ -21,12 +21,12 @@ namespace System.Windows.Forms.UITests
         [InlineData(false)]
         public void FolderBrowserDialog_ShowDialog(bool autoUpgradeEnabled)
         {
-            FolderBrowserDialog form = new()
+            using FolderBrowserDialog form = new()
             {
                 AutoUpgradeEnabled = autoUpgradeEnabled,
             };
 
-            Timer timer = new();
+            using Timer timer = new();
             timer.Interval = 1_000;
             int counter = 0;
             timer.Tick += (s, e) =>
