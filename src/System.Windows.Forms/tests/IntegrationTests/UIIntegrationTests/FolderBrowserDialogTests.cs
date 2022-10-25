@@ -16,12 +16,14 @@ namespace System.Windows.Forms.UITests
         {
         }
 
-        [WinFormsFact]
-        public void FolderBrowserDialog_ShowDialog()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void FolderBrowserDialog_ShowDialog(bool autoUpgradeEnabled)
         {
             FolderBrowserDialog form = new()
             {
-                AutoUpgradeEnabled = false,
+                AutoUpgradeEnabled = autoUpgradeEnabled,
             };
 
             Timer timer = new();
