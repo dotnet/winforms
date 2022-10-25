@@ -3,11 +3,17 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms;
+using static Interop.ComCtl32;
+using static Interop;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Newtonsoft.Json.Linq;
 
 namespace WinformsControlsTest
 {
     public partial class TrackBars : Form
     {
+        private int V;
+
         public TrackBars()
         {
             InitializeComponent();
@@ -29,7 +35,18 @@ namespace WinformsControlsTest
             trackBar1.RightToLeft = chbRightToLeft.Checked ? RightToLeft.Yes : RightToLeft.No;
         }
 
-        private void numericMinimum_ValueChanged(object sender, EventArgs e)
+        private void tickstyleNone_CheckedChanged(object sender, EventArgs e)
+        {
+            if (trackBar1.TickStyle.Equals(System.Windows.Forms.TickStyle.BottomRight))
+            {
+                trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
+            }
+            else
+            { trackBar1.TickStyle = System.Windows.Forms.TickStyle.BottomRight; }
+        }
+    
+
+    private void numericMinimum_ValueChanged(object sender, EventArgs e)
         {
             trackBar1.Minimum = Decimal.ToInt32(numericMinimum.Value);
             numericMaximum.Minimum = numericMinimum.Value;
@@ -38,9 +55,11 @@ namespace WinformsControlsTest
 
         private void numericMaximum_ValueChanged(object sender, EventArgs e)
         {
+
             trackBar1.Maximum = Decimal.ToInt32(numericMaximum.Value);
             numericMinimum.Maximum = numericMaximum.Value;
             UpdateValueLabel();
+
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)

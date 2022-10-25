@@ -38,6 +38,7 @@ namespace WinformsControlsTest
             this.gbOrientation = new System.Windows.Forms.GroupBox();
             this.chbRightToLeft = new System.Windows.Forms.CheckBox();
             this.chbRightToLeftLayout = new System.Windows.Forms.CheckBox();
+            this.tickstyleNone = new System.Windows.Forms.CheckBox();
             this.lblTrackBarValue = new System.Windows.Forms.Label();
             this.numericMinimum = new System.Windows.Forms.NumericUpDown();
             this.numericMaximum = new System.Windows.Forms.NumericUpDown();
@@ -51,9 +52,11 @@ namespace WinformsControlsTest
             // 
             // trackBar1
             // 
+            this.trackBar1.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             this.trackBar1.Location = new System.Drawing.Point(413, 67);
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(350, 350);
+            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.BottomRight;
             this.trackBar1.TabIndex = 0;
             this.trackBar1.Value = 5;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
@@ -96,24 +99,35 @@ namespace WinformsControlsTest
             // chbRightToLeft
             // 
             this.chbRightToLeft.AutoSize = true;
-            this.chbRightToLeft.Location = new System.Drawing.Point(56, 223);
+            this.chbRightToLeft.Location = new System.Drawing.Point(56, 220);
             this.chbRightToLeft.Name = "chbRightToLeft";
-            this.chbRightToLeft.Size = new System.Drawing.Size(107, 24);
+            this.chbRightToLeft.Size = new System.Drawing.Size(100, 24);
             this.chbRightToLeft.TabIndex = 4;
             this.chbRightToLeft.Text = "RightToLeft";
             this.chbRightToLeft.UseVisualStyleBackColor = true;
-            this.chbRightToLeft.CheckedChanged += new System.EventHandler(this.chbRightToLeft_CheckedChanged);
+            this.chbRightToLeft.CheckedChanged += new System.EventHandler(this.chbRightToLeft_CheckedChanged);       
             // 
             // chbRightToLeftLayout
-            // 
+            //
             this.chbRightToLeftLayout.AutoSize = true;
-            this.chbRightToLeftLayout.Location = new System.Drawing.Point(56, 279);
+            this.chbRightToLeftLayout.Location = new System.Drawing.Point(56, 260);
             this.chbRightToLeftLayout.Name = "chbRightToLeftLayout";
-            this.chbRightToLeftLayout.Size = new System.Drawing.Size(151, 24);
+            this.chbRightToLeftLayout.Size = new System.Drawing.Size(100, 24);
             this.chbRightToLeftLayout.TabIndex = 5;
             this.chbRightToLeftLayout.Text = "RightToLeftLayout";
             this.chbRightToLeftLayout.UseVisualStyleBackColor = true;
             this.chbRightToLeftLayout.CheckedChanged += new System.EventHandler(this.chbRightToLeftLayout_CheckedChanged);
+            // 
+            // tickstyleNone
+            //
+            this.tickstyleNone.AutoSize = true;
+            this.tickstyleNone.Location = new System.Drawing.Point(56, 300);
+            this.tickstyleNone.Name = "tickstyleNone";
+            this.tickstyleNone.Size = new System.Drawing.Size(100, 24);
+            this.tickstyleNone.TabIndex = 11;
+            this.tickstyleNone.Text = "TickstyleNone";
+            this.tickstyleNone.UseVisualStyleBackColor = true;
+            this.tickstyleNone.CheckedChanged += new System.EventHandler(this.tickstyleNone_CheckedChanged);
             // 
             // lblTrackBarValue
             // 
@@ -135,6 +149,7 @@ namespace WinformsControlsTest
             // numericMaximum
             // 
             this.numericMaximum.Location = new System.Drawing.Point(56, 418);
+            this.numericMaximum.Maximum = decimal.MaxValue;
             this.numericMaximum.Name = "numericMaximum";
             this.numericMaximum.Size = new System.Drawing.Size(150, 27);
             this.numericMaximum.TabIndex = 8;
@@ -177,6 +192,7 @@ namespace WinformsControlsTest
             this.Controls.Add(this.chbRightToLeft);
             this.Controls.Add(this.gbOrientation);
             this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.tickstyleNone);
             this.Name = "TrackBars";
             this.Text = "TrackBars";
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
@@ -196,6 +212,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.RadioButton rbVertical;
         private System.Windows.Forms.GroupBox gbOrientation;
         private System.Windows.Forms.CheckBox chbRightToLeft;
+        private System.Windows.Forms.CheckBox tickstyleNone;
         private System.Windows.Forms.CheckBox chbRightToLeftLayout;
         private System.Windows.Forms.Label lblTrackBarValue;
         private System.Windows.Forms.NumericUpDown numericMinimum;
