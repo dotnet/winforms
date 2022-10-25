@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -20,7 +18,7 @@ namespace System.Windows.Forms
                 _owner = owner;
             }
 
-            internal override void AddInternal(Control value)
+            internal override void AddInternal(Control? value)
             {
                 if (value is not null)
                 {
