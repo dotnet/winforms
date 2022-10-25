@@ -294,7 +294,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new Rectangle();
+                    return default(Rectangle);
                 }
             }
         }
@@ -950,7 +950,7 @@ namespace System.Windows.Forms
                 return listView.GetItemRect(Index, portion);
             }
 
-            return new Rectangle();
+            return default(Rectangle);
         }
 
         public ListViewSubItem GetSubItemAt(int x, int y)
@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms
 
         internal void UpdateStateToListView(int index)
         {
-            var lvItem = new LVITEMW();
+            var lvItem = default(LVITEMW);
             UpdateStateToListView(index, ref lvItem, true);
         }
 

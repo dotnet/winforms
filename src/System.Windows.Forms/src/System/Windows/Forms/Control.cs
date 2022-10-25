@@ -5122,7 +5122,7 @@ namespace System.Windows.Forms
                     {
                         if (s_threadCallbackMessage != 0)
                         {
-                            var msg = new MSG();
+                            var msg = default(MSG);
                             BOOL result = User32.PeekMessageW(
                                 ref msg,
                                 this,
@@ -9790,7 +9790,7 @@ namespace System.Windows.Forms
         {
             if (!IsDisposed)
             {
-                var msg = new MSG();
+                var msg = default(MSG);
                 while (User32.PeekMessageW(ref msg, this, msgMin, msgMax, User32.PM.REMOVE))
                 {
                     // No-op.
@@ -11578,7 +11578,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal void UpdateBounds()
         {
-            RECT rect = new();
+            RECT rect = default(RECT);
             int clientWidth = 0;
             int clientHeight = 0;
 

@@ -99,7 +99,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return string.Empty;
             }
 
-            using BSTR nameBstr = new();
+            using BSTR nameBstr = default(BSTR);
             pTypeInfo.GetDocumentation(DispatchID.MEMBERID_NIL, &nameBstr, null, null, null);
             return nameBstr.AsSpan().TrimStart('_').ToString();
         }
@@ -192,8 +192,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 Guid g = Guid.Empty;
-                EXCEPINFO pExcepInfo = new();
-                DISPPARAMS dispParams = new();
+                EXCEPINFO pExcepInfo = default(EXCEPINFO);
+                DISPPARAMS dispParams = default(DISPPARAMS);
                 try
                 {
                     HRESULT hr = dispatch.Invoke(

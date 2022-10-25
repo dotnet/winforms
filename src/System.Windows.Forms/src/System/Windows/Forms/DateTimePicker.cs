@@ -340,7 +340,7 @@ namespace System.Windows.Forms
                 // The information from win32 DateTimePicker is reliable only when ShowCheckBoxes is True
                 if (ShowCheckBox && IsHandleCreated)
                 {
-                    var sys = new SYSTEMTIME();
+                    var sys = default(SYSTEMTIME);
                     NMDATETIMECHANGE_FLAGS gdt = (NMDATETIMECHANGE_FLAGS)PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_GETSYSTEMTIME, 0, ref sys);
                     return gdt == NMDATETIMECHANGE_FLAGS.GDT_VALID;
                 }

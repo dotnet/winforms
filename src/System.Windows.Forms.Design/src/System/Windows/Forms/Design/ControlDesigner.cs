@@ -316,7 +316,7 @@ namespace System.Windows.Forms.Design
 
         internal Point GetOffsetToClientArea()
         {
-            var nativeOffset = new Point();
+            var nativeOffset = default(Point);
             PInvoke.MapWindowPoints(Control, Control.Parent, ref nativeOffset);
             Point offset = Control.Location;
 
@@ -2100,7 +2100,7 @@ namespace System.Windows.Forms.Design
 
                         // First, save off the update region and call our base class.
 
-                        RECT clip = new();
+                        RECT clip = default(RECT);
                         using var hrgn = new PInvoke.RegionScope(0, 0, 0, 0);
                         PInvoke.GetUpdateRgn(m.HWND, hrgn, false);
                         PInvoke.GetUpdateRect(m.HWND, &clip, false);

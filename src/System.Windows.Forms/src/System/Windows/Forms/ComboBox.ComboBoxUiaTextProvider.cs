@@ -384,7 +384,7 @@ namespace System.Windows.Forms
             private RECT GetFormattingRectangle()
             {
                 // Send an EM_GETRECT message to find out the bounding rectangle.
-                RECT rectangle = new RECT();
+                RECT rectangle = default(RECT);
                 PInvoke.SendMessage(_owningChildEdit, (WM)EM.GETRECT, (WPARAM)0, ref rectangle);
 
                 return rectangle;

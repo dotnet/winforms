@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                Rectangle rect = new Rectangle();
+                Rectangle rect = default(Rectangle);
                 if (_miniToolStrip is null)
                 {
                     return rect;
@@ -371,7 +371,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                Rectangle rect = new Rectangle();
+                Rectangle rect = default(Rectangle);
                 if (ToolStrip.OverflowButton.Visible)
                 {
                     return ToolStrip.OverflowButton.Bounds;

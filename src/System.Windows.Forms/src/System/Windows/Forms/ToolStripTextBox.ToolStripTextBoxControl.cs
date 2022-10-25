@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    RECT rect = new();
+                    RECT rect = default(RECT);
                     CreateParams cp = CreateParams;
 
                     AdjustWindowRectExForControlDpi(ref rect, (WINDOW_STYLE)cp.Style, false, (WINDOW_EX_STYLE)cp.ExStyle);

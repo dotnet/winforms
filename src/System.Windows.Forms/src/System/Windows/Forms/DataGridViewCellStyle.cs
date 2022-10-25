@@ -659,7 +659,7 @@ namespace System.Windows.Forms
 
         public override int GetHashCode()
         {
-            var hash = new HashCode();
+            var hash = default(HashCode);
             hash.Add(Alignment);
             hash.Add(WrapMode);
             hash.Add(Padding);

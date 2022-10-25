@@ -57,7 +57,7 @@ namespace System.Windows.Forms
                         : PInvoke.LVGGR_GROUP;
 
                     // Get the native rectangle
-                    RECT groupRect = new();
+                    RECT groupRect = default(RECT);
 
                     // Using the "top" property, we set which rectangle type of the group we want to get
                     // This is described in more detail in https://docs.microsoft.com/windows/win32/controls/lvm-getgrouprect

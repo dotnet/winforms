@@ -1888,7 +1888,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.RichTextFindEndInvalid, end));
             }
 
-            var ft = new FINDTEXTW();
+            var ft = default(FINDTEXTW);
             if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
             {
                 // normal
@@ -2049,7 +2049,7 @@ namespace System.Windows.Forms
                 end = textLen;
             }
 
-            var chrg = new Richedit.CHARRANGE(); // The range of characters we have searched
+            var chrg = default(Richedit.CHARRANGE); // The range of characters we have searched
             chrg.cpMax = chrg.cpMin = start;
 
             // Use the TEXTRANGE to move our text buffer forward
@@ -2342,7 +2342,7 @@ namespace System.Windows.Forms
                 return Point.Empty;
             }
 
-            var pt = new Point();
+            var pt = default(Point);
             PInvoke.SendMessage(this, (User32.WM)User32.EM.POSFROMCHAR, (WPARAM)(&pt), index);
             return pt;
         }
@@ -2932,7 +2932,7 @@ namespace System.Windows.Forms
             // clear out the selection only if we are replacing all the text
             if ((flags & SF.F_SELECTION) == 0)
             {
-                var cr = new CHARRANGE();
+                var cr = default(CHARRANGE);
                 PInvoke.SendMessage(this, (User32.WM)EM.EXSETSEL, 0, ref cr);
             }
 
@@ -2964,7 +2964,7 @@ namespace System.Windows.Forms
                 int cookieVal = 0;
 
                 // set up structure to do stream operation
-                var es = new EDITSTREAM();
+                var es = default(EDITSTREAM);
 
                 if ((flags & SF.UNICODE) != 0)
                 {
@@ -3068,7 +3068,7 @@ namespace System.Windows.Forms
             try
             {
                 int cookieVal = 0;
-                var es = new EDITSTREAM();
+                var es = default(EDITSTREAM);
                 if ((flags & SF.UNICODE) != 0)
                 {
                     cookieVal = OUTPUT | UNICODE;

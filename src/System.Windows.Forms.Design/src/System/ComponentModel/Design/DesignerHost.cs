@@ -63,7 +63,7 @@ namespace System.ComponentModel.Design
         public DesignerHost(DesignSurface surface)
         {
             _surface = surface;
-            _state = new BitVector32();
+            _state = default(BitVector32);
             _designers = new Hashtable();
             _events = new EventHandlerList();
 

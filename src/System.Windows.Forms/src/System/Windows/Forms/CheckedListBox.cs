@@ -416,7 +416,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                var rect = new RECT();
+                var rect = default(RECT);
                 PInvoke.SendMessage(this, (User32.WM)User32.LB.GETITEMRECT, (WPARAM)index, ref rect);
                 PInvoke.InvalidateRect(this, &rect, bErase: false);
             }

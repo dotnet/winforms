@@ -119,7 +119,7 @@ namespace System.Windows.Forms
                     flags |= User32.MOUSEEVENTF.VIRTUALDESK;
                 }
 
-                User32.INPUT mouseInput = new();
+                User32.INPUT mouseInput = default(User32.INPUT);
                 mouseInput.type = User32.INPUTENUM.MOUSE;
                 mouseInput.inputUnion.mi.dx = x;
                 mouseInput.inputUnion.mi.dy = y;

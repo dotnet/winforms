@@ -515,7 +515,7 @@ namespace System.Resources
         /// </summary>
         public Point GetNodePosition()
         {
-            return _nodeInfo?.ReaderPosition ?? new Point();
+            return _nodeInfo?.ReaderPosition ?? default(Point);
         }
 
         /// <summary>

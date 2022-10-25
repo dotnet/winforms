@@ -107,7 +107,7 @@ namespace System.Windows.Forms
 
         public override int GetHashCode()
         {
-            var hash = new HashCode();
+            var hash = default(HashCode);
             foreach (WeakRefObject? o in InnerList)
             {
                 hash.Add(o);

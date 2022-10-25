@@ -59,7 +59,7 @@ namespace System.Windows.Forms
                     // Protect against re-entrancy.
                     try
                     {
-                        MSG msg = new();
+                        MSG msg = default(MSG);
                         while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
                         {
                             PInvoke.UpdateWindow(msg.hwnd);

@@ -67,7 +67,7 @@ namespace System.Windows.Forms
                 control.WindowTarget = this;
 
                 _adviseList = new List<IAdviseSink>();
-                _activeXState = new BitVector32();
+                _activeXState = default(BitVector32);
                 _ambientProperties = new AmbientProperty[]
                 {
                     new AmbientProperty("Font", Ole32.DispatchID.AMBIENT_FONT),
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
                 {
                     if (s_logPixels.IsEmpty)
                     {
-                        s_logPixels = new Point();
+                        s_logPixels = default(Point);
                         using var dc = User32.GetDcScope.ScreenDC;
                         s_logPixels.X = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
                         s_logPixels.Y = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
@@ -546,7 +546,7 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
 
-                    DISPPARAMS dispParams = new();
+                    DISPPARAMS dispParams = default(DISPPARAMS);
                     object[] pvt = new object[1];
                     Guid g = Guid.Empty;
                     HRESULT hr = disp.Invoke(
@@ -811,8 +811,8 @@ namespace System.Windows.Forms
                         ThrowHr(hr);
                     }
 
-                    var posRect = new RECT();
-                    var clipRect = new RECT();
+                    var posRect = default(RECT);
+                    var clipRect = default(RECT);
 
                     if (_inPlaceUiWindow is not null && Marshal.IsComObject(_inPlaceUiWindow))
                     {
@@ -1457,7 +1457,7 @@ namespace System.Windows.Forms
 
                     if (converter.CanConvertFrom(typeof(string)))
                     {
-                        VARIANT variant = new();
+                        VARIANT variant = default(VARIANT);
                         value = converter.ConvertToInvariantString(props[i].GetValue(_control));
                         Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
                         pPropBag.Write(props[i].Name, ref value!);
@@ -1954,7 +1954,7 @@ namespace System.Windows.Forms
                 {
                     if (_clientSite is Ole32.IOleInPlaceSite ioleClientSite)
                     {
-                        var rc = new RECT();
+                        var rc = default(RECT);
                         if (flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOMOVE))
                         {
                             rc.left = _control.Left;

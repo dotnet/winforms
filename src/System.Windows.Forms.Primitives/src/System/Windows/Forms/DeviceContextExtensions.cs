@@ -91,7 +91,7 @@ namespace System.Windows.Forms
             using PInvoke.SetBkModeScope bkScope = new(hdc, BACKGROUND_MODE.TRANSPARENT);
             using PInvoke.SelectObjectScope selection = new(hdc, (HGDIOBJ)hpen.Value);
 
-            Point oldPoint = new();
+            Point oldPoint = default(Point);
 
             for (int i = 0; i < lines.Length; i += 4)
             {

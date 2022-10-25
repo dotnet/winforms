@@ -3732,7 +3732,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Point p = new Point();
+            Point p = default(Point);
             Size s = Size;
             HWND ownerHandle = (HWND)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
 
@@ -3778,7 +3778,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected void CenterToScreen()
         {
-            Point p = new Point();
+            Point p = default(Point);
             Screen desktop;
             if (OwnerInternal is not null)
             {
@@ -4358,7 +4358,7 @@ namespace System.Windows.Forms
         {
             DefWndProc(ref m);
 
-            Size desiredSize = new Size();
+            Size desiredSize = default(Size);
             if (OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize))
             {
                 SIZE* size = (SIZE*)m.LParamInternal;

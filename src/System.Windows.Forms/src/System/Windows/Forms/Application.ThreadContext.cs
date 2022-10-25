@@ -1177,7 +1177,7 @@ namespace System.Windows.Forms
                 try
                 {
                     // Execute the message loop until the active component tells us to stop.
-                    var msg = new MSG();
+                    var msg = default(MSG);
                     bool unicodeWindow = false;
                     bool continueLoop = true;
 

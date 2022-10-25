@@ -528,7 +528,7 @@ namespace System.Windows.Forms.Design
                 && (host.GetDesigner(newChild) as ControlDesigner) != null
                 && !(newChild is Form && ((Form)newChild).TopLevel))
             {
-                Rectangle bounds = new Rectangle();
+                Rectangle bounds = default(Rectangle);
 
                 // If we were provided with a location, convert it to parent control coordinates.
                 // Otherwise, get the control's size and put the location in the middle of it

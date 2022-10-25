@@ -42,7 +42,7 @@ namespace System.ComponentModel.Design
         internal SelectionService(IServiceProvider provider) : base()
         {
             _provider = provider;
-            _state = new BitVector32();
+            _state = default(BitVector32);
             _events = new EventHandlerList();
             _statusCommandUI = new StatusCommandUI(provider);
         }

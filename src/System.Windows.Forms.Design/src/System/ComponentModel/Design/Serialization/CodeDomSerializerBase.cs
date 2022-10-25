@@ -458,7 +458,7 @@ namespace System.ComponentModel.Design.Serialization
             Trace(name);
             traceScope.Push(name);
 #endif
-            return new TracingScope();
+            return default(TracingScope);
         }
 
         [Conditional("DEBUG")]

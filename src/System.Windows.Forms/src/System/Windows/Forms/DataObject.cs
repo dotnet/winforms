@@ -544,7 +544,7 @@ namespace System.Windows.Forms
                 return converter.OleDataObject.GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
             }
 
-            pformatetcOut = new FORMATETC();
+            pformatetcOut = default(FORMATETC);
             return DATA_S_SAMEFORMATETC;
         }
 
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
                 string formatName = DataFormats.GetFormat(formatetc.cfFormat).Name;
                 if (!_innerData.GetDataPresent(formatName))
                 {
-                    medium = new STGMEDIUM();
+                    medium = default(STGMEDIUM);
                     Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $" drag-and-drop private format requested '{formatName}' not present");
                     return;
                 }
@@ -577,7 +577,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            medium = new STGMEDIUM();
+            medium = default(STGMEDIUM);
 
             if (!GetTymedUseable(formatetc.tymed))
             {

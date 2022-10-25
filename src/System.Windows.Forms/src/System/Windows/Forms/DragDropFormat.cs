@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         /// </returns>
         private static STGMEDIUM CopyData(short format, STGMEDIUM mediumSource)
         {
-            STGMEDIUM mediumDestination = new();
+            STGMEDIUM mediumDestination = default(STGMEDIUM);
 
             try
             {
