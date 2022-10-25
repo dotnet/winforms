@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                     return items;
                 }
 
-                return new ToolStripItemCollection(owner: null, false);
+                return new ToolStripItemCollection(owner: null, itemsCollection: false);
             }
         }
 
