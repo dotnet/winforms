@@ -45,8 +45,11 @@ namespace Windows.Win32
                     //
                     // Doing this is a bit pointless when the color depth is much higher (the normal scenario). As such
                     // we'll skip doing this unless we see 8bpp or less.
-
+#if DEBUG
                     return new SelectPaletteScope();
+#else
+                    return default(SelectPaletteScope);
+#endif
                 }
 
                 return new SelectPaletteScope(
