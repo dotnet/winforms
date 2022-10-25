@@ -2,14 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     internal class ToolStripCustomIComparer : IComparer<ToolStrip>
     {
-        public int Compare(ToolStrip x, ToolStrip y)
+        public int Compare(ToolStrip? x, ToolStrip? y)
         {
+            if (x is null && y is null)
+            {
+                return 0;
+            }
+
+            if (x is null)
+            {
+                return -1;
+            }
+
+            if (y is null)
+            {
+                return 1;
+            }
+
             if (x.GetType() == y.GetType())
             {
                 return 0; // same type
