@@ -514,11 +514,11 @@ override System.Windows.Forms.ToolStripLabel.OnPaint(System.Windows.Forms.PaintE
 ~override System.Windows.Forms.ToolStripMenuItem.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
 ~override System.Windows.Forms.ToolStripMenuItem.OnOwnerChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStripMenuItem.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStripOverflow.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripOverflow.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection
-~override System.Windows.Forms.ToolStripOverflow.Items.get -> System.Windows.Forms.ToolStripItemCollection
-~override System.Windows.Forms.ToolStripOverflow.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
-~override System.Windows.Forms.ToolStripOverflow.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
+override System.Windows.Forms.ToolStripOverflow.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripOverflow.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection!
+override System.Windows.Forms.ToolStripOverflow.Items.get -> System.Windows.Forms.ToolStripItemCollection!
+override System.Windows.Forms.ToolStripOverflow.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
+override System.Windows.Forms.ToolStripOverflow.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
 override System.Windows.Forms.ToolStripProgressBar.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.ToolStripProgressBar.BackgroundImage.set -> void
 override System.Windows.Forms.ToolStripProgressBar.OnSubscribeControlEvents(System.Windows.Forms.Control? control) -> void
@@ -1509,7 +1509,7 @@ System.Windows.Forms.ToolStripLabel.ToolStripLabel(System.Drawing.Image? image) 
 ~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
 ~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, System.EventHandler onClick, System.Windows.Forms.Keys shortcutKeys) -> void
 ~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(System.Drawing.Image image) -> void
-~System.Windows.Forms.ToolStripOverflow.ToolStripOverflow(System.Windows.Forms.ToolStripItem parentItem) -> void
+System.Windows.Forms.ToolStripOverflow.ToolStripOverflow(System.Windows.Forms.ToolStripItem! parentItem) -> void
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Add(System.Windows.Forms.ToolStripPanelRow value) -> int
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection value) -> void
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanelRow[] value) -> void
