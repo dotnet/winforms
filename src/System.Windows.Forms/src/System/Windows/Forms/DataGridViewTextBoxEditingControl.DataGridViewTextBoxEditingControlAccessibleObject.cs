@@ -6,7 +6,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    partial class DataGridViewTextBoxEditingControl
+    public partial class DataGridViewTextBoxEditingControl
     {
         /// <summary>
         ///  Defines the DataGridView TextBox EditingControl accessible object.

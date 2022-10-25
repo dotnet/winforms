@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    partial class ErrorProvider
+    public partial class ErrorProvider
     {
         /// <summary>
         ///  There is one ErrorWindow for each control parent. It is parented to the
