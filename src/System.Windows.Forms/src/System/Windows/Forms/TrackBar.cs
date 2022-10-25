@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -308,7 +307,6 @@ namespace System.Windows.Forms
                 }
 
                 SetRange(_minimum, value);
-                SetTickFrequency();
             }
         }
 
@@ -335,7 +333,6 @@ namespace System.Windows.Forms
                 }
 
                 SetRange(value, _maximum);
-                SetTickFrequency();
             }
         }
 
@@ -539,8 +536,6 @@ namespace System.Windows.Forms
             }
         }
 
-
-
         /// <summary>
         ///  Indicates just how many ticks will be drawn. For a TrackBar with a
         ///  range of 0..100, it might be impractical to draw all 100 ticks for a
@@ -564,7 +559,6 @@ namespace System.Windows.Forms
                 _tickFrequency = value;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)value);
                     SetTickFrequency();
                     Invalidate();
                 }
@@ -826,15 +820,15 @@ namespace System.Windows.Forms
         {
             // check if the value of the max is greater then the taskbar size
             // if so then we divide the value by size and only that many ticks to be drawn on the screen
-                 
+
             if (TickStyle != System.Windows.Forms.TickStyle.None)
             {
                 return;
             }
 
             int tickFrequency = _tickFrequency;
-            Decimal trackbarSize;
-            Decimal maxValue = _minimum + _maximum;
+            int trackbarSize;
+            uint maxValue = (uint)(_minimum + _maximum);
             if (Orientation == Orientation.Horizontal)
             {
                 trackbarSize = Size.Width;
@@ -844,14 +838,12 @@ namespace System.Windows.Forms
                 trackbarSize = Size.Height;
             }
 
-            if ( maxValue > trackbarSize)
+            if (maxValue > trackbarSize)
             {
-                tickFrequency = Convert.ToInt32(Math.Round(Convert.ToDouble(maxValue / trackbarSize)));               
+                tickFrequency = (int)(maxValue / trackbarSize);
             }
 
-   
-            User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, tickFrequency);
-
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)tickFrequency);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
