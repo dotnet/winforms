@@ -6,6 +6,7 @@ using WindowsInput;
 using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
+using static Interop.Ole32;
 
 namespace System.Windows.Forms.UITests
 {
@@ -29,14 +30,15 @@ namespace System.Windows.Forms.UITests
             using Timer timer = new();
             timer.Interval = 1_000;
             int counter = 0;
+            bool failedClose = false;
             timer.Tick += (s, e) =>
             {
                 counter++;
                 if (counter > 2)
                 {
                     timer.Stop();
+                    failedClose=true;
                     Application.Exit();
-                    Assert.Fail("Failed to close the dialog");
                 }
 
                 // Close the dialog
@@ -47,7 +49,7 @@ namespace System.Windows.Forms.UITests
             dialog.ShowDialog();
 
             // The dialog has opened and closed successfully
-            Assert.True(true);
+            Assert.False(failedClose, "Failed to close the dialog");
         }
     }
 }
