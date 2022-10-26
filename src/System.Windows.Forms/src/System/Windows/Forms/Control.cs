@@ -4687,6 +4687,7 @@ namespace System.Windows.Forms
                 OnParentChanged(EventArgs.Empty);
             }
 
+            UpdateAnchorsIfRequired();
             SetState(States.CheckedHost, false);
             ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
         }
@@ -7862,8 +7863,6 @@ namespace System.Windows.Forms
             {
                 OnTopMostActiveXParentChanged(EventArgs.Empty);
             }
-
-            DefaultLayout.UpdateAnchorInfoV2(this);
         }
 
         /// <summary>
@@ -10587,11 +10586,11 @@ namespace System.Windows.Forms
             scaledSize = LayoutUtils.UnionSizes(scaledSize, minSize);
 
             if (DpiHelper.IsScalingRequirementMet
-                && ParentInternal is not null
-                && (ParentInternal.LayoutEngine == DefaultLayout.Instance)
                 // In the v2 layout, anchors are updated/computed after the controls bounds changed
                 // and, thus, don't need scaling.
-                && !LocalAppContextSwitches.EnableAnchorLayoutV2)
+                && !DefaultLayout.UseAnchorLayoutV2(this)
+                && ParentInternal is { } parent
+                && (parent.LayoutEngine == DefaultLayout.Instance))
             {
                 // We need to scale AnchorInfo to update distances to container edges
                 DefaultLayout.ScaleAnchorInfo(this, factor);
@@ -10816,6 +10815,16 @@ namespace System.Windows.Forms
             }
         }
 
+        internal void UpdateAnchorsIfRequired()
+        {
+            if (!LocalAppContextSwitches.AnchorLayoutV2)
+            {
+                return;
+            }
+
+            DefaultLayout.UpdateAnchorInfoV2(this);
+        }
+
         /// <summary>
         ///  Sets the bounds of the control.
         /// </summary>
@@ -10845,7 +10854,7 @@ namespace System.Windows.Forms
                 _height != height)
             {
                 SetBoundsCore(x, y, width, height, specified);
-                DefaultLayout.UpdateAnchorInfoV2(this);
+                UpdateAnchorsIfRequired();
 
                 // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
                 // have refreshed the interior layout or the resized control.  We only need to layout
@@ -12204,7 +12213,7 @@ namespace System.Windows.Forms
             _parent?.UpdateChildZOrder(this);
 
             UpdateBounds();
-            DefaultLayout.UpdateAnchorInfoV2(this);
+            UpdateAnchorsIfRequired();
 
             // Let any interested sites know that we've now created a handle
             OnHandleCreated(EventArgs.Empty);

@@ -26,9 +26,9 @@ namespace System.Windows.Forms.UITests
         [InlineData(AnchorStyles.Top | AnchorStyles.Bottom, 120, 30, 20, 330)]
         [InlineData(AnchorStyles.Left | AnchorStyles.Right, 20, 180, 220, 30)]
         [InlineData(AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left, 20, 30, 220, 330)]
-        public void ResizeAnchoredControlsParent_HanldeCreated_NewAnchorsApplied(AnchorStyles anchor, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
+        public void Control_ResizeAnchoredControls_ParentHanldeCreated_NewAnchorsApplied(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
         {
-            var (form, button) = GetFormWithAnchoredButton(anchor);
+            (Form form, Button button) = GetFormWithAnchoredButton(anchors);
             form.Shown += OnFormShown;
 
             // Showing the dialog will execute the assertions
@@ -40,24 +40,25 @@ namespace System.Windows.Forms.UITests
 
             void OnFormShown(object? sender, EventArgs e)
             {
-                Form formLocal = (Form)sender!;
-                Control button1 = formLocal.Controls[0];
+                // Resize the form to compute button anchors.
+                form.Size = new Size(400, 600);
+                Rectangle buttonBounds = button.Bounds;
 
-                //Resize the form to compute button anchors.
-                formLocal.Size = new Size(400, 600);
+                Assert.Equal(expectedX, buttonBounds.X);
+                Assert.Equal(expectedY, buttonBounds.Y);
+                Assert.Equal(expectedWidth, buttonBounds.Width);
+                Assert.Equal(expectedHeight, buttonBounds.Height);
 
-                Assert.Equal(expectedX, button1.Bounds.X);
-                Assert.Equal(expectedY, button1.Bounds.Y);
-                Assert.Equal(expectedWidth, button1.Bounds.Width);
-                Assert.Equal(expectedHeight, button1.Bounds.Height);
                 form.Close();
             }
         }
 
         private static (Form, Button) GetFormWithAnchoredButton(AnchorStyles buttonAnchors)
         {
-            Form form = new();
-            form.Size = new Size(200, 300);
+            Form form = new()
+            {
+                Size = new Size(200, 300)
+            };
 
             Button button = new()
             {

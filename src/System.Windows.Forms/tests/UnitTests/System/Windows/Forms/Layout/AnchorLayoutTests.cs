@@ -11,23 +11,23 @@ namespace System.Windows.Forms.Layout.Tests
     public class AnchorLayoutTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
-        public void Control_NotParented_NoAnchorsComputed()
+        public void Control_NotParented_AnchorsNotComputed()
         {
-            var (form, button) = GetFormWithAnchoredButton();
+            (Form form, Button button) = GetFormWithAnchoredButton();
 
             DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
             Assert.Null(anchorInfo);
 
-            _ = button.Handle; // Force handle creation;
+            Assert.NotEqual(IntPtr.Zero, button.Handle);
             Assert.Null(anchorInfo);
 
             Dispose(form, button);
         }
 
         [WinFormsFact]
-        public void Control_HandleNotCreated_NoAnchorsComputed()
+        public void Control_HandleNotCreated_AnchorsNotComputed()
         {
-            var (form, button) = GetFormWithAnchoredButton();
+            (Form form, Button button) = GetFormWithAnchoredButton();
 
             DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
             Assert.Null(anchorInfo);
@@ -39,14 +39,15 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [WinFormsFact]
-        public void Control_ParentHandleNotCreated_NoAnchorsComputed()
+        public void Control_ParentHandleNotCreated_AnchorsNotComputed()
         {
-            var (form, button) = GetFormWithAnchoredButton();
+            (Form form, Button button) = GetFormWithAnchoredButton();
 
             DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
             Assert.Null(anchorInfo);
 
-            _ = button.Handle; // Force handle creation;
+            Assert.NotEqual(IntPtr.Zero, button.Handle);
+
             form.Controls.Add(button);
             Assert.Null(anchorInfo);
 
@@ -54,10 +55,11 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [WinFormsFact]
-        public void ConfigSwitch_Disabled_NoHanldeCreated_AnchorsComputed()
+        public void ConfigSwitch_Disabled_HanldeNotCreated_AnchorsComputed()
         {
-            AppContext.SetSwitch(LocalAppContextSwitches.EnableAnchorLayoutV2SwitchName, false);
-            var (form, button) = GetFormWithAnchoredButton();
+            AppContext.SetSwitch(LocalAppContextSwitches.AnchorLayoutV2SwitchName, false);
+
+            (Form form, Button button) = GetFormWithAnchoredButton();
             form.Controls.Add(button);
 
             DefaultLayout.AnchorInfo anchorInfo = DefaultLayout.GetAnchorInfo(button);
@@ -68,8 +70,11 @@ namespace System.Windows.Forms.Layout.Tests
 
         private static (Form, Button) GetFormWithAnchoredButton()
         {
-            Form form = new ();
-            form.Size = new Size(200, 300);
+            Form form = new()
+            {
+                Size = new Size(200, 300)
+            };
+
             Button button = new()
             {
                 Location = new Point(20, 30),
