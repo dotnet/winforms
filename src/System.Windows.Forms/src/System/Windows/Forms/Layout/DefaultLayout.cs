@@ -437,8 +437,7 @@ namespace System.Windows.Forms.Layout
             for (int i = children.Count - 1; i >= 0; i--)
             {
                 IArrangedElement element = children[i];
-                Rectangle bounds = element.Bounds;
-                Debug.Assert(bounds == GetCachedBounds(element), "Why do we have cachedBounds for a docked element?");
+                Debug.Assert(element.Bounds == GetCachedBounds(element), "Why do we have cachedBounds for a docked element?");
                 if (CommonProperties.GetNeedsDockLayout(element))
                 {
                     // Some controls modify their bounds when you call SetBoundsCore. We
@@ -453,8 +452,8 @@ namespace System.Windows.Forms.Layout
                                 TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
                                 // What we are really doing here: top += control.Bounds.Height;
-                                remainingBounds.Y += bounds.Height;
-                                remainingBounds.Height -= bounds.Height;
+                                remainingBounds.Y += element.Bounds.Height;
+                                remainingBounds.Height -= element.Bounds.Height;
                                 break;
                             }
 
@@ -466,7 +465,7 @@ namespace System.Windows.Forms.Layout
                                 TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
                                 // What we are really doing here: bottom -= control.Bounds.Height;
-                                remainingBounds.Height -= bounds.Height;
+                                remainingBounds.Height -= element.Bounds.Height;
 
                                 break;
                             }
@@ -479,8 +478,8 @@ namespace System.Windows.Forms.Layout
                                 TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
                                 // What we are really doing here: left += control.Bounds.Width;
-                                remainingBounds.X += bounds.Width;
-                                remainingBounds.Width -= bounds.Width;
+                                remainingBounds.X += element.Bounds.Width;
+                                remainingBounds.Width -= element.Bounds.Width;
                                 break;
                             }
 
@@ -492,7 +491,7 @@ namespace System.Windows.Forms.Layout
                                 TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
 
                                 // What we are really doing here: right -= control.Bounds.Width;
-                                remainingBounds.Width -= bounds.Width;
+                                remainingBounds.Width -= element.Bounds.Width;
                                 break;
                             }
 
