@@ -536,13 +536,13 @@ override System.Windows.Forms.ToolStripProgressBar.Text.set -> void
 ~override System.Windows.Forms.ToolStripSeparator.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
 ~override System.Windows.Forms.ToolStripSeparator.Text.get -> string
 ~override System.Windows.Forms.ToolStripSeparator.Text.set -> void
-~override System.Windows.Forms.ToolStripSplitButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripSplitButton.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown
-~override System.Windows.Forms.ToolStripSplitButton.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSplitButton.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripSplitButton.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSplitButton.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSplitButton.OnRightToLeftChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStripSplitButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripSplitButton.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown!
+override System.Windows.Forms.ToolStripSplitButton.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSplitButton.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripSplitButton.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSplitButton.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSplitButton.OnRightToLeftChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripStatusLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripStatusLabel.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.ToolStripStatusLabel.OnTextChanged(System.EventArgs! e) -> void
@@ -1531,14 +1531,14 @@ System.Windows.Forms.ToolStripProgressBar.ToolStripProgressBar(string? name) -> 
 ~System.Windows.Forms.ToolStripSeparator.ImageKey.set -> void
 ~System.Windows.Forms.ToolStripSeparator.ToolTipText.get -> string
 ~System.Windows.Forms.ToolStripSeparator.ToolTipText.set -> void
-~System.Windows.Forms.ToolStripSplitButton.DefaultItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripSplitButton.DefaultItem.set -> void
-~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string text) -> void
-~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string text, System.Drawing.Image image) -> void
-~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string text, System.Drawing.Image image, params System.Windows.Forms.ToolStripItem[] dropDownItems) -> void
-~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
-~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(System.Drawing.Image image) -> void
+System.Windows.Forms.ToolStripSplitButton.DefaultItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.ToolStripSplitButton.DefaultItem.set -> void
+System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string? text) -> void
+System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string? text, System.Drawing.Image? image) -> void
+System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string? text, System.Drawing.Image? image, params System.Windows.Forms.ToolStripItem![]? dropDownItems) -> void
+System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
+System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
+System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(System.Drawing.Image? image) -> void
 System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string? text) -> void
 System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string? text, System.Drawing.Image? image) -> void
 System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
@@ -2185,9 +2185,9 @@ virtual System.Windows.Forms.ToolStripComboBox.OnTextUpdate(System.EventArgs! e)
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlRemoved(System.Windows.Forms.Control control, int index) -> void
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 virtual System.Windows.Forms.ToolStripProgressBar.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.ToolStripSplitButton.OnButtonClick(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripSplitButton.OnButtonDoubleClick(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripSplitButton.OnDefaultItemChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripSplitButton.OnButtonClick(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripSplitButton.OnButtonDoubleClick(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripSplitButton.OnDefaultItemChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripTextBox.OnAcceptsTabChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripTextBox.OnBorderStyleChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripTextBox.OnHideSelectionChanged(System.EventArgs! e) -> void
@@ -11609,11 +11609,11 @@ System.Windows.Forms.ToolStripSplitButton
 System.Windows.Forms.ToolStripSplitButton.AutoToolTip.get -> bool
 System.Windows.Forms.ToolStripSplitButton.AutoToolTip.set -> void
 System.Windows.Forms.ToolStripSplitButton.ButtonBounds.get -> System.Drawing.Rectangle
-System.Windows.Forms.ToolStripSplitButton.ButtonClick -> System.EventHandler
-System.Windows.Forms.ToolStripSplitButton.ButtonDoubleClick -> System.EventHandler
+System.Windows.Forms.ToolStripSplitButton.ButtonClick -> System.EventHandler?
+System.Windows.Forms.ToolStripSplitButton.ButtonDoubleClick -> System.EventHandler?
 System.Windows.Forms.ToolStripSplitButton.ButtonPressed.get -> bool
 System.Windows.Forms.ToolStripSplitButton.ButtonSelected.get -> bool
-System.Windows.Forms.ToolStripSplitButton.DefaultItemChanged -> System.EventHandler
+System.Windows.Forms.ToolStripSplitButton.DefaultItemChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripSplitButton.DropDownButtonBounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.ToolStripSplitButton.DropDownButtonPressed.get -> bool
 System.Windows.Forms.ToolStripSplitButton.DropDownButtonSelected.get -> bool
