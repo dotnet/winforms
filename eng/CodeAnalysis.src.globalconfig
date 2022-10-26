@@ -1017,7 +1017,7 @@ dotnet_diagnostic.SA1119.severity = none
 dotnet_diagnostic.SA1120.severity = none
 
 # SA1121: Use built-in type alias
-dotnet_diagnostic.SA1121.severity = none # TODO: warning
+dotnet_diagnostic.SA1121.severity = warning
 
 # SA1122: Use string.Empty for empty strings
 dotnet_diagnostic.SA1122.severity = none

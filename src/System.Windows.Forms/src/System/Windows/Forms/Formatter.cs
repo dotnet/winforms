@@ -398,7 +398,7 @@ namespace System.Windows.Forms
             else
             {
                 // Otherwise perform default comparison based on object types
-                return Object.Equals(value, formattedNullValue);
+                return object.Equals(value, formattedNullValue);
             }
         }
 
@@ -480,7 +480,7 @@ namespace System.Windows.Forms
         {
             return value is null ||
                    value == System.DBNull.Value ||
-                   Object.Equals(value, NullData(value.GetType(), dataSourceNullValue));
+                   object.Equals(value, NullData(value.GetType(), dataSourceNullValue));
         }
 
         /// <summary>

@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Layout
 
             foreach (string propertyName in _propertiesWhichInvalidateCache)
             {
-                if (Object.ReferenceEquals(args.AffectedProperty, propertyName))
+                if (object.ReferenceEquals(args.AffectedProperty, propertyName))
                 {
                     ClearCachedAssignments(containerInfo);
                     break;

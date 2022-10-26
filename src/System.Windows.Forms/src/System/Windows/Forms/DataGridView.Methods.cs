@@ -15115,7 +15115,7 @@ namespace System.Windows.Forms
 
             if (CurrentCell is not null && (ShowCellToolTips || (ShowCellErrors && !string.IsNullOrEmpty(CurrentCell?.ErrorText))))
             {
-                ActivateToolTip(false /*activate*/, String.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
+                ActivateToolTip(false /*activate*/, string.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
                 KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
             }
         }
@@ -15778,7 +15778,7 @@ namespace System.Windows.Forms
                 AccessibilityNotifyCurrentCellChanged(_ptCurrentCell);
                 if (CurrentCell is not null && (ShowCellToolTips || (ShowCellErrors && !string.IsNullOrEmpty(CurrentCell.ErrorText))))
                 {
-                    ActivateToolTip(false /*activate*/, String.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
+                    ActivateToolTip(false /*activate*/, string.Empty, CurrentCell.ColumnIndex, CurrentCell.RowIndex);
                     KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(CurrentCell);
                 }
             }
@@ -22650,7 +22650,7 @@ namespace System.Windows.Forms
 
             DataGridViewCell dataGridViewCell = CurrentCell;
 
-            ActivateToolTip(false /*activate*/, String.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
+            ActivateToolTip(false /*activate*/, string.Empty, dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
             if (KeyboardToolTip.IsActivatedByKeyboard)
             {
                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(dataGridViewCell);
