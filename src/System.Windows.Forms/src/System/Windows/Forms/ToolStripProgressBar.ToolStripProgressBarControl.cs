@@ -8,12 +8,12 @@ namespace System.Windows.Forms
     {
         internal class ToolStripProgressBarControl : ProgressBar
         {
-            private ToolStripProgressBar? ownerItem;
+            private ToolStripProgressBar? _ownerItem;
 
             public ToolStripProgressBar? Owner
             {
-                get { return ownerItem; }
-                set { ownerItem = value; }
+                get { return _ownerItem; }
+                set { _ownerItem = value; }
             }
 
             internal override bool SupportsUiaProviders => true;
