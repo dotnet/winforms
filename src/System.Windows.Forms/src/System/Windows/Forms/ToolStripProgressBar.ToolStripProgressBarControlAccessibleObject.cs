@@ -17,11 +17,11 @@ namespace System.Windows.Forms
                 _ownerToolStripProgressBarControl = toolStripProgressBarControl;
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             {
                 get
                 {
-                    return _ownerToolStripProgressBarControl.Owner.Owner.AccessibilityObject;
+                    return _ownerToolStripProgressBarControl.Owner?.Owner.AccessibilityObject;
                 }
             }
 
@@ -32,7 +32,7 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.Parent:
                     case UiaCore.NavigateDirection.PreviousSibling:
                     case UiaCore.NavigateDirection.NextSibling:
-                        return _ownerToolStripProgressBarControl.Owner.AccessibilityObject.FragmentNavigate(direction);
+                        return _ownerToolStripProgressBarControl.Owner?.AccessibilityObject.FragmentNavigate(direction);
                 }
 
                 return base.FragmentNavigate(direction);
@@ -41,7 +41,7 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
                 propertyID switch
                 {
-                    UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_ownerToolStripProgressBarControl.Owner.Placement, Bounds),
+                    UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_ownerToolStripProgressBarControl.Owner?.Placement, Bounds),
                     _ => base.GetPropertyValue(propertyID)
                 };
         }
