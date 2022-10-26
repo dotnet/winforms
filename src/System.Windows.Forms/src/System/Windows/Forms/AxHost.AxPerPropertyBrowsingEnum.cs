@@ -5,7 +5,7 @@
 using System.Diagnostics;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using Windows.Win32.System.Com;
-using static Interop;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms
 {
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
                 try
                 {
                     // Marshal the items.
-                    Oleaut32.IPerPropertyBrowsing ppb = _owner.GetPerPropertyBrowsing();
+                    IPerPropertyBrowsing.Interface ppb = _owner.GetPerPropertyBrowsing();
                     int itemCount = 0;
 
                     Debug.Assert(_cookies is not null && _names is not null, "An item array is null");
@@ -98,7 +98,7 @@ namespace System.Windows.Forms
                             }
 
                             using VARIANT var = default(VARIANT);
-                            HRESULT hr = ppb.GetPredefinedValue(_target.Dispid, cookie, &var);
+                            HRESULT hr = ppb.GetPredefinedValue((int)_target.Dispid, cookie, &var);
                             if (hr.Succeeded && var.Type != VARENUM.VT_EMPTY)
                             {
                                 values[i] = var.ToObject()!;

@@ -15,6 +15,8 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -26,7 +28,7 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultEvent(nameof(Enter))]
     [Designer($"System.Windows.Forms.Design.AxHostDesigner, {AssemblyRef.SystemDesign}")]
-    public abstract partial class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
+    public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
     {
         private static readonly TraceSwitch s_axHTraceSwitch = new("AxHTrace", "ActiveX handle tracing");
         private static readonly TraceSwitch s_axPropTraceSwitch = new("AxPropTrace", "ActiveX property tracing");
@@ -100,7 +102,7 @@ namespace System.Windows.Forms
         private static readonly Guid s_ipicture_Guid = typeof(Ole32.IPicture).GUID;
         private static readonly Guid s_ipictureDisp_Guid = typeof(Ole32.IPictureDisp).GUID;
         private static readonly Guid s_ivbformat_Guid = typeof(Ole32.IVBFormat).GUID;
-        private static readonly Guid s_ioleobject_Guid = typeof(Ole32.IOleObject).GUID;
+        private static readonly Guid s_ioleobject_Guid = IOleObject.Guid;
         private static readonly Guid s_dataSource_Guid = new("{7C0FFAB3-CD84-11D0-949A-00A0C91110ED}");
         private static readonly Guid s_windowsMediaPlayer_Clsid = new("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
         private static readonly Guid s_comctlImageCombo_Clsid = new("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
@@ -176,12 +178,12 @@ namespace System.Windows.Forms
         // Interface pointers to the ocx
 
         private object _instance;
-        private Ole32.IOleInPlaceObject _iOleInPlaceObject;
-        private Ole32.IOleObject _iOleObject;
+        private IOleInPlaceObject.Interface _iOleInPlaceObject;
+        private IOleObject.Interface _iOleObject;
         private Ole32.IOleControl _iOleControl;
-        private Ole32.IOleInPlaceActiveObject _iOleInPlaceActiveObject;
-        private Ole32.IOleInPlaceActiveObject _iOleInPlaceActiveObjectExternal;
-        private Oleaut32.IPerPropertyBrowsing _iPerPropertyBrowsing;
+        private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObject;
+        private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObjectExternal;
+        private IPerPropertyBrowsing.Interface _iPerPropertyBrowsing;
         private VSSDK.ICategorizeProperties _iCategorizeProperties;
         private Oleaut32.IPersistPropertyBag _iPersistPropBag;
         private Ole32.IPersistStream _iPersistStream;
@@ -308,11 +310,10 @@ namespace System.Windows.Forms
         private unsafe void RealizeStyles()
         {
             SetStyle(ControlStyles.UserPaint, false);
-            Ole32.OLEMISC bits = 0;
-            HRESULT hr = GetOleObject().GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
+            HRESULT hr = GetOleObject().GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC bits);
             if (hr.Succeeded)
             {
-                _miscStatusBits = bits;
+                _miscStatusBits = (Ole32.OLEMISC)bits;
                 ParseMiscBits(_miscStatusBits);
             }
         }
@@ -1221,10 +1222,10 @@ namespace System.Windows.Forms
         private unsafe Size SetExtent(int width, int height)
         {
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"setting extent to {width} {height}");
-            Size sz = new Size(width, height);
+            Size size = new(width, height);
             bool resetExtents = !IsUserMode();
-            Pixel2hiMetric(ref sz);
-            HRESULT hr = GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
+            Pixel2hiMetric(ref size);
+            HRESULT hr = GetOleObject().SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
             if (hr != HRESULT.S_OK)
             {
                 resetExtents = true;
@@ -1232,8 +1233,8 @@ namespace System.Windows.Forms
 
             if (resetExtents)
             {
-                GetOleObject().GetExtent(Ole32.DVASPECT.CONTENT, &sz);
-                GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
+                GetOleObject().GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+                GetOleObject().SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
             }
 
             return GetExtent();
@@ -1241,10 +1242,10 @@ namespace System.Windows.Forms
 
         private unsafe Size GetExtent()
         {
-            var sz = default(Size);
-            GetOleObject().GetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            HiMetric2Pixel(ref sz);
-            return sz;
+            Size size = default;
+            GetOleObject().GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+            HiMetric2Pixel(ref size);
+            return size;
         }
 
         /// <summary>
@@ -1624,7 +1625,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Naughty control didn't call showObject...");
                 try
                 {
-                    ((Ole32.IOleClientSite)_oleSite).ShowObject();
+                    ((IOleClientSite.Interface)_oleSite).ShowObject();
                 }
                 catch
                 {
@@ -1824,7 +1825,7 @@ namespace System.Windows.Forms
                 _axState[s_siteProcessedInputKey] = false;
                 try
                 {
-                    Ole32.IOleInPlaceActiveObject activeObj = GetInPlaceActiveObject();
+                    IOleInPlaceActiveObject.Interface activeObj = GetInPlaceActiveObject();
                     if (activeObj is not null)
                     {
                         HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
@@ -2320,7 +2321,9 @@ namespace System.Windows.Forms
         {
             Control parent = ParentInternal;
             RECT posRect = Bounds;
-            GetOleObject().DoVerb((Ole32.OLEIVERB)verb, null, _oleSite, -1, parent is not null ? parent.Handle : IntPtr.Zero, &posRect);
+            bool result = ComHelpers.TryQueryInterface(_oleSite, out IOleClientSite* pClientSite);
+            Debug.Assert(result);
+            GetOleObject().DoVerb(verb, lpmsg: null, pClientSite, -1, parent is null ? HWND.Null : parent.HWND, &posRect);
         }
 
         private bool AwaitingDefreezing()
@@ -3439,11 +3442,11 @@ namespace System.Windows.Forms
                     // transition back to a state >= InPlaceActive.
                     if (GetOcState() >= OC_INPLACE)
                     {
-                        Ole32.IOleInPlaceObject ipo = GetInPlaceObject();
+                        IOleInPlaceObject.Interface ipo = GetInPlaceObject();
                         HWND hwnd = HWND.Null;
                         if (ipo.GetWindow(&hwnd).Succeeded)
                         {
-                            Application.ParkHandle(handle: new(ipo, hwnd), DpiAwarenessContext);
+                            Application.ParkHandle(new HandleRef<HWND>(this, hwnd), DpiAwarenessContext);
                         }
                     }
 
@@ -3802,7 +3805,9 @@ namespace System.Windows.Forms
 
             if ((_miscStatusBits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0)
             {
-                GetOleObject().SetClientSite(_oleSite);
+                bool result = ComHelpers.TryQueryInterface(_oleSite, out IOleClientSite* clientSite);
+                Debug.Assert(result);
+                GetOleObject().SetClientSite(clientSite);
                 setClientSite = true;
             }
 
@@ -3810,7 +3815,9 @@ namespace System.Windows.Forms
 
             if (!setClientSite)
             {
-                GetOleObject().SetClientSite(_oleSite);
+                bool result = ComHelpers.TryQueryInterface(_oleSite, out IOleClientSite* clientSite);
+                Debug.Assert(result);
+                GetOleObject().SetClientSite(clientSite);
             }
         }
 
@@ -3849,7 +3856,7 @@ namespace System.Windows.Forms
 
         private Ole32.IOleControl GetOleControl() => _iOleControl ??= (Ole32.IOleControl)_instance;
 
-        private Ole32.IOleInPlaceActiveObject GetInPlaceActiveObject()
+        private IOleInPlaceActiveObject.Interface GetInPlaceActiveObject()
         {
             // if our AxContainer was set an external active object then use it.
             if (_iOleInPlaceActiveObjectExternal is not null)
@@ -3863,7 +3870,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_instance is not null, "must have the ocx");
                 try
                 {
-                    _iOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)_instance;
+                    _iOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)_instance;
                 }
                 catch (InvalidCastException e)
                 {
@@ -3874,17 +3881,17 @@ namespace System.Windows.Forms
             return _iOleInPlaceActiveObject;
         }
 
-        private Ole32.IOleObject GetOleObject() => _iOleObject ??= (Ole32.IOleObject)_instance;
+        private IOleObject.Interface GetOleObject() => _iOleObject ??= (IOleObject.Interface)_instance;
 
-        private Ole32.IOleInPlaceObject GetInPlaceObject()
+        private IOleInPlaceObject.Interface GetInPlaceObject()
         {
             if (_iOleInPlaceObject is null)
             {
                 Debug.Assert(_instance is not null, "must have the ocx");
-                _iOleInPlaceObject = (Ole32.IOleInPlaceObject)_instance;
+                _iOleInPlaceObject = (IOleInPlaceObject.Interface)_instance;
 
 #if DEBUG
-                if (_iOleInPlaceObject is Ole32.IOleInPlaceObjectWindowless)
+                if (_iOleInPlaceObject is IOleInPlaceObjectWindowless.Interface)
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"{GetType().FullName} Can also be a Windowless control.");
                 }
@@ -3908,12 +3915,12 @@ namespace System.Windows.Forms
             return _iCategorizeProperties;
         }
 
-        private Oleaut32.IPerPropertyBrowsing GetPerPropertyBrowsing()
+        private IPerPropertyBrowsing.Interface GetPerPropertyBrowsing()
         {
             if (_iPerPropertyBrowsing is null && !_axState[s_checkedIppb] && _instance is not null)
             {
                 _axState[s_checkedIppb] = true;
-                if (_instance is Oleaut32.IPerPropertyBrowsing browsing)
+                if (_instance is IPerPropertyBrowsing.Interface browsing)
                 {
                     _iPerPropertyBrowsing = browsing;
                 }

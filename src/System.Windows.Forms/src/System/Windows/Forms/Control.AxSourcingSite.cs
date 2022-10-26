@@ -4,6 +4,8 @@
 
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -12,11 +14,11 @@ namespace System.Windows.Forms
     {
         private class AxSourcingSite : ISite
         {
-            private readonly Ole32.IOleClientSite _clientSite;
+            private readonly IOleClientSite.Interface _clientSite;
             private string? _name;
             private HtmlShimManager? _shimManager;
 
-            internal AxSourcingSite(IComponent component, Ole32.IOleClientSite clientSite, string? name)
+            internal AxSourcingSite(IComponent component, IOleClientSite.Interface clientSite, string? name)
             {
                 Component = component;
                 _clientSite = clientSite;
@@ -33,11 +35,13 @@ namespace System.Windows.Forms
             /// </summary>
             public IContainer? Container => null;
 
-            public object? GetService(Type service)
+            public unsafe object? GetService(Type service)
             {
                 if (service == typeof(HtmlDocument))
                 {
-                    if (_clientSite.GetContainer() is Mshtml.IHTMLDocument document)
+                    IOleContainer* container;
+                    _clientSite.GetContainer(&container);
+                    if (Marshal.GetObjectForIUnknown((nint)container) is Mshtml.IHTMLDocument document)
                     {
                         _shimManager ??= new HtmlShimManager();
                         return new HtmlDocument(_shimManager, document);

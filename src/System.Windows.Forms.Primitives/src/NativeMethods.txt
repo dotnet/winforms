@@ -273,6 +273,11 @@ IFileDialogCustomize
 IFileDialogEvents
 IFileOpenDialog
 IFileSaveDialog
+IOleInPlaceActiveObject
+IOleInPlaceObject
+IOleInPlaceObjectWindowless
+IOleObject
+IOleWindow
 IMAGE_LIST_WRITE_STREAM_FLAGS
 ImageList_Add
 ImageList_Create
@@ -303,6 +308,7 @@ INPLACE_E_NOTOOLSPACE
 IntersectClipRect
 InvalidateRect
 InvalidateRgn
+IPerPropertyBrowsing
 IRecordInfo
 IsAppThemed
 IsChild

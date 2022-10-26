@@ -8,6 +8,8 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Ole = Windows.Win32.System.Ole;
+using Windows.Win32.System.Com;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms
@@ -27,7 +29,7 @@ namespace System.Windows.Forms
     public class WebBrowserSiteBase :
         IOleControlSite,
         IOleInPlaceSite,
-        IOleClientSite,
+        Ole.IOleClientSite.Interface,
         ISimpleFrameSite,
         IPropertyNotifySink,
         IDisposable
@@ -173,25 +175,32 @@ namespace System.Windows.Forms
         HRESULT IOleControlSite.ShowPropertyFrame() => HRESULT.E_NOTIMPL;
 
         // IOleClientSite methods:
-        HRESULT IOleClientSite.SaveObject() => HRESULT.E_NOTIMPL;
+        HRESULT Ole.IOleClientSite.Interface.SaveObject() => HRESULT.E_NOTIMPL;
 
-        unsafe HRESULT IOleClientSite.GetMoniker(OLEGETMONIKER dwAssign, OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
+        unsafe HRESULT Ole.IOleClientSite.Interface.GetMoniker(Ole.OLEGETMONIKER dwAssign, Ole.OLEWHICHMK dwWhichMoniker, IMoniker** ppmk)
         {
             if (ppmk is null)
             {
                 return HRESULT.E_POINTER;
             }
 
-            *ppmk = IntPtr.Zero;
+            *ppmk = null;
             return HRESULT.E_NOTIMPL;
         }
 
-        IOleContainer IOleClientSite.GetContainer()
+        unsafe HRESULT Ole.IOleClientSite.Interface.GetContainer(Ole.IOleContainer** ppContainer)
         {
-            return Host.GetParentContainer();
+            if (ppContainer is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            bool result = ComHelpers.TryQueryInterface(Host.GetParentContainer(), out *ppContainer);
+            Debug.Assert(result);
+            return HRESULT.S_OK;
         }
 
-        unsafe HRESULT IOleClientSite.ShowObject()
+        unsafe HRESULT Ole.IOleClientSite.Interface.ShowObject()
         {
             if (Host.ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
             {
@@ -208,7 +217,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                else if (Host.AXInPlaceObject is IOleInPlaceObjectWindowless)
+                else if (Host.AXInPlaceObject is Ole.IOleInPlaceObjectWindowless.Interface)
                 {
                     throw new InvalidOperationException(SR.AXWindowlessControl);
                 }
@@ -217,9 +226,9 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleClientSite.OnShowWindow(BOOL fShow) => HRESULT.S_OK;
+        HRESULT Ole.IOleClientSite.Interface.OnShowWindow(BOOL fShow) => HRESULT.S_OK;
 
-        HRESULT IOleClientSite.RequestNewObjectLayout() => HRESULT.E_NOTIMPL;
+        HRESULT Ole.IOleClientSite.Interface.RequestNewObjectLayout() => HRESULT.E_NOTIMPL;
 
         // IOleInPlaceSite methods:
         unsafe HRESULT IOleInPlaceSite.GetWindow(IntPtr* phwnd)

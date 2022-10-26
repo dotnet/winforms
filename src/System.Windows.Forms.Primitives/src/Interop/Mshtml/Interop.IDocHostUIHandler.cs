@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.System.Ole;
 
 internal partial class Interop
 {
@@ -29,7 +30,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT ShowUI(
                 uint dwID,
-                Ole32.IOleInPlaceActiveObject activeObject,
+                IOleInPlaceActiveObject.Interface activeObject,
                 Ole32.IOleCommandTarget commandTarget,
                 Ole32.IOleInPlaceFrame frame,
                 Ole32.IOleInPlaceUIWindow doc);

@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Primitives.Ole32Tests
 {
@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Primitives.Ole32Tests
         [Fact]
         public void CADWORD_ConvertAndFree_SingleItem()
         {
-            Ole32.CADWORD ca = CreateIntVector(2020);
+            CADWORD ca = CreateIntVector(2020);
 
             uint[] values = ca.ConvertAndFree();
             Assert.Equal(1, values.Length);
@@ -23,18 +23,18 @@ namespace System.Windows.Forms.Primitives.Ole32Tests
         [Fact]
         public void CADWORD_ConvertAndFree_EmptyStruct()
         {
-            Ole32.CADWORD ca = default;
+            CADWORD ca = default;
 
             uint[] values = ca.ConvertAndFree();
             Assert.Empty(values);
         }
 
-        private static Ole32.CADWORD CreateIntVector(params uint[] values)
+        private static CADWORD CreateIntVector(params uint[] values)
             => CreateIntVector(allocations: null, values);
 
-        private static unsafe Ole32.CADWORD CreateIntVector(IList<IntPtr>? allocations, params uint[] values)
+        private static unsafe CADWORD CreateIntVector(IList<IntPtr>? allocations, params uint[] values)
         {
-            Ole32.CADWORD ca = new()
+            CADWORD ca = new()
             {
                 cElems = (uint)values.Length,
                 pElems = (uint*)Marshal.AllocCoTaskMem(sizeof(uint) * values.Length)

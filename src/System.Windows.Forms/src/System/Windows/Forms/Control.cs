@@ -16,7 +16,9 @@ using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using Windows.Win32.System.Ole;
 using static Interop;
+using Com = Windows.Win32.System.Com;
 using Encoding = System.Text.Encoding;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -41,10 +43,10 @@ namespace System.Windows.Forms
     public partial class Control :
         Component,
         Ole32.IOleControl,
-        Ole32.IOleObject,
-        Ole32.IOleInPlaceObject,
-        Ole32.IOleInPlaceActiveObject,
-        Ole32.IOleWindow,
+        IOleObject.Interface,
+        IOleInPlaceObject.Interface,
+        IOleInPlaceActiveObject.Interface,
+        IOleWindow.Interface,
         Ole32.IViewObject,
         Ole32.IViewObject2,
         Ole32.IPersist,
@@ -13659,29 +13661,29 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceActiveObject.GetWindow(HWND* phwnd)
+        unsafe HRESULT IOleInPlaceActiveObject.Interface.GetWindow(HWND* phwnd)
         {
-            return ((Ole32.IOleInPlaceObject)this).GetWindow(phwnd);
+            return ((IOleInPlaceObject.Interface)this).GetWindow(phwnd);
         }
 
-        HRESULT Ole32.IOleInPlaceActiveObject.ContextSensitiveHelp(BOOL fEnterMode)
+        HRESULT IOleInPlaceActiveObject.Interface.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            return ((Ole32.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
+            return ((IOleInPlaceObject.Interface)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceActiveObject.TranslateAccelerator(MSG* lpmsg)
+        unsafe HRESULT IOleInPlaceActiveObject.Interface.TranslateAccelerator(MSG* lpmsg)
         {
             return ActiveXInstance.TranslateAccelerator(lpmsg);
         }
 
-        HRESULT Ole32.IOleInPlaceActiveObject.OnFrameWindowActivate(BOOL fActivate)
+        HRESULT IOleInPlaceActiveObject.Interface.OnFrameWindowActivate(BOOL fActivate)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnFrameWindowActivate");
             OnFrameWindowActivate(fActivate);
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleInPlaceActiveObject.OnDocWindowActivate(BOOL fActivate)
+        HRESULT IOleInPlaceActiveObject.Interface.OnDocWindowActivate(BOOL fActivate)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:OnDocWindowActivate.  Activate: {(bool)fActivate}");
             Debug.Indent();
@@ -13690,29 +13692,29 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceActiveObject.ResizeBorder(RECT* prcBorder, Ole32.IOleInPlaceUIWindow pUIWindow, BOOL fFrameWindow)
+        unsafe HRESULT IOleInPlaceActiveObject.Interface.ResizeBorder(RECT* prcBorder, IOleInPlaceUIWindow* pUIWindow, BOOL fFrameWindow)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ResizesBorder");
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleInPlaceActiveObject.EnableModeless(BOOL fEnable)
+        HRESULT IOleInPlaceActiveObject.Interface.EnableModeless(BOOL fEnable)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnableModeless");
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceObject.GetWindow(HWND* phwnd)
+        unsafe HRESULT IOleInPlaceObject.Interface.GetWindow(HWND* phwnd)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetWindow");
             HRESULT hr = ActiveXInstance.GetWindow(phwnd);
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "\twin == " + (phwnd is null ? IntPtr.Zero : *phwnd));
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"\twin == {(phwnd is null ? HWND.Null : *phwnd)}");
             return hr;
         }
 
-        HRESULT Ole32.IOleInPlaceObject.ContextSensitiveHelp(BOOL fEnterMode)
+        HRESULT IOleInPlaceObject.Interface.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ContextSensitiveHelp.  Mode: " + fEnterMode);
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:ContextSensitiveHelp.  Mode: {fEnterMode}");
             if (fEnterMode)
             {
                 OnHelpRequested(new HelpEventArgs(MousePosition));
@@ -13721,7 +13723,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleInPlaceObject.InPlaceDeactivate()
+        HRESULT IOleInPlaceObject.Interface.InPlaceDeactivate()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InPlaceDeactivate");
             Debug.Indent();
@@ -13730,17 +13732,18 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        HRESULT Ole32.IOleInPlaceObject.UIDeactivate()
+        HRESULT IOleInPlaceObject.Interface.UIDeactivate()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:UIDeactivate");
             return ActiveXInstance.UIDeactivate();
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceObject.SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
+        unsafe HRESULT IOleInPlaceObject.Interface.SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
         {
             if (lprcClipRect is not null)
             {
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:SetObjectRects({lprcClipRect->left}, {lprcClipRect->top}, {lprcClipRect->right}, {lprcClipRect->bottom})");
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo,
+                    $"AxSource:SetObjectRects({lprcClipRect->left}, {lprcClipRect->top}, {lprcClipRect->right}, {lprcClipRect->bottom})");
             }
 
             Debug.Indent();
@@ -13749,27 +13752,39 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        HRESULT Ole32.IOleInPlaceObject.ReactivateAndUndo()
+        HRESULT IOleInPlaceObject.Interface.ReactivateAndUndo()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ReactivateAndUndo");
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleObject.SetClientSite(Ole32.IOleClientSite pClientSite)
+        unsafe HRESULT IOleObject.Interface.SetClientSite(IOleClientSite* pClientSite)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetClientSite");
             ActiveXInstance.SetClientSite(pClientSite);
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleObject.GetClientSite(out Ole32.IOleClientSite? ppClientSite)
+        unsafe HRESULT IOleObject.Interface.GetClientSite(IOleClientSite** ppClientSite)
         {
+            if (ppClientSite is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClientSite");
-            ppClientSite = ActiveXInstance.GetClientSite();
+            var clientSite = ActiveXInstance.GetClientSite();
+            *ppClientSite = null;
+            if (clientSite is not null)
+            {
+                bool result = ComHelpers.TryQueryInterface(clientSite, out *ppClientSite);
+                Debug.Assert(result);
+            }
+
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleObject.SetHostNames(string szContainerApp, string szContainerObj)
+        HRESULT IOleObject.Interface.SetHostNames(PCWSTR szContainerApp, PCWSTR szContainerObj)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetHostNames");
 
@@ -13777,20 +13792,20 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleObject.Close(Ole32.OLECLOSE dwSaveOption)
+        HRESULT IOleObject.Interface.Close(OLECLOSE dwSaveOption)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Close. Save option: " + dwSaveOption);
             ActiveXInstance.Close(dwSaveOption);
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleObject.SetMoniker(Ole32.OLEWHICHMK dwWhichMoniker, object pmk)
+        unsafe HRESULT IOleObject.Interface.SetMoniker(OLEWHICHMK dwWhichMoniker, Com.IMoniker* pmk)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetMoniker");
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT Ole32.IOleObject.GetMoniker(Ole32.OLEGETMONIKER dwAssign, Ole32.OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
+        unsafe HRESULT IOleObject.Interface.GetMoniker(OLEGETMONIKER dwAssign, OLEWHICHMK dwWhichMoniker, Com.IMoniker** ppmk)
         {
             if (ppmk is null)
             {
@@ -13798,51 +13813,56 @@ namespace System.Windows.Forms
             }
 
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMoniker");
-            *ppmk = IntPtr.Zero;
+            *ppmk = null;
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT Ole32.IOleObject.InitFromData(IComDataObject pDataObject, BOOL fCreation, uint dwReserved)
+        unsafe HRESULT IOleObject.Interface.InitFromData(Com.IDataObject* pDataObject, BOOL fCreation, uint dwReserved)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InitFromData");
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT Ole32.IOleObject.GetClipboardData(uint dwReserved, out IComDataObject? ppDataObject)
+        unsafe HRESULT IOleObject.Interface.GetClipboardData(uint dwReserved, Com.IDataObject** ppDataObject)
         {
+            if (ppDataObject is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClipboardData");
             ppDataObject = null;
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT Ole32.IOleObject.DoVerb(
-            Ole32.OLEIVERB iVerb,
+        unsafe HRESULT IOleObject.Interface.DoVerb(
+            int iVerb,
             MSG* lpmsg,
-            Ole32.IOleClientSite pActiveSite,
+            IOleClientSite* pActiveSite,
             int lindex,
-            IntPtr hwndParent,
+            HWND hwndParent,
             RECT* lprcPosRect)
         {
             // In Office they are internally casting an iVerb to a short and not doing the proper sign extension.
             short sVerb = unchecked((short)iVerb);
-            iVerb = (Ole32.OLEIVERB)sVerb;
+            iVerb = sVerb;
 
 #if DEBUG
             if (CompModSwitches.ActiveX.TraceInfo)
             {
                 Debug.WriteLine("AxSource:DoVerb {");
-                Debug.WriteLine("     verb: " + iVerb);
-                Debug.WriteLine("     msg: " + (IntPtr)lpmsg);
-                Debug.WriteLine("     activeSite: " + pActiveSite);
-                Debug.WriteLine("     index: " + lindex);
-                Debug.WriteLine("     hwndParent: " + hwndParent);
-                Debug.WriteLine("     posRect: " + (lprcPosRect is not null ? (*lprcPosRect).ToString() : "null"));
+                Debug.WriteLine($"     verb: {iVerb}");
+                Debug.WriteLine($"     msg: {*lpmsg}");
+                Debug.WriteLine($"     activeSite: {*pActiveSite}");
+                Debug.WriteLine($"     index: {lindex}");
+                Debug.WriteLine($"     hwndParent: {hwndParent}");
+                Debug.WriteLine($"     posRect: {(lprcPosRect is null ? "null" : lprcPosRect->ToString())}");
             }
 #endif
             Debug.Indent();
             try
             {
-                return ActiveXInstance.DoVerb(iVerb, lpmsg, pActiveSite, lindex, (HWND)hwndParent, lprcPosRect);
+                return ActiveXInstance.DoVerb((Ole32.OLEIVERB)iVerb, lpmsg, pActiveSite, lindex, hwndParent, lprcPosRect);
             }
             finally
             {
@@ -13851,25 +13871,33 @@ namespace System.Windows.Forms
             }
         }
 
-        HRESULT Ole32.IOleObject.EnumVerbs(out Ole32.IEnumOLEVERB ppEnumOleVerb)
+        unsafe HRESULT IOleObject.Interface.EnumVerbs(IEnumOLEVERB** ppEnumOleVerb)
         {
+            if (ppEnumOleVerb is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumVerbs");
-            return ActiveXImpl.EnumVerbs(out ppEnumOleVerb);
+            HRESULT hr = ActiveXImpl.EnumVerbs(out Ole32.IEnumOLEVERB oleVerb);
+            bool result = ComHelpers.TryQueryInterface(oleVerb, out *ppEnumOleVerb);
+            Debug.Assert(result);
+            return hr;
         }
 
-        HRESULT Ole32.IOleObject.OleUpdate()
+        HRESULT IOleObject.Interface.Update()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OleUpdate");
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleObject.IsUpToDate()
+        HRESULT IOleObject.Interface.IsUpToDate()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IsUpToDate");
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleObject.GetUserClassID(Guid* pClsid)
+        unsafe HRESULT IOleObject.Interface.GetUserClassID(Guid* pClsid)
         {
             if (pClsid is null)
             {
@@ -13881,51 +13909,50 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleObject.GetUserType(Ole32.USERCLASSTYPE dwFormOfType, out string pszUserType)
+        unsafe HRESULT IOleObject.Interface.GetUserType(USERCLASSTYPE dwFormOfType, PWSTR* pszUserType)
         {
+            if (pszUserType is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserType");
-            if (dwFormOfType == Ole32.USERCLASSTYPE.FULL)
-            {
-                pszUserType = GetType().FullName!;
-            }
-            else
-            {
-                pszUserType = GetType().Name;
-            }
+            *pszUserType = (char*)Marshal.StringToCoTaskMemUni(
+                dwFormOfType == USERCLASSTYPE.USERCLASSTYPE_FULL ? GetType().FullName : GetType().Name);
 
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleObject.SetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
+        unsafe HRESULT IOleObject.Interface.SetExtent(Com.DVASPECT dwDrawAspect, SIZE* psizel)
         {
-            if (pSizel is null)
+            if (psizel is null)
             {
                 return HRESULT.E_INVALIDARG;
             }
 
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetExtent(" + pSizel->Width + ", " + pSizel->Height + ")");
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:SetExtent({psizel->Width}, {psizel->Height}");
             Debug.Indent();
-            ActiveXInstance.SetExtent(dwDrawAspect, pSizel);
+            ActiveXInstance.SetExtent((Ole32.DVASPECT)dwDrawAspect, (Size*)psizel);
             Debug.Unindent();
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleObject.GetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
+        unsafe HRESULT IOleObject.Interface.GetExtent(Com.DVASPECT dwDrawAspect, SIZE* psizel)
         {
-            if (pSizel is null)
+            if (psizel is null)
             {
                 return HRESULT.E_INVALIDARG;
             }
 
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent.  Aspect: " + dwDrawAspect.ToString(CultureInfo.InvariantCulture));
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:GetExtent.  Aspect: {dwDrawAspect.ToString()}");
             Debug.Indent();
-            ActiveXInstance.GetExtent(dwDrawAspect, pSizel);
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "value: " + pSizel->Width + ", " + pSizel->Height);
+            ActiveXInstance.GetExtent((Ole32.DVASPECT)dwDrawAspect, (Size*)psizel);
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"value: {psizel->Width}, {psizel->Height}");
             Debug.Unindent();
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleObject.Advise(IAdviseSink pAdvSink, uint* pdwConnection)
+        unsafe HRESULT IOleObject.Interface.Advise(Com.IAdviseSink* pAdvSink, uint* pdwConnection)
         {
             if (pdwConnection is null)
             {
@@ -13937,7 +13964,7 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleObject.Unadvise(uint dwConnection)
+        HRESULT IOleObject.Interface.Unadvise(uint dwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unadvise");
             Debug.Indent();
@@ -13946,57 +13973,62 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        HRESULT Ole32.IOleObject.EnumAdvise(out IEnumSTATDATA? e)
+        unsafe HRESULT IOleObject.Interface.EnumAdvise(Com.IEnumSTATDATA** ppenumAdvise)
         {
+            if (ppenumAdvise is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumAdvise");
-            e = null;
+            *ppenumAdvise = null;
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT Ole32.IOleObject.GetMiscStatus(Ole32.DVASPECT dwAspect, Ole32.OLEMISC* pdwStatus)
+        unsafe HRESULT IOleObject.Interface.GetMiscStatus(Com.DVASPECT dwAspect, OLEMISC* pdwStatus)
         {
             if (pdwStatus is null)
             {
                 return HRESULT.E_POINTER;
             }
 
-            if ((dwAspect & Ole32.DVASPECT.CONTENT) == 0)
+            if (!dwAspect.HasFlag(Com.DVASPECT.DVASPECT_CONTENT))
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMiscStatus.  Status: ERROR, wrong aspect.");
                 *pdwStatus = 0;
                 return HRESULT.DV_E_DVASPECT;
             }
 
-            Ole32.OLEMISC status = Ole32.OLEMISC.ACTIVATEWHENVISIBLE | Ole32.OLEMISC.INSIDEOUT | Ole32.OLEMISC.SETCLIENTSITEFIRST;
+            OLEMISC status = OLEMISC.OLEMISC_ACTIVATEWHENVISIBLE | OLEMISC.OLEMISC_INSIDEOUT | OLEMISC.OLEMISC_SETCLIENTSITEFIRST;
             if (GetStyle(ControlStyles.ResizeRedraw))
             {
-                status |= Ole32.OLEMISC.RECOMPOSEONRESIZE;
+                status |= OLEMISC.OLEMISC_RECOMPOSEONRESIZE;
             }
 
             if (this is IButtonControl)
             {
-                status |= Ole32.OLEMISC.ACTSLIKEBUTTON;
+                status |= OLEMISC.OLEMISC_ACTSLIKEBUTTON;
             }
 
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMiscStatus. Status: " + status.ToString(CultureInfo.InvariantCulture));
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:GetMiscStatus. Status: {status}");
             *pdwStatus = status;
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleObject.SetColorScheme(LOGPALETTE* pLogpal)
+        unsafe HRESULT IOleObject.Interface.SetColorScheme(LOGPALETTE* pLogpal)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetColorScheme");
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleWindow.GetWindow(HWND* phwnd)
+        unsafe HRESULT IOleWindow.Interface.GetWindow(HWND* phwnd)
         {
-            return ((Ole32.IOleInPlaceObject)this).GetWindow(phwnd);
+            return ((IOleInPlaceObject.Interface)this).GetWindow(phwnd);
         }
 
-        HRESULT Ole32.IOleWindow.ContextSensitiveHelp(BOOL fEnterMode)
+        HRESULT IOleWindow.Interface.ContextSensitiveHelp(BOOL fEnterMode)
         {
-            return ((Ole32.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
+            return ((IOleInPlaceObject.Interface)this).ContextSensitiveHelp(fEnterMode);
         }
 
         unsafe HRESULT Ole32.IPersist.GetClassID(Guid* pClassID)
@@ -14316,7 +14348,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent (IViewObject2)");
 
             // We already have an implementation of this [from IOleObject]
-            return ((Ole32.IOleObject)this).GetExtent(dwDrawAspect, lpsizel);
+            return ((IOleObject.Interface)this).GetExtent((Com.DVASPECT)dwDrawAspect, (SIZE*)lpsizel);
         }
 
         #region IKeyboardToolTip implementation

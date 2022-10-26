@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using System.Globalization;
-using static Interop;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         bool success = false;
                         string? result = GetDisplayString(
-                            (Oleaut32.IPerPropertyBrowsing)_itemsEnum._target.TargetObject,
+                            (IPerPropertyBrowsing.Interface)_itemsEnum._target.TargetObject,
                             _itemsEnum._target.DISPID,
                             ref success);
 
