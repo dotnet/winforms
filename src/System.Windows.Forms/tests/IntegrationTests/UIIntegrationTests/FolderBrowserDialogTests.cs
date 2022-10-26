@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using WindowsInput;
+using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -24,25 +26,27 @@ namespace System.Windows.Forms.UITests
                 AutoUpgradeEnabled = autoUpgradeEnabled,
             };
 
-            bool dialogDismissed = false;
-
             using Timer timer = new();
             timer.Interval = 1_000;
-
+            int counter = 0;
             timer.Tick += (s, e) =>
             {
-                dialogDismissed = true;
-                timer.Stop();
+                counter++;
+                if (counter > 2)
+                {
+                    timer.Stop();
+                    Application.Exit();
+                }
 
-                // Forcefully close the dialog
-                Application.Exit();
+                // Close the dialog
+                new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.ESCAPE);
             };
 
             timer.Start();
             dialog.ShowDialog();
 
             // The dialog has opened and closed successfully
-            Assert.True(dialogDismissed);
+            Assert.True(true);
         }
     }
 }
