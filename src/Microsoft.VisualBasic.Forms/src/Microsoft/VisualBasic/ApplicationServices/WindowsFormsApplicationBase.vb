@@ -881,7 +881,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 _formLoadWaiter = New AutoResetEvent(False)
 
                 Task.Run(Async Function() As Task
-                             Await _splashScreenCompletionSource.Task
+                             Await _splashScreenCompletionSource.Task.ConfigureAwait(False)
                              _formLoadWaiter.Set()
                          End Function)
 
