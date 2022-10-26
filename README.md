@@ -15,7 +15,6 @@ This codebase is a fork of the Windows Forms code in the .NET Framework 4.8.
 In Windows Forms .NET Core 3.0, we've strived to bring the two runtimes to a parity. However since then, we've done a number of changes, including [breaking changes](https://docs.microsoft.com/dotnet/core/compatibility/winforms), which diverged the two.
 For more information about breaking changes, see the [Porting guide][porting-guidelines].
 
-
 ## Please note
 
 :warning: This repository contains only implementations for Windows Forms for [.NET platform](https://github.com/dotnet/core).<br />
