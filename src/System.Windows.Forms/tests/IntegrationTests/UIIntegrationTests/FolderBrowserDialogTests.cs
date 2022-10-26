@@ -36,6 +36,7 @@ namespace System.Windows.Forms.UITests
                 {
                     timer.Stop();
                     Application.Exit();
+                    Assert.Fail("Failed to close the dialog");
                 }
 
                 // Close the dialog
