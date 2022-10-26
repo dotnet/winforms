@@ -1216,15 +1216,15 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~System.Windows.Forms.IDataGridViewEditingCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
 ~System.Windows.Forms.IFileReaderService.OpenFileFromSource(string relativePath) -> System.IO.Stream
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.LinkLabel.Link.Description.get -> string
-~System.Windows.Forms.LinkLabel.Link.Description.set -> void
-~System.Windows.Forms.LinkLabel.Link.Link(int start, int length, object linkData) -> void
-~System.Windows.Forms.LinkLabel.Link.LinkData.get -> object
-~System.Windows.Forms.LinkLabel.Link.LinkData.set -> void
-~System.Windows.Forms.LinkLabel.Link.Name.get -> string
-~System.Windows.Forms.LinkLabel.Link.Name.set -> void
-~System.Windows.Forms.LinkLabel.Link.Tag.get -> object
-~System.Windows.Forms.LinkLabel.Link.Tag.set -> void
+System.Windows.Forms.LinkLabel.Link.Description.get -> string?
+System.Windows.Forms.LinkLabel.Link.Description.set -> void
+System.Windows.Forms.LinkLabel.Link.Link(int start, int length, object? linkData) -> void
+System.Windows.Forms.LinkLabel.Link.LinkData.get -> object?
+System.Windows.Forms.LinkLabel.Link.LinkData.set -> void
+System.Windows.Forms.LinkLabel.Link.Name.get -> string!
+System.Windows.Forms.LinkLabel.Link.Name.set -> void
+System.Windows.Forms.LinkLabel.Link.Tag.get -> object?
+System.Windows.Forms.LinkLabel.Link.Tag.set -> void
 ~System.Windows.Forms.LinkLabel.LinkCollection.Add(int start, int length) -> System.Windows.Forms.LinkLabel.Link
 ~System.Windows.Forms.LinkLabel.LinkCollection.Add(int start, int length, object linkData) -> System.Windows.Forms.LinkLabel.Link
 ~System.Windows.Forms.LinkLabel.LinkCollection.Add(System.Windows.Forms.LinkLabel.Link value) -> int
