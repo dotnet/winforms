@@ -63,31 +63,26 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return;
             }
 
-            string? s = null;
+            string? guidString = null;
             VSSDK.CTLBLDTYPE bldrType = 0;
-            bool builderValid = GetBuilderGuidString(target, sender.DISPID, ref s, &bldrType);
+            bool builderValid = GetBuilderGuidString(target, sender.DISPID, ref guidString, &bldrType);
 
             // We hide IDispatch props by default, we we need to force showing them here
-            if (sender.CanShow && builderValid)
+            if (sender.CanShow && builderValid && typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
             {
-                if (typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
-                {
-                    attrEvent.Add(BrowsableAttribute.Yes);
-                }
+                attrEvent.Add(BrowsableAttribute.Yes);
             }
         }
 
         private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
         {
-            object target = sender.TargetObject;
-
-            if (target is VSSDK.IProvidePropertyBuilder propBuilder)
+            if (sender.TargetObject is VSSDK.IProvidePropertyBuilder propertyBuilder)
             {
                 string? guidString = null;
                 VSSDK.CTLBLDTYPE pctlBldType = 0;
-                if (GetBuilderGuidString(propBuilder, sender.DISPID, ref guidString, &pctlBldType))
+                if (GetBuilderGuidString(propertyBuilder, sender.DISPID, ref guidString, &pctlBldType))
                 {
-                    gveevent.TypeEditor = new Com2PropertyBuilderUITypeEditor(sender, guidString, pctlBldType, (UITypeEditor)gveevent.TypeEditor);
+                    gveevent.TypeEditor = new Com2PropertyBuilderUITypeEditor(sender, guidString, pctlBldType, (UITypeEditor?)gveevent.TypeEditor);
                 }
             }
         }

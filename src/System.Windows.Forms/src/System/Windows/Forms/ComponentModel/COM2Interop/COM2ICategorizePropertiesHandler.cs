@@ -11,7 +11,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public override Type Interface => typeof(VSSDK.ICategorizeProperties);
 
-        private static unsafe string? GetCategoryFromObject(object obj, Ole32.DispatchID dispid)
+        private static unsafe string? GetCategoryFromObject(object? obj, Ole32.DispatchID dispid)
         {
             if (obj is not VSSDK.ICategorizeProperties catObj)
             {
@@ -50,12 +50,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return SR.PropertyCategoryDDE;
             }
 
-            if (catObj.GetCategoryName(categoryID, PInvoke.GetThreadLocale(), out string categoryName) == HRESULT.S_OK)
-            {
-                return categoryName;
-            }
-
-            return null;
+            return catObj.GetCategoryName(categoryID, PInvoke.GetThreadLocale(), out string categoryName).Succeeded ? categoryName : null;
         }
 
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)

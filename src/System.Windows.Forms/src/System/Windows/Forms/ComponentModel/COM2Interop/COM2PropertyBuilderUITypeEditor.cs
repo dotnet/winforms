@@ -21,7 +21,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Com2PropertyDescriptor pd,
             string guidString,
             VSSDK.CTLBLDTYPE type,
-            UITypeEditor baseEditor) : base(baseEditor)
+            UITypeEditor? baseEditor) : base(baseEditor)
         {
             _propDesc = pd;
             _guidString = guidString;

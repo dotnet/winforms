@@ -14,22 +14,22 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         // This exists for perf reasons. We delay doing this until we are actually asked for the array of values.
         private class Com2IPerPropertyBrowsingEnum : Com2Enum
         {
-            internal Com2PropertyDescriptor _target;
             private readonly string?[] _names;
             private readonly uint[] _cookies;
-            internal bool _arraysFetched;
 
             public Com2IPerPropertyBrowsingEnum(
                 Com2PropertyDescriptor targetObject,
                 string?[] names,
                 uint[] cookies)
             {
-                _target = targetObject;
+                Target = targetObject;
                 _names = names;
                 _cookies = cookies;
-                _target = targetObject;
-                _arraysFetched = false;
+                ArraysFetched = false;
             }
+
+            internal Com2PropertyDescriptor Target { get; private set; }
+            internal bool ArraysFetched { get; private set; }
 
             public override object[] Values
             {
@@ -51,18 +51,22 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             private unsafe void EnsureArrays()
             {
-                if (_arraysFetched)
+                if (ArraysFetched)
                 {
                     return;
                 }
 
-                _arraysFetched = true;
+                ArraysFetched = true;
 
                 try
                 {
                     // Marshal the items.
+                    if (Target.TargetObject is not IPerPropertyBrowsing.Interface ppb)
+                    {
+                        PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
+                        return;
+                    }
 
-                    IPerPropertyBrowsing.Interface ppb = (IPerPropertyBrowsing.Interface)_target.TargetObject;
                     int itemCount = 0;
 
                     Debug.Assert(_cookies is not null && _names is not null, "An item array is null");
@@ -79,7 +83,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     // For each name item, we ask the object for it's corresponding value.
 
-                    Type targetType = _target.PropertyType;
+                    Type? targetType = Target.PropertyType;
+
+                    if (targetType is null)
+                    {
+                        PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
+                        return;
+                    }
+
                     for (int i = _names.Length - 1; i >= 0; i--)
                     {
                         cookie = _cookies[i];
@@ -90,7 +101,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
 
                         using VARIANT variant = default;
-                        HRESULT hr = ppb.GetPredefinedValue((int)_target.DISPID, cookie, &variant);
+                        HRESULT hr = ppb.GetPredefinedValue((int)Target.DISPID, cookie, &variant);
                         if (hr.Succeeded && variant.Type != VARENUM.VT_EMPTY)
                         {
                             valueItems[i] = variant.ToObject()!;
@@ -108,7 +119,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                     }
                                     catch
                                     {
-                                        // oh well...
                                     }
                                 }
                             }
@@ -152,22 +162,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // If the value is the object's current value, then ask GetDisplay string first. This is a perf
                 // improvement because this way we don't populate the arrays when an object is selected, only
                 // when the dropdown is actually opened.
-                if (_target.IsCurrentValue(v))
+                if (Target.IsCurrentValue(v)
+                    && Target.TargetObject is IPerPropertyBrowsing.Interface propertyBrowsing
+                    && TryGetDisplayString(propertyBrowsing, Target.DISPID, out string? displayString))
                 {
-                    bool success = false;
-
-                    string? displayString = GetDisplayString(
-                        (IPerPropertyBrowsing.Interface)_target.TargetObject,
-                        _target.DISPID,
-                        ref success);
-
-                    if (success)
-                    {
-                        return displayString!;
-                    }
+                    return displayString;
                 }
 
-                // Couldn't get a display string... do the normal thing.
                 EnsureArrays();
                 return base.ToString(v);
             }

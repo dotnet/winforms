@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
 using Windows.Win32.System.Com;
@@ -62,25 +60,30 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             typeof(Com2IManagedPerPropertyBrowsingHandler)
         };
 
-        public event EventHandler Disposed;
+        public event EventHandler? Disposed;
 
-        public Com2Properties(object obj, Com2PropertyDescriptor[] props, int defaultIndex)
+        public Com2Properties(object comObject, Com2PropertyDescriptor[] properties, int defaultIndex)
         {
+            ArgumentNullException.ThrowIfNull(comObject);
+            ArgumentNullException.ThrowIfNull(properties);
+
 #if DEBUG
             if (DbgCom2PropertiesSwitch.TraceVerbose)
             {
-                Debug.WriteLine($"Creating Com2Properties for object {ComNativeDescriptor.GetName(obj) ?? "(null)"}, class={ComNativeDescriptor.GetClassName(obj) ?? "(null)"}");
+                Debug.WriteLine($"Creating Com2Properties for object {ComNativeDescriptor.GetName(comObject) ?? "(null)"}, class={ComNativeDescriptor.GetClassName(comObject) ?? "(null)"}");
             }
 #endif
 
-            // set up our variables
-            SetProperties(props);
-            _weakObjectReference = new WeakReference(obj);
+            // Set up our variables.
+            _properties = properties;
+            for (int i = 0; i < _properties.Length; i++)
+            {
+                _properties[i].PropertyManager = this;
+            }
 
+            _weakObjectReference = new WeakReference(comObject);
             _defaultPropertyIndex = defaultIndex;
-
-            _typeInfoVersions = GetTypeInfoVersions(obj);
-
+            _typeInfoVersions = GetTypeInfoVersions(comObject);
             _touchedTime = DateTime.Now.Ticks;
         }
 
@@ -108,7 +111,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        public Com2PropertyDescriptor DefaultProperty
+        public Com2PropertyDescriptor? DefaultProperty
         {
             get
             {
@@ -131,7 +134,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  The object that created the list of properties. This will return null if the timeout has passed or the
         ///  reference has died.
         /// </summary>
-        public object TargetObject
+        public object? TargetObject
         {
             get
             {
@@ -155,7 +158,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public long TicksSinceTouched => _touchedTime == 0 ? 0 : DateTime.Now.Ticks - _touchedTime;
 
-        public Com2PropertyDescriptor[] Properties
+        public Com2PropertyDescriptor[]? Properties
         {
             get
             {
@@ -201,34 +204,36 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public void AddExtendedBrowsingHandlers(Hashtable handlers)
         {
-            object target = TargetObject;
+            object? target = TargetObject;
             if (target is null)
             {
                 return;
             }
 
             // Process all our registered types.
-            Type t;
+            Type type;
             for (int i = 0; i < s_extendedInterfaces.Length; i++)
             {
-                t = s_extendedInterfaces[i];
+                type = s_extendedInterfaces[i];
 
                 // Is this object an implementor of the interface?
-                if (!t.IsInstanceOfType(target))
+                if (!type.IsInstanceOfType(target))
                 {
                     continue;
                 }
 
                 // Since handlers must be stateless, check to see if we've already created one of this type
-                Com2ExtendedBrowsingHandler handler = (Com2ExtendedBrowsingHandler)handlers[t];
+                Com2ExtendedBrowsingHandler? handler = (Com2ExtendedBrowsingHandler?)handlers[type];
                 if (handler is null)
                 {
-                    handler = (Com2ExtendedBrowsingHandler)Activator.CreateInstance(s_extendedInterfaceHandlerTypes[i]);
-                    handlers[t] = handler;
+                    handler = (Com2ExtendedBrowsingHandler)Activator.CreateInstance(s_extendedInterfaceHandlerTypes[i])!;
+                    Debug.Assert(handler is not null, $"Could not construct {s_extendedInterfaceHandlerTypes[i]}");
+
+                    handlers[type] = handler;
                 }
 
                 // Make sure we got the right one.
-                if (t.IsAssignableFrom(handler.Interface))
+                if (type.IsAssignableFrom(handler.Interface))
                 {
 #if DEBUG
                     if (DbgCom2PropertiesSwitch.TraceVerbose)
@@ -241,7 +246,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 else
                 {
-                    throw new ArgumentException(string.Format(SR.COM2BadHandlerType, t.Name, handler.Interface.Name));
+                    throw new ArgumentException(string.Format(SR.COM2BadHandlerType, type.Name, handler.Interface.Name));
                 }
             }
         }
@@ -259,8 +264,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 Disposed?.Invoke(this, EventArgs.Empty);
 
-                _weakObjectReference = null;
-                _properties = null;
+                _weakObjectReference = null!;
+                _properties = null!;
                 _touchedTime = 0;
             }
         }
@@ -271,7 +276,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private unsafe (ushort FunctionCount, ushort VariableCount, ushort MajorVersion, ushort MinorVersion)[] GetTypeInfoVersions(object comObject)
         {
-            Oleaut32.ITypeInfo[] pTypeInfos = Com2TypeInfoProcessor.FindTypeInfos(comObject, false);
+            Oleaut32.ITypeInfo[] pTypeInfos = Com2TypeInfoProcessor.FindTypeInfos(comObject, preferIProvideClassInfo: false);
             var versions = new (ushort, ushort, ushort, ushort)[pTypeInfos.Length];
             for (int i = 0; i < pTypeInfos.Length; i++)
             {
@@ -302,12 +307,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return true;
             }
 
-            bool valid = _weakObjectReference is not null && _weakObjectReference.IsAlive;
+            object? target = _weakObjectReference.Target;
+            bool valid = target is not null;
 
             // Check the version information for each ITypeInfo the object exposes.
-            if (valid && checkVersions)
+            if (target is not null && checkVersions)
             {
-                (ushort, ushort, ushort, ushort)[] newTypeInfoVersions = GetTypeInfoVersions(_weakObjectReference.Target);
+                (ushort, ushort, ushort, ushort)[] newTypeInfoVersions = GetTypeInfoVersions(target);
                 if (newTypeInfoVersions.Length != _typeInfoVersions.Length)
                 {
                     valid = false;
@@ -346,21 +352,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             return valid;
-        }
-
-        /// <summary>
-        ///  Set the proerties for this object, and notify each property that we are now it's manager.
-        /// </summary>
-        internal void SetProperties(Com2PropertyDescriptor[] properties)
-        {
-            _properties = properties;
-            if (properties is not null)
-            {
-                for (int i = 0; i < properties.Length; i++)
-                {
-                    properties[i].PropertyManager = this;
-                }
-            }
         }
     }
 }

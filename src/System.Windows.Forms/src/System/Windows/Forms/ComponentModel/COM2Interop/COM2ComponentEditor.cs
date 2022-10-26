@@ -13,11 +13,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2ComponentEditor : WindowsFormsComponentEditor
     {
-        public static unsafe bool NeedsComponentEditor(object obj)
+        public static unsafe bool NeedsComponentEditor(object comObject)
         {
-            if (obj is IPerPropertyBrowsing.Interface perPropertyBrowsing)
+            if (comObject is IPerPropertyBrowsing.Interface perPropertyBrowsing)
             {
-                // Check for a property page
+                // Check for a property page.
                 Guid guid = Guid.Empty;
                 HRESULT hr = perPropertyBrowsing.MapPropertyToPage((int)DispatchID.MEMBERID_NIL, &guid);
                 if (hr.Succeeded && !guid.Equals(Guid.Empty))
@@ -26,9 +26,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (obj is ISpecifyPropertyPages ispp)
+            if (comObject is ISpecifyPropertyPages ispp)
             {
-                var uuids = default(CAUUID);
+                CAUUID uuids = default;
                 try
                 {
                     HRESULT hr = ispp.GetPages(&uuids);

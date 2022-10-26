@@ -39,7 +39,7 @@ internal partial class Interop
                 PInvoke.LCID lcid,
                 DISPATCH_FLAGS dwFlags,
                 DISPPARAMS* pDispParams,
-                [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
+                [Out, MarshalAs(UnmanagedType.LPArray)] object[]? pVarResult,
                 EXCEPINFO* pExcepInfo,
                 uint* pArgErr);
         }

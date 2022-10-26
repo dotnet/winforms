@@ -162,22 +162,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing browsing)
             {
-                // we only do this for IDispatch types
+                // We only do this for IDispatch types.
                 if (sender.CanShow && typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
                 {
-                    VSSDK.IVsPerPropertyBrowsing vsObj = browsing;
-
                     // Should we make this read only?
-                    BOOL pfResult = false;
-                    HRESULT hr = vsObj.DisplayChildProperties(sender.DISPID, &pfResult);
-                    if (gveevent.TypeConverter is Com2IDispatchConverter)
-                    {
-                        gveevent.TypeConverter = new Com2IDispatchConverter(sender, hr == HRESULT.S_OK && pfResult);
-                    }
-                    else
-                    {
-                        gveevent.TypeConverter = new Com2IDispatchConverter(hr == HRESULT.S_OK && pfResult, gveevent.TypeConverter);
-                    }
+                    BOOL result;
+                    HRESULT hr = browsing.DisplayChildProperties(sender.DISPID, &result);
+                    gveevent.TypeConverter = gveevent.TypeConverter is Com2IDispatchConverter
+                        ? new Com2IDispatchConverter(sender, hr == HRESULT.S_OK && result)
+                        : new Com2IDispatchConverter(hr == HRESULT.S_OK && result, gveevent.TypeConverter);
                 }
             }
 

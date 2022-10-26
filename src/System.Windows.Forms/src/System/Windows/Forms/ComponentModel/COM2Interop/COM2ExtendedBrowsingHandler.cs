@@ -40,6 +40,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Called to setup the property handlers on a given property. In this method, the handler will add listeners
         ///  to the events that the <see cref="Com2PropertyDescriptor"/> surfaces that it cares about.
         /// </summary>
-        public abstract void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc);
+        public abstract void SetupPropertyHandlers(Com2PropertyDescriptor[]? properties);
     }
 }

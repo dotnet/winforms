@@ -34,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private void OnGetAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            object target = sender.TargetObject;
+            object? target = sender.TargetObject;
 
             if (target is VSSDK.IVSMDPerPropertyBrowsing browsing)
             {

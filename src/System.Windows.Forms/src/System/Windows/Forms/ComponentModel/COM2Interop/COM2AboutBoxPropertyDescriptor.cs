@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
@@ -14,11 +12,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal partial class Com2AboutBoxPropertyDescriptor : Com2PropertyDescriptor
     {
-        private TypeConverter _converter;
-        private UITypeEditor _editor;
+        private TypeConverter? _converter;
+        private UITypeEditor? _editor;
 
         public Com2AboutBoxPropertyDescriptor()
-            : base(Ole32.DispatchID.ABOUTBOX, "About",
+            : base(
+                  Ole32.DispatchID.ABOUTBOX, "About",
                   new Attribute[]
                   {
                       new DispIdAttribute((int)Ole32.DispatchID.ABOUTBOX),
@@ -26,7 +25,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                       new DescriptionAttribute(SR.AboutBoxDesc),
                       new ParenthesizePropertyNameAttribute(true)
                   },
-                  true, typeof(string), null, false)
+                  readOnly: true,
+                  typeof(string),
+                  typeData: null,
+                  hrHidden: false)
         {
         }
 
@@ -45,7 +47,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public override bool CanResetValue(object component) => false;
 
         [RequiresUnreferencedCode($"{TrimmingConstants.EditorRequiresUnreferencedCode} {TrimmingConstants.PropertyDescriptorPropertyTypeMessage}")]
-        public override object GetEditor(Type editorBaseType)
+        public override object? GetEditor(Type editorBaseType)
         {
             if (editorBaseType == typeof(UITypeEditor))
             {
@@ -55,13 +57,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return _editor;
         }
 
-        public override object GetValue(object component) => string.Empty;
+        public override object? GetValue(object? component) => string.Empty;
 
-        public override void ResetValue(object component)
+        public override void ResetValue(object? component)
         {
         }
 
-        public override void SetValue(object component, object value) => throw new ArgumentException();
+        public override void SetValue(object? component, object? value) => throw new ArgumentException();
 
         public override bool ShouldSerializeValue(object component) => false;
     }
