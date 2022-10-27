@@ -19,7 +19,7 @@ internal partial class Interop
     internal unsafe partial class WinFormsComWrappers : ComWrappers
     {
         private const int S_OK = 0;
-        private static readonly ComInterfaceEntry* s_streamEntry = InitializeIStreamEntry();
+        private static readonly ComInterfaceEntry* s_streamEntry = InitializeEntry<IStream, IStream.Vtbl>();
         private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeEntry<IFileDialogEvents, IFileDialogEvents.Vtbl>();
         private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeEntry<IEnumString, IEnumString.Vtbl>();
         private static readonly ComInterfaceEntry* s_enumFormatEtcEntry = InitializeIEnumFORMATETCEntry();
@@ -30,18 +30,6 @@ internal partial class Interop
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
 
         private WinFormsComWrappers() { }
-
-        private static ComInterfaceEntry* InitializeIStreamEntry()
-        {
-            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
-
-            IntPtr iStreamVtbl = IStreamVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
-
-            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = IID.IStream;
-            wrapperEntry->Vtable = iStreamVtbl;
-            return wrapperEntry;
-        }
 
         private static ComInterfaceEntry* InitializeEntry<TComInterface, TVTable>()
             where TComInterface : unmanaged, IPopulateVTable<TVTable>, INativeGuid
