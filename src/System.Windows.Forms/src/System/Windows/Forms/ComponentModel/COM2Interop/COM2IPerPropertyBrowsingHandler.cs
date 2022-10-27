@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Ole;
@@ -11,7 +12,7 @@ using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    internal partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
+    internal unsafe partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
     {
         public override Type Interface => typeof(IPerPropertyBrowsing.Interface);
 
@@ -24,14 +25,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             for (int i = 0; i < propDesc.Length; i++)
             {
-                propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetBaseAttributes);
-                propDesc[i].QueryGetDisplayValue += new GetNameItemEventHandler(OnGetDisplayValue);
-
-                propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(OnGetTypeConverterAndTypeEditor);
+                propDesc[i].QueryGetBaseAttributes += OnGetBaseAttributes;
+                propDesc[i].QueryGetDisplayValue += OnGetDisplayValue;
+                propDesc[i].QueryGetTypeConverterAndTypeEditor += OnGetTypeConverterAndTypeEditor;
             }
         }
 
-        private static unsafe Guid GetPropertyPageGuid(IPerPropertyBrowsing.Interface target, Ole32.DispatchID dispid)
+        private static Guid GetPropertyPageGuid(IPerPropertyBrowsing.Interface target, Ole32.DispatchID dispid)
         {
             // Check for a property page
             Guid guid = Guid.Empty;
@@ -39,18 +39,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return hr.Succeeded ? guid : Guid.Empty;
         }
 
-        internal static unsafe string? GetDisplayString(IPerPropertyBrowsing.Interface ppb, Ole32.DispatchID dispid, ref bool success)
+        internal static bool TryGetDisplayString(
+            IPerPropertyBrowsing.Interface ppb,
+            Ole32.DispatchID dispid,
+            [NotNullWhen(true)] out string? value)
         {
             using BSTR strVal = default;
-            HRESULT hr = ppb.GetDisplayString((int)dispid, &strVal);
-            if (hr != HRESULT.S_OK)
+            if (ppb.GetDisplayString((int)dispid, &strVal).Failed)
             {
-                success = false;
-                return null;
+                value = null;
+                return false;
             }
 
-            success = strVal.Value is not null;
-            return strVal.ToString();
+            value = strVal.ToString();
+            return value is not null;
         }
 
         /// <summary>
@@ -91,11 +93,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return;
                 }
 
-                bool success = true;
-
-                string? displayString = GetDisplayString(browsing, sender.DISPID, ref success);
-
-                if (success)
+                if (TryGetDisplayString(browsing, sender.DISPID, out string? displayString))
                 {
                     gnievent.Name = displayString;
                 }
@@ -146,7 +144,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             else
             {
-                // If we didn't get any strings, try the proppage editor
+                // If we didn't get any strings, try the property page editor.
                 //
                 // This is a bit of a backwards-compat work around. Many older ActiveX controls will show a
                 // property page for all properties since the old grid would only put up the [...] button for
@@ -161,7 +159,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (!Guid.Empty.Equals(guid))
                 {
-                    gveevent.TypeEditor = new Com2PropertyPageUITypeEditor(sender, guid, (UITypeEditor)gveevent.TypeEditor);
+                    gveevent.TypeEditor = new Com2PropertyPageUITypeEditor(sender, guid, (UITypeEditor?)gveevent.TypeEditor);
                 }
             }
         }

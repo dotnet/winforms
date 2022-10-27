@@ -17,14 +17,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private readonly bool _allowExpand;
 
-        public Com2IDispatchConverter(bool allowExpand, TypeConverter baseConverter)
+        public Com2IDispatchConverter(bool allowExpand, TypeConverter? baseConverter)
             : base(baseConverter)
         {
             _allowExpand = allowExpand;
         }
 
-        public Com2IDispatchConverter(Com2PropertyDescriptor propDesc, bool allowExpand)
-            : base(propDesc.PropertyType)
+        public Com2IDispatchConverter(Com2PropertyDescriptor propertyDescriptor, bool allowExpand)
+            // This will throw in the base.
+            : base(propertyDescriptor.PropertyType!)
         {
             _allowExpand = allowExpand;
         }

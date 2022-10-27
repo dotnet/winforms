@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -17,8 +15,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public class AboutBoxUITypeEditor : UITypeEditor
         {
-            public override unsafe object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+            public override unsafe object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
             {
+                ArgumentNullException.ThrowIfNull(context);
                 object component = context.Instance;
 
                 if (Marshal.IsComObject(component) && component is Oleaut32.IDispatch pDisp)
@@ -41,10 +40,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return value;
             }
 
-            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-            {
-                return UITypeEditorEditStyle.Modal;
-            }
+            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
         }
     }
 }

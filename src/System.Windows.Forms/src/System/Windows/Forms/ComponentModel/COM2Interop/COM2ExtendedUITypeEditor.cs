@@ -14,12 +14,12 @@ namespace System.Drawing.Design
     {
         private readonly UITypeEditor? _innerEditor;
 
-        public Com2ExtendedUITypeEditor(UITypeEditor baseTypeEditor)
+        public Com2ExtendedUITypeEditor(UITypeEditor? baseTypeEditor)
         {
             _innerEditor = baseTypeEditor;
         }
 
-        public Com2ExtendedUITypeEditor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]Type baseType)
+        public Com2ExtendedUITypeEditor([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type baseType)
         {
             _innerEditor = (UITypeEditor?)TypeDescriptor.GetEditor(baseType, typeof(UITypeEditor));
         }

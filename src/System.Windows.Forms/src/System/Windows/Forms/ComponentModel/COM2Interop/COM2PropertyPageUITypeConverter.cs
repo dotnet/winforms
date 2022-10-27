@@ -12,12 +12,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
     {
-        private readonly Com2PropertyDescriptor _propDesc;
+        private readonly Com2PropertyDescriptor _propertyDescriptor;
         private readonly Guid _guid;
 
-        public Com2PropertyPageUITypeEditor(Com2PropertyDescriptor pd, Guid guid, UITypeEditor baseEditor) : base(baseEditor)
+        public Com2PropertyPageUITypeEditor(
+            Com2PropertyDescriptor propertyDescriptor,
+            Guid guid,
+            UITypeEditor? baseEditor) : base(baseEditor)
         {
-            _propDesc = pd;
+            _propertyDescriptor = propertyDescriptor;
             _guid = guid;
         }
 
@@ -27,27 +30,30 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                ICom2PropertyPageDisplayService? propPageSvc = (ICom2PropertyPageDisplayService?)provider.GetService(typeof(ICom2PropertyPageDisplayService));
-
-                propPageSvc ??= this;
+                if (!provider.TryGetService(out ICom2PropertyPageDisplayService? propertyPageService))
+                {
+                    propertyPageService ??= this;
+                }
 
                 object? instance = context?.Instance;
 
                 if (instance is not null && !instance.GetType().IsArray)
                 {
-                    instance = _propDesc.TargetObject;
+                    instance = _propertyDescriptor.TargetObject;
                     if (instance is ICustomTypeDescriptor customTypeDescriptor)
                     {
-                        instance = customTypeDescriptor.GetPropertyOwner(_propDesc);
+                        instance = customTypeDescriptor.GetPropertyOwner(_propertyDescriptor);
                     }
                 }
 
-                propPageSvc.ShowPropertyPage(_propDesc.Name, instance, (int)_propDesc.DISPID, _guid, hWndParent);
+                propertyPageService.ShowPropertyPage(_propertyDescriptor.Name, instance, (int)_propertyDescriptor.DISPID, _guid, hWndParent);
             }
             catch (Exception ex)
             {
-                IUIService? uiSvc = (IUIService?)provider?.GetService(typeof(IUIService));
-                uiSvc?.ShowError(ex, SR.ErrorTypeConverterFailed);
+                if (provider.TryGetService(out IUIService? uiService))
+                {
+                    uiService?.ShowError(ex, SR.ErrorTypeConverterFailed);
+                }
             }
 
             return value;

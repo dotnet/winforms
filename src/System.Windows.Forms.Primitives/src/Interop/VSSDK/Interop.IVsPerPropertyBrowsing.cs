@@ -68,7 +68,7 @@ internal partial class Interop
             /// </summary>
             [PreserveSig]
             HRESULT GetClassName(
-                ref string pbstrClassName);
+                ref string? pbstrClassName);
 
             /// <summary>
             ///  Checks whether the given property can be reset to some default value.

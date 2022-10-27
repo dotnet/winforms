@@ -67,9 +67,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             _lastFont = (Font)managedValue;
-            IFont nativeFont = (IFont)pd.GetNativeValue(pd.TargetObject);
 
-            if (nativeFont is not null)
+            if (pd.GetNativeValue(pd.TargetObject) is IFont nativeFont)
             {
                 bool changed = ControlPaint.FontToIFont(_lastFont, nativeFont);
 

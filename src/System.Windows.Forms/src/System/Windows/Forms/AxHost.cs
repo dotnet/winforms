@@ -1060,54 +1060,46 @@ namespace System.Windows.Forms
 
         private void OnNewSelection(object sender, EventArgs e)
         {
-            if (IsUserMode())
+            if (IsUserMode() || GetSelectionService() is not { } selectionService)
             {
                 return;
             }
 
-            ISelectionService iss = GetSelectionService();
+            // If we are uiactive and we lose selection, then we need to uideactivate ourselves.
 
-            // What we care about:
-            // if we are uiactive and we lose selection, then we need to uideactivate ourselves...
-            if (iss is not null)
+            if (GetOcState() >= OC_UIACTIVE && !selectionService.GetComponentSelected(this))
             {
-                if (GetOcState() >= OC_UIACTIVE && !iss.GetComponentSelected(this))
+                // Need to deactivate.
+                HRESULT hr = UiDeactivate();
+                Debug.Assert(hr.Succeeded, $"Failed to UiDeactivate: {hr}");
+            }
+
+            if (!selectionService.GetComponentSelected(this))
+            {
+                if (_editMode != EDITM_NONE)
                 {
-                    // Need to deactivate.
-                    HRESULT hr = UiDeactivate();
-                    Debug.Assert(hr.Succeeded, $"Failed to UiDeactivate: {hr}");
+                    GetParentContainer().OnExitEditMode(this);
+                    _editMode = EDITM_NONE;
                 }
 
-                if (!iss.GetComponentSelected(this))
+                // Need to exit edit mode.
+                SetSelectionStyle(1);
+                RemoveSelectionHandler();
+            }
+            else
+            {
+                // The AX Host designer will offer an extender property called "SelectionStyle".
+                if (TypeDescriptor.GetProperties(this)["SelectionStyle"] is { } property && property.PropertyType == typeof(int))
                 {
-                    if (_editMode != EDITM_NONE)
+                    if ((int)property.GetValue(this) != _selectionStyle)
                     {
-                        GetParentContainer().OnExitEditMode(this);
-                        _editMode = EDITM_NONE;
-                    }
-
-                    // Need to exit edit mode.
-                    SetSelectionStyle(1);
-                    RemoveSelectionHandler();
-                }
-                else
-                {
-                    // The AX Host designer will offer an extender property called "SelectionStyle"
-                    PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
-
-                    if (prop is not null && prop.PropertyType == typeof(int))
-                    {
-                        int curSelectionStyle = (int)prop.GetValue(this);
-                        if (curSelectionStyle != _selectionStyle)
-                        {
-                            prop.SetValue(this, _selectionStyle);
-                        }
+                        property.SetValue(this, _selectionStyle);
                     }
                 }
             }
         }
 
-        // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+        // DrawToBitmap doesn't work for this control, so we should hide it. We'll
         // still call base so that this has a chance to work if it can.
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
@@ -1115,10 +1107,6 @@ namespace System.Windows.Forms
             base.DrawToBitmap(bitmap, targetBounds);
         }
 
-        /// <summary>
-        ///  Creates a handle for this control. This method is called by the framework, this should
-        ///  not be called directly.
-        /// </summary>
         protected override void CreateHandle()
         {
             if (IsHandleCreated)
@@ -1135,16 +1123,18 @@ namespace System.Windows.Forms
                     _axState[s_fNeedOwnWindow] = false;
                     _axState[s_fFakingWindow] = true;
                     base.CreateHandle();
-                    // note that we do not need to attach the handle because the work usually done in there
-                    // will be done in Control's wndProc on WM_CREATE...
+
+                    // Note that we do not need to attach the handle because the work usually done in there
+                    // will be done in Control's wndProc on WM_CREATE.
                 }
                 else
                 {
                     TransitionUpTo(OC_INPLACE);
-                    // it is possible that we were hidden while in place activating, in which case we don't
-                    // really have a handle now because the act of hiding could have destroyed it
-                    // so, just call ourselves again recursively, and if we don't have a handle, we will
-                    // just take the "axState[fNeedOwnWindow]" path above...
+
+                    // It is possible that we were hidden while in place activating, in which case we don't
+                    // really have a handle now because the act of hiding could have destroyed it. Just call ourselves
+                    // again recursively, and if we don't have a handle, we will just take the "axState[fNeedOwnWindow]"
+                    // path above.
                     if (_axState[s_fNeedOwnWindow])
                     {
                         Debug.Assert(!IsHandleCreated, "if we need a fake window, we can't have a real one");
@@ -2545,19 +2535,16 @@ namespace System.Windows.Forms
         {
             if (!IsUserMode())
             {
-                // selectionStyle can be 0 (not selected), 1 (selected) or 2 (active)
-                Debug.Assert(selectionStyle >= 0 && selectionStyle <= 2, "Invalid selection style");
-
-                ISelectionService iss = GetSelectionService();
+                // SelectionStyle can be 0 (not selected), 1 (selected) or 2 (active)
+                Debug.Assert(selectionStyle is >= 0 and <= 2, "Invalid selection style");
                 _selectionStyle = selectionStyle;
-                if (iss is not null && iss.GetComponentSelected(this))
+
+                if (GetSelectionService() is { } selectionService && selectionService.GetComponentSelected(this))
                 {
                     // The AX Host designer will offer an extender property called "SelectionStyle"
-                    //
-                    PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
-                    if (prop is not null && prop.PropertyType == typeof(int))
+                    if (TypeDescriptor.GetProperties(this)["SelectionStyle"] is { } property && property.PropertyType == typeof(int))
                     {
-                        prop.SetValue(this, selectionStyle);
+                        property.SetValue(this, selectionStyle);
                     }
                 }
             }

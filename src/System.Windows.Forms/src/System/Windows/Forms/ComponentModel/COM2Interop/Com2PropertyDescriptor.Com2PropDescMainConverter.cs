@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -18,85 +16,76 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private class Com2PropDescMainConverter : Com2ExtendedTypeConverter
         {
-            readonly Com2PropertyDescriptor pd;
+            private readonly Com2PropertyDescriptor _propertyDescriptor;
 
             private const int CheckSubprops = 0;
             private const int AllowSubprops = 1;
             private const int SuppressSubprops = 2;
 
-            private int subprops = CheckSubprops;
+            private int _subprops = CheckSubprops;
 
-            public Com2PropDescMainConverter(Com2PropertyDescriptor pd, TypeConverter baseConverter) : base(baseConverter)
+            public Com2PropDescMainConverter(
+                Com2PropertyDescriptor propertyDescriptor,
+                TypeConverter baseConverter) : base(baseConverter)
             {
-                this.pd = pd;
+                _propertyDescriptor = propertyDescriptor;
             }
 
-            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+            public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
             {
-                object baseConversion = base.ConvertTo(context, culture, value, destinationType);
-                if (destinationType == typeof(string))
+                object? baseConversion = base.ConvertTo(context, culture, value, destinationType);
+
+                // If this is our current value, ask if it should be changed for display,
+                // otherwise we'll ask for our enum drop downs, which we don't want to do.
+                if (destinationType == typeof(string)
+                    && _propertyDescriptor.IsCurrentValue(value)
+                    && !(_propertyDescriptor.PropertyType?.IsEnum ?? false))
                 {
-                    // if this is our current value, ask if it should be changed for display,
-                    // otherwise we'll ask for our enum drop downs, which we don't wanna do!
-                    //
-                    if (pd.IsCurrentValue(value))
-                    {
-                        // don't ever do this for enum types
-                        if (!pd.PropertyType.IsEnum)
-                        {
-                            Com2EnumConverter baseConverter = (Com2EnumConverter)GetWrappedConverter(typeof(Com2EnumConverter));
-                            if (baseConverter is null)
-                            {
-                                return pd.GetDisplayValue((string)baseConversion);
-                            }
-                            else
-                            {
-                                return baseConverter.ConvertTo(value, destinationType);
-                            }
-                        }
-                    }
+                    return GetWrappedConverter(typeof(Com2EnumConverter)) is Com2EnumConverter baseConverter
+                        ? baseConverter.ConvertTo(value, destinationType)
+                        : _propertyDescriptor.GetDisplayValue((string?)baseConversion);
                 }
 
                 return baseConversion;
             }
 
             [RequiresUnreferencedCode(TrimmingConstants.TypeConverterGetPropertiesMessage)]
-            public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+            public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
             {
-                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value, attributes);
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(value, attributes);
 
-                if (props is not null && props.Count > 0)
+                if (properties is not null && properties.Count > 0)
                 {
                     // Return sorted read-only collection (can't sort original because its read-only)
-                    props = props.Sort();
-                    PropertyDescriptor[] descs = new PropertyDescriptor[props.Count];
-                    props.CopyTo(descs, 0);
-                    props = new PropertyDescriptorCollection(descs, true);
+                    properties = properties.Sort();
+                    PropertyDescriptor[] descriptors = new PropertyDescriptor[properties.Count];
+                    properties.CopyTo(descriptors, 0);
+                    properties = new PropertyDescriptorCollection(descriptors, true);
                 }
 
-                return props;
+                return properties;
             }
 
-            public override bool GetPropertiesSupported(ITypeDescriptorContext context)
+            public override bool GetPropertiesSupported(ITypeDescriptorContext? context)
             {
-                if (subprops == CheckSubprops)
+                if (_subprops == CheckSubprops)
                 {
                     if (!base.GetPropertiesSupported(context))
                     {
-                        subprops = SuppressSubprops;
+                        _subprops = SuppressSubprops;
                     }
                     else
                     {
-                        // special case the font converter here.
-                        //
-                        if ((pd.valueConverter is not null && pd.valueConverter.AllowExpand) || Com2IVsPerPropertyBrowsingHandler.AllowChildProperties(pd))
+                        // Special case the font converter here.
+                        if ((_propertyDescriptor._valueConverter is { } converter && converter.AllowExpand)
+                            || Com2IVsPerPropertyBrowsingHandler.AllowChildProperties(_propertyDescriptor))
                         {
-                            subprops = AllowSubprops;
+                            _subprops = AllowSubprops;
                         }
                     }
                 }
 
-                return (subprops == AllowSubprops);
+                return _subprops == AllowSubprops;
             }
         }
     }
