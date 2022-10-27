@@ -156,16 +156,8 @@ internal partial class Interop
                 || flags == CreateObjectFlags.None
                 || flags == CreateObjectFlags.Unwrap);
 
-            Guid pictureIID = IID.IPicture;
-            int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr pictureComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new PictureWrapper(pictureComObject);
-            }
-
             Guid errorInfoIID = IID.IErrorInfo;
-            hr = Marshal.QueryInterface(externalComObject, ref errorInfoIID, out IntPtr errorInfoComObject);
+            int hr = Marshal.QueryInterface(externalComObject, ref errorInfoIID, out IntPtr errorInfoComObject);
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);

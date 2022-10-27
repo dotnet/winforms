@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DEBUG
 using System.Diagnostics;
-#endif
 using System.Drawing;
 using Windows.Win32.System.Com;
 
@@ -27,9 +25,9 @@ namespace System.Windows.Forms
                 HIMAGELIST himl;
                 lock (s_syncLock)
                 {
-                    bool result = ComHelpers.TryQueryInterface(pstm, out IStream* pStream);
+                    using var stream = ComHelpers.QueryInterface<IStream>(pstm, out bool result);
                     Debug.Assert(result);
-                    himl = PInvoke.ImageList_Read(pStream);
+                    himl = PInvoke.ImageList_Read(stream);
                     Init(himl);
                 }
             }

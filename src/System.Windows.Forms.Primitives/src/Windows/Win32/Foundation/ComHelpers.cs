@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
-using Windows.Win32.System.Ole;
 
 namespace Windows.Win32.Foundation
 {
@@ -12,6 +11,12 @@ namespace Windows.Win32.Foundation
     {
         internal static bool TryQueryInterface<T>(object obj, out T* pInterface) where T : unmanaged, INativeGuid
             => QueryInterface(obj, out pInterface).Succeeded;
+
+        internal static ComScope<T> QueryInterface<T>(object obj, out bool success) where T : unmanaged, INativeGuid
+        {
+            success = TryQueryInterface(obj, out T* pInterface);
+            return new(pInterface);
+        }
 
         internal static HRESULT QueryInterface<T>(object obj, out T* pInterface) where T : unmanaged, INativeGuid
         {
@@ -27,6 +32,12 @@ namespace Windows.Win32.Foundation
             return result;
         }
 
+        internal static ComScope<T> QueryInterface<T>(object obj, out HRESULT hr) where T : unmanaged, INativeGuid
+        {
+            hr = QueryInterface(obj, out T* pInterface);
+            return new(pInterface);
+        }
+
         public static void Release<T>(T* release) where T : unmanaged, IUnknown.Interface
         {
             if (release is not null)
@@ -35,17 +46,15 @@ namespace Windows.Win32.Foundation
             }
         }
 
-        public static HRESULT InvokePictureDisp(
-            IPictureDisp* dispatch,
+        public static HRESULT GetDispatchProperty(
+            IDispatch* dispatch,
             uint dispId,
             VARIANT* pVar,
-            uint lcid = 0,
-            EXCEPINFO* excepInfo = null,
-            uint* argError = null)
+            uint lcid = 0)
         {
             Guid riid = Guid.Empty;
             DISPPARAMS disparams = default;
-            return dispatch->Invoke((int)dispId, &riid, lcid, DISPATCH_FLAGS.DISPATCH_PROPERTYGET, &disparams, pVar, excepInfo, argError);
+            return dispatch->Invoke((int)dispId, &riid, lcid, DISPATCH_FLAGS.DISPATCH_PROPERTYGET, &disparams, pVar, null, null);
         }
     }
 }

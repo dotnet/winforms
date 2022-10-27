@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Com = Windows.Win32.System.Com;
@@ -69,7 +70,7 @@ internal static partial class Interop
                     return HRESULT.STG_E_INVALIDPOINTER;
                 }
 
-                Span<byte> buffer = stackalloc byte[4096];
+                byte[] buffer = ArrayPool<byte>.Shared.Rent(4096);
 
                 ulong remaining = cb;
                 ulong totalWritten = 0;
@@ -95,6 +96,8 @@ internal static partial class Interop
                         totalWritten += written;
                     }
                 }
+
+                ArrayPool<byte>.Shared.Return(buffer);
 
                 if (pcbRead is not null)
                     *pcbRead = totalRead;
@@ -213,13 +216,13 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            /// Returns <see cref="HRESULT.STG_E_INVALIDFUNCTION"/> as a documented way to say we don't support locking
+            /// Returns HRESULT.STG_E_INVALIDFUNCTION as a documented way to say we don't support locking
             HRESULT Com.IStream.Interface.LockRegion(ulong libOffset, ulong cb, Com.LOCKTYPE dwLockType) => HRESULT.STG_E_INVALIDFUNCTION;
 
             // We never report ourselves as Transacted, so we can just ignore this.
             HRESULT Com.IStream.Interface.Revert() => HRESULT.S_OK;
 
-            /// Returns <see cref="HRESULT.STG_E_INVALIDFUNCTION"/> as a documented way to say we don't support locking
+            /// Returns HRESULT.STG_E_INVALIDFUNCTION as a documented way to say we don't support locking
             HRESULT Com.IStream.Interface.UnlockRegion(ulong libOffset, ulong cb, uint dwLockType) => HRESULT.STG_E_INVALIDFUNCTION;
 
             HRESULT Com.ISequentialStream.Interface.Write(void* pv, uint cb, uint* pcbWritten)

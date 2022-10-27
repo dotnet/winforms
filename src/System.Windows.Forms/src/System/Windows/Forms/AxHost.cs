@@ -2023,7 +2023,7 @@ namespace System.Windows.Forms
                     if (_iPersistPropBag is not null)
                     {
                         propBag = new PropertyBagStream();
-                        bool result = ComHelpers.TryQueryInterface(propBag, out IPropertyBag* propertyBag);
+                        using var propertyBag = ComHelpers.QueryInterface<IPropertyBag>(propBag, out bool result);
                         Debug.Assert(result);
                         _iPersistPropBag.Save(propertyBag, fClearDirty: true, fSaveAllProperties: true);
                     }
@@ -2312,7 +2312,7 @@ namespace System.Windows.Forms
         {
             Control parent = ParentInternal;
             RECT posRect = Bounds;
-            bool result = ComHelpers.TryQueryInterface(_oleSite, out IOleClientSite* pClientSite);
+            using var pClientSite = ComHelpers.QueryInterface<IOleClientSite>(_oleSite, out bool result);
             Debug.Assert(result);
             GetOleObject().DoVerb(verb, lpmsg: null, pClientSite, -1, parent is null ? HWND.Null : parent.HWND, &posRect);
         }
@@ -2910,7 +2910,7 @@ namespace System.Windows.Forms
 
         private void DepersistFromIPropertyBag(IPropertyBag.Interface propBag)
         {
-            bool result = ComHelpers.TryQueryInterface(propBag, out IPropertyBag* pPropBag);
+            using var pPropBag = ComHelpers.QueryInterface<IPropertyBag>(propBag, out bool result);
             Debug.Assert(result);
             _iPersistPropBag.Load(pPropBag, pErrorLog: null).ThrowOnFailure();
         }
@@ -2918,7 +2918,7 @@ namespace System.Windows.Forms
         private void DepersistFromIStream(IStream.Interface istream)
         {
             _storageType = STG_STREAM;
-            bool result = ComHelpers.TryQueryInterface(istream, out IStream* pStream);
+            using var pStream = ComHelpers.QueryInterface<IStream>(istream, out bool result);
             Debug.Assert(result);
             _iPersistStream.Load(pStream).ThrowOnFailure();
         }
@@ -2926,7 +2926,7 @@ namespace System.Windows.Forms
         private void DepersistFromIStreamInit(IStream.Interface istream)
         {
             _storageType = STG_STREAMINIT;
-            bool result = ComHelpers.TryQueryInterface(istream, out IStream* pStream);
+            using var pStream = ComHelpers.QueryInterface<IStream>(istream, out bool result);
             Debug.Assert(result);
             _iPersistStreamInit.Load(pStream).ThrowOnFailure();
         }
@@ -2942,7 +2942,7 @@ namespace System.Windows.Forms
             //
             if (storage is not null)
             {
-                bool result = ComHelpers.TryQueryInterface(storage, out IStorage* pStorage);
+                using var pStorage = ComHelpers.QueryInterface<IStorage>(storage, out bool result);
                 Debug.Assert(result);
                 _iPersistStorage.Load(pStorage).ThrowOnFailure();
             }
@@ -2982,7 +2982,7 @@ namespace System.Windows.Forms
                     _storageType = STG_STORAGE;
                     _ocxState = new State(this);
                     _iPersistStorage = persistStorage;
-                    bool result = ComHelpers.TryQueryInterface(_ocxState.GetStorage(), out IStorage* pStorage);
+                    using var pStorage = ComHelpers.QueryInterface<IStorage>(_ocxState.GetStorage(), out bool result);
                     Debug.Assert(result);
                     HRESULT hr = _iPersistStorage.InitNew(pStorage);
                     if (hr.Failed)
@@ -3790,7 +3790,7 @@ namespace System.Windows.Forms
 
             if ((_miscStatusBits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0)
             {
-                bool result = ComHelpers.TryQueryInterface(_oleSite, out IOleClientSite* clientSite);
+                using var clientSite = ComHelpers.QueryInterface<IOleClientSite>(_oleSite, out bool result);
                 Debug.Assert(result);
                 GetOleObject().SetClientSite(clientSite);
                 setClientSite = true;
@@ -3800,7 +3800,7 @@ namespace System.Windows.Forms
 
             if (!setClientSite)
             {
-                bool result = ComHelpers.TryQueryInterface(_oleSite, out IOleClientSite* clientSite);
+                using var clientSite = ComHelpers.QueryInterface<IOleClientSite>(_oleSite, out bool result);
                 Debug.Assert(result);
                 GetOleObject().SetClientSite(clientSite);
             }
@@ -4018,23 +4018,24 @@ namespace System.Windows.Forms
             }
 
             uint hPal = default;
-            ComHelpers.QueryInterface(picture, out IPictureDisp* pict).ThrowOnFailure();
+            using var pict = ComHelpers.QueryInterface<IDispatch>(picture, out HRESULT hr);
+            hr.ThrowOnFailure();
             using VARIANT variant = default;
-            ComHelpers.InvokePictureDisp(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             PICTYPE type = (PICTYPE)variant.data.iVal;
             if (type == PICTYPE.PICTYPE_BITMAP)
             {
-                ComHelpers.InvokePictureDisp(pict, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
+                ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
                 hPal = variant.data.uintVal;
             }
 
-            ComHelpers.InvokePictureDisp(pict, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
             uint handle = variant.data.uintVal;
 
-            ComHelpers.InvokePictureDisp(pict, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
             uint width = variant.data.uintVal;
 
-            ComHelpers.InvokePictureDisp(pict, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
             uint height = variant.data.uintVal;
 
             return GetPictureFromParams(handle, type, hPal, width, height);

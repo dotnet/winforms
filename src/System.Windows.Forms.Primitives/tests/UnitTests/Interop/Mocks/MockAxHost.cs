@@ -65,23 +65,24 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
             }
 
             uint hPal = default;
-            ComHelpers.QueryInterface(picture, out IPictureDisp* pict).ThrowOnFailure();
+            using var pict = ComHelpers.QueryInterface<IDispatch>(picture, out HRESULT hr);
+            hr.ThrowOnFailure();
             using VARIANT variant = new();
-            ComHelpers.InvokePictureDisp(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             PICTYPE type = (PICTYPE)variant.data.iVal;
             if (type == PICTYPE.PICTYPE_BITMAP)
             {
-                ComHelpers.InvokePictureDisp(pict, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
+                ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
                 hPal = variant.data.uintVal;
             }
 
-            ComHelpers.InvokePictureDisp(pict, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
             uint handle = variant.data.uintVal;
 
-            ComHelpers.InvokePictureDisp(pict, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
             uint width = variant.data.uintVal;
 
-            ComHelpers.InvokePictureDisp(pict, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
             uint height = variant.data.uintVal;
 
             return GetPictureFromParams(handle, type, hPal, width, height);

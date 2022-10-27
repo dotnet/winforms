@@ -79,9 +79,9 @@ namespace System.Windows.Forms
                     {
                         IPersistStreamInit.Interface psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                         Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
-                        bool result = ComHelpers.TryQueryInterface(
+                        using var pStream = ComHelpers.QueryInterface<IStream>(
                             new Ole32.GPStream(_parent.documentStreamToSetOnLoad),
-                            out IStream* pStream);
+                            out bool result);
                         Debug.Assert(result);
                         psi.Load(pStream);
                         htmlDocument.Encoding = "unicode";

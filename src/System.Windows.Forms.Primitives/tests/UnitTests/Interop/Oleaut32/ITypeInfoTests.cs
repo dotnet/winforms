@@ -17,9 +17,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_AddressOfMember_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             void* pv;
@@ -31,9 +32,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_CreateInstance_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             void* pvObj = null;
@@ -45,9 +47,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetContainingTypeLib_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             using ComScope<ITypeLib> typeLib = new(null);
@@ -62,9 +65,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetDllEntry_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             using BSTR dllName = new("DllName");
@@ -81,9 +85,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetDocumentation_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             using BSTR name = new("Name");
@@ -102,9 +107,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetFuncDesc_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             FUNCDESC* pFuncDesc = null;
@@ -137,9 +143,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetIDsOfNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             fixed (char* width = "Width")
@@ -162,9 +169,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetImplTypeFlags_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             int implTypeFlags = -1;
@@ -177,9 +185,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetMops_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             using BSTR mops = new("Mops");
@@ -192,9 +201,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             BSTR* rgszNames = stackalloc BSTR[2];
@@ -215,9 +225,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetRefTypeInfo_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             uint refType = uint.MaxValue;
@@ -234,9 +245,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetRefTypeOfImplType_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             uint refType = uint.MaxValue;
@@ -249,9 +261,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetTypeAttr_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             TYPEATTR* pTypeAttr = null;
@@ -289,9 +302,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetTypeComp_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             ITypeComp* typeComp;
@@ -303,9 +317,10 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetVarDesc_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* dispatch).ThrowOnFailure();
+            using var dispatch = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = dispatch->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             VARDESC* pVarDesc = null;
@@ -333,18 +348,19 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_Invoke_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            ComHelpers.QueryInterface(MockAxHost.GetIPictureDispFromPicture(image), out IPictureDisp* picture).ThrowOnFailure();
+            using var picture = ComHelpers.QueryInterface<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = picture->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
+            hr = picture.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            var dispParams = new DISPPARAMS();
-            var varResult = new VARIANT();
-            var excepInfo = new EXCEPINFO();
+            DISPPARAMS dispParams = default;
+            VARIANT varResult = default;
+            EXCEPINFO excepInfo = default;
             uint argErr = 0;
             hr = typeInfo.Value->Invoke(
                 picture,
-                4,
+                (int)PInvoke.DISPID_PICT_WIDTH,
                 DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                 &dispParams,
                 &varResult,

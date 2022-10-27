@@ -51,15 +51,18 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
         {
             using Icon icon = SystemIcons.Question;
             using Bitmap bitmap = icon.ToBitmap();
-            Assert.True(ComHelpers.TryQueryInterface(MockAxHost.GetIPictureDispFromPicture(bitmap), out IPictureDisp* picture));
+            using var picture = ComHelpers.QueryInterface<IDispatch>(
+                MockAxHost.GetIPictureDispFromPicture(bitmap),
+                out bool result);
+            Assert.True(result);
             using VARIANT variant = new();
-            ComHelpers.InvokePictureDisp(picture, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(picture, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             Assert.Equal(PICTYPE.PICTYPE_BITMAP, (PICTYPE)variant.data.iVal);
 
-            ComHelpers.InvokePictureDisp(picture, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(picture, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
             Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY((int)variant.data.uintVal));
 
-            ComHelpers.InvokePictureDisp(picture, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(picture, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
             Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX((int)variant.data.uintVal));
         }
 

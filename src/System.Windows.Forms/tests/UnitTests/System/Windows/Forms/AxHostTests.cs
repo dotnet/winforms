@@ -1618,19 +1618,19 @@ namespace System.Windows.Forms.Tests
             var original = new Bitmap(10, 11);
             original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
-            bool succeeded = ComHelpers.TryQueryInterface(disp, out IPictureDisp* iPictureDisp);
+            using var iPictureDisp = ComHelpers.QueryInterface<IDispatch>(disp, out bool succeeded);
 
             Assert.True(succeeded);
-            using VARIANT variant = new();
-            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            using VARIANT variant = default;
+            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
             Assert.NotEqual(0u, variant.data.uintVal);
-            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
             Assert.Equal(0u, variant.data.uintVal);
-            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             Assert.Equal(1, variant.data.iVal);
-            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
             Assert.Equal(265u, variant.data.uintVal);
-            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
             Assert.Equal(291u, variant.data.uintVal);
 
             var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPictureDisp(disp));
@@ -1645,19 +1645,19 @@ namespace System.Windows.Forms.Tests
             var original = new Metafile("bitmaps/milkmateya01.emf");
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
 
-            bool succeeded = ComHelpers.TryQueryInterface(disp, out IPictureDisp* iPictureDisp);
+            using var iPictureDisp = ComHelpers.QueryInterface<IDispatch>(disp, out bool succeeded);
 
             Assert.True(succeeded);
             using VARIANT variant = default;
-            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
             Assert.NotEqual(0u, variant.data.uintVal);
-            Assert.True(ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).Failed);
+            Assert.True(ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).Failed);
             Assert.Equal(0u, variant.data.uintVal);
-            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             Assert.Equal(4, variant.data.iVal);
-            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
             Assert.Equal(19972u, variant.data.uintVal);
-            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
             Assert.Equal(28332u, variant.data.uintVal);
 
             var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPictureDisp(disp));

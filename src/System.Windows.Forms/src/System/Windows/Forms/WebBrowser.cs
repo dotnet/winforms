@@ -298,7 +298,7 @@ namespace System.Windows.Forms
                     else
                     {
                         MemoryStream memoryStream = new MemoryStream();
-                        bool result = ComHelpers.TryQueryInterface(new Ole32.GPStream(memoryStream), out IStream* pStream);
+                        using var pStream = ComHelpers.QueryInterface<IStream>(new Ole32.GPStream(memoryStream), out bool result);
                         Debug.Assert(result);
                         psi.Save(pStream, fClearDirty: false);
                         return new MemoryStream(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, false);
