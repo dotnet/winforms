@@ -566,7 +566,8 @@ namespace System.Windows.Forms
             // The base implementation should be called before the implementation above,
             // but changing the order in Whidbey would be too much of a breaking change
             // for this particular class.
-            base.OnMouseWheel(e);
+            // Because the code has been like that since long time, we assume that e is not null.
+            base.OnMouseWheel(e!);
         }
 
         /// <summary>

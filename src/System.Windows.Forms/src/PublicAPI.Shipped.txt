@@ -865,8 +865,8 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string title, object component, int dispid, System.Guid pageGuid, nint parentHandle) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.LoadState(Microsoft.Win32.RegistryKey key) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey key) -> void
-~System.Windows.Forms.Control.InvokeGotFocus(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
-~System.Windows.Forms.Control.InvokeLostFocus(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
+System.Windows.Forms.Control.InvokeGotFocus(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
+System.Windows.Forms.Control.InvokeLostFocus(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
 ~System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
 ~System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitmap logicalBitmap) -> void
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember) -> System.Windows.Forms.Binding
@@ -1715,67 +1715,67 @@ System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(System.Windows.Forms.Cont
 ~virtual System.Windows.Forms.Control.OnBackgroundImageLayoutChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnBindingContextChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnCausesValidationChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnClick(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnClientSizeChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnClick(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnClientSizeChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnContextMenuStripChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnControlAdded(System.Windows.Forms.ControlEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnControlRemoved(System.Windows.Forms.ControlEventArgs e) -> void
+virtual System.Windows.Forms.Control.OnControlAdded(System.Windows.Forms.ControlEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnControlRemoved(System.Windows.Forms.ControlEventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnCursorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnDataContextChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnDockChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnDoubleClick(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnDpiChangedAfterParent(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnDpiChangedBeforeParent(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnDragDrop(System.Windows.Forms.DragEventArgs drgevent) -> void
-~virtual System.Windows.Forms.Control.OnDragEnter(System.Windows.Forms.DragEventArgs drgevent) -> void
-~virtual System.Windows.Forms.Control.OnDragLeave(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnDragOver(System.Windows.Forms.DragEventArgs drgevent) -> void
+virtual System.Windows.Forms.Control.OnDoubleClick(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnDpiChangedAfterParent(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnDpiChangedBeforeParent(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnDragDrop(System.Windows.Forms.DragEventArgs! drgevent) -> void
+virtual System.Windows.Forms.Control.OnDragEnter(System.Windows.Forms.DragEventArgs! drgevent) -> void
+virtual System.Windows.Forms.Control.OnDragLeave(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnDragOver(System.Windows.Forms.DragEventArgs! drgevent) -> void
 ~virtual System.Windows.Forms.Control.OnEnabledChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnEnter(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnEnter(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnFontChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnForeColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnGiveFeedback(System.Windows.Forms.GiveFeedbackEventArgs gfbevent) -> void
-~virtual System.Windows.Forms.Control.OnGotFocus(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnHandleCreated(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnHandleDestroyed(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnHelpRequested(System.Windows.Forms.HelpEventArgs hevent) -> void
-~virtual System.Windows.Forms.Control.OnInvalidated(System.Windows.Forms.InvalidateEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnLayout(System.Windows.Forms.LayoutEventArgs levent) -> void
-~virtual System.Windows.Forms.Control.OnLeave(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnLocationChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnLostFocus(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMarginChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMouseCaptureChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMouseClick(System.Windows.Forms.MouseEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMouseDoubleClick(System.Windows.Forms.MouseEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMouseEnter(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMouseHover(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMouseLeave(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMouseMove(System.Windows.Forms.MouseEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnMove(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnGiveFeedback(System.Windows.Forms.GiveFeedbackEventArgs! gfbevent) -> void
+virtual System.Windows.Forms.Control.OnGotFocus(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnHandleCreated(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnHandleDestroyed(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnHelpRequested(System.Windows.Forms.HelpEventArgs! hevent) -> void
+virtual System.Windows.Forms.Control.OnInvalidated(System.Windows.Forms.InvalidateEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+virtual System.Windows.Forms.Control.OnLeave(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnLocationChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnLostFocus(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMarginChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMouseCaptureChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMouseClick(System.Windows.Forms.MouseEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMouseDoubleClick(System.Windows.Forms.MouseEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMouseEnter(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMouseHover(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMouseLeave(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMouseMove(System.Windows.Forms.MouseEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnMove(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnParentBackColorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentBackgroundImageChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentBindingContextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnParentChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnParentChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnParentCursorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentDataContextChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnParentEnabledChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnParentFontChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnParentForeColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnParentRightToLeftChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnParentVisibleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnPrint(System.Windows.Forms.PaintEventArgs e) -> void
+virtual System.Windows.Forms.Control.OnParentFontChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnParentForeColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnParentRightToLeftChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnParentVisibleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnPrint(System.Windows.Forms.PaintEventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnRightToLeftChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnTabIndexChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnTabStopChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnTextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnVisibleChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnTabIndexChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnTabStopChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnTextChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnVisibleChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.DataGridView.AdjustColumnHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder, bool isFirstDisplayedColumn, bool isLastVisibleColumn) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~virtual System.Windows.Forms.DataGridView.CreateColumnsInstance() -> System.Windows.Forms.DataGridViewColumnCollection

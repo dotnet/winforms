@@ -7607,7 +7607,7 @@ namespace System.Windows.Forms
                 OnEnabledChanged(e);
             }
         }
-
+#nullable enable
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e)
         {
@@ -7638,7 +7638,7 @@ namespace System.Windows.Forms
         {
             // Restore ourselves over to the original control.
             // Use SetParent directly so as to not raise ParentChanged events.
-            Control parent = ParentInternal;
+            Control? parent = ParentInternal;
             if (parent is not null && IsHandleCreated)
             {
                 if (PInvoke.SetParent(this, parent).IsNull)
@@ -7711,7 +7711,7 @@ namespace System.Windows.Forms
             if (DesiredVisibility)
             {
                 // This control became invisible too - notify its children
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
                 if (controlsCollection is not null)
                 {
                     for (int i = 0; i < controlsCollection.Count; i++)
@@ -7814,7 +7814,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7838,7 +7838,7 @@ namespace System.Windows.Forms
 
         internal virtual void OnTopMostActiveXParentChanged(EventArgs e)
         {
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7873,7 +7873,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnClick(EventArgs e)
         {
-            ((EventHandler)Events[s_clickEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_clickEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -7891,7 +7891,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlAdded(ControlEventArgs e)
         {
-            ((ControlEventHandler)Events[s_controlAddedEvent])?.Invoke(this, e);
+            ((ControlEventHandler?)Events[s_controlAddedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -7900,7 +7900,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlRemoved(ControlEventArgs e)
         {
-            ((ControlEventHandler)Events[s_controlRemovedEvent])?.Invoke(this, e);
+            ((ControlEventHandler?)Events[s_controlRemovedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -7969,7 +7969,7 @@ namespace System.Windows.Forms
                 // Restore dragdrop status. Ole Initialize happens when the ThreadContext in Application is created.
                 SetAcceptDrops(AllowDrop);
 
-                Region region = Region;
+                Region? region = Region;
                 if (region is not null)
                 {
                     SetRegion(region);
@@ -8014,7 +8014,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            ((EventHandler)Events[s_handleCreatedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_handleCreatedEvent])?.Invoke(this, e);
 
             if (IsHandleCreated)
             {
@@ -8029,15 +8029,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnSetScrollPosition(object sender, EventArgs e)
+        private void OnSetScrollPosition(object? sender, EventArgs e)
         {
             SetExtendedState(ExtendedStates.HaveInvoked, false);
             OnInvokedSetScrollPosition(sender, e);
         }
 
-        internal virtual unsafe void OnInvokedSetScrollPosition(object sender, EventArgs e)
+        internal virtual unsafe void OnInvokedSetScrollPosition(object? sender, EventArgs e)
         {
-            if (!(this is ScrollableControl) && !IsMirrored)
+            if (this is not ScrollableControl && !IsMirrored)
             {
                 SCROLLINFO si = new()
                 {
@@ -8072,7 +8072,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHandleDestroyed(EventArgs e)
         {
-            ((EventHandler)Events[s_handleDestroyedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_handleDestroyedEvent])?.Invoke(this, e);
 
             // The Accessibility Object for this Control
             if (Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject accObj)
@@ -8093,7 +8093,7 @@ namespace System.Windows.Forms
             {
                 if (GetState(States.OwnCtlBrush))
                 {
-                    object backBrush = Properties.GetObject(s_backBrushProperty);
+                    object? backBrush = Properties.GetObject(s_backBrushProperty);
                     if (backBrush is not null)
                     {
                         Properties.SetObject(s_backBrushProperty, value: null);
@@ -8146,7 +8146,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDoubleClick(EventArgs e)
         {
-            ((EventHandler)Events[s_doubleClickEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_doubleClickEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8161,7 +8161,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragEnter(DragEventArgs drgevent)
         {
-            ((DragEventHandler)Events[s_dragEnterEvent])?.Invoke(this, drgevent);
+            ((DragEventHandler?)Events[s_dragEnterEvent])?.Invoke(this, drgevent);
         }
 
         /// <summary>
@@ -8171,7 +8171,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragOver(DragEventArgs drgevent)
         {
-            ((DragEventHandler)Events[s_dragOverEvent])?.Invoke(this, drgevent);
+            ((DragEventHandler?)Events[s_dragOverEvent])?.Invoke(this, drgevent);
         }
 
         /// <summary>
@@ -8181,7 +8181,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragLeave(EventArgs e)
         {
-            ((EventHandler)Events[s_dragLeaveEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_dragLeaveEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8191,7 +8191,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDragDrop(DragEventArgs drgevent)
         {
-            ((DragEventHandler)Events[s_dragDropEvent])?.Invoke(this, drgevent);
+            ((DragEventHandler?)Events[s_dragDropEvent])?.Invoke(this, drgevent);
         }
 
         /// <summary>
@@ -8201,20 +8201,20 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnGiveFeedback(GiveFeedbackEventArgs gfbevent)
         {
-            ((GiveFeedbackEventHandler)Events[s_giveFeedbackEvent])?.Invoke(this, gfbevent);
+            ((GiveFeedbackEventHandler?)Events[s_giveFeedbackEvent])?.Invoke(this, gfbevent);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnEnter(EventArgs e)
         {
-            ((EventHandler)Events[s_enterEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_enterEvent])?.Invoke(this, e);
         }
 
         /// <summary>
         ///  Raises the <see cref="GotFocus"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected void InvokeGotFocus(Control toInvoke, EventArgs e)
+        protected void InvokeGotFocus(Control? toInvoke, EventArgs e)
         {
             if (toInvoke is not null)
             {
@@ -8236,7 +8236,7 @@ namespace System.Windows.Forms
 
             _parent?.ChildGotFocus(this);
 
-            ((EventHandler)Events[s_gotFocusEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_gotFocusEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8246,7 +8246,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHelpRequested(HelpEventArgs hevent)
         {
-            HelpEventHandler handler = (HelpEventHandler)Events[s_helpRequestedEvent];
+            HelpEventHandler? handler = (HelpEventHandler?)Events[s_helpRequestedEvent];
             if (handler is not null)
             {
                 handler(this, hevent);
@@ -8279,7 +8279,7 @@ namespace System.Windows.Forms
             }
 
             // Transparent control support
-            ControlCollection controls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controls = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controls is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -8291,7 +8291,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            ((InvalidateEventHandler)Events[s_invalidatedEvent])?.Invoke(this, e);
+            ((InvalidateEventHandler?)Events[s_invalidatedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8300,7 +8300,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyDown(KeyEventArgs e)
         {
-            ((KeyEventHandler)Events[s_keyDownEvent])?.Invoke(this, e);
+            ((KeyEventHandler?)Events[s_keyDownEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8309,7 +8309,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyPress(KeyPressEventArgs e)
         {
-            ((KeyPressEventHandler)Events[s_keyPressEvent])?.Invoke(this, e);
+            ((KeyPressEventHandler?)Events[s_keyPressEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8324,7 +8324,7 @@ namespace System.Windows.Forms
                 KeyboardToolTipStateMachine.HidePersistentTooltip();
             }
 
-            ((KeyEventHandler)Events[s_keyUpEvent])?.Invoke(this, e);
+            ((KeyEventHandler?)Events[s_keyUpEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8342,7 +8342,7 @@ namespace System.Windows.Forms
                 ActiveXViewChanged();
             }
 
-            ((LayoutEventHandler)Events[s_layoutEvent])?.Invoke(this, levent);
+            ((LayoutEventHandler?)Events[s_layoutEvent])?.Invoke(this, levent);
 
             bool parentRequiresLayout = LayoutEngine.Layout(this, levent);
             if (parentRequiresLayout && ParentInternal is not null)
@@ -8375,11 +8375,11 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLeave(EventArgs e)
         {
-            ((EventHandler)Events[s_leaveEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_leaveEvent])?.Invoke(this, e);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected void InvokeLostFocus(Control toInvoke, EventArgs e)
+        protected void InvokeLostFocus(Control? toInvoke, EventArgs e)
         {
             if (toInvoke is not null)
             {
@@ -8399,12 +8399,12 @@ namespace System.Windows.Forms
                 ActiveXOnFocus(false);
             }
 
-            ((EventHandler)Events[s_lostFocusEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_lostFocusEvent])?.Invoke(this, e);
         }
 
         protected virtual void OnMarginChanged(EventArgs e)
         {
-            ((EventHandler)Events[s_marginChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_marginChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8413,7 +8413,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDoubleClick(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[s_mouseDoubleClickEvent])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[s_mouseDoubleClickEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8422,7 +8422,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseClick(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[s_mouseClickEvent])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[s_mouseClickEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8431,7 +8431,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseCaptureChanged(EventArgs e)
         {
-            ((EventHandler)Events[s_mouseCaptureChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_mouseCaptureChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8440,7 +8440,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDown(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[s_mouseDownEvent])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[s_mouseDownEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8449,7 +8449,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseEnter(EventArgs e)
         {
-            ((EventHandler)Events[s_mouseEnterEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_mouseEnterEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8458,7 +8458,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseLeave(EventArgs e)
         {
-            ((EventHandler)Events[s_mouseLeaveEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_mouseLeaveEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8471,7 +8471,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Always)]
         protected virtual void OnDpiChangedBeforeParent(EventArgs e)
         {
-            ((EventHandler)Events[s_dpiChangedBeforeParentEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_dpiChangedBeforeParentEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8484,7 +8484,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Always)]
         protected virtual void OnDpiChangedAfterParent(EventArgs e)
         {
-            ((EventHandler)Events[s_dpiChangedAfterParentEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_dpiChangedAfterParentEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8493,7 +8493,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseHover(EventArgs e)
         {
-            ((EventHandler)Events[s_mouseHoverEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_mouseHoverEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8502,7 +8502,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseMove(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[s_mouseMoveEvent])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[s_mouseMoveEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8511,7 +8511,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseUp(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[s_mouseUpEvent])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[s_mouseUpEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8520,7 +8520,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseWheel(MouseEventArgs e)
         {
-            ((MouseEventHandler)Events[s_mouseWheelEvent])?.Invoke(this, e);
+            ((MouseEventHandler?)Events[s_mouseWheelEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -8529,14 +8529,14 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMove(EventArgs e)
         {
-            ((EventHandler)Events[s_moveEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_moveEvent])?.Invoke(this, e);
 
             if (RenderTransparent)
             {
                 Invalidate();
             }
         }
-#nullable enable
+
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.onPaint to send this event to any registered event listeners.
