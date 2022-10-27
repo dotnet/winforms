@@ -272,9 +272,9 @@ namespace System.Windows.Forms.Layout
             else if (!IsAnchored(anchor, AnchorStyles.Left))
             {
                 Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting left & right");
-                int centerPos = displayRect.Width / 2;
-                right += centerPos;
-                left += centerPos;
+                int center = displayRect.Width / 2;
+                right += center;
+                left += center;
             }
 
             if (IsAnchored(anchor, AnchorStyles.Bottom))
@@ -291,9 +291,9 @@ namespace System.Windows.Forms.Layout
             else if (!IsAnchored(anchor, AnchorStyles.Top))
             {
                 Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t...adjusting top & bottom");
-                int centerPos = displayRect.Height / 2;
-                bottom += centerPos;
-                top += centerPos;
+                int center = displayRect.Height / 2;
+                bottom += center;
+                top += center;
             }
 
             if (!measureOnly)
@@ -359,18 +359,20 @@ namespace System.Windows.Forms.Layout
 
         /// <summary>
         ///  Determines if AnchorLayoutV2 should be used to compute anchors of the element
-        ///  and layout child anchored elements with V2 version.
+        ///  and to layout anchored children controls with V2 version.
         /// </summary>
         internal static bool UseAnchorLayoutV2(IArrangedElement element)
         {
-            // Layout V2 version only supports Control types. If AnchorLayoutV2 switch is disabled or
-            // element is not Control type, use legacy layout.
+            // AnchorLayoutV2  only supports Control types. If the feature is disabled or
+            // the element is not of Control type, use the original layout method.
             return LocalAppContextSwitches.AnchorLayoutV2 && element is Control control;
         }
 
         private static void LayoutAnchoredControlsV2(Control container)
         {
-            // If container handle is not created, child controls do not have anchors computed.
+            Debug.Assert(LocalAppContextSwitches.AnchorLayoutV2, $"AnchorLayoutV2 should be called only when {LocalAppContextSwitches.AnchorLayoutV2SwitchName} is enabled.");
+
+            // If the container handle is not created, no need to compute anchors for its children controls.
             if (!container.IsHandleCreated)
             {
                 return;
@@ -403,7 +405,7 @@ namespace System.Windows.Forms.Layout
 
                 if (GetAnchorInfo(element) is null)
                 {
-                    // In V2 layout, it is possible that the parent's handle might not have been created
+                    // It is possible that the parent's handle might not have been created
                     // when the control's handle was created. If that's the case, compute the control's anchors.
                     if (updateAnchorInfoIfNeeded)
                     {
@@ -838,12 +840,12 @@ namespace System.Windows.Forms.Layout
             {
                 if (DpiHelper.IsScalingRequirementMet && (anchorInfo.Bottom - parentHeight > 0) && (oldAnchorInfo.Bottom < 0))
                 {
-                    // Parent was resized to fit its parent, or screen, we need to reuse old anchors info to prevent losing control beyond bottom edge.
+                    // The parent was resized to fit its parent or the screen, we need to reuse the old anchors info to prevent positioning the control beyond the bottom edge.
                     anchorInfo.Bottom = oldAnchorInfo.Bottom;
 
                     if (!IsAnchored(anchor, AnchorStyles.Top))
                     {
-                        // Control might have been resized, update Top anchors.
+                        // The control might have been resized, update the Top anchor.
                         anchorInfo.Top = oldAnchorInfo.Bottom - cachedBounds.Height;
                     }
                 }
@@ -869,16 +871,20 @@ namespace System.Windows.Forms.Layout
 
         /// <summary>
         ///  Updates anchors calculations if the control is parented and both control's and its parent's handle are created.
-        ///  This is the new behavior introduced in .NET 8.0. Refer to
-        ///  https://github.com/microsoft/winforms/blob/main/docs/AnchorLayoutChangesInNet80.md for more details.
-        ///  Developers may opt-out of this new behavior using switch <see cref="LocalAppContextSwitches.AnchorLayoutV2"/>.
         /// </summary>
+        /// <devdoc>
+        ///  This is the new behavior introduced in .NET 8.0. Refer to
+        ///  https://github.com/microsoft/winforms/blob/tree/main/docs/design/anchor_layout_changes_in_net80.md for more details.
+        ///  Developers may opt-out of this new behavior using switch <see cref="LocalAppContextSwitches.AnchorLayoutV2"/>.
+        /// </devdoc>
         internal static void UpdateAnchorInfoV2(Control control)
         {
             if (!CommonProperties.GetNeedsAnchorLayout(control))
             {
                 return;
             }
+
+            Debug.Assert(LocalAppContextSwitches.AnchorLayoutV2, $"AnchorLayoutV2 should be called only when {LocalAppContextSwitches.AnchorLayoutV2SwitchName} is enabled.");
 
             Control parent = control.Parent;
 
@@ -1126,7 +1132,7 @@ namespace System.Windows.Forms.Layout
         private static Size GetAnchorPreferredSize(IArrangedElement container)
         {
             Size prefSize = Size.Empty;
-            bool usedV2Layout = UseAnchorLayoutV2(container);
+            bool useV2Layout = UseAnchorLayoutV2(container);
 
             ArrangedElementCollection children = container.Children;
             for (int i = children.Count - 1; i >= 0; i--)
@@ -1156,7 +1162,7 @@ namespace System.Windows.Forms.Layout
                     {
                         // If we are right anchored, see what the anchors distance between our right edge and
                         // the container is, and make sure our container is large enough to accomodate us.
-                        if (usedV2Layout)
+                        if (useV2Layout)
                         {
                             AnchorInfo anchorInfo = GetAnchorInfo(element);
                             Rectangle bounds = element.Bounds;
@@ -1176,7 +1182,7 @@ namespace System.Windows.Forms.Layout
                         // If we are right anchored, see what the anchors distance between our right edge and
                         // the container is, and make sure our container is large enough to accomodate us.
                         Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, measureOnly: true);
-                        if (usedV2Layout)
+                        if (useV2Layout)
                         {
                             AnchorInfo anchorInfo = GetAnchorInfo(element);
                             Rectangle bounds = element.Bounds;

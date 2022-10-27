@@ -10815,7 +10815,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void UpdateAnchorsIfRequired()
+        private void UpdateAnchorsIfRequired()
         {
             if (!LocalAppContextSwitches.AnchorLayoutV2)
             {
