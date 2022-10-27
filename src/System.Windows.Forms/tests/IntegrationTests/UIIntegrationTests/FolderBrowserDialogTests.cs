@@ -36,7 +36,7 @@ namespace System.Windows.Forms.UITests
                 if (counter > 2)
                 {
                     timer.Stop();
-                    failedClose=true;
+                    failedClose = true;
                     Application.Exit();
                 }
 
