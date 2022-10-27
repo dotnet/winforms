@@ -1652,7 +1652,6 @@ namespace System.Windows.Forms.Tests
             ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
             Assert.NotEqual(0u, variant.data.uintVal);
             Assert.True(ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).Failed);
-            Assert.Equal(0u, variant.data.uintVal);
             ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             Assert.Equal(4, variant.data.iVal);
             ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
