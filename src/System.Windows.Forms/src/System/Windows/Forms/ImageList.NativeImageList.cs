@@ -6,7 +6,7 @@
 using System.Diagnostics;
 #endif
 using System.Drawing;
-using static Interop;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
 {
@@ -22,12 +22,14 @@ namespace System.Windows.Forms
 
             private static readonly object s_syncLock = new object();
 
-            public NativeImageList(Ole32.IStream pstm)
+            public unsafe NativeImageList(IStream.Interface pstm)
             {
                 HIMAGELIST himl;
                 lock (s_syncLock)
                 {
-                    himl = (HIMAGELIST)ComCtl32.ImageList.Read(pstm);
+                    bool result = ComHelpers.TryQueryInterface(pstm, out IStream* pStream);
+                    Debug.Assert(result);
+                    himl = PInvoke.ImageList_Read(pStream);
                     Init(himl);
                 }
             }

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32.System.Com;
 using static Interop;
 using static Interop.Mshtml;
 
@@ -277,7 +278,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Stream DocumentStream
+        public unsafe Stream DocumentStream
         {
             get
             {
@@ -288,7 +289,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
+                    IPersistStreamInit.Interface psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                     Debug.Assert(psi is not null, "Object isn't an IPersistStreamInit!");
                     if (psi is null)
                     {
@@ -297,8 +298,9 @@ namespace System.Windows.Forms
                     else
                     {
                         MemoryStream memoryStream = new MemoryStream();
-                        Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(memoryStream);
-                        psi.Save(iStream, false);
+                        bool result = ComHelpers.TryQueryInterface(new Ole32.GPStream(memoryStream), out IStream* pStream);
+                        Debug.Assert(result);
+                        psi.Save(pStream, fClearDirty: false);
                         return new MemoryStream(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, false);
                     }
                 }

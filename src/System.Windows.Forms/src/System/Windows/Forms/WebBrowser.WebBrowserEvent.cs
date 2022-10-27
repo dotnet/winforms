@@ -7,6 +7,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -67,7 +68,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public void DocumentComplete(object pDisp, ref object urlObject)
+            public unsafe void DocumentComplete(object pDisp, ref object urlObject)
             {
                 Debug.Assert(urlObject is null || urlObject is string, "invalid url");
                 _haveNavigated = true;
@@ -76,11 +77,13 @@ namespace System.Windows.Forms
                     HtmlDocument htmlDocument = _parent.Document;
                     if (htmlDocument is not null)
                     {
-                        Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
+                        IPersistStreamInit.Interface psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                         Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
-                        Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(
-                                                    _parent.documentStreamToSetOnLoad);
-                        psi.Load(iStream);
+                        bool result = ComHelpers.TryQueryInterface(
+                            new Ole32.GPStream(_parent.documentStreamToSetOnLoad),
+                            out IStream* pStream);
+                        Debug.Assert(result);
+                        psi.Load(pStream);
                         htmlDocument.Encoding = "unicode";
                     }
 

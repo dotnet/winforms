@@ -6,8 +6,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Com.StructuredStorage;
 using static Interop;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms
 {
@@ -26,7 +28,7 @@ namespace System.Windows.Forms
             private int _length;
             private byte[]? _buffer;
             private MemoryStream? _memoryStream;
-            private Ole32.IStorage? _storage;
+            private IStorage.Interface? _storage;
             private WinFormsComWrappers.LockBytesWrapper? _iLockBytes;
             private bool _manualUpdate;
             private string? _licenseKey;
@@ -195,12 +197,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal Oleaut32.IPropertyBag? GetPropBag()
+            internal IPropertyBag.Interface? GetPropBag()
             {
                 return _propertyBag;
             }
 
-            internal Ole32.IStorage? GetStorage()
+            internal IStorage.Interface? GetStorage()
             {
                 if (_storage is null)
                 {
@@ -210,7 +212,7 @@ namespace System.Windows.Forms
                 return _storage;
             }
 
-            internal Ole32.IStream? GetStream()
+            internal IStream.Interface? GetStream()
             {
                 if (_memoryStream is null)
                 {
@@ -267,7 +269,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal unsafe State? RefreshStorage(Ole32.IPersistStorage iPersistStorage)
+            internal unsafe State? RefreshStorage(IPersistStorage.Interface iPersistStorage)
             {
                 Debug.Assert(_storage is not null, "how can we not have a storage object?");
                 Debug.Assert(_iLockBytes is not null, "how can we have a storage w/o ILockBytes?");
@@ -276,7 +278,9 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                iPersistStorage.Save(_storage, true);
+                bool result = ComHelpers.TryQueryInterface(_storage, out IStorage* storage);
+                Debug.Assert(result);
+                iPersistStorage.Save(storage, fSameAsLoad: true);
                 _storage.Commit(0);
                 iPersistStorage.HandsOffStorage();
                 try
@@ -307,7 +311,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    iPersistStorage.SaveCompleted(_storage);
+                    iPersistStorage.SaveCompleted(storage);
                 }
 
                 return this;

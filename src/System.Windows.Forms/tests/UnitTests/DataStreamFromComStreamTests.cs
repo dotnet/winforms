@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using Moq;
+using Windows.Win32.System.Com;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
         public void Write_ThrowsInvalidCount(int bufferSize, int index, int count)
         {
             // The mock should never be called in outlier cases
-            var comStreamMock = new Mock<Ole32.IStream>(MockBehavior.Strict);
+            var comStreamMock = new Mock<IStream.Interface>(MockBehavior.Strict);
             var dataStream = new DataStreamFromComStream(comStreamMock.Object);
             Assert.Throws<IOException>(() => dataStream.Write(new byte[bufferSize], index, count));
         }
@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Tests
         public void Write_DoesNotThrowCountZeroOrLess(int bufferSize, int index, int count)
         {
             // The mock should never be called in outlier cases
-            var comStreamMock = new Mock<Ole32.IStream>(MockBehavior.Strict);
+            var comStreamMock = new Mock<IStream.Interface>(MockBehavior.Strict);
             var dataStream = new DataStreamFromComStream(comStreamMock.Object);
             dataStream.Write(new byte[bufferSize], index, count);
         }

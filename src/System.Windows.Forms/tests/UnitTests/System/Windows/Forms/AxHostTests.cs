@@ -7,8 +7,10 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using Xunit;
 using static Interop;
 using Point = System.Drawing.Point;
@@ -1586,85 +1588,79 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AxHost_GetIPictureFromCursor_Invoke_Roundtrips()
+        public unsafe void AxHost_GetIPictureFromCursor_Invoke_Roundtrips()
         {
             var original = new Cursor("bitmaps/cursor.cur");
-            IPicture iPicture = (IPicture)SubAxHost.GetIPictureFromCursor(original);
+            IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromCursor(original);
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0, iPicture.Handle);
-            Assert.Throws<COMException>(() => iPicture.hPal);
-            Assert.Equal(3, iPicture.Type);
-            Assert.Equal(847, iPicture.Width);
-            Assert.Equal(847, iPicture.Height);
-            Assert.Throws<COMException>(() => iPicture.CurDC);
-            Assert.Equal(2u, iPicture.Attributes);
+
+            iPicture.get_Handle(out uint handle).ThrowOnFailure();
+            iPicture.get_Type(out short type).ThrowOnFailure();
+            iPicture.get_Width(out int width).ThrowOnFailure();
+            iPicture.get_Height(out int height).ThrowOnFailure();
+            iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+
+            Assert.NotEqual(0u, handle);
+            Assert.True(iPicture.get_hPal(out _).Failed);
+            Assert.Equal(3, type);
+            Assert.Equal(847, width);
+            Assert.Equal(847, height);
+            HDC curDc;
+            Assert.True(iPicture.get_CurDC(&curDc).Failed);
+            Assert.Equal(2u, attributes);
 
             Assert.Throws<InvalidCastException>(() => SubAxHost.GetPictureFromIPicture(iPicture));
         }
 
         [WinFormsFact]
-        public void AxHost_GetIPictureDispFromPicture_InvokeBitmap_Roundtrips()
+        public unsafe void AxHost_GetIPictureDispFromPicture_InvokeBitmap_Roundtrips()
         {
             var original = new Bitmap(10, 11);
             original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
-            IPicture iPicture = (IPicture)disp;
-            Assert.NotNull(iPicture);
-            Assert.NotEqual(0, iPicture.Handle);
-            Assert.Equal(0, iPicture.hPal);
-            Assert.Equal(1, iPicture.Type);
-            Assert.Equal(265, iPicture.Width);
-            Assert.Equal(291, iPicture.Height);
-            Assert.Equal(0, iPicture.CurDC);
-            Assert.Equal(0u, iPicture.Attributes);
+            bool succeeded = ComHelpers.TryQueryInterface(disp, out IPictureDisp* iPictureDisp);
 
-            Ole32.IPictureDisp iPictureDisp = (Ole32.IPictureDisp)disp;
-            Assert.NotNull(iPictureDisp);
-            Assert.NotEqual(0, iPictureDisp.Handle);
-            Assert.Equal(0, iPictureDisp.hPal);
-            Assert.Equal(1, iPictureDisp.Type);
-            Assert.Equal(265, iPictureDisp.Width);
-            Assert.Equal(291, iPictureDisp.Height);
+            Assert.True(succeeded);
+            using VARIANT variant = new();
+            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            Assert.NotEqual(0u, variant.data.uintVal);
+            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
+            Assert.Equal(0u, variant.data.uintVal);
+            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            Assert.Equal(1, variant.data.iVal);
+            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            Assert.Equal(265u, variant.data.uintVal);
+            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            Assert.Equal(291u, variant.data.uintVal);
 
-            var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPicture));
-            Assert.Equal(original.Size, result.Size);
-            Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
-            Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
-
-            result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPictureDisp));
+            var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPictureDisp(disp));
             Assert.Equal(original.Size, result.Size);
             Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
             Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
         }
 
         [WinFormsFact]
-        public void AxHost_GetIPictureDispFromPicture_InvokeEnhancedMetafile_Roundtrips()
+        public unsafe void AxHost_GetIPictureDispFromPicture_InvokeEnhancedMetafile_Roundtrips()
         {
             var original = new Metafile("bitmaps/milkmateya01.emf");
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
 
-            IPicture iPicture = (IPicture)disp;
-            Assert.NotNull(iPicture);
-            Assert.NotEqual(0, iPicture.Handle);
-            Assert.Throws<COMException>(() => iPicture.hPal);
-            Assert.Equal(4, iPicture.Type);
-            Assert.Equal(19972, iPicture.Width);
-            Assert.Equal(28332, iPicture.Height);
-            Assert.Throws<COMException>(() => iPicture.CurDC);
-            Assert.Equal(3u, iPicture.Attributes);
+            bool succeeded = ComHelpers.TryQueryInterface(disp, out IPictureDisp* iPictureDisp);
 
-            Ole32.IPictureDisp iPictureDisp = (Ole32.IPictureDisp)disp;
-            Assert.NotNull(iPictureDisp);
-            Assert.NotEqual(0, iPictureDisp.Handle);
-            Assert.Throws<COMException>(() => iPictureDisp.hPal);
-            Assert.Equal(4, iPictureDisp.Type);
-            Assert.Equal(19972, iPictureDisp.Width);
-            Assert.Equal(28332, iPictureDisp.Height);
+            Assert.True(succeeded);
+            using VARIANT variant = default;
+            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            Assert.NotEqual(0u, variant.data.uintVal);
+            Assert.True(ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).Failed);
+            Assert.Equal(0u, variant.data.uintVal);
+            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            Assert.Equal(4, variant.data.iVal);
+            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            Assert.Equal(19972u, variant.data.uintVal);
+            ComHelpers.InvokePictureDisp(iPictureDisp, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            Assert.Equal(28332u, variant.data.uintVal);
 
-            var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));
-            Assert.Equal(new Size(759, 1073), result.Size);
-
-            result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPictureDisp));
+            var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPictureDisp(disp));
             Assert.Equal(new Size(759, 1073), result.Size);
         }
 
@@ -1682,19 +1678,29 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AxHost_GetIPictureFromPicture_InvokeBitmap_Roundtrips()
+        public unsafe void AxHost_GetIPictureFromPicture_InvokeBitmap_Roundtrips()
         {
             var original = new Bitmap(10, 11);
             original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
-            IPicture iPicture = (IPicture)SubAxHost.GetIPictureFromPicture(original);
+            IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0, iPicture.Handle);
-            Assert.Equal(0, iPicture.hPal);
-            Assert.Equal(1, iPicture.Type);
-            Assert.Equal(265, iPicture.Width);
-            Assert.Equal(291, iPicture.Height);
-            Assert.Equal(0, iPicture.CurDC);
-            Assert.Equal(0u, iPicture.Attributes);
+
+            iPicture.get_Handle(out uint handle).ThrowOnFailure();
+            iPicture.get_hPal(out uint hPal).ThrowOnFailure();
+            iPicture.get_Type(out short type).ThrowOnFailure();
+            iPicture.get_Width(out int width).ThrowOnFailure();
+            iPicture.get_Height(out int height).ThrowOnFailure();
+            iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+            HDC curDc;
+            iPicture.get_CurDC(&curDc).ThrowOnFailure();
+
+            Assert.NotEqual(0u, handle);
+            Assert.Equal(0u, hPal);
+            Assert.Equal(1, type);
+            Assert.Equal(265, width);
+            Assert.Equal(291, height);
+            Assert.Equal(HDC.Null, curDc);
+            Assert.Equal(0u, attributes);
 
             var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPicture(iPicture));
             Assert.Equal(original.Size, result.Size);
@@ -1703,18 +1709,26 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AxHost_GetIPictureFromPicture_InvokeEnhancedMetafile_Roundtrips()
+        public unsafe void AxHost_GetIPictureFromPicture_InvokeEnhancedMetafile_Roundtrips()
         {
             var original = new Metafile("bitmaps/milkmateya01.emf");
-            IPicture iPicture = (IPicture)SubAxHost.GetIPictureFromPicture(original);
+            IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
             Assert.NotNull(iPicture);
-            Assert.NotEqual(0, iPicture.Handle);
-            Assert.Throws<COMException>(() => iPicture.hPal);
-            Assert.Equal(4, iPicture.Type);
-            Assert.Equal(19972, iPicture.Width);
-            Assert.Equal(28332, iPicture.Height);
-            Assert.Throws<COMException>(() => iPicture.CurDC);
-            Assert.Equal(3u, iPicture.Attributes);
+
+            iPicture.get_Handle(out uint handle).ThrowOnFailure();
+            iPicture.get_Type(out short type).ThrowOnFailure();
+            iPicture.get_Width(out int width).ThrowOnFailure();
+            iPicture.get_Height(out int height).ThrowOnFailure();
+            iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+
+            Assert.NotEqual(0u, handle);
+            Assert.True(iPicture.get_hPal(out _).Failed);
+            Assert.Equal(4, type);
+            Assert.Equal(19972, width);
+            Assert.Equal(28332, height);
+            HDC curDc;
+            Assert.True(iPicture.get_CurDC(&curDc).Failed);
+            Assert.Equal(3u, attributes);
 
             var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));
             Assert.Equal(new Size(759, 1073), result.Size);
@@ -3218,66 +3232,13 @@ namespace System.Windows.Forms.Tests
 
             public static new Image GetPictureFromIPicture(object picture) => AxHost.GetPictureFromIPicture(picture);
 
+            public static new Image GetPictureFromIPictureDisp(object picture) => AxHost.GetPictureFromIPictureDisp(picture);
+
             public new void OnEnter(EventArgs e) => base.OnEnter(e);
 
             public new void OnLeave(EventArgs e) => base.OnLeave(e);
 
             public new void OnMouseCaptureChanged(EventArgs e) => base.OnMouseCaptureChanged(e);
-        }
-
-        /// <remarks>
-        /// A duplicate as Interop.Ole32.IPicture is only partially implemented to make RCW smaller
-        /// </remarks>
-        [ComImport]
-        [Guid("7BF80980-BF32-101A-8BBB-00AA00300CAB")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        private unsafe interface IPicture
-        {
-            int Handle { get; }
-
-            int hPal { get; }
-
-            short Type { get; }
-
-            int Width { get; }
-
-            int Height { get; }
-
-            [PreserveSig]
-            HRESULT Render(
-                IntPtr hDC,
-                int x,
-                int y,
-                int cx,
-                int cy,
-                long xSrc,
-                long ySrc,
-                long cxSrc,
-                long cySrc,
-                RECT* pRcWBounds);
-
-            void SetHPal(int hPal);
-
-            int CurDC { get; }
-
-            [PreserveSig]
-            HRESULT SelectPicture(
-                IntPtr hDCIn,
-                IntPtr* phDCOut,
-                int* phBmpOut);
-
-            BOOL KeepOriginalFormat { get; set; }
-
-            [PreserveSig]
-            HRESULT PictureChanged();
-
-            [PreserveSig]
-            HRESULT SaveAsFile(
-                IntPtr pStream,
-                BOOL fSaveMemCopy,
-                int* pCbSize);
-
-            uint Attributes { get; }
         }
     }
 }

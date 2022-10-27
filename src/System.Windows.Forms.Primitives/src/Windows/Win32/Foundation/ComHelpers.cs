@@ -4,6 +4,7 @@
 
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
 namespace Windows.Win32.Foundation
 {
@@ -32,6 +33,19 @@ namespace Windows.Win32.Foundation
             {
                 ((IUnknown*)release)->Release();
             }
+        }
+
+        public static HRESULT InvokePictureDisp(
+            IPictureDisp* dispatch,
+            uint dispId,
+            VARIANT* pVar,
+            uint lcid = 0,
+            EXCEPINFO* excepInfo = null,
+            uint* argError = null)
+        {
+            Guid riid = Guid.Empty;
+            DISPPARAMS disparams = default;
+            return dispatch->Invoke((int)dispId, &riid, lcid, DISPATCH_FLAGS.DISPATCH_PROPERTYGET, &disparams, pVar, excepInfo, argError);
         }
     }
 }

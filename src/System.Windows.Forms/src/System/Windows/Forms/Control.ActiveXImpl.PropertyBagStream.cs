@@ -4,7 +4,8 @@
 
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
-using static Interop;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Com.StructuredStorage;
 
 namespace System.Windows.Forms
 {
@@ -15,11 +16,11 @@ namespace System.Windows.Forms
             /// <summary>
             ///  This is a property bag implementation that sits on a stream. It can read and write the bag to the stream.
             /// </summary>
-            private class PropertyBagStream : Oleaut32.IPropertyBag
+            private class PropertyBagStream : IPropertyBag.Interface
             {
                 private Hashtable _bag = new Hashtable();
 
-                internal void Read(Ole32.IStream istream)
+                internal void Read(IStream.Interface istream)
                 {
                     // Visual Basic's memory streams don't support seeking, so we have to work around this limitation
                     // here. We do this by copying the contents of the stream into a MemoryStream object.
@@ -63,25 +64,35 @@ namespace System.Windows.Forms
                     }
                 }
 
-                HRESULT Oleaut32.IPropertyBag.Read(string pszPropName, out object? pVar, Oleaut32.IErrorLog? pErrorLog)
+                HRESULT IPropertyBag.Interface.Read(PCWSTR pszPropName, VARIANT* pVar, IErrorLog* pErrorLog)
                 {
+                    if (pVar is null)
+                    {
+                        return HRESULT.E_POINTER;
+                    }
+
                     if (!_bag.Contains(pszPropName))
                     {
-                        pVar = null;
+                        *pVar = default;
                         return HRESULT.E_INVALIDARG;
                     }
 
-                    pVar = _bag[pszPropName];
+                    *pVar = (VARIANT)_bag[pszPropName]!;
                     return HRESULT.S_OK;
                 }
 
-                HRESULT Oleaut32.IPropertyBag.Write(string pszPropName, ref object pVar)
+                HRESULT IPropertyBag.Interface.Write(PCWSTR pszPropName, VARIANT* pVar)
                 {
-                    _bag[pszPropName] = pVar;
+                    if (pVar is null)
+                    {
+                        return HRESULT.E_POINTER;
+                    }
+
+                    _bag[pszPropName] = *pVar;
                     return HRESULT.S_OK;
                 }
 
-                internal void Write(Ole32.IStream istream)
+                internal void Write(IStream.Interface istream)
                 {
                     Stream stream = new DataStreamFromComStream(istream);
                     BinaryFormatter formatter = new BinaryFormatter();

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using Windows.Win32.System.Com.StructuredStorage;
 using static Interop;
 using static Interop.Richedit;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -30,7 +31,7 @@ namespace System.Windows.Forms
                 DragDropHelper.ClearDropDescription(lastDataObject);
             }
 
-            public HRESULT GetNewStorage(out Ole32.IStorage? storage)
+            public HRESULT GetNewStorage(out IStorage.Interface? storage)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetNewStorage");
                 if (!owner.AllowOleObjects)

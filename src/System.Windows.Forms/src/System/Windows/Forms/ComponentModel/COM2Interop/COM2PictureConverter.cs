@@ -4,6 +4,8 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -11,10 +13,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// <summary>
     ///  This class maps an IPicture to a System.Drawing.Image.
     /// </summary>
-    internal class Com2PictureConverter : Com2DataTypeToManagedDataTypeConverter
+    internal unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTypeConverter
     {
         private object? _lastManaged;
-        private IntPtr _lastNativeHandle;
+
+        // OLE_HANDLE
+        private uint _lastNativeHandle;
         private WeakReference? _pictureRef;
 
         private Type _pictureType = typeof(Bitmap);
@@ -36,27 +40,31 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return null;
             }
 
-            Debug.Assert(nativeValue is IPicture, "nativevalue is not IPicture");
+            Debug.Assert(nativeValue is IPicture.Interface, "nativevalue is not IPicture");
 
-            IPicture nativePicture = (IPicture)nativeValue;
-            IntPtr handle = (IntPtr)nativePicture.Handle;
+            IPicture.Interface nativePicture = (IPicture.Interface)nativeValue;
+            nativePicture.get_Handle(out uint handle).ThrowOnFailure();
 
             if (_lastManaged is not null && handle == _lastNativeHandle)
             {
                 return _lastManaged;
             }
 
-            if (handle != IntPtr.Zero)
+            if (handle != 0)
             {
-                switch ((PICTYPE)nativePicture.Type)
+                // GDI handles are sign extended 32 bit values.
+                // We need to first cast to int so sign extension happens correctly.
+                nint extendedHandle = (int)handle;
+                nativePicture.get_Type(out short type).ThrowOnFailure();
+                switch ((PICTYPE)type)
                 {
-                    case PICTYPE.ICON:
+                    case PICTYPE.PICTYPE_ICON:
                         _pictureType = typeof(Icon);
-                        _lastManaged = Icon.FromHandle(handle);
+                        _lastManaged = Icon.FromHandle(extendedHandle);
                         break;
-                    case PICTYPE.BITMAP:
+                    case PICTYPE.PICTYPE_BITMAP:
                         _pictureType = typeof(Bitmap);
-                        _lastManaged = Image.FromHbitmap(handle);
+                        _lastManaged = Image.FromHbitmap(extendedHandle);
                         break;
                     default:
                         Debug.Fail("Unknown picture type");
@@ -110,17 +118,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return null;
                 }
 
-                Guid iid = typeof(IPicture).GUID;
-                IPicture pict = (IPicture)OleCreatePictureIndirect(ref pictdesc, in iid, own);
+                using ComScope<IPicture> picture = new(null);
+                PInvoke.OleCreatePictureIndirect(&pictdesc, IPicture.NativeGuid, own, picture).ThrowOnFailure();
                 _lastManaged = managedValue;
-                _lastNativeHandle = (IntPtr)pict.Handle;
-                _pictureRef = new WeakReference(pict);
-                return pict;
+                picture.Value->get_Handle(out _lastNativeHandle);
+                var pictureObject = Marshal.GetObjectForIUnknown(picture);
+                _pictureRef = new WeakReference(pictureObject);
+                return pictureObject;
             }
             else
             {
                 _lastManaged = null;
-                _lastNativeHandle = IntPtr.Zero;
+                _lastNativeHandle = 0;
                 _pictureRef = null;
                 return null;
             }

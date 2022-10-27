@@ -117,7 +117,7 @@ internal partial class Interop
 
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
-            if (obj is Ole32.IStream)
+            if (obj is IStream.Interface)
             {
                 count = 1;
                 return s_streamEntry;

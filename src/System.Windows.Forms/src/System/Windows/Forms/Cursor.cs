@@ -8,6 +8,8 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -384,21 +386,27 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Loads a picture from the requested stream.
         /// </summary>
-        private unsafe void LoadPicture(Ole32.IStream stream, string paramName)
+        private unsafe void LoadPicture(IStream.Interface stream, string paramName)
         {
             Debug.Assert(stream is not null, "Stream should be validated before this method is called.");
 
             try
             {
-                Guid iid = IID.IPicture;
-                var picture = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(&iid);
+                using ComScope<IPicture> picture = new(null);
+                PInvoke.OleCreatePictureIndirect(lpPictDesc: null, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
 
-                Ole32.IPersistStream iPersistStream = (Ole32.IPersistStream)picture;
-                iPersistStream.Load(stream);
+                using ComScope<IPersistStream> persist = new(null);
+                picture.Value->QueryInterface(IPersistStream.NativeGuid, persist).ThrowOnFailure();
 
-                if (picture.Type == (short)Ole32.PICTYPE.ICON)
+                bool result = ComHelpers.TryQueryInterface(stream, out IStream* pStream);
+                Debug.Assert(result);
+                persist.Value->Load(pStream);
+
+                picture.Value->get_Type(out short type).ThrowOnFailure();
+                if (type == (short)PICTYPE.PICTYPE_ICON)
                 {
-                    HICON cursorHandle = (HICON)picture.Handle;
+                    picture.Value->get_Handle(out uint handle).ThrowOnFailure();
+                    HICON cursorHandle = (HICON)(int)handle;
                     Size picSize = GetIconSize(cursorHandle);
                     if (DpiHelper.IsScalingRequired)
                     {

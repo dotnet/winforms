@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Forms;
+using Windows.Win32.System.Com.StructuredStorage;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -23,7 +24,7 @@ namespace System.ComponentModel.Design
 
             internal OleCallback(RichTextBox owner) => _owner = owner;
 
-            public HRESULT GetNewStorage(out Ole32.IStorage storage)
+            public HRESULT GetNewStorage(out IStorage.Interface storage)
             {
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
 

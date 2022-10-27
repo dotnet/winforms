@@ -38,7 +38,7 @@ internal partial class Interop
             {
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)@this);
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)@this);
                     instance.Read((byte*)pv, cb, pcbRead);
                     return HRESULT.S_OK;
                 }
@@ -53,7 +53,7 @@ internal partial class Interop
             {
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)@this);
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)@this);
                     instance.Write((byte*)pv, cb, pcbWritten);
                     return HRESULT.S_OK;
                 }
@@ -68,7 +68,7 @@ internal partial class Interop
             {
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)@this);
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)@this);
                     instance.Seek(dlibMove, dwOrigin, plibNewPosition);
                     return HRESULT.S_OK;
                 }
@@ -83,7 +83,7 @@ internal partial class Interop
             {
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)@this);
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)@this);
                     instance.SetSize(libNewSize);
                     return HRESULT.S_OK;
                 }
@@ -98,11 +98,8 @@ internal partial class Interop
             {
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)@this);
-                    Interop.Ole32.IStream pstmStream = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)pstm);
-
-                    instance.CopyTo(pstmStream, cb, pcbRead, pcbWritten);
-                    return HRESULT.S_OK;
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)@this);
+                    return instance.CopyTo(pstm, cb, pcbRead, pcbWritten);
                 }
                 catch (Exception ex)
                 {
@@ -115,9 +112,8 @@ internal partial class Interop
             {
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)@this);
-                    instance.Commit((Interop.Ole32.STGC)grfCommitFlags);
-                    return HRESULT.S_OK;
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)@this);
+                    return instance.Commit(grfCommitFlags);
                 }
                 catch (Exception ex)
                 {
@@ -130,9 +126,8 @@ internal partial class Interop
             {
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
-                    instance.Revert();
-                    return HRESULT.S_OK;
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)thisPtr);
+                    return instance.Revert();
                 }
                 catch (Exception ex)
                 {
@@ -145,8 +140,8 @@ internal partial class Interop
             {
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)@this);
-                    return instance.LockRegion(libOffset, cb, (uint)dwLockType);
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)@this);
+                    return instance.LockRegion(libOffset, cb, dwLockType);
                 }
                 catch (Exception ex)
                 {
@@ -159,7 +154,7 @@ internal partial class Interop
             {
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)@this);
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)@this);
                     return instance.UnlockRegion(libOffset, cb, dwLockType);
                 }
                 catch (Exception ex)
@@ -173,9 +168,8 @@ internal partial class Interop
             {
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)@this);
-                    instance.Stat(out *((Ole32.STATSTG*)pstatstg), (Ole32.STATFLAG)grfStatFlag);
-                    return HRESULT.S_OK;
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)@this);
+                    return instance.Stat(pstatstg, grfStatFlag);
                 }
                 catch (Exception ex)
                 {
@@ -193,10 +187,8 @@ internal partial class Interop
 
                 try
                 {
-                    Interop.Ole32.IStream instance = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)@this);
-
-                    *ppstm = (IStream*)Instance.GetOrCreateComInterfaceForObject(instance.Clone(), CreateComInterfaceFlags.None);
-                    return HRESULT.S_OK;
+                    IStream.Interface instance = ComInterfaceDispatch.GetInstance<IStream.Interface>((ComInterfaceDispatch*)@this);
+                    return instance.Clone(ppstm);
                 }
                 catch (Exception ex)
                 {

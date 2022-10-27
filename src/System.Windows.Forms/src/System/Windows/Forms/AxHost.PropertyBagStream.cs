@@ -7,13 +7,14 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
-using static Interop;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Com.StructuredStorage;
 
 namespace System.Windows.Forms
 {
-    public abstract partial class AxHost
+    public abstract unsafe partial class AxHost
     {
-        internal class PropertyBagStream : Oleaut32.IPropertyBag
+        internal class PropertyBagStream : IPropertyBag.Interface
         {
             private Hashtable _bag = new();
 
@@ -33,37 +34,47 @@ namespace System.Windows.Forms
                 }
             }
 
-            HRESULT Oleaut32.IPropertyBag.Read(string pszPropName, out object pVar, Oleaut32.IErrorLog pErrorLog)
+            HRESULT IPropertyBag.Interface.Read(PCWSTR pszPropName, VARIANT* pVar, IErrorLog* pErrorLog)
             {
+                if (pVar is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Reading property {pszPropName} from OCXState propertybag.");
 
                 if (!_bag.Contains(pszPropName))
                 {
-                    pVar = null;
+                    *pVar = default;
                     return HRESULT.E_INVALIDARG;
                 }
 
-                pVar = _bag[pszPropName];
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\tValue={pVar ?? "<null>"}");
+                *pVar = (VARIANT)_bag[pszPropName];
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\tValue={*pVar}");
 
                 // The EE returns a VT_EMPTY for a null. The problem is that visual basic6 expects the caller to respect the
                 // "hint" it gives in the VariantType. For eg., for a VT_BSTR, it expects that the callee will null
                 // out the BSTR field of the variant. Since, the EE or us cannot do anything about this, we will return
                 // a E_INVALIDARG rather than let visual basic6 crash.
 
-                return (pVar is null) ? HRESULT.E_INVALIDARG : HRESULT.S_OK;
+                return (*pVar).Equals(default(VARIANT)) ? HRESULT.E_INVALIDARG : HRESULT.S_OK;
             }
 
-            HRESULT Oleaut32.IPropertyBag.Write(string pszPropName, ref object pVar)
+            HRESULT IPropertyBag.Interface.Write(PCWSTR pszPropName, VARIANT* pVar)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Writing property {pszPropName} [{pVar}] into OCXState propertybag.");
-                if (pVar is not null && !pVar.GetType().IsSerializable)
+                if (pVar is null)
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t {pVar.GetType().FullName} is not serializable.");
+                    return HRESULT.E_POINTER;
+                }
+
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Writing property {pszPropName} [{*pVar}] into OCXState propertybag.");
+                if (!pVar->GetType().IsSerializable)
+                {
+                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t {pVar->GetType().FullName} is not serializable.");
                     return HRESULT.S_OK;
                 }
 
-                _bag[pszPropName] = pVar;
+                _bag[pszPropName] = *pVar;
                 return HRESULT.S_OK;
             }
 

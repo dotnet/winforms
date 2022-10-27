@@ -16,6 +16,7 @@ using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
 using static Interop;
 using Com = Windows.Win32.System.Com;
@@ -40,7 +41,7 @@ namespace System.Windows.Forms
         $"System.Windows.Forms.Design.ControlCodeDomSerializer, {AssemblyRef.SystemDesign}",
         $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
     [ToolboxItemFilter("System.Windows.Forms")]
-    public partial class Control :
+    public unsafe partial class Control :
         Component,
         Ole32.IOleControl,
         IOleObject.Interface,
@@ -49,10 +50,10 @@ namespace System.Windows.Forms
         IOleWindow.Interface,
         Ole32.IViewObject,
         Ole32.IViewObject2,
-        Ole32.IPersist,
-        Ole32.IPersistStreamInit,
-        Oleaut32.IPersistPropertyBag,
-        Ole32.IPersistStorage,
+        Com.IPersist.Interface,
+        Com.IPersistStreamInit.Interface,
+        IPersistPropertyBag.Interface,
+        IPersistStorage.Interface,
         Ole32.IQuickActivate,
         ISupportOleDropSource,
         IDropTarget,
@@ -14031,7 +14032,7 @@ namespace System.Windows.Forms
             return ((IOleInPlaceObject.Interface)this).ContextSensitiveHelp(fEnterMode);
         }
 
-        unsafe HRESULT Ole32.IPersist.GetClassID(Guid* pClassID)
+        unsafe HRESULT Com.IPersist.Interface.GetClassID(Guid* pClassID)
         {
             if (pClassID is null)
             {
@@ -14039,17 +14040,17 @@ namespace System.Windows.Forms
             }
 
             *pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersist.GetClassID.  ClassID: " + pClassID->ToString());
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:IPersist.GetClassID.  ClassID: {*pClassID}");
             return HRESULT.S_OK;
         }
 
-        HRESULT Oleaut32.IPersistPropertyBag.InitNew()
+        HRESULT IPersistPropertyBag.Interface.InitNew()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.InitNew");
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Oleaut32.IPersistPropertyBag.GetClassID(Guid* pClassID)
+        unsafe HRESULT IPersistPropertyBag.Interface.GetClassID(Guid* pClassID)
         {
             if (pClassID is null)
             {
@@ -14057,27 +14058,29 @@ namespace System.Windows.Forms
             }
 
             *pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.GetClassID.  ClassID: " + pClassID->ToString());
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:IPersistPropertyBag.GetClassID.  ClassID: {*pClassID}");
             return HRESULT.S_OK;
         }
 
-        void Oleaut32.IPersistPropertyBag.Load(Oleaut32.IPropertyBag pPropBag, Oleaut32.IErrorLog pErrorLog)
+        unsafe HRESULT IPersistPropertyBag.Interface.Load(IPropertyBag* pPropBag, Com.IErrorLog* pErrorLog)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Load (IPersistPropertyBag)");
             Debug.Indent();
-            ActiveXInstance.Load(pPropBag, pErrorLog);
+            ActiveXInstance.Load((IPropertyBag.Interface)Marshal.GetObjectForIUnknown((nint)pPropBag), pErrorLog);
             Debug.Unindent();
+            return HRESULT.S_OK;
         }
 
-        void Oleaut32.IPersistPropertyBag.Save(Oleaut32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+        unsafe HRESULT IPersistPropertyBag.Interface.Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
             Debug.Indent();
-            ActiveXInstance.Save(pPropBag, fClearDirty, fSaveAllProperties);
+            ActiveXInstance.Save((IPropertyBag.Interface)Marshal.GetObjectForIUnknown((nint)pPropBag), fClearDirty, fSaveAllProperties);
             Debug.Unindent();
+            return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IPersistStorage.GetClassID(Guid* pClassID)
+        HRESULT IPersistStorage.Interface.GetClassID(Guid* pClassID)
         {
             if (pClassID is null)
             {
@@ -14085,49 +14088,53 @@ namespace System.Windows.Forms
             }
 
             *pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID->ToString());
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:IPersistStorage.GetClassID.  ClassID: {*pClassID}");
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IPersistStorage.IsDirty()
+        HRESULT IPersistStorage.Interface.IsDirty()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.IsDirty");
             return ActiveXInstance.IsDirty();
         }
 
-        void Ole32.IPersistStorage.InitNew(Ole32.IStorage pstg)
+        HRESULT IPersistStorage.Interface.InitNew(IStorage* pStg)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.InitNew");
+            return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IPersistStorage.Load(Ole32.IStorage pstg)
+        HRESULT IPersistStorage.Interface.Load(IStorage* pStg)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Load");
             Debug.Indent();
-            ActiveXInstance.Load(pstg);
+            ActiveXInstance.Load((IStorage.Interface)Marshal.GetObjectForIUnknown((nint)pStg));
             Debug.Unindent();
             return HRESULT.S_OK;
         }
 
-        void Ole32.IPersistStorage.Save(Ole32.IStorage pstg, BOOL fSameAsLoad)
+        HRESULT IPersistStorage.Interface.Save(IStorage* pStgSave, BOOL fSameAsLoad)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Save");
             Debug.Indent();
-            ActiveXInstance.Save(pstg, fSameAsLoad);
+            ActiveXInstance.Save((IStorage.Interface)Marshal.GetObjectForIUnknown((nint)pStgSave), fSameAsLoad);
             Debug.Unindent();
+            return HRESULT.S_OK;
         }
 
-        void Ole32.IPersistStorage.SaveCompleted(Ole32.IStorage pStgNew)
+        HRESULT IPersistStorage.Interface.SaveCompleted(IStorage* pStgNew)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.SaveCompleted");
+            return HRESULT.S_OK;
         }
 
-        void Ole32.IPersistStorage.HandsOffStorage()
+        HRESULT IPersistStorage.Interface.HandsOffStorage()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.HandsOffStorage");
+            return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IPersistStreamInit.GetClassID(Guid* pClassID)
+        HRESULT Com.IPersistStreamInit.Interface.GetClassID(Guid* pClassID)
         {
             if (pClassID is null)
             {
@@ -14135,40 +14142,54 @@ namespace System.Windows.Forms
             }
 
             *pClassID = GetType().GUID;
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID->ToString());
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:IPersistStreamInit.GetClassID.  ClassID: {*pClassID}");
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IPersistStreamInit.IsDirty()
+        HRESULT Com.IPersistStreamInit.Interface.IsDirty()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.IsDirty");
             return ActiveXInstance.IsDirty();
         }
 
-        void Ole32.IPersistStreamInit.Load(Ole32.IStream pstm)
+        HRESULT Com.IPersistStreamInit.Interface.Load(Com.IStream* pStm)
         {
+            if (pStm is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Load");
             Debug.Indent();
-            ActiveXInstance.Load(pstm);
+            ActiveXInstance.Load((Com.IStream.Interface)Marshal.GetObjectForIUnknown((nint)pStm));
             Debug.Unindent();
+            return HRESULT.S_OK;
         }
 
-        void Ole32.IPersistStreamInit.Save(Ole32.IStream pstm, BOOL fClearDirty)
+        HRESULT Com.IPersistStreamInit.Interface.Save(Com.IStream* pStm, BOOL fClearDirty)
         {
+            if (pStm is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Save");
             Debug.Indent();
-            ActiveXInstance.Save(pstm, fClearDirty);
+            ActiveXInstance.Save((Com.IStream.Interface)Marshal.GetObjectForIUnknown((nint)pStm), fClearDirty);
             Debug.Unindent();
+            return HRESULT.S_OK;
         }
 
-        unsafe void Ole32.IPersistStreamInit.GetSizeMax(ulong* pcbSize)
+        HRESULT Com.IPersistStreamInit.Interface.GetSizeMax(ulong* pCbSize)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetSizeMax");
+            return HRESULT.S_OK;
         }
 
-        void Ole32.IPersistStreamInit.InitNew()
+        HRESULT Com.IPersistStreamInit.Interface.InitNew()
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.InitNew");
+            return HRESULT.S_OK;
         }
 
         unsafe HRESULT Ole32.IQuickActivate.QuickActivate(Ole32.QACONTAINER pQaContainer, Ole32.QACONTROL* pQaControl)

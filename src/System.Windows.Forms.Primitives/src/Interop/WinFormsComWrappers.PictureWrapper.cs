@@ -2,179 +2,88 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
 internal partial class Interop
 {
     internal unsafe partial class WinFormsComWrappers
     {
-        private class PictureWrapper : Ole32.IPicture, Ole32.IPersistStream, IDisposable
+        private class PictureWrapper : IPicture.Interface, IPersistStream.Interface, IDisposable
         {
-            private IntPtr _wrappedInstance;
+            private IPicture* _wrappedInstance;
 
             public PictureWrapper(IntPtr wrappedInstance)
             {
-                _wrappedInstance = wrappedInstance.OrThrowIfZero();
+                _wrappedInstance = (IPicture*)wrappedInstance.OrThrowIfZero();
             }
 
             public void Dispose()
             {
-                Marshal.Release(_wrappedInstance);
-                _wrappedInstance = IntPtr.Zero;
+                _wrappedInstance->Release();
+                _wrappedInstance = null;
             }
 
-            public int Handle
+            public HRESULT get_Handle(uint* pHandle)
+                => pHandle is null ? HRESULT.E_POINTER : _wrappedInstance->get_Handle(pHandle).ThrowOnFailure();
+
+            public HRESULT get_hPal(uint* phPal)
+                =>phPal is null ? HRESULT.E_POINTER : _wrappedInstance->get_hPal(phPal).ThrowOnFailure();
+
+            public HRESULT get_Type(short* pType)
+                => pType is null ? HRESULT.E_POINTER : _wrappedInstance->get_Type(pType).ThrowOnFailure();
+
+            public HRESULT get_Width(int* pWidth)
+                => pWidth is null ? HRESULT.E_POINTER : _wrappedInstance->get_Width(pWidth).ThrowOnFailure();
+
+            public HRESULT get_Height(int* pHeight)
+                => pHeight is null ? HRESULT.E_POINTER : _wrappedInstance->get_Height(pHeight).ThrowOnFailure();
+
+            public HRESULT GetClassID(Guid* pClassID) => HRESULT.E_NOTIMPL;
+
+            public HRESULT IsDirty() => HRESULT.E_NOTIMPL;
+
+            public HRESULT Load(IStream* pstm)
             {
-                get
-                {
-                    int retVal;
-                    int errorCode = ((delegate* unmanaged<IntPtr, int*, int>)(*(*(void***)_wrappedInstance + 3 /* IPicture.get_Handle slot */)))
-                        (_wrappedInstance, &retVal);
-                    if (errorCode < 0)
-                    {
-                        Marshal.ThrowExceptionForHR(errorCode);
-                    }
-
-                    return retVal;
-                }
-            }
-
-            public int hPal
-            {
-                get
-                {
-                    int retVal;
-                    int errorCode = ((delegate* unmanaged<IntPtr, int*, int>)(*(*(void***)_wrappedInstance + 4 /* IPicture.get_hPal slot */)))
-                        (_wrappedInstance, &retVal);
-                    if (errorCode < 0)
-                    {
-                        Marshal.ThrowExceptionForHR(errorCode);
-                    }
-
-                    return retVal;
-                }
-            }
-
-            public short Type
-            {
-                get
-                {
-                    short retVal;
-                    int errorCode = ((delegate* unmanaged<IntPtr, short*, int>)(*(*(void***)_wrappedInstance + 5 /* IPicture.get_Type slot */)))
-                        (_wrappedInstance, &retVal);
-                    if (errorCode < 0)
-                    {
-                        Marshal.ThrowExceptionForHR(errorCode);
-                    }
-
-                    return retVal;
-                }
-            }
-
-            public int Width
-            {
-                get
-                {
-                    int retVal;
-                    int errorCode = ((delegate* unmanaged<IntPtr, int*, int>)(*(*(void***)_wrappedInstance + 6 /* IPicture.get_Width slot */)))
-                        (_wrappedInstance, &retVal);
-                    if (errorCode < 0)
-                    {
-                        Marshal.ThrowExceptionForHR(errorCode);
-                    }
-
-                    return retVal;
-                }
-            }
-
-            public int Height
-            {
-                get
-                {
-                    int retVal;
-                    int errorCode = ((delegate* unmanaged<IntPtr, int*, int>)(*(*(void***)_wrappedInstance + 7 /* IPicture.get_Height slot */)))
-                        (_wrappedInstance, &retVal);
-                    if (errorCode < 0)
-                    {
-                        Marshal.ThrowExceptionForHR(errorCode);
-                    }
-
-                    return retVal;
-                }
-            }
-
-            public HRESULT GetClassID(
-                Guid* pClassID)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT IsDirty()
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Load(Interop.Ole32.IStream pstm)
-            {
-                Guid persistedStreamIID = IID.IPersistStream;
-                Guid streamIID = IID.IStream;
-                IntPtr streamUnknownPtr = IntPtr.Zero;
-                IntPtr streamPtr = IntPtr.Zero;
-                IntPtr persistedStreamPtr = IntPtr.Zero;
-
+                Guid persistedStreamIID = IPersistStream.Guid;
+                IPersistStream* pPersistStream = null;
                 try
                 {
-                    int errorCode = Marshal.QueryInterface(_wrappedInstance, ref persistedStreamIID, out persistedStreamPtr);
-                    if (errorCode < 0)
-                    {
-                        Marshal.ThrowExceptionForHR(errorCode);
-                    }
-
-                    streamUnknownPtr = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(pstm, CreateComInterfaceFlags.None);
-                    errorCode = Marshal.QueryInterface(streamUnknownPtr, ref streamIID, out streamPtr);
-                    if (errorCode < 0)
-                    {
-                        Marshal.ThrowExceptionForHR(errorCode);
-                    }
-
-                    errorCode = ((delegate* unmanaged<IntPtr, IntPtr, int>)(*(*(void***)persistedStreamPtr + 5 /* IPersistStream.Load slot */)))
-                        (persistedStreamPtr, streamPtr);
-                    if (errorCode < 0)
-                    {
-                        Marshal.ThrowExceptionForHR(errorCode);
-                    }
+                    int errorCode = Marshal.QueryInterface((nint)_wrappedInstance, ref persistedStreamIID, out nint temp);
+                    pPersistStream = (IPersistStream*)temp;
+                    return pPersistStream->Load(pstm).ThrowOnFailure();
                 }
                 finally
                 {
-                    if (streamPtr != IntPtr.Zero)
-                    {
-                        Marshal.Release(streamPtr);
-                    }
-
-                    if (streamUnknownPtr != IntPtr.Zero)
-                    {
-                        int count = Marshal.Release(streamUnknownPtr);
-                        Debug.Assert(count == 0, $"streamUnknownPtr = {count}");
-                    }
-
-                    if (persistedStreamPtr != IntPtr.Zero)
-                    {
-                        Marshal.Release(persistedStreamPtr);
-                    }
+                    ComHelpers.Release(pstm);
+                    ComHelpers.Release(pPersistStream);
                 }
             }
 
-            public void Save(Interop.Ole32.IStream pstm, BOOL fClearDirty)
-            {
-                throw new NotImplementedException();
-            }
+            public HRESULT Save(IStream* pstm, BOOL fClearDirty) => HRESULT.E_NOTIMPL;
 
-            public long GetSizeMax()
-            {
-                throw new NotImplementedException();
-            }
+            public HRESULT GetSizeMax(ulong* pcbSize) => HRESULT.E_NOTIMPL;
+
+            public HRESULT Render(HDC hDC, int x, int y, int cx, int cy, int xSrc, int ySrc, int cxSrc, int cySrc, RECT* pRcWBounds)
+                => HRESULT.E_NOTIMPL;
+
+            public HRESULT set_hPal(uint hPal) => HRESULT.E_NOTIMPL;
+
+            public HRESULT get_CurDC(HDC* phDC) => HRESULT.E_NOTIMPL;
+
+            public HRESULT SelectPicture(HDC hDCIn, HDC* phDCOut, uint* phBmpOut) => HRESULT.E_NOTIMPL;
+
+            public HRESULT get_KeepOriginalFormat(BOOL* pKeep) => HRESULT.E_NOTIMPL;
+
+            public HRESULT put_KeepOriginalFormat(BOOL keep) => HRESULT.E_NOTIMPL;
+
+            public HRESULT PictureChanged() => HRESULT.E_NOTIMPL;
+
+            public HRESULT SaveAsFile(IStream* pStream, BOOL fSaveMemCopy, int* pCbSize) => HRESULT.E_NOTIMPL;
+
+            public HRESULT get_Attributes(uint* pDwAttr) => HRESULT.E_NOTIMPL;
         }
     }
 }
