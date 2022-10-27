@@ -45,6 +45,42 @@ namespace System.Windows.Forms.Tests
             Assert.False(upDownBase.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void UpDownButtonsAccessibleObject_DirectionButtonAccessibleObject_FragmentNavigate_Parent_ReturnsExpected(int childIndex)
+        {
+            using SubUpDownBase upDownBase = new();
+            using UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
+            UpDownButtonsAccessibleObject accessibleObject = new(upDownButtons);
+
+            // UpButton has 0 index, DownButton has 1 index
+            AccessibleObject directionButton = accessibleObject.GetChild(childIndex);
+
+            Assert.Equal(accessibleObject, directionButton.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+            Assert.False(upDownButtons.IsHandleCreated);
+            Assert.False(upDownBase.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void UpDownButtonsAccessibleObject_DirectionButtonAccessibleObject_FragmentNavigate_Child_ReturnsNull(int childIndex)
+        {
+            using SubUpDownBase upDownBase = new();
+            using UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
+            UpDownButtonsAccessibleObject accessibleObject = new(upDownButtons);
+
+            // UpButton has 0 index, DownButton has 1 index
+            AccessibleObject directionButton = accessibleObject.GetChild(childIndex);
+
+            Assert.Null(directionButton.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(directionButton.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+
+            Assert.False(upDownButtons.IsHandleCreated);
+            Assert.False(upDownBase.IsHandleCreated);
+        }
+
         private class SubUpDownBase : UpDownBase
         {
             protected override void UpdateEditText() => throw new NotImplementedException();
