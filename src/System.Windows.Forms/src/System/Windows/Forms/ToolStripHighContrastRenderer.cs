@@ -199,7 +199,9 @@ namespace System.Windows.Forms
                 RenderItemInternalFilled(e, /*pressFill = */false);
                 ToolStripItem item = e.Item;
                 Graphics g = e.Graphics;
-                Color arrowColor = item.Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
+                Color arrowColor = !item.Enabled ? SystemColors.ControlDark
+                    : item.Selected && !item.Pressed ? SystemColors.HighlightText
+                    : SystemColors.ControlText;
                 DrawArrow(new ToolStripArrowRenderEventArgs(g, item, new Rectangle(Point.Empty, item.Size), arrowColor, ArrowDirection.Down));
             }
             else
