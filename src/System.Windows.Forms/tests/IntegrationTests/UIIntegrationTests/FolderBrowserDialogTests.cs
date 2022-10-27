@@ -6,7 +6,6 @@ using WindowsInput;
 using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
-using static Interop.Ole32;
 
 namespace System.Windows.Forms.UITests
 {
