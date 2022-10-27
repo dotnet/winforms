@@ -1,0 +1,10 @@
+{  
+    "instanceUrl": "https://devdiv.visualstudio.com/",
+    "template": "TFSDEVDIV",
+    "projectName": "DEVDIV",
+    "areaPath": "DevDiv\\NET Fundamentals\\Winforms\\Runtime\\Core",
+    "iterationPath": "DevDiv",
+    "notificationAliases": [ "wffteam@microsoft.com" ],
+    "repositoryName":"Winforms",
+    "codebaseName": "Winforms"
+}

@@ -1,0 +1,58 @@
+parameters:
+- name: Codeql.TSAEnabled
+  displayName: Publish results to TSA
+  type: boolean
+  default: true
+
+variables:
+- template: eng/common-variables.yml
+  # CG is handled in the primary CI pipeline
+- name: skipComponentGovernanceDetection
+  value: true
+  # Force CodeQL enabled so it may be run on any branch
+- name: Codeql.Enabled
+  value: true
+  # Do not let CodeQL 3000 Extension gate scan frequency
+- name: Codeql.Cadence
+  value: 0
+  # Build variables
+- name: _BuildConfig
+  value: Release
+
+trigger: none
+
+schedules:
+  - cron: 0 12 * * 1
+    displayName: Weekly Monday CodeQL run
+    branches:
+      include:
+      - main
+      - release/6.0
+      - release/7.0
+    always: true
+
+jobs:
+- job: codeql
+  displayName: CodeQL
+  pool:
+    name: NetCore1ESPool-Internal
+    demands: ImageOverride -equals 1es-windows-2022
+  timeoutInMinutes: 90
+
+  steps:
+
+  - task: UseDotNet@2
+    inputs:
+      useGlobalJson: true
+
+  - task: CodeQL3000Init@0
+    displayName: CodeQL Initialize
+
+  - script: eng\cibuild.cmd
+        -restore
+        -build
+        -configuration $(_BuildConfig)
+      displayName: Winforms Build
+
+  - task: CodeQL3000Finalize@0
+    displayName: CodeQL Finalize
