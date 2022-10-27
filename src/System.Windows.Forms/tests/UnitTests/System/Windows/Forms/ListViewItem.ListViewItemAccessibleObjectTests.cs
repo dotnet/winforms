@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Tests
                     foreach (bool virtualMode in new[] { true, false })
                     {
                         // View.Tile is not supported by ListView in virtual mode
-                        if (view == View.Tile)
+                        if (view == View.Tile && virtualMode)
                         {
                             continue;
                         }
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Tests
                 foreach (bool virtualMode in new[] { true, false })
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (view == View.Tile)
+                    if (view == View.Tile && virtualMode)
                     {
                         continue;
                     }
