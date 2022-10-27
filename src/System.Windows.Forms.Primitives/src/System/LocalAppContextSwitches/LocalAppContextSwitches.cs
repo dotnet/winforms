@@ -52,7 +52,17 @@ namespace System.Windows.Forms.Primitives
         private static bool GetCachedSwitchValue(string switchName, ref int cachedSwitchValue)
         {
             // The cached switch value has 3 states: 0 - unknown, 1 - true, -1 - false
-            return cachedSwitchValue >= 0 && (cachedSwitchValue > 0 || GetSwitchValue(switchName, ref cachedSwitchValue));
+            if (cachedSwitchValue < 0)
+            {
+                return false;
+            }
+
+            if (cachedSwitchValue > 0)
+            {
+                return true;
+            }
+
+            return GetSwitchValue(switchName, ref cachedSwitchValue);
         }
 
         private static bool GetSwitchValue(string switchName, ref int cachedSwitchValue)
@@ -80,7 +90,7 @@ namespace System.Windows.Forms.Primitives
                 }
 
                 // We are introducing switch defaults in .NET 8.0+ and support matrix for this product is
-                // is limited to Windows 10 and above versions.
+                // limited to Windows 10 and above versions.
                 if (OsVersion.IsWindows10_1703OrGreater())
                 {
                     if (s_targetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
