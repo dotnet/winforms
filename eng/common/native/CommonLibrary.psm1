@@ -170,7 +170,7 @@ function Get-File {
         $Attempt++
         if ($Attempt -Lt $DownloadRetries) {
           $AttemptsLeft = $DownloadRetries - $Attempt
-          Write-Warning "Download failed, $AttemptsLeft attempts remaining, will retry in $RetryWaitTimeInSeconds seconds"
+          Write-Warning "'$Path' does not exist, download `$Uri` to `$TempPath` failed, , $AttemptsLeft attempts remaining, will retry in $RetryWaitTimeInSeconds seconds"
           Start-Sleep -Seconds $RetryWaitTimeInSeconds
         }
         else {

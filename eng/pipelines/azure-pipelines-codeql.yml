@@ -17,6 +17,8 @@ variables:
   # Build variables
 - name: _BuildConfig
   value: Release
+- name: NativeToolsOnMachine
+  value: true
 
 trigger: none
 
