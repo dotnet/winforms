@@ -1225,14 +1225,14 @@ System.Windows.Forms.LinkLabel.Link.Name.get -> string!
 System.Windows.Forms.LinkLabel.Link.Name.set -> void
 System.Windows.Forms.LinkLabel.Link.Tag.get -> object?
 System.Windows.Forms.LinkLabel.Link.Tag.set -> void
-~System.Windows.Forms.LinkLabel.LinkCollection.Add(int start, int length) -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.LinkLabel.LinkCollection.Add(int start, int length, object linkData) -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.LinkLabel.LinkCollection.Add(System.Windows.Forms.LinkLabel.Link value) -> int
-~System.Windows.Forms.LinkLabel.LinkCollection.Contains(System.Windows.Forms.LinkLabel.Link link) -> bool
-~System.Windows.Forms.LinkLabel.LinkCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.LinkLabel.LinkCollection.IndexOf(System.Windows.Forms.LinkLabel.Link link) -> int
-~System.Windows.Forms.LinkLabel.LinkCollection.LinkCollection(System.Windows.Forms.LinkLabel owner) -> void
-~System.Windows.Forms.LinkLabel.LinkCollection.Remove(System.Windows.Forms.LinkLabel.Link value) -> void
+System.Windows.Forms.LinkLabel.LinkCollection.Add(int start, int length) -> System.Windows.Forms.LinkLabel.Link!
+System.Windows.Forms.LinkLabel.LinkCollection.Add(int start, int length, object? linkData) -> System.Windows.Forms.LinkLabel.Link!
+System.Windows.Forms.LinkLabel.LinkCollection.Add(System.Windows.Forms.LinkLabel.Link! value) -> int
+System.Windows.Forms.LinkLabel.LinkCollection.Contains(System.Windows.Forms.LinkLabel.Link! link) -> bool
+System.Windows.Forms.LinkLabel.LinkCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.LinkLabel.LinkCollection.IndexOf(System.Windows.Forms.LinkLabel.Link! link) -> int
+System.Windows.Forms.LinkLabel.LinkCollection.LinkCollection(System.Windows.Forms.LinkLabel! owner) -> void
+System.Windows.Forms.LinkLabel.LinkCollection.Remove(System.Windows.Forms.LinkLabel.Link! value) -> void
 System.Windows.Forms.LinkLabel.Links.get -> System.Windows.Forms.LinkLabel.LinkCollection!
 System.Windows.Forms.LinkLabel.OverrideCursor.get -> System.Windows.Forms.Cursor?
 System.Windows.Forms.LinkLabel.OverrideCursor.set -> void
@@ -2022,12 +2022,12 @@ virtual System.Windows.Forms.Control.OnVisibleChanged(System.EventArgs! e) -> vo
 ~virtual System.Windows.Forms.HelpProvider.SetHelpNavigator(System.Windows.Forms.Control ctl, System.Windows.Forms.HelpNavigator navigator) -> void
 ~virtual System.Windows.Forms.HelpProvider.SetHelpString(System.Windows.Forms.Control ctl, string helpString) -> void
 ~virtual System.Windows.Forms.HelpProvider.SetShowHelp(System.Windows.Forms.Control ctl, bool value) -> void
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.RemoveByKey(string key) -> void
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].get -> System.Windows.Forms.LinkLabel.Link
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].set -> void
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[string key].get -> System.Windows.Forms.LinkLabel.Link
+virtual System.Windows.Forms.LinkLabel.LinkCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.LinkLabel.LinkCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.LinkLabel.LinkCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].get -> System.Windows.Forms.LinkLabel.Link!
+virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].set -> void
+virtual System.Windows.Forms.LinkLabel.LinkCollection.this[string! key].get -> System.Windows.Forms.LinkLabel.Link?
 virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs! e) -> void
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, int imageIndex) -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, string imageKey) -> System.Windows.Forms.ListViewItem

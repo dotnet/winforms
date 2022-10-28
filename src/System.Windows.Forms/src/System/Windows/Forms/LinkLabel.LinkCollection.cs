@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms.Layout;
@@ -31,7 +29,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return (Link)_owner._links[index];
+                    return _owner._links[index];
                 }
                 set
                 {
@@ -44,7 +42,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get => this[index];
                 set
@@ -63,7 +61,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public virtual Link this[string key]
+            public virtual Link? this[string key]
             {
                 get
                 {
@@ -112,7 +110,7 @@ namespace System.Windows.Forms
                 return Add(start, length, null);
             }
 
-            public Link Add(int start, int length, object linkData)
+            public Link Add(int start, int length, object? linkData)
             {
                 if (length != 0)
                 {
@@ -151,7 +149,6 @@ namespace System.Windows.Forms
                 // check for the special case where the list is in the "magic"
                 // state of having only the default link in it. In that case
                 // we want to clear the list before adding this link.
-                //
                 if (_owner._links.Count == 1
                     && this[0].Start == 0
                     && this[0]._length == -1)
@@ -161,7 +158,7 @@ namespace System.Windows.Forms
                 }
 
                 // Set the owner control for this link
-                value.Owner = _owner;
+                value!.Owner = _owner;
 
                 _owner._links.Add(value);
 
@@ -192,11 +189,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
-                if (value is Link)
+                if (value is Link l)
                 {
-                    return Add((Link)value);
+                    return Add(l);
                 }
                 else
                 {
@@ -204,11 +201,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            void IList.Insert(int index, object value)
+            void IList.Insert(int index, object? value)
             {
-                if (value is Link)
+                if (value is Link l)
                 {
-                    Add((Link)value);
+                    Add(l);
                 }
                 else
                 {
@@ -224,16 +221,16 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
-            public virtual bool ContainsKey(string key)
+            public virtual bool ContainsKey(string? key)
             {
                 return IsValidIndex(IndexOfKey(key));
             }
 
-            bool IList.Contains(object link)
+            bool IList.Contains(object? link)
             {
-                if (link is Link)
+                if (link is Link l)
                 {
-                    return Contains((Link)link);
+                    return Contains(l);
                 }
                 else
                 {
@@ -246,11 +243,11 @@ namespace System.Windows.Forms
                 return _owner._links.IndexOf(link);
             }
 
-            int IList.IndexOf(object link)
+            int IList.IndexOf(object? link)
             {
-                if (link is Link)
+                if (link is Link l)
                 {
-                    return IndexOf((Link)link);
+                    return IndexOf(l);
                 }
                 else
                 {
@@ -261,7 +258,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
-            public virtual int IndexOfKey(string key)
+            public virtual int IndexOfKey(string? key)
             {
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key))
@@ -363,7 +360,7 @@ namespace System.Windows.Forms
 
                 if (_owner.FocusLink is null && _owner._links.Count > 0)
                 {
-                    _owner.FocusLink = (Link)_owner._links[0];
+                    _owner.FocusLink = _owner._links[0];
                 }
             }
 
@@ -375,7 +372,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Removes the child control with the specified key.
             /// </summary>
-            public virtual void RemoveByKey(string key)
+            public virtual void RemoveByKey(string? key)
             {
                 int index = IndexOfKey(key);
                 if (IsValidIndex(index))
@@ -384,11 +381,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
-                if (value is Link)
+                if (value is Link link)
                 {
-                    Remove((Link)value);
+                    Remove(link);
                 }
             }
         }
