@@ -20,16 +20,20 @@ namespace System.Windows.Forms
         private static readonly TraceSwitch s_allWinMessages = new("AllWinMessages", "Output every received message");
 #endif
 
-        // Using prefixed variants of the property names for easier diffing.
-#pragma warning disable IDE1006 // Naming Styles
-        internal LRESULT ResultInternal;
-        internal LPARAM LParamInternal;
-        internal WPARAM WParamInternal;
-        internal User32.WM MsgInternal;
-        internal HWND HWND => (HWND)HWnd;
-#pragma warning restore IDE1006 // Naming Styles
+        // Keep HWND, WM, WPARAM, and LPARAM in this order so that they match the MSG struct.
+        // This struct shouldn't be used as a direct mapping against MSG, but if someone does already do this
+        // it will allow their code to continue to work.
 
         public IntPtr HWnd { get; set; }
+
+        // Using prefixed variants of the property names for easier diffing.
+#pragma warning disable IDE1006 // Naming Styles
+        internal User32.WM MsgInternal;
+        internal WPARAM WParamInternal;
+        internal LPARAM LParamInternal;
+        internal LRESULT ResultInternal;
+        internal HWND HWND => (HWND)HWnd;
+#pragma warning restore IDE1006 // Naming Styles
 
         public int Msg
         {
