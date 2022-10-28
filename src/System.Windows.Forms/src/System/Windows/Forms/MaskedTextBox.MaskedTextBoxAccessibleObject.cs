@@ -12,6 +12,16 @@ namespace System.Windows.Forms
             {
             }
 
+            public override string? Name
+            {
+                get => string.IsNullOrEmpty((Owner as MaskedTextBox)?.Mask)
+                    ? base.Name
+                    // If base.Name is null mask template will be used as a name, which is not descriptive for users.
+                    // Instead, we want to show an empty string to signal developers to set an appropriate name.
+                    : base.Name ?? string.Empty;
+                set => base.Name = value;
+            }
+
             protected override string ValueInternal => Owner.WindowText;
         }
     }
