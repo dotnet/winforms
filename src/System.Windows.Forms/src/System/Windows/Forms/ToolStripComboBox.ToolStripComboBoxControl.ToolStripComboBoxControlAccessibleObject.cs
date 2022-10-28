@@ -26,7 +26,7 @@ namespace System.Windows.Forms
                         case UiaCore.NavigateDirection.NextSibling:
                             if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
                             {
-                                return toolStripComboBoxControl.Owner.AccessibilityObject.FragmentNavigate(direction);
+                                return toolStripComboBoxControl.Owner?.AccessibilityObject.FragmentNavigate(direction);
                             }
 
                             break;
@@ -41,7 +41,7 @@ namespace System.Windows.Forms
                     {
                         if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
                         {
-                            return toolStripComboBoxControl.Owner.Owner.AccessibilityObject;
+                            return toolStripComboBoxControl.Owner?.Owner.AccessibilityObject;
                         }
 
                         return base.FragmentRoot;
