@@ -2023,7 +2023,7 @@ namespace System.Windows.Forms
                     if (_iPersistPropBag is not null)
                     {
                         propBag = new PropertyBagStream();
-                        using var propertyBag = ComHelpers.QueryInterface<IPropertyBag>(propBag, out bool result);
+                        using var propertyBag = ComHelpers.GetComScope<IPropertyBag>(propBag, out bool result);
                         Debug.Assert(result);
                         _iPersistPropBag.Save(propertyBag, fClearDirty: true, fSaveAllProperties: true);
                     }
@@ -2312,7 +2312,7 @@ namespace System.Windows.Forms
         {
             Control parent = ParentInternal;
             RECT posRect = Bounds;
-            using var pClientSite = ComHelpers.QueryInterface<IOleClientSite>(_oleSite, out bool result);
+            using var pClientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite, out bool result);
             Debug.Assert(result);
             GetOleObject().DoVerb(verb, lpmsg: null, pClientSite, -1, parent is null ? HWND.Null : parent.HWND, &posRect);
         }
@@ -2910,7 +2910,7 @@ namespace System.Windows.Forms
 
         private void DepersistFromIPropertyBag(IPropertyBag.Interface propBag)
         {
-            using var pPropBag = ComHelpers.QueryInterface<IPropertyBag>(propBag, out bool result);
+            using var pPropBag = ComHelpers.GetComScope<IPropertyBag>(propBag, out bool result);
             Debug.Assert(result);
             _iPersistPropBag.Load(pPropBag, pErrorLog: null).ThrowOnFailure();
         }
@@ -2918,7 +2918,7 @@ namespace System.Windows.Forms
         private void DepersistFromIStream(IStream.Interface istream)
         {
             _storageType = STG_STREAM;
-            using var pStream = ComHelpers.QueryInterface<IStream>(istream, out bool result);
+            using var pStream = ComHelpers.GetComScope<IStream>(istream, out bool result);
             Debug.Assert(result);
             _iPersistStream.Load(pStream).ThrowOnFailure();
         }
@@ -2926,7 +2926,7 @@ namespace System.Windows.Forms
         private void DepersistFromIStreamInit(IStream.Interface istream)
         {
             _storageType = STG_STREAMINIT;
-            using var pStream = ComHelpers.QueryInterface<IStream>(istream, out bool result);
+            using var pStream = ComHelpers.GetComScope<IStream>(istream, out bool result);
             Debug.Assert(result);
             _iPersistStreamInit.Load(pStream).ThrowOnFailure();
         }
@@ -2942,7 +2942,7 @@ namespace System.Windows.Forms
             //
             if (storage is not null)
             {
-                using var pStorage = ComHelpers.QueryInterface<IStorage>(storage, out bool result);
+                using var pStorage = ComHelpers.GetComScope<IStorage>(storage, out bool result);
                 Debug.Assert(result);
                 _iPersistStorage.Load(pStorage).ThrowOnFailure();
             }
@@ -2982,7 +2982,7 @@ namespace System.Windows.Forms
                     _storageType = STG_STORAGE;
                     _ocxState = new State(this);
                     _iPersistStorage = persistStorage;
-                    using var pStorage = ComHelpers.QueryInterface<IStorage>(_ocxState.GetStorage(), out bool result);
+                    using var pStorage = ComHelpers.GetComScope<IStorage>(_ocxState.GetStorage(), out bool result);
                     Debug.Assert(result);
                     HRESULT hr = _iPersistStorage.InitNew(pStorage);
                     if (hr.Failed)
@@ -3790,7 +3790,7 @@ namespace System.Windows.Forms
 
             if ((_miscStatusBits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0)
             {
-                using var clientSite = ComHelpers.QueryInterface<IOleClientSite>(_oleSite, out bool result);
+                using var clientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite, out bool result);
                 Debug.Assert(result);
                 GetOleObject().SetClientSite(clientSite);
                 setClientSite = true;
@@ -3800,7 +3800,7 @@ namespace System.Windows.Forms
 
             if (!setClientSite)
             {
-                using var clientSite = ComHelpers.QueryInterface<IOleClientSite>(_oleSite, out bool result);
+                using var clientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite, out bool result);
                 Debug.Assert(result);
                 GetOleObject().SetClientSite(clientSite);
             }
@@ -4018,7 +4018,7 @@ namespace System.Windows.Forms
             }
 
             uint hPal = default;
-            using var pict = ComHelpers.QueryInterface<IDispatch>(picture, out HRESULT hr);
+            using var pict = ComHelpers.GetComScope<IDispatch>(picture, out HRESULT hr);
             hr.ThrowOnFailure();
             using VARIANT variant = default;
             ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();

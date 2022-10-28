@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
         {
             using Icon icon = SystemIcons.Question;
             using Bitmap bitmap = icon.ToBitmap();
-            using var picture = ComHelpers.QueryInterface<IDispatch>(
+            using var picture = ComHelpers.GetComScope<IDispatch>(
                 MockAxHost.GetIPictureDispFromPicture(bitmap),
                 out bool result);
             Assert.True(result);

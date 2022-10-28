@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                bool result = ComHelpers.TryQueryInterface(new EnumUnknown(_array, _location), out *ppenum);
+                bool result = ComHelpers.TryGetComPointer(new EnumUnknown(_array, _location), out *ppenum);
                 Debug.Assert(result);
                 return HRESULT.S_OK;
             }

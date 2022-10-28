@@ -195,7 +195,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            bool result = ComHelpers.TryQueryInterface(Host.GetParentContainer(), out *ppContainer);
+            bool result = ComHelpers.TryGetComPointer(Host.GetParentContainer(), out *ppContainer);
             Debug.Assert(result);
             return HRESULT.S_OK;
         }

@@ -46,7 +46,7 @@ internal static partial class Interop
                 }
 
                 // The cloned object should have the same current "position"
-                bool result = ComHelpers.TryQueryInterface(
+                bool result = ComHelpers.TryGetComPointer(
                     new GPStream(_dataStream) { _virtualPosition = _virtualPosition },
                     out Com.IStream* pStream);
                 Debug.Assert(result);

@@ -278,7 +278,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                bool result = ComHelpers.TryQueryInterface(_storage, out IStorage* pStorage);
+                bool result = ComHelpers.TryGetComPointer(_storage, out IStorage* pStorage);
                 using ComScope<IStorage> storage = new(pStorage);
                 Debug.Assert(result);
                 iPersistStorage.Save(storage, fSameAsLoad: true);

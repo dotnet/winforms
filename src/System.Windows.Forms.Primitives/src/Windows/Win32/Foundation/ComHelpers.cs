@@ -9,44 +9,68 @@ namespace Windows.Win32.Foundation
 {
     internal static unsafe class ComHelpers
     {
-        internal static bool TryQueryInterface<T>(object obj, out T* pInterface) where T : unmanaged, INativeGuid
-            => QueryInterface(obj, out pInterface).Succeeded;
+        /// <summary>
+        ///  Attempts to get the specified <paramref name="iid"/> interface for the given <paramref name="obj"/>.
+        /// </summary>
+        internal static bool TryGetComPointer<T>(object? obj, in Guid iid, out T* ppvObject) where T : unmanaged
+            => GetComPointer(obj, in iid, out ppvObject).Succeeded;
 
-        internal static ComScope<T> QueryInterface<T>(object obj, out bool success) where T : unmanaged, INativeGuid
+        internal static ComScope<T> GetComScope<T>(object obj, out HRESULT hr) where T : unmanaged, INativeGuid
         {
-            success = TryQueryInterface(obj, out T* pInterface);
+            hr = GetComPointer(obj, T.NativeGuid, out T* pInterface);
             return new(pInterface);
         }
 
-        internal static HRESULT QueryInterface<T>(object obj, out T* pInterface) where T : unmanaged, INativeGuid
+        internal static ComScope<T> GetComScope<T>(object obj, out bool success) where T : unmanaged, INativeGuid
         {
-            pInterface = null;
-            using ComScope<IUnknown> unknown = new((IUnknown*)Marshal.GetIUnknownForObject(obj));
-            void* ppvObject;
-            HRESULT result = unknown.Value->QueryInterface(T.NativeGuid, &ppvObject);
-            if (result.Succeeded)
-            {
-                pInterface = (T*)ppvObject;
-            }
-
-            return result;
-        }
-
-        internal static ComScope<T> QueryInterface<T>(object obj, out HRESULT hr) where T : unmanaged, INativeGuid
-        {
-            hr = QueryInterface(obj, out T* pInterface);
+            success = TryGetComPointer(obj, out T* pInterface);
             return new(pInterface);
         }
 
-        public static void Release<T>(T* release) where T : unmanaged, IUnknown.Interface
+        internal static HRESULT GetComPointer<T>(object? obj, in Guid iid, out T* ppvObject) where T : unmanaged
         {
-            if (release is not null)
+            fixed (Guid* pGuid = &iid)
             {
-                ((IUnknown*)release)->Release();
+                return GetComPointer(obj, pGuid, out ppvObject);
             }
         }
 
-        public static HRESULT GetDispatchProperty(
+        internal static HRESULT GetComPointer<T>(object? obj, Guid* iid, out T* ppvObject) where T : unmanaged
+        {
+            ppvObject = null;
+
+            if (obj is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            IUnknown* ccw = (IUnknown*)Interop.WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None);
+            if (ccw is null)
+            {
+                // We haven't converted this, fall back to COM interop.
+                ccw = (IUnknown*)Marshal.GetIUnknownForObject(obj);
+                if (ccw is null)
+                {
+                    return HRESULT.E_NOINTERFACE;
+                }
+            }
+
+            fixed (T** unknown = &ppvObject)
+            {
+                HRESULT result = ccw->QueryInterface(iid, (void**)unknown);
+                ccw->Release();
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        ///  Attempts to get the specified <typeparamref name="T"/> interface for the given <paramref name="obj"/>.
+        /// </summary>
+        internal static bool TryGetComPointer<T>(object? obj, out T* ppvObject) where T : unmanaged, INativeGuid
+            => GetComPointer(obj, T.NativeGuid, out ppvObject).Succeeded;
+
+        internal static HRESULT GetDispatchProperty(
             IDispatch* dispatch,
             uint dispId,
             VARIANT* pVar,

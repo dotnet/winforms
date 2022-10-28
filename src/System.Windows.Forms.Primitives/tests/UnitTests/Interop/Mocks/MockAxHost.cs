@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
             }
 
             uint hPal = default;
-            using var pict = ComHelpers.QueryInterface<IDispatch>(picture, out HRESULT hr);
+            using var pict = ComHelpers.GetComScope<IDispatch>(picture, out HRESULT hr);
             hr.ThrowOnFailure();
             using VARIANT variant = new();
             ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();

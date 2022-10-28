@@ -1618,7 +1618,7 @@ namespace System.Windows.Forms.Tests
             var original = new Bitmap(10, 11);
             original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
-            using var iPictureDisp = ComHelpers.QueryInterface<IDispatch>(disp, out bool succeeded);
+            using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp, out bool succeeded);
 
             Assert.True(succeeded);
             using VARIANT variant = default;
@@ -1645,7 +1645,7 @@ namespace System.Windows.Forms.Tests
             var original = new Metafile("bitmaps/milkmateya01.emf");
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
 
-            using var iPictureDisp = ComHelpers.QueryInterface<IDispatch>(disp, out bool succeeded);
+            using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp, out bool succeeded);
 
             Assert.True(succeeded);
             using VARIANT variant = default;

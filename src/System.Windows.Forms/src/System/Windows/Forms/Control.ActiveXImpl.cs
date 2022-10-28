@@ -1342,7 +1342,7 @@ namespace System.Windows.Forms
 
                 if (pQaContainer.pClientSite is not null)
                 {
-                    using var clientSite = ComHelpers.QueryInterface<IOleClientSite>(pQaContainer.pClientSite, out bool result);
+                    using var clientSite = ComHelpers.GetComScope<IOleClientSite>(pQaContainer.pClientSite, out bool result);
                     Debug.Assert(result);
                     SetClientSite(clientSite);
                 }

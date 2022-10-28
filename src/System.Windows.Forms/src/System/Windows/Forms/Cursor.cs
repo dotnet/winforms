@@ -398,7 +398,7 @@ namespace System.Windows.Forms
                 using ComScope<IPersistStream> persist = new(null);
                 picture.Value->QueryInterface(IPersistStream.NativeGuid, persist).ThrowOnFailure();
 
-                using var pStream = ComHelpers.QueryInterface<IStream>(stream, out bool result);
+                using var pStream = ComHelpers.GetComScope<IStream>(stream, out bool result);
                 Debug.Assert(result);
                 persist.Value->Load(pStream);
 

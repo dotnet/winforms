@@ -10,3 +10,4 @@ global using Windows.Win32.UI.Controls;
 global using Windows.Win32.UI.HiDpi;
 global using Windows.Win32.UI.Shell;
 global using Windows.Win32.UI.WindowsAndMessaging;
+global using ComWrappers = Interop.WinFormsComWrappers;

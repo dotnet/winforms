@@ -25,7 +25,7 @@ namespace System.Windows.Forms
                 HIMAGELIST himl;
                 lock (s_syncLock)
                 {
-                    using var stream = ComHelpers.QueryInterface<IStream>(pstm, out bool result);
+                    using var stream = ComHelpers.GetComScope<IStream>(pstm, out bool result);
                     Debug.Assert(result);
                     himl = PInvoke.ImageList_Read(stream);
                     Init(himl);

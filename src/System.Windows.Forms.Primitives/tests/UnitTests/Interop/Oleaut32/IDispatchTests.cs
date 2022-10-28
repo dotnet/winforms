@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void IDispatch_GetIDsOfNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            using var picture = ComHelpers.QueryInterface<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            using var picture = ComHelpers.GetComScope<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
             hr.ThrowOnFailure();
 
             Guid riid = Guid.Empty;
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void IDispatch_GetTypeInfo_Invoke_Success()
         {
             using var image = new Bitmap(16, 16);
-            using var picture = ComHelpers.QueryInterface<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            using var picture = ComHelpers.GetComScope<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
             hr.ThrowOnFailure();
 
             using ComScope<ITypeInfo> typeInfo = new(null);
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void IDispatch_GetTypeInfoCount_Invoke_Success()
         {
             using var image = new Bitmap(16, 16);
-            using var picture = ComHelpers.QueryInterface<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            using var picture = ComHelpers.GetComScope<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
             hr.ThrowOnFailure();
 
             uint ctInfo = uint.MaxValue;
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void IDispatch_Invoke_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            using var picture = ComHelpers.QueryInterface<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            using var picture = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
             hr.ThrowOnFailure();
 
             using VARIANT varResult = default;

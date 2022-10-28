@@ -13778,7 +13778,7 @@ namespace System.Windows.Forms
             *ppClientSite = null;
             if (clientSite is not null)
             {
-                bool result = ComHelpers.TryQueryInterface(clientSite, out *ppClientSite);
+                bool result = ComHelpers.TryGetComPointer(clientSite, out *ppClientSite);
                 Debug.Assert(result);
             }
 
@@ -13881,7 +13881,7 @@ namespace System.Windows.Forms
 
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumVerbs");
             HRESULT hr = ActiveXImpl.EnumVerbs(out Ole32.IEnumOLEVERB oleVerb);
-            bool result = ComHelpers.TryQueryInterface(oleVerb, out *ppEnumOleVerb);
+            bool result = ComHelpers.TryGetComPointer(oleVerb, out *ppEnumOleVerb);
             Debug.Assert(result);
             return hr;
         }

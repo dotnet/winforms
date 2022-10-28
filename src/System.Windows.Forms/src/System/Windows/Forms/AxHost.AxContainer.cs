@@ -724,13 +724,13 @@ namespace System.Windows.Forms
                     {
                         object[] temp = new object[list.Count];
                         list.CopyTo(temp, 0);
-                        result = ComHelpers.TryQueryInterface(new EnumUnknown(temp), out *ppenum);
+                        result = ComHelpers.TryGetComPointer(new EnumUnknown(temp), out *ppenum);
                         Debug.Assert(result);
                         return HRESULT.S_OK;
                     }
                 }
 
-                result = ComHelpers.TryQueryInterface(new EnumUnknown(null), out *ppenum);
+                result = ComHelpers.TryGetComPointer(new EnumUnknown(null), out *ppenum);
                 Debug.Assert(result);
                 return HRESULT.S_OK;
             }

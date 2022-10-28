@@ -400,7 +400,7 @@ namespace System.Windows.Forms
                 }
 
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in getContainer");
-                bool result = ComHelpers.TryQueryInterface(_host.GetParentContainer(), out *ppContainer);
+                bool result = ComHelpers.TryGetComPointer(_host.GetParentContainer(), out *ppContainer);
                 Debug.Assert(result);
                 return HRESULT.S_OK;
             }

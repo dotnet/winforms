@@ -13,7 +13,7 @@ namespace Windows.Win32
         public static unsafe HRESULT RegisterDragDrop<T>(T hwnd, Ole.IDropTarget pDropTarget)
             where T : IHandle<HWND>
         {
-            if (!Interop.WinFormsComWrappers.Instance.TryGetComPointer(pDropTarget, Interop.IID.IDropTarget, out IDropTarget* dropTarget))
+            if (!ComHelpers.TryGetComPointer(pDropTarget, Interop.IID.IDropTarget, out IDropTarget* dropTarget))
             {
                 return HRESULT.E_NOINTERFACE;
             }

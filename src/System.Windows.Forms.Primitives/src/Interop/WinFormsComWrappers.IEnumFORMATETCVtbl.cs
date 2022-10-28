@@ -96,7 +96,7 @@ internal partial class Interop
                     instance.Clone(out var cloned);
                     *ppenum = null;
 
-                    if (Instance.TryGetComPointer(cloned, IID.IEnumFORMATETC, out Com.IEnumFORMATETC* p))
+                    if (ComHelpers.TryGetComPointer(cloned, IID.IEnumFORMATETC, out Com.IEnumFORMATETC* p))
                     {
                         *ppenum = p;
                         return HRESULT.S_OK;

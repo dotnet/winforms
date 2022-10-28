@@ -147,7 +147,9 @@ internal partial class Interop
                 return s_dataObjectEntry;
             }
 
-            throw new NotImplementedException($"ComWrappers for type {obj.GetType()} not implemented.");
+            Debug.WriteLine($"ComWrappers for type {obj.GetType()} not implemented.");
+            count = 0;
+            return null;
         }
 
         protected override object CreateObject(IntPtr externalComObject, CreateObjectFlags flags)
@@ -194,46 +196,6 @@ internal partial class Interop
         protected override void ReleaseObjects(IEnumerable objects)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        ///  Attempts to get the specified <paramref name="iid"/> interface for the given <paramref name="obj"/>.
-        /// </summary>
-        internal bool TryGetComPointer<T>(object? obj, in Guid iid, out T* ppvObject) where T : unmanaged
-        {
-            ppvObject = null;
-
-            if (obj is null)
-            {
-                return false;
-            }
-
-            // Get the CCW and attempt to get the requested interface.
-            IUnknown* ccw = GetOrCreateComInterfaceForObject(obj);
-            if (ccw is null)
-            {
-                return false;
-            }
-
-            HRESULT result = ccw->QueryInterface(in iid, out void* unknown);
-            ppvObject = (T*)unknown;
-            ccw->Release();
-
-            return result == HRESULT.S_OK;
-        }
-
-        /// <summary>
-        ///  Attempts to get the specified <typeparamref name="T"/> interface for the given <paramref name="obj"/>.
-        /// </summary>
-        internal bool TryGetComPointer<T>(object? obj, out T* ppvObject) where T : unmanaged, INativeGuid
-            => TryGetComPointer(obj, *T.NativeGuid, out ppvObject);
-
-        private IUnknown* GetOrCreateComInterfaceForObject(object obj)
-        {
-            return obj switch
-            {
-                _ => (IUnknown*)GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None),
-            };
         }
 
         /// <summary>
