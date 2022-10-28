@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Globalization;
 
@@ -14,9 +12,9 @@ namespace System.Windows.Forms
     /// </summary>
     internal class MdiWindowListStrip : MenuStrip
     {
-        private Form mdiParent;
-        private ToolStripMenuItem mergeItem;
-        private MenuStrip mergedMenu;
+        private Form? mdiParent;
+        private ToolStripMenuItem? mergeItem;
+        private MenuStrip? mergedMenu;
 
         public MdiWindowListStrip()
         {
@@ -50,7 +48,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal MenuStrip MergedMenu
+        internal MenuStrip? MergedMenu
         {
             get
             {
@@ -94,7 +92,7 @@ namespace System.Windows.Forms
                         mergeItem.DropDownItems.Add(separator);
                     }
 
-                    Form activeMdiChild = mdiParent.ActiveMdiChild;
+                    Form? activeMdiChild = mdiParent.ActiveMdiChild;
 
                     const int maxMenuForms = 9;  // max number of Window menu items for forms
                     int visibleChildren = 0;     // number of visible child forms (so we know if we need to show More Windows...
@@ -114,7 +112,7 @@ namespace System.Windows.Forms
                                 forms[i].Equals(activeMdiChild))
                             {
                                 // there's always room for activeMdiChild
-                                string text = WindowsFormsUtils.EscapeTextWithAmpersands(mdiParent.MdiChildren[i].Text);
+                                string? text = WindowsFormsUtils.EscapeTextWithAmpersands(mdiParent.MdiChildren[i].Text);
                                 text ??= string.Empty;
                                 ToolStripMenuItem windowListItem = new ToolStripMenuItem(mdiParent.MdiChildren[i])
                                 {
@@ -160,22 +158,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary> handler for More Windows... This is similar to MenuItem.cs</summary>
-        private void OnMoreWindowsMenuItemClick(object sender, EventArgs e)
+        private void OnMoreWindowsMenuItemClick(object? sender, EventArgs e)
         {
-            Form[] forms = mdiParent.MdiChildren;
+            Form[]? forms = mdiParent?.MdiChildren;
 
             if (forms is not null)
             {
                 using (MdiWindowDialog dialog = new MdiWindowDialog())
                 {
-                    dialog.SetItems(mdiParent.ActiveMdiChild, forms);
+                    dialog.SetItems(mdiParent?.ActiveMdiChild, forms);
                     DialogResult result = dialog.ShowDialog();
                     if (result == DialogResult.OK)
                     {
                         // AllWindows Assert above allows this...
-                        //
-                        dialog.ActiveChildForm.Activate();
-                        if (dialog.ActiveChildForm.ActiveControl is not null && !dialog.ActiveChildForm.ActiveControl.Focused)
+                        dialog.ActiveChildForm?.Activate();
+                        if (dialog.ActiveChildForm?.ActiveControl is not null && !dialog.ActiveChildForm.ActiveControl.Focused)
                         {
                             dialog.ActiveChildForm.ActiveControl.Focus();
                         }
@@ -185,7 +182,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary> handler for 1 - 9.  This is similar to MenuItem.cs</summary>
-        private void OnWindowListItemClick(object sender, EventArgs e)
+        private void OnWindowListItemClick(object? sender, EventArgs e)
         {
             if (sender is ToolStripMenuItem windowListItem)
             {
