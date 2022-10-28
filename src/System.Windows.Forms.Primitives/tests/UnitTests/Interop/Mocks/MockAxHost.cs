@@ -5,54 +5,56 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using static Interop.Ole32;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
 {
-    internal class MockAxHost
+    internal unsafe class MockAxHost
     {
-        private static readonly Guid s_ipictureDisp_Guid = typeof(IPictureDisp).GUID;
-        private static readonly Guid s_ipicture_Guid = typeof(IPicture).GUID;
-
         public MockAxHost(string clsidString)
         {
         }
 
-        public static IPictureDisp GetIPictureDispFromPicture(Image image)
+        public static IPictureDisp.Interface GetIPictureDispFromPicture(Image image)
         {
             PICTDESC desc = GetPICTDESCFromPicture(image);
-            return (IPictureDisp)OleCreatePictureIndirect(ref desc, in s_ipictureDisp_Guid, fOwn: BOOL.TRUE);
+            using ComScope<IPictureDisp> picture = new(null);
+            PInvoke.OleCreatePictureIndirect(&desc, IPictureDisp.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+            return (IPictureDisp.Interface)Marshal.GetObjectForIUnknown(picture);
         }
 
-        public static IPicture GetIPictureFromCursor(IntPtr cursorHandle)
+        public static IPicture.Interface GetIPictureFromCursor(IntPtr cursorHandle)
         {
             PICTDESC desc = PICTDESC.FromIcon(Icon.FromHandle(cursorHandle), copy: true);
-            return (IPicture)OleCreatePictureIndirect(ref desc, in s_ipicture_Guid, fOwn: BOOL.TRUE);
+            using ComScope<IPicture> picture = new(null);
+            PInvoke.OleCreatePictureIndirect(&desc, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+            return (IPicture.Interface)Marshal.GetObjectForIUnknown(picture);
         }
 
-        public static IPicture GetIPictureFromPicture(Image image)
+        public static IPicture.Interface GetIPictureFromPicture(Image image)
         {
             PICTDESC desc = GetPICTDESCFromPicture(image);
-            return (IPicture)OleCreatePictureIndirect(ref desc, in s_ipicture_Guid, fOwn: BOOL.TRUE);
+            using ComScope<IPicture> picture = new(null);
+            PInvoke.OleCreatePictureIndirect(&desc, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+            return (IPicture.Interface)Marshal.GetObjectForIUnknown(picture);
         }
 
         public static Image? GetPictureFromIPicture(object picture)
         {
-            int hPal = default;
-            IPicture pict = (IPicture)picture;
-            PICTYPE type = (PICTYPE)pict.Type;
-            if (type == PICTYPE.BITMAP)
+            uint hPal = default;
+            IPicture.Interface pict = (IPicture.Interface)picture;
+            pict.get_Type(out short type).ThrowOnFailure();
+            if (type == (short)PICTYPE.PICTYPE_BITMAP)
             {
-                try
-                {
-                    hPal = pict.hPal;
-                }
-                catch (COMException)
-                {
-                }
+                pict.get_hPal(&hPal);
             }
 
-            return GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
+            pict.get_Handle(out uint handle).ThrowOnFailure();
+            pict.get_Width(out int width).ThrowOnFailure();
+            pict.get_Height(out int height).ThrowOnFailure();
+
+            return GetPictureFromParams(handle, (PICTYPE)type, hPal, (uint)width, (uint)height);
         }
 
         public static Image? GetPictureFromIPictureDisp(object picture)
@@ -62,23 +64,28 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
                 return null;
             }
 
-            int hPal = default;
-            IPictureDisp pict = (IPictureDisp)picture;
-            PICTYPE type = (PICTYPE)pict.Type;
-            if (type == PICTYPE.BITMAP)
+            uint hPal = default;
+            using var pict = ComHelpers.GetComScope<IDispatch>(picture, out HRESULT hr);
+            hr.ThrowOnFailure();
+            using VARIANT variant = new();
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            PICTYPE type = (PICTYPE)variant.data.iVal;
+            if (type == PICTYPE.PICTYPE_BITMAP)
             {
-                try
-                {
-                    hPal = pict.hPal;
-                }
-                catch (COMException)
-                {
-                }
+                ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
+                hPal = variant.data.uintVal;
             }
 
-            Image? image = GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
-            GC.KeepAlive(pict);
-            return image;
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            uint handle = variant.data.uintVal;
+
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            uint width = variant.data.uintVal;
+
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            uint height = variant.data.uintVal;
+
+            return GetPictureFromParams(handle, type, hPal, width, height);
         }
 
         private static PICTDESC GetPICTDESCFromPicture(Image image)
@@ -97,40 +104,41 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
         }
 
         private static Image? GetPictureFromParams(
-            int handle,
+            uint handle,
             PICTYPE type,
-            int paletteHandle,
-            int width,
-            int height)
+            uint paletteHandle,
+            uint width,
+            uint height)
         {
+            int extendedHandle = (int)handle;
             switch (type)
             {
-                case PICTYPE.ICON:
-                    return (Image)Icon.FromHandle((IntPtr)handle).Clone();
-                case PICTYPE.METAFILE:
+                case PICTYPE.PICTYPE_ICON:
+                    return (Image)Icon.FromHandle(extendedHandle).Clone();
+                case PICTYPE.PICTYPE_METAFILE:
                     WmfPlaceableFileHeader header = new WmfPlaceableFileHeader
                     {
                         BboxRight = (short)width,
                         BboxBottom = (short)height
                     };
 
-                    using (var metafile = new Metafile((IntPtr)handle, header, deleteWmf: false))
+                    using (var metafile = new Metafile(extendedHandle, header, deleteWmf: false))
                     {
                         return (Image)metafile.Clone();
                     }
 
-                case PICTYPE.ENHMETAFILE:
-                    using (var metafile = new Metafile((IntPtr)handle, deleteEmf: false))
+                case PICTYPE.PICTYPE_ENHMETAFILE:
+                    using (var metafile = new Metafile(extendedHandle, deleteEmf: false))
                     {
                         return (Image)metafile.Clone();
                     }
 
-                case PICTYPE.BITMAP:
-                    return Image.FromHbitmap((IntPtr)handle, (IntPtr)paletteHandle);
-                case PICTYPE.NONE:
+                case PICTYPE.PICTYPE_BITMAP:
+                    return Image.FromHbitmap(extendedHandle, (int)paletteHandle);
+                case PICTYPE.PICTYPE_NONE:
                     // MSDN says this should not be a valid value, but comctl32 returns it...
                     return null;
-                case PICTYPE.UNINITIALIZED:
+                case PICTYPE.PICTYPE_UNINITIALIZED:
                     return null;
                 default:
                     throw new ArgumentException("AXUnknownImage", nameof(type));

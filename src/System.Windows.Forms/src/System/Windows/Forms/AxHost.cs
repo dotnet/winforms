@@ -16,6 +16,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
 using static Interop;
 
@@ -99,8 +100,6 @@ namespace System.Windows.Forms
         private static readonly Guid s_icf2_Guid = typeof(Ole32.IClassFactory2).GUID;
         private static readonly Guid s_ifont_Guid = typeof(Ole32.IFont).GUID;
         private static readonly Guid s_ifontDisp_Guid = typeof(Ole32.IFontDisp).GUID;
-        private static readonly Guid s_ipicture_Guid = typeof(Ole32.IPicture).GUID;
-        private static readonly Guid s_ipictureDisp_Guid = typeof(Ole32.IPictureDisp).GUID;
         private static readonly Guid s_ivbformat_Guid = typeof(Ole32.IVBFormat).GUID;
         private static readonly Guid s_ioleobject_Guid = IOleObject.Guid;
         private static readonly Guid s_dataSource_Guid = new("{7C0FFAB3-CD84-11D0-949A-00A0C91110ED}");
@@ -185,10 +184,10 @@ namespace System.Windows.Forms
         private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObjectExternal;
         private IPerPropertyBrowsing.Interface _iPerPropertyBrowsing;
         private VSSDK.ICategorizeProperties _iCategorizeProperties;
-        private Oleaut32.IPersistPropertyBag _iPersistPropBag;
-        private Ole32.IPersistStream _iPersistStream;
-        private Ole32.IPersistStreamInit _iPersistStreamInit;
-        private Ole32.IPersistStorage _iPersistStorage;
+        private IPersistPropertyBag.Interface _iPersistPropBag;
+        private IPersistStream.Interface _iPersistStream;
+        private IPersistStreamInit.Interface _iPersistStreamInit;
+        private IPersistStorage.Interface _iPersistStorage;
 
         private AboutBoxDelegate _aboutBoxDelegate;
         private readonly EventHandler _selectionChangeHandler;
@@ -2024,7 +2023,9 @@ namespace System.Windows.Forms
                     if (_iPersistPropBag is not null)
                     {
                         propBag = new PropertyBagStream();
-                        _iPersistPropBag.Save(propBag, true, true);
+                        using var propertyBag = ComHelpers.GetComScope<IPropertyBag>(propBag, out bool result);
+                        Debug.Assert(result);
+                        _iPersistPropBag.Save(propertyBag, fClearDirty: true, fSaveAllProperties: true);
                     }
 
                     MemoryStream ms = null;
@@ -2035,11 +2036,11 @@ namespace System.Windows.Forms
                             ms = new MemoryStream();
                             if (_storageType == STG_STREAM)
                             {
-                                _iPersistStream.Save(new Ole32.GPStream(ms), true);
+                                _iPersistStream.Save((IStream*)Marshal.GetIUnknownForObject(new Ole32.GPStream(ms)), true);
                             }
                             else
                             {
-                                _iPersistStreamInit.Save(new Ole32.GPStream(ms), true);
+                                _iPersistStreamInit.Save((IStream*)Marshal.GetIUnknownForObject(new Ole32.GPStream(ms)), true);
                             }
 
                             break;
@@ -2311,7 +2312,7 @@ namespace System.Windows.Forms
         {
             Control parent = ParentInternal;
             RECT posRect = Bounds;
-            bool result = ComHelpers.TryQueryInterface(_oleSite, out IOleClientSite* pClientSite);
+            using var pClientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite, out bool result);
             Debug.Assert(result);
             GetOleObject().DoVerb(verb, lpmsg: null, pClientSite, -1, parent is null ? HWND.Null : parent.HWND, &posRect);
         }
@@ -2907,24 +2908,30 @@ namespace System.Windows.Forms
             SetOcState(OC_RUNNING);
         }
 
-        private void DepersistFromIPropertyBag(Oleaut32.IPropertyBag propBag)
+        private void DepersistFromIPropertyBag(IPropertyBag.Interface propBag)
         {
-            _iPersistPropBag.Load(propBag, null);
+            using var pPropBag = ComHelpers.GetComScope<IPropertyBag>(propBag, out bool result);
+            Debug.Assert(result);
+            _iPersistPropBag.Load(pPropBag, pErrorLog: null).ThrowOnFailure();
         }
 
-        private void DepersistFromIStream(Ole32.IStream istream)
+        private void DepersistFromIStream(IStream.Interface istream)
         {
             _storageType = STG_STREAM;
-            _iPersistStream.Load(istream);
+            using var pStream = ComHelpers.GetComScope<IStream>(istream, out bool result);
+            Debug.Assert(result);
+            _iPersistStream.Load(pStream).ThrowOnFailure();
         }
 
-        private void DepersistFromIStreamInit(Ole32.IStream istream)
+        private void DepersistFromIStreamInit(IStream.Interface istream)
         {
             _storageType = STG_STREAMINIT;
-            _iPersistStreamInit.Load(istream);
+            using var pStream = ComHelpers.GetComScope<IStream>(istream, out bool result);
+            Debug.Assert(result);
+            _iPersistStreamInit.Load(pStream).ThrowOnFailure();
         }
 
-        private void DepersistFromIStorage(Ole32.IStorage storage)
+        private void DepersistFromIStorage(IStorage.Interface storage)
         {
             _storageType = STG_STORAGE;
 
@@ -2935,11 +2942,9 @@ namespace System.Windows.Forms
             //
             if (storage is not null)
             {
-                HRESULT hr = _iPersistStorage.Load(storage);
-                if (hr != HRESULT.S_OK)
-                {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Error trying load depersist from IStorage: {hr}");
-                }
+                using var pStorage = ComHelpers.GetComScope<IStorage>(storage, out bool result);
+                Debug.Assert(result);
+                _iPersistStorage.Load(pStorage).ThrowOnFailure();
             }
         }
 
@@ -2950,63 +2955,56 @@ namespace System.Windows.Forms
             if (_ocxState is null)
             {
                 // Must init new:
-                if (_instance is Ole32.IPersistStreamInit init)
+                if (_instance is IPersistStreamInit.Interface init)
                 {
                     _iPersistStreamInit = init;
-                    try
-                    {
-                        _storageType = STG_STREAMINIT;
-                        _iPersistStreamInit.InitNew();
-                    }
-                    catch (Exception e1)
+                    _storageType = STG_STREAMINIT;
+                    HRESULT hr = _iPersistStreamInit.InitNew();
+                    if (hr.Failed)
                     {
                         Debug.WriteLineIf(
-                            s_axHTraceSwitch.TraceVerbose,
-                            $"Exception thrown trying to IPersistStreamInit.InitNew(). Is this good? {e1}");
+                        s_axHTraceSwitch.TraceVerbose,
+                            $"Exception thrown trying to IPersistStreamInit.InitNew(). Is this good? {hr}");
                     }
 
                     return;
                 }
 
-                if (_instance is Ole32.IPersistStream persistStream)
+                if (_instance is IPersistStream.Interface persistStream)
                 {
                     _storageType = STG_STREAM;
                     _iPersistStream = persistStream;
                     return;
                 }
 
-                if (_instance is Ole32.IPersistStorage persistStorage)
+                if (_instance is IPersistStorage.Interface persistStorage)
                 {
                     _storageType = STG_STORAGE;
                     _ocxState = new State(this);
                     _iPersistStorage = persistStorage;
-                    try
-                    {
-                        _iPersistStorage.InitNew(_ocxState.GetStorage());
-                    }
-                    catch (Exception e2)
+                    using var pStorage = ComHelpers.GetComScope<IStorage>(_ocxState.GetStorage(), out bool result);
+                    Debug.Assert(result);
+                    HRESULT hr = _iPersistStorage.InitNew(pStorage);
+                    if (hr.Failed)
                     {
                         Debug.WriteLineIf(
                             s_axHTraceSwitch.TraceVerbose,
-                            $"Exception thrown trying to IPersistStorage.InitNew(). Is this good? {e2}");
+                            $"Exception thrown trying to IPersistStorage.InitNew(). Is this good? {hr}");
                     }
 
                     return;
                 }
 
-                if (_instance is Oleaut32.IPersistPropertyBag persistPropertyBag)
+                if (_instance is IPersistPropertyBag.Interface persistPropertyBag)
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"{this} supports IPersistPropertyBag.");
                     _iPersistPropBag = persistPropertyBag;
-                    try
-                    {
-                        _iPersistPropBag.InitNew();
-                    }
-                    catch (Exception e1)
+                    HRESULT hr = _iPersistPropBag.InitNew();
+                    if (hr.Failed)
                     {
                         Debug.WriteLineIf(
                             s_axHTraceSwitch.TraceVerbose,
-                            $"Exception thrown trying to IPersistPropertyBag.InitNew(). Is this good? {e1}");
+                            $"Exception thrown trying to IPersistPropertyBag.InitNew(). Is this good? {hr}");
                     }
                 }
 
@@ -3020,7 +3018,7 @@ namespace System.Windows.Forms
                 case STG_STREAM:
                     try
                     {
-                        _iPersistStream = (Ole32.IPersistStream)_instance;
+                        _iPersistStream = (IPersistStream.Interface)_instance;
                         DepersistFromIStream(_ocxState.GetStream());
                     }
                     catch (Exception e)
@@ -3032,7 +3030,7 @@ namespace System.Windows.Forms
 
                     break;
                 case STG_STREAMINIT:
-                    if (_instance is Ole32.IPersistStreamInit persistStreamInit)
+                    if (_instance is IPersistStreamInit.Interface persistStreamInit)
                     {
                         try
                         {
@@ -3059,7 +3057,7 @@ namespace System.Windows.Forms
                 case STG_STORAGE:
                     try
                     {
-                        _iPersistStorage = (Ole32.IPersistStorage)_instance;
+                        _iPersistStorage = (IPersistStorage.Interface)_instance;
                         DepersistFromIStorage(_ocxState.GetStorage());
                     }
                     catch (Exception e)
@@ -3079,7 +3077,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    _iPersistPropBag = (Oleaut32.IPersistPropertyBag)_instance;
+                    _iPersistPropBag = (IPersistPropertyBag.Interface)_instance;
                     DepersistFromIPropertyBag(_ocxState.GetPropBag());
                 }
                 catch (Exception e)
@@ -3792,7 +3790,7 @@ namespace System.Windows.Forms
 
             if ((_miscStatusBits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0)
             {
-                bool result = ComHelpers.TryQueryInterface(_oleSite, out IOleClientSite* clientSite);
+                using var clientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite, out bool result);
                 Debug.Assert(result);
                 GetOleObject().SetClientSite(clientSite);
                 setClientSite = true;
@@ -3802,7 +3800,7 @@ namespace System.Windows.Forms
 
             if (!setClientSite)
             {
-                bool result = ComHelpers.TryQueryInterface(_oleSite, out IOleClientSite* clientSite);
+                using var clientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite, out bool result);
                 Debug.Assert(result);
                 GetOleObject().SetClientSite(clientSite);
             }
@@ -3917,16 +3915,16 @@ namespace System.Windows.Forms
         }
 
         // Mapping functions:
-        private static Ole32.PICTDESC GetPICTDESCFromPicture(Image image)
+        private static PICTDESC GetPICTDESCFromPicture(Image image)
         {
             if (image is Bitmap bmp)
             {
-                return Ole32.PICTDESC.FromBitmap(bmp);
+                return PICTDESC.FromBitmap(bmp);
             }
 
             if (image is Metafile mf)
             {
-                return Ole32.PICTDESC.FromMetafile(mf);
+                return PICTDESC.FromMetafile(mf);
             }
 
             throw new ArgumentException(SR.AXUnknownImage, nameof(image));
@@ -3943,8 +3941,10 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            Ole32.PICTDESC pictdesc = GetPICTDESCFromPicture(image);
-            return Ole32.OleCreatePictureIndirect(ref pictdesc, in s_ipicture_Guid, fOwn: true);
+            PICTDESC pictdesc = GetPICTDESCFromPicture(image);
+            using ComScope<IPicture> picture = new(null);
+            PInvoke.OleCreatePictureIndirect(&pictdesc, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+            return Marshal.GetObjectForIUnknown(picture);
         }
 
         /// <summary>
@@ -3958,8 +3958,10 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            Ole32.PICTDESC desc = Ole32.PICTDESC.FromIcon(Icon.FromHandle(cursor.Handle), copy: true);
-            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipicture_Guid, fOwn: true);
+            PICTDESC desc = PICTDESC.FromIcon(Icon.FromHandle(cursor.Handle), copy: true);
+            using ComScope<IPicture> picture = new(null);
+            PInvoke.OleCreatePictureIndirect(&desc, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+            return Marshal.GetObjectForIUnknown(picture);
         }
 
         /// <summary>
@@ -3973,8 +3975,10 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            Ole32.PICTDESC desc = GetPICTDESCFromPicture(image);
-            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipictureDisp_Guid, fOwn: true);
+            PICTDESC desc = GetPICTDESCFromPicture(image);
+            using ComScope<IPictureDisp> pictureDisp = new(null);
+            PInvoke.OleCreatePictureIndirect(&desc, IPictureDisp.NativeGuid, fOwn: true, pictureDisp).ThrowOnFailure();
+            return Marshal.GetObjectForIUnknown(pictureDisp);
         }
 
         /// <summary>
@@ -3988,21 +3992,18 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            int hPal = default;
-            Ole32.IPicture pict = (Ole32.IPicture)picture;
-            Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
-            if (type == Ole32.PICTYPE.BITMAP)
+            uint hPal = default;
+            IPicture.Interface pict = (IPicture.Interface)picture;
+            pict.get_Type(out short type).ThrowOnFailure();
+            if (type == (short)PICTYPE.PICTYPE_BITMAP)
             {
-                try
-                {
-                    hPal = pict.hPal;
-                }
-                catch (COMException)
-                {
-                }
+                pict.get_hPal(&hPal);
             }
 
-            return GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
+            pict.get_Handle(out uint handle).ThrowOnFailure();
+            pict.get_Width(out int width).ThrowOnFailure();
+            pict.get_Height(out int height).ThrowOnFailure();
+            return GetPictureFromParams(handle, (PICTYPE)type, hPal, (uint)width, (uint)height);
         }
 
         /// <summary>
@@ -4016,60 +4017,67 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            int hPal = default;
-            Ole32.IPictureDisp pict = (Ole32.IPictureDisp)picture;
-            Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
-            if (type == Ole32.PICTYPE.BITMAP)
+            uint hPal = default;
+            using var pict = ComHelpers.GetComScope<IDispatch>(picture, out HRESULT hr);
+            hr.ThrowOnFailure();
+            using VARIANT variant = default;
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            PICTYPE type = (PICTYPE)variant.data.iVal;
+            if (type == PICTYPE.PICTYPE_BITMAP)
             {
-                try
-                {
-                    hPal = pict.hPal;
-                }
-                catch (COMException)
-                {
-                }
+                ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
+                hPal = variant.data.uintVal;
             }
 
-            Image image = GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
-            GC.KeepAlive(pict);
-            return image;
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            uint handle = variant.data.uintVal;
+
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            uint width = variant.data.uintVal;
+
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            uint height = variant.data.uintVal;
+
+            return GetPictureFromParams(handle, type, hPal, width, height);
         }
 
         private static Image GetPictureFromParams(
-            int handle,
-            Ole32.PICTYPE type,
-            int paletteHandle,
-            int width,
-            int height)
+            uint handle,
+            PICTYPE type,
+            uint paletteHandle,
+            uint width,
+            uint height)
         {
+            nint extendedHandle = (int)handle;
             switch (type)
             {
-                case Ole32.PICTYPE.ICON:
-                    return (Image)(Icon.FromHandle((IntPtr)handle)).Clone();
-                case Ole32.PICTYPE.METAFILE:
+                case PICTYPE.PICTYPE_ICON:
+                    return (Image)(Icon.FromHandle(extendedHandle).Clone());
+                case PICTYPE.PICTYPE_METAFILE:
                     WmfPlaceableFileHeader header = new WmfPlaceableFileHeader
                     {
                         BboxRight = (short)width,
                         BboxBottom = (short)height
                     };
 
-                    using (var metafile = new Metafile((IntPtr)handle, header, deleteWmf: false))
+                    using (var metafile = new Metafile(extendedHandle, header, deleteWmf: false))
                     {
                         return (Image)metafile.Clone();
                     }
 
-                case Ole32.PICTYPE.ENHMETAFILE:
-                    using (var metafile = new Metafile((IntPtr)handle, deleteEmf: false))
+                case PICTYPE.PICTYPE_ENHMETAFILE:
+                    using (var metafile = new Metafile(extendedHandle, deleteEmf: false))
                     {
                         return (Image)metafile.Clone();
                     }
 
-                case Ole32.PICTYPE.BITMAP:
-                    return Image.FromHbitmap((IntPtr)handle, (IntPtr)paletteHandle);
-                case Ole32.PICTYPE.NONE:
+                case PICTYPE.PICTYPE_BITMAP:
+                    nint extendedPaletteHandle = (int)paletteHandle;
+                    return Image.FromHbitmap(extendedHandle, extendedPaletteHandle);
+                case PICTYPE.PICTYPE_NONE:
                     // MSDN says this should not be a valid value, but comctl32 returns it...
                     return null;
-                case Ole32.PICTYPE.UNINITIALIZED:
+                case PICTYPE.PICTYPE_UNINITIALIZED:
                     return null;
                 default:
                     Debug.Fail($"Invalid image type {type}");

@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using static Interop;
 
@@ -271,15 +270,17 @@ namespace System.Windows.Forms
 
             try
             {
-                HRESULT hr = ComCtl32.ImageList.WriteEx(new HandleRef(this, handle), IMAGE_LIST_WRITE_STREAM_FLAGS.ILP_DOWNLEVEL, new Ole32.GPStream(stream));
-                return hr == HRESULT.S_OK;
+                return PInvoke.ImageList.WriteEx(
+                    new HandleRef<HIMAGELIST>(this, handle),
+                    IMAGE_LIST_WRITE_STREAM_FLAGS.ILP_DOWNLEVEL,
+                    new Ole32.GPStream(stream)).Succeeded;
             }
             catch (EntryPointNotFoundException)
             {
                 // WriteEx wasn't found - that's fine - we will use Write.
             }
 
-            return ComCtl32.ImageList.Write(new HandleRef(this, handle), new Ole32.GPStream(stream));
+            return PInvoke.ImageList.Write(new HandleRef<HIMAGELIST>(this, handle), new Ole32.GPStream(stream));
         }
 
         /// <summary>

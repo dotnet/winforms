@@ -2,15 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
 {
     internal class DataStreamFromComStream : Stream
     {
-        private Ole32.IStream _comStream;
+        private IStream.Interface _comStream;
 
-        public DataStreamFromComStream(Ole32.IStream comStream) : base()
+        public DataStreamFromComStream(IStream.Interface comStream) : base()
         {
             _comStream = comStream;
         }
@@ -175,13 +175,7 @@ namespace System.Windows.Forms
             {
                 if (disposing && _comStream is not null)
                 {
-                    try
-                    {
-                        _comStream.Commit(Ole32.STGC.DEFAULT);
-                    }
-                    catch (Exception)
-                    {
-                    }
+                    _comStream.Commit(STGC.STGC_DEFAULT);
                 }
 
                 // Can't release a COM stream from the finalizer thread.

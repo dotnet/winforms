@@ -62,13 +62,13 @@ namespace System.Windows.Forms
                 {
                     object[] temp = new object[list.Count];
                     list.CopyTo(temp, 0);
-                    bool hr = ComHelpers.TryQueryInterface(new AxHost.EnumUnknown(temp), out *ppenum);
+                    bool hr = ComHelpers.TryGetComPointer(new AxHost.EnumUnknown(temp), out *ppenum);
                     Debug.Assert(hr);
                     return HRESULT.S_OK;
                 }
             }
 
-            bool result = ComHelpers.TryQueryInterface(new AxHost.EnumUnknown(null), out *ppenum);
+            bool result = ComHelpers.TryGetComPointer(new AxHost.EnumUnknown(null), out *ppenum);
             Debug.Assert(result);
             return HRESULT.S_OK;
         }

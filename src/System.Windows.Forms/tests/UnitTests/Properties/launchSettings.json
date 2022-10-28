@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "System.Windows.Forms.Tests": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

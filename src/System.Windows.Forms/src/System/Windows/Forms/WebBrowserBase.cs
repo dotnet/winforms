@@ -718,7 +718,7 @@ namespace System.Windows.Forms
         internal unsafe bool DoVerb(Ole32.OLEIVERB verb)
         {
             RECT posRect = Bounds;
-            bool result = ComHelpers.TryQueryInterface(ActiveXSite, out IOleClientSite* clientSite);
+            using var clientSite = ComHelpers.GetComScope<IOleClientSite>(ActiveXSite, out bool result);
             Debug.Assert(result);
             HRESULT hr = axOleObject.DoVerb((int)verb, null, clientSite, 0, HWND, &posRect);
             Debug.Assert(hr.Succeeded, $"DoVerb call failed for verb 0x{verb}");
@@ -955,7 +955,7 @@ namespace System.Windows.Forms
                     //
                     // Simply setting the site to the ActiveX control should activate it.
                     // And this will take us to the Running state.
-                    bool result = ComHelpers.TryQueryInterface(ActiveXSite, out IOleClientSite* clientSite);
+                    using var clientSite = ComHelpers.GetComScope<IOleClientSite>(ActiveXSite, out bool result);
                     Debug.Assert(result);
                     axOleObject.SetClientSite(clientSite);
                 }

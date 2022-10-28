@@ -9,7 +9,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
-using Com = Windows.Win32.System.Com;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
 using static Interop;
 using IAdviseSink = System.Runtime.InteropServices.ComTypes.IAdviseSink;
@@ -220,7 +221,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Advise
             /// </summary>
-            internal unsafe uint Advise(Com.IAdviseSink* pAdvSink)
+            internal unsafe uint Advise(global::Windows.Win32.System.Com.IAdviseSink* pAdvSink)
             {
                 _adviseList.Add((IAdviseSink)Marshal.GetObjectForIUnknown((nint)pAdvSink));
                 return (uint)_adviseList.Count;
@@ -548,14 +549,14 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
 
-                    Com.DISPPARAMS dispParams = default;
+                    DISPPARAMS dispParams = default;
                     object[] pvt = new object[1];
                     Guid g = Guid.Empty;
                     HRESULT hr = disp.Invoke(
                         dispid,
                         &g,
                         PInvoke.LCID.USER_DEFAULT,
-                        Com.DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
+                        DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                         &dispParams,
                         pvt,
                         null,
@@ -975,29 +976,31 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Load
             /// </summary>
-            internal void Load(Ole32.IStorage stg)
+            internal void Load(IStorage.Interface stg)
             {
-                Ole32.IStream stream;
+                IStream* stream;
                 try
                 {
-                    stream = stg.OpenStream(
+                    stg.OpenStream(
                         GetStreamName(),
-                        IntPtr.Zero,
-                        Ole32.STGM.READ | Ole32.STGM.SHARE_EXCLUSIVE,
-                        0);
+                        null,
+                        STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
+                        0,
+                        &stream);
                 }
                 catch (COMException e) when (e.ErrorCode == (int)HRESULT.STG_E_FILENOTFOUND)
                 {
                     // For backward compatibility: We were earlier using GetType().FullName
                     // as the stream name in v1. Lets see if a stream by that name exists.
-                    stream = stg.OpenStream(
+                    stg.OpenStream(
                         GetType().FullName!,
-                        IntPtr.Zero,
-                        Ole32.STGM.READ | Ole32.STGM.SHARE_EXCLUSIVE,
-                        0);
+                        null,
+                        STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
+                        0,
+                        &stream);
                 }
 
-                Load(stream);
+                Load((IStream.Interface)Marshal.GetObjectForIUnknown((nint)stream));
                 if (Marshal.IsComObject(stg))
                 {
                     Marshal.ReleaseComObject(stg);
@@ -1007,7 +1010,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStreamInit::Load
             /// </summary>
-            internal void Load(Ole32.IStream stream)
+            internal void Load(IStream.Interface stream)
             {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, load through that method.
@@ -1024,7 +1027,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Load
             /// </summary>
-            internal unsafe void Load(Oleaut32.IPropertyBag pPropBag, Oleaut32.IErrorLog? pErrorLog)
+            internal unsafe void Load(IPropertyBag.Interface pPropBag, IErrorLog* pErrorLog)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                     _control,
@@ -1036,7 +1039,18 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        HRESULT hr = pPropBag.Read(props[i].Name, out object? obj, pErrorLog);
+                        HRESULT hr = HRESULT.S_OK;
+                        object? obj = null;
+                        using (VARIANT variant = default)
+                        {
+                            fixed (char* pszPropName = props[i].Name)
+                            {
+                                hr = pPropBag.Read(pszPropName, &variant, pErrorLog);
+                            }
+
+                            obj = variant.ToObject();
+                        }
+
                         if (!hr.Succeeded || obj is null)
                         {
                             continue;
@@ -1097,13 +1111,14 @@ namespace System.Windows.Forms
                             {
                                 using BSTR bstrSource = new(_control.GetType().FullName!);
                                 using BSTR bstrDescription = new(errorString);
-                                Com.EXCEPINFO err = new()
+                                EXCEPINFO err = new()
                                 {
                                     bstrSource = bstrSource,
                                     bstrDescription = bstrDescription,
                                     scode = errorCode
                                 };
-                                pErrorLog.AddError(props[i].Name, &err);
+
+                                pErrorLog->AddError(props[i].Name, in err);
                             }
                         }
 
@@ -1327,7 +1342,7 @@ namespace System.Windows.Forms
 
                 if (pQaContainer.pClientSite is not null)
                 {
-                    bool result = ComHelpers.TryQueryInterface(pQaContainer.pClientSite, out IOleClientSite* clientSite);
+                    using var clientSite = ComHelpers.GetComScope<IOleClientSite>(pQaContainer.pClientSite, out bool result);
                     Debug.Assert(result);
                     SetClientSite(clientSite);
                 }
@@ -1337,7 +1352,7 @@ namespace System.Windows.Forms
                     SetAdvise(Ole32.DVASPECT.CONTENT, 0, pQaContainer.pAdviseSink);
                 }
 
-                ((IOleObject.Interface)_control).GetMiscStatus(Com.DVASPECT.DVASPECT_CONTENT, out OLEMISC status);
+                ((IOleObject.Interface)_control).GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC status);
                 pQaControl->dwMiscStatus = (Ole32.OLEMISC)status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
@@ -1405,23 +1420,24 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Save
             /// </summary>
-            internal void Save(Ole32.IStorage stg, BOOL fSameAsLoad)
+            internal void Save(IStorage.Interface stg, BOOL fSameAsLoad)
             {
-                Ole32.IStream stream = stg.CreateStream(
+                using ComScope<IStream> stream = new(null);
+                stg.CreateStream(
                     GetStreamName(),
-                    Ole32.STGM.WRITE | Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE,
+                    STGM.STGM_WRITE | STGM.STGM_SHARE_EXCLUSIVE | STGM.STGM_CREATE,
                     0,
-                    0);
-                Debug.Assert(stream is not null, "Stream should be non-null, or an exception should have been thrown.");
+                    0,
+                    stream);
+                Debug.Assert(!stream.IsNull, "Stream should be non-null, or an exception should have been thrown.");
 
-                Save(stream, true);
-                Marshal.ReleaseComObject(stream);
+                Save((IStream.Interface)Marshal.GetObjectForIUnknown((nint)stream.Value), true);
             }
 
             /// <summary>
             ///  Implements IPersistStreamInit::Save
             /// </summary>
-            internal void Save(Ole32.IStream stream, BOOL fClearDirty)
+            internal void Save(IStream.Interface stream, BOOL fClearDirty)
             {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, save through that method.
@@ -1438,7 +1454,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Save
             /// </summary>
-            internal void Save(Oleaut32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+            internal void Save(IPropertyBag.Interface pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                     _control,
@@ -1453,7 +1469,7 @@ namespace System.Windows.Forms
 
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Saving property {props[i].Name}");
 
-                    object? value;
+                    object? value = null;
 
                     // Not a resource property.  Persist this using standard type converters.
                     TypeConverter converter = props[i].Converter;
@@ -1463,10 +1479,7 @@ namespace System.Windows.Forms
 
                     if (converter.CanConvertFrom(typeof(string)))
                     {
-                        Com.VARIANT variant = default;
                         value = converter.ConvertToInvariantString(props[i].GetValue(_control));
-                        Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
-                        pPropBag.Write(props[i].Name, ref value!);
                     }
                     else if (converter.CanConvertFrom(typeof(byte[])))
                     {
@@ -1477,7 +1490,13 @@ namespace System.Windows.Forms
                             typeof(byte[]))!;
 
                         value = Convert.ToBase64String(data);
-                        pPropBag.Write(props[i].Name, ref value);
+                    }
+
+                    VARIANT variant = default;
+                    Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
+                    fixed (char* pszPropName = props[i].Name)
+                    {
+                        pPropBag.Write(pszPropName, &variant);
                     }
                 }
 

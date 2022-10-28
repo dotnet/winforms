@@ -19,7 +19,7 @@ internal partial class Interop
     internal unsafe partial class WinFormsComWrappers : ComWrappers
     {
         private const int S_OK = 0;
-        private static readonly ComInterfaceEntry* s_streamEntry = InitializeIStreamEntry();
+        private static readonly ComInterfaceEntry* s_streamEntry = InitializeEntry<IStream, IStream.Vtbl>();
         private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeEntry<IFileDialogEvents, IFileDialogEvents.Vtbl>();
         private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeEntry<IEnumString, IEnumString.Vtbl>();
         private static readonly ComInterfaceEntry* s_enumFormatEtcEntry = InitializeIEnumFORMATETCEntry();
@@ -30,18 +30,6 @@ internal partial class Interop
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
 
         private WinFormsComWrappers() { }
-
-        private static ComInterfaceEntry* InitializeIStreamEntry()
-        {
-            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
-
-            IntPtr iStreamVtbl = IStreamVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
-
-            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = IID.IStream;
-            wrapperEntry->Vtable = iStreamVtbl;
-            return wrapperEntry;
-        }
 
         private static ComInterfaceEntry* InitializeEntry<TComInterface, TVTable>()
             where TComInterface : unmanaged, IPopulateVTable<TVTable>, INativeGuid
@@ -115,9 +103,52 @@ internal partial class Interop
             return wrapperEntry;
         }
 
+        internal static bool IsSupportedObject(object obj)
+        {
+            int count = 0;
+
+            if (obj is IStream.Interface)
+            {
+                count++;
+            }
+
+            if (obj is IFileDialogEvents.Interface)
+            {
+                count++;
+            }
+
+            if (obj is Ole32.IDropSource)
+            {
+                count++;
+            }
+
+            if (obj is Ole32.IDropTarget)
+            {
+                count++;
+            }
+
+            if (obj is IEnumString.Interface)
+            {
+                count++;
+            }
+
+            if (obj is ComTypes.IEnumFORMATETC)
+            {
+                count++;
+            }
+
+            if (obj is ComTypes.IDataObject)
+            {
+                count++;
+            }
+
+            Debug.Assert(count < 2);
+            return count == 1;
+        }
+
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
-            if (obj is Ole32.IStream)
+            if (obj is IStream.Interface)
             {
                 count = 1;
                 return s_streamEntry;
@@ -168,16 +199,8 @@ internal partial class Interop
                 || flags == CreateObjectFlags.None
                 || flags == CreateObjectFlags.Unwrap);
 
-            Guid pictureIID = IID.IPicture;
-            int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr pictureComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new PictureWrapper(pictureComObject);
-            }
-
             Guid errorInfoIID = IID.IErrorInfo;
-            hr = Marshal.QueryInterface(externalComObject, ref errorInfoIID, out IntPtr errorInfoComObject);
+            int hr = Marshal.QueryInterface(externalComObject, ref errorInfoIID, out IntPtr errorInfoComObject);
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);
@@ -214,46 +237,6 @@ internal partial class Interop
         protected override void ReleaseObjects(IEnumerable objects)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        ///  Attempts to get the specified <paramref name="iid"/> interface for the given <paramref name="obj"/>.
-        /// </summary>
-        internal bool TryGetComPointer<T>(object? obj, in Guid iid, out T* ppvObject) where T : unmanaged
-        {
-            ppvObject = null;
-
-            if (obj is null)
-            {
-                return false;
-            }
-
-            // Get the CCW and attempt to get the requested interface.
-            IUnknown* ccw = GetOrCreateComInterfaceForObject(obj);
-            if (ccw is null)
-            {
-                return false;
-            }
-
-            HRESULT result = ccw->QueryInterface(in iid, out void* unknown);
-            ppvObject = (T*)unknown;
-            ccw->Release();
-
-            return result == HRESULT.S_OK;
-        }
-
-        /// <summary>
-        ///  Attempts to get the specified <typeparamref name="T"/> interface for the given <paramref name="obj"/>.
-        /// </summary>
-        internal bool TryGetComPointer<T>(object? obj, out T* ppvObject) where T : unmanaged, INativeGuid
-            => TryGetComPointer(obj, *T.NativeGuid, out ppvObject);
-
-        private IUnknown* GetOrCreateComInterfaceForObject(object obj)
-        {
-            return obj switch
-            {
-                _ => (IUnknown*)GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None),
-            };
         }
 
         /// <summary>

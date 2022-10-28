@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Diagnostics.Debug;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -81,8 +82,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             [GUID_COLOR] = typeof(Com2ColorConverter),
             [typeof(Ole32.IFontDisp).GUID] = typeof(Com2FontConverter),
             [typeof(Ole32.IFont).GUID] = typeof(Com2FontConverter),
-            [typeof(Ole32.IPictureDisp).GUID] = typeof(Com2PictureConverter),
-            [typeof(Ole32.IPicture).GUID] = typeof(Com2PictureConverter)
+            [IPictureDisp.Guid] = typeof(Com2PictureConverter),
+            [IPicture.Guid] = typeof(Com2PictureConverter)
         };
 
         private readonly Com2DataTypeToManagedDataTypeConverter? _valueConverter;

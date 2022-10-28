@@ -4,8 +4,9 @@
 
 using System.Drawing;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using Xunit;
-using static Interop.Ole32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
 {
@@ -17,39 +18,52 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
         {
             using MockCursor arrow = new MockCursor(PInvoke.IDC_ARROW);
 
-            IPicture picture = MockAxHost.GetIPictureFromCursor(arrow.Handle);
+            IPicture.Interface picture = MockAxHost.GetIPictureFromCursor(arrow.Handle);
             Assert.NotNull(picture);
-            Assert.Equal(PICTYPE.ICON, (PICTYPE)picture.Type);
+            picture.get_Type(out short type).ThrowOnFailure();
+            Assert.Equal((short)PICTYPE.PICTYPE_ICON, type);
 
-            Assert.Equal(arrow.Size.Height, GdiHelper.HimetricToPixelY(picture.Height));
-            Assert.Equal(arrow.Size.Width, GdiHelper.HimetricToPixelX(picture.Width));
+            picture.get_Height(out int height).ThrowOnFailure();
+            Assert.Equal(arrow.Size.Height, GdiHelper.HimetricToPixelY(height));
+            picture.get_Width(out int width).ThrowOnFailure();
+            Assert.Equal(arrow.Size.Width, GdiHelper.HimetricToPixelX(width));
         }
 
         [StaFact]
-        public void GetIPictureFromImage()
+        public unsafe void GetIPictureFromImage()
         {
             using MockCursor arrow = new MockCursor(PInvoke.IDC_ARROW);
             using Icon icon = Icon.FromHandle(arrow.Handle);
             using Bitmap bitmap = icon.ToBitmap();
-            IPicture picture = MockAxHost.GetIPictureFromPicture(bitmap);
+            IPicture.Interface picture = MockAxHost.GetIPictureFromPicture(bitmap);
             Assert.NotNull(picture);
-            Assert.Equal(PICTYPE.BITMAP, (PICTYPE)picture.Type);
+            picture.get_Type(out short type).ThrowOnFailure();
+            Assert.Equal((short)PICTYPE.PICTYPE_BITMAP, type);
 
-            Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY(picture.Height));
-            Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX(picture.Width));
+            picture.get_Height(out int height).ThrowOnFailure();
+            Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY(height));
+            picture.get_Width(out int width).ThrowOnFailure();
+            Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX(width));
         }
 
         [StaFact]
-        public void GetIPictureDispFromImage()
+        public unsafe void GetIPictureDispFromImage()
         {
             using Icon icon = SystemIcons.Question;
             using Bitmap bitmap = icon.ToBitmap();
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(bitmap);
-            Assert.NotNull(picture);
-            Assert.Equal(PICTYPE.BITMAP, (PICTYPE)picture.Type);
+            using var picture = ComHelpers.GetComScope<IDispatch>(
+                MockAxHost.GetIPictureDispFromPicture(bitmap),
+                out bool result);
+            Assert.True(result);
+            using VARIANT variant = new();
+            ComHelpers.GetDispatchProperty(picture, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            Assert.Equal(PICTYPE.PICTYPE_BITMAP, (PICTYPE)variant.data.iVal);
 
-            Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY(picture.Height));
-            Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX(picture.Width));
+            ComHelpers.GetDispatchProperty(picture, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY((int)variant.data.uintVal));
+
+            ComHelpers.GetDispatchProperty(picture, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX((int)variant.data.uintVal));
         }
 
         [StaFact]
@@ -57,7 +71,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
         {
             using Icon icon = SystemIcons.Exclamation;
             using Bitmap bitmap = icon.ToBitmap();
-            IPicture picture = MockAxHost.GetIPictureFromPicture(bitmap);
+            IPicture.Interface picture = MockAxHost.GetIPictureFromPicture(bitmap);
             Assert.NotNull(picture);
             using Image image = MockAxHost.GetPictureFromIPicture(picture)!;
             Assert.NotNull(image);
@@ -68,7 +82,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
         public void GetPictureFromIPictureDisp()
         {
             using Bitmap bitmap = new Bitmap(100, 200);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(bitmap);
+            IPictureDisp.Interface picture = MockAxHost.GetIPictureDispFromPicture(bitmap);
             Assert.NotNull(picture);
             using Image image = MockAxHost.GetPictureFromIPictureDisp(picture)!;
             Assert.NotNull(image);

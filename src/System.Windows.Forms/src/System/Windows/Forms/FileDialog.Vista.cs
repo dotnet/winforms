@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using Windows.Win32.UI.Controls.Dialogs;
 using static Windows.Win32.UI.Controls.Dialogs.OPEN_FILENAME_FLAGS;
 using static Windows.Win32.UI.Shell.FILEOPENDIALOGOPTIONS;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -40,7 +39,7 @@ namespace System.Windows.Forms
             }
 
             OnBeforeVistaDialog(dialog);
-            bool success = WinFormsComWrappers.Instance.TryGetComPointer(
+            bool success = ComHelpers.TryGetComPointer(
                 new VistaDialogEvents(this),
                 out IFileDialogEvents* events);
 

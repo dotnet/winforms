@@ -73,6 +73,7 @@ DISP_E_MEMBERNOTFOUND
 DISP_E_PARAMNOTFOUND
 DISP_E_UNKNOWNNAME
 DISPATCH_FLAGS
+DISPID_*
 DISPPARAMS
 DPI_AWARENESS_CONTEXT_*
 DragAcceptFiles
@@ -287,10 +288,13 @@ ImageList_Duplicate
 ImageList_GetIconSize
 ImageList_GetImageCount
 ImageList_GetImageInfo
+ImageList_Read
 ImageList_Remove
 ImageList_Replace
 ImageList_ReplaceIcon
 ImageList_SetBkColor
+ImageList_Write
+ImageList_WriteEx
 IME_COMPOSITION_STRING
 ImmAssociateContext
 ImmCreateContext
@@ -309,6 +313,11 @@ IntersectClipRect
 InvalidateRect
 InvalidateRgn
 IPerPropertyBrowsing
+IPersistPropertyBag
+IPersistStorage
+IPersistStreamInit
+IPicture
+IPictureDisp
 IRecordInfo
 IsAppThemed
 IsChild
@@ -389,6 +398,7 @@ OLE_E_ADVISENOTSUPPORTED
 OLE_E_INVALIDRECT
 OLE_E_NOCONNECTION
 OLE_E_PROMPTSAVECANCELLED
+OleCreatePictureIndirect
 OleFlushClipboard
 OleInitialize
 OleUninitialize

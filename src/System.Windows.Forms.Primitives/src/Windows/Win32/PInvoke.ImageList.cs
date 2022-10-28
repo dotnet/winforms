@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using Windows.Win32.System.Com;
+
 namespace Windows.Win32
 {
     internal partial class PInvoke
@@ -101,6 +104,27 @@ namespace Windows.Win32
             public static COLORREF SetBkColor<T>(T himl, COLORREF clrBk) where T : IHandle<HIMAGELIST>
             {
                 COLORREF result = ImageList_SetBkColor(himl.Handle, clrBk);
+                GC.KeepAlive(himl.Wrapper);
+                return result;
+            }
+
+            public static unsafe BOOL Write<T>(T himl, IStream.Interface pstm) where T : IHandle<HIMAGELIST>
+            {
+                using var stream = ComHelpers.GetComScope<IStream>(pstm, out bool succeeded);
+                Debug.Assert(succeeded);
+                BOOL result = ImageList_Write(himl.Handle, stream);
+                GC.KeepAlive(himl.Wrapper);
+                return result;
+            }
+
+            public static unsafe HRESULT WriteEx<T>(
+                T himl,
+                IMAGE_LIST_WRITE_STREAM_FLAGS dwFlags,
+                IStream.Interface pstm) where T : IHandle<HIMAGELIST>
+            {
+                using var stream = ComHelpers.GetComScope<IStream>(pstm, out bool succeeded);
+                Debug.Assert(succeeded);
+                HRESULT result = ImageList_WriteEx(himl.Handle, dwFlags, stream);
                 GC.KeepAlive(himl.Wrapper);
                 return result;
             }

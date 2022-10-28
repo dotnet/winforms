@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -55,7 +54,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            bool result = WinFormsComWrappers.Instance.TryGetComPointer(this, out IEnumString* pEnumString);
+            bool result = ComHelpers.TryGetComPointer(this, out IEnumString* pEnumString);
             Debug.Assert(result);
             HRESULT hr = _autoComplete2->Init(edit.Handle, (IUnknown*)pEnumString, (PCWSTR)null, (PCWSTR)null).ThrowOnFailure();
             GC.KeepAlive(edit.Wrapper);
@@ -86,7 +85,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            bool result = WinFormsComWrappers.Instance.TryGetComPointer(
+            bool result = ComHelpers.TryGetComPointer(
                 new StringSource(strings) { current = current },
                 out *ppenum);
             Debug.Assert(result);

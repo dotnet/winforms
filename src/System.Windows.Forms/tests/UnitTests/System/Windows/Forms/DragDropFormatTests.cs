@@ -4,6 +4,7 @@ using Xunit;
 using static Interop;
 using static Interop.User32;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
+using IStream = Windows.Win32.System.Com.IStream;
 
 namespace System.Windows.Forms.Tests
 {
@@ -33,7 +34,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { formatEtc, medium };
 
             MemoryStream memoryStream = new();
-            Ole32.IStream iStream = new Ole32.GPStream(memoryStream);
+            IStream.Interface iStream = new Ole32.GPStream(memoryStream);
             formatEtc = new()
             {
                 cfFormat = (short)RegisterClipboardFormatW("DragContext"),

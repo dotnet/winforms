@@ -17,7 +17,7 @@ internal partial class Interop
 
         public static unsafe HRESULT RegisterDragDrop(IHandle hwnd, IDropTarget pDropTarget)
         {
-            if (!WinFormsComWrappers.Instance.TryGetComPointer(pDropTarget, IID.IDropTarget, out IUnknown* dropTargetPtr))
+            if (!ComHelpers.TryGetComPointer(pDropTarget, IID.IDropTarget, out IUnknown* dropTargetPtr))
             {
                 return HRESULT.E_NOINTERFACE;
             }

@@ -14,6 +14,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using static Interop;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
+using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
@@ -73,14 +74,14 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                Ole32.IStream? pStream = null;
+                Com.IStream.Interface? pStream = null;
                 nint hglobal = 0;
                 try
                 {
-                    if (medium.tymed == TYMED.TYMED_ISTREAM && medium.unionmember != IntPtr.Zero)
+                    if (medium.tymed == TYMED.TYMED_ISTREAM && medium.unionmember != 0)
                     {
-                        pStream = (Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
-                        pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.DEFAULT);
+                        pStream = (Com.IStream.Interface)Marshal.GetObjectForIUnknown(medium.unionmember);
+                        pStream.Stat(out Com.STATSTG sstg, Com.STATFLAG.STATFLAG_DEFAULT);
 
                         hglobal = PInvoke.GlobalAlloc(
                             GMEM_MOVEABLE | GMEM_ZEROINIT,

@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DEBUG
 using System.Diagnostics;
-#endif
 using System.Drawing;
-using static Interop;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
 {
@@ -22,12 +20,14 @@ namespace System.Windows.Forms
 
             private static readonly object s_syncLock = new object();
 
-            public NativeImageList(Ole32.IStream pstm)
+            public unsafe NativeImageList(IStream.Interface pstm)
             {
                 HIMAGELIST himl;
                 lock (s_syncLock)
                 {
-                    himl = (HIMAGELIST)ComCtl32.ImageList.Read(pstm);
+                    using var stream = ComHelpers.GetComScope<IStream>(pstm, out bool result);
+                    Debug.Assert(result);
+                    himl = PInvoke.ImageList_Read(stream);
                     Init(himl);
                 }
             }
