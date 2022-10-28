@@ -103,6 +103,49 @@ internal partial class Interop
             return wrapperEntry;
         }
 
+        internal static bool IsSupportedObject(object obj)
+        {
+            int count = 0;
+
+            if (obj is IStream.Interface)
+            {
+                count++;
+            }
+
+            if (obj is IFileDialogEvents.Interface)
+            {
+                count++;
+            }
+
+            if (obj is Ole32.IDropSource)
+            {
+                count++;
+            }
+
+            if (obj is Ole32.IDropTarget)
+            {
+                count++;
+            }
+
+            if (obj is IEnumString.Interface)
+            {
+                count++;
+            }
+
+            if (obj is ComTypes.IEnumFORMATETC)
+            {
+                count++;
+            }
+
+            if (obj is ComTypes.IDataObject)
+            {
+                count++;
+            }
+
+            Debug.Assert(count < 2);
+            return count == 1;
+        }
+
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
             if (obj is IStream.Interface)
@@ -147,9 +190,7 @@ internal partial class Interop
                 return s_dataObjectEntry;
             }
 
-            Debug.WriteLine($"ComWrappers for type {obj.GetType()} not implemented.");
-            count = 0;
-            return null;
+            throw new NotImplementedException($"ComWrappers for type {obj.GetType()} not implemented.");
         }
 
         protected override object CreateObject(IntPtr externalComObject, CreateObjectFlags flags)

@@ -44,15 +44,20 @@ namespace Windows.Win32.Foundation
                 return HRESULT.E_POINTER;
             }
 
-            IUnknown* ccw = (IUnknown*)Interop.WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None);
-            if (ccw is null)
+            IUnknown* ccw = null;
+            if (Interop.WinFormsComWrappers.IsSupportedObject(obj))
+            {
+                ccw = (IUnknown*)Interop.WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None);
+            }
+            else
             {
                 // We haven't converted this, fall back to COM interop.
                 ccw = (IUnknown*)Marshal.GetIUnknownForObject(obj);
-                if (ccw is null)
-                {
-                    return HRESULT.E_NOINTERFACE;
-                }
+            }
+
+            if (ccw is null)
+            {
+                return HRESULT.E_NOINTERFACE;
             }
 
             fixed (T** unknown = &ppvObject)
