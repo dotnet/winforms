@@ -126,8 +126,8 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            HRESULT Com.IStream.Interface.Read(void* pv, uint cb, uint* pcbRead) =>
-                ((Com.ISequentialStream.Interface)this).Read(pv, cb, pcbRead);
+            HRESULT Com.IStream.Interface.Read(void* pv, uint cb, uint* pcbRead)
+                => ((Com.ISequentialStream.Interface)this).Read(pv, cb, pcbRead);
 
             HRESULT Com.IStream.Interface.Seek(long dlibMove, SeekOrigin dwOrigin, ulong* plibNewPosition)
             {
@@ -243,8 +243,8 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            HRESULT Com.IStream.Interface.Write(void* pv, uint cb, uint* pcbWritten) =>
-                ((Com.ISequentialStream.Interface)this).Write(pv, cb, pcbWritten);
+            HRESULT Com.IStream.Interface.Write(void* pv, uint cb, uint* pcbWritten)
+                => ((Com.ISequentialStream.Interface)this).Write(pv, cb, pcbWritten);
         }
     }
 }
