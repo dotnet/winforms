@@ -10589,9 +10589,6 @@ namespace System.Windows.Forms
             scaledSize = LayoutUtils.UnionSizes(scaledSize, minSize);
 
             if (DpiHelper.IsScalingRequirementMet
-                // In the v2 layout, anchors are updated/computed after the controls bounds changed
-                // and, thus, don't need scaling.
-                && !DefaultLayout.UseAnchorLayoutV2(this)
                 && ParentInternal is { } parent
                 && (parent.LayoutEngine == DefaultLayout.Instance))
             {
