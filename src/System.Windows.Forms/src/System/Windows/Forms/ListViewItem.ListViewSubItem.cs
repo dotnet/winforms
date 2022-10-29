@@ -139,6 +139,7 @@ public partial class ListViewItem
         internal bool CustomStyle => style is not null;
 
         [Localizable(true)]
+        [AllowNull]
         public Font Font
         {
             get

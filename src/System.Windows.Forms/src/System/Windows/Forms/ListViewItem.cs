@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -36,13 +34,13 @@ public partial class ListViewItem : ICloneable, ISerializable
     private int indentCount;
     private Point position = new Point(-1, -1);
 
-    internal ListView listView;
+    internal ListView? listView;
 
-    internal ListViewGroup group;
-    private string groupName;
+    internal ListViewGroup? group;
+    private string? groupName;
 
-    private ListViewSubItemCollection listViewSubItemCollection;
-    private ListViewSubItem[] subItems;
+    private ListViewSubItemCollection? listViewSubItemCollection;
+    private ListViewSubItem[]? subItems;
 
     // we stash the last index we got as a seed to GetDisplayIndex.
     private int lastIndex = -1;
@@ -51,11 +49,11 @@ public partial class ListViewItem : ICloneable, ISerializable
     internal int ID = -1;
 
     private BitVector32 state;
-    private ListViewItemImageIndexer imageIndexer;
+    private ListViewItemImageIndexer? imageIndexer;
     private string toolTipText = string.Empty;
-    private object userData;
+    private object? userData;
 
-    private AccessibleObject _accessibilityObject;
+    private AccessibleObject? _accessibilityObject;
     private View _accessibilityObjectView;
 
     public ListViewItem()
@@ -68,26 +66,31 @@ public partial class ListViewItem : ICloneable, ISerializable
     /// <summary>
     ///  Creates a ListViewItem object from an Stream.
     /// </summary>
-    protected ListViewItem(SerializationInfo info, StreamingContext context) : this()
+    protected ListViewItem(SerializationInfo info, StreamingContext context)
+        : this()
     {
         Deserialize(info, context);
     }
 
-    public ListViewItem(string text) : this(text, ImageList.Indexer.DefaultIndex)
+    public ListViewItem(string? text)
+        : this(text, ImageList.Indexer.DefaultIndex)
     {
     }
 
-    public ListViewItem(string text, int imageIndex) : this()
+    public ListViewItem(string? text, int imageIndex)
+        : this()
     {
         ImageIndexer.Index = imageIndex;
         Text = text;
     }
 
-    public ListViewItem(string[] items) : this(items, ImageList.Indexer.DefaultIndex)
+    public ListViewItem(string[]? items)
+        : this(items, ImageList.Indexer.DefaultIndex)
     {
     }
 
-    public ListViewItem(string[] items, int imageIndex) : this()
+    public ListViewItem(string[]? items, int imageIndex)
+        : this()
     {
         ImageIndexer.Index = imageIndex;
         if (items is not null && items.Length > 0)
@@ -102,14 +105,16 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
     }
 
-    public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font) : this(items, imageIndex)
+    public ListViewItem(string[]? items, int imageIndex, Color foreColor, Color backColor, Font? font)
+        : this(items, imageIndex)
     {
         ForeColor = foreColor;
         BackColor = backColor;
         Font = font;
     }
 
-    public ListViewItem(ListViewSubItem[] subItems, int imageIndex) : this()
+    public ListViewItem(ListViewSubItem[] subItems, int imageIndex)
+        : this()
     {
         ImageIndexer.Index = imageIndex;
         this.subItems = subItems.OrThrowIfNull();
@@ -124,48 +129,57 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
     }
 
-    public ListViewItem(ListViewGroup group) : this()
+    public ListViewItem(ListViewGroup? group)
+        : this()
     {
         Group = group;
     }
 
-    public ListViewItem(string text, ListViewGroup group) : this(text)
+    public ListViewItem(string? text, ListViewGroup? group)
+        : this(text)
     {
         Group = group;
     }
 
-    public ListViewItem(string text, int imageIndex, ListViewGroup group) : this(text, imageIndex)
+    public ListViewItem(string? text, int imageIndex, ListViewGroup? group)
+        : this(text, imageIndex)
     {
         Group = group;
     }
 
-    public ListViewItem(string[] items, ListViewGroup group) : this(items)
+    public ListViewItem(string[]? items, ListViewGroup? group)
+        : this(items)
     {
         Group = group;
     }
 
-    public ListViewItem(string[] items, int imageIndex, ListViewGroup group) : this(items, imageIndex)
+    public ListViewItem(string[]? items, int imageIndex, ListViewGroup? group)
+        : this(items, imageIndex)
     {
         Group = group;
     }
 
-    public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group) : this(items, imageIndex, foreColor, backColor, font)
+    public ListViewItem(string[]? items, int imageIndex, Color foreColor, Color backColor, Font? font, ListViewGroup? group)
+        : this(items, imageIndex, foreColor, backColor, font)
     {
         Group = group;
     }
 
-    public ListViewItem(ListViewSubItem[] subItems, int imageIndex, ListViewGroup group) : this(subItems, imageIndex)
+    public ListViewItem(ListViewSubItem[] subItems, int imageIndex, ListViewGroup? group)
+        : this(subItems, imageIndex)
     {
         Group = group;
     }
 
-    public ListViewItem(string text, string imageKey) : this()
+    public ListViewItem(string? text, string? imageKey)
+        : this()
     {
         ImageIndexer.Key = imageKey;
         Text = text;
     }
 
-    public ListViewItem(string[] items, string imageKey) : this()
+    public ListViewItem(string[]? items, string? imageKey)
+        : this()
     {
         ImageIndexer.Key = imageKey;
         if (items is not null && items.Length > 0)
@@ -180,14 +194,16 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
     }
 
-    public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font) : this(items, imageKey)
+    public ListViewItem(string[]? items, string? imageKey, Color foreColor, Color backColor, Font? font)
+        : this(items, imageKey)
     {
         ForeColor = foreColor;
         BackColor = backColor;
         Font = font;
     }
 
-    public ListViewItem(ListViewSubItem[] subItems, string imageKey) : this()
+    public ListViewItem(ListViewSubItem[] subItems, string? imageKey)
+        : this()
     {
         ImageIndexer.Key = imageKey;
         this.subItems = subItems.OrThrowIfNull();
@@ -202,22 +218,26 @@ public partial class ListViewItem : ICloneable, ISerializable
         }
     }
 
-    public ListViewItem(string text, string imageKey, ListViewGroup group) : this(text, imageKey)
+    public ListViewItem(string? text, string? imageKey, ListViewGroup? group)
+        : this(text, imageKey)
     {
         Group = group;
     }
 
-    public ListViewItem(string[] items, string imageKey, ListViewGroup group) : this(items, imageKey)
+    public ListViewItem(string[]? items, string? imageKey, ListViewGroup? group)
+        : this(items, imageKey)
     {
         Group = group;
     }
 
-    public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group) : this(items, imageKey, foreColor, backColor, font)
+    public ListViewItem(string[]? items, string? imageKey, Color foreColor, Color backColor, Font? font, ListViewGroup? group)
+        : this(items, imageKey, foreColor, backColor, font)
     {
         Group = group;
     }
 
-    public ListViewItem(ListViewSubItem[] subItems, string imageKey, ListViewGroup group) : this(subItems, imageKey)
+    public ListViewItem(ListViewSubItem[] subItems, string? imageKey, ListViewGroup? group)
+        : this(subItems, imageKey)
     {
         Group = group;
     }
@@ -270,7 +290,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return subItems[0].BackColor;
+                return subItems![0].BackColor;
             }
         }
         set => SubItems[0].BackColor = value;
@@ -362,6 +382,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     [Localizable(true)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRCategory(nameof(SR.CatAppearance))]
+    [AllowNull]
     public Font Font
     {
         get
@@ -377,7 +398,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return subItems[0].Font;
+                return subItems![0].Font;
             }
         }
         set => SubItems[0].Font = value;
@@ -400,7 +421,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return subItems[0].ForeColor;
+                return subItems![0].ForeColor;
             }
         }
         set
@@ -412,7 +433,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     [DefaultValue(null)]
     [Localizable(true)]
     [SRCategory(nameof(SR.CatBehavior))]
-    public ListViewGroup Group
+    public ListViewGroup? Group
     {
         get => group;
         set
@@ -425,7 +446,7 @@ public partial class ListViewItem : ICloneable, ISerializable
                 }
                 else
                 {
-                    group.Items.Remove(this);
+                    group!.Items.Remove(this);
                 }
             }
 
@@ -499,7 +520,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     }
 
     [Browsable(false)]
-    public ImageList ImageList
+    public ImageList? ImageList
     {
         get
         {
@@ -576,7 +597,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     ///  control has been assigned yet.
     /// </summary>
     [Browsable(false)]
-    public ListView ListView => listView;
+    public ListView? ListView => listView;
 
     /// <summary>
     ///  Name associated with this ListViewItem
@@ -584,6 +605,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     [Localizable(true)]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public string Name
     {
         get
@@ -594,7 +616,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return subItems[0].Name;
+                return subItems![0].Name;
             }
         }
         set => SubItems[0].Name = value;
@@ -689,7 +711,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
         }
     }
-
+#nullable disable
     [Localizable(true)]
     [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
     [DefaultValue(ImageList.Indexer.DefaultIndex)]

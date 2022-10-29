@@ -850,39 +850,39 @@ System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, string? t
 System.Windows.Forms.ListView.ListViewItemCollection.Insert(int index, System.Windows.Forms.ListViewItem! item) -> System.Windows.Forms.ListViewItem!
 System.Windows.Forms.ListView.ListViewItemCollection.ListViewItemCollection(System.Windows.Forms.ListView! owner) -> void
 ~System.Windows.Forms.ListViewItem.FindNearestItem(System.Windows.Forms.SearchDirectionHint searchDirection) -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListViewItem.Font.get -> System.Drawing.Font
-~System.Windows.Forms.ListViewItem.Font.set -> void
+System.Windows.Forms.ListViewItem.Font.get -> System.Drawing.Font!
+System.Windows.Forms.ListViewItem.Font.set -> void
 ~System.Windows.Forms.ListViewItem.GetSubItemAt(int x, int y) -> System.Windows.Forms.ListViewItem.ListViewSubItem
-~System.Windows.Forms.ListViewItem.Group.get -> System.Windows.Forms.ListViewGroup
-~System.Windows.Forms.ListViewItem.Group.set -> void
-~System.Windows.Forms.ListViewItem.ImageKey.get -> string
-~System.Windows.Forms.ListViewItem.ImageKey.set -> void
-~System.Windows.Forms.ListViewItem.ImageList.get -> System.Windows.Forms.ImageList
-~System.Windows.Forms.ListViewItem.ListView.get -> System.Windows.Forms.ListView
-~System.Windows.Forms.ListViewItem.ListViewItem(string text) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string text, int imageIndex) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string text, int imageIndex, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string text, string imageKey) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string text, string imageKey, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string text, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string[] items) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string[] items, int imageIndex) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string[] items, int imageIndex, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string[] items, int imageIndex, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string[] items, int imageIndex, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string[] items, string imageKey) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string[] items, string imageKey, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string[] items, string imageKey, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string[] items, string imageKey, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(string[] items, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem[] subItems, int imageIndex) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem[] subItems, int imageIndex, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem[] subItems, string imageKey) -> void
-~System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem[] subItems, string imageKey, System.Windows.Forms.ListViewGroup group) -> void
-~System.Windows.Forms.ListViewItem.Name.get -> string
-~System.Windows.Forms.ListViewItem.Name.set -> void
+System.Windows.Forms.ListViewItem.Group.get -> System.Windows.Forms.ListViewGroup?
+System.Windows.Forms.ListViewItem.Group.set -> void
+System.Windows.Forms.ListViewItem.ImageKey.get -> string!
+System.Windows.Forms.ListViewItem.ImageKey.set -> void
+System.Windows.Forms.ListViewItem.ImageList.get -> System.Windows.Forms.ImageList?
+System.Windows.Forms.ListViewItem.ListView.get -> System.Windows.Forms.ListView?
+System.Windows.Forms.ListViewItem.ListViewItem(string? text) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text, int imageIndex) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text, int imageIndex, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text, string? imageKey) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text, string? imageKey, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string? text, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, int imageIndex, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, string? imageKey, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(string![]? items, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, int imageIndex) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, int imageIndex, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, string? imageKey) -> void
+System.Windows.Forms.ListViewItem.ListViewItem(System.Windows.Forms.ListViewItem.ListViewSubItem![]! subItems, string? imageKey, System.Windows.Forms.ListViewGroup? group) -> void
+System.Windows.Forms.ListViewItem.Name.get -> string!
+System.Windows.Forms.ListViewItem.Name.set -> void
 ~System.Windows.Forms.ListViewItem.SubItems.get -> System.Windows.Forms.ListViewItem.ListViewSubItemCollection
 ~System.Windows.Forms.ListViewItem.Tag.get -> object
 ~System.Windows.Forms.ListViewItem.Tag.set -> void

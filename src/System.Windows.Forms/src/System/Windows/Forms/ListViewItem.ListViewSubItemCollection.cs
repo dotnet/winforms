@@ -50,7 +50,7 @@ public partial class ListViewItem
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                return _owner.subItems[index];
+                return _owner.subItems![index];
             }
             set
             {
@@ -59,7 +59,7 @@ public partial class ListViewItem
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                ListViewSubItem oldSubItem = _owner.subItems[index];
+                ListViewSubItem oldSubItem = _owner.subItems![index];
 
                 _owner.subItems[index] = value.OrThrowIfNull();
                 value._owner = _owner;
@@ -115,7 +115,7 @@ public partial class ListViewItem
 
             EnsureSubItemSpace(1, -1);
             item._owner = _owner;
-            _owner.subItems[_owner.SubItemCount] = item;
+            _owner.subItems![_owner.SubItemCount] = item;
             _owner.UpdateSubItems(_owner.SubItemCount++);
             return item;
         }
@@ -144,7 +144,7 @@ public partial class ListViewItem
                 if (item is not null)
                 {
                     item._owner = _owner;
-                    _owner.subItems[_owner.SubItemCount++] = item;
+                    _owner.subItems![_owner.SubItemCount++] = item;
                 }
             }
 
@@ -160,7 +160,7 @@ public partial class ListViewItem
             {
                 if (item is not null)
                 {
-                    _owner.subItems[_owner.SubItemCount++] = new ListViewSubItem(_owner, item);
+                    _owner.subItems![_owner.SubItemCount++] = new ListViewSubItem(_owner, item);
                 }
             }
 
@@ -176,7 +176,7 @@ public partial class ListViewItem
             {
                 if (item is not null)
                 {
-                    _owner.subItems[_owner.SubItemCount++] = new ListViewSubItem(_owner, item, foreColor, backColor, font);
+                    _owner.subItems![_owner.SubItemCount++] = new ListViewSubItem(_owner, item, foreColor, backColor, font);
                 }
             }
 
@@ -201,7 +201,7 @@ public partial class ListViewItem
                 for (int i = 0; i < oldCount; i++)
                 {
                     _owner.SubItems[i]._owner = null;
-                    _owner.subItems[i].ReleaseUiaProvider();
+                    _owner.subItems![i].ReleaseUiaProvider();
                 }
 
                 _owner.SubItemCount = 0;
@@ -288,7 +288,7 @@ public partial class ListViewItem
         {
             for (int index = 0; index < Count; ++index)
             {
-                if (_owner.subItems[index] == subItem)
+                if (_owner.subItems![index] == subItem)
                 {
                     return index;
                 }
@@ -357,7 +357,7 @@ public partial class ListViewItem
             EnsureSubItemSpace(1, index);
 
             // Insert new item
-            _owner.subItems[index] = item;
+            _owner.subItems![index] = item;
             _owner.SubItemCount++;
             _owner.UpdateSubItems(-1);
         }
@@ -397,8 +397,8 @@ public partial class ListViewItem
             }
 
             // Remove ourselves as the owner.
-            _owner.subItems[index]._owner = null;
-            _owner.subItems[index].ReleaseUiaProvider();
+            _owner.subItems![index]._owner = null;
+            _owner.subItems![index].ReleaseUiaProvider();
 
             // Collapse the items
             for (int i = index + 1; i < _owner.SubItemCount; i++)
@@ -408,7 +408,7 @@ public partial class ListViewItem
 
             int oldCount = _owner.SubItemCount;
             _owner.SubItemCount--;
-            _owner.subItems[_owner.SubItemCount] = null;
+            _owner.subItems[_owner.SubItemCount] = null!;
             _owner.UpdateSubItems(-1, oldCount);
         }
 
@@ -428,7 +428,7 @@ public partial class ListViewItem
         {
             if (Count > 0)
             {
-                Array.Copy(_owner.subItems, 0, dest, index, Count);
+                Array.Copy(_owner.subItems!, 0, dest, index, Count);
             }
         }
 

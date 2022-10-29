@@ -62,7 +62,7 @@ public partial class ListViewItem : IKeyboardToolTip
         return neighboringRectangles;
     }
 
-    IWin32Window IKeyboardToolTip.GetOwnerWindow() => listView;
+    IWin32Window? IKeyboardToolTip.GetOwnerWindow() => listView;
 
     bool IKeyboardToolTip.HasRtlModeEnabled() => listView?.RightToLeft == RightToLeft.Yes;
 

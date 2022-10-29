@@ -99,7 +99,7 @@ internal class ListViewGroupItemCollection : ListView.ListViewItemCollection.IIn
 
     private static void MoveToGroup(ListViewItem item, ListViewGroup? newGroup)
     {
-        ListViewGroup oldGroup = item.Group;
+        ListViewGroup? oldGroup = item.Group;
         if (oldGroup != newGroup)
         {
             item.group = newGroup;

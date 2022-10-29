@@ -7002,7 +7002,7 @@ public partial class ListView : Control
                     HashSet<int> groups = new();
                     foreach (ListViewItem selectedItem in SelectedItems)
                     {
-                        ListViewGroup group = selectedItem.Group;
+                        ListViewGroup? group = selectedItem.Group;
                         if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default || !groups.Add(group.ID))
                         {
                             continue;
