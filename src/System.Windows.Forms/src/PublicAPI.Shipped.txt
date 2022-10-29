@@ -327,20 +327,20 @@ override System.Windows.Forms.LinkLabel.Text.set -> void
 ~override System.Windows.Forms.MdiClient.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
 override System.Windows.Forms.MenuStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.MenuStrip.CreateDefaultItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
-~override System.Windows.Forms.MonthCalendar.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.MonthCalendar.BackgroundImage.set -> void
-~override System.Windows.Forms.MonthCalendar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.MonthCalendar.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.MonthCalendar.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnForeColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.Text.get -> string
-~override System.Windows.Forms.MonthCalendar.Text.set -> void
-~override System.Windows.Forms.MonthCalendar.ToString() -> string
+override System.Windows.Forms.MonthCalendar.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.MonthCalendar.BackgroundImage.set -> void
+override System.Windows.Forms.MonthCalendar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.MonthCalendar.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.MonthCalendar.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnForeColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.Text.get -> string!
+override System.Windows.Forms.MonthCalendar.Text.set -> void
+override System.Windows.Forms.MonthCalendar.ToString() -> string!
 ~override System.Windows.Forms.PictureBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.PictureBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.PictureBox.Font.get -> System.Drawing.Font
@@ -1293,17 +1293,17 @@ System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms
 ~System.Windows.Forms.MdiClient.ControlCollection.ControlCollection(System.Windows.Forms.MdiClient owner) -> void
 System.Windows.Forms.MenuStrip.MdiWindowListItem.get -> System.Windows.Forms.ToolStripMenuItem?
 System.Windows.Forms.MenuStrip.MdiWindowListItem.set -> void
-~System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.get -> System.DateTime[]
-~System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.set -> void
-~System.Windows.Forms.MonthCalendar.BoldedDates.get -> System.DateTime[]
-~System.Windows.Forms.MonthCalendar.BoldedDates.set -> void
-~System.Windows.Forms.MonthCalendar.GetDisplayRange(bool visible) -> System.Windows.Forms.SelectionRange
-~System.Windows.Forms.MonthCalendar.HitTest(int x, int y) -> System.Windows.Forms.MonthCalendar.HitTestInfo
-~System.Windows.Forms.MonthCalendar.HitTest(System.Drawing.Point point) -> System.Windows.Forms.MonthCalendar.HitTestInfo
-~System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.get -> System.DateTime[]
-~System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.set -> void
-~System.Windows.Forms.MonthCalendar.SelectionRange.get -> System.Windows.Forms.SelectionRange
-~System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
+System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.get -> System.DateTime[]!
+System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.set -> void
+System.Windows.Forms.MonthCalendar.BoldedDates.get -> System.DateTime[]!
+System.Windows.Forms.MonthCalendar.BoldedDates.set -> void
+System.Windows.Forms.MonthCalendar.GetDisplayRange(bool visible) -> System.Windows.Forms.SelectionRange!
+System.Windows.Forms.MonthCalendar.HitTest(int x, int y) -> System.Windows.Forms.MonthCalendar.HitTestInfo!
+System.Windows.Forms.MonthCalendar.HitTest(System.Drawing.Point point) -> System.Windows.Forms.MonthCalendar.HitTestInfo!
+System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.get -> System.DateTime[]!
+System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.set -> void
+System.Windows.Forms.MonthCalendar.SelectionRange.get -> System.Windows.Forms.SelectionRange!
+System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
 ~System.Windows.Forms.PictureBox.ErrorImage.get -> System.Drawing.Image
 ~System.Windows.Forms.PictureBox.ErrorImage.set -> void
 ~System.Windows.Forms.PictureBox.Image.get -> System.Drawing.Image
@@ -2049,9 +2049,9 @@ virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLa
 ~virtual System.Windows.Forms.ListViewItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 virtual System.Windows.Forms.MenuStrip.OnMenuActivate(System.EventArgs! e) -> void
 virtual System.Windows.Forms.MenuStrip.OnMenuDeactivate(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.MonthCalendar.OnDateChanged(System.Windows.Forms.DateRangeEventArgs drevent) -> void
-~virtual System.Windows.Forms.MonthCalendar.OnDateSelected(System.Windows.Forms.DateRangeEventArgs drevent) -> void
-~virtual System.Windows.Forms.MonthCalendar.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.MonthCalendar.OnDateChanged(System.Windows.Forms.DateRangeEventArgs! drevent) -> void
+virtual System.Windows.Forms.MonthCalendar.OnDateSelected(System.Windows.Forms.DateRangeEventArgs! drevent) -> void
+virtual System.Windows.Forms.MonthCalendar.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.AsyncCompletedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs e) -> void
@@ -9068,14 +9068,14 @@ System.Windows.Forms.MonthCalendar
 System.Windows.Forms.MonthCalendar.AddAnnuallyBoldedDate(System.DateTime date) -> void
 System.Windows.Forms.MonthCalendar.AddBoldedDate(System.DateTime date) -> void
 System.Windows.Forms.MonthCalendar.AddMonthlyBoldedDate(System.DateTime date) -> void
-System.Windows.Forms.MonthCalendar.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.MonthCalendar.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.MonthCalendar.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.MonthCalendar.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.MonthCalendar.CalendarDimensions.get -> System.Drawing.Size
 System.Windows.Forms.MonthCalendar.CalendarDimensions.set -> void
-System.Windows.Forms.MonthCalendar.Click -> System.EventHandler
-System.Windows.Forms.MonthCalendar.DateChanged -> System.Windows.Forms.DateRangeEventHandler
-System.Windows.Forms.MonthCalendar.DateSelected -> System.Windows.Forms.DateRangeEventHandler
-System.Windows.Forms.MonthCalendar.DoubleClick -> System.EventHandler
+System.Windows.Forms.MonthCalendar.Click -> System.EventHandler?
+System.Windows.Forms.MonthCalendar.DateChanged -> System.Windows.Forms.DateRangeEventHandler?
+System.Windows.Forms.MonthCalendar.DateSelected -> System.Windows.Forms.DateRangeEventHandler?
+System.Windows.Forms.MonthCalendar.DoubleClick -> System.EventHandler?
 System.Windows.Forms.MonthCalendar.FirstDayOfWeek.get -> System.Windows.Forms.Day
 System.Windows.Forms.MonthCalendar.FirstDayOfWeek.set -> void
 System.Windows.Forms.MonthCalendar.HitArea
@@ -9098,7 +9098,7 @@ System.Windows.Forms.MonthCalendar.HitTestInfo.Point.get -> System.Drawing.Point
 System.Windows.Forms.MonthCalendar.HitTestInfo.Time.get -> System.DateTime
 System.Windows.Forms.MonthCalendar.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.MonthCalendar.ImeMode.set -> void
-System.Windows.Forms.MonthCalendar.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.MonthCalendar.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.MonthCalendar.MaxDate.get -> System.DateTime
 System.Windows.Forms.MonthCalendar.MaxDate.set -> void
 System.Windows.Forms.MonthCalendar.MaxSelectionCount.get -> int
@@ -9106,19 +9106,19 @@ System.Windows.Forms.MonthCalendar.MaxSelectionCount.set -> void
 System.Windows.Forms.MonthCalendar.MinDate.get -> System.DateTime
 System.Windows.Forms.MonthCalendar.MinDate.set -> void
 System.Windows.Forms.MonthCalendar.MonthCalendar() -> void
-System.Windows.Forms.MonthCalendar.MouseClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.MonthCalendar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.MonthCalendar.MouseClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.MonthCalendar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.MonthCalendar.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.MonthCalendar.Padding.set -> void
-System.Windows.Forms.MonthCalendar.PaddingChanged -> System.EventHandler
-System.Windows.Forms.MonthCalendar.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.MonthCalendar.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.MonthCalendar.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.MonthCalendar.RemoveAllAnnuallyBoldedDates() -> void
 System.Windows.Forms.MonthCalendar.RemoveAllBoldedDates() -> void
 System.Windows.Forms.MonthCalendar.RemoveAllMonthlyBoldedDates() -> void
 System.Windows.Forms.MonthCalendar.RemoveAnnuallyBoldedDate(System.DateTime date) -> void
 System.Windows.Forms.MonthCalendar.RemoveBoldedDate(System.DateTime date) -> void
 System.Windows.Forms.MonthCalendar.RemoveMonthlyBoldedDate(System.DateTime date) -> void
-System.Windows.Forms.MonthCalendar.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.MonthCalendar.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.MonthCalendar.ScrollChange.get -> int
 System.Windows.Forms.MonthCalendar.ScrollChange.set -> void
 System.Windows.Forms.MonthCalendar.SelectionEnd.get -> System.DateTime
@@ -9137,7 +9137,7 @@ System.Windows.Forms.MonthCalendar.ShowWeekNumbers.set -> void
 System.Windows.Forms.MonthCalendar.SingleMonthSize.get -> System.Drawing.Size
 System.Windows.Forms.MonthCalendar.Size.get -> System.Drawing.Size
 System.Windows.Forms.MonthCalendar.Size.set -> void
-System.Windows.Forms.MonthCalendar.TextChanged -> System.EventHandler
+System.Windows.Forms.MonthCalendar.TextChanged -> System.EventHandler?
 System.Windows.Forms.MonthCalendar.TitleBackColor.get -> System.Drawing.Color
 System.Windows.Forms.MonthCalendar.TitleBackColor.set -> void
 System.Windows.Forms.MonthCalendar.TitleForeColor.get -> System.Drawing.Color
