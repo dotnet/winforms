@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using static Interop;
 
@@ -12,7 +10,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal class GridToolTip : Control
     {
         private readonly Control[] _controls;
-        private string _toolTipText;
+        private string? _toolTipText;
         private bool _dontShow;
         private const int MaximumToolTipLength = 1000;
 
@@ -34,7 +32,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public string ToolTip
+        public string? ToolTip
         {
             get => _toolTipText;
             set
@@ -108,11 +106,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         private ComCtl32.ToolInfoWrapper<Control> GetTOOLINFO(Control c)
             => new(c, TOOLTIP_FLAGS.TTF_TRANSPARENT | TOOLTIP_FLAGS.TTF_SUBCLASS, _toolTipText);
 
-        private void OnControlCreateHandle(object sender, EventArgs e) => SetupToolTip((Control)sender);
+        private void OnControlCreateHandle(object? sender, EventArgs e) => SetupToolTip((Control?)sender);
 
-        private void OnControlDestroyHandle(object sender, EventArgs e)
+        private void OnControlDestroyHandle(object? sender, EventArgs e)
         {
-            if (IsHandleCreated)
+            if (IsHandleCreated && sender is not null)
             {
                 GetTOOLINFO((Control)sender).SendMessage(this, (User32.WM)PInvoke.TTM_DELTOOLW);
             }
@@ -130,9 +128,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void SetupToolTip(Control control)
+        private void SetupToolTip(Control? control)
         {
-            if (IsHandleCreated)
+            if (IsHandleCreated && control is not null)
             {
                 PInvoke.SetWindowPos(
                     this,
@@ -161,7 +159,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // then reenter. So we set the tooltip to null, update the text, then it back to
             // what it was, so the tooltip thinks it's back in the regular state again.
 
-            string oldText = ToolTip;
+            string? oldText = ToolTip;
             _toolTipText = string.Empty;
 
             for (int i = 0; i < _controls.Length; i++)
