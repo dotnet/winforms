@@ -640,12 +640,12 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
-~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url) -> void
-~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url, string keyword) -> void
-~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url, System.Windows.Forms.HelpNavigator command, object parameter) -> void
-~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url, System.Windows.Forms.HelpNavigator navigator) -> void
-~static System.Windows.Forms.Help.ShowHelpIndex(System.Windows.Forms.Control parent, string url) -> void
-~static System.Windows.Forms.Help.ShowPopup(System.Windows.Forms.Control parent, string caption, System.Drawing.Point location) -> void
+static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control? parent, string? url) -> void
+static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control? parent, string? url, string? keyword) -> void
+static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control? parent, string? url, System.Windows.Forms.HelpNavigator command, object? parameter) -> void
+static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control? parent, string? url, System.Windows.Forms.HelpNavigator navigator) -> void
+static System.Windows.Forms.Help.ShowHelpIndex(System.Windows.Forms.Control? parent, string? url) -> void
+static System.Windows.Forms.Help.ShowPopup(System.Windows.Forms.Control? parent, string! caption, System.Drawing.Point location) -> void
 ~static System.Windows.Forms.HtmlDocument.operator !=(System.Windows.Forms.HtmlDocument left, System.Windows.Forms.HtmlDocument right) -> bool
 ~static System.Windows.Forms.HtmlDocument.operator ==(System.Windows.Forms.HtmlDocument left, System.Windows.Forms.HtmlDocument right) -> bool
 ~static System.Windows.Forms.HtmlElement.operator !=(System.Windows.Forms.HtmlElement left, System.Windows.Forms.HtmlElement right) -> bool
