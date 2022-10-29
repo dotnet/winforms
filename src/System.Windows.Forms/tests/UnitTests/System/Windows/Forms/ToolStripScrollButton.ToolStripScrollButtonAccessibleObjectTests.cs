@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Tests
             SubToolStripDropDownMenu dropDownMenu = new SubToolStripDropDownMenu(ownerItem, true, true);
 
             toolStrip.Items.Add(ownerItem);
-            ownerItem.TestAccessor().Dynamic.dropDown = dropDownMenu;
+            ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 1"));
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 2"));
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 3"));
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Tests
             SubToolStripDropDownMenu dropDownMenu = new SubToolStripDropDownMenu(ownerItem, true, false);
 
             toolStrip.Items.Add(ownerItem);
-            ownerItem.TestAccessor().Dynamic.dropDown = dropDownMenu;
+            ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 1"));
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 2"));
 
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Tests
             SubToolStripDropDownMenu dropDownMenu = new SubToolStripDropDownMenu(ownerItem, true, true);
 
             toolStrip.Items.Add(ownerItem);
-            ownerItem.TestAccessor().Dynamic.dropDown = dropDownMenu;
+            ownerItem.TestAccessor().Dynamic._dropDown = dropDownMenu;
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 1"));
             ownerItem.DropDownItems.Add(new ToolStripDropDownButton("Item 2"));
             dropDownMenu.UpdateDisplayedItems();
