@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 
@@ -13,7 +11,7 @@ namespace System.Windows.Forms
     {
         private abstract class ToolStripPanelRowManager
         {
-            private FlowLayoutSettings _flowLayoutSettings;
+            private FlowLayoutSettings? _flowLayoutSettings;
 
             public ToolStripPanelRowManager(ToolStripPanelRow owner)
             {
@@ -22,21 +20,21 @@ namespace System.Windows.Forms
 
             public virtual bool CanMove(ToolStrip toolStripToDrag)
             {
-                if (toolStripToDrag is ISupportToolStripPanel raftingControl)
+                if (toolStripToDrag is ISupportToolStripPanel toolStripToDragAsRaftingControl)
                 {
-                    if (raftingControl.Stretch)
+                    if (toolStripToDragAsRaftingControl.Stretch)
                     {
                         Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, "TSP RM CanMove returns false - the item moving is stretched.");
                         return false;
                     }
                 }
 
-                foreach (Control c in Row.ControlsInternal)
+                foreach (Control control in Row.ControlsInternal)
                 {
-                    raftingControl = c as ISupportToolStripPanel;
-                    if (raftingControl is not null)
+                    var controlAsRaftingControl = control as ISupportToolStripPanel;
+                    if (controlAsRaftingControl is not null)
                     {
-                        if (raftingControl.Stretch)
+                        if (controlAsRaftingControl.Stretch)
                         {
                             Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, "TSP RM CanMove returns false - the row already contains a stretched item.");
                             return false;
@@ -94,13 +92,13 @@ namespace System.Windows.Forms
                 return freedSpace;
             }
 
-            public ToolStripPanelCell GetNextVisibleCell(int index, bool forward)
+            public ToolStripPanelCell? GetNextVisibleCell(int index, bool forward)
             {
                 if (forward)
                 {
                     for (int i = index; i < Row.Cells.Count; i++)
                     {
-                        ToolStripPanelCell cell = Row.Cells[i] as ToolStripPanelCell;
+                        ToolStripPanelCell cell = (ToolStripPanelCell)Row.Cells[i];
                         if ((cell.Visible || (Row.ToolStripPanel.Visible && cell.ControlInDesignMode)) && cell.ToolStripPanelRow == Row)
                         {
                             return cell;
@@ -111,7 +109,7 @@ namespace System.Windows.Forms
                 {
                     for (int i = index; i >= 0; i--)
                     {
-                        ToolStripPanelCell cell = Row.Cells[i] as ToolStripPanelCell;
+                        ToolStripPanelCell cell = (ToolStripPanelCell)Row.Cells[i];
                         if ((cell.Visible || (Row.ToolStripPanel.Visible && cell.ControlInDesignMode)) && cell.ToolStripPanelRow == Row)
                         {
                             return cell;
