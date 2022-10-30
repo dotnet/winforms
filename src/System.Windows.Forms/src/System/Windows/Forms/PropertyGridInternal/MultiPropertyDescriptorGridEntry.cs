@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -28,11 +26,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             Initialize(_mergedDescriptor);
         }
 
-        public override IContainer Container
+        public override IContainer? Container
         {
             get
             {
-                IContainer container = null;
+                IContainer? container = null;
 
                 foreach (object o in _objects)
                 {
@@ -185,7 +183,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal override bool SendNotification(GridEntry entry, Notify notification)
         {
-            DesignerTransaction transaction = DesignerHost?.CreateTransaction();
+            DesignerTransaction? transaction = DesignerHost?.CreateTransaction();
 
             try
             {
@@ -244,8 +242,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         if (propertyInfo is not null)
                         {
-                            changeService.OnComponentChanging(ownerArray.GetValue(i), propertyInfo);
-                            changeService.OnComponentChanged(ownerArray.GetValue(i), propertyInfo);
+                            var component = ownerArray.GetValue(i)!;
+                            changeService.OnComponentChanging(component, propertyInfo);
+                            changeService.OnComponentChanged(component, propertyInfo);
                         }
                     }
                 }
@@ -257,7 +256,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected override bool SendNotification(object owner, Notify notification)
+        protected override bool SendNotification(object? owner, Notify notification)
         {
             if (owner is ICustomTypeDescriptor descriptor)
             {
@@ -268,7 +267,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 case Notify.Reset:
 
-                    object[] objects = (object[])owner;
+                    object[]? objects = (object[]?)owner;
 
                     if (objects is null || objects.Length == 0)
                     {
@@ -276,7 +275,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                     IDesignerHost host = DesignerHost;
-                    DesignerTransaction transaction = host?.CreateTransaction(string.Format(SR.PropertyGridResetValue, PropertyName));
+                    DesignerTransaction? transaction = host?.CreateTransaction(string.Format(SR.PropertyGridResetValue, PropertyName));
 
                     try
                     {
@@ -318,7 +317,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         if (_eventBindings is not null)
                         {
-                            EventDescriptor eventDescriptor = _eventBindings.GetEvent(mergeDescriptor[0]);
+                            EventDescriptor? eventDescriptor = _eventBindings.GetEvent(mergeDescriptor[0]);
                             if (eventDescriptor is not null)
                             {
                                 return ViewEvent(owner, null, eventDescriptor, true);
