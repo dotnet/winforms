@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Globalization;
 
 namespace System.Windows.Forms
@@ -16,10 +14,10 @@ namespace System.Windows.Forms
             readonly Type contentPanelType = typeof(ToolStripContentPanel);
             readonly Type panelType = typeof(ToolStripPanel);
 
-            public ToolStripContainerTypedControlCollection(Control c, bool isReadOnly)
+            public ToolStripContainerTypedControlCollection(ToolStripContainer c, bool isReadOnly)
                 : base(c, isReadOnly)
             {
-                owner = c as ToolStripContainer;
+                owner = c;
             }
 
             public override void Add(Control value)
@@ -40,7 +38,7 @@ namespace System.Windows.Forms
                 base.Add(value);
             }
 
-            public override void Remove(Control value)
+            public override void Remove(Control? value)
             {
                 if (value is ToolStripPanel || value is ToolStripContentPanel)
                 {
