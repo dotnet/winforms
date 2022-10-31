@@ -15,18 +15,31 @@ namespace Windows.Win32.Foundation
         internal static bool TryGetComPointer<T>(object? obj, in Guid iid, out T* ppvObject) where T : unmanaged
             => GetComPointer(obj, in iid, out ppvObject).Succeeded;
 
+        // Note that ComScope<T> needs to be the return value to faciliate using in a `using`.
+        //
+        //  using var stream = GetComScope<IStream>(obj, out bool success);
+
+        /// <summary>
+        ///  Attempts to get a pointer for the specified <typeparamref name="T"/> for the given <paramref name="obj"/>.
+        /// </summary>
         internal static ComScope<T> GetComScope<T>(object obj, out HRESULT hr) where T : unmanaged, INativeGuid
         {
             hr = GetComPointer(obj, T.NativeGuid, out T* pInterface);
             return new(pInterface);
         }
 
+        /// <summary>
+        ///  Attempts to get a pointer for the specified <typeparamref name="T"/> for the given <paramref name="obj"/>.
+        /// </summary>
         internal static ComScope<T> GetComScope<T>(object obj, out bool success) where T : unmanaged, INativeGuid
         {
             success = TryGetComPointer(obj, out T* pInterface);
             return new(pInterface);
         }
 
+        /// <summary>
+        ///  Attempts to get the specified <paramref name="iid"/> interface for the given <paramref name="obj"/>.
+        /// </summary>
         internal static HRESULT GetComPointer<T>(object? obj, in Guid iid, out T* ppvObject) where T : unmanaged
         {
             fixed (Guid* pGuid = &iid)
@@ -35,6 +48,9 @@ namespace Windows.Win32.Foundation
             }
         }
 
+        /// <summary>
+        ///  Attempts to get the specified <paramref name="iid"/> interface for the given <paramref name="obj"/>.
+        /// </summary>
         internal static HRESULT GetComPointer<T>(object? obj, Guid* iid, out T* ppvObject) where T : unmanaged
         {
             ppvObject = null;
@@ -75,6 +91,9 @@ namespace Windows.Win32.Foundation
         internal static bool TryGetComPointer<T>(object? obj, out T* ppvObject) where T : unmanaged, INativeGuid
             => GetComPointer(obj, T.NativeGuid, out ppvObject).Succeeded;
 
+        /// <summary>
+        ///  Helper to get a property value from an <see cref="IDispatch"/> interface.
+        /// </summary>
         internal static HRESULT GetDispatchProperty(
             IDispatch* dispatch,
             uint dispId,

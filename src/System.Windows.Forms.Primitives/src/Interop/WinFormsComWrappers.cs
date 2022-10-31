@@ -103,8 +103,19 @@ internal partial class Interop
             return wrapperEntry;
         }
 
+        /// <summary>
+        ///  Check to see if the given object is supported by our ComWrappers implementation.
+        /// </summary>
         internal static bool IsSupportedObject(object obj)
         {
+            // This maps to what we're currently doing in ComputeVtables. We currently presume only one match, so
+            // if we see that we get multiple matches we're going to not claim it as supported.
+
+            // We need to figure out a more direct way of tying objects to our ComWrappers implementation. Going by
+            // interface is fragile unless we check the object for all supported interfaces and dynamically build
+            // the ComInterfaceEntry table for it. This seems slow, perhaps we need some sort of deliberate interface
+            // on our classes we're exposing to COM to give the data?
+
             int count = 0;
 
             if (obj is IStream.Interface)
