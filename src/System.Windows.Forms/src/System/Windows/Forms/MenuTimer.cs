@@ -38,7 +38,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose && currentItem != value, "[MenuTimer.CurrentItem] changed: " + ((value is null) ? "null" : value.ToString()));
+                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose && currentItem != value, $"[MenuTimer.CurrentItem] changed: {(value is null ? "null" : value.ToString())}");
                 currentItem = value;
             }
         }
