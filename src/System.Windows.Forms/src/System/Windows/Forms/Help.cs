@@ -118,7 +118,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static unsafe void ShowHTML10Help(Control? parent, string? url, HelpNavigator command, object? param)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, "Help:: ShowHTML10Help:: " + url + ", " + command.ToString("G") + ", " + param);
+            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, $"Help:: ShowHTML10Help:: {url}, {command.ToString("G")}, {param}");
 
             // See if we can get a full path and file name and if that will
             // resolve the out of memory condition with file names that include spaces.
@@ -326,7 +326,7 @@ namespace System.Windows.Forms
 
         private static int GetHelpFileType(string? url)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, "Help:: GetHelpFileType " + url);
+            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, "Help:: GetHelpFileType {url}");
 
             if (url is null)
             {
