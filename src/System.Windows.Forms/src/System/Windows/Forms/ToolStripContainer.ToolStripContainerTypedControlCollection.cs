@@ -10,14 +10,14 @@ namespace System.Windows.Forms
     {
         internal class ToolStripContainerTypedControlCollection : ReadOnlyControlCollection
         {
-            readonly ToolStripContainer owner;
-            readonly Type contentPanelType = typeof(ToolStripContentPanel);
-            readonly Type panelType = typeof(ToolStripPanel);
+            private readonly ToolStripContainer _owner;
+            private readonly Type _contentPanelType = typeof(ToolStripContentPanel);
+            private readonly Type _panelType = typeof(ToolStripPanel);
 
             public ToolStripContainerTypedControlCollection(ToolStripContainer c, bool isReadOnly)
                 : base(c, isReadOnly)
             {
-                owner = c;
+                _owner = c;
             }
 
             public override void Add(Control value)
@@ -30,9 +30,9 @@ namespace System.Windows.Forms
                 }
 
                 Type controlType = value.GetType();
-                if (!contentPanelType.IsAssignableFrom(controlType) && !panelType.IsAssignableFrom(controlType))
+                if (!_contentPanelType.IsAssignableFrom(controlType) && !_panelType.IsAssignableFrom(controlType))
                 {
-                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, contentPanelType.Name, panelType.Name)), value.GetType().Name);
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, _contentPanelType.Name, _panelType.Name)), value.GetType().Name);
                 }
 
                 base.Add(value);
@@ -42,7 +42,7 @@ namespace System.Windows.Forms
             {
                 if (value is ToolStripPanel || value is ToolStripContentPanel)
                 {
-                    if (!owner.DesignMode)
+                    if (!_owner.DesignMode)
                     {
                         if (IsReadOnly)
                         {
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
             {
                 if (child is ToolStripPanel || child is ToolStripContentPanel)
                 {
-                    if (!owner.DesignMode)
+                    if (!_owner.DesignMode)
                     {
                         if (IsReadOnly)
                         {
