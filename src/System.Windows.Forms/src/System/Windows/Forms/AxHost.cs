@@ -1895,8 +1895,8 @@ namespace System.Windows.Forms
 
                 MSG msg = new()
                 {
-                    // We don't have a message so we must fake one ourselves.
-                    // The message we are faking is a WM_SYSKEYDOWN with the right alt key setting.
+                    // We don't have a message so we must create one ourselves.
+                    // The message we are creating is a WM_SYSKEYDOWN with the right alt key setting.
                     hwnd = (ContainingControl is null) ? HWND.Null : ContainingControl.HWND,
                     message = (uint)User32.WM.SYSKEYDOWN,
                     wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
@@ -1917,8 +1917,7 @@ namespace System.Windows.Forms
             }
             catch (Exception t)
             {
-                Debug.Fail("error in processMnemonic");
-                Debug.Fail(t.ToString());
+                Debug.Fail($"error in processMnemonic: {t}");
             }
 
             return processed;

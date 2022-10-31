@@ -347,8 +347,8 @@ namespace System.Windows.Forms
                     return processed;
                 }
 
-                // We don't have a message so we must fake one ourselves.
-                // The message we are faking is a WM_SYSKEYDOWN with the right alt key setting.
+                // We don't have a message so we must create one ourselves.
+                // The message we are creating is a WM_SYSKEYDOWN with the right alt key setting.
                 MSG msg = new()
                 {
                     hwnd = HWND.Null,
@@ -369,7 +369,7 @@ namespace System.Windows.Forms
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
-                Debug.Fail("error in processMnemonic");
+                Debug.Fail($"error in processMnemonic: {ex}");
             }
 
             return processed;
