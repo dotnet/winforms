@@ -34,6 +34,7 @@ COMDLG_FILTERSPEC
 CommDlgExtendedError
 CopyImage
 CP_ACP
+CreateAcceleratorTableW
 CreateActCtx
 CreateBitmap
 CreateBrushIndirect
@@ -274,6 +275,7 @@ IFileDialogCustomize
 IFileDialogEvents
 IFileOpenDialog
 IFileSaveDialog
+IOleControl
 IOleInPlaceActiveObject
 IOleInPlaceObject
 IOleInPlaceObjectWindowless
@@ -319,6 +321,7 @@ IPersistStreamInit
 IPicture
 IPictureDisp
 IRecordInfo
+IsAccelerator
 IsAppThemed
 IsChild
 IShellItem

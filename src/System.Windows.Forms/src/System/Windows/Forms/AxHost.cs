@@ -179,7 +179,7 @@ namespace System.Windows.Forms
         private object _instance;
         private IOleInPlaceObject.Interface _iOleInPlaceObject;
         private IOleObject.Interface _iOleObject;
-        private Ole32.IOleControl _iOleControl;
+        private IOleControl.Interface _iOleControl;
         private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObject;
         private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObjectExternal;
         private IPerPropertyBrowsing.Interface _iPerPropertyBrowsing;
@@ -872,14 +872,11 @@ namespace System.Windows.Forms
         {
             if (GetOcx() is not null)
             {
-                try
+                Invalidate();
+                HRESULT result = GetOleControl().OnAmbientPropertyChange((int)dispid);
+                if (result.Failed)
                 {
-                    Invalidate();
-                    GetOleControl().OnAmbientPropertyChange(dispid);
-                }
-                catch (Exception t)
-                {
-                    Debug.Fail(t.ToString());
+                    Debug.Fail(result.ToString());
                 }
             }
         }
@@ -921,9 +918,9 @@ namespace System.Windows.Forms
             if (e.Component == this)
             {
                 // If it is, call DISPID_AMBIENT_DISPLAYNAME directly on the control itself.
-                if (GetOcx() is Ole32.IOleControl oleCtl)
+                if (GetOcx() is IOleControl.Interface oleCtl)
                 {
-                    oleCtl.OnAmbientPropertyChange(Ole32.DispatchID.AMBIENT_DISPLAYNAME);
+                    oleCtl.OnAmbientPropertyChange(PInvoke.DISPID_AMBIENT_DISPLAYNAME);
                 }
             }
         }
@@ -1878,52 +1875,53 @@ namespace System.Windows.Forms
         protected internal override unsafe bool ProcessMnemonic(char charCode)
         {
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"In AxHost.ProcessMnemonic: {(int)charCode}");
-            if (CanSelect)
+            if (!CanSelect)
             {
-                try
-                {
-                    var ctlInfo = new Ole32.CONTROLINFO
-                    {
-                        cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
-                    };
-                    HRESULT hr = GetOleControl().GetControlInfo(&ctlInfo);
-                    if (!hr.Succeeded)
-                    {
-                        return false;
-                    }
-
-                    var msg = new MSG
-                    {
-                        // Sadly, we don't have a message so we must fake one ourselves...
-                        // A bit of ugliness here (a bit?  more like a bucket...)
-                        // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
-                        hwnd = (ContainingControl is null) ? (HWND)0 : ContainingControl.HWND,
-                        message = (uint)User32.WM.SYSKEYDOWN,
-                        wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
-                        lParam = 0x20180001,
-                        time = PInvoke.GetTickCount()
-                    };
-
-                    PInvoke.GetCursorPos(out Point p);
-                    msg.pt = p;
-
-                    if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
-                    {
-                        GetOleControl().OnMnemonic(&msg);
-                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"\t Processed mnemonic {msg}");
-                        Focus();
-                        return true;
-                    }
-                }
-                catch (Exception t)
-                {
-                    Debug.Fail("error in processMnemonic");
-                    Debug.Fail(t.ToString());
-                    return false;
-                }
+                return false;
             }
 
-            return false;
+            bool processed = false;
+            try
+            {
+                CONTROLINFO ctlInfo = new()
+                {
+                    cb = (uint)sizeof(CONTROLINFO)
+                };
+
+                if (GetOleControl().GetControlInfo(&ctlInfo).Failed)
+                {
+                    return processed;
+                }
+
+                MSG msg = new()
+                {
+                    // We don't have a message so we must fake one ourselves.
+                    // The message we are faking is a WM_SYSKEYDOWN with the right alt key setting.
+                    hwnd = (ContainingControl is null) ? HWND.Null : ContainingControl.HWND,
+                    message = (uint)User32.WM.SYSKEYDOWN,
+                    wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+                    lParam = 0x20180001,
+                    time = PInvoke.GetTickCount()
+                };
+
+                PInvoke.GetCursorPos(out Point p);
+                msg.pt = p;
+
+                if (PInvoke.IsAccelerator(new HandleRef<HACCEL>(this, ctlInfo.hAccel), ctlInfo.cAccel, &msg, lpwCmd: null))
+                {
+                    GetOleControl().OnMnemonic(&msg);
+                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"\t Processed mnemonic {msg}");
+                    Focus();
+                    processed = true;
+                }
+            }
+            catch (Exception t)
+            {
+                Debug.Fail("error in processMnemonic");
+                Debug.Fail(t.ToString());
+            }
+
+            return processed;
         }
 
         // misc methods:
@@ -3839,17 +3837,17 @@ namespace System.Windows.Forms
             return _container;
         }
 
-        private Ole32.IOleControl GetOleControl() => _iOleControl ??= (Ole32.IOleControl)_instance;
+        private IOleControl.Interface GetOleControl() => _iOleControl ??= (IOleControl.Interface)_instance;
 
         private IOleInPlaceActiveObject.Interface GetInPlaceActiveObject()
         {
-            // if our AxContainer was set an external active object then use it.
+            // If our AxContainer was set an external active object then use it.
             if (_iOleInPlaceActiveObjectExternal is not null)
             {
                 return _iOleInPlaceActiveObjectExternal;
             }
 
-            // otherwise use our instance.
+            // Otherwise use our instance.
             if (_iOleInPlaceActiveObject is null)
             {
                 Debug.Assert(_instance is not null, "must have the ocx");

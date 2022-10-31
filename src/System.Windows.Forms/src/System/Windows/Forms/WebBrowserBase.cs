@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         private IOleObject.Interface axOleObject;
         private IOleInPlaceObject.Interface axOleInPlaceObject;
         private IOleInPlaceActiveObject.Interface axOleInPlaceActiveObject;
-        private Ole32.IOleControl axOleControl;
+        private IOleControl.Interface axOleControl;
         private WebBrowserBaseNativeWindow axWindow;
         // We need to change the size of the inner ActiveX control before the
         //WebBrowserBase control's size is changed (i.e., before WebBrowserBase.Bounds
@@ -337,22 +337,21 @@ namespace System.Windows.Forms
 
             try
             {
-                var ctlInfo = new Ole32.CONTROLINFO
+                CONTROLINFO controlInfo = new()
                 {
-                    cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
+                    cb = (uint)sizeof(CONTROLINFO)
                 };
 
-                HRESULT hr = axOleControl.GetControlInfo(&ctlInfo);
-                if (!hr.Succeeded)
+                if (axOleControl.GetControlInfo(&controlInfo).Failed)
                 {
                     return processed;
                 }
 
-                // Sadly, we don't have a message so we must fake one ourselves.
+                // We don't have a message so we must fake one ourselves.
                 // The message we are faking is a WM_SYSKEYDOWN with the right alt key setting.
-                var msg = new MSG
+                MSG msg = new()
                 {
-                    hwnd = (HWND)0,
+                    hwnd = HWND.Null,
                     message = (uint)User32.WM.SYSKEYDOWN,
                     wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                     lParam = 0x20180001,
@@ -361,14 +360,12 @@ namespace System.Windows.Forms
 
                 PInvoke.GetCursorPos(out Point p);
                 msg.pt = p;
-                if (!Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
+                if (!PInvoke.IsAccelerator(new HandleRef<HACCEL>(this, controlInfo.hAccel), controlInfo.cAccel, &msg, lpwCmd: null))
                 {
                     axOleControl.OnMnemonic(&msg);
                     Focus();
                     processed = true;
                 }
-
-                return processed;
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
@@ -1091,7 +1088,7 @@ namespace System.Windows.Forms
             axOleObject = (IOleObject.Interface)activeXInstance;
             axOleInPlaceObject = (IOleInPlaceObject.Interface)activeXInstance;
             axOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)activeXInstance;
-            axOleControl = (Ole32.IOleControl)activeXInstance;
+            axOleControl = (IOleControl.Interface)activeXInstance;
 
             // Give the inheriting classes a chance to cast the ActiveX object to the
             // appropriate interfaces.
@@ -1263,14 +1260,11 @@ namespace System.Windows.Forms
         {
             if (activeXInstance is not null)
             {
-                try
+                Invalidate();
+                HRESULT result = axOleControl.OnAmbientPropertyChange((int)dispid);
+                if (result.Failed)
                 {
-                    Invalidate();
-                    axOleControl.OnAmbientPropertyChange(dispid);
-                }
-                catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
-                {
-                    Debug.Fail(ex.ToString());
+                    Debug.Fail(result.ToString());
                 }
             }
         }
