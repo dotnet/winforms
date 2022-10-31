@@ -191,9 +191,9 @@ namespace System.Windows.Forms
 
             int IList.Add(object? value)
             {
-                if (value is Link l)
+                if (value is Link link)
                 {
-                    return Add(l);
+                    return Add(link);
                 }
                 else
                 {
@@ -203,9 +203,9 @@ namespace System.Windows.Forms
 
             void IList.Insert(int index, object? value)
             {
-                if (value is Link l)
+                if (value is Link link)
                 {
-                    Add(l);
+                    Add(link);
                 }
                 else
                 {
@@ -226,11 +226,11 @@ namespace System.Windows.Forms
                 return IsValidIndex(IndexOfKey(key));
             }
 
-            bool IList.Contains(object? link)
+            bool IList.Contains(object? value)
             {
-                if (link is Link l)
+                if (value is Link link)
                 {
-                    return Contains(l);
+                    return Contains(link);
                 }
                 else
                 {
@@ -243,11 +243,11 @@ namespace System.Windows.Forms
                 return _owner._links.IndexOf(link);
             }
 
-            int IList.IndexOf(object? link)
+            int IList.IndexOf(object? value)
             {
-                if (link is Link l)
+                if (value is Link link)
                 {
-                    return IndexOf(l);
+                    return IndexOf(link);
                 }
                 else
                 {
