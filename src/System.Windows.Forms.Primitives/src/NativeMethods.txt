@@ -120,7 +120,6 @@ EndDialog
 EndPaint
 EnumDisplaySettings
 EnumEnhMetaFile
-WIN32_ERROR
 EVENTMSG
 ExtTextOut
 FDAP
