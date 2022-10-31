@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
@@ -110,7 +108,7 @@ namespace System.Windows.Forms
                 if (spaceToFree > 0)
                 {
                     // we should shrink the last guy and then move him.
-                    ToolStripPanelCell lastCellOnRow = GetNextVisibleCell(Row.Cells.Count - 1,  /*forward*/false);
+                    ToolStripPanelCell? lastCellOnRow = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
                     if (lastCellOnRow is null)
                     {
                         return 0;
@@ -192,7 +190,7 @@ namespace System.Windows.Forms
                     // remove all margins starting from the index.
                     for (int i = index; i >= 0; i--)
                     {
-                        ToolStripPanelCell cell = (ToolStripPanelCell)Row.Cells[i];
+                        ToolStripPanelCell? cell = (ToolStripPanelCell)Row.Cells[i];
                         if (!cell.Visible && !cell.ControlInDesignMode)
                         {
                             continue;
@@ -259,7 +257,7 @@ namespace System.Windows.Forms
                         return 0;
                     }
 
-                    ToolStripPanelCell cell;
+                    ToolStripPanelCell? cell;
                     Padding cellMargin;
 
                     // remove all margins after this point in the index.
@@ -297,7 +295,7 @@ namespace System.Windows.Forms
                     // add in the space at the end of the row.
                     if (Row.Cells.Count > 0 && (spaceToFree > freedSpace))
                     {
-                        ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward*/false);
+                        ToolStripPanelCell? lastCell = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
                         if (lastCell is not null)
                         {
                             freedSpace += DisplayRectangle.Right - lastCell.Bounds.Right;
@@ -312,7 +310,7 @@ namespace System.Windows.Forms
                     if (spaceToFree <= freedSpace)
                     {
                         // add the space we freed to the first guy.
-                        cell = GetNextVisibleCell(index, /*forward*/true);
+                        cell = GetNextVisibleCell(index, forward: true);
                         cell ??= Row.Cells[index] as ToolStripPanelCell;
 
                         Debug.Assert(cell is not null, "Don't expect cell to be null here, what's going on?");
@@ -350,7 +348,7 @@ namespace System.Windows.Forms
 
                     if (Row.Cells.Count == 1)
                     {
-                        cell = GetNextVisibleCell(index, /*forward*/true);
+                        cell = GetNextVisibleCell(index, forward: true);
                         if (cell is not null)
                         {
                             cellMargin = cell.Margin;
@@ -385,7 +383,7 @@ namespace System.Windows.Forms
                             int spaceOccupiedByCell = cell.Margin.Horizontal + cell.Bounds.Width;
 
                             // add the space occupied by the cell to the next one.
-                            ToolStripPanelCell nextCell = GetNextVisibleCell(index + 1, /*forward*/true);
+                            ToolStripPanelCell? nextCell = GetNextVisibleCell(index + 1, forward: true);
                             if (nextCell is not null)
                             {
                                 Padding nextCellMargin = nextCell.Margin;
@@ -426,7 +424,7 @@ namespace System.Windows.Forms
                             // walk through the columns and determine which column you want to insert into.
                             for (index = 0; index < Row.Cells.Count; index++)
                             {
-                                ToolStripPanelCell cell = Row.Cells[index] as ToolStripPanelCell;
+                                ToolStripPanelCell cell = (ToolStripPanelCell)Row.Cells[index];
                                 if (!cell.Visible && !cell.ControlInDesignMode)
                                 {
                                     continue;
@@ -510,8 +508,8 @@ namespace System.Windows.Forms
                             else
                             {
                                 // we're adding to the end.
-                                ToolStripPanelCell nextCell = GetNextVisibleCell(Row.Cells.Count - 2,  /*forward*/false);
-                                ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1,  /*forward*/false);
+                                ToolStripPanelCell? nextCell = GetNextVisibleCell(Row.Cells.Count - 2, forward: false);
+                                ToolStripPanelCell? lastCell = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
 
                                 // count the stuff at the end of the row as freed space
                                 if (nextCell is not null && lastCell is not null)
@@ -536,7 +534,7 @@ namespace System.Windows.Forms
                                 // we need to take care of pushing over the new cell.
                                 if (freedSpace - controlToDragWidth > 0)
                                 {
-                                    ToolStripPanelCell newCell = Row.Cells[index] as ToolStripPanelCell;
+                                    ToolStripPanelCell newCell = (ToolStripPanelCell)Row.Cells[index];
                                     Padding newCellMargin = newCell.Margin;
                                     newCellMargin.Left = freedSpace - controlToDragWidth;
                                     newCell.Margin = newCellMargin;
@@ -556,7 +554,7 @@ namespace System.Windows.Forms
                             if (Row.Cells.Count > 0 || toolStripToDrag.IsInDesignMode)
                             {
                                 // we're adding to the beginning.
-                                ToolStripPanelCell cell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward*/false);
+                                ToolStripPanelCell? cell = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
                                 if (cell is null && toolStripToDrag.IsInDesignMode)
                                 {
                                     cell = (ToolStripPanelCell)Row.Cells[Row.Cells.Count - 1];
