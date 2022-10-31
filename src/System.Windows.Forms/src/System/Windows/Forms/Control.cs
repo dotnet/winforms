@@ -43,7 +43,7 @@ namespace System.Windows.Forms
     [ToolboxItemFilter("System.Windows.Forms")]
     public unsafe partial class Control :
         Component,
-        Ole32.IOleControl,
+        IOleControl.Interface,
         IOleObject.Interface,
         IOleInPlaceObject.Interface,
         IOleInPlaceActiveObject.Interface,
@@ -13605,7 +13605,7 @@ namespace System.Windows.Forms
             OnQueryContinueDrag(queryContinueDragEventArgs);
         }
 
-        unsafe HRESULT Ole32.IOleControl.GetControlInfo(Ole32.CONTROLINFO* pCI)
+        unsafe HRESULT IOleControl.Interface.GetControlInfo(CONTROLINFO* pCI)
         {
             if (pCI is null)
             {
@@ -13613,25 +13613,25 @@ namespace System.Windows.Forms
             }
 
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetControlInfo");
-            pCI->cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>();
-            pCI->hAccel = IntPtr.Zero;
+            pCI->cb = (uint)sizeof(CONTROLINFO);
+            pCI->hAccel = HACCEL.Null;
             pCI->cAccel = 0;
             pCI->dwFlags = 0;
 
             if (IsInputKey(Keys.Return))
             {
-                pCI->dwFlags |= Ole32.CTRLINFO.EATS_RETURN;
+                pCI->dwFlags |= CTRLINFO.CTRLINFO_EATS_RETURN;
             }
 
             if (IsInputKey(Keys.Escape))
             {
-                pCI->dwFlags |= Ole32.CTRLINFO.EATS_ESCAPE;
+                pCI->dwFlags |= CTRLINFO.CTRLINFO_EATS_ESCAPE;
             }
 
             return ActiveXInstance.GetControlInfo(pCI);
         }
 
-        unsafe HRESULT Ole32.IOleControl.OnMnemonic(MSG* pMsg)
+        unsafe HRESULT IOleControl.Interface.OnMnemonic(MSG* pMsg)
         {
             if (pMsg is null)
             {
@@ -13641,22 +13641,22 @@ namespace System.Windows.Forms
             // If we got a mnemonic here, then the appropriate control will focus itself which
             // will cause us to become UI active.
             bool processed = ProcessMnemonic((char)(nuint)pMsg->wParam);
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnMnemonic processed: " + processed.ToString());
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:OnMnemonic processed: {processed}");
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleControl.OnAmbientPropertyChange(Ole32.DispatchID dispID)
+        HRESULT IOleControl.Interface.OnAmbientPropertyChange(int dispID)
         {
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnAmbientPropertyChange.  Dispid: " + dispID);
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:OnAmbientPropertyChange. Dispid: {dispID}");
             Debug.Indent();
-            ActiveXInstance.OnAmbientPropertyChange(dispID);
+            ActiveXInstance.OnAmbientPropertyChange((Ole32.DispatchID)dispID);
             Debug.Unindent();
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleControl.FreezeEvents(BOOL bFreeze)
+        HRESULT IOleControl.Interface.FreezeEvents(BOOL bFreeze)
         {
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:FreezeEvents.  Freeze: " + bFreeze);
+            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:FreezeEvents. Freeze: {bFreeze}");
             ActiveXInstance.EventsFrozen = bFreeze;
             Debug.Assert(ActiveXInstance.EventsFrozen == bFreeze, "Failed to set EventsFrozen correctly");
             return HRESULT.S_OK;

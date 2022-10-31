@@ -52,7 +52,7 @@ namespace System.Windows.Forms
             private IAdviseSink? _viewAdviseSink;
             private BitVector32 _activeXState;
             private readonly AmbientProperty[] _ambientProperties;
-            private IntPtr _accelTable;
+            private HACCEL _accelTable;
             private short _accelCount = -1;
             private RECT* _adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
 
@@ -585,7 +585,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal IOleClientSite.Interface? GetClientSite() => _clientSite;
 
-            internal unsafe HRESULT GetControlInfo(Ole32.CONTROLINFO* pCI)
+            internal unsafe HRESULT GetControlInfo(CONTROLINFO* pControlInfo)
             {
                 if (_accelCount == -1)
                 {
@@ -596,9 +596,9 @@ namespace System.Windows.Forms
 
                     if (_accelCount > 0)
                     {
-                        // In the worst case we may have two accelerators per mnemonic:  one lower case and
+                        // In the worst case we may have two accelerators per mnemonic: one lower case and
                         // one upper case, hence the * 2 below.
-                        var accelerators = new User32.ACCEL[_accelCount * 2];
+                        var accelerators = new ACCEL[_accelCount * 2];
                         Debug.Indent();
 
                         ushort cmd = 0;
@@ -606,24 +606,24 @@ namespace System.Windows.Forms
 
                         foreach (char ch in mnemonicList)
                         {
-                            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Mnemonic: " + ch.ToString());
+                            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Mnemonic: {ch}");
 
                             short scan = PInvoke.VkKeyScan(ch);
                             ushort key = (ushort)(scan & 0x00FF);
-                            if (ch >= 'A' && ch <= 'Z')
+                            if (ch is >= 'A' and <= 'Z')
                             {
-                                // Lower case letter
-                                accelerators[_accelCount++] = new User32.ACCEL
+                                // Lowercase letter.
+                                accelerators[_accelCount++] = new ACCEL
                                 {
-                                    fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY,
+                                    fVirt = ACCEL_VIRT_FLAGS.FALT | ACCEL_VIRT_FLAGS.FVIRTKEY,
                                     key = key,
                                     cmd = cmd
                                 };
 
-                                // Upper case letter
-                                accelerators[_accelCount++] = new User32.ACCEL
+                                // Uppercase letter.
+                                accelerators[_accelCount++] = new ACCEL
                                 {
-                                    fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY | User32.AcceleratorFlags.FSHIFT,
+                                    fVirt = ACCEL_VIRT_FLAGS.FALT | ACCEL_VIRT_FLAGS.FVIRTKEY | ACCEL_VIRT_FLAGS.FSHIFT,
                                     key = key,
                                     cmd = cmd
                                 };
@@ -631,13 +631,13 @@ namespace System.Windows.Forms
                             else
                             {
                                 // Some non-printable character.
-                                User32.AcceleratorFlags virt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY;
+                                ACCEL_VIRT_FLAGS virt = ACCEL_VIRT_FLAGS.FALT | ACCEL_VIRT_FLAGS.FVIRTKEY;
                                 if ((scan & 0x0100) != 0)
                                 {
-                                    virt |= User32.AcceleratorFlags.FSHIFT;
+                                    virt |= ACCEL_VIRT_FLAGS.FSHIFT;
                                 }
 
-                                accelerators[_accelCount++] = new User32.ACCEL
+                                accelerators[_accelCount++] = new ACCEL
                                 {
                                     fVirt = virt,
                                     key = key,
@@ -652,21 +652,21 @@ namespace System.Windows.Forms
 
                         // Now create an accelerator table and then free our memory.
 
-                        if (_accelTable != IntPtr.Zero)
+                        if (!_accelTable.IsNull)
                         {
-                            PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(this, (HACCEL)_accelTable));
-                            _accelTable = IntPtr.Zero;
+                            PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(_control, _accelTable));
+                            _accelTable = HACCEL.Null;
                         }
 
-                        fixed (User32.ACCEL* pAccelerators = accelerators)
+                        fixed (ACCEL* pAccelerators = accelerators)
                         {
-                            _accelTable = User32.CreateAcceleratorTableW(pAccelerators, _accelCount);
+                            _accelTable = PInvoke.CreateAcceleratorTable(pAccelerators, _accelCount);
                         }
                     }
                 }
 
-                pCI->cAccel = (ushort)_accelCount;
-                pCI->hAccel = _accelTable;
+                pControlInfo->cAccel = (ushort)_accelCount;
+                pControlInfo->hAccel = _accelTable;
                 return HRESULT.S_OK;
             }
 
@@ -1592,10 +1592,10 @@ namespace System.Windows.Forms
                     buttonControl.NotifyDefault((bool)obj!);
                 }
 
-                if (_clientSite is null && _accelTable != IntPtr.Zero)
+                if (_clientSite is null && !_accelTable.IsNull)
                 {
-                    PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(this, (HACCEL)_accelTable));
-                    _accelTable = IntPtr.Zero;
+                    PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(_control, _accelTable));
+                    _accelTable = HACCEL.Null;
                     _accelCount = -1;
                 }
 
