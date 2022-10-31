@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms
                 dropDownBounds = new Rectangle(parentClientPoint, suggestedBounds.Size);
             }
 
-            Debug.WriteLineIf(DropDownDebugBounds!.TraceVerbose, "DropDownBounds for " + suggestedBounds + "is" + dropDownBounds);
+            Debug.WriteLineIf(DropDownDebugBounds!.TraceVerbose, $"DropDownBounds for {suggestedBounds} is {dropDownBounds}");
 
             return dropDownBounds;
         }
@@ -1564,7 +1564,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override bool ProcessDialogChar(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "ToolStripDropDown.ProcessDialogChar [" + charCode.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"ToolStripDropDown.ProcessDialogChar [{charCode.ToString()}]");
 
             // Since we're toplevel and aren't a container control, we've got to do our own mnemonic handling.
             if ((OwnerItem is null || OwnerItem.Pressed) && charCode != ' ' && ProcessMnemonic(charCode))
@@ -1648,7 +1648,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy)
         {
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, GetType().Name + "::ScaleCore(" + dx + ", " + dy + ")");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, $"{GetType().Name}::ScaleCore({dx}, {dy})");
             SuspendLayout();
             try
             {
@@ -2149,7 +2149,7 @@ namespace System.Windows.Forms
 
         private void DismissActiveDropDowns()
         {
-            Debug.WriteLineIf((DropDownActivateDebug!.TraceVerbose && ActiveDropDowns.Count > 0), "Dismiss children called - COUNT " + ActiveDropDowns.Count + " \r\n" + new StackTrace().ToString());
+            Debug.WriteLineIf((DropDownActivateDebug!.TraceVerbose && ActiveDropDowns.Count > 0), $"Dismiss children called - COUNT {ActiveDropDowns.Count}{Environment.NewLine}{new StackTrace().ToString()}");
             int count = ActiveDropDowns.Count;
             if (count == 1)
             {
