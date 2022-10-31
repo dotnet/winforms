@@ -393,10 +393,10 @@ override System.Windows.Forms.MenuStrip.CreateDefaultItem(string? text, System.D
 ~override System.Windows.Forms.RichTextBox.SelectedText.set -> void
 ~override System.Windows.Forms.RichTextBox.Text.get -> string
 ~override System.Windows.Forms.RichTextBox.Text.set -> void
-~override System.Windows.Forms.StatusStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.StatusStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
-~override System.Windows.Forms.StatusStrip.OnLayout(System.Windows.Forms.LayoutEventArgs levent) -> void
-~override System.Windows.Forms.StatusStrip.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
+override System.Windows.Forms.StatusStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.StatusStrip.CreateDefaultItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
+override System.Windows.Forms.StatusStrip.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+override System.Windows.Forms.StatusStrip.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 ~override System.Windows.Forms.TabControl.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TabControl.BackgroundImage.set -> void
 ~override System.Windows.Forms.TabControl.ControlCollection.Add(System.Windows.Forms.Control value) -> void
@@ -10375,7 +10375,7 @@ System.Windows.Forms.StatusStrip.LayoutStyle.get -> System.Windows.Forms.ToolStr
 System.Windows.Forms.StatusStrip.LayoutStyle.set -> void
 System.Windows.Forms.StatusStrip.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.StatusStrip.Padding.set -> void
-System.Windows.Forms.StatusStrip.PaddingChanged -> System.EventHandler
+System.Windows.Forms.StatusStrip.PaddingChanged -> System.EventHandler?
 System.Windows.Forms.StatusStrip.ShowItemToolTips.get -> bool
 System.Windows.Forms.StatusStrip.ShowItemToolTips.set -> void
 System.Windows.Forms.StatusStrip.SizeGripBounds.get -> System.Drawing.Rectangle

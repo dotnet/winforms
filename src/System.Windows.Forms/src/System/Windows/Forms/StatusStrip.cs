@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -25,7 +23,7 @@ namespace System.Windows.Forms
         private static readonly int stateCalledSpringTableLayout = BitVector32.CreateMask(stateSizingGrip);
 
         private const int gripWidth = 12;
-        private RightToLeftLayoutGrip rtlLayoutGrip;
+        private RightToLeftLayoutGrip? rtlLayoutGrip;
         private Orientation lastOrientation = Orientation.Horizontal;
 
         public StatusStrip()
@@ -132,7 +130,7 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -237,7 +235,7 @@ namespace System.Windows.Forms
 
         private TableLayoutSettings TableLayoutSettings
         {
-            get { return LayoutSettings as TableLayoutSettings; }
+            get { return (TableLayoutSettings)LayoutSettings; }
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -245,7 +243,7 @@ namespace System.Windows.Forms
             return new StatusStripAccessibleObject(this);
         }
 
-        protected internal override ToolStripItem CreateDefaultItem(string text, Image image, EventHandler onClick)
+        protected internal override ToolStripItem CreateDefaultItem(string? text, Image? image, EventHandler? onClick)
         {
             return new ToolStripStatusLabel(text, image, onClick);
         }
@@ -334,7 +332,7 @@ namespace System.Windows.Forms
         {
             state[stateCalledSpringTableLayout] = false;
             bool inDisplayedItemCollection = false;
-            ToolStripItem item = levent.AffectedComponent as ToolStripItem;
+            ToolStripItem? item = levent.AffectedComponent as ToolStripItem;
             int itemCount = DisplayedItems.Count;
             if (item is not null)
             {
@@ -380,7 +378,7 @@ namespace System.Windows.Forms
                 bool overflow = false;
                 Rectangle lastItemBounds = Rectangle.Empty;
 
-                ToolStripItem lastItem = null;
+                ToolStripItem? lastItem = null;
                 for (int i = 0; i < Items.Count; i++)
                 {
                     ToolStripItem item = Items[i];
