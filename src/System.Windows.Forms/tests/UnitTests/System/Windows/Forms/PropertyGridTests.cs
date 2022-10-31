@@ -2765,6 +2765,47 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { mockSite2.Object };
         }
 
+        [WinFormsFact]
+        public void PropertyGrid_Site_ShouldSaveSelectedTabIndex()
+        {
+            var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
+            var mockPropertyValueUIService = new Mock<IPropertyValueUIService>(MockBehavior.Strict);
+            var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+            mockDesignerHost
+               .Setup(h => h.Container)
+               .Returns((IContainer)null);
+            mockDesignerHost
+                .Setup(h => h.GetService(typeof(IComponentChangeService)))
+                .Returns(mockComponentChangeService.Object);
+            mockDesignerHost
+                .Setup(h => h.GetService(typeof(IPropertyValueUIService)))
+                .Returns(mockPropertyValueUIService.Object);
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(mockDesignerHost.Object);
+
+            using PropertyGrid propertyGrid = new();
+            propertyGrid.Site = mockSite.Object;
+            Assert.NotNull(propertyGrid.ActiveDesigner);
+            propertyGrid.TestAccessor().Dynamic.SaveSelectedTabIndex();
+            Assert.NotNull(propertyGrid.TestAccessor().Dynamic._designerSelections);
+            Dictionary<int,int> _designerSelections = propertyGrid.TestAccessor().Dynamic._designerSelections;
+            Assert.True(_designerSelections.ContainsKey(propertyGrid.ActiveDesigner.GetHashCode()));
+            int savedTabIndex = _designerSelections[propertyGrid.ActiveDesigner.GetHashCode()];
+            int selectedTabIndex = -1;
+            Assert.NotEqual(savedTabIndex, selectedTabIndex);
+            bool isInvokeMethodSuccessful = propertyGrid.TestAccessor().Dynamic.TryGetSavedTabIndex(out selectedTabIndex);
+            Assert.True(isInvokeMethodSuccessful);
+            Assert.Equal(savedTabIndex, selectedTabIndex);
+        }
+
         [WinFormsTheory]
         [MemberData(nameof(Site_Set_TestData))]
         public void PropertyGrid_Site_Set_GetReturnsExpected(ISite value)

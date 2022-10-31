@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -66,7 +65,7 @@ namespace System.Windows.Forms
         private IDesignerHost _designerHost;
         private IDesignerEventService _designerEventService;
 
-        private Hashtable _designerSelections;
+        private Dictionary<int, int> _designerSelections;
 
         private GridEntry _defaultEntry;
         private GridEntry _rootEntry;
@@ -1106,7 +1105,7 @@ namespace System.Windows.Forms
                     object designerKey = ActiveDesigner;
 
                     // Get the active designer and see if we've stashed away state for it.
-                    if (TryGetSavedTabSelection(out int selectedTab))
+                    if (TryGetSavedTabIndex(out int selectedTab))
                     {
                         if (selectedTab < _tabs.Count && (selectedTab == PropertiesTabIndex || _tabs[selectedTab].Button.Visible))
                         {
@@ -1127,7 +1126,7 @@ namespace System.Windows.Forms
 
                 if (_selectedObjects.Length > 0)
                 {
-                    SaveTabSelection();
+                    SaveSelectedTabIndex();
                 }
             }
         }
@@ -3066,7 +3065,7 @@ namespace System.Windows.Forms
             {
                 SelectViewTabButton((ToolStripButton)sender, true);
                 OnLayoutInternal(dividerOnly: false);
-                SaveTabSelection();
+                SaveSelectedTabIndex();
             }
 
             OnButtonClick(sender, e);
@@ -3541,7 +3540,7 @@ namespace System.Windows.Forms
             }
 
             // Remove this tab from our "last selected" group
-            if (!GetFlag(Flags.ReInitTab) && TryGetSavedTabSelection(out int selectedTab) && selectedTab == tabIndex)
+            if (!GetFlag(Flags.ReInitTab) && TryGetSavedTabIndex(out int selectedTab) && selectedTab == tabIndex)
             {
                 _designerSelections.Remove(ActiveDesigner.GetHashCode());
             }
@@ -3620,18 +3619,18 @@ namespace System.Windows.Forms
 
         public void ResetSelectedProperty() => _gridView.Reset();
 
-        private void SaveTabSelection()
+        private void SaveSelectedTabIndex()
         {
             if (_designerHost is not null)
             {
                 _designerSelections ??= new();
-                _designerSelections[_designerHost.GetHashCode()] = _selectedTab;
+                _designerSelections[_designerHost.GetHashCode()] = _tabs.IndexOf(_selectedTab);
             }
         }
 
-        private bool TryGetSavedTabSelection(out int selectedTab)
+        private bool TryGetSavedTabIndex(out int selectedTabIndex)
         {
-            selectedTab = -1;
+            selectedTabIndex = -1;
             if (_designerSelections is null || ActiveDesigner is null)
             {
                 return false;
@@ -3643,7 +3642,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            selectedTab = (int)_designerSelections[hashCode];
+            selectedTabIndex = _designerSelections[hashCode];
             return true;
         }
 
