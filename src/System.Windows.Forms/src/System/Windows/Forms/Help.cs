@@ -390,16 +390,14 @@ namespace System.Windows.Forms
 
                 case HelpNavigator.TopicId:
                     {
-                        try
+                        if (int.TryParse(param, out int htmlParamAsInt))
                         {
-                            htmlParam = int.Parse(param!, CultureInfo.InvariantCulture);
+                            htmlParam = htmlParamAsInt;
                             return HH.HELP_CONTEXT;
                         }
-                        catch
-                        {
-                            // default to just showing the index
-                            return HH.DISPLAY_INDEX;
-                        }
+
+                        // default to just showing the index
+                        return HH.DISPLAY_INDEX;
                     }
 
                 case HelpNavigator.KeywordIndex:
