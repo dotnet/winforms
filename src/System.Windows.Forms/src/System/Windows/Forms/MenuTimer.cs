@@ -38,7 +38,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose && currentItem != value, "[MenuTimer.CurrentItem] changed: " + ((value is null) ? "null" : value.ToString()));
+                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose && currentItem != value, "[MenuTimer.CurrentItem] changed: " + ((value is null) ? "null" : value.ToString()));
                 currentItem = value;
             }
         }
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
 
         public void Transition(ToolStripMenuItem fromItem, ToolStripMenuItem toItem)
         {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[MenuTimer.Transition] transitioning items " + fromItem.ToString() + " " + toItem.ToString());
+            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, $"[MenuTimer.Transition] transitioning items {fromItem.ToString()} {toItem.ToString()}");
 
             if (toItem is null && InTransition)
             {
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
             EndTransition(forceClose: false);
             if (CurrentItem is not null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
             {
-                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[MenuTimer.OnTick] calling OnMenuAutoExpand");
+                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, "[MenuTimer.OnTick] calling OnMenuAutoExpand");
                 CurrentItem.OnMenuAutoExpand();
             }
         }

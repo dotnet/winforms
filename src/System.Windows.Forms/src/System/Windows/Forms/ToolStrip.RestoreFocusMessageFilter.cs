@@ -58,7 +58,7 @@ namespace System.Windows.Forms
 
             private void RestoreFocusInternal()
             {
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.RestoreFocusFilter] Detected a click, restoring focus.");
+                Debug.WriteLineIf(s_snapFocusDebug!.TraceVerbose, "[ToolStrip.RestoreFocusFilter] Detected a click, restoring focus.");
 
                 _ownerToolStrip.BeginInvoke(new BooleanMethodInvoker(_ownerToolStrip.RestoreFocusInternal), new object[] { ToolStripManager.ModalMenuFilter.InMenuMode });
 
