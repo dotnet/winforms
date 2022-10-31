@@ -35,7 +35,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public void SetItems(Form active, Form[] all)
+        public void SetItems(Form? active, Form[] all)
         {
             int selIndex = 0;
             for (int i = 0; i < all.Length; i++)
