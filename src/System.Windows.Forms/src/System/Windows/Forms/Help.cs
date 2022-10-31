@@ -251,7 +251,7 @@ namespace System.Windows.Forms
             HandleRef<HWND> handle;
             if (parent is not null)
             {
-                handle= new(parent);
+                handle = new(parent);
             }
             else
             {
