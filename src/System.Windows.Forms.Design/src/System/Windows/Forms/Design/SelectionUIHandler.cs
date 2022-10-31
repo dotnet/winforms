@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public virtual bool BeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
         {
-            dragOffset = new Rectangle();
+            dragOffset = default(Rectangle);
             originalCoords = null;
             this.rules = rules;
 
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Design
         {
             Debug.Assert(bounds != null && controls != null && bounds.Length == controls.Length, "bounds->controls mismatch");
 
-            Rectangle b = new Rectangle();
+            Rectangle b = default(Rectangle);
 
             // Whip through each of the controls.
             //
@@ -103,10 +103,7 @@ namespace System.Windows.Forms.Design
                 // Suspend parent layout so that we don't continuously re-arrange components
                 // while we move.
                 //
-                if (parent != null)
-                {
-                    parent.SuspendLayout();
-                }
+                parent?.SuspendLayout();
 
                 b.X = bounds[i].X;
                 b.Y = bounds[i].Y;
@@ -121,10 +118,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < controls.Length; i++)
             {
                 Control parent = controls[i].Parent;
-                if (parent != null)
-                {
-                    parent.ResumeLayout();
-                }
+                parent?.ResumeLayout();
             }
         }
 
@@ -214,7 +208,7 @@ namespace System.Windows.Forms.Design
             Control[] controls = dragControls;
             Rectangle offset = dragOffset;
             BoundsInfo[] bounds = originalCoords;
-            Point adjustedLoc = new Point();
+            Point adjustedLoc = default(Point);
 
             // Erase the clipping and other state if this is the final move.
             //
@@ -277,10 +271,7 @@ namespace System.Windows.Forms.Design
                 // Suspend parent layout so that we don't continuously re-arrange components
                 // while we move.
                 //
-                if (parent != null)
-                {
-                    parent.SuspendLayout();
-                }
+                parent?.SuspendLayout();
 
                 BoundsInfo ctlBounds = bounds[i];
 

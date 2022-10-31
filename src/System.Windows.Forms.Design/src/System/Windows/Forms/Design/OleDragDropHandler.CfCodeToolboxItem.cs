@@ -101,8 +101,7 @@ namespace System.Windows.Forms.Design
 
                 // Parent and locate each Control
                 //
-                if (defaultValues == null)
-                    defaultValues = new Hashtable();
+                defaultValues ??= new Hashtable();
                 Control parentControl = defaultValues["Parent"] as Control;
                 if (parentControl != null)
                 {
@@ -161,10 +160,7 @@ namespace System.Windows.Forms.Design
 
                         if (c != null)
                         {
-                            if (trayComponents == null)
-                            {
-                                trayComponents = new ArrayList();
-                            }
+                            trayComponents ??= new ArrayList();
 
                             trayComponents.Add(c);
                         }

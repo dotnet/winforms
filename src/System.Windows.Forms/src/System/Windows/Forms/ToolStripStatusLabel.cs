@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Automation;
@@ -19,12 +17,12 @@ namespace System.Windows.Forms
     public partial class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion
     {
         private static readonly Padding defaultMargin = new Padding(0, 3, 0, 2);
-        private Padding scaledDefaultMargin = defaultMargin;
+        private Padding _scaledDefaultMargin = defaultMargin;
 
-        private Border3DStyle borderStyle = Border3DStyle.Flat;
-        private ToolStripStatusLabelBorderSides borderSides = ToolStripStatusLabelBorderSides.None;
-        private bool spring;
-        private AutomationLiveSetting liveSetting;
+        private Border3DStyle _borderStyle = Border3DStyle.Flat;
+        private ToolStripStatusLabelBorderSides _borderSides = ToolStripStatusLabelBorderSides.None;
+        private bool _spring;
+        private AutomationLiveSetting _liveSetting;
 
         /// <summary>
         ///  A non selectable ToolStrip item
@@ -34,27 +32,32 @@ namespace System.Windows.Forms
             Initialize();
         }
 
-        public ToolStripStatusLabel(string text) : base(text, null, false, null)
+        public ToolStripStatusLabel(string? text)
+            : base(text, image: null, isLink: false, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripStatusLabel(Image image) : base(null, image, false, null)
+        public ToolStripStatusLabel(Image? image)
+            : base(text: null, image, isLink: false, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripStatusLabel(string text, Image image) : base(text, image, false, null)
+        public ToolStripStatusLabel(string? text, Image? image)
+            : base(text, image, isLink: false, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripStatusLabel(string text, Image image, EventHandler onClick) : base(text, image, /*isLink=*/false, onClick, null)
+        public ToolStripStatusLabel(string? text, Image? image, EventHandler? onClick)
+            : base(text, image, isLink: false, onClick, name: null)
         {
             Initialize();
         }
 
-        public ToolStripStatusLabel(string text, Image image, EventHandler onClick, string name) : base(text, image, /*isLink=*/false, onClick, name)
+        public ToolStripStatusLabel(string? text, Image? image, EventHandler? onClick, string? name)
+            : base(text, image, isLink: false, onClick, name)
         {
             Initialize();
         }
@@ -95,15 +98,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                return borderStyle;
+                return _borderStyle;
             }
             set
             {
                 SourceGenerated.EnumValidator.Validate(value);
 
-                if (borderStyle != value)
+                if (_borderStyle != value)
                 {
-                    borderStyle = value;
+                    _borderStyle = value;
                     Invalidate();
                 }
             }
@@ -116,14 +119,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return borderSides;
+                return _borderSides;
             }
             set
             {
                 // no Enum.IsDefined as this is a flags enum.
-                if (borderSides != value)
+                if (_borderSides != value)
                 {
-                    borderSides = value;
+                    _borderSides = value;
                     LayoutTransaction.DoLayout(Owner, this, PropertyNames.BorderStyle);
                     Invalidate();
                 }
@@ -137,7 +140,7 @@ namespace System.Windows.Forms
         {
             if (DpiHelper.IsScalingRequirementMet)
             {
-                scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin);
+                _scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin);
             }
         }
 
@@ -145,7 +148,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return scaledDefaultMargin;
+                return _scaledDefaultMargin;
             }
         }
 
@@ -154,12 +157,12 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         public bool Spring
         {
-            get { return spring; }
+            get { return _spring; }
             set
             {
-                if (spring != value)
+                if (_spring != value)
                 {
-                    spring = value;
+                    _spring = value;
                     if (ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Spring);
@@ -181,12 +184,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return liveSetting;
+                return _liveSetting;
             }
             set
             {
                 SourceGenerated.EnumValidator.Validate(value);
-                liveSetting = value;
+                _liveSetting = value;
             }
         }
 

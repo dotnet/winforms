@@ -32,10 +32,7 @@ namespace System.Windows.Forms.Design
 
         protected override void OnClick(EventArgs e)
         {
-            if (_verb != null)
-            {
-                _verb.Invoke();
-            }
+            _verb?.Invoke();
         }
     }
 }

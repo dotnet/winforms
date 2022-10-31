@@ -110,10 +110,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_events is null)
-                {
-                    _events = new EventHandlerList();
-                }
+                _events ??= new EventHandlerList();
 
                 return _events;
             }
@@ -1039,10 +1036,7 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(normalImage);
 
-            if (imgAttrib is null)
-            {
-                imgAttrib = new ImageAttributes();
-            }
+            imgAttrib ??= new ImageAttributes();
 
             imgAttrib.ClearColorKey();
             imgAttrib.SetColorMatrix(DisabledImageColorMatrix);

@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 
             var windowClass = new ChangeWindowTextClass();
             windowClass.Register();
-            IntPtr windowHandle = windowClass.CreateWindow(shortText);
+            HWND windowHandle = (HWND)windowClass.CreateWindow(shortText);
 
             windowClass.BeforeGetTextCallback = () => longText;
             if (useBeforeGetTextLengthCallback)
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
             }
 
             string result = GetWindowText(windowHandle);
-            DestroyWindow(windowHandle);
+            PInvoke.DestroyWindow(windowHandle);
 
             Assert.Equal(longText, result);
         }
@@ -58,13 +58,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                 set;
             }
 
-            protected override IntPtr WNDPROC(IntPtr hWnd, WM msg, IntPtr wParam, IntPtr lParam)
+            protected override LRESULT WNDPROC(HWND hWnd, WM msg, WPARAM wParam, LPARAM lParam)
             {
                 switch (msg)
                 {
                     case WM.GETTEXTLENGTH:
                         string? text = BeforeGetTextLengthCallback?.Invoke();
-                        if (text != null)
+                        if (text is not null)
                         {
                             SetWindowTextW(hWnd, text);
                         }
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                         break;
                     case WM.GETTEXT:
                         text = BeforeGetTextCallback?.Invoke();
-                        if (text != null)
+                        if (text is not null)
                         {
                             SetWindowTextW(hWnd, text);
                         }

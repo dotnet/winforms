@@ -5,12 +5,11 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
 {
-    partial class ErrorProvider
+    public partial class ErrorProvider
     {
         /// <summary>
         ///  There is one ErrorWindow for each control parent. It is parented to the
@@ -73,8 +72,8 @@ namespace System.Windows.Forms
 
                 if (_tipWindow is not null)
                 {
-                    var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, ComCtl32.TTF.SUBCLASS, item.Error);
-                    toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.ADDTOOLW);
+                    var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, TOOLTIP_FLAGS.TTF_SUBCLASS, item.Error);
+                    toolInfo.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_ADDTOOLW);
                 }
 
                 Update(timerCaused: false);
@@ -111,8 +110,8 @@ namespace System.Windows.Forms
                     CreateParams cparams = new CreateParams
                     {
                         Caption = string.Empty,
-                        Style = (int)(User32.WS.VISIBLE | User32.WS.CHILD),
-                        ClassStyle = (int)User32.CS.DBLCLKS,
+                        Style = (int)(WINDOW_STYLE.WS_VISIBLE | WINDOW_STYLE.WS_CHILD),
+                        ClassStyle = (int)WNDCLASS_STYLES.CS_DBLCLKS,
                         X = 0,
                         Y = 0,
                         Width = 0,
@@ -124,25 +123,30 @@ namespace System.Windows.Forms
 
                     var icc = new ComCtl32.INITCOMMONCONTROLSEX
                     {
-                        dwICC = ComCtl32.ICC.TAB_CLASSES
+                        dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
                     };
                     ComCtl32.InitCommonControlsEx(ref icc);
 
                     cparams = new CreateParams
                     {
                         Parent = Handle,
-                        ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS,
-                        Style = (int)ComCtl32.TTS.ALWAYSTIP
+                        ClassName = PInvoke.TOOLTIPS_CLASS,
+                        Style = (int)PInvoke.TTS_ALWAYSTIP
                     };
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
 
-                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
-                    User32.SetWindowPos(
-                        new HandleRef(_tipWindow, _tipWindow.Handle),
-                        User32.HWND_TOP,
-                        flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE | User32.SWP.NOACTIVATE);
-                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (nint)ComCtl32.TTDT.INITIAL, 0);
+                    PInvoke.SendMessage(
+                        _tipWindow,
+                        (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH,
+                        (WPARAM)0,
+                        (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
+                    PInvoke.SetWindowPos(
+                        _tipWindow,
+                        HWND.HWND_TOP,
+                        0, 0, 0, 0,
+                        SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+                    PInvoke.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_SETDELAYTIME, (WPARAM)(uint)PInvoke.TTDT_INITIAL);
                 }
 
                 return true;
@@ -165,31 +169,32 @@ namespace System.Windows.Forms
                     _tipWindow = null;
                 }
 
-                // Hide the window and invalidate the parent to ensure
-                // that we leave no visual artifacts. given that we
-                // have a bizarre region window, this is needed.
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    User32.HWND_TOP,
+                // Hide the window and invalidate the parent to ensure that we leave no visual artifacts.
+                // Given that we have an unusual region window, this is needed.
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOP,
                     _windowBounds.X,
                     _windowBounds.Y,
                     _windowBounds.Width,
                     _windowBounds.Height,
-                    User32.SWP.HIDEWINDOW | User32.SWP.NOSIZE | User32.SWP.NOMOVE);
+                    SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE);
                 _parent?.Invalidate(true);
                 DestroyHandle();
             }
 
-            private unsafe void MirrorDcIfNeeded(Gdi32.HDC hdc)
+            private unsafe void MirrorDcIfNeeded(HDC hdc)
             {
                 if (_parent.IsMirrored)
                 {
                     // Mirror the DC
-                    Gdi32.SetMapMode(hdc, Gdi32.MM.ANISOTROPIC);
-                    Gdi32.GetViewportExtEx(hdc, out Size originalExtents);
-                    Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, null);
-                    Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
-                    Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, null);
+                    PInvoke.SetMapMode(hdc, HDC_MAP_MODE.MM_ANISOTROPIC);
+                    SIZE originalExtents = default;
+                    PInvoke.GetViewportExtEx(hdc, &originalExtents);
+                    PInvoke.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, lpsz: null);
+                    Point originalOrigin = default;
+                    PInvoke.GetViewportOrgEx(hdc, &originalOrigin);
+                    PInvoke.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, lppt: null);
                 }
             }
 
@@ -198,8 +203,8 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void OnPaint()
             {
-                using var hdc = new User32.BeginPaintScope(Handle);
-                using var save = new Gdi32.SaveDcScope(hdc);
+                using PInvoke.BeginPaintScope hdc = new((HWND)Handle);
+                using PInvoke.SaveDcScope save = new(hdc);
 
                 MirrorDcIfNeeded(hdc);
 
@@ -207,7 +212,7 @@ namespace System.Windows.Forms
                 {
                     ControlItem item = _items[i];
                     Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
-                    User32.DrawIconEx(
+                    PInvoke.DrawIconEx(
                         hdc,
                         bounds.X - _windowBounds.X,
                         bounds.Y - _windowBounds.Y,
@@ -281,7 +286,7 @@ namespace System.Windows.Forms
                 if (_tipWindow is not null)
                 {
                     var info = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id);
-                    info.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.DELTOOLW);
+                    info.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_DELTOOLW);
                 }
 
                 if (_items.Count == 0)
@@ -376,14 +381,14 @@ namespace System.Windows.Forms
 
                     if (_tipWindow is not null)
                     {
-                        ComCtl32.TTF flags = ComCtl32.TTF.SUBCLASS;
+                        TOOLTIP_FLAGS flags = TOOLTIP_FLAGS.TTF_SUBCLASS;
                         if (_provider.RightToLeft)
                         {
-                            flags |= ComCtl32.TTF.RTLREADING;
+                            flags |= TOOLTIP_FLAGS.TTF_RTLREADING;
                         }
 
                         var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
-                        toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETTOOLINFOW);
+                        toolInfo.SendMessage(_tipWindow, (User32.WM)PInvoke.TTM_SETTOOLINFOW);
                     }
 
                     if (timerCaused && item.BlinkPhase > 0)
@@ -397,27 +402,28 @@ namespace System.Windows.Forms
                     _provider._showIcon = !_provider._showIcon;
                 }
 
-                using var hdc = new User32.GetDcScope(Handle);
-                using var save = new Gdi32.SaveDcScope(hdc);
+                using User32.GetDcScope hdc = new(Handle);
+                using PInvoke.SaveDcScope save = new(hdc);
                 MirrorDcIfNeeded(hdc);
 
                 using Graphics g = hdc.CreateGraphics();
-                using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, g);
-                if (User32.SetWindowRgn(this, windowRegionHandle, BOOL.TRUE) != 0)
+                using PInvoke.RegionScope windowRegionHandle = new(windowRegion, g);
+                if (PInvoke.SetWindowRgn(this, windowRegionHandle, fRedraw: true) != 0)
                 {
                     // The HWnd owns the region.
                     windowRegionHandle.RelinquishOwnership();
                 }
 
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    User32.HWND_TOP,
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOP,
                     _windowBounds.X,
                     _windowBounds.Y,
                     _windowBounds.Width,
                     _windowBounds.Height,
-                    User32.SWP.NOACTIVATE);
-                User32.InvalidateRect(new HandleRef(this, Handle), null, BOOL.FALSE);
+                    SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+
+                PInvoke.InvalidateRect(this, lpRect: null, bErase: false);
             }
 
             /// <summary>
@@ -431,7 +437,7 @@ namespace System.Windows.Forms
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    m.ResultInternal = UiaCore.UiaReturnRawElementProvider(
+                    m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
                         this,
                         m.WParamInternal,
                         m.LParamInternal,
@@ -447,7 +453,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Called when the error window gets a windows message.
             /// </summary>
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 switch (m.MsgInternal)
                 {
@@ -455,10 +461,10 @@ namespace System.Windows.Forms
                         WmGetObject(ref m);
                         break;
                     case User32.WM.NOTIFY:
-                        User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
-                        if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
+                        NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+                        if ((int)nmhdr->code == (int)ComCtl32.TTN.SHOW || (int)nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
-                            OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);
+                            OnToolTipVisibilityChanging((nint)nmhdr->idFrom, (int)nmhdr->code == (int)ComCtl32.TTN.SHOW);
                         }
 
                         break;

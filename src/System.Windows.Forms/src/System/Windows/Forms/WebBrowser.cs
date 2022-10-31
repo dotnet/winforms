@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using Windows.Win32.System.Com;
 using static Interop;
 using static Interop.Mshtml;
 
@@ -277,7 +278,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Stream DocumentStream
+        public unsafe Stream DocumentStream
         {
             get
             {
@@ -288,7 +289,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
+                    IPersistStreamInit.Interface psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                     Debug.Assert(psi is not null, "Object isn't an IPersistStreamInit!");
                     if (psi is null)
                     {
@@ -297,8 +298,9 @@ namespace System.Windows.Forms
                     else
                     {
                         MemoryStream memoryStream = new MemoryStream();
-                        Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(memoryStream);
-                        psi.Save(iStream, BOOL.FALSE);
+                        using var pStream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(memoryStream), out bool result);
+                        Debug.Assert(result);
+                        psi.Save(pStream, fClearDirty: false);
                         return new MemoryStream(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, false);
                     }
                 }
@@ -340,10 +342,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 //string length is a good initial guess for capacity --
                 //if it needs more room, it'll take it.
@@ -1076,8 +1075,8 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                IntPtr hwndFocus = User32.GetFocus();
-                return hwndFocus != IntPtr.Zero && User32.IsChild(new HandleRef(this, Handle), hwndFocus).IsTrue();
+                HWND hwndFocus = PInvoke.GetFocus();
+                return !hwndFocus.IsNull && PInvoke.IsChild(this, hwndFocus);
             }
         }
 
@@ -1085,10 +1084,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (htmlShimManager is not null)
-                {
-                    htmlShimManager.Dispose();
-                }
+                htmlShimManager?.Dispose();
 
                 DetachSink();
                 ActiveXSite.Dispose();
@@ -1269,10 +1265,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (htmlShimManager is null)
-                {
-                    htmlShimManager = new HtmlShimManager();
-                }
+                htmlShimManager ??= new HtmlShimManager();
 
                 return htmlShimManager;
             }
@@ -1390,10 +1383,7 @@ namespace System.Windows.Forms
 
                 if (ClientRectangle.Contains(client))
                 {
-                    if (contextMenuStrip is not null)
-                    {
-                        contextMenuStrip.ShowInternal(this, client, keyboardActivated);
-                    }
+                    contextMenuStrip?.ShowInternal(this, client, keyboardActivated);
 
                     return true;
                 }

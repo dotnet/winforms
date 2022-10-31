@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
 
@@ -207,7 +206,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event UICuesEventHandler ChangeUICues
+        public new event UICuesEventHandler ChangeUICues
         {
             add => base.ChangeUICues += value;
             remove => base.ChangeUICues -= value;
@@ -244,28 +243,30 @@ namespace System.Windows.Forms
                 // If we're using themes then go ahead
                 if (DropShadowEnabled)
                 {
-                    cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
+                    cp.ClassStyle |= (int)WNDCLASS_STYLES.CS_DROPSHADOW;
                 }
 
-                // we're a borderless menuless control with no min/max boxes
-                // we don't want to show in the taskbar either
+                // We're a borderless menuless control with no min/max boxes. We don't want to show in the taskbar either.
 
-                //HOWTO: Prevent a Window from Appearing on the Taskbar
-                //Give the window the WS_EX_TOOLWINDOW extended style, and remove the WS_EX_APPWINDOW style. As a side effect, the window will have a smaller caption than a normal window.
-                //Give the window the WS_POPUP style and make it owned by a hidden window. (Form)
+                // HOWTO: Prevent a Window from Appearing on the Taskbar
+                // Give the window the WS_EX_TOOLWINDOW extended style, and remove the WS_EX_APPWINDOW style. As a side
+                // effect, the window will have a smaller caption than a normal window.
 
-                cp.Style &= ~(int)(User32.WS.CAPTION | User32.WS.CLIPSIBLINGS);         /* no caption, no siblings */
-                cp.ExStyle &= ~(int)User32.WS_EX.APPWINDOW;  /* show in taskbar = false */
-                // | NativeMethods.WS_EX_TOOLWINDOW
-                cp.Style |= TopLevel ? unchecked((int)User32.WS.POPUP) : (int)User32.WS.CHILD;
-                cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;  /* show in taskbar = false */
+                // Give the window the WS_POPUP style and make it owned by a hidden window. (Form)
+
+                // No caption, no siblings.
+                cp.Style &= ~(int)(WINDOW_STYLE.WS_CAPTION | WINDOW_STYLE.WS_CLIPSIBLINGS);
+                // Don't show in the taskbar
+                cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_APPWINDOW;
+                cp.Style |= TopLevel ? unchecked((int)WINDOW_STYLE.WS_POPUP) : (int)WINDOW_STYLE.WS_CHILD;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CONTROLPARENT;
 
                 bool topLevel = TopLevel;
 
                 // opacity
                 if (topLevel && state[stateLayered])
                 {
-                    cp.ExStyle |= (int)User32.WS_EX.LAYERED;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYERED;
                 }
                 else if (topLevel)
                 {
@@ -274,11 +275,11 @@ namespace System.Windows.Forms
                     //If the display driver has enough memory, it saves the bits for Windows. If the display driver does not have enough memory, Window
                     //saves the bits itself as a bitmap in global memory and also uses some of User's local heap for housekeeping structures for each window.
                     //When the application removes the window, Windows can restore the screen image quickly by using the stored bits.
-                    cp.ClassStyle |= (int)User32.CS.SAVEBITS;
+                    cp.ClassStyle |= (int)WNDCLASS_STYLES.CS_SAVEBITS;
                 }
                 else if (!topLevel)
                 {
-                    cp.Style |= (int)User32.WS.CLIPSIBLINGS;
+                    cp.Style |= (int)WINDOW_STYLE.WS_CLIPSIBLINGS;
                 }
 
                 // We're turning off CLIPSIBLINGS because in the designer the elements of the form beneath
@@ -407,7 +408,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler Enter
+        public new event EventHandler Enter
         {
             add => base.Enter += value;
             remove => base.Enter -= value;
@@ -435,7 +436,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler FontChanged
+        public new event EventHandler FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -443,7 +444,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -451,7 +452,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event GiveFeedbackEventHandler GiveFeedback
+        public new event GiveFeedbackEventHandler GiveFeedback
         {
             add => base.GiveFeedback += value;
             remove => base.GiveFeedback -= value;
@@ -491,7 +492,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event HelpEventHandler HelpRequested
+        public new event HelpEventHandler HelpRequested
         {
             add => base.HelpRequested += value;
             remove => base.HelpRequested -= value;
@@ -567,7 +568,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event KeyEventHandler KeyDown
+        public new event KeyEventHandler KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
@@ -575,7 +576,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
@@ -583,7 +584,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event KeyEventHandler KeyUp
+        public new event KeyEventHandler KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
@@ -773,7 +774,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public Region Region
+        public new Region Region
         {
             get => base.Region;
             set => base.Region = value;
@@ -781,7 +782,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler RegionChanged
+        public new event EventHandler RegionChanged
         {
             add => base.RegionChanged += value;
             remove => base.RegionChanged -= value;
@@ -837,7 +838,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event ScrollEventHandler Scroll
+        public new event ScrollEventHandler Scroll
         {
             add => base.Scroll += value;
             remove => base.Scroll -= value;
@@ -853,7 +854,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler StyleChanged
+        public new event EventHandler StyleChanged
         {
             add => base.StyleChanged += value;
             remove => base.StyleChanged -= value;
@@ -871,11 +872,11 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override User32.SW ShowParams => User32.SW.SHOWNOACTIVATE;
+        internal override SHOW_WINDOW_CMD ShowParams => SHOW_WINDOW_CMD.SW_SHOWNOACTIVATE;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TabStopChanged
+        public new event EventHandler TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
@@ -883,7 +884,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -953,7 +954,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler Validated
+        public new event EventHandler Validated
         {
             add => base.Validated += value;
             remove => base.Validated -= value;
@@ -961,7 +962,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event CancelEventHandler Validating
+        public new event CancelEventHandler Validating
         {
             add => base.Validating += value;
             remove => base.Validating -= value;
@@ -1005,10 +1006,11 @@ namespace System.Windows.Forms
         {
             if (TopMost)
             {
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    topMost ? User32.HWND_TOPMOST : User32.HWND_NOTOPMOST,
-                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
+                PInvoke.SetWindowPos(
+                    this,
+                    topMost ? HWND.HWND_TOPMOST : HWND.HWND_NOTOPMOST,
+                    0, 0, 0, 0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
             }
         }
 
@@ -1622,16 +1624,14 @@ namespace System.Windows.Forms
         private void ReparentToActiveToolStripWindow()
         {
             ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
-            User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd);
+            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd);
         }
 
         private void ReparentToDropDownOwnerWindow()
         {
             // when we're toplevel we need to parent ourselves to a hidden window
             // this prevents a taskbar entry.
-            NativeWindow ownerWindow = DropDownOwnerWindow;
-            HandleRef ownerHandle = new HandleRef(ownerWindow, ownerWindow.Handle);
-            User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHandle);
+            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, DropDownOwnerWindow);
         }
 
         internal override void ResetScaling(int newDpi)
@@ -1670,10 +1670,7 @@ namespace System.Windows.Forms
 
                 foreach (Control control in Controls)
                 {
-                    if (control is not null)
-                    {
-                        control.Scale(dx, dy);
-                    }
+                    control?.Scale(dx, dy);
                 }
             }
             finally
@@ -1731,19 +1728,19 @@ namespace System.Windows.Forms
 
             // We need to swap they style bits on the window handle
             // we could recreate the handle, but that seems rather expensive.
-            User32.WS styleFlags = WindowStyle;
+            WINDOW_STYLE styleFlags = WindowStyle;
 
             if (value)
             {
                 // Setting toplevel = true
-                styleFlags &= ~User32.WS.CHILD;
-                styleFlags |= User32.WS.POPUP;
+                styleFlags &= ~WINDOW_STYLE.WS_CHILD;
+                styleFlags |= WINDOW_STYLE.WS_POPUP;
             }
             else
             {
                 // This is a child window
-                styleFlags &= ~User32.WS.POPUP;
-                styleFlags |= User32.WS.CHILD;
+                styleFlags &= ~WINDOW_STYLE.WS_POPUP;
+                styleFlags |= WINDOW_STYLE.WS_CHILD;
             }
 
             WindowStyle = styleFlags;
@@ -1775,7 +1772,7 @@ namespace System.Windows.Forms
                         // Snap the foreground window BEFORE calling any user events so they
                         // don't have a chance to activate something else. This covers the case
                         // where someone handles the opening event and throws up a messagebox.
-                        IntPtr foregroundWindow = User32.GetForegroundWindow();
+                        HWND foregroundWindow = PInvoke.GetForegroundWindow();
 
                         // Fire Opening event
                         // Cancellable event in which default value of e.Cancel depends on
@@ -1813,12 +1810,13 @@ namespace System.Windows.Forms
                             {
                                 ApplyTopMost(true);
                             }
-                            else if (IsHandleCreated && User32.IsWindowEnabled(this).IsTrue())
+                            else if (IsHandleCreated && PInvoke.IsWindowEnabled(this))
                             {
-                                User32.SetWindowPos(
-                                    new HandleRef(this, Handle),
-                                    User32.HWND_TOP,
-                                    flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
+                                PInvoke.SetWindowPos(
+                                    this,
+                                    HWND.HWND_TOP,
+                                    0, 0, 0, 0,
+                                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
                             }
                         }
                     }
@@ -1993,16 +1991,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Updates the layered window attributes if the control
-        ///  is in layered mode.
+        ///  Updates the layered window attributes if the control is in layered mode.
         /// </summary>
         private void UpdateLayered()
         {
             if (state[stateLayered] && IsHandleCreated && TopLevel)
             {
-                BOOL result = User32.SetLayeredWindowAttributes(this, 0, OpacityAsByte, User32.LWA.ALPHA);
-
-                if (result.IsFalse())
+                if (!PInvoke.SetLayeredWindowAttributes(this, (COLORREF)0, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA))
                 {
                     throw new Win32Exception();
                 }
@@ -2110,9 +2105,9 @@ namespace System.Windows.Forms
                     // when we get focus again, we should reactivate our message filter.
                     Debug.WriteLineIf(
                         s_snapFocusDebug.TraceVerbose,
-                        $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((User32.WA)m.WParamInternal == User32.WA.ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
+                        $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((User32.WA)(nint)m.WParamInternal == User32.WA.ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
 
-                    if ((User32.WA)m.WParamInternal == User32.WA.ACTIVE)
+                    if ((User32.WA)(nint)m.WParamInternal == User32.WA.ACTIVE)
                     {
                         if (Visible)
                         {
@@ -2124,12 +2119,12 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.Fail($"Why are we being activated when we're not visible? Deactivating thing is {WindowsFormsUtils.GetControlInformation(m.LParamInternal)}");
+                            Debug.Fail($"Why are we being activated when we're not visible? Deactivating thing is {WindowsFormsUtils.GetControlInformation((HWND)(nint)m.LParamInternal)}");
                         }
                     }
                     else
                     {
-                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"[ToolStripDropDown.WndProc] activating thing is {WindowsFormsUtils.GetControlInformation(m.LParamInternal)}");
+                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"[ToolStripDropDown.WndProc] activating thing is {WindowsFormsUtils.GetControlInformation((HWND)(nint)m.LParamInternal)}");
                     }
 
                     base.WndProc(ref m);
@@ -2188,7 +2183,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmNCActivate(ref Message m)
         {
-            if (m.WParamInternal == 0)
+            if (m.WParamInternal == 0u)
             {
                 base.WndProc(ref m);
             }
@@ -2199,19 +2194,21 @@ namespace System.Windows.Forms
                     _sendingActivateMessage = true;
                     try
                     {
-                        Debug.WriteLineIf(DropDownActivateDebug.TraceVerbose, $"Sending WM_NCACTIVATE to toplevel hwnd {ToolStripManager.ModalMenuFilter.ActiveHwnd}");
+                        Debug.WriteLineIf(
+                            DropDownActivateDebug.TraceVerbose,
+                            $"Sending WM_NCACTIVATE to toplevel hwnd {ToolStripManager.ModalMenuFilter.ActiveHwnd}");
 
                         // We're activating - notify the previous guy that we're activating.
-                        HandleRef activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
+                        HandleRef<HWND> activeWindow = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
-                        User32.SendMessageW(activeHwndHandleRef.Handle, User32.WM.NCACTIVATE, (nint)BOOL.TRUE, -1);
-                        User32.RedrawWindow(
-                            activeHwndHandleRef.Handle,
-                            flags: User32.RDW.FRAME | User32.RDW.INVALIDATE);
+                        PInvoke.SendMessage(activeWindow, User32.WM.NCACTIVATE, (WPARAM)(BOOL)true, (LPARAM)(-1));
+                        PInvoke.RedrawWindow(
+                            activeWindow,
+                            lprcUpdate: null,
+                            HRGN.Null,
+                            REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
 
-                        m.WParamInternal = 1;
-
-                        GC.KeepAlive(activeHwndHandleRef.Wrapper);
+                        m.WParamInternal = 1u;
                     }
                     finally
                     {

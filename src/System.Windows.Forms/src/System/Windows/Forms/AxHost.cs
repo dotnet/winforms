@@ -15,6 +15,9 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -26,7 +29,7 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultEvent(nameof(Enter))]
     [Designer($"System.Windows.Forms.Design.AxHostDesigner, {AssemblyRef.SystemDesign}")]
-    public abstract partial class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
+    public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
     {
         private static readonly TraceSwitch s_axHTraceSwitch = new("AxHTrace", "ActiveX handle tracing");
         private static readonly TraceSwitch s_axPropTraceSwitch = new("AxPropTrace", "ActiveX property tracing");
@@ -97,10 +100,8 @@ namespace System.Windows.Forms
         private static readonly Guid s_icf2_Guid = typeof(Ole32.IClassFactory2).GUID;
         private static readonly Guid s_ifont_Guid = typeof(Ole32.IFont).GUID;
         private static readonly Guid s_ifontDisp_Guid = typeof(Ole32.IFontDisp).GUID;
-        private static readonly Guid s_ipicture_Guid = typeof(Ole32.IPicture).GUID;
-        private static readonly Guid s_ipictureDisp_Guid = typeof(Ole32.IPictureDisp).GUID;
         private static readonly Guid s_ivbformat_Guid = typeof(Ole32.IVBFormat).GUID;
-        private static readonly Guid s_ioleobject_Guid = typeof(Ole32.IOleObject).GUID;
+        private static readonly Guid s_ioleobject_Guid = IOleObject.Guid;
         private static readonly Guid s_dataSource_Guid = new("{7C0FFAB3-CD84-11D0-949A-00A0C91110ED}");
         private static readonly Guid s_windowsMediaPlayer_Clsid = new("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
         private static readonly Guid s_comctlImageCombo_Clsid = new("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
@@ -164,7 +165,7 @@ namespace System.Windows.Forms
         private ContainerControl _newParent;
         private AxContainer _axContainer;
         private State _ocxState;
-        private IntPtr _hwndFocus = IntPtr.Zero;
+        private HWND _hwndFocus;
 
         // CustomTypeDescriptor related state
 
@@ -176,17 +177,17 @@ namespace System.Windows.Forms
         // Interface pointers to the ocx
 
         private object _instance;
-        private Ole32.IOleInPlaceObject _iOleInPlaceObject;
-        private Ole32.IOleObject _iOleObject;
+        private IOleInPlaceObject.Interface _iOleInPlaceObject;
+        private IOleObject.Interface _iOleObject;
         private Ole32.IOleControl _iOleControl;
-        private Ole32.IOleInPlaceActiveObject _iOleInPlaceActiveObject;
-        private Ole32.IOleInPlaceActiveObject _iOleInPlaceActiveObjectExternal;
-        private Oleaut32.IPerPropertyBrowsing _iPerPropertyBrowsing;
+        private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObject;
+        private IOleInPlaceActiveObject.Interface _iOleInPlaceActiveObjectExternal;
+        private IPerPropertyBrowsing.Interface _iPerPropertyBrowsing;
         private VSSDK.ICategorizeProperties _iCategorizeProperties;
-        private Oleaut32.IPersistPropertyBag _iPersistPropBag;
-        private Ole32.IPersistStream _iPersistStream;
-        private Ole32.IPersistStreamInit _iPersistStreamInit;
-        private Ole32.IPersistStorage _iPersistStorage;
+        private IPersistPropertyBag.Interface _iPersistPropBag;
+        private IPersistStream.Interface _iPersistStream;
+        private IPersistStreamInit.Interface _iPersistStreamInit;
+        private IPersistStorage.Interface _iPersistStorage;
 
         private AboutBoxDelegate _aboutBoxDelegate;
         private readonly EventHandler _selectionChangeHandler;
@@ -278,7 +279,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (_axState[s_fOwnWindow] && IsUserMode())
                 {
-                    cp.Style &= ~(int)User32.WS.VISIBLE;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_VISIBLE;
                 }
 
                 return cp;
@@ -308,11 +309,10 @@ namespace System.Windows.Forms
         private unsafe void RealizeStyles()
         {
             SetStyle(ControlStyles.UserPaint, false);
-            Ole32.OLEMISC bits = 0;
-            HRESULT hr = GetOleObject().GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
-            if (hr.Succeeded())
+            HRESULT hr = GetOleObject().GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC bits);
+            if (hr.Succeeded)
             {
-                _miscStatusBits = bits;
+                _miscStatusBits = (Ole32.OLEMISC)bits;
                 ParseMiscBits(_miscStatusBits);
             }
         }
@@ -351,7 +351,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        new public ImeMode ImeMode
+        public new ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MouseClick
+        public new event EventHandler MouseClick
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
             remove { }
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MouseDoubleClick
+        public new event EventHandler MouseDoubleClick
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
             remove { }
@@ -395,7 +395,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual new bool Enabled
+        public new virtual bool Enabled
         {
             get => base.Enabled;
             set => base.Enabled = value;
@@ -533,7 +533,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        public new event EventHandler BackColorChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
             remove { }
@@ -541,7 +541,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
             remove { }
@@ -549,7 +549,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
             remove { }
@@ -557,7 +557,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BindingContextChanged
+        public new event EventHandler BindingContextChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
             remove { }
@@ -565,7 +565,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler CursorChanged
+        public new event EventHandler CursorChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
             remove { }
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler EnabledChanged
+        public new event EventHandler EnabledChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
             remove { }
@@ -584,7 +584,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler FontChanged
+        public new event EventHandler FontChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
             remove { }
@@ -592,7 +592,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
             remove { }
@@ -600,7 +600,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler RightToLeftChanged
+        public new event EventHandler RightToLeftChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
             remove { }
@@ -608,7 +608,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
             remove { }
@@ -619,7 +619,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler Click
+        public new event EventHandler Click
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
             remove { }
@@ -627,7 +627,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event DragEventHandler DragDrop
+        public new event DragEventHandler DragDrop
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
             remove { }
@@ -635,7 +635,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event DragEventHandler DragEnter
+        public new event DragEventHandler DragEnter
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
             remove { }
@@ -643,7 +643,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event DragEventHandler DragOver
+        public new event DragEventHandler DragOver
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
             remove { }
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DragLeave
+        public new event EventHandler DragLeave
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
             remove { }
@@ -659,7 +659,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event GiveFeedbackEventHandler GiveFeedback
+        public new event GiveFeedbackEventHandler GiveFeedback
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
             remove { }
@@ -667,7 +667,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event HelpEventHandler HelpRequested
+        public new event HelpEventHandler HelpRequested
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
             remove { }
@@ -675,7 +675,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event PaintEventHandler Paint
+        public new event PaintEventHandler Paint
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
             remove { }
@@ -683,7 +683,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event QueryContinueDragEventHandler QueryContinueDrag
+        public new event QueryContinueDragEventHandler QueryContinueDrag
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
             remove { }
@@ -691,7 +691,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
+        public new event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
             remove { }
@@ -702,7 +702,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DoubleClick
+        public new event EventHandler DoubleClick
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
             remove { }
@@ -710,7 +710,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ImeModeChanged
+        public new event EventHandler ImeModeChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
             remove { }
@@ -721,7 +721,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event KeyEventHandler KeyDown
+        public new event KeyEventHandler KeyDown
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
             remove { }
@@ -732,7 +732,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler KeyPress
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
             remove { }
@@ -743,7 +743,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event KeyEventHandler KeyUp
+        public new event KeyEventHandler KeyUp
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
             remove { }
@@ -751,7 +751,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event LayoutEventHandler Layout
+        public new event LayoutEventHandler Layout
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
             remove { }
@@ -762,7 +762,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseDown
+        public new event MouseEventHandler MouseDown
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
             remove { }
@@ -773,7 +773,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MouseEnter
+        public new event EventHandler MouseEnter
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
             remove { }
@@ -784,7 +784,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MouseLeave
+        public new event EventHandler MouseLeave
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
             remove { }
@@ -795,7 +795,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MouseHover
+        public new event EventHandler MouseHover
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
             remove { }
@@ -806,7 +806,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseMove
+        public new event MouseEventHandler MouseMove
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
             remove { }
@@ -817,7 +817,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseUp
+        public new event MouseEventHandler MouseUp
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
             remove { }
@@ -828,7 +828,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseWheel
+        public new event MouseEventHandler MouseWheel
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
             remove { }
@@ -836,7 +836,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event UICuesEventHandler ChangeUICues
+        public new event UICuesEventHandler ChangeUICues
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
             remove { }
@@ -844,7 +844,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler StyleChanged
+        public new event EventHandler StyleChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
             remove { }
@@ -889,15 +889,7 @@ namespace System.Windows.Forms
             return _axState[s_fOwnWindow] || _axState[s_fFakingWindow];
         }
 
-        private IntPtr GetHandleNoCreate()
-        {
-            if (IsHandleCreated)
-            {
-                return Handle;
-            }
-
-            return IntPtr.Zero;
-        }
+        private HWND GetHandleNoCreate() => IsHandleCreated ? (HWND)Handle : default;
 
         private ISelectionService GetSelectionService()
         {
@@ -1052,10 +1044,10 @@ namespace System.Windows.Forms
             // destroy that window, these controls will crash trying to process WM_CHAR.
             // We now check to see if we are losing focus to a child, and if so, not call
             // UIDeactivate().
-            bool uiDeactivate = (GetHandleNoCreate() != _hwndFocus);
+            bool uiDeactivate = GetHandleNoCreate() != _hwndFocus;
             if (uiDeactivate && IsHandleCreated)
             {
-                uiDeactivate = !User32.IsChild(new HandleRef(this, GetHandleNoCreate()), _hwndFocus).IsTrue();
+                uiDeactivate = !PInvoke.IsChild(this, _hwndFocus);
             }
 
             base.OnLostFocus(e);
@@ -1067,65 +1059,53 @@ namespace System.Windows.Forms
 
         private void OnNewSelection(object sender, EventArgs e)
         {
-            if (IsUserMode())
+            if (IsUserMode() || GetSelectionService() is not { } selectionService)
             {
                 return;
             }
 
-            ISelectionService iss = GetSelectionService();
+            // If we are uiactive and we lose selection, then we need to uideactivate ourselves.
 
-            // What we care about:
-            // if we are uiactive and we lose selection, then we need to uideactivate ourselves...
-            if (iss is not null)
+            if (GetOcState() >= OC_UIACTIVE && !selectionService.GetComponentSelected(this))
             {
-                if (GetOcState() >= OC_UIACTIVE && !iss.GetComponentSelected(this))
+                // Need to deactivate.
+                HRESULT hr = UiDeactivate();
+                Debug.Assert(hr.Succeeded, $"Failed to UiDeactivate: {hr}");
+            }
+
+            if (!selectionService.GetComponentSelected(this))
+            {
+                if (_editMode != EDITM_NONE)
                 {
-                    // Need to deactivate.
-                    HRESULT hr = UiDeactivate();
-                    Debug.Assert(hr.Succeeded(), $"Failed to UiDeactivate: {hr}");
+                    GetParentContainer().OnExitEditMode(this);
+                    _editMode = EDITM_NONE;
                 }
 
-                if (!iss.GetComponentSelected(this))
+                // Need to exit edit mode.
+                SetSelectionStyle(1);
+                RemoveSelectionHandler();
+            }
+            else
+            {
+                // The AX Host designer will offer an extender property called "SelectionStyle".
+                if (TypeDescriptor.GetProperties(this)["SelectionStyle"] is { } property && property.PropertyType == typeof(int))
                 {
-                    if (_editMode != EDITM_NONE)
+                    if ((int)property.GetValue(this) != _selectionStyle)
                     {
-                        GetParentContainer().OnExitEditMode(this);
-                        _editMode = EDITM_NONE;
-                    }
-
-                    // Need to exit edit mode.
-                    SetSelectionStyle(1);
-                    RemoveSelectionHandler();
-                }
-                else
-                {
-                    // The AX Host designer will offer an extender property called "SelectionStyle"
-                    PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
-
-                    if (prop is not null && prop.PropertyType == typeof(int))
-                    {
-                        int curSelectionStyle = (int)prop.GetValue(this);
-                        if (curSelectionStyle != _selectionStyle)
-                        {
-                            prop.SetValue(this, _selectionStyle);
-                        }
+                        property.SetValue(this, _selectionStyle);
                     }
                 }
             }
         }
 
-        // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+        // DrawToBitmap doesn't work for this control, so we should hide it. We'll
         // still call base so that this has a chance to work if it can.
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
+        public new void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
         {
             base.DrawToBitmap(bitmap, targetBounds);
         }
 
-        /// <summary>
-        ///  Creates a handle for this control. This method is called by the framework, this should
-        ///  not be called directly.
-        /// </summary>
         protected override void CreateHandle()
         {
             if (IsHandleCreated)
@@ -1142,16 +1122,18 @@ namespace System.Windows.Forms
                     _axState[s_fNeedOwnWindow] = false;
                     _axState[s_fFakingWindow] = true;
                     base.CreateHandle();
-                    // note that we do not need to attach the handle because the work usually done in there
-                    // will be done in Control's wndProc on WM_CREATE...
+
+                    // Note that we do not need to attach the handle because the work usually done in there
+                    // will be done in Control's wndProc on WM_CREATE.
                 }
                 else
                 {
                     TransitionUpTo(OC_INPLACE);
-                    // it is possible that we were hidden while in place activating, in which case we don't
-                    // really have a handle now because the act of hiding could have destroyed it
-                    // so, just call ourselves again recursively, and if we don't have a handle, we will
-                    // just take the "axState[fNeedOwnWindow]" path above...
+
+                    // It is possible that we were hidden while in place activating, in which case we don't
+                    // really have a handle now because the act of hiding could have destroyed it. Just call ourselves
+                    // again recursively, and if we don't have a handle, we will just take the "axState[fNeedOwnWindow]"
+                    // path above.
                     if (_axState[s_fNeedOwnWindow])
                     {
                         Debug.Assert(!IsHandleCreated, "if we need a fake window, we can't have a real one");
@@ -1179,8 +1161,8 @@ namespace System.Windows.Forms
                     return HRESULT.E_FAIL;
                 }
 
-                s_logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
-                s_logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
+                s_logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                s_logPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"log pixels are: {s_logPixelsX} {s_logPixelsY}");
             }
 
@@ -1190,7 +1172,7 @@ namespace System.Windows.Forms
         private unsafe void HiMetric2Pixel(ref Size sz)
         {
             var phm = new Point(sz.Width, sz.Height);
-            var pcont = new PointF();
+            var pcont = default(PointF);
             ((Ole32.IOleControlSite)_oleSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.HIMETRICTOCONTAINER);
             sz.Width = (int)pcont.X;
             sz.Height = (int)pcont.Y;
@@ -1198,7 +1180,7 @@ namespace System.Windows.Forms
 
         private unsafe void Pixel2hiMetric(ref Size sz)
         {
-            var phm = new Point();
+            var phm = default(Point);
             var pcont = new PointF(sz.Width, sz.Height);
             ((Ole32.IOleControlSite)_oleSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.CONTAINERTOHIMETRIC);
             sz.Width = phm.X;
@@ -1229,19 +1211,19 @@ namespace System.Windows.Forms
         private unsafe Size SetExtent(int width, int height)
         {
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"setting extent to {width} {height}");
-            Size sz = new Size(width, height);
+            Size size = new(width, height);
             bool resetExtents = !IsUserMode();
-            Pixel2hiMetric(ref sz);
-            Interop.HRESULT hr = GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            if (hr != Interop.HRESULT.S_OK)
+            Pixel2hiMetric(ref size);
+            HRESULT hr = GetOleObject().SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+            if (hr != HRESULT.S_OK)
             {
                 resetExtents = true;
             }
 
             if (resetExtents)
             {
-                GetOleObject().GetExtent(Ole32.DVASPECT.CONTENT, &sz);
-                GetOleObject().SetExtent(Ole32.DVASPECT.CONTENT, &sz);
+                GetOleObject().GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+                GetOleObject().SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
             }
 
             return GetExtent();
@@ -1249,10 +1231,10 @@ namespace System.Windows.Forms
 
         private unsafe Size GetExtent()
         {
-            var sz = new Size();
-            GetOleObject().GetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            HiMetric2Pixel(ref sz);
-            return sz;
+            Size size = default;
+            GetOleObject().GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+            HiMetric2Pixel(ref size);
+            return size;
         }
 
         /// <summary>
@@ -1357,14 +1339,14 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            IntPtr handle = Handle;
-            IntPtr currentWndproc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
+            HWND handle = HWND;
+            IntPtr currentWndproc = PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
             if (currentWndproc == _wndprocAddr)
             {
                 return true;
             }
 
-            if ((int)User32.SendMessageW(this, _registeredMessage) == REGMSG_RETVAL)
+            if ((int)PInvoke.SendMessage(this, _registeredMessage) == REGMSG_RETVAL)
             {
                 _wndprocAddr = currentWndproc;
                 return true;
@@ -1374,7 +1356,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_axHostSwitch.TraceVerbose, "The control subclassed itself w/o calling the old wndproc.");
             Debug.Assert(!OwnWindow(), "Why are we here if we own our window?");
             WindowReleaseHandle();
-            User32.SetWindowLong(this, User32.GWL.WNDPROC, new HandleRef(this, currentWndproc));
+            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, currentWndproc);
             WindowAssignHandle(handle, _axState[s_assignUniqueID]);
             InformOfNewHandle();
             _axState[s_manualUpdate] = true;
@@ -1422,7 +1404,7 @@ namespace System.Windows.Forms
                             break;
                         case OC_UIACTIVE:
                             HRESULT hr = UiDeactivate();
-                            Debug.Assert(hr.Succeeded(), $"Failed in UiDeactivate: {hr}");
+                            Debug.Assert(hr.Succeeded, $"Failed in UiDeactivate: {hr}");
                             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose && GetOcState() == OC_INPLACE, "failed transition");
                             SetOcState(OC_INPLACE);
                             break;
@@ -1632,7 +1614,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Naughty control didn't call showObject...");
                 try
                 {
-                    ((Ole32.IOleClientSite)_oleSite).ShowObject();
+                    ((IOleClientSite.Interface)_oleSite).ShowObject();
                 }
                 catch
                 {
@@ -1811,7 +1793,7 @@ namespace System.Windows.Forms
         ///  -- If this returns S_FALSE, then it means that the control did not process this message,
         ///  but we did, and so we should route it through our PreProcessMessage().
         /// </summary>
-        public unsafe override bool PreProcessMessage(ref Message msg)
+        public override unsafe bool PreProcessMessage(ref Message msg)
         {
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"AxHost.PreProcessMessage {msg}");
 
@@ -1828,15 +1810,15 @@ namespace System.Windows.Forms
                     return base.PreProcessMessage(ref msg);
                 }
 
-                User32.MSG win32Message = msg;
+                MSG win32Message = msg;
                 _axState[s_siteProcessedInputKey] = false;
                 try
                 {
-                    Ole32.IOleInPlaceActiveObject activeObj = GetInPlaceActiveObject();
+                    IOleInPlaceActiveObject.Interface activeObj = GetInPlaceActiveObject();
                     if (activeObj is not null)
                     {
                         HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
-                        msg.MsgInternal = win32Message.message;
+                        msg.MsgInternal = (User32.WM)win32Message.message;
                         msg.WParamInternal = win32Message.wParam;
                         msg.LParamInternal = win32Message.lParam;
                         msg.HWnd = win32Message.hwnd;
@@ -1893,7 +1875,7 @@ namespace System.Windows.Forms
         ///  Process a mnemonic character. This is done by manufacturing a WM_SYSKEYDOWN message and passing it to the
         ///  ActiveX control.
         /// </summary>
-        protected internal unsafe override bool ProcessMnemonic(char charCode)
+        protected internal override unsafe bool ProcessMnemonic(char charCode)
         {
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"In AxHost.ProcessMnemonic: {(int)charCode}");
             if (CanSelect)
@@ -1905,25 +1887,27 @@ namespace System.Windows.Forms
                         cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
                     };
                     HRESULT hr = GetOleControl().GetControlInfo(&ctlInfo);
-                    if (!hr.Succeeded())
+                    if (!hr.Succeeded)
                     {
                         return false;
                     }
 
-                    var msg = new User32.MSG
+                    var msg = new MSG
                     {
                         // Sadly, we don't have a message so we must fake one ourselves...
                         // A bit of ugliness here (a bit?  more like a bucket...)
                         // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
-                        hwnd = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle,
-                        message = User32.WM.SYSKEYDOWN,
-                        wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
-                        lParam = (IntPtr)0x20180001,
-                        time = Kernel32.GetTickCount()
+                        hwnd = (ContainingControl is null) ? (HWND)0 : ContainingControl.HWND,
+                        message = (uint)User32.WM.SYSKEYDOWN,
+                        wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+                        lParam = 0x20180001,
+                        time = PInvoke.GetTickCount()
                     };
-                    User32.GetCursorPos(out Point p);
+
+                    PInvoke.GetCursorPos(out Point p);
                     msg.pt = p;
-                    if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsTrue())
+
+                    if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
                     {
                         GetOleControl().OnMnemonic(&msg);
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"\t Processed mnemonic {msg}");
@@ -2039,7 +2023,9 @@ namespace System.Windows.Forms
                     if (_iPersistPropBag is not null)
                     {
                         propBag = new PropertyBagStream();
-                        _iPersistPropBag.Save(propBag, BOOL.TRUE, BOOL.TRUE);
+                        using var propertyBag = ComHelpers.GetComScope<IPropertyBag>(propBag, out bool result);
+                        Debug.Assert(result);
+                        _iPersistPropBag.Save(propertyBag, fClearDirty: true, fSaveAllProperties: true);
                     }
 
                     MemoryStream ms = null;
@@ -2050,11 +2036,11 @@ namespace System.Windows.Forms
                             ms = new MemoryStream();
                             if (_storageType == STG_STREAM)
                             {
-                                _iPersistStream.Save(new Ole32.GPStream(ms), BOOL.TRUE);
+                                _iPersistStream.Save((IStream*)Marshal.GetIUnknownForObject(new Ole32.GPStream(ms)), true);
                             }
                             else
                             {
-                                _iPersistStreamInit.Save(new Ole32.GPStream(ms), BOOL.TRUE);
+                                _iPersistStreamInit.Save((IStream*)Marshal.GetIUnknownForObject(new Ole32.GPStream(ms)), true);
                             }
 
                             break;
@@ -2114,10 +2100,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_containingControl is null)
-                {
-                    _containingControl = FindContainerControlInternal();
-                }
+                _containingControl ??= FindContainerControlInternal();
 
                 return _containingControl;
             }
@@ -2291,15 +2274,12 @@ namespace System.Windows.Forms
                     return null;
                 case Ole32.DispatchID.AMBIENT_DISPLAYNAME:
                     string rval = AxContainer.GetNameForControl(this);
-                    if (rval is null)
-                    {
-                        rval = string.Empty;
-                    }
+                    rval ??= string.Empty;
 
                     return rval;
                 case Ole32.DispatchID.AMBIENT_LOCALEID:
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for localeid");
-                    return Kernel32.GetThreadLocale().RawValue;
+                    return PInvoke.GetThreadLocale();
                 case Ole32.DispatchID.AMBIENT_RIGHTTOLEFT:
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for right to left");
                     Control ctl = this;
@@ -2332,7 +2312,9 @@ namespace System.Windows.Forms
         {
             Control parent = ParentInternal;
             RECT posRect = Bounds;
-            GetOleObject().DoVerb((Ole32.OLEIVERB)verb, null, _oleSite, -1, parent is not null ? parent.Handle : IntPtr.Zero, &posRect);
+            using var pClientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite, out bool result);
+            Debug.Assert(result);
+            GetOleObject().DoVerb(verb, lpmsg: null, pClientSite, -1, parent is null ? HWND.Null : parent.HWND, &posRect);
         }
 
         private bool AwaitingDefreezing()
@@ -2345,12 +2327,12 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"freezing {v}");
             if (v)
             {
-                GetOleControl().FreezeEvents(BOOL.TRUE);
+                GetOleControl().FreezeEvents(true);
                 _freezeCount++;
             }
             else
             {
-                GetOleControl().FreezeEvents(BOOL.FALSE);
+                GetOleControl().FreezeEvents(false);
                 _freezeCount--;
             }
 
@@ -2401,7 +2383,7 @@ namespace System.Windows.Forms
                 in s_icf2_Guid,
                 out Ole32.IClassFactory2 icf2);
 
-            if (!hr.Succeeded())
+            if (!hr.Succeeded)
             {
                 if (hr == HRESULT.E_NOINTERFACE)
                 {
@@ -2417,7 +2399,7 @@ namespace System.Windows.Forms
                 cbLicInfo = sizeof(Ole32.LICINFO)
             };
             icf2.GetLicInfo(&licInfo);
-            if (licInfo.fRuntimeAvailable.IsTrue())
+            if (licInfo.fRuntimeAvailable)
             {
                 var rval = new string[1];
                 icf2.RequestLicKey(0, rval);
@@ -2432,12 +2414,12 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Creating object without license: {clsid}");
             HRESULT hr = Ole32.CoCreateInstance(
-                ref clsid,
+                in clsid,
                 IntPtr.Zero,
                 Ole32.CLSCTX.INPROC_SERVER,
-                ref NativeMethods.ActiveX.IID_IUnknown,
+                in NativeMethods.ActiveX.IID_IUnknown,
                 out object ret);
-            hr.ThrowIfFailed();
+            hr.ThrowOnFailure();
 
             _instance = ret;
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t{(_instance is not null)}");
@@ -2454,7 +2436,7 @@ namespace System.Windows.Forms
                     IntPtr.Zero,
                     in s_icf2_Guid,
                     out Ole32.IClassFactory2 icf2);
-                if (hr.Succeeded())
+                if (hr.Succeeded)
                 {
                     icf2.CreateInstanceLic(IntPtr.Zero, IntPtr.Zero, ref NativeMethods.ActiveX.IID_IUnknown, license, out _instance);
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t{(_instance is not null)}");
@@ -2538,7 +2520,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            hr = icp.GetCategoryName(propcat, Kernel32.GetThreadLocale(), out string name);
+            hr = icp.GetCategoryName(propcat, PInvoke.GetThreadLocale(), out string name);
             if (hr == HRESULT.S_OK && name is not null)
             {
                 var rval = new CategoryAttribute(name);
@@ -2554,19 +2536,16 @@ namespace System.Windows.Forms
         {
             if (!IsUserMode())
             {
-                // selectionStyle can be 0 (not selected), 1 (selected) or 2 (active)
-                Debug.Assert(selectionStyle >= 0 && selectionStyle <= 2, "Invalid selection style");
-
-                ISelectionService iss = GetSelectionService();
+                // SelectionStyle can be 0 (not selected), 1 (selected) or 2 (active)
+                Debug.Assert(selectionStyle is >= 0 and <= 2, "Invalid selection style");
                 _selectionStyle = selectionStyle;
-                if (iss is not null && iss.GetComponentSelected(this))
+
+                if (GetSelectionService() is { } selectionService && selectionService.GetComponentSelected(this))
                 {
                     // The AX Host designer will offer an extender property called "SelectionStyle"
-                    //
-                    PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
-                    if (prop is not null && prop.PropertyType == typeof(int))
+                    if (TypeDescriptor.GetProperties(this)["SelectionStyle"] is { } property && property.PropertyType == typeof(int))
                     {
-                        prop.SetValue(this, selectionStyle);
+                        property.SetValue(this, selectionStyle);
                     }
                 }
             }
@@ -2585,7 +2564,7 @@ namespace System.Windows.Forms
             AddSelectionHandler();
             _editMode = EDITM_HOST;
             SetSelectionStyle(2);
-            _ = User32.GetFocus();
+            _ = PInvoke.GetFocus();
             try
             {
                 UiActivate();
@@ -2757,10 +2736,7 @@ namespace System.Windows.Forms
 
             ArrayList returnProperties = new ArrayList();
 
-            if (_properties is null)
-            {
-                _properties = new Hashtable();
-            }
+            _properties ??= new Hashtable();
 
             if (_propertyInfos is null)
             {
@@ -2826,10 +2802,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            if (axPropDesc is not null)
-                            {
-                                axPropDesc.UpdateAttributes();
-                            }
+                            axPropDesc?.UpdateAttributes();
 
                             returnProperties.Add(propDesc);
                         }
@@ -2935,24 +2908,30 @@ namespace System.Windows.Forms
             SetOcState(OC_RUNNING);
         }
 
-        private void DepersistFromIPropertyBag(Oleaut32.IPropertyBag propBag)
+        private void DepersistFromIPropertyBag(IPropertyBag.Interface propBag)
         {
-            _iPersistPropBag.Load(propBag, null);
+            using var pPropBag = ComHelpers.GetComScope<IPropertyBag>(propBag, out bool result);
+            Debug.Assert(result);
+            _iPersistPropBag.Load(pPropBag, pErrorLog: null).ThrowOnFailure();
         }
 
-        private void DepersistFromIStream(Ole32.IStream istream)
+        private void DepersistFromIStream(IStream.Interface istream)
         {
             _storageType = STG_STREAM;
-            _iPersistStream.Load(istream);
+            using var pStream = ComHelpers.GetComScope<IStream>(istream, out bool result);
+            Debug.Assert(result);
+            _iPersistStream.Load(pStream).ThrowOnFailure();
         }
 
-        private void DepersistFromIStreamInit(Ole32.IStream istream)
+        private void DepersistFromIStreamInit(IStream.Interface istream)
         {
             _storageType = STG_STREAMINIT;
-            _iPersistStreamInit.Load(istream);
+            using var pStream = ComHelpers.GetComScope<IStream>(istream, out bool result);
+            Debug.Assert(result);
+            _iPersistStreamInit.Load(pStream).ThrowOnFailure();
         }
 
-        private void DepersistFromIStorage(Ole32.IStorage storage)
+        private void DepersistFromIStorage(IStorage.Interface storage)
         {
             _storageType = STG_STORAGE;
 
@@ -2963,11 +2942,9 @@ namespace System.Windows.Forms
             //
             if (storage is not null)
             {
-                HRESULT hr = _iPersistStorage.Load(storage);
-                if (hr != HRESULT.S_OK)
-                {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Error trying load depersist from IStorage: {hr}");
-                }
+                using var pStorage = ComHelpers.GetComScope<IStorage>(storage, out bool result);
+                Debug.Assert(result);
+                _iPersistStorage.Load(pStorage).ThrowOnFailure();
             }
         }
 
@@ -2978,63 +2955,56 @@ namespace System.Windows.Forms
             if (_ocxState is null)
             {
                 // Must init new:
-                if (_instance is Ole32.IPersistStreamInit init)
+                if (_instance is IPersistStreamInit.Interface init)
                 {
                     _iPersistStreamInit = init;
-                    try
-                    {
-                        _storageType = STG_STREAMINIT;
-                        _iPersistStreamInit.InitNew();
-                    }
-                    catch (Exception e1)
+                    _storageType = STG_STREAMINIT;
+                    HRESULT hr = _iPersistStreamInit.InitNew();
+                    if (hr.Failed)
                     {
                         Debug.WriteLineIf(
-                            s_axHTraceSwitch.TraceVerbose,
-                            $"Exception thrown trying to IPersistStreamInit.InitNew(). Is this good? {e1}");
+                        s_axHTraceSwitch.TraceVerbose,
+                            $"Exception thrown trying to IPersistStreamInit.InitNew(). Is this good? {hr}");
                     }
 
                     return;
                 }
 
-                if (_instance is Ole32.IPersistStream persistStream)
+                if (_instance is IPersistStream.Interface persistStream)
                 {
                     _storageType = STG_STREAM;
                     _iPersistStream = persistStream;
                     return;
                 }
 
-                if (_instance is Ole32.IPersistStorage persistStorage)
+                if (_instance is IPersistStorage.Interface persistStorage)
                 {
                     _storageType = STG_STORAGE;
                     _ocxState = new State(this);
                     _iPersistStorage = persistStorage;
-                    try
-                    {
-                        _iPersistStorage.InitNew(_ocxState.GetStorage());
-                    }
-                    catch (Exception e2)
+                    using var pStorage = ComHelpers.GetComScope<IStorage>(_ocxState.GetStorage(), out bool result);
+                    Debug.Assert(result);
+                    HRESULT hr = _iPersistStorage.InitNew(pStorage);
+                    if (hr.Failed)
                     {
                         Debug.WriteLineIf(
                             s_axHTraceSwitch.TraceVerbose,
-                            $"Exception thrown trying to IPersistStorage.InitNew(). Is this good? {e2}");
+                            $"Exception thrown trying to IPersistStorage.InitNew(). Is this good? {hr}");
                     }
 
                     return;
                 }
 
-                if (_instance is Oleaut32.IPersistPropertyBag persistPropertyBag)
+                if (_instance is IPersistPropertyBag.Interface persistPropertyBag)
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"{this} supports IPersistPropertyBag.");
                     _iPersistPropBag = persistPropertyBag;
-                    try
-                    {
-                        _iPersistPropBag.InitNew();
-                    }
-                    catch (Exception e1)
+                    HRESULT hr = _iPersistPropBag.InitNew();
+                    if (hr.Failed)
                     {
                         Debug.WriteLineIf(
                             s_axHTraceSwitch.TraceVerbose,
-                            $"Exception thrown trying to IPersistPropertyBag.InitNew(). Is this good? {e1}");
+                            $"Exception thrown trying to IPersistPropertyBag.InitNew(). Is this good? {hr}");
                     }
                 }
 
@@ -3048,7 +3018,7 @@ namespace System.Windows.Forms
                 case STG_STREAM:
                     try
                     {
-                        _iPersistStream = (Ole32.IPersistStream)_instance;
+                        _iPersistStream = (IPersistStream.Interface)_instance;
                         DepersistFromIStream(_ocxState.GetStream());
                     }
                     catch (Exception e)
@@ -3060,7 +3030,7 @@ namespace System.Windows.Forms
 
                     break;
                 case STG_STREAMINIT:
-                    if (_instance is Ole32.IPersistStreamInit persistStreamInit)
+                    if (_instance is IPersistStreamInit.Interface persistStreamInit)
                     {
                         try
                         {
@@ -3087,7 +3057,7 @@ namespace System.Windows.Forms
                 case STG_STORAGE:
                     try
                     {
-                        _iPersistStorage = (Ole32.IPersistStorage)_instance;
+                        _iPersistStorage = (IPersistStorage.Interface)_instance;
                         DepersistFromIStorage(_ocxState.GetStorage());
                     }
                     catch (Exception e)
@@ -3107,7 +3077,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    _iPersistPropBag = (Oleaut32.IPersistPropertyBag)_instance;
+                    _iPersistPropBag = (IPersistPropertyBag.Interface)_instance;
                     DepersistFromIPropertyBag(_ocxState.GetPropBag());
                 }
                 catch (Exception e)
@@ -3209,11 +3179,11 @@ namespace System.Windows.Forms
             }
 
             Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
-            var uuids = new Ole32.CAUUID();
+            var uuids = default(Ole32.CAUUID);
             try
             {
                 HRESULT hr = ispp.GetPages(&uuids);
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
                     return false;
                 }
@@ -3239,13 +3209,13 @@ namespace System.Windows.Forms
                     var opcparams = new Oleaut32.OCPFIPARAMS
                     {
                         cbStructSize = (uint)Marshal.SizeOf<Oleaut32.OCPFIPARAMS>(),
-                        hwndOwner = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle,
+                        hwndOwner = (ContainingControl is null) ? 0 : ContainingControl.Handle,
                         lpszCaption = pName,
                         cObjects = 1,
-                        ppUnk = (IntPtr)(&pUnk),
+                        ppUnk = (nint)(&pUnk),
                         cPages = 1,
-                        lpPages = (IntPtr)(&guid),
-                        lcid = Kernel32.GetThreadLocale(),
+                        lpPages = (nint)(&guid),
+                        lcid = PInvoke.GetThreadLocale(),
                         dispidInitialProperty = dispid
                     };
                     Oleaut32.OleCreatePropertyFrameIndirect(ref opcparams);
@@ -3292,9 +3262,9 @@ namespace System.Windows.Forms
             }
 
             Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
-            var uuids = new Ole32.CAUUID();
+            var uuids = default(Ole32.CAUUID);
             HRESULT hr = ispp.GetPages(&uuids);
-            if (!hr.Succeeded() || uuids.cElems == 0)
+            if (!hr.Succeeded || uuids.cElems == 0)
             {
                 return;
             }
@@ -3313,8 +3283,8 @@ namespace System.Windows.Forms
                     trans = host.CreateTransaction(SR.AXEditProperties);
                 }
 
-                IntPtr handle = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle;
-                IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
+                nint handle = (ContainingControl is null) ? 0 : ContainingControl.Handle;
+                nint pUnk = Marshal.GetIUnknownForObject(GetOcx());
                 try
                 {
                     Oleaut32.OleCreatePropertyFrame(
@@ -3326,9 +3296,9 @@ namespace System.Windows.Forms
                         &pUnk,
                         uuids.cElems,
                         uuids.pElems,
-                        Kernel32.GetThreadLocale(),
+                        PInvoke.GetThreadLocale(),
                         0,
-                        IntPtr.Zero);
+                        0);
                 }
                 finally
                 {
@@ -3342,10 +3312,7 @@ namespace System.Windows.Forms
                     ((Ole32.IPropertyNotifySink)_oleSite).OnChanged(Ole32.DispatchID.UNKNOWN);
                 }
 
-                if (trans is not null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
 
                 if (uuids.pElems is not null)
                 {
@@ -3354,7 +3321,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
+        internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg)
         {
             if (_isMaskEdit)
             {
@@ -3372,7 +3339,7 @@ namespace System.Windows.Forms
         ///  Certain messages are forwarder directly to the ActiveX control,
         ///  others are first processed by the wndProc of Control
         /// </summary>
-        protected unsafe override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             // Ignore the warnings generated by the following code (unreachable code, and unreachable expression)
             if (false && (_axState[s_manualUpdate] && IsUserMode()))
@@ -3419,14 +3386,14 @@ namespace System.Windows.Forms
 
                 case User32.WM.KILLFOCUS:
                     {
-                        _hwndFocus = m.WParamInternal;
+                        _hwndFocus = (HWND)(nint)m.WParamInternal;
                         try
                         {
                             base.WndProc(ref m);
                         }
                         finally
                         {
-                            _hwndFocus = IntPtr.Zero;
+                            _hwndFocus = default;
                         }
 
                         break;
@@ -3460,11 +3427,11 @@ namespace System.Windows.Forms
                     // transition back to a state >= InPlaceActive.
                     if (GetOcState() >= OC_INPLACE)
                     {
-                        Ole32.IOleInPlaceObject ipo = GetInPlaceObject();
-                        IntPtr hwnd = IntPtr.Zero;
-                        if (ipo.GetWindow(&hwnd).Succeeded())
+                        IOleInPlaceObject.Interface ipo = GetInPlaceObject();
+                        HWND hwnd = HWND.Null;
+                        if (ipo.GetWindow(&hwnd).Succeeded)
                         {
-                            Application.ParkHandle(new HandleRef(ipo, hwnd), DpiAwarenessContext);
+                            Application.ParkHandle(new HandleRef<HWND>(this, hwnd), DpiAwarenessContext);
                         }
                     }
 
@@ -3522,7 +3489,7 @@ namespace System.Windows.Forms
                 default:
                     if (m.MsgInternal == _registeredMessage)
                     {
-                        m.ResultInternal = REGMSG_RETVAL;
+                        m.ResultInternal = (LRESULT)REGMSG_RETVAL;
                         return;
                     }
 
@@ -3532,13 +3499,20 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DetachAndForward(ref Message m)
+        private unsafe void DetachAndForward(ref Message m)
         {
             DetachWindow();
             if (IsHandleCreated)
             {
-                IntPtr wndProc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
-                m.ResultInternal = User32.CallWindowProcW(wndProc, Handle, (User32.WM)m.Msg, m.WParamInternal, m.LParamInternal);
+                void* wndProc = (void*)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
+                m.ResultInternal = PInvoke.CallWindowProc(
+                    (delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, LRESULT>)wndProc,
+                    HWND,
+                    (uint)m.Msg,
+                    m.WParamInternal,
+                    m.LParamInternal);
+
+                GC.KeepAlive(this);
             }
         }
 
@@ -3554,10 +3528,10 @@ namespace System.Windows.Forms
         private void InformOfNewHandle()
         {
             Debug.Assert(IsHandleCreated, "we got to have a handle to be here...");
-            _wndprocAddr = User32.GetWindowLong(this, User32.GWL.WNDPROC);
+            _wndprocAddr = PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
         }
 
-        private void AttachWindow(IntPtr hwnd)
+        private void AttachWindow(HWND hwnd)
         {
             Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"attaching window for {ToString()} {hwnd}");
             if (!_axState[s_fFakingWindow])
@@ -3650,7 +3624,7 @@ namespace System.Windows.Forms
             qaContainer.pPropertyNotifySink = _oleSite;
             qaContainer.pFont = (Ole32.IFont)GetIFontFromFont(GetParentContainer()._parent.Font);
             qaContainer.dwAppearance = 0;
-            qaContainer.lcid = Kernel32.GetThreadLocale();
+            qaContainer.lcid = PInvoke.GetThreadLocale();
 
             Control p = ParentInternal;
 
@@ -3675,7 +3649,7 @@ namespace System.Windows.Forms
             }
 
             HRESULT hr = iqa.QuickActivate(qaContainer, &qaControl);
-            if (!hr.Succeeded())
+            if (!hr.Succeeded)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Failed to QuickActivate: {hr}");
                 DisposeAxControl();
@@ -3728,15 +3702,9 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 TransitionDownTo(OC_PASSIVE);
-                if (_newParent is not null)
-                {
-                    _newParent.Dispose();
-                }
+                _newParent?.Dispose();
 
-                if (_oleSite is not null)
-                {
-                    _oleSite.Dispose();
-                }
+                _oleSite?.Dispose();
             }
 
             base.Dispose(disposing);
@@ -3749,10 +3717,7 @@ namespace System.Windows.Forms
 
         private void DisposeAxControl()
         {
-            if (GetParentContainer() is not null)
-            {
-                GetParentContainer().RemoveControl(this);
-            }
+            GetParentContainer()?.RemoveControl(this);
 
             TransitionDownTo(OC_RUNNING);
             if (GetOcState() == OC_RUNNING)
@@ -3825,7 +3790,9 @@ namespace System.Windows.Forms
 
             if ((_miscStatusBits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0)
             {
-                GetOleObject().SetClientSite(_oleSite);
+                using var clientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite, out bool result);
+                Debug.Assert(result);
+                GetOleObject().SetClientSite(clientSite);
                 setClientSite = true;
             }
 
@@ -3833,16 +3800,15 @@ namespace System.Windows.Forms
 
             if (!setClientSite)
             {
-                GetOleObject().SetClientSite(_oleSite);
+                using var clientSite = ComHelpers.GetComScope<IOleClientSite>(_oleSite, out bool result);
+                Debug.Assert(result);
+                GetOleObject().SetClientSite(clientSite);
             }
         }
 
         private AxContainer GetParentContainer()
         {
-            if (_container is null)
-            {
-                _container = AxContainer.FindContainerForControl(this);
-            }
+            _container ??= AxContainer.FindContainerForControl(this);
 
             if (_container is null)
             {
@@ -3875,7 +3841,7 @@ namespace System.Windows.Forms
 
         private Ole32.IOleControl GetOleControl() => _iOleControl ??= (Ole32.IOleControl)_instance;
 
-        private Ole32.IOleInPlaceActiveObject GetInPlaceActiveObject()
+        private IOleInPlaceActiveObject.Interface GetInPlaceActiveObject()
         {
             // if our AxContainer was set an external active object then use it.
             if (_iOleInPlaceActiveObjectExternal is not null)
@@ -3889,7 +3855,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_instance is not null, "must have the ocx");
                 try
                 {
-                    _iOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)_instance;
+                    _iOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)_instance;
                 }
                 catch (InvalidCastException e)
                 {
@@ -3900,17 +3866,17 @@ namespace System.Windows.Forms
             return _iOleInPlaceActiveObject;
         }
 
-        private Ole32.IOleObject GetOleObject() => _iOleObject ??= (Ole32.IOleObject)_instance;
+        private IOleObject.Interface GetOleObject() => _iOleObject ??= (IOleObject.Interface)_instance;
 
-        private Ole32.IOleInPlaceObject GetInPlaceObject()
+        private IOleInPlaceObject.Interface GetInPlaceObject()
         {
             if (_iOleInPlaceObject is null)
             {
                 Debug.Assert(_instance is not null, "must have the ocx");
-                _iOleInPlaceObject = (Ole32.IOleInPlaceObject)_instance;
+                _iOleInPlaceObject = (IOleInPlaceObject.Interface)_instance;
 
 #if DEBUG
-                if (_iOleInPlaceObject is Ole32.IOleInPlaceObjectWindowless)
+                if (_iOleInPlaceObject is IOleInPlaceObjectWindowless.Interface)
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"{GetType().FullName} Can also be a Windowless control.");
                 }
@@ -3934,12 +3900,12 @@ namespace System.Windows.Forms
             return _iCategorizeProperties;
         }
 
-        private Oleaut32.IPerPropertyBrowsing GetPerPropertyBrowsing()
+        private IPerPropertyBrowsing.Interface GetPerPropertyBrowsing()
         {
             if (_iPerPropertyBrowsing is null && !_axState[s_checkedIppb] && _instance is not null)
             {
                 _axState[s_checkedIppb] = true;
-                if (_instance is Oleaut32.IPerPropertyBrowsing browsing)
+                if (_instance is IPerPropertyBrowsing.Interface browsing)
                 {
                     _iPerPropertyBrowsing = browsing;
                 }
@@ -3949,16 +3915,16 @@ namespace System.Windows.Forms
         }
 
         // Mapping functions:
-        private static Ole32.PICTDESC GetPICTDESCFromPicture(Image image)
+        private static PICTDESC GetPICTDESCFromPicture(Image image)
         {
             if (image is Bitmap bmp)
             {
-                return Ole32.PICTDESC.FromBitmap(bmp);
+                return PICTDESC.FromBitmap(bmp);
             }
 
             if (image is Metafile mf)
             {
-                return Ole32.PICTDESC.FromMetafile(mf);
+                return PICTDESC.FromMetafile(mf);
             }
 
             throw new ArgumentException(SR.AXUnknownImage, nameof(image));
@@ -3975,8 +3941,10 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            Ole32.PICTDESC pictdesc = GetPICTDESCFromPicture(image);
-            return Ole32.OleCreatePictureIndirect(ref pictdesc, in s_ipicture_Guid, fOwn: BOOL.TRUE);
+            PICTDESC pictdesc = GetPICTDESCFromPicture(image);
+            using ComScope<IPicture> picture = new(null);
+            PInvoke.OleCreatePictureIndirect(&pictdesc, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+            return Marshal.GetObjectForIUnknown(picture);
         }
 
         /// <summary>
@@ -3990,8 +3958,10 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            Ole32.PICTDESC desc = Ole32.PICTDESC.FromIcon(Icon.FromHandle(cursor.Handle), copy: true);
-            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipicture_Guid, fOwn: BOOL.TRUE);
+            PICTDESC desc = PICTDESC.FromIcon(Icon.FromHandle(cursor.Handle), copy: true);
+            using ComScope<IPicture> picture = new(null);
+            PInvoke.OleCreatePictureIndirect(&desc, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+            return Marshal.GetObjectForIUnknown(picture);
         }
 
         /// <summary>
@@ -4005,8 +3975,10 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            Ole32.PICTDESC desc = GetPICTDESCFromPicture(image);
-            return Ole32.OleCreatePictureIndirect(ref desc, in s_ipictureDisp_Guid, fOwn: BOOL.TRUE);
+            PICTDESC desc = GetPICTDESCFromPicture(image);
+            using ComScope<IPictureDisp> pictureDisp = new(null);
+            PInvoke.OleCreatePictureIndirect(&desc, IPictureDisp.NativeGuid, fOwn: true, pictureDisp).ThrowOnFailure();
+            return Marshal.GetObjectForIUnknown(pictureDisp);
         }
 
         /// <summary>
@@ -4020,88 +3992,92 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            int hPal = default;
-            Ole32.IPicture pict = (Ole32.IPicture)picture;
-            Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
-            if (type == Ole32.PICTYPE.BITMAP)
+            uint hPal = default;
+            IPicture.Interface pict = (IPicture.Interface)picture;
+            pict.get_Type(out short type).ThrowOnFailure();
+            if (type == (short)PICTYPE.PICTYPE_BITMAP)
             {
-                try
-                {
-                    hPal = pict.hPal;
-                }
-                catch (COMException)
-                {
-                }
+                pict.get_hPal(&hPal);
             }
 
-            return GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
+            pict.get_Handle(out uint handle).ThrowOnFailure();
+            pict.get_Width(out int width).ThrowOnFailure();
+            pict.get_Height(out int height).ThrowOnFailure();
+            return GetPictureFromParams(handle, (PICTYPE)type, hPal, (uint)width, (uint)height);
         }
 
         /// <summary>
         ///  Maps from an OLE IPictureDisp to a System.Drawing.Image
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected unsafe static Image GetPictureFromIPictureDisp(object picture)
+        protected static unsafe Image GetPictureFromIPictureDisp(object picture)
         {
             if (picture is null)
             {
                 return null;
             }
 
-            int hPal = default;
-            Ole32.IPictureDisp pict = (Ole32.IPictureDisp)picture;
-            Ole32.PICTYPE type = (Ole32.PICTYPE)pict.Type;
-            if (type == Ole32.PICTYPE.BITMAP)
+            uint hPal = default;
+            using var pict = ComHelpers.GetComScope<IDispatch>(picture, out HRESULT hr);
+            hr.ThrowOnFailure();
+            using VARIANT variant = default;
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            PICTYPE type = (PICTYPE)variant.data.iVal;
+            if (type == PICTYPE.PICTYPE_BITMAP)
             {
-                try
-                {
-                    hPal = pict.hPal;
-                }
-                catch (COMException)
-                {
-                }
+                ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
+                hPal = variant.data.uintVal;
             }
 
-            Image image = GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
-            GC.KeepAlive(pict);
-            return image;
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            uint handle = variant.data.uintVal;
+
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            uint width = variant.data.uintVal;
+
+            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            uint height = variant.data.uintVal;
+
+            return GetPictureFromParams(handle, type, hPal, width, height);
         }
 
         private static Image GetPictureFromParams(
-            int handle,
-            Ole32.PICTYPE type,
-            int paletteHandle,
-            int width,
-            int height)
+            uint handle,
+            PICTYPE type,
+            uint paletteHandle,
+            uint width,
+            uint height)
         {
+            nint extendedHandle = (int)handle;
             switch (type)
             {
-                case Ole32.PICTYPE.ICON:
-                    return (Image)(Icon.FromHandle((IntPtr)handle)).Clone();
-                case Ole32.PICTYPE.METAFILE:
+                case PICTYPE.PICTYPE_ICON:
+                    return (Image)(Icon.FromHandle(extendedHandle).Clone());
+                case PICTYPE.PICTYPE_METAFILE:
                     WmfPlaceableFileHeader header = new WmfPlaceableFileHeader
                     {
                         BboxRight = (short)width,
                         BboxBottom = (short)height
                     };
 
-                    using (var metafile = new Metafile((IntPtr)handle, header, deleteWmf: false))
+                    using (var metafile = new Metafile(extendedHandle, header, deleteWmf: false))
                     {
                         return (Image)metafile.Clone();
                     }
 
-                case Ole32.PICTYPE.ENHMETAFILE:
-                    using (var metafile = new Metafile((IntPtr)handle, deleteEmf: false))
+                case PICTYPE.PICTYPE_ENHMETAFILE:
+                    using (var metafile = new Metafile(extendedHandle, deleteEmf: false))
                     {
                         return (Image)metafile.Clone();
                     }
 
-                case Ole32.PICTYPE.BITMAP:
-                    return Image.FromHbitmap((IntPtr)handle, (IntPtr)paletteHandle);
-                case Ole32.PICTYPE.NONE:
+                case PICTYPE.PICTYPE_BITMAP:
+                    nint extendedPaletteHandle = (int)paletteHandle;
+                    return Image.FromHbitmap(extendedHandle, extendedPaletteHandle);
+                case PICTYPE.PICTYPE_NONE:
                     // MSDN says this should not be a valid value, but comctl32 returns it...
                     return null;
-                case Ole32.PICTYPE.UNINITIALIZED:
+                case PICTYPE.PICTYPE_UNINITIALIZED:
                     return null;
                 default:
                     Debug.Fail($"Invalid image type {type}");
@@ -4120,17 +4096,17 @@ namespace System.Windows.Forms
                 return cachedFDesc;
             }
 
-            User32.LOGFONTW logfont = User32.LOGFONTW.FromFont(font);
+            LOGFONTW logfont = LOGFONTW.FromFont(font);
             var fdesc = new Oleaut32.FONTDESC
             {
                 cbSizeOfStruct = (uint)Marshal.SizeOf<Oleaut32.FONTDESC>(),
                 lpstrName = font.Name,
                 cySize = (long)(font.SizeInPoints * 10000),
                 sWeight = (short)logfont.lfWeight,
-                sCharset = logfont.lfCharSet,
-                fItalic = font.Italic.ToBOOL(),
-                fUnderline = font.Underline.ToBOOL(),
-                fStrikethrough = font.Strikeout.ToBOOL()
+                sCharset = (short)logfont.lfCharSet,
+                fItalic = font.Italic,
+                fUnderline = font.Underline,
+                fStrikethrough = font.Strikeout
             };
             s_fontTable[font] = fdesc;
             return fdesc;

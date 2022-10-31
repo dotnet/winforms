@@ -100,24 +100,24 @@ namespace System.Windows.Forms.Design
                     }
 
                     // recreate the keystroke to the newly activated window
-                    IntPtr hWnd;
+                    HWND hwnd;
                     if (!ignoreMessages)
                     {
-                        hWnd = User32.GetFocus();
+                        hwnd = PInvoke.GetFocus();
                     }
                     else
                     {
                         if (InSituSupportService != null)
                         {
-                            hWnd = InSituSupportService.GetEditWindow();
+                            hwnd = (HWND)InSituSupportService.GetEditWindow();
                         }
                         else
                         {
-                            hWnd = User32.GetFocus();
+                            hwnd = PInvoke.GetFocus();
                         }
                     }
 
-                    if (hWnd != m.HWnd)
+                    if (hwnd != m.HWnd)
                     {
                         foreach (BufferedKey bk in bufferedChars)
                         {
@@ -125,18 +125,18 @@ namespace System.Windows.Forms.Design
                             {
                                 if (bk.KeyDown.MsgInternal != 0)
                                 {
-                                    User32.SendMessageW(hWnd, User32.WM.KEYDOWN, bk.KeyDown.WParamInternal, bk.KeyDown.LParamInternal);
+                                    PInvoke.SendMessage(hwnd, User32.WM.KEYDOWN, bk.KeyDown.WParamInternal, bk.KeyDown.LParamInternal);
                                 }
 
-                                User32.SendMessageW(hWnd, User32.WM.CHAR, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
+                                PInvoke.SendMessage(hwnd, User32.WM.CHAR, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
                                 if (bk.KeyUp.MsgInternal != 0)
                                 {
-                                    User32.SendMessageW(hWnd, User32.WM.KEYUP, bk.KeyUp.WParamInternal, bk.KeyUp.LParamInternal);
+                                    PInvoke.SendMessage(hwnd, User32.WM.KEYUP, bk.KeyUp.WParamInternal, bk.KeyUp.LParamInternal);
                                 }
                             }
                             else
                             {
-                                User32.SendMessageW(hWnd, bk.KeyChar.MsgInternal, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
+                                PInvoke.SendMessage(hwnd, bk.KeyChar.MsgInternal, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
                             }
                         }
                     }
@@ -161,10 +161,7 @@ namespace System.Windows.Forms.Design
                         break;
                     }
 
-                    if (bufferedChars == null)
-                    {
-                        bufferedChars = new ArrayList();
-                    }
+                    bufferedChars ??= new ArrayList();
 
                     bufferedChars.Add(new BufferedKey(lastKeyDown, m, lastKeyDown));
 
@@ -213,10 +210,7 @@ namespace System.Windows.Forms.Design
                     break;
             }
 
-            if (oldTarget != null)
-            {
-                oldTarget.OnMessage(ref m);
-            }
+            oldTarget?.OnMessage(ref m);
         }
     }
 }

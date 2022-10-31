@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design
 
         public virtual string DisplayName { get; }
 
-        public IDictionary Properties => _properties ?? (_properties = new HybridDictionary());
+        public IDictionary Properties => _properties ??= new HybridDictionary();
 
         public bool ShowInSourceView { get; set; } = true;
     }

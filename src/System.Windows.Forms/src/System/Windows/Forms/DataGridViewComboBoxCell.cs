@@ -806,17 +806,17 @@ namespace System.Windows.Forms
                         }
 
                         Debug.Assert(s_cachedDropDownWidth >= 1);
-                        User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, s_cachedDropDownWidth);
+                        PInvoke.SendMessage(comboBox, (User32.WM)PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)s_cachedDropDownWidth);
                     }
                 }
                 else
                 {
                     // The dropdown width may have been previously adjusted to the items because of the owning column autosized.
                     // The dropdown width needs to be realigned to the DropDownWidth property value.
-                    int dropDownWidth = (int)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETDROPPEDWIDTH);
+                    int dropDownWidth = (int)PInvoke.SendMessage(comboBox, (User32.WM)PInvoke.CB_GETDROPPEDWIDTH);
                     if (dropDownWidth != DropDownWidth)
                     {
-                        User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, DropDownWidth);
+                        PInvoke.SendMessage(comboBox, (User32.WM)PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)DropDownWidth);
                     }
                 }
             }
@@ -2450,7 +2450,7 @@ namespace System.Windows.Forms
                                 }
 
                                 Color textColor;
-                                if (paintPostXPThemes && (drawDropDownButton || drawComboBox))
+                                if (paintPostXPThemes && (drawDropDownButton || drawComboBox) && !SystemInformation.HighContrast)
                                 {
                                     textColor = DataGridViewComboBoxCellRenderer.VisualStyleRenderer.GetColor(ColorProperty.TextColor);
                                 }

@@ -34,10 +34,7 @@ namespace System.Windows.Forms.Design
 
             //use the adornerWindow as an overlay
             _overlayService = (IOverlayService)serviceProvider.GetService(typeof(IOverlayService));
-            if (_overlayService != null)
-            {
-                _overlayService.InsertOverlay(_toolStripAdornerWindow, indexToInsert);
-            }
+            _overlayService?.InsertOverlay(_toolStripAdornerWindow, indexToInsert);
 
             _dropDownAdorner = new Adorner();
             int count = _behaviorService.Adorners.Count;
@@ -75,10 +72,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void Dispose()
         {
-            if (_overlayService != null)
-            {
-                _overlayService.RemoveOverlay(_toolStripAdornerWindow);
-            }
+            _overlayService?.RemoveOverlay(_toolStripAdornerWindow);
 
             _toolStripAdornerWindow.Dispose();
             if (_behaviorService != null)
@@ -115,7 +109,7 @@ namespace System.Windows.Forms.Design
             }
 
             var pt = new Point(c.Left, c.Top);
-            User32.MapWindowPoint(c.Parent, _toolStripAdornerWindow, ref pt);
+            PInvoke.MapWindowPoints(c.Parent, _toolStripAdornerWindow, ref pt);
             return pt;
         }
 
@@ -148,10 +142,7 @@ namespace System.Windows.Forms.Design
             get => _dropDownCollection;
             set
             {
-                if (_dropDownCollection is null)
-                {
-                    _dropDownCollection = new ArrayList();
-                }
+                _dropDownCollection ??= new ArrayList();
             }
         }
 
@@ -188,8 +179,8 @@ namespace System.Windows.Forms.Design
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~(int)(User32.WS.CLIPCHILDREN | User32.WS.CLIPSIBLINGS);
-                    cp.ExStyle |= (int)User32.WS_EX.TRANSPARENT;
+                    cp.Style &= ~(int)(WINDOW_STYLE.WS_CLIPCHILDREN | WINDOW_STYLE.WS_CLIPSIBLINGS);
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TRANSPARENT;
                     return cp;
                 }
             }
@@ -286,7 +277,7 @@ namespace System.Windows.Forms.Design
                 switch (m.MsgInternal)
                 {
                     case User32.WM.NCHITTEST:
-                        m.ResultInternal = (nint)User32.HT.TRANSPARENT;
+                        m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
                         break;
                     default:
                         base.WndProc(ref m);

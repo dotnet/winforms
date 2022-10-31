@@ -66,10 +66,10 @@ namespace System.ComponentModel.Design
             treeView.HotTracking = true;
             treeView.ShowLines = false;
 
-            IntPtr hwnd = treeView.Handle;
-            ComCtl32.TVS_EX exstyle = (ComCtl32.TVS_EX)User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
-            exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
+            HWND hwnd = (HWND)treeView.Handle;
+            uint exstyle = (uint)PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.TVM_GETEXTENDEDSTYLE);
+            exstyle |= PInvoke.TVS_EX_DOUBLEBUFFER | PInvoke.TVS_EX_FADEINOUTEXPANDOS;
+            PInvoke.SendMessage(hwnd, (User32.WM)PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)0, (LPARAM)(uint)exstyle);
         }
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.DropDown;

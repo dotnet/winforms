@@ -30,7 +30,7 @@ namespace System.ComponentModel.Design
             {
             }
 
-            private void ActivateDropDown()
+            private unsafe void ActivateDropDown()
             {
                 if (_editor is not null)
                 {
@@ -76,22 +76,25 @@ namespace System.ComponentModel.Design
                     // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
                     using (var hdc = new User32.GetDcScope(listBox.Handle))
                     {
-                        using var hFont = new Gdi32.ObjectScope(listBox.Font.ToHFONT());
-                        using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
+                        using PInvoke.ObjectScope hFont = new(listBox.Font.ToHFONT());
+                        using PInvoke.SelectObjectScope fontSelection = new(hdc, hFont);
 
-                        var tm = new Gdi32.TEXTMETRICW();
+                        TEXTMETRICW tm = default;
 
                         if (listBox.Items.Count > 0)
                         {
                             foreach (string s in listBox.Items)
                             {
-                                var textSize = new Size();
-                                Gdi32.GetTextExtentPoint32W(hdc, s, s.Length, ref textSize);
-                                maxWidth = Math.Max(textSize.Width, maxWidth);
+                                fixed (char* ps = s)
+                                {
+                                    Size textSize = default;
+                                    PInvoke.GetTextExtentPoint32W(hdc, ps, s.Length, (SIZE*)(void*)&textSize);
+                                    maxWidth = Math.Max(textSize.Width, maxWidth);
+                                }
                             }
                         }
 
-                        Gdi32.GetTextMetricsW(hdc, ref tm);
+                        PInvoke.GetTextMetrics(hdc, &tm);
 
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
@@ -529,9 +532,9 @@ namespace System.ComponentModel.Design
                     get
                     {
                         CreateParams cp = base.CreateParams;
-                        cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
-                        cp.Style |= unchecked((int)(User32.WS.POPUP | User32.WS.BORDER));
-                        cp.ClassStyle |= (int)User32.CS.SAVEBITS;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW;
+                        cp.Style |= unchecked((int)(WINDOW_STYLE.WS_POPUP | WINDOW_STYLE.WS_BORDER));
+                        cp.ClassStyle |= (int)WNDCLASS_STYLES.CS_SAVEBITS;
                         if (_parentControl is not null)
                         {
                             if (!_parentControl.IsDisposed)
@@ -565,17 +568,17 @@ namespace System.ComponentModel.Design
                 /// <summary>
                 ///  General purpose method, based on Control.Contains()... Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
                 /// </summary>
-                private bool OwnsWindow(IntPtr hWnd)
+                private bool OwnsWindow(HWND hWnd)
                 {
-                    while (hWnd != IntPtr.Zero)
+                    while (!hWnd.IsNull)
                     {
-                        hWnd = User32.GetWindowLong(hWnd, User32.GWL.HWNDPARENT);
-                        if (hWnd == IntPtr.Zero)
+                        hWnd = (HWND)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                        if (hWnd.IsNull)
                         {
                             return false;
                         }
 
-                        if (hWnd == Handle)
+                        if (hWnd == (HWND)Handle)
                         {
                             return true;
                         }
@@ -602,14 +605,14 @@ namespace System.ComponentModel.Design
                 {
                     try
                     {
-                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, parent.Handle);
+                        PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, parent.Handle);
 
                         // Lifted directly from Form.ShowDialog()...
-                        IntPtr hWndCapture = User32.GetCapture();
-                        if (hWndCapture != IntPtr.Zero)
+                        HWND hWndCapture = PInvoke.GetCapture();
+                        if (!hWndCapture.IsNull)
                         {
-                            User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE);
-                            User32.ReleaseCapture();
+                            PInvoke.SendMessage(hWndCapture, User32.WM.CANCELMODE);
+                            PInvoke.ReleaseCapture();
                         }
 
                         Visible = true; // NOTE: Do this AFTER creating handle and setting parent
@@ -618,7 +621,7 @@ namespace System.ComponentModel.Design
                     }
                     finally
                     {
-                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, IntPtr.Zero);
+                        PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, IntPtr.Zero);
 
                         // sometimes activation goes to LALA land - if our parent control is still  around, remind it to take focus.
                         if (parent is not null && parent.Visible)
@@ -632,8 +635,8 @@ namespace System.ComponentModel.Design
                 {
                     if (m.MsgInternal == User32.WM.ACTIVATE
                         && Visible
-                        && (User32.WA)PARAM.LOWORD(m.WParamInternal) == User32.WA.INACTIVE
-                        && !OwnsWindow(m.LParamInternal))
+                        && (User32.WA)m.WParamInternal.LOWORD == User32.WA.INACTIVE
+                        && !OwnsWindow((HWND)m.LParamInternal))
                     {
                         Visible = false;
                         if (m.LParamInternal == 0)
@@ -789,18 +792,12 @@ namespace System.ComponentModel.Design
                                     }
                                     finally
                                     {
-                                        if (attrs is not null)
-                                        {
-                                            attrs.Dispose();
-                                        }
+                                        attrs?.Dispose();
                                     }
                                 }
                                 finally
                                 {
-                                    if (icon is not null)
-                                    {
-                                        icon.Dispose();
-                                    }
+                                    icon?.Dispose();
                                 }
                             }
                             catch

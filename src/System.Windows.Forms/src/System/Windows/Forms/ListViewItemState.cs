@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -12,14 +10,14 @@ namespace System.Windows.Forms
     [Flags]
     public enum ListViewItemStates
     {
-        Checked = (int)ComCtl32.CDIS.CHECKED,
-        Default = (int)ComCtl32.CDIS.DEFAULT,
-        Focused = (int)ComCtl32.CDIS.FOCUS,
-        Grayed = (int)ComCtl32.CDIS.GRAYED,
-        Hot = (int)ComCtl32.CDIS.HOT,
-        Indeterminate = (int)ComCtl32.CDIS.INDETERMINATE,
-        Marked = (int)ComCtl32.CDIS.MARKED,
-        Selected = (int)ComCtl32.CDIS.SELECTED,
-        ShowKeyboardCues = (int)ComCtl32.CDIS.SHOWKEYBOARDCUES
+        Checked = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_CHECKED,
+        Default = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_DEFAULT,
+        Focused = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_FOCUS,
+        Grayed = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_GRAYED,
+        Hot = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_HOT,
+        Indeterminate = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_INDETERMINATE,
+        Marked = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_MARKED,
+        Selected = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SELECTED,
+        ShowKeyboardCues = (int)NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_SHOWKEYBOARDCUES
     }
 }

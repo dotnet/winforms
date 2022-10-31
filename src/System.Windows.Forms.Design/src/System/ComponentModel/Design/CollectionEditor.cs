@@ -218,7 +218,7 @@ namespace System.ComponentModel.Design
             _currentContext = context;
 
             // Child modal dialog - launching in SystemAware mode.
-            CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(() => CreateCollectionForm());
+            CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(CreateCollectionForm);
             ITypeDescriptorContext lastContext = _currentContext;
             localCollectionForm.EditValue = value;
             _ignoreChangingEvents = false;

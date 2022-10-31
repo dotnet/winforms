@@ -12,7 +12,7 @@ internal static partial class Interop
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct LVFINDINFOW
         {
-            public LVFI flags;
+            public LVFINDINFOW_FLAGS flags;
             public char* psz;
             public nint lParam;
             public Point pt;

@@ -155,10 +155,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (sourceConverter is null)
-                    {
-                        sourceConverter = sourceTypeTypeConverter;
-                    }
+                    sourceConverter ??= sourceTypeTypeConverter;
 
                     if (sourceConverter is not null && sourceConverter.CanConvertTo(booleanType))
                     {
@@ -177,15 +174,9 @@ namespace System.Windows.Forms
             // If explicit type converters not provided, supply default ones instead
             //
 
-            if (sourceConverter is null)
-            {
-                sourceConverter = sourceTypeTypeConverter;
-            }
+            sourceConverter ??= sourceTypeTypeConverter;
 
-            if (targetConverter is null)
-            {
-                targetConverter = targetTypeTypeConverter;
-            }
+            targetConverter ??= targetTypeTypeConverter;
 
             //
             // Standardized conversions
@@ -326,10 +317,7 @@ namespace System.Windows.Forms
                     return (state == CheckState.Checked);
                 }
 
-                if (targetConverter is null)
-                {
-                    targetConverter = targetTypeTypeConverter;
-                }
+                targetConverter ??= targetTypeTypeConverter;
 
                 if (targetConverter is not null && targetConverter.CanConvertFrom(booleanType))
                 {
@@ -346,15 +334,9 @@ namespace System.Windows.Forms
             // If explicit type converters not provided, supply default ones instead
             //
 
-            if (targetConverter is null)
-            {
-                targetConverter = targetTypeTypeConverter;
-            }
+            targetConverter ??= targetTypeTypeConverter;
 
-            if (sourceConverter is null)
-            {
-                sourceConverter = sourceTypeTypeConverter;
-            }
+            sourceConverter ??= sourceTypeTypeConverter;
 
             //
             // Standardized conversions
@@ -387,10 +369,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                if (formatInfo is null)
-                {
-                    formatInfo = CultureInfo.CurrentCulture;
-                }
+                formatInfo ??= CultureInfo.CurrentCulture;
 
                 return Convert.ChangeType(value, type, formatInfo);
             }
@@ -419,7 +398,7 @@ namespace System.Windows.Forms
             else
             {
                 // Otherwise perform default comparison based on object types
-                return Object.Equals(value, formattedNullValue);
+                return object.Equals(value, formattedNullValue);
             }
         }
 
@@ -501,7 +480,7 @@ namespace System.Windows.Forms
         {
             return value is null ||
                    value == System.DBNull.Value ||
-                   Object.Equals(value, NullData(value.GetType(), dataSourceNullValue));
+                   object.Equals(value, NullData(value.GetType(), dataSourceNullValue));
         }
 
         /// <summary>

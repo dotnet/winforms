@@ -108,10 +108,7 @@ namespace System.Windows.Forms
                 SetFlag(FlagAutoEllipsis, value);
                 if (value)
                 {
-                    if (_textToolTip is null)
-                    {
-                        _textToolTip = new ToolTip();
-                    }
+                    _textToolTip ??= new ToolTip();
                 }
 
                 Invalidate();
@@ -278,7 +275,7 @@ namespace System.Windows.Forms
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw)
                 {
-                    cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the BS_XXXX alignment styles
+                    cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the BS_XXXX alignment styles
 
                     cp.Style |= (int)User32.BS.MULTILINE;
 
@@ -395,10 +392,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_flatAppearance is null)
-                {
-                    _flatAppearance = new FlatButtonAppearance(this);
-                }
+                _flatAppearance ??= new FlatButtonAppearance(this);
 
                 return _flatAppearance;
             }
@@ -964,10 +958,7 @@ namespace System.Windows.Forms
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             SetFlag(FlagMouseOver, false);
-            if (_textToolTip is not null)
-            {
-                _textToolTip.Hide(this);
-            }
+            _textToolTip?.Hide(this);
 
             Invalidate();
             // call base last, so if it invokes any listeners that disable the button, we
@@ -1248,7 +1239,7 @@ namespace System.Windows.Forms
                     // not paint the button as "un-depressed".
                     if (!OwnerDraw)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.TRUE);
+                        PInvoke.SendMessage(this, (User32.WM)User32.BM.SETSTATE, (WPARAM)(BOOL)true);
                     }
 
                     Invalidate(DownChangeRectangle);
@@ -1277,7 +1268,7 @@ namespace System.Windows.Forms
                 {
                     SetFlag(FlagMousePressed, false);
                     SetFlag(FlagMouseDown, false);
-                    User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.FALSE);
+                    PInvoke.SendMessage(this, (User32.WM)User32.BM.SETSTATE, (WPARAM)(BOOL)false);
                 }
 
                 // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
@@ -1509,7 +1500,7 @@ namespace System.Windows.Forms
                 switch (m.MsgInternal)
                 {
                     case User32.WM.REFLECT_COMMAND:
-                        if ((User32.BN)PARAM.HIWORD(m.WParamInternal) == User32.BN.CLICKED && !ValidationCancelled)
+                        if ((User32.BN)m.WParamInternal.HIWORD == User32.BN.CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);
                         }

@@ -546,7 +546,7 @@ namespace System.Windows.Forms
             OnMouseHover(e);
             RaiseEvent(ToolStripItem.s_mouseHoverEvent, e);
         }
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
 
         private void HandleMouseMove(object sender, MouseEventArgs e)
         {
@@ -638,7 +638,7 @@ namespace System.Windows.Forms
         ///  called when the control has lost focus
         /// </summary>
         protected virtual void OnLostFocus(EventArgs e) => RaiseEvent(s_lostFocusEvent, e);
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
 
         protected virtual void OnKeyDown(KeyEventArgs e) => RaiseKeyEvent(s_keyDownEvent, e);
 
@@ -699,10 +699,7 @@ namespace System.Windows.Forms
                 // politely remove ourselves from the control collection
                 ReadOnlyControlCollection oldControlCollection
                                 = GetControlCollection(Control.ParentInternal as ToolStrip);
-                if (oldControlCollection is not null)
-                {
-                    oldControlCollection.RemoveInternal(Control);
-                }
+                oldControlCollection?.RemoveInternal(Control);
             }
             else
             {
@@ -807,7 +804,7 @@ namespace System.Windows.Forms
 
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
         protected virtual void OnValidated(EventArgs e) => RaiseEvent(s_validatedEvent, e);
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
 
         private static ReadOnlyControlCollection GetControlCollection(ToolStrip toolStrip)
             => (ReadOnlyControlCollection)toolStrip?.Controls;
@@ -818,10 +815,7 @@ namespace System.Windows.Forms
         private void SyncControlParent()
         {
             ReadOnlyControlCollection newControls = GetControlCollection(ParentInternal);
-            if (newControls is not null)
-            {
-                newControls.AddInternal(Control);
-            }
+            newControls?.AddInternal(Control);
         }
 
         protected virtual void OnHostedControlResize(EventArgs e)
@@ -875,6 +869,12 @@ namespace System.Windows.Forms
         public override void ResetForeColor() => Control.ResetForeColor();
 
         private void SuspendSizeSync() => _suspendSyncSizeCount++;
+
+        internal override void ReleaseUiaProvider()
+        {
+            _control?.ReleaseUiaProvider(IntPtr.Zero);
+            base.ReleaseUiaProvider();
+        }
 
         private void ResumeSizeSync() => _suspendSyncSizeCount--;
 

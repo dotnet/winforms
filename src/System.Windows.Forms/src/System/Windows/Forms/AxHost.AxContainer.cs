@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Ole = Windows.Win32.System.Ole;
+using Com = Windows.Win32.System.Com;
 using static Interop;
 using static Interop.Ole32;
 
@@ -18,7 +20,7 @@ namespace System.Windows.Forms
 {
     public abstract partial class AxHost
     {
-        internal class AxContainer : IOleContainer, IOleInPlaceFrame, IReflect
+        internal class AxContainer : Ole.IOleContainer.Interface, IOleInPlaceFrame, IReflect
         {
             internal ContainerControl _parent;
 
@@ -214,10 +216,7 @@ namespace System.Windows.Forms
             {
                 lock (this)
                 {
-                    if (_containerCache.ContainsKey(ctl))
-                    {
-                        _containerCache.Remove(ctl);
-                    }
+                    _containerCache.Remove(ctl);
                 }
             }
 
@@ -235,7 +234,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal IEnumUnknown EnumControls(Control ctl, OLECONTF dwOleContF, GC_WCH dwWhich)
+            internal Com.IEnumUnknown.Interface EnumControls(Control ctl, OLECONTF dwOleContF, GC_WCH dwWhich)
             {
                 GetComponents();
 
@@ -446,10 +445,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (_components is null)
-                {
-                    _components = new();
-                }
+                _components ??= new();
 
                 if (ctl != _parent && !_components.ContainsKey(ctl))
                 {
@@ -695,22 +691,31 @@ namespace System.Windows.Forms
                 }
             }
 
+            unsafe HRESULT Ole.IParseDisplayName.Interface.ParseDisplayName(Com.IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, Com.IMoniker** ppmkOut)
+                => ((Ole.IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
+
             // IOleContainer methods:
-            unsafe HRESULT IOleContainer.ParseDisplayName(IntPtr pbc, string pszDisplayName, uint* pchEaten, IntPtr* ppmkOut)
+            unsafe HRESULT Ole.IOleContainer.Interface.ParseDisplayName(Com.IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, Com.IMoniker** ppmkOut)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in ParseDisplayName");
                 if (ppmkOut is not null)
                 {
-                    *ppmkOut = IntPtr.Zero;
+                    *ppmkOut = null;
                 }
 
                 return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT IOleContainer.EnumObjects(OLECONTF grfFlags, out IEnumUnknown ppenum)
+            unsafe HRESULT Ole.IOleContainer.Interface.EnumObjects(Ole.OLECONTF grfFlags, Com.IEnumUnknown** ppenum)
             {
+                if (ppenum is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnumObjects");
-                if ((grfFlags & OLECONTF.EMBEDDINGS) != 0)
+                bool result = true;
+                if ((grfFlags & Ole.OLECONTF.OLECONTF_EMBEDDINGS) != 0)
                 {
                     Debug.Assert(_parent is not null, "gotta have it...");
                     ArrayList list = new ArrayList();
@@ -719,16 +724,18 @@ namespace System.Windows.Forms
                     {
                         object[] temp = new object[list.Count];
                         list.CopyTo(temp, 0);
-                        ppenum = new EnumUnknown(temp);
+                        result = ComHelpers.TryGetComPointer(new EnumUnknown(temp), out *ppenum);
+                        Debug.Assert(result);
                         return HRESULT.S_OK;
                     }
                 }
 
-                ppenum = new EnumUnknown(null);
+                result = ComHelpers.TryGetComPointer(new EnumUnknown(null), out *ppenum);
+                Debug.Assert(result);
                 return HRESULT.S_OK;
             }
 
-            HRESULT IOleContainer.LockContainer(BOOL fLock)
+            HRESULT Ole.IOleContainer.Interface.LockContainer(BOOL fLock)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in LockContainer");
                 return HRESULT.E_NOTIMPL;
@@ -782,7 +789,7 @@ namespace System.Windows.Forms
                 _controlInEditMode = null;
             }
 
-            HRESULT IOleInPlaceFrame.SetActiveObject(IOleInPlaceActiveObject pActiveObject, string pszObjName)
+            unsafe HRESULT IOleInPlaceFrame.SetActiveObject(Ole.IOleInPlaceActiveObject.Interface pActiveObject, string pszObjName)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in SetActiveObject {pszObjName ?? "<null>"}");
                 if (_siteUIActive is not null)
@@ -810,11 +817,14 @@ namespace System.Windows.Forms
                 }
 
                 AxHost ctl = null;
-                if (pActiveObject is IOleObject oleObject)
+                if (pActiveObject is Ole.IOleObject.Interface oleObject)
                 {
-                    HRESULT hr = oleObject.GetClientSite(out IOleClientSite clientSite);
-                    Debug.Assert(hr.Succeeded());
-                    if (clientSite is OleInterfaces interfaces)
+                    Ole.IOleClientSite* clientSite;
+                    HRESULT hr = oleObject.GetClientSite(&clientSite);
+                    Debug.Assert(hr.Succeeded);
+
+                    var clientSiteObject = (Ole.IOleClientSite.Interface)Marshal.GetObjectForIUnknown((nint)clientSite);
+                    if (clientSiteObject is OleInterfaces interfaces)
                     {
                         ctl = interfaces.GetAxHost();
                     }
@@ -877,7 +887,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            unsafe HRESULT IOleInPlaceFrame.TranslateAccelerator(User32.MSG* lpmsg, ushort wID)
+            unsafe HRESULT IOleInPlaceFrame.TranslateAccelerator(MSG* lpmsg, ushort wID)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in IOleInPlaceFrame.TranslateAccelerator");
                 return HRESULT.S_FALSE;
@@ -905,7 +915,7 @@ namespace System.Windows.Forms
 
                 private AxContainer GetC() => (AxContainer)_pContainer.Target;
 
-                HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out IEnumUnknown ppenum)
+                HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out Com.IEnumUnknown.Interface ppenum)
                 {
                     Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnumControls for proxy");
                     ppenum = GetC().EnumControls(GetP(), dwOleContF, dwWhich);
@@ -987,12 +997,12 @@ namespace System.Windows.Forms
                     get
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getEnabled for proxy for {GetP()}");
-                        return GetP().Enabled.ToBOOL();
+                        return GetP().Enabled;
                     }
                     set
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setEnabled for proxy for {GetP()} {value}");
-                        GetP().Enabled = value.IsTrue();
+                        GetP().Enabled = value;
                     }
                 }
 
@@ -1066,12 +1076,12 @@ namespace System.Windows.Forms
                     get
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getTabStop for proxy for {GetP()}");
-                        return GetP().TabStop.ToBOOL();
+                        return GetP().TabStop;
                     }
                     set
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setTabStop for proxy for {GetP()} {value}");
-                        GetP().TabStop = value.IsTrue();
+                        GetP().TabStop = value;
                     }
                 }
 
@@ -1094,12 +1104,12 @@ namespace System.Windows.Forms
                     get
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getVisible for proxy for {GetP()}");
-                        return GetP().Visible.ToBOOL();
+                        return GetP().Visible;
                     }
                     set
                     {
                         Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setVisible for proxy for {GetP()} {value}");
-                        GetP().Visible = value.IsTrue();
+                        GetP().Visible = value;
                     }
                 }
 
@@ -1185,10 +1195,7 @@ namespace System.Windows.Forms
                 PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
                 {
                     PropertyInfo prop = GetP().GetType().GetProperty(name, bindingAttr);
-                    if (prop is null)
-                    {
-                        prop = GetType().GetProperty(name, bindingAttr);
-                    }
+                    prop ??= GetType().GetProperty(name, bindingAttr);
 
                     return prop;
                 }
@@ -1202,10 +1209,7 @@ namespace System.Windows.Forms
                     ParameterModifier[] modifiers)
                 {
                     PropertyInfo prop = GetP().GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-                    if (prop is null)
-                    {
-                        prop = GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-                    }
+                    prop ??= GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
 
                     return prop;
                 }
@@ -1245,10 +1249,7 @@ namespace System.Windows.Forms
                 MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
                 {
                     MemberInfo[] memb = GetP().GetType().GetMember(name, bindingAttr);
-                    if (memb is null)
-                    {
-                        memb = GetType().GetMember(name, bindingAttr);
-                    }
+                    memb ??= GetType().GetMember(name, bindingAttr);
 
                     return memb;
                 }

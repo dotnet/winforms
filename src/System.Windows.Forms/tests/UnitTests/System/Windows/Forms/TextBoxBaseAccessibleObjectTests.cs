@@ -26,7 +26,8 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData((int)Interop.UiaCore.UIA.IsTextPatternAvailablePropertyId)]
         [InlineData((int)Interop.UiaCore.UIA.IsTextPattern2AvailablePropertyId)]
-        public void TextBoxBaseAccessibleObject_TextPatternAvailable(int propertyId)
+        [InlineData((int)Interop.UiaCore.UIA.IsValuePatternAvailablePropertyId)]
+        public void TextBoxBaseAccessibleObject_PatternAvailable(int propertyId)
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             AccessibleObject textBoxAccessibleObject = textBoxBase.AccessibilityObject;
@@ -39,7 +40,8 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData((int)Interop.UiaCore.UIA.TextPatternId)]
         [InlineData((int)Interop.UiaCore.UIA.TextPattern2Id)]
-        public void TextBoxBaseAccessibleObject_TextPatternSupported(int patternId)
+        [InlineData((int)Interop.UiaCore.UIA.ValuePatternId)]
+        public void TextBoxBaseAccessibleObject_PatternSupported(int patternId)
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             AccessibleObject textBoxAccessibleObject = textBoxBase.AccessibilityObject;
@@ -47,6 +49,20 @@ namespace System.Windows.Forms.Tests
             // Interop.UiaCore.UIA accessible level (internal) is less than the test level (public) so it needs boxing and unboxing
             Assert.True(textBoxAccessibleObject.IsPatternSupported((Interop.UiaCore.UIA)patternId));
             Assert.False(textBoxBase.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBaseAccessibleObject_SetValue_OwnerTextChanged()
+        {
+            const string text = "some text";
+            using TextBoxBase textBoxBase = new SubTextBoxBase();
+            textBoxBase.CreateControl();
+
+            AccessibleObject accessibleObject = textBoxBase.AccessibilityObject;
+            accessibleObject.SetValue(text);
+
+            Assert.Equal(text, textBoxBase.Text);
+            Assert.True(textBoxBase.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -63,13 +79,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TextBoxBaseAccessibleObject_Value_ReturnsEmpty_WithoutHandle()
+        public void TextBoxBaseAccessibleObject_Name_ReturnsNullAsDefault()
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
-            textBoxBase.Text = "Some test text";
+            textBoxBase.CreateControl();
             AccessibleObject accessibleObject = textBoxBase.AccessibilityObject;
-            Assert.Equal(string.Empty, accessibleObject.Value);
-            Assert.False(textBoxBase.IsHandleCreated);
+            Assert.Null(accessibleObject.Name);
+            Assert.True(textBoxBase.IsHandleCreated);
         }
 
         [WinFormsFact]

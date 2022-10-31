@@ -6,6 +6,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
+using Windows.Win32.UI.WindowsAndMessaging;
 using static Interop;
 
 namespace WinformsControlsTest
@@ -31,11 +35,11 @@ namespace WinformsControlsTest
         {
             x = LogicalDpi;
             y = LogicalDpi;
-            Gdi32.HDC hDC = User32.GetDC(handleRef);
+            HDC hDC = User32.GetDC(handleRef);
             if (!hDC.IsNull)
             {
-                x = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSX);
-                y = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSY);
+                x = PInvoke.GetDeviceCaps(hDC, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                y = PInvoke.GetDeviceCaps(hDC, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
 
                 User32.ReleaseDC(handleRef, hDC);
             }
@@ -82,13 +86,14 @@ namespace WinformsControlsTest
                     {
                         RECT suggestedRect = Marshal.PtrToStructure<RECT>(m.LParam);
 
-                        User32.SetWindowPos(
-                            new HandleRef(this, Handle),
-                            IntPtr.Zero, suggestedRect.left,
+                        PInvoke.SetWindowPos(
+                            this,
+                            HWND.Null,
+                            suggestedRect.left,
                             suggestedRect.top,
                             suggestedRect.right - suggestedRect.left,
                             suggestedRect.bottom - suggestedRect.top,
-                            User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
+                            SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
 
                         float factorX = (float)(x / deviceDpiX);
                         float factorY = (float)(y / deviceDpiY);
@@ -118,13 +123,13 @@ namespace WinformsControlsTest
             switch ((User32.WM)m.Msg)
             {
                 case User32.WM.DPICHANGED_BEFOREPARENT:
-                    dpi = User32.GetDpiForWindow(Handle);
+                    dpi = PInvoke.GetDpiForWindow(this);
                     Debug.WriteLine($"WM_DPICHANGED_BEFOREPARENT  {dpi}");
 
                     m.Result = (IntPtr)1;
                     break;
                 case User32.WM.DPICHANGED_AFTERPARENT:
-                    dpi = User32.GetDpiForWindow(this);
+                    dpi = PInvoke.GetDpiForWindow(this);
                     Debug.WriteLine($"WM_DPICHANGED_AFTERPARENT {dpi}");
                     m.Result = (IntPtr)1;
                     break;

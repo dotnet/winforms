@@ -8,11 +8,10 @@ using System.Runtime.Versioning;
 using System.Windows.Forms.DataBinding.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public partial class ToolStripButtonTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -1059,9 +1058,9 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, CheckState.Checked, AccessibleStates.Focusable | AccessibleStates.Checked)]
         [InlineData(true, CheckState.Indeterminate, AccessibleStates.Focusable | AccessibleStates.Checked)]
         [InlineData(true, CheckState.Unchecked, AccessibleStates.Focusable)]
-        [InlineData(false, CheckState.Checked, AccessibleStates.Unavailable)]
-        [InlineData(false, CheckState.Indeterminate, AccessibleStates.Unavailable)]
-        [InlineData(false, CheckState.Unchecked, AccessibleStates.Unavailable)]
+        [InlineData(false, CheckState.Checked, AccessibleStates.None)]
+        [InlineData(false, CheckState.Indeterminate, AccessibleStates.None)]
+        [InlineData(false, CheckState.Unchecked, AccessibleStates.None)]
         public void ToolStripButton_CreateAccessibilityInstance_InvokeChecked_ReturnsExpected(bool enabled, CheckState checkState, AccessibleStates expectedState)
         {
             using var item = new SubToolStripButton
@@ -1078,7 +1077,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData(true, AccessibleStates.Focused | AccessibleStates.HotTracked | AccessibleStates.Focusable)]
-        [InlineData(false, AccessibleStates.Unavailable | AccessibleStates.Focused)]
+        [InlineData(false, AccessibleStates.None)]
         public void ToolStripButton_CreateAccessibilityInstance_InvokeSelected_ReturnsExpected(bool enabled, AccessibleStates expectedState)
         {
             using var item = new SubToolStripButton
@@ -1086,7 +1085,7 @@ namespace System.Windows.Forms.Tests
                 Enabled = enabled
             };
             item.Select();
-            Assert.True(item.Selected);
+            Assert.Equal(item.CanSelect, item.Selected);
 
             ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsAssignableFrom<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
             Assert.Equal(AccessibleRole.PushButton, accessibleObject.Role);

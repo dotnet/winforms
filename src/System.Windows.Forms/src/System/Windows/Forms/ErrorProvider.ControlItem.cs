@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    partial class ErrorProvider
+    public partial class ErrorProvider
     {
         /// <summary>
         ///  There is one ControlItem for each control that the ErrorProvider is tracking state for.
@@ -131,10 +131,7 @@ namespace System.Windows.Forms
                 get => _error;
                 set
                 {
-                    if (value is null)
-                    {
-                        value = string.Empty;
-                    }
+                    value ??= string.Empty;
 
                     // If the error is the same and the blinkStyle is not AlwaysBlink, then
                     // we should not add the error and not start blinking.

@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         protected void RaiseCommandChanged(EventArgs e);
 
         /// <summary>
-        /// An implementation should raise the <see cref="CommandCanExecuteChanged"/> event 
+        /// An implementation should raise the <see cref="CommandCanExecuteChanged"/> event
         /// by calling component's or control's OnCommandCanExecuteChanged method.
         /// </summary>
         /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>

@@ -21,7 +21,7 @@ namespace System.Windows.Forms
                 private static bool UseBaseAdapter(ComboBox comboBox)
                 {
                     ToolStripComboBoxControl? toolStripComboBox = comboBox as ToolStripComboBoxControl;
-                    if (toolStripComboBox is null || !(toolStripComboBox.Owner.Renderer is ToolStripProfessionalRenderer))
+                    if (toolStripComboBox is null || toolStripComboBox.Owner?.Renderer is not ToolStripProfessionalRenderer)
                     {
                         Debug.Assert(toolStripComboBox is not null, "Why are we here and not a toolstrip combo?");
                         return true;
@@ -97,7 +97,9 @@ namespace System.Windows.Forms
 
                                 g.FillRectangle(b, dropDownRect);
                             }
-                            else if (toolStripComboBox is not null && toolStripComboBox.Owner.IsOnOverflow)
+                            else if (toolStripComboBox is not null
+                                && toolStripComboBox.Owner is not null
+                                && toolStripComboBox.Owner.IsOnOverflow)
                             {
                                 using var b = colorTable.ComboBoxButtonOnOverflow.GetCachedSolidBrushScope();
                                 g.FillRectangle(b, dropDownRect);

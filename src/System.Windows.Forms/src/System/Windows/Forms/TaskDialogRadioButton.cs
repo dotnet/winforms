@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -265,9 +263,9 @@ namespace System.Windows.Forms
         /// <returns>A string that contains the control text.</returns>
         public override string ToString() => _text ?? base.ToString() ?? string.Empty;
 
-        internal ComCtl32.TDF Bind(TaskDialogPage page, int radioButtonID)
+        internal TASKDIALOG_FLAGS Bind(TaskDialogPage page, int radioButtonID)
         {
-            ComCtl32.TDF result = Bind(page);
+            TASKDIALOG_FLAGS result = Bind(page);
             _radioButtonID = radioButtonID;
 
             return result;

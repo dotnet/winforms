@@ -125,17 +125,17 @@ namespace System.Windows.Forms.Automation
         ITextRangeProvider ITextRangeProvider.Clone() => new UiaTextRange(_enclosingElement, _provider, Start, End);
 
         /// <remarks>
-        ///  Ranges come from the same element. Only need to compare endpoints.
+        ///  <para>Ranges come from the same element. Only need to compare endpoints.</para>
         /// </remarks>
         BOOL ITextRangeProvider.Compare(ITextRangeProvider range)
-            => (range is UiaTextRange editRange && editRange.Start == Start && editRange.End == End).ToBOOL();
+            => range is UiaTextRange editRange && editRange.Start == Start && editRange.End == End;
 
         int ITextRangeProvider.CompareEndpoints(
             TextPatternRangeEndpoint endpoint,
             ITextRangeProvider targetRange,
             TextPatternRangeEndpoint targetEndpoint)
         {
-            if (!(targetRange is UiaTextRange editRange))
+            if (targetRange is not UiaTextRange editRange)
             {
                 return -1;
             }
@@ -263,10 +263,10 @@ namespace System.Windows.Forms.Automation
 
             ValidateEndpoints();
             ReadOnlySpan<char> rangeText = new ReadOnlySpan<char>(_provider.Text.ToCharArray(), Start, Length);
-            StringComparison comparisonType = ignoreCase.IsTrue() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+            StringComparison comparisonType = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
             // Do a case-sensitive search for the text inside the range.
-            int index = backwards.IsTrue() ? rangeText.LastIndexOf(text, comparisonType) : rangeText.IndexOf(text, comparisonType);
+            int index = backwards ? rangeText.LastIndexOf(text, comparisonType) : rangeText.IndexOf(text, comparisonType);
 
             // If the text was found then create a new range covering the found text.
             return index >= 0 ? new UiaTextRange(_enclosingElement, _provider, Start + index, Start + index + text.Length) : null;
@@ -296,8 +296,7 @@ namespace System.Windows.Forms.Automation
                 || (_provider.IsMultiline && End < _provider.TextLength
                     && End - Start == 1 && text[End] == '\n'))
             {
-                Point endlinePoint;
-                User32.GetCaretPos(out endlinePoint);
+                PInvoke.GetCaretPos(out Point endlinePoint);
                 endlinePoint = _provider.PointToScreen(endlinePoint);
                 Rectangle endlineRectangle = new Rectangle(endlinePoint.X, endlinePoint.Y + 2, UiaTextProvider.EndOfLineWidth, Math.Abs(_provider.Logfont.lfHeight) + 1);
                 return new double[] { endlineRectangle.X, endlineRectangle.Y, endlineRectangle.Width, endlineRectangle.Height };
@@ -497,7 +496,7 @@ namespace System.Windows.Forms.Automation
         {
             if (_provider.IsMultiline)
             {
-                int newFirstLine = alignToTop.IsTrue()
+                int newFirstLine = alignToTop
                     ? _provider.GetLineFromCharIndex(Start)
                     : Math.Max(0, _provider.GetLineFromCharIndex(End) - _provider.LinesPerPage + 1);
 
@@ -771,7 +770,7 @@ namespace System.Windows.Forms.Automation
 
         private bool GetReadOnly() => _provider.IsReadOnly;
 
-        private static COLORREF GetBackgroundColor() => GetSysColor(COLOR.WINDOW);
+        private static COLORREF GetBackgroundColor() => (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
 
         private static string GetFontName(LOGFONTW logfont) => logfont.FaceName.ToString();
 
@@ -780,13 +779,13 @@ namespace System.Windows.Forms.Automation
             // Note: this assumes integral point sizes. violating this assumption would confuse the user
             // because they set something to 7 point but reports that it is, say 7.2 point, due to the rounding.
             using var dc = User32.GetDcScope.ScreenDC;
-            int lpy = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
+            int lpy = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
             return Math.Round((double)(-logfont.lfHeight) * 72 / lpy);
         }
 
-        private static Gdi32.FW GetFontWeight(LOGFONTW logfont) => logfont.lfWeight;
+        private static FW GetFontWeight(LOGFONTW logfont) => (FW)logfont.lfWeight;
 
-        private static COLORREF GetForegroundColor() => GetSysColor(COLOR.WINDOWTEXT);
+        private static COLORREF GetForegroundColor() => (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
 
         private static bool GetItalic(LOGFONTW logfont) => logfont.lfItalic != 0;
 
@@ -809,7 +808,7 @@ namespace System.Windows.Forms.Automation
                         ValidateEndpoints();
 
                         moved = Math.Min(count, limit - index);
-                        index = index + moved;
+                        index += moved;
 
                         index = index > limit ? limit : index;
                     }
@@ -924,7 +923,7 @@ namespace System.Windows.Forms.Automation
                         ValidateEndpoints();
                         int oneBasedIndex = index + 1;
                         moved = Math.Max(count, -oneBasedIndex);
-                        index = index + moved;
+                        index += moved;
                         index = index < 0 ? 0 : index;
                     }
 

@@ -5,36 +5,27 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using static Interop;
-using static Interop.Shell32;
+using Windows.Win32.UI.Controls.Dialogs;
+using static Windows.Win32.UI.Controls.Dialogs.OPEN_FILENAME_FLAGS;
+using static Windows.Win32.UI.Shell.FILEOPENDIALOGOPTIONS;
 
 namespace System.Windows.Forms
 {
     public partial class FileDialog
     {
         private protected virtual bool SettingsSupportVistaDialog
-        {
-            get => !ShowHelp && ((Application.VisualStyleState & VisualStyles.VisualStyleState.ClientAreaEnabled) == VisualStyles.VisualStyleState.ClientAreaEnabled);
-        }
+            => !ShowHelp && Application.VisualStyleState.HasFlag(VisualStyles.VisualStyleState.ClientAreaEnabled);
 
         internal bool UseVistaDialogInternal
+            => AutoUpgradeEnabled
+                && SettingsSupportVistaDialog
+                && SystemInformation.BootMode == BootMode.Normal;
+
+        private protected abstract unsafe IFileDialog* CreateVistaDialog();
+
+        private unsafe bool TryRunDialogVista(HWND hWndOwner, out bool returnValue)
         {
-            get
-            {
-                if (AutoUpgradeEnabled && SettingsSupportVistaDialog)
-                {
-                    return SystemInformation.BootMode == BootMode.Normal;
-                }
-
-                return false;
-            }
-        }
-
-        private protected abstract Interop.WinFormsComWrappers.FileDialogWrapper CreateVistaDialog();
-
-        private bool TryRunDialogVista(IntPtr hWndOwner, out bool returnValue)
-        {
-            IFileDialog dialog;
+            IFileDialog* dialog;
             try
             {
                 // Creating the Vista dialog can fail on Windows Server Core, even if the
@@ -48,83 +39,87 @@ namespace System.Windows.Forms
             }
 
             OnBeforeVistaDialog(dialog);
-            var events = new VistaDialogEvents(this);
-            dialog.Advise(events, out uint eventCookie);
+            bool success = ComHelpers.TryGetComPointer(
+                new VistaDialogEvents(this),
+                out IFileDialogEvents* events);
+
+            Debug.Assert(success);
+
+            dialog->Advise(events, out uint eventCookie).ThrowOnFailure();
             try
             {
-                returnValue = dialog.Show(hWndOwner) == 0;
+                returnValue = dialog->Show(hWndOwner) == HRESULT.S_OK;
                 return true;
             }
             finally
             {
-                dialog.Unadvise(eventCookie);
-                // Make sure that the event interface doesn't get collected
-                GC.KeepAlive(events);
+                dialog->Unadvise(eventCookie).ThrowOnFailure();
+                uint count = events->Release();
+                Debug.Assert(count == 0);
             }
         }
 
-        private void OnBeforeVistaDialog(IFileDialog dialog)
+        private unsafe void OnBeforeVistaDialog(IFileDialog* dialog)
         {
             if (ClientGuid is { } clientGuid)
             {
                 // IFileDialog::SetClientGuid should be called immediately after creation of the dialog object.
-                // https://docs.microsoft.com/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
-                dialog.SetClientGuid(clientGuid);
+                // https://learn.microsoft.com/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
+                dialog->SetClientGuid(in clientGuid).ThrowOnFailure();
             }
 
-            dialog.SetDefaultExtension(DefaultExt);
-            dialog.SetFileName(FileName);
+            dialog->SetDefaultExtension(DefaultExt).ThrowOnFailure();
+            dialog->SetFileName(FileName).ThrowOnFailure();
 
             if (!string.IsNullOrEmpty(InitialDirectory))
             {
-                try
+                IShellItem* initialDirectory = PInvoke.SHCreateShellItem(InitialDirectory);
+                if (initialDirectory is null)
                 {
-                    IShellItem initialDirectory = GetShellItemForPath(InitialDirectory);
-
-                    dialog.SetDefaultFolder(initialDirectory);
-                    dialog.SetFolder(initialDirectory);
-                }
-                catch (FileNotFoundException)
-                {
+                    dialog->SetDefaultFolder(initialDirectory).ThrowOnFailure();
+                    dialog->SetFolder(initialDirectory).ThrowOnFailure();
+                    initialDirectory->Release();
                 }
             }
 
-            dialog.SetTitle(Title);
-            dialog.SetOptions(GetOptions());
+            dialog->SetTitle(Title).ThrowOnFailure();
+            dialog->SetOptions(GetOptions()).ThrowOnFailure();
             SetFileTypes(dialog);
 
             _customPlaces.Apply(dialog);
         }
 
-        private FOS GetOptions()
+        private FILEOPENDIALOGOPTIONS GetOptions()
         {
-            const FOS BlittableOptions =
-                FOS.OVERWRITEPROMPT
-              | FOS.NOCHANGEDIR
-              | FOS.NOVALIDATE
-              | FOS.ALLOWMULTISELECT
-              | FOS.PATHMUSTEXIST
-              | FOS.FILEMUSTEXIST
-              | FOS.CREATEPROMPT
-              | FOS.NODEREFERENCELINKS
-              | FOS.DONTADDTORECENT
-              | FOS.NOREADONLYRETURN
-              | FOS.NOTESTFILECREATE
-              | FOS.FORCESHOWHIDDEN
-              | FOS.DEFAULTNOMINIMODE
-              | FOS.OKBUTTONNEEDSINTERACTION
-              | FOS.HIDEPINNEDPLACES
-              | FOS.FORCEPREVIEWPANEON;
+            const FILEOPENDIALOGOPTIONS BlittableOptions =
+                FOS_OVERWRITEPROMPT
+                | FOS_NOCHANGEDIR
+                | FOS_NOVALIDATE
+                | FOS_ALLOWMULTISELECT
+                | FOS_PATHMUSTEXIST
+                | FOS_FILEMUSTEXIST
+                | FOS_CREATEPROMPT
+                | FOS_NODEREFERENCELINKS
+                | FOS_DONTADDTORECENT
+                | FOS_NOREADONLYRETURN
+                | FOS_NOTESTFILECREATE
+                | FOS_FORCESHOWHIDDEN
+                | FOS_DEFAULTNOMINIMODE
+                | FOS_OKBUTTONNEEDSINTERACTION
+                | FOS_HIDEPINNEDPLACES
+                | FOS_FORCEPREVIEWPANEON;
 
-            const int UnexpectedOptions =
-                (int)(Comdlg32.OFN.SHOWHELP // If ShowHelp is true, we don't use the Vista Dialog
-                | Comdlg32.OFN.ENABLEHOOK // These shouldn't be set in options (only set in the flags for the legacy dialog)
-                | Comdlg32.OFN.ENABLESIZING // These shouldn't be set in options (only set in the flags for the legacy dialog)
-                | Comdlg32.OFN.EXPLORER); // These shouldn't be set in options (only set in the flags for the legacy dialog)
+#if DEBUG
+            const OPEN_FILENAME_FLAGS UnexpectedOptions =
+                OFN_SHOWHELP        // If ShowHelp is true, we don't use the Vista Dialog
+                | OFN_ENABLEHOOK    // These shouldn't be set in options (only set in the flags for the legacy dialog)
+                | OFN_ENABLESIZING  // These shouldn't be set in options (only set in the flags for the legacy dialog)
+                | OFN_EXPLORER;     // These shouldn't be set in options (only set in the flags for the legacy dialog)
 
-            Debug.Assert((UnexpectedOptions & _options) == 0, "Unexpected FileDialog options");
+            Debug.Assert((UnexpectedOptions & _fileNameFlags) == 0, "Unexpected FileDialog options");
+#endif
 
-            FOS ret = (FOS)_options & BlittableOptions;
+            FILEOPENDIALOGOPTIONS result = (FILEOPENDIALOGOPTIONS)_fileNameFlags & BlittableOptions;
 
             // Make sure that the Open dialog allows the user to specify
             // non-file system locations. This flag will cause the dialog to copy the resource
@@ -133,16 +128,16 @@ namespace System.Windows.Forms
             // An example of a non-file system location is a URL (http://), or a file stored on
             // a digital camera that is not mapped to a drive letter.
             // This reproduces the behavior of the "classic" Open and Save dialogs.
-            ret |= FOS.FORCEFILESYSTEM;
+            result |= FOS_FORCEFILESYSTEM;
 
-            return ret;
+            return result;
         }
 
-        private protected abstract string[] ProcessVistaFiles(WinFormsComWrappers.FileDialogWrapper dialog);
+        private protected abstract unsafe string[] ProcessVistaFiles(IFileDialog* dialog);
 
-        private bool HandleVistaFileOk(WinFormsComWrappers.FileDialogWrapper dialog)
+        private unsafe bool HandleVistaFileOk(IFileDialog* dialog)
         {
-            int saveOptions = _options;
+            OPEN_FILENAME_FLAGS saveOptions = _fileNameFlags;
             int saveFilterIndex = FilterIndex;
             string[]? saveFileNames = _fileNames;
             bool ok = false;
@@ -150,7 +145,7 @@ namespace System.Windows.Forms
             try
             {
                 Thread.MemoryBarrier();
-                dialog.GetFileTypeIndex(out uint filterIndexTemp);
+                dialog->GetFileTypeIndex(out uint filterIndexTemp).ThrowOnFailure();
                 FilterIndex = unchecked((int)filterIndexTemp);
                 _fileNames = ProcessVistaFiles(dialog);
                 if (ProcessFileNames(_fileNames))
@@ -182,17 +177,16 @@ namespace System.Windows.Forms
                     Thread.MemoryBarrier();
                     _fileNames = saveFileNames;
 
-                    _options = saveOptions;
+                    _fileNameFlags = saveOptions;
                     FilterIndex = saveFilterIndex;
                 }
                 else
                 {
-                    if ((_options & (int)Comdlg32.OFN.HIDEREADONLY) != 0)
+                    if (_fileNameFlags.HasFlag(OFN_HIDEREADONLY))
                     {
-                        // When the dialog is dismissed OK, the Readonly bit can't
-                        // be left on if ShowReadOnly was false
+                        // When the dialog is dismissed OK, the Readonly bit can't be left on if ShowReadOnly was false.
                         // Downlevel this happens automatically, on Vista mode, we need to watch out for it.
-                        _options &= ~(int)Comdlg32.OFN.READONLY;
+                        _fileNameFlags &= ~OFN_READONLY;
                     }
                 }
             }
@@ -200,61 +194,67 @@ namespace System.Windows.Forms
             return ok;
         }
 
-        private void SetFileTypes(IFileDialog dialog)
+        private unsafe void SetFileTypes(IFileDialog* dialog)
         {
             COMDLG_FILTERSPEC[] filterItems = GetFilterItems(_filter);
-            try
+            if (filterItems.Length > 0)
             {
-                HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
-                hr.ThrowIfFailed();
+                fixed (COMDLG_FILTERSPEC* fi = filterItems)
+                {
+                    dialog->SetFileTypes((uint)filterItems.Length, fi).ThrowOnFailure();
+                }
 
-                if (filterItems.Length > 0)
-                {
-                    hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
-                    hr.ThrowIfFailed();
-                }
-            }
-            finally
-            {
-                foreach (var item in filterItems)
-                {
-                    Marshal.FreeCoTaskMem(item.pszName);
-                    Marshal.FreeCoTaskMem(item.pszSpec);
-                }
+                dialog->SetFileTypeIndex(unchecked((uint)FilterIndex)).ThrowOnFailure();
             }
         }
 
-        private static COMDLG_FILTERSPEC[] GetFilterItems(string? filter)
+        private static unsafe COMDLG_FILTERSPEC[] GetFilterItems(string? filter)
         {
-            // Expected input types
-            // "Text files (*.txt)|*.txt|All files (*.*)|*.*"
-            // "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
-            var extensions = new List<COMDLG_FILTERSPEC>();
-            if (!string.IsNullOrEmpty(filter))
+            if (string.IsNullOrEmpty(filter))
             {
-                string[] tokens = filter.Split('|');
-                if (0 == tokens.Length % 2)
+                return Array.Empty<COMDLG_FILTERSPEC>();
+            }
+
+            // Expected input types:
+            //
+            //  "Text files (*.txt)|*.txt|All files (*.*)|*.*"
+            //  "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
+
+            string[] tokens = filter.Split('|');
+            if (tokens.Length % 2 != 0)
+            {
+                return Array.Empty<COMDLG_FILTERSPEC>();
+            }
+
+            var extensions = new COMDLG_FILTERSPEC[tokens.Length / 2];
+
+            // All even numbered tokens should be labels
+            // Odd numbered tokens are the associated extensions
+            for (int i = 1; i < tokens.Length; i += 2)
+            {
+                fixed (char* tokenName = tokens[i - 1])
+                fixed (char* tokenSpec = tokens[i])
                 {
-                    // All even numbered tokens should be labels
-                    // Odd numbered tokens are the associated extensions
-                    for (int i = 1; i < tokens.Length; i += 2)
+                    COMDLG_FILTERSPEC extension = new()
                     {
-                        COMDLG_FILTERSPEC extension;
-                        extension.pszSpec = Marshal.StringToCoTaskMemUni(tokens[i]);        // This may be a semicolon delimited list of extensions (that's ok)
-                        extension.pszName = Marshal.StringToCoTaskMemUni(tokens[i - 1]);
-                        extensions.Add(extension);
-                    }
+                        pszName = tokenName,
+                        // This may be a semicolon delimited list of extensions (that's ok)
+                        pszSpec = tokenSpec
+                    };
+
+                    extensions[(i - 1) / 2] = extension;
                 }
             }
 
-            return extensions.ToArray();
+            return extensions;
         }
 
-        private protected static string GetFilePathFromShellItem(IShellItem item)
+        private protected static unsafe string GetFilePathFromShellItem(IShellItem* item)
         {
-            HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string? filename);
-            hr.ThrowIfFailed();
-            return filename!;
+            HRESULT hr = item->GetDisplayName(SIGDN.SIGDN_DESKTOPABSOLUTEPARSING, out PWSTR ppszName);
+            hr.ThrowOnFailure();
+
+            return ppszName.ToStringAndCoTaskMemFree()!;
         }
 
         private readonly FileDialogCustomPlacesCollection _customPlaces = new();
@@ -283,8 +283,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FileDialogOkRequiresInteractionDescr))]
         public bool OkRequiresInteraction
         {
-            get => GetOption((int)FOS.OKBUTTONNEEDSINTERACTION);
-            set => SetOption((int)FOS.OKBUTTONNEEDSINTERACTION, value);
+            get => _dialogOptions.HasFlag(FOS_OKBUTTONNEEDSINTERACTION);
+            set => _dialogOptions.ChangeFlags(FOS_OKBUTTONNEEDSINTERACTION, value);
         }
 
         /// <summary>
@@ -296,8 +296,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FileDialogShowPinnedPlacesDescr))]
         public bool ShowPinnedPlaces
         {
-            get => !GetOption((int)FOS.HIDEPINNEDPLACES);
-            set => SetOption((int)FOS.HIDEPINNEDPLACES, !value);
+            get => !_dialogOptions.HasFlag(FOS_HIDEPINNEDPLACES);
+            set => _dialogOptions.ChangeFlags(FOS_HIDEPINNEDPLACES, !value);
         }
     }
 }

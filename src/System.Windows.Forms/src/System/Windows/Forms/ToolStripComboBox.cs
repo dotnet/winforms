@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -29,9 +27,10 @@ namespace System.Windows.Forms
         private Padding _scaledDropDownPadding = s_dropDownPadding;
         private Padding _scaledPadding = s_padding;
 
-        public ToolStripComboBox() : base(CreateControlInstance())
+        public ToolStripComboBox()
+            : base(CreateControlInstance())
         {
-            ToolStripComboBoxControl combo = Control as ToolStripComboBoxControl;
+            ToolStripComboBoxControl combo = (ToolStripComboBoxControl)Control;
             combo.Owner = this;
 
             if (DpiHelper.IsScalingRequirementMet)
@@ -41,13 +40,15 @@ namespace System.Windows.Forms
             }
         }
 
-        public ToolStripComboBox(string name) : this()
+        public ToolStripComboBox(string? name)
+            : this()
         {
             Name = name;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public ToolStripComboBox(Control c) : base(c)
+        public ToolStripComboBox(Control c)
+            : base(c)
         {
             throw new NotSupportedException(SR.ToolStripMustSupplyItsOwnComboBox);
         }
@@ -97,7 +98,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -118,7 +119,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Control as ComboBox;
+                return (ComboBox)Control;
             }
         }
 
@@ -151,7 +152,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -159,7 +160,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
-        public event EventHandler DropDown
+        public event EventHandler? DropDown
         {
             add => Events.AddHandler(s_eventDropDown, value);
             remove => Events.RemoveHandler(s_eventDropDown, value);
@@ -167,7 +168,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
-        public event EventHandler DropDownClosed
+        public event EventHandler? DropDownClosed
         {
             add => Events.AddHandler(s_eventDropDownClosed, value);
             remove => Events.RemoveHandler(s_eventDropDownClosed, value);
@@ -175,7 +176,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
-        public event EventHandler DropDownStyleChanged
+        public event EventHandler? DropDownStyleChanged
         {
             add => Events.AddHandler(s_eventDropDownStyleChanged, value);
             remove => Events.RemoveHandler(s_eventDropDownStyleChanged, value);
@@ -286,7 +287,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
-        public event EventHandler SelectedIndexChanged
+        public event EventHandler? SelectedIndexChanged
         {
             add => Events.AddHandler(s_eventSelectedIndexChanged, value);
             remove => Events.RemoveHandler(s_eventSelectedIndexChanged, value);
@@ -296,7 +297,7 @@ namespace System.Windows.Forms
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ComboBoxSelectedItemDescr))]
-        public object SelectedItem
+        public object? SelectedItem
         {
             get { return ComboBox.SelectedItem; }
             set { ComboBox.SelectedItem = value; }
@@ -340,7 +341,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
-        public event EventHandler TextUpdate
+        public event EventHandler? TextUpdate
         {
             add => Events.AddHandler(s_eventTextUpdate, value);
             remove => Events.RemoveHandler(s_eventTextUpdate, value);
@@ -350,10 +351,10 @@ namespace System.Windows.Forms
 
         public void BeginUpdate() { ComboBox.BeginUpdate(); }
         public void EndUpdate() { ComboBox.EndUpdate(); }
-        public int FindString(string s) { return ComboBox.FindString(s); }
-        public int FindString(string s, int startIndex) { return ComboBox.FindString(s, startIndex); }
-        public int FindStringExact(string s) { return ComboBox.FindStringExact(s); }
-        public int FindStringExact(string s, int startIndex) { return ComboBox.FindStringExact(s, startIndex); }
+        public int FindString(string? s) { return ComboBox.FindString(s); }
+        public int FindString(string? s, int startIndex) { return ComboBox.FindString(s, startIndex); }
+        public int FindStringExact(string? s) { return ComboBox.FindStringExact(s); }
+        public int FindStringExact(string? s, int startIndex) { return ComboBox.FindStringExact(s, startIndex); }
         public int GetItemHeight(int index) { return ComboBox.GetItemHeight(index); }
         public void Select(int start, int length) { ComboBox.Select(start, length); }
         public void SelectAll() { ComboBox.SelectAll(); }
@@ -362,39 +363,38 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            //
             Size preferredSize = base.GetPreferredSize(constrainingSize);
             preferredSize.Width = Math.Max(preferredSize.Width, 75);
 
             return preferredSize;
         }
 
-        private void HandleDropDown(object sender, EventArgs e)
+        private void HandleDropDown(object? sender, EventArgs e)
         {
             OnDropDown(e);
         }
 
-        private void HandleDropDownClosed(object sender, EventArgs e)
+        private void HandleDropDownClosed(object? sender, EventArgs e)
         {
             OnDropDownClosed(e);
         }
 
-        private void HandleDropDownStyleChanged(object sender, EventArgs e)
+        private void HandleDropDownStyleChanged(object? sender, EventArgs e)
         {
             OnDropDownStyleChanged(e);
         }
 
-        private void HandleSelectedIndexChanged(object sender, EventArgs e)
+        private void HandleSelectedIndexChanged(object? sender, EventArgs e)
         {
             OnSelectedIndexChanged(e);
         }
 
-        private void HandleSelectionChangeCommitted(object sender, EventArgs e)
+        private void HandleSelectionChangeCommitted(object? sender, EventArgs e)
         {
             OnSelectionChangeCommitted(e);
         }
 
-        private void HandleTextUpdate(object sender, EventArgs e)
+        private void HandleTextUpdate(object? sender, EventArgs e)
         {
             OnTextUpdate(e);
         }
@@ -443,14 +443,13 @@ namespace System.Windows.Forms
         {
             RaiseEvent(s_eventTextUpdate, e);
         }
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
 
-        protected override void OnSubscribeControlEvents(Control control)
+        protected override void OnSubscribeControlEvents(Control? control)
         {
             if (control is ComboBox comboBox)
             {
-                // Please keep this alphabetized and in sync with Unsubscribe
-                //
+                // Please keep this alphabetized and in sync with Unsubscribe.
                 comboBox.DropDown += new EventHandler(HandleDropDown);
                 comboBox.DropDownClosed += new EventHandler(HandleDropDownClosed);
                 comboBox.DropDownStyleChanged += new EventHandler(HandleDropDownStyleChanged);
@@ -462,12 +461,11 @@ namespace System.Windows.Forms
             base.OnSubscribeControlEvents(control);
         }
 
-        protected override void OnUnsubscribeControlEvents(Control control)
+        protected override void OnUnsubscribeControlEvents(Control? control)
         {
             if (control is ComboBox comboBox)
             {
-                // Please keep this alphabetized and in sync with Unsubscribe
-                //
+                // Please keep this alphabetized and in sync with Unsubscribe.
                 comboBox.DropDown -= new EventHandler(HandleDropDown);
                 comboBox.DropDownClosed -= new EventHandler(HandleDropDownClosed);
                 comboBox.DropDownStyleChanged -= new EventHandler(HandleDropDownStyleChanged);

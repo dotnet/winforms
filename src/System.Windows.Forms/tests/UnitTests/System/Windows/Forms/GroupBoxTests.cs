@@ -8,12 +8,11 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class GroupBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -927,8 +926,8 @@ namespace System.Windows.Forms.Tests
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style |= (int)User32.WS.BORDER;
-                    cp.ExStyle |= (int)User32.WS_EX.STATICEDGE;
+                    cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_STATICEDGE;
                     return cp;
                 }
             }

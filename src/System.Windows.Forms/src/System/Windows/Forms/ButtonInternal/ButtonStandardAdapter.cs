@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
 {
@@ -70,7 +69,7 @@ namespace System.Windows.Forms.ButtonInternal
                 Control.ClientRectangle,
                 false,
                 pbState,
-                DpiHelper.IsScalingRequirementMet ? Control.HandleInternal : IntPtr.Zero);
+                DpiHelper.IsScalingRequirementMet ? Control.HWNDInternal : HWND.Null);
 
             // Now overlay the background image or backcolor (the former overrides the latter), leaving a margin.
             // We hardcode this margin for now since GetThemeMargins returns 0 all the time.
@@ -95,7 +94,7 @@ namespace System.Windows.Forms.ButtonInternal
                     hdc.FillRectangle(
                         bounds,
                         isHighContrastHighlighted
-                            ? User32.GetSysColorBrush(User32.COLOR.HIGHLIGHT)
+                            ? PInvoke.GetSysColorBrush(SYS_COLOR_INDEX.COLOR_HIGHLIGHT)
                             : Control.BackColorBrush);
                 }
             }

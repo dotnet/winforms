@@ -6,8 +6,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
-using static Interop;
 using static Interop.Comdlg32;
+using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms
 {
@@ -144,10 +144,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_printerSettings is null)
-                {
-                    _printerSettings = new PrinterSettings();
-                }
+                _printerSettings ??= new PrinterSettings();
 
                 return _printerSettings;
             }
@@ -280,7 +277,7 @@ namespace System.Windows.Forms
             _showNetwork = true;
         }
 
-        internal unsafe static NativeMethods.PRINTDLGEX CreatePRINTDLGEX()
+        internal static unsafe NativeMethods.PRINTDLGEX CreatePRINTDLGEX()
         {
             NativeMethods.PRINTDLGEX data = new NativeMethods.PRINTDLGEX();
             data.lStructSize = Marshal.SizeOf(data);
@@ -293,7 +290,7 @@ namespace System.Windows.Forms
             data.ExclusionFlags = 0;
             data.nPageRanges = 0;
             data.nMaxPageRanges = 1;
-            data.pageRanges = Kernel32.GlobalAlloc(Kernel32.GMEM.GPTR, (uint)(data.nMaxPageRanges * sizeof(PRINTPAGERANGE)));
+            data.pageRanges = PInvoke.GlobalAlloc(GPTR, (uint)(data.nMaxPageRanges * sizeof(PRINTPAGERANGE)));
             data.nMinPage = 0;
             data.nMaxPage = 9999;
             data.nCopies = 1;
@@ -343,7 +340,7 @@ namespace System.Windows.Forms
             data.nCopies = (ushort)PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;
 
-            User32.WNDPROCINT wndproc = new User32.WNDPROCINT(HookProc);
+            WNDPROC wndproc = HookProcInternal;
             data.lpfnPrintHook = Marshal.GetFunctionPointerForDelegate(wndproc);
 
             try
@@ -394,9 +391,12 @@ namespace System.Windows.Forms
                     data.nMaxPage = (ushort)PrinterSettings.MaximumPage;
                 }
 
-                if (PrintDlg(ref data).IsFalse())
+                if (!PrintDlg(ref data))
                 {
-                    var result = CommDlgExtendedError();
+#if DEBUG
+                    var result = PInvoke.CommDlgExtendedError();
+                    Diagnostics.Debug.Assert(result == 0, $"PrintDlg returned non zero error code: {result}");
+#endif
                     return false;
                 }
 
@@ -426,8 +426,8 @@ namespace System.Windows.Forms
             finally
             {
                 GC.KeepAlive(wndproc);
-                Kernel32.GlobalFree(data.hDevMode);
-                Kernel32.GlobalFree(data.hDevNames);
+                PInvoke.GlobalFree(data.hDevMode);
+                PInvoke.GlobalFree(data.hDevNames);
             }
         }
 
@@ -500,7 +500,7 @@ namespace System.Windows.Forms
                 data.Flags &= ~(PD.SHOWHELP | PD.NONETWORKBUTTON);
 
                 HRESULT hr = UnsafeNativeMethods.PrintDlgEx(data);
-                if (hr.Failed() || data.dwResultAction == PD_RESULT.CANCEL)
+                if (hr.Failed || data.dwResultAction == PD_RESULT.CANCEL)
                 {
                     return false;
                 }
@@ -537,17 +537,17 @@ namespace System.Windows.Forms
             {
                 if (data.hDevMode != IntPtr.Zero)
                 {
-                    Kernel32.GlobalFree(data.hDevMode);
+                    PInvoke.GlobalFree(data.hDevMode);
                 }
 
                 if (data.hDevNames != IntPtr.Zero)
                 {
-                    Kernel32.GlobalFree(data.hDevNames);
+                    PInvoke.GlobalFree(data.hDevNames);
                 }
 
                 if (data.pageRanges != IntPtr.Zero)
                 {
-                    Kernel32.GlobalFree(data.pageRanges);
+                    PInvoke.GlobalFree(data.pageRanges);
                 }
             }
         }
@@ -561,10 +561,7 @@ namespace System.Windows.Forms
             settings.SetHdevmode(hDevMode);
             settings.SetHdevnames(hDevNames);
 
-            if (pageSettings is not null)
-            {
-                pageSettings.SetHdevmode(hDevMode);
-            }
+            pageSettings?.SetHdevmode(hDevMode);
 
             //Check for Copies == 1 since we might get the Right number of Copies from hdevMode.dmCopies...
             if (settings.Copies == 1)

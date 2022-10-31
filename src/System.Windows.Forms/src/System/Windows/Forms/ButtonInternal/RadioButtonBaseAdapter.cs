@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
 {
@@ -77,9 +76,9 @@ namespace System.Windows.Forms.ButtonInternal
 
             double scale = GetDpiScaleRatio();
 
-            using var hdc = new DeviceContextHdcScope(e);
-            using var borderPen = new Gdi32.CreatePenScope(border);
-            using var fieldBrush = new Gdi32.CreateBrushScope(field);
+            using DeviceContextHdcScope hdc = new(e);
+            using PInvoke.CreatePenScope borderPen = new(border);
+            using PInvoke.CreateBrushScope fieldBrush = new(field);
 
             if (scale > 1.1)
             {
@@ -97,7 +96,7 @@ namespace System.Windows.Forms.ButtonInternal
         }
 
         // Helper method to overcome the poor GDI ellipse drawing routine
-        private static void DrawAndFillEllipse(Gdi32.HDC hdc, Gdi32.HPEN borderPen, Gdi32.HBRUSH fieldBrush, Rectangle bounds)
+        private static void DrawAndFillEllipse(HDC hdc, HPEN borderPen, HBRUSH fieldBrush, Rectangle bounds)
         {
             Debug.Assert(!hdc.IsNull, "Calling DrawAndFillEllipse with null wg");
             if (hdc.IsNull)
@@ -146,8 +145,8 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             double scale = GetDpiScaleRatio();
-            using var hdc = new DeviceContextHdcScope(e);
-            using var brush = new Gdi32.CreateBrushScope(checkColor);
+            using DeviceContextHdcScope hdc = new(e);
+            using PInvoke.CreateBrushScope brush = new(checkColor);
 
             // Circle drawing doesn't work at this size
             int offset = 5;
@@ -209,7 +208,7 @@ namespace System.Windows.Forms.ButtonInternal
                     hdc,
                     new Point(check.Left, check.Top),
                     RadioButtonRenderer.ConvertFromButtonState(style, Control.MouseIsOver),
-                    Control.HandleInternal);
+                    Control.HWNDInternal);
             }
             else
             {

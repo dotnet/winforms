@@ -9,7 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    partial class ErrorProvider
+    public partial class ErrorProvider
     {
         internal partial class ControlItem
         {

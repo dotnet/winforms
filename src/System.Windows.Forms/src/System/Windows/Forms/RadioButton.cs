@@ -191,7 +191,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, PARAM.FromBool(value));
+                        PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(BOOL)value);
                     }
 
                     Invalidate();
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_BUTTON;
+                cp.ClassName = PInvoke.WC_BUTTON;
                 if (OwnerDraw)
                 {
                     cp.Style |= (int)User32.BS.OWNERDRAW;
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => true;
 
         [DefaultValue(false)]
-        new public bool TabStop
+        public new bool TabStop
         {
             get => base.TabStop;
             set => base.TabStop = value;
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)_isChecked.ToBOOL());
+                PInvoke.SendMessage(this, (User32.WM)User32.BM.SETCHECK, (WPARAM)(BOOL)_isChecked);
             }
         }
 
@@ -426,7 +426,7 @@ namespace System.Windows.Forms
             // user arrows onto the control..
             if (MouseButtons == MouseButtons.None)
             {
-                if (User32.GetKeyState((int)Keys.Tab) >= 0)
+                if (PInvoke.GetKeyState((int)Keys.Tab) >= 0)
                 {
                     //We enter the radioButton by using arrow keys
                     //Paint in raised state...
@@ -535,26 +535,19 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Raises the <see cref="ButtonBase.OnMouseUp"/> event.
-        /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            if (mevent.Button == MouseButtons.Left && GetStyle(ControlStyles.UserPaint))
+            if (mevent.Button == MouseButtons.Left
+                && GetStyle(ControlStyles.UserPaint)
+                && MouseIsDown
+                && PInvoke.WindowFromPoint(PointToScreen(mevent.Location)) == HWND)
             {
-                if (base.MouseIsDown)
+                // Paint in raised state.
+                ResetFlagsandPaint();
+                if (!ValidationCancelled)
                 {
-                    Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                    if (User32.WindowFromPoint(pt) == Handle)
-                    {
-                        //Paint in raised state...
-                        ResetFlagsandPaint();
-                        if (!ValidationCancelled)
-                        {
-                            OnClick(mevent);
-                            OnMouseClick(mevent);
-                        }
-                    }
+                    OnClick(mevent);
+                    OnMouseClick(mevent);
                 }
             }
 
@@ -562,15 +555,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Generates a <see cref="Control.Click"/> event for the
-        ///  button, simulating a click by a user.
+        ///  Generates a <see cref="Control.Click"/> event for the button, simulating a click by a user.
         /// </summary>
         public void PerformClick()
         {
             if (CanSelect)
             {
-                //Paint in raised state...
-                //
+                // Paint in raised state.
                 ResetFlagsandPaint();
                 if (!ValidationCancelled)
                 {
@@ -585,11 +576,13 @@ namespace System.Windows.Forms
             {
                 if (!Focused)
                 {
-                    Focus();    // This will cause an OnEnter event, which in turn will fire the click event
+                    // This will cause an OnEnter event, which in turn will fire the click event.
+                    Focus();
                 }
                 else
                 {
-                    PerformClick();     // Generate a click if already focused
+                    // Generate a click if already focused.
+                    PerformClick();
                 }
 
                 return true;

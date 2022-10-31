@@ -5,7 +5,6 @@
 using System.Runtime.InteropServices;
 using Moq;
 using Xunit;
-using static Interop;
 using static Interop.Mso;
 
 namespace System.Windows.Forms.Tests.Interop_Mso
@@ -21,7 +20,7 @@ namespace System.Windows.Forms.Tests.Interop_Mso
         public void FDebugMessage_ReturnsTrue()
         {
             var manager = CreateComponentManager();
-            Assert.Equal(BOOL.TRUE, manager.FDebugMessage(IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero));
+            Assert.True(manager.FDebugMessage(IntPtr.Zero, 0, IntPtr.Zero, IntPtr.Zero));
         }
 
         [Fact]
@@ -46,8 +45,8 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             MSOCRINFO info = default;
             UIntPtr id = default;
 
-            Assert.Equal(BOOL.FALSE, manager.FRegisterComponent(mock.Object, &info, null));
-            Assert.Equal(BOOL.FALSE, manager.FRegisterComponent(mock.Object, null, &id));
+            Assert.False(manager.FRegisterComponent(mock.Object, &info, null));
+            Assert.False(manager.FRegisterComponent(mock.Object, null, &id));
             Assert.Equal(UIntPtr.Zero, id);
         }
 
@@ -59,7 +58,7 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             MSOCRINFO info = default;
             UIntPtr id = default;
 
-            Assert.Equal(BOOL.FALSE, manager.FRegisterComponent(mock.Object, &info, &id));
+            Assert.False(manager.FRegisterComponent(mock.Object, &info, &id));
             Assert.Equal(UIntPtr.Zero, id);
         }
 
@@ -71,11 +70,11 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
             UIntPtr id = default;
 
-            Assert.Equal(BOOL.TRUE, manager.FRegisterComponent(mock.Object, &info, &id));
+            Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
             Assert.NotEqual(UIntPtr.Zero, id);
 
             UIntPtr newId = default;
-            Assert.Equal(BOOL.TRUE, manager.FRegisterComponent(mock.Object, &info, &newId));
+            Assert.True(manager.FRegisterComponent(mock.Object, &info, &newId));
             Assert.NotEqual(UIntPtr.Zero, newId);
 
             Assert.NotEqual(id, newId);
@@ -89,10 +88,10 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
             UIntPtr id = default;
 
-            Assert.Equal(BOOL.FALSE, manager.FRevokeComponent(UIntPtr.Zero));
-            Assert.Equal(BOOL.TRUE, manager.FRegisterComponent(mock.Object, &info, &id));
-            Assert.Equal(BOOL.TRUE, manager.FRevokeComponent(id));
-            Assert.Equal(BOOL.FALSE, manager.FRevokeComponent(id));
+            Assert.False(manager.FRevokeComponent(UIntPtr.Zero));
+            Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
+            Assert.True(manager.FRevokeComponent(id));
+            Assert.False(manager.FRevokeComponent(id));
         }
 
         [Fact]
@@ -103,8 +102,8 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
             UIntPtr id = default;
 
-            Assert.Equal(BOOL.TRUE, manager.FRegisterComponent(mock.Object, &info, &id));
-            Assert.Equal(BOOL.FALSE, manager.FUpdateComponentRegistration(id, null));
+            Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
+            Assert.False(manager.FUpdateComponentRegistration(id, null));
         }
 
         [Fact]
@@ -115,24 +114,24 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
             UIntPtr id = default;
 
-            Assert.Equal(BOOL.FALSE, manager.FUpdateComponentRegistration(id, &info));
-            Assert.Equal(BOOL.TRUE, manager.FRegisterComponent(mock.Object, &info, &id));
-            Assert.Equal(BOOL.TRUE, manager.FUpdateComponentRegistration(id, &info));
+            Assert.False(manager.FUpdateComponentRegistration(id, &info));
+            Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
+            Assert.True(manager.FUpdateComponentRegistration(id, &info));
         }
 
         [Fact]
         public void FOnComponentActivate_InvalidId()
         {
             var manager = CreateComponentManager();
-            Assert.Equal(BOOL.FALSE, manager.FOnComponentActivate(default));
+            Assert.False(manager.FOnComponentActivate(default));
         }
 
         [Fact]
         public void FSetTrackingComponent_InvalidId()
         {
             var manager = CreateComponentManager();
-            Assert.Equal(BOOL.FALSE, manager.FSetTrackingComponent(default, BOOL.TRUE));
-            Assert.Equal(BOOL.FALSE, manager.FSetTrackingComponent(default, BOOL.FALSE));
+            Assert.False(manager.FSetTrackingComponent(default, true));
+            Assert.False(manager.FSetTrackingComponent(default, false));
         }
 
         [Fact]
@@ -144,18 +143,18 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
             UIntPtr id = default;
 
-            Assert.Equal(BOOL.TRUE, manager.FRegisterComponent(mock.Object, &info, &id));
+            Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
 
-            Assert.Equal(BOOL.TRUE, manager.FSetTrackingComponent(id, BOOL.TRUE));
+            Assert.True(manager.FSetTrackingComponent(id, true));
 
             // Returns false if we're already tracking
-            Assert.Equal(BOOL.FALSE, manager.FSetTrackingComponent(id, BOOL.TRUE));
+            Assert.False(manager.FSetTrackingComponent(id, true));
 
-            Assert.Equal(BOOL.TRUE, manager.FSetTrackingComponent(id, BOOL.FALSE));
+            Assert.True(manager.FSetTrackingComponent(id, false));
 
             // If we aren't tracking, untracking should return false
-            Assert.Equal(BOOL.FALSE, manager.FSetTrackingComponent(id, BOOL.FALSE));
-            Assert.Equal(BOOL.TRUE, manager.FSetTrackingComponent(id, BOOL.TRUE));
+            Assert.False(manager.FSetTrackingComponent(id, false));
+            Assert.True(manager.FSetTrackingComponent(id, true));
         }
 
         [Fact]
@@ -170,28 +169,28 @@ namespace System.Windows.Forms.Tests.Interop_Mso
         {
             var manager = CreateComponentManager();
             var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
-            mock.Setup(m => m.OnEnterState(msocstate.Modal, BOOL.TRUE));
+            mock.Setup(m => m.OnEnterState(msocstate.Modal, true));
 
             MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
             UIntPtr id = default;
-            Assert.Equal(BOOL.TRUE, manager.FRegisterComponent(mock.Object, &info, &id));
+            Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
 
             // No call on "Others"
             manager.OnComponentEnterState(default, msocstate.Modal, msoccontext.Others, 0, null, 0);
-            mock.Verify(m => m.OnEnterState(msocstate.Modal, BOOL.TRUE), Times.Never);
+            mock.Verify(m => m.OnEnterState(msocstate.Modal, true), Times.Never);
 
             manager.OnComponentEnterState(default, msocstate.Modal, msoccontext.All, 0, null, 0);
-            mock.Verify(m => m.OnEnterState(msocstate.Modal, BOOL.TRUE), Times.Once);
+            mock.Verify(m => m.OnEnterState(msocstate.Modal, true), Times.Once);
 
             manager.OnComponentEnterState(default, msocstate.Modal, msoccontext.Mine, 0, null, 0);
-            mock.Verify(m => m.OnEnterState(msocstate.Modal, BOOL.TRUE), Times.Exactly(2));
+            mock.Verify(m => m.OnEnterState(msocstate.Modal, true), Times.Exactly(2));
         }
 
         [Fact]
         public void FOnComponentExitState_HandlesNull()
         {
             var manager = CreateComponentManager();
-            Assert.Equal(BOOL.FALSE, manager.FOnComponentExitState(default, default, default, default, null));
+            Assert.False(manager.FOnComponentExitState(default, default, default, default, null));
         }
 
         [Fact]
@@ -199,35 +198,35 @@ namespace System.Windows.Forms.Tests.Interop_Mso
         {
             var manager = CreateComponentManager();
             var mock = new Mock<IMsoComponent>(MockBehavior.Strict);
-            mock.Setup(m => m.OnEnterState(msocstate.Modal, BOOL.FALSE));
+            mock.Setup(m => m.OnEnterState(msocstate.Modal, false));
 
             MSOCRINFO info = new MSOCRINFO { cbSize = (uint)sizeof(MSOCRINFO) };
             UIntPtr id = default;
-            Assert.Equal(BOOL.TRUE, manager.FRegisterComponent(mock.Object, &info, &id));
+            Assert.True(manager.FRegisterComponent(mock.Object, &info, &id));
 
             // No call on "Others"
             manager.FOnComponentExitState(default, msocstate.Modal, msoccontext.Others, 0, null);
-            mock.Verify(m => m.OnEnterState(msocstate.Modal, BOOL.FALSE), Times.Never);
+            mock.Verify(m => m.OnEnterState(msocstate.Modal, false), Times.Never);
 
             manager.FOnComponentExitState(default, msocstate.Modal, msoccontext.All, 0, null);
-            mock.Verify(m => m.OnEnterState(msocstate.Modal, BOOL.FALSE), Times.Once);
+            mock.Verify(m => m.OnEnterState(msocstate.Modal, false), Times.Once);
 
             manager.FOnComponentExitState(default, msocstate.Modal, msoccontext.Mine, 0, null);
-            mock.Verify(m => m.OnEnterState(msocstate.Modal, BOOL.FALSE), Times.Exactly(2));
+            mock.Verify(m => m.OnEnterState(msocstate.Modal, false), Times.Exactly(2));
         }
 
         [Fact]
         public void FInState()
         {
             var manager = CreateComponentManager();
-            Assert.Equal(BOOL.TRUE, manager.FInState(0, null));
+            Assert.True(manager.FInState(0, null));
             manager.OnComponentEnterState(default, msocstate.Modal, default, 0, null, 0);
-            Assert.Equal(BOOL.FALSE, manager.FInState(0, null));
-            Assert.Equal(BOOL.TRUE, manager.FInState(msocstate.Modal, null));
+            Assert.False(manager.FInState(0, null));
+            Assert.True(manager.FInState(msocstate.Modal, null));
             manager.OnComponentEnterState(default, msocstate.Recording, default, 0, null, 0);
-            Assert.Equal(BOOL.TRUE, manager.FInState(msocstate.Recording, null));
+            Assert.True(manager.FInState(msocstate.Recording, null));
             manager.FOnComponentExitState(default, msocstate.RedrawOff, default, 0, null);
-            Assert.Equal(BOOL.TRUE, manager.FInState(0, null));
+            Assert.True(manager.FInState(0, null));
         }
 
         [Fact]
@@ -242,7 +241,7 @@ namespace System.Windows.Forms.Tests.Interop_Mso
         public void FPushMessageLoop_InvalidComponent()
         {
             var manager = CreateComponentManager();
-            Assert.Equal(BOOL.FALSE, manager.FPushMessageLoop(default, default, null));
+            Assert.False(manager.FPushMessageLoop(default, default, null));
         }
 
         [Fact]
@@ -251,11 +250,11 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             var manager = CreateComponentManager();
 
             // Shouldn't try and deref a null
-            Assert.Equal(BOOL.FALSE, manager.FCreateSubComponentManager(default, default, null, null));
+            Assert.False(manager.FCreateSubComponentManager(default, default, null, null));
 
             // Should null out obj pointer
             void* obj = (void*)0xDEADBEEF;
-            Assert.Equal(BOOL.FALSE, manager.FCreateSubComponentManager(default, default, null, &obj));
+            Assert.False(manager.FCreateSubComponentManager(default, default, null, &obj));
             Assert.True(obj is null);
         }
 
@@ -265,11 +264,11 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             var manager = CreateComponentManager();
 
             // Shouldn't try and deref a null
-            Assert.Equal(BOOL.FALSE, manager.FGetParentComponentManager(null));
+            Assert.False(manager.FGetParentComponentManager(null));
 
             // Should null out obj pointer
             void* obj = (void*)0xDEADBEEF;
-            Assert.Equal(BOOL.FALSE, manager.FGetParentComponentManager(&obj));
+            Assert.False(manager.FGetParentComponentManager(&obj));
             Assert.True(obj is null);
         }
 
@@ -277,7 +276,7 @@ namespace System.Windows.Forms.Tests.Interop_Mso
         public void FGetActiveComponent()
         {
             var manager = CreateComponentManager();
-            Assert.Equal(BOOL.FALSE, manager.FGetActiveComponent(msogac.Active, null, null, 0));
+            Assert.False(manager.FGetActiveComponent(msogac.Active, null, null, 0));
 
             var mock1 = new Mock<IMsoComponent>(MockBehavior.Strict);
             var mock2 = new Mock<IMsoComponent>(MockBehavior.Strict);
@@ -289,39 +288,39 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             };
 
             UIntPtr firstId = default;
-            Assert.Equal(BOOL.TRUE, manager.FRegisterComponent(mock1.Object, &info, &firstId));
+            Assert.True(manager.FRegisterComponent(mock1.Object, &info, &firstId));
             info.uIdleTimeInterval = 2;
             UIntPtr secondId = default;
-            Assert.Equal(BOOL.TRUE, manager.FRegisterComponent(mock2.Object, &info, &secondId));
+            Assert.True(manager.FRegisterComponent(mock2.Object, &info, &secondId));
 
-            Assert.Equal(BOOL.FALSE, manager.FGetActiveComponent(msogac.Active, null, null, 0));
+            Assert.False(manager.FGetActiveComponent(msogac.Active, null, null, 0));
 
             // Just an active component
-            Assert.Equal(BOOL.TRUE, manager.FOnComponentActivate(firstId));
-            Assert.Equal(BOOL.FALSE, manager.FGetActiveComponent(msogac.Tracking, null, &info, 0));
-            Assert.Equal(BOOL.TRUE, manager.FGetActiveComponent(msogac.Active, null, &info, 0));
+            Assert.True(manager.FOnComponentActivate(firstId));
+            Assert.False(manager.FGetActiveComponent(msogac.Tracking, null, &info, 0));
+            Assert.True(manager.FGetActiveComponent(msogac.Active, null, &info, 0));
             Assert.Equal(1u, info.uIdleTimeInterval);
-            Assert.Equal(BOOL.TRUE, manager.FGetActiveComponent(msogac.TrackingOrActive, null, &info, 0));
+            Assert.True(manager.FGetActiveComponent(msogac.TrackingOrActive, null, &info, 0));
             Assert.Equal(1u, info.uIdleTimeInterval);
 
             // Active and tracking
-            Assert.Equal(BOOL.TRUE, manager.FSetTrackingComponent(secondId, BOOL.TRUE));
-            Assert.Equal(BOOL.TRUE, manager.FGetActiveComponent(msogac.Tracking, null, &info, 0));
+            Assert.True(manager.FSetTrackingComponent(secondId, true));
+            Assert.True(manager.FGetActiveComponent(msogac.Tracking, null, &info, 0));
             Assert.Equal(2u, info.uIdleTimeInterval);
-            Assert.Equal(BOOL.TRUE, manager.FGetActiveComponent(msogac.Active, null, &info, 0));
+            Assert.True(manager.FGetActiveComponent(msogac.Active, null, &info, 0));
             Assert.Equal(1u, info.uIdleTimeInterval);
-            Assert.Equal(BOOL.TRUE, manager.FGetActiveComponent(msogac.TrackingOrActive, null, &info, 0));
+            Assert.True(manager.FGetActiveComponent(msogac.TrackingOrActive, null, &info, 0));
             Assert.Equal(2u, info.uIdleTimeInterval);
 
             // Now check that we can get the object out
-            mock2.Setup(m => m.FQueryTerminate(BOOL.TRUE)).Returns(BOOL.TRUE);
+            mock2.Setup(m => m.FQueryTerminate(true)).Returns(true);
             void* pUnk = default;
-            Assert.Equal(BOOL.TRUE, manager.FGetActiveComponent(msogac.Tracking, &pUnk, &info, 0));
+            Assert.True(manager.FGetActiveComponent(msogac.Tracking, &pUnk, &info, 0));
             Assert.True(pUnk != null);
             try
             {
                 var component = (IMsoComponent)Marshal.GetObjectForIUnknown((IntPtr)pUnk);
-                Assert.Equal(BOOL.TRUE, component.FQueryTerminate(BOOL.TRUE));
+                Assert.True(component.FQueryTerminate(true));
             }
             finally
             {

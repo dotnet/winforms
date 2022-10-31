@@ -36,7 +36,7 @@ namespace System.Windows.Forms
 
                     if (_owner.Parent is null)
                     {
-                        // If the Forms is a main window and a root object. 
+                        // If the Forms is a main window and a root object.
                         return _owner.Bounds;
                     }
 

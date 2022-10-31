@@ -12,7 +12,8 @@ namespace System.Windows.Forms
         {
             private class ToolStripNumericUpDownAccessibleObject : ToolStripHostedControlAccessibleObject
             {
-                public ToolStripNumericUpDownAccessibleObject(Control toolStripHostedControl, ToolStripControlHost toolStripControlHost) : base(toolStripHostedControl, toolStripControlHost)
+                public ToolStripNumericUpDownAccessibleObject(Control toolStripHostedControl, ToolStripControlHost? toolStripControlHost)
+                    : base(toolStripHostedControl, toolStripControlHost)
                 {
                 }
 

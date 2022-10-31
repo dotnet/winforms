@@ -7,11 +7,10 @@ using System.Drawing;
 using Moq;
 using Xunit;
 using static Interop;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class TabControlControlCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -769,34 +768,34 @@ namespace System.Windows.Forms.Tests
             collection.Add(page1);
             collection.Add(page2);
             collection.Add(page3);
-            Assert.Equal(3, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT));
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMCOUNT));
 
             char* buffer = stackalloc char[256];
             ComCtl32.TCITEMW item = default;
             item.cchTextMax = int.MaxValue;
             item.pszText = buffer;
-            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
-            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+            item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
+            item.mask = (TCITEMHEADERA_MASK)uint.MaxValue;
 
             // Get item 0.
-            Assert.Equal(1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 0, ref item));
-            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMW, 0, ref item));
+            Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
             Assert.Equal(-1, item.iImage);
 
             // Get item 1.
-            Assert.Equal(1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 1, ref item));
-            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMW, 1, ref item));
+            Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal(expectedText, new string(item.pszText));
             Assert.Equal(1, item.iImage);
 
             // Get item 2.
-            Assert.Equal(1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 2, ref item));
-            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMW, 2, ref item));
+            Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
@@ -837,34 +836,34 @@ namespace System.Windows.Forms.Tests
             collection.Add(page1);
             collection.Add(page2);
             collection.Add(page3);
-            Assert.Equal(3, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT));
+            Assert.Equal(3, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMCOUNT));
 
             char* buffer = stackalloc char[256];
             ComCtl32.TCITEMW item = default;
             item.cchTextMax = int.MaxValue;
             item.pszText = buffer;
-            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
-            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+            item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
+            item.mask = (TCITEMHEADERA_MASK)uint.MaxValue;
 
             // Get item 0.
-            Assert.Equal(1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 0, ref item));
-            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMW, 0, ref item));
+            Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
             Assert.Equal(-1, item.iImage);
 
             // Get item 1.
-            Assert.Equal(1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 1, ref item));
-            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMW, 1, ref item));
+            Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal(expectedText, new string(item.pszText));
             Assert.Equal(1, item.iImage);
 
             // Get item 2.
-            Assert.Equal(1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 2, ref item));
-            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMW, 2, ref item));
+            Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
@@ -1477,26 +1476,26 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             collection.Remove(page2);
-            Assert.Equal(2, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT));
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMCOUNT));
 
             char* buffer = stackalloc char[256];
             ComCtl32.TCITEMW item = default;
             item.cchTextMax = int.MaxValue;
             item.pszText = buffer;
-            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
-            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+            item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
+            item.mask = (TCITEMHEADERA_MASK)uint.MaxValue;
 
             // Get item 0.
-            Assert.Equal(1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 0, ref item));
-            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMW, 0, ref item));
+            Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
             Assert.Equal(-1, item.iImage);
 
             // Get item 2.
-            Assert.Equal(1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 1, ref item));
-            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMW, 1, ref item));
+            Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
@@ -1535,26 +1534,26 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             collection.Remove(page2);
-            Assert.Equal(2, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT));
+            Assert.Equal(2, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMCOUNT));
 
             char* buffer = stackalloc char[256];
             ComCtl32.TCITEMW item = default;
             item.cchTextMax = int.MaxValue;
             item.pszText = buffer;
-            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
-            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+            item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
+            item.mask = (TCITEMHEADERA_MASK)uint.MaxValue;
 
             // Get item 0.
-            Assert.Equal(1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 0, ref item));
-            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMW, 0, ref item));
+            Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
             Assert.Equal(-1, item.iImage);
 
             // Get item 1.
-            Assert.Equal(1, User32.SendMessageW(owner.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 1, ref item));
-            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(owner, (User32.WM)PInvoke.TCM_GETITEMW, 1, ref item));
+            Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));

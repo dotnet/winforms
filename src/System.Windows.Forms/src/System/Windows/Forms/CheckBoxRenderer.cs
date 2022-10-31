@@ -5,7 +5,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -15,9 +14,9 @@ namespace System.Windows.Forms
     /// </summary>
     public static class CheckBoxRenderer
     {
-        //Make this per-thread, so that different threads can safely use these methods.
+        // Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer? t_visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer;
         private static readonly VisualStyleElement s_checkBoxElement = VisualStyleElement.Button.CheckBox.UncheckedNormal;
 
         /// <summary>
@@ -28,12 +27,7 @@ namespace System.Windows.Forms
         public static bool RenderMatchingApplicationState { get; set; } = true;
 
         private static bool RenderWithVisualStyles
-        {
-            get
-            {
-                return (!RenderMatchingApplicationState || Application.RenderWithVisualStyles);
-            }
-        }
+            => !RenderMatchingApplicationState || Application.RenderWithVisualStyles;
 
         /// <summary>
         ///  Returns true if the background corresponding to the given state is partially transparent, else false.
@@ -43,12 +37,11 @@ namespace System.Windows.Forms
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
-
                 return t_visualStyleRenderer.IsBackgroundPartiallyTransparent();
             }
             else
             {
-                return false; //for downlevel, this is false
+                return false;
             }
         }
 
@@ -93,7 +86,7 @@ namespace System.Windows.Forms
             IDeviceContext deviceContext,
             Point glyphLocation,
             CheckBoxState state,
-            IntPtr hwnd = default)
+            HWND hwnd = default)
         {
             InitializeRenderer((int)state);
 
@@ -112,9 +105,7 @@ namespace System.Windows.Forms
             string? checkBoxText,
             Font? font,
             bool focused,
-            CheckBoxState state)
-        {
-            DrawCheckBox(
+            CheckBoxState state) => DrawCheckBox(
                 g,
                 glyphLocation,
                 textBounds,
@@ -123,7 +114,6 @@ namespace System.Windows.Forms
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
                 focused,
                 state);
-        }
 
         /// <summary>
         ///  Renders a CheckBox control.
@@ -138,7 +128,7 @@ namespace System.Windows.Forms
             bool focused,
             CheckBoxState state)
         {
-            DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font, flags, focused, state, IntPtr.Zero);
+            DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font, flags, focused, state, HWND.Null);
         }
 
         internal static void DrawCheckBox(
@@ -150,7 +140,7 @@ namespace System.Windows.Forms
             TextFormatFlags flags,
             bool focused,
             CheckBoxState state,
-            IntPtr hwnd)
+            HWND hwnd)
         {
             Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state, hwnd));
             Color textColor;
@@ -187,12 +177,26 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a CheckBox control.
         /// </summary>
-        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string? checkBoxText, Font? font, Image image, Rectangle imageBounds, bool focused, CheckBoxState state)
-        {
-            DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font,
-                       TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
-                       image, imageBounds, focused, state);
-        }
+        public static void DrawCheckBox(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string? checkBoxText,
+            Font? font,
+            Image image,
+            Rectangle imageBounds,
+            bool focused,
+            CheckBoxState state) => DrawCheckBox(
+                g,
+                glyphLocation,
+                textBounds,
+                checkBoxText,
+                font,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
+                image,
+                imageBounds,
+                focused,
+                state);
 
         /// <summary>
         ///  Renders a CheckBox control.
@@ -250,7 +254,7 @@ namespace System.Windows.Forms
         public static Size GetGlyphSize(Graphics g, CheckBoxState state)
             => GetGlyphSize((IDeviceContext)g, state);
 
-        internal static Size GetGlyphSize(IDeviceContext deviceContext, CheckBoxState state, IntPtr hwnd = default)
+        internal static Size GetGlyphSize(IDeviceContext deviceContext, CheckBoxState state, HWND hwnd = default)
         {
             if (!RenderWithVisualStyles)
             {
@@ -261,7 +265,7 @@ namespace System.Windows.Forms
             return GetGlyphSize(hdc, state, hwnd);
         }
 
-        internal static Size GetGlyphSize(Gdi32.HDC hdc, CheckBoxState state, IntPtr hwnd)
+        internal static Size GetGlyphSize(HDC hdc, CheckBoxState state, HWND hwnd)
         {
             if (RenderWithVisualStyles)
             {
@@ -273,36 +277,19 @@ namespace System.Windows.Forms
             return new Size(13, 13);
         }
 
-        internal static ButtonState ConvertToButtonState(CheckBoxState state)
+        internal static ButtonState ConvertToButtonState(CheckBoxState state) => state switch
         {
-            switch (state)
-            {
-                case CheckBoxState.CheckedNormal:
-                case CheckBoxState.CheckedHot:
-                    return ButtonState.Checked;
-                case CheckBoxState.CheckedPressed:
-                    return (ButtonState.Checked | ButtonState.Pushed);
-                case CheckBoxState.CheckedDisabled:
-                    return (ButtonState.Checked | ButtonState.Inactive);
-
-                case CheckBoxState.UncheckedPressed:
-                    return ButtonState.Pushed;
-                case CheckBoxState.UncheckedDisabled:
-                    return ButtonState.Inactive;
-
-                //Downlevel mixed drawing works only if ButtonState.Checked is set
-                case CheckBoxState.MixedNormal:
-                case CheckBoxState.MixedHot:
-                    return ButtonState.Checked;
-                case CheckBoxState.MixedPressed:
-                    return (ButtonState.Checked | ButtonState.Pushed);
-                case CheckBoxState.MixedDisabled:
-                    return (ButtonState.Checked | ButtonState.Inactive);
-
-                default:
-                    return ButtonState.Normal;
-            }
-        }
+            CheckBoxState.CheckedNormal or CheckBoxState.CheckedHot => ButtonState.Checked,
+            CheckBoxState.CheckedPressed => (ButtonState.Checked | ButtonState.Pushed),
+            CheckBoxState.CheckedDisabled => (ButtonState.Checked | ButtonState.Inactive),
+            CheckBoxState.UncheckedPressed => ButtonState.Pushed,
+            CheckBoxState.UncheckedDisabled => ButtonState.Inactive,
+            // Downlevel mixed drawing works only if ButtonState.Checked is set
+            CheckBoxState.MixedNormal or CheckBoxState.MixedHot => ButtonState.Checked,
+            CheckBoxState.MixedPressed => (ButtonState.Checked | ButtonState.Pushed),
+            CheckBoxState.MixedDisabled => (ButtonState.Checked | ButtonState.Inactive),
+            _ => ButtonState.Normal,
+        };
 
         internal static CheckBoxState ConvertFromButtonState(ButtonState state, bool isMixed, bool isHot)
         {
@@ -341,7 +328,8 @@ namespace System.Windows.Forms
                 return CheckBoxState.CheckedNormal;
             }
             else
-            { //unchecked
+            {
+                // Unchecked
                 if ((state & ButtonState.Pushed) == ButtonState.Pushed)
                 {
                     return CheckBoxState.UncheckedPressed;

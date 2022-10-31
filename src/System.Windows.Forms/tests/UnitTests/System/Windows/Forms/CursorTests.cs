@@ -158,14 +158,14 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Cursor_Clip_Set_GetReturnsExpected()
         {
-            IntPtr oldDpiAwarenessContext = Interop.User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
+            DPI_AWARENESS_CONTEXT oldDpiAwarenessContext = DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
             Rectangle clip = Cursor.Clip;
             try
             {
                 // The clipping area is always defined in physical pixels (disregarding DPI) while
                 // the virtual screen area depends on the DPI awareness of the thread querying for it.
                 // Cannot use DpiAwarenessScope because it rejects to change the DPI awareness.
-                oldDpiAwarenessContext = Interop.User32.SetThreadDpiAwarenessContext(Interop.User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+                oldDpiAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
                 // Set non-empty.
                 Cursor.Clip = new Rectangle(1, 2, 3, 4);
@@ -186,8 +186,8 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
-                if (oldDpiAwarenessContext != Interop.User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT)
-                    Interop.User32.SetThreadDpiAwarenessContext(oldDpiAwarenessContext);
+                if (oldDpiAwarenessContext != DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT)
+                    PInvoke.SetThreadDpiAwarenessContextInternal(oldDpiAwarenessContext);
 
                 Cursor.Clip = clip;
             }
@@ -322,7 +322,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Cursor_Dispose_InvokeNotOwned_Success()
         {
-            var cursor = new Cursor((IntPtr)2);
+            var cursor = new Cursor(2);
             cursor.Dispose();
             Assert.Throws<ObjectDisposedException>(() => cursor.Handle);
             Assert.Throws<ObjectDisposedException>(() => cursor.HotSpot);

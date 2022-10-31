@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
+using Windows.Win32.System.Ole;
 using static Interop;
 using static Interop.Ole32;
 
@@ -12,31 +13,26 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2ComponentEditor : WindowsFormsComponentEditor
     {
-        public unsafe static bool NeedsComponentEditor(object obj)
+        public static unsafe bool NeedsComponentEditor(object comObject)
         {
-            if (obj is Oleaut32.IPerPropertyBrowsing perPropertyBrowsing)
+            if (comObject is IPerPropertyBrowsing.Interface perPropertyBrowsing)
             {
-                // check for a property page
+                // Check for a property page.
                 Guid guid = Guid.Empty;
-                HRESULT hr = perPropertyBrowsing.MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
-                if ((hr == HRESULT.S_OK) && !guid.Equals(Guid.Empty))
+                HRESULT hr = perPropertyBrowsing.MapPropertyToPage((int)DispatchID.MEMBERID_NIL, &guid);
+                if (hr.Succeeded && !guid.Equals(Guid.Empty))
                 {
                     return true;
                 }
             }
 
-            if (obj is ISpecifyPropertyPages ispp)
+            if (comObject is ISpecifyPropertyPages ispp)
             {
-                var uuids = new CAUUID();
+                CAUUID uuids = default;
                 try
                 {
                     HRESULT hr = ispp.GetPages(&uuids);
-                    if (!hr.Succeeded())
-                    {
-                        return false;
-                    }
-
-                    return uuids.cElems > 0;
+                    return hr.Succeeded && uuids.cElems > 0;
                 }
                 finally
                 {
@@ -50,17 +46,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return false;
         }
 
-        public unsafe override bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
+        public override unsafe bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
         {
             IntPtr handle = (parent is null ? IntPtr.Zero : parent.Handle);
 
-            // try to get the page guid
-            if (obj is Oleaut32.IPerPropertyBrowsing perPropertyBrowsing)
+            // Try to get the page guid
+            if (obj is IPerPropertyBrowsing.Interface perPropertyBrowsing)
             {
-                // check for a property page
+                // Check for a property page.
                 Guid guid = Guid.Empty;
-                HRESULT hr = perPropertyBrowsing.MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
-                if (hr == HRESULT.S_OK & !guid.Equals(Guid.Empty))
+                HRESULT hr = perPropertyBrowsing.MapPropertyToPage((int)DispatchID.MEMBERID_NIL, &guid);
+                if (hr.Succeeded & !guid.Equals(Guid.Empty))
                 {
                     IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
                     try
@@ -74,7 +70,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             &pUnk,
                             1,
                             &guid,
-                            Kernel32.GetThreadLocale(),
+                            PInvoke.GetThreadLocale(),
                             0,
                             IntPtr.Zero);
                         return true;
@@ -90,9 +86,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 try
                 {
-                    var uuids = new CAUUID();
+                    var uuids = default(CAUUID);
                     HRESULT hr = ispp.GetPages(&uuids);
-                    if (!hr.Succeeded() || uuids.cElems == 0)
+                    if (!hr.Succeeded || uuids.cElems == 0)
                     {
                         return false;
                     }
@@ -109,7 +105,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             &pUnk,
                             uuids.cElems,
                             uuids.pElems,
-                            Kernel32.GetThreadLocale(),
+                            PInvoke.GetThreadLocale(),
                             0,
                             IntPtr.Zero);
                         return true;

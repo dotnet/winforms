@@ -259,10 +259,7 @@ namespace System.ComponentModel.Design
                                 if (verb == sender)
                                 {
                                     DesignerActionUIService dapUISvc = (DesignerActionUIService)sc.GetService(typeof(DesignerActionUIService));
-                                    if (dapUISvc is not null)
-                                    {
-                                        dapUISvc.Refresh(comp); // we need to refresh, a verb on the current panel has changed its state
-                                    }
+                                    dapUISvc?.Refresh(comp); // we need to refresh, a verb on the current panel has changed its state
                                 }
                             }
                         }

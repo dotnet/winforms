@@ -16,14 +16,11 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static PrimitiveCodeDomSerializer Default
+        internal static new PrimitiveCodeDomSerializer Default
         {
             get
             {
-                if (s_defaultSerializer is null)
-                {
-                    s_defaultSerializer = new PrimitiveCodeDomSerializer();
-                }
+                s_defaultSerializer ??= new PrimitiveCodeDomSerializer();
 
                 return s_defaultSerializer;
             }

@@ -214,10 +214,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (entries[i].ParensAroundName)
                     {
-                        if (newEntries is null)
-                        {
-                            newEntries = new MultiPropertyDescriptorGridEntry[entries.Length];
-                        }
+                        newEntries ??= new MultiPropertyDescriptorGridEntry[entries.Length];
 
                         newEntries[newPosition++] = entries[i];
                         entries[i] = null;

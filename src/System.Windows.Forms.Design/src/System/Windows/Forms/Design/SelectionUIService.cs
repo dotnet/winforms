@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style &= ~(int)(User32.WS.CLIPSIBLINGS | User32.WS.CLIPCHILDREN);
+                cp.Style &= ~(int)(WINDOW_STYLE.WS_CLIPSIBLINGS | WINDOW_STYLE.WS_CLIPCHILDREN);
                 return cp;
             }
         }
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Design
             _mouseDragAnchor = anchor;
             _mouseDragging = true;
             _mouseDragHitTest = hitTest;
-            _mouseDragOffset = new Rectangle();
+            _mouseDragOffset = default(Rectangle);
             _savedVisible = Visible;
         }
 
@@ -438,10 +438,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragEnter(DragEventArgs devent)
         {
             base.OnDragEnter(devent);
-            if (_dragHandler != null)
-            {
-                _dragHandler.OleDragEnter(devent);
-            }
+            _dragHandler?.OleDragEnter(devent);
         }
 
         /// <summary>
@@ -450,10 +447,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragOver(DragEventArgs devent)
         {
             base.OnDragOver(devent);
-            if (_dragHandler != null)
-            {
-                _dragHandler.OleDragOver(devent);
-            }
+            _dragHandler?.OleDragOver(devent);
         }
 
         /// <summary>
@@ -462,10 +456,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragLeave(EventArgs e)
         {
             base.OnDragLeave(e);
-            if (_dragHandler != null)
-            {
-                _dragHandler.OleDragLeave();
-            }
+            _dragHandler?.OleDragLeave();
         }
 
         /// <summary>
@@ -474,10 +465,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragDrop(DragEventArgs devent)
         {
             base.OnDragDrop(devent);
-            if (_dragHandler != null)
-            {
-                _dragHandler.OleDragDrop(devent);
-            }
+            _dragHandler?.OleDragDrop(devent);
         }
 
         /// <summary>
@@ -493,10 +481,7 @@ namespace System.Windows.Forms.Design
                 if (selComp != null)
                 {
                     ISelectionUIHandler handler = GetHandler(selComp);
-                    if (handler != null)
-                    {
-                        handler.OnSelectionDoubleClick((IComponent)selComp);
-                    }
+                    handler?.OnSelectionDoubleClick((IComponent)selComp);
                 }
             }
         }
@@ -1147,10 +1132,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (trans != null)
-                {
-                    trans.Commit();
-                }
+                trans?.Commit();
 
                 // Reset the selection.  This will re-display our selection.
                 Visible = _savedVisible;
@@ -1265,19 +1247,13 @@ namespace System.Windows.Forms.Design
                 SelectionUIItem existingItem = (SelectionUIItem)_selectionItems[component];
                 if (!(existingItem is ContainerSelectionUIItem))
                 {
-                    if (existingItem != null)
-                    {
-                        existingItem.Dispose();
-                    }
+                    existingItem?.Dispose();
 
                     SelectionUIItem item = new ContainerSelectionUIItem(this, component);
                     _selectionItems[component] = item;
                     // Now update our region and invalidate
                     UpdateWindowRegion();
-                    if (existingItem != null)
-                    {
-                        existingItem.Invalidate();
-                    }
+                    existingItem?.Invalidate();
 
                     item.Invalidate();
                 }
@@ -1288,10 +1264,7 @@ namespace System.Windows.Forms.Design
                 if (existingItem is null || existingItem is ContainerSelectionUIItem)
                 {
                     _selectionItems.Remove(component);
-                    if (existingItem != null)
-                    {
-                        existingItem.Dispose();
-                    }
+                    existingItem?.Dispose();
 
                     UpdateWindowRegion();
                     existingItem.Invalidate();

@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Forms;
+using Windows.Win32.System.Com.StructuredStorage;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -23,11 +24,11 @@ namespace System.ComponentModel.Design
 
             internal OleCallback(RichTextBox owner) => _owner = owner;
 
-            public HRESULT GetNewStorage(out Ole32.IStorage storage)
+            public HRESULT GetNewStorage(out IStorage.Interface storage)
             {
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
 
-                WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
+                WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, true);
 
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
@@ -57,7 +58,7 @@ namespace System.ComponentModel.Design
                 HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, $"real clsid:{realClsid} (hr={hr:X})");
 
-                if (!hr.Succeeded())
+                if (!hr.Succeeded)
                 {
                     return HRESULT.S_FALSE;
                 }

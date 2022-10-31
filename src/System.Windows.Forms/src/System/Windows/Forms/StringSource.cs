@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
-using static Interop;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
 {
@@ -13,12 +13,12 @@ namespace System.Windows.Forms
     ///  This class is responsible for initializing the SHAutoComplete COM object and setting options in it.
     ///  The StringSource contains an array of Strings which is passed to the COM object as the custom source.
     /// </summary>
-    internal class StringSource : IEnumString
+    internal unsafe class StringSource : IEnumString.Interface
     {
         private string[] strings;
         private int current;
         private int size;
-        private WinFormsComWrappers.AutoCompleteWrapper? _autoCompleteObject2;
+        private IAutoComplete2* _autoComplete2;
 
         /// <summary>
         ///  Constructor.
@@ -31,46 +31,42 @@ namespace System.Windows.Forms
             current = 0;
             size = strings.Length;
 
-            var autoCompleteIID = IID.IAutoComplete2;
-            Ole32.CoCreateInstance(
+            PInvoke.CoCreateInstance(
                 in CLSID.AutoComplete,
-                IntPtr.Zero,
-                Ole32.CLSCTX.INPROC_SERVER,
-                in autoCompleteIID,
-                out IntPtr autoComplete2Ptr).ThrowIfFailed();
-
-            var obj = WinFormsComWrappers.Instance
-                .GetOrCreateObjectForComInstance(autoComplete2Ptr, CreateObjectFlags.UniqueInstance);
-            _autoCompleteObject2 = (WinFormsComWrappers.AutoCompleteWrapper)obj;
+                pUnkOuter: null,
+                CLSCTX.CLSCTX_INPROC_SERVER,
+                out _autoComplete2).ThrowOnFailure();
         }
 
         /// <summary>
         ///  This is the method that binds the custom source with the IAutoComplete interface.The "hWndEdit" is the handle
         ///  to the edit Control and the "options' are the options that need to be set in the AUTOCOMPLETE mode.
         /// </summary>
-        public bool Bind(HandleRef edit, Shell32.AUTOCOMPLETEOPTIONS options)
+        public bool Bind(IHandle<HWND> edit, AUTOCOMPLETEOPTIONS options)
         {
-            if (_autoCompleteObject2 is null)
+            if (_autoComplete2 is null)
             {
                 return false;
             }
 
-            if (!_autoCompleteObject2.SetOptions(options).Succeeded())
+            if (_autoComplete2->SetOptions((uint)options).Failed)
             {
                 return false;
             }
 
-            HRESULT hr = _autoCompleteObject2.Init(edit.Handle, this, IntPtr.Zero, IntPtr.Zero);
+            bool result = ComHelpers.TryGetComPointer(this, out IEnumString* pEnumString);
+            Debug.Assert(result);
+            HRESULT hr = _autoComplete2->Init(edit.Handle, (IUnknown*)pEnumString, (PCWSTR)null, (PCWSTR)null).ThrowOnFailure();
             GC.KeepAlive(edit.Wrapper);
-            return hr.Succeeded();
+            return hr.Succeeded;
         }
 
         public void ReleaseAutoComplete()
         {
-            if (_autoCompleteObject2 is not null)
+            if (_autoComplete2 is not null)
             {
-                _autoCompleteObject2.Dispose();
-                _autoCompleteObject2 = null;
+                _autoComplete2->Release();
+                _autoComplete2 = null;
             }
         }
 
@@ -82,54 +78,61 @@ namespace System.Windows.Forms
             size = strings.Length;
         }
 
-        #region IEnumString Members
-
-        void IEnumString.Clone(out IEnumString ppenum)
+        public unsafe HRESULT Clone(IEnumString** ppenum)
         {
-            ppenum = new StringSource(strings);
+            if (ppenum is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            bool result = ComHelpers.TryGetComPointer(
+                new StringSource(strings) { current = current },
+                out *ppenum);
+            Debug.Assert(result);
+            return HRESULT.S_OK;
         }
 
-        int IEnumString.Next(int celt, string[] rgelt, IntPtr pceltFetched)
+        public unsafe HRESULT Next(uint celt, PWSTR* rgelt, [Optional] uint* pceltFetched)
         {
             if (celt < 0)
             {
-                return (int)HRESULT.E_INVALIDARG;
+                return HRESULT.E_INVALIDARG;
             }
 
-            int fetched = 0;
+            uint fetched = 0;
 
             while (current < size && celt > 0)
             {
-                rgelt[fetched] = strings[current];
+                rgelt[fetched] = (char*)Marshal.StringToCoTaskMemUni(strings[current]);
                 current++;
                 fetched++;
                 celt--;
             }
 
-            if (pceltFetched != IntPtr.Zero)
+            if (pceltFetched is not null)
             {
-                Marshal.WriteInt32(pceltFetched, fetched);
+                *pceltFetched = fetched;
             }
 
-            return celt == 0 ? (int)HRESULT.S_OK : (int)HRESULT.S_FALSE;
+            return celt == 0 ? HRESULT.S_OK : HRESULT.S_FALSE;
         }
 
-        void IEnumString.Reset()
+        public HRESULT Skip(uint celt)
+        {
+            int newCurrent = current + (int)celt;
+            if (newCurrent >= size)
+            {
+                return HRESULT.S_FALSE;
+            }
+
+            current = newCurrent;
+            return HRESULT.S_OK;
+        }
+
+        public HRESULT Reset()
         {
             current = 0;
+            return HRESULT.S_OK;
         }
-
-        int IEnumString.Skip(int celt)
-        {
-            current += celt;
-            if (current >= size)
-            {
-                return (int)HRESULT.S_FALSE;
-            }
-
-            return (int)HRESULT.S_OK;
-        }
-
-        #endregion
     }
 }

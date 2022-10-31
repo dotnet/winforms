@@ -32,9 +32,8 @@ namespace System.Windows.Forms.Design
 
         internal void OnGetUIValueItem(ITypeDescriptorContext context, PropertyDescriptor propDesc, ArrayList valueUIItemList)
         {
-            if (context.Instance is Control)
+            if (context.Instance is Control control)
             {
-                Control control = (Control)context.Instance;
                 foreach (Binding binding in control.DataBindings)
                 {
                     // Only add the binding if it is one of the data source types we recognize.  Otherwise, our drop-down list won't show it as
@@ -68,10 +67,7 @@ namespace System.Windows.Forms.Design
 
         public void Dispose()
         {
-            if (dataBitmap != null)
-            {
-                dataBitmap.Dispose();
-            }
+            dataBitmap?.Dispose();
         }
     }
 }

@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static unsafe partial BOOL EnumDisplayMonitors(IntPtr hdc, RECT* rcClip, MONITORENUMPROC lpfnEnum, IntPtr dwData);
+        [DllImport(Libraries.User32)]
+        public static extern unsafe BOOL EnumDisplayMonitors(IntPtr hdc, RECT* rcClip, MONITORENUMPROC lpfnEnum, IntPtr dwData);
     }
 }

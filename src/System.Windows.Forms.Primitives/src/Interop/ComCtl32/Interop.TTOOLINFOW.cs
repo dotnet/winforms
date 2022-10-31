@@ -13,7 +13,7 @@ internal static partial class Interop
         public unsafe struct TTOOLINFOW
         {
             public uint cbSize;
-            public TTF uFlags;
+            public TOOLTIP_FLAGS uFlags;
             public IntPtr hwnd;
             public IntPtr uId;
             public RECT rect;
@@ -24,26 +24,26 @@ internal static partial class Interop
         }
 
         public struct ToolInfoWrapper<T>
-            where T : IHandle
+            where T : IHandle<HWND>
         {
             public TTOOLINFOW Info;
             public string? Text { get; set; }
             [MaybeNull]
             private readonly T _handle;
 
-            public unsafe ToolInfoWrapper(T handle, TTF flags = default, string? text = null)
+            public unsafe ToolInfoWrapper(T handle, TOOLTIP_FLAGS flags = default, string? text = null)
             {
                 Info = new TTOOLINFOW
                 {
                     hwnd = handle.Handle,
                     uId = handle.Handle,
-                    uFlags = flags | TTF.IDISHWND
+                    uFlags = flags | TOOLTIP_FLAGS.TTF_IDISHWND
                 };
                 Text = text;
                 _handle = handle;
             }
 
-            public unsafe ToolInfoWrapper(T handle, IntPtr id, TTF flags = default, string? text = null, RECT rect = default)
+            public unsafe ToolInfoWrapper(T handle, IntPtr id, TOOLTIP_FLAGS flags = default, string? text = null, RECT rect = default)
             {
                 Info = new TTOOLINFOW
                 {
@@ -56,7 +56,7 @@ internal static partial class Interop
                 _handle = handle;
             }
 
-            public unsafe nint SendMessage(IHandle sender, User32.WM message, BOOL state = BOOL.FALSE)
+            public unsafe LRESULT SendMessage(IHandle<HWND> sender, User32.WM message, bool state = false)
             {
                 Info.cbSize = (uint)sizeof(TTOOLINFOW);
                 fixed (char* c = Text)
@@ -67,7 +67,7 @@ internal static partial class Interop
                         Info.lpszText = c;
                     }
 
-                    nint result = User32.SendMessageW(sender, message, (nint)state, (nint)i);
+                    LRESULT result = PInvoke.SendMessage(sender, message, (WPARAM)(BOOL)state, (LPARAM)i);
                     GC.KeepAlive(_handle);
                     return result;
                 }

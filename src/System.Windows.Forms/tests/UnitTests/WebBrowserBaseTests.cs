@@ -6,11 +6,10 @@ using System.ComponentModel;
 using System.Drawing;
 using Moq;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
     public class WebBrowserBaseTests
     {

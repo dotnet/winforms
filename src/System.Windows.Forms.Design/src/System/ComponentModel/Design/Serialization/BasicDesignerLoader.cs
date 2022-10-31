@@ -854,10 +854,7 @@ namespace System.ComponentModel.Design.Serialization
 
             Exception ex = lastError as Exception;
 
-            if (ex is null)
-            {
-                ex = new InvalidOperationException(lastError.ToString());
-            }
+            ex ??= new InvalidOperationException(lastError.ToString());
 
             throw ex;
         }

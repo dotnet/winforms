@@ -270,19 +270,23 @@ namespace System.Windows.Forms
             pageSettings.Margins = PrinterUnitConvert.Convert(newMargins, fromUnit, PrinterUnit.Display);
         }
 
-        protected unsafe override bool RunDialog(IntPtr hwndOwner)
+        protected override unsafe bool RunDialog(IntPtr hwndOwner)
         {
-            var hookProcPtr = new User32.WNDPROCINT(HookProc);
+            WNDPROC hookProc = HookProcInternal;
+            void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
+
             if (_pageSettings is null)
             {
                 throw new ArgumentException(SR.PSDcantShowWithoutPage);
             }
 
-            var data = new Comdlg32.PAGESETUPDLGW();
-            data.lStructSize = (uint)Marshal.SizeOf<Comdlg32.PAGESETUPDLGW>();
-            data.Flags = GetFlags();
-            data.hwndOwner = hwndOwner;
-            data.lpfnPageSetupHook = hookProcPtr;
+            Comdlg32.PAGESETUPDLGW data = new()
+            {
+                lStructSize = (uint)sizeof(Comdlg32.PAGESETUPDLGW),
+                Flags = GetFlags(),
+                hwndOwner = hwndOwner,
+                lpfnPageSetupHook = hookProcPtr
+            };
 
             PrinterUnit toUnit = PrinterUnit.ThousandthsOfAnInch;
 
@@ -294,7 +298,7 @@ namespace System.Windows.Forms
                 int result;
                 fixed (char* pBuffer = buffer)
                 {
-                    result = Kernel32.GetLocaleInfoEx(Kernel32.LOCALE_NAME_USER_DEFAULT, Kernel32.LCTYPE.IMEASURE, pBuffer, 2);
+                    result = PInvoke.GetLocaleInfoEx(PInvoke.LOCALE_NAME_SYSTEM_DEFAULT, PInvoke.LOCALE_IMEASURE, pBuffer, 2);
                 }
 
                 if (result > 0 && int.Parse(buffer, NumberStyles.Integer, CultureInfo.InvariantCulture) == 0)
@@ -335,7 +339,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (Comdlg32.PageSetupDlgW(ref data).IsFalse())
+                if (!Comdlg32.PageSetupDlgW(ref data))
                 {
                     return false;
                 }
@@ -346,8 +350,9 @@ namespace System.Windows.Forms
             }
             finally
             {
-                Kernel32.GlobalFree(data.hDevMode);
-                Kernel32.GlobalFree(data.hDevNames);
+                PInvoke.GlobalFree(data.hDevMode);
+                PInvoke.GlobalFree(data.hDevNames);
+                GC.KeepAlive(hookProc);
             }
         }
     }

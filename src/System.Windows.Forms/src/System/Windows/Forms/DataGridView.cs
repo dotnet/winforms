@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -232,7 +231,7 @@ namespace System.Windows.Forms
             OperationTrackColRelocation | OperationTrackColHeadersResize | OperationTrackRowHeadersResize;
         private const int OperationKeyboardOperationMask = OperationTrackKeyboardColResize;
 
-        private readonly static Size s_dragSize = SystemInformation.DragSize;
+        private static readonly Size s_dragSize = SystemInformation.DragSize;
 
         private const byte ColumnSizingHotZone = 6;
         private const byte RowSizingHotZone = 5;
@@ -1065,7 +1064,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        public new event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -1120,7 +1119,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -1128,7 +1127,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -1416,10 +1415,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvcpe is null)
-                {
-                    _dgvcpe = new DataGridViewCellPaintingEventArgs(this);
-                }
+                _dgvcpe ??= new DataGridViewCellPaintingEventArgs(this);
 
                 return _dgvcpe;
             }
@@ -1429,10 +1425,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvcsce is null)
-                {
-                    _dgvcsce = new DataGridViewCellStyleChangedEventArgs();
-                }
+                _dgvcsce ??= new DataGridViewCellStyleChangedEventArgs();
 
                 return _dgvcsce;
             }
@@ -1442,10 +1435,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvcve is null)
-                {
-                    _dgvcve = new DataGridViewCellValueEventArgs();
-                }
+                _dgvcve ??= new DataGridViewCellValueEventArgs();
 
                 return _dgvcve;
             }
@@ -1617,10 +1607,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_columnHeadersDefaultCellStyle is null)
-                {
-                    _columnHeadersDefaultCellStyle = DefaultColumnHeadersDefaultCellStyle;
-                }
+                _columnHeadersDefaultCellStyle ??= DefaultColumnHeadersDefaultCellStyle;
 
                 return _columnHeadersDefaultCellStyle;
             }
@@ -1813,10 +1800,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dataGridViewColumns is null)
-                {
-                    _dataGridViewColumns = CreateColumnsInstance();
-                }
+                _dataGridViewColumns ??= CreateColumnsInstance();
 
                 return _dataGridViewColumns;
             }
@@ -2019,10 +2003,7 @@ namespace System.Windows.Forms
                 if (value != DataMember)
                 {
                     CurrentCell = null;
-                    if (DataConnection is null)
-                    {
-                        DataConnection = new DataGridViewDataConnection(this);
-                    }
+                    DataConnection ??= new DataGridViewDataConnection(this);
 
                     DataConnection.SetDataConnection(DataSource, value);
                     OnDataMemberChanged(EventArgs.Empty);
@@ -2135,7 +2116,7 @@ namespace System.Windows.Forms
 
                     if (_defaultCellStyle.ForeColor == Color.Empty)
                     {
-                        defaultCellStyleTmp.ForeColor = base.ForeColor;
+                        defaultCellStyleTmp.ForeColor = SystemInformation.HighContrast ? DefaultForeBrush.Color : base.ForeColor;
                         _dataGridViewState1[State1_AmbientForeColor] = true;
                     }
 
@@ -2202,7 +2183,7 @@ namespace System.Windows.Forms
                 DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
                 {
                     BackColor = s_defaultBackColor,
-                    ForeColor = base.ForeColor,
+                    ForeColor = SystemInformation.HighContrast ? DefaultForeBrush.Color : base.ForeColor,
                     SelectionBackColor = DefaultSelectionBackBrush.Color,
                     SelectionForeColor = DefaultSelectionForeBrush.Color,
                     Font = base.Font,
@@ -2431,13 +2412,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_editingPanel is null)
-                {
-                    _editingPanel = new DataGridViewEditingPanel(this)
+                _editingPanel ??= new DataGridViewEditingPanel(this)
                     {
                         AccessibleName = SR.DataGridView_AccEditingPanelAccName
                     };
-                }
 
                 return _editingPanel;
             }
@@ -2447,10 +2425,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_editingPanelAccessibleObject is null)
-                {
-                    _editingPanelAccessibleObject = new DataGridViewEditingPanelAccessibleObject(this, EditingPanel);
-                }
+                _editingPanelAccessibleObject ??= new DataGridViewEditingPanelAccessibleObject(this, EditingPanel);
 
                 return _editingPanelAccessibleObject;
             }
@@ -2811,7 +2786,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -2827,7 +2802,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler FontChanged
+        public new event EventHandler FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -3542,10 +3517,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_rowHeadersDefaultCellStyle is null)
-                {
-                    _rowHeadersDefaultCellStyle = DefaultRowHeadersDefaultCellStyle;
-                }
+                _rowHeadersDefaultCellStyle ??= DefaultRowHeadersDefaultCellStyle;
 
                 return _rowHeadersDefaultCellStyle;
             }
@@ -3733,10 +3705,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dataGridViewRows is null)
-                {
-                    _dataGridViewRows = CreateRowsInstance();
-                }
+                _dataGridViewRows ??= CreateRowsInstance();
 
                 return _dataGridViewRows;
             }
@@ -3791,10 +3760,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_rowTemplate is null)
-                {
-                    _rowTemplate = new DataGridViewRow();
-                }
+                _rowTemplate ??= new DataGridViewRow();
 
                 return _rowTemplate;
             }
@@ -4286,7 +4252,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -5072,10 +5038,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvrhine is null)
-                {
-                    _dgvrhine = new DataGridViewRowHeightInfoNeededEventArgs();
-                }
+                _dgvrhine ??= new DataGridViewRowHeightInfoNeededEventArgs();
 
                 return _dgvrhine;
             }
@@ -5118,10 +5081,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvrpope is null)
-                {
-                    _dgvrpope = new DataGridViewRowPostPaintEventArgs(this);
-                }
+                _dgvrpope ??= new DataGridViewRowPostPaintEventArgs(this);
 
                 return _dgvrpope;
             }
@@ -5139,10 +5099,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_dgvrprpe is null)
-                {
-                    _dgvrprpe = new DataGridViewRowPrePaintEventArgs(this);
-                }
+                _dgvrprpe ??= new DataGridViewRowPrePaintEventArgs(this);
 
                 return _dgvrprpe;
             }
@@ -5232,7 +5189,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler StyleChanged
+        public new event EventHandler StyleChanged
         {
             add => base.StyleChanged += value;
             remove => base.StyleChanged -= value;

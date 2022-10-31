@@ -170,10 +170,7 @@ namespace System.Windows.Forms
             get
             {
                 ToolStrip parent = ParentInternal;
-                if (parent is null)
-                {
-                    parent = Owner;
-                }
+                parent ??= Owner;
 
                 if (parent is ToolStripDropDownMenu dropDownMenu)
                 {
@@ -262,10 +259,7 @@ namespace System.Windows.Forms
         public override Size GetPreferredSize(Size constrainingSize)
         {
             ToolStrip parent = ParentInternal;
-            if (parent is null)
-            {
-                parent = Owner;
-            }
+            parent ??= Owner;
 
             if (parent is null)
             {
@@ -306,13 +300,13 @@ namespace System.Windows.Forms
             // Perf: don't call base, we don't care if the font changes
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
             RaiseEvent(s_fontChangedEvent, e);
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeForeColor() => ForeColor != SystemColors.ControlDark;
 
-        internal protected override void SetBounds(Rectangle rect)
+        protected internal override void SetBounds(Rectangle rect)
         {
             if (Owner is ToolStripDropDownMenu dropDownMenu)
             {

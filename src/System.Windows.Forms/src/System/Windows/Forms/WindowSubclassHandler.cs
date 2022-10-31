@@ -26,10 +26,10 @@ namespace System.Windows.Forms
     /// </remarks>
     internal class WindowSubclassHandler : IDisposable
     {
-        private readonly IntPtr _handle;
+        private readonly HWND _handle;
         private bool _opened;
         private bool _disposed;
-        private IntPtr _originalWindowProc;
+        private unsafe void* _originalWindowProc;
 
         /// <summary>
         ///   The delegate for <see cref="WndProc(ref Message)"/>
@@ -50,40 +50,42 @@ namespace System.Windows.Forms
         ///   is also the way that the <see cref="NativeWindow"/> class does it.
         /// </para>
         /// </remarks>
-        private readonly User32.WNDPROC _windowProcDelegate;
+        private readonly WNDPROC _windowProcDelegate;
 
         /// <summary>
-        ///   The function pointer created from <see cref="_windowProcDelegate"/>.
+        ///  The function pointer created from <see cref="_windowProcDelegate"/>.
         /// </summary>
-        private readonly IntPtr _windowProcDelegatePtr;
+        private readonly unsafe void* _windowProcDelegatePtr;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref="WindowSubclassHandler"/> class.
+        ///  Initializes a new instance of the <see cref="WindowSubclassHandler"/> class.
         /// </summary>
-        /// <param name="handle">The window handle of the window to subclass.</param>
-        public WindowSubclassHandler(IntPtr handle)
+        /// <param name="hwnd">The window handle of the window to subclass.</param>
+        public unsafe WindowSubclassHandler(HWND hwnd)
         {
-            _handle = handle.OrThrowIfZero();
+            if (hwnd.IsNull)
+            {
+                throw new ArgumentNullException(nameof(hwnd));
+            }
 
-            // Create a delegate for our window procedure and get a function
-            // pointer for it.
+            _handle = hwnd;
+
+            // Create a delegate for our window procedure and get a function pointer for it.
             _windowProcDelegate = NativeWndProc;
-            _windowProcDelegatePtr = Marshal.GetFunctionPointerForDelegate(
-                    _windowProcDelegate);
+            _windowProcDelegatePtr = (void*)Marshal.GetFunctionPointerForDelegate(_windowProcDelegate);
         }
 
         /// <summary>
-        ///   Subclasses the window.
+        ///  Subclasses the window.
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   You must call <see cref="Dispose()"/> to undo the subclassing before
-        ///   the window is destroyed.
+        ///  You must call <see cref="Dispose()"/> to undo the subclassing before the window is destroyed.
         /// </para>
         /// </remarks>
         /// <exception cref="Win32Exception">The window could not be subclassed.</exception>
         /// <exception cref="InvalidOperationException"><see cref="Open"/> was already called.</exception>
-        public void Open()
+        public unsafe void Open()
         {
             if (_disposed)
             {
@@ -98,12 +100,12 @@ namespace System.Windows.Forms
             // Replace the existing window procedure with our one ("instance subclassing").
             // Note: It shouldn't be possible to set a null pointer as window procedure, so we
             // can use the return value to determine if the call succeeded.
-            _originalWindowProc = User32.SetWindowLong(
+            _originalWindowProc = (void*)PInvoke.SetWindowLong(
                 _handle,
-                User32.GWL.WNDPROC,
-                _windowProcDelegatePtr);
+                WINDOW_LONG_PTR_INDEX.GWL_WNDPROC,
+                (nint)_windowProcDelegatePtr);
 
-            if (_originalWindowProc == IntPtr.Zero)
+            if (_originalWindowProc is null)
             {
                 throw new Win32Exception();
             }
@@ -170,7 +172,7 @@ namespace System.Windows.Forms
         /// <exception cref="Win32Exception">The subclassing could not be undone.</exception>
         /// <exception cref="InvalidOperationException">The current window procedure is not the
         /// expected one.</exception>
-        protected virtual void Dispose(bool disposing)
+        protected virtual unsafe void Dispose(bool disposing)
         {
             if (_disposed)
             {
@@ -182,11 +184,11 @@ namespace System.Windows.Forms
             if (disposing && _opened)
             {
                 // Check if the current window procedure is the correct one.
-                IntPtr currentWindowProcedure = User32.GetWindowLong(
+                void* currentWindowProcedure = (void*)PInvoke.GetWindowLong(
                     _handle,
-                    User32.GWL.WNDPROC);
+                    WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
 
-                if (currentWindowProcedure == IntPtr.Zero)
+                if (currentWindowProcedure == null)
                 {
                     throw new Win32Exception();
                 }
@@ -202,10 +204,10 @@ namespace System.Windows.Forms
 
                 // Undo the subclassing by restoring the original window
                 // procedure.
-                if (User32.SetWindowLong(
+                if (PInvoke.SetWindowLong(
                     _handle,
-                    User32.GWL.WNDPROC,
-                    _originalWindowProc) == IntPtr.Zero)
+                    WINDOW_LONG_PTR_INDEX.GWL_WNDPROC,
+                    (nint)_originalWindowProc) == 0)
                 {
                     throw new Win32Exception();
                 }
@@ -222,15 +224,15 @@ namespace System.Windows.Forms
         ///   Processes Windows messages for the subclassed window.
         /// </summary>
         /// <param name="m">The message to process.</param>
-        protected virtual void WndProc(ref Message m)
+        protected virtual unsafe void WndProc(ref Message m)
         {
             // Call the original window procedure to process the message.
-            if (_originalWindowProc != IntPtr.Zero)
+            if (_originalWindowProc is not null)
             {
-                m.ResultInternal = User32.CallWindowProcW(
+                m.ResultInternal = PInvoke.CallWindowProc(
                     _originalWindowProc,
-                    m.HWnd,
-                    m.MsgInternal,
+                    m.HWND,
+                    (uint)m.Msg,
                     m.WParamInternal,
                     m.LParamInternal);
             }
@@ -260,11 +262,11 @@ namespace System.Windows.Forms
             ExceptionDispatchInfo.Throw(exception);
         }
 
-        private IntPtr NativeWndProc(
-            IntPtr hWnd,
+        private LRESULT NativeWndProc(
+            HWND hWnd,
             User32.WM msg,
-            IntPtr wParam,
-            IntPtr lParam)
+            WPARAM wParam,
+            LPARAM lParam)
         {
             Debug.Assert(hWnd == _handle);
 

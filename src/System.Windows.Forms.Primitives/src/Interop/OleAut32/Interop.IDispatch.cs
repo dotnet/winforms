@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using static Interop.Kernel32;
+using Windows.Win32.System.Com;
 
 internal partial class Interop
 {
@@ -21,7 +21,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetTypeInfo(
                 uint iTInfo,
-                LCID lcid,
+                PInvoke.LCID lcid,
                 out ITypeInfo ppTInfo);
 
             [PreserveSig]
@@ -29,17 +29,17 @@ internal partial class Interop
                 Guid* riid,
                 [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)] string[] rgszNames,
                 uint cNames,
-                LCID lcid,
+                PInvoke.LCID lcid,
                 Ole32.DispatchID* rgDispId);
 
             [PreserveSig]
             HRESULT Invoke(
                 Ole32.DispatchID dispIdMember,
                 Guid* riid,
-                LCID lcid,
-                DISPATCH dwFlags,
+                PInvoke.LCID lcid,
+                DISPATCH_FLAGS dwFlags,
                 DISPPARAMS* pDispParams,
-                [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
+                [Out, MarshalAs(UnmanagedType.LPArray)] object[]? pVarResult,
                 EXCEPINFO* pExcepInfo,
                 uint* pArgErr);
         }

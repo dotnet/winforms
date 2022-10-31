@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
             // Create an ImageListStreamer via BinaryFormatter
             using ImageListStreamer streamerFromBf = BinarySerialization.EnsureDeserialize<ImageListStreamer>(ClassicBfImageListStreamer);
             using NativeImageList nativeImageListBf = streamerFromBf.GetNativeImageList();
-            Assert.NotEqual(IntPtr.Zero, nativeImageListBf.Handle);
+            Assert.NotEqual(HIMAGELIST.Null, nativeImageListBf.HIMAGELIST);
 
             // Read as a memory stream
             using MemoryStream ms = new();
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
             ms.Position = 0;
             using ImageListStreamer streamerFromMs = new(ms);
             using NativeImageList nativeImageListMs = streamerFromMs.GetNativeImageList();
-            Assert.NotEqual(IntPtr.Zero, nativeImageListMs.Handle);
+            Assert.NotEqual(HIMAGELIST.Null, nativeImageListMs.HIMAGELIST);
 
             // Compare the two
             using ImageList imageListBf = new();
@@ -47,12 +47,12 @@ namespace System.Windows.Forms.Tests
             using MemoryStream ms = new(bytes);
             using ImageListStreamer streamerFromMs = new(ms);
             using NativeImageList nativeImageListMs = streamerFromMs.GetNativeImageList();
-            Assert.NotEqual(IntPtr.Zero, nativeImageListMs.Handle);
+            Assert.NotEqual(HIMAGELIST.Null, nativeImageListMs.HIMAGELIST);
 
             // Create an ImageListStreamer via BinaryFormatter
             using ImageListStreamer streamerFromBf = BinarySerialization.EnsureDeserialize<ImageListStreamer>(ClassicBfImageListStreamer);
             using NativeImageList nativeImageListBf = streamerFromBf.GetNativeImageList();
-            Assert.NotEqual(IntPtr.Zero, nativeImageListBf.Handle);
+            Assert.NotEqual(HIMAGELIST.Null, nativeImageListBf.HIMAGELIST);
 
             // Compare the two
             using ImageList imageListBf = new();

@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -90,10 +89,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_accelerations is null)
-                {
-                    _accelerations = new NumericUpDownAccelerationCollection();
-                }
+                _accelerations ??= new NumericUpDownAccelerationCollection();
 
                 return _accelerations;
             }
@@ -243,7 +239,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -278,7 +274,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -496,7 +492,7 @@ namespace System.Windows.Forms
             {
                 // Eat this invalid key and beep
                 e.Handled = true;
-                User32.MessageBeep(User32.MB.OK);
+                PInvoke.MessageBeep(MESSAGEBOX_STYLE.MB_OK);
             }
         }
 
@@ -540,7 +536,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected void ParseEditText()
         {
-            Debug.Assert(UserEdit == true, "ParseEditText() - UserEdit == false");
+            Debug.Assert(UserEdit, "ParseEditText() - UserEdit == false");
 
             try
             {
@@ -829,24 +825,19 @@ namespace System.Windows.Forms
 
             if (maxDigitsReached)
             {
-                string shortText;
-                if (Hexadecimal)
-                {
-                    shortText = ((long)testNumber).ToString("X", CultureInfo.InvariantCulture);
-                }
-                else
-                {
-                    shortText = testNumber.ToString(CultureInfo.CurrentCulture);
-                }
+                string shortText = Hexadecimal
+                    ? ((long)testNumber).ToString("X", CultureInfo.InvariantCulture)
+                    : testNumber.ToString(CultureInfo.CurrentCulture);
 
                 int shortTextWidth = TextRenderer.MeasureText(shortText, Font).Width;
+
                 // Adding the width of the one digit that was dropped earlier.
                 // This assumes that no additional thousand separator is added by that digit which is correct.
                 textWidth += shortTextWidth / (numDigits + 1);
             }
 
             // Call AdjustWindowRect to add space for the borders
-            int width = SizeFromClientSize(textWidth, height).Width + _upDownButtons.Width;
+            int width = SizeFromClientSizeInternal(new(textWidth, height)).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }
 

@@ -15,14 +15,11 @@ namespace System.ComponentModel.Design.Serialization
         private const string _initMethodName = "InitializeComponent";
         private static ComponentTypeCodeDomSerializer s_default;
 
-        internal new static ComponentTypeCodeDomSerializer Default
+        internal static new ComponentTypeCodeDomSerializer Default
         {
             get
             {
-                if (s_default is null)
-                {
-                    s_default = new ComponentTypeCodeDomSerializer();
-                }
+                s_default ??= new ComponentTypeCodeDomSerializer();
 
                 return s_default;
             }
@@ -85,4 +82,3 @@ namespace System.ComponentModel.Design.Serialization
         }
     }
 }
-

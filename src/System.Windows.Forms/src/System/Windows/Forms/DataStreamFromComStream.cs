@@ -2,15 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
 {
     internal class DataStreamFromComStream : Stream
     {
-        private Ole32.IStream _comStream;
+        private IStream.Interface _comStream;
 
-        public DataStreamFromComStream(Ole32.IStream comStream) : base()
+        public DataStreamFromComStream(IStream.Interface comStream) : base()
         {
             _comStream = comStream;
         }
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="buffer">The buffer receiving the data</param>
         /// <returns>The number of bytes read</returns>
-        public unsafe override int Read(Span<byte> buffer)
+        public override unsafe int Read(Span<byte> buffer)
         {
             uint bytesRead = 0;
             if (!buffer.IsEmpty)
@@ -110,7 +110,7 @@ namespace System.Windows.Forms
             _comStream.SetSize((ulong)value);
         }
 
-        public unsafe override long Seek(long offset, SeekOrigin origin)
+        public override unsafe long Seek(long offset, SeekOrigin origin)
         {
             ulong newPosition = 0;
             _comStream.Seek(offset, origin, &newPosition);
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
         ///  Writes the data contained in the given buffer
         /// </summary>
         /// <param name="buffer">The buffer to write</param>
-        public unsafe override void Write(ReadOnlySpan<byte> buffer)
+        public override unsafe void Write(ReadOnlySpan<byte> buffer)
         {
             if (buffer.IsEmpty)
             {
@@ -175,13 +175,7 @@ namespace System.Windows.Forms
             {
                 if (disposing && _comStream is not null)
                 {
-                    try
-                    {
-                        _comStream.Commit(Ole32.STGC.DEFAULT);
-                    }
-                    catch (Exception)
-                    {
-                    }
+                    _comStream.Commit(STGC.STGC_DEFAULT);
                 }
 
                 // Can't release a COM stream from the finalizer thread.

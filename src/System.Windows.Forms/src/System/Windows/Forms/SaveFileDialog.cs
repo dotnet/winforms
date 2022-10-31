@@ -3,32 +3,33 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Runtime.InteropServices;
-using static Interop;
-using static Interop.Shell32;
+using Windows.Win32.System.Com;
+using Windows.Win32.UI.Controls.Dialogs;
+using static Windows.Win32.UI.Controls.Dialogs.OPEN_FILENAME_FLAGS;
+using static Windows.Win32.UI.Shell.FILEOPENDIALOGOPTIONS;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents
-    ///  a common dialog box that allows the user to specify options for saving a
+    ///  Represents common dialog box that allows the user to specify options for saving a
     ///  file. This class cannot be inherited.
     /// </summary>
-    [Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.SaveFileDialogDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionSaveFileDialog))]
     public sealed partial class SaveFileDialog : FileDialog
     {
         /// <summary>
-        ///  Gets or sets a value indicating whether the dialog box verifies if the creation of the specified file will be successful.
-        ///  If this flag is not set, the calling application must handle errors, such as denial of access, discovered when the item is created.
+        ///  Gets or sets a value indicating whether the dialog box verifies if the creation of the specified file will
+        ///  be successful. If this flag is not set, the calling application must handle errors, such as denial of access,
+        ///  discovered when the item is created.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
         [SRDescription(nameof(SR.SaveFileDialogCheckWriteAccess))]
         public bool CheckWriteAccess
         {
-            get => !GetOption((int)Comdlg32.OFN.NOTESTFILECREATE);
-            set => SetOption((int)Comdlg32.OFN.NOTESTFILECREATE, !value);
+            get => !GetOption(OFN_NOTESTFILECREATE);
+            set => SetOption(OFN_NOTESTFILECREATE, !value);
         }
 
         /// <summary>
@@ -40,8 +41,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.SaveFileDialogCreatePrompt))]
         public bool CreatePrompt
         {
-            get => GetOption((int)Comdlg32.OFN.CREATEPROMPT);
-            set => SetOption((int)Comdlg32.OFN.CREATEPROMPT, value);
+            get => GetOption(OFN_CREATEPROMPT);
+            set => SetOption(OFN_CREATEPROMPT, value);
         }
 
         /// <summary>
@@ -52,8 +53,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.SaveFileDialogExpandedMode))]
         public bool ExpandedMode
         {
-            get => GetOption((int)FOS.DEFAULTNOMINIMODE);
-            set => SetOption((int)FOS.DEFAULTNOMINIMODE, value);
+            get => _dialogOptions.HasFlag(FOS_DEFAULTNOMINIMODE);
+            set => _dialogOptions.ChangeFlags(FOS_DEFAULTNOMINIMODE, value);
         }
 
         /// <summary>
@@ -65,8 +66,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.SaveFileDialogOverWritePrompt))]
         public bool OverwritePrompt
         {
-            get => GetOption((int)Comdlg32.OFN.OVERWRITEPROMPT);
-            set => SetOption((int)Comdlg32.OFN.OVERWRITEPROMPT, value);
+            get => GetOption(OFN_OVERWRITEPROMPT);
+            set => SetOption(OFN_OVERWRITEPROMPT, value);
         }
 
         /// <summary>
@@ -80,33 +81,29 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Prompts the user with a <see cref="MessageBox"/>
-        ///  when a file is about to be created. This method is
-        ///  invoked when the CreatePrompt property is true and the specified file
-        ///  does not exist. A return value of false prevents the dialog from
-        ///  closing.
+        ///  Prompts the user with a <see cref="MessageBox"/> when a file is about to be created. This method is
+        ///  invoked when the <see cref="CreatePrompt"/> property is true and the specified file does not exist. A
+        ///  return value of <see langword="false"/> prevents the dialog from closing.
         /// </summary>
         private bool PromptFileCreate(string fileName)
-        {
-            return MessageBoxWithFocusRestore(string.Format(SR.FileDialogCreatePrompt, fileName),
-                    DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-        }
+            => MessageBoxWithFocusRestore(
+                string.Format(SR.FileDialogCreatePrompt, fileName),
+                DialogCaption,
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
 
         /// <summary>
-        ///  Prompts the user when a file is about to be overwritten. This method is
-        ///  invoked when the "overwritePrompt" property is true and the specified
-        ///  file already exists. A return value of false prevents the dialog from
-        ///  closing.
+        ///  Prompts the user when a file is about to be overwritten. This method is invoked when the
+        ///  <see cref="OverwritePrompt"/> property is true and the specified file already exists. A return value
+        ///  of <see langword="false"/> prevents the dialog from closing.
         /// </summary>
         private bool PromptFileOverwrite(string fileName)
-        {
-            return MessageBoxWithFocusRestore(string.Format(SR.FileDialogOverwritePrompt, fileName),
-                    DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-        }
+            => MessageBoxWithFocusRestore(
+                string.Format(SR.FileDialogOverwritePrompt, fileName),
+                DialogCaption,
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
 
-        // If it's necessary to throw up a "This file exists, are you sure?" kind of
-        // MessageBox, here's where we do it.
-        // Return value is whether or not the user hit "okay".
         private protected override bool PromptUserIfAppropriate(string fileName)
         {
             if (!base.PromptUserIfAppropriate(fileName))
@@ -114,47 +111,43 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            //Note: When we are using the Vista dialog mode we get two prompts (one from us and one from the OS) if we do this
-            if ((_options & (int)Comdlg32.OFN.OVERWRITEPROMPT) != 0 && FileExists(fileName) && !UseVistaDialogInternal)
+            // Note: Vista dialog mode automatically prompts for overwrite.
+            if (_fileNameFlags.HasFlag(OFN_OVERWRITEPROMPT)
+                && !UseVistaDialogInternal
+                && FileExists(fileName)
+                && !PromptFileOverwrite(fileName))
             {
-                if (!PromptFileOverwrite(fileName))
-                {
-                    return false;
-                }
+                return false;
             }
 
-            if ((_options & (int)Comdlg32.OFN.CREATEPROMPT) != 0 && !FileExists(fileName))
+            if (_fileNameFlags.HasFlag(OFN_CREATEPROMPT) && !FileExists(fileName) && !PromptFileCreate(fileName))
             {
-                if (!PromptFileCreate(fileName))
-                {
-                    return false;
-                }
+                return false;
             }
 
             return true;
         }
 
         /// <summary>
-        ///  Resets all dialog box options to their default
-        ///  values.
+        ///  Resets all dialog box options to their default values.
         /// </summary>
         public override void Reset()
         {
             base.Reset();
-            SetOption((int)FOS.DEFAULTNOMINIMODE, true);
-            SetOption((int)Comdlg32.OFN.OVERWRITEPROMPT, true);
+            _dialogOptions |= FOS_DEFAULTNOMINIMODE;
+            SetOption(OFN_OVERWRITEPROMPT, true);
         }
 
-        private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
+        private protected override unsafe bool RunFileDialog(OPENFILENAME* ofn)
         {
-            bool result = UnsafeNativeMethods.GetSaveFileName(ofn);
+            bool result = PInvoke.GetSaveFileName(ofn);
 
             if (!result)
             {
                 // Something may have gone wrong - check for error condition
-                switch (Comdlg32.CommDlgExtendedError())
+                switch (PInvoke.CommDlgExtendedError())
                 {
-                    case Comdlg32.FNERR.INVALIDFILENAME:
+                    case COMMON_DLG_ERRORS.FNERR_INVALIDFILENAME:
                         throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
                 }
             }
@@ -162,33 +155,22 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected override string[] ProcessVistaFiles(WinFormsComWrappers.FileDialogWrapper dialog)
+        private protected override unsafe string[] ProcessVistaFiles(IFileDialog* dialog)
         {
-            dialog.GetResult(out IShellItem? item);
-            if (item is null)
-            {
-                return Array.Empty<string>();
-            }
-
-            return new string[] { GetFilePathFromShellItem(item) };
+            using ComScope<IShellItem> item = new(null);
+            dialog->GetResult(item).ThrowOnFailure();
+            return item.IsNull ? Array.Empty<string>() : new string[] { GetFilePathFromShellItem(item) };
         }
 
-        private protected override Interop.WinFormsComWrappers.FileDialogWrapper CreateVistaDialog()
+        private protected override unsafe IFileDialog* CreateVistaDialog()
         {
-            HRESULT hr = Ole32.CoCreateInstance(
+            PInvoke.CoCreateInstance(
                 in CLSID.FileSaveDialog,
-                IntPtr.Zero,
-                Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
-                in NativeMethods.ActiveX.IID_IUnknown,
-                out IntPtr lpDialogUnknownPtr);
-            if (!hr.Succeeded())
-            {
-                Marshal.ThrowExceptionForHR((int)hr);
-            }
+                pUnkOuter: null,
+                CLSCTX.CLSCTX_INPROC_SERVER | CLSCTX.CLSCTX_LOCAL_SERVER | CLSCTX.CLSCTX_REMOTE_SERVER,
+                out IFileDialog* fileDialog).ThrowOnFailure();
 
-            var obj = WinFormsComWrappers.Instance
-                .GetOrCreateObjectForComInstance(lpDialogUnknownPtr, CreateObjectFlags.None);
-            return (WinFormsComWrappers.FileDialogWrapper)obj;
+            return fileDialog;
         }
     }
 }

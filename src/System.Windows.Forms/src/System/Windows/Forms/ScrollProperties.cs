@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -55,10 +54,10 @@ namespace System.Windows.Forms
                     _enabled = value;
                     if (_parent is not null)
                     {
-                        User32.EnableScrollBar(
+                        PInvoke.EnableScrollBar(
                             _parent,
                             Orientation,
-                            value ? User32.ESB.ENABLE_BOTH : User32.ESB.DISABLE_BOTH);
+                            value ? ENABLE_SCROLL_BAR_ARROWS.ESB_ENABLE_BOTH : ENABLE_SCROLL_BAR_ARROWS.ESB_DISABLE_BOTH);
                     }
                 }
             }
@@ -176,7 +175,7 @@ namespace System.Windows.Forms
 
         private protected abstract int GetPageSize(ScrollableControl parent);
 
-        private protected abstract User32.SB Orientation { get; }
+        private protected abstract SCROLLBAR_CONSTANTS Orientation { get; }
 
         private protected abstract int GetHorizontalDisplayPosition(ScrollableControl parent);
 
@@ -271,10 +270,10 @@ namespace System.Windows.Forms
         {
             if (_parent is not null && _parent.IsHandleCreated && _visible)
             {
-                User32.SCROLLINFO si = new()
+                SCROLLINFO si = new()
                 {
-                    cbSize = (uint)sizeof(User32.SCROLLINFO),
-                    fMask = User32.SIF.ALL,
+                    cbSize = (uint)sizeof(SCROLLINFO),
+                    fMask = SCROLLINFO_MASK.SIF_ALL,
                     nMin = _minimum,
                     nMax = _maximum,
                     nPage = _parent.AutoScroll ? (uint)GetPageSize(_parent) : (uint)LargeChange,
@@ -282,7 +281,7 @@ namespace System.Windows.Forms
                     nTrackPos = 0
                 };
 
-                User32.SetScrollInfo(_parent, Orientation, ref si, BOOL.TRUE);
+                PInvoke.SetScrollInfo(_parent, Orientation, ref si, true);
             }
         }
 

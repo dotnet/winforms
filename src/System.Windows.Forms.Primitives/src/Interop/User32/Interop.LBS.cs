@@ -25,7 +25,7 @@ internal static partial class Interop
             NODATA = 0x2000,
             COMBOBOX = 0x8000,
             NOSEL = 0x4000,
-            STANDARD = NOTIFY | SORT | WS.VSCROLL | WS.BORDER,
+            STANDARD = NOTIFY | SORT | WINDOW_STYLE.WS_VSCROLL | WINDOW_STYLE.WS_BORDER,
         }
     }
 }

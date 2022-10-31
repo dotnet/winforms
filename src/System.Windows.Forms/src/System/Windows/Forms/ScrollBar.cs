@@ -122,8 +122,8 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_SCROLLBAR;
-                cp.Style &= ~(int)User32.WS.BORDER;
+                cp.ClassName = PInvoke.WC_SCROLLBAR;
+                cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
                 return cp;
             }
         }
@@ -494,7 +494,7 @@ namespace System.Windows.Forms
             return base.GetScaledBounds(bounds, factor, specified);
         }
 
-        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg) => default;
+        internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg) => default;
 
         protected override void OnEnabledChanged(EventArgs e)
         {
@@ -566,7 +566,8 @@ namespace System.Windows.Forms
             // The base implementation should be called before the implementation above,
             // but changing the order in Whidbey would be too much of a breaking change
             // for this particular class.
-            base.OnMouseWheel(e);
+            // Because the code has been like that since long time, we assume that e is not null.
+            base.OnMouseWheel(e!);
         }
 
         /// <summary>
@@ -598,10 +599,10 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SCROLLINFO si = new()
+            SCROLLINFO si = new()
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.ALL,
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_ALL,
                 nMin = _minimum,
                 nMax = _maximum,
                 nPage = (uint)LargeChange
@@ -618,13 +619,12 @@ namespace System.Windows.Forms
             }
 
             si.nTrackPos = 0;
-
-            User32.SetScrollInfo(this, User32.SB.CTL, ref si, BOOL.TRUE);
+            PInvoke.SetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_CTL, ref si, true);
         }
 
         private void WmReflectScroll(ref Message m)
         {
-            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParamInternal);
+            ScrollEventType type = (ScrollEventType)m.WParamInternal.LOWORD;
             DoScroll(type);
         }
 
@@ -695,13 +695,13 @@ namespace System.Windows.Forms
 
                 case ScrollEventType.ThumbPosition:
                 case ScrollEventType.ThumbTrack:
-                    User32.SCROLLINFO si = new()
+                    SCROLLINFO si = new()
                     {
-                        cbSize = (uint)sizeof(User32.SCROLLINFO),
-                        fMask = User32.SIF.TRACKPOS
+                        cbSize = (uint)sizeof(SCROLLINFO),
+                        fMask = SCROLLINFO_MASK.SIF_TRACKPOS
                     };
 
-                    User32.GetScrollInfo(this, User32.SB.CTL, ref si);
+                    PInvoke.GetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_CTL, ref si);
 
                     if (RightToLeft == RightToLeft.Yes)
                     {
@@ -734,11 +734,11 @@ namespace System.Windows.Forms
 
                 case User32.WM.SIZE:
                     // Fixes the scrollbar focus rect
-                    if (User32.GetFocus() == Handle)
+                    if (PInvoke.GetFocus() == HWND)
                     {
                         DefWndProc(ref m);
-                        User32.SendMessageW(this, User32.WM.KILLFOCUS);
-                        User32.SendMessageW(this, User32.WM.SETFOCUS);
+                        PInvoke.SendMessage(this, User32.WM.KILLFOCUS);
+                        PInvoke.SendMessage(this, User32.WM.SETFOCUS);
                     }
 
                     break;

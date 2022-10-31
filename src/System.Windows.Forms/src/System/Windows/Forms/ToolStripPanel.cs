@@ -737,10 +737,7 @@ namespace System.Windows.Forms
 #endif
             FeedbackRectangle? oldFeedback = feedbackRect;
             feedbackRect = null;
-            if (oldFeedback is not null)
-            {
-                oldFeedback.Dispose();
-            }
+            oldFeedback?.Dispose();
         }
 
         private static FeedbackRectangle? CurrentFeedbackRect
@@ -1006,10 +1003,7 @@ namespace System.Windows.Forms
                 if (changedRow)
                 {
                     Debug.WriteLineIf(s_toolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tCalling JoinRow."));
-                    if (currentToolStripPanelRow is not null)
-                    {
-                        currentToolStripPanelRow.LeaveRow(toolStripToDrag);
-                    }
+                    currentToolStripPanelRow?.LeaveRow(toolStripToDrag);
 
                     row.JoinRow(toolStripToDrag, clientLocation);
                 }

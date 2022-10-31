@@ -223,16 +223,16 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                cp.Style &= ~(int)User32.WS.BORDER;
+                cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
                 if (!Application.RenderWithVisualStyles)
                 {
                     switch (_borderStyle)
                     {
                         case BorderStyle.Fixed3D:
-                            cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                            cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                             break;
                         case BorderStyle.FixedSingle:
-                            cp.Style |= (int)User32.WS.BORDER;
+                            cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                             break;
                     }
                 }
@@ -540,10 +540,10 @@ namespace System.Windows.Forms
                     clipBottom.Intersect(clipBounds);
 
                     using var hdc = new DeviceContextHdcScope(e);
-                    vsr.DrawBackground(hdc, bounds, clipLeft, HandleInternal);
-                    vsr.DrawBackground(hdc, bounds, clipTop, HandleInternal);
-                    vsr.DrawBackground(hdc, bounds, clipRight, HandleInternal);
-                    vsr.DrawBackground(hdc, bounds, clipBottom, HandleInternal);
+                    vsr.DrawBackground(hdc, bounds, clipLeft, HWNDInternal);
+                    vsr.DrawBackground(hdc, bounds, clipTop, HWNDInternal);
+                    vsr.DrawBackground(hdc, bounds, clipRight, HWNDInternal);
+                    vsr.DrawBackground(hdc, bounds, clipBottom, HWNDInternal);
 
                     // Draw a rectangle around edit control with the background color.
                     Rectangle backRect = editBounds;
@@ -551,7 +551,7 @@ namespace System.Windows.Forms
                     backRect.Y--;
                     backRect.Width += 2;
                     backRect.Height += 2;
-                    using var hpen = new Gdi32.CreatePenScope(backColor);
+                    using PInvoke.CreatePenScope hpen = new(backColor);
                     hdc.DrawRectangle(backRect, hpen);
                 }
             }
@@ -572,8 +572,8 @@ namespace System.Windows.Forms
 
                 backRect.Width++;
                 backRect.Height++;
-                using var hdc = new DeviceContextHdcScope(e);
-                using var hpen = new Gdi32.CreatePenScope(backColor, width);
+                using DeviceContextHdcScope hdc = new(e);
+                using PInvoke.CreatePenScope hpen = new(backColor, width);
                 hdc.DrawRectangle(backRect, hpen);
             }
 
@@ -695,8 +695,7 @@ namespace System.Windows.Forms
         {
             if (mevent.Button == MouseButtons.Left)
             {
-                Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
-                if (User32.WindowFromPoint(pt) == Handle && !ValidationCancelled)
+                if (PInvoke.WindowFromPoint(PointToScreen(mevent.Location)) == HWND && !ValidationCancelled)
                 {
                     if (!_doubleClickFired)
                     {
@@ -900,7 +899,8 @@ namespace System.Windows.Forms
         public void Select(int start, int length) => _upDownEdit.Select(start, length);
 
         /// <summary>
-        ///  Child controls run their
+        ///  Create a new <see cref="MouseEventArgs"/> with the points translated from the <paramref name="child"/>
+        ///  coordinates to this control's.
         /// </summary>
         private MouseEventArgs TranslateMouseEvent(Control child, MouseEventArgs e)
         {
@@ -908,7 +908,7 @@ namespace System.Windows.Forms
             {
                 // Same control as PointToClient or PointToScreen, just
                 // with two specific controls in mind.
-                var point = new Point(e.X, e.Y);
+                Point point = e.Location;
                 point = WindowsFormsUtils.TranslatePoint(point, child, this);
                 return new MouseEventArgs(e.Button, e.Clicks, point.X, point.Y, e.Delta);
             }
@@ -962,7 +962,7 @@ namespace System.Windows.Forms
                     {
                         if (TextBox.CanFocus)
                         {
-                            User32.SetFocus(new HandleRef(TextBox, TextBox.Handle));
+                            PInvoke.SetFocus(TextBox);
                         }
 
                         base.WndProc(ref m);

@@ -6,21 +6,22 @@ using System.Collections;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.System.Com;
 
 internal partial class Interop
 {
     /// <summary>
-    /// The ComWrappers implementation for System.Windows.Forms.Primitive's COM interop usages.
+    ///  The ComWrappers implementation for System.Windows.Forms.Primitive's COM interop usages.
     ///
-    /// Supports IStream COM interface.
+    ///  Supports IStream COM interface.
     /// </summary>
     internal unsafe partial class WinFormsComWrappers : ComWrappers
     {
-        private const int S_OK = (int)Interop.HRESULT.S_OK;
-        private static readonly ComInterfaceEntry* s_streamEntry = InitializeIStreamEntry();
-        private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeIFileDialogEventsEntry();
-        private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeIEnumStringEntry();
+        private const int S_OK = 0;
+        private static readonly ComInterfaceEntry* s_streamEntry = InitializeEntry<IStream, IStream.Vtbl>();
+        private static readonly ComInterfaceEntry* s_fileDialogEventsEntry = InitializeEntry<IFileDialogEvents, IFileDialogEvents.Vtbl>();
+        private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeEntry<IEnumString, IEnumString.Vtbl>();
         private static readonly ComInterfaceEntry* s_enumFormatEtcEntry = InitializeIEnumFORMATETCEntry();
         private static readonly ComInterfaceEntry* s_dropSourceEntry = InitializeIDropSourceEntry();
         private static readonly ComInterfaceEntry* s_dropTargetEntry = InitializeIDropTargetEntry();
@@ -30,39 +31,24 @@ internal partial class Interop
 
         private WinFormsComWrappers() { }
 
-        private static ComInterfaceEntry* InitializeIStreamEntry()
+        private static ComInterfaceEntry* InitializeEntry<TComInterface, TVTable>()
+            where TComInterface : unmanaged, IPopulateVTable<TVTable>, INativeGuid
+            where TVTable : unmanaged
         {
-            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+            TVTable* vtable = (TVTable*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(TComInterface), sizeof(TVTable));
 
-            IntPtr iStreamVtbl = IStreamVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+            IUnknown.Vtbl* unknown = (IUnknown.Vtbl*)vtable;
+
+            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+            unknown->QueryInterface_1 = (delegate* unmanaged[Stdcall]<IUnknown*, Guid*, void**, HRESULT>)fpQueryInterface;
+            unknown->AddRef_2 = (delegate* unmanaged[Stdcall]<IUnknown*, uint>)fpAddRef;
+            unknown->Release_3 = (delegate* unmanaged[Stdcall]<IUnknown*, uint>)fpRelease;
+
+            TComInterface.PopulateVTable(vtable);
 
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = IID.IStream;
-            wrapperEntry->Vtable = iStreamVtbl;
-            return wrapperEntry;
-        }
-
-        private static ComInterfaceEntry* InitializeIFileDialogEventsEntry()
-        {
-            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
-
-            IntPtr iFileDialogEventsVtbl = IFileDialogEventsVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
-
-            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = IID.IFileDialogEvents;
-            wrapperEntry->Vtable = iFileDialogEventsVtbl;
-            return wrapperEntry;
-        }
-
-        private static ComInterfaceEntry* InitializeIEnumStringEntry()
-        {
-            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
-
-            IntPtr iEnumStringVtbl = IEnumStringVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
-
-            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = IID.IEnumString;
-            wrapperEntry->Vtable = iEnumStringVtbl;
+            wrapperEntry->IID = *TComInterface.NativeGuid;
+            wrapperEntry->Vtable = (nint)(void*)vtable;
             return wrapperEntry;
         }
 
@@ -117,15 +103,58 @@ internal partial class Interop
             return wrapperEntry;
         }
 
+        internal static bool IsSupportedObject(object obj)
+        {
+            int count = 0;
+
+            if (obj is IStream.Interface)
+            {
+                count++;
+            }
+
+            if (obj is IFileDialogEvents.Interface)
+            {
+                count++;
+            }
+
+            if (obj is Ole32.IDropSource)
+            {
+                count++;
+            }
+
+            if (obj is Ole32.IDropTarget)
+            {
+                count++;
+            }
+
+            if (obj is IEnumString.Interface)
+            {
+                count++;
+            }
+
+            if (obj is ComTypes.IEnumFORMATETC)
+            {
+                count++;
+            }
+
+            if (obj is ComTypes.IDataObject)
+            {
+                count++;
+            }
+
+            Debug.Assert(count < 2);
+            return count == 1;
+        }
+
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
-            if (obj is Interop.Ole32.IStream)
+            if (obj is IStream.Interface)
             {
                 count = 1;
                 return s_streamEntry;
             }
 
-            if (obj is Interop.Shell32.IFileDialogEvents)
+            if (obj is IFileDialogEvents.Interface)
             {
                 count = 1;
                 return s_fileDialogEventsEntry;
@@ -137,25 +166,25 @@ internal partial class Interop
                 return s_dropSourceEntry;
             }
 
-            if (obj is Interop.Ole32.IDropTarget)
+            if (obj is Ole32.IDropTarget)
             {
                 count = 1;
                 return s_dropTargetEntry;
             }
 
-            if (obj is IEnumString)
+            if (obj is IEnumString.Interface)
             {
                 count = 1;
                 return s_enumStringEntry;
             }
 
-            if (obj is IEnumFORMATETC)
+            if (obj is ComTypes.IEnumFORMATETC)
             {
                 count = 1;
                 return s_enumFormatEtcEntry;
             }
 
-            if (obj is IDataObject)
+            if (obj is ComTypes.IDataObject)
             {
                 count = 1;
                 return s_dataObjectEntry;
@@ -166,18 +195,12 @@ internal partial class Interop
 
         protected override object CreateObject(IntPtr externalComObject, CreateObjectFlags flags)
         {
-            Debug.Assert(flags == CreateObjectFlags.UniqueInstance || flags == CreateObjectFlags.None || flags == CreateObjectFlags.Unwrap);
-
-            Guid pictureIID = IID.IPicture;
-            int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr pictureComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new PictureWrapper(pictureComObject);
-            }
+            Debug.Assert(flags == CreateObjectFlags.UniqueInstance
+                || flags == CreateObjectFlags.None
+                || flags == CreateObjectFlags.Unwrap);
 
             Guid errorInfoIID = IID.IErrorInfo;
-            hr = Marshal.QueryInterface(externalComObject, ref errorInfoIID, out IntPtr errorInfoComObject);
+            int hr = Marshal.QueryInterface(externalComObject, ref errorInfoIID, out IntPtr errorInfoComObject);
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);
@@ -192,52 +215,12 @@ internal partial class Interop
                 return new EnumFORMATETCWrapper(enumFormatEtcComObject);
             }
 
-            Guid fileOpenDialogIID = IID.IFileOpenDialog;
-            hr = Marshal.QueryInterface(externalComObject, ref fileOpenDialogIID, out IntPtr fileOpenDialogComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new FileOpenDialogWrapper(fileOpenDialogComObject);
-            }
-
-            Guid fileSaveDialogIID = IID.IFileSaveDialog;
-            hr = Marshal.QueryInterface(externalComObject, ref fileSaveDialogIID, out IntPtr fileSaveDialogComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new FileSaveDialogWrapper(fileSaveDialogComObject);
-            }
-
             Guid lockBytesIID = IID.ILockBytes;
             hr = Marshal.QueryInterface(externalComObject, ref lockBytesIID, out IntPtr lockBytesComObject);
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);
                 return new LockBytesWrapper(lockBytesComObject);
-            }
-
-            Guid shellItemIID = IID.IShellItem;
-            hr = Marshal.QueryInterface(externalComObject, ref shellItemIID, out IntPtr shellItemComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new ShellItemWrapper(shellItemComObject);
-            }
-
-            Guid shellItemArrayIID = IID.IShellItemArray;
-            hr = Marshal.QueryInterface(externalComObject, ref shellItemArrayIID, out IntPtr shellItemArrayComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new ShellItemArrayWrapper(shellItemArrayComObject);
-            }
-
-            Guid autoCompleteIID = IID.IAutoComplete2;
-            hr = Marshal.QueryInterface(externalComObject, ref autoCompleteIID, out IntPtr autoCompleteComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new AutoCompleteWrapper(autoCompleteComObject);
             }
 
             Guid enumVariantIID = IID.IEnumVariant;
@@ -256,38 +239,28 @@ internal partial class Interop
             throw new NotImplementedException();
         }
 
-        internal IntPtr GetComPointer<T>(T obj, Guid iid) where T : class
+        /// <summary>
+        ///  For the given <paramref name="this"/> pointer unwrap the associated managed object and use it to
+        ///  invoke <paramref name="func"/>.
+        /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   Handles exceptions and converts to <see cref="HRESULT"/>.
+        ///  </para>
+        /// </remarks>
+        internal static HRESULT UnwrapAndInvoke<TThis, TInterface>(TThis* @this, Func<TInterface, HRESULT> func)
+            where TThis : unmanaged
+            where TInterface : class
         {
-            TryGetComPointer(obj, iid, out var comPtr).ThrowIfFailed();
-            return comPtr;
-        }
-
-        internal HRESULT TryGetComPointer<T>(T? obj, Guid iid, out IntPtr comPtr) where T : class
-        {
-            if (obj is null)
+            try
             {
-                comPtr = IntPtr.Zero;
-                return HRESULT.S_OK;
+                TInterface? @object = ComInterfaceDispatch.GetInstance<TInterface>((ComInterfaceDispatch*)@this);
+                return @object is null ? HRESULT.COR_E_OBJECTDISPOSED : func(@object);
             }
-
-            IntPtr pobj_local;
-            IntPtr pUnk_local = GetOrCreateComInterfaceForObject(obj);
-            Guid local_IID = iid;
-            HRESULT result = (HRESULT)Marshal.QueryInterface(pUnk_local, ref local_IID, out pobj_local);
-            Marshal.Release(pUnk_local);
-            comPtr = pobj_local;
-            return result;
-        }
-
-        private IntPtr GetOrCreateComInterfaceForObject(object obj)
-        {
-            return obj switch
+            catch (Exception ex)
             {
-                ShellItemWrapper siw => siw.Instance,
-                FileOpenDialogWrapper fodw => fodw.Instance,
-                FileSaveDialogWrapper fsdw => fsdw.Instance,
-                _ => GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None),
-            };
+                return ex;
+            }
         }
     }
 }

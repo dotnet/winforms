@@ -258,15 +258,13 @@ namespace TestConsole
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-            if (null != isurf)
-                isurf.GetUndoEngineExt().Undo();
+            isurf?.GetUndoEngineExt().Undo();
         }
 
         private void redoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-            if (null != isurf)
-                isurf.GetUndoEngineExt().Redo();
+            isurf?.GetUndoEngineExt().Redo();
         }
 
         private void OnAbout(object sender, EventArgs e)
@@ -278,8 +276,7 @@ namespace TestConsole
         {
             //- find out the DesignSurfaceExt control hosted by the TabPage
             IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-            if (null != isurf)
-                isurf.SwitchTabOrder();
+            isurf?.SwitchTabOrder();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -300,8 +297,7 @@ namespace TestConsole
         private void OnMenuClick(object sender, EventArgs e)
         {
             IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-            if (null != isurf)
-                isurf.DoAction((sender as ToolStripMenuItem).Text);
+            isurf?.DoAction((sender as ToolStripMenuItem).Text);
         }
     }
 }

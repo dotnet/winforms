@@ -19,9 +19,19 @@ namespace System.Windows.Forms
                 _owningListView = owningListView;
             }
 
-            internal override Rectangle BoundingRectangle => _owningListView.IsHandleCreated
-                ? User32.GetWindowRect(_owningListView)
-                : Rectangle.Empty;
+            internal override Rectangle BoundingRectangle
+            {
+                get
+                {
+                    if (_owningListView.IsHandleCreated)
+                    {
+                        PInvoke.GetWindowRect(_owningListView, out var rect);
+                        return rect;
+                    }
+
+                    return Rectangle.Empty;
+                }
+            }
 
             internal override bool CanSelectMultiple
                 => _owningListView.IsHandleCreated;
@@ -307,7 +317,8 @@ namespace System.Windows.Forms
                     {
                         return _owningListView.View switch
                         {
-                            View.Details => hitTestInfo.SubItem.AccessibilityObject,
+                            View.Details => ((ListViewItem.ListViewItemDetailsAccessibleObject)hitTestInfo.Item.AccessibilityObject)
+                                .GetChild(hitTestInfo.SubItem.Index, point),
 
                             // Only additional ListViewSubItem are displayed in the accessibility tree if the ListView
                             // in the "Tile" view (the first ListViewSubItem is responsible for the ListViewItem)

@@ -177,8 +177,8 @@ namespace System.Windows.Forms
 
             internal void ResetListItemAccessibleObjects()
             {
-                if (OsVersion.IsWindows8OrGreater)
-                { 
+                if (OsVersion.IsWindows8OrGreater())
+                {
                     foreach (ListBoxItemAccessibleObject itemAccessibleObject in _itemAccessibleObjects.Values)
                     {
                         UiaCore.UiaDisconnectProvider(itemAccessibleObject);
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (OsVersion.IsWindows8OrGreater)
+                if (OsVersion.IsWindows8OrGreater())
                 {
                     UiaCore.UiaDisconnectProvider(_itemAccessibleObjects[item]);
                 }

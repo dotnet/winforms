@@ -8,12 +8,11 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class TabControlTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -1015,7 +1014,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new TabControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETIMAGELIST));
         }
 
         [WinFormsFact]
@@ -1027,7 +1026,7 @@ namespace System.Windows.Forms.Tests
                 ImageList = imageList
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((nint)imageList.Handle, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST));
+            Assert.Equal((nint)imageList.Handle, (nint)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETIMAGELIST));
         }
 
         [WinFormsFact]
@@ -1035,7 +1034,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new TabControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETITEMCOUNT));
         }
 
         [WinFormsTheory]
@@ -1057,34 +1056,34 @@ namespace System.Windows.Forms.Tests
             control.TabPages.Add(page2);
             control.TabPages.Add(page3);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(3, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT));
+            Assert.Equal(3, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETITEMCOUNT));
 
             char* buffer = stackalloc char[256];
             ComCtl32.TCITEMW item = default;
             item.cchTextMax = int.MaxValue;
             item.pszText = buffer;
-            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
-            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+            item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
+            item.mask = (TCITEMHEADERA_MASK)uint.MaxValue;
 
             // Get item 0.
-            Assert.Equal(1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 0, ref item));
-            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETITEMW, 0, ref item));
+            Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
             Assert.Equal(-1, item.iImage);
 
             // Get item 1.
-            Assert.Equal(1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 1, ref item));
-            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETITEMW, 1, ref item));
+            Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal(expectedText, new string(item.pszText));
             Assert.Equal(1, item.iImage);
 
             // Get item 2.
-            Assert.Equal(1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 2, ref item));
-            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETITEMW, 2, ref item));
+            Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
@@ -1302,11 +1301,11 @@ namespace System.Windows.Forms.Tests
             using var imageList = new ImageList();
             control.ImageList = imageList;
             Assert.True(imageList.HandleCreated);
-            Assert.Equal((nint)imageList.Handle, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST));
+            Assert.Equal((nint)imageList.Handle, (nint)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETIMAGELIST));
 
             // Set null.
             control.ImageList = null;
-            Assert.Equal(0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETIMAGELIST));
         }
 
         [WinFormsFact]
@@ -1423,7 +1422,7 @@ namespace System.Windows.Forms.Tests
             imageList1.ImageSize = new Size(1, 2);
             Assert.Equal(1, recreateCallCount1);
             Assert.Same(imageList1, control.ImageList);
-            Assert.Equal((nint)imageList1.Handle, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST));
+            Assert.Equal((nint)imageList1.Handle, (nint)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETIMAGELIST));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1434,7 +1433,7 @@ namespace System.Windows.Forms.Tests
             imageList1.ImageSize = new Size(2, 3);
             Assert.Equal(2, recreateCallCount1);
             Assert.Same(imageList2, control.ImageList);
-            Assert.Equal((nint)imageList2.Handle, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST));
+            Assert.Equal((nint)imageList2.Handle, (nint)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETIMAGELIST));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -3737,9 +3736,9 @@ namespace System.Windows.Forms.Tests
         {
             public RECT GetItemRectResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
-                if (m.Msg == (int)ComCtl32.TCM.GETITEMRECT)
+                if (m.Msg == (int)PInvoke.TCM_GETITEMRECT)
                 {
                     RECT* pRect = (RECT*)m.LParam;
                     *pRect = GetItemRectResult;
@@ -3767,9 +3766,9 @@ namespace System.Windows.Forms.Tests
         {
             public bool MakeInvalid { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
-                if (MakeInvalid && m.Msg == (int)ComCtl32.TCM.GETITEMRECT)
+                if (MakeInvalid && m.Msg == (int)PInvoke.TCM_GETITEMRECT)
                 {
                     RECT* pRect = (RECT*)m.LParam;
                     *pRect = new RECT(1, 2, 3, 4);
@@ -4924,34 +4923,34 @@ namespace System.Windows.Forms.Tests
             control.TabPages.Add(page3);
 
             control.RecreateHandle();
-            Assert.Equal(3, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT));
+            Assert.Equal(3, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETITEMCOUNT));
 
             char* buffer = stackalloc char[256];
             ComCtl32.TCITEMW item = default;
             item.cchTextMax = int.MaxValue;
             item.pszText = buffer;
-            item.dwStateMask = (ComCtl32.TCIS)uint.MaxValue;
-            item.mask = (ComCtl32.TCIF)uint.MaxValue;
+            item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
+            item.mask = (TCITEMHEADERA_MASK)uint.MaxValue;
 
             // Get item 0.
-            Assert.Equal(1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 0, ref item));
-            Assert.Equal(ComCtl32.TCIS.BUTTONPRESSED, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETITEMW, 0, ref item));
+            Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
             Assert.Equal(-1, item.iImage);
 
             // Get item 1.
-            Assert.Equal(1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 1, ref item));
-            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETITEMW, 1, ref item));
+            Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Equal(expectedText, new string(item.pszText));
             Assert.Equal(1, item.iImage);
 
             // Get item 2.
-            Assert.Equal(1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMW, 2, ref item));
-            Assert.Equal((ComCtl32.TCIS)0, item.dwState);
+            Assert.Equal(1, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETITEMW, 2, ref item));
+            Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
             Assert.Equal(IntPtr.Zero, item.lParam);
             Assert.Equal(int.MaxValue, item.cchTextMax);
             Assert.Empty(new string(item.pszText));
@@ -5181,7 +5180,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.RemoveAll();
-            Assert.Equal(0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETITEMCOUNT));
+            Assert.Equal(0, (int)PInvoke.SendMessage(control, (User32.WM)PInvoke.TCM_GETITEMCOUNT));
         }
 
         [WinFormsFact]

@@ -151,10 +151,8 @@ namespace System.Windows.Forms
 
                 toolStripPanel.BeginInit();
                 // get the associated toolstrips for this panel
-                if (toolStripPanelDestinationHash.ContainsKey(toolStripPanelName))
+                if (toolStripPanelDestinationHash.TryGetValue(toolStripPanelName, out List<SettingsStub>? stubSettings))
                 {
-                    List<SettingsStub> stubSettings = toolStripPanelDestinationHash[toolStripPanelName];
-
                     if (stubSettings is not null)
                     {
                         foreach (SettingsStub settings in stubSettings)
@@ -197,9 +195,9 @@ namespace System.Windows.Forms
                         if (match.Success)
                         {
                             string key = match.Value;
-                            if (!string.IsNullOrEmpty(key) && itemLocationHash.ContainsKey(key))
+                            if (!string.IsNullOrEmpty(key) && itemLocationHash.TryGetValue(key, out ToolStrip? value))
                             {
-                                toolStrip.Items.Insert(i, itemLocationHash[key].Items[key]);
+                                toolStrip.Items.Insert(i, value.Items[key]);
                             }
                         }
                     }

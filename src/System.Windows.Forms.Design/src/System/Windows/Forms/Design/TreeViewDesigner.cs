@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Design
         {
             point = Control.PointToClient(point);
             _tvhit.pt = point;
-            User32.SendMessageW(Control, (User32.WM)ComCtl32.TVM.HITTEST, 0, ref _tvhit);
+            PInvoke.SendMessage(Control, (User32.WM)PInvoke.TVM_HITTEST, 0, ref _tvhit);
             return _tvhit.flags == ComCtl32.TVHT.ONITEMBUTTON;
         }
 

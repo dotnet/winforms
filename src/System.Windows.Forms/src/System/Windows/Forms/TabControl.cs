@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -188,7 +187,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        public new event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -204,7 +203,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -220,7 +219,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -259,7 +258,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -276,74 +275,74 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_TABCONTROL;
+                cp.ClassName = PInvoke.WC_TABCONTROL;
 
                 // set up window styles
                 //
-                if (Multiline == true)
+                if (Multiline)
                 {
-                    cp.Style |= (int)ComCtl32.TCS.MULTILINE;
+                    cp.Style |= (int)PInvoke.TCS_MULTILINE;
                 }
 
                 if (_drawMode == TabDrawMode.OwnerDrawFixed)
                 {
-                    cp.Style |= (int)ComCtl32.TCS.OWNERDRAWFIXED;
+                    cp.Style |= (int)PInvoke.TCS_OWNERDRAWFIXED;
                 }
 
                 if (ShowToolTips && !DesignMode)
                 {
-                    cp.Style |= (int)ComCtl32.TCS.TOOLTIPS;
+                    cp.Style |= (int)PInvoke.TCS_TOOLTIPS;
                 }
 
                 if (_alignment == TabAlignment.Bottom ||
                     _alignment == TabAlignment.Right)
                 {
-                    cp.Style |= (int)ComCtl32.TCS.BOTTOM;
+                    cp.Style |= (int)PInvoke.TCS_BOTTOM;
                 }
 
                 if (_alignment == TabAlignment.Left ||
                     _alignment == TabAlignment.Right)
                 {
-                    cp.Style |= (int)ComCtl32.TCS.VERTICAL | (int)ComCtl32.TCS.MULTILINE;
+                    cp.Style |= (int)PInvoke.TCS_VERTICAL | (int)PInvoke.TCS_MULTILINE;
                 }
 
                 if (GetState(State.HotTrack))
                 {
-                    cp.Style |= (int)ComCtl32.TCS.HOTTRACK;
+                    cp.Style |= (int)PInvoke.TCS_HOTTRACK;
                 }
 
                 if (_appearance == TabAppearance.Normal)
                 {
-                    cp.Style |= (int)ComCtl32.TCS.TABS;
+                    cp.Style |= (int)PInvoke.TCS_TABS;
                 }
                 else
                 {
-                    cp.Style |= (int)ComCtl32.TCS.BUTTONS;
+                    cp.Style |= (int)PInvoke.TCS_BUTTONS;
                     if (_appearance == TabAppearance.FlatButtons && _alignment == TabAlignment.Top)
                     {
-                        cp.Style |= (int)ComCtl32.TCS.FLATBUTTONS;
+                        cp.Style |= (int)PInvoke.TCS_FLATBUTTONS;
                     }
                 }
 
                 switch (_sizeMode)
                 {
                     case TabSizeMode.Normal:
-                        cp.Style |= (int)ComCtl32.TCS.RAGGEDRIGHT;
+                        cp.Style |= (int)PInvoke.TCS_RAGGEDRIGHT;
                         break;
                     case TabSizeMode.FillToRight:
-                        cp.Style |= (int)ComCtl32.TCS.RIGHTJUSTIFY;
+                        cp.Style |= (int)PInvoke.TCS_RIGHTJUSTIFY;
                         break;
                     case TabSizeMode.Fixed:
-                        cp.Style |= (int)ComCtl32.TCS.FIXEDWIDTH;
+                        cp.Style |= (int)PInvoke.TCS_FIXEDWIDTH;
                         break;
                 }
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for Form explicitly.
-                    cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
+                    cp.ExStyle |= (int)(WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT);
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -383,7 +382,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.ADJUSTRECT, 0, ref rect);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_ADJUSTRECT, 0, ref rect);
                     }
                 }
 
@@ -477,7 +476,7 @@ namespace System.Windows.Forms
                     IntPtr handle = (value is not null) ? value.Handle : IntPtr.Zero;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, 0, handle);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETIMAGELIST, 0, handle);
                     }
 
                     // Update the image list in the tab pages.
@@ -646,7 +645,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.TabBaseRowCountDescr))]
         public int RowCount
-            => (int)User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETROWCOUNT);
+            => (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_GETROWCOUNT);
 
         /// <summary>
         ///  The index of the currently selected tab in the strip, if there
@@ -660,7 +659,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.selectedIndexDescr))]
         public int SelectedIndex
         {
-            get => IsHandleCreated ? (int)User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETCURSEL) : _selectedIndex;
+            get => IsHandleCreated ? (int)PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_GETCURSEL) : _selectedIndex;
             set
             {
                 if (value < -1)
@@ -691,7 +690,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, value);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETCURSEL, (WPARAM)value);
 
                         if (!GetState(State.FromCreateHandles) && !GetState(State.SelectFirstControl))
                         {
@@ -838,7 +837,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -937,7 +936,7 @@ namespace System.Windows.Forms
 
         private int AddNativeTabPage(TabPage tabPage)
         {
-            int index = SendMessage(ComCtl32.TCM.INSERTITEMW, _tabPageCount + 1, tabPage);
+            int index = SendMessage(PInvoke.TCM_INSERTITEMW, _tabPageCount + 1, tabPage);
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
             return index;
         }
@@ -946,7 +945,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && ShouldSerializeItemSize())
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETITEMSIZE, 0, PARAM.FromLowHigh(_itemSize.Width, _itemSize.Height));
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETITEMSIZE, 0, PARAM.FromLowHigh(_itemSize.Width, _itemSize.Height));
             }
 
             _cachedDisplayRect = Rectangle.Empty;
@@ -973,7 +972,7 @@ namespace System.Windows.Forms
                 {
                     var icc = new ComCtl32.INITCOMMONCONTROLSEX
                     {
-                        dwICC = ComCtl32.ICC.TAB_CLASSES
+                        dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
                     };
                     ComCtl32.InitCommonControlsEx(ref icc);
                 }
@@ -1130,7 +1129,7 @@ namespace System.Windows.Forms
             }
 
             SetState(State.GetTabRectfromItemSize, false);
-            RECT rect = new RECT();
+            RECT rect = default(RECT);
 
             // normally, we would not want to create the handle for this, but since
             // it is dependent on the actual physical display, we simply must.
@@ -1139,7 +1138,7 @@ namespace System.Windows.Forms
                 CreateHandle();
             }
 
-            User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETITEMRECT, index, ref rect);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_GETITEMRECT, (WPARAM)index, ref rect);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
@@ -1159,7 +1158,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, 0, ImageList.Handle);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETIMAGELIST, 0, ImageList.Handle);
             }
         }
 
@@ -1203,7 +1202,7 @@ namespace System.Windows.Forms
 
             ArgumentNullException.ThrowIfNull(tabPage);
 
-            index = IsHandleCreated ? SendMessage(ComCtl32.TCM.INSERTITEMW, index, tabPage) : index;
+            index = IsHandleCreated ? SendMessage(PInvoke.TCM_INSERTITEMW, index, tabPage) : index;
             if (index >= 0)
             {
                 Insert(index, tabPage);
@@ -1282,7 +1281,7 @@ namespace System.Windows.Forms
             // horizontal and vertical dimensions of the padding rectangle.
             if (!_padding.IsEmpty)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETPADDING, 0, PARAM.FromPoint(_padding));
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETPADDING, 0, PARAM.FromPoint(_padding));
             }
 
             base.OnHandleCreated(e);
@@ -1290,19 +1289,19 @@ namespace System.Windows.Forms
             ApplyItemSize();
             if (_imageList is not null)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, 0, _imageList.Handle);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETIMAGELIST, 0, _imageList.Handle);
             }
 
             if (ShowToolTips)
             {
-                IntPtr tooltipHwnd;
-                tooltipHwnd = User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETTOOLTIPS);
-                if (tooltipHwnd != IntPtr.Zero)
+                HWND tooltipHwnd = (HWND)PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_GETTOOLTIPS);
+                if (!tooltipHwnd.IsNull)
                 {
-                    User32.SetWindowPos(
-                        new HandleRef(this, tooltipHwnd),
-                        User32.HWND_TOPMOST,
-                        flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
+                    PInvoke.SetWindowPos(
+                        this,
+                        HWND.HWND_TOPMOST,
+                        0, 0, 0, 0,
+                        SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
                 }
             }
 
@@ -1342,9 +1341,7 @@ namespace System.Windows.Forms
                 _selectedIndex = SelectedIndex;
             }
 
-            //Remove the Handle from NativeWindow....
-
-            // Don't try to remove the Handle if we've already done so
+            // Remove the handle from NativeWindow.
             if (_handleInTable)
             {
                 _handleInTable = false;
@@ -1383,10 +1380,7 @@ namespace System.Windows.Forms
         protected override void OnEnter(EventArgs e)
         {
             base.OnEnter(e);
-            if (SelectedTab is not null)
-            {
-                SelectedTab.FireEnter(e);
-            }
+            SelectedTab?.FireEnter(e);
         }
 
         /// <summary>
@@ -1405,10 +1399,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnLeave(EventArgs e)
         {
-            if (SelectedTab is not null)
-            {
-                SelectedTab.FireLeave(e);
-            }
+            SelectedTab?.FireLeave(e);
 
             base.OnLeave(e);
         }
@@ -1519,10 +1510,7 @@ namespace System.Windows.Forms
             ((TabControlEventHandler)Events[s_selectedEvent])?.Invoke(this, e);
 
             // Raise the enter event for this tab.
-            if (SelectedTab is not null)
-            {
-                SelectedTab.FireEnter(EventArgs.Empty);
-            }
+            SelectedTab?.FireEnter(EventArgs.Empty);
         }
 
         /// <summary>
@@ -1598,7 +1586,7 @@ namespace System.Windows.Forms
             // So, no RemoveAll()
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.DELETEALLITEMS);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_DELETEALLITEMS);
             }
 
             this._tabPages = null;
@@ -1633,7 +1621,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, ((User32.WM)TCM.DELETEALLITEMS));
+                PInvoke.SendMessage(this, ((User32.WM)PInvoke.TCM_DELETEALLITEMS));
             }
 
             _tabPages = null;
@@ -1656,7 +1644,7 @@ namespace System.Windows.Forms
             _tabPages[_tabPageCount] = null;
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.DELETEITEM, index);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_DELETEITEM, (WPARAM)index);
             }
 
             _cachedDisplayRect = Rectangle.Empty;
@@ -1692,7 +1680,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETTOOLTIPS, toolTip.Handle);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETTOOLTIPS, (WPARAM)toolTip.Handle);
             GC.KeepAlive(toolTip);
             _controlTipText = toolTip.GetToolTip(this);
         }
@@ -1708,13 +1696,13 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                SendMessage(ComCtl32.TCM.SETITEMW, index, value);
+                SendMessage(PInvoke.TCM_SETITEMW, index, value);
             }
 
             // Make the Updated tab page the currently selected tab page
             if (DesignMode && IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, index, 0);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETCURSEL, (WPARAM)index);
             }
 
             _tabPages[index] = value;
@@ -1919,10 +1907,7 @@ namespace System.Windows.Forms
                                             c = (IContainerControl)c.ActiveControl;
                                         }
 
-                                        if (c.ActiveControl is not null)
-                                        {
-                                            c.ActiveControl.Focus();
-                                        }
+                                        c.ActiveControl?.Focus();
                                     }
                                 }
                             }
@@ -1976,7 +1961,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmNeedText(ref Message m)
         {
-            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m.LParamInternal;
+            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)(nint)m.LParamInternal;
 
             int commandID = (int)ttt->hdr.idFrom;
 
@@ -1993,13 +1978,13 @@ namespace System.Windows.Forms
             // RightToLeft reading order
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt->uFlags |= TTF.RTLREADING;
+                ttt->uFlags |= TOOLTIP_FLAGS.TTF_RTLREADING;
             }
         }
 
         private unsafe void WmReflectDrawItem(ref Message m)
         {
-            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParamInternal;
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
             using var e = new DrawItemEventArgs(
                 dis->hDC,
@@ -2010,7 +1995,7 @@ namespace System.Windows.Forms
 
             OnDrawItem(e);
 
-            m.ResultInternal = 1;
+            m.ResultInternal = (LRESULT)1;
         }
 
         private bool WmSelChange()
@@ -2031,7 +2016,7 @@ namespace System.Windows.Forms
             else
             {
                 // user Cancelled the Selection of the new Tab.
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, _lastSelection);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_SETCURSEL, (WPARAM)_lastSelection);
                 UpdateTabSelection(true);
             }
 
@@ -2077,8 +2062,8 @@ namespace System.Windows.Forms
             Invalidate(true);
 
             // Remove other TabBaseReLayout messages from the message queue
-            var msg = new User32.MSG();
-            while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage, User32.PM.REMOVE).IsTrue())
+            var msg = default(MSG);
+            while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage, User32.PM.REMOVE))
             {
                 // No-op.
             }
@@ -2089,7 +2074,7 @@ namespace System.Windows.Forms
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the tab continues to function properly.
         /// </summary>
-        protected unsafe override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch (m.MsgInternal)
             {
@@ -2103,8 +2088,8 @@ namespace System.Windows.Forms
 
                 case User32.WM.NOTIFY:
                 case User32.WM.REFLECT_NOTIFY:
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
-                    switch (nmhdr->code)
+                    NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+                    switch ((int)nmhdr->code)
                     {
                         // new switch added to prevent the TabControl from changing to next TabPage ...
                         //in case of validation cancelled...
@@ -2115,14 +2100,14 @@ namespace System.Windows.Forms
                         case (int)TCN.SELCHANGING:
                             if (WmSelChanging())
                             {
-                                m.ResultInternal = 1;
+                                m.ResultInternal = (LRESULT)1;
                                 SetState(State.UISelection, false);
                                 return;
                             }
 
                             if (ValidationCancelled)
                             {
-                                m.ResultInternal = 1;
+                                m.ResultInternal = (LRESULT)1;
                                 SetState(State.UISelection, false);
                                 return;
                             }
@@ -2135,7 +2120,7 @@ namespace System.Windows.Forms
                         case (int)TCN.SELCHANGE:
                             if (WmSelChange())
                             {
-                                m.ResultInternal = 1;
+                                m.ResultInternal = (LRESULT)1;
                                 SetState(State.UISelection, false);
                                 return;
                             }
@@ -2147,9 +2132,9 @@ namespace System.Windows.Forms
                             break;
                         case (int)TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling Multiline tool tips
-                            User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                            PInvoke.SendMessage(nmhdr->hwndFrom, (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
-                            m.ResultInternal = 1;
+                            m.ResultInternal = (LRESULT)1;
                             return;
                     }
 
@@ -2169,25 +2154,25 @@ namespace System.Windows.Forms
 
         private void SetState(State state, bool value) => _tabControlState[(int)state] = value;
 
-        private unsafe int SendMessage(ComCtl32.TCM msg, int wParam, TabPage tabPage)
+        private unsafe int SendMessage(uint msg, int wParam, TabPage tabPage)
         {
-            var tcitem = new ComCtl32.TCITEMW();
+            var tcitem = default(ComCtl32.TCITEMW);
             string text = tabPage.Text;
             PrefixAmpersands(ref text);
             if (text is not null)
             {
-                tcitem.mask |= ComCtl32.TCIF.TEXT;
+                tcitem.mask |= TCITEMHEADERA_MASK.TCIF_TEXT;
                 tcitem.cchTextMax = text.Length;
             }
 
             int imageIndex = tabPage.ImageIndex;
-            tcitem.mask |= ComCtl32.TCIF.IMAGE;
+            tcitem.mask |= TCITEMHEADERA_MASK.TCIF_IMAGE;
             tcitem.iImage = tabPage.ImageIndexer.ActualIndex;
 
             fixed (char* pText = text)
             {
                 tcitem.pszText = pText;
-                return (int)User32.SendMessageW(this, (User32.WM)msg, wParam, ref tcitem);
+                return (int)PInvoke.SendMessage(this, (User32.WM)msg, (WPARAM)wParam, ref tcitem);
             }
         }
 

@@ -28,7 +28,7 @@ namespace System.Windows.Forms
 
         private void InstallWinEventHooks()
         {
-            if (UiaCore.UiaClientsAreListening().IsFalse())
+            if (!UiaCore.UiaClientsAreListening())
             {
                 return;
             }
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                 UiaCore.UiaReturnRawElementProvider(Handle, wParam: 0, lParam: 0, el: null);
             }
 
-            if (OsVersion.IsWindows8OrGreater)
+            if (OsVersion.IsWindows8OrGreater())
             {
                 UiaCore.UiaDisconnectProvider(_accessibilityObject);
             }
@@ -130,7 +130,7 @@ namespace System.Windows.Forms
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                m.ResultInternal = UiaCore.UiaReturnRawElementProvider(
+                m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
                     this,
                     m.WParamInternal,
                     m.LParamInternal,
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    m.ResultInternal = Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, new HandleRef(this, pUnknown));
+                    m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, new HandleRef(this, pUnknown));
                 }
                 finally
                 {

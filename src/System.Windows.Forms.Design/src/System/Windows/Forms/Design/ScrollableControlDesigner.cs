@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Design
             ScrollableControl f = (ScrollableControl)Control;
             if (f.IsHandleCreated && f.AutoScroll)
             {
-                int hitTest = (int)User32.SendMessageW(f.Handle, User32.WM.NCHITTEST, 0, PARAM.FromLowHigh(pt.X, pt.Y));
+                int hitTest = (int)PInvoke.SendMessage(f, User32.WM.NCHITTEST, 0, PARAM.FromLowHigh(pt.X, pt.Y));
                 if (hitTest == (int)User32.HT.VSCROLL || hitTest == (int)User32.HT.HSCROLL)
                 {
                     return true;
@@ -57,15 +57,9 @@ namespace System.Windows.Forms.Design
                     // When we scroll, we reposition a control without causing a
                     // property change event.  Therefore, we must tell the
                     // SelectionManager to refresh its glyphs.
-                    if (selManager == null)
-                    {
-                        selManager = GetService(typeof(SelectionManager)) as SelectionManager;
-                    }
+                    selManager ??= GetService(typeof(SelectionManager)) as SelectionManager;
 
-                    if (selManager != null)
-                    {
-                        selManager.Refresh();
-                    }
+                    selManager?.Refresh();
 
                     // Now we must paint our adornments, since the scroll does not
                     // trigger a paint event

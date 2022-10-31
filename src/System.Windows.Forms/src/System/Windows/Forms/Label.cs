@@ -143,10 +143,7 @@ namespace System.Windows.Forms
 
                     if (value)
                     {
-                        if (_textToolTip is null)
-                        {
-                            _textToolTip = new ToolTip();
-                        }
+                        _textToolTip ??= new ToolTip();
                     }
 
                     if (ParentInternal is not null)
@@ -246,7 +243,7 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_STATIC;
+                cp.ClassName = PInvoke.WC_STATIC;
 
                 if (OwnerDraw)
                 {
@@ -257,7 +254,7 @@ namespace System.Windows.Forms
 
                     // Since we're owner draw, I don't see any point in setting the
                     // SS_CENTER/SS_RIGHT styles.
-                    cp.ExStyle &= ~(int)User32.WS_EX.RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
+                    cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_RIGHT;   // WS_EX_RIGHT overrides the SS_XXXX alignment styles
                 }
 
                 if (!OwnerDraw)
@@ -289,7 +286,7 @@ namespace System.Windows.Forms
                 switch (BorderStyle)
                 {
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)User32.WS.BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                     case BorderStyle.Fixed3D:
                         cp.Style |= (int)User32.SS.SUNKEN;
@@ -669,7 +666,7 @@ namespace System.Windows.Forms
         ///  the container control background is rendered on the <see cref="Label"/>.
         /// </summary>
         [Obsolete("This property has been deprecated. Use BackColor instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
-        virtual new protected bool RenderTransparent
+        protected new virtual bool RenderTransparent
         {
             get => ((Control)this).RenderTransparent;
             set { }
@@ -824,14 +821,14 @@ namespace System.Windows.Forms
                 // Set windowStyle directly instead of recreating handle to increase efficiency.
                 if (IsHandleCreated)
                 {
-                    User32.WS style = WindowStyle;
+                    WINDOW_STYLE style = WindowStyle;
                     if (!UseMnemonic)
                     {
-                        style |= (User32.WS)User32.SS.NOPREFIX;
+                        style |= (WINDOW_STYLE)User32.SS.NOPREFIX;
                     }
                     else
                     {
-                        style &= ~(User32.WS)User32.SS.NOPREFIX;
+                        style &= ~(WINDOW_STYLE)User32.SS.NOPREFIX;
                     }
 
                     WindowStyle = style;
@@ -1401,7 +1398,7 @@ namespace System.Windows.Forms
             Animate();
         }
 
-        private protected override void PrintToMetaFileRecursive(Gdi32.HDC hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(HDC hDC, IntPtr lParam, Rectangle bounds)
         {
             base.PrintToMetaFileRecursive(hDC, lParam, bounds);
 
@@ -1506,7 +1503,7 @@ namespace System.Windows.Forms
 
                     Rectangle rectInScreen = RectangleToScreen(new Rectangle(0, 0, Width, Height));
                     Point pt = new Point((int)m.LParamInternal);
-                    m.ResultInternal = (nint)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
+                    m.ResultInternal = (LRESULT)(nint)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
                     break;
 
                 default:

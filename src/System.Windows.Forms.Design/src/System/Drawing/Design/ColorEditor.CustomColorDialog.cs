@@ -58,75 +58,83 @@ namespace System.Drawing.Design
                 }
             }
 
-            protected unsafe override IntPtr HookProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
+            protected override unsafe IntPtr HookProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
             {
                 switch ((User32.WM)msg)
                 {
                     case User32.WM.INITDIALOG:
-                        User32.SendDlgItemMessageW(
-                            hwnd,
-                            (User32.DialogItemID)Comdlg32.COLOR.HUE,
-                            (User32.WM)User32.EM.SETMARGINS,
-                            (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN));
-                        User32.SendDlgItemMessageW(
-                            hwnd,
-                            (User32.DialogItemID)Comdlg32.COLOR.SAT,
-                            (User32.WM)User32.EM.SETMARGINS,
-                            (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN));
-                        User32.SendDlgItemMessageW(
-                            hwnd,
-                            (User32.DialogItemID)Comdlg32.COLOR.LUM,
-                            (User32.WM)User32.EM.SETMARGINS,
-                            (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN));
-                        User32.SendDlgItemMessageW(
-                            hwnd,
-                            (User32.DialogItemID)Comdlg32.COLOR.RED,
-                            (User32.WM)User32.EM.SETMARGINS,
-                            (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN));
-                        User32.SendDlgItemMessageW(
-                            hwnd,
-                            (User32.DialogItemID)Comdlg32.COLOR.GREEN,
-                            (User32.WM)User32.EM.SETMARGINS,
-                            (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN));
-                        User32.SendDlgItemMessageW(
-                            hwnd,
-                            (User32.DialogItemID)Comdlg32.COLOR.BLUE,
-                            (User32.WM)User32.EM.SETMARGINS,
-                            (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN));
-                        IntPtr hwndCtl = User32.GetDlgItem(hwnd, (User32.DialogItemID)Comdlg32.COLOR.MIX);
-                        User32.EnableWindow(hwndCtl, BOOL.FALSE);
-                        User32.SetWindowPos(
+                        PInvoke.SendDlgItemMessage(
+                            (HWND)hwnd,
+                            (int)PInvoke.COLOR_HUE,
+                            PInvoke.EM_SETMARGINS,
+                            (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN),
+                            0);
+                        PInvoke.SendDlgItemMessage(
+                            (HWND)hwnd,
+                            (int)PInvoke.COLOR_SAT,
+                            PInvoke.EM_SETMARGINS,
+                            (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN),
+                            0);
+                        PInvoke.SendDlgItemMessage(
+                            (HWND)hwnd,
+                            (int)PInvoke.COLOR_LUM,
+                            PInvoke.EM_SETMARGINS,
+                            (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN),
+                            0);
+                        PInvoke.SendDlgItemMessage(
+                            (HWND)hwnd,
+                            (int)PInvoke.COLOR_RED,
+                            PInvoke.EM_SETMARGINS,
+                            (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN),
+                            0);
+                        PInvoke.SendDlgItemMessage(
+                            (HWND)hwnd,
+                            (int)PInvoke.COLOR_GREEN,
+                            PInvoke.EM_SETMARGINS,
+                            (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN),
+                            0);
+                        PInvoke.SendDlgItemMessage(
+                            (HWND)hwnd,
+                            (int)PInvoke.COLOR_BLUE,
+                            PInvoke.EM_SETMARGINS,
+                            (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN),
+                            0);
+                        HWND hwndCtl = PInvoke.GetDlgItem((HWND)hwnd, (int)PInvoke.COLOR_MIX);
+                        PInvoke.EnableWindow(hwndCtl, false);
+                        PInvoke.SetWindowPos(
                             hwndCtl,
-                            User32.HWND_TOP,
-                            flags: User32.SWP.HIDEWINDOW);
-                        hwndCtl = User32.GetDlgItem(hwnd, (User32.DialogItemID)User32.ID.OK);
-                        User32.EnableWindow(hwndCtl, BOOL.FALSE);
-                        User32.SetWindowPos(
+                            HWND.HWND_TOP,
+                            0, 0, 0, 0,
+                            SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW);
+                        hwndCtl = PInvoke.GetDlgItem((HWND)hwnd, (int)User32.ID.OK);
+                        PInvoke.EnableWindow(hwndCtl, false);
+                        PInvoke.SetWindowPos(
                             hwndCtl,
-                            User32.HWND_TOP,
-                            flags: User32.SWP.HIDEWINDOW);
+                            HWND.HWND_TOP,
+                            0, 0, 0, 0,
+                            SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW);
                         Color = Color.Empty;
                         break;
 
                     case User32.WM.COMMAND:
-                        if (PARAM.LOWORD(wParam) == (int)Comdlg32.COLOR.ADD)
+                        if (PARAM.LOWORD(wParam) == (int)PInvoke.COLOR_ADD)
                         {
-                            BOOL success = BOOL.FALSE;
-                            byte red = (byte)User32.GetDlgItemInt(hwnd, (int)Comdlg32.COLOR.RED, &success, BOOL.FALSE);
-                            Debug.Assert(success.IsFalse(), "Couldn't find dialog member COLOR_RED");
+                            BOOL success = false;
+                            byte red = (byte)PInvoke.GetDlgItemInt((HWND)hwnd, (int)PInvoke.COLOR_RED, &success, false);
+                            Debug.Assert(!success, "Couldn't find dialog member COLOR_RED");
 
-                            byte green = (byte)User32.GetDlgItemInt(hwnd, (int)Comdlg32.COLOR.GREEN, &success, BOOL.FALSE);
-                            Debug.Assert(success.IsFalse(), "Couldn't find dialog member COLOR_GREEN");
+                            byte green = (byte)PInvoke.GetDlgItemInt((HWND)hwnd, (int)PInvoke.COLOR_GREEN, &success, false);
+                            Debug.Assert(!success, "Couldn't find dialog member COLOR_GREEN");
 
-                            byte blue = (byte)User32.GetDlgItemInt(hwnd, (int)Comdlg32.COLOR.BLUE, &success, BOOL.FALSE);
-                            Debug.Assert(success.IsFalse(), "Couldn't find dialog member COLOR_BLUE");
+                            byte blue = (byte)PInvoke.GetDlgItemInt((HWND)hwnd, (int)PInvoke.COLOR_BLUE, &success, false);
+                            Debug.Assert(!success, "Couldn't find dialog member COLOR_BLUE");
 
                             Color = Color.FromArgb(red, green, blue);
                             User32.PostMessageW(
                                 hwnd,
                                 User32.WM.COMMAND,
                                 PARAM.FromLowHigh((int)User32.ID.OK, 0),
-                                User32.GetDlgItem(hwnd, (User32.DialogItemID)User32.ID.OK));
+                                PInvoke.GetDlgItem((HWND)hwnd, (int)User32.ID.OK));
                             break;
                         }
 

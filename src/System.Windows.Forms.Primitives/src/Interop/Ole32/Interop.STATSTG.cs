@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.System.Com;
 
 internal static partial class Interop
 {

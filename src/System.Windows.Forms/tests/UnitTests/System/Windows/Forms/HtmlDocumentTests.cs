@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms.Tests
@@ -2148,7 +2147,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        private async static Task<HtmlDocument> GetDocument(WebBrowser control, string html)
+        private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
         {
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);

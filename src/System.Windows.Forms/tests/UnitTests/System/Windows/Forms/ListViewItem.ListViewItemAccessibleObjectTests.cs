@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Tests
                     foreach (bool virtualMode in new[] { true, false })
                     {
                         // View.Tile is not supported by ListView in virtual mode
-                        if (view == View.Tile)
+                        if (view == View.Tile && virtualMode)
                         {
                             continue;
                         }
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Tests
                 foreach (bool virtualMode in new[] { true, false })
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (view == View.Tile)
+                    if (view == View.Tile && virtualMode)
                     {
                         continue;
                     }
@@ -735,7 +735,7 @@ namespace System.Windows.Forms.Tests
                 foreach (View view in Enum.GetValues(typeof(View)))
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (virtualMode == true && View.Tile == view)
+                    if (virtualMode && View.Tile == view)
                     {
                         continue;
                     }
@@ -1604,6 +1604,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, accessibleObject.GetChildIndex(accessibleObject.GetDetailsSubItemOrFake(1)));
             Assert.Equal(2, accessibleObject.GetChildIndex(accessibleObject.GetDetailsSubItemOrFake(2)));
             Assert.Equal(3, accessibleObject.GetChildIndex(accessibleObject.GetDetailsSubItemOrFake(3)));
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ListViewItemAccessibleObject_GetChildIndex_ReturnsExpected_Image(bool hasImage, int expectedFirstSubItemIndex)
+        {
+            using ImageList imageCollection = new();
+            imageCollection.Images.Add(Form.DefaultIcon);
+            using ListView listView = new()
+            {
+                View = View.Details,
+                SmallImageList = imageCollection
+            };
+            listView.Columns.Add(new ColumnHeader());
+            var listViewItem = new ListViewItem("Item 1", imageIndex: hasImage ? 0 : -1);
+            listView.Items.Add(listViewItem);
+            var accessibleObject = (ListViewItemDetailsAccessibleObject)listView.Items[0].AccessibilityObject;
+            
+            Assert.Equal(expectedFirstSubItemIndex, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
             Assert.False(listView.IsHandleCreated);
         }
 

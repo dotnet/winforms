@@ -755,7 +755,7 @@ Namespace Microsoft.VisualBasic.Devices
     ''' Temporary class used to provide WebClient with a timeout property.
     ''' </summary>
     ''' <remarks>This class will be deleted when Timeout is added to WebClient</remarks>
-    Friend Class WebClientExtended
+    Friend NotInheritable Class WebClientExtended
         Inherits WebClient
 
         ''' <summary>

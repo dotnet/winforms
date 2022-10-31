@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -34,7 +33,8 @@ namespace System.Windows.Forms
             }
         }
 
-        public ToolStripProgressBar(string name) : this()
+        public ToolStripProgressBar(string? name)
+            : this()
         {
             Name = name;
         }
@@ -49,14 +49,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Control as ProgressBar;
+                return (ProgressBar)Control;
             }
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -209,6 +209,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public override string Text
         {
             get
@@ -250,7 +251,7 @@ namespace System.Windows.Forms
             return progressBar;
         }
 
-        private void HandleRightToLeftLayoutChanged(object sender, EventArgs e)
+        private void HandleRightToLeftLayoutChanged(object? sender, EventArgs e)
         {
             OnRightToLeftLayoutChanged(e);
         }
@@ -259,27 +260,25 @@ namespace System.Windows.Forms
         {
 #pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
             RaiseEvent(EventRightToLeftLayoutChanged, e);
-#pragma warning restore CA2252 
+#pragma warning restore CA2252
         }
 
-        protected override void OnSubscribeControlEvents(Control control)
+        protected override void OnSubscribeControlEvents(Control? control)
         {
             if (control is ProgressBar bar)
             {
-                // Please keep this alphabetized and in sync with Unsubscribe
-                //
+                // Please keep this alphabetized and in sync with Unsubscribe.
                 bar.RightToLeftLayoutChanged += new EventHandler(HandleRightToLeftLayoutChanged);
             }
 
             base.OnSubscribeControlEvents(control);
         }
 
-        protected override void OnUnsubscribeControlEvents(Control control)
+        protected override void OnUnsubscribeControlEvents(Control? control)
         {
             if (control is ProgressBar bar)
             {
-                // Please keep this alphabetized and in sync with Subscribe
-                //
+                // Please keep this alphabetized and in sync with Subscribe.
                 bar.RightToLeftLayoutChanged -= new EventHandler(HandleRightToLeftLayoutChanged);
             }
 
@@ -291,7 +290,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event KeyEventHandler KeyDown
+        public new event KeyEventHandler? KeyDown
         {
             add => base.KeyDown += value;
             remove => base.KeyDown -= value;
@@ -302,7 +301,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler? KeyPress
         {
             add => base.KeyPress += value;
             remove => base.KeyPress -= value;
@@ -313,7 +312,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event KeyEventHandler KeyUp
+        public new event KeyEventHandler? KeyUp
         {
             add => base.KeyUp += value;
             remove => base.KeyUp -= value;
@@ -324,7 +323,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler LocationChanged
+        public new event EventHandler? LocationChanged
         {
             add => base.LocationChanged += value;
             remove => base.LocationChanged -= value;
@@ -335,7 +334,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler OwnerChanged
+        public new event EventHandler? OwnerChanged
         {
             add => base.OwnerChanged += value;
             remove => base.OwnerChanged -= value;
@@ -343,7 +342,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler RightToLeftLayoutChanged
+        public event EventHandler? RightToLeftLayoutChanged
         {
             add => Events.AddHandler(EventRightToLeftLayoutChanged, value);
             remove => Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
@@ -354,7 +353,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -365,7 +364,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler Validated
+        public new event EventHandler? Validated
         {
             add => base.Validated += value;
             remove => base.Validated -= value;
@@ -376,7 +375,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event CancelEventHandler Validating
+        public new event CancelEventHandler? Validating
         {
             add => base.Validating += value;
             remove => base.Validating -= value;

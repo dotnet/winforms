@@ -10,4 +10,3 @@ namespace System.ComponentModel.Design
     /// </summary>
     public delegate void MenuCommandsChangedEventHandler(object sender, MenuCommandsChangedEventArgs e);
 }
-

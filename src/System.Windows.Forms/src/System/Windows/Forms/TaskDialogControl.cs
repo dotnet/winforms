@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -58,7 +56,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsCreated { get; private set; }
 
-        internal ComCtl32.TDF Bind(TaskDialogPage page)
+        internal TASKDIALOG_FLAGS Bind(TaskDialogPage page)
         {
             BoundPage = page.OrThrowIfNull();
 
@@ -103,7 +101,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <returns></returns>
-        private protected virtual ComCtl32.TDF BindCore() => default;
+        private protected virtual TASKDIALOG_FLAGS BindCore() => default;
 
         /// <summary>
         ///

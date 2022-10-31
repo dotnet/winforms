@@ -53,10 +53,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_converter is null)
-                    {
-                        _converter = new EventConverter(Event);
-                    }
+                    _converter ??= new EventConverter(Event);
 
                     return _converter;
                 }
@@ -156,7 +153,7 @@ namespace System.ComponentModel.Design
 
                 if (value is not null and not string)
                 {
-                    throw new ArgumentException(string.Format(SR.EventBindingServiceBadArgType, Name, typeof(string).Name))
+                    throw new ArgumentException(string.Format(SR.EventBindingServiceBadArgType, Name, nameof(String)))
                     {
                         HelpLink = SR.EventBindingServiceBadArgType
                     };
@@ -199,7 +196,7 @@ namespace System.ComponentModel.Design
                 // The dictionary service is where we store the actual event method name.
                 if (!site.TryGetService(out IDictionaryService dictionaryService))
                 {
-                    throw new InvalidOperationException(string.Format(SR.EventBindingServiceMissingService, typeof(IDictionaryService).Name))
+                    throw new InvalidOperationException(string.Format(SR.EventBindingServiceMissingService, nameof(IDictionaryService)))
                     {
                         HelpLink = SR.EventBindingServiceMissingService
                     };

@@ -39,7 +39,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetLocalizedPropertyInfo(
                 Ole32.DispatchID dispid,
-                Kernel32.LCID localeID,
+                PInvoke.LCID localeID,
                 [Out, MarshalAs(UnmanagedType.LPArray)] string[]? pbstrLocalizedName,
                 [Out, MarshalAs(UnmanagedType.LPArray)] string[]? pbstrLocalizeDescription);
 
@@ -68,7 +68,7 @@ internal partial class Interop
             /// </summary>
             [PreserveSig]
             HRESULT GetClassName(
-                ref string pbstrClassName);
+                ref string? pbstrClassName);
 
             /// <summary>
             ///  Checks whether the given property can be reset to some default value.

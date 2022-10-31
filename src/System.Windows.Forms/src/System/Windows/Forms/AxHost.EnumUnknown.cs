@@ -2,14 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Runtime.InteropServices;
-using static Interop;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
 {
     public abstract partial class AxHost
     {
-        internal class EnumUnknown : Ole32.IEnumUnknown
+        internal class EnumUnknown : IEnumUnknown.Interface
         {
             private readonly object[]? _array;
             private int _location;
@@ -27,8 +28,13 @@ namespace System.Windows.Forms
                 _location = location;
             }
 
-            unsafe HRESULT Ole32.IEnumUnknown.Next(uint celt, IntPtr rgelt, uint* pceltFetched)
+            unsafe HRESULT IEnumUnknown.Interface.Next(uint celt, IUnknown** rgelt, uint* pceltFetched)
             {
+                if (rgelt is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
                 if (pceltFetched is not null)
                 {
                     *pceltFetched = 0;
@@ -50,8 +56,7 @@ namespace System.Windows.Forms
                     {
                         if (_array![_location] is not null)
                         {
-                            Marshal.WriteIntPtr(rgelt, Marshal.GetIUnknownForObject(_array[_location]));
-                            rgelt = (IntPtr)((long)rgelt + sizeof(IntPtr));
+                            *rgelt = (IUnknown*)Marshal.GetIUnknownForObject(_array[_location]);
                             ++fetched;
                         }
                     }
@@ -70,7 +75,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            HRESULT Ole32.IEnumUnknown.Skip(uint celt)
+            HRESULT IEnumUnknown.Interface.Skip(uint celt)
             {
                 _location += (int)celt;
                 if (_location >= _size)
@@ -81,15 +86,21 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            HRESULT Ole32.IEnumUnknown.Reset()
+            HRESULT IEnumUnknown.Interface.Reset()
             {
                 _location = 0;
                 return HRESULT.S_OK;
             }
 
-            HRESULT Ole32.IEnumUnknown.Clone(out Ole32.IEnumUnknown ppenum)
+            unsafe HRESULT IEnumUnknown.Interface.Clone(IEnumUnknown** ppenum)
             {
-                ppenum = new EnumUnknown(_array, _location);
+                if (ppenum is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                bool result = ComHelpers.TryGetComPointer(new EnumUnknown(_array, _location), out *ppenum);
+                Debug.Assert(result);
                 return HRESULT.S_OK;
             }
         }

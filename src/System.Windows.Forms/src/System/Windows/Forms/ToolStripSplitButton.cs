@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,10 +14,10 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(ButtonClick))]
     public partial class ToolStripSplitButton : ToolStripDropDownItem
     {
-        private ToolStripItem _defaultItem;
-        private ToolStripSplitButtonButton _splitButtonButton;
+        private ToolStripItem? _defaultItem;
+        private ToolStripSplitButtonButton? _splitButtonButton;
         private Rectangle _dropDownButtonBounds = Rectangle.Empty;
-        private ToolStripSplitButtonButtonLayout _splitButtonButtonLayout;
+        private ToolStripSplitButtonButtonLayout? _splitButtonButtonLayout;
         private int _dropDownButtonWidth;
         private int _splitterWidth = 1;
         private Rectangle _splitterBounds = Rectangle.Empty;
@@ -40,32 +38,38 @@ namespace System.Windows.Forms
             Initialize(); // all additional work should be done in Initialize
         }
 
-        public ToolStripSplitButton(string text) : base(text, null, (EventHandler)null)
+        public ToolStripSplitButton(string? text)
+            : base(text, image: null, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripSplitButton(Image image) : base(null, image, (EventHandler)null)
+        public ToolStripSplitButton(Image? image)
+            : base(text: null, image, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripSplitButton(string text, Image image) : base(text, image, (EventHandler)null)
+        public ToolStripSplitButton(string? text, Image? image)
+            : base(text, image, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripSplitButton(string text, Image image, EventHandler onClick) : base(text, image, onClick)
+        public ToolStripSplitButton(string? text, Image? image, EventHandler? onClick)
+            : base(text, image, onClick)
         {
             Initialize();
         }
 
-        public ToolStripSplitButton(string text, Image image, EventHandler onClick, string name) : base(text, image, onClick, name)
+        public ToolStripSplitButton(string? text, Image? image, EventHandler? onClick, string? name)
+            : base(text, image, onClick, name)
         {
             Initialize();
         }
 
-        public ToolStripSplitButton(string text, Image image, params ToolStripItem[] dropDownItems) : base(text, image, dropDownItems)
+        public ToolStripSplitButton(string? text, Image? image, params ToolStripItem[]? dropDownItems)
+            : base(text, image, dropDownItems)
         {
             Initialize();
         }
@@ -111,7 +115,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ToolStripSplitButtonOnButtonClickDescr))]
-        public event EventHandler ButtonClick
+        public event EventHandler? ButtonClick
         {
             add => Events.AddHandler(s_eventButtonClick, value);
             remove => Events.RemoveHandler(s_eventButtonClick, value);
@@ -122,7 +126,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ToolStripSplitButtonOnButtonDoubleClickDescr))]
-        public event EventHandler ButtonDoubleClick
+        public event EventHandler? ButtonDoubleClick
         {
             add => Events.AddHandler(s_eventButtonDoubleClick, value);
             remove => Events.RemoveHandler(s_eventButtonDoubleClick, value);
@@ -138,7 +142,7 @@ namespace System.Windows.Forms
 
         [DefaultValue(null)]
         [Browsable(false)]
-        public ToolStripItem DefaultItem
+        public ToolStripItem? DefaultItem
         {
             get
             {
@@ -159,7 +163,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ToolStripSplitButtonOnDefaultItemChangedDescr))]
-        public event EventHandler DefaultItemChanged
+        public event EventHandler? DefaultItemChanged
         {
             add => Events.AddHandler(s_eventDefaultItemChanged, value);
             remove => Events.RemoveHandler(s_eventDefaultItemChanged, value);
@@ -168,7 +172,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  specifies the default behavior of these items on ToolStripDropDowns when clicked.
         /// </summary>
-        internal protected override bool DismissWhenClicked
+        protected internal override bool DismissWhenClicked
         {
             get
             {
@@ -266,10 +270,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_splitButtonButton is null)
-                {
-                    _splitButtonButton = new ToolStripSplitButtonButton(this);
-                }
+                _splitButtonButton ??= new ToolStripSplitButtonButton(this);
 
                 _splitButtonButton.Image = Image;
                 _splitButtonButton.Text = Text;
@@ -296,7 +297,7 @@ namespace System.Windows.Forms
                     _splitButtonButtonLayout = new ToolStripSplitButtonButtonLayout(this);
                 }
 
-                return _splitButtonButtonLayout;
+                return _splitButtonButtonLayout!;
             }
         }
 
@@ -383,7 +384,7 @@ namespace System.Windows.Forms
         protected override ToolStripDropDown CreateDefaultDropDown()
         {
             // AutoGenerate a ToolStrip DropDown - set the property so we hook events
-            return new ToolStripDropDownMenu(this, /*isAutoGenerated=*/true);
+            return new ToolStripDropDownMenu(this, isAutoGenerated: true);
         }
 
         private protected override ToolStripItemInternalLayout CreateInternalLayout()
@@ -437,7 +438,7 @@ namespace System.Windows.Forms
         protected virtual void OnButtonClick(EventArgs e)
         {
             DefaultItem?.FireEvent(ToolStripItemEventType.Click);
-            ((EventHandler)Events[s_eventButtonClick])?.Invoke(this, e);
+            ((EventHandler?)Events[s_eventButtonClick])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -447,7 +448,7 @@ namespace System.Windows.Forms
         public virtual void OnButtonDoubleClick(EventArgs e)
         {
             DefaultItem?.FireEvent(ToolStripItemEventType.DoubleClick);
-            ((EventHandler)Events[s_eventButtonDoubleClick])?.Invoke(this, e);
+            ((EventHandler?)Events[s_eventButtonDoubleClick])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -475,7 +476,7 @@ namespace System.Windows.Forms
                     {
                         Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
                         _openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
-                        ShowDropDown(/*mousePress = */true);
+                        ShowDropDown(mousePush: true);
                     }
                 }
             }

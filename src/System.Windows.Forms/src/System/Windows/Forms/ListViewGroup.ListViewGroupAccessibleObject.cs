@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Drawing;
 using static System.Windows.Forms.ListView;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -36,7 +35,7 @@ namespace System.Windows.Forms
             }
 
             private protected override string AutomationId
-                => string.Format("{0}-{1}", typeof(ListViewGroup).Name, CurrentIndex);
+                => $"{nameof(ListViewGroup)}-{CurrentIndex}";
 
             public override Rectangle Bounds
             {
@@ -53,17 +52,17 @@ namespace System.Windows.Forms
                         return Rectangle.Empty;
                     }
 
-                    LVGGR rectType = _owningGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
-                        ? LVGGR.HEADER
-                        : LVGGR.GROUP;
+                    uint rectType = _owningGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
+                        ? PInvoke.LVGGR_HEADER
+                        : PInvoke.LVGGR_GROUP;
 
                     // Get the native rectangle
-                    RECT groupRect = new();
+                    RECT groupRect = default(RECT);
 
                     // Using the "top" property, we set which rectangle type of the group we want to get
                     // This is described in more detail in https://docs.microsoft.com/windows/win32/controls/lvm-getgrouprect
                     groupRect.top = (int)rectType;
-                    User32.SendMessageW(_owningListView, (User32.WM)LVM.GETGROUPRECT, nativeGroupId, ref groupRect);
+                    PInvoke.SendMessage(_owningListView, (User32.WM)PInvoke.LVM_GETGROUPRECT, (WPARAM)nativeGroupId, ref groupRect);
 
                     // Using the following code, we limit the size of the ListViewGroup rectangle
                     // so that it does not go beyond the rectangle of the ListView
@@ -165,12 +164,16 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                return LVGS.FOCUSED == (LVGS)User32.SendMessageW(_owningListView, (User32.WM)LVM.GETGROUPSTATE, nativeGroupId, (nint)LVGS.FOCUSED);
+                return LIST_VIEW_GROUP_STATE_FLAGS.LVGS_FOCUSED == (LIST_VIEW_GROUP_STATE_FLAGS)(uint)PInvoke.SendMessage(
+                    _owningListView,
+                    (User32.WM)PInvoke.LVM_GETGROUPSTATE,
+                    (WPARAM)nativeGroupId,
+                    (LPARAM)(uint)LIST_VIEW_GROUP_STATE_FLAGS.LVGS_FOCUSED);
             }
 
             private int GetNativeGroupId()
             {
-                if (User32.SendMessageW(_owningListView, (User32.WM)LVM.HASGROUP, _owningGroup.ID) == 0)
+                if (PInvoke.SendMessage(_owningListView, (User32.WM)PInvoke.LVM_HASGROUP, (WPARAM)_owningGroup.ID) == 0)
                 {
                     return -1;
                 }

@@ -24,9 +24,7 @@ namespace System.Windows.Forms
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new DataGridViewTextBoxEditingControlAccessibleObject(this);
-        }
+            => new DataGridViewTextBoxEditingControlAccessibleObject(this);
 
         public virtual DataGridView? EditingControlDataGridView
         {
@@ -237,15 +235,6 @@ namespace System.Windows.Forms
             _dataGridView?.NotifyCurrentCellDirty(true);
         }
 
-        protected override void OnGotFocus(EventArgs e)
-        {
-            base.OnGotFocus(e);
-            if (IsAccessibilityObjectCreated)
-            {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            }
-        }
-
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             // Forwarding to grid control. Can't prevent the TextBox from handling the mouse wheel as expected.
@@ -262,7 +251,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            switch ((Keys)m.WParamInternal)
+            switch ((Keys)(nint)m.WParamInternal)
             {
                 case Keys.Enter:
                     if (m.MsgInternal == User32.WM.CHAR

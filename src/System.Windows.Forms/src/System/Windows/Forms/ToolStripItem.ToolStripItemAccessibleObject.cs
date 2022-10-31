@@ -120,7 +120,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string name = _ownerItem.AccessibleName;
+                    string? name = _ownerItem.AccessibleName;
                     if (name is not null)
                     {
                         return name;
@@ -196,10 +196,7 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                if (Owner is not null)
-                {
-                    Owner.PerformClick();
-                }
+                Owner?.PerformClick();
             }
 
             public override int GetHelpTopic(out string? fileName)

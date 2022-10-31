@@ -11,10 +11,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents
-    ///  a common dialog box that displays a list of fonts that are currently installed
-    ///  on
-    ///  the system.
+    ///  Represents a common dialog box that displays a list of fonts that are currently installed on the system.
     /// </summary>
     [DefaultEvent(nameof(Apply))]
     [DefaultProperty(nameof(Font))]
@@ -35,8 +32,7 @@ namespace System.Windows.Forms
         private bool usingDefaultIndirectColor;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref="FontDialog"/>
-        ///  class.
+        ///  Initializes a new instance of the <see cref="FontDialog"/> class.
         /// </summary>
         public FontDialog()
         {
@@ -322,8 +318,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the user clicks the Apply button in the font
-        ///  dialog box.
+        ///  Occurs when the user clicks the Apply button in the font dialog box.
         /// </summary>
         [SRDescription(nameof(SR.FnDapplyDescr))]
         public event EventHandler? Apply
@@ -351,13 +346,13 @@ namespace System.Windows.Forms
                 case User32.WM.COMMAND:
                     if (PARAM.ToInt(wparam) == 0x402)
                     {
-                        var logFont = new User32.LOGFONTW();
-                        User32.SendMessageW(hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, 0, ref logFont);
+                        LOGFONTW logFont = default;
+                        PInvoke.SendMessage((HWND)hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
                         UpdateFont(ref logFont);
-                        int index = PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL));
-                        if (index != User32.CB_ERR)
+                        int index = (int)PInvoke.SendDlgItemMessage((HWND)hWnd, (int)PInvoke.cmb4, PInvoke.CB_GETCURSEL, 0, 0);
+                        if (index != PInvoke.CB_ERR)
                         {
-                            UpdateColor(PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETITEMDATA, (IntPtr)index)));
+                            UpdateColor((int)PInvoke.SendDlgItemMessage((HWND)hWnd, (int)PInvoke.cmb4, PInvoke.CB_GETITEMDATA, (WPARAM)index, 0));
                         }
 
                         if (NativeWindow.WndProcShouldBeDebuggable)
@@ -381,10 +376,10 @@ namespace System.Windows.Forms
                 case User32.WM.INITDIALOG:
                     if (!showColor)
                     {
-                        IntPtr hWndCtl = User32.GetDlgItem(hWnd, User32.DialogItemID.cmb4);
-                        User32.ShowWindow(hWndCtl, User32.SW.HIDE);
-                        hWndCtl = User32.GetDlgItem(hWnd, User32.DialogItemID.stc4);
-                        User32.ShowWindow(hWndCtl, User32.SW.HIDE);
+                        HWND hWndCtl = PInvoke.GetDlgItem((HWND)hWnd, (int)PInvoke.cmb4);
+                        PInvoke.ShowWindow(hWndCtl, SHOW_WINDOW_CMD.SW_HIDE);
+                        hWndCtl = PInvoke.GetDlgItem((HWND)hWnd, (int)PInvoke.stc4);
+                        PInvoke.ShowWindow(hWndCtl, SHOW_WINDOW_CMD.SW_HIDE);
                     }
 
                     break;
@@ -426,12 +421,13 @@ namespace System.Windows.Forms
         ///  should override this if they want to add more functionality, and call
         ///  base.runDialog() if necessary
         /// </summary>
-        protected unsafe override bool RunDialog(IntPtr hWndOwner)
+        protected override unsafe bool RunDialog(IntPtr hWndOwner)
         {
-            var hookProcPtr = new User32.WNDPROCINT(HookProc);
+            WNDPROC hookProc = HookProcInternal;
+            void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
             using var dc = User32.GetDcScope.ScreenDC;
             using Graphics graphics = Graphics.FromHdcInternal(dc);
-            User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(Font, graphics);
+            LOGFONTW logFont = LOGFONTW.FromFont(Font, graphics);
 
             var cf = new Comdlg32.CHOOSEFONTW
             {
@@ -441,7 +437,7 @@ namespace System.Windows.Forms
                 lpLogFont = &logFont,
                 Flags = (Comdlg32.CF)Options | Comdlg32.CF.INITTOLOGFONTSTRUCT | Comdlg32.CF.ENABLEHOOK,
                 lpfnHook = hookProcPtr,
-                hInstance = Kernel32.GetModuleHandleW(null),
+                hInstance = PInvoke.GetModuleHandle((PCWSTR)null),
                 nSizeMin = minSize,
                 nSizeMax = maxSize == 0 ? int.MaxValue : maxSize,
                 rgbColors = ShowColor || ShowEffects
@@ -459,7 +455,7 @@ namespace System.Windows.Forms
             // (limitation of windows control)
 
             Debug.Assert(cf.nSizeMin <= cf.nSizeMax, "min and max font sizes are the wrong way around");
-            if (Comdlg32.ChooseFontW(ref cf).IsFalse())
+            if (!Comdlg32.ChooseFontW(ref cf))
             {
                 return false;
             }
@@ -469,6 +465,8 @@ namespace System.Windows.Forms
                 UpdateFont(ref logFont);
                 UpdateColor(cf.rgbColors);
             }
+
+            GC.KeepAlive(hookProc);
 
             return true;
         }
@@ -516,7 +514,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateFont(ref User32.LOGFONTW lf)
+        private void UpdateFont(ref LOGFONTW lf)
         {
             using var dc = User32.GetDcScope.ScreenDC;
             using Font fontInWorldUnits = Font.FromLogFont(lf, dc);

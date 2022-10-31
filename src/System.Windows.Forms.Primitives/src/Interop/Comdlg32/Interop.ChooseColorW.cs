@@ -9,18 +9,18 @@ internal partial class Interop
     internal partial class Comdlg32
     {
         [DllImport(Libraries.Comdlg32, ExactSpelling = true)]
-        public unsafe static extern BOOL ChooseColorW(ref CHOOSECOLORW lppsd);
+        public static extern unsafe BOOL ChooseColorW(ref CHOOSECOLORW lppsd);
 
         public unsafe struct CHOOSECOLORW
         {
             public uint lStructSize;
-            public IntPtr hwndOwner;
-            public IntPtr hInstance;
+            public HWND hwndOwner;
+            public HINSTANCE hInstance;
             public int rgbResult;
             public IntPtr lpCustColors;
             public CC Flags;
             public IntPtr lCustData;
-            public User32.WNDPROCINT lpfnHook;
+            public void* lpfnHook;
             public char* lpTemplateName;
         }
     }

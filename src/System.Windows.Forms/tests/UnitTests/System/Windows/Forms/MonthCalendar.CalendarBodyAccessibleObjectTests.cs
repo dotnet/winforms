@@ -6,7 +6,6 @@ using System.Drawing;
 using Xunit;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -38,16 +37,16 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)MCMV.MONTH, 7)]
-        [InlineData((int)MCMV.YEAR, 4)]
-        [InlineData((int)MCMV.DECADE, 4)]
-        [InlineData((int)MCMV.CENTURY, 4)]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH, 7)]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR, 4)]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE, 4)]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY, 4)]
         public void CalendarBodyAccessibleObject_ColumnCount_ReturnsExpected(int view, int expected)
         {
             using MonthCalendar control = new MonthCalendar();
 
             control.CreateControl();
-            User32.SendMessageW(control, (User32.WM)MCM.SETCURRENTVIEW, 0, view);
+            PInvoke.SendMessage(control, (User32.WM)PInvoke.MCM_SETCURRENTVIEW, 0, view);
             CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
             Assert.Equal(expected, accessibleObject.ColumnCount);
@@ -65,15 +64,15 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)MCMV.YEAR)]
-        [InlineData((int)MCMV.DECADE)]
-        [InlineData((int)MCMV.CENTURY)]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR)]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE)]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY)]
         public void CalendarBodyAccessibleObject_GetColumnHeaders_IsNull_IfViewIsNotMonth(int view)
         {
             using MonthCalendar control = new MonthCalendar();
 
             control.CreateControl();
-            User32.SendMessageW(control, (User32.WM)MCM.SETCURRENTVIEW, 0, view);
+            PInvoke.SendMessage(control, (User32.WM)PInvoke.MCM_SETCURRENTVIEW, 0, view);
             CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
             Assert.Null(accessibleObject.GetColumnHeaders());
@@ -115,22 +114,22 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)MCMV.MONTH, 0, "January 2021")]
-        [InlineData((int)MCMV.MONTH, 1, "February 2021")]
-        [InlineData((int)MCMV.MONTH, 2, "March 2021")]
-        [InlineData((int)MCMV.MONTH, 3, "April 2021")]
-        [InlineData((int)MCMV.YEAR, 0, "2021")]
-        [InlineData((int)MCMV.YEAR, 1, "2022")]
-        [InlineData((int)MCMV.YEAR, 2, "2023")]
-        [InlineData((int)MCMV.YEAR, 3, "2024")]
-        [InlineData((int)MCMV.DECADE, 0, "2020-2029")]
-        [InlineData((int)MCMV.DECADE, 1, "2030-2039")]
-        [InlineData((int)MCMV.DECADE, 2, "2040-2049")]
-        [InlineData((int)MCMV.DECADE, 3, "2050-2059")]
-        [InlineData((int)MCMV.CENTURY, 0, "2000-2099")]
-        [InlineData((int)MCMV.CENTURY, 1, "2100-2199")]
-        [InlineData((int)MCMV.CENTURY, 2, "2200-2299")]
-        [InlineData((int)MCMV.CENTURY, 3, "2300-2399")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH, 0, "January 2021")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH, 1, "February 2021")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH, 2, "March 2021")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH, 3, "April 2021")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR, 0, "2021")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR, 1, "2022")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR, 2, "2023")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_YEAR, 3, "2024")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE, 0, "2020-2029")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE, 1, "2030-2039")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE, 2, "2040-2049")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_DECADE, 3, "2050-2059")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY, 0, "2000-2099")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY, 1, "2100-2199")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY, 2, "2200-2299")]
+        [InlineData((int)MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_CENTURY, 3, "2300-2399")]
         public void CalendarBodyAccessibleObject_Name_IsExpected(int view, int calendarIndex, string expected)
         {
             using MonthCalendar control = new MonthCalendar();
@@ -139,7 +138,7 @@ namespace System.Windows.Forms.Tests
             control.SelectionStart = new DateTime(2021, 1, 1);
 
             control.CreateControl();
-            User32.SendMessageW(control, (User32.WM)MCM.SETCURRENTVIEW, 0, (nint)view);
+            PInvoke.SendMessage(control, (User32.WM)PInvoke.MCM_SETCURRENTVIEW, 0, (nint)view);
             MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             LinkedListNode<CalendarAccessibleObject> calendarNode = controlAccessibleObject.CalendarsAccessibleObjects.First;
 
@@ -185,6 +184,56 @@ namespace System.Windows.Forms.Tests
             CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
             Assert.Equal(AccessibleStates.Default, accessibleObject.State);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarBodyAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
+            CalendarBodyAccessibleObject calendarBody = new(calendar, controlAccessibleObject, 0);
+
+            Assert.Equal(calendar, calendarBody.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarBodyAccessibleObject_FragmentNavigate_NextSibling_ReturnsNull()
+        {
+            using MonthCalendar control = new();
+            CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control, 0);
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarBodyAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
+            CalendarBodyAccessibleObject calendarBody = new(calendar, controlAccessibleObject, 0);
+
+            AccessibleObject expected = calendar.CalendarHeaderAccessibleObject;
+
+            Assert.Equal(expected, calendarBody.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarBodyAccessibleObject_FragmentNavigate_Child_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control, 0);
+
+            AccessibleObject firstRow = accessibleObject.RowsAccessibleObjects?.First();
+            AccessibleObject lastRow = accessibleObject.RowsAccessibleObjects?.Last();
+
+            Assert.Equal(firstRow, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(lastRow, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
             Assert.False(control.IsHandleCreated);
         }
 

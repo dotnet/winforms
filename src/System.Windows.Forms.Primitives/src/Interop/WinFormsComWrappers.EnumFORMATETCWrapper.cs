@@ -63,7 +63,7 @@ internal partial class Interop
             {
                 IntPtr resultPtr;
                 ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 6)))
-                    (_wrappedInstance, &resultPtr).ThrowIfFailed();
+                    (_wrappedInstance, &resultPtr).ThrowOnFailure();
                 newEnum = (IEnumFORMATETC)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(resultPtr, CreateObjectFlags.Unwrap);
             }
         }

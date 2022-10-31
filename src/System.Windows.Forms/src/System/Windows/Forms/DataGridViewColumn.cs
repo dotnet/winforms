@@ -192,18 +192,12 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (value != _dataPropertyName)
                 {
                     _dataPropertyName = value;
-                    if (DataGridView is not null)
-                    {
-                        DataGridView.OnColumnDataPropertyNameChanged(this);
-                    }
+                    DataGridView?.OnColumnDataPropertyNameChanged(this);
                 }
             }
         }
@@ -812,10 +806,7 @@ namespace System.Windows.Forms
                         _flags = (byte)(_flags & ~ProgrammaticSort);
                     }
 
-                    if (DataGridView is not null)
-                    {
-                        DataGridView.OnColumnSortModeChanged(this);
-                    }
+                    DataGridView?.OnColumnSortModeChanged(this);
                 }
             }
         }
@@ -836,10 +827,7 @@ namespace System.Windows.Forms
                 {
                     HeaderCell.ToolTipText = value;
 
-                    if (DataGridView is not null)
-                    {
-                        DataGridView.OnColumnToolTipTextChanged(this);
-                    }
+                    DataGridView?.OnColumnToolTipTextChanged(this);
                 }
             }
         }

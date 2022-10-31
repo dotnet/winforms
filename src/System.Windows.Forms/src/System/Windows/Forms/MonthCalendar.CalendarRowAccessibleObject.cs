@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -53,7 +52,7 @@ namespace System.Windows.Forms
             }
 
             public override Rectangle Bounds
-                => _monthCalendarAccessibleObject.GetCalendarPartRectangle(MCGIP.CALENDARROW, _calendarIndex, _rowIndex);
+                => _monthCalendarAccessibleObject.GetCalendarPartRectangle(MCGRIDINFO_PART.MCGIP_CALENDARROW, _calendarIndex, _rowIndex);
 
             // Use a LinkedList instead a List for the following reasons:
             // 1. We don't require an access to items by indices.
@@ -76,11 +75,11 @@ namespace System.Windows.Forms
 
                         int start = 0;
                         // A calendar body always has 7 or 4 columns depending on its view
-                        int end = _monthCalendarAccessibleObject.CalendarView == MCMV.MONTH ? 7 : 4;
+                        int end = _monthCalendarAccessibleObject.CalendarView == MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH ? 7 : 4;
 
                         for (int i = start; i < end; i++)
                         {
-                            string name = _monthCalendarAccessibleObject.GetCalendarPartText(MCGIP.CALENDARCELL, _calendarIndex, _rowIndex, i);
+                            string name = _monthCalendarAccessibleObject.GetCalendarPartText(MCGRIDINFO_PART.MCGIP_CALENDARCELL, _calendarIndex, _rowIndex, i);
                             if (!string.IsNullOrEmpty(name))
                             {
                                 CalendarCellAccessibleObject cell =
@@ -96,11 +95,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal void ClearChildCollection() => _cellsAccessibleObjects = null;
-
             internal void DisconnectChildren()
             {
-                Debug.Assert(OsVersion.IsWindows8OrGreater);
+                Debug.Assert(OsVersion.IsWindows8OrGreater());
 
                 UiaCore.UiaDisconnectProvider(_weekNumberCellAccessibleObject);
                 _weekNumberCellAccessibleObject = null;
@@ -126,7 +123,7 @@ namespace System.Windows.Forms
                     // Only day and week number cells have a description
                     if (_rowIndex == -1
                         || _monthCalendarAccessibleObject.IsHandleCreated
-                        || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH)
+                        || _monthCalendarAccessibleObject.CalendarView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH)
                     {
                         return null;
                     }
@@ -215,7 +212,7 @@ namespace System.Windows.Forms
                 get
                 {
                     if (!_monthCalendarAccessibleObject.ShowWeekNumbers
-                        || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH
+                        || _monthCalendarAccessibleObject.CalendarView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH
                         || CellsAccessibleObjects?.First is null
                         || CellsAccessibleObjects.First.Value.DateRange is null)
                     {

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 
 internal partial class Interop
 {
@@ -17,7 +18,7 @@ internal partial class Interop
             HRESULT EnumControls(
                 OLECONTF dwOleContF,
                 GC_WCH dwWhich,
-                out IEnumUnknown ppenum);
+                out IEnumUnknown.Interface ppenum);
         }
     }
 }

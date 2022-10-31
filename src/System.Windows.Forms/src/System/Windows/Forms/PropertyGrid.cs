@@ -344,7 +344,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -360,7 +360,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -591,7 +591,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -606,7 +606,7 @@ namespace System.Windows.Forms
                 {
                     if (0 == _paintFrozen++)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                        PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                     }
                 }
 
@@ -619,7 +619,7 @@ namespace System.Windows.Forms
 
                     if (0 == --_paintFrozen)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                        PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                         Invalidate(true);
                     }
                 }
@@ -1186,7 +1186,7 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -3299,10 +3299,10 @@ namespace System.Windows.Forms
                     // If we're not hosted in a windows forms thing, just give the parent the focus.
                     if (!result && Parent is null)
                     {
-                        IntPtr hWndParent = User32.GetParent(this);
-                        if (hWndParent != IntPtr.Zero)
+                        HWND hWndParent = PInvoke.GetParent(this);
+                        if (!hWndParent.IsNull)
                         {
-                            User32.SetFocus(hWndParent);
+                            PInvoke.SetFocus(hWndParent);
                         }
                     }
 
@@ -4195,7 +4195,7 @@ namespace System.Windows.Forms
             _toolStripButtonPaddingY = LogicalToDeviceUnits(ToolStripButtonPaddingY);
         }
 
-        protected unsafe override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch (m.MsgInternal)
             {
@@ -4206,7 +4206,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        m.ResultInternal = CanUndo ? 1 : 0;
+                        m.ResultInternal = (LRESULT)(nint)(BOOL)CanUndo;
                     }
 
                     return;
@@ -4217,7 +4217,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        m.ResultInternal = CanCut ? 1 : 0;
+                        m.ResultInternal = (LRESULT)(nint)(BOOL)CanCut;
                     }
 
                     return;
@@ -4229,7 +4229,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        m.ResultInternal = CanCopy ? 1 : 0;
+                        m.ResultInternal = (LRESULT)(nint)(BOOL)CanCopy;
                     }
 
                     return;
@@ -4241,13 +4241,13 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        m.ResultInternal = CanPaste ? 1 : 0;
+                        m.ResultInternal = (LRESULT)(nint)(BOOL)CanPaste;
                     }
 
                     return;
 
                 case User32.WM.COPYDATA:
-                    var cds = (User32.COPYDATASTRUCT*)m.LParamInternal;
+                    var cds = (User32.COPYDATASTRUCT*)(nint)m.LParamInternal;
 
                     if (cds is not null && cds->lpData != IntPtr.Zero)
                     {
@@ -4255,12 +4255,12 @@ namespace System.Windows.Forms
                         _copyDataMessage = (int)cds->dwData;
                     }
 
-                    m.ResultInternal = 1;
+                    m.ResultInternal = (LRESULT)1;
                     return;
                 case (User32.WM)AutomationMessages.PGM_GETBUTTONCOUNT:
                     if (_toolStrip is not null)
                     {
-                        m.ResultInternal = _toolStrip.Items.Count;
+                        m.ResultInternal = (LRESULT)_toolStrip.Items.Count;
                         return;
                     }
 
@@ -4273,11 +4273,11 @@ namespace System.Windows.Forms
                         {
                             if (_toolStrip.Items[index] is ToolStripButton button)
                             {
-                                m.ResultInternal = button.Checked ? 1 : 0;
+                                m.ResultInternal = (LRESULT)(nint)(BOOL)button.Checked;
                             }
                             else
                             {
-                                m.ResultInternal = 0;
+                                m.ResultInternal = (LRESULT)0;
                             }
                         }
 
@@ -4336,7 +4336,7 @@ namespace System.Windows.Forms
                             }
 
                             // Write text into test file.
-                            m.ResultInternal = AutomationMessages.WriteAutomationText(text);
+                            m.ResultInternal = (LRESULT)AutomationMessages.WriteAutomationText(text);
                         }
 
                         return;
@@ -4348,24 +4348,24 @@ namespace System.Windows.Forms
                     {
                         // Get "testing info" string for Nth grid entry (or active entry if N < 0)
                         string testingInfo = _gridView.GetTestingInfo((int)m.WParamInternal);
-                        m.ResultInternal = AutomationMessages.WriteAutomationText(testingInfo);
+                        m.ResultInternal = (LRESULT)AutomationMessages.WriteAutomationText(testingInfo);
                         return;
                     }
 
                 case (User32.WM)AutomationMessages.PGM_GETROWCOORDS:
                     if (m.Msg == _copyDataMessage)
                     {
-                        m.ResultInternal = _gridView.GetPropertyLocation(
+                        m.ResultInternal = (LRESULT)_gridView.GetPropertyLocation(
                             _propertyName,
                             getXY: m.LParamInternal == 0,
-                            rowValue: m.WParamInternal == 0);
+                            rowValue: m.WParamInternal == 0u);
                         return;
                     }
 
                     break;
                 case (User32.WM)AutomationMessages.PGM_GETSELECTEDROW:
                 case (User32.WM)AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m.ResultInternal = User32.SendMessageW(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    m.ResultInternal = (LRESULT)PInvoke.SendMessage(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return;
                 case (User32.WM)AutomationMessages.PGM_SETSELECTEDTAB:
                     if (m.LParamInternal != 0)
@@ -4380,13 +4380,13 @@ namespace System.Windows.Forms
 
                                 // This gets set again to 0 below. This seems wrong, but has always been this way.
                                 // Leaving this should we find we need to return instead of break.
-                                m.ResultInternal = 1;
+                                m.ResultInternal = (LRESULT)1;
                                 break;
                             }
                         }
                     }
 
-                    m.ResultInternal = 0;
+                    m.ResultInternal = (LRESULT)0;
                     return;
             }
 

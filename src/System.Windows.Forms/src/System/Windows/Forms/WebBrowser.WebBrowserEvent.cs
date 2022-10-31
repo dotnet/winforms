@@ -7,6 +7,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -51,15 +52,9 @@ namespace System.Windows.Forms
                     // If during running interop code, the variant.bstr value gets set
                     // to -1 on return back to native code, if the original value was null, we
                     // have to set targetFrameName and headers to string.Empty.
-                    if (targetFrameName is null)
-                    {
-                        targetFrameName = string.Empty;
-                    }
+                    targetFrameName ??= string.Empty;
 
-                    if (headers is null)
-                    {
-                        headers = string.Empty;
-                    }
+                    headers ??= string.Empty;
 
                     string urlString = urlObject is null ? string.Empty : (string)urlObject;
                     WebBrowserNavigatingEventArgs e = new WebBrowserNavigatingEventArgs(
@@ -73,7 +68,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public void DocumentComplete(object pDisp, ref object urlObject)
+            public unsafe void DocumentComplete(object pDisp, ref object urlObject)
             {
                 Debug.Assert(urlObject is null || urlObject is string, "invalid url");
                 _haveNavigated = true;
@@ -82,11 +77,13 @@ namespace System.Windows.Forms
                     HtmlDocument htmlDocument = _parent.Document;
                     if (htmlDocument is not null)
                     {
-                        Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
+                        IPersistStreamInit.Interface psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                         Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
-                        Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(
-                                                    _parent.documentStreamToSetOnLoad);
-                        psi.Load(iStream);
+                        using var pStream = ComHelpers.GetComScope<IStream>(
+                            new Ole32.GPStream(_parent.documentStreamToSetOnLoad),
+                            out bool result);
+                        Debug.Assert(result);
+                        psi.Load(pStream);
                         htmlDocument.Encoding = "unicode";
                     }
 

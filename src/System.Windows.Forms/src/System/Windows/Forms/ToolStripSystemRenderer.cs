@@ -9,8 +9,8 @@ namespace System.Windows.Forms
 {
     public class ToolStripSystemRenderer : ToolStripRenderer
     {
-        [ThreadStatic()]
-        private static VisualStyleRenderer? t_renderer = null;
+        [ThreadStatic]
+        private static VisualStyleRenderer? t_renderer;
         private ToolStripRenderer? _toolStripHighContrastRenderer;
 
         public ToolStripSystemRenderer()
@@ -38,11 +38,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_toolStripHighContrastRenderer is null)
-                {
-                    // If system in high contrast mode 'false' flag should be passed to render filled selected button background. This is in consistence with ToolStripProfessionalRenderer.
-                    _toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(systemRenderMode: false);
-                }
+                // If system in high contrast mode 'false' flag should be passed to render filled selected button background. This is in consistence with ToolStripProfessionalRenderer.
+                _toolStripHighContrastRenderer ??= new ToolStripHighContrastRenderer(systemRenderMode: false);
 
                 return _toolStripHighContrastRenderer;
             }

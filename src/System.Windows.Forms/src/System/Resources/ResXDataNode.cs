@@ -204,13 +204,10 @@ namespace System.Resources
                     return null;
                 }
 
-                if (_fileRef is null)
-                {
-                    _fileRef =
+                _fileRef ??=
                         string.IsNullOrEmpty(_fileRefTextEncoding)
                             ? new ResXFileRef(FileRefFullPath, FileRefType)
                             : new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding));
-                }
 
                 return _fileRef;
             }
@@ -334,13 +331,10 @@ namespace System.Resources
                 }
                 else
                 {
-                    if (_binaryFormatter is null)
-                    {
-                        _binaryFormatter = new BinaryFormatter
+                    _binaryFormatter ??= new BinaryFormatter
                         {
                             Binder = new ResXSerializationBinder(_typeNameConverter)
                         };
-                    }
 
                     using (MemoryStream ms = new MemoryStream())
                     {
@@ -372,13 +366,10 @@ namespace System.Resources
                     string text = dataNodeInfo.ValueData;
                     byte[] serializedData = FromBase64WrappedString(text);
 
-                    if (_binaryFormatter is null)
-                    {
-                        _binaryFormatter = new BinaryFormatter
+                    _binaryFormatter ??= new BinaryFormatter
                         {
                             Binder = new ResXSerializationBinder(typeResolver)
                         };
-                    }
 
                     IFormatter formatter = _binaryFormatter;
                     if (serializedData is not null && serializedData.Length > 0)
@@ -524,7 +515,7 @@ namespace System.Resources
         /// </summary>
         public Point GetNodePosition()
         {
-            return _nodeInfo?.ReaderPosition ?? new Point();
+            return _nodeInfo?.ReaderPosition ?? default(Point);
         }
 
         /// <summary>
@@ -727,10 +718,7 @@ namespace System.Resources
                 }
             }
 
-            if (resolvedType is null)
-            {
-                resolvedType = Type.GetType(typeName, false);
-            }
+            resolvedType ??= Type.GetType(typeName, false);
 
             return resolvedType;
         }

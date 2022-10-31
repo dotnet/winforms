@@ -12,68 +12,54 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
     {
-        private readonly Com2PropertyDescriptor _propDesc;
+        private readonly Com2PropertyDescriptor _propertyDescriptor;
         private readonly Guid _guid;
 
-        public Com2PropertyPageUITypeEditor(Com2PropertyDescriptor pd, Guid guid, UITypeEditor baseEditor) : base(baseEditor)
+        public Com2PropertyPageUITypeEditor(
+            Com2PropertyDescriptor propertyDescriptor,
+            Guid guid,
+            UITypeEditor? baseEditor) : base(baseEditor)
         {
-            _propDesc = pd;
+            _propertyDescriptor = propertyDescriptor;
             _guid = guid;
         }
 
-        /// <summary>
-        ///  Takes the value returned from valueAccess.getValue() and modifies or replaces
-        ///  the value, passing the result into valueAccess.setValue().  This is where
-        ///  an editor can launch a modal dialog or create a drop down editor to allow
-        ///  the user to modify the value.  Host assistance in presenting UI to the user
-        ///  can be found through the valueAccess.getService function.
-        /// </summary>
         public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            IntPtr hWndParent = User32.GetFocus(); // Windows.GetForegroundWindow
+            HWND hWndParent = PInvoke.GetFocus();
 
             try
             {
-                ICom2PropertyPageDisplayService? propPageSvc = (ICom2PropertyPageDisplayService?)provider.GetService(typeof(ICom2PropertyPageDisplayService));
-
-                if (propPageSvc is null)
+                if (!provider.TryGetService(out ICom2PropertyPageDisplayService? propertyPageService))
                 {
-                    propPageSvc = this;
+                    propertyPageService ??= this;
                 }
 
                 object? instance = context?.Instance;
 
                 if (instance is not null && !instance.GetType().IsArray)
                 {
-                    instance = _propDesc.TargetObject;
+                    instance = _propertyDescriptor.TargetObject;
                     if (instance is ICustomTypeDescriptor customTypeDescriptor)
                     {
-                        instance = customTypeDescriptor.GetPropertyOwner(_propDesc);
+                        instance = customTypeDescriptor.GetPropertyOwner(_propertyDescriptor);
                     }
                 }
 
-                propPageSvc.ShowPropertyPage(_propDesc.Name, instance, (int)_propDesc.DISPID, _guid, hWndParent);
+                propertyPageService.ShowPropertyPage(_propertyDescriptor.Name, instance, (int)_propertyDescriptor.DISPID, _guid, hWndParent);
             }
             catch (Exception ex)
             {
-                IUIService? uiSvc = (IUIService?)provider?.GetService(typeof(IUIService));
-                if (uiSvc is not null)
+                if (provider.TryGetService(out IUIService? uiService))
                 {
-                    uiSvc.ShowError(ex, SR.ErrorTypeConverterFailed);
+                    uiService?.ShowError(ex, SR.ErrorTypeConverterFailed);
                 }
             }
 
             return value;
         }
 
-        /// <summary>
-        ///  Retrieves the editing style of the Edit method.  If the method
-        ///  is not supported, this will return None.
-        /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
-        {
-            return UITypeEditorEditStyle.Modal;
-        }
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 
         public unsafe void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, IntPtr parentHandle)
         {
@@ -98,7 +84,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         pObjAddrs,
                         1,
                         &pageGuid,
-                        Kernel32.GetThreadLocale(),
+                        PInvoke.GetThreadLocale(),
                         0,
                         IntPtr.Zero);
                 }

@@ -8,7 +8,6 @@ using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
 using static Interop.ComCtl32;
-using static Interop.Kernel32;
 using static Interop.User32;
 
 namespace System.Windows.Forms.UITests
@@ -63,22 +62,22 @@ namespace System.Windows.Forms.UITests
                 DateTime selectedDate = new DateTime(2020, 4, 10);
                 SYSTEMTIME date = new()
                 {
-                    wYear = (short)selectedDate.Year,
-                    wMonth = (short)selectedDate.Month,
-                    wDay = (short)selectedDate.Day
+                    wYear = (ushort)selectedDate.Year,
+                    wMonth = (ushort)selectedDate.Month,
+                    wDay = (ushort)selectedDate.Day
                 };
 
                 NMSELCHANGE lParam = new()
                 {
                     nmhdr = new NMHDR
                     {
-                        code = (int)MCN.SELCHANGE,
+                        code = unchecked((uint)MCN.SELCHANGE),
                     },
                     stSelStart = date,
                     stSelEnd = date,
                 };
 
-                SendMessageW(calendar.Handle, WM.REFLECT | WM.NOTIFY, 0, ref lParam);
+                PInvoke.SendMessage(calendar, WM.REFLECT | WM.NOTIFY, 0, ref lParam);
             });
         }
 
@@ -127,8 +126,8 @@ namespace System.Windows.Forms.UITests
         }
 
         [WinFormsTheory]
-        [InlineData(2018, 12, 8, (int)MCGIP.NEXT, 2019, 1, 1)]
-        [InlineData(2018, 12, 8, (int)MCGIP.PREV, 2018, 11, 1)]
+        [InlineData(2018, 12, 8, (int)MCGRIDINFO_PART.MCGIP_NEXT, 2019, 1, 1)]
+        [InlineData(2018, 12, 8, (int)MCGRIDINFO_PART.MCGIP_PREV, 2018, 11, 1)]
         public async Task MonthCalendar_Click_ToMonthAsync(int givenYear, int givenMonth, int givenDay, int action, int expectedYear, int expectedMonth, int expectedDay)
         {
             await RunTestAsync(async (form, calendar) =>
@@ -142,7 +141,7 @@ namespace System.Windows.Forms.UITests
                 Assert.Equal(new DateTime(givenYear, givenMonth, 1), calendar.GetDisplayRange(visible: true).Start);
 
                 // Find the position of the 'Next' button
-                var rect = GetCalendarGridRect(calendar, (MCGIP)action);
+                var rect = GetCalendarGridRect(calendar, (MCGRIDINFO_PART)action);
 
                 // Move the mouse to the center of the 'Next' or 'Prev' buttons
                 var centerOfRect = new Point(rect.Left, rect.Top) + new Size(rect.Width / 2, rect.Height / 2);
@@ -162,16 +161,16 @@ namespace System.Windows.Forms.UITests
                 Assert.Equal(expectedDate, calendar.GetDisplayRange(visible: true).Start);
             });
 
-            static unsafe Rectangle GetCalendarGridRect(MonthCalendar control, MCGIP part)
+            static unsafe Rectangle GetCalendarGridRect(MonthCalendar control, MCGRIDINFO_PART part)
             {
                 MCGRIDINFO result = new()
                 {
                     cbSize = (uint)sizeof(MCGRIDINFO),
                     dwPart = part,
-                    dwFlags = MCGIF.RECT,
+                    dwFlags = MCGRIDINFO_FLAGS.MCGIF_RECT,
                 };
 
-                Assert.NotEqual(default, User32.SendMessageW(control, (User32.WM)ComCtl32.MCM.GETCALENDARGRIDINFO, default, ref result));
+                Assert.NotEqual(default, PInvoke.SendMessage(control, (User32.WM)PInvoke.MCM_GETCALENDARGRIDINFO, default, ref result));
                 var rect = Rectangle.FromLTRB(result.rc.left, result.rc.top, result.rc.right, result.rc.bottom);
                 return rect;
             }

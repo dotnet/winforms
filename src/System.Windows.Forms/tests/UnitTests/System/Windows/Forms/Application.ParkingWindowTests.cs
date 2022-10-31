@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 using static System.Windows.Forms.Application;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -71,26 +69,26 @@ namespace System.Windows.Forms.Tests
             // set thread awareness context to PermonitorV2(PMv2).
             // if process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
             // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
             try
             {
-                using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.UNAWARE))
+                using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE))
                 {
-                    using var control = new Control();
-                    ThreadContext ctx = GetContextForHandle(new HandleRef(this, control.Handle));
+                    using Control control = new();
+                    ThreadContext ctx = GetContextForHandle(control);
                     Assert.NotNull(ctx);
-                    ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.UNAWARE);
+                    ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE);
                     Assert.NotNull(parkingWindow);
 
-                    IntPtr dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
-                    Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.UNAWARE, dpiContext));
+                    DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
+                    Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE, dpiContext));
                 }
             }
             finally
             {
                 // reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
 
@@ -106,26 +104,26 @@ namespace System.Windows.Forms.Tests
             // set thread awareness context to PermonitorV2(PMv2).
             // if process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
             // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
             try
             {
-                using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
+                using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                 {
-                    using var control = new Control();
-                    ThreadContext ctx = GetContextForHandle(new HandleRef(this, control.Handle));
+                    using Control control = new();
+                    ThreadContext ctx = GetContextForHandle(control);
                     Assert.NotNull(ctx);
-                    ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE);
+                    ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
                     Assert.NotNull(parkingWindow);
 
-                    IntPtr dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
-                    Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE, dpiContext));
+                    DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
+                    Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, dpiContext));
                 }
             }
             finally
             {
                 // reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
 
@@ -141,24 +139,24 @@ namespace System.Windows.Forms.Tests
             // set thread awareness context to PermonitorV2(PMv2).
             // if process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
             // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
             try
             {
-                using var control = new Control();
-                ThreadContext ctx = GetContextForHandle(new HandleRef(this, control.Handle));
+                using Control control = new();
+                ThreadContext ctx = GetContextForHandle(control);
                 Assert.NotNull(ctx);
 
-                ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+                ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
                 Assert.NotNull(parkingWindow);
 
-                IntPtr dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
-                Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2, dpiContext));
+                DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
+                Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, dpiContext));
             }
             finally
             {
                 // reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
 
@@ -174,42 +172,42 @@ namespace System.Windows.Forms.Tests
             // set thread awareness context to PermonitorV2(PMv2).
             // if process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
             // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
-            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
             try
             {
-                using var control = new Control();
-                ThreadContext ctx = GetContextForHandle(new HandleRef(this, control.Handle));
+                using Control control = new();
+                ThreadContext ctx = GetContextForHandle(control);
                 Assert.NotNull(ctx);
-                ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+                ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
                 Assert.NotNull(parkingWindow);
 
-                IntPtr dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
-                Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2, dpiContext));
+                DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
+                Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, dpiContext));
 
-                using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
+                using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                 {
-                    using var systemControl = new Control();
-                    ctx = GetContextForHandle(new HandleRef(this, systemControl.Handle));
+                    using Control systemControl = new();
+                    ctx = GetContextForHandle(systemControl);
                     Assert.NotNull(ctx);
-                    parkingWindow = ctx.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE);
+                    parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
                     Assert.NotNull(parkingWindow);
 
-                    dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
-                    Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE, dpiContext));
+                    dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
+                    Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, dpiContext));
 
                     // check PMv2 parking window still available.
-                    parkingWindow = ctx.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+                    parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
                     Assert.NotNull(parkingWindow);
 
-                    dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
-                    Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2, dpiContext));
+                    dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
+                    Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, dpiContext));
                 }
             }
             finally
             {
                 // reset back to original awareness context.
-                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
+                PInvoke.SetThreadDpiAwarenessContextInternal(originalAwarenessContext);
             }
         }
     }

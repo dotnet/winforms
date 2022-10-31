@@ -7,12 +7,11 @@ using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public partial class TextBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
@@ -387,11 +386,11 @@ namespace System.Windows.Forms.Tests
             };
 
             // Cover the Placeholder draw code path
-            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
+            PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
             tb.TextAlign = HorizontalAlignment.Center;
-            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
+            PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
             tb.TextAlign = HorizontalAlignment.Right;
-            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
+            PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
 
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
@@ -405,12 +404,12 @@ namespace System.Windows.Forms.Tests
                 RightToLeft = RightToLeft.Yes
             };
 
-            //Cover the Placeholder draw code path in RightToLeft scenario
-            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
+            // Cover the Placeholder draw code path in RightToLeft scenario
+            PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
             tb.TextAlign = HorizontalAlignment.Center;
-            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
+            PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
             tb.TextAlign = HorizontalAlignment.Right;
-            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
+            PInvoke.SendMessage(tb, User32.WM.PAINT, (WPARAM)(BOOL)false);
 
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
@@ -427,7 +426,7 @@ namespace System.Windows.Forms.Tests
             }
 
             Assert.Equal(createControl, control.IsHandleCreated);
-            Control.ControlAccessibleObject instance = Assert.IsType<TextBoxBase.TextBoxBaseAccessibleObject>(control.CreateAccessibilityInstance());
+            Control.ControlAccessibleObject instance = Assert.IsType<TextBox.TextBoxAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.Equal(createControl, control.IsHandleCreated);
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
@@ -444,7 +443,7 @@ namespace System.Windows.Forms.Tests
             {
                 AccessibleRole = AccessibleRole.HelpBalloon
             };
-            Control.ControlAccessibleObject instance = Assert.IsType<TextBoxBase.TextBoxBaseAccessibleObject>(control.CreateAccessibilityInstance());
+            Control.ControlAccessibleObject instance = Assert.IsType<TextBox.TextBoxAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
             Assert.Equal(AccessibleRole.HelpBalloon, instance.Role);

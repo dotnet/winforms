@@ -68,10 +68,7 @@ namespace System.Windows.Forms.Design
             {
                 DesignerActionListCollection actionLists = new DesignerActionListCollection();
                 actionLists.AddRange(base.ActionLists);
-                if (_actionLists is null)
-                {
-                    _actionLists = new ToolStripActionList(this);
-                }
+                _actionLists ??= new ToolStripActionList(this);
 
                 actionLists.Add(_actionLists);
 
@@ -95,7 +92,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                Rectangle rect = new Rectangle();
+                Rectangle rect = default(Rectangle);
                 if (_miniToolStrip is null)
                 {
                     return rect;
@@ -210,13 +207,10 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_toolStripContextMenu is null)
-                {
-                    _toolStripContextMenu = new BaseContextMenuStrip(ToolStrip.Site, ToolStrip)
+                _toolStripContextMenu ??= new BaseContextMenuStrip(ToolStrip.Site, ToolStrip)
                     {
                         Text = "CustomContextMenu"
                     };
-                }
 
                 return _toolStripContextMenu;
             }
@@ -355,10 +349,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_items is null)
-                {
-                    _items = new ArrayList();
-                }
+                _items ??= new ArrayList();
 
                 return _items;
             }
@@ -380,7 +371,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                Rectangle rect = new Rectangle();
+                Rectangle rect = default(Rectangle);
                 if (ToolStrip.OverflowButton.Visible)
                 {
                     return ToolStrip.OverflowButton.Bounds;
@@ -429,10 +420,7 @@ namespace System.Windows.Forms.Design
                 {
                     // Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
                     _keyboardHandlingService = GetService<ToolStripKeyboardHandlingService>();
-                    if (_keyboardHandlingService is null)
-                    {
-                        _keyboardHandlingService = new ToolStripKeyboardHandlingService(Component.Site);
-                    }
+                    _keyboardHandlingService ??= new ToolStripKeyboardHandlingService(Component.Site);
                 }
 
                 return _keyboardHandlingService;
@@ -502,10 +490,7 @@ namespace System.Windows.Forms.Design
                     //Set the glyph for the item .. so that we can remove it later....
                     dropDownItemDesigner.bodyGlyph = bodyGlyphForddItem;
                     //Add ItemGlyph to the Collection
-                    if (_toolStripAdornerWindowService != null)
-                    {
-                        _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Add(bodyGlyphForddItem);
-                    }
+                    _toolStripAdornerWindowService?.DropDownAdorner.Glyphs.Add(bodyGlyphForddItem);
                 }
             }
         }
@@ -637,17 +622,11 @@ namespace System.Windows.Forms.Design
 
                         PropertyDescriptor dispProperty = TypeDescriptor.GetProperties(item)["DisplayStyle"];
                         Debug.Assert(dispProperty != null, "Could not find 'DisplayStyle' property in ToolStripItem.");
-                        if (dispProperty != null)
-                        {
-                            dispProperty.SetValue(item, ToolStripItemDisplayStyle.Image);
-                        }
+                        dispProperty?.SetValue(item, ToolStripItemDisplayStyle.Image);
 
                         PropertyDescriptor imageTransProperty = TypeDescriptor.GetProperties(item)["ImageTransparentColor"];
                         Debug.Assert(imageTransProperty != null, "Could not find 'DisplayStyle' property in ToolStripItem.");
-                        if (imageTransProperty != null)
-                        {
-                            imageTransProperty.SetValue(item, Color.Magenta);
-                        }
+                        imageTransProperty?.SetValue(item, Color.Magenta);
                     }
                 }
 
@@ -727,15 +706,9 @@ namespace System.Windows.Forms.Design
                     _pendingTransaction.Cancel();
                     _pendingTransaction = null;
 
-                    if (outerTransaction != null)
-                    {
-                        outerTransaction.Cancel();
-                    }
+                    outerTransaction?.Cancel();
                 }
-                else if (outerTransaction != null)
-                {
-                    outerTransaction.Commit();
-                }
+                else outerTransaction?.Commit();
 
                 _addingItem = false;
             }
@@ -761,10 +734,7 @@ namespace System.Windows.Forms.Design
 
         internal void CancelPendingMenuItemTransaction()
         {
-            if (_insertMenuItemTransaction != null)
-            {
-                _insertMenuItemTransaction.Cancel();
-            }
+            _insertMenuItemTransaction?.Cancel();
         }
 
         /// <summary>
@@ -774,10 +744,7 @@ namespace System.Windows.Forms.Design
         {
             bool showToolStrip = false;
             object comp = SelectionService.PrimarySelection;
-            if (comp is null)
-            {
-                comp = (IComponent)KeyboardHandlingService.SelectedDesignerControl;
-            }
+            comp ??= (IComponent)KeyboardHandlingService.SelectedDesignerControl;
 
             if (comp is ToolStripItem item)
             {
@@ -1372,10 +1339,7 @@ namespace System.Windows.Forms.Design
                     if (comp is ToolStripItem item && item.Visible)
                     {
                         ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)_host.GetDesigner(item);
-                        if (itemDesigner != null)
-                        {
-                            itemDesigner.GetGlyphs(ref glyphs, StandardBehavior);
-                        }
+                        itemDesigner?.GetGlyphs(ref glyphs, StandardBehavior);
                     }
                 }
             }
@@ -1495,10 +1459,7 @@ namespace System.Windows.Forms.Design
             {
                 // smoke the dock property whenever we add a toolstrip to a toolstrip panel.
                 PropertyDescriptor dockProp = TypeDescriptor.GetProperties(ToolStrip)["Dock"];
-                if (dockProp != null)
-                {
-                    dockProp.SetValue(ToolStrip, DockStyle.None);
-                }
+                dockProp?.SetValue(ToolStrip, DockStyle.None);
             }
 
             // Set up parenting and all the base functionality.
@@ -1526,17 +1487,11 @@ namespace System.Windows.Forms.Design
                 {
                     PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(parentPanel)["Controls"];
 
-                    if (_componentChangeSvc != null)
-                    {
-                        _componentChangeSvc.OnComponentChanging(parentPanel, controlsProp);
-                    }
+                    _componentChangeSvc?.OnComponentChanging(parentPanel, controlsProp);
 
                     parentPanel.Join(ToolStrip, parentPanel.Rows.Length);
 
-                    if (_componentChangeSvc != null)
-                    {
-                        _componentChangeSvc.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
-                    }
+                    _componentChangeSvc?.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
 
                     //Try to fire ComponentChange on the Location Property for ToolStrip.
                     PropertyDescriptor locationProp = TypeDescriptor.GetProperties(ToolStrip)["Location"];
@@ -1942,10 +1897,7 @@ namespace System.Windows.Forms.Design
                     SelectionService.SetSelectedComponents(new IComponent[] { primaryItem }, SelectionTypes.Primary | SelectionTypes.Replace);
                 }
 
-                if (changeService != null)
-                {
-                    changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
-                }
+                changeService?.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
 
                 // Fire extra changing/changed events so that the order is "restored" after undo/redo
                 if (copy)
@@ -1971,10 +1923,7 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (changeParent != null)
-                {
-                    changeParent.Commit();
-                }
+                changeParent?.Commit();
             }
         }
 
@@ -2448,10 +2397,7 @@ namespace System.Windows.Forms.Design
             if (ToolStrip is MenuStrip)
             {
                 // The TemplateNode should no longer be selected.
-                if (KeyboardHandlingService != null)
-                {
-                    KeyboardHandlingService.ResetActiveTemplateNodeSelectionState();
-                }
+                KeyboardHandlingService?.ResetActiveTemplateNodeSelectionState();
 
                 try
                 {
@@ -2479,10 +2425,7 @@ namespace System.Windows.Forms.Design
                     Debug.Assert(NewItemTransaction is null, "NewItemTransaction should have been nulled out and cancelled by now.");
                     GetService<IUIService>().ShowError(ex.Message);
 
-                    if (KeyboardHandlingService != null)
-                    {
-                        KeyboardHandlingService.ResetActiveTemplateNodeSelectionState();
-                    }
+                    KeyboardHandlingService?.ResetActiveTemplateNodeSelectionState();
                 }
             }
         }
@@ -2500,10 +2443,7 @@ namespace System.Windows.Forms.Design
 
                 // Get the itemDesigner...
                 ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)_host.GetDesigner(item);
-                if (itemDesigner != null)
-                {
-                    itemDesigner.SetItemVisible(toolStripSelected, this);
-                }
+                itemDesigner?.SetItemVisible(toolStripSelected, this);
             }
 
             if (FireSyncSelection)

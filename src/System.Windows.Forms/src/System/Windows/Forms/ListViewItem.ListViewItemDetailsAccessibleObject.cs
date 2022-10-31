@@ -11,12 +11,26 @@ namespace System.Windows.Forms
     {
         internal class ListViewItemDetailsAccessibleObject : ListViewItemBaseAccessibleObject
         {
+            private const int ImageAccessibleObjectIndex = 0;
             private readonly Dictionary<int, AccessibleObject> _listViewSubItemAccessibleObjects;
 
             public ListViewItemDetailsAccessibleObject(ListViewItem owningItem) : base(owningItem)
             {
                 _listViewSubItemAccessibleObjects = new Dictionary<int, AccessibleObject>();
             }
+
+            internal override int FirstSubItemIndex => HasImage ? 1 : 0;
+
+            private bool HasImage => _owningItem.ImageIndex != ImageList.Indexer.DefaultIndex;
+
+            private int LastChildIndex => HasImage ? _owningListView.Columns.Count : _owningListView.Columns.Count - 1;
+
+            /// <summary>
+            ///  Converts the provided index of the <see cref="AccessibleObject"/>'s child to an index of a <see cref="ListViewSubItem"/>.
+            /// </summary>
+            /// <param name="accessibleChildIndex">The index of the child <see cref="AccessibleObject"/>.</param>
+            /// <returns>The index of an owning <see cref="ListViewSubItem"/>'s object.</returns>
+            private int AccessibleChildToSubItemIndex(int accessibleChildIndex) => HasImage ? accessibleChildIndex - 1 : accessibleChildIndex;
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
@@ -25,24 +39,37 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.FirstChild:
                         return GetChild(0);
                     case UiaCore.NavigateDirection.LastChild:
-                        return GetChild(_owningListView.Columns.Count - 1);
+                        return GetChild(LastChildIndex);
                 }
 
                 return base.FragmentNavigate(direction);
             }
 
-            // If the ListView does not support ListViewSubItems, the index is greater than the number of columns
-            // or the index is negative, then we return null
-            public override AccessibleObject? GetChild(int index)
+            public override AccessibleObject? GetChild(int accessibleChildIndex)
             {
                 if (_owningListView.View != View.Details)
                 {
                     throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, nameof(View.Details)));
                 }
 
-                return !_owningListView.SupportsListViewSubItems || _owningListView.Columns.Count <= index || index < 0
+                // If the ListView does not support ListViewSubItems, the accessibleChildIndex is greater than the number of columns
+                // or the accessibleChildIndex is negative, then we return null
+                return !_owningListView.SupportsListViewSubItems || accessibleChildIndex > LastChildIndex || accessibleChildIndex < 0
                     ? null
-                    : GetDetailsSubItemOrFake(index);
+                    : GetDetailsSubItemOrFakeInternal(accessibleChildIndex);
+            }
+
+            internal AccessibleObject? GetChild(int subItemIndex, Point point)
+            {
+                if (!HasImage || subItemIndex > 0)
+                {
+                    return GetDetailsSubItemOrFake(subItemIndex);
+                }
+
+                return GetDetailsSubItemOrFakeInternal(ImageAccessibleObjectIndex) is ListViewItemImageAccessibleObject imageAccessibleObject &&
+                       imageAccessibleObject.GetImageRectangle().Contains(point)
+                    ? imageAccessibleObject
+                    : GetDetailsSubItemOrFake(0);
             }
 
             public override int GetChildCount()
@@ -54,14 +81,22 @@ namespace System.Windows.Forms
 
                 return !_owningListView.IsHandleCreated || !_owningListView.SupportsListViewSubItems
                     ? -1
-                    : _owningListView.Columns.Count;
+                    : LastChildIndex + 1;
             }
 
             internal override int GetChildIndex(AccessibleObject? child)
             {
-                if (child is null
-                    || !_owningListView.SupportsListViewSubItems
-                    || child is not ListViewSubItem.ListViewSubItemAccessibleObject subItemAccessibleObject)
+                if (child is null || !_owningListView.SupportsListViewSubItems)
+                {
+                    return InvalidIndex;
+                }
+
+                if (child is ListViewItemImageAccessibleObject)
+                {
+                    return ImageAccessibleObjectIndex;
+                }
+
+                if (child is not ListViewSubItem.ListViewSubItemAccessibleObject subItemAccessibleObject)
                 {
                     return InvalidIndex;
                 }
@@ -71,8 +106,9 @@ namespace System.Windows.Forms
                     return GetFakeSubItemIndex(subItemAccessibleObject);
                 }
 
-                int index = _owningItem.SubItems.IndexOf(subItemAccessibleObject.OwningSubItem);
-                return index > _owningListView.Columns.Count - 1 ? InvalidIndex : index;
+                int subItemIndex = _owningItem.SubItems.IndexOf(subItemAccessibleObject.OwningSubItem);
+                int accessibleChildIndex = SubItemToAccessibleChildIndex(subItemIndex);
+                return accessibleChildIndex > LastChildIndex ? InvalidIndex : accessibleChildIndex;
             }
 
             // This method returns an accessibility object for an existing ListViewSubItem, or creates a fake one
@@ -80,25 +116,44 @@ namespace System.Windows.Forms
             // when there is no ListViewSubItem, but the cell for it is displayed and the user can interact with it.
             internal AccessibleObject? GetDetailsSubItemOrFake(int subItemIndex)
             {
+                int accessibleChildIndex = SubItemToAccessibleChildIndex(subItemIndex);
+                return GetDetailsSubItemOrFakeInternal(accessibleChildIndex);
+            }
+
+            private AccessibleObject? GetDetailsSubItemOrFakeInternal(int accessibleChildIndex)
+            {
+                if (accessibleChildIndex == ImageAccessibleObjectIndex && HasImage)
+                {
+                    if (_listViewSubItemAccessibleObjects.TryGetValue(accessibleChildIndex, out AccessibleObject? childAO))
+                    {
+                        return childAO;
+                    }
+
+                    ListViewItemImageAccessibleObject imageAccessibleObject = new(_owningItem);
+                    _listViewSubItemAccessibleObjects.Add(accessibleChildIndex, imageAccessibleObject);
+                    return imageAccessibleObject;
+                }
+
+                int subItemIndex = AccessibleChildToSubItemIndex(accessibleChildIndex);
                 if (subItemIndex < _owningItem.SubItems.Count)
                 {
-                    _listViewSubItemAccessibleObjects.Remove(subItemIndex);
+                    _listViewSubItemAccessibleObjects.Remove(accessibleChildIndex);
 
                     return _owningItem.SubItems[subItemIndex].AccessibilityObject;
                 }
 
-                if (_listViewSubItemAccessibleObjects.ContainsKey(subItemIndex))
+                if (_listViewSubItemAccessibleObjects.TryGetValue(accessibleChildIndex, out AccessibleObject? childAO2))
                 {
-                    return _listViewSubItemAccessibleObjects[subItemIndex];
+                    return childAO2;
                 }
 
                 ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessibleObject = new(owningSubItem: null, _owningItem);
-                _listViewSubItemAccessibleObjects.Add(subItemIndex, fakeAccessibleObject);
+                _listViewSubItemAccessibleObjects.Add(accessibleChildIndex, fakeAccessibleObject);
                 return fakeAccessibleObject;
             }
 
-            // This method is required to get the index of the fake accessibility object. Since the fake accessibility object
-            // has no ListViewSubItem from which we could get an index, we have to get its index from the dictionary
+            // This method is required to get the accessibleChildIndex of the fake accessibility object. Since the fake accessibility object
+            // has no ListViewSubItem from which we could get an accessibleChildIndex, we have to get its accessibleChildIndex from the dictionary
             private int GetFakeSubItemIndex(ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessibleObject)
             {
                 foreach (KeyValuePair<int, AccessibleObject> keyValuePair in _listViewSubItemAccessibleObjects)
@@ -112,9 +167,9 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            internal override Rectangle GetSubItemBounds(int subItemIndex)
+            internal override Rectangle GetSubItemBounds(int accessibleChildIndex)
                 => _owningListView.IsHandleCreated
-                    ? _owningListView.GetSubItemRect(_owningItem.Index, subItemIndex)
+                    ? _owningListView.GetSubItemRect(_owningItem.Index, AccessibleChildToSubItemIndex(accessibleChildIndex))
                     : Rectangle.Empty;
 
             /// <devdoc>
@@ -131,6 +186,13 @@ namespace System.Windows.Forms
 
                 _listViewSubItemAccessibleObjects.Clear();
             }
+
+            /// <summary>
+            ///  Converts the provided index of a <see cref="ListViewSubItem"/> to an index of the <see cref="AccessibleObject"/>'s child.
+            /// </summary>
+            /// <param name="subItemIndex">The index of an owning <see cref="ListViewSubItem"/>'s object.</param>
+            /// <returns>The index of the child <see cref="AccessibleObject"/>.</returns>
+            private int SubItemToAccessibleChildIndex(int subItemIndex) => HasImage ? subItemIndex + 1 : subItemIndex;
         }
     }
 }

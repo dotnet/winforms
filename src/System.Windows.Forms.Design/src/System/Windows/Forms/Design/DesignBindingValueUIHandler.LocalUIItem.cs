@@ -29,9 +29,8 @@ namespace System.Windows.Forms.Design
             static string GetToolTip(Binding binding)
             {
                 string name = "";
-                if (binding.DataSource is IComponent)
+                if (binding.DataSource is IComponent comp)
                 {
-                    IComponent comp = (IComponent)binding.DataSource;
                     if (comp.Site != null)
                     {
                         name = comp.Site.Name;

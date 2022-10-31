@@ -77,7 +77,7 @@ namespace System.Windows.Forms
                     else
                     {
                         BoundPage.BoundDialog!.UpdateTextElement(
-                            ComCtl32.TDE.FOOTER, value);
+                            TASKDIALOG_ELEMENTS.TDE_FOOTER, value);
                     }
                 }
 
@@ -131,7 +131,7 @@ namespace System.Windows.Forms
                     }
 
                     BoundPage.BoundDialog!.UpdateIconElement(
-                        ComCtl32.TDIE.ICON_FOOTER,
+                         TASKDIALOG_ICON_ELEMENTS.TDIE_ICON_FOOTER,
                         _boundIconIsFromHandle ? icon.hIcon : (IntPtr)icon.pszIcon);
                 }
 
@@ -147,25 +147,25 @@ namespace System.Windows.Forms
         /// <returns>A string that contains the control text.</returns>
         public override string ToString() => _text ?? base.ToString() ?? string.Empty;
 
-        internal ComCtl32.TDF Bind(TaskDialogPage page, out ComCtl32.TASKDIALOGCONFIG.IconUnion icon)
+        internal TASKDIALOG_FLAGS Bind(TaskDialogPage page, out ComCtl32.TASKDIALOGCONFIG.IconUnion icon)
         {
-            ComCtl32.TDF result = base.Bind(page);
+            TASKDIALOG_FLAGS result = base.Bind(page);
 
             icon = TaskDialogPage.GetIconValue(_icon).iconUnion;
 
             return result;
         }
 
-        private protected override ComCtl32.TDF BindCore()
+        private protected override TASKDIALOG_FLAGS BindCore()
         {
-            ComCtl32.TDF flags = base.BindCore();
+            TASKDIALOG_FLAGS flags = base.BindCore();
 
             _updateTextOnInitialization = false;
             _boundIconIsFromHandle = TaskDialogPage.GetIconValue(_icon).iconIsFromHandle ?? false;
 
             if (_boundIconIsFromHandle)
             {
-                flags |= ComCtl32.TDF.USE_HICON_FOOTER;
+                flags |= TASKDIALOG_FLAGS.TDF_USE_HICON_FOOTER;
             }
 
             return flags;

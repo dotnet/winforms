@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 
@@ -19,13 +17,13 @@ namespace System.Windows.Forms
 
         public ToolStripSplitStackDragDropHandler(ToolStrip owner)
         {
-            this._owner = owner.OrThrowIfNull();
+            _owner = owner.OrThrowIfNull();
         }
 
         public void OnDragEnter(DragEventArgs e)
         {
             Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, "OnDragEnter: " + e.ToString());
-            if (e.Data.GetDataPresent(typeof(ToolStripItem)))
+            if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
                 e.Effect = DragDropEffects.Move;
                 ShowItemDropPoint(_owner.PointToClient(new Point(e.X, e.Y)));
@@ -42,9 +40,9 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, "OnDragDrop: " + e.ToString());
 
-            if (e.Data.GetDataPresent(typeof(ToolStripItem)))
+            if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
-                ToolStripItem item = (ToolStripItem)e.Data.GetData(typeof(ToolStripItem));
+                ToolStripItem item = (ToolStripItem)e.Data.GetData(typeof(ToolStripItem))!;
                 OnDropItem(item, _owner.PointToClient(new Point(e.X, e.Y)));
             }
         }
@@ -53,7 +51,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, "OnDragOver: " + e.ToString());
 
-            if (e.Data.GetDataPresent(typeof(ToolStripItem)))
+            if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
                 if (ShowItemDropPoint(_owner.PointToClient(new Point(e.X, e.Y))))
                 {
@@ -61,10 +59,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_owner is not null)
-                    {
-                        _owner.ClearInsertionMark();
-                    }
+                    _owner?.ClearInsertionMark();
 
                     e.Effect = DragDropEffects.None;
                 }

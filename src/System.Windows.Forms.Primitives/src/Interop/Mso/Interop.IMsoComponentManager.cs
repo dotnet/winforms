@@ -28,7 +28,7 @@ internal static partial class Interop
         ///  that are outside of the component manager's state context. <see cref="FInState"/> is used to query the
         ///  state of the component manager's state context at its root.
         /// </remarks>
-        [ComImport()]
+        [ComImport]
         [Guid(ComponentIds.IID_IMsoComponentManager)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public unsafe interface IMsoComponentManager

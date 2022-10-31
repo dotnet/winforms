@@ -63,7 +63,7 @@ namespace System.ComponentModel.Design
         public DesignerHost(DesignSurface surface)
         {
             _surface = surface;
-            _state = new BitVector32();
+            _state = default(BitVector32);
             _designers = new Hashtable();
             _events = new EventHandlerList();
 
@@ -93,10 +93,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_licenseCtx is null)
-                {
-                    _licenseCtx = new HostDesigntimeLicenseContext(this);
-                }
+                _licenseCtx ??= new HostDesigntimeLicenseContext(this);
 
                 return _licenseCtx;
             }
@@ -246,10 +243,7 @@ namespace System.ComponentModel.Design
 
                 _rootComponent = component;
                 // Check and see if anyone has set the class name of the root component. we default to the component name.
-                if (_rootComponentClassName is null)
-                {
-                    _rootComponentClassName = component.Site.Name;
-                }
+                _rootComponentClassName ??= component.Site.Name;
             }
             else
             {
@@ -394,10 +388,7 @@ namespace System.ComponentModel.Design
             }
             else
             {
-                if (nameCreate is not null)
-                {
-                    nameCreate.ValidateName(name);
-                }
+                nameCreate?.ValidateName(name);
             }
 
             return new Site(component, this, name, this);
@@ -472,10 +463,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void Flush()
         {
-            if (_loader is not null)
-            {
-                _loader.Flush();
-            }
+            _loader?.Flush();
         }
 
         /// <summary>
@@ -706,10 +694,7 @@ namespace System.ComponentModel.Design
             }
 
             ISelectionService selectionService = (ISelectionService)GetService(typeof(ISelectionService));
-            if (selectionService is not null)
-            {
-                selectionService.SetSelectedComponents(null, SelectionTypes.Replace);
-            }
+            selectionService?.SetSelectedComponents(null, SelectionTypes.Replace);
 
             // Now remove all the designers and their components.  We save the root for last.  Note that we eat any exceptions that components or their designers generate.  A bad component or designer should not prevent an unload from happening.  We do all of this in a transaction to help reduce the number of events we generate.
             _state[s_stateUnloading] = true;
@@ -1094,10 +1079,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         DesignerTransaction IDesignerHost.CreateTransaction(string description)
         {
-            if (description is null)
-            {
-                description = SR.DesignerHostGenericTransactionName;
-            }
+            description ??= SR.DesignerHostGenericTransactionName;
 
             return new DesignerHostTransaction(this, description);
         }
@@ -1251,10 +1233,7 @@ namespace System.ComponentModel.Design
                         errorCollection = errorList;
                         successful = false;
 
-                        if (_surface is not null)
-                        {
-                            _surface.OnLoaded(successful, errorCollection);
-                        }
+                        _surface?.OnLoaded(successful, errorCollection);
 
                         // We re-throw.  If this was a synchronous load this will error back to BeginLoad (and, as a side effect, may call us again).  For asynchronous loads we need to throw so the caller knows what happened.
                         throw;
@@ -1529,10 +1508,7 @@ namespace System.ComponentModel.Design
             public DesignerHostTransaction(DesignerHost host, string description) : base(description)
             {
                 _host = host;
-                if (_host._transactions is null)
-                {
-                    _host._transactions = new Stack();
-                }
+                _host._transactions ??= new Stack();
 
                 _host._transactions.Push(this);
                 _host.OnTransactionOpening(EventArgs.Empty);
@@ -1672,10 +1648,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             void IDictionaryService.SetValue(object key, object value)
             {
-                if (_dictionary is null)
-                {
-                    _dictionary = new Hashtable();
-                }
+                _dictionary ??= new Hashtable();
 
                 if (value is null)
                 {
@@ -1822,10 +1795,7 @@ namespace System.ComponentModel.Design
                 get => _name;
                 set
                 {
-                    if (value is null)
-                    {
-                        value = string.Empty;
-                    }
+                    value ??= string.Empty;
 
                     if (_name != value)
                     {

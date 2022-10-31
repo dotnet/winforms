@@ -12,12 +12,11 @@ using Moq;
 using Xunit;
 using static Interop;
 using static Interop.User32;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ButtonBaseTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -5710,7 +5709,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.OnKeyDown(new KeyEventArgs(key));
-            Assert.Equal(expected, (int)SendMessageW(control.Handle, (WM)BM.GETSTATE));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)BM.GETSTATE));
         }
 
         [WinFormsTheory]
@@ -5735,7 +5734,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
             control.OnKeyDown(new KeyEventArgs(key));
-            Assert.Equal(expected, (int)SendMessageW(control.Handle, (WM)BM.GETSTATE));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)BM.GETSTATE));
         }
 
         [WinFormsFact]
@@ -5989,7 +5988,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.OnKeyUp(new KeyEventArgs(key));
-            Assert.Equal(expected, (int)SendMessageW(control.Handle, (WM)BM.GETSTATE));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)BM.GETSTATE));
         }
 
         [WinFormsTheory]
@@ -6014,7 +6013,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
             control.OnKeyUp(new KeyEventArgs(key));
-            Assert.Equal(expected, (int)SendMessageW(control.Handle, (WM)BM.GETSTATE));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)BM.GETSTATE));
         }
 
         [WinFormsFact]

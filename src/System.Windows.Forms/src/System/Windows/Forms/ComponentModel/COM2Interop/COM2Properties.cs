@@ -2,10 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -20,65 +20,38 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private static readonly TraceSwitch DbgCom2PropertiesSwitch = new TraceSwitch("DbgCom2Properties", "Com2Properties: debug Com2 properties manager");
 #endif
 
-        /// <summary>
-        ///  This is the interval that we'll hold props for.  If someone doesn't touch an object
-        ///  for this amount of time, we'll dump the properties from our cache.
-        ///
-        ///  5 minutes -- ticks are 1/10,000,000th of a second
-        /// </summary>
-        private const long AGE_THRESHOLD = (long)(10000000L * 60L * 5L);
+        // This is the interval that we'll hold properties for. If someone doesn't touch an object for this amount of time,
+        // we'll dump the properties from our cache. 5 minutes -- ticks are 1/10,000,000th of a second
+        private const long AgeThreshold = 10000000L * 60L * 5L;
 
-        /// <summary>
-        ///  This is the object that gave us the properties.  We hold a WeakRef so we don't addref the object.
-        /// </summary>
-        internal WeakReference weakObjRef;
+        // This is the object that gave us the properties.  We hold a WeakRef so we don't addref the object.
+        private WeakReference _weakObjectReference;
 
-        /// <summary>
-        ///  This is our list of properties.
-        /// </summary>
-        private Com2PropertyDescriptor[] props;
+        private Com2PropertyDescriptor[] _properties;
 
-        /// <summary>
-        ///  The index of the default property
-        /// </summary>
-        private readonly int defaultIndex = -1;
+        private readonly int _defaultPropertyIndex = -1;
 
-        /// <summary>
-        ///  The timestamp of the last operation on this property manager, usually
-        ///  when the property list was fetched.
-        /// </summary>
-        private long touchedTime;
+        // The timestamp of the last operation on this property manager, usually when the property list was fetched.
+        private long _touchedTime;
 
-        /// <summary>
-        ///  For non-IProvideMultipleClassInfo ITypeInfos, this is the version number on the last
-        ///  ITypeInfo we looked at.  If this changes, we know we need to dump the cache.
-        /// </summary>
-        private (ushort, ushort, ushort, ushort)[] _typeInfoVersions;
-
-#if DEBUG
-        private readonly string dbgObjName;
-        private readonly string dbgObjClass;
-#endif
+        // For non-IProvideMultipleClassInfo ITypeInfos, this is the version number on the last ITypeInfo we looked at.
+        // If this changes, we know we need to dump the cache.
+        private (ushort FunctionCount, ushort VariableCount, ushort MajorVersion, ushort MinorVersion)[] _typeInfoVersions;
 
         private int alwaysValid;
 
-        /// <summary>
-        ///  These are the interfaces we recognize for extended browsing.
-        /// </summary>
-        private static readonly Type[] extendedInterfaces = new Type[]
+        // The interfaces we recognize for extended browsing.
+        private static readonly Type[] s_extendedInterfaces = new Type[]
         {
             typeof(VSSDK.ICategorizeProperties),
             typeof(VSSDK.IProvidePropertyBuilder),
-            typeof(Oleaut32.IPerPropertyBrowsing),
+            typeof(IPerPropertyBrowsing.Interface),
             typeof(VSSDK.IVsPerPropertyBrowsing),
             typeof(VSSDK.IVSMDPerPropertyBrowsing)
         };
 
-        /// <summary>
-        ///  These are the classes of handlers corresponding to the extended
-        ///  interfaces above.
-        /// </summary>
-        private static readonly Type[] extendedInterfaceHandlerTypes = new Type[]
+        // The handler classes corresponding to the extended interfaces above.
+        private static readonly Type[] s_extendedInterfaceHandlerTypes = new Type[]
         {
             typeof(Com2ICategorizePropertiesHandler),
             typeof(Com2IProvidePropertyBuilderHandler),
@@ -87,55 +60,41 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             typeof(Com2IManagedPerPropertyBrowsingHandler)
         };
 
-        public event EventHandler Disposed;
+        public event EventHandler? Disposed;
 
-        /// <summary>
-        ///  Default ctor.
-        /// </summary>
-        public Com2Properties(object obj, Com2PropertyDescriptor[] props, int defaultIndex)
+        public Com2Properties(object comObject, Com2PropertyDescriptor[] properties, int defaultIndex)
         {
+            ArgumentNullException.ThrowIfNull(comObject);
+            ArgumentNullException.ThrowIfNull(properties);
+
 #if DEBUG
-            ComNativeDescriptor cnd = new ComNativeDescriptor();
-            dbgObjName = ComNativeDescriptor.GetName(obj);
-            if (dbgObjName is null)
-            {
-                dbgObjName = "(null)";
-            }
-
-            dbgObjClass = ComNativeDescriptor.GetClassName(obj);
-            if (dbgObjClass is null)
-            {
-                dbgObjClass = "(null)";
-            }
-
             if (DbgCom2PropertiesSwitch.TraceVerbose)
             {
-                Debug.WriteLine("Creating Com2Properties for object " + dbgObjName + ", class=" + dbgObjClass);
+                Debug.WriteLine($"Creating Com2Properties for object {ComNativeDescriptor.GetName(comObject) ?? "(null)"}, class={ComNativeDescriptor.GetClassName(comObject) ?? "(null)"}");
             }
 #endif
 
-            // set up our variables
-            SetProps(props);
-            weakObjRef = new WeakReference(obj);
+            // Set up our variables.
+            _properties = properties;
+            for (int i = 0; i < _properties.Length; i++)
+            {
+                _properties[i].PropertyManager = this;
+            }
 
-            this.defaultIndex = defaultIndex;
-
-            _typeInfoVersions = GetTypeInfoVersions(obj);
-
-            touchedTime = DateTime.Now.Ticks;
+            _weakObjectReference = new WeakReference(comObject);
+            _defaultPropertyIndex = defaultIndex;
+            _typeInfoVersions = GetTypeInfoVersions(comObject);
+            _touchedTime = DateTime.Now.Ticks;
         }
 
         internal bool AlwaysValid
         {
-            get
-            {
-                return alwaysValid > 0;
-            }
+            get => alwaysValid > 0;
             set
             {
                 if (value)
                 {
-                    if (alwaysValid == 0 && !CheckValid())
+                    if (alwaysValid == 0 && !CheckValidity())
                     {
                         return;
                     }
@@ -152,44 +111,34 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        /// <summary>
-        ///  Retrieve the default property.
-        /// </summary>
-        public Com2PropertyDescriptor DefaultProperty
+        public Com2PropertyDescriptor? DefaultProperty
         {
             get
             {
-                if (!CheckValid(true))
+                if (!CheckValidity(true))
                 {
                     return null;
                 }
 
-                if (defaultIndex == -1)
+                if (_defaultPropertyIndex == -1)
                 {
-                    if (props.Length > 0)
-                    {
-                        return props[0];
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return _properties.Length > 0 ? _properties[0] : null;
                 }
 
-                Debug.Assert(defaultIndex < props.Length, "Whoops! default index is > props.Length");
-                return props[defaultIndex];
+                Debug.Assert(_defaultPropertyIndex < _properties.Length, "Whoops! default index is > props.Length");
+                return _properties[_defaultPropertyIndex];
             }
         }
 
         /// <summary>
-        ///  The object that created the list of properties.  This will
-        ///  return null if the timeout has passed or the ref has died.
+        ///  The object that created the list of properties. This will return null if the timeout has passed or the
+        ///  reference has died.
         /// </summary>
-        public object TargetObject
+        public object? TargetObject
         {
             get
             {
-                if (!CheckValid(false) || touchedTime == 0)
+                if (!CheckValidity(false) || _touchedTime == 0)
                 {
 #if DEBUG
                     if (DbgCom2PropertiesSwitch.TraceVerbose)
@@ -200,126 +149,104 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return null;
                 }
 
-                return weakObjRef.Target;
+                return _weakObjectReference.Target;
             }
         }
 
         /// <summary>
-        ///  How long since these props have been queried.
+        ///  How long since these properties have been queried.
         /// </summary>
-        public long TicksSinceTouched
+        public long TicksSinceTouched => _touchedTime == 0 ? 0 : DateTime.Now.Ticks - _touchedTime;
+
+        public Com2PropertyDescriptor[]? Properties
         {
             get
             {
-                if (touchedTime == 0)
-                {
-                    return 0;
-                }
-
-                return DateTime.Now.Ticks - touchedTime;
-            }
-        }
-
-        /// <summary>
-        ///  Returns the list of properties
-        /// </summary>
-        public Com2PropertyDescriptor[] Properties
-        {
-            get
-            {
-                CheckValid(true);
-                if (touchedTime == 0 || props is null)
+                CheckValidity(true);
+                if (_touchedTime == 0 || _properties is null)
                 {
                     return null;
                 }
 
-                touchedTime = DateTime.Now.Ticks;
+                _touchedTime = DateTime.Now.Ticks;
 
-                // refresh everyone!
-                for (int i = 0; i < props.Length; i++)
+                // Refresh everything.
+                for (int i = 0; i < _properties.Length; i++)
                 {
-                    props[i].SetNeedsRefresh(Com2PropertyDescriptorRefresh.All, true);
+                    _properties[i].SetNeedsRefresh(Com2PropertyDescriptorRefresh.All, true);
                 }
 
 #if DEBUG
                 if (DbgCom2PropertiesSwitch.TraceVerbose)
                 {
-                    Debug.WriteLine("Returning prop array for object " + dbgObjName + ", class=" + dbgObjClass);
+                    Debug.WriteLine("Returning property array for object.");
                 }
 #endif
-                return props;
+                return _properties;
             }
         }
 
         /// <summary>
-        ///  Should this guy be refreshed because of old age?
+        ///  Should this be refreshed because of old age?
         /// </summary>
-        public bool TooOld
+        public bool NeedsRefreshed
         {
             get
             {
-                // check if the property is valid but don't dispose it if it's not
-                CheckValid(false, false);
-                if (touchedTime == 0)
-                {
-                    return false;
-                }
-
-                return TicksSinceTouched > AGE_THRESHOLD;
+                // Check if the property is valid but don't dispose it if it's not.
+                CheckValidity(checkVersions: false, callDispose: false);
+                return _touchedTime == 0 ? false : TicksSinceTouched > AgeThreshold;
             }
         }
 
         /// <summary>
-        ///  Checks the source object for each extended browsing inteface
-        ///  listed in extendedInterfaces and creates a handler from extendedInterfaceHandlerTypes
-        ///  to handle it.
+        ///  Checks the source object for each supported extended browsing inteface and adds the relevant handlers.
         /// </summary>
         public void AddExtendedBrowsingHandlers(Hashtable handlers)
         {
-            object target = TargetObject;
+            object? target = TargetObject;
             if (target is null)
             {
                 return;
             }
 
-            // process all our registered types
-            Type t;
-            for (int i = 0; i < extendedInterfaces.Length; i++)
+            // Process all our registered types.
+            Type type;
+            for (int i = 0; i < s_extendedInterfaces.Length; i++)
             {
-                t = extendedInterfaces[i];
+                type = s_extendedInterfaces[i];
 
-                // is this object an implementor of the interface?
-                //
-                if (t.IsInstanceOfType(target))
+                // Is this object an implementor of the interface?
+                if (!type.IsInstanceOfType(target))
                 {
-                    // since handlers must be stateless, check to see if we've already
-                    // created one of this type
-                    //
-                    Com2ExtendedBrowsingHandler handler = (Com2ExtendedBrowsingHandler)handlers[t];
-                    if (handler is null)
-                    {
-                        handler = (Com2ExtendedBrowsingHandler)Activator.CreateInstance(extendedInterfaceHandlerTypes[i]);
-                        handlers[t] = handler;
-                    }
+                    continue;
+                }
 
-                    // make sure we got the right one
-                    //
-                    if (t.IsAssignableFrom(handler.Interface))
-                    {
+                // Since handlers must be stateless, check to see if we've already created one of this type
+                Com2ExtendedBrowsingHandler? handler = (Com2ExtendedBrowsingHandler?)handlers[type];
+                if (handler is null)
+                {
+                    handler = (Com2ExtendedBrowsingHandler)Activator.CreateInstance(s_extendedInterfaceHandlerTypes[i])!;
+                    Debug.Assert(handler is not null, $"Could not construct {s_extendedInterfaceHandlerTypes[i]}");
+
+                    handlers[type] = handler;
+                }
+
+                // Make sure we got the right one.
+                if (type.IsAssignableFrom(handler.Interface))
+                {
 #if DEBUG
-                        if (DbgCom2PropertiesSwitch.TraceVerbose)
-                        {
-                            Debug.WriteLine("Adding browsing handler type " + handler.Interface.Name + " to object " + dbgObjName + ", class=" + dbgObjClass);
-                        }
-#endif
-                        // allow the handler to attach itself to the appropriate properties
-                        //
-                        handler.SetupPropertyHandlers(props);
-                    }
-                    else
+                    if (DbgCom2PropertiesSwitch.TraceVerbose)
                     {
-                        throw new ArgumentException(string.Format(SR.COM2BadHandlerType, t.Name, handler.Interface.Name));
+                        Debug.WriteLine($"Adding browsing handler type {handler.Interface.Name} to object.");
                     }
+#endif
+                    // Allow the handler to attach itself to the appropriate properties.
+                    handler.SetupPropertyHandlers(_properties);
+                }
+                else
+                {
+                    throw new ArgumentException(string.Format(SR.COM2BadHandlerType, type.Name, handler.Interface.Name));
                 }
             }
         }
@@ -329,92 +256,71 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 #if DEBUG
             if (DbgCom2PropertiesSwitch.TraceVerbose)
             {
-                Debug.WriteLine("Disposing property manager for " + dbgObjName + ", class=" + dbgObjClass);
+                Debug.WriteLine("Disposing property manager.");
             }
 #endif
 
-            if (props is not null)
+            if (_properties is not null)
             {
                 Disposed?.Invoke(this, EventArgs.Empty);
 
-                weakObjRef = null;
-                props = null;
-                touchedTime = 0;
+                _weakObjectReference = null!;
+                _properties = null!;
+                _touchedTime = 0;
             }
         }
 
-        public bool CheckValid()
-        {
-            return CheckValid(false);
-        }
-
         /// <summary>
-        ///  Make sure this property list is still valid.
-        ///
-        ///  1) WeakRef is still alive
-        ///  2) Our timeout hasn't passed
+        ///  Gets a list of version longs for each type info in the COM object representing the current version stamp,
+        ///  function and variable count. If any of these things change, we'll re-fetch the properties.
         /// </summary>
-        public bool CheckValid(bool checkVersions)
+        private unsafe (ushort FunctionCount, ushort VariableCount, ushort MajorVersion, ushort MinorVersion)[] GetTypeInfoVersions(object comObject)
         {
-            return CheckValid(checkVersions, true);
-        }
-
-        /// <summary>
-        ///  Gets a list of version longs for each type info in the COM object representing the
-        ///  current version stamp, function and variable count.
-        ///  If any of these things change, we'll re-fetch the properties.
-        /// </summary>
-        private (ushort, ushort, ushort, ushort)[] GetTypeInfoVersions(object comObject)
-        {
-            Oleaut32.ITypeInfo[] pTypeInfos = Com2TypeInfoProcessor.FindTypeInfos(comObject, false);
+            Oleaut32.ITypeInfo[] pTypeInfos = Com2TypeInfoProcessor.FindTypeInfos(comObject, preferIProvideClassInfo: false);
             var versions = new (ushort, ushort, ushort, ushort)[pTypeInfos.Length];
             for (int i = 0; i < pTypeInfos.Length; i++)
             {
-                versions[i] = GetTypeInfoVersion(pTypeInfos[i]);
+                TYPEATTR* pTypeAttr = null;
+                HRESULT hr = pTypeInfos[i].GetTypeAttr(&pTypeAttr);
+                if (!hr.Succeeded || pTypeAttr is null)
+                {
+                    versions[i] = (0, 0, 0, 0);
+                }
+                else
+                {
+                    versions[i] = (pTypeAttr->cFuncs, pTypeAttr->cVars, pTypeAttr->wMajorVerNum, pTypeAttr->wMinorVerNum);
+                    pTypeInfos[i].ReleaseTypeAttr(pTypeAttr);
+                }
             }
 
             return versions;
         }
 
-        private unsafe (ushort, ushort, ushort, ushort) GetTypeInfoVersion(Oleaut32.ITypeInfo pTypeInfo)
-        {
-            Ole32.TYPEATTR* pTypeAttr = null;
-            HRESULT hr = pTypeInfo.GetTypeAttr(&pTypeAttr);
-            if (!hr.Succeeded() || pTypeAttr is null)
-            {
-                return (0, 0, 0, 0);
-            }
-
-            try
-            {
-                return (pTypeAttr->cFuncs, pTypeAttr->cVars, pTypeAttr->wMajorVerNum, pTypeAttr->wMinorVerNum);
-            }
-            finally
-            {
-                pTypeInfo.ReleaseTypeAttr(pTypeAttr);
-            }
-        }
-
-        internal bool CheckValid(bool checkVersions, bool callDispose)
+        /// <summary>
+        ///  Make sure this property list is still valid. (The reference is still alive and we haven't passed the
+        ///  timeout.)
+        /// </summary>
+        internal bool CheckValidity(bool checkVersions = false, bool callDispose = true)
         {
             if (AlwaysValid)
             {
                 return true;
             }
 
-            bool valid = weakObjRef is not null && weakObjRef.IsAlive;
+            object? target = _weakObjectReference.Target;
+            bool valid = target is not null;
 
-            // check the version information for each ITypeInfo the object exposes.
-            if (valid && checkVersions)
+            // Check the version information for each ITypeInfo the object exposes.
+            if (target is not null && checkVersions)
             {
-                (ushort, ushort, ushort, ushort)[] newTypeInfoVersions = GetTypeInfoVersions(weakObjRef.Target);
+                (ushort, ushort, ushort, ushort)[] newTypeInfoVersions = GetTypeInfoVersions(target);
                 if (newTypeInfoVersions.Length != _typeInfoVersions.Length)
                 {
                     valid = false;
                 }
                 else
                 {
-                    // compare each version number to the old one.
+                    // Compare each version number to the old one.
                     for (int i = 0; i < newTypeInfoVersions.Length; i++)
                     {
                         if (newTypeInfoVersions[i] != _typeInfoVersions[i])
@@ -427,20 +333,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (!valid)
                 {
-                    // update to the new version list we have.
-                    //
+                    // Update to the new version list we have.
                     _typeInfoVersions = newTypeInfoVersions;
                 }
             }
 
             if (!valid && callDispose)
             {
-                // weak ref has died, so remove this from the hash table
-                //
+                // Weak reference has died, so remove this from the hash table
 #if DEBUG
                 if (DbgCom2PropertiesSwitch.TraceVerbose)
                 {
-                    Debug.WriteLine("Disposing reference to object " + dbgObjName + ", class=" + dbgObjClass + " (weakRef " + (weakObjRef is null ? "null" : "dead") + ")");
+                    Debug.WriteLine($"Disposing reference to object (weakRef {(_weakObjectReference is null ? "null" : "dead")})");
                 }
 #endif
 
@@ -448,22 +352,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             return valid;
-        }
-
-        /// <summary>
-        ///  Set the props for this object, and notify each property
-        ///  that we are now it's manager
-        /// </summary>
-        internal void SetProps(Com2PropertyDescriptor[] props)
-        {
-            this.props = props;
-            if (props is not null)
-            {
-                for (int i = 0; i < props.Length; i++)
-                {
-                    props[i].PropertyManager = this;
-                }
-            }
         }
     }
 }

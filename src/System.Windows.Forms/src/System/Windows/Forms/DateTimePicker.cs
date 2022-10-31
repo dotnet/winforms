@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using SourceGenerated;
@@ -50,7 +49,7 @@ namespace System.Windows.Forms
 
         private static readonly string s_dateTimePickerLocalizedControlTypeString = SR.DateTimePickerLocalizedControlType;
 
-        private const DTS TIMEFORMAT_NOUPDOWN = DTS.TIMEFORMAT & (~DTS.UPDOWN);
+        private const uint TIMEFORMAT_NOUPDOWN = PInvoke.DTS_TIMEFORMAT & (~PInvoke.DTS_UPDOWN);
         private EventHandler? _onCloseUp;
         private EventHandler? _onDropDown;
         private EventHandler? _onValueChanged;
@@ -74,7 +73,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DateTime MaxDateTime = new(9998, 12, 31);
 
-        private DTS _style;
+        private uint _style;
         private short _prefHeightCache = -1;
 
         /// <summary>
@@ -137,7 +136,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackColorChanged
+        public new event EventHandler? BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -153,7 +152,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -169,7 +168,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -193,7 +192,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(_calendarForeColor))
                 {
                     _calendarForeColor = value;
-                    SetControlColor(MCSC.TEXT, value);
+                    SetControlColor(PInvoke.MCSC_TEXT, value);
                 }
             }
         }
@@ -220,7 +219,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Gdi32.HFONT CalendarFontHandle
+        private HFONT CalendarFontHandle
         {
             get
             {
@@ -253,7 +252,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(_calendarTitleBackColor))
                 {
                     _calendarTitleBackColor = value;
-                    SetControlColor(MCSC.TITLEBK, value);
+                    SetControlColor(PInvoke.MCSC_TITLEBK, value);
                 }
             }
         }
@@ -276,7 +275,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(_calendarTitleForeColor))
                 {
                     _calendarTitleForeColor = value;
-                    SetControlColor(MCSC.TITLETEXT, value);
+                    SetControlColor(PInvoke.MCSC_TITLETEXT, value);
                 }
             }
         }
@@ -299,7 +298,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(_calendarTrailingText))
                 {
                     _calendarTrailingText = value;
-                    SetControlColor(MCSC.TRAILINGTEXT, value);
+                    SetControlColor(PInvoke.MCSC_TRAILINGTEXT, value);
                 }
             }
         }
@@ -322,7 +321,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(_calendarMonthBackground))
                 {
                     _calendarMonthBackground = value;
-                    SetControlColor(MCSC.MONTHBK, value);
+                    SetControlColor(PInvoke.MCSC_MONTHBK, value);
                 }
             }
         }
@@ -341,9 +340,9 @@ namespace System.Windows.Forms
                 // The information from win32 DateTimePicker is reliable only when ShowCheckBoxes is True
                 if (ShowCheckBox && IsHandleCreated)
                 {
-                    var sys = new Kernel32.SYSTEMTIME();
-                    GDT gdt = (GDT)User32.SendMessageW(this, (User32.WM)DTM.GETSYSTEMTIME, 0, ref sys);
-                    return gdt == GDT.VALID;
+                    var sys = default(SYSTEMTIME);
+                    NMDATETIMECHANGE_FLAGS gdt = (NMDATETIMECHANGE_FLAGS)PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_GETSYSTEMTIME, 0, ref sys);
+                    return gdt == NMDATETIMECHANGE_FLAGS.GDT_VALID;
                 }
                 else
                 {
@@ -359,12 +358,12 @@ namespace System.Windows.Forms
                     {
                         if (value)
                         {
-                            Kernel32.SYSTEMTIME systemTime = _value;
-                            User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.VALID, ref systemTime);
+                            SYSTEMTIME systemTime = (SYSTEMTIME)_value;
+                            PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
                         }
                         else
                         {
-                            User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.NONE);
+                            PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_NONE);
                         }
                     }
 
@@ -378,7 +377,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -392,14 +391,14 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = WindowClasses.WC_DATETIMEPICK;
+                cp.ClassName = PInvoke.DATETIMEPICK_CLASS;
 
                 cp.Style |= (int)_style;
 
                 switch (_format)
                 {
                     case DateTimePickerFormat.Long:
-                        cp.Style |= (int)DTS.LONGDATEFORMAT;
+                        cp.Style |= (int)PInvoke.DTS_LONGDATEFORMAT;
                         break;
                     case DateTimePickerFormat.Short:
                         break;
@@ -410,14 +409,14 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout)
                 {
                     //We want to turn on mirroring for DateTimePicker explicitly.
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
                     //Don't need these styles when mirroring is turned on.
-                    cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -446,7 +445,7 @@ namespace System.Windows.Forms
                     {
                         if (_format == DateTimePickerFormat.Custom)
                         {
-                            User32.SendMessageW(this, (User32.WM)DTM.SETFORMATW, 0, _customFormat);
+                            PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETFORMATW, 0, _customFormat);
                         }
                     }
                 }
@@ -464,7 +463,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -479,13 +478,13 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DateTimePickerDropDownAlignDescr))]
         public LeftRightAlignment DropDownAlign
         {
-            get => (_style & DTS.RIGHTALIGN) != 0 ? LeftRightAlignment.Right : LeftRightAlignment.Left;
+            get => (_style & PInvoke.DTS_RIGHTALIGN) != 0 ? LeftRightAlignment.Right : LeftRightAlignment.Left;
             set
             {
                 // Valid values are 0x0 to 0x1
                 SourceGenerated.EnumValidator.Validate(value);
 
-                SetStyleBit(value == LeftRightAlignment.Right, DTS.RIGHTALIGN);
+                SetStyleBit(value == LeftRightAlignment.Right, PInvoke.DTS_RIGHTALIGN);
             }
         }
 
@@ -499,7 +498,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? ForeColorChanged
+        public new event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -568,7 +567,7 @@ namespace System.Windows.Forms
         // problems are anticipated here: I don't believe there are calendars
         // around that have max dates on them.  But if there are, we'll deal with
         // them correctly.
-        static internal DateTime EffectiveMaxDate(DateTime maxDate)
+        internal static DateTime EffectiveMaxDate(DateTime maxDate)
         {
             DateTime maxSupportedDate = MaximumDateTime;
             if (maxDate > maxSupportedDate)
@@ -709,7 +708,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler? MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -717,7 +716,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler? MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -798,8 +797,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DateTimePickerShowNoneDescr))]
         public bool ShowCheckBox
         {
-            get => (_style & DTS.SHOWNONE) != 0;
-            set => SetStyleBit(value, DTS.SHOWNONE);
+            get => (_style & PInvoke.DTS_SHOWNONE) != 0;
+            set => SetStyleBit(value, PInvoke.DTS_SHOWNONE);
         }
 
         /// <summary>
@@ -810,12 +809,12 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DateTimePickerShowUpDownDescr))]
         public bool ShowUpDown
         {
-            get => (_style & DTS.UPDOWN) != 0;
+            get => (_style & PInvoke.DTS_UPDOWN) != 0;
             set
             {
                 if (ShowUpDown != value)
                 {
-                    SetStyleBit(value, DTS.UPDOWN);
+                    SetStyleBit(value, PInvoke.DTS_UPDOWN);
                 }
             }
         }
@@ -850,7 +849,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler? TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -903,8 +902,8 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     // Make sure any changes to this code get propagated to createHandle
-                    Kernel32.SYSTEMTIME systemTime = value;
-                    User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.VALID, ref systemTime);
+                    SYSTEMTIME systemTime = (SYSTEMTIME)value;
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
                 }
 
                 if (valueChanged)
@@ -975,7 +974,7 @@ namespace System.Windows.Forms
                 {
                     var icc = new INITCOMMONCONTROLSEX
                     {
-                        dwICC = ICC.DATE_CLASSES
+                        dwICC = INITCOMMONCONTROLSEX_ICC.ICC_DATE_CLASSES
                     };
                     InitCommonControlsEx(ref icc);
                 }
@@ -992,17 +991,17 @@ namespace System.Windows.Forms
             if (_userHasSetValue && _validTime)
             {
                 // Make sure any changes to this code get propagated to setValue
-                Kernel32.SYSTEMTIME systemTime = Value;
-                User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.VALID, ref systemTime);
+                SYSTEMTIME systemTime = (SYSTEMTIME)Value;
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
             }
             else if (!_validTime)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.NONE);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_NONE);
             }
 
             if (_format == DateTimePickerFormat.Custom)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETFORMATW, 0, _customFormat);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETFORMATW, 0, _customFormat);
             }
 
             UpdateUpDown();
@@ -1149,7 +1148,10 @@ namespace System.Windows.Forms
                 // border should be drawn disabled when theming (VisualStyles) is enabled. Setting the window
                 // style to itself (which will have the proper WS_DISABLED setting after calling base) will
                 // flush the cached value and render the border as one would expect.
-                User32.SetWindowLong(this, User32.GWL.STYLE, User32.GetWindowLong(this, User32.GWL.STYLE));
+                PInvoke.SetWindowLong(
+                    this,
+                    WINDOW_LONG_PTR_INDEX.GWL_STYLE,
+                    PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE));
             }
         }
 
@@ -1279,8 +1281,8 @@ namespace System.Windows.Forms
             // Update the text displayed in the DateTimePicker.
             if (IsHandleCreated)
             {
-                Kernel32.SYSTEMTIME systemTime = _value;
-                User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (nint)GDT.VALID, ref systemTime);
+                SYSTEMTIME systemTime = (SYSTEMTIME)_value;
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
             }
 
             // Updating Checked to false will set the control to "no date" and clear its checkbox.
@@ -1293,11 +1295,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  If the handle has been created, this applies the color to the control
         /// </summary>
-        private void SetControlColor(MCSC colorIndex, Color value)
+        private void SetControlColor(uint colorIndex, Color value)
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETMCCOLOR, (nint)colorIndex, value.ToWin32());
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETMCCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
             }
         }
 
@@ -1308,7 +1310,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETMCFONT, CalendarFontHandle, NativeMethods.InvalidIntPtr);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETMCFONT, (WPARAM)CalendarFontHandle, (LPARAM)(-1));
             }
         }
 
@@ -1317,11 +1319,11 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetAllControlColors()
         {
-            SetControlColor(MCSC.MONTHBK, _calendarMonthBackground);
-            SetControlColor(MCSC.TEXT, _calendarForeColor);
-            SetControlColor(MCSC.TITLEBK, _calendarTitleBackColor);
-            SetControlColor(MCSC.TITLETEXT, _calendarTitleForeColor);
-            SetControlColor(MCSC.TRAILINGTEXT, _calendarTrailingText);
+            SetControlColor(PInvoke.MCSC_MONTHBK, _calendarMonthBackground);
+            SetControlColor(PInvoke.MCSC_TEXT, _calendarForeColor);
+            SetControlColor(PInvoke.MCSC_TITLEBK, _calendarTitleBackColor);
+            SetControlColor(PInvoke.MCSC_TITLETEXT, _calendarTitleForeColor);
+            SetControlColor(PInvoke.MCSC_TRAILINGTEXT, _calendarTrailingText);
         }
 
         /// <summary>
@@ -1336,18 +1338,18 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
-                times[0] = min;
-                times[1] = max;
-                GDTR flags = GDTR.MIN | GDTR.MAX;
-                User32.SendMessageW(this, (User32.WM)DTM.SETRANGE, (nint)flags, ref times[0]);
+                Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
+                times[0] = (SYSTEMTIME)min;
+                times[1] = (SYSTEMTIME)max;
+                uint flags = PInvoke.GDTR_MIN | PInvoke.GDTR_MAX;
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_SETRANGE, (WPARAM)(uint)flags, ref times[0]);
             }
         }
 
         /// <summary>
         ///  Turns on or off a given style bit.
         /// </summary>
-        private void SetStyleBit(bool flag, DTS bit)
+        private void SetStyleBit(bool flag, uint bit)
         {
             if (((_style & bit) != 0) == flag)
             {
@@ -1463,10 +1465,10 @@ namespace System.Windows.Forms
             {
                 EnumChildren c = new EnumChildren();
                 User32.EnumChildWindows(this, c.enumChildren);
-                if (c.hwndFound != IntPtr.Zero)
+                if (!c.hwndFound.IsNull)
                 {
-                    User32.InvalidateRect(new HandleRef(c, c.hwndFound), null, BOOL.TRUE);
-                    User32.UpdateWindow(c.hwndFound);
+                    PInvoke.InvalidateRect(c.hwndFound, lpRect: (RECT*)null, bErase: true);
+                    PInvoke.UpdateWindow(c.hwndFound);
                 }
             }
         }
@@ -1496,13 +1498,13 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateTimeChange(ref Message m)
         {
-            NMDATETIMECHANGE* nmdtc = (NMDATETIMECHANGE*)m.LParamInternal;
+            NMDATETIMECHANGE* nmdtc = (NMDATETIMECHANGE*)(nint)m.LParamInternal;
             DateTime temp = _value;
             bool oldvalid = _validTime;
-            if (nmdtc->dwFlags != GDT.NONE)
+            if (nmdtc->dwFlags != NMDATETIMECHANGE_FLAGS.GDT_NONE)
             {
                 _validTime = true;
-                _value = nmdtc->st;
+                _value = (DateTime)nmdtc->st;
                 _userHasSetValue = true;
             }
             else
@@ -1522,15 +1524,15 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmDropDown()
         {
-            if (RightToLeftLayout == true && RightToLeft == RightToLeft.Yes)
+            if (RightToLeftLayout && RightToLeft == RightToLeft.Yes)
             {
-                IntPtr handle = User32.SendMessageW(this, (User32.WM)DTM.GETMONTHCAL);
+                HWND handle = (HWND)PInvoke.SendMessage(this, (User32.WM)PInvoke.DTM_GETMONTHCAL);
                 if (handle != IntPtr.Zero)
                 {
-                    User32.WS_EX style = (User32.WS_EX)User32.GetWindowLong(handle, User32.GWL.EXSTYLE);
-                    style |= User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT;
-                    style &= ~(User32.WS_EX.RIGHT | User32.WS_EX.RTLREADING);
-                    User32.SetWindowLong(handle, User32.GWL.EXSTYLE, (nint)style);
+                    WINDOW_EX_STYLE style = (WINDOW_EX_STYLE)PInvoke.GetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+                    style |= WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
+                    style &= ~(WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_RTLREADING);
+                    PInvoke.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (nint)style);
                     GC.KeepAlive(this);
                 }
             }
@@ -1554,7 +1556,7 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
+                NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                 switch ((DTN)nmhdr->code)
                 {
                     case DTN.CLOSEUP:

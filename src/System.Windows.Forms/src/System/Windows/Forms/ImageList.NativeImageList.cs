@@ -2,18 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DEBUG
 using System.Diagnostics;
-#endif
 using System.Drawing;
-using static Interop;
-using static Interop.ComCtl32;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
 {
     public sealed partial class ImageList
     {
-        internal class NativeImageList : IDisposable, IHandle
+        internal class NativeImageList : IDisposable, IHandle<HIMAGELIST>
         {
 #if DEBUG
             private readonly string _callStack = new StackTrace().ToString();
@@ -23,36 +20,38 @@ namespace System.Windows.Forms
 
             private static readonly object s_syncLock = new object();
 
-            public NativeImageList(Ole32.IStream pstm)
+            public unsafe NativeImageList(IStream.Interface pstm)
             {
-                IntPtr himl;
+                HIMAGELIST himl;
                 lock (s_syncLock)
                 {
-                    himl = ComCtl32.ImageList.Read(pstm);
+                    using var stream = ComHelpers.GetComScope<IStream>(pstm, out bool result);
+                    Debug.Assert(result);
+                    himl = PInvoke.ImageList_Read(stream);
                     Init(himl);
                 }
             }
 
-            public NativeImageList(Size imageSize, ILC flags)
+            public NativeImageList(Size imageSize, IMAGELIST_CREATION_FLAGS flags)
             {
-                IntPtr himl;
+                HIMAGELIST himl;
                 lock (s_syncLock)
                 {
-                    himl = ComCtl32.ImageList.Create(imageSize.Width, imageSize.Height, flags, InitialCapacity, GrowBy);
+                    himl = PInvoke.ImageList_Create(imageSize.Width, imageSize.Height, flags, InitialCapacity, GrowBy);
                     Init(himl);
                 }
             }
 
-            private NativeImageList(IntPtr himl)
+            private NativeImageList(HIMAGELIST himl)
             {
-                Handle = himl;
+                HIMAGELIST = himl;
             }
 
-            private void Init(IntPtr himl)
+            private void Init(HIMAGELIST himl)
             {
-                if (himl != IntPtr.Zero)
+                if (!himl.IsNull)
                 {
-                    Handle = himl;
+                    HIMAGELIST = himl;
                     return;
                 }
 
@@ -62,7 +61,9 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ImageListCreateFailed);
             }
 
-            public IntPtr Handle { get; private set; }
+            HIMAGELIST IHandle<HIMAGELIST>.Handle => HIMAGELIST;
+
+            internal HIMAGELIST HIMAGELIST { get; private set; }
 
             public void Dispose()
             {
@@ -74,13 +75,13 @@ namespace System.Windows.Forms
             {
                 lock (s_syncLock)
                 {
-                    if (Handle == IntPtr.Zero)
+                    if (HIMAGELIST.IsNull)
                     {
                         return;
                     }
 
-                    ComCtl32.ImageList.Destroy(Handle);
-                    Handle = IntPtr.Zero;
+                    PInvoke.ImageList.Destroy(this);
+                    HIMAGELIST = HIMAGELIST.Null;
                 }
             }
 
@@ -101,8 +102,8 @@ namespace System.Windows.Forms
             {
                 lock (s_syncLock)
                 {
-                    IntPtr himl = ComCtl32.ImageList.Duplicate(Handle);
-                    if (himl != IntPtr.Zero)
+                    HIMAGELIST himl = PInvoke.ImageList_Duplicate(HIMAGELIST);
+                    if (!HIMAGELIST.IsNull)
                     {
                         return new NativeImageList(himl);
                     }

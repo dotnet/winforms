@@ -29,7 +29,14 @@ namespace System.Windows.Forms
 
             private protected override string AutomationId => COMBO_BOX_LIST_AUTOMATION_ID;
 
-            internal override Rectangle BoundingRectangle => User32.GetWindowRect(_owningComboBox.GetListNativeWindow());
+            internal override Rectangle BoundingRectangle
+            {
+                get
+                {
+                    PInvoke.GetWindowRect(_owningComboBox.GetListNativeWindow(), out var rect);
+                    return rect;
+                }
+            }
 
             /// <summary>
             ///  Return the child object at the given screen coordinates.
@@ -63,7 +70,10 @@ namespace System.Windows.Forms
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (!_owningComboBox.IsHandleCreated)
+                if (!_owningComboBox.IsHandleCreated ||
+                    // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
+                    // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
+                    !_owningComboBox.Created)
                 {
                     return null;
                 }

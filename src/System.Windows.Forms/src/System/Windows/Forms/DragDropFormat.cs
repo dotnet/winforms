@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         /// </returns>
         private static STGMEDIUM CopyData(short format, STGMEDIUM mediumSource)
         {
-            STGMEDIUM mediumDestination = new();
+            STGMEDIUM mediumDestination = default(STGMEDIUM);
 
             try
             {
@@ -72,7 +72,7 @@ namespace System.Windows.Forms
                         mediumDestination.unionmember = Ole32.OleDuplicateData(
                             mediumSource.unionmember,
                             format,
-                            Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
+                            PInvoke.GMEM.MOVEABLE | PInvoke.GMEM.DDESHARE | PInvoke.GMEM.ZEROINIT);
 
                         if (mediumDestination.unionmember == IntPtr.Zero)
                         {

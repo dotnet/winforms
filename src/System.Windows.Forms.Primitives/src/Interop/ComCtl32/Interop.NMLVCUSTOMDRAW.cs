@@ -12,7 +12,7 @@ internal static partial class Interop
             public int clrText;
             public int clrTextBk;
             public int iSubItem;
-            public ComCtl32.LVCDI dwItemType;
+            public NMLVCUSTOMDRAW_ITEM_TYPE dwItemType;
             public int clrFace;
             public int iIconEffect;
             public int iIconPhase;

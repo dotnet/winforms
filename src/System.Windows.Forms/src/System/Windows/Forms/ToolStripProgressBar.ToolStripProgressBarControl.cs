@@ -2,20 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public partial class ToolStripProgressBar
     {
         internal class ToolStripProgressBarControl : ProgressBar
         {
-            private ToolStripProgressBar ownerItem;
+            private ToolStripProgressBar? _ownerItem;
 
-            public ToolStripProgressBar Owner
+            public ToolStripProgressBar? Owner
             {
-                get { return ownerItem; }
-                set { ownerItem = value; }
+                get { return _ownerItem; }
+                set { _ownerItem = value; }
             }
 
             internal override bool SupportsUiaProviders => true;

@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using System.Globalization;
-using static Interop;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -24,21 +24,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destType)
             {
-                if (destType == typeof(string) && !_itemsEnum._arraysFetched)
+                if (destType == typeof(string) && !_itemsEnum.ArraysFetched)
                 {
-                    object? curValue = _itemsEnum._target.GetValue(_itemsEnum._target.TargetObject);
-                    if (curValue == value || (curValue is not null && curValue.Equals(value)))
+                    object? currentValue = _itemsEnum.Target.GetValue(_itemsEnum.Target.TargetObject);
+                    if ((currentValue == value || (currentValue is not null && currentValue.Equals(value)))
+                        && _itemsEnum.Target.TargetObject is IPerPropertyBrowsing.Interface propertyBrowsing
+                        && TryGetDisplayString(propertyBrowsing, _itemsEnum.Target.DISPID, out string? displayString))
                     {
-                        bool success = false;
-                        string? val = GetDisplayString(
-                            (Oleaut32.IPerPropertyBrowsing)_itemsEnum._target.TargetObject,
-                            _itemsEnum._target.DISPID,
-                            ref success);
-
-                        if (success)
-                        {
-                            return val;
-                        }
+                        return displayString;
                     }
                 }
 

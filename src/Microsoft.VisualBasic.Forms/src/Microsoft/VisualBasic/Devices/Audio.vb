@@ -118,9 +118,7 @@ Namespace Microsoft.VisualBasic
                 Debug.Assert([Enum].IsDefined(GetType(AudioPlayMode), mode), "Enum value is out of range")
 
                 ' Stopping the sound ensures it's safe to dispose it. This could happen when we change the value of m_Sound below
-                If _sound IsNot Nothing Then
-                    _sound.Stop()
-                End If
+                _sound?.Stop()
 
                 _sound = sound
 

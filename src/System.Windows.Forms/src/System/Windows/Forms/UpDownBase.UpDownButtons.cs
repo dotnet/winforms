@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -219,13 +218,10 @@ namespace System.Windows.Forms
                     !(_pushed != ButtonID.None && _captured == ButtonID.None),
                     "Invalid button pushed/captured combination");
 
-                Point pt = new Point(e.X, e.Y);
-                pt = PointToScreen(pt);
-
                 MouseEventArgs me = _parent.TranslateMouseEvent(this, e);
                 if (e.Button == MouseButtons.Left)
                 {
-                    if (!_parent.ValidationCancelled && User32.WindowFromPoint(pt) == Handle)
+                    if (!_parent.ValidationCancelled && PInvoke.WindowFromPoint(PointToScreen(e.Location)) == HWND)
                     {
                         if (!_doubleClickFired)
                         {
@@ -280,7 +276,7 @@ namespace System.Windows.Forms
                     vsr.DrawBackground(
                         hdc,
                         new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
-                        HandleInternal);
+                        HWNDInternal);
 
                     if (!Enabled)
                     {
@@ -300,7 +296,7 @@ namespace System.Windows.Forms
                     vsr.DrawBackground(
                         hdc,
                         new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
-                        HandleInternal);
+                        HWNDInternal);
                 }
                 else
                 {
@@ -326,8 +322,8 @@ namespace System.Windows.Forms
                     Point pt1 = new Point(clientRect.Left, clientRect.Bottom - 1);
                     Point pt2 = new Point(clientRect.Right, clientRect.Bottom - 1);
 
-                    using var hdc = new DeviceContextHdcScope(e);
-                    using var hpen = new Gdi32.CreatePenScope(color);
+                    using DeviceContextHdcScope hdc = new(e);
+                    using PInvoke.CreatePenScope hpen = new(color);
                     hdc.DrawLine(hpen, pt1, pt2);
                 }
 
@@ -344,7 +340,7 @@ namespace System.Windows.Forms
             internal override void ReleaseUiaProvider(IntPtr handle)
             {
                 if (IsAccessibilityObjectCreated
-                    && OsVersion.IsWindows8OrGreater
+                    && OsVersion.IsWindows8OrGreater()
                     && AccessibilityObject is UpDownButtonsAccessibleObject buttonsAccessibilityObject)
                 {
                     buttonsAccessibilityObject.ReleaseChildUiaProviders();

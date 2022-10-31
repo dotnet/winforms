@@ -198,10 +198,7 @@ namespace System.Windows.Forms
 
                 if (tempList is IList)
                 {
-                    if (finalType is null)
-                    {
-                        finalType = tempList.GetType();
-                    }
+                    finalType ??= tempList.GetType();
 
                     list = (IList)tempList;
                     WireEvents(list);
@@ -889,7 +886,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Causes the CurrentChanged event to occur.
         /// </summary>
-        internal protected override void OnCurrentChanged(EventArgs e)
+        protected internal override void OnCurrentChanged(EventArgs e)
         {
             if (!inChangeRecordState)
             {
@@ -974,7 +971,7 @@ namespace System.Windows.Forms
         }
 
         //Exists in Everett
-        internal protected void OnMetaDataChanged(EventArgs e)
+        protected internal void OnMetaDataChanged(EventArgs e)
         {
             onMetaDataChangedHandler?.Invoke(this, e);
         }

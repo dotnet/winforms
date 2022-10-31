@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
@@ -25,27 +23,32 @@ namespace System.Windows.Forms
             Initialize();
         }
 
-        public ToolStripButton(string text) : base(text, null, null)
+        public ToolStripButton(string? text)
+            : base(text, image: null, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripButton(Image image) : base(null, image, null)
+        public ToolStripButton(Image? image)
+            : base(text: null, image, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripButton(string text, Image image) : base(text, image, null)
+        public ToolStripButton(string? text, Image? image)
+            : base(text, image, onClick: null)
         {
             Initialize();
         }
 
-        public ToolStripButton(string text, Image image, EventHandler onClick) : base(text, image, onClick)
+        public ToolStripButton(string? text, Image? image, EventHandler? onClick)
+            : base(text, image, onClick)
         {
             Initialize();
         }
 
-        public ToolStripButton(string text, Image image, EventHandler onClick, string name) : base(text, image, onClick, name)
+        public ToolStripButton(string? text, Image? image, EventHandler? onClick, string? name)
+            : base(text, image, onClick, name)
         {
             Initialize();
         }
@@ -56,8 +59,6 @@ namespace System.Windows.Forms
             get => base.AutoToolTip;
             set => base.AutoToolTip = value;
         }
-
-        public override bool CanSelect => true;
 
         [DefaultValue(false)]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -113,7 +114,7 @@ namespace System.Windows.Forms
         ///  Occurs when the value of the <see cref="CheckBox.Checked"/> property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
-        public event EventHandler CheckedChanged
+        public event EventHandler? CheckedChanged
         {
             add => Events.AddHandler(s_checkedChangedEvent, value);
             remove => Events.RemoveHandler(s_checkedChangedEvent, value);
@@ -123,7 +124,7 @@ namespace System.Windows.Forms
         ///  Occurs when the value of the <see cref="CheckBox.CheckState"/> property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
-        public event EventHandler CheckStateChanged
+        public event EventHandler? CheckStateChanged
         {
             add => Events.AddHandler(s_checkStateChangedEvent, value);
             remove => Events.RemoveHandler(s_checkStateChangedEvent, value);
@@ -175,7 +176,7 @@ namespace System.Windows.Forms
         ///  Raises the <see cref="ToolStripMenuItem.CheckedChanged"/> event.
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
-            => ((EventHandler)Events[s_checkedChangedEvent])?.Invoke(this, e);
+            => ((EventHandler?)Events[s_checkedChangedEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Raises the <see cref="ToolStripMenuItem.CheckStateChanged"/> event.
@@ -183,7 +184,7 @@ namespace System.Windows.Forms
         protected virtual void OnCheckStateChanged(EventArgs e)
         {
             AccessibilityNotifyClients(AccessibleEvents.StateChange);
-            ((EventHandler)Events[s_checkStateChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_checkStateChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>

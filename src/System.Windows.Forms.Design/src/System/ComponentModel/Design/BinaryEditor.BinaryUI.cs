@@ -287,5 +287,3 @@ namespace System.ComponentModel.Design
         }
     }
 }
-
-

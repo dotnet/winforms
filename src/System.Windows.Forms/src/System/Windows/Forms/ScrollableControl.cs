@@ -178,20 +178,20 @@ namespace System.Windows.Forms
 
                 if (HScroll || HorizontalScroll.Visible)
                 {
-                    cp.Style |= (int)User32.WS.HSCROLL;
+                    cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
                 }
                 else
                 {
-                    cp.Style &= ~(int)User32.WS.HSCROLL;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_HSCROLL;
                 }
 
                 if (VScroll || VerticalScroll.Visible)
                 {
-                    cp.Style |= (int)User32.WS.VSCROLL;
+                    cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL;
                 }
                 else
                 {
-                    cp.Style &= ~(int)User32.WS.VSCROLL;
+                    cp.Style &= ~(int)WINDOW_STYLE.WS_VSCROLL;
                 }
 
                 return cp;
@@ -582,12 +582,12 @@ namespace System.Windows.Forms
                 _displayRect = ClientRectangle;
             }
 
-            if (!AutoScroll && HorizontalScroll._visible == true)
+            if (!AutoScroll && HorizontalScroll._visible)
             {
                 _displayRect = new Rectangle(_displayRect.X, _displayRect.Y, HorizontalScroll.Maximum, _displayRect.Height);
             }
 
-            if (!AutoScroll && VerticalScroll._visible == true)
+            if (!AutoScroll && VerticalScroll._visible)
             {
                 _displayRect = new Rectangle(_displayRect.X, _displayRect.Y, _displayRect.Width, VerticalScroll.Maximum);
             }
@@ -625,7 +625,9 @@ namespace System.Windows.Forms
             }
 
             AdjustFormScrollbars(AutoScroll);
-            base.OnLayout(levent);
+
+            // Because the code has been like that since long time, we assume that levent is not null.
+            base.OnLayout(levent!);
         }
 
         /// <summary>
@@ -929,15 +931,15 @@ namespace System.Windows.Forms
             return new Point(xCalc, yCalc);
         }
 
-        private unsafe int ScrollThumbPosition(User32.SB fnBar)
+        private unsafe int ScrollThumbPosition(SCROLLBAR_CONSTANTS fnBar)
         {
-            User32.SCROLLINFO si = new()
+            SCROLLINFO si = new()
             {
-                cbSize = (uint)sizeof(User32.SCROLLINFO),
-                fMask = User32.SIF.TRACKPOS
+                cbSize = (uint)sizeof(SCROLLINFO),
+                fMask = SCROLLINFO_MASK.SIF_TRACKPOS
             };
 
-            User32.GetScrollInfo(this, fnBar, ref si);
+            PInvoke.GetScrollInfo(this, fnBar, ref si);
             return si.nTrackPos;
         }
 
@@ -1260,10 +1262,10 @@ namespace System.Windows.Forms
         {
             if (!IsMirrored)
             {
-                User32.SendMessageW(
+                PInvoke.SendMessage(
                     this,
                     User32.WM.HSCROLL,
-                    PARAM.FromLowHigh((RightToLeft == RightToLeft.Yes) ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT, 0),
+                    (WPARAM)(RightToLeft == RightToLeft.Yes ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT),
                     0);
             }
         }
@@ -1291,7 +1293,7 @@ namespace System.Windows.Forms
             }
 
             Rectangle client = ClientRectangle;
-            User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParamInternal);
+            User32.SBV loWord = (User32.SBV)m.WParamInternal.LOWORD;
             bool thumbTrack = loWord != User32.SBV.THUMBTRACK;
             int pos = -_displayRect.Y;
             int oldValue = pos;
@@ -1306,7 +1308,7 @@ namespace System.Windows.Forms
             {
                 case User32.SBV.THUMBPOSITION:
                 case User32.SBV.THUMBTRACK:
-                    pos = ScrollThumbPosition(User32.SB.VERT);
+                    pos = ScrollThumbPosition(SCROLLBAR_CONSTANTS.SB_VERT);
                     break;
                 case User32.SBV.LINEUP:
                     if (pos > 0)
@@ -1395,12 +1397,12 @@ namespace System.Windows.Forms
                 maxPos = HorizontalScroll.Maximum;
             }
 
-            User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParamInternal);
+            User32.SBH loWord = (User32.SBH)m.WParamInternal.LOWORD;
             switch (loWord)
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
-                    pos = ScrollThumbPosition(User32.SB.HORZ);
+                    pos = ScrollThumbPosition(SCROLLBAR_CONSTANTS.SB_HORZ);
                     break;
                 case User32.SBH.LINELEFT:
                     if (pos > HorizontalScroll.SmallChange)
@@ -1470,7 +1472,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmOnScroll(ref Message m, int oldValue, int value, ScrollOrientation scrollOrientation)
         {
-            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParamInternal);
+            ScrollEventType type = (ScrollEventType)m.WParamInternal.LOWORD;
             if (type != ScrollEventType.EndScroll)
             {
                 ScrollEventArgs se = new ScrollEventArgs(type, oldValue, value, scrollOrientation);

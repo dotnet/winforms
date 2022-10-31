@@ -30,15 +30,15 @@ namespace System.Windows.Forms
     {
         /// <summary>
         ///   A self-defined window message that we post to the task dialog when
-        ///   handling a <see cref="ComCtl32.TDN.BUTTON_CLICKED"/>
+        ///   handling a <see cref="TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED"/>
         ///   notification, so that we will ignore further
-        ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> notifications
+        ///   <see cref="TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED"/> notifications
         ///   until we process the posted message.
         /// </summary>
         /// <remarks>
         /// <para>
         ///   This is used to work-around a bug in the native task dialog, where
-        ///   a <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> notification
+        ///   a <see cref="TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED"/> notification
         ///   seems to be sent twice to the callback when you "click" a button by
         ///   pressing its access key (mnemonic) and the dialog is still open when
         ///   continuing the message loop.
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         ///   ignoring a valid button clicked notification when the user presses the
         ///   button multiple times while the GUI thread is hangs - this seems
         ///   to work correctly, as our posted message will be processed before
-        ///   further (valid) <see cref="ComCtl32.TDN.BUTTON_CLICKED"/>
+        ///   further (valid) <see cref="TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED"/>
         ///   notifications are processed.
         /// </para>
         /// <para>
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         ///   A queue of <see cref="TaskDialogPage"/>s that have been bound by
         ///   navigating the dialog, but don't yet reflect the state of the
         ///   native dialog because the corresponding
-        ///   <see cref="ComCtl32.TDN.NAVIGATED"/> notification was
+        ///   <see cref="TASKDIALOG_NOTIFICATIONS.TDN_NAVIGATED"/> notification was
         ///   not yet received.
         /// </summary>
         private readonly Queue<TaskDialogPage> _waitingNavigationPages = new Queue<TaskDialogPage>();
@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         /// </summary>
         private IntPtr _instanceHandlePtr;
 
-        private IntPtr _handle;
+        private HWND _handle;
 
         private WindowSubclassHandler? _windowSubclassHandler;
 
@@ -104,7 +104,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   A counter which is used to determine whether the dialog has been navigated
-        ///   while being in a <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> handler.
+        ///   while being in a <see cref="TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED"/> handler.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -132,19 +132,19 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   The button designated as the dialog result by the handler for the
-        ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/>
+        ///   <see cref="TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED"/>
         ///   notification.
         /// </summary>
         /// <remarks>
         /// <para>
         ///   This will be set the first time the
-        ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> handler returns
+        ///   <see cref="TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED"/> handler returns
         ///   <see cref="HRESULT.S_OK"/> to cache the button instance,
         ///   so that <see cref="ShowDialog(IntPtr, TaskDialogPage, TaskDialogStartupLocation)"/> can then return it.
         /// </para>
         /// <para>
         ///   Additionally, this is used to check if there was already a
-        ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> handler that
+        ///   <see cref="TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED"/> handler that
         ///   returned <see cref="HRESULT.S_OK"/>, so that further
         ///   handles will return <see cref="HRESULT.S_FALSE"/> to
         ///   not override the previously set result.
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   Specifies if the <see cref="HandleTaskDialogCallback"/> method should
-        ///   currently ignore <see cref="ComCtl32.TDN.BUTTON_CLICKED"/>
+        ///   currently ignore <see cref="TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED"/>
         ///   notifications.
         /// </summary>
         /// <remarks>
@@ -180,14 +180,14 @@ namespace System.Windows.Forms
         private bool _ignoreButtonClickedNotifications;
 
         /// <summary>
-        ///   Specifies if the current <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> notification
-        ///   is caused by our own code sending a <see cref="ComCtl32.TDM.CLICK_BUTTON"/> message.
+        ///   Specifies if the current <see cref="TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED"/> notification
+        ///   is caused by our own code sending a <see cref="TASKDIALOG_MESSAGES.TDM_CLICK_BUTTON"/> message.
         /// </summary>
         private bool _buttonClickedProgrammatically;
 
         /// <summary>
         ///   Specifies if the currently showing task dialog already received the
-        ///   <see cref="ComCtl32.TDN.DESTROYED"/> notification.
+        ///   <see cref="TASKDIALOG_NOTIFICATIONS.TDN_DESTROYED"/> notification.
         /// </summary>
         private bool _receivedDestroyedNotification;
 
@@ -242,7 +242,7 @@ namespace System.Windows.Forms
         internal bool IsHandleCreated => _handle != IntPtr.Zero;
 
         internal bool InvokeRequired => IsHandleCreated &&
-            User32.GetWindowThreadProcessId(_handle, out _) != Kernel32.GetCurrentThreadId();
+            PInvoke.GetWindowThreadProcessId(_handle, out _) != PInvoke.GetCurrentThreadId();
 
         /// <summary>
         ///   Gets or sets the current count of stack frames that are in the
@@ -263,8 +263,8 @@ namespace System.Windows.Forms
 
         [UnmanagedCallersOnly]
         private static HRESULT HandleTaskDialogNativeCallback(
-            IntPtr hwnd,
-            ComCtl32.TDN msg,
+            HWND hwnd,
+            TASKDIALOG_NOTIFICATIONS msg,
             IntPtr wParam,
             IntPtr lParam,
             IntPtr lpRefData) =>
@@ -489,10 +489,7 @@ namespace System.Windows.Forms
 
                     // Marshal.ThrowExceptionForHR will use the IErrorInfo on the
                     // current thread if it exists.
-                    if (returnValue.Failed())
-                    {
-                        Marshal.ThrowExceptionForHR((int)returnValue);
-                    }
+                    returnValue.ThrowOnFailure();
 
                     // Normally, the returned button ID should always equal the cached
                     // result button ID. However, in some cases when the dialog is closed
@@ -534,7 +531,7 @@ namespace System.Windows.Forms
                     // raiseClosed/raisePageDestroyed flags are is cleared even if
                     // the TDN_DESTROYED notification did not occur (although that
                     // should only happen when there was an exception).
-                    _handle = IntPtr.Zero;
+                    _handle = HWND.Null;
                     _raisedPageCreated = false;
 
                     // Clear cached objects and other fields.
@@ -567,21 +564,20 @@ namespace System.Windows.Forms
         // Messages that can be sent to the dialog while it is being shown.
 
         /// <summary>
-        ///   Closes the shown task dialog with
-        ///   <see cref="TaskDialogButton.Cancel"/> as resulting button.
+        ///   Closes the shown task dialog with <see cref="TaskDialogButton.Cancel"/> as resulting button.
         /// </summary>
         /// <remarks>
-        /// <para>
+        ///  <para>
         ///   To close the dialog with a different result, call the
         ///   <see cref="TaskDialogButton.PerformClick"/> method of the
         ///   <see cref="TaskDialogButton"/> that you want to set as a result.
-        /// </para>
-        /// <para>
+        ///  </para>
+        ///  <para>
         ///   This method can be called while the dialog is waiting for
         ///   navigation to complete, whereas <see cref="TaskDialogButton.PerformClick"/>
         ///   would throw in that case. When calling this method, the
         ///   <see cref="TaskDialogButton.Click"/> event won't be raised.
-        /// </para>
+        ///  </para>
         /// </remarks>
         public void Close()
         {
@@ -603,25 +599,22 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   While the dialog is being shown, switches the progress bar mode to either a
-        ///   marquee progress bar or to a regular progress bar.
-        ///   For a marquee progress bar, you can enable or disable the marquee using
-        ///   <see cref="SetProgressBarMarquee(bool, int)"/>.
+        ///  While the dialog is being shown, switches the progress bar mode to either a
+        ///  marquee progress bar or to a regular progress bar.
+        ///  For a marquee progress bar, you can enable or disable the marquee using
+        ///  <see cref="SetProgressBarMarquee(bool, int)"/>.
         /// </summary>
-        /// <param name="marqueeProgressBar"></param>
         internal void SwitchProgressBarMode(bool marqueeProgressBar) => SendTaskDialogMessage(
-            ComCtl32.TDM.SET_MARQUEE_PROGRESS_BAR,
-            PARAM.FromBool(marqueeProgressBar),
-            IntPtr.Zero);
+            TASKDIALOG_MESSAGES.TDM_SET_MARQUEE_PROGRESS_BAR,
+            (WPARAM)(BOOL)marqueeProgressBar);
 
         /// <summary>
-        ///   While the dialog is being shown, enables or disables progress bar marquee when
-        ///   a marquee progress bar is displayed.
+        ///  While the dialog is being shown, enables or disables progress bar marquee when
+        ///  a marquee progress bar is displayed.
         /// </summary>
-        /// <param name="enableMarquee"></param>
         /// <param name="animationSpeed">
-        /// The time in milliseconds between marquee animation updates. If <c>0</c>, the
-        /// animation will be updated every 30 milliseconds.
+        ///  The time in milliseconds between marquee animation updates. If <c>0</c>, the
+        ///  animation will be updated every 30 milliseconds.
         /// </param>
         internal unsafe void SetProgressBarMarquee(bool enableMarquee, int animationSpeed = 0)
         {
@@ -631,20 +624,18 @@ namespace System.Windows.Forms
             }
 
             SendTaskDialogMessage(
-                ComCtl32.TDM.SET_PROGRESS_BAR_MARQUEE,
-                PARAM.FromBool(enableMarquee),
-                (IntPtr)(void*)(uint)animationSpeed);
+                TASKDIALOG_MESSAGES.TDM_SET_PROGRESS_BAR_MARQUEE,
+                (WPARAM)(BOOL)enableMarquee,
+                (LPARAM)animationSpeed);
         }
 
         /// <summary>
-        ///   While the dialog is being shown, sets the progress bar range.
+        ///  While the dialog is being shown, sets the progress bar range.
         /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
         /// <remarks>
-        /// <para>
+        ///  <para>
         ///   The default range is 0 to 100.
-        /// </para>
+        ///  </para>
         /// </remarks>
         internal unsafe void SetProgressBarRange(int min, int max)
         {
@@ -659,9 +650,9 @@ namespace System.Windows.Forms
             }
 
             SendTaskDialogMessage(
-                ComCtl32.TDM.SET_PROGRESS_BAR_RANGE,
-                IntPtr.Zero,
-                PARAM.FromLowHighUnsigned(min, max));
+                TASKDIALOG_MESSAGES.TDM_SET_PROGRESS_BAR_RANGE,
+                default,
+                LPARAM.MAKELPARAM(min, max));
         }
 
         /// <summary>
@@ -676,45 +667,40 @@ namespace System.Windows.Forms
             }
 
             SendTaskDialogMessage(
-                ComCtl32.TDM.SET_PROGRESS_BAR_POS,
-                (IntPtr)pos,
-                IntPtr.Zero);
+                TASKDIALOG_MESSAGES.TDM_SET_PROGRESS_BAR_POS,
+                (WPARAM)pos);
         }
 
         /// <summary>
         ///   While the dialog is being shown, sets the progress bar state.
         /// </summary>
         /// <param name="state"></param>
-        internal void SetProgressBarState(ComCtl32.PBST state) => SendTaskDialogMessage(
-            ComCtl32.TDM.SET_PROGRESS_BAR_STATE,
-            (IntPtr)state,
-            IntPtr.Zero);
+        internal void SetProgressBarState(uint state) => SendTaskDialogMessage(
+            TASKDIALOG_MESSAGES.TDM_SET_PROGRESS_BAR_STATE,
+            (WPARAM)(int)state);
 
         /// <summary>
-        ///   While the dialog is being shown, sets the checkbox to the specified
-        ///   state.
+        ///  While the dialog is being shown, sets the checkbox to the specified state.
         /// </summary>
-        /// <param name="isChecked"></param>
-        /// <param name="focus"></param>
         internal void ClickCheckBox(bool isChecked, bool focus = false) => SendTaskDialogMessage(
-            ComCtl32.TDM.CLICK_VERIFICATION,
-            PARAM.FromBool(isChecked),
-            PARAM.FromBool(focus));
+            TASKDIALOG_MESSAGES.TDM_CLICK_VERIFICATION,
+            (WPARAM)(BOOL)isChecked,
+            (LPARAM)(BOOL)focus);
 
         internal void SetButtonElevationRequiredState(int buttonID, bool requiresElevation) => SendTaskDialogMessage(
-            ComCtl32.TDM.SET_BUTTON_ELEVATION_REQUIRED_STATE,
-            (IntPtr)buttonID,
-            PARAM.FromBool(requiresElevation));
+            TASKDIALOG_MESSAGES.TDM_SET_BUTTON_ELEVATION_REQUIRED_STATE,
+            (WPARAM)buttonID,
+            (LPARAM)(BOOL)requiresElevation);
 
         internal void SetButtonEnabled(int buttonID, bool enable) => SendTaskDialogMessage(
-            ComCtl32.TDM.ENABLE_BUTTON,
-            (IntPtr)buttonID,
-            PARAM.FromBool(enable));
+            TASKDIALOG_MESSAGES.TDM_ENABLE_BUTTON,
+            (WPARAM)buttonID,
+            (LPARAM)(BOOL)enable);
 
         internal void SetRadioButtonEnabled(int radioButtonID, bool enable) => SendTaskDialogMessage(
-            ComCtl32.TDM.ENABLE_RADIO_BUTTON,
-            (IntPtr)radioButtonID,
-            PARAM.FromBool(enable));
+            TASKDIALOG_MESSAGES.TDM_ENABLE_RADIO_BUTTON,
+            (WPARAM)radioButtonID,
+            (LPARAM)(BOOL)enable);
 
         internal void ClickButton(int buttonID, bool checkWaitingForNavigation = true)
         {
@@ -724,9 +710,9 @@ namespace System.Windows.Forms
             try
             {
                 SendTaskDialogMessage(
-                    ComCtl32.TDM.CLICK_BUTTON,
-                    (IntPtr)buttonID,
-                    IntPtr.Zero,
+                    TASKDIALOG_MESSAGES.TDM_CLICK_BUTTON,
+                    (WPARAM)buttonID,
+                    default,
                     checkWaitingForNavigation);
             }
             finally
@@ -739,11 +725,10 @@ namespace System.Windows.Forms
         }
 
         internal void ClickRadioButton(int radioButtonID) => SendTaskDialogMessage(
-            ComCtl32.TDM.CLICK_RADIO_BUTTON,
-            (IntPtr)radioButtonID,
-            IntPtr.Zero);
+            TASKDIALOG_MESSAGES.TDM_CLICK_RADIO_BUTTON,
+            (WPARAM)radioButtonID);
 
-        internal unsafe void UpdateTextElement(ComCtl32.TDE element, string? text)
+        internal unsafe void UpdateTextElement(TASKDIALOG_ELEMENTS element, string? text)
         {
             // Instead of null, we must specify the empty string; otherwise the update
             // would be ignored.
@@ -754,13 +739,12 @@ namespace System.Windows.Forms
             fixed (char* textPtr = text)
             {
                 // Note: SetElementText will resize the dialog while UpdateElementText
-                // will not (which would lead to clipped controls), so we use the
-                // former.
-                SendTaskDialogMessage(ComCtl32.TDM.SET_ELEMENT_TEXT, (IntPtr)element, (IntPtr)textPtr);
+                // will not (which would lead to clipped controls), so we use the former.
+                SendTaskDialogMessage(TASKDIALOG_MESSAGES.TDM_SET_ELEMENT_TEXT, (WPARAM)(int)element, (LPARAM)textPtr);
             }
         }
 
-        internal void UpdateIconElement(ComCtl32.TDIE element, IntPtr icon)
+        internal void UpdateIconElement(TASKDIALOG_ICON_ELEMENTS element, IntPtr icon)
         {
             // Note: Updating the icon doesn't cause the task dialog to update
             // its size; in contrast to the text updates where we use a
@@ -771,7 +755,7 @@ namespace System.Windows.Forms
             //
             // To fix this, we call UpdateWindowSize() after updating the icon, to
             // force the task dialog to update its size.
-            SendTaskDialogMessage(ComCtl32.TDM.UPDATE_ICON, (IntPtr)element, icon);
+            SendTaskDialogMessage(TASKDIALOG_MESSAGES.TDM_UPDATE_ICON, (WPARAM)(int)element, (LPARAM)icon);
             UpdateWindowSize();
         }
 
@@ -802,14 +786,14 @@ namespace System.Windows.Forms
         }
 
         private HRESULT HandleTaskDialogCallback(
-            IntPtr hWnd,
-            ComCtl32.TDN notification,
+            HWND hWnd,
+            TASKDIALOG_NOTIFICATIONS notification,
             IntPtr wParam)
         {
             Debug.Assert(_boundPage is not null);
 
             // Set the hWnd as this may be the first time that we get it.
-            bool isFirstNotification = _handle == IntPtr.Zero;
+            bool isFirstNotification = _handle.IsNull;
             _handle = hWnd;
 
             try
@@ -823,7 +807,7 @@ namespace System.Windows.Forms
 
                 switch (notification)
                 {
-                    case ComCtl32.TDN.CREATED:
+                    case TASKDIALOG_NOTIFICATIONS.TDN_CREATED:
                         _boundPage.ApplyInitialization();
 
                         // Don't raise the Created event of the bound page if we are
@@ -840,7 +824,7 @@ namespace System.Windows.Forms
 
                         break;
 
-                    case ComCtl32.TDN.NAVIGATED:
+                    case TASKDIALOG_NOTIFICATIONS.TDN_NAVIGATED:
                         // Indicate to the ButtonClicked handlers currently on the stack
                         // that we received the TDN_NAVIGATED notification.
                         _buttonClickNavigationCounter.navigationIndex = _buttonClickNavigationCounter.stackCount;
@@ -872,7 +856,7 @@ namespace System.Windows.Forms
 
                         break;
 
-                    case ComCtl32.TDN.DESTROYED:
+                    case TASKDIALOG_NOTIFICATIONS.TDN_DESTROYED:
                         _receivedDestroyedNotification = true;
 
                         // Note: When multiple dialogs are shown (so Show() will occur
@@ -904,12 +888,12 @@ namespace System.Windows.Forms
                             // must not continue to send any notifications to the dialog
                             // after the callback function has returned from being called
                             // with the 'Destroyed' notification.
-                            _handle = IntPtr.Zero;
+                            _handle = HWND.Null;
                         }
 
                         break;
 
-                    case ComCtl32.TDN.BUTTON_CLICKED:
+                    case TASKDIALOG_NOTIFICATIONS.TDN_BUTTON_CLICKED:
                         // Only do the special handling (ignoring the notification and
                         // setting the _ignoreButtonClickedNotifications flag) if this
                         // BUTTON_CLICKED notification is not caused by our own code.
@@ -936,7 +920,7 @@ namespace System.Windows.Forms
                             // notifications until we receive the posted message.
                             if (User32.PostMessageW(
                                 hWnd,
-                                ContinueButtonClickHandlingMessage).IsTrue())
+                                ContinueButtonClickHandlingMessage))
                             {
                                 _ignoreButtonClickedNotifications = true;
                             }
@@ -1018,10 +1002,7 @@ namespace System.Windows.Forms
                                 // AllowCancel but not adding a "Cancel" button), we need
                                 // to create a new instance and save it, so that we can
                                 // return that instance after TaskDialogIndirect() returns.
-                                if (button is null)
-                                {
-                                    button = CreatePlaceholderButton((TaskDialogResult)buttonID);
-                                }
+                                button ??= CreatePlaceholderButton((TaskDialogResult)buttonID);
 
                                 // Cache the result button if we return S_OK.
                                 _resultButton = (button, buttonID);
@@ -1030,7 +1011,7 @@ namespace System.Windows.Forms
 
                         return applyButtonResult ? HRESULT.S_OK : HRESULT.S_FALSE;
 
-                    case ComCtl32.TDN.RADIO_BUTTON_CLICKED:
+                    case TASKDIALOG_NOTIFICATIONS.TDN_RADIO_BUTTON_CLICKED:
                         int radioButtonID = PARAM.ToInt(wParam);
                         TaskDialogRadioButton radioButton = _boundPage.GetBoundRadioButtonByID(radioButtonID)!;
 
@@ -1050,15 +1031,15 @@ namespace System.Windows.Forms
 
                         break;
 
-                    case ComCtl32.TDN.EXPANDO_BUTTON_CLICKED:
+                    case TASKDIALOG_NOTIFICATIONS.TDN_EXPANDO_BUTTON_CLICKED:
                         _boundPage.Expander!.HandleExpandoButtonClicked(wParam != IntPtr.Zero);
                         break;
 
-                    case ComCtl32.TDN.VERIFICATION_CLICKED:
+                    case TASKDIALOG_NOTIFICATIONS.TDN_VERIFICATION_CLICKED:
                         _boundPage.Verification!.HandleCheckBoxClicked(wParam != IntPtr.Zero);
                         break;
 
-                    case ComCtl32.TDN.HELP:
+                    case TASKDIALOG_NOTIFICATIONS.TDN_HELP:
                         _boundPage.OnHelpRequest(EventArgs.Empty);
                         break;
                 }
@@ -1199,9 +1180,9 @@ namespace System.Windows.Forms
                     // returns with an error code; but this will not be
                     // noticeable in the SendMessage() return value.
                     SendTaskDialogMessage(
-                        ComCtl32.TDM.NAVIGATE_PAGE,
-                        IntPtr.Zero,
-                        (IntPtr)ptrTaskDialogConfig,
+                        TASKDIALOG_MESSAGES.TDM_NAVIGATE_PAGE,
+                        default,
+                        (LPARAM)ptrTaskDialogConfig,
                         checkWaitingForNavigation: false);
                 }
                 catch
@@ -1245,7 +1226,7 @@ namespace System.Windows.Forms
         {
             page.Bind(
                 this,
-                out ComCtl32.TDF flags,
+                out TASKDIALOG_FLAGS flags,
                 out ComCtl32.TDCBF standardButtonFlags,
                 out IEnumerable<(int buttonID, string text)> customButtonElements,
                 out IEnumerable<(int buttonID, string text)> radioButtonElements,
@@ -1258,7 +1239,7 @@ namespace System.Windows.Forms
             {
                 if (startupLocation == TaskDialogStartupLocation.CenterOwner)
                 {
-                    flags |= ComCtl32.TDF.POSITION_RELATIVE_TO_WINDOW;
+                    flags |= TASKDIALOG_FLAGS.TDF_POSITION_RELATIVE_TO_WINDOW;
                 }
 
                 checked
@@ -1551,14 +1532,14 @@ namespace System.Windows.Forms
         private static void HandleCallbackException(Exception e) => Application.OnThreadException(e);
 
         private void SendTaskDialogMessage(
-            ComCtl32.TDM message,
-            IntPtr wParam,
-            IntPtr lParam,
+            TASKDIALOG_MESSAGES message,
+            WPARAM wParam,
+            LPARAM lParam = default,
             bool checkWaitingForNavigation = true)
         {
             DenyIfDialogNotUpdatable(checkWaitingForNavigation);
 
-            User32.SendMessageW(
+            PInvoke.SendMessage(
                 _handle,
                 (User32.WM)message,
                 wParam,
@@ -1577,7 +1558,7 @@ namespace System.Windows.Forms
             // causes the size/layout to be updated).
             // We use the MainInstruction because it cannot contain hyperlinks
             // (and therefore there is no risk that one of the links loses focus).
-            UpdateTextElement(ComCtl32.TDE.MAIN_INSTRUCTION, _boundPage!.Heading);
+            UpdateTextElement(TASKDIALOG_ELEMENTS.TDE_MAIN_INSTRUCTION, _boundPage!.Heading);
         }
     }
 }

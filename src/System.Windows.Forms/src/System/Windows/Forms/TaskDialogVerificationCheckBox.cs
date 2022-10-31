@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -143,13 +141,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected override ComCtl32.TDF BindCore()
+        private protected override TASKDIALOG_FLAGS BindCore()
         {
-            ComCtl32.TDF flags = base.BindCore();
+            TASKDIALOG_FLAGS flags = base.BindCore();
 
             if (_checked)
             {
-                flags |= ComCtl32.TDF.VERIFICATION_FLAG_CHECKED;
+                flags |= TASKDIALOG_FLAGS.TDF_VERIFICATION_FLAG_CHECKED;
             }
 
             return flags;

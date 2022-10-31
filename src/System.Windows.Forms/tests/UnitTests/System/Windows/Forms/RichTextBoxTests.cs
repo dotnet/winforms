@@ -14,12 +14,11 @@ using Xunit;
 using static Interop;
 using static Interop.Richedit;
 using static Interop.User32;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class RichTextBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
@@ -588,7 +587,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETOPTIONS.
-            SendMessageW(control.Handle, (WM)Richedit.EM.SETOPTIONS, (nint)ECOOP.OR, (nint)ECO.AUTOWORDSELECTION);
+            PInvoke.SendMessage(control, (WM)Richedit.EM.SETOPTIONS, (WPARAM)(int)ECOOP.OR, (LPARAM)(int)ECO.AUTOWORDSELECTION);
             Assert.False(control.AutoWordSelection);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -664,7 +663,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.AutoWordSelection = value;
-            Assert.Equal(expected, SendMessageW(control.Handle, (WM)Richedit.EM.GETOPTIONS));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETOPTIONS));
         }
 
         public static IEnumerable<object[]> BackColor_Set_TestData()
@@ -1019,7 +1018,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr Result { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.CANREDO)
                 {
@@ -1088,7 +1087,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr Result { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.EM.CANUNDO)
                 {
@@ -1135,7 +1134,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_AUTOURLDETECT.
-            SendMessageW(control.Handle, (WM)Richedit.EM.AUTOURLDETECT, 0);
+            PInvoke.SendMessage(control, (WM)Richedit.EM.AUTOURLDETECT, 0);
             Assert.True(control.DetectUrls);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1212,7 +1211,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.DetectUrls = value;
-            Assert.Equal(expected, SendMessageW(control.Handle, (WM)Richedit.EM.GETAUTOURLDETECT));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETAUTOURLDETECT));
         }
 
         [WinFormsTheory]
@@ -1630,7 +1629,7 @@ namespace System.Windows.Forms.Tests
             using (var font = new Font(familyName, emSize, style, unit, gdiCharSet))
             {
                 control.Font = font;
-                result = SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.ALL, ref format);
+                result = PInvoke.SendMessage(control, (WM)Richedit.EM.GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format);
                 Assert.NotEqual(0, result);
                 Assert.Equal(familyName, format.FaceName.ToString());
                 Assert.Equal(expectedYHeight, format.yHeight);
@@ -1647,7 +1646,7 @@ namespace System.Windows.Forms.Tests
                 dwMask = (CFM)int.MaxValue
             };
 
-            result = SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.ALL, ref format1);
+            result = PInvoke.SendMessage(control, (WM)Richedit.EM.GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format1);
             Assert.NotEqual(0, result);
             Assert.Equal(Control.DefaultFont.Name, format1.FaceName.ToString());
             Assert.Equal((int)(Control.DefaultFont.SizeInPoints * 20), (int)format1.yHeight);
@@ -1773,7 +1772,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.ALL, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format));
             Assert.Equal(0x785634, format.crTextColor);
         }
 
@@ -1788,7 +1787,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.ALL, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format));
             Assert.Equal(0x785634, format.crTextColor);
 
             // Set different.
@@ -1797,7 +1796,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.ALL, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format));
             Assert.Equal(0x907856, format.crTextColor);
         }
 
@@ -1932,7 +1931,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.LanguageOption = value;
-            Assert.Equal(value, (RichTextBoxLanguageOptions)SendMessageW(control.Handle, (WM)Richedit.EM.GETLANGOPTIONS));
+            Assert.Equal(value, (RichTextBoxLanguageOptions)(int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETLANGOPTIONS));
         }
 
         [WinFormsFact]
@@ -1954,7 +1953,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_LIMITTEXT.
-            SendMessageW(control.Handle, (WM)User32.EM.LIMITTEXT, 0, 1);
+            PInvoke.SendMessage(control, (WM)User32.EM.LIMITTEXT, 0, 1);
             Assert.Equal(0x7FFFFFFF, control.MaxLength);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1962,7 +1961,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_EXLIMITTEXT.
-            SendMessageW(control.Handle, (WM)Richedit.EM.EXLIMITTEXT, 0, 2);
+            PInvoke.SendMessage(control, (WM)Richedit.EM.EXLIMITTEXT, 0, 2);
             Assert.Equal(0x7FFFFFFF, control.MaxLength);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -2071,7 +2070,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.MaxLength = value;
-            Assert.Equal(expected, SendMessageW(control.Handle, (WM)User32.EM.GETLIMITTEXT));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)User32.EM.GETLIMITTEXT));
         }
 
         [WinFormsFact]
@@ -2391,7 +2390,7 @@ namespace System.Windows.Forms.Tests
             public IntPtr CanRedoResult { get; set; }
             public IntPtr GetRedoNameResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.CANREDO)
                 {
@@ -3805,7 +3804,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(expected, (int)format.wAlignment);
         }
 
@@ -4000,7 +3999,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(0x785634, format.crBackColor);
         }
 
@@ -4262,7 +4261,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(expectedOffset, (int)format.dxOffset);
             Assert.Equal(expected, (int)format.wNumbering);
         }
@@ -4456,7 +4455,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(900, format.yOffset);
         }
 
@@ -4645,7 +4644,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(0x785634, format.crTextColor);
         }
 
@@ -4960,7 +4959,7 @@ namespace System.Windows.Forms.Tests
                 cbSize = (uint)sizeof(CHARFORMAT2W),
                 dwMask = (CFM)int.MaxValue
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal("Arial", format.FaceName.ToString());
             Assert.Equal(expectedYHeight, (int)format.yHeight);
             Assert.Equal(CFE.AUTOBACKCOLOR | CFE.AUTOCOLOR | (CFE)expectedEffects, format.dwEffects);
@@ -5180,7 +5179,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(expected, format.dxOffset);
         }
 
@@ -5371,7 +5370,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(expected, format.dxStartIndent);
         }
 
@@ -5573,7 +5572,7 @@ namespace System.Windows.Forms.Tests
             control.SelectionLength = value;
             int selectionStart = 0;
             int selectionEnd = 0;
-            IntPtr result = SendMessageW(control.Handle, (WM)User32.EM.GETSEL, (nint)(&selectionStart), (nint)(&selectionEnd));
+            IntPtr result = PInvoke.SendMessage(control, (WM)User32.EM.GETSEL, (WPARAM)(&selectionStart), (LPARAM)(&selectionEnd));
             Assert.Equal(1, PARAM.LOWORD(result));
             Assert.Equal(expected, PARAM.HIWORD(result));
             Assert.Equal(1, selectionStart);
@@ -5769,7 +5768,7 @@ namespace System.Windows.Forms.Tests
                 cbSize = (uint)sizeof(CHARFORMAT2W),
                 dwMask = CFM.PROTECTED
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(value, (format.dwEffects & CFE.PROTECTED) != 0);
         }
 
@@ -5955,7 +5954,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(expected, format.dxRightIndent);
         }
 
@@ -6163,7 +6162,7 @@ namespace System.Windows.Forms.Tests
             control.SelectionStart = value;
             int selectionStart = 0;
             int selectionEnd = 0;
-            IntPtr result = SendMessageW(control.Handle, (WM)User32.EM.GETSEL, (nint)(&selectionStart), (nint)(&selectionEnd));
+            IntPtr result = PInvoke.SendMessage(control, (WM)User32.EM.GETSEL, (WPARAM)(&selectionStart), (LPARAM)(&selectionEnd));
             Assert.Equal(expectedSelectionStart, PARAM.LOWORD(result));
             Assert.Equal(expectedEnd, PARAM.HIWORD(result));
             Assert.Equal(expectedSelectionStart, selectionStart);
@@ -6402,7 +6401,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(3, format.cTabCount);
             Assert.Equal(15, format.rgxTabs[0]);
             Assert.Equal(30, format.rgxTabs[1]);
@@ -6410,7 +6409,7 @@ namespace System.Windows.Forms.Tests
 
             // Set null or empty.
             control.SelectionTabs = nullOrEmptyValue;
-            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
             Assert.Equal(0, format.cTabCount);
         }
 
@@ -6554,7 +6553,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr SelectionTypeResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.SELECTIONTYPE)
                 {
@@ -6603,7 +6602,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETOPTIONS.
-            SendMessageW(control.Handle, (WM)Richedit.EM.SETOPTIONS, (nint)ECOOP.OR, (nint)ECO.SELECTIONBAR);
+            PInvoke.SendMessage(control, (WM)Richedit.EM.SETOPTIONS, (WPARAM)(int)ECOOP.OR, (LPARAM)(nint)ECO.SELECTIONBAR);
             Assert.False(control.ShowSelectionMargin);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -6679,7 +6678,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.ShowSelectionMargin = value;
-            Assert.Equal(expected, SendMessageW(control.Handle, (WM)Richedit.EM.GETOPTIONS));
+            Assert.Equal(expected, (int)PInvoke.SendMessage(control, (WM)Richedit.EM.GETOPTIONS));
         }
 
         [WinFormsFact]
@@ -6781,7 +6780,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr GetTextLengthExResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.GETTEXTLENGTHEX)
                 {
@@ -7700,7 +7699,7 @@ namespace System.Windows.Forms.Tests
             public IntPtr CanUndoResult { get; set; }
             public IntPtr GetUndoNameResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.EM.CANUNDO)
                 {
@@ -7752,7 +7751,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETZOOM.
-            SendMessageW(control.Handle, (WM)Richedit.EM.SETZOOM, 2, 10);
+            PInvoke.SendMessage(control, (WM)Richedit.EM.SETZOOM, 2, 10);
             Assert.Equal(0.2f, control.ZoomFactor);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -7784,7 +7783,7 @@ namespace System.Windows.Forms.Tests
             public int NumeratorResult { get; set; }
             public int DenominatorResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.GETZOOM)
                 {
@@ -7924,7 +7923,7 @@ namespace System.Windows.Forms.Tests
         {
             public IntPtr Result { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (m.Msg == (int)Richedit.EM.CANPASTE)
                 {
@@ -10125,17 +10124,19 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubRichTextBox();
 
-            var nmhdr = new NMHDR
+            NMHDR nmhdr = new()
             {
-                code = code
+                code = (uint)code
             };
-            var m = new Message
+
+            Message m = new()
             {
                 Msg = (int)(WM.REFLECT | WM.NOTIFY),
                 HWnd = hWnd,
                 LParam = (IntPtr)(&nmhdr),
                 Result = (IntPtr)250
             };
+
             control.WndProc(ref m);
             Assert.Equal((IntPtr)0, m.Result);
             Assert.True(control.IsHandleCreated);
@@ -10286,17 +10287,19 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
-            var nmhdr = new NMHDR
+            NMHDR nmhdr = new()
             {
-                code = code
+                code = (uint)code
             };
-            var m = new Message
+
+            Message m = new()
             {
                 Msg = (int)(WM.REFLECT | WM.NOTIFY),
                 HWnd = hWnd,
                 LParam = (IntPtr)(&nmhdr),
                 Result = (IntPtr)250
             };
+
             control.WndProc(ref m);
             Assert.Equal((IntPtr)0, m.Result);
             Assert.True(control.IsHandleCreated);
@@ -10312,6 +10315,7 @@ namespace System.Windows.Forms.Tests
             {
                 Text = "text"
             };
+
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -10531,7 +10535,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(IntPtr.Zero, m.Result);
                 Assert.True(control.IsHandleCreated);
                 Assert.Equal(0, textChangedCallCount);
-                IntPtr result = SendMessageW(control.Handle, (WM)User32.EM.GETMARGINS);
+                IntPtr result = PInvoke.SendMessage(control, (WM)User32.EM.GETMARGINS);
                 Assert.Equal(expectedMargin, PARAM.HIWORD(result));
                 Assert.Equal(expectedMargin, PARAM.LOWORD(result));
             }
@@ -10553,7 +10557,7 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
-            SendMessageW(control.Handle, (WM)User32.EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN), PARAM.FromLowHigh(1, 2));
+            PInvoke.SendMessage(control, (WM)User32.EM.SETMARGINS, (WPARAM)(uint)(EC.LEFTMARGIN | EC.RIGHTMARGIN), LPARAM.MAKELPARAM(1, 2));
             int textChangedCallCount = 0;
             control.TextChanged += (sender, e) => textChangedCallCount++;
 
@@ -10565,7 +10569,7 @@ namespace System.Windows.Forms.Tests
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
             Assert.Equal(0, textChangedCallCount);
-            IntPtr result = SendMessageW(control.Handle, (WM)User32.EM.GETMARGINS);
+            IntPtr result = PInvoke.SendMessage(control, (WM)User32.EM.GETMARGINS);
             Assert.Equal(expectedLeft, PARAM.LOWORD(result));
             Assert.Equal(expectedRight, PARAM.HIWORD(result));
             Assert.True(control.IsHandleCreated);
@@ -10660,7 +10664,7 @@ namespace System.Windows.Forms.Tests
             public IntPtr ExpectedWParam { get; set; }
             public PARAFORMAT GetParaFormatResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (MakeCustom && m.Msg == (int)Richedit.EM.GETPARAFORMAT)
                 {
@@ -10681,7 +10685,7 @@ namespace System.Windows.Forms.Tests
             public IntPtr ExpectedWParam { get; set; }
             public CHARFORMAT2W GetCharFormatResult { get; set; }
 
-            protected unsafe override void WndProc(ref Message m)
+            protected override unsafe void WndProc(ref Message m)
             {
                 if (MakeCustom && m.Msg == (int)Richedit.EM.GETCHARFORMAT)
                 {
@@ -10832,7 +10836,7 @@ namespace System.Windows.Forms.Tests
 
                     if (_nativeDllHandle == IntPtr.Zero)
                     {
-                        _nativeDllHandle = Kernel32.LoadLibraryFromSystemPathIfAvailable(NativeDll);
+                        _nativeDllHandle = PInvoke.LoadLibraryFromSystemPathIfAvailable(NativeDll);
 
                         int lastWin32Error = Marshal.GetLastWin32Error();
                         if ((ulong)_nativeDllHandle < (ulong)32)

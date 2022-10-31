@@ -8,55 +8,57 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     // Miscellaneous utilities
-    static internal class ImageListUtils
+    internal static class ImageListUtils
     {
         public static PropertyDescriptor? GetImageListProperty(PropertyDescriptor currentComponent, ref object instance)
         {
-            if (instance is object[]) //multiple selection is not supported by this class
+            // Multiple selection is not supported.
+            if (instance is object[])
             {
                 return null;
             }
 
-            PropertyDescriptor? imageListProp = null;
+            if (!currentComponent.TryGetAttribute(out RelatedImageListAttribute? relatedAttribute) || relatedAttribute.RelatedImageList is null)
+            {
+                return null;
+            }
+
+            PropertyDescriptor? imageListProperty = null;
             object? parentInstance = instance;
 
-            if (currentComponent.TryGetAttribute(out RelatedImageListAttribute? relatedAttribute) && relatedAttribute.RelatedImageList is not null)
+            string[] pathInfo = relatedAttribute.RelatedImageList.Split('.');
+            for (int i = 0; i < pathInfo.Length; i++)
             {
-                string[] pathInfo = relatedAttribute.RelatedImageList.Split('.');
-                for (int i = 0; i < pathInfo.Length; i++)
+                if (parentInstance is null)
                 {
-                    if (parentInstance is null)
-                    {
-                        Debug.Fail("A property specified in the path is null or not yet instantiated at this time");
-                        break; // path is wrong
-                    }
+                    Debug.Fail("A property specified in the path is null or not yet instantiated at this time");
+                    break;
+                }
 
-                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(parentInstance)[pathInfo[i]];
-                    if (prop is null)
-                    {
-                        Debug.Fail("The path specified to the property is wrong");
-                        break; // path is wrong
-                    }
+                PropertyDescriptor? property = TypeDescriptor.GetProperties(parentInstance)[pathInfo[i]];
+                if (property is null)
+                {
+                    Debug.Fail("The path specified to the property is wrong");
+                    break;
+                }
 
-                    if (i == pathInfo.Length - 1)
+                if (i == pathInfo.Length - 1)
+                {
+                    // We're on the last one, look if that's our guy
+                    if (typeof(ImageList).IsAssignableFrom(property.PropertyType))
                     {
-                        // we're on the last one, look if that's our guy
-                        if (typeof(ImageList).IsAssignableFrom(prop.PropertyType))
-                        {
-                            instance = parentInstance;
-                            imageListProp = prop;
-                            break;
-                        }
+                        instance = parentInstance;
+                        imageListProperty = property;
+                        break;
                     }
-                    else
-                    {
-                        parentInstance = prop.GetValue(parentInstance);
-                    }
+                }
+                else
+                {
+                    parentInstance = property.GetValue(parentInstance);
                 }
             }
 
-            return imageListProp;
+            return imageListProperty;
         }
     }
 }
-

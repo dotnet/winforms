@@ -48,4 +48,3 @@ namespace System.ComponentModel.Design
         perfFXDesignElementHostDesignerSetChildEnd = 7544
     }
 }
-

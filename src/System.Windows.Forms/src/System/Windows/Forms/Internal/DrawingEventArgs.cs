@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -25,8 +24,8 @@ namespace System.Windows.Forms
         ///  DC (Display context) for obtaining the graphics object. Used to delay getting the graphics object until
         ///  absolutely necessary (for perf reasons)
         /// </summary>
-        private readonly Gdi32.HDC _hdc;
-        private Gdi32.HPALETTE _oldPalette;
+        private readonly HDC _hdc;
+        private HPALETTE _oldPalette;
 
         public DrawingEventArgs(
             Graphics graphics,
@@ -45,18 +44,18 @@ namespace System.Windows.Forms
         ///  Internal version of constructor for performance. We try to avoid getting the graphics object until needed.
         /// </summary>
         public DrawingEventArgs(
-            Gdi32.HDC dc,
+            HDC dc,
             Rectangle clipRect,
             DrawingEventFlags flags)
         {
             ArgumentValidation.ThrowIfNull(dc);
 
 #if DEBUG
-            Gdi32.OBJ type = Gdi32.GetObjectType(dc);
-            Debug.Assert(type == Gdi32.OBJ.DC
-                || type == Gdi32.OBJ.ENHMETADC
-                || type == Gdi32.OBJ.MEMDC
-                || type == Gdi32.OBJ.METADC);
+            OBJ_TYPE type = (OBJ_TYPE)PInvoke.GetObjectType(dc);
+            Debug.Assert(type == OBJ_TYPE.OBJ_DC
+                || type == OBJ_TYPE.OBJ_ENHMETADC
+                || type == OBJ_TYPE.OBJ_MEMDC
+                || type == OBJ_TYPE.OBJ_METADC);
 #endif
 
             _hdc = dc;
@@ -75,7 +74,7 @@ namespace System.Windows.Forms
         ///  Gets the HDC this event is connected to.  If there is no associated HDC, or the GDI+ Graphics object has
         ///  been externally accessed (where it may have gotten a transform or clip) a null handle is returned.
         /// </summary>
-        internal Gdi32.HDC HDC => IsStateClean ? default : _hdc;
+        internal HDC HDC => IsStateClean ? default : _hdc;
 
         /// <summary>
         ///  Gets the <see cref="Graphics"/> object used to paint.
@@ -100,7 +99,7 @@ namespace System.Windows.Forms
                 Debug.Assert(!_hdc.IsNull);
 
                 // We need to manually unset the palette here so this scope shouldn't be disposed
-                var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(
+                var paletteScope = PInvoke.SelectPaletteScope.HalftonePalette(
                     _hdc,
                     forceBackground: false,
                     realizePalette: false);
@@ -119,7 +118,7 @@ namespace System.Windows.Forms
             return _graphics;
         }
 
-        internal Gdi32.HDC GetHDC() => _hdc;
+        internal HDC GetHDC() => _hdc;
 
         internal Graphics? GetGraphics(bool create)
         {
@@ -140,7 +139,7 @@ namespace System.Windows.Forms
 
             if (!_oldPalette.IsNull && !_hdc.IsNull)
             {
-                Gdi32.SelectPalette(_hdc, _oldPalette, BOOL.FALSE);
+                PInvoke.SelectPalette(_hdc, _oldPalette, bForceBkgd: false);
                 _oldPalette = default;
             }
         }

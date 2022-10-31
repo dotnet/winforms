@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using static Interop;
@@ -18,23 +17,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private readonly string _guidString;
         private readonly VSSDK.CTLBLDTYPE _bldrType;
 
-        public Com2PropertyBuilderUITypeEditor(Com2PropertyDescriptor pd, string guidString, VSSDK.CTLBLDTYPE type, UITypeEditor baseEditor) : base(baseEditor)
+        public Com2PropertyBuilderUITypeEditor(
+            Com2PropertyDescriptor pd,
+            string guidString,
+            VSSDK.CTLBLDTYPE type,
+            UITypeEditor? baseEditor) : base(baseEditor)
         {
             _propDesc = pd;
             _guidString = guidString;
             _bldrType = type;
         }
 
-        /// <summary>
-        ///  Takes the value returned from valueAccess.getValue() and modifies or replaces
-        ///  the value, passing the result into valueAccess.setValue().  This is where
-        ///  an editor can launch a modal dialog or create a drop down editor to allow
-        ///  the user to modify the value.  Host assistance in presenting UI to the user
-        ///  can be found through the valueAccess.getService function.
-        /// </summary>
-        public unsafe override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+        public override unsafe object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            IntPtr parentHandle = User32.GetFocus();
+            HWND parentHandle = PInvoke.GetFocus();
 
             IUIService? uiSvc = (IUIService?)provider.GetService(typeof(IUIService));
             if (uiSvc is not null)
@@ -42,11 +38,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 IWin32Window parent = uiSvc.GetDialogOwnerWindow();
                 if (parent is not null)
                 {
-                    parentHandle = parent.Handle;
+                    parentHandle = (HWND)parent.Handle;
                 }
             }
 
-            BOOL useValue = BOOL.FALSE;
+            BOOL useValue = false;
             object? pValue = value;
 
             try
@@ -66,31 +62,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     null,
                     parentHandle,
                     ref pValue,
-                    &useValue).Succeeded())
+                    &useValue).Succeeded)
                 {
-                    useValue = BOOL.FALSE;
+                    useValue = false;
                 }
             }
             catch (ExternalException ex)
             {
-                Debug.Fail("Failed to show property frame: " + ex.ErrorCode.ToString(CultureInfo.InvariantCulture));
+                Debug.Fail($"Failed to show property frame: {ex.ErrorCode}");
             }
 
-            if (useValue.IsTrue() && (_bldrType & VSSDK.CTLBLDTYPE.FEDITSOBJIDRECTLY) == 0)
-            {
-                return pValue;
-            }
-
-            return value;
+            return useValue && (_bldrType & VSSDK.CTLBLDTYPE.FEDITSOBJIDRECTLY) == 0 ? pValue : value;
         }
 
-        /// <summary>
-        ///  Retrieves the editing style of the Edit method.  If the method
-        ///  is not supported, this will return None.
-        /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
-        {
-            return UITypeEditorEditStyle.Modal;
-        }
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
     }
 }

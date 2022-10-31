@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         /// It corresponds to <see cref="User32.MENUITEMINFOW.wID"/>.
         /// </summary>
         private readonly int _nativeMenuCommandID = -1;
-        private IntPtr _targetWindowHandle = IntPtr.Zero;
+        private HandleRef<HWND> _targetWindowHandle;
         private IntPtr _nativeMenuHandle = IntPtr.Zero;
 
         // Keep checked images shared between menu items, but per thread so we don't have locking issues in GDI+
@@ -253,7 +253,7 @@ namespace System.Windows.Forms
                 {
                     // if we're based off a native menu item,
                     // we need to ask it if it's enabled.
-                    if (base.Enabled && _nativeMenuHandle != IntPtr.Zero && _targetWindowHandle != IntPtr.Zero)
+                    if (base.Enabled && _nativeMenuHandle != IntPtr.Zero && !_targetWindowHandle.IsNull)
                     {
                         return GetNativeMenuItemEnabled();
                     }
@@ -717,7 +717,7 @@ namespace System.Windows.Forms
                 fMask = User32.MIIM.STATE,
                 wID = _nativeMenuCommandID
             };
-            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
             return (info.fState & User32.MFS.DISABLED) == 0;
         }
 
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
                 fMask = User32.MIIM.STRING,
                 wID = _nativeMenuCommandID
             };
-            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
 
             if (info.cch > 0)
             {
@@ -751,7 +751,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+                    User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
 
                     // convert the string into managed data.
                     if (info.dwTypeData is not null)
@@ -787,7 +787,7 @@ namespace System.Windows.Forms
                 fMask = User32.MIIM.BITMAP,
                 wID = _nativeMenuCommandID
             };
-            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
+            User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ false, ref info);
 
             if (info.hbmpItem != IntPtr.Zero && PARAM.ToInt(info.hbmpItem) > (int)User32.HBMMENU.POPUP_MINIMIZE)
             {
@@ -865,10 +865,7 @@ namespace System.Windows.Forms
 
         internal string GetShortcutText()
         {
-            if (_cachedShortcutText is null)
-            {
-                _cachedShortcutText = ShortcutToText(ShortcutKeys, ShortcutKeyDisplayString);
-            }
+            _cachedShortcutText ??= ShortcutToText(ShortcutKeys, ShortcutKeyDisplayString);
 
             return _cachedShortcutText;
         }
@@ -909,14 +906,14 @@ namespace System.Windows.Forms
                 // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                 // the system message... if we use SendMessage the dismissal of our window
                 // breaks things like the modal sizing loop.
-                User32.PostMessageW(new HandleRef(this, _targetWindowHandle), User32.WM.SYSCOMMAND, (IntPtr)_nativeMenuCommandID);
+                PInvoke.PostMessage(_targetWindowHandle, User32.WM.SYSCOMMAND, (WPARAM)(uint)_nativeMenuCommandID);
             }
             else
             {
                 // These are user added items like ".Net Window..."
 
                 // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                User32.PostMessageW(new HandleRef(this, _targetWindowHandle), User32.WM.COMMAND, (IntPtr)_nativeMenuCommandID);
+                PInvoke.PostMessage(_targetWindowHandle, User32.WM.COMMAND, (WPARAM)(uint)_nativeMenuCommandID);
             }
 
             Invalidate();
@@ -1062,10 +1059,7 @@ namespace System.Windows.Forms
             Keys shortcut = ShortcutKeys;
             if (shortcut != Keys.None)
             {
-                if (_lastOwner is not null)
-                {
-                    _lastOwner.Shortcuts.Remove(shortcut);
-                }
+                _lastOwner?.Shortcuts.Remove(shortcut);
 
                 if (Owner is not null)
                 {
@@ -1210,7 +1204,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary> overridden here so we scooch over when we're in the ToolStripDropDownMenu</summary>
-        internal protected override void SetBounds(Rectangle rect)
+        protected internal override void SetBounds(Rectangle rect)
         {
             if (InternalLayout is ToolStripMenuItemInternalLayout internalLayout && internalLayout.UseMenuLayout)
             {

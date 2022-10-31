@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using static Interop;
 
 namespace System.ComponentModel.Design
 {
@@ -98,7 +97,7 @@ namespace System.ComponentModel.Design
                         // in the AttachPerf context we should see which module is already loaded
                         if (_regroot is null)
                         {
-                            _shouldUseTestDll = Kernel32.GetModuleHandleW(ProductDllName) == IntPtr.Zero;
+                            _shouldUseTestDll = PInvoke.GetModuleHandle(ProductDllName) == 0;
                         }
                         else
                         {
@@ -278,10 +277,7 @@ namespace System.ComponentModel.Design
             byte[] bufferWithCorrelation = new byte[s_correlationMarkBytes.Length + correlationIdBytes.Length + (buffer is not null ? buffer.Length : 0)];
             s_correlationMarkBytes.CopyTo(bufferWithCorrelation, 0);
             correlationIdBytes.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length);
-            if (buffer is not null)
-            {
-                buffer.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length + correlationIdBytes.Length);
-            }
+            buffer?.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length + correlationIdBytes.Length);
 
             return bufferWithCorrelation;
         }

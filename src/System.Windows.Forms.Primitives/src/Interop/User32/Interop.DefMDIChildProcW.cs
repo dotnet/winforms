@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        [LibraryImport(Libraries.User32)]
-        public static partial IntPtr DefMDIChildProcW(IntPtr hWnd, WM msg, IntPtr wParam, IntPtr lParam);
+        [DllImport(Libraries.User32)]
+        public static extern nint DefMDIChildProcW(IntPtr hWnd, WM msg, IntPtr wParam, IntPtr lParam);
     }
 }

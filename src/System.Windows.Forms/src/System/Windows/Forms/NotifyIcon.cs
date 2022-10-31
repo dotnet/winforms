@@ -240,10 +240,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!value.Equals(_text))
                 {
@@ -615,12 +612,12 @@ namespace System.Windows.Forms
         {
             if (_contextMenuStrip is not null)
             {
-                User32.GetCursorPos(out Point pt);
+                PInvoke.GetCursorPos(out Point pt);
 
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
                 // forced after the call.
-                User32.SetForegroundWindow(_window);
+                PInvoke.SetForegroundWindow(_window);
 
                 // this will set the context menu strip to be toplevel
                 // and will allow us to overlap the system tray
@@ -738,7 +735,7 @@ namespace System.Windows.Forms
             switch (msg.MsgInternal)
             {
                 case (User32.WM)WM_TRAYMOUSEMESSAGE:
-                    switch ((User32.WM)msg.LParamInternal)
+                    switch ((User32.WM)(nint)msg.LParamInternal)
                     {
                         case User32.WM.LBUTTONDBLCLK:
                             WmMouseDown(MouseButtons.Left, 2);

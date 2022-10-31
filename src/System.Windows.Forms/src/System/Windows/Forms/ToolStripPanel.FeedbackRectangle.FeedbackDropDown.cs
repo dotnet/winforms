@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -51,31 +49,30 @@ namespace System.Windows.Forms
                 // have bits of the dropdown region drawn all over them.
                 private void ForceSynchronousPaint()
                 {
-                    if (!IsDisposed)
+                    if (IsDisposed || _numPaintsServiced != 0)
                     {
-                        if (_numPaintsServiced == 0)
-                        {
-                            // protect against re-entrancy.
-                            try
-                            {
-                                var msg = new User32.MSG();
-                                while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE).IsTrue())
-                                {
-                                    User32.UpdateWindow(msg.hwnd);
+                        return;
+                    }
 
-                                    // Infinite loop protection
-                                    if (_numPaintsServiced++ > MaxPaintsToService)
-                                    {
-                                        Debug.Fail("somehow we've gotten ourself in a situation where we're pumping an unreasonable number of paint messages, investigate.");
-                                        break;
-                                    }
-                                }
-                            }
-                            finally
+                    // Protect against re-entrancy.
+                    try
+                    {
+                        MSG msg = default(MSG);
+                        while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
+                        {
+                            PInvoke.UpdateWindow(msg.hwnd);
+
+                            // Infinite loop protection
+                            if (_numPaintsServiced++ > MaxPaintsToService)
                             {
-                                _numPaintsServiced = 0;
+                                Debug.Fail("Somehow we've gotten ourself in a situation where we're pumping an unreasonable number of paint messages, investigate.");
+                                break;
                             }
                         }
+                    }
+                    finally
+                    {
+                        _numPaintsServiced = 0;
                     }
                 }
 
@@ -108,7 +105,7 @@ namespace System.Windows.Forms
                 {
                     if (m.MsgInternal == User32.WM.NCHITTEST)
                     {
-                        m.ResultInternal = (nint)User32.HT.TRANSPARENT;
+                        m.ResultInternal = (LRESULT)(nint)User32.HT.TRANSPARENT;
                     }
 
                     base.WndProc(ref m);

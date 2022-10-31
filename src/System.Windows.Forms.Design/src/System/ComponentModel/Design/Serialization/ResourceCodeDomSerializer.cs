@@ -22,14 +22,11 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static ResourceCodeDomSerializer Default
+        internal static new ResourceCodeDomSerializer Default
         {
             get
             {
-                if (s_defaultSerializer is null)
-                {
-                    s_defaultSerializer = new ResourceCodeDomSerializer();
-                }
+                s_defaultSerializer ??= new ResourceCodeDomSerializer();
 
                 return s_defaultSerializer;
             }
@@ -126,7 +123,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!(codeObject is CodeStatement statement))
                         {
                             Debug.Fail("ResourceCodeDomSerializer::Deserialize requires a CodeExpression, CodeStatement or CodeStatementCollection to parse");
-                            string supportedTypes = string.Format(CultureInfo.CurrentCulture, "{0}, {1}, {2}", typeof(CodeExpression).Name, typeof(CodeStatement).Name, typeof(CodeStatementCollection).Name);
+                            string supportedTypes = string.Format(CultureInfo.CurrentCulture, "{0}, {1}, {2}", nameof(CodeExpression), nameof(CodeStatement), nameof(CodeStatementCollection));
                             throw new ArgumentException(string.Format(SR.SerializerBadElementTypes, codeObject.GetType().Name, supportedTypes));
                         }
                     }
@@ -551,10 +548,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_resourceSets is null)
-                    {
-                        _resourceSets = new Hashtable();
-                    }
+                    _resourceSets ??= new Hashtable();
 
                     return _resourceSets;
                 }
@@ -664,24 +658,15 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public override void ApplyResources(object value, string objectName, CultureInfo culture)
             {
-                if (culture is null)
-                {
-                    culture = ReadCulture;
-                }
+                culture ??= ReadCulture;
 
                 // .NET Framework 4.0 (Dev10 #425129): Control location moves due to incorrect anchor info when resource files are reloaded.
                 Windows.Forms.Control control = value as Windows.Forms.Control;
-                if (control is not null)
-                {
-                    control.SuspendLayout();
-                }
+                control?.SuspendLayout();
 
                 base.ApplyResources(value, objectName, culture);
 
-                if (control is not null)
-                {
-                    control.ResumeLayout(false);
-                }
+                control?.ResumeLayout(false);
             }
 
             /// <summary>
@@ -1305,10 +1290,7 @@ namespace System.ComponentModel.Design.Serialization
                         expressionName = null;
                     }
 
-                    if (nameBase is null)
-                    {
-                        nameBase = "resource";
-                    }
+                    nameBase ??= "resource";
 
                     if (expressionName is not null)
                     {

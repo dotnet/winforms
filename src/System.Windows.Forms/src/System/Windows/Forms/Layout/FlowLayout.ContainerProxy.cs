@@ -113,10 +113,7 @@ namespace System.Windows.Forms.Layout
             {
                 get
                 {
-                    if (_elementProxy is null)
-                    {
-                        _elementProxy = IsVertical ? new VerticalElementProxy() : new ElementProxy();
-                    }
+                    _elementProxy ??= IsVertical ? new VerticalElementProxy() : new ElementProxy();
 
                     return _elementProxy;
                 }

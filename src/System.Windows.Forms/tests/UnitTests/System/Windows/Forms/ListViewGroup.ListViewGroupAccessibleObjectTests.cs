@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Tests
                 Assert.True(list.IsHandleCreated);
 
                 RECT groupRect = new RECT();
-                User32.SendMessageW(list, (User32.WM)ComCtl32.LVM.GETGROUPRECT, listGroup.ID, ref groupRect);
+                PInvoke.SendMessage(list, (User32.WM)PInvoke.LVM_GETGROUPRECT, (WPARAM)listGroup.ID, ref groupRect);
 
                 int actualWidth = group1AccObj.Bounds.Width;
                 int expectedWidth = groupRect.Width;
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(new ListViewItem("a", group));
 
             RECT groupRect = new RECT();
-            User32.SendMessageW(listView, (User32.WM)ComCtl32.LVM.GETGROUPRECT, group.ID, ref groupRect);
+            PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETGROUPRECT, (WPARAM)group.ID, ref groupRect);
 
             AccessibleObject groupAccObj = group.AccessibilityObject;
 
@@ -559,7 +559,7 @@ namespace System.Windows.Forms.Tests
                 foreach (View view in Enum.GetValues(typeof(View)))
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (virtualMode == true && View.Tile == view)
+                    if (virtualMode && View.Tile == view)
                     {
                         continue;
                     }
@@ -636,7 +636,7 @@ namespace System.Windows.Forms.Tests
                 foreach (View view in Enum.GetValues(typeof(View)))
                 {
                     // View.Tile is not supported by ListView in virtual mode
-                    if (virtualMode == true && View.Tile == view)
+                    if (virtualMode && View.Tile == view)
                     {
                         continue;
                     }

@@ -3,12 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using Xunit;
-using static Interop;
-using static Interop.Ole32;
-using static Interop.Oleaut32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
 {
@@ -19,81 +17,67 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_AddressOfMember_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            IntPtr pv = (IntPtr)int.MaxValue;
-            hr = typeInfo.AddressOfMember((DispatchID)6, INVOKEKIND.FUNC, &pv);
+            void* pv;
+            hr = typeInfo.Value->AddressOfMember(6, INVOKEKIND.INVOKE_FUNC, &pv);
             Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
-            Assert.Equal(IntPtr.Zero, pv);
         }
 
         [StaFact]
         public unsafe void ITypeInfo_CreateInstance_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            Guid riid = typeof(IPictureDisp).GUID;
-            IntPtr pvObj = (IntPtr)int.MaxValue;
-            hr = typeInfo.CreateInstance(IntPtr.Zero, &riid, &pvObj);
+            void* pvObj = null;
+            hr = typeInfo.Value->CreateInstance(null, IPictureDisp.NativeGuid, &pvObj);
             Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
-            Assert.Equal(IntPtr.Zero, pvObj);
         }
 
         [StaFact]
         public unsafe void ITypeInfo_GetContainingTypeLib_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            IntPtr typeLib = (IntPtr)int.MaxValue;
+            using ComScope<ITypeLib> typeLib = new(null);
             uint index = uint.MaxValue;
-            hr = typeInfo.GetContainingTypeLib(&typeLib, &index);
-            try
-            {
-                Assert.Equal(HRESULT.S_OK, hr);
-                Assert.NotEqual(IntPtr.Zero, typeLib);
-                Assert.NotEqual(0u, index);
-            }
-            finally
-            {
-                Runtime.InteropServices.Marshal.Release(typeLib);
-            }
+            hr = typeInfo.Value->GetContainingTypeLib(typeLib, &index);
+
+            Assert.Equal(HRESULT.S_OK, hr);
+            Assert.NotEqual(0u, index);
         }
 
         [StaFact]
         public unsafe void ITypeInfo_GetDllEntry_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            var dllName = new BSTR("DllName");
-            var name = new BSTR("Name");
+            using BSTR dllName = new("DllName");
+            using BSTR name = new("Name");
             ushort wOrdinal = ushort.MaxValue;
-            hr = typeInfo.GetDllEntry((DispatchID)6, INVOKEKIND.FUNC, &dllName, &name, &wOrdinal);
+            hr = typeInfo.Value->GetDllEntry(6, INVOKEKIND.INVOKE_FUNC, &dllName, &name, &wOrdinal);
             Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
-            Assert.Empty(dllName.String.ToString());
-            Assert.Empty(name.String.ToString());
+            Assert.True(dllName.Length == 0);
+            Assert.True(name.Length == 0);
             Assert.Equal(0u, wOrdinal);
         }
 
@@ -101,59 +85,57 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetDocumentation_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            using var name = new BSTR("Name");
-            using var docString = new BSTR("DocString");
+            using BSTR name = new("Name");
+            using BSTR docString = new("DocString");
             uint dwHelpContext = uint.MaxValue;
-            using var helpFile = new BSTR("HelpFile");
-            hr = typeInfo.GetDocumentation((DispatchID)4, &name, &docString, &dwHelpContext, &helpFile);
+            using BSTR helpFile = new("HelpFile");
+            hr = typeInfo.Value->GetDocumentation(4, &name, &docString, &dwHelpContext, &helpFile);
             Assert.Equal(HRESULT.S_OK, hr);
-            Assert.Equal("Width", name.String.ToString());
-            Assert.Empty(docString.String.ToString());
+            Assert.Equal("Width", name.ToString());
+            Assert.True(docString.Length == 0);
             Assert.Equal(0u, dwHelpContext);
-            Assert.Empty(helpFile.String.ToString());
+            Assert.True(helpFile.Length == 0);
         }
 
         [StaFact]
         public unsafe void ITypeInfo_GetFuncDesc_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             FUNCDESC* pFuncDesc = null;
             try
             {
-                hr = typeInfo.GetFuncDesc(0, &pFuncDesc);
+                hr = typeInfo.Value->GetFuncDesc(0, &pFuncDesc);
                 Assert.Equal(HRESULT.S_OK, hr);
-                Assert.Equal((DispatchID)6, pFuncDesc->memid);
-                Assert.Equal(IntPtr.Zero, pFuncDesc->lprgscode);
+                Assert.Equal(6, pFuncDesc->memid);
+                Assert.True(pFuncDesc->lprgscode is null);
                 Assert.NotEqual(IntPtr.Zero, (IntPtr)pFuncDesc->lprgelemdescParam);
-                Assert.Equal(FUNCKIND.DISPATCH, pFuncDesc->funckind);
-                Assert.Equal(INVOKEKIND.FUNC, pFuncDesc->invkind);
-                Assert.Equal(CALLCONV.STDCALL, pFuncDesc->callconv);
+                Assert.Equal(FUNCKIND.FUNC_DISPATCH, pFuncDesc->funckind);
+                Assert.Equal(INVOKEKIND.INVOKE_FUNC, pFuncDesc->invkind);
+                Assert.Equal(CALLCONV.CC_STDCALL, pFuncDesc->callconv);
                 Assert.Equal(10, pFuncDesc->cParams);
                 Assert.Equal(0, pFuncDesc->cParamsOpt);
                 Assert.Equal(0, pFuncDesc->oVft);
                 Assert.Equal(0, pFuncDesc->cScodes);
-                Assert.Equal(VARENUM.VOID, pFuncDesc->elemdescFunc.tdesc.vt);
-                Assert.Equal(IntPtr.Zero, pFuncDesc->elemdescFunc.tdesc.union.lpadesc);
-                Assert.Equal(IntPtr.Zero, pFuncDesc->elemdescFunc.paramdesc.pparamdescex);
-                Assert.Equal(IntPtr.Zero, pFuncDesc->elemdescFunc.paramdesc.pparamdescex);
+                Assert.Equal(VARENUM.VT_VOID, pFuncDesc->elemdescFunc.tdesc.vt);
+                Assert.True(pFuncDesc->elemdescFunc.tdesc.Anonymous.lpadesc is null);
+                Assert.True(pFuncDesc->elemdescFunc.Anonymous.paramdesc.pparamdescex is null);
+                Assert.True(pFuncDesc->elemdescFunc.Anonymous.paramdesc.pparamdescex is null);
             }
             finally
             {
-                typeInfo.ReleaseFuncDesc(pFuncDesc);
+                typeInfo.Value->ReleaseFuncDesc(pFuncDesc);
             }
         }
 
@@ -161,21 +143,25 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetIDsOfNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            var rgszNames = new string[] { "Width", "Other" };
-            var rgDispId = new DispatchID[rgszNames.Length];
-            fixed (DispatchID* pRgDispId = rgDispId)
+            fixed (char* width = "Width")
+            fixed (char* other = "Other")
             {
-                hr = typeInfo.GetIDsOfNames(rgszNames, (uint)rgszNames.Length, pRgDispId);
-                Assert.Equal(HRESULT.S_OK, hr);
-                Assert.Equal(new string[] { "Width", "Other" }, rgszNames);
-                Assert.Equal(new DispatchID[] { (DispatchID)4, DispatchID.UNKNOWN }, rgDispId);
+                var rgszNames = new PWSTR[] { width, other };
+                var rgDispId = new int[rgszNames.Length];
+                fixed (PWSTR* pRgszNames = rgszNames)
+                fixed (int* pRgDispId = rgDispId)
+                {
+                    hr = typeInfo.Value->GetIDsOfNames(pRgszNames, (uint)rgszNames.Length, pRgDispId);
+                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(new PWSTR[] { width, other }, rgszNames);
+                    Assert.Equal(new int[] { (int)PInvoke.DISPID_PICT_WIDTH, PInvoke.DISPID_UNKNOWN }, rgDispId);
+                }
             }
         }
 
@@ -183,55 +169,52 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetImplTypeFlags_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            IMPLTYPEFLAG implTypeFlags = (IMPLTYPEFLAG)(-1);
-            hr = typeInfo.GetImplTypeFlags(0, &implTypeFlags);
+            int implTypeFlags = -1;
+            hr = typeInfo.Value->GetImplTypeFlags(0, &implTypeFlags);
             Assert.Equal(HRESULT.S_OK, hr);
-            Assert.NotEqual(IMPLTYPEFLAG.FDEFAULT, implTypeFlags);
+            Assert.NotEqual((int)IMPLTYPEFLAGS.IMPLTYPEFLAG_FDEFAULT, implTypeFlags);
         }
 
         [StaFact]
         public unsafe void ITypeInfo_GetMops_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            var mops = new BSTR("Mops");
-            hr = typeInfo.GetMops((DispatchID)4, &mops);
+            using BSTR mops = new("Mops");
+            hr = typeInfo.Value->GetMops(4, &mops);
             Assert.Equal(HRESULT.S_OK, hr);
-            Assert.Empty(mops.String.ToString());
+            Assert.True(mops.Length == 0);
         }
 
         [StaFact]
         public unsafe void ITypeInfo_GetNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             BSTR* rgszNames = stackalloc BSTR[2];
             rgszNames[0] = new BSTR("Name1");
             rgszNames[1] = new BSTR("Name2");
             uint cNames = 0;
-            hr = typeInfo.GetNames((DispatchID)4, rgszNames, 2u, &cNames);
+            hr = typeInfo.Value->GetNames(4, rgszNames, 2u, &cNames);
             Assert.Equal(HRESULT.S_OK, hr);
-            Assert.Equal("Width", rgszNames[0].String.ToString());
-            Assert.Equal("Name2", rgszNames[1].String.ToString());
+            Assert.Equal("Width", rgszNames[0].ToString());
+            Assert.Equal("Name2", rgszNames[1].ToString());
             Assert.Equal(1u, cNames);
 
             rgszNames[0].Dispose();
@@ -242,38 +225,34 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetRefTypeInfo_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             uint refType = uint.MaxValue;
-            hr = typeInfo.GetRefTypeOfImplType(0, &refType);
+            hr = typeInfo.Value->GetRefTypeOfImplType(0, &refType);
             Assert.Equal(HRESULT.S_OK, hr);
             Assert.NotEqual(0u, refType);
 
-            ITypeInfo refTypeInfo;
-            hr = typeInfo.GetRefTypeInfo(refType, out refTypeInfo);
-            using var refTypeInfoReleaser = new ComRefReleaser(refTypeInfo);
+            using ComScope<ITypeInfo> refTypeInfo = new(null);
+            hr = typeInfo.Value->GetRefTypeInfo(refType, refTypeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
-            Assert.NotNull(refTypeInfo);
         }
 
         [StaFact]
         public unsafe void ITypeInfo_GetRefTypeOfImplType_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             uint refType = uint.MaxValue;
-            hr = typeInfo.GetRefTypeOfImplType(0, &refType);
+            hr = typeInfo.Value->GetRefTypeOfImplType(0, &refType);
             Assert.Equal(HRESULT.S_OK, hr);
             Assert.NotEqual(0u, refType);
         }
@@ -282,26 +261,25 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetTypeAttr_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             TYPEATTR* pTypeAttr = null;
             try
             {
-                hr = typeInfo.GetTypeAttr(&pTypeAttr);
+                hr = typeInfo.Value->GetTypeAttr(&pTypeAttr);
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal(typeof(IPictureDisp).GUID, pTypeAttr->guid);
                 Assert.Equal(0u, pTypeAttr->lcid);
                 Assert.Equal(0u, pTypeAttr->dwReserved);
-                Assert.Equal(DispatchID.UNKNOWN, pTypeAttr->memidConstructor);
-                Assert.Equal(DispatchID.UNKNOWN, pTypeAttr->memidDestructor);
-                Assert.Equal(IntPtr.Zero, pTypeAttr->lpstrSchema);
+                Assert.Equal(PInvoke.DISPID_UNKNOWN, pTypeAttr->memidConstructor);
+                Assert.Equal(PInvoke.DISPID_UNKNOWN, pTypeAttr->memidDestructor);
+                Assert.True(pTypeAttr->lpstrSchema.IsNull);
                 Assert.Equal((uint)IntPtr.Size, pTypeAttr->cbSizeInstance);
-                Assert.Equal(TYPEKIND.DISPATCH, pTypeAttr->typekind);
+                Assert.Equal(TYPEKIND.TKIND_DISPATCH, pTypeAttr->typekind);
                 Assert.Equal(1, pTypeAttr->cFuncs);
                 Assert.Equal(5, pTypeAttr->cVars);
                 Assert.Equal(1, pTypeAttr->cImplTypes);
@@ -310,13 +288,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
                 Assert.Equal(0x1000, pTypeAttr->wTypeFlags);
                 Assert.Equal(0, pTypeAttr->wMajorVerNum);
                 Assert.Equal(0, pTypeAttr->wMinorVerNum);
-                Assert.Equal(VARENUM.EMPTY, pTypeAttr->tdescAlias.vt);
-                Assert.Equal(IntPtr.Zero, pTypeAttr->idldescType.dwReserved);
-                Assert.Equal(IDLFLAG.NONE, pTypeAttr->idldescType.wIDLFlags);
+                Assert.Equal(VARENUM.VT_EMPTY, pTypeAttr->tdescAlias.vt);
+                Assert.Equal((nuint)0, pTypeAttr->idldescType.dwReserved);
+                Assert.Equal(IDLFLAGS.IDLFLAG_NONE, pTypeAttr->idldescType.wIDLFlags);
             }
             finally
             {
-                typeInfo.ReleaseTypeAttr(pTypeAttr);
+                typeInfo.Value->ReleaseTypeAttr(pTypeAttr);
             }
         }
 
@@ -324,55 +302,45 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetTypeComp_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            IntPtr typeComp = IntPtr.Zero;
-            hr = typeInfo.GetTypeComp(&typeComp);
-            try
-            {
-                Assert.Equal(HRESULT.S_OK, hr);
-                Assert.NotEqual(IntPtr.Zero, typeComp);
-            }
-            finally
-            {
-                Runtime.InteropServices.Marshal.Release(typeComp);
-            }
+            ITypeComp* typeComp;
+            hr = typeInfo.Value->GetTypeComp(&typeComp);
+            Assert.Equal(HRESULT.S_OK, hr);
         }
 
         [StaFact]
         public unsafe void ITypeInfo_GetVarDesc_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             VARDESC* pVarDesc = null;
             try
             {
-                hr = typeInfo.GetVarDesc(3, &pVarDesc);
+                hr = typeInfo.Value->GetVarDesc(3, &pVarDesc);
                 Assert.Equal(HRESULT.S_OK, hr);
-                Assert.Equal((DispatchID)4, pVarDesc->memid);
-                Assert.Equal(IntPtr.Zero, pVarDesc->lpstrSchema);
-                Assert.Equal(IntPtr.Zero, pVarDesc->unionMember);
-                Assert.Equal(VARENUM.USERDEFINED, pVarDesc->elemdescVar.tdesc.vt);
-                Assert.NotEqual(IntPtr.Zero, pVarDesc->elemdescVar.tdesc.union.lpadesc);
-                Assert.Equal(IntPtr.Zero, pVarDesc->elemdescVar.paramdesc.pparamdescex);
-                Assert.Equal(PARAMFLAG.NONE, pVarDesc->elemdescVar.paramdesc.wParamFlags);
-                Assert.Equal(VARFLAGS.FREADONLY, pVarDesc->wVarFlags);
-                Assert.Equal(VARKIND.DISPATCH, pVarDesc->varkind);
+                Assert.Equal(4, pVarDesc->memid);
+                Assert.True(pVarDesc->lpstrSchema.IsNull);
+                Assert.True(pVarDesc->Anonymous.lpvarValue  is null);
+                Assert.Equal(VARENUM.VT_USERDEFINED, pVarDesc->elemdescVar.tdesc.vt);
+                Assert.False(pVarDesc->elemdescVar.tdesc.Anonymous.lpadesc is null);
+                Assert.True(pVarDesc->elemdescVar.Anonymous.paramdesc.pparamdescex is null);
+                Assert.Equal(PARAMFLAGS.PARAMFLAG_NONE, pVarDesc->elemdescVar.Anonymous.paramdesc.wParamFlags);
+                Assert.Equal(VARFLAGS.VARFLAG_FREADONLY, pVarDesc->wVarFlags);
+                Assert.Equal(VARKIND.VAR_DISPATCH, pVarDesc->varkind);
             }
             finally
             {
-                typeInfo.ReleaseVarDesc(pVarDesc);
+                typeInfo.Value->ReleaseVarDesc(pVarDesc);
             }
         }
 
@@ -380,52 +348,27 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_Invoke_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
-            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
+            using var picture = ComHelpers.GetComScope<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = picture.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
-            var dispParams = new DISPPARAMS();
-            var varResult = new object[1];
-            var excepInfo = new EXCEPINFO();
+            DISPPARAMS dispParams = default;
+            VARIANT varResult = default;
+            EXCEPINFO excepInfo = default;
             uint argErr = 0;
-            hr = typeInfo.Invoke(
+            hr = typeInfo.Value->Invoke(
                 picture,
-                (DispatchID)4,
-                DISPATCH.PROPERTYGET,
+                (int)PInvoke.DISPID_PICT_WIDTH,
+                DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                 &dispParams,
-                varResult,
+                &varResult,
                 &excepInfo,
                 &argErr);
             Assert.Equal(HRESULT.DISP_E_MEMBERNOTFOUND, hr);
-            Assert.Null(varResult[0]);
+            Assert.Equal(default, varResult);
             Assert.Equal(0u, argErr);
-        }
-
-        // ITypeInfo often requires manual RCW reference management. The native object may be free threaded
-        // but when created on an STA thread it will be associated with that thread. If the native code keeps
-        // reusing the same instance you can run into a condition where the GC cleans up the RCW from one STA
-        // thread while you want to start using the same underlying object on a new STA thread. This will lead
-        // to an error so manual release is required to avoid running into this condition.
-        private struct ComRefReleaser : IDisposable
-        {
-            private object? _reference;
-
-            public ComRefReleaser(object? reference)
-            {
-                _reference = reference;
-            }
-
-            public void Dispose()
-            {
-                if (_reference != null)
-                {
-                    Marshal.ReleaseComObject(_reference);
-                    _reference = null;
-                }
-            }
         }
     }
 }

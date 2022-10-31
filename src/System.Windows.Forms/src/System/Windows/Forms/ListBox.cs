@@ -196,7 +196,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -212,7 +212,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
                     }
                     else if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, _columnWidth);
+                        PInvoke.SendMessage(this, (WM)LB.SETCOLUMNWIDTH, (WPARAM)_columnWidth);
                     }
                 }
             }
@@ -298,9 +298,9 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_LISTBOX;
+                cp.ClassName = PInvoke.WC_LISTBOX;
 
-                cp.Style |= (int)WS.VSCROLL | (int)LBS.NOTIFY | (int)LBS.HASSTRINGS;
+                cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | (int)LBS.NOTIFY | (int)LBS.HASSTRINGS;
                 if (_scrollAlwaysVisible)
                 {
                     cp.Style |= (int)LBS.DISABLENOSCROLL;
@@ -319,20 +319,20 @@ namespace System.Windows.Forms
                 switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= (int)WS_EX.CLIENTEDGE;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= (int)WS.BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                 }
 
                 if (_multiColumn)
                 {
-                    cp.Style |= (int)LBS.MULTICOLUMN | (int)WS.HSCROLL;
+                    cp.Style |= (int)LBS.MULTICOLUMN | (int)WINDOW_STYLE.WS_HSCROLL;
                 }
                 else if (_horizontalScrollbar)
                 {
-                    cp.Style |= (int)WS.HSCROLL;
+                    cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
                 }
 
                 switch (_selectionMode)
@@ -436,7 +436,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal int FocusedIndex => IsHandleCreated ? (int)SendMessageW(this, (WM)LB.GETCARETINDEX) : -1;
+        internal int FocusedIndex => IsHandleCreated ? (int)PInvoke.SendMessage(this, (WM)LB.GETCARETINDEX) : -1;
 
         // The scroll bars don't display properly when the IntegralHeight == false
         // and the control is resized before the font size is change and the new font size causes
@@ -616,7 +616,7 @@ namespace System.Windows.Forms
                     if (_drawMode == DrawMode.OwnerDrawFixed && IsHandleCreated)
                     {
                         BeginUpdate();
-                        SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, value);
+                        PInvoke.SendMessage(this, (WM)LB.SETITEMHEIGHT, 0, value);
 
                         // Changing the item height might require a resize for IntegralHeight list boxes
                         if (IntegralHeight)
@@ -645,10 +645,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_itemsCollection is null)
-                {
-                    _itemsCollection = CreateItemCollection();
-                }
+                _itemsCollection ??= CreateItemCollection();
 
                 return _itemsCollection;
             }
@@ -860,7 +857,7 @@ namespace System.Windows.Forms
 
                 if (current == SelectionMode.One && IsHandleCreated)
                 {
-                    return (int)SendMessageW(this, (WM)LB.GETCURSEL);
+                    return (int)PInvoke.SendMessage(this, (WM)LB.GETCURSEL);
                 }
 
                 if (_itemsCollection is not null && SelectedItems.Count > 0)
@@ -944,10 +941,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_selectedIndices is null)
-                {
-                    _selectedIndices = new SelectedIndexCollection(this);
-                }
+                _selectedIndices ??= new SelectedIndexCollection(this);
 
                 return _selectedIndices;
             }
@@ -1006,10 +1000,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_selectedItems is null)
-                {
-                    _selectedItems = new SelectedObjectCollection(this);
-                }
+                _selectedItems ??= new SelectedObjectCollection(this);
 
                 return _selectedItems;
             }
@@ -1132,7 +1123,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        new public event EventHandler? TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -1148,12 +1139,12 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListBoxTopIndexDescr))]
         public int TopIndex
         {
-            get => IsHandleCreated ? (int)SendMessageW(this, (WM)LB.GETTOPINDEX) : _topIndex;
+            get => IsHandleCreated ? (int)PInvoke.SendMessage(this, (WM)LB.GETTOPINDEX) : _topIndex;
             set
             {
                 if (IsHandleCreated)
                 {
-                    SendMessageW(this, (WM)LB.SETTOPINDEX, value);
+                    PInvoke.SendMessage(this, (WM)LB.SETTOPINDEX, (WPARAM)value);
                 }
                 else
                 {
@@ -1197,10 +1188,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_customTabOffsets is null)
-                {
-                    _customTabOffsets = new IntegerCollection(this);
-                }
+                _customTabOffsets ??= new IntegerCollection(this);
 
                 return _customTabOffsets;
             }
@@ -1462,7 +1450,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int height = (int)SendMessageW(this, (WM)LB.GETITEMHEIGHT, index);
+                int height = (int)PInvoke.SendMessage(this, (WM)LB.GETITEMHEIGHT, (WPARAM)index);
                 if (height == -1)
                 {
                     throw new Win32Exception();
@@ -1482,8 +1470,8 @@ namespace System.Windows.Forms
         public Rectangle GetItemRectangle(int index)
         {
             CheckIndex(index);
-            var rect = new RECT();
-            if (SendMessageW(this, (WM)LB.GETITEMRECT, index, ref rect) == 0)
+            var rect = default(RECT);
+            if (PInvoke.SendMessage(this, (WM)LB.GETITEMRECT, (uint)index, ref rect) == 0)
             {
                 return Rectangle.Empty;
             }
@@ -1517,7 +1505,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                int selection = (int)SendMessageW(this, (WM)LB.GETSEL, index);
+                int selection = (int)PInvoke.SendMessage(this, (WM)LB.GETSEL, (WPARAM)index);
                 if (selection == -1)
                 {
                     throw new Win32Exception();
@@ -1551,11 +1539,10 @@ namespace System.Windows.Forms
         {
             // NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
             // call Sendmessage.
-            RECT r = new RECT();
-            GetClientRect(new HandleRef(this, Handle), ref r);
+            PInvoke.GetClientRect(this, out RECT r);
             if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
             {
-                int index = (int)SendMessageW(this, (WM)LB.ITEMFROMPOINT, 0, PARAM.FromLowHigh(x, y));
+                int index = (int)PInvoke.SendMessage(this, (WM)LB.ITEMFROMPOINT, 0, PARAM.FromLowHigh(x, y));
                 if (PARAM.HIWORD(index) == 0)
                 {
                     // Inside ListBox client area
@@ -1572,7 +1559,7 @@ namespace System.Windows.Forms
         private int NativeAdd(object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = (int)SendMessageW(this, (WM)LB.ADDSTRING, 0, GetItemText(item));
+            int insertIndex = (int)PInvoke.SendMessage(this, (WM)LB.ADDSTRING, 0, GetItemText(item));
             if (insertIndex == LB_ERRSPACE)
             {
                 throw new OutOfMemoryException();
@@ -1596,7 +1583,7 @@ namespace System.Windows.Forms
         private void NativeClear()
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            SendMessageW(this, (WM)LB.RESETCONTENT);
+            PInvoke.SendMessage(this, (WM)LB.RESETCONTENT);
         }
 
         /// <summary>
@@ -1604,7 +1591,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal unsafe string NativeGetItemText(int index)
         {
-            int maxLength = (int)SendMessageW(this, (WM)LB.GETTEXTLEN, index);
+            int maxLength = (int)PInvoke.SendMessage(this, (WM)LB.GETTEXTLEN, (WPARAM)index);
             if (maxLength == LB_ERR)
             {
                 return string.Empty;
@@ -1614,7 +1601,7 @@ namespace System.Windows.Forms
             string result;
             fixed (char* pText = text)
             {
-                int actualLength = (int)SendMessageW(this, (WM)LB.GETTEXT, index, (nint)pText);
+                int actualLength = (int)PInvoke.SendMessage(this, (WM)LB.GETTEXT, (WPARAM)index, (LPARAM)pText);
                 Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
                 if (actualLength == LB_ERR)
                 {
@@ -1635,7 +1622,7 @@ namespace System.Windows.Forms
         private int NativeInsert(int index, object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = (int)SendMessageW(this, (WM)LB.INSERTSTRING, index, GetItemText(item));
+            int insertIndex = (int)PInvoke.SendMessage(this, (WM)LB.INSERTSTRING, (uint)index, GetItemText(item));
 
             if (insertIndex == LB_ERRSPACE)
             {
@@ -1662,8 +1649,8 @@ namespace System.Windows.Forms
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
 
-            bool selected = (int)SendMessageW(this, (WM)LB.GETSEL, index, 0) > 0;
-            SendMessageW(this, (WM)LB.DELETESTRING, index);
+            bool selected = (int)PInvoke.SendMessage(this, (WM)LB.GETSEL, (WPARAM)index) > 0;
+            PInvoke.SendMessage(this, (WM)LB.DELETESTRING, (WPARAM)index);
 
             // If the item currently selected is removed then we should fire a Selectionchanged event
             // as the next time selected index returns -1.
@@ -1685,11 +1672,11 @@ namespace System.Windows.Forms
 
             if (_selectionMode == SelectionMode.One)
             {
-                SendMessageW(this, (WM)LB.SETCURSEL, value ? index : -1);
+                PInvoke.SendMessage(this, (WM)LB.SETCURSEL, (WPARAM)(value ? index : -1));
             }
             else
             {
-                SendMessageW(this, (WM)LB.SETSEL, PARAM.FromBool(value), index);
+                PInvoke.SendMessage(this, (WM)LB.SETSEL, (WPARAM)(BOOL)value, (LPARAM)index);
             }
         }
 
@@ -1712,7 +1699,7 @@ namespace System.Windows.Forms
             switch (_selectionMode)
             {
                 case SelectionMode.One:
-                    int index = (int)SendMessageW(this, (WM)LB.GETCURSEL);
+                    int index = (int)PInvoke.SendMessage(this, (WM)LB.GETCURSEL);
                     if (index >= 0)
                     {
                         SelectedItems.SetSelected(index, true);
@@ -1722,13 +1709,13 @@ namespace System.Windows.Forms
 
                 case SelectionMode.MultiSimple:
                 case SelectionMode.MultiExtended:
-                    int count = (int)SendMessageW(this, (WM)LB.GETSELCOUNT);
+                    int count = (int)PInvoke.SendMessage(this, (WM)LB.GETSELCOUNT);
                     if (count > 0)
                     {
                         var result = new int[count];
                         fixed (int* pResult = result)
                         {
-                            SendMessageW(this, (WM)LB.GETSELITEMS, count, (nint)pResult);
+                            PInvoke.SendMessage(this, (WM)LB.GETSELITEMS, (WPARAM)count, (LPARAM)pResult);
                         }
 
                         foreach (int i in result)
@@ -1792,27 +1779,26 @@ namespace System.Windows.Forms
         ///  set up a few things, like column width, etc!  Inheriting classes should
         ///  not forget to call base.OnHandleCreated().
         /// </summary>
-        protected unsafe override void OnHandleCreated(EventArgs e)
+        protected override unsafe void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
 
-            //for getting the current Locale to set the Scrollbars...
-            //
-            SendMessageW(this, (WM)LB.SETLOCALE, (nint)Kernel32.GetThreadLocale().RawValue);
+            // Get the current locale to set the Scrollbars
+            PInvoke.SendMessage(this, (WM)LB.SETLOCALE, (WPARAM)PInvoke.GetThreadLocale());
 
             if (_columnWidth != 0)
             {
-                SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, _columnWidth);
+                PInvoke.SendMessage(this, (WM)LB.SETCOLUMNWIDTH, (WPARAM)_columnWidth);
             }
 
             if (_drawMode == DrawMode.OwnerDrawFixed)
             {
-                SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
+                PInvoke.SendMessage(this, (WM)LB.SETITEMHEIGHT, (WPARAM)0, (LPARAM)ItemHeight);
             }
 
             if (_topIndex != 0)
             {
-                SendMessageW(this, (WM)LB.SETTOPINDEX, _topIndex);
+                PInvoke.SendMessage(this, (WM)LB.SETTOPINDEX, (WPARAM)_topIndex);
             }
 
             if (UseCustomTabOffsets && CustomTabOffsets is not null)
@@ -1823,7 +1809,7 @@ namespace System.Windows.Forms
 
                 fixed (int* pOffsets = offsets)
                 {
-                    SendMessageW(this, (WM)LB.SETTABSTOPS, wpar, (nint)pOffsets);
+                    PInvoke.SendMessage(this, (WM)LB.SETTABSTOPS, (WPARAM)wpar, (LPARAM)pOffsets);
                 }
             }
 
@@ -1837,10 +1823,7 @@ namespace System.Windows.Forms
 
                     if (_selectionMode != SelectionMode.None)
                     {
-                        if (_selectedItems is not null)
-                        {
-                            _selectedItems.PushSelectionIntoNativeListBox(i);
-                        }
+                        _selectedItems?.PushSelectionIntoNativeListBox(i);
                     }
                 }
             }
@@ -2178,7 +2161,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SendMessageW(this, (WM)LB.SETCURSEL, DataManager.Position);
+                    PInvoke.SendMessage(this, (WM)LB.SETCURSEL, (WPARAM)DataManager.Position);
                 }
 
                 // if the list changed and we still did not fire the
@@ -2312,7 +2295,7 @@ namespace System.Windows.Forms
                     width = MaxItemWidth;
                 }
 
-                SendMessageW(this, (WM)LB.SETHORIZONTALEXTENT, width);
+                PInvoke.SendMessage(this, (WM)LB.SETHORIZONTALEXTENT, (WPARAM)width);
             }
         }
 
@@ -2369,7 +2352,7 @@ namespace System.Windows.Forms
                 CustomTabOffsets.CopyTo(offsets, 0);
                 fixed (int* pOffsets = offsets)
                 {
-                    SendMessageW(this, (WM)LB.SETTABSTOPS, wpar, (nint)pOffsets);
+                    PInvoke.SendMessage(this, (WM)LB.SETTABSTOPS, (WPARAM)wpar, (nint)pOffsets);
                 }
 
                 Invalidate();
@@ -2379,9 +2362,9 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((PRF)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+            if (((PRF)(nint)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m.WParamInternal);
+                using Graphics g = Graphics.FromHdc((HDC)m.WParamInternal);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);
@@ -2392,13 +2375,10 @@ namespace System.Windows.Forms
 
         protected virtual void WmReflectCommand(ref Message m)
         {
-            switch ((User32.LBN)PARAM.HIWORD(m.WParamInternal))
+            switch ((User32.LBN)m.WParamInternal.HIWORD)
             {
                 case User32.LBN.SELCHANGE:
-                    if (_selectedItems is not null)
-                    {
-                        _selectedItems.Dirty();
-                    }
+                    _selectedItems?.Dirty();
 
                     OnSelectedIndexChanged(EventArgs.Empty);
                     break;
@@ -2411,7 +2391,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmReflectDrawItem(ref Message m)
         {
-            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParamInternal;
+            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
             Rectangle bounds = dis->rcItem;
             if (HorizontalScrollbar)
@@ -2430,13 +2410,13 @@ namespace System.Windows.Forms
 
             OnDrawItem(e);
 
-            m.ResultInternal = 1;
+            m.ResultInternal = (LRESULT)1;
         }
 
         // This method is only called if in owner draw mode
         private unsafe void WmReflectMeasureItem(ref Message m)
         {
-            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParamInternal;
+            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)(nint)m.LParamInternal;
 
             if (_drawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
@@ -2450,7 +2430,7 @@ namespace System.Windows.Forms
                 mis->itemHeight = (uint)ItemHeight;
             }
 
-            m.ResultInternal = 1;
+            m.ResultInternal = (LRESULT)1;
         }
 
         /// <summary>
@@ -2481,7 +2461,7 @@ namespace System.Windows.Forms
                 case WM.LBUTTONUP:
                     Point point = PARAM.ToPoint(m.LParamInternal);
                     bool captured = Capture;
-                    if (captured && WindowFromPoint(PointToScreen(point)) == Handle)
+                    if (captured && PInvoke.WindowFromPoint(PointToScreen(point)) == HWND)
                     {
                         if (!_doubleClickFired && !ValidationCancelled)
                         {
@@ -2521,7 +2501,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.RBUTTONUP:
-                    if (Capture && WindowFromPoint(PointToScreen(PARAM.ToPoint(m.LParamInternal))) == Handle)
+                    if (Capture && PInvoke.WindowFromPoint(PointToScreen((Point)m.LParamInternal)) == HWND)
                     {
                         _selectedItems?.Dirty();
                     }

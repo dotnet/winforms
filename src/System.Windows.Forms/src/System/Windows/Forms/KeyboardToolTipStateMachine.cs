@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -27,10 +25,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_instance is null)
-                {
-                    s_instance = new KeyboardToolTipStateMachine();
-                }
+                s_instance ??= new KeyboardToolTipStateMachine();
 
                 return s_instance;
             }
@@ -151,7 +146,7 @@ namespace System.Windows.Forms
                     return tool;
                 }
 
-                return Control.FromHandle(User32.GetFocus());
+                return Control.FromHandle(PInvoke.GetFocus());
             }
         }
 
@@ -181,7 +176,7 @@ namespace System.Windows.Forms
         {
             _currentTool = tool;
             ResetTimer();
-            StartTimer(toolTip.GetDelayTime(ComCtl32.TTDT.RESHOW),
+            StartTimer(toolTip.GetDelayTime(PInvoke.TTDT_RESHOW),
                 GetOneRunTickHandler((Timer sender) => Transit(SmEvent.ReshowDelayTimerExpired, tool)));
             return SmState.ReadyForReshow;
         }
@@ -192,7 +187,7 @@ namespace System.Windows.Forms
 
             int autoPopDelay = toolTip.IsPersistent ?
                 0 :
-                toolTip.GetDelayTime(ComCtl32.TTDT.AUTOPOP);
+                toolTip.GetDelayTime(PInvoke.TTDT_AUTOPOP);
 
             if (_currentTool is null)
             {
@@ -218,7 +213,7 @@ namespace System.Windows.Forms
         {
             _currentTool = tool;
             ResetTimer();
-            StartTimer(toolTip.GetDelayTime(ComCtl32.TTDT.INITIAL),
+            StartTimer(toolTip.GetDelayTime(PInvoke.TTDT_INITIAL),
                 GetOneRunTickHandler((Timer sender) => Transit(SmEvent.InitialDelayTimerExpired, _currentTool)));
 
             return SmState.ReadyForInitShow;
@@ -297,10 +292,7 @@ namespace System.Windows.Forms
             if (_currentState == SmState.Shown && _currentTool is not null)
             {
                 ToolTip? currentToolTip = _toolToTip[_currentTool];
-                if (currentToolTip is not null)
-                {
-                    currentToolTip.HideToolTip(_currentTool);
-                }
+                currentToolTip?.HideToolTip(_currentTool);
             }
 
             ResetTimer();

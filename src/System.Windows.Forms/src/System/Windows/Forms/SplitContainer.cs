@@ -102,7 +102,7 @@ namespace System.Windows.Forms
             // either the right or bottom panel - LTR
             // either the left or bottom panel - RTL
             Panel2 = new SplitterPanel(this);
-            _splitterRect = new Rectangle();
+            _splitterRect = default(Rectangle);
 
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -439,26 +439,24 @@ namespace System.Windows.Forms
 
         private Cursor? OverrideCursor
         {
-            get
-            {
-                return _overrideCursor;
-            }
+            get => _overrideCursor;
             set
             {
-                if (_overrideCursor != value)
+                if (_overrideCursor == value)
                 {
-                    _overrideCursor = value;
+                    return;
+                }
 
-                    if (IsHandleCreated)
+                _overrideCursor = value;
+
+                if (IsHandleCreated)
+                {
+                    // We want to instantly change the cursor if the mouse is within our bounds.
+                    PInvoke.GetCursorPos(out Point p);
+                    PInvoke.GetWindowRect(this, out var r);
+                    if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                     {
-                        // We want to instantly change the cursor if the mouse is within our bounds.
-                        var r = new RECT();
-                        User32.GetCursorPos(out Point p);
-                        User32.GetWindowRect(this, ref r);
-                        if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
-                        {
-                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (nint)User32.HT.CLIENT);
-                        }
+                        PInvoke.SendMessage(this, User32.WM.SETCURSOR, (WPARAM)HWND, (LPARAM)(int)User32.HT.CLIENT);
                     }
                 }
             }
@@ -887,7 +885,7 @@ namespace System.Windows.Forms
 
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler? BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -895,7 +893,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -919,7 +917,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler? TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -1393,7 +1391,7 @@ namespace System.Windows.Forms
         /// </summary>
         private Rectangle CalcSplitLine(int splitSize, int minWeight)
         {
-            Rectangle r = new Rectangle();
+            Rectangle r = default(Rectangle);
             switch (Orientation)
             {
                 case Orientation.Vertical:
@@ -1492,11 +1490,11 @@ namespace System.Windows.Forms
         private void DrawSplitHelper(int splitSize)
         {
             Rectangle r = CalcSplitLine(splitSize, 3);
-            using var dc = new User32.GetDcScope(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
-            Gdi32.HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-            using var objectScope = new Gdi32.ObjectScope(halftone);
-            using var selectBrush = new Gdi32.SelectObjectScope(dc, halftone);
-            Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
+            using User32.GetDcScope dc = new(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+            HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
+            using PInvoke.ObjectScope objectScope = new(halftone);
+            using PInvoke.SelectObjectScope selectBrush = new(dc, halftone);
+            PInvoke.PatBlt(dc, r.X, r.Y, r.Width, r.Height, ROP_CODE.PATINVERT);
 
             GC.KeepAlive(this);
         }
@@ -1787,6 +1785,14 @@ namespace System.Windows.Forms
                 }
 
                 SplitterWidth = (int)Math.Round((float)SplitterWidth * scale);
+                _splitterDistance = (int)Math.Round((float)_splitterDistance * scale);
+                _splitDistance = _splitterDistance;
+
+                // If FixedPanel property is set.
+                if (_panelSize != 0)
+                {
+                    _panelSize = (int)Math.Round((float)_panelSize * scale);
+                }
             }
             finally
             {
@@ -2107,10 +2113,7 @@ namespace System.Windows.Forms
             _initialSplitterDistance = _splitterDistance;
             _initialSplitterRectangle = SplitterRectangle;
 
-            if (_splitContainerMessageFilter is null)
-            {
-                _splitContainerMessageFilter = new SplitContainerMessageFilter(this);
-            }
+            _splitContainerMessageFilter ??= new SplitContainerMessageFilter(this);
 
             Application.AddMessageFilter(_splitContainerMessageFilter);
 
@@ -2285,7 +2288,7 @@ namespace System.Windows.Forms
         private void WmSetCursor(ref Message m)
         {
             // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
-            if (m.WParamInternal == InternalHandle && (User32.HT)(m.LParamInternal & 0x0000FFFF) == User32.HT.CLIENT)
+            if ((HWND)m.WParamInternal == InternalHandle && (User32.HT)m.LParamInternal.LOWORD == User32.HT.CLIENT)
             {
                 Cursor.Current = OverrideCursor ?? Cursor;
             }

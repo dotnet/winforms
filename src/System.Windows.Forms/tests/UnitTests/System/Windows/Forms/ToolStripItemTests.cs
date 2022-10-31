@@ -9,11 +9,10 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class ToolStripItemTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -14273,11 +14272,11 @@ namespace System.Windows.Forms.Tests
             };
 
             item.Select();
-            Assert.True(item.Selected);
+            Assert.Equal(item.CanSelect, item.Selected);
 
             // Select again.
             item.Select();
-            Assert.True(item.Selected);
+            Assert.Equal(item.CanSelect, item.Selected);
         }
 
         public static IEnumerable<object[]> Select_WithoutToolStripItemAccessibleObject_TestData()

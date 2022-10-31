@@ -24,10 +24,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             get
             {
-                if (_buttonAdapter is null)
-                {
-                    _buttonAdapter = CreateButtonAdapter();
-                }
+                _buttonAdapter ??= CreateButtonAdapter();
 
                 return _buttonAdapter;
             }
@@ -42,7 +39,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             LayoutOptions? options = default;
             using (var screen = GdiCache.GetScreenHdc())
-            using (PaintEventArgs pe = new PaintEventArgs(screen, new Rectangle()))
+            using (PaintEventArgs pe = new PaintEventArgs(screen, default(Rectangle)))
             {
                 options = Layout(pe);
             }

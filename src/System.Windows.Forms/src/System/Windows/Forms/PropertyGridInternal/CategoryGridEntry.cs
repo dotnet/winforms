@@ -15,7 +15,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private readonly string _name;
         private static Dictionary<string, bool> s_categoryStates;
-        private readonly static object s_lock = new();
+        private static readonly object s_lock = new();
 
         public CategoryGridEntry(PropertyGrid ownerGrid, GridEntry parent, string name, IEnumerable<GridEntry> children)
             : base(ownerGrid, parent)

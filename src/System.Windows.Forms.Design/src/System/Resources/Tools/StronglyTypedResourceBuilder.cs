@@ -52,7 +52,7 @@ namespace System.Resources.Tools
         // When fixing up identifiers, we will replace all these chars with ReplacementChar ('_').
         private static ReadOnlySpan<char> CharsToReplace => new char[]
         {
-            ' ', '\u00A0' /* non-breaking space */, '.', ',', ';', '|', '~','@', '#', '%', '^', '&', '*', '+', '-',
+            ' ', '\u00A0' /* non-breaking space */, '.', ',', ';', '|', '~', '@', '#', '%', '^', '&', '*', '+', '-',
             '/', '\\', '<', '>', '?', '[', ']', '(', ')', '{', '}', '\"', '\'', ':', '!'
         };
 

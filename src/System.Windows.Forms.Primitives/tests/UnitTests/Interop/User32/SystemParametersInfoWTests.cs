@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using Xunit;
-using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 {
@@ -15,7 +14,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
         {
             NONCLIENTMETRICSW data = default;
 
-            bool result = SystemParametersInfoW(ref data);
+            bool result = PInvoke.SystemParametersInfo(ref data);
             Assert.True(result);
 
             Font captionFont = Font.FromLogFont(data.lfCaptionFont);

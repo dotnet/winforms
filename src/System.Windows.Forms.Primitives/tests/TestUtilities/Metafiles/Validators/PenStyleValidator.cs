@@ -5,14 +5,13 @@
 #nullable enable
 
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
     internal class PenStyleValidator : IStateValidator
     {
-        private readonly Gdi32.PS _penStyle;
-        public PenStyleValidator(Gdi32.PS penStyle) => _penStyle = penStyle;
+        private readonly PEN_STYLE _penStyle;
+        public PenStyleValidator(PEN_STYLE penStyle) => _penStyle = penStyle;
         public void Validate(DeviceContextState state) => Assert.Equal(_penStyle, state.SelectedPen.elpPenStyle);
     }
 }

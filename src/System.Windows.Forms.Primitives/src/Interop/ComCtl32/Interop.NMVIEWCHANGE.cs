@@ -8,9 +8,9 @@ internal static partial class Interop
     {
         public struct NMVIEWCHANGE
         {
-            public User32.NMHDR nmhdr;
-            public MCMV uOldView;
-            public MCMV uNewView;
+            public NMHDR nmhdr;
+            public MONTH_CALDENDAR_MESSAGES_VIEW uOldView;
+            public MONTH_CALDENDAR_MESSAGES_VIEW uNewView;
         }
     }
 }

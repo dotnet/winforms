@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Primitives.Ole32Tests
 {
@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Primitives.Ole32Tests
         [Fact]
         public void CALPOLESTR_ConvertAndFree_SingleItem()
         {
-            Ole32.CALPOLESTR ca = CreateStringVector("Swizzle");
+            CALPOLESTR ca = CreateStringVector("Swizzle");
 
             string?[] values = ca.ConvertAndFree();
             Assert.Equal(1, values.Length);
@@ -23,21 +23,21 @@ namespace System.Windows.Forms.Primitives.Ole32Tests
         [Fact]
         public void CALPOLESTR_ConvertAndFree_EmptyStruct()
         {
-            Ole32.CALPOLESTR ca = default;
+            CALPOLESTR ca = default;
 
             string?[] values = ca.ConvertAndFree();
             Assert.Empty(values);
         }
 
-        private static Ole32.CALPOLESTR CreateStringVector(params string[] values)
+        private static CALPOLESTR CreateStringVector(params string[] values)
             => CreateStringVector(allocations: null, values);
 
-        private unsafe static Ole32.CALPOLESTR CreateStringVector(IList<IntPtr>? allocations, params string[] values)
+        private static unsafe CALPOLESTR CreateStringVector(IList<IntPtr>? allocations, params string[] values)
         {
-            Ole32.CALPOLESTR ca = new()
+            CALPOLESTR ca = new()
             {
                 cElems = (uint)values.Length,
-                pElems = (char**)Marshal.AllocCoTaskMem(IntPtr.Size * values.Length)
+                pElems = (PWSTR*)Marshal.AllocCoTaskMem(IntPtr.Size * values.Length)
             };
 
             allocations?.Add((IntPtr)ca.pElems);

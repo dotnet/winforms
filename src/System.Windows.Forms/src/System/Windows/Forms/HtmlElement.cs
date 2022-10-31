@@ -7,6 +7,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 using static Interop.Mshtml;
 
@@ -451,8 +452,8 @@ namespace System.Windows.Forms
                     Guid g = Guid.Empty;
                     var names = new string[] { methodName };
                     Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
-                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
-                    if (!hr.Succeeded() || dispid == Ole32.DispatchID.UNKNOWN)
+                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
+                    if (!hr.Succeeded || dispid == Ole32.DispatchID.UNKNOWN)
                     {
                         return null;
                     }
@@ -463,26 +464,29 @@ namespace System.Windows.Forms
                         Array.Reverse(parameter);
                     }
 
-                    using var vectorArgs = new Oleaut32.VARIANTVector(parameter);
-                    fixed (Oleaut32.VARIANT* pVariant = vectorArgs.Variants)
+                    using VARIANTVector vectorArgs = new(parameter);
+                    fixed (VARIANT* pVariant = vectorArgs.Variants)
                     {
-                        var dispParams = new Oleaut32.DISPPARAMS();
-                        dispParams.rgvarg = pVariant;
-                        dispParams.cArgs = (uint)vectorArgs.Variants.Length;
-                        dispParams.rgdispidNamedArgs = null;
-                        dispParams.cNamedArgs = 0;
+                        DISPPARAMS dispParams = new()
+                        {
+                            rgvarg = pVariant,
+                            cArgs = (uint)vectorArgs.Variants.Length,
+                            rgdispidNamedArgs = null,
+                            cNamedArgs = 0
+                        };
 
                         var retVals = new object[1];
-                        var excepInfo = new Oleaut32.EXCEPINFO();
+                        EXCEPINFO excepInfo = default(EXCEPINFO);
                         hr = scriptObject.Invoke(
                             dispid,
                             &g,
-                            Kernel32.GetThreadLocale(),
-                            Oleaut32.DISPATCH.METHOD,
+                            PInvoke.GetThreadLocale(),
+                            DISPATCH_FLAGS.DISPATCH_METHOD,
                             &dispParams,
                             retVals,
                             &excepInfo,
                             null);
+
                         if (hr == HRESULT.S_OK)
                         {
                             return retVals[0];

@@ -463,7 +463,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _hasFocus = value;
 
                     // Notify accessibility applications that keyboard focus has changed.
-                    if (OwnerGridView.IsAccessibilityObjectCreated && value == true)
+                    if (OwnerGridView.IsAccessibilityObjectCreated && value)
                     {
                         int id = OwnerGridView.AccessibilityGetGridEntryChildID(this);
                         if (id >= 0)
@@ -1409,10 +1409,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Fail($"Bad Type Converter! {t.GetType().Name}, {t.Message},{converter}", t.ToString());
             }
 
-            if (textValue is null)
-            {
-                textValue = string.Empty;
-            }
+            textValue ??= string.Empty;
 
             return textValue;
         }
@@ -1583,7 +1580,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _lastPaintWithExplorerStyle = true;
                 }
 
-                PaintOutlineWithExplorerTreeStyle(g, r, (OwnerGridView is not null) ? OwnerGridView.HandleInternal : IntPtr.Zero);
+                PaintOutlineWithExplorerTreeStyle(g, r, OwnerGridView.HWNDInternal);
             }
             else
             {
@@ -1602,7 +1599,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             // Draw the expansion glyph with the Explorer tree style.
-            void PaintOutlineWithExplorerTreeStyle(Graphics g, Rectangle r, IntPtr handle)
+            void PaintOutlineWithExplorerTreeStyle(Graphics g, Rectangle r, HWND hwnd)
             {
                 // Make sure we're in our bounds.
                 Rectangle outline = Rectangle.Intersect(r, OutlineRectangle);
@@ -1628,34 +1625,34 @@ namespace System.Windows.Forms.PropertyGridInternal
                         : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
 
                     VisualStyleRenderer explorerTreeRenderer = new(element);
-                    RedrawExplorerTreeViewClosedGlyph(g, explorerTreeRenderer, outline, handle);
+                    RedrawExplorerTreeViewClosedGlyph(g, explorerTreeRenderer, outline, hwnd);
                 }
                 else
                 {
                     using var hdc = new DeviceContextHdcScope(g);
                     VisualStyleRenderer explorerTreeRenderer = new(VisualStyleElement.ExplorerTreeView.Glyph.Opened);
-                    explorerTreeRenderer.DrawBackground(hdc, outline, handle);
+                    explorerTreeRenderer.DrawBackground(hdc, outline, hwnd);
                 }
 
                 unsafe void RedrawExplorerTreeViewClosedGlyph(
                     Graphics graphics,
                     VisualStyleRenderer explorerTreeRenderer,
                     Rectangle rectangle,
-                    IntPtr handle)
+                    HWND hwnd)
                 {
                     Color backgroundColor = ColorInversionNeededInHighContrast ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
-                    using var compatibleDC = new Gdi32.CreateDcScope(default);
+                    using var compatibleDC = new PInvoke.CreateDcScope(default);
 
-                    int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
-                    int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
-                    Gdi32.HBITMAP compatibleBitmap = Gdi32.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpvBits: null);
-                    using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
+                    int planes = PInvoke.GetDeviceCaps(compatibleDC, GET_DEVICE_CAPS_INDEX.PLANES);
+                    int bitsPixel = PInvoke.GetDeviceCaps(compatibleDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
+                    HBITMAP compatibleBitmap = PInvoke.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
+                    using PInvoke.SelectObjectScope targetBitmapSelection = new(compatibleDC, compatibleBitmap);
 
-                    using var brush = new Gdi32.CreateBrushScope(backgroundColor);
+                    using PInvoke.CreateBrushScope brush = new(backgroundColor);
                     compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), brush);
-                    explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), handle);
+                    explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), hwnd);
 
-                    using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap.Handle);
+                    using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap);
                     ControlPaint.InvertForeColorIfNeeded(bitmap, backgroundColor);
                     graphics.DrawImage(bitmap, rectangle, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel);
                 }

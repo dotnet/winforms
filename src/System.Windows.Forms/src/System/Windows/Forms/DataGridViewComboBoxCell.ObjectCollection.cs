@@ -32,10 +32,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (comparer is null)
-                    {
-                        comparer = new ItemComparer(owner);
-                    }
+                    comparer ??= new ItemComparer(owner);
 
                     return comparer;
                 }
@@ -59,10 +56,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (items is null)
-                    {
-                        items = new ArrayList();
-                    }
+                    items ??= new ArrayList();
 
                     return items;
                 }

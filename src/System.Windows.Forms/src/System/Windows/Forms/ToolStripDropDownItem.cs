@@ -201,7 +201,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventDropDownClosed, value);
         }
 
-        internal protected virtual Point DropDownLocation
+        protected internal virtual Point DropDownLocation
         {
             get
             {
@@ -422,10 +422,7 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            if (dropDown is not null)
-            {
-                dropDown.OnOwnerItemFontChanged(EventArgs.Empty);
-            }
+            dropDown?.OnOwnerItemFontChanged(EventArgs.Empty);
         }
 
         protected override void OnBoundsChanged()
@@ -613,6 +610,12 @@ namespace System.Windows.Forms
 
             Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] ddi calling base");
             return base.ProcessDialogKey(keyData);
+        }
+
+        internal override void ReleaseUiaProvider()
+        {
+            dropDown?.ReleaseUiaProvider(IntPtr.Zero);
+            base.ReleaseUiaProvider();
         }
 
         private ToolStripDropDownDirection RTLTranslateDropDownDirection(ToolStripDropDownDirection dropDownDirection, RightToLeft rightToLeft)

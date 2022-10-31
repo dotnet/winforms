@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     public partial class Form
@@ -14,18 +12,18 @@ namespace System.Windows.Forms
         /// </summary>
         private class EnumThreadWindowsCallback
         {
-            private List<IntPtr>? _ownedWindows;
+            private List<HWND>? _ownedWindows;
 
-            private readonly IntPtr _formHandle;
+            private readonly HWND _formHandle;
 
-            internal EnumThreadWindowsCallback(IntPtr formHandle)
+            internal EnumThreadWindowsCallback(HWND formHandle)
             {
                 _formHandle = formHandle;
             }
 
-            internal BOOL Callback(IntPtr hwnd)
+            internal BOOL Callback(HWND hwnd)
             {
-                IntPtr parent = User32.GetWindowLong(hwnd, User32.GWL.HWNDPARENT);
+                HWND parent = (HWND)PInvoke.GetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                 if (parent == _formHandle)
                 {
                     // Enumerated window is owned by this Form.
@@ -34,7 +32,7 @@ namespace System.Windows.Forms
                     _ownedWindows.Add(parent);
                 }
 
-                return BOOL.TRUE;
+                return true;
             }
 
             // Resets the owner of all the windows owned by this Form before handle recreation.
@@ -42,9 +40,9 @@ namespace System.Windows.Forms
             {
                 if (_ownedWindows is not null)
                 {
-                    foreach (IntPtr hwnd in _ownedWindows)
+                    foreach (HWND hwnd in _ownedWindows)
                     {
-                        User32.SetWindowLong(hwnd, User32.GWL.HWNDPARENT, 0);
+                        PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, 0);
                     }
                 }
             }
@@ -54,9 +52,9 @@ namespace System.Windows.Forms
             {
                 if (_ownedWindows is not null)
                 {
-                    foreach (IntPtr hwnd in _ownedWindows)
+                    foreach (HWND hwnd in _ownedWindows)
                     {
-                        User32.SetWindowLong(hwnd, User32.GWL.HWNDPARENT, ownerHwnd);
+                        PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
                     }
                 }
             }

@@ -11,7 +11,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
@@ -71,7 +70,7 @@ namespace System.Windows.Forms
         private ComboBoxChildNativeWindow _childEdit;
         private ComboBoxChildNativeWindow _childListBox;
 
-        private IntPtr _dropDownHandle;
+        private HWND _dropDownHandle;
         private ObjectCollection _itemsCollection;
         private short _prefHeightCache = -1;
         private short _maxDropDownItems = 8;
@@ -289,7 +288,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -297,7 +296,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -307,10 +306,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_childEditAccessibleObject is null)
-                {
-                    _childEditAccessibleObject = new ComboBoxChildEditUiaProvider(this, _childEdit.Handle);
-                }
+                _childEditAccessibleObject ??= new ComboBoxChildEditUiaProvider(this, _childEdit.Handle);
 
                 return _childEditAccessibleObject;
             }
@@ -320,11 +316,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_childListAccessibleObject is null)
-                {
-                    _childListAccessibleObject =
+                _childListAccessibleObject ??=
                         new ComboBoxChildListUiaProvider(this, DropDownStyle == ComboBoxStyle.Simple ? _childListBox.Handle : _dropDownHandle);
-                }
 
                 return _childListAccessibleObject;
             }
@@ -334,10 +327,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_childTextAccessibleObject is null)
-                {
-                    _childTextAccessibleObject = new ComboBoxChildTextUiaProvider(this);
-                }
+                _childTextAccessibleObject ??= new ComboBoxChildTextUiaProvider(this);
 
                 return _childTextAccessibleObject;
             }
@@ -358,9 +348,9 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = ComCtl32.WindowClasses.WC_COMBOBOX;
-                cp.Style |= (int)WS.VSCROLL | (int)CBS.HASSTRINGS | (int)CBS.AUTOHSCROLL;
-                cp.ExStyle |= (int)WS_EX.CLIENTEDGE;
+                cp.ClassName = PInvoke.WC_COMBOBOX;
+                cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL | (int)CBS.HASSTRINGS | (int)CBS.AUTOHSCROLL;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                 if (!_integralHeight)
                 {
                     cp.Style |= (int)CBS.NOINTEGRALHEIGHT;
@@ -467,22 +457,16 @@ namespace System.Windows.Forms
             get
             {
                 int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
-
-                if (found)
-                {
-                    return dropDownWidth;
-                }
-                else
-                {
-                    return Width;
-                }
+                return found ? dropDownWidth : Width;
             }
-
             set
             {
                 if (value < 1)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(DropDownWidth), value));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidArgument, nameof(DropDownWidth), value));
                 }
 
                 if (Properties.GetInteger(PropDropDownWidth) != value)
@@ -490,7 +474,7 @@ namespace System.Windows.Forms
                     Properties.SetInteger(PropDropDownWidth, value);
                     if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)CB.SETDROPPEDWIDTH, value);
+                        PInvoke.SendMessage(this, (WM)PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)value);
                     }
                 }
             }
@@ -522,7 +506,10 @@ namespace System.Windows.Forms
             {
                 if (value < 1)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(DropDownHeight), value));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidArgument, nameof(DropDownHeight), value));
                 }
 
                 if (Properties.GetInteger(PropDropDownHeight) != value)
@@ -548,7 +535,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return (int)SendMessageW(this, (WM)CB.GETDROPPEDSTATE) != 0;
+                    return (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETDROPPEDSTATE) != 0;
                 }
 
                 return false;
@@ -560,14 +547,12 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                SendMessageW(this, (WM)CB.SHOWDROPDOWN, value ? -1 : 0);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_SHOWDROPDOWN, (WPARAM)(value ? -1 : 0));
             }
         }
 
         /// <summary>
-        ///  Gets or
-        ///  sets
-        ///  the flat style appearance of the button control.
+        ///  Gets or sets the flat style appearance of the button control.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(FlatStyle.Standard)]
@@ -600,8 +585,9 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                IntPtr focus = GetFocus();
-                return focus != IntPtr.Zero && ((_childEdit is not null && focus == _childEdit.Handle) || (_childListBox is not null && focus == _childListBox.Handle));
+                HWND focus = PInvoke.GetFocus();
+                return !focus.IsNull
+                    && ((_childEdit is not null && focus == _childEdit.Handle) || (_childListBox is not null && focus == _childListBox.Handle));
             }
         }
 
@@ -684,7 +670,7 @@ namespace System.Windows.Forms
                 // Note that the above if clause deals with the case when the handle has not yet been created
                 Debug.Assert(IsHandleCreated, "Handle should be created at this point");
 
-                int h = (int)SendMessageW(this, (WM)CB.GETITEMHEIGHT);
+                int h = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETITEMHEIGHT);
                 if (h == -1)
                 {
                     throw new Win32Exception();
@@ -726,10 +712,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_itemsCollection is null)
-                {
-                    _itemsCollection = new ObjectCollection(this);
-                }
+                _itemsCollection ??= new ObjectCollection(this);
 
                 return _itemsCollection;
             }
@@ -816,7 +799,7 @@ namespace System.Windows.Forms
                     Properties.SetInteger(PropMaxLength, value);
                     if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)CB.LIMITTEXT, value);
+                        PInvoke.SendMessage(this, (WM)PInvoke.CB_LIMITTEXT, (WPARAM)value);
                     }
                 }
             }
@@ -1000,7 +983,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return (int)SendMessageW(this, (WM)CB.GETCURSEL);
+                    return (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETCURSEL);
                 }
 
                 return _selectedIndex;
@@ -1022,7 +1005,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)CB.SETCURSEL, value);
+                        PInvoke.SendMessage(this, (WM)PInvoke.CB_SETCURSEL, (WPARAM)value);
                     }
                     else
                     {
@@ -1104,13 +1087,10 @@ namespace System.Windows.Forms
             {
                 if (DropDownStyle != ComboBoxStyle.DropDownList)
                 {
-                    //guard against null string, since otherwise we will throw an
-                    //AccessViolation exception, which is bad
-                    string str = (value ?? "");
                     CreateControl();
                     if (IsHandleCreated && _childEdit is not null)
                     {
-                        SendMessageW(_childEdit, (WM)EM.REPLACESEL, -1, str);
+                        PInvoke.SendMessage(_childEdit, (WM)EM.REPLACESEL, (WPARAM)(-1), value ?? string.Empty);
                     }
                 }
             }
@@ -1128,7 +1108,7 @@ namespace System.Windows.Forms
             {
                 int end = 0;
                 int start = 0;
-                SendMessageW(this, (WM)CB.GETEDITSEL, (nint)(&start), (nint)(&end));
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_GETEDITSEL, (WPARAM)(&start), (LPARAM)(&end));
                 return end - start;
             }
             set
@@ -1149,14 +1129,17 @@ namespace System.Windows.Forms
             get
             {
                 int value = 0;
-                SendMessageW(this, (WM)CB.GETEDITSEL, (nint)(&value), 0);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_GETEDITSEL, (WPARAM)(&value));
                 return value;
             }
             set
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
                 }
 
                 Select(value, SelectionLength);
@@ -1542,12 +1525,10 @@ namespace System.Windows.Forms
             }
 
             // Get the Combobox Rect
-            var comboRectMid = new RECT();
-            GetWindowRect(this, ref comboRectMid);
+            PInvoke.GetWindowRect(this, out var comboRectMid);
 
             // Get the Edit Rectangle.
-            var editRectMid = new RECT();
-            GetWindowRect(_childEdit, ref editRectMid);
+            PInvoke.GetWindowRect(_childEdit, out var editRectMid);
 
             // Get the delta.
             int comboXMid = PARAM.SignedLOWORD(m.LParamInternal) + (editRectMid.left - comboRectMid.left);
@@ -1611,7 +1592,7 @@ namespace System.Windows.Forms
 
                     if (AutoCompleteMode != AutoCompleteMode.None)
                     {
-                        char keyChar = (char)m.WParamInternal;
+                        char keyChar = (char)(nint)m.WParamInternal;
                         if (keyChar == (char)(int)Keys.Escape)
                         {
                             DroppedDown = false;
@@ -1743,7 +1724,7 @@ namespace System.Windows.Forms
                     DefChildWndProc(ref m);
                     if (_childEdit is not null && m.HWnd == _childEdit.Handle)
                     {
-                        SendMessageW(_childEdit, (WM)EM.SETMARGINS, (nint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                        PInvoke.SendMessage(_childEdit, (WM)EM.SETMARGINS, (WPARAM)(uint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                     }
 
                     break;
@@ -1819,8 +1800,7 @@ namespace System.Windows.Forms
                         _mouseEvents = false;
                         if (_mousePressed)
                         {
-                            RECT rect = default;
-                            GetWindowRect(this, ref rect);
+                            PInvoke.GetWindowRect(this, out var rect);
                             Rectangle clientRect = rect;
 
                             if (clientRect.Contains(PointToScreen(PARAM.ToPoint(m.LParamInternal))))
@@ -1899,7 +1879,7 @@ namespace System.Windows.Forms
                     // Forward context menu messages to the parent control
                     if (ContextMenuStrip is not null)
                     {
-                        SendMessageW(this, WM.CONTEXTMENU, m.WParamInternal, m.LParamInternal);
+                        PInvoke.SendMessage(this, WM.CONTEXTMENU, m.WParamInternal, m.LParamInternal);
                     }
                     else
                     {
@@ -1968,8 +1948,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseLeaveInternal(EventArgs args)
         {
-            var rect = new RECT();
-            GetWindowRect(this, ref rect);
+            PInvoke.GetWindowRect(this, out var rect);
             Rectangle rectangle = rect;
             Point p = MousePosition;
             if (!rectangle.Contains(p))
@@ -2000,10 +1979,7 @@ namespace System.Windows.Forms
                 //childwindow could be null if the handle was recreated while within a message handler
                 // and then whoever recreated the handle allowed the message to continue to be processed
                 //we cannot really be sure the new child will properly handle this window message, so we eat it.
-                if (childWindow is not null)
-                {
-                    childWindow.DefWndProc(ref m);
-                }
+                childWindow?.DefWndProc(ref m);
             }
         }
 
@@ -2042,14 +2018,14 @@ namespace System.Windows.Forms
 
             if (EndUpdateInternal())
             {
-                if (_childEdit is not null && _childEdit.Handle != IntPtr.Zero)
+                if (_childEdit is not null && !_childEdit.HWND.IsNull)
                 {
-                    InvalidateRect(new HandleRef(this, _childEdit.Handle), null, BOOL.FALSE);
+                    PInvoke.InvalidateRect(_childEdit, lpRect: null, bErase: false);
                 }
 
-                if (_childListBox is not null && _childListBox.Handle != IntPtr.Zero)
+                if (_childListBox is not null && !_childEdit.HWND.IsNull)
                 {
-                    InvalidateRect(new HandleRef(this, _childListBox.Handle), null, BOOL.FALSE);
+                    PInvoke.InvalidateRect(_childListBox, lpRect: null, bErase: false);
                 }
             }
         }
@@ -2136,12 +2112,15 @@ namespace System.Windows.Forms
 
             if (index < 0 || _itemsCollection is null || index >= _itemsCollection.Count)
             {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                throw new ArgumentOutOfRangeException(
+                    nameof(index),
+                    index,
+                    string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
             if (IsHandleCreated)
             {
-                int h = (int)SendMessageW(this, (WM)CB.GETITEMHEIGHT, index);
+                int h = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETITEMHEIGHT, (WPARAM)index);
                 if (h == -1)
                 {
                     throw new Win32Exception();
@@ -2153,9 +2132,9 @@ namespace System.Windows.Forms
             return ItemHeight;
         }
 
-        internal IntPtr GetListHandle()
+        internal HandleRef<HWND> GetListHandle()
         {
-            return DropDownStyle == ComboBoxStyle.Simple ? _childListBox.Handle : _dropDownHandle;
+            return DropDownStyle == ComboBoxStyle.Simple ? new(_childListBox) : new(this, _dropDownHandle);
         }
 
         internal NativeWindow GetListNativeWindow()
@@ -2169,7 +2148,7 @@ namespace System.Windows.Forms
             return listNativeWindow is not null ? listNativeWindow.GetHashCode() : 0;
         }
 
-        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
+        internal override HBRUSH InitializeDCForWmCtlColor(HDC dc, User32.WM msg)
         {
             if (msg == WM.CTLCOLORSTATIC && !ShouldSerializeBackColor())
             {
@@ -2183,8 +2162,8 @@ namespace System.Windows.Forms
                 // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
                 // since hollow brush leaves the list background unpainted.
-                Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(ForeColor));
-                Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(BackColor));
+                PInvoke.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(ForeColor));
+                PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(BackColor));
                 return BackColorBrush;
             }
             else
@@ -2218,7 +2197,7 @@ namespace System.Windows.Forms
             else if (m.Msg == (int)WM.CHAR)
             {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
-                char keyChar = (char)m.WParamInternal;
+                char keyChar = (char)(nuint)m.WParamInternal;
                 if (keyChar == (char)Keys.Back)
                 {
                     if (DateTime.Now.Ticks - _autoCompleteTimeStamp > AutoCompleteTimeout ||
@@ -2298,9 +2277,14 @@ namespace System.Windows.Forms
             }
 
             // Control.Invalidate(true) doesn't invalidate the non-client region.
-            RedrawWindow(
+            PInvoke.RedrawWindow(
                 this,
-                flags: RDW.INVALIDATE | RDW.FRAME | RDW.ERASE | RDW.ALLCHILDREN);
+                lprcUpdate: null,
+                HRGN.Null,
+                REDRAW_WINDOW_FLAGS.RDW_INVALIDATE
+                    | REDRAW_WINDOW_FLAGS.RDW_FRAME
+                    | REDRAW_WINDOW_FLAGS.RDW_ERASE
+                    | REDRAW_WINDOW_FLAGS.RDW_ALLCHILDREN);
         }
 
         /// <summary>
@@ -2334,7 +2318,7 @@ namespace System.Windows.Forms
         private int NativeAdd(object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = (int)SendMessageW(this, (WM)CB.ADDSTRING, 0, GetItemText(item));
+            int insertIndex = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_ADDSTRING, (WPARAM)0, GetItemText(item));
             if (insertIndex < 0)
             {
                 throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
@@ -2355,7 +2339,7 @@ namespace System.Windows.Forms
                 saved = WindowText;
             }
 
-            SendMessageW(this, (WM)CB.RESETCONTENT);
+            PInvoke.SendMessage(this, (WM)PInvoke.CB_RESETCONTENT);
             if (saved is not null)
             {
                 WindowText = saved;
@@ -2367,7 +2351,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe string NativeGetItemText(int index)
         {
-            int maxLength = (int)SendMessageW(this, (WM)CB.GETLBTEXTLEN, index);
+            int maxLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXTLEN, (WPARAM)index);
             if (maxLength == LB_ERR)
             {
                 return string.Empty;
@@ -2377,7 +2361,7 @@ namespace System.Windows.Forms
             string result;
             fixed (char* pText = text)
             {
-                int actualLength = (int)SendMessageW(this, (WM)CB.GETLBTEXT, index, (nint)pText);
+                int actualLength = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETLBTEXT, (WPARAM)index, (LPARAM)pText);
                 Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
                 if (actualLength == LB_ERR)
                 {
@@ -2398,7 +2382,7 @@ namespace System.Windows.Forms
         private int NativeInsert(int index, object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = (int)SendMessageW(this, (WM)CB.INSERTSTRING, index, GetItemText(item));
+            int insertIndex = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_INSERTSTRING, (WPARAM)index, GetItemText(item));
             if (insertIndex < 0)
             {
                 throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
@@ -2425,7 +2409,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
 
-            SendMessageW(this, (WM)CB.DELETESTRING, index);
+            PInvoke.SendMessage(this, (WM)PInvoke.CB_DELETESTRING, (WPARAM)index);
         }
 
         internal override void RecreateHandleCore()
@@ -2460,7 +2444,7 @@ namespace System.Windows.Forms
 
             if (MaxLength > 0)
             {
-                SendMessageW(this, (WM)CB.LIMITTEXT, MaxLength);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_LIMITTEXT, (WPARAM)MaxLength);
             }
 
             // Get the handles and wndprocs of the ComboBox's child windows
@@ -2472,8 +2456,8 @@ namespace System.Windows.Forms
 
             if (ok && DropDownStyle != ComboBoxStyle.DropDownList)
             {
-                IntPtr hwnd = GetWindow(new HandleRef(this, Handle), GW.CHILD);
-                if (hwnd != IntPtr.Zero)
+                HWND hwnd = PInvoke.GetWindow(this, GET_WINDOW_CMD.GW_CHILD);
+                if (!hwnd.IsNull)
                 {
                     // If it's a simple dropdown list, the first HWND is the list box.
                     if (DropDownStyle == ComboBoxStyle.Simple)
@@ -2482,21 +2466,21 @@ namespace System.Windows.Forms
                         _childListBox.AssignHandle(hwnd);
 
                         // Get the edits hwnd...
-                        hwnd = GetWindow(new HandleRef(this, hwnd), GW.HWNDNEXT);
+                        hwnd = PInvoke.GetWindow(new HandleRef<HWND>(this, hwnd), GET_WINDOW_CMD.GW_HWNDNEXT);
                     }
 
                     _childEdit = new ComboBoxChildNativeWindow(this, ChildWindowType.Edit);
                     _childEdit.AssignHandle(hwnd);
 
                     // Set the initial margin for combobox to be zero (this is also done whenever the font is changed).
-                    SendMessageW(_childEdit, (WM)EM.SETMARGINS, (nint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                    PInvoke.SendMessage(_childEdit, (WM)EM.SETMARGINS, (WPARAM)(int)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                 }
             }
 
             int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
             if (found)
             {
-                SendMessageW(this, (WM)CB.SETDROPPEDWIDTH, dropDownWidth);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)dropDownWidth);
             }
 
             found = false;
@@ -2535,10 +2519,9 @@ namespace System.Windows.Forms
                 }
 
                 // Now update the current selection.
-                //
                 if (_selectedIndex >= 0)
                 {
-                    SendMessageW(this, (WM)CB.SETCURSEL, _selectedIndex);
+                    PInvoke.SendMessage(this, (WM)PInvoke.CB_SETCURSEL, (WPARAM)_selectedIndex);
                     UpdateText();
                     _selectedIndex = -1;
                 }
@@ -2553,7 +2536,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            _dropDownHandle = IntPtr.Zero;
+            _dropDownHandle = HWND.Null;
             if (Disposing)
             {
                 _itemsCollection = null;
@@ -3247,7 +3230,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (OsVersion.IsWindows8OrGreater)
+            if (OsVersion.IsWindows8OrGreater())
             {
                 UiaCore.UiaDisconnectProvider(_childTextAccessibleObject);
             }
@@ -3312,14 +3295,14 @@ namespace System.Windows.Forms
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {
-                            Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                            PInvoke.SHAutoComplete(_childEdit, SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
                         }
                         else
                         {
                             if (_stringSource is null)
                             {
                                 _stringSource = new StringSource(GetStringsForAutoComplete(AutoCompleteCustomSource));
-                                if (!_stringSource.Bind(new HandleRef(this, _childEdit.Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
+                                if (!_stringSource.Bind(_childEdit, (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                 {
                                     throw new ArgumentException(SR.AutoCompleteFailure);
                                 }
@@ -3339,14 +3322,14 @@ namespace System.Windows.Forms
                         {
                             if (_itemsCollection.Count == 0)
                             {
-                                Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                                PInvoke.SHAutoComplete(_childEdit, SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
                             }
                             else
                             {
                                 if (_stringSource is null)
                                 {
                                     _stringSource = new StringSource(GetStringsForAutoComplete(Items));
-                                    if (!_stringSource.Bind(new HandleRef(this, _childEdit.Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
+                                    if (!_stringSource.Bind(_childEdit, (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                     {
                                         throw new ArgumentException(SR.AutoCompleteFailureListItems);
                                     }
@@ -3362,35 +3345,37 @@ namespace System.Windows.Forms
                     {
                         // Drop Down List special handling
                         Debug.Assert(DropDownStyle == ComboBoxStyle.DropDownList);
-                        Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                        PInvoke.SHAutoComplete(_childEdit, SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
                     }
                 }
                 else
                 {
-                    Shlwapi.SHACF mode = Shlwapi.SHACF.DEFAULT;
+                    SHELL_AUTOCOMPLETE_FLAGS mode = SHELL_AUTOCOMPLETE_FLAGS.SHACF_DEFAULT;
                     if (AutoCompleteMode == AutoCompleteMode.Suggest)
                     {
-                        mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
+                        mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_ON | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF;
                     }
 
                     if (AutoCompleteMode == AutoCompleteMode.Append)
                     {
-                        mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
+                        mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_ON | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF;
                     }
 
                     if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                     {
-                        mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
-                        mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON;
+                        mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_ON;
+                        mode |= SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_ON;
                     }
 
-                    Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), (Shlwapi.SHACF)AutoCompleteSource | mode);
+                    PInvoke.SHAutoComplete(_childEdit.HWND, (SHELL_AUTOCOMPLETE_FLAGS)AutoCompleteSource | mode);
                 }
             }
             else if (reset)
             {
-                Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                PInvoke.SHAutoComplete(_childEdit, SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOSUGGEST_FORCE_OFF | SHELL_AUTOCOMPLETE_FLAGS.SHACF_AUTOAPPEND_FORCE_OFF);
             }
+
+            GC.KeepAlive(this);
         }
 
         /// <summary>
@@ -3413,7 +3398,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
             }
 
-            SendMessageW(this, (WM)CB.SETEDITSEL, 0, PARAM.FromLowHigh(start, end));
+            PInvoke.SendMessage(this, (WM)PInvoke.CB_SETEDITSEL, (WPARAM)0, LPARAM.MAKELPARAM(start, end));
         }
 
         /// <summary>
@@ -3458,7 +3443,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SendMessageW(this, (WM)CB.SETCURSEL, DataManager.Position);
+                    PInvoke.SendMessage(this, (WM)PInvoke.CB_SETCURSEL, (WPARAM)DataManager.Position);
                 }
                 else
                 {
@@ -3521,7 +3506,7 @@ namespace System.Windows.Forms
 
         private void UpdateDropDownHeight()
         {
-            if (_dropDownHandle != IntPtr.Zero)
+            if (!_dropDownHandle.IsNull)
             {
                 //Now use the DropDownHeight property instead of calculating the Height...
                 int height = DropDownHeight;
@@ -3529,17 +3514,19 @@ namespace System.Windows.Forms
                 {
                     int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
                     int count = Math.Min(Math.Max(itemCount, 1), _maxDropDownItems);
-                    height = (ItemHeight * count + 2);
+                    height = ItemHeight * count + 2;
                 }
 
-                SetWindowPos(
-                    new HandleRef(this, _dropDownHandle),
-                    HWND_TOP,
+                PInvoke.SetWindowPos(
+                    _dropDownHandle,
+                    HWND.HWND_TOP,
                     0,
                     0,
                     DropDownWidth,
                     height,
-                    SWP.NOMOVE | SWP.NOZORDER);
+                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER);
+
+                GC.KeepAlive(this);
             }
         }
 
@@ -3558,21 +3545,21 @@ namespace System.Windows.Forms
 
             if (DrawMode == DrawMode.OwnerDrawFixed)
             {
-                SendMessageW(this, (WM)CB.SETITEMHEIGHT, -1, ItemHeight);
-                SendMessageW(this, (WM)CB.SETITEMHEIGHT, 0, ItemHeight);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, 0, ItemHeight);
             }
             else if (DrawMode == DrawMode.OwnerDrawVariable)
             {
-                SendMessageW(this, (WM)CB.SETITEMHEIGHT, -1, ItemHeight);
+                PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, (WPARAM)(-1), (LPARAM)ItemHeight);
                 Graphics graphics = CreateGraphicsInternal();
                 for (int i = 0; i < Items.Count; i++)
                 {
-                    int original = (int)SendMessageW(this, (WM)CB.GETITEMHEIGHT, i);
+                    int original = (int)PInvoke.SendMessage(this, (WM)PInvoke.CB_GETITEMHEIGHT, (WPARAM)i);
                     MeasureItemEventArgs mievent = new MeasureItemEventArgs(graphics, i, original);
                     OnMeasureItem(mievent);
                     if (mievent.ItemHeight != original)
                     {
-                        SendMessageW(this, (WM)CB.SETITEMHEIGHT, i, mievent.ItemHeight);
+                        PInvoke.SendMessage(this, (WM)PInvoke.CB_SETITEMHEIGHT, (WPARAM)i, (LPARAM)mievent.ItemHeight);
                     }
                 }
 
@@ -3613,9 +3600,9 @@ namespace System.Windows.Forms
 
             if (DropDownStyle == ComboBoxStyle.DropDown)
             {
-                if (_childEdit is not null && _childEdit.Handle != IntPtr.Zero)
+                if (_childEdit is not null && !_childEdit.HWND.IsNull)
                 {
-                    SendMessageW(_childEdit, WM.SETTEXT, IntPtr.Zero, s);
+                    PInvoke.SendMessage(_childEdit, WM.SETTEXT, 0, s);
                 }
             }
         }
@@ -3624,12 +3611,11 @@ namespace System.Windows.Forms
         {
             if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal is not null)
             {
-                RECT rect = default;
-                GetClientRect(this, ref rect);
-                Gdi32.HDC hdc = (Gdi32.HDC)m.WParamInternal;
-                using var hbrush = new Gdi32.CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
+                PInvoke.GetClientRect(this, out RECT rect);
+                HDC hdc = (HDC)m.WParamInternal;
+                using var hbrush = new PInvoke.CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
                 hdc.FillRectangle(rect, hbrush);
-                m.ResultInternal = 1;
+                m.ResultInternal = (LRESULT)1;
                 return;
             }
 
@@ -3641,15 +3627,11 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if ((int)m.WParamInternal == ((int)WM.CREATE | 1000 << 16))
             {
-                _dropDownHandle = m.LParamInternal;
+                _dropDownHandle = (HWND)m.LParamInternal;
 
                 // By some reason WmParentNotify with WM_DESTROY is not called before recreation.
                 // So release the old references here.
-                if (_childDropDown is not null)
-                {
-                    _childDropDown.ReleaseHandle();
-                }
-
+                _childDropDown?.ReleaseHandle();
                 _childDropDown = new ComboBoxChildNativeWindow(this, ChildWindowType.DropDownList);
                 _childDropDown.AssignHandle(_dropDownHandle);
 
@@ -3722,7 +3704,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmReflectCommand(ref Message m)
         {
-            switch ((CBN)PARAM.HIWORD(m.WParamInternal))
+            switch ((CBN)m.WParamInternal.SIGNEDHIWORD)
             {
                 case CBN.DBLCLK:
                     break;
@@ -3761,7 +3743,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmReflectDrawItem(ref Message m)
         {
-            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParamInternal;
+            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
             using var e = new DrawItemEventArgs(
                 dis->hDC,
@@ -3774,12 +3756,12 @@ namespace System.Windows.Forms
 
             OnDrawItem(e);
 
-            m.ResultInternal = 1;
+            m.ResultInternal = (LRESULT)1;
         }
 
         private unsafe void WmReflectMeasureItem(ref Message m)
         {
-            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParamInternal;
+            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)(nint)m.LParamInternal;
 
             // Determine if message was sent by a combo item or the combo edit field
             int itemID = (int)mis->itemID;
@@ -3796,7 +3778,7 @@ namespace System.Windows.Forms
                 mis->itemHeight = (uint)ItemHeight;
             }
 
-            m.ResultInternal = 1;
+            m.ResultInternal = (LRESULT)1;
         }
 
         /// <summary>
@@ -3804,7 +3786,7 @@ namespace System.Windows.Forms
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the combo continues to function properly.
         /// </summary>
-        protected override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch ((WM)m.Msg)
             {
@@ -3853,7 +3835,7 @@ namespace System.Windows.Forms
                     break;
                 case WM.CTLCOLOREDIT:
                 case WM.CTLCOLORLISTBOX:
-                    m.ResultInternal = InitializeDCForWmCtlColor((Gdi32.HDC)m.WParamInternal, m.MsgInternal);
+                    m.ResultInternal = (LRESULT)(nint)InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
                     break;
                 case WM.ERASEBKGND:
                     WmEraseBkgnd(ref m);
@@ -3875,8 +3857,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
                 case WM.LBUTTONUP:
-                    RECT rect = default;
-                    GetWindowRect(this, ref rect);
+                    PInvoke.GetWindowRect(this, out var rect);
                     Rectangle clientRect = rect;
 
                     Point point = PointToScreen(PARAM.ToPoint(m.LParamInternal));
@@ -3909,37 +3890,39 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.PAINT:
-                    if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup) && !(SystemInformation.HighContrast && BackColor == SystemColors.Window))
+                    if (!GetStyle(ControlStyles.UserPaint)
+                        && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
+                        && !(SystemInformation.HighContrast && BackColor == SystemColors.Window))
                     {
-                        using var dropDownRegion = new Gdi32.RegionScope(FlatComboBoxAdapter._dropDownRect);
-                        using var windowRegion = new Gdi32.RegionScope(Bounds);
+                        using PInvoke.RegionScope dropDownRegion = new(FlatComboBoxAdapter._dropDownRect);
+                        using PInvoke.RegionScope windowRegion = new(Bounds);
 
                         // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
-                        bool getRegionSucceeded = GetUpdateRgn(Handle, windowRegion, bErase: BOOL.TRUE) != RegionType.ERROR;
+                        bool getRegionSucceeded = PInvoke.GetUpdateRgn(HWND, windowRegion, bErase: true) != GDI_REGION_TYPE.RGN_ERROR;
 
-                        Gdi32.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, Gdi32.RGN.DIFF);
+                        PInvoke.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, RGN_COMBINE_MODE.RGN_DIFF);
                         RECT updateRegionBoundingRect = default;
-                        Gdi32.GetRgnBox(windowRegion, ref updateRegionBoundingRect);
+                        PInvoke.GetRgnBox(windowRegion, &updateRegionBoundingRect);
 
                         // Call the base class to do its painting (with a clipped DC).
-                        bool useBeginPaint = m.WParamInternal == 0;
-                        using var paintScope = useBeginPaint ? new BeginPaintScope(Handle) : default;
+                        bool useBeginPaint = m.WParamInternal == 0u;
+                        using var paintScope = useBeginPaint ? new PInvoke.BeginPaintScope((HWND)Handle) : default;
 
-                        Gdi32.HDC dc = useBeginPaint ? paintScope : (Gdi32.HDC)m.WParamInternal;
+                        HDC dc = useBeginPaint ? paintScope : (HDC)m.WParamInternal;
 
-                        using var savedDcState = new Gdi32.SaveDcScope(dc);
+                        using PInvoke.SaveDcScope savedDcState = new(dc);
 
                         if (getRegionSucceeded)
                         {
-                            Gdi32.SelectClipRgn(dc, dropDownRegion);
+                            PInvoke.SelectClipRgn(dc, dropDownRegion);
                         }
 
-                        m.WParamInternal = dc;
+                        m.WParamInternal = (WPARAM)dc;
                         DefWndProc(ref m);
 
                         if (getRegionSucceeded)
                         {
-                            Gdi32.SelectClipRgn(dc, windowRegion);
+                            PInvoke.SelectClipRgn(dc, windowRegion);
                         }
 
                         using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);
@@ -3957,11 +3940,11 @@ namespace System.Windows.Forms
                     {
                         DefWndProc(ref m);
 
-                        if (((PRF)m.LParamInternal & PRF.CLIENT) == PRF.CLIENT)
+                        if (((PRF)(nint)m.LParamInternal & PRF.CLIENT) == PRF.CLIENT)
                         {
                             if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                             {
-                                using Graphics g = Graphics.FromHdcInternal(m.WParamInternal);
+                                using Graphics g = Graphics.FromHdcInternal((HDC)m.WParamInternal);
                                 FlatComboBoxAdapter.DrawFlatCombo(this, g);
                             }
 

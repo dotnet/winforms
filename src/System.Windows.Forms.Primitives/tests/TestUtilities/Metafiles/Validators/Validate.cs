@@ -5,7 +5,6 @@
 #nullable enable
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -96,13 +95,13 @@ namespace System.Windows.Forms.Metafiles
         /// <summary>
         ///  Simple wrapper to allow doing an arbitrary action for a given <paramref name="recordType"/>.
         /// </summary>
-        internal static IEmfValidator Action(Gdi32.EMR recordType, ProcessRecordDelegate action)
+        internal static IEmfValidator Action(ENHANCED_METAFILE_RECORD_TYPE recordType, ProcessRecordDelegate action)
             => new ActionValidator(recordType, action);
 
         /// <summary>
         ///  Simple wrapper to allow doing an arbitrary action for a given <paramref name="recordType"/>.
         /// </summary>
-        internal static IEmfValidator Action(Gdi32.EMR recordType, ProcessRecordWithStateDelegate action)
+        internal static IEmfValidator Action(ENHANCED_METAFILE_RECORD_TYPE recordType, ProcessRecordWithStateDelegate action)
             => new ActionValidator(recordType, action);
 
         /// <summary>
@@ -118,12 +117,12 @@ namespace System.Windows.Forms.Metafiles
         /// <summary>
         ///  Skips the next record of the given type.
         /// </summary>
-        internal static IEmfValidator SkipType(Gdi32.EMR type) => new SkipTypesValidator(type);
+        internal static IEmfValidator SkipType(ENHANCED_METAFILE_RECORD_TYPE type) => new SkipTypesValidator(type);
 
         /// <summary>
         ///  Skip the next record if it matches any of the given types.
         /// </summary>
-        internal static IEmfValidator SkipTypes(params Gdi32.EMR[] types) => new SkipTypesValidator(types);
+        internal static IEmfValidator SkipTypes(params ENHANCED_METAFILE_RECORD_TYPE[] types) => new SkipTypesValidator(types);
 
         /// <summary>
         ///  Repeat the given validation <paramref name="count"/> number of times.

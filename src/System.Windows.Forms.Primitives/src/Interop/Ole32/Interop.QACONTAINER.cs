@@ -4,6 +4,7 @@
 
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.System.Ole;
 
 internal static partial class Interop
 {
@@ -13,7 +14,7 @@ internal static partial class Interop
         public sealed class QACONTAINER
         {
             public uint cbSize;
-            public IOleClientSite? pClientSite;
+            public IOleClientSite.Interface? pClientSite;
             public IAdviseSink? pAdviseSink;
             public IPropertyNotifySink? pPropertyNotifySink;
             [MarshalAs(UnmanagedType.Interface)]
@@ -24,7 +25,7 @@ internal static partial class Interop
             public IFont? pFont;
             public IntPtr pUndoMgr;
             public uint dwAppearance;
-            public Kernel32.LCID lcid;
+            public PInvoke.LCID lcid;
             public IntPtr hpal;
             public IServiceProvider? pBindHost;
         }

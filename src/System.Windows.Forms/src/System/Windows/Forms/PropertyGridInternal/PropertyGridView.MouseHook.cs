@@ -18,8 +18,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly IMouseHookClient _client;
 
             private uint _thisProcessId;
-            private GCHandle _mouseHookRoot;
-            private IntPtr _mouseHookHandle = IntPtr.Zero;
+            private HOOKPROC? _callBack;
+            private HHOOK _mouseHookHandle;
             private bool _hookDisable;
 
             private bool _processing;
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly string _callingStack;
             ~MouseHook()
             {
-                if (_mouseHookHandle != IntPtr.Zero)
+                if (!_mouseHookHandle.IsNull)
                 {
                     throw new InvalidOperationException($"Finalizing an active mouse hook. This will crash the process. Calling stack: {_callingStack}");
                 }
@@ -59,11 +59,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public virtual bool HookMouseDown
             {
-                get
-                {
-                    GC.KeepAlive(this);
-                    return _mouseHookHandle != IntPtr.Zero;
-                }
+                get => !_mouseHookHandle.IsNull;
                 set
                 {
                     if (value && !_hookDisable)
@@ -82,31 +78,29 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Sets up the needed windows hooks to catch messages.
             /// </summary>
-            private void HookMouse()
+            private unsafe void HookMouse()
             {
-                GC.KeepAlive(this);
-
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
-                    if (_mouseHookHandle != IntPtr.Zero)
+                    if (!_mouseHookHandle.IsNull)
                     {
                         return;
                     }
 
                     if (_thisProcessId == 0)
                     {
-                        User32.GetWindowThreadProcessId(_control, out _thisProcessId);
+                        PInvoke.GetWindowThreadProcessId(_control, out _thisProcessId);
                     }
 
-                    var hook = new User32.HOOKPROC(new MouseHookObject(this).Callback);
-                    _mouseHookRoot = GCHandle.Alloc(hook);
-                    _mouseHookHandle = User32.SetWindowsHookExW(
-                        User32.WH.MOUSE,
-                        hook,
-                        IntPtr.Zero,
-                        Kernel32.GetCurrentThreadId());
-                    Debug.Assert(_mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
+                    _callBack = MouseHookProc;
+                    var hook = Marshal.GetFunctionPointerForDelegate(_callBack);
+                    _mouseHookHandle = PInvoke.SetWindowsHookEx(
+                        WINDOWS_HOOK_ID.WH_MOUSE,
+                        (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
+                        (HINSTANCE)0,
+                        PInvoke.GetCurrentThreadId());
+                    Debug.Assert(!_mouseHookHandle.IsNull, "Failed to install mouse hook");
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:HookMouse()");
                 }
             }
@@ -114,14 +108,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  HookProc used for catch mouse messages.
             /// </summary>
-            private unsafe nint MouseHookProc(User32.HC nCode, nint wparam, nint lparam)
+            private unsafe LRESULT MouseHookProc(int nCode, WPARAM wparam, LPARAM lparam)
             {
-                if (nCode == User32.HC.ACTION)
+                if (nCode == PInvoke.HC_ACTION)
                 {
-                    var mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
+                    var mhs = (MOUSEHOOKSTRUCT*)(nint)lparam;
                     if (mhs is not null)
                     {
-                        switch ((User32.WM)wparam)
+                        switch ((User32.WM)(uint)wparam)
                         {
                             case User32.WM.LBUTTONDOWN:
                             case User32.WM.MBUTTONDOWN:
@@ -130,9 +124,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                             case User32.WM.NCMBUTTONDOWN:
                             case User32.WM.NCRBUTTONDOWN:
                             case User32.WM.MOUSEACTIVATE:
-                                if (ProcessMouseDown(mhs->hWnd))
+                                if (ProcessMouseDown(mhs->hwnd))
                                 {
-                                    return 1;
+                                    return (LRESULT)1;
                                 }
 
                                 break;
@@ -140,7 +134,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                return User32.CallNextHookEx(_mouseHookHandle, nCode, wparam, lparam);
+                return PInvoke.CallNextHookEx(_mouseHookHandle, nCode, wparam, lparam);
             }
 
             /// <summary>
@@ -148,22 +142,19 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             private void UnhookMouse()
             {
-                GC.KeepAlive(this);
-
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
-                    if (_mouseHookHandle != IntPtr.Zero)
+                    if (!_mouseHookHandle.IsNull)
                     {
-                        User32.UnhookWindowsHookEx(new HandleRef(this, _mouseHookHandle));
-                        _mouseHookRoot.Free();
-                        _mouseHookHandle = IntPtr.Zero;
+                        PInvoke.UnhookWindowsHookEx(_mouseHookHandle);
+                        _mouseHookHandle = default;
                         Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:UnhookMouse()");
                     }
                 }
             }
 
-            private bool ProcessMouseDown(IntPtr hwnd)
+            private bool ProcessMouseDown(HWND hwnd)
             {
                 // If we put up the "invalid" message box, it appears this method is getting called reentrantly
                 // when it shouldn't be. This prevents us from recursing.
@@ -182,7 +173,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Debug.Assert(_thisProcessId != 0, "Didn't get our process id!");
 
                     // Make sure the window is in our process.
-                    User32.GetWindowThreadProcessId(hwnd, out uint pid);
+                    PInvoke.GetWindowThreadProcessId(hwnd, out uint pid);
 
                     // If this isn't our process, unhook the mouse.
                     if (pid != _thisProcessId)

@@ -4,10 +4,9 @@
 
 using System.Drawing;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using Xunit;
-using static Interop;
-using static Interop.Ole32;
-using static Interop.Oleaut32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
 {
@@ -18,18 +17,24 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void IDispatch_GetIDsOfNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
+            using var picture = ComHelpers.GetComScope<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
 
             Guid riid = Guid.Empty;
-            var rgszNames = new string[] { "Width", "Other" };
-            var rgDispId = new DispatchID[rgszNames.Length];
-            fixed (DispatchID* pRgDispId = rgDispId)
+            fixed (char* width = "Width")
+            fixed (char* other = "Other")
             {
-                HRESULT hr = dispatch.GetIDsOfNames(&riid, rgszNames, (uint)rgszNames.Length, Kernel32.GetThreadLocale(), pRgDispId);
-                Assert.Equal(HRESULT.S_OK, hr);
-                Assert.Equal(new string[] { "Width", "Other" }, rgszNames);
-                Assert.Equal(new DispatchID[] { (DispatchID)4, DispatchID.UNKNOWN }, rgDispId);
+                var rgszNames = new PWSTR[] { width, other };
+                var rgDispId = new int[rgszNames.Length];
+                fixed (int* pRgDispId = rgDispId)
+                fixed (PWSTR* pRgszNames = rgszNames)
+                {
+                    hr = picture.Value->GetIDsOfNames(&riid, pRgszNames, (uint)rgszNames.Length, PInvoke.GetThreadLocale(), pRgDispId);
+                    Assert.Equal(HRESULT.S_OK, hr);
+                    Assert.Equal(new PWSTR[] { width, other }, rgszNames);
+                    
+                    Assert.Equal(new int[] { (int)PInvoke.DISPID_PICT_WIDTH, PInvoke.DISPID_UNKNOWN }, rgDispId);
+                }
             }
         }
 
@@ -37,25 +42,23 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void IDispatch_GetTypeInfo_Invoke_Success()
         {
             using var image = new Bitmap(16, 16);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
+            using var picture = ComHelpers.GetComScope<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
 
-            ITypeInfo typeInfo;
-            HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using ComScope<ITypeInfo> typeInfo = new(null);
+            hr = picture.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
-            Assert.NotNull(typeInfo);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(typeInfo);
         }
 
         [StaFact]
         public unsafe void IDispatch_GetTypeInfoCount_Invoke_Success()
         {
             using var image = new Bitmap(16, 16);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
+            using var picture = ComHelpers.GetComScope<IPictureDisp>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
 
             uint ctInfo = uint.MaxValue;
-            HRESULT hr = dispatch.GetTypeInfoCount(&ctInfo);
+            hr = picture.Value->GetTypeInfoCount(&ctInfo);
             Assert.Equal(HRESULT.S_OK, hr);
             Assert.Equal(1u, ctInfo);
         }
@@ -64,26 +67,18 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void IDispatch_Invoke_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
-            IDispatch dispatch = (IDispatch)picture;
+            using var picture = ComHelpers.GetComScope<IDispatch>(MockAxHost.GetIPictureDispFromPicture(image), out HRESULT hr);
+            hr.ThrowOnFailure();
 
-            Guid riid = Guid.Empty;
-            var dispParams = new DISPPARAMS();
-            var varResult = new object[1];
-            var excepInfo = new EXCEPINFO();
-            uint argErr = 0;
-            HRESULT hr = dispatch.Invoke(
-                (DispatchID)4,
-                &riid,
-                Kernel32.GetThreadLocale(),
-                DISPATCH.PROPERTYGET,
-                &dispParams,
-                varResult,
-                &excepInfo,
-                &argErr);
+            using VARIANT varResult = default;
+            hr = ComHelpers.GetDispatchProperty(
+                picture,
+                PInvoke.DISPID_PICT_WIDTH,
+                &varResult,
+                PInvoke.GetThreadLocale());
             Assert.Equal(HRESULT.S_OK, hr);
-            Assert.Equal(16, GdiHelper.HimetricToPixelY((int)varResult[0]));
-            Assert.Equal(0u, argErr);
+            Assert.Equal(VARENUM.VT_I4, varResult.vt);
+            Assert.Equal(16, GdiHelper.HimetricToPixelY(varResult.data.intVal));
         }
     }
 }

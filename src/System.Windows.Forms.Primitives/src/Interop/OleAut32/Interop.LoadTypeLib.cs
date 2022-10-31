@@ -12,6 +12,6 @@ internal partial class Interop
     {
         [DllImport(Libraries.Oleaut32, ExactSpelling = true, PreserveSig = false)]
         [ResourceExposure(ResourceScope.Machine)]
-        public extern static ITypeLib LoadTypeLib([In, MarshalAs(UnmanagedType.LPWStr)] string typelib);
+        public static extern ITypeLib LoadTypeLib([In, MarshalAs(UnmanagedType.LPWStr)] string typelib);
     }
 }

@@ -7,12 +7,11 @@ using System.Drawing;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using Point = System.Drawing.Point;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     public class ProgressBarTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

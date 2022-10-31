@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests
     public class DeviceContextHdcScopeTests
     {
         [Fact]
-        public void CreateWithGraphicsBasedOnImageAppliesRequestedParameters()
+        public unsafe void CreateWithGraphicsBasedOnImageAppliesRequestedParameters()
         {
             using Bitmap b = new Bitmap(10, 10);
             using Graphics g = Graphics.FromImage(b);
@@ -29,11 +29,12 @@ namespace System.Windows.Forms.Tests
             // Just the translation transform
             using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.TranslateTransform))
             {
-                Gdi32.GetViewportOrgEx(scope, out Point origin);
+                Point origin = default;
+                PInvoke.GetViewportOrgEx(scope, &origin);
                 Assert.Equal(new Point(1, 2), origin);
 
                 RECT clipRect = default;
-                RegionType regionType = Gdi32.GetClipBox(scope, ref clipRect);
+                RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
                 Assert.Equal(RegionType.SIMPLEREGION, regionType);
                 Assert.Equal(new Rectangle(-1, -2, 10, 10), (Rectangle)clipRect);
 
@@ -43,11 +44,12 @@ namespace System.Windows.Forms.Tests
             // Just the clipping
             using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.Clipping))
             {
-                Gdi32.GetViewportOrgEx(scope, out Point origin);
+                Point origin = default;
+                PInvoke.GetViewportOrgEx(scope, &origin);
                 Assert.Equal(new Point(0, 0), origin);
 
                 RECT clipRect = default;
-                RegionType regionType = Gdi32.GetClipBox(scope, ref clipRect);
+                RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
                 Assert.Equal(RegionType.SIMPLEREGION, regionType);
                 Assert.Equal(clipRectangle, (Rectangle)clipRect);
 
@@ -57,11 +59,12 @@ namespace System.Windows.Forms.Tests
             // Both
             using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All))
             {
-                Gdi32.GetViewportOrgEx(scope, out Point origin);
+                Point origin = default;
+                PInvoke.GetViewportOrgEx(scope, &origin);
                 Assert.Equal(new Point(1, 2), origin);
 
                 RECT clipRect = default;
-                RegionType regionType = Gdi32.GetClipBox(scope, ref clipRect);
+                RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
                 Assert.Equal(RegionType.SIMPLEREGION, regionType);
                 Assert.Equal(new Rectangle(0, -1, 5, 5), (Rectangle)clipRect);
 
@@ -71,11 +74,12 @@ namespace System.Windows.Forms.Tests
             // Nothing
             using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.None))
             {
-                Gdi32.GetViewportOrgEx(scope, out Point origin);
+                Point origin = default;
+                PInvoke.GetViewportOrgEx(scope, &origin);
                 Assert.Equal(new Point(0, 0), origin);
 
                 RECT clipRect = default;
-                RegionType regionType = Gdi32.GetClipBox(scope, ref clipRect);
+                RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
                 Assert.Equal(RegionType.SIMPLEREGION, regionType);
                 Assert.Equal(new Rectangle(0, 0, 10, 10), (Rectangle)clipRect);
 
@@ -87,12 +91,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CreateWithGraphicsBasedOnHdcAppliesRequestedParameters()
+        public unsafe void CreateWithGraphicsBasedOnHdcAppliesRequestedParameters()
         {
             using var hdc = User32.GetDcScope.ScreenDC;
             RECT originalClipRect = default;
-            RegionType originalRegionType = Gdi32.GetClipBox(hdc, ref originalClipRect);
-            Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
+            RegionType originalRegionType = (RegionType)PInvoke.GetClipBox(hdc, &originalClipRect);
+            Point originalOrigin = default;
+            PInvoke.GetViewportOrgEx(hdc, &originalOrigin);
 
             using Graphics g = Graphics.FromHdcInternal(hdc);
 
@@ -107,11 +112,12 @@ namespace System.Windows.Forms.Tests
             // Just the translation transform
             using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.TranslateTransform))
             {
-                Gdi32.GetViewportOrgEx(scope, out Point origin);
+                Point origin = default;
+                PInvoke.GetViewportOrgEx(scope, &origin);
                 Assert.Equal(new Point(1, 2), origin);
 
                 RECT clipRect = default;
-                RegionType regionType = Gdi32.GetClipBox(scope, ref clipRect);
+                RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
                 Assert.Equal(originalRegionType, regionType);
                 Rectangle expectedClipRect = originalClipRect;
                 expectedClipRect.X -= 1;
@@ -124,19 +130,21 @@ namespace System.Windows.Forms.Tests
 
             // Should be in original state
             RECT currentClipRect = default;
-            Gdi32.GetClipBox(hdc, ref currentClipRect);
-            Gdi32.GetViewportOrgEx(hdc, out Point currentOrigin);
+            PInvoke.GetClipBox(hdc, &currentClipRect);
+            Point currentOrigin = default;
+            PInvoke.GetViewportOrgEx(hdc, &currentOrigin);
             Assert.Equal(originalClipRect, currentClipRect);
             Assert.Equal(originalOrigin, currentOrigin);
 
             // Just the clipping
             using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.Clipping))
             {
-                Gdi32.GetViewportOrgEx(scope, out Point origin);
+                Point origin = default;
+                PInvoke.GetViewportOrgEx(scope, &origin);
                 Assert.Equal(new Point(0, 0), origin);
 
                 RECT clipRect = default;
-                RegionType regionType = Gdi32.GetClipBox(scope, ref clipRect);
+                RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
                 Assert.Equal(RegionType.SIMPLEREGION, regionType);
                 Assert.Equal(clipRectangle, (Rectangle)clipRect);
 
@@ -146,19 +154,20 @@ namespace System.Windows.Forms.Tests
 
             // Should be in original state
             currentClipRect = default;
-            Gdi32.GetClipBox(hdc, ref currentClipRect);
-            Gdi32.GetViewportOrgEx(hdc, out currentOrigin);
+            PInvoke.GetClipBox(hdc, &currentClipRect);
+            PInvoke.GetViewportOrgEx(hdc, &currentOrigin);
             Assert.Equal(originalClipRect, currentClipRect);
             Assert.Equal(originalOrigin, currentOrigin);
 
             // Both
             using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All))
             {
-                Gdi32.GetViewportOrgEx(scope, out Point origin);
+                Point origin = default;
+                PInvoke.GetViewportOrgEx(scope, &origin);
                 Assert.Equal(new Point(1, 2), origin);
 
                 RECT clipRect = default;
-                RegionType regionType = Gdi32.GetClipBox(scope, ref clipRect);
+                RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
                 Assert.Equal(RegionType.SIMPLEREGION, regionType);
                 Assert.Equal(new Rectangle(0, -1, 5, 5), (Rectangle)clipRect);
 
@@ -168,19 +177,20 @@ namespace System.Windows.Forms.Tests
 
             // Should be in original state
             currentClipRect = default;
-            Gdi32.GetClipBox(hdc, ref currentClipRect);
-            Gdi32.GetViewportOrgEx(hdc, out currentOrigin);
+            PInvoke.GetClipBox(hdc, &currentClipRect);
+            PInvoke.GetViewportOrgEx(hdc, &currentOrigin);
             Assert.Equal(originalClipRect, currentClipRect);
             Assert.Equal(originalOrigin, currentOrigin);
 
             // Nothing
             using (var scope = new DeviceContextHdcScope(g, ApplyGraphicsProperties.None))
             {
-                Gdi32.GetViewportOrgEx(scope, out Point origin);
+                Point origin = default;
+                PInvoke.GetViewportOrgEx(scope, &origin);
                 Assert.Equal(new Point(0, 0), origin);
 
                 RECT clipRect = default;
-                RegionType regionType = Gdi32.GetClipBox(scope, ref clipRect);
+                RegionType regionType = (RegionType)PInvoke.GetClipBox(scope, &clipRect);
                 Assert.Equal(originalRegionType, regionType);
                 Assert.Equal((Rectangle)originalClipRect, (Rectangle)clipRect);
 
@@ -190,8 +200,8 @@ namespace System.Windows.Forms.Tests
 
             // Should be in original state
             currentClipRect = default;
-            Gdi32.GetClipBox(hdc, ref currentClipRect);
-            Gdi32.GetViewportOrgEx(hdc, out currentOrigin);
+            PInvoke.GetClipBox(hdc, &currentClipRect);
+            PInvoke.GetViewportOrgEx(hdc, &currentOrigin);
             Assert.Equal(originalClipRect, currentClipRect);
             Assert.Equal(originalOrigin, currentOrigin);
 
@@ -241,7 +251,7 @@ namespace System.Windows.Forms.Tests
             using Bitmap b = new Bitmap(10, 10);
             using Graphics g = Graphics.FromImage(b);
 
-            Gdi32.HDC mockHdc = new Gdi32.HDC((IntPtr)1234);
+            HDC mockHdc = new HDC((IntPtr)1234);
             var mockHdcProvider = new Mock<IGraphicsHdcProvider>();
             var mockIDeviceContext = mockHdcProvider.As<IDeviceContext>();
             mockHdcProvider

@@ -12,6 +12,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -41,13 +43,13 @@ namespace System.Windows.Forms
         private WebBrowserHelper.SelectionStyle selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
         private WebBrowserSiteBase axSite;
         private ContainerControl containingControl;
-        private IntPtr hwndFocus = IntPtr.Zero;
+        private HWND hwndFocus;
         private EventHandler selectionChangeHandler;
         private Guid clsid;
         // Pointers to the ActiveX object: Interface pointers are cached for perf.
-        private Ole32.IOleObject axOleObject;
-        private Ole32.IOleInPlaceObject axOleInPlaceObject;
-        private Ole32.IOleInPlaceActiveObject axOleInPlaceActiveObject;
+        private IOleObject.Interface axOleObject;
+        private IOleInPlaceObject.Interface axOleInPlaceObject;
+        private IOleInPlaceActiveObject.Interface axOleInPlaceActiveObject;
         private Ole32.IOleControl axOleControl;
         private WebBrowserBaseNativeWindow axWindow;
         // We need to change the size of the inner ActiveX control before the
@@ -166,7 +168,7 @@ namespace System.Windows.Forms
         //DrawToBitmap doesn't work for this control, so we should hide it.  We'll
         //still call base so that this has a chance to work if it can.
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
+        public new void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
         {
             base.DrawToBitmap(bitmap, targetBounds);
         }
@@ -198,7 +200,7 @@ namespace System.Windows.Forms
         /// <remarks>
         /// We have to resize the ActiveX control when our size changes.
         /// </remarks>
-        internal unsafe override void OnBoundsUpdate(int x, int y, int width, int height)
+        internal override unsafe void OnBoundsUpdate(int x, int y, int width, int height)
         {
             // If the ActiveX control is already InPlaceActive, make sure
             // it's bounds also change.
@@ -226,7 +228,7 @@ namespace System.Windows.Forms
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
         }
 
-        public unsafe override bool PreProcessMessage(ref Message msg)
+        public override unsafe bool PreProcessMessage(ref Message msg)
         {
             // Let us assume that TAB key was pressed. In this case, we should first
             // give a chance to the ActiveX control to see if it wants to change focus
@@ -252,7 +254,7 @@ namespace System.Windows.Forms
             }
 
             // Convert Message to MSG
-            User32.MSG win32Message = msg;
+            MSG win32Message = msg;
             SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
             try
             {
@@ -272,7 +274,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // win32Message may have been modified. Lets copy it back.
-                    msg.MsgInternal = win32Message.message;
+                    msg.MsgInternal = (User32.WM)win32Message.message;
                     msg.WParamInternal = win32Message.wParam;
                     msg.LParamInternal = win32Message.lParam;
                     msg.HWnd = win32Message.hwnd;
@@ -324,53 +326,53 @@ namespace System.Windows.Forms
         // We can't decide just by ourselves whether we can process the
         // mnemonic. We have to ask the ActiveX control for it.
         //
-        protected internal unsafe override bool ProcessMnemonic(char charCode)
+        protected internal override unsafe bool ProcessMnemonic(char charCode)
         {
+            if (!CanSelect)
+            {
+                return false;
+            }
+
             bool processed = false;
 
-            if (CanSelect)
+            try
             {
-                try
+                var ctlInfo = new Ole32.CONTROLINFO
                 {
-                    var ctlInfo = new Ole32.CONTROLINFO
-                    {
-                        cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
-                    };
-                    HRESULT hr = axOleControl.GetControlInfo(&ctlInfo);
-                    if (hr.Succeeded())
-                    {
-                        //
-                        // Sadly, we don't have a message so we must fake one ourselves.
-                        // The message we are faking is a WM_SYSKEYDOWN with the right
-                        // alt key setting.
-                        var msg = new User32.MSG
-                        {
-                            hwnd = IntPtr.Zero,
-                            message = User32.WM.SYSKEYDOWN,
-                            wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
-                            lParam = (IntPtr)0x20180001,
-                            time = Kernel32.GetTickCount()
-                        };
+                    cb = (uint)Marshal.SizeOf<Ole32.CONTROLINFO>()
+                };
 
-                        User32.GetCursorPos(out Point p);
-                        msg.pt = p;
-                        if (Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null).IsFalse())
-                        {
-                            axOleControl.OnMnemonic(&msg);
-                            Focus();
-                            processed = true;
-                        }
-                    }
-                }
-                catch (Exception ex)
+                HRESULT hr = axOleControl.GetControlInfo(&ctlInfo);
+                if (!hr.Succeeded)
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
-
-                    Debug.Fail("error in processMnemonic");
+                    return processed;
                 }
+
+                // Sadly, we don't have a message so we must fake one ourselves.
+                // The message we are faking is a WM_SYSKEYDOWN with the right alt key setting.
+                var msg = new MSG
+                {
+                    hwnd = (HWND)0,
+                    message = (uint)User32.WM.SYSKEYDOWN,
+                    wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
+                    lParam = 0x20180001,
+                    time = PInvoke.GetTickCount()
+                };
+
+                PInvoke.GetCursorPos(out Point p);
+                msg.pt = p;
+                if (!Ole32.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null))
+                {
+                    axOleControl.OnMnemonic(&msg);
+                    Focus();
+                    processed = true;
+                }
+
+                return processed;
+            }
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
+            {
+                Debug.Fail("error in processMnemonic");
             }
 
             return processed;
@@ -380,7 +382,7 @@ namespace System.Windows.Forms
         /// Certain messages are forwarder directly to the ActiveX control,
         /// others are first processed by the wndproc of Control
         /// </remarks>
-        protected unsafe override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch ((User32.WM)m.Msg)
             {
@@ -433,14 +435,14 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.KILLFOCUS:
-                    hwndFocus = m.WParamInternal;
+                    hwndFocus = (HWND)m.WParamInternal;
                     try
                     {
                         base.WndProc(ref m);
                     }
                     finally
                     {
-                        hwndFocus = IntPtr.Zero;
+                        hwndFocus = HWND.Null;
                     }
 
                     break;
@@ -455,10 +457,10 @@ namespace System.Windows.Forms
                     //
                     if (ActiveXState >= WebBrowserHelper.AXState.InPlaceActive)
                     {
-                        IntPtr hwndInPlaceObject = IntPtr.Zero;
-                        if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded())
+                        HWND hwndInPlaceObject = HWND.Null;
+                        if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded)
                         {
-                            Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject), DpiAwarenessContext);
+                            Application.ParkHandle(new HandleRef<HWND>(AXInPlaceObject, hwndInPlaceObject), DpiAwarenessContext);
                         }
                     }
 
@@ -474,10 +476,7 @@ namespace System.Windows.Forms
                     // up to InPlaceActivate that the ActiveX control grabs our handle).
                     TransitionDownTo(WebBrowserHelper.AXState.Running);
 
-                    if (axWindow is not null)
-                    {
-                        axWindow.ReleaseHandle();
-                    }
+                    axWindow?.ReleaseHandle();
 
                     OnHandleDestroyed(EventArgs.Empty);
                     break;
@@ -485,7 +484,7 @@ namespace System.Windows.Forms
                 default:
                     if (m.MsgInternal == WebBrowserHelper.REGMSG_MSG)
                     {
-                        m.ResultInternal = WebBrowserHelper.REGMSG_RETVAL;
+                        m.ResultInternal = (LRESULT)WebBrowserHelper.REGMSG_RETVAL;
                     }
                     else
                     {
@@ -719,9 +718,11 @@ namespace System.Windows.Forms
         internal unsafe bool DoVerb(Ole32.OLEIVERB verb)
         {
             RECT posRect = Bounds;
-            HRESULT hr = axOleObject.DoVerb(verb, null, ActiveXSite, 0, Handle, &posRect);
-            Debug.Assert(hr == HRESULT.S_OK, string.Format(CultureInfo.CurrentCulture, "DoVerb call failed for verb 0x{0:X}", verb));
-            return hr == HRESULT.S_OK;
+            using var clientSite = ComHelpers.GetComScope<IOleClientSite>(ActiveXSite, out bool result);
+            Debug.Assert(result);
+            HRESULT hr = axOleObject.DoVerb((int)verb, null, clientSite, 0, HWND, &posRect);
+            Debug.Assert(hr.Succeeded, $"DoVerb call failed for verb 0x{verb}");
+            return hr.Succeeded;
         }
 
         //
@@ -752,20 +753,14 @@ namespace System.Windows.Forms
 
         internal WebBrowserContainer CreateWebBrowserContainer()
         {
-            if (wbContainer is null)
-            {
-                wbContainer = new WebBrowserContainer(this);
-            }
+            wbContainer ??= new WebBrowserContainer(this);
 
             return wbContainer;
         }
 
         internal WebBrowserContainer GetParentContainer()
         {
-            if (container is null)
-            {
-                container = WebBrowserContainer.FindContainerForControl(this);
-            }
+            container ??= WebBrowserContainer.FindContainerForControl(this);
 
             if (container is null)
             {
@@ -831,14 +826,11 @@ namespace System.Windows.Forms
             return retVal;
         }
 
-        internal void AttachWindow(IntPtr hwnd)
+        internal void AttachWindow(HWND hwnd)
         {
-            User32.SetParent(hwnd, new HandleRef(this, Handle));
+            PInvoke.SetParent(hwnd, this);
 
-            if (axWindow is not null)
-            {
-                axWindow.ReleaseHandle();
-            }
+            axWindow?.ReleaseHandle();
 
             axWindow = new WebBrowserBaseNativeWindow(this);
             axWindow.AssignHandle(hwnd, false);
@@ -900,12 +892,12 @@ namespace System.Windows.Forms
                 // First, create the ActiveX control
                 Debug.Assert(activeXInstance is null, "activeXInstance must be null");
                 HRESULT hr = Ole32.CoCreateInstance(
-                    ref clsid,
+                    in clsid,
                     IntPtr.Zero,
                     Ole32.CLSCTX.INPROC_SERVER,
-                    ref NativeMethods.ActiveX.IID_IUnknown,
+                    in NativeMethods.ActiveX.IID_IUnknown,
                     out activeXInstance);
-                hr.ThrowIfFailed();
+                hr.ThrowOnFailure();
 
                 Debug.Assert(activeXInstance is not null, "w/o an exception being thrown we must have an object...");
 
@@ -957,14 +949,15 @@ namespace System.Windows.Forms
             if (ActiveXState == WebBrowserHelper.AXState.Loaded)
             {
                 // See if the ActiveX control returns OLEMISC_SETCLIENTSITEFIRST
-                Ole32.OLEMISC bits = 0;
-                HRESULT hr = axOleObject.GetMiscStatus(Ole32.DVASPECT.CONTENT, &bits);
-                if (hr.Succeeded() && ((bits & Ole32.OLEMISC.SETCLIENTSITEFIRST) != 0))
+                HRESULT hr = axOleObject.GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC bits);
+                if (hr.Succeeded && bits.HasFlag(OLEMISC.OLEMISC_SETCLIENTSITEFIRST))
                 {
                     //
                     // Simply setting the site to the ActiveX control should activate it.
                     // And this will take us to the Running state.
-                    axOleObject.SetClientSite(ActiveXSite);
+                    using var clientSite = ComHelpers.GetComScope<IOleClientSite>(ActiveXSite, out bool result);
+                    Debug.Assert(result);
+                    axOleObject.SetClientSite(clientSite);
                 }
 
                 //
@@ -981,7 +974,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void TransitionFromRunningToLoaded()
+        private unsafe void TransitionFromRunningToLoaded()
         {
             Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Running, "Wrong start state to transition from");
             if (ActiveXState == WebBrowserHelper.AXState.Running)
@@ -991,10 +984,7 @@ namespace System.Windows.Forms
                 //
                 // Remove ourselves from our parent container...
                 WebBrowserContainer parentContainer = GetParentContainer();
-                if (parentContainer is not null)
-                {
-                    parentContainer.RemoveControl(this);
-                }
+                parentContainer?.RemoveControl(this);
 
                 //
                 // Now inform the ActiveX control that it's been un-sited.
@@ -1078,7 +1068,7 @@ namespace System.Windows.Forms
             if (ActiveXState == WebBrowserHelper.AXState.UIActive)
             {
                 HRESULT hr = AXInPlaceObject.UIDeactivate();
-                Debug.Assert(hr.Succeeded(), "Failed to UIDeactivate");
+                Debug.Assert(hr.Succeeded, "Failed to UIDeactivate");
 
                 // We are now InPlaceActive
                 ActiveXState = WebBrowserHelper.AXState.InPlaceActive;
@@ -1089,10 +1079,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (axSite is null)
-                {
-                    axSite = CreateWebBrowserSiteBase();
-                }
+                axSite ??= CreateWebBrowserSiteBase();
 
                 return axSite;
             }
@@ -1101,9 +1088,9 @@ namespace System.Windows.Forms
         private void AttachInterfacesInternal()
         {
             Debug.Assert(activeXInstance is not null, "The native control is null");
-            axOleObject = (Ole32.IOleObject)activeXInstance;
-            axOleInPlaceObject = (Ole32.IOleInPlaceObject)activeXInstance;
-            axOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)activeXInstance;
+            axOleObject = (IOleObject.Interface)activeXInstance;
+            axOleInPlaceObject = (IOleInPlaceObject.Interface)activeXInstance;
+            axOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)activeXInstance;
             axOleControl = (Ole32.IOleControl)activeXInstance;
 
             // Give the inheriting classes a chance to cast the ActiveX object to the
@@ -1129,10 +1116,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectionChangeHandler is null)
-                {
-                    selectionChangeHandler = new EventHandler(OnNewSelection);
-                }
+                selectionChangeHandler ??= new EventHandler(OnNewSelection);
 
                 return selectionChangeHandler;
             }
@@ -1185,16 +1169,16 @@ namespace System.Windows.Forms
             var sz = new Size(width, height);
             bool resetExtents = DesignMode;
             Pixel2hiMetric(ref sz);
-            Interop.HRESULT hr = axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            if (hr != Interop.HRESULT.S_OK)
+            HRESULT hr = axOleObject.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
+            if (hr != HRESULT.S_OK)
             {
                 resetExtents = true;
             }
 
             if (resetExtents)
             {
-                axOleObject.GetExtent(Ole32.DVASPECT.CONTENT, &sz);
-                axOleObject.SetExtent(Ole32.DVASPECT.CONTENT, &sz);
+                axOleObject.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
+                axOleObject.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
             }
 
             return GetExtent();
@@ -1202,16 +1186,16 @@ namespace System.Windows.Forms
 
         private unsafe Size GetExtent()
         {
-            var sz = new Size();
-            axOleObject.GetExtent(Ole32.DVASPECT.CONTENT, &sz);
-            HiMetric2Pixel(ref sz);
-            return sz;
+            Size size = default;
+            axOleObject.GetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&size);
+            HiMetric2Pixel(ref size);
+            return size;
         }
 
         private unsafe void HiMetric2Pixel(ref Size sz)
         {
             var phm = new Point(sz.Width, sz.Height);
-            var pcont = new PointF();
+            var pcont = default(PointF);
             ((Ole32.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.HIMETRICTOCONTAINER);
             sz.Width = (int)pcont.X;
             sz.Height = (int)pcont.Y;
@@ -1219,7 +1203,7 @@ namespace System.Windows.Forms
 
         private unsafe void Pixel2hiMetric(ref Size sz)
         {
-            var phm = new Point();
+            var phm = default(Point);
             var pcont = new PointF(sz.Width, sz.Height);
             ((Ole32.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.CONTAINERTOHIMETRIC);
             sz.Width = phm.X;
@@ -1261,7 +1245,7 @@ namespace System.Windows.Forms
 
             if (cc is null && IsHandleCreated)
             {
-                cc = Control.FromHandle(User32.GetParent(this)) as ContainerControl;
+                cc = Control.FromHandle(PInvoke.GetParent(this)) as ContainerControl;
             }
 
             // Never use the parking window for this: its hwnd can be destroyed at any time.
@@ -1291,7 +1275,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal Ole32.IOleInPlaceObject AXInPlaceObject => axOleInPlaceObject;
+        internal IOleInPlaceObject.Interface AXInPlaceObject => axOleInPlaceObject;
 
         // ---------------------------------------------------------------
         // The following properties implemented in the Control class don't make
@@ -1389,7 +1373,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        new public ImeMode ImeMode
+        public new ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
@@ -1449,7 +1433,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        new public bool Enabled
+        public new bool Enabled
         {
             get => base.Enabled;
             set
@@ -1508,7 +1492,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
             remove { }
@@ -1516,7 +1500,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler Enter
+        public new event EventHandler Enter
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Enter"));
             remove { }
@@ -1524,7 +1508,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler Leave
+        public new event EventHandler Leave
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Leave"));
             remove { }
@@ -1532,7 +1516,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MouseCaptureChanged
+        public new event EventHandler MouseCaptureChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseCaptureChanged"));
             remove { }
@@ -1540,7 +1524,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseClick
+        public new event MouseEventHandler MouseClick
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
             remove { }
@@ -1548,7 +1532,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseDoubleClick
+        public new event MouseEventHandler MouseDoubleClick
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
             remove { }
@@ -1556,7 +1540,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        public new event EventHandler BackColorChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
             remove { }
@@ -1564,7 +1548,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
             remove { }
@@ -1572,7 +1556,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BindingContextChanged
+        public new event EventHandler BindingContextChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
             remove { }
@@ -1580,7 +1564,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler CursorChanged
+        public new event EventHandler CursorChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
             remove { }
@@ -1588,7 +1572,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler EnabledChanged
+        public new event EventHandler EnabledChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
             remove { }
@@ -1596,7 +1580,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler FontChanged
+        public new event EventHandler FontChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
             remove { }
@@ -1604,7 +1588,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
             remove { }
@@ -1612,7 +1596,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler RightToLeftChanged
+        public new event EventHandler RightToLeftChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
             remove { }
@@ -1620,7 +1604,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
             remove { }
@@ -1628,7 +1612,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler Click
+        public new event EventHandler Click
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
             remove { }
@@ -1636,7 +1620,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event DragEventHandler DragDrop
+        public new event DragEventHandler DragDrop
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
             remove { }
@@ -1644,7 +1628,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event DragEventHandler DragEnter
+        public new event DragEventHandler DragEnter
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
             remove { }
@@ -1652,7 +1636,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event DragEventHandler DragOver
+        public new event DragEventHandler DragOver
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
             remove { }
@@ -1660,7 +1644,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DragLeave
+        public new event EventHandler DragLeave
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
             remove { }
@@ -1668,7 +1652,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event GiveFeedbackEventHandler GiveFeedback
+        public new event GiveFeedbackEventHandler GiveFeedback
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
             remove { }
@@ -1677,7 +1661,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         //Everett
-        new public event HelpEventHandler HelpRequested
+        public new event HelpEventHandler HelpRequested
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
             remove { }
@@ -1685,7 +1669,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event PaintEventHandler Paint
+        public new event PaintEventHandler Paint
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
             remove { }
@@ -1693,7 +1677,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event QueryContinueDragEventHandler QueryContinueDrag
+        public new event QueryContinueDragEventHandler QueryContinueDrag
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
             remove { }
@@ -1701,7 +1685,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
+        public new event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
             remove { }
@@ -1709,7 +1693,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DoubleClick
+        public new event EventHandler DoubleClick
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
             remove { }
@@ -1717,7 +1701,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ImeModeChanged
+        public new event EventHandler ImeModeChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
             remove { }
@@ -1725,7 +1709,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event KeyEventHandler KeyDown
+        public new event KeyEventHandler KeyDown
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
             remove { }
@@ -1733,7 +1717,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event KeyPressEventHandler KeyPress
+        public new event KeyPressEventHandler KeyPress
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
             remove { }
@@ -1741,7 +1725,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event KeyEventHandler KeyUp
+        public new event KeyEventHandler KeyUp
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
             remove { }
@@ -1749,7 +1733,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event LayoutEventHandler Layout
+        public new event LayoutEventHandler Layout
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
             remove { }
@@ -1757,7 +1741,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseDown
+        public new event MouseEventHandler MouseDown
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
             remove { }
@@ -1765,7 +1749,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MouseEnter
+        public new event EventHandler MouseEnter
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
             remove { }
@@ -1773,7 +1757,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MouseLeave
+        public new event EventHandler MouseLeave
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
             remove { }
@@ -1781,7 +1765,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler MouseHover
+        public new event EventHandler MouseHover
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
             remove { }
@@ -1789,7 +1773,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseMove
+        public new event MouseEventHandler MouseMove
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
             remove { }
@@ -1797,7 +1781,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseUp
+        public new event MouseEventHandler MouseUp
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
             remove { }
@@ -1805,7 +1789,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event MouseEventHandler MouseWheel
+        public new event MouseEventHandler MouseWheel
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
             remove { }
@@ -1813,7 +1797,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event UICuesEventHandler ChangeUICues
+        public new event UICuesEventHandler ChangeUICues
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
             remove { }
@@ -1821,7 +1805,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler StyleChanged
+        public new event EventHandler StyleChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
             remove { }

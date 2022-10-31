@@ -23,11 +23,11 @@ namespace System.Windows.Forms
         /// </summary>
         private const int OwnerChildEditLinesCount = 1;
 
-        private readonly IHandle _owningChildEdit;
+        private readonly IHandle<HWND> _owningChildEdit;
         private readonly AccessibleObject _owningChildEditAccessibilityObject;
         private readonly ListView _owningListView;
 
-        public ListViewLabelEditUiaTextProvider(ListView owner, IHandle childEdit, AccessibleObject childEditAccessibilityObject)
+        public ListViewLabelEditUiaTextProvider(ListView owner, IHandle<HWND> childEdit, AccessibleObject childEditAccessibilityObject)
         {
             _owningListView = owner.OrThrowIfNull();
             _owningChildEdit = childEdit;
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
 
         public override bool IsMultiline => false;
 
-        public override bool IsReadingRTL => WindowExStyle.HasFlag(User32.WS_EX.RTLREADING);
+        public override bool IsReadingRTL => WindowExStyle.HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
         public override bool IsReadOnly => false;
 
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                User32.ES extendedStyle = (User32.ES)User32.GetWindowLong(_owningChildEdit, User32.GWL.STYLE);
+                User32.ES extendedStyle = (User32.ES)PInvoke.GetWindowLong(_owningChildEdit.Handle, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
                 return extendedStyle.HasFlag(User32.ES.AUTOHSCROLL);
             }
         }
@@ -61,17 +61,17 @@ namespace System.Windows.Forms
 
         public override int LinesPerPage => _owningChildEditAccessibilityObject.BoundingRectangle.IsEmpty ? 0 : OwnerChildEditLinesCount;
 
-        public override User32.LOGFONTW Logfont => User32.LOGFONTW.FromFont(_owningListView.Font);
+        public override LOGFONTW Logfont => LOGFONTW.FromFont(_owningListView.Font);
 
         public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
 
-        public override string Text => User32.GetWindowText(_owningChildEdit);
+        public override string Text => User32.GetWindowText(_owningChildEdit.Handle);
 
-        public override int TextLength => (int)User32.SendMessageW(_owningChildEdit, User32.WM.GETTEXTLENGTH);
+        public override int TextLength => (int)PInvoke.SendMessage(_owningChildEdit, User32.WM.GETTEXTLENGTH);
 
-        public override User32.WS_EX WindowExStyle => GetWindowExStyle(_owningChildEdit);
+        public override WINDOW_EX_STYLE WindowExStyle => GetWindowExStyle(_owningChildEdit);
 
-        public override User32.WS WindowStyle => GetWindowStyle(_owningChildEdit);
+        public override WINDOW_STYLE WindowStyle => GetWindowStyle(_owningChildEdit);
 
         public override UiaCore.ITextRangeProvider? GetCaretRange(out BOOL isActive)
         {
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
+            PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
 
             return new UiaTextRange(_owningChildEditAccessibilityObject, this, start, start);
         }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
+            PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.GETSEL, ref start, ref end);
 
             return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end) };
         }
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
 
             return;
 
-            bool IsDegenerate(Rectangle rect)
+            static bool IsDegenerate(Rectangle rect)
                 => rect.IsEmpty || rect.Width <= 0 || rect.Height <= 0;
         }
 
@@ -202,7 +202,7 @@ namespace System.Windows.Forms
 
         public override Point PointToScreen(Point pt)
         {
-            User32.MapWindowPoint(_owningChildEdit, IntPtr.Zero, ref pt);
+            PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref pt);
             return pt;
         }
 
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
 
             // Convert screen to client coordinates.
             // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-            if (User32.MapWindowPoint(IntPtr.Zero, _owningChildEdit, ref clientLocation) == 0)
+            if (PInvoke.MapWindowPoints(HWND.Null, (HWND)_owningChildEdit.Handle, ref clientLocation) == 0)
             {
                 return new UiaTextRange(_owningChildEditAccessibilityObject, this, start: 0, end: 0);
             }
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
         public override Rectangle RectangleToScreen(Rectangle rect)
         {
             RECT r = rect;
-            User32.MapWindowPoints(_owningChildEdit.Handle, IntPtr.Zero, ref r);
+            PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref r);
             return Rectangle.FromLTRB(r.left, r.top, r.right, r.bottom);
         }
 
@@ -281,12 +281,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.SETSEL, start, end);
+            PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.SETSEL, (WPARAM)start, (LPARAM)end);
         }
 
         private int GetCharIndexFromPosition(Point pt)
         {
-            int index = PARAM.LOWORD(User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.CHARFROMPOS, 0, PARAM.FromPoint(pt)));
+            int index = PARAM.LOWORD(PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.CHARFROMPOS, 0, PARAM.FromPoint(pt)));
 
             if (index < 0)
             {
@@ -309,8 +309,8 @@ namespace System.Windows.Forms
         private RECT GetFormattingRectangle()
         {
             // Send an EM_GETRECT message to find out the bounding rectangle.
-            RECT rectangle = new RECT();
-            User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.GETRECT, 0, ref rectangle);
+            RECT rectangle = default(RECT);
+            PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.GETRECT, 0, ref rectangle);
 
             return rectangle;
         }
@@ -322,14 +322,14 @@ namespace System.Windows.Forms
                 return Point.Empty;
             }
 
-            int i = (int)User32.SendMessageW(_owningChildEdit, (User32.WM)User32.EM.POSFROMCHAR, index);
+            int i = (int)PInvoke.SendMessage(_owningChildEdit, (User32.WM)User32.EM.POSFROMCHAR, (WPARAM)index);
 
             return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }
 
-        private bool GetTextExtentPoint32(char item, out Size size)
+        private unsafe bool GetTextExtentPoint32(char item, out Size size)
         {
-            size = new Size();
+            size = default(Size);
 
             using var hdc = new User32.GetDcScope(_owningChildEdit.Handle);
             if (hdc.IsNull)
@@ -338,7 +338,10 @@ namespace System.Windows.Forms
             }
 
             // Add the width of the character at that position.
-            return Gdi32.GetTextExtentPoint32W(hdc, item.ToString(), 1, ref size).IsTrue();
+            fixed (void* psizle = &size)
+            {
+                return PInvoke.GetTextExtentPoint32W(hdc.HDC, &item, 1, (SIZE*)psizle);
+            }
         }
     }
 }

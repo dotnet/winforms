@@ -13,7 +13,7 @@ internal static partial class Interop
         public unsafe struct HDHITTESTINFO
         {
             public Point pt;
-            public HHT flags;
+            public HEADER_HITTEST_INFO_FLAGS flags;
             public int iItem;
         }
     }

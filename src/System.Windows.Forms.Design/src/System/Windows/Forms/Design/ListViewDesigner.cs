@@ -62,12 +62,12 @@ namespace System.Windows.Forms.Design
                 ((ListView)Component).View = value;
                 if (value == View.Details)
                 {
-                    HookChildHandles(Control.Handle);
+                    HookChildHandles((HWND)Control.Handle);
                 }
             }
         }
 
-        protected unsafe override bool GetHitTest(Point point)
+        protected override unsafe bool GetHitTest(Point point)
         {
             // We override GetHitTest to make the header in report view UI-active.
 
@@ -75,17 +75,17 @@ namespace System.Windows.Forms.Design
             if (listView.View == View.Details)
             {
                 Point listViewPoint = Control.PointToClient(point);
-                IntPtr hwndHit = User32.ChildWindowFromPointEx(listView, listViewPoint, User32.CWP.SKIPINVISIBLE);
+                HWND hwndHit = PInvoke.ChildWindowFromPointEx(listView, listViewPoint, CWP_FLAGS.CWP_SKIPINVISIBLE);
 
-                if (hwndHit != IntPtr.Zero && hwndHit != listView.Handle)
+                if (!hwndHit.IsNull && hwndHit != listView.Handle)
                 {
-                    IntPtr headerHwnd = User32.SendMessageW(listView, (User32.WM)ComCtl32.LVM.GETHEADER);
+                    HWND headerHwnd = (HWND)PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_GETHEADER);
                     if (hwndHit == headerHwnd)
                     {
-                        User32.MapWindowPoints(IntPtr.Zero, headerHwnd, &point, 1);
+                        PInvoke.MapWindowPoints(HWND.Null, headerHwnd, ref point);
                         _hdrhit.pt = point;
-                        User32.SendMessageW(headerHwnd, (User32.WM)ComCtl32.HDM.HITTEST, 0, ref _hdrhit);
-                        if (_hdrhit.flags == ComCtl32.HHT.ONDIVIDER)
+                        PInvoke.SendMessage(headerHwnd, (User32.WM)PInvoke.HDM_HITTEST, 0, ref _hdrhit);
+                        if (_hdrhit.flags == HEADER_HITTEST_INFO_FLAGS.HHT_ONDIVIDER)
                             return true;
                     }
                 }
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Design
             base.Initialize(component);
             if (lv.View == View.Details)
             {
-                HookChildHandles(Control.Handle);
+                HookChildHandles((HWND)Control.Handle);
             }
         }
 
@@ -129,14 +129,14 @@ namespace System.Windows.Forms.Design
             base.PreFilterProperties(properties);
         }
 
-        protected unsafe override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
                 case (int)User32.WM.NOTIFY:
                 case (int)User32.WM.REFLECT_NOTIFY:
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
-                    if (nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
+                    NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+                    if ((int)nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
                     {
                         // Re-codegen if the columns have been resized
                         try
@@ -204,4 +204,3 @@ namespace System.Windows.Forms.Design
         }
     }
 }
-

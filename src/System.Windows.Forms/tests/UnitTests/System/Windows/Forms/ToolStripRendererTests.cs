@@ -4,11 +4,10 @@
 
 using System.Drawing;
 using Xunit;
+using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
-
     public class ToolStripRendererTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

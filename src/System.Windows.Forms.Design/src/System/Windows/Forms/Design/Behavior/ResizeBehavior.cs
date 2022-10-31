@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -70,10 +69,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_behaviorService is null)
-                {
-                    _behaviorService = (BehaviorService)_serviceProvider.GetService(typeof(BehaviorService));
-                }
+                _behaviorService ??= (BehaviorService)_serviceProvider.GetService(typeof(BehaviorService));
 
                 return _behaviorService;
             }
@@ -430,7 +426,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (propIntegralHeight != null)
             {
                 object value = propIntegralHeight.GetValue(control);
-                if (value is bool && (bool)value == true)
+                if (value is bool && (bool)value)
                 {
                     PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(control)["ItemHeight"];
                     if (propItemHeight != null)
@@ -478,7 +474,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (_lastMouseAbs != Point.Empty)
             {
                 var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
-                User32.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref mouseLocAbs);
+                PInvoke.ClientToScreen(_behaviorService.AdornerWindowControl, ref mouseLocAbs);
                 if (mouseLocAbs.X == _lastMouseAbs.X && mouseLocAbs.Y == _lastMouseAbs.Y)
                 {
                     return true;
@@ -542,7 +538,7 @@ namespace System.Windows.Forms.Design.Behavior
             Control targetControl = _resizeComponents[0].resizeControl as Control;
             _lastMouseLoc = mouseLoc;
             _lastMouseAbs = new Point(mouseLoc.X, mouseLoc.Y);
-            User32.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref _lastMouseAbs);
+            PInvoke.ClientToScreen(_behaviorService.AdornerWindowControl, ref _lastMouseAbs);
             int minHeight = Math.Max(targetControl.MinimumSize.Height, MINSIZE);
             int minWidth = Math.Max(targetControl.MinimumSize.Width, MINSIZE);
             if (_dragManager != null)
@@ -566,7 +562,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (propIntegralHeight != null)
                 {
                     object value = propIntegralHeight.GetValue(targetControl);
-                    if (value is bool && (bool)value == true)
+                    if (value is bool && (bool)value)
                     {
                         shouldSnapHorizontally = false;
                     }
@@ -618,7 +614,7 @@ namespace System.Windows.Forms.Design.Behavior
                 Rectangle oldBorderRect = BehaviorService.ControlRectInAdornerWindow(control);
                 bool needToUpdate = true;
                 // The ResizeBehavior can easily get into a situation where we are fighting with a layout engine. E.g., We resize control to 50px, LayoutEngine lays out and finds 50px was too small and resized back to 100px.  This is what should happen, but it looks bad in the designer.  To avoid the flicker we temporarily turn off painting while we do the resize.
-                User32.SendMessageW(control, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                PInvoke.SendMessage(control, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                 try
                 {
                     bool fRTL = false;
@@ -772,7 +768,7 @@ namespace System.Windows.Forms.Design.Behavior
                 finally
                 {
                     // While we were resizing we discarded painting messages to reduce flicker.  We now turn painting back on and manually refresh the controls.
-                    User32.SendMessageW(control, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
+                    PInvoke.SendMessage(control, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                     //update the control
                     if (needToUpdate)
                     {
@@ -824,10 +820,7 @@ namespace System.Windows.Forms.Design.Behavior
                                     DesignerUtils.DrawResizeBorder(graphics, newRegion, backColor);
                                 }
 
-                                if (_lastResizeRegion is null)
-                                {
-                                    _lastResizeRegion = newRegion.Clone(); //we will need to dispose it later.
-                                }
+                                _lastResizeRegion ??= newRegion.Clone(); //we will need to dispose it later.
                             }
                         }
                     }

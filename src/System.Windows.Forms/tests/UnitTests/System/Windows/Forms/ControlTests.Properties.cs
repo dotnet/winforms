@@ -6661,7 +6661,7 @@ namespace System.Windows.Forms.Tests
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
                     return cp;
                 }
             }
@@ -9283,13 +9283,13 @@ namespace System.Windows.Forms.Tests
             var keyState = new byte[256];
             fixed (byte* b = keyState)
             {
-                Assert.True(User32.GetKeyboardState(b).IsTrue());
+                Assert.True(PInvoke.GetKeyboardState(b));
                 keyState[(int)Keys.LButton] = lState;
                 keyState[(int)Keys.MButton] = mState;
                 keyState[(int)Keys.RButton] = rState;
                 keyState[(int)Keys.XButton1] = xState1;
                 keyState[(int)Keys.XButton2] = xState2;
-                User32.SetKeyboardState(b);
+                PInvoke.SetKeyboardState(b);
             }
 
             Assert.Equal(expected, Control.MouseButtons);
@@ -10537,7 +10537,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            User32.SendMessageW(control.Handle, User32.WM.UPDATEUISTATE, wParam);
+            PInvoke.SendMessage(control, User32.WM.UPDATEUISTATE, (WPARAM)wParam);
             Assert.Equal(expected, control.ShowFocusCues);
         }
 
@@ -10596,7 +10596,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            User32.SendMessageW(control.Handle, User32.WM.UPDATEUISTATE, wParam);
+            PInvoke.SendMessage(control, User32.WM.UPDATEUISTATE, (WPARAM)wParam);
             Assert.Equal(expected, control.ShowKeyboardCues);
         }
 

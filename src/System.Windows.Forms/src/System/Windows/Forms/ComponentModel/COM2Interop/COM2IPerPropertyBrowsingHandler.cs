@@ -4,21 +4,17 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
-    internal partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
+    internal unsafe partial class Com2IPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
     {
-        public override Type Interface
-        {
-            get
-            {
-                return typeof(Oleaut32.IPerPropertyBrowsing);
-            }
-        }
+        public override Type Interface => typeof(IPerPropertyBrowsing.Interface);
 
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
         {
@@ -29,48 +25,45 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             for (int i = 0; i < propDesc.Length; i++)
             {
-                propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetBaseAttributes);
-                propDesc[i].QueryGetDisplayValue += new GetNameItemEventHandler(OnGetDisplayValue);
-
-                propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(OnGetTypeConverterAndTypeEditor);
+                propDesc[i].QueryGetBaseAttributes += OnGetBaseAttributes;
+                propDesc[i].QueryGetDisplayValue += OnGetDisplayValue;
+                propDesc[i].QueryGetTypeConverterAndTypeEditor += OnGetTypeConverterAndTypeEditor;
             }
         }
 
-        private static unsafe Guid GetPropertyPageGuid(Oleaut32.IPerPropertyBrowsing target, Ole32.DispatchID dispid)
+        private static Guid GetPropertyPageGuid(IPerPropertyBrowsing.Interface target, Ole32.DispatchID dispid)
         {
-            // check for a property page
+            // Check for a property page
             Guid guid = Guid.Empty;
-            HRESULT hr = target.MapPropertyToPage(dispid, &guid);
-            if (hr == HRESULT.S_OK)
-            {
-                return guid;
-            }
-
-            return Guid.Empty;
+            HRESULT hr = target.MapPropertyToPage((int)dispid, &guid);
+            return hr.Succeeded ? guid : Guid.Empty;
         }
 
-        internal static string? GetDisplayString(Oleaut32.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
+        internal static bool TryGetDisplayString(
+            IPerPropertyBrowsing.Interface ppb,
+            Ole32.DispatchID dispid,
+            [NotNullWhen(true)] out string? value)
         {
-            HRESULT hr = ppb.GetDisplayString(dispid, out string strVal);
-            if (hr != HRESULT.S_OK)
+            using BSTR strVal = default;
+            if (ppb.GetDisplayString((int)dispid, &strVal).Failed)
             {
-                success = false;
-                return null;
+                value = null;
+                return false;
             }
 
-            success = strVal is not null;
-            return strVal;
+            value = strVal.ToString();
+            return value is not null;
         }
 
         /// <summary>
-        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing.   HideProperty
-        ///  such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
+        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing. We
+        ///  hide properties such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
         /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            if (sender.TargetObject is Oleaut32.IPerPropertyBrowsing target)
+            if (sender.TargetObject is IPerPropertyBrowsing.Interface target)
             {
-                // we hide IDispatch props by default, we we need to force showing them here
+                // We hide IDispatch props by default, we we need to force showing them here.
 
                 bool validPropPage = !Guid.Empty.Equals(GetPropertyPageGuid(target, sender.DISPID));
 
@@ -88,24 +81,21 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                if (sender.TargetObject is Oleaut32.IPerPropertyBrowsing)
+                if (sender.TargetObject is not IPerPropertyBrowsing.Interface browsing)
                 {
-                    // if we are using the dropdown, don't convert the value
-                    // or the values will change when we select them and call back
-                    // for the display value.
-                    if (sender.Converter is Com2IPerPropertyEnumConverter || sender.ConvertingNativeType)
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    bool success = true;
+                // If we are using the dropdown, don't convert the value or the values will change when we select them
+                // and call back for the display value.
+                if (sender.Converter is Com2IPerPropertyEnumConverter || sender.ConvertingNativeType)
+                {
+                    return;
+                }
 
-                    string? displayString = GetDisplayString((Oleaut32.IPerPropertyBrowsing)sender.TargetObject, sender.DISPID, ref success);
-
-                    if (success)
-                    {
-                        gnievent.Name = displayString;
-                    }
+                if (TryGetDisplayString(browsing, sender.DISPID, out string? displayString))
+                {
+                    gnievent.Name = displayString;
                 }
             }
             catch
@@ -115,19 +105,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
         {
-            if (sender.TargetObject is not Oleaut32.IPerPropertyBrowsing ppb)
+            if (sender.TargetObject is not IPerPropertyBrowsing.Interface ppb)
             {
                 return;
             }
 
-            // check for enums
-            Ole32.CALPOLESTR caStrings = default;
-            Ole32.CADWORD caCookies = default;
+            // Check for enums.
+            CALPOLESTR caStrings = default;
+            CADWORD caCookies = default;
 
             HRESULT hr;
             try
             {
-                hr = ppb.GetPredefinedStrings(sender.DISPID, &caStrings, &caCookies);
+                hr = ppb.GetPredefinedStrings((int)sender.DISPID, &caStrings, &caCookies);
             }
             catch (ExternalException ex)
             {
@@ -154,7 +144,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             else
             {
-                // If we didn't get any strings, try the proppage editor
+                // If we didn't get any strings, try the property page editor.
                 //
                 // This is a bit of a backwards-compat work around. Many older ActiveX controls will show a
                 // property page for all properties since the old grid would only put up the [...] button for
@@ -169,7 +159,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (!Guid.Empty.Equals(guid))
                 {
-                    gveevent.TypeEditor = new Com2PropertyPageUITypeEditor(sender, guid, (UITypeEditor)gveevent.TypeEditor);
+                    gveevent.TypeEditor = new Com2PropertyPageUITypeEditor(sender, guid, (UITypeEditor?)gveevent.TypeEditor);
                 }
             }
         }

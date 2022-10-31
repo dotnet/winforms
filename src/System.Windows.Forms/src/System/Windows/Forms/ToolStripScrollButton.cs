@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -13,33 +11,34 @@ namespace System.Windows.Forms
     /// </summary>
     internal partial class ToolStripScrollButton : ToolStripControlHost
     {
-        private readonly bool up = true;
+        private readonly bool _up = true;
 
         private static readonly Size defaultBitmapSize = new(16, 16);
 
         [ThreadStatic]
-        private static Bitmap upScrollImage;
+        private static Bitmap? t_upScrollImage;
 
         [ThreadStatic]
-        private static Bitmap downScrollImage;
+        private static Bitmap? t_downScrollImage;
 
         const int AUTOSCROLL_UPDATE = 50;
         private static readonly int AUTOSCROLL_PAUSE = SystemInformation.DoubleClickTime;
 
-        private Timer mouseDownTimer;
+        private Timer? _mouseDownTimer;
 
-        public ToolStripScrollButton(bool up) : base(CreateControlInstance(up))
+        public ToolStripScrollButton(bool up)
+            : base(CreateControlInstance(up))
         {
             if (Control is StickyLabel stickyLabel)
             {
                 stickyLabel.OwnerScrollButton = this;
             }
 
-            this.up = up;
+            _up = up;
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
-           => this.Control.AccessibilityObject;
+           => Control.AccessibilityObject;
 
         private static Control CreateControlInstance(bool up)
             => new StickyLabel(up)
@@ -72,28 +71,22 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (downScrollImage is null)
-                {
-                    downScrollImage = DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown", defaultBitmapSize);
-                }
+                t_downScrollImage ??= DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown", defaultBitmapSize);
 
-                return downScrollImage;
+                return t_downScrollImage;
             }
         }
 
         internal StickyLabel Label
-            => Control as StickyLabel;
+            => (StickyLabel)Control;
 
         private static Image UpImage
         {
             get
             {
-                if (upScrollImage is null)
-                {
-                    upScrollImage = DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp", defaultBitmapSize);
-                }
+                t_upScrollImage ??= DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp", defaultBitmapSize);
 
-                return upScrollImage;
+                return t_upScrollImage;
             }
         }
 
@@ -101,12 +94,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (mouseDownTimer is null)
-                {
-                    mouseDownTimer = new Timer();
-                }
+                _mouseDownTimer ??= new Timer();
 
-                return mouseDownTimer;
+                return _mouseDownTimer;
             }
         }
 
@@ -114,11 +104,11 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (mouseDownTimer is not null)
+                if (_mouseDownTimer is not null)
                 {
-                    mouseDownTimer.Enabled = false;
-                    mouseDownTimer.Dispose();
-                    mouseDownTimer = null;
+                    _mouseDownTimer.Enabled = false;
+                    _mouseDownTimer.Dispose();
+                    _mouseDownTimer = null;
                 }
             }
 
@@ -155,12 +145,12 @@ namespace System.Windows.Forms
             MouseDownTimer.Tick -= new EventHandler(OnAutoScrollAccelerate);
         }
 
-        private void OnAutoScrollAccelerate(object sender, EventArgs e)
+        private void OnAutoScrollAccelerate(object? sender, EventArgs e)
         {
             Scroll();
         }
 
-        private void OnInitialAutoScrollMouseDown(object sender, EventArgs e)
+        private void OnInitialAutoScrollMouseDown(object? sender, EventArgs e)
         {
             MouseDownTimer.Tick -= new EventHandler(OnInitialAutoScrollMouseDown);
 
@@ -181,7 +171,7 @@ namespace System.Windows.Forms
         {
             if (ParentInternal is ToolStripDropDownMenu parent && Label.Enabled)
             {
-                parent.ScrollInternal(up);
+                parent.ScrollInternal(_up);
             }
         }
     }

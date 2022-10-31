@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms
@@ -12,10 +11,12 @@ namespace System.Windows.Forms
     {
         internal class TextBoxBaseAccessibleObject : ControlAccessibleObject
         {
+            private readonly TextBoxBase _owningTextBoxBase;
             private TextBoxBaseUiaTextProvider? _textProvider;
 
             public TextBoxBaseAccessibleObject(TextBoxBase owner) : base(owner)
             {
+                _owningTextBoxBase = owner;
                 _textProvider = new TextBoxBaseUiaTextProvider(owner);
             }
 
@@ -43,6 +44,13 @@ namespace System.Windows.Forms
                 //        ClearOwnerControl();
             }
 
+            internal override object? GetPropertyValue(UIA propertyID)
+                => propertyID switch
+                {
+                    UIA.IsPasswordPropertyId => _owningTextBoxBase.PasswordProtect,
+                    _ => base.GetPropertyValue(propertyID),
+                };
+
             internal override bool IsIAccessibleExSupported() => true;
 
             internal override bool IsPatternSupported(UIA patternId)
@@ -50,11 +58,43 @@ namespace System.Windows.Forms
                 {
                     UIA.TextPatternId => true,
                     UIA.TextPattern2Id => true,
+                    UIA.ValuePatternId => true,
                     _ => base.IsPatternSupported(patternId)
                 };
 
-            internal override bool IsReadOnly
-                => Owner is TextBoxBase textBoxBase && textBoxBase.ReadOnly;
+            internal override bool IsReadOnly => _owningTextBoxBase.ReadOnly;
+
+            public override string? Name
+            {
+                get
+                {
+                    var name = base.Name;
+                    return name != null || !_owningTextBoxBase.PasswordProtect ? name : string.Empty;
+                }
+                set => base.Name = value;
+            }
+
+            public override string? Value => !_owningTextBoxBase.PasswordProtect ? ValueInternal : SR.AccessDenied;
+
+            protected virtual string ValueInternal => Owner.Text;
+
+            internal override void SetFocus()
+            {
+                if (!Owner.IsHandleCreated)
+                {
+                    return;
+                }
+
+                base.SetFocus();
+
+                RaiseAutomationEvent(UIA.AutomationFocusChangedEventId);
+            }
+
+            internal override void SetValue(string? newValue)
+            {
+                Owner.Text = newValue;
+                base.SetValue(newValue);
+            }
 
             internal override ITextRangeProvider? DocumentRangeInternal
                 => _textProvider?.DocumentRange;
@@ -76,7 +116,7 @@ namespace System.Windows.Forms
 
             internal override ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
             {
-                isActive = BOOL.FALSE;
+                isActive = false;
                 return _textProvider?.GetCaretRange(out isActive);
             }
 

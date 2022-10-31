@@ -47,10 +47,7 @@ namespace System.ComponentModel.Design
 
         public virtual void Invoke()
         {
-            if (_methodInfo is null)
-            {
-                _methodInfo = _actionList?.GetType()?.GetMethod(MemberName, BindingFlags.Default | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            }
+            _methodInfo ??= _actionList?.GetType()?.GetMethod(MemberName, BindingFlags.Default | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
             if (_methodInfo is null)
             {

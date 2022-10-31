@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using Xunit;
-using static Interop.Kernel32;
 
 namespace System.Windows.Forms.Tests.Interop.Kernel32
 {
@@ -46,7 +45,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
                 wMilliseconds = 50
             };
 
-            DateTime dt = st; // cast to DateTime implicitly
+            DateTime dt = (DateTime)st; // cast to DateTime implicitly
 
             Assert.Equal(st.wYear, dt.Year);
             Assert.Equal(st.wMonth, dt.Month);
@@ -73,7 +72,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
             };
             DateTime dt;
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => dt = st); // cast to DateTime implicitly with incorrect arguments
+            Assert.Throws<ArgumentOutOfRangeException>(() => dt = (DateTime)st); // cast to DateTime implicitly with incorrect arguments
         }
 
         [Fact]
@@ -84,7 +83,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
 
             using (new NoAssertContext())
             {
-                dt = st; // cast to DateTime implicitly
+                dt = (DateTime)st; // cast to DateTime implicitly
             }
 
             Assert.Equal(DateTime.MinValue, dt);

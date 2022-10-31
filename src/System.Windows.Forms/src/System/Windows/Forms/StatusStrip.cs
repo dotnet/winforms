@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -25,7 +23,7 @@ namespace System.Windows.Forms
         private static readonly int stateCalledSpringTableLayout = BitVector32.CreateMask(stateSizingGrip);
 
         private const int gripWidth = 12;
-        private RightToLeftLayoutGrip rtlLayoutGrip;
+        private RightToLeftLayoutGrip? rtlLayoutGrip;
         private Orientation lastOrientation = Orientation.Horizontal;
 
         public StatusStrip()
@@ -132,7 +130,7 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -142,10 +140,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (rtlLayoutGrip is null)
-                {
-                    rtlLayoutGrip = new RightToLeftLayoutGrip();
-                }
+                rtlLayoutGrip ??= new RightToLeftLayoutGrip();
 
                 return rtlLayoutGrip;
             }
@@ -172,10 +167,10 @@ namespace System.Windows.Forms
                         return true;  // we don't care about the state of VS.
                     }
 
-                    IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
-                    if (rootHwnd != IntPtr.Zero)
+                    HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+                    if (!rootHwnd.IsNull)
                     {
-                        return !User32.IsZoomed(rootHwnd).IsTrue();
+                        return !PInvoke.IsZoomed(rootHwnd);
                     }
                 }
 
@@ -240,7 +235,7 @@ namespace System.Windows.Forms
 
         private TableLayoutSettings TableLayoutSettings
         {
-            get { return LayoutSettings as TableLayoutSettings; }
+            get { return (TableLayoutSettings)LayoutSettings; }
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()
@@ -248,7 +243,7 @@ namespace System.Windows.Forms
             return new StatusStripAccessibleObject(this);
         }
 
-        protected internal override ToolStripItem CreateDefaultItem(string text, Image image, EventHandler onClick)
+        protected internal override ToolStripItem CreateDefaultItem(string? text, Image? image, EventHandler? onClick)
         {
             return new ToolStripStatusLabel(text, image, onClick);
         }
@@ -337,7 +332,7 @@ namespace System.Windows.Forms
         {
             state[stateCalledSpringTableLayout] = false;
             bool inDisplayedItemCollection = false;
-            ToolStripItem item = levent.AffectedComponent as ToolStripItem;
+            ToolStripItem? item = levent.AffectedComponent as ToolStripItem;
             int itemCount = DisplayedItems.Count;
             if (item is not null)
             {
@@ -383,7 +378,7 @@ namespace System.Windows.Forms
                 bool overflow = false;
                 Rectangle lastItemBounds = Rectangle.Empty;
 
-                ToolStripItem lastItem = null;
+                ToolStripItem? lastItem = null;
                 for (int i = 0; i < Items.Count; i++)
                 {
                     ToolStripItem item = Items[i];
@@ -582,16 +577,15 @@ namespace System.Windows.Forms
 
                 if (sizeGripBounds.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                 {
-                    IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
+                    HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
 
                     // if the main window isn't maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
-                    if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd).IsTrue())
+                    if (!rootHwnd.IsNull && !PInvoke.IsZoomed(rootHwnd))
                     {
                         // get the client area of the topmost window.  If we're next to the edge then
                         // the sizing grip is valid.
-                        RECT rootHwndClientArea = new RECT();
-                        User32.GetClientRect(rootHwnd, ref rootHwndClientArea);
+                        PInvoke.GetClientRect(rootHwnd, out RECT rootHwndClientArea);
 
                         // map the size grip FROM statusStrip coords TO the toplevel window coords.
                         Point gripLocation;
@@ -604,7 +598,7 @@ namespace System.Windows.Forms
                             gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
                         }
 
-                        User32.MapWindowPoint(this, rootHwnd, ref gripLocation);
+                        PInvoke.MapWindowPoints(this, rootHwnd, ref gripLocation);
 
                         int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
                         int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.X);
@@ -613,7 +607,7 @@ namespace System.Windows.Forms
                         {
                             if ((deltaRightEdge + deltaBottomEdge) < 2)
                             {
-                                m.ResultInternal = (nint)User32.HT.BOTTOMRIGHT;
+                                m.ResultInternal = (LRESULT)(nint)User32.HT.BOTTOMRIGHT;
                                 return;
                             }
                         }
@@ -638,7 +632,7 @@ namespace System.Windows.Forms
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.ExStyle |= (int)User32.WS_EX.LAYOUTRTL;
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
                     return cp;
                 }
             }
@@ -649,7 +643,7 @@ namespace System.Windows.Forms
                 {
                     if (ClientRectangle.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                     {
-                        m.ResultInternal = (nint)User32.HT.BOTTOMLEFT;
+                        m.ResultInternal = (LRESULT)(nint)User32.HT.BOTTOMLEFT;
                         return;
                     }
                 }
