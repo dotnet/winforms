@@ -197,7 +197,7 @@ namespace System.Windows.Forms
             Items.AddRange(items);
         }
 
-        internal ArrayList ActiveDropDowns { get; } = new ArrayList(1);
+        internal List<ToolStripDropDown> ActiveDropDowns { get; } = new List<ToolStripDropDown>(1);
 
         // returns true when entered into menu mode through this toolstrip/menustrip
         // this is only really supported for menustrip active event, but to prevent casting everywhere...

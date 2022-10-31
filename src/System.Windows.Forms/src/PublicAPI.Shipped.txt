@@ -470,17 +470,17 @@ override System.Windows.Forms.ToolStripComboBox.ToString() -> string!
 ~override System.Windows.Forms.ToolStripControlHost.Site.set -> void
 ~override System.Windows.Forms.ToolStripControlHost.Text.get -> string
 ~override System.Windows.Forms.ToolStripControlHost.Text.set -> void
-~override System.Windows.Forms.ToolStripDropDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripDropDown.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle style) -> System.Windows.Forms.LayoutSettings
-~override System.Windows.Forms.ToolStripDropDown.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ToolStripDropDown.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ToolStripDropDown.Font.set -> void
-~override System.Windows.Forms.ToolStripDropDown.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDown.OnItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDown.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDown.OnMouseUp(System.Windows.Forms.MouseEventArgs mea) -> void
-~override System.Windows.Forms.ToolStripDropDown.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDown.OnVisibleChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStripDropDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripDropDown.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle style) -> System.Windows.Forms.LayoutSettings!
+override System.Windows.Forms.ToolStripDropDown.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ToolStripDropDown.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ToolStripDropDown.Font.set -> void
+override System.Windows.Forms.ToolStripDropDown.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDown.OnItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDown.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDown.OnMouseUp(System.Windows.Forms.MouseEventArgs! mea) -> void
+override System.Windows.Forms.ToolStripDropDown.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDown.OnVisibleChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripDropDownButton.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown!
 override System.Windows.Forms.ToolStripDropDownButton.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
@@ -1429,16 +1429,16 @@ System.Windows.Forms.ToolStripComboBox.ToolStripComboBox(System.Windows.Forms.Co
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
-~System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.set -> void
-~System.Windows.Forms.ToolStripDropDown.OverflowButton.get -> System.Windows.Forms.ToolStripOverflowButton
-~System.Windows.Forms.ToolStripDropDown.OwnerItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripDropDown.OwnerItem.set -> void
-~System.Windows.Forms.ToolStripDropDown.Region.get -> System.Drawing.Region
-~System.Windows.Forms.ToolStripDropDown.Region.set -> void
-~System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control control, int x, int y) -> void
-~System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control control, System.Drawing.Point position) -> void
-~System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control control, System.Drawing.Point position, System.Windows.Forms.ToolStripDropDownDirection direction) -> void
+System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.set -> void
+System.Windows.Forms.ToolStripDropDown.OverflowButton.get -> System.Windows.Forms.ToolStripOverflowButton!
+System.Windows.Forms.ToolStripDropDown.OwnerItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.ToolStripDropDown.OwnerItem.set -> void
+System.Windows.Forms.ToolStripDropDown.Region.get -> System.Drawing.Region?
+System.Windows.Forms.ToolStripDropDown.Region.set -> void
+System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control! control, int x, int y) -> void
+System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control! control, System.Drawing.Point position) -> void
+System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control! control, System.Drawing.Point position, System.Windows.Forms.ToolStripDropDownDirection direction) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? text) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? text, System.Drawing.Image? image) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? text, System.Drawing.Image? image, params System.Windows.Forms.ToolStripItem![]? dropDownItems) -> void
@@ -2117,10 +2117,10 @@ virtual System.Windows.Forms.ToolStripComboBox.OnTextUpdate(System.EventArgs! e)
 ~virtual System.Windows.Forms.ToolStripControlHost.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnValidated(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnValidating(System.ComponentModel.CancelEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDown.OnClosed(System.Windows.Forms.ToolStripDropDownClosedEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDown.OnClosing(System.Windows.Forms.ToolStripDropDownClosingEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDown.OnOpened(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDown.OnOpening(System.ComponentModel.CancelEventArgs e) -> void
+virtual System.Windows.Forms.ToolStripDropDown.OnClosed(System.Windows.Forms.ToolStripDropDownClosedEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDown.OnClosing(System.Windows.Forms.ToolStripDropDownClosingEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDown.OnOpened(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDown.OnOpening(System.ComponentModel.CancelEventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripDropDownItem.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown
 ~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownClosed(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownHide(System.EventArgs e) -> void
@@ -11129,64 +11129,64 @@ System.Windows.Forms.ToolStripDropDown.AllowTransparency.get -> bool
 System.Windows.Forms.ToolStripDropDown.AllowTransparency.set -> void
 System.Windows.Forms.ToolStripDropDown.AutoClose.get -> bool
 System.Windows.Forms.ToolStripDropDown.AutoClose.set -> void
-System.Windows.Forms.ToolStripDropDown.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.BackgroundImageLayoutChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.BindingContextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.BackgroundImageLayoutChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.BindingContextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.CanOverflow.get -> bool
 System.Windows.Forms.ToolStripDropDown.CanOverflow.set -> void
-System.Windows.Forms.ToolStripDropDown.ChangeUICues -> System.Windows.Forms.UICuesEventHandler
+System.Windows.Forms.ToolStripDropDown.ChangeUICues -> System.Windows.Forms.UICuesEventHandler?
 System.Windows.Forms.ToolStripDropDown.Close() -> void
 System.Windows.Forms.ToolStripDropDown.Close(System.Windows.Forms.ToolStripDropDownCloseReason reason) -> void
-System.Windows.Forms.ToolStripDropDown.Closed -> System.Windows.Forms.ToolStripDropDownClosedEventHandler
-System.Windows.Forms.ToolStripDropDown.Closing -> System.Windows.Forms.ToolStripDropDownClosingEventHandler
-System.Windows.Forms.ToolStripDropDown.ContextMenuStripChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.DockChanged -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.Closed -> System.Windows.Forms.ToolStripDropDownClosedEventHandler?
+System.Windows.Forms.ToolStripDropDown.Closing -> System.Windows.Forms.ToolStripDropDownClosingEventHandler?
+System.Windows.Forms.ToolStripDropDown.ContextMenuStripChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.DockChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.DropShadowEnabled.get -> bool
 System.Windows.Forms.ToolStripDropDown.DropShadowEnabled.set -> void
-System.Windows.Forms.ToolStripDropDown.Enter -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.FontChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.ForeColorChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler
+System.Windows.Forms.ToolStripDropDown.Enter -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.FontChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.ForeColorChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler?
 System.Windows.Forms.ToolStripDropDown.GripDisplayStyle.get -> System.Windows.Forms.ToolStripGripDisplayStyle
 System.Windows.Forms.ToolStripDropDown.GripMargin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ToolStripDropDown.GripMargin.set -> void
 System.Windows.Forms.ToolStripDropDown.GripRectangle.get -> System.Drawing.Rectangle
 System.Windows.Forms.ToolStripDropDown.GripStyle.get -> System.Windows.Forms.ToolStripGripStyle
 System.Windows.Forms.ToolStripDropDown.GripStyle.set -> void
-System.Windows.Forms.ToolStripDropDown.HelpRequested -> System.Windows.Forms.HelpEventHandler
-System.Windows.Forms.ToolStripDropDown.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.HelpRequested -> System.Windows.Forms.HelpEventHandler?
+System.Windows.Forms.ToolStripDropDown.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.IsAutoGenerated.get -> bool
-System.Windows.Forms.ToolStripDropDown.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.ToolStripDropDown.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.ToolStripDropDown.KeyUp -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.ToolStripDropDown.Leave -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.ToolStripDropDown.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.ToolStripDropDown.KeyUp -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.ToolStripDropDown.Leave -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.Location.get -> System.Drawing.Point
 System.Windows.Forms.ToolStripDropDown.Location.set -> void
 System.Windows.Forms.ToolStripDropDown.Opacity.get -> double
 System.Windows.Forms.ToolStripDropDown.Opacity.set -> void
-System.Windows.Forms.ToolStripDropDown.Opened -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.Opening -> System.ComponentModel.CancelEventHandler
-System.Windows.Forms.ToolStripDropDown.RegionChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.Scroll -> System.Windows.Forms.ScrollEventHandler
+System.Windows.Forms.ToolStripDropDown.Opened -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.Opening -> System.ComponentModel.CancelEventHandler?
+System.Windows.Forms.ToolStripDropDown.RegionChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.Scroll -> System.Windows.Forms.ScrollEventHandler?
 System.Windows.Forms.ToolStripDropDown.Show() -> void
 System.Windows.Forms.ToolStripDropDown.Show(int x, int y) -> void
 System.Windows.Forms.ToolStripDropDown.Show(System.Drawing.Point position, System.Windows.Forms.ToolStripDropDownDirection direction) -> void
 System.Windows.Forms.ToolStripDropDown.Show(System.Drawing.Point screenLocation) -> void
 System.Windows.Forms.ToolStripDropDown.Stretch.get -> bool
 System.Windows.Forms.ToolStripDropDown.Stretch.set -> void
-System.Windows.Forms.ToolStripDropDown.StyleChanged -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.StyleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.TabIndex.get -> int
 System.Windows.Forms.ToolStripDropDown.TabIndex.set -> void
-System.Windows.Forms.ToolStripDropDown.TabIndexChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.TabStopChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.TextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.TabIndexChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.TabStopChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.TextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.ToolStripDropDown() -> void
 System.Windows.Forms.ToolStripDropDown.ToolStripDropDownAccessibleObject
 System.Windows.Forms.ToolStripDropDown.ToolStripDropDownAccessibleObject.ToolStripDropDownAccessibleObject(System.Windows.Forms.ToolStripDropDown! owner) -> void
 System.Windows.Forms.ToolStripDropDown.TopLevel.get -> bool
 System.Windows.Forms.ToolStripDropDown.TopLevel.set -> void
-System.Windows.Forms.ToolStripDropDown.Validated -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.Validating -> System.ComponentModel.CancelEventHandler
+System.Windows.Forms.ToolStripDropDown.Validated -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.Validating -> System.ComponentModel.CancelEventHandler?
 System.Windows.Forms.ToolStripDropDown.Visible.get -> bool
 System.Windows.Forms.ToolStripDropDown.Visible.set -> void
 System.Windows.Forms.ToolStripDropDownButton

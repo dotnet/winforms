@@ -165,7 +165,7 @@ namespace System.Windows.Forms
                 // that onmouseleave we make sure there's a selected menu item.
                 if (toolStrip.IsDropDown && toolStrip.ActiveDropDowns.Count > 0)
                 {
-                    ToolStripMenuItem? menuItem = (toolStrip.ActiveDropDowns[0] as ToolStripDropDown)?.OwnerItem as ToolStripMenuItem;
+                    ToolStripMenuItem? menuItem = toolStrip.ActiveDropDowns[0].OwnerItem as ToolStripMenuItem;
                     if (menuItem is not null && menuItem.Pressed)
                     {
                         menuItem.Select();
