@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Windows.Forms;
+
 namespace System;
 
 internal static class Obsoletions
@@ -12,9 +14,13 @@ internal static class Obsoletions
     // and ensure the "aka.ms/dotnet-warnings/{0}" URL points to documentation for the obsoletion
     // The diagnostic ids reserved for obsoletions are WFDEV### (WFDEV001 - WFDEV999).
 
-    internal const string DomainUpDownAccessibleObjectMessage = $"{nameof(System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject)} is no longer used to provide accessible support for {nameof(System.Windows.Forms.DomainUpDown)} controls.";
+#pragma warning disable WFDEV002 // Type or member is obsolete
+    internal const string DomainUpDownAccessibleObjectMessage = $"{nameof(DomainUpDown.DomainUpDownAccessibleObject)} is no longer used to provide accessible support for {nameof(DomainUpDown)} controls.";
+#pragma warning restore WFDEV002 // Type or member is obsolete
     internal const string DomainUpDownAccessibleObjectDiagnosticId = "WFDEV002";
 
-    internal const string DomainItemAccessibleObjectMessage = $"{nameof(System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject)} is no longer used to provide accessible support for {nameof(System.Windows.Forms.DomainUpDown)} items.";
+#pragma warning disable WFDEV003 // Type or member is obsolete
+    internal const string DomainItemAccessibleObjectMessage = $"{nameof(DomainUpDown.DomainItemAccessibleObject)} is no longer used to provide accessible support for {nameof(DomainUpDown)} items.";
+#pragma warning disable WFDEV003 // Type or member is obsolete
     internal const string DomainItemAccessibleObjectDiagnosticId = "WFDEV003";
 }
