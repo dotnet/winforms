@@ -15,6 +15,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
@@ -4689,6 +4690,7 @@ namespace System.Windows.Forms
                 OnParentChanged(EventArgs.Empty);
             }
 
+            UpdateAnchorsIfRequired();
             SetState(States.CheckedHost, false);
             ParentInternal?.LayoutEngine.InitLayout(this, BoundsSpecified.All);
         }
@@ -7717,8 +7719,7 @@ namespace System.Windows.Forms
                 {
                     for (int i = 0; i < controlsCollection.Count; i++)
                     {
-                        Control ctl = controlsCollection[i];
-                        ctl.OnParentBecameInvisible();
+                        controlsCollection[i].OnParentBecameInvisible();
                     }
                 }
             }
@@ -10213,8 +10214,9 @@ namespace System.Windows.Forms
                 {
                     for (int i = 0; i < controlsCollection.Count; i++)
                     {
-                        LayoutEngine.InitLayout(controlsCollection[i], BoundsSpecified.All);
-                        CommonProperties.xClearPreferredSizeCache(controlsCollection[i]);
+                        Control control = controlsCollection[i];
+                        LayoutEngine.InitLayout(control, BoundsSpecified.All);
+                        CommonProperties.xClearPreferredSizeCache(control);
                     }
                 }
             }
@@ -10586,10 +10588,15 @@ namespace System.Windows.Forms
             Size scaledSize = LayoutUtils.IntersectSizes(rawScaledBounds.Size, maximumSize);
             scaledSize = LayoutUtils.UnionSizes(scaledSize, minSize);
 
-            if (DpiHelper.IsScalingRequirementMet && (ParentInternal is not null) && (ParentInternal.LayoutEngine == DefaultLayout.Instance))
+            if (DpiHelper.IsScalingRequirementMet
+                // In the v2 layout, anchors are updated/computed after the controls bounds changed
+                // and, thus, don't need scaling.
+                && !DefaultLayout.UseAnchorLayoutV2(this)
+                && ParentInternal is { } parent
+                && (parent.LayoutEngine == DefaultLayout.Instance))
             {
                 // We need to scale AnchorInfo to update distances to container edges
-                DefaultLayout.ScaleAnchorInfo((IArrangedElement)this, factor);
+                DefaultLayout.ScaleAnchorInfo(this, factor);
             }
 
             // Set in the scaled bounds as constrained by the newly scaled min/max size.
@@ -10811,6 +10818,16 @@ namespace System.Windows.Forms
             }
         }
 
+        private void UpdateAnchorsIfRequired()
+        {
+            if (!LocalAppContextSwitches.AnchorLayoutV2)
+            {
+                return;
+            }
+
+            DefaultLayout.UpdateAnchorInfoV2(this);
+        }
+
         /// <summary>
         ///  Sets the bounds of the control.
         /// </summary>
@@ -10840,6 +10857,7 @@ namespace System.Windows.Forms
                 _height != height)
             {
                 SetBoundsCore(x, y, width, height, specified);
+                UpdateAnchorsIfRequired();
 
                 // WM_WINDOWPOSCHANGED will trickle down to an OnResize() which will
                 // have refreshed the interior layout or the resized control.  We only need to layout
@@ -12198,6 +12216,7 @@ namespace System.Windows.Forms
             _parent?.UpdateChildZOrder(this);
 
             UpdateBounds();
+            UpdateAnchorsIfRequired();
 
             // Let any interested sites know that we've now created a handle
             OnHandleCreated(EventArgs.Empty);
