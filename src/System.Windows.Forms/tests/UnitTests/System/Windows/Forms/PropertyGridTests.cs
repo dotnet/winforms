@@ -2794,13 +2794,17 @@ namespace System.Windows.Forms.Tests
             using PropertyGrid propertyGrid = new();
             propertyGrid.Site = mockSite.Object;
             Assert.NotNull(propertyGrid.ActiveDesigner);
+
             propertyGrid.TestAccessor().Dynamic.SaveSelectedTabIndex();
             Assert.NotNull(propertyGrid.TestAccessor().Dynamic._designerSelections);
+
             Dictionary<int,int> _designerSelections = propertyGrid.TestAccessor().Dynamic._designerSelections;
             Assert.True(_designerSelections.ContainsKey(propertyGrid.ActiveDesigner.GetHashCode()));
+
             int savedTabIndex = _designerSelections[propertyGrid.ActiveDesigner.GetHashCode()];
             int selectedTabIndex = -1;
             Assert.NotEqual(savedTabIndex, selectedTabIndex);
+
             bool isInvokeMethodSuccessful = propertyGrid.TestAccessor().Dynamic.TryGetSavedTabIndex(out selectedTabIndex);
             Assert.True(isInvokeMethodSuccessful);
             Assert.Equal(savedTabIndex, selectedTabIndex);
