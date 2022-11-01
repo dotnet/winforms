@@ -17,6 +17,8 @@ variables:
   # Publish to TSA if requested
 - name: Codeql.TSAEnabled
   value: ${{ parameters.TSAEnabled }}
+- name: Codeql.TsaOptionsPath
+  value: $(Build.SourcesDirectory)/eng/pipelines/tsaoptions.json
   # Build variables
 - name: _BuildConfig
   value: Release
