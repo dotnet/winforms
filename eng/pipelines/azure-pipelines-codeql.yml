@@ -1,5 +1,5 @@
 parameters:
-- name: Codeql.TSAEnabled
+- name: TSAEnabled
   displayName: Publish results to TSA
   type: boolean
   default: true
@@ -14,6 +14,9 @@ variables:
   # Do not let CodeQL 3000 Extension gate scan frequency
 - name: Codeql.Cadence
   value: 0
+  # Publish to TSA if requested
+- name: Codeql.TSAEnabled
+  value: ${{ parameters.TSAEnabled }}
   # Build variables
 - name: _BuildConfig
   value: Release
