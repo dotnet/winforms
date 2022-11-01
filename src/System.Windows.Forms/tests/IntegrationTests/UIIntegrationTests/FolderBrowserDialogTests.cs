@@ -27,7 +27,7 @@ namespace System.Windows.Forms.UITests
             };
 
             using Timer timer = new();
-            timer.Interval = 1_000;
+            timer.Interval = 2_000;
             int counter = 0;
             bool failedClose = false;
             timer.Tick += (s, e) =>
