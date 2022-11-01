@@ -88,7 +88,10 @@ namespace System.Windows.Forms
         {
         }
 
-        // This constructor is used ONLY for wrapping system IAccessible objects
+        /// <devdoc>
+        ///  This constructor is used ONLY for wrapping system IAccessible objects
+        ///  that are returned by the IAccessible methods.
+        /// </devdoc>
         private AccessibleObject(IAccessible? accessible)
         {
             _systemIAccessible = new SystemIAccessibleWrapper(accessible);
@@ -377,7 +380,7 @@ namespace System.Windows.Forms
 
         internal virtual bool IsIAccessibleExSupported()
         {
-            // Override this, in your derived class, to enable IAccessibleEx support
+            // Override this, in your derived class, to enable IAccessibleEx support.
             return false;
         }
 
@@ -945,7 +948,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Perform a hit test
+        ///  Perform a hit test.
         /// </summary>
         object? IAccessible.accHitTest(int xLeft, int yTop)
         {
@@ -1106,12 +1109,12 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void DoDefaultAction()
         {
-            // By default, just does the system default action if available
+            // By default, does the system default action if available.
             _systemIAccessible.accDoDefaultAction(0);
         }
 
         /// <summary>
-        ///  Returns a child Accessible object
+        ///  Returns a child Accessible object.
         /// </summary>
         object? IAccessible.get_accChild(object childID)
         {
@@ -1123,7 +1126,7 @@ namespace System.Windows.Forms
                     CompModSwitches.MSAA.TraceInfo,
                     $"AccessibleObject.GetAccChild: this = {ToString()}, childID = {childID}");
 
-                // Return self for CHILDID_SELF
+                // Return self for CHILDID_SELF.
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
                 {
                     return AsIAccessible(this);
@@ -1236,7 +1239,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns the appropriate child from the Accessible Child Collection, if available
+        ///  Returns the appropriate child from the Accessible Child Collection, if available.
         /// </summary>
         private AccessibleObject? GetAccessibleChild(object childID)
         {
@@ -1875,15 +1878,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private AccessibleObject? WrapIAccessible(object? iacc)
+        private AccessibleObject? WrapIAccessible(object? iAccessible)
         {
-            if (iacc is not IAccessible accessible)
+            if (iAccessible is not IAccessible accessible)
             {
                 return null;
             }
 
-            // Check to see if this object already wraps iacc
-            if (_systemIAccessible.SystemIAccessibleInternal == iacc)
+            // Check to see if this object already wraps iAccessible.
+            if (_systemIAccessible.SystemIAccessibleInternal == iAccessible)
             {
                 return this;
             }
