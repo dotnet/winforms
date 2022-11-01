@@ -2028,13 +2028,17 @@ namespace System.Windows.Forms
                         case STG_STREAM:
                         case STG_STREAMINIT:
                             ms = new MemoryStream();
-                            if (_storageType == STG_STREAM)
+                            using (var stream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(ms), out bool result))
                             {
-                                _iPersistStream.Save((IStream*)Marshal.GetIUnknownForObject(new Ole32.GPStream(ms)), true);
-                            }
-                            else
-                            {
-                                _iPersistStreamInit.Save((IStream*)Marshal.GetIUnknownForObject(new Ole32.GPStream(ms)), true);
+                                Debug.Assert(result);
+                                if (_storageType == STG_STREAM)
+                                {
+                                    _iPersistStream.Save(stream, true);
+                                }
+                                else
+                                {
+                                    _iPersistStreamInit.Save(stream, true);
+                                }
                             }
 
                             break;

@@ -20,7 +20,7 @@ namespace System.Windows.Forms
             {
                 private Hashtable _bag = new Hashtable();
 
-                internal void Read(IStream.Interface istream)
+                internal void Read(IStream* istream)
                 {
                     // Visual Basic's memory streams don't support seeking, so we have to work around this limitation
                     // here. We do this by copying the contents of the stream into a MemoryStream object.
@@ -92,7 +92,7 @@ namespace System.Windows.Forms
                     return HRESULT.S_OK;
                 }
 
-                internal void Write(IStream.Interface istream)
+                internal void Write(IStream* istream)
                 {
                     Stream stream = new DataStreamFromComStream(istream);
                     BinaryFormatter formatter = new BinaryFormatter();

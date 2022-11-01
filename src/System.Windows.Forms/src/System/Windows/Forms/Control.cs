@@ -14123,7 +14123,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Load");
             Debug.Indent();
-            ActiveXInstance.Load((IStorage.Interface)Marshal.GetObjectForIUnknown((nint)pStg));
+            ActiveXInstance.Load(pStg);
             Debug.Unindent();
             return HRESULT.S_OK;
         }
@@ -14176,7 +14176,7 @@ namespace System.Windows.Forms
 
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Load");
             Debug.Indent();
-            ActiveXInstance.Load((Com.IStream.Interface)Marshal.GetObjectForIUnknown((nint)pStm));
+            ActiveXInstance.Load(pStm);
             Debug.Unindent();
             return HRESULT.S_OK;
         }
@@ -14190,7 +14190,7 @@ namespace System.Windows.Forms
 
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Save");
             Debug.Indent();
-            ActiveXInstance.Save((Com.IStream.Interface)Marshal.GetObjectForIUnknown((nint)pStm), fClearDirty);
+            ActiveXInstance.Save(pStm, fClearDirty);
             Debug.Unindent();
             return HRESULT.S_OK;
         }

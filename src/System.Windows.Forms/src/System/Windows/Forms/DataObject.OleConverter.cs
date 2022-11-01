@@ -51,8 +51,8 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe object? GetDataFromOleIStream(string format)
             {
-                FORMATETC formatetc = default(FORMATETC);
-                STGMEDIUM medium = default(STGMEDIUM);
+                FORMATETC formatetc = default;
+                STGMEDIUM medium = default;
 
                 formatetc.cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id));
                 formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
@@ -74,24 +74,23 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                Com.IStream.Interface? pStream = null;
                 nint hglobal = 0;
                 try
                 {
                     if (medium.tymed == TYMED.TYMED_ISTREAM && medium.unionmember != 0)
                     {
-                        pStream = (Com.IStream.Interface)Marshal.GetObjectForIUnknown(medium.unionmember);
-                        pStream.Stat(out Com.STATSTG sstg, Com.STATFLAG.STATFLAG_DEFAULT);
+                        using ComScope<Com.IStream> pStream = new((Com.IStream*)medium.unionmember);
+                        pStream.Value->Stat(out Com.STATSTG sstg, Com.STATFLAG.STATFLAG_DEFAULT);
 
                         hglobal = PInvoke.GlobalAlloc(
                             GMEM_MOVEABLE | GMEM_ZEROINIT,
                             (uint)sstg.cbSize);
-                        // not throwing here because the other out of memory condition on GlobalAlloc
-                        // happens inside innerData.GetData and gets turned into a null return value
+                        // Not throwing here because the other out of memory condition on GlobalAlloc
+                        // happens inside innerData.GetData and gets turned into a null return value.
                         if (hglobal == 0)
                             return null;
                         void* ptr = PInvoke.GlobalLock(hglobal);
-                        pStream.Read((byte*)ptr, (uint)sstg.cbSize, null);
+                        pStream.Value->Read((byte*)ptr, (uint)sstg.cbSize, null);
                         PInvoke.GlobalUnlock(hglobal);
 
                         return GetDataFromHGLOBAL(format, hglobal);
@@ -103,9 +102,6 @@ namespace System.Windows.Forms
                 {
                     if (hglobal != 0)
                         PInvoke.GlobalFree(hglobal);
-
-                    if (pStream is not null)
-                        Marshal.ReleaseComObject(pStream);
 
                     Ole32.ReleaseStgMedium(ref medium);
                 }
