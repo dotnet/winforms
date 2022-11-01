@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
                 internal override int Column
                     => _owningListView.View == View.Details
-                        ? ParentInternal.GetChildIndex(this)
+                        ? ParentInternal.GetChildIndex(this) - ParentInternal.FirstSubItemIndex
                         : InvalidIndex;
 
                 /// <summary>
@@ -146,7 +146,9 @@ namespace System.Windows.Forms
                 internal override int Row => _owningItem.Index;
 
                 internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
-                    => new UiaCore.IRawElementProviderSimple[] { _owningListView.Columns[Column].AccessibilityObject };
+                    => _owningListView.View == View.Details
+                        ? new UiaCore.IRawElementProviderSimple[] { _owningListView.Columns[Column].AccessibilityObject }
+                        : null;
 
                 internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {
