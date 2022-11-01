@@ -66,7 +66,7 @@ The following image illustrates anchors calculation with respect to a control's 
 
     ![AnchorCalculations](../images/AnchorCalculations.png)
 
-In the above picture the boundary marked in `red` is a container hosting the control (boundary marked with `green`). The control can define its anchor property to explicitly tell the layout engine how its bounds change relative to its parent's bounds. For example: 
+In the above image the boundary marked in "orange" is a container hosting the control (boundary marked with "blue"). The control can define its anchor property to explicitly tell the layout engine how its bounds change relative to its parent's bounds. For example: 
 ```CS
 this.button14.Anchor = (System.Windows.Forms.AnchorStyles.Bottom
  | System.Windows.Forms.AnchorStyles.Left
