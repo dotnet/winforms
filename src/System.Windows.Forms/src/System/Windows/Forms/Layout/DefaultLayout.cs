@@ -920,7 +920,7 @@ namespace System.Windows.Forms.Layout
             anchorInfo.Right = displayRect.Width - (x + elementBounds.Width);
             anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
 
-            // Walk through parent heirarchy and check if scaling due to DPI change is in progress.
+            // Walk through parent hierarchy and check if scaling due to DPI change is in progress.
             static bool IsDPIScalingInProgress(Control control, Control parent)
             {
                 if (control.IsCurrentlyBeingScaled)
