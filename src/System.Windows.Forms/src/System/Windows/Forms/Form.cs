@@ -5788,7 +5788,7 @@ namespace System.Windows.Forms
                 {
                     if (ActiveMdiChildInternal.ControlBox)
                     {
-                        Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug.TraceVerbose, "UpdateMdiControlStrip: Detected ControlBox on ActiveMDI child, adding in MDIControlStrip.");
+                        Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug!.TraceVerbose, "UpdateMdiControlStrip: Detected ControlBox on ActiveMDI child, adding in MDIControlStrip.");
 
                         // determine if we need to add control gadgets into the MenuStrip
                         // double check GetMenu incase someone is using interop

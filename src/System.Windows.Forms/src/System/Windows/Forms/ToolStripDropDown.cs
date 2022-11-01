@@ -1379,7 +1379,7 @@ namespace System.Windows.Forms
         protected override void OnMouseUp(MouseEventArgs mea)
         {
             base.OnMouseUp(mea);
-            Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ToolStripDropDown.OnMouseUp] mouse up outside of the toolstrip - this should dismiss the entire chain");
+            Debug.WriteLineIf(ToolStrip.s_snapFocusDebug!.TraceVerbose, "[ToolStripDropDown.OnMouseUp] mouse up outside of the toolstrip - this should dismiss the entire chain");
 
             // Menus should dismiss when you drag off
             if (!ClientRectangle.Contains(mea.Location))
@@ -1450,7 +1450,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ToolStripDropDown.SelectPreviousToolStrip] No previous toolstrip to select - exiting menu mode.");
+                Debug.WriteLineIf(ToolStrip.s_snapFocusDebug!.TraceVerbose, "[ToolStripDropDown.SelectPreviousToolStrip] No previous toolstrip to select - exiting menu mode.");
                 ToolStripManager.ModalMenuFilter.ExitMenuMode();
             }
         }
@@ -1462,7 +1462,7 @@ namespace System.Windows.Forms
         ///  </summary>
         internal override bool ProcessArrowKey(Keys keyCode)
         {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[ToolStripDropDown.ProcessArrowKey] MenuTimer.Cancel called");
+            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, "[ToolStripDropDown.ProcessArrowKey] MenuTimer.Cancel called");
 
             ToolStripMenuItem.MenuTimer.Cancel();
 
@@ -1540,7 +1540,7 @@ namespace System.Windows.Forms
                 ToolStrip? toplevel = GetToplevelOwnerToolStrip();
                 if (toplevel is not null)
                 {
-                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ToolStripDropDown ProcessDialogKey]: Got Menu Key, finding toplevel toolstrip, calling RestoreFocus.");
+                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug!.TraceVerbose, "[ToolStripDropDown ProcessDialogKey]: Got Menu Key, finding toplevel toolstrip, calling RestoreFocus.");
                     toplevel.RestoreFocusInternal();
                     ToolStripManager.ModalMenuFilter.MenuKeyToggle = true;
                 }
@@ -1898,7 +1898,7 @@ namespace System.Windows.Forms
 
                                     ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(this);
 
-                                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ToolStripDropDown.SetVisibleCore] Exiting menu mode because item clicked");
+                                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug!.TraceVerbose, "[ToolStripDropDown.SetVisibleCore] Exiting menu mode because item clicked");
 
                                     ToolStripManager.ModalMenuFilter.ExitMenuMode();
                                 }
@@ -2106,7 +2106,7 @@ namespace System.Windows.Forms
                     // we had focus, then the Chrome panel was activated and we never went away
                     // when we get focus again, we should reactivate our message filter.
                     Debug.WriteLineIf(
-                        s_snapFocusDebug.TraceVerbose,
+                        s_snapFocusDebug!.TraceVerbose,
                         $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((User32.WA)(nint)m.WParamInternal == User32.WA.ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
 
                     if ((User32.WA)(nint)m.WParamInternal == User32.WA.ACTIVE)

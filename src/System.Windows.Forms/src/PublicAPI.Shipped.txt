@@ -419,14 +419,14 @@ override System.Windows.Forms.StatusStrip.OnPaintBackground(System.Windows.Forms
 ~override System.Windows.Forms.TabControl.ToString() -> string
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.Equals(object other) -> bool
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.ToString() -> string
-~override System.Windows.Forms.ToolStrip.BindingContext.get -> System.Windows.Forms.BindingContext
-~override System.Windows.Forms.ToolStrip.BindingContext.set -> void
+override System.Windows.Forms.ToolStrip.BindingContext.get -> System.Windows.Forms.BindingContext?
+override System.Windows.Forms.ToolStrip.BindingContext.set -> void
 ~override System.Windows.Forms.ToolStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStrip.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.ToolStrip.Cursor.get -> System.Windows.Forms.Cursor
-~override System.Windows.Forms.ToolStrip.Cursor.set -> void
-~override System.Windows.Forms.ToolStrip.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ToolStrip.Font.set -> void
+override System.Windows.Forms.ToolStrip.Cursor.get -> System.Windows.Forms.Cursor!
+override System.Windows.Forms.ToolStrip.Cursor.set -> void
+override System.Windows.Forms.ToolStrip.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ToolStrip.Font.set -> void
 ~override System.Windows.Forms.ToolStrip.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 ~override System.Windows.Forms.ToolStrip.OnDockChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStrip.OnEnabledChanged(System.EventArgs e) -> void
@@ -1391,21 +1391,21 @@ System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
 ~System.Windows.Forms.TableLayoutStyleCollection.Add(System.Windows.Forms.TableLayoutStyle style) -> int
 ~System.Windows.Forms.TableLayoutStyleCollection.this[int index].get -> System.Windows.Forms.TableLayoutStyle
 ~System.Windows.Forms.TableLayoutStyleCollection.this[int index].set -> void
-~System.Windows.Forms.ToolStrip.Controls.get -> System.Windows.Forms.Control.ControlCollection
+System.Windows.Forms.ToolStrip.Controls.get -> System.Windows.Forms.Control.ControlCollection!
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point point) -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStrip.GetItemAt(int x, int y) -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStrip.GetItemAt(System.Drawing.Point point) -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStrip.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties
-~System.Windows.Forms.ToolStrip.ImageList.get -> System.Windows.Forms.ImageList
-~System.Windows.Forms.ToolStrip.ImageList.set -> void
+System.Windows.Forms.ToolStrip.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties!
+System.Windows.Forms.ToolStrip.ImageList.get -> System.Windows.Forms.ImageList?
+System.Windows.Forms.ToolStrip.ImageList.set -> void
 ~System.Windows.Forms.ToolStrip.LayoutSettings.get -> System.Windows.Forms.LayoutSettings
 ~System.Windows.Forms.ToolStrip.LayoutSettings.set -> void
 ~System.Windows.Forms.ToolStrip.OverflowButton.get -> System.Windows.Forms.ToolStripOverflowButton
 ~System.Windows.Forms.ToolStrip.Renderer.get -> System.Windows.Forms.ToolStripRenderer
 ~System.Windows.Forms.ToolStrip.Renderer.set -> void
 ~System.Windows.Forms.ToolStrip.SetItemLocation(System.Windows.Forms.ToolStripItem item, System.Drawing.Point location) -> void
-~System.Windows.Forms.ToolStrip.ToolStrip(params System.Windows.Forms.ToolStripItem[] items) -> void
+System.Windows.Forms.ToolStrip.ToolStrip(params System.Windows.Forms.ToolStripItem![]! items) -> void
 ~System.Windows.Forms.ToolStrip.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
 System.Windows.Forms.ToolStripButton.ToolStripButton(string? text) -> void
 System.Windows.Forms.ToolStripButton.ToolStripButton(string? text, System.Drawing.Image? image) -> void
@@ -2085,9 +2085,9 @@ virtual System.Windows.Forms.MonthCalendar.OnRightToLeftLayoutChanged(System.Eve
 ~virtual System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control control, int column, int row) -> void
 ~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStrip.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle layoutStyle) -> System.Windows.Forms.LayoutSettings
-~virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection
+virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection!
 ~virtual System.Windows.Forms.ToolStrip.GetNextItem(System.Windows.Forms.ToolStripItem start, System.Windows.Forms.ArrowDirection direction) -> System.Windows.Forms.ToolStripItem
-~virtual System.Windows.Forms.ToolStrip.Items.get -> System.Windows.Forms.ToolStripItemCollection
+virtual System.Windows.Forms.ToolStrip.Items.get -> System.Windows.Forms.ToolStripItemCollection!
 ~virtual System.Windows.Forms.ToolStrip.OnBeginDrag(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStrip.OnEndDrag(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStrip.OnItemAdded(System.Windows.Forms.ToolStripItemEventArgs e) -> void
@@ -10902,22 +10902,22 @@ System.Windows.Forms.ToolStrip.AutoScrollMinSize.get -> System.Drawing.Size
 System.Windows.Forms.ToolStrip.AutoScrollMinSize.set -> void
 System.Windows.Forms.ToolStrip.AutoScrollPosition.get -> System.Drawing.Point
 System.Windows.Forms.ToolStrip.AutoScrollPosition.set -> void
-System.Windows.Forms.ToolStrip.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.ToolStrip.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.ToolStrip.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolStrip.BackColor.set -> void
-System.Windows.Forms.ToolStrip.BeginDrag -> System.EventHandler
+System.Windows.Forms.ToolStrip.BeginDrag -> System.EventHandler?
 System.Windows.Forms.ToolStrip.CanOverflow.get -> bool
 System.Windows.Forms.ToolStrip.CanOverflow.set -> void
 System.Windows.Forms.ToolStrip.CausesValidation.get -> bool
 System.Windows.Forms.ToolStrip.CausesValidation.set -> void
-System.Windows.Forms.ToolStrip.CausesValidationChanged -> System.EventHandler
-System.Windows.Forms.ToolStrip.ControlAdded -> System.Windows.Forms.ControlEventHandler
-System.Windows.Forms.ToolStrip.ControlRemoved -> System.Windows.Forms.ControlEventHandler
-System.Windows.Forms.ToolStrip.CursorChanged -> System.EventHandler
-System.Windows.Forms.ToolStrip.EndDrag -> System.EventHandler
+System.Windows.Forms.ToolStrip.CausesValidationChanged -> System.EventHandler?
+System.Windows.Forms.ToolStrip.ControlAdded -> System.Windows.Forms.ControlEventHandler?
+System.Windows.Forms.ToolStrip.ControlRemoved -> System.Windows.Forms.ControlEventHandler?
+System.Windows.Forms.ToolStrip.CursorChanged -> System.EventHandler?
+System.Windows.Forms.ToolStrip.EndDrag -> System.EventHandler?
 System.Windows.Forms.ToolStrip.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolStrip.ForeColor.set -> void
-System.Windows.Forms.ToolStrip.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.ToolStrip.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.ToolStrip.GripDisplayStyle.get -> System.Windows.Forms.ToolStripGripDisplayStyle
 System.Windows.Forms.ToolStrip.GripMargin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ToolStrip.GripMargin.set -> void
@@ -10929,9 +10929,9 @@ System.Windows.Forms.ToolStrip.ImageScalingSize.get -> System.Drawing.Size
 System.Windows.Forms.ToolStrip.ImageScalingSize.set -> void
 System.Windows.Forms.ToolStrip.IsCurrentlyDragging.get -> bool
 System.Windows.Forms.ToolStrip.IsDropDown.get -> bool
-System.Windows.Forms.ToolStrip.ItemAdded -> System.Windows.Forms.ToolStripItemEventHandler
-System.Windows.Forms.ToolStrip.ItemClicked -> System.Windows.Forms.ToolStripItemClickedEventHandler
-System.Windows.Forms.ToolStrip.ItemRemoved -> System.Windows.Forms.ToolStripItemEventHandler
+System.Windows.Forms.ToolStrip.ItemAdded -> System.Windows.Forms.ToolStripItemEventHandler?
+System.Windows.Forms.ToolStrip.ItemClicked -> System.Windows.Forms.ToolStripItemClickedEventHandler?
+System.Windows.Forms.ToolStrip.ItemRemoved -> System.Windows.Forms.ToolStripItemEventHandler?
 System.Windows.Forms.ToolStrip.LayoutCompleted -> System.EventHandler
 System.Windows.Forms.ToolStrip.LayoutStyle.get -> System.Windows.Forms.ToolStripLayoutStyle
 System.Windows.Forms.ToolStrip.LayoutStyle.set -> void
