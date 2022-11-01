@@ -30,7 +30,7 @@ this.Controls.Add(button7);
 this.Size = new System.Drawing.Size(828, 146);
 
 // The following line triggers layout to compute anchors with the button's current size and new size for the parent control.
-// The current DPI  still not applied.
+// The current DPI is still not applied.
 this.ResumeLayout(false)
 ```
 The above snippet does not represent the complete set of instances where anchor computations are unnecessary and may hold invalid anchor values. It gets even more complicated when nested UserControls are involved.
