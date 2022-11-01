@@ -6616,11 +6616,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Geçerli erişilebilirlik nesnesi yalnızca {0} görünümündeki ListView içindir</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">Geçerli erişilebilirlik nesnesi yalnızca {0}, {1} veya {2} görünümündeki ListView içindir</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">ListViewItem bir ListView'a ekli olmadığında erişilebilirlik nesnesi alınamaz.</target>

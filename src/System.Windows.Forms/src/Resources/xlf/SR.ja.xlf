@@ -6616,11 +6616,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">現在のアクセシビリティ オブジェクトは {0} ビューの ListView にのみ使用できます</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">現在のアクセシビリティ オブジェクトは {0}、{1} または {2} ビューの ListView にのみ使用できます</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">ListViewItem が ListView にアタッチされていない場合、アクセシビリティ オブジェクトは取得できません。</target>

@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         ///  The implementation of this class fully corresponds to the behavior of the ListViewItem accessibility object
         ///  when the ListView is in "LargeIcon" or "SmallIcon" view.
         /// </remarks>
-        internal class ListViewItemBaseAccessibleObject : AccessibleObject
+        internal abstract class ListViewItemBaseAccessibleObject : AccessibleObject
         {
             private protected readonly ListView _owningListView;
             private protected readonly ListViewItem _owningItem;
@@ -54,6 +54,8 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 => _owningListView.AccessibilityObject;
+
+            protected bool HasImage => _owningItem.ImageIndex != ImageList.Indexer.DefaultIndex;
 
             internal override bool IsItemSelected
                 => (State & AccessibleStates.Selected) != 0;
@@ -106,6 +108,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            protected abstract View View { get; }
+
             internal override void AddToSelection()
                 => SelectItem();
 
@@ -157,12 +161,9 @@ namespace System.Windows.Forms
 
             public override AccessibleObject? GetChild(int index)
             {
-                if (_owningListView.View == View.Details || _owningListView.View == View.Tile)
+                if (_owningListView.View != View)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewsException,
-                        nameof(View.LargeIcon),
-                        nameof(View.List),
-                        nameof(View.SmallIcon)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
                 }
 
                 return null;
@@ -172,12 +173,9 @@ namespace System.Windows.Forms
 
             public override int GetChildCount()
             {
-                if (_owningListView.View == View.Details || _owningListView.View == View.Tile)
+                if (_owningListView.View != View)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewsException,
-                        nameof(View.LargeIcon),
-                        nameof(View.List),
-                        nameof(View.SmallIcon)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
                 }
 
                 return InvalidIndex;
