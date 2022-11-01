@@ -8,30 +8,29 @@ We have multiple [issues](https://github.com/dotnet/winforms/issues?q=is%3Aissue
 
 ## Problem in Scope
 
-The position of an anchored control with respect to its parent should be able to determined at design time and should only need to be changed  if there were explicit changes in the control's bounds or when the control is scaled in response to a DPI changed event. Bounds changes as result of the parent control's bounds changing shouldn't alter a control's relative position in the parent's rectangle. However, currently the layout engine computes the anchored control's position every time there are changes to the control's bounds or the control's location-related properties.
+The position of an anchored control with respect to its parent should be able to be determined at design time and should only need to be changed if there were explicit changes in the control's bounds or when the control is scaled in response to a DPI changed event. Bounds changes that happen as result of the parent control's bounds changing shouldn't alter a control's relative position in the parent's rectangle. However, currently the layout engine computes the anchored control's relative position every time there are changes to the control's bounds or the control's location-related properties.
 
-For example, the following simple code snippet copied from an `InitializeComponent` method demonstrates the impact of the "over-eager" computations. The number of unnecessaryy computations can increase quite dramatically for nested layouts.
+For example, the following simple code snippet copied from a Control's `InitializeComponent` method demonstrates the impact of the "over-eager" computations. The number of unnecessary computations can increase quite dramatically for nested layouts.
 
 ```CS
-// The following line triggers layout to compute anchors with default button size and without parent.
+// The following line triggers layout to compute anchors with the default button size and without a parent control.
 this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 
-// The following line triggers layout again to compute anchors with default button size with new location but still without parent.
+// The following line triggers layout again to compute anchors with the default button size with a new location but still without a parent control.
 this.button7.Location = new System.Drawing.Point(9, 47);
 
-// The following line triggers layout once again to compute anchors with button's new size but still without parent.
+// The following line triggers layout once again to compute anchors with the button's new size but still without a parent control.
 this.button7.Size = new System.Drawing.Size(134, 23);
 
-// The following line triggers layout to compute anchors with button's current size and the default size for parent.
+// The following line triggers layout to compute anchors with button's current size and the default size for the parent control.
 this.Controls.Add(button7);
 
-// The following line triggers layout to compute anchors with button's current size and new size for parent.
-// These sizes still may be changed for the DPI on the monitor depending on application's DPI mode
+// The following line triggers layout to compute anchors with the button's current size and a new size for the parent control.
+// These sizes still may be changed for the current DPI depending on application's DPI mode.
 this.Size = new System.Drawing.Size(828, 146);
 
-// The following line triggers layout to compute anchors with button's
-current size and new size for parent.
-// DPI on the monitor still not applied.
+// The following line triggers layout to compute anchors with the button's current size and new size for the parent control.
+// The current DPI  still not applied.
 this.ResumeLayout(false)
 ```
 The above snippet does not represent the complete set of instances where anchor computations are unnecessary and may hold invalid anchor values. It gets even more complicated when nested UserControls are involved.
@@ -39,19 +38,19 @@ The above snippet does not represent the complete set of instances where anchor 
 
 ## Known issues
 
-Customer reported issues can be largely groupped as follows.
+Customer reported issues can be largely grouped as follows:
 
 
 ### Missing controls
 
-Calculation of control's anchors with default sizes may result in negative anchors and, thus, result in invalid location for the anchored controls.
+Calculation of control's anchors with default sizes may result in negative anchors and, thus, result in an invalid location for the anchored controls.
 
 ![MissingControls](../images/AnchorLayoutKnownIssue_MissingControl.png)
 
 
 ### Overlapped Controls
 
-Related to the above reason, if the parent control is scaled to match the current monitor's DPI, and the control's anchor calculations happen out of sync with this scaling, controls may overlap:
+Related to the "Missing controls" issue above, if the parent control is scaled to match the current monitor's DPI, and the control's anchor calculations happen out of sync with this scaling, controls may overlap:
 
 ![OverlappedControls](../images/AnchorLayoutKnownIssue_OverlappedControl.png)
 
@@ -59,10 +58,10 @@ Related to the above reason, if the parent control is scaled to match the curren
 ## Anchor Calculations
 
 The following image illustrates anchors calculation with respect to a control's parent's display rectangle. The "red" rectangle is the parent's display rectangle, and the "green" rectangle is the anchored control's (button) bounds.
-- `Left` arrow indicates the X coordinate of the button location with respect to parents display rectangle.
-- `Top` arrow indicates the Y coordinate of the button location with respect to parents display rectangle.
-- `Right` arrow indicates the distance from right edge of parent's rectangle where button is placed.
-- `Right` arrow indicates the distance from bottom edge of parent's rectangle where button is placed.
+- `Left` arrow indicates the X coordinate of the button location with respect to the parent's display rectangle.
+- `Top` arrow indicates the Y coordinate of the button location with respect to the parent's display rectangle.
+- `Right` arrow indicates the distance from right edge of the parent's rectangle where button is placed.
+- `Right` arrow indicates the distance from the bottom edge of the parent's rectangle where the button is placed.
 
     ![AnchorCalculations](../images/AnchorCalculations.png)
 
@@ -78,7 +77,7 @@ When the control's `Anchor` property is set, the anchors (that is, left, top, ri
 
 ## Proposed solution
 
-There may be cases where developers could be force-creating handles out of order, but those cases are not expected to be mainstream, and such cases will have to be handled by application developer. 
+There may be cases where developers could be force-creating handles out of order, but those cases are not expected to be mainstream, and such cases will have to be manually handled by the application developer. 
 
 The following are the events we will be using to compute anchors and replacing the current set of events mentioned in Scope section above.
 

@@ -896,12 +896,6 @@ namespace System.Windows.Forms.Layout
                 return;
             }
 
-            // Anchors are scaled for the new DPI and doesn't need to be recalculated.
-            if (IsDPIScalingInProgress(control, parent))
-            {
-                return;
-            }
-
             AnchorInfo anchorInfo = GetAnchorInfo(control);
             if (anchorInfo is null)
             {
@@ -919,27 +913,6 @@ namespace System.Windows.Forms.Layout
 
             anchorInfo.Right = displayRect.Width - (x + elementBounds.Width);
             anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
-
-            // Walk through parent hierarchy and check if scaling due to DPI change is in progress.
-            static bool IsDPIScalingInProgress(Control control, Control parent)
-            {
-                if (control.IsCurrentlyBeingScaled)
-                {
-                    return true;
-                }
-
-                while (parent is not null)
-                {
-                    if (parent is ContainerControl container && container.ContainersDpiScalingInProgress)
-                    {
-                        return true;
-                    }
-
-                    parent = parent.Parent;
-                }
-
-                return false;
-            }
         }
 
         public static AnchorStyles GetAnchor(IArrangedElement element) => CommonProperties.xGetAnchor(element);
