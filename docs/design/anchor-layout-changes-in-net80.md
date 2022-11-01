@@ -8,7 +8,7 @@ We have multiple [issues](https://github.com/dotnet/winforms/issues?q=is%3Aissue
 
 ## Problem in Scope
 
-The position of an anchored control with respect to its parent should be able to determined at design time and should only need to be changed  if there were explicit changes in the control's bounds or when the control is scaled in response to a DPI changed event. Bounds changes as result of the parent control's bounds changing shouldn’t alter a control's relative position in the parent's rectangle. However, currently the layout engine computes the anchored control's position every time there are changes to the control's bounds or the control's location-related properties.
+The position of an anchored control with respect to its parent should be able to determined at design time and should only need to be changed  if there were explicit changes in the control's bounds or when the control is scaled in response to a DPI changed event. Bounds changes as result of the parent control's bounds changing shouldn't alter a control's relative position in the parent's rectangle. However, currently the layout engine computes the anchored control's position every time there are changes to the control's bounds or the control's location-related properties.
 
 For example, the following simple code snippet copied from an `InitializeComponent` method demonstrates the impact of the "over-eager" computations. The number of unnecessaryy computations can increase quite dramatically for nested layouts.
 
@@ -46,14 +46,14 @@ Customer reported issues can be largely groupped as follows.
 
 Calculation of control's anchors with default sizes may result in negative anchors and, thus, result in invalid location for the anchored controls.
 
-![MissingControls](images/AnchorLayoutKnownIssue_MissingControl.png)
+![MissingControls](../images/AnchorLayoutKnownIssue_MissingControl.png)
 
 
 ### Overlapped Controls
 
-Related to the above reason, if the parent control is caled to match the current monitor's DPI, and the control's anchor calculations happen out of sync with this scaling, controls may overlap:
+Related to the above reason, if the parent control is scaled to match the current monitor's DPI, and the control's anchor calculations happen out of sync with this scaling, controls may overlap:
 
-![OverlappedControls](images/AnchorLayoutKnownIssue_OverlappedControl.png)
+![OverlappedControls](../images/AnchorLayoutKnownIssue_OverlappedControl.png)
 
 
 ## Anchor Calculations
@@ -64,7 +64,7 @@ The following image illustrates anchors calculation with respect to a control's 
 - `Right` arrow indicates the distance from right edge of parent's rectangle where button is placed.
 - `Right` arrow indicates the distance from bottom edge of parent's rectangle where button is placed.
 
-    ![AnchorCalculations](images/AnchorCalculations.png)
+    ![AnchorCalculations](../images/AnchorCalculations.png)
 
 In the above picture the boundary marked in `red` is a container hosting the control (boundary marked with `green`). The control can define its anchor property to explicitly tell the layout engine how its bounds change relative to its parent's bounds. For example: 
 ```CS
@@ -79,7 +79,7 @@ When the control's `Anchor` property is set, the anchors (that is, left, top, ri
 ## Proposed solution
 
 There may be cases where developers could be force-creating handles out of order, but those cases are not expected to be mainstream, and such cases will have to be handled by application developer. 
-	
+
 The following are the events we will be using to compute anchors and replacing the current set of events mentioned in Scope section above.
 
 - `WmCreate`,
@@ -93,32 +93,32 @@ The following are the events we will be using to compute anchors and replacing t
 ```CS
 private void WmCreate()
 {
-     ...
-     DefaultLayout.UpdateAnchorInfoV2(this);
+   ...
+   DefaultLayout.UpdateAnchorInfoV2(this);
 }
 
 internal static void UpdateAnchorInfoV2(IArrangedElement element)
 {
-    if (!LocalAppContextSwitches.EnableAnchorLayoutV2
-     || !CommonProperties.GetNeedsAnchorLayout(element))
-     {
-        return;
-     }
+   if (!LocalAppContextSwitches.EnableAnchorLayoutV2
+    || !CommonProperties.GetNeedsAnchorLayout(element))
+   {
+       return;
+   }
 
-    Control control = element as Control;
-    Debug.Assert(control != null, "AnchorLayoutV2 and beyond are expected to be used only on Control type");
+   Control control = element as Control;
+   Debug.Assert(control != null, "AnchorLayoutV2 and beyond are expected to be used only on Control type");
 
-    if (control is null || control.Parent is null)
-     {
-        return;
-     }
+   if (control is null || control.Parent is null)
+    {
+      return;
+    }
 
-    if (!control.IsHandleCreated || !control.Parent.IsHandleCreated)
-     {
-        return;
-     }
+   if (!control.IsHandleCreated || !control.Parent.IsHandleCreated)
+    {
+      return;
+    }
 
-    ComputeAnchorInfo(IArrangedElement element)
+   ComputeAnchorInfo(IArrangedElement element)
 }
 ```
 
@@ -131,37 +131,37 @@ The current anchor calculation implementation was designed prior to adding high 
 private static void ComputeAnchorInfo(IArrangedElement element)
  {
     AnchorInfo? anchorInfo = GetAnchorInfo(element);
-    if (anchorInfo is null)
-     {
-        anchorInfo = new();
-        SetAnchorInfo(element, anchorInfo);
-     }
+   if (anchorInfo is null)
+    {
+      anchorInfo = new();
+      SetAnchorInfo(element, anchorInfo);
+    }
 
-    Rectangle displayRect = element.Container.DisplayRectangle;
-    Rectangle elementBounds = element.Bounds;
+   Rectangle displayRect = element.Container.DisplayRectangle;
+   Rectangle elementBounds = element.Bounds;
 
-    int x = elementBounds.X;
-    int y = elementBounds.Y;
+   int x = elementBounds.X;
+   int y = elementBounds.Y;
 
-    anchorInfo.Left = x;
-    anchorInfo.Top = y;
+   anchorInfo.Left = x;
+   anchorInfo.Top = y;
 
-    anchorInfo.Right = displayRect.Width - (x + elementBounds.Width);
-    anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
+   anchorInfo.Right = displayRect.Width - (x + elementBounds.Width);
+   anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
  }
 ```
 
 
 ## Risk mitigation
 
-The layout engine, in general, is quite complex, and any changes in it carry a very high risk. In order to reduce the risks and to provide backward compatibility, the new anchor calculations are put behind a feature switch `System.Windows.Forms.EnableAnchorLayoutV2`. The switch is enabled by default for Windows Forms applications targeting .NET 8.
+The layout engine, in general, is quite complex, and any changes in it carry a very high risk. In order to reduce the risks and to provide backward compatibility, the new anchor calculations are put behind a feature switch `System.Windows.Forms.AnchorLayoutV2`. The switch is enabled by default for Windows Forms applications targeting .NET 8.
 
 It is possible to retain the original anchor calculations by setting the swtich to `false` in the [runtimeconfig.json](https://learn.microsoft.com/dotnet/core/runtime-config/#runtimeconfigjson).
 Snippet for runtimeconfig.template.json:
 ```JSON
 {
   "configProperties": {
-    "System.Windows.Forms.EnableAnchorLayoutV2": false
+    "System.Windows.Forms.AnchorLayoutV2": false
   }
 }
 ```
