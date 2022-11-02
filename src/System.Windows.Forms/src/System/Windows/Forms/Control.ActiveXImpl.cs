@@ -976,7 +976,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Load
             /// </summary>
-            internal void Load(IStorage* stg)
+            internal HRESULT Load(IStorage* stg)
             {
                 using ComScope<IStream> stream = new(null);
                 HRESULT hr = stg->OpenStream(
@@ -989,7 +989,7 @@ namespace System.Windows.Forms
                 {
                     // For backward compatibility: We were earlier using GetType().FullName
                     // as the stream name in v1. Lets see if a stream by that name exists.
-                    stg->OpenStream(
+                    hr = stg->OpenStream(
                         GetType().FullName!,
                         null,
                         STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
@@ -997,7 +997,12 @@ namespace System.Windows.Forms
                         stream);
                 }
 
-                Load(stream);
+                if (hr.Succeeded)
+                {
+                    Load(stream);
+                }
+
+                return hr;
             }
 
             /// <summary>
@@ -1408,18 +1413,23 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Save
             /// </summary>
-            internal void Save(IStorage* stg, BOOL fSameAsLoad)
+            internal HRESULT Save(IStorage* stg, BOOL fSameAsLoad)
             {
                 using ComScope<IStream> stream = new(null);
-                stg->CreateStream(
+                HRESULT hr = stg->CreateStream(
                     GetStreamName(),
                     STGM.STGM_WRITE | STGM.STGM_SHARE_EXCLUSIVE | STGM.STGM_CREATE,
                     0,
                     0,
                     stream);
-                Debug.Assert(!stream.IsNull, "Stream should be non-null, or an exception should have been thrown.");
+                Debug.Assert(hr.Succeeded, "Stream should be non-null.");
 
-                Save(stream, fClearDirty: true);
+                if (hr.Succeeded)
+                {
+                    Save(stream, fClearDirty: true);
+                }
+
+                return hr;
             }
 
             /// <summary>
