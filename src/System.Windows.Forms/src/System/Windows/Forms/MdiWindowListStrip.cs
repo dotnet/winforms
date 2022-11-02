@@ -186,7 +186,7 @@ namespace System.Windows.Forms
         {
             if (sender is ToolStripMenuItem windowListItem)
             {
-                Form boundForm = windowListItem.MdiForm;
+                Form? boundForm = windowListItem.MdiForm;
 
                 if (boundForm is not null)
                 {

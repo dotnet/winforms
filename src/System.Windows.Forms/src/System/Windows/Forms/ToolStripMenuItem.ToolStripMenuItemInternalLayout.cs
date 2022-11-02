@@ -123,7 +123,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 //If we don't have an image, use the CheckedImage
-                                Image image = _ownerItem.Image ?? _ownerItem.CheckedImage;
+                                Image image = _ownerItem.Image ?? _ownerItem.CheckedImage!;
                                 imageRect.Size = image.Size;
                             }
 
