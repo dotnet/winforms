@@ -503,7 +503,7 @@ namespace System.Windows.Forms
                             owner.Shortcuts.Remove(originalShortcut);
                         }
 
-                        if (owner.Shortcuts.Contains(value))
+                        if (owner.Shortcuts.ContainsKey(value))
                         {
                             // last one in wins.
                             owner.Shortcuts[value] = this;
@@ -686,7 +686,7 @@ namespace System.Windows.Forms
             {
                 if (_lastOwner is not null)
                 {
-                    Keys shortcut = this.ShortcutKeys;
+                    Keys shortcut = ShortcutKeys;
                     if (shortcut != Keys.None && _lastOwner.Shortcuts.ContainsKey(shortcut))
                     {
                         _lastOwner.Shortcuts.Remove(shortcut);
@@ -1063,7 +1063,7 @@ namespace System.Windows.Forms
 
                 if (Owner is not null)
                 {
-                    if (Owner.Shortcuts.Contains(shortcut))
+                    if (Owner.Shortcuts.ContainsKey(shortcut))
                     {
                         // last one in wins
                         Owner.Shortcuts[shortcut] = this;

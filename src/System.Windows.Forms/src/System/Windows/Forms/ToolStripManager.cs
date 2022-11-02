@@ -774,7 +774,7 @@ namespace System.Windows.Forms
         {
             for (int i = 0; i < ToolStrips.Count; i++)
             {
-                if (ToolStrips[i] is ToolStrip t && t.Shortcuts.Contains(shortcut))
+                if (ToolStrips[i] is ToolStrip t && t.Shortcuts.ContainsKey(shortcut))
                 {
                     return true;
                 }
@@ -836,9 +836,8 @@ namespace System.Windows.Forms
                     // Check the context menu strip first.
                     if (activeControlInChain.ContextMenuStrip is not null)
                     {
-                        if (activeControlInChain.ContextMenuStrip.Shortcuts.ContainsKey(shortcut))
+                        if (activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem item))
                         {
-                            ToolStripMenuItem item = activeControlInChain.ContextMenuStrip.Shortcuts[shortcut] as ToolStripMenuItem;
                             if (item.ProcessCmdKey(ref m, shortcut))
                             {
                                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - found item on context menu: [" + item.ToString() + "]");
@@ -941,7 +940,7 @@ namespace System.Windows.Forms
 
                         if (isAssociatedContextMenu || rootWindowsMatch || isDoublyAssignedContextMenuStrip)
                         {
-                            if (toolStrip.Shortcuts[shortcut] is ToolStripMenuItem item)
+                            if (toolStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem item))
                             {
                                 if (item.ProcessCmdKey(ref m, shortcut))
                                 {
