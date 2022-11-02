@@ -190,7 +190,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Now check if there is a dropdown UI type editor. If so, use that.
                 if (editor is null)
                 {
-                    UITypeEditor ute = entry.UITypeEditor;
+                    UITypeEditor? ute = entry.UITypeEditor;
                     if (ute is not null && ute.GetEditStyle() == UITypeEditorEditStyle.DropDown)
                     {
                         editor = (InstanceCreationEditor?)TypeDescriptor.GetEditor(ute, typeof(InstanceCreationEditor));
