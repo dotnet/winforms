@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Primitives
     internal static partial class LocalAppContextSwitches
     {
         // Switch names declared internal below are used in unit/integration tests. Refer to
-        // https://github.com/microsoft/winforms/blob/tree/main/docs/design/anchor_layout_changes_in_net80.md
+        // https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md
         // for more details on how to enable these switches in the application.
         private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
         internal const string AnchorLayoutV2SwitchName = "System.Windows.Forms.AnchorLayoutV2";
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Primitives
         /// <devdoc>
         ///  Returns AnchorLayoutV2 switch value from runtimeconfig.json. Defaults to true if application is targeting .NET 8.0 and beyond.
         ///  Refer to
-        ///  https://github.com/microsoft/winforms/blob/tree/main/docs/design/anchor_layout_changes_in_net80.md for more details.
+        ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
         /// </devdoc>
         public static bool AnchorLayoutV2
         {

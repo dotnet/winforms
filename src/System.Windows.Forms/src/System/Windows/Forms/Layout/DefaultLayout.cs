@@ -874,7 +874,7 @@ namespace System.Windows.Forms.Layout
         /// </summary>
         /// <devdoc>
         ///  This is the new behavior introduced in .NET 8.0. Refer to
-        ///  https://github.com/microsoft/winforms/blob/tree/main/docs/design/anchor_layout_changes_in_net80.md for more details.
+        ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
         ///  Developers may opt-out of this new behavior using switch <see cref="LocalAppContextSwitches.AnchorLayoutV2"/>.
         /// </devdoc>
         internal static void UpdateAnchorInfoV2(Control control)
