@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -53,7 +52,7 @@ namespace System.Windows.Forms
         private byte _mouseDownID;  // NEVER use this directly from another class, 0 should never be returned to another class.
         private ToolStripRenderer? _renderer;
         private Type _currentRendererType = typeof(Type);
-        private Hashtable? _shortcuts;
+        private Dictionary<Keys, ToolStripMenuItem>? _shortcuts;
         private Stack<MergeHistory>? _mergeHistoryStack;
         private ToolStripDropDownDirection _toolStripDropDownDirection = ToolStripDropDownDirection.Default;
         private Size _largestDisplayedItemSize = Size.Empty;
@@ -1742,11 +1741,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary> internal lookup table for shortcuts... intended to speed search time </summary>
-        internal Hashtable Shortcuts
+        internal Dictionary<Keys, ToolStripMenuItem> Shortcuts
         {
             get
             {
-                _shortcuts ??= new Hashtable(1);
+                _shortcuts ??= new Dictionary<Keys, ToolStripMenuItem>(1);
 
                 return _shortcuts;
             }
