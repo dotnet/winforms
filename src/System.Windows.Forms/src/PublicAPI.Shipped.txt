@@ -525,17 +525,17 @@ override System.Windows.Forms.ToolStripProgressBar.OnSubscribeControlEvents(Syst
 override System.Windows.Forms.ToolStripProgressBar.OnUnsubscribeControlEvents(System.Windows.Forms.Control? control) -> void
 override System.Windows.Forms.ToolStripProgressBar.Text.get -> string!
 override System.Windows.Forms.ToolStripProgressBar.Text.set -> void
-~override System.Windows.Forms.ToolStripSeparator.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ToolStripSeparator.BackgroundImage.set -> void
-~override System.Windows.Forms.ToolStripSeparator.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripSeparator.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ToolStripSeparator.Font.set -> void
-~override System.Windows.Forms.ToolStripSeparator.Image.get -> System.Drawing.Image
-~override System.Windows.Forms.ToolStripSeparator.Image.set -> void
-~override System.Windows.Forms.ToolStripSeparator.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripSeparator.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSeparator.Text.get -> string
-~override System.Windows.Forms.ToolStripSeparator.Text.set -> void
+override System.Windows.Forms.ToolStripSeparator.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripSeparator.BackgroundImage.set -> void
+override System.Windows.Forms.ToolStripSeparator.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripSeparator.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ToolStripSeparator.Font.set -> void
+override System.Windows.Forms.ToolStripSeparator.Image.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripSeparator.Image.set -> void
+override System.Windows.Forms.ToolStripSeparator.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripSeparator.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSeparator.Text.get -> string!
+override System.Windows.Forms.ToolStripSeparator.Text.set -> void
 override System.Windows.Forms.ToolStripSplitButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripSplitButton.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown!
 override System.Windows.Forms.ToolStripSplitButton.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
@@ -1527,10 +1527,10 @@ System.Windows.Forms.ToolStripOverflow.ToolStripOverflow(System.Windows.Forms.To
 ~System.Windows.Forms.ToolStripPanelRow.ToolStripPanelRow(System.Windows.Forms.ToolStripPanel parent) -> void
 System.Windows.Forms.ToolStripProgressBar.ProgressBar.get -> System.Windows.Forms.ProgressBar!
 System.Windows.Forms.ToolStripProgressBar.ToolStripProgressBar(string? name) -> void
-~System.Windows.Forms.ToolStripSeparator.ImageKey.get -> string
-~System.Windows.Forms.ToolStripSeparator.ImageKey.set -> void
-~System.Windows.Forms.ToolStripSeparator.ToolTipText.get -> string
-~System.Windows.Forms.ToolStripSeparator.ToolTipText.set -> void
+System.Windows.Forms.ToolStripSeparator.ImageKey.get -> string!
+System.Windows.Forms.ToolStripSeparator.ImageKey.set -> void
+System.Windows.Forms.ToolStripSeparator.ToolTipText.get -> string?
+System.Windows.Forms.ToolStripSeparator.ToolTipText.set -> void
 System.Windows.Forms.ToolStripSplitButton.DefaultItem.get -> System.Windows.Forms.ToolStripItem?
 System.Windows.Forms.ToolStripSplitButton.DefaultItem.set -> void
 System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string? text) -> void
@@ -11581,10 +11581,10 @@ System.Windows.Forms.ToolStripSeparator.AutoToolTip.get -> bool
 System.Windows.Forms.ToolStripSeparator.AutoToolTip.set -> void
 System.Windows.Forms.ToolStripSeparator.DisplayStyle.get -> System.Windows.Forms.ToolStripItemDisplayStyle
 System.Windows.Forms.ToolStripSeparator.DisplayStyle.set -> void
-System.Windows.Forms.ToolStripSeparator.DisplayStyleChanged -> System.EventHandler
+System.Windows.Forms.ToolStripSeparator.DisplayStyleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripSeparator.DoubleClickEnabled.get -> bool
 System.Windows.Forms.ToolStripSeparator.DoubleClickEnabled.set -> void
-System.Windows.Forms.ToolStripSeparator.EnabledChanged -> System.EventHandler
+System.Windows.Forms.ToolStripSeparator.EnabledChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripSeparator.ImageAlign.get -> System.Drawing.ContentAlignment
 System.Windows.Forms.ToolStripSeparator.ImageAlign.set -> void
 System.Windows.Forms.ToolStripSeparator.ImageIndex.get -> int
@@ -11597,7 +11597,7 @@ System.Windows.Forms.ToolStripSeparator.RightToLeftAutoMirrorImage.get -> bool
 System.Windows.Forms.ToolStripSeparator.RightToLeftAutoMirrorImage.set -> void
 System.Windows.Forms.ToolStripSeparator.TextAlign.get -> System.Drawing.ContentAlignment
 System.Windows.Forms.ToolStripSeparator.TextAlign.set -> void
-System.Windows.Forms.ToolStripSeparator.TextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripSeparator.TextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripSeparator.TextImageRelation.get -> System.Windows.Forms.TextImageRelation
 System.Windows.Forms.ToolStripSeparator.TextImageRelation.set -> void
 System.Windows.Forms.ToolStripSeparator.ToolStripSeparator() -> void
