@@ -487,9 +487,9 @@ override System.Windows.Forms.ToolStripDropDownButton.OnMouseDown(System.Windows
 override System.Windows.Forms.ToolStripDropDownButton.OnMouseLeave(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownButton.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownButton.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
-~override System.Windows.Forms.ToolStripDropDownItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripDropDownItem.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDownItem.OnRightToLeftChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStripDropDownItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripDropDownItem.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDownItem.OnRightToLeftChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownMenu.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripDropDownMenu.CreateDefaultItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
 override System.Windows.Forms.ToolStripDropDownMenu.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
@@ -1445,12 +1445,12 @@ System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? tex
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(System.Drawing.Image? image) -> void
-~System.Windows.Forms.ToolStripDropDownItem.DropDown.get -> System.Windows.Forms.ToolStripDropDown
-~System.Windows.Forms.ToolStripDropDownItem.DropDown.set -> void
-~System.Windows.Forms.ToolStripDropDownItem.DropDownItems.get -> System.Windows.Forms.ToolStripItemCollection
-~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, params System.Windows.Forms.ToolStripItem[] dropDownItems) -> void
-~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
-~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
+System.Windows.Forms.ToolStripDropDownItem.DropDown.get -> System.Windows.Forms.ToolStripDropDown!
+System.Windows.Forms.ToolStripDropDownItem.DropDown.set -> void
+System.Windows.Forms.ToolStripDropDownItem.DropDownItems.get -> System.Windows.Forms.ToolStripItemCollection!
+System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string? text, System.Drawing.Image? image, params System.Windows.Forms.ToolStripItem![]? dropDownItems) -> void
+System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
+System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
 System.Windows.Forms.ToolStripItem.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!
 System.Windows.Forms.ToolStripItem.AccessibleDefaultActionDescription.get -> string?
 System.Windows.Forms.ToolStripItem.AccessibleDefaultActionDescription.set -> void
@@ -2121,12 +2121,12 @@ virtual System.Windows.Forms.ToolStripDropDown.OnClosed(System.Windows.Forms.Too
 virtual System.Windows.Forms.ToolStripDropDown.OnClosing(System.Windows.Forms.ToolStripDropDownClosingEventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripDropDown.OnOpened(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripDropDown.OnOpening(System.ComponentModel.CancelEventArgs! e) -> void
-~virtual System.Windows.Forms.ToolStripDropDownItem.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown
-~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownClosed(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownHide(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownOpened(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownShow(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripDropDownItem.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown!
+virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownClosed(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownHide(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownOpened(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownShow(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripItem.BackgroundImage.get -> System.Drawing.Image?
 virtual System.Windows.Forms.ToolStripItem.BackgroundImage.set -> void
 ~virtual System.Windows.Forms.ToolStripItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -11218,12 +11218,12 @@ System.Windows.Forms.ToolStripDropDownDirection.Default = 7 -> System.Windows.Fo
 System.Windows.Forms.ToolStripDropDownDirection.Left = 4 -> System.Windows.Forms.ToolStripDropDownDirection
 System.Windows.Forms.ToolStripDropDownDirection.Right = 5 -> System.Windows.Forms.ToolStripDropDownDirection
 System.Windows.Forms.ToolStripDropDownItem
-System.Windows.Forms.ToolStripDropDownItem.DropDownClosed -> System.EventHandler
+System.Windows.Forms.ToolStripDropDownItem.DropDownClosed -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDownItem.DropDownDirection.get -> System.Windows.Forms.ToolStripDropDownDirection
 System.Windows.Forms.ToolStripDropDownItem.DropDownDirection.set -> void
-System.Windows.Forms.ToolStripDropDownItem.DropDownItemClicked -> System.Windows.Forms.ToolStripItemClickedEventHandler
-System.Windows.Forms.ToolStripDropDownItem.DropDownOpened -> System.EventHandler
-System.Windows.Forms.ToolStripDropDownItem.DropDownOpening -> System.EventHandler
+System.Windows.Forms.ToolStripDropDownItem.DropDownItemClicked -> System.Windows.Forms.ToolStripItemClickedEventHandler?
+System.Windows.Forms.ToolStripDropDownItem.DropDownOpened -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDownItem.DropDownOpening -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDownItem.HasDropDown.get -> bool
 System.Windows.Forms.ToolStripDropDownItem.HideDropDown() -> void
 System.Windows.Forms.ToolStripDropDownItem.ShowDropDown() -> void
