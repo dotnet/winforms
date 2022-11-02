@@ -105,30 +105,21 @@ namespace System.Windows.Forms
 
         protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
-            // The ARGB values came directly from the bitmap.
-            // If the bitmap colors change this code will no longer work and will
-            // need to be updated.
-            Color checkColor = Color.FromArgb(255, 4, 2, 4);
-
-            // Create a color map to remap the check color to either the theme
-            // color for highlighted text or menu text, depending on whether
-            // the menu item is selected.
-            ColorMap[] checkColorMap = new ColorMap[1];
-            checkColorMap[0] = new ColorMap
+            Image? image = e.Image;
+            if (image is not null)
             {
-                OldColor = checkColor,
-
-                NewColor = ((e.Item.Selected || e.Item.Pressed) && e.Item.Enabled) ?
-                SystemColors.HighlightText : SystemColors.MenuText
-            };
-
-            // If we already have an image attributes associated with the event,
-            // just add the color map. Otherwise, create a new one.
-            ImageAttributes imageAttr = e.ImageAttributes ?? new ImageAttributes();
-            imageAttr.SetRemapTable(checkColorMap, ColorAdjustType.Bitmap);
-            e.ImageAttributes = imageAttr;
-
-            base.OnRenderItemCheck(e);
+                if (Image.GetPixelFormatSize(image.PixelFormat) > 16)
+                {
+                    // for 24, 32 bit images, just paint normally - mapping the color table is not
+                    // going to work when you can have full color.
+                    base.OnRenderItemCheck(e);
+                    return;
+                }
+                else
+                {
+                    RenderItemImageOfLowColorDepth(e);
+                }
+            }
         }
 
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
@@ -385,40 +376,10 @@ namespace System.Windows.Forms
                     // for 24, 32 bit images, just paint normally - mapping the color table is not
                     // going to work when you can have full color.
                     base.OnRenderItemImage(e);
-                    return;
                 }
-
-                Graphics g = e.Graphics;
-
-                ToolStripItem item = e.Item;
-                Rectangle imageRect = e.ImageRectangle;
-                using (ImageAttributes attrs = new ImageAttributes())
+                else
                 {
-                    if (IsHighContrastWhiteOnBlack() && !(FillWhenSelected && (e.Item.Pressed || e.Item.Selected)))
-                    {
-                        // translate white, black and blue to colors visible in high contrast mode.
-                        ColorMap cm1 = new ColorMap();
-                        ColorMap cm2 = new ColorMap();
-                        ColorMap cm3 = new ColorMap();
-
-                        cm1.OldColor = Color.Black;
-                        cm1.NewColor = Color.White;
-                        cm2.OldColor = Color.White;
-                        cm2.NewColor = Color.Black;
-                        cm3.OldColor = Color.FromArgb(0, 0, 128);
-                        cm3.NewColor = Color.White;
-
-                        attrs.SetRemapTable(new ColorMap[] { cm1, cm2, cm3 }, ColorAdjustType.Bitmap);
-                    }
-
-                    if (item.ImageScaling == ToolStripItemImageScaling.None)
-                    {
-                        g.DrawImage(image, imageRect, 0, 0, imageRect.Width, imageRect.Height, GraphicsUnit.Pixel, attrs);
-                    }
-                    else
-                    {
-                        g.DrawImage(image, imageRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attrs);
-                    }
+                    RenderItemImageOfLowColorDepth(e);
                 }
             }
         }
@@ -501,6 +462,49 @@ namespace System.Windows.Forms
 
             graphics.DrawRectangle(focusPen1, bounds);
             graphics.DrawRectangle(focusPen2, bounds);
+        }
+
+        private void RenderItemImageOfLowColorDepth(ToolStripItemImageRenderEventArgs e)
+        {
+            Image? image = e.Image;
+
+            if (image is not null)
+            {
+                Graphics g = e.Graphics;
+
+                ToolStripItem item = e.Item;
+                Rectangle imageRect = e.ImageRectangle;
+                using (ImageAttributes attrs = new ImageAttributes())
+                {
+                    if (IsHighContrastWhiteOnBlack() && !(FillWhenSelected && (e.Item.Pressed || e.Item.Selected)))
+                    {
+                        // translate white, black and blue to colors visible in high contrast mode.
+                        ColorMap cm1 = new ColorMap();
+                        ColorMap cm2 = new ColorMap();
+                        ColorMap cm3 = new ColorMap();
+
+                        cm1.OldColor = Color.Black;
+                        cm1.NewColor = Color.White;
+
+                        cm2.OldColor = Color.White;
+                        cm2.NewColor = Color.Black;
+
+                        cm3.OldColor = Color.FromArgb(0, 0, 128);
+                        cm3.NewColor = Color.White;
+
+                        attrs.SetRemapTable(new ColorMap[3] { cm1, cm2, cm3 }, ColorAdjustType.Bitmap);
+                    }
+
+                    if (item.ImageScaling == ToolStripItemImageScaling.None)
+                    {
+                        g.DrawImage(image, imageRect, 0, 0, imageRect.Width, imageRect.Height, GraphicsUnit.Pixel, attrs);
+                    }
+                    else
+                    {
+                        g.DrawImage(image, imageRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attrs);
+                    }
+                }
+            }
         }
     }
 }
