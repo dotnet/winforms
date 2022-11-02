@@ -48,8 +48,10 @@ namespace System.Windows.Forms
         /// </summary>
         private bool _isScaledByDpiChangedEvent;
 
-        // Indicates scaling, due to DPI changed event, of the container control is in progress.
-        internal bool ContainersDpiScalingInProgress;
+        /// <summary>
+        ///  Indicates scaling, due to DPI changed event, of the container control is in progress.
+        /// </summary>
+        internal bool _dpiScalingInProgress;
 
         private BitVector32 _state;
 
@@ -1444,7 +1446,7 @@ namespace System.Windows.Forms
             SuspendAllLayout(this);
             try
             {
-                ContainersDpiScalingInProgress = true;
+                _dpiScalingInProgress = true;
 
                 if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
                 {
@@ -1498,7 +1500,7 @@ namespace System.Windows.Forms
                 _isScaledByDpiChangedEvent = false;
 
                 // Scaling and ResumeLayout, due to DPI changed event, should be finished by now for this container.
-                ContainersDpiScalingInProgress = false;
+                _dpiScalingInProgress = false;
             }
         }
 

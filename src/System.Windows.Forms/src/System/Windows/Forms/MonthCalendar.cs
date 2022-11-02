@@ -1756,7 +1756,7 @@ namespace System.Windows.Forms
 
             // Second argument to GetPreferredWidth and GetPreferredHeight is a boolean specifying if we should update the number of rows/columns.
             // We only want to update the number of rows/columns if we are not currently being scaled.
-            bool updateRowsAndColumns = !DpiHelper.IsScalingRequirementMet || !IsCurrentlyBeingScaled;
+            bool updateRowsAndColumns = !DpiHelper.IsScalingRequirementMet || !ScalingInProgress;
 
             if (width != oldBounds.Width)
             {

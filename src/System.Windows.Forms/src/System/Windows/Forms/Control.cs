@@ -1713,10 +1713,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  returns bool indicating whether the control is currently being scaled.
+        ///  Returns bool indicating whether the control is currently being scaled.
         ///  This property is set in ScaleControl method to allow method being called to condition code that should not run for scaling.
         /// </summary>
-        internal bool IsCurrentlyBeingScaled
+        internal bool ScalingInProgress
         {
             get => GetExtendedState(ExtendedStates.CurrentlyBeingScaled);
             private set => SetExtendedState(ExtendedStates.CurrentlyBeingScaled, value);
@@ -10450,7 +10450,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                IsCurrentlyBeingScaled = true;
+                ScalingInProgress = true;
 
                 BoundsSpecified includedSpecified = BoundsSpecified.None;
                 BoundsSpecified excludedSpecified = BoundsSpecified.None;
@@ -10489,7 +10489,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                IsCurrentlyBeingScaled = false;
+                ScalingInProgress = false;
             }
         }
 
