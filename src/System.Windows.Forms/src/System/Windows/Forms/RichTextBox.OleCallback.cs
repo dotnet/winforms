@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using static Interop;
 using static Interop.Richedit;
@@ -31,7 +32,7 @@ namespace System.Windows.Forms
                 DragDropHelper.ClearDropDescription(lastDataObject);
             }
 
-            public HRESULT GetNewStorage(out IStorage.Interface? storage)
+            public unsafe HRESULT GetNewStorage(out IStorage* storage)
             {
                 RichTextDbg.TraceVerbose("IRichEditOleCallback::GetNewStorage");
                 if (!owner.AllowOleObjects)
@@ -40,13 +41,19 @@ namespace System.Windows.Forms
                     return HRESULT.E_FAIL;
                 }
 
-                WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, true);
-                storage = Ole32.StgCreateDocfileOnILockBytes(
-                    pLockBytes,
-                    Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE);
-                Debug.Assert(storage is not null, "storage is NULL!");
+                using ComScope<ILockBytes> pLockBytes = new(null);
+                PInvoke.CreateILockBytesOnHGlobal(0, true, pLockBytes);
+                fixed (IStorage** pStorage = &storage)
+                {
+                    HRESULT result = PInvoke.StgCreateDocfileOnILockBytes(
+                        pLockBytes,
+                        STGM.STGM_SHARE_EXCLUSIVE | STGM.STGM_CREATE | STGM.STGM_READWRITE,
+                        0,
+                        pStorage);
+                    Debug.Assert(result.Succeeded, "storage is NULL!");
 
-                return HRESULT.S_OK;
+                    return result;
+                }
             }
 
             public HRESULT GetInPlaceContext(IntPtr lplpFrame,

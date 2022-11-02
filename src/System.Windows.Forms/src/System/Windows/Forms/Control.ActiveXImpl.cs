@@ -1408,10 +1408,10 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Save
             /// </summary>
-            internal void Save(IStorage.Interface stg, BOOL fSameAsLoad)
+            internal void Save(IStorage* stg, BOOL fSameAsLoad)
             {
                 using ComScope<IStream> stream = new(null);
-                stg.CreateStream(
+                stg->CreateStream(
                     GetStreamName(),
                     STGM.STGM_WRITE | STGM.STGM_SHARE_EXCLUSIVE | STGM.STGM_CREATE,
                     0,

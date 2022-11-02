@@ -16,7 +16,7 @@ internal partial class Interop
         public unsafe interface IRichEditOleCallback
         {
             [PreserveSig]
-            HRESULT GetNewStorage(out IStorage.Interface? ret);
+            HRESULT GetNewStorage(out IStorage* storage);
 
             [PreserveSig]
             HRESULT GetInPlaceContext(IntPtr lplpFrame, IntPtr lplpDoc, IntPtr lpFrameInfo);

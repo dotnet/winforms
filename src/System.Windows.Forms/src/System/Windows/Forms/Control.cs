@@ -14121,6 +14121,11 @@ namespace System.Windows.Forms
 
         HRESULT IPersistStorage.Interface.Load(IStorage* pStg)
         {
+            if (pStg is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Load");
             Debug.Indent();
             ActiveXInstance.Load(pStg);
@@ -14130,9 +14135,14 @@ namespace System.Windows.Forms
 
         HRESULT IPersistStorage.Interface.Save(IStorage* pStgSave, BOOL fSameAsLoad)
         {
+            if (pStgSave is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Save");
             Debug.Indent();
-            ActiveXInstance.Save((IStorage.Interface)Marshal.GetObjectForIUnknown((nint)pStgSave), fSameAsLoad);
+            ActiveXInstance.Save(pStgSave, fSameAsLoad);
             Debug.Unindent();
             return HRESULT.S_OK;
         }

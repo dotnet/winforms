@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Forms;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -24,19 +25,24 @@ namespace System.ComponentModel.Design
 
             internal OleCallback(RichTextBox owner) => _owner = owner;
 
-            public HRESULT GetNewStorage(out IStorage.Interface storage)
+            public unsafe HRESULT GetNewStorage(out IStorage* storage)
             {
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
+                using ComScope<ILockBytes> pLockBytes = new(null);
+                PInvoke.CreateILockBytesOnHGlobal(0, true, pLockBytes);
 
-                WinFormsComWrappers.LockBytesWrapper pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, true);
-
-                storage = Ole32.StgCreateDocfileOnILockBytes(
+                fixed (IStorage** pStorage = &storage)
+                {
+                    HRESULT result = PInvoke.StgCreateDocfileOnILockBytes(
                     pLockBytes,
-                    Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE);
+                    STGM.STGM_SHARE_EXCLUSIVE | STGM.STGM_CREATE | STGM.STGM_READWRITE,
+                    reserved: 0,
+                    pStorage);
 
-                Debug.Assert(storage is not null, "storage is NULL!");
+                    Debug.Assert(result.Succeeded, "storage is NULL!");
 
-                return HRESULT.S_OK;
+                    return result;
+                }
             }
 
             public HRESULT GetInPlaceContext(IntPtr lplpFrame, IntPtr lplpDoc, IntPtr lpFrameInfo)

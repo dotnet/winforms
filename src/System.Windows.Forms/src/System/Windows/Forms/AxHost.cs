@@ -2930,20 +2930,15 @@ namespace System.Windows.Forms
             _iPersistStreamInit.Load(pStream).ThrowOnFailure();
         }
 
-        private void DepersistFromIStorage(IStorage.Interface storage)
+        private void DepersistFromIStorage(IStorage* storage)
         {
             _storageType = STG_STORAGE;
 
-            // Looks like MapPoint control does not create a valid IStorage
-            // until some property has changed. Since we end up creating a bogus (empty)
-            // storage, we end up not being able to re-create a valid one and this would
-            // fail.
-            //
+            // MapPoint control does not create a valid IStorage until some property has changed.
+            // Since we end up creating an empty storage, we are not able to re-create a valid one and this would fail.
             if (storage is not null)
             {
-                using var pStorage = ComHelpers.GetComScope<IStorage>(storage, out bool result);
-                Debug.Assert(result);
-                _iPersistStorage.Load(pStorage).ThrowOnFailure();
+                _iPersistStorage.Load(storage).ThrowOnFailure();
             }
         }
 
@@ -2962,7 +2957,7 @@ namespace System.Windows.Forms
                     if (hr.Failed)
                     {
                         s_axHTraceSwitch.TraceVerbose(
-                            $"Exception thrown trying to IPersistStreamInit.InitNew(). Is this good? {hr}");
+                            $"Failure trying to IPersistStreamInit.InitNew(). Is this good? {hr}");
                     }
 
                     return;
@@ -2980,13 +2975,11 @@ namespace System.Windows.Forms
                     _storageType = STG_STORAGE;
                     _ocxState = new State(this);
                     _iPersistStorage = persistStorage;
-                    using var pStorage = ComHelpers.GetComScope<IStorage>(_ocxState.GetStorage(), out bool result);
-                    Debug.Assert(result);
-                    HRESULT hr = _iPersistStorage.InitNew(pStorage);
+                    HRESULT hr = _iPersistStorage.InitNew(_ocxState.GetStorage());
                     if (hr.Failed)
                     {
                         s_axHTraceSwitch.TraceVerbose(
-                            $"Exception thrown trying to IPersistStorage.InitNew(). Is this good? {hr}");
+                            $"Failure trying to IPersistStorage.InitNew(). Is this good? {hr}");
                     }
 
                     return;
@@ -3695,6 +3688,7 @@ namespace System.Windows.Forms
                 _newParent?.Dispose();
 
                 _oleSite?.Dispose();
+                _ocxState?.Dispose();
             }
 
             base.Dispose(disposing);
