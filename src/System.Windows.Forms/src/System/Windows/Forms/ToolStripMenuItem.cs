@@ -365,34 +365,26 @@ namespace System.Windows.Forms
             Bitmap? b = null;
 
             Icon icon = new Icon(typeof(ToolStripMenuItem), iconName);
-            if (icon is not null)
-            {
-                Icon desiredIcon = new Icon(icon, desiredIconSize);
-                if (desiredIcon is not null)
-                {
-                    try
-                    {
-                        b = desiredIcon.ToBitmap();
+            Icon desiredIcon = new Icon(icon, desiredIconSize);
 
-                        if (b is not null)
-                        {
-                            if (DpiHelper.IsScalingRequired && (b.Size.Width != desiredIconSize.Width || b.Size.Height != desiredIconSize.Height))
-                            {
-                                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredIconSize);
-                                if (scaledBitmap is not null)
-                                {
-                                    b.Dispose();
-                                    b = scaledBitmap;
-                                }
-                            }
-                        }
-                    }
-                    finally
+            try
+            {
+                b = desiredIcon.ToBitmap();
+
+                if (DpiHelper.IsScalingRequired && (b.Size.Width != desiredIconSize.Width || b.Size.Height != desiredIconSize.Height))
+                {
+                    Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredIconSize);
+                    if (scaledBitmap is not null)
                     {
-                        icon.Dispose();
-                        desiredIcon.Dispose();
+                        b.Dispose();
+                        b = scaledBitmap;
                     }
                 }
+            }
+            finally
+            {
+                icon.Dispose();
+                desiredIcon.Dispose();
             }
 
             return b;
