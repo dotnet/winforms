@@ -502,18 +502,18 @@ override System.Windows.Forms.ToolStripLabel.OnFontChanged(System.EventArgs! e) 
 override System.Windows.Forms.ToolStripLabel.OnMouseEnter(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripLabel.OnMouseLeave(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripLabel.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripMenuItem.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown
-~override System.Windows.Forms.ToolStripMenuItem.OnClick(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnDropDownHide(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnDropDownShow(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnMouseEnter(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnOwnerChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
+override System.Windows.Forms.ToolStripMenuItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripMenuItem.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown!
+override System.Windows.Forms.ToolStripMenuItem.OnClick(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnDropDownHide(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnDropDownShow(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnMouseEnter(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnOwnerChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.ToolStripOverflow.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripOverflow.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection!
 override System.Windows.Forms.ToolStripOverflow.Items.get -> System.Windows.Forms.ToolStripItemCollection!
@@ -1500,15 +1500,15 @@ System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text, System.Drawing.
 System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text, System.Drawing.Image? image, bool isLink, System.EventHandler? onClick) -> void
 System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text, System.Drawing.Image? image, bool isLink, System.EventHandler? onClick, string? name) -> void
 System.Windows.Forms.ToolStripLabel.ToolStripLabel(System.Drawing.Image? image) -> void
-~System.Windows.Forms.ToolStripMenuItem.ShortcutKeyDisplayString.get -> string
-~System.Windows.Forms.ToolStripMenuItem.ShortcutKeyDisplayString.set -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, params System.Windows.Forms.ToolStripItem[] dropDownItems) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, System.EventHandler onClick, System.Windows.Forms.Keys shortcutKeys) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(System.Drawing.Image image) -> void
+System.Windows.Forms.ToolStripMenuItem.ShortcutKeyDisplayString.get -> string?
+System.Windows.Forms.ToolStripMenuItem.ShortcutKeyDisplayString.set -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text, System.Drawing.Image? image) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text, System.Drawing.Image? image, params System.Windows.Forms.ToolStripItem![]? dropDownItems) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick, System.Windows.Forms.Keys shortcutKeys) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(System.Drawing.Image? image) -> void
 System.Windows.Forms.ToolStripOverflow.ToolStripOverflow(System.Windows.Forms.ToolStripItem! parentItem) -> void
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Add(System.Windows.Forms.ToolStripPanelRow value) -> int
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection value) -> void
@@ -2178,8 +2178,8 @@ virtual System.Windows.Forms.ToolStripItem.Image.set -> void
 ~virtual System.Windows.Forms.ToolStripItemCollection.RemoveByKey(string key) -> void
 ~virtual System.Windows.Forms.ToolStripItemCollection.this[int index].get -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStripItemCollection.this[string key].get -> System.Windows.Forms.ToolStripItem
-~virtual System.Windows.Forms.ToolStripMenuItem.OnCheckedChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripMenuItem.OnCheckStateChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripMenuItem.OnCheckedChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripMenuItem.OnCheckStateChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.this[int index].get -> System.Windows.Forms.ToolStripPanelRow
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlAdded(System.Windows.Forms.Control control, int index) -> void
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlRemoved(System.Windows.Forms.Control control, int index) -> void
@@ -11422,12 +11422,12 @@ System.Windows.Forms.ToolStripManagerRenderMode.System = 1 -> System.Windows.For
 System.Windows.Forms.ToolStripMenuItem
 System.Windows.Forms.ToolStripMenuItem.Checked.get -> bool
 System.Windows.Forms.ToolStripMenuItem.Checked.set -> void
-System.Windows.Forms.ToolStripMenuItem.CheckedChanged -> System.EventHandler
+System.Windows.Forms.ToolStripMenuItem.CheckedChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripMenuItem.CheckOnClick.get -> bool
 System.Windows.Forms.ToolStripMenuItem.CheckOnClick.set -> void
 System.Windows.Forms.ToolStripMenuItem.CheckState.get -> System.Windows.Forms.CheckState
 System.Windows.Forms.ToolStripMenuItem.CheckState.set -> void
-System.Windows.Forms.ToolStripMenuItem.CheckStateChanged -> System.EventHandler
+System.Windows.Forms.ToolStripMenuItem.CheckStateChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripMenuItem.IsMdiWindowListEntry.get -> bool
 System.Windows.Forms.ToolStripMenuItem.Overflow.get -> System.Windows.Forms.ToolStripItemOverflow
 System.Windows.Forms.ToolStripMenuItem.Overflow.set -> void

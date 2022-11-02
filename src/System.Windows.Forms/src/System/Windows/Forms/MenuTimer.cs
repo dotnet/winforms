@@ -75,16 +75,17 @@ namespace System.Windows.Forms
             }
         }
 
-        public void Transition(ToolStripMenuItem fromItem, ToolStripMenuItem toItem)
+        public void Transition(ToolStripMenuItem fromItem, ToolStripMenuItem? toItem)
         {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, $"[MenuTimer.Transition] transitioning items {fromItem.ToString()} {toItem.ToString()}");
+            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, $"[MenuTimer.Transition] transitioning items {fromItem.ToString()} {toItem?.ToString()}");
 
             if (toItem is null && InTransition)
             {
                 Cancel();
+
                 // in this case we're likely to have hit an item that's not a menu item
                 // or nothing is selected.
-                EndTransition(/*forceClose*/ true);
+                EndTransition(forceClose: true);
                 return;
             }
 
