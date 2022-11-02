@@ -212,7 +212,9 @@ namespace System.Windows.Forms
         ///  should not call base.CreateAccessibilityObject.
         /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance()
+#pragma warning disable WFDEV002 // Type or member is obsolete
             => new DomainUpDownAccessibleObject(this);
+#pragma warning restore WFDEV002 // Type or member is obsolete
 
         /// <summary>
         ///  Displays the next item in the object collection.
