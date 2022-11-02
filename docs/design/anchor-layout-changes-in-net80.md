@@ -5,7 +5,6 @@
 
 We have multiple [issues](https://github.com/dotnet/winforms/issues?q=is%3Aissue+is%3Aopen+anchor+label%3A%22area%3A+anchor%2Fscaling%22) reported in WinForms around the anchor layout being problematic on higher DPI scale monitors, irrespective of application DPI mode. This document outlines the changes being made in .NET 8.0 to address these issues, which is aligned with the larger goal to support all supported application DPI modes in WinForms.
 
-
 ## Problem in Scope
 
 The position of an anchored control with respect to its parent should be able to be determined at design time and should only need to be changed if there were explicit changes in the control's bounds or when the control is scaled in response to a DPI changed event. Bounds changes that happen as result of the parent control's bounds changing shouldn't alter a control's relative position in the parent's rectangle. However, currently the layout engine computes the anchored control's relative position every time there are changes to the control's bounds or the control's location-related properties.
@@ -31,10 +30,11 @@ this.Size = new System.Drawing.Size(828, 146);
 
 // The following line triggers layout to compute anchors with the button's current size and new size for the parent control.
 // The current DPI is still not applied.
-this.ResumeLayout(false)
+this.ResumeLayout(false);
 ```
 The above snippet does not represent the complete set of instances where anchor computations are unnecessary and may hold invalid anchor values. It gets even more complicated when nested UserControls are involved.
 
+In addition, the original anchor calculation implementation was designed prior to adding high DPI support to WinForms.
 
 ## Known issues
 
@@ -55,7 +55,17 @@ Related to the "Missing controls" issue above, if the parent control is scaled t
 ![OverlappedControls](../images/AnchorLayoutKnownIssue_OverlappedControl.png)
 
 
-## Anchor Calculations
+## Proposed solution
+
+ The proposal is that we calculate anchors for a control only if the following conditions are met:
+
+- The control's handle is created.
+- The control is parented.
+- The control's parent's handle is created.
+
+ The initial anchor calculations would now happen whenever `WM_CREATE` message is received, or when control is parented. The anchors will be recalculated whenever there are changes in geometry (`Size`, `Location`, etc.), or whenever explicit layout event is triggered.
+
+### Anchor calculations
 
 The following image illustrates anchors calculation with respect to a control's parent's display rectangle. The "orange" rectangle is the parent's display rectangle, and the "blue" rectangle is the anchored control's (button) bounds.
 - `Left` arrow indicates the X coordinate of the button location with respect to the parent's display rectangle.
@@ -65,7 +75,10 @@ The following image illustrates anchors calculation with respect to a control's 
 
     ![AnchorCalculations](../images/AnchorCalculations.png)
 
-In the above image the boundary marked in "orange" is a container hosting the control (boundary marked with "blue"). The control can define its anchor property to explicitly tell the layout engine how its bounds change relative to its parent's bounds. For example: 
+
+In the above image the boundary marked in "orange" is a container hosting the control (boundary marked with "blue"). The control can define its anchor property to explicitly tell the layout engine how its bounds change relative to its parent's bounds.
+
+For example:
 ```CS
 this.button14.Anchor = (System.Windows.Forms.AnchorStyles.Bottom
  | System.Windows.Forms.AnchorStyles.Left
@@ -74,82 +87,29 @@ this.button14.Anchor = (System.Windows.Forms.AnchorStyles.Bottom
 ```
 When the control's `Anchor` property is set, the anchors (that is, left, top, right, bottom values) are computed and stored in an internal struct `AnchorInfo`. The only time the anchor values can be negative is when the control is placed/position outside/overlapped with the hosting control's bounds.
 
-
-## Proposed solution
-
-There may be cases where developers could be force-creating handles out of order, but those cases are not expected to be mainstream, and such cases will have to be manually handled by the application developer. 
-
-The following are the events we will be using to compute anchors and replacing the current set of events mentioned in Scope section above.
-
-- `WmCreate`,
-- `OnParentChanged`,
-- `SetBounds`.
-
-
-### Source snippet
-
+The following code snippet demonstrates anchor calculations:
 
 ```CS
-private void WmCreate()
+private static void ComputeAnchorInfo(IArrangedElement element)
 {
-    ...
-    DefaultLayout.UpdateAnchorInfoV2(this);
-}
-
-internal static void UpdateAnchorInfoV2(IArrangedElement element)
-{
-    if (!LocalAppContextSwitches.EnableAnchorLayoutV2
-        || !CommonProperties.GetNeedsAnchorLayout(element))
+    AnchorInfo? anchorInfo = GetAnchorInfo(element);
+    if (anchorInfo is null)
     {
-        return;
+        anchorInfo = new();
+        SetAnchorInfo(element, anchorInfo);
     }
-
-    Control? control = element as Control;
-    Debug.Assert(control != null, "AnchorLayoutV2 and beyond are expected to be used only on Control type");
-
-    if (control is null || control.Parent is null)
-    {
-        return;
-    }
-
-    if (!control.IsHandleCreated || !control.Parent.IsHandleCreated)
-    {
-        return;
-    }
-
-    ComputeAnchorInfo(element);
+    Rectangle displayRect = element.Container.DisplayRectangle;
+    Rectangle elementBounds = element.Bounds;
+    int x = elementBounds.X;
+    int y = elementBounds.Y;
+    anchorInfo.Left = x;
+    anchorInfo.Top = y;
+    anchorInfo.Right = displayRect.Width - (x + elementBounds.Width);
+    anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
 }
 ```
 
-
-## Simplifying Anchor calculations
-
-The original anchor calculation implementation was designed prior to adding high DPI support to WinForms. This proposal is replacing the current implementation with the one described in Figure 1 above. Following is the source snippet that computes the anchors.
-
-```CS
- private static void ComputeAnchorInfo(IArrangedElement element)
-  {
-      AnchorInfo? anchorInfo = GetAnchorInfo(element);
-      if (anchorInfo is null)
-      {
-          anchorInfo = new();
-          SetAnchorInfo(element, anchorInfo);
-      }
-
-      Rectangle displayRect = element.Container.DisplayRectangle;
-      Rectangle elementBounds = element.Bounds;
-
-      int x = elementBounds.X;
-      int y = elementBounds.Y;
-
-      anchorInfo.Left = x;
-      anchorInfo.Top = y;
-
-      anchorInfo.Right = displayRect.Width - (x + elementBounds.Width);
-      anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
-  }
-```
-
+There may be cases where developers could be force-creating handles out of order, but those cases are not expected to be mainstream, and such cases will have to be manually handled by the application developer.
 
 ## Risk mitigation
 
