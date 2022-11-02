@@ -57,7 +57,7 @@ Related to the "Missing controls" issue above, if the parent control is scaled t
 
 ## Anchor Calculations
 
-The following image illustrates anchors calculation with respect to a control's parent's display rectangle. The "red" rectangle is the parent's display rectangle, and the "green" rectangle is the anchored control's (button) bounds.
+The following image illustrates anchors calculation with respect to a control's parent's display rectangle. The "orange" rectangle is the parent's display rectangle, and the "blue" rectangle is the anchored control's (button) bounds.
 - `Left` arrow indicates the X coordinate of the button location with respect to the parent's display rectangle.
 - `Top` arrow indicates the Y coordinate of the button location with respect to the parent's display rectangle.
 - `Right` arrow indicates the distance from right edge of the parent's rectangle where button is placed.
@@ -72,7 +72,7 @@ this.button14.Anchor = (System.Windows.Forms.AnchorStyles.Bottom
  | System.Windows.Forms.AnchorStyles.Top
  | System.Windows.Forms.AnchorStyles.Right );
 ```
-When the control's `Anchor` property is set, the anchors (that is, left, top, right, bottom values) are computed and stored in an internal struct `AnchorInfo`. The only time the anchor values can be negative is when the control is placed/position outside/overlapped with the hosting controls bounds.
+When the control's `Anchor` property is set, the anchors (that is, left, top, right, bottom values) are computed and stored in an internal struct `AnchorInfo`. The only time the anchor values can be negative is when the control is placed/position outside/overlapped with the hosting control's bounds.
 
 
 ## Proposed solution
@@ -92,62 +92,62 @@ The following are the events we will be using to compute anchors and replacing t
 ```CS
 private void WmCreate()
 {
-   ...
-   DefaultLayout.UpdateAnchorInfoV2(this);
+    ...
+    DefaultLayout.UpdateAnchorInfoV2(this);
 }
 
 internal static void UpdateAnchorInfoV2(IArrangedElement element)
 {
-   if (!LocalAppContextSwitches.EnableAnchorLayoutV2
-    || !CommonProperties.GetNeedsAnchorLayout(element))
-   {
-       return;
-   }
-
-   Control control = element as Control;
-   Debug.Assert(control != null, "AnchorLayoutV2 and beyond are expected to be used only on Control type");
-
-   if (control is null || control.Parent is null)
+    if (!LocalAppContextSwitches.EnableAnchorLayoutV2
+        || !CommonProperties.GetNeedsAnchorLayout(element))
     {
-      return;
+        return;
     }
 
-   if (!control.IsHandleCreated || !control.Parent.IsHandleCreated)
+    Control? control = element as Control;
+    Debug.Assert(control != null, "AnchorLayoutV2 and beyond are expected to be used only on Control type");
+
+    if (control is null || control.Parent is null)
     {
-      return;
+        return;
     }
 
-   ComputeAnchorInfo(IArrangedElement element)
+    if (!control.IsHandleCreated || !control.Parent.IsHandleCreated)
+    {
+        return;
+    }
+
+    ComputeAnchorInfo(element);
 }
 ```
 
 
 ## Simplifying Anchor calculations
 
-The current anchor calculation implementation was designed prior to adding high DPI support to WinForms. This proposal is replacing the current implementation with the one described in Figure 1 above. Following is the source snippet that computes the anchors.
+The original anchor calculation implementation was designed prior to adding high DPI support to WinForms. This proposal is replacing the current implementation with the one described in Figure 1 above. Following is the source snippet that computes the anchors.
 
 ```CS
-private static void ComputeAnchorInfo(IArrangedElement element)
- {
-    AnchorInfo? anchorInfo = GetAnchorInfo(element);
-   if (anchorInfo is null)
-    {
-      anchorInfo = new();
-      SetAnchorInfo(element, anchorInfo);
-    }
+ private static void ComputeAnchorInfo(IArrangedElement element)
+  {
+      AnchorInfo? anchorInfo = GetAnchorInfo(element);
+      if (anchorInfo is null)
+      {
+          anchorInfo = new();
+          SetAnchorInfo(element, anchorInfo);
+      }
 
-   Rectangle displayRect = element.Container.DisplayRectangle;
-   Rectangle elementBounds = element.Bounds;
+      Rectangle displayRect = element.Container.DisplayRectangle;
+      Rectangle elementBounds = element.Bounds;
 
-   int x = elementBounds.X;
-   int y = elementBounds.Y;
+      int x = elementBounds.X;
+      int y = elementBounds.Y;
 
-   anchorInfo.Left = x;
-   anchorInfo.Top = y;
+      anchorInfo.Left = x;
+      anchorInfo.Top = y;
 
-   anchorInfo.Right = displayRect.Width - (x + elementBounds.Width);
-   anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
- }
+      anchorInfo.Right = displayRect.Width - (x + elementBounds.Width);
+      anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
+  }
 ```
 
 
