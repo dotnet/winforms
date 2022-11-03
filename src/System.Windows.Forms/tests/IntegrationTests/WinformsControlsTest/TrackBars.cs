@@ -12,8 +12,6 @@ namespace WinformsControlsTest
 {
     public partial class TrackBars : Form
     {
-        private int V;
-
         public TrackBars()
         {
             InitializeComponent();
