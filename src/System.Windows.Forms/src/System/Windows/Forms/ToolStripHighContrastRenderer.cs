@@ -105,21 +105,20 @@ namespace System.Windows.Forms
 
         protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
-            Image? image = e.Image;
-            if (image is not null)
+            if (e.Image is not { } image)
             {
-                if (Image.GetPixelFormatSize(image.PixelFormat) > 16)
-                {
-                    // for 24, 32 bit images, just paint normally - mapping the color table is not
-                    // going to work when you can have full color.
-                    base.OnRenderItemCheck(e);
-                    return;
-                }
-                else
-                {
-                    RenderItemImageOfLowColorDepth(e);
-                }
+                return;
             }
+
+            if (Image.GetPixelFormatSize(image.PixelFormat) > 16)
+            {
+                // For 24, 32 bit images, just paint normally - mapping the color table is not
+                // going to work when you can have full color.
+                base.OnRenderItemCheck(e);
+                return;
+            }
+
+            RenderItemImageOfLowColorDepth(e);
         }
 
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
@@ -368,20 +367,20 @@ namespace System.Windows.Forms
 
         protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
-            Image? image = e.Image;
-            if (image is not null)
+            if (e.Image is not { } image)
             {
-                if (Image.GetPixelFormatSize(image.PixelFormat) > 16)
-                {
-                    // for 24, 32 bit images, just paint normally - mapping the color table is not
-                    // going to work when you can have full color.
-                    base.OnRenderItemImage(e);
-                }
-                else
-                {
-                    RenderItemImageOfLowColorDepth(e);
-                }
+                return;
             }
+
+            if (Image.GetPixelFormatSize(image.PixelFormat) > 16)
+            {
+                // For 24, 32 bit images, just paint normally - mapping the color table is not
+                // going to work when you can have full color.
+                base.OnRenderItemImage(e);
+                return;
+            }
+
+            RenderItemImageOfLowColorDepth(e);
         }
 
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
@@ -466,44 +465,44 @@ namespace System.Windows.Forms
 
         private void RenderItemImageOfLowColorDepth(ToolStripItemImageRenderEventArgs e)
         {
-            Image? image = e.Image;
-
-            if (image is not null)
+            if (e.Image is not { } image)
             {
-                Graphics g = e.Graphics;
+                return;
+            }
 
-                ToolStripItem item = e.Item;
-                Rectangle imageRect = e.ImageRectangle;
-                using (ImageAttributes attrs = new ImageAttributes())
-                {
-                    if (IsHighContrastWhiteOnBlack() && !(FillWhenSelected && (e.Item.Pressed || e.Item.Selected)))
-                    {
-                        // translate white, black and blue to colors visible in high contrast mode.
-                        ColorMap cm1 = new ColorMap();
-                        ColorMap cm2 = new ColorMap();
-                        ColorMap cm3 = new ColorMap();
+            ToolStripItem item = e.Item;
 
-                        cm1.OldColor = Color.Black;
-                        cm1.NewColor = Color.White;
+            using ImageAttributes attrs = new();
 
-                        cm2.OldColor = Color.White;
-                        cm2.NewColor = Color.Black;
+            if (IsHighContrastWhiteOnBlack() && !(FillWhenSelected && (e.Item.Pressed || e.Item.Selected)))
+            {
+                // Translate white, black and blue to colors visible in high contrast mode.
+                ColorMap cm1 = new();
+                ColorMap cm2 = new();
+                ColorMap cm3 = new();
 
-                        cm3.OldColor = Color.FromArgb(0, 0, 128);
-                        cm3.NewColor = Color.White;
+                cm1.OldColor = Color.Black;
+                cm1.NewColor = Color.White;
 
-                        attrs.SetRemapTable(new ColorMap[3] { cm1, cm2, cm3 }, ColorAdjustType.Bitmap);
-                    }
+                cm2.OldColor = Color.White;
+                cm2.NewColor = Color.Black;
 
-                    if (item.ImageScaling == ToolStripItemImageScaling.None)
-                    {
-                        g.DrawImage(image, imageRect, 0, 0, imageRect.Width, imageRect.Height, GraphicsUnit.Pixel, attrs);
-                    }
-                    else
-                    {
-                        g.DrawImage(image, imageRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attrs);
-                    }
-                }
+                cm3.OldColor = Color.FromArgb(0, 0, 128);
+                cm3.NewColor = Color.White;
+
+                attrs.SetRemapTable(new ColorMap[3] { cm1, cm2, cm3 }, ColorAdjustType.Bitmap);
+            }
+
+            Graphics g = e.Graphics;
+            Rectangle imageRect = e.ImageRectangle;
+
+            if (item.ImageScaling == ToolStripItemImageScaling.None)
+            {
+                g.DrawImage(image, imageRect, 0, 0, imageRect.Width, imageRect.Height, GraphicsUnit.Pixel, attrs);
+            }
+            else
+            {
+                g.DrawImage(image, imageRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attrs);
             }
         }
     }
