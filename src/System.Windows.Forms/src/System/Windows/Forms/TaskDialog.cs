@@ -777,7 +777,7 @@ namespace System.Windows.Forms
             // executable's name as title if the string is null or empty.
             if (TaskDialogPage.IsNativeStringNullOrEmpty(caption))
             {
-                caption = Path.GetFileName(PInvoke.GetModuleFileNameLongPath(default));
+                caption = Path.GetFileName(PInvoke.GetModuleFileNameLongPath(HINSTANCE.Null));
             }
 
             User32.SetWindowTextW(_handle, caption);

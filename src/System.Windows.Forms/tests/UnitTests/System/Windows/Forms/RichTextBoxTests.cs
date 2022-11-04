@@ -10584,7 +10584,7 @@ namespace System.Windows.Forms.Tests
             using var control = new RichTextBox();
             control.CreateControl();
 
-            Assert.Contains("RICHEDIT50W", GetClassName(control.HWND), StringComparison.InvariantCultureIgnoreCase);
+            Assert.Contains("RICHEDIT50W", GetClassName(control.HWND), StringComparison.Ordinal);
         }
 
         [WinFormsFact]
@@ -10593,13 +10593,13 @@ namespace System.Windows.Forms.Tests
             using (var riched32 = new RichEdit())
             {
                 riched32.CreateControl();
-                Assert.Contains(".RichEdit.", GetClassName(riched32.HWND), StringComparison.InvariantCultureIgnoreCase);
+                Assert.Contains(".RichEdit.", GetClassName(riched32.HWND), StringComparison.Ordinal);
             }
 
             using (var riched20 = new RichEdit20W())
             {
                 riched20.CreateControl();
-                Assert.Contains(".RichEdit20W.", GetClassName(riched20.HWND), StringComparison.InvariantCultureIgnoreCase);
+                Assert.Contains(".RichEdit20W.", GetClassName(riched20.HWND), StringComparison.Ordinal);
 
                 string rtfString = @"{\rtf1\ansi{" +
                     @"The next line\par " +
@@ -10615,8 +10615,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(riched20.Text, richTextBox.Text);
                 Assert.Equal(richTextBox.Text.Length, richTextBox.TextLength);
 
-                int startOfIs = riched20.Text.IndexOf("is");
-                int endOfHidden = riched20.Text.IndexOf("hidden") + "hidden".Length;
+                int startOfIs = riched20.Text.IndexOf("is", StringComparison.Ordinal);
+                int endOfHidden = riched20.Text.IndexOf("hidden", StringComparison.Ordinal) + "hidden".Length;
                 richTextBox.Select(startOfIs, endOfHidden - startOfIs);
                 Assert.Equal("is ###NOT### hidden", richTextBox.SelectedText);
             }
@@ -10793,13 +10793,14 @@ namespace System.Windows.Forms.Tests
 
         private static unsafe string GetClassName(HWND hWnd)
         {
-            Span<char> buf = stackalloc char[PInvoke.MAX_CLASS_NAME];
-            fixed (char* lpClassName = buf)
+            int length = 0;
+            Span<char> buffer = stackalloc char[PInvoke.MAX_CLASS_NAME];
+            fixed (char* lpClassName = buffer)
             {
-                _ = PInvoke.GetClassName(hWnd, lpClassName, buf.Length);
+                length = PInvoke.GetClassName(hWnd, lpClassName, buffer.Length);
             }
 
-            return buf.SliceAtFirstNull().ToString();
+            return new string(buffer.Slice(0, length));
         }
 
         /// <summary>

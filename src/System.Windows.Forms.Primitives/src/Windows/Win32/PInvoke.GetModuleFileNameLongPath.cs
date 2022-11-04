@@ -12,11 +12,10 @@ namespace Windows.Win32
     {
         public static unsafe string GetModuleFileNameLongPath(HINSTANCE hModule)
         {
-            const int INSUFFICIENT_BUFFER = 0x007A;
             char[] buffer;
-
-            // Try increased buffer sizes if on longpath-enabled Windows
-            for (int bufferSize = MAX_PATH; bufferSize <= MaxPath; bufferSize *= 2)
+            int bufferSize = 4096;
+            // Allocate increasingly larger portions of memory until successful or we hit short.maxvalue
+            for (int i = 1; bufferSize <= short.MaxValue; i++, bufferSize = 4096 * i)
             {
                 buffer = ArrayPool<char>.Shared.Rent(bufferSize);
                 try
@@ -24,11 +23,11 @@ namespace Windows.Win32
                     uint pathLength;
                     fixed (char* lpFilename = buffer)
                     {
-                        pathLength = GetModuleFileName(hModule, lpFilename, (uint)bufferSize);
+                        pathLength = GetModuleFileName(hModule, lpFilename, (uint)buffer.Length);
                     }
 
-                    bool isBufferTooSmall = Marshal.GetLastWin32Error() == INSUFFICIENT_BUFFER;
-                    if (pathLength != 0 && !isBufferTooSmall && bufferSize <= int.MaxValue)
+                    bool isBufferTooSmall = (WIN32_ERROR)Marshal.GetLastWin32Error() == WIN32_ERROR.ERROR_INSUFFICIENT_BUFFER;
+                    if (pathLength > 0 && (pathLength < buffer.Length || Marshal.GetLastWin32Error() != INSUFFICENT_BUFFER))
                     {
                         return new string(buffer, 0, (int)pathLength);
                     }

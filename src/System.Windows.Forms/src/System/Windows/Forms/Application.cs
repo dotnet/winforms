@@ -292,7 +292,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                s_executablePath ??= Path.GetFullPath(PInvoke.GetModuleFileNameLongPath(default));
+                s_executablePath ??= Path.GetFullPath(PInvoke.GetModuleFileNameLongPath(HINSTANCE.Null));
                 return s_executablePath;
             }
         }

@@ -2556,7 +2556,7 @@ namespace System.Windows.Forms
                         HWND parentHandle = PInvoke.GetParent(this);
                         HWND lastParentHandle = parentHandle;
                         SetState(States.HostedInDialog, false);
-                        Span<char> buffer = stackalloc char[256];
+                        Span<char> buffer = stackalloc char[PInvoke.MAX_CLASS_NAME];
                         while (!parentHandle.IsNull)
                         {
                             int length = 0;
@@ -2567,7 +2567,7 @@ namespace System.Windows.Forms
 
                             // class name #32770
                             ReadOnlySpan<char> className = "#32770";
-                            if (MemoryExtensions.Equals(className, buffer.SliceAtFirstNull(), StringComparison.Ordinal))
+                            if (className.Equals(buffer.Slice(0, length), StringComparison.Ordinal))
                             {
                                 SetState(States.HostedInDialog, true);
                                 break;
