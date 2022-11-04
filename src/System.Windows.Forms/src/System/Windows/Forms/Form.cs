@@ -231,7 +231,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Form::set_Active - " + Name);
+                s_focusTracing.TraceVerbose($"Form::set_Active - {Name}");
                 if ((_formState[FormStateIsActive] != 0) != value)
                 {
                     if (value)
@@ -2239,7 +2239,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void SetVisibleCore(bool value)
         {
-            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
+            s_focusTracing.TraceVerbose($"Form::SetVisibleCore({value}) - {Name}");
 
             // If DialogResult.OK and the value == Visible then this code has been called either through
             // ShowDialog( ) or explicit Hide( ) by the user. So don't go through this function again.
@@ -4528,7 +4528,7 @@ namespace System.Windows.Forms
         protected override bool ProcessDialogChar(char charCode)
         {
 #if DEBUG
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Form.ProcessDialogChar [" + charCode.ToString() + "]");
+            s_controlKeyboardRouting.TraceVerbose($"Form.ProcessDialogChar [{charCode}]");
 #endif
             // If we're the top-level form or control, we need to do the mnemonic handling
             //
@@ -5788,7 +5788,7 @@ namespace System.Windows.Forms
                 {
                     if (ActiveMdiChildInternal.ControlBox)
                     {
-                        Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug!.TraceVerbose, "UpdateMdiControlStrip: Detected ControlBox on ActiveMDI child, adding in MDIControlStrip.");
+                        ToolStrip.s_mdiMergeDebug.TraceVerbose("UpdateMdiControlStrip: Detected ControlBox on ActiveMDI child, adding in MDIControlStrip.");
 
                         // determine if we need to add control gadgets into the MenuStrip
                         // double check GetMenu incase someone is using interop
@@ -5799,10 +5799,10 @@ namespace System.Windows.Forms
                             if (sourceMenuStrip is not null)
                             {
                                 MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
-                                Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug.TraceVerbose, "UpdateMdiControlStrip: built up an MDI control strip for " + ActiveMdiChildInternal.Text + " with " + MdiControlStrip.Items.Count.ToString(CultureInfo.InvariantCulture) + " items.");
-                                Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug.TraceVerbose, "UpdateMdiControlStrip: merging MDI control strip into source menustrip - items before: " + sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture));
+                                ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: built up an MDI control strip for {ActiveMdiChildInternal.Text} with {MdiControlStrip.Items.Count.ToString(CultureInfo.InvariantCulture)} items.");
+                                ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: merging MDI control strip into source menustrip - items before: {sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture)}");
                                 ToolStripManager.Merge(MdiControlStrip, sourceMenuStrip);
-                                Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug.TraceVerbose, "UpdateMdiControlStrip: merging MDI control strip into source menustrip - items after: " + sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture));
+                                ToolStrip.s_mdiMergeDebug.TraceVerbose($"UpdateMdiControlStrip: merging MDI control strip into source menustrip - items after: {sourceMenuStrip.Items.Count.ToString(CultureInfo.InvariantCulture)}");
                                 MdiControlStrip.MergedMenu = sourceMenuStrip;
                             }
                         }

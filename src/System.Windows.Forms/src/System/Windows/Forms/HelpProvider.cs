@@ -6,7 +6,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing.Design;
 
 namespace System.Windows.Forms
@@ -129,7 +128,7 @@ namespace System.Windows.Forms
 
             if (Control.MouseButtons != MouseButtons.None && !string.IsNullOrEmpty(helpString))
             {
-                Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "HelpProvider:: Mouse down w/ helpstring");
+                Help.WindowsFormsHelpTrace.TraceVerbose("HelpProvider:: Mouse down w/ helpstring");
                 Help.ShowPopup(ctl, helpString, hevent.MousePos);
                 hevent.Handled = true;
                 return;
@@ -138,7 +137,7 @@ namespace System.Windows.Forms
             // If we have a help file, and help keyword we try F1 help next
             if (HelpNamespace is not null)
             {
-                Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "HelpProvider:: F1 help");
+                Help.WindowsFormsHelpTrace.TraceVerbose("HelpProvider:: F1 help");
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     Help.ShowHelp(ctl, HelpNamespace, navigator, keyword);
@@ -155,7 +154,7 @@ namespace System.Windows.Forms
             // So at this point we don't have a help keyword, so try to display the whats this help
             if (!string.IsNullOrEmpty(helpString))
             {
-                Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "HelpProvider:: back to helpstring");
+                Help.WindowsFormsHelpTrace.TraceVerbose("HelpProvider:: back to helpstring");
                 Help.ShowPopup(ctl, helpString, hevent.MousePos);
                 hevent.Handled = true;
             }

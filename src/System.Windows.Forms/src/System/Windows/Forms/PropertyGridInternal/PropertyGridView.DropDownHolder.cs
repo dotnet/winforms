@@ -247,7 +247,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public void FocusComponent()
             {
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:FocusComponent()");
+                CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:FocusComponent()");
                 if (_currentControl is not null && Visible)
                 {
                     _currentControl.Focus();
@@ -580,8 +580,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 _currentControl = control;
-                Debug.WriteLineIf(
-                    CompModSwitches.DebugGridView.TraceVerbose,
+                CompModSwitches.DebugGridView.TraceVerbose(
                     $"DropDownHolder:SetComponent({control.GetType().Name})");
 
                 DockPadding.All = 0;
@@ -672,7 +671,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (m.MsgInternal == User32.WM.ACTIVATE)
                 {
                     SetState(States.Modal, true);
-                    Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
+                    CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:WM_ACTIVATE()");
                     HWND activatedWindow = (HWND)m.LParamInternal;
                     if (Visible && (User32.WA)m.WParamInternal.LOWORD == User32.WA.INACTIVE && !OwnsWindow(activatedWindow))
                     {

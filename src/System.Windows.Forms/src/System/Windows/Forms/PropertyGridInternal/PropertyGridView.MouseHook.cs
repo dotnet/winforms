@@ -101,7 +101,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         (HINSTANCE)0,
                         PInvoke.GetCurrentThreadId());
                     Debug.Assert(!_mouseHookHandle.IsNull, "Failed to install mouse hook");
-                    Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:HookMouse()");
+                    CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:HookMouse()");
                 }
             }
 
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         PInvoke.UnhookWindowsHookEx(_mouseHookHandle);
                         _mouseHookHandle = default;
-                        Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:UnhookMouse()");
+                        CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:UnhookMouse()");
                     }
                 }
             }

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Globalization;
 
 namespace System.Windows.Forms
@@ -129,7 +128,7 @@ namespace System.Windows.Forms
 
                                 accel++;
                                 formsAddedToMenu++;
-                                Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug!.TraceVerbose, $"\tPopulateItems: Added {windowListItem.Text}");
+                                ToolStrip.s_mdiMergeDebug.TraceVerbose($"\tPopulateItems: Added {windowListItem.Text}");
                                 mergeItem.DropDownItems.Add(windowListItem);
                             }
                         }
@@ -142,7 +141,7 @@ namespace System.Windows.Forms
                         {
                             Text = SR.MDIMenuMoreWindows
                         };
-                        Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug!.TraceVerbose, $"\tPopulateItems: Added {moreWindowsMenuItem.Text}");
+                        ToolStrip.s_mdiMergeDebug.TraceVerbose($"\tPopulateItems: Added {moreWindowsMenuItem.Text}");
                         moreWindowsMenuItem.Click += new EventHandler(OnMoreWindowsMenuItemClick);
                         moreWindowsMenuItem.MergeAction = MergeAction.Append;
                         mergeItem.DropDownItems.Add(moreWindowsMenuItem);

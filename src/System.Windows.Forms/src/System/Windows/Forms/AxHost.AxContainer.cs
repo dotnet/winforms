@@ -39,7 +39,7 @@ namespace System.Windows.Forms
 
             internal AxContainer(ContainerControl parent)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in constructor.  Parent created : {parent.Created}");
+                s_axHTraceSwitch.TraceVerbose($"in constructor.  Parent created : {parent.Created}");
                 _parent = parent;
                 if (parent.Created)
                 {
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
                 {
                     if (ctl != _parent && !GetControlBelongs(ctl))
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "!parent || !belongs NYI");
+                        s_axHTraceSwitch.TraceVerbose("!parent || !belongs NYI");
                         AxContainer c = FindContainerForControl(ctl);
                         if (c is not null)
                         {
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "unable to find proxy, returning null");
+                            s_axHTraceSwitch.TraceVerbose("unable to find proxy, returning null");
                             return null;
                         }
                     }
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
                     _proxyCache.Add(ctl, rval);
                 }
 
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"found proxy {rval}");
+                s_axHTraceSwitch.TraceVerbose($"found proxy {rval}");
                 return rval;
             }
 
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
                         ISite site = ctl.Site;
                         if (site is not null && _associatedContainer != site.Container)
                         {
-                            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "mismatch between assoc container & added control");
+                            s_axHTraceSwitch.TraceVerbose("mismatch between assoc container & added control");
                         }
 #endif
                     }
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Assert(_parent.Site is null, "Parent is sited but we could not find IContainer!!!");
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Did not find a container in FillComponentsTable!!!");
+                s_axHTraceSwitch.TraceVerbose("Did not find a container in FillComponentsTable!!!");
 
                 bool checkHashTable = true;
                 Control[] ctls = new Control[_containerCache.Values.Count];
@@ -613,7 +613,7 @@ namespace System.Windows.Forms
 
                 site.AddSelectionHandler();
                 Debug.Assert(_siteUIActive is null, "Object did not call OnUIDeactivate");
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"active Object is now {site}");
+                s_axHTraceSwitch.TraceVerbose($"active Object is now {site}");
                 _siteUIActive = site;
                 ContainerControl f = site.ContainingControl;
                 if (f is not null)
@@ -654,7 +654,7 @@ namespace System.Windows.Forms
 
             internal void ControlCreated(AxHost invoker)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in controlCreated for {invoker} fAC: {_formAlreadyCreated}");
+                s_axHTraceSwitch.TraceVerbose($"in controlCreated for {invoker} fAC: {_formAlreadyCreated}");
                 if (_formAlreadyCreated)
                 {
                     if (invoker.IsUserMode() && invoker.AwaitingDefreezing())
@@ -697,7 +697,7 @@ namespace System.Windows.Forms
             // IOleContainer methods:
             unsafe HRESULT Ole.IOleContainer.Interface.ParseDisplayName(Com.IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, Com.IMoniker** ppmkOut)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in ParseDisplayName");
+                s_axHTraceSwitch.TraceVerbose("in ParseDisplayName");
                 if (ppmkOut is not null)
                 {
                     *ppmkOut = null;
@@ -713,7 +713,7 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnumObjects");
+                s_axHTraceSwitch.TraceVerbose("in EnumObjects");
                 bool result = true;
                 if ((grfFlags & Ole.OLECONTF.OLECONTF_EMBEDDINGS) != 0)
                 {
@@ -737,7 +737,7 @@ namespace System.Windows.Forms
 
             HRESULT Ole.IOleContainer.Interface.LockContainer(BOOL fLock)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in LockContainer");
+                s_axHTraceSwitch.TraceVerbose("in LockContainer");
                 return HRESULT.E_NOTIMPL;
             }
 
@@ -749,32 +749,32 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetWindow");
+                s_axHTraceSwitch.TraceVerbose("in GetWindow");
                 *phwnd = _parent.Handle;
                 return HRESULT.S_OK;
             }
 
             HRESULT IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in ContextSensitiveHelp");
+                s_axHTraceSwitch.TraceVerbose("in ContextSensitiveHelp");
                 return HRESULT.S_OK;
             }
 
             unsafe HRESULT IOleInPlaceFrame.GetBorder(RECT* lprectBorder)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetBorder");
+                s_axHTraceSwitch.TraceVerbose("in GetBorder");
                 return HRESULT.E_NOTIMPL;
             }
 
             unsafe HRESULT IOleInPlaceFrame.RequestBorderSpace(RECT* pborderwidths)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in RequestBorderSpace");
+                s_axHTraceSwitch.TraceVerbose("in RequestBorderSpace");
                 return HRESULT.E_NOTIMPL;
             }
 
             unsafe HRESULT IOleInPlaceFrame.SetBorderSpace(RECT* pborderwidths)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in SetBorderSpace");
+                s_axHTraceSwitch.TraceVerbose("in SetBorderSpace");
                 return HRESULT.E_NOTIMPL;
             }
 
@@ -791,7 +791,7 @@ namespace System.Windows.Forms
 
             unsafe HRESULT IOleInPlaceFrame.SetActiveObject(Ole.IOleInPlaceActiveObject.Interface pActiveObject, string pszObjName)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in SetActiveObject {pszObjName ?? "<null>"}");
+                s_axHTraceSwitch.TraceVerbose($"in SetActiveObject {pszObjName ?? "<null>"}");
                 if (_siteUIActive is not null)
                 {
                     if (_siteUIActive._iOleInPlaceActiveObjectExternal != pActiveObject)
@@ -838,12 +838,12 @@ namespace System.Windows.Forms
 
                     if (ctl is null)
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "control w/o a valid site called setactiveobject");
+                        s_axHTraceSwitch.TraceVerbose("control w/o a valid site called setactiveobject");
                         _controlInEditMode = null;
                     }
                     else
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"resolved to {ctl}");
+                        s_axHTraceSwitch.TraceVerbose($"resolved to {ctl}");
                         if (!ctl.IsUserMode())
                         {
                             _controlInEditMode = ctl;
@@ -859,37 +859,37 @@ namespace System.Windows.Forms
 
             unsafe HRESULT IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in InsertMenus");
+                s_axHTraceSwitch.TraceVerbose("in InsertMenus");
                 return HRESULT.S_OK;
             }
 
             HRESULT IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in SetMenu");
+                s_axHTraceSwitch.TraceVerbose("in SetMenu");
                 return HRESULT.E_NOTIMPL;
             }
 
             HRESULT IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in RemoveMenus");
+                s_axHTraceSwitch.TraceVerbose("in RemoveMenus");
                 return HRESULT.E_NOTIMPL;
             }
 
             HRESULT IOleInPlaceFrame.SetStatusText(string pszStatusText)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in SetStatusText");
+                s_axHTraceSwitch.TraceVerbose("in SetStatusText");
                 return HRESULT.E_NOTIMPL;
             }
 
             HRESULT IOleInPlaceFrame.EnableModeless(BOOL fEnable)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnableModeless");
+                s_axHTraceSwitch.TraceVerbose("in EnableModeless");
                 return HRESULT.E_NOTIMPL;
             }
 
             unsafe HRESULT IOleInPlaceFrame.TranslateAccelerator(MSG* lpmsg, ushort wID)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in IOleInPlaceFrame.TranslateAccelerator");
+                s_axHTraceSwitch.TraceVerbose("in IOleInPlaceFrame.TranslateAccelerator");
                 return HRESULT.S_FALSE;
             }
 
@@ -917,14 +917,14 @@ namespace System.Windows.Forms
 
                 HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out Com.IEnumUnknown.Interface ppenum)
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnumControls for proxy");
+                    s_axHTraceSwitch.TraceVerbose("in EnumControls for proxy");
                     ppenum = GetC().EnumControls(GetP(), dwOleContF, dwWhich);
                     return HRESULT.S_OK;
                 }
 
                 unsafe HRESULT IGetOleObject.GetOleObject(Guid* riid, out object ppvObj)
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetOleObject for proxy");
+                    s_axHTraceSwitch.TraceVerbose("in GetOleObject for proxy");
                     ppvObj = null;
                     if (riid is null || !riid->Equals(s_ioleobject_Guid))
                     {
@@ -942,7 +942,7 @@ namespace System.Windows.Forms
 
                 unsafe HRESULT IGetVBAObject.GetObject(Guid* riid, IVBFormat[] rval, uint dwReserved)
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetObject for proxy");
+                    s_axHTraceSwitch.TraceVerbose("in GetObject for proxy");
                     if (rval is null || riid is null)
                     {
                         return HRESULT.E_INVALIDARG;
@@ -962,7 +962,7 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getAlign for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getAlign for proxy for {GetP()}");
                         int rval = (int)(GetP()).Dock;
                         if (rval < NativeMethods.ActiveX.ALIGN_MIN || rval > NativeMethods.ActiveX.ALIGN_MAX)
                         {
@@ -973,7 +973,7 @@ namespace System.Windows.Forms
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setAlign for proxy for {GetP()} {value}");
+                        s_axHTraceSwitch.TraceVerbose($"in setAlign for proxy for {GetP()} {value}");
                         GetP().Dock = (DockStyle)value;
                     }
                 }
@@ -982,12 +982,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getBackColor for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getBackColor for proxy for {GetP()}");
                         return GetOleColorFromColor(GetP().BackColor);
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setBackColor for proxy for {GetP()} {value}");
+                        s_axHTraceSwitch.TraceVerbose($"in setBackColor for proxy for {GetP()} {value}");
                         GetP().BackColor = GetColorFromOleColor(value);
                     }
                 }
@@ -996,12 +996,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getEnabled for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getEnabled for proxy for {GetP()}");
                         return GetP().Enabled;
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setEnabled for proxy for {GetP()} {value}");
+                        s_axHTraceSwitch.TraceVerbose($"in setEnabled for proxy for {GetP()} {value}");
                         GetP().Enabled = value;
                     }
                 }
@@ -1010,12 +1010,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getForeColor for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getForeColor for proxy for {GetP()}");
                         return GetOleColorFromColor(GetP().ForeColor);
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setForeColor for proxy for {GetP()} {value}");
+                        s_axHTraceSwitch.TraceVerbose($"in setForeColor for proxy for {GetP()} {value}");
                         GetP().ForeColor = GetColorFromOleColor(value);
                     }
                 }
@@ -1024,12 +1024,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getHeight for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getHeight for proxy for {GetP()}");
                         return Pixel2Twip(GetP().Height, xDirection: false);
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setHeight for proxy for {GetP()} {Twip2Pixel(value, false)}");
+                        s_axHTraceSwitch.TraceVerbose($"in setHeight for proxy for {GetP()} {Twip2Pixel(value, false)}");
                         GetP().Height = Twip2Pixel(value, xDirection: false);
                     }
                 }
@@ -1038,12 +1038,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getLeft for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getLeft for proxy for {GetP()}");
                         return Pixel2Twip(GetP().Left, xDirection: true);
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setLeft for proxy for {GetP()} {Twip2Pixel(value, true)}");
+                        s_axHTraceSwitch.TraceVerbose($"in setLeft for proxy for {GetP()} {Twip2Pixel(value, true)}");
                         GetP().Left = Twip2Pixel(value, xDirection: true);
                     }
                 }
@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getParent for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getParent for proxy for {GetP()}");
                         return GetC().GetProxyForControl(GetC()._parent);
                     }
                 }
@@ -1061,12 +1061,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getTabIndex for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getTabIndex for proxy for {GetP()}");
                         return (short)GetP().TabIndex;
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setTabIndex for proxy for {GetP()} {value}");
+                        s_axHTraceSwitch.TraceVerbose($"in setTabIndex for proxy for {GetP()} {value}");
                         GetP().TabIndex = value;
                     }
                 }
@@ -1075,12 +1075,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getTabStop for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getTabStop for proxy for {GetP()}");
                         return GetP().TabStop;
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setTabStop for proxy for {GetP()} {value}");
+                        s_axHTraceSwitch.TraceVerbose($"in setTabStop for proxy for {GetP()} {value}");
                         GetP().TabStop = value;
                     }
                 }
@@ -1089,12 +1089,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getTop for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getTop for proxy for {GetP()}");
                         return Pixel2Twip(GetP().Top, xDirection: false);
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setTop for proxy for {GetP()} {Twip2Pixel(value, false)}");
+                        s_axHTraceSwitch.TraceVerbose($"in setTop for proxy for {GetP()} {Twip2Pixel(value, false)}");
                         GetP().Top = Twip2Pixel(value, xDirection: false);
                     }
                 }
@@ -1103,12 +1103,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getVisible for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getVisible for proxy for {GetP()}");
                         return GetP().Visible;
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setVisible for proxy for {GetP()} {value}");
+                        s_axHTraceSwitch.TraceVerbose($"in setVisible for proxy for {GetP()} {value}");
                         GetP().Visible = value;
                     }
                 }
@@ -1117,12 +1117,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getWidth for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getWidth for proxy for {GetP()}");
                         return Pixel2Twip(GetP().Width, xDirection: true);
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setWidth for proxy for {GetP()} {Twip2Pixel(value, true)}");
+                        s_axHTraceSwitch.TraceVerbose($"in setWidth for proxy for {GetP()} {Twip2Pixel(value, true)}");
                         GetP().Width = Twip2Pixel(value, xDirection: true);
                     }
                 }
@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getName for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getName for proxy for {GetP()}");
                         return GetNameForControl(GetP());
                     }
                 }
@@ -1140,7 +1140,7 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getHwnd for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getHwnd for proxy for {GetP()}");
                         return GetP().Handle;
                     }
                 }
@@ -1151,12 +1151,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in getText for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in getText for proxy for {GetP()}");
                         return GetP().Text;
                     }
                     set
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in setText for proxy for {GetP()}");
+                        s_axHTraceSwitch.TraceVerbose($"in setText for proxy for {GetP()}");
                         GetP().Text = value;
                     }
                 }
@@ -1302,7 +1302,7 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "In UnderlyingSystemType");
+                        s_axHTraceSwitch.TraceVerbose("In UnderlyingSystemType");
                         return null;
                     }
                 }

@@ -201,7 +201,7 @@ namespace System.Windows.Forms
 
                 if (intWndProcFlags == 0)
                 {
-                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Init wndProcFlags");
+                    WndProcChoice.TraceVerbose("Init wndProcFlags");
                     Debug.Indent();
 
                     if (t_userSetProcFlags != 0)
@@ -216,7 +216,7 @@ namespace System.Windows.Forms
                     {
                         if (Debugger.IsAttached)
                         {
-                            Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger is attached, using debuggable WndProc");
+                            WndProcChoice.TraceVerbose("Debugger is attached, using debuggable WndProc");
                             intWndProcFlags |= UseDebuggableWndProc;
                         }
                         else
@@ -226,19 +226,19 @@ namespace System.Windows.Forms
                             // via Application.SetUnhandledExceptionModeInternal(..).
                             // Disabling this feature from .NET core 3.0 release. Would need to redesign if there are customer requests on this.
 
-                            Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Debugger check from registry is not supported in this release of .Net version");
+                            WndProcChoice.TraceVerbose("Debugger check from registry is not supported in this release of .Net version");
                         }
                     }
 
 #if DEBUG
                     if (AlwaysUseNormalWndProc.Enabled)
                     {
-                        Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Stripping debuggablewndproc due to AlwaysUseNormalWndProc switch");
+                        WndProcChoice.TraceVerbose("Stripping debuggablewndproc due to AlwaysUseNormalWndProc switch");
                         intWndProcFlags &= ~UseDebuggableWndProc;
                     }
 #endif
                     intWndProcFlags |= InitializedFlags;
-                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, "Final 0x" + intWndProcFlags.ToString("X", CultureInfo.InvariantCulture));
+                    WndProcChoice.TraceVerbose($"Final 0x{intWndProcFlags.ToString("X", CultureInfo.InvariantCulture)}");
                     t_wndProcFlags = (byte)intWndProcFlags;
                     Debug.Unindent();
                 }
@@ -324,8 +324,7 @@ namespace System.Windows.Forms
                 _priorWindowProcHandle = (void*)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
                 Debug.Assert(_priorWindowProcHandle is not null);
 
-                Debug.WriteLineIf(
-                    WndProcChoice.TraceVerbose,
+                WndProcChoice.TraceVerbose(
                     WndProcShouldBeDebuggable ? "Using debuggable wndproc" : "Using normal wndproc");
 
                 _windowProc = new WNDPROC(Callback);

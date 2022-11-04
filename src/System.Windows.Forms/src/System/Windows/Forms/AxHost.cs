@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms
 
                 s_logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
                 s_logPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"log pixels are: {s_logPixelsX} {s_logPixelsY}");
+                s_axHTraceSwitch.TraceVerbose($"log pixels are: {s_logPixelsX} {s_logPixelsY}");
             }
 
             return HRESULT.S_OK;
@@ -1207,7 +1207,7 @@ namespace System.Windows.Forms
 
         private unsafe Size SetExtent(int width, int height)
         {
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"setting extent to {width} {height}");
+            s_axHTraceSwitch.TraceVerbose($"setting extent to {width} {height}");
             Size size = new(width, height);
             bool resetExtents = !IsUserMode();
             Pixel2hiMetric(ref size);
@@ -1350,7 +1350,7 @@ namespace System.Windows.Forms
             }
 
             // We were resubclassed, we need to resublass ourselves.
-            Debug.WriteLineIf(s_axHostSwitch.TraceVerbose, "The control subclassed itself w/o calling the old wndproc.");
+            s_axHostSwitch.TraceVerbose("The control subclassed itself w/o calling the old wndproc.");
             Debug.Assert(!OwnWindow(), "Why are we here if we own our window?");
             WindowReleaseHandle();
             PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, currentWndproc);
@@ -1383,7 +1383,7 @@ namespace System.Windows.Forms
         {
             if (_axState[s_inTransition])
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Recursively entering TransitionDownTo...");
+                s_axHTraceSwitch.TraceVerbose("Recursively entering TransitionDownTo...");
                 return;
             }
 
@@ -1447,7 +1447,7 @@ namespace System.Windows.Forms
         {
             if (_axState[s_inTransition])
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Recursively entering TransitionUpTo...");
+                s_axHTraceSwitch.TraceVerbose("Recursively entering TransitionUpTo...");
                 return;
             }
 
@@ -1457,7 +1457,7 @@ namespace System.Windows.Forms
 
                 while (state > GetOcState())
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Transitioning up from: {GetOcState()} to: {state}");
+                    s_axHTraceSwitch.TraceVerbose($"Transitioning up from: {GetOcState()} to: {state}");
                     switch (GetOcState())
                     {
                         case OC_PASSIVE:
@@ -1581,7 +1581,7 @@ namespace System.Windows.Forms
 
         private void UiActivate()
         {
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"calling uiActivate for {ToString()}");
+            s_axHTraceSwitch.TraceVerbose($"calling uiActivate for {ToString()}");
             Debug.Assert(CanUIActivate, "we have to be able to uiactivate");
             if (CanUIActivate)
             {
@@ -1608,7 +1608,7 @@ namespace System.Windows.Forms
             // if the ctl didn't call showobject, we need to do it for it...
             if (!IsHandleCreated)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Naughty control didn't call showObject...");
+                s_axHTraceSwitch.TraceVerbose("Naughty control didn't call showObject...");
                 try
                 {
                     ((IOleClientSite.Interface)_oleSite).ShowObject();
@@ -1663,7 +1663,7 @@ namespace System.Windows.Forms
                                 }
                                 catch
                                 {
-                                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Could not make ctl visible by using INPLACE. Will try SHOW");
+                                    s_axHTraceSwitch.TraceVerbose("Could not make ctl visible by using INPLACE. Will try SHOW");
                                     MakeVisibleWithShow();
                                 }
                             }
@@ -1729,7 +1729,7 @@ namespace System.Windows.Forms
             DoVerb((int)Ole32.OLEIVERB.HIDE);
             if (GetOcState() < OC_INPLACE)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Naughty control inplace deactivated on a hide verb...");
+                s_axHTraceSwitch.TraceVerbose("Naughty control inplace deactivated on a hide verb...");
                 Debug.Assert(!IsHandleCreated, "if we are inplace deactivated we should not have a window.");
                 // all we do here is set a flag saying that we need the window to be created if
                 // create handle is ever called...
@@ -1792,7 +1792,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override unsafe bool PreProcessMessage(ref Message msg)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"AxHost.PreProcessMessage {msg}");
+            s_controlKeyboardRouting.TraceVerbose($"AxHost.PreProcessMessage {msg}");
 
             if (IsUserMode())
             {
@@ -1822,8 +1822,7 @@ namespace System.Windows.Forms
 
                         if (hr == HRESULT.S_OK)
                         {
-                            Debug.WriteLineIf(
-                                s_controlKeyboardRouting.TraceVerbose,
+                            s_controlKeyboardRouting.TraceVerbose(
                                 $"\t Message translated by control to {msg}");
                             return true;
                         }
@@ -1845,15 +1844,13 @@ namespace System.Windows.Forms
                         }
                         else if (_axState[s_siteProcessedInputKey])
                         {
-                            Debug.WriteLineIf(
-                                s_controlKeyboardRouting.TraceVerbose,
+                            s_controlKeyboardRouting.TraceVerbose(
                                 $"\t Message processed by site. Calling base.PreProcessMessage() {msg}");
                             return base.PreProcessMessage(ref msg);
                         }
                         else
                         {
-                            Debug.WriteLineIf(
-                                s_controlKeyboardRouting.TraceVerbose,
+                            s_controlKeyboardRouting.TraceVerbose(
                                 $"\t Message not processed by site. Returning false. {msg}");
                             return false;
                         }
@@ -1874,7 +1871,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal override unsafe bool ProcessMnemonic(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"In AxHost.ProcessMnemonic: {(int)charCode}");
+            s_controlKeyboardRouting.TraceVerbose($"In AxHost.ProcessMnemonic: {(int)charCode}");
             if (!CanSelect)
             {
                 return false;
@@ -1910,7 +1907,7 @@ namespace System.Windows.Forms
                 if (PInvoke.IsAccelerator(new HandleRef<HACCEL>(this, ctlInfo.hAccel), ctlInfo.cAccel, &msg, lpwCmd: null))
                 {
                     GetOleControl().OnMnemonic(&msg);
-                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"\t Processed mnemonic {msg}");
+                    s_controlKeyboardRouting.TraceVerbose($"\t Processed mnemonic {msg}");
                     Focus();
                     processed = true;
                 }
@@ -2065,7 +2062,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Could not create new OCX State: {e}");
+                    s_axHTraceSwitch.TraceVerbose($"Could not create new OCX State: {e}");
                 }
             }
             finally
@@ -2227,22 +2224,22 @@ namespace System.Windows.Forms
             switch (dispid)
             {
                 case Ole32.DispatchID.AMBIENT_USERMODE:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for usermode");
+                    s_axHTraceSwitch.TraceVerbose("asked for usermode");
                     return IsUserMode();
                 case Ole32.DispatchID.AMBIENT_AUTOCLIP:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for autoclip");
+                    s_axHTraceSwitch.TraceVerbose("asked for autoclip");
                     return true;
                 case Ole32.DispatchID.AMBIENT_MESSAGEREFLECT:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for message reflect");
+                    s_axHTraceSwitch.TraceVerbose("asked for message reflect");
                     return true;
                 case Ole32.DispatchID.AMBIENT_UIDEAD:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for uidead");
+                    s_axHTraceSwitch.TraceVerbose("asked for uidead");
                     return false;
                 case Ole32.DispatchID.AMBIENT_DISPLAYASDEFAULT:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for displayasdefault");
+                    s_axHTraceSwitch.TraceVerbose("asked for displayasdefault");
                     return false;
                 case Ole32.DispatchID.AMBIENT_FONT:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for font");
+                    s_axHTraceSwitch.TraceVerbose("asked for font");
                     if (richParent is not null)
                     {
                         return GetIFontFromFont(richParent.Font);
@@ -2250,10 +2247,10 @@ namespace System.Windows.Forms
 
                     return null;
                 case Ole32.DispatchID.AMBIENT_SHOWGRABHANDLES:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for showGrabHandles");
+                    s_axHTraceSwitch.TraceVerbose("asked for showGrabHandles");
                     return false;
                 case Ole32.DispatchID.AMBIENT_SHOWHATCHING:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for showHatching");
+                    s_axHTraceSwitch.TraceVerbose("asked for showHatching");
                     return false;
                 case Ole32.DispatchID.AMBIENT_BACKCOLOR:
                     if (richParent is not null)
@@ -2275,10 +2272,10 @@ namespace System.Windows.Forms
 
                     return rval;
                 case Ole32.DispatchID.AMBIENT_LOCALEID:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for localeid");
+                    s_axHTraceSwitch.TraceVerbose("asked for localeid");
                     return PInvoke.GetThreadLocale();
                 case Ole32.DispatchID.AMBIENT_RIGHTTOLEFT:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "asked for right to left");
+                    s_axHTraceSwitch.TraceVerbose("asked for right to left");
                     Control ctl = this;
                     while (ctl is not null)
                     {
@@ -2300,7 +2297,7 @@ namespace System.Windows.Forms
 
                     return null;
                 default:
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"unsupported ambient {dispid}");
+                    s_axHTraceSwitch.TraceVerbose($"unsupported ambient {dispid}");
                     return null;
             }
         }
@@ -2321,7 +2318,7 @@ namespace System.Windows.Forms
 
         private void Freeze(bool v)
         {
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"freezing {v}");
+            s_axHTraceSwitch.TraceVerbose($"freezing {v}");
             if (v)
             {
                 GetOleControl().FreezeEvents(true);
@@ -2338,7 +2335,7 @@ namespace System.Windows.Forms
 
         private HRESULT UiDeactivate()
         {
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"calling uiDeactivate for {ToString()}");
+            s_axHTraceSwitch.TraceVerbose($"calling uiDeactivate for {ToString()}");
             bool ownDispose = _axState[s_ownDisposing];
             _axState[s_ownDisposing] = true;
             try
@@ -2409,7 +2406,7 @@ namespace System.Windows.Forms
 
         private void CreateWithoutLicense(Guid clsid)
         {
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Creating object without license: {clsid}");
+            s_axHTraceSwitch.TraceVerbose($"Creating object without license: {clsid}");
             HRESULT hr = Ole32.CoCreateInstance(
                 in clsid,
                 IntPtr.Zero,
@@ -2419,14 +2416,14 @@ namespace System.Windows.Forms
             hr.ThrowOnFailure();
 
             _instance = ret;
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t{(_instance is not null)}");
+            s_axHTraceSwitch.TraceVerbose($"\t{(_instance is not null)}");
         }
 
         private void CreateWithLicense(string license, Guid clsid)
         {
             if (license is not null)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Creating object with license: {clsid}");
+                s_axHTraceSwitch.TraceVerbose($"Creating object with license: {clsid}");
                 HRESULT hr = Ole32.CoGetClassObject(
                     ref clsid,
                     Ole32.CLSCTX.INPROC_SERVER,
@@ -2436,7 +2433,7 @@ namespace System.Windows.Forms
                 if (hr.Succeeded)
                 {
                     icf2.CreateInstanceLic(IntPtr.Zero, IntPtr.Zero, ref NativeMethods.ActiveX.IID_IUnknown, license, out _instance);
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t{(_instance is not null)}");
+                    s_axHTraceSwitch.TraceVerbose($"\t{(_instance is not null)}");
                 }
             }
 
@@ -2465,7 +2462,7 @@ namespace System.Windows.Forms
                 throw;
             }
 
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "created");
+            s_axHTraceSwitch.TraceVerbose("created");
             SetOcState(OC_LOADED);
         }
 
@@ -2551,7 +2548,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void InvokeEditMode()
         {
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"invoking EditMode for {ToString()}");
+            s_axHTraceSwitch.TraceVerbose($"invoking EditMode for {ToString()}");
             Debug.Assert((_flags & AxFlags.PreventEditMode) == 0, "edit mode should have been disabled");
             if (_editMode != EDITM_NONE)
             {
@@ -2707,7 +2704,7 @@ namespace System.Windows.Forms
             {
                 if (attributes is null && _attribsStash is null)
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Returning stashed values for : <null>");
+                    s_axHTraceSwitch.TraceVerbose("Returning stashed values for : <null>");
                     return _propsStash;
                 }
                 else if (attributes is not null && _attribsStash is not null && attributes.Length == _attribsStash.Length)
@@ -2725,7 +2722,7 @@ namespace System.Windows.Forms
 
                     if (attribsEqual)
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Returning stashed values for : {attributes.Length}");
+                        s_axHTraceSwitch.TraceVerbose($"Returning stashed values for : {attributes.Length}");
                         return _propsStash;
                     }
                 }
@@ -2775,13 +2772,13 @@ namespace System.Windows.Forms
                     {
                         if (propInfo is not null)
                         {
-                            Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"Added AxPropertyDescriptor for: {propName}");
+                            s_axPropTraceSwitch.TraceVerbose($"Added AxPropertyDescriptor for: {propName}");
                             prop = new AxPropertyDescriptor(baseProps[i], this);
                             ((AxPropertyDescriptor)prop).UpdateAttributes();
                         }
                         else
                         {
-                            Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"Added PropertyDescriptor for: {propName}");
+                            s_axPropTraceSwitch.TraceVerbose($"Added PropertyDescriptor for: {propName}");
                             prop = baseProps[i];
                         }
 
@@ -2796,7 +2793,7 @@ namespace System.Windows.Forms
                         if ((propInfo is null && axPropDesc is not null) || (propInfo is not null && axPropDesc is null))
                         {
                             Debug.Fail($"Duplicate property with same name: {propName}");
-                            Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"Duplicate property with same name: {propName}");
+                            s_axPropTraceSwitch.TraceVerbose($"Duplicate property with same name: {propName}");
                         }
                         else
                         {
@@ -2849,7 +2846,7 @@ namespace System.Windows.Forms
             returnProperties.CopyTo(temp, 0);
 
             // Update our stashed values.
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Updating stashed values for : {attributes?.Length.ToString() ?? "<null>"}");
+            s_axHTraceSwitch.TraceVerbose($"Updating stashed values for : {attributes?.Length.ToString() ?? "<null>"}");
             _propsStash = new PropertyDescriptorCollection(temp);
             _attribsStash = attributes;
 
@@ -2960,8 +2957,7 @@ namespace System.Windows.Forms
                     HRESULT hr = _iPersistStreamInit.InitNew();
                     if (hr.Failed)
                     {
-                        Debug.WriteLineIf(
-                        s_axHTraceSwitch.TraceVerbose,
+                        s_axHTraceSwitch.TraceVerbose(
                             $"Exception thrown trying to IPersistStreamInit.InitNew(). Is this good? {hr}");
                     }
 
@@ -2985,8 +2981,7 @@ namespace System.Windows.Forms
                     HRESULT hr = _iPersistStorage.InitNew(pStorage);
                     if (hr.Failed)
                     {
-                        Debug.WriteLineIf(
-                            s_axHTraceSwitch.TraceVerbose,
+                        s_axHTraceSwitch.TraceVerbose(
                             $"Exception thrown trying to IPersistStorage.InitNew(). Is this good? {hr}");
                     }
 
@@ -2995,13 +2990,12 @@ namespace System.Windows.Forms
 
                 if (_instance is IPersistPropertyBag.Interface persistPropertyBag)
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"{this} supports IPersistPropertyBag.");
+                    s_axHTraceSwitch.TraceVerbose($"{this} supports IPersistPropertyBag.");
                     _iPersistPropBag = persistPropertyBag;
                     HRESULT hr = _iPersistPropBag.InitNew();
                     if (hr.Failed)
                     {
-                        Debug.WriteLineIf(
-                            s_axHTraceSwitch.TraceVerbose,
+                        s_axHTraceSwitch.TraceVerbose(
                             $"Exception thrown trying to IPersistPropertyBag.InitNew(). Is this good? {hr}");
                     }
                 }
@@ -3021,8 +3015,7 @@ namespace System.Windows.Forms
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLineIf(
-                            s_axHTraceSwitch.TraceVerbose,
+                        s_axHTraceSwitch.TraceVerbose(
                             $"Exception thrown trying to IPersistStream.DepersistFromIStream(). Is this good? {e}");
                     }
 
@@ -3037,8 +3030,7 @@ namespace System.Windows.Forms
                         }
                         catch (Exception e)
                         {
-                            Debug.WriteLineIf(
-                                s_axHTraceSwitch.TraceVerbose,
+                            s_axHTraceSwitch.TraceVerbose(
                                 $"Exception thrown trying to IPersistStreamInit.DepersistFromIStreamInit(). Is this good? {e}");
                         }
 
@@ -3060,8 +3052,7 @@ namespace System.Windows.Forms
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLineIf(
-                            s_axHTraceSwitch.TraceVerbose,
+                        s_axHTraceSwitch.TraceVerbose(
                             $"Exception thrown trying to IPersistStorage.DepersistFromIStorage(). Is this good? {e}");
                     }
 
@@ -3080,8 +3071,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLineIf(
-                        s_axHTraceSwitch.TraceVerbose,
+                    s_axHTraceSwitch.TraceVerbose(
                         $"Exception thrown trying to IPersistPropertyBag.DepersistFromIPropertyBag(). Is this good? {e}");
                 }
             }
@@ -3115,7 +3105,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Creating sink for events...");
+                    s_axHTraceSwitch.TraceVerbose("Creating sink for events...");
                     CreateSink();
                     _oleSite.StartEvents();
                 }
@@ -3413,8 +3403,7 @@ namespace System.Windows.Forms
 #if DEBUG
                     if (!OwnWindow())
                     {
-                        Debug.WriteLineIf(
-                            s_axHTraceSwitch.TraceVerbose,
+                        s_axHTraceSwitch.TraceVerbose(
                             $"WM_DESTROY control is destroying the window from under us...{GetType()}");
                     }
 #endif
@@ -3475,8 +3464,7 @@ namespace System.Windows.Forms
 #if DEBUG
                     if (!OwnWindow())
                     {
-                        Debug.WriteLineIf(
-                            s_axHTraceSwitch.TraceVerbose,
+                        s_axHTraceSwitch.TraceVerbose(
                             $"WM_NCDESTROY control is destroying the window from under us...{GetType()}");
                     }
 #endif
@@ -3531,7 +3519,7 @@ namespace System.Windows.Forms
 
         private void AttachWindow(HWND hwnd)
         {
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"attaching window for {ToString()} {hwnd}");
+            s_axHTraceSwitch.TraceVerbose($"attaching window for {ToString()} {hwnd}");
             if (!_axState[s_fFakingWindow])
             {
                 WindowAssignHandle(hwnd, _axState[s_assignUniqueID]);
@@ -3541,12 +3529,12 @@ namespace System.Windows.Forms
 
             // Get the latest bounds set by the user.
             Size setExtent = Size;
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"SetBounds {setExtent}");
+            s_axHTraceSwitch.TraceVerbose($"SetBounds {setExtent}");
 
             // Get the default bounds set by the ActiveX control.
             UpdateBounds();
             Size ocxExtent = GetExtent();
-            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"OcxBounds {ocxExtent}");
+            s_axHTraceSwitch.TraceVerbose($"OcxBounds {ocxExtent}");
 
             Point location = Location;
 
@@ -3649,7 +3637,7 @@ namespace System.Windows.Forms
             HRESULT hr = iqa.QuickActivate(qaContainer, &qaControl);
             if (!hr.Succeeded)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Failed to QuickActivate: {hr}");
+                s_axHTraceSwitch.TraceVerbose($"Failed to QuickActivate: {hr}");
                 DisposeAxControl();
                 return false;
             }
@@ -3827,7 +3815,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"calling upon {f} to create a container");
+                    s_axHTraceSwitch.TraceVerbose($"calling upon {f} to create a container");
                     _container = f.CreateAxContainer();
                     _container.AddControl(this);
                     _containingControl = f;
@@ -3876,7 +3864,7 @@ namespace System.Windows.Forms
 #if DEBUG
                 if (_iOleInPlaceObject is IOleInPlaceObjectWindowless.Interface)
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"{GetType().FullName} Can also be a Windowless control.");
+                    s_axHTraceSwitch.TraceVerbose($"{GetType().FullName} Can also be a Windowless control.");
                 }
 #endif //DEBUG
             }
@@ -4153,7 +4141,7 @@ namespace System.Windows.Forms
             }
             catch
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Failed to create IFrom from font: {font}");
+                s_axHTraceSwitch.TraceVerbose($"Failed to create IFrom from font: {font}");
                 return null;
             }
         }
@@ -4182,7 +4170,7 @@ namespace System.Windows.Forms
             }
             catch (Exception e)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Could not create font. {e.Message}");
+                s_axHTraceSwitch.TraceVerbose($"Could not create font. {e.Message}");
                 return DefaultFont;
             }
         }
@@ -4257,7 +4245,7 @@ namespace System.Windows.Forms
             }
             catch (Exception e)
             {
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Could not create font from: {oleFont.Name}. {e.Message}");
+                s_axHTraceSwitch.TraceVerbose($"Could not create font from: {oleFont.Name}. {e.Message}");
                 return DefaultFont;
             }
         }

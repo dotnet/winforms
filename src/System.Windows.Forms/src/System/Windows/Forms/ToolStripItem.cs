@@ -2481,7 +2481,7 @@ namespace System.Windows.Forms
 
         private void HandleClick(EventArgs e)
         {
-            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] HandleClick");
+            s_mouseDebugging.TraceVerbose($"[{Text}] HandleClick");
 
             try
             {
@@ -2496,7 +2496,7 @@ namespace System.Windows.Forms
 
                 if (SupportsItemClick && Owner is not null)
                 {
-                    Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] HandleItemClick");
+                    s_mouseDebugging.TraceVerbose($"[{Text}] HandleItemClick");
                     Owner.HandleItemClick(this);
                 }
 
@@ -2504,7 +2504,7 @@ namespace System.Windows.Forms
 
                 if (SupportsItemClick && Owner is not null)
                 {
-                    Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] HandleItemClicked");
+                    s_mouseDebugging.TraceVerbose($"[{Text}] HandleItemClicked");
                     Owner.HandleItemClicked(this);
                 }
             }
@@ -2566,14 +2566,14 @@ namespace System.Windows.Forms
             if (Enabled)
             {
                 OnMouseEnter(e);
-                Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseEnter");
+                s_mouseDebugging.TraceVerbose($"[{Text}] MouseEnter");
                 RaiseEvent(s_mouseEnterEvent, e);
             }
         }
 
         private void HandleMouseMove(MouseEventArgs mea)
         {
-            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseMove");
+            s_mouseDebugging.TraceVerbose($"[{Text}] MouseMove");
 
             if (Enabled && CanSelect && !Selected)
             {
@@ -2595,7 +2595,7 @@ namespace System.Windows.Forms
 
         private void HandleMouseHover(EventArgs e)
         {
-            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseHover");
+            s_mouseDebugging.TraceVerbose($"[{Text}] MouseHover");
             OnMouseHover(e);
             RaiseEvent(s_mouseHoverEvent, e);
         }
@@ -2614,7 +2614,7 @@ namespace System.Windows.Forms
 
         private void HandleMouseLeave(EventArgs e)
         {
-            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseLeave");
+            s_mouseDebugging.TraceVerbose($"[{Text}] MouseLeave");
             HandleLeave();
             if (Enabled)
             {
@@ -2625,7 +2625,7 @@ namespace System.Windows.Forms
 
         private void HandleMouseDown(MouseEventArgs e)
         {
-            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseDown");
+            s_mouseDebugging.TraceVerbose($"[{Text}] MouseDown");
 
             _state[s_stateMouseDownAndNoDrag] = !BeginDragForItemReorder();
             if (_state[s_stateMouseDownAndNoDrag])
@@ -2643,7 +2643,7 @@ namespace System.Windows.Forms
 
         private void HandleMouseUp(MouseEventArgs e)
         {
-            Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseUp");
+            s_mouseDebugging.TraceVerbose($"[{Text}] MouseUp");
 
             bool fireMouseUp = (ParentInternal.LastMouseDownedItem == this);
 
@@ -3245,7 +3245,7 @@ namespace System.Windows.Forms
 
             if (ParentInternal is not null && ParentInternal.IsSelectionSuspended)
             {
-                Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[Selection DBG] BAILING, selection is currently suspended");
+                ToolStrip.s_selectionDebug.TraceVerbose("[Selection DBG] BAILING, selection is currently suspended");
                 return;
             }
 
@@ -3633,7 +3633,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void Unselect()
         {
-            Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", ToString()));
+            ToolStrip.s_selectionDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", ToString()));
             if (_state[s_stateSelected])
             {
                 _state[s_stateSelected] = false;

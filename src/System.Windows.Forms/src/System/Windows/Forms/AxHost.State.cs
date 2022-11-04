@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                     {
                         try
                         {
-                            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Loading up property bag from stream...");
+                            s_axHTraceSwitch.TraceVerbose("Loading up property bag from stream...");
                             byte[]? data = enumerator.Value as byte[];
                             if (data is not null)
                             {
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Failed to serialize the property bag into ResX : {e}");
+                        s_axHTraceSwitch.TraceVerbose($"Failed to serialize the property bag into ResX : {e}");
                     }
                 }
             }

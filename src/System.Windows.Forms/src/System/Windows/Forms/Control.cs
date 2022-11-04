@@ -5573,7 +5573,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool Focus()
         {
-            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Control::Focus - " + Name);
+            s_focusTracing.TraceVerbose($"Control::Focus - {Name}");
 
             // Call the internal method (which form overrides)
             return FocusInternal();
@@ -5586,7 +5586,7 @@ namespace System.Windows.Forms
         /// </summary>
         private protected virtual bool FocusInternal()
         {
-            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, $"Control::FocusInternal - {Name}");
+            s_focusTracing.TraceVerbose($"Control::FocusInternal - {Name}");
             if (CanFocus)
             {
                 PInvoke.SetFocus(this);
@@ -6817,7 +6817,7 @@ namespace System.Windows.Forms
         /// </returns>
         protected virtual bool IsInputChar(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.IsInputChar 0x{((int)charCode):X}");
+            s_controlKeyboardRouting.TraceVerbose($"Control.IsInputChar 0x{((int)charCode):X}");
 
             int mask = 0;
             if (charCode == (char)(int)Keys.Tab)
@@ -6847,7 +6847,7 @@ namespace System.Windows.Forms
         /// </returns>
         protected virtual bool IsInputKey(Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.IsInputKey {keyData}");
+            s_controlKeyboardRouting.TraceVerbose($"Control.IsInputKey {keyData}");
 
             if ((keyData & Keys.Alt) == Keys.Alt)
             {
@@ -6900,7 +6900,7 @@ namespace System.Windows.Forms
             // Special case handling:
             if (charCode == '&')
             {
-                Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "   ...returning false");
+                s_controlKeyboardRouting.TraceVerbose("   ...returning false");
                 return false;
             }
 
@@ -6922,10 +6922,10 @@ namespace System.Windows.Forms
                     }
 
                     char c1 = char.ToUpper(text[pos], CultureInfo.CurrentCulture);
-                    Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"   ...& found... char={c1}");
+                    s_controlKeyboardRouting.TraceVerbose($"   ...& found... char={c1}");
                     if (c1 == c2 || char.ToLower(c1, CultureInfo.CurrentCulture) == char.ToLower(c2, CultureInfo.CurrentCulture))
                     {
-                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning true");
+                        s_controlKeyboardRouting.TraceVerbose("   ...returning true");
                         return true;
                     }
                 }
@@ -6933,7 +6933,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose && pos == 0, "   ...no & found");
             }
 
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "   ...returning false");
+            s_controlKeyboardRouting.TraceVerbose("   ...returning false");
             return false;
         }
 
@@ -7133,14 +7133,14 @@ namespace System.Windows.Forms
         // Used by form to notify the control that it has been "entered"
         internal void NotifyEnter()
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::NotifyEnter() - " + Name);
+            s_focusTracing.TraceVerbose($"Control::NotifyEnter() - {Name}");
             OnEnter(EventArgs.Empty);
         }
 
         // Used by form to notify the control that it has been "left"
         internal void NotifyLeave()
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Control::NotifyLeave() - " + Name);
+            s_focusTracing.TraceVerbose($"Control::NotifyLeave() - {Name}");
             OnLeave(EventArgs.Empty);
         }
 
@@ -9303,7 +9303,7 @@ namespace System.Windows.Forms
             target.SetExtendedState(ExtendedStates.InputChar, false);
             target.SetExtendedState(ExtendedStates.UiCues, true);
 
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.PreProcessControlMessageInternal {message}");
+            s_controlKeyboardRouting.TraceVerbose($"Control.PreProcessControlMessageInternal {message}");
 
             try
             {
@@ -9319,7 +9319,7 @@ namespace System.Windows.Forms
 
                     if (args.IsInputKey)
                     {
-                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "PreviewKeyDown indicated this is an input key.");
+                        s_controlKeyboardRouting.TraceVerbose("PreviewKeyDown indicated this is an input key.");
 
                         // Control wants this message - indicate it should be dispatched.
                         return PreProcessControlState.MessageNeeded;
@@ -9336,7 +9336,7 @@ namespace System.Windows.Forms
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetExtendedState(ExtendedStates.InputKey) || target.IsInputKey(keyData))
                         {
-                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
+                            s_controlKeyboardRouting.TraceVerbose("Control didn't preprocess this message but it needs to be dispatched");
                             state = PreProcessControlState.MessageNeeded;
                         }
                     }
@@ -9346,7 +9346,7 @@ namespace System.Windows.Forms
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetExtendedState(ExtendedStates.InputChar) || target.IsInputChar((char)(nint)message.WParamInternal))
                         {
-                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
+                            s_controlKeyboardRouting.TraceVerbose("Control didn't preprocess this message but it needs to be dispatched");
                             state = PreProcessControlState.MessageNeeded;
                         }
                     }
@@ -9383,7 +9383,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
+            s_controlKeyboardRouting.TraceVerbose($"Control.ProcessCmdKey {msg}");
 
             if (_parent is not null)
             {
@@ -9502,7 +9502,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogChar(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessDialogChar [{charCode.ToString()}]");
+            s_controlKeyboardRouting.TraceVerbose($"Control.ProcessDialogChar [{charCode}]");
             return _parent is null ? false : _parent.ProcessDialogChar(charCode);
         }
 
@@ -9523,7 +9523,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogKey(Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
+            s_controlKeyboardRouting.TraceVerbose($"Control.ProcessDialogKey {keyData}");
             return _parent is null ? false : _parent.ProcessDialogKey(keyData);
         }
 
@@ -9542,7 +9542,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessKeyEventArgs(ref Message m)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessKeyEventArgs {m}");
+            s_controlKeyboardRouting.TraceVerbose($"Control.ProcessKeyEventArgs {m}");
             KeyEventArgs? ke = null;
             KeyPressEventArgs? kpe = null;
             WPARAM newWParam = 0;
@@ -9605,13 +9605,13 @@ namespace System.Windows.Forms
 
             if (kpe is not null)
             {
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"    processkeyeventarg returning: {kpe.Handled}");
+                s_controlKeyboardRouting.TraceVerbose($"    processkeyeventarg returning: {kpe.Handled}");
                 m.WParamInternal = newWParam;
                 return kpe.Handled;
             }
             else
             {
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"    processkeyeventarg returning: {ke!.Handled}");
+                s_controlKeyboardRouting.TraceVerbose($"    processkeyeventarg returning: {ke!.Handled}");
                 if (ke!.SuppressKeyPress)
                 {
                     RemovePendingMessages(User32.WM.CHAR, User32.WM.CHAR);
@@ -9640,7 +9640,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual bool ProcessKeyMessage(ref Message m)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessKeyMessage {m}");
+            s_controlKeyboardRouting.TraceVerbose($"Control.ProcessKeyMessage {m}");
             if (_parent is not null && _parent.ProcessKeyPreview(ref m))
             {
                 return true;
@@ -9669,7 +9669,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessKeyPreview(ref Message m)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.ProcessKeyPreview {m}");
+            s_controlKeyboardRouting.TraceVerbose($"Control.ProcessKeyPreview {m}");
             return _parent is not null && _parent.ProcessKeyPreview(ref m);
         }
 
@@ -9694,7 +9694,7 @@ namespace System.Windows.Forms
         protected internal virtual bool ProcessMnemonic(char charCode)
         {
 #if DEBUG
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessMnemonic [0x{((int)charCode):X}]");
+            s_controlKeyboardRouting.TraceVerbose($"Control.ProcessMnemonic [0x{((int)charCode):X}]");
 #endif
             return false;
         }
@@ -12287,7 +12287,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKillFocus(ref Message m)
         {
-            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, "Control::WmKillFocus - " + Name);
+            s_focusTracing.TraceVerbose($"Control::WmKillFocus - {Name}");
             WmImeKillFocus();
             DefWndProc(ref m);
             InvokeLostFocus(this, EventArgs.Empty);
@@ -12787,7 +12787,7 @@ namespace System.Windows.Forms
 
         private void WmQueryNewPalette(ref Message m)
         {
-            Debug.WriteLineIf(s_paletteTracing!.TraceVerbose, $"{Handle}: WM_QUERYNEWPALETTE");
+            s_paletteTracing.TraceVerbose($"{Handle}: WM_QUERYNEWPALETTE");
 
             using var dc = new User32.GetDcScope(Handle);
 
@@ -12882,7 +12882,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmSetFocus(ref Message m)
         {
-            Debug.WriteLineIf(s_focusTracing!.TraceVerbose, $"Control::WmSetFocus - {Name}");
+            s_focusTracing.TraceVerbose($"Control::WmSetFocus - {Name}");
             WmImeSetFocus();
 
             if (!HostedInWin32DialogManager)
@@ -13178,12 +13178,11 @@ namespace System.Windows.Forms
                 case User32.WM.SYSCOMMAND:
                     if ((User32.SC)(m.WParamInternal & 0xFFF0) == User32.SC.KEYMENU)
                     {
-                        Debug.WriteLineIf(s_controlKeyboardRouting!.TraceVerbose, $"Control.WndProc processing {m}");
+                        s_controlKeyboardRouting.TraceVerbose($"Control.WndProc processing {m}");
 
                         if (ToolStripManager.ProcessMenuKey(ref m))
                         {
-                            Debug.WriteLineIf(
-                                s_controlKeyboardRouting.TraceVerbose,
+                            s_controlKeyboardRouting.TraceVerbose(
                                 $"Control.WndProc ToolStripManager.ProcessMenuKey returned true{m}");
                             m.ResultInternal = (LRESULT)0;
                             return;

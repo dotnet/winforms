@@ -21,7 +21,7 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in AxComponentEditor.EditComponent");
+                        s_axHTraceSwitch.TraceVerbose("in AxComponentEditor.EditComponent");
                         ((Ole32.IOleControlSite)host._oleSite).ShowPropertyFrame();
                         return true;
                     }

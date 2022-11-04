@@ -268,7 +268,7 @@ namespace System.Windows.Forms
                 HRESULT hr = axOleInPlaceActiveObject.TranslateAccelerator(&win32Message);
                 if (hr == HRESULT.S_OK)
                 {
-                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"\t Message translated to {win32Message}");
+                    s_controlKeyboardRouting.TraceVerbose($"\t Message translated to {win32Message}");
                     return true;
                 }
                 else
@@ -299,15 +299,13 @@ namespace System.Windows.Forms
                     }
                     else if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
                     {
-                        Debug.WriteLineIf(
-                            s_controlKeyboardRouting.TraceVerbose,
+                        s_controlKeyboardRouting.TraceVerbose(
                             $"\t Message processed by site. Calling base.PreProcessMessage() {msg}");
                         return base.PreProcessMessage(ref msg);
                     }
                     else
                     {
-                        Debug.WriteLineIf(
-                            s_controlKeyboardRouting.TraceVerbose,
+                        s_controlKeyboardRouting.TraceVerbose(
                             $"\t Message not processed by site. Returning false. {msg}");
                         return false;
                     }

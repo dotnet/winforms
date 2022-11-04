@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             _state[s_stateVisible] = visible;
             _state[s_stateDisposing | s_stateLocked | s_stateInitialized] = false;
 
-            Debug.WriteLineIf(s_toolStripPanelRowCreationDebug.TraceVerbose, "Created new ToolStripPanelRow");
+            s_toolStripPanelRowCreationDebug.TraceVerbose("Created new ToolStripPanelRow");
 
             using (LayoutTransaction lt = new LayoutTransaction(parent, this, null))
             {
@@ -306,7 +306,7 @@ namespace System.Windows.Forms
             {
                 if (disposing)
                 {
-                    Debug.WriteLineIf(s_toolStripPanelRowCreationDebug.TraceVerbose, "Disposed ToolStripPanelRow");
+                    s_toolStripPanelRowCreationDebug.TraceVerbose("Disposed ToolStripPanelRow");
                     _state[s_stateDisposing] = true;
                     ControlsInternal.Clear();
                 }

@@ -155,7 +155,7 @@ namespace System.Windows.Forms.Layout
         {
             // Container can not be null since we AnchorControls takes a non-null container.
             //
-            // NB: DO NOT convert the following into Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "...")
+            // NB: DO NOT convert the following into CompModSwitches.RichLayout.TraceInfo, "...")
             // because it WILL execute GetCachedBounds(control).ToString() calls even if CompModSwitches.RichLayout.TraceInfo=false
             // This in turn will lead to a cascade of native calls and callbacks
             if (CompModSwitches.RichLayout.TraceInfo)

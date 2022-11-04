@@ -31,7 +31,7 @@ namespace System.Windows.Forms
 
             public OleConverter(IComDataObject data)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "OleConverter: Constructed OleConverter");
+                CompModSwitches.DataObject.TraceVerbose("OleConverter: Constructed OleConverter");
                 _innerData = data;
             }
 

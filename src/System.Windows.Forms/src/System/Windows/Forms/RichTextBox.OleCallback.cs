@@ -33,7 +33,7 @@ namespace System.Windows.Forms
 
             public HRESULT GetNewStorage(out IStorage.Interface? storage)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetNewStorage");
+                RichTextDbg.TraceVerbose("IRichEditOleCallback::GetNewStorage");
                 if (!owner.AllowOleObjects)
                 {
                     storage = null;
@@ -53,33 +53,33 @@ namespace System.Windows.Forms
                                          IntPtr lplpDoc,
                                          IntPtr lpFrameInfo)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetInPlaceContext");
+                RichTextDbg.TraceVerbose("IRichEditOleCallback::GetInPlaceContext");
                 return HRESULT.E_NOTIMPL;
             }
 
             public HRESULT ShowContainerUI(BOOL fShow)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::ShowContainerUI");
+                RichTextDbg.TraceVerbose("IRichEditOleCallback::ShowContainerUI");
                 // Do nothing
                 return HRESULT.S_OK;
             }
 
             public HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryInsertObject(" + lpclsid.ToString() + ")");
+                RichTextDbg.TraceVerbose($"IRichEditOleCallback::QueryInsertObject({lpclsid})");
                 return HRESULT.S_OK;
             }
 
             public HRESULT DeleteObject(IntPtr lpoleobj)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::DeleteObject");
+                RichTextDbg.TraceVerbose("IRichEditOleCallback::DeleteObject");
                 // Do nothing
                 return HRESULT.S_OK;
             }
 
             public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, RECO reco, BOOL fReally, IntPtr hMetaPict)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryAcceptData(reco=" + reco + ")");
+                RichTextDbg.TraceVerbose($"IRichEditOleCallback::QueryAcceptData(reco={reco})");
 
                 if (reco == RECO.DROP)
                 {
@@ -184,18 +184,18 @@ namespace System.Windows.Forms
                         lastEffect = e.Effect;
                         if (e.Effect == DragDropEffects.None)
                         {
-                            Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data");
+                            RichTextDbg.TraceVerbose("\tCancel data");
                             return HRESULT.E_FAIL;
                         }
                         else
                         {
-                            Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tAccept data");
+                            RichTextDbg.TraceVerbose("\tAccept data");
                             return HRESULT.S_OK;
                         }
                     }
                     else
                     {
-                        Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data, allowdrop == false");
+                        RichTextDbg.TraceVerbose("\tCancel data, allowdrop == false");
                         lastDataObject = null;
                         return HRESULT.E_FAIL;
                     }
@@ -208,13 +208,13 @@ namespace System.Windows.Forms
 
             public HRESULT ContextSensitiveHelp(BOOL fEnterMode)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::ContextSensitiveHelp");
+                RichTextDbg.TraceVerbose("IRichEditOleCallback::ContextSensitiveHelp");
                 return HRESULT.E_NOTIMPL;
             }
 
             public HRESULT GetClipboardData(ref Richedit.CHARRANGE lpchrg, RECO reco, IntPtr lplpdataobj)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetClipboardData");
+                RichTextDbg.TraceVerbose("IRichEditOleCallback::GetClipboardData");
                 return HRESULT.E_NOTIMPL;
             }
 
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetDragDropEffect");
+                RichTextDbg.TraceVerbose("IRichEditOleCallback::GetDragDropEffect");
 
                 if (owner.AllowDrop || owner.EnableAutoDragDrop)
                 {
@@ -307,7 +307,7 @@ namespace System.Windows.Forms
 
             public HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetContextMenu");
+                RichTextDbg.TraceVerbose("IRichEditOleCallback::GetContextMenu");
 
                 // do nothing, we don't have ContextMenu any longer
                 hmenu = IntPtr.Zero;
