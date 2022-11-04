@@ -21,6 +21,6 @@
     "Microsoft.NET.Sdk.IL": "6.0.11-servicing.22523.4"
   },
   "native-tools": {
-    "cmake": "3.22.5"
+    "cmake": "latest"
   }
 }
