@@ -18,24 +18,19 @@ namespace Windows.Win32
             for (int i = 1; bufferSize <= short.MaxValue; i++, bufferSize = 4096 * i)
             {
                 buffer = ArrayPool<char>.Shared.Rent(bufferSize);
-                try
+                uint pathLength;
+                fixed (char* lpFilename = buffer)
                 {
-                    uint pathLength;
-                    fixed (char* lpFilename = buffer)
-                    {
-                        pathLength = GetModuleFileName(hModule, lpFilename, (uint)buffer.Length);
-                    }
+                    pathLength = GetModuleFileName(hModule, lpFilename, (uint)buffer.Length);
+                }
 
-                    bool isBufferTooSmall = (WIN32_ERROR)Marshal.GetLastWin32Error() == WIN32_ERROR.ERROR_INSUFFICIENT_BUFFER;
-                    if (pathLength > 0 && (pathLength < buffer.Length || Marshal.GetLastWin32Error() != INSUFFICENT_BUFFER))
-                    {
-                        return new string(buffer, 0, (int)pathLength);
-                    }
-                }
-                finally
+                if (pathLength > 0 && (pathLength < buffer.Length || (WIN32_ERROR)Marshal.GetLastWin32Error() == WIN32_ERROR.ERROR_INSUFFICIENT_BUFFER))
                 {
-                    ArrayPool<char>.Shared.Return(buffer);
+                    return new string(buffer, 0, (int)pathLength);
                 }
+
+                // Return to array pool
+                ArrayPool<char>.Shared.Return(buffer);
 
                 // Double check that the buffer is not insanely big
                 Debug.Assert(bufferSize <= int.MaxValue / 2, "Buffer size approaching int.MaxValue");
