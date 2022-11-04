@@ -474,7 +474,7 @@ namespace System.Windows.Forms
 
             using ImageAttributes attrs = new();
 
-            if (IsHighContrastWhiteOnBlack() && !(FillWhenSelected && (e.Item.Pressed || e.Item.Selected)))
+            if (IsHighContrastWhiteOnBlack() && !(FillWhenSelected && (item.Pressed || item. Selected)))
             {
                 // Translate white, black and blue to colors visible in high contrast mode.
                 ColorMap cm1 = new();
