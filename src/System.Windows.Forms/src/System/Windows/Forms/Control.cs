@@ -2541,7 +2541,7 @@ namespace System.Windows.Forms
             set => SetBounds(_x, _y, _width, value, BoundsSpecified.Height);
         }
 
-        internal bool HostedInWin32DialogManager
+        internal unsafe bool HostedInWin32DialogManager
         {
             get
             {
@@ -2556,22 +2556,19 @@ namespace System.Windows.Forms
                     {
                         HWND parentHandle = PInvoke.GetParent(this);
                         HWND lastParentHandle = parentHandle;
-
-                        StringBuilder sb = new StringBuilder(32);
-
                         SetState(States.HostedInDialog, false);
-
+                        Span<char> buffer = stackalloc char[256];
                         while (!parentHandle.IsNull)
                         {
-                            int len = UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), null, 0);
-                            if (len > sb.Capacity)
+                            int length = 0;
+                            fixed (char* lpClassName = buffer)
                             {
-                                sb.Capacity = len + 5;
+                                length = PInvoke.GetClassName(lastParentHandle, lpClassName, buffer.Length);
                             }
 
-                            UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), sb, sb.Capacity);
-
-                            if (sb.ToString() == "#32770")
+                            // class name #32770
+                            ReadOnlySpan<char> className = "#32770";
+                            if (MemoryExtensions.Equals(className, buffer.SliceAtFirstNull(), StringComparison.Ordinal))
                             {
                                 SetState(States.HostedInDialog, true);
                                 break;

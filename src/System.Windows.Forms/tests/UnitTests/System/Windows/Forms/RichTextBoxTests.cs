@@ -10584,7 +10584,7 @@ namespace System.Windows.Forms.Tests
             using var control = new RichTextBox();
             control.CreateControl();
 
-            Assert.Contains("RICHEDIT50W", GetClassName(control.Handle), StringComparison.InvariantCultureIgnoreCase);
+            Assert.Contains("RICHEDIT50W", GetClassName(control.HWND), StringComparison.InvariantCultureIgnoreCase);
         }
 
         [WinFormsFact]
@@ -10593,13 +10593,13 @@ namespace System.Windows.Forms.Tests
             using (var riched32 = new RichEdit())
             {
                 riched32.CreateControl();
-                Assert.Contains(".RichEdit.", GetClassName(riched32.Handle), StringComparison.InvariantCultureIgnoreCase);
+                Assert.Contains(".RichEdit.", GetClassName(riched32.HWND), StringComparison.InvariantCultureIgnoreCase);
             }
 
             using (var riched20 = new RichEdit20W())
             {
                 riched20.CreateControl();
-                Assert.Contains(".RichEdit20W.", GetClassName(riched20.Handle), StringComparison.InvariantCultureIgnoreCase);
+                Assert.Contains(".RichEdit20W.", GetClassName(riched20.HWND), StringComparison.InvariantCultureIgnoreCase);
 
                 string rtfString = @"{\rtf1\ansi{" +
                     @"The next line\par " +
@@ -10791,12 +10791,15 @@ namespace System.Windows.Forms.Tests
             public new void WndProc(ref Message m) => base.WndProc(ref m);
         }
 
-        private static string GetClassName(IntPtr hWnd)
+        private static unsafe string GetClassName(HWND hWnd)
         {
-            const int MaxClassName = 256;
-            StringBuilder sb = new StringBuilder(MaxClassName);
-            UnsafeNativeMethods.GetClassName(new HandleRef(null, hWnd), sb, MaxClassName);
-            return sb.ToString();
+            Span<char> buf = stackalloc char[PInvoke.MAX_CLASS_NAME];
+            fixed (char* lpClassName = buf)
+            {
+                _ = PInvoke.GetClassName(hWnd, lpClassName, buf.Length);
+            }
+
+            return buf.SliceAtFirstNull().ToString();
         }
 
         /// <summary>
