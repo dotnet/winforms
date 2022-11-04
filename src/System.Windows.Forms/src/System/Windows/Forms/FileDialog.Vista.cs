@@ -73,12 +73,11 @@ namespace System.Windows.Forms
 
             if (!string.IsNullOrEmpty(InitialDirectory))
             {
-                IShellItem* initialDirectory = PInvoke.SHCreateShellItem(InitialDirectory);
-                if (initialDirectory is null)
+                using ComScope<IShellItem> initialDirectory = new(PInvoke.SHCreateShellItem(InitialDirectory));
+                if (!initialDirectory.IsNull)
                 {
                     dialog->SetDefaultFolder(initialDirectory).ThrowOnFailure();
                     dialog->SetFolder(initialDirectory).ThrowOnFailure();
-                    initialDirectory->Release();
                 }
             }
 
