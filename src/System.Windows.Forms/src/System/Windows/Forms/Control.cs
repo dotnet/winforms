@@ -12,7 +12,6 @@ using System.Globalization;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
