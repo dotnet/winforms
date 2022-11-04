@@ -2,10 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using WindowsInput;
 using WindowsInput.Native;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Sdk;
+using static Interop;
 
 namespace System.Windows.Forms.UITests
 {
@@ -29,26 +32,51 @@ namespace System.Windows.Forms.UITests
             using Timer timer = new();
             timer.Interval = 1_000;
             int counter = 0;
-            bool failedClose = false;
+
+            bool dialogClosed = false;
             timer.Tick += (s, e) =>
             {
                 counter++;
-                if (counter > 2)
-                {
-                    timer.Stop();
-                    failedClose = true;
-                    Application.Exit();
-                }
+                timer.Stop();
 
-                // Close the dialog
-                new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.ESCAPE);
+                User32.EnumWindows(FindAndCloseDialog);
+
+                if (!dialogClosed)
+                {
+                    if (counter > 2)
+                    {
+                        Application.Exit();
+                        return;
+                    }
+
+                    TestOutputHelper?.WriteLine($"Couldn't find the dialog ({counter}/3). Retrying...");
+                    timer.Start();
+                }
             };
 
             timer.Start();
             dialog.ShowDialog();
 
             // The dialog has opened and closed successfully
-            Assert.False(failedClose, "Failed to close the dialog");
+            Assert.True(dialogClosed, "Failed to close the dialog");
+            return;
+
+            unsafe BOOL FindAndCloseDialog(HWND hwnd)
+            {
+                uint processId;
+                PInvoke.GetWindowThreadProcessId(hwnd, &processId);
+                if (processId == PInvoke.GetCurrentProcessId() && PInvoke.IsWindowVisible(hwnd))
+                {
+                    TestOutputHelper?.WriteLine($"Process ID: {processId}");
+                    TestOutputHelper?.WriteLine($"Dialog window found: 0x{hwnd.Value:X8}");
+
+                    PInvoke.SendMessage(hwnd, User32.WM.CLOSE);
+
+                    dialogClosed = true;
+                }
+
+                return true;
+            }
         }
     }
 }
