@@ -28,7 +28,7 @@ namespace System.Windows.Forms
                 get { return _owner; }
             }
 
-            protected override ToolStrip ParentInternal
+            protected override ToolStrip? ParentInternal
             {
                 get
                 {

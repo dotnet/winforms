@@ -226,7 +226,7 @@ namespace System.Windows.Forms
 
                 if (Owner is not null)
                 {
-                    ToolStrip parent = Owner.ParentInternal;
+                    ToolStrip? parent = Owner.ParentInternal;
                     if (parent is null)
                     {
                         return null;

@@ -170,7 +170,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStrip parent = ParentInternal;
+                ToolStrip? parent = ParentInternal;
                 parent ??= Owner;
 
                 if (parent is ToolStripDropDownMenu dropDownMenu)
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                switch (parent.LayoutStyle)
+                switch (parent!.LayoutStyle)
                 {
                     case ToolStripLayoutStyle.VerticalStackWithOverflow:
                         return false;
@@ -260,7 +260,7 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            ToolStrip parent = ParentInternal;
+            ToolStrip? parent = ParentInternal;
             parent ??= Owner;
 
             if (parent is null)
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
         {
             if (Owner is not null && ParentInternal is not null)
             {
-                Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
+                Renderer!.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
             }
         }
 

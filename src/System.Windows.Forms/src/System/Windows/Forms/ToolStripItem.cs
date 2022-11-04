@@ -552,7 +552,7 @@ namespace System.Windows.Forms
                     return c;
                 }
 
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null)
                 {
                     return p.BackColor;
@@ -909,7 +909,7 @@ namespace System.Windows.Forms
                     return foreColor;
                 }
 
-                Control p = ParentInternal;
+                Control? p = ParentInternal;
                 if (p is not null)
                 {
                     return p.ForeColor;
@@ -1012,7 +1012,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Should not be exposed as this returns an unexposed type.
         /// </summary>
-        IArrangedElement IArrangedElement.Container => ParentInternal ?? Owner;
+        IArrangedElement? IArrangedElement.Container => ParentInternal ?? Owner;
 
         Rectangle IArrangedElement.DisplayRectangle => Bounds;
 
@@ -1252,7 +1252,7 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                Control parent = ParentInternal;
+                Control? parent = ParentInternal;
                 if (parent is not null)
                 {
                     return parent.ShouldSerializeForeColor();
@@ -1307,7 +1307,7 @@ namespace System.Windows.Forms
             add => Events.AddHandler(s_locationChangedEvent, value);
             remove => Events.RemoveHandler(s_locationChangedEvent, value);
         }
-#nullable disable
+
         /// <summary>
         ///  Specifies the external spacing between this item and any other item or the ToolStrip.
         /// </summary>
@@ -1385,7 +1385,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ToolStripItemOnMouseDownDescr))]
-        public event MouseEventHandler MouseDown
+        public event MouseEventHandler? MouseDown
         {
             add => Events.AddHandler(s_mouseDownEvent, value);
             remove => Events.RemoveHandler(s_mouseDownEvent, value);
@@ -1396,7 +1396,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ToolStripItemOnMouseEnterDescr))]
-        public event EventHandler MouseEnter
+        public event EventHandler? MouseEnter
         {
             add => Events.AddHandler(s_mouseEnterEvent, value);
             remove => Events.RemoveHandler(s_mouseEnterEvent, value);
@@ -1407,7 +1407,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ToolStripItemOnMouseLeaveDescr))]
-        public event EventHandler MouseLeave
+        public event EventHandler? MouseLeave
         {
             add => Events.AddHandler(s_mouseLeaveEvent, value);
             remove => Events.RemoveHandler(s_mouseLeaveEvent, value);
@@ -1418,7 +1418,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ToolStripItemOnMouseHoverDescr))]
-        public event EventHandler MouseHover
+        public event EventHandler? MouseHover
         {
             add => Events.AddHandler(s_mouseHoverEvent, value);
             remove => Events.RemoveHandler(s_mouseHoverEvent, value);
@@ -1429,7 +1429,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ToolStripItemOnMouseMoveDescr))]
-        public event MouseEventHandler MouseMove
+        public event MouseEventHandler? MouseMove
         {
             add => Events.AddHandler(s_mouseMoveEvent, value);
             remove => Events.RemoveHandler(s_mouseMoveEvent, value);
@@ -1440,7 +1440,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatMouse))]
         [SRDescription(nameof(SR.ToolStripItemOnMouseUpDescr))]
-        public event MouseEventHandler MouseUp
+        public event MouseEventHandler? MouseUp
         {
             add => Events.AddHandler(s_mouseUpEvent, value);
             remove => Events.RemoveHandler(s_mouseUpEvent, value);
@@ -1453,9 +1453,9 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DefaultValue(null)]
-        public string Name
+        public string? Name
         {
-            get => WindowsFormsUtils.GetComponentName(this, (string)Properties.GetObject(ToolStripItem.s_nameProperty));
+            get => WindowsFormsUtils.GetComponentName(this, (string?)Properties.GetObject(ToolStripItem.s_nameProperty));
             set
             {
                 if (DesignMode)
@@ -1474,7 +1474,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ToolStrip Owner
+        public ToolStrip? Owner
         {
             get => _owner;
             set
@@ -1494,11 +1494,11 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ToolStripItem OwnerItem
+        public ToolStripItem? OwnerItem
         {
             get
             {
-                ToolStripDropDown currentParent = null;
+                ToolStripDropDown? currentParent = null;
                 if (ParentInternal is not null)
                 {
                     currentParent = ParentInternal as ToolStripDropDown;
@@ -1520,7 +1520,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ToolStripItemOwnerChangedDescr))]
-        public event EventHandler OwnerChanged
+        public event EventHandler? OwnerChanged
         {
             add => Events.AddHandler(s_ownerChangedEvent, value);
             remove => Events.RemoveHandler(s_ownerChangedEvent, value);
@@ -1528,7 +1528,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripItemOnPaintDescr))]
-        public event PaintEventHandler Paint
+        public event PaintEventHandler? Paint
         {
             add => Events.AddHandler(s_paintEvent, value);
             remove => Events.RemoveHandler(s_paintEvent, value);
@@ -1544,7 +1544,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        protected internal ToolStrip Parent
+        protected internal ToolStrip? Parent
         {
             get => ParentInternal;
             set => ParentInternal = value;
@@ -1596,14 +1596,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This is explicitly a ToolStrip, because only ToolStrips know how to manage ToolStripItems
         /// </summary>
-        internal ToolStrip ParentInternal
+        internal ToolStrip? ParentInternal
         {
             get => _parent;
             set
             {
                 if (_parent != value)
                 {
-                    ToolStrip oldParent = _parent;
+                    ToolStrip? oldParent = _parent;
                     _parent = value;
                     OnParentChanged(oldParent, value);
                 }
@@ -1625,12 +1625,12 @@ namespace System.Windows.Forms
                     return Size.Empty;
                 }
 
-                Image image = (Image)Properties.GetObject(s_imageProperty);
+                Image? image = (Image?)Properties.GetObject(s_imageProperty);
                 bool usingImageList = ((Owner is not null) && (Owner.ImageList is not null) && (ImageIndexer.ActualIndex >= 0));
 
                 if (ImageScaling == ToolStripItemImageScaling.SizeToFit)
                 {
-                    ToolStrip ownerToolStrip = Owner;
+                    ToolStrip? ownerToolStrip = Owner;
                     if (ownerToolStrip is not null && (image is not null || usingImageList))
                     {
                         return ownerToolStrip.ImageScalingSize;
@@ -1640,7 +1640,7 @@ namespace System.Windows.Forms
                 Size imageSize = Size.Empty;
                 if (usingImageList)
                 {
-                    imageSize = Owner.ImageList.ImageSize;
+                    imageSize = Owner!.ImageList!.ImageSize;
                 }
                 else
                 {
@@ -1669,7 +1669,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ToolStripItemOnQueryContinueDragDescr))]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [Browsable(false)]
-        public event QueryContinueDragEventHandler QueryContinueDrag
+        public event QueryContinueDragEventHandler? QueryContinueDrag
         {
             add => Events.AddHandler(s_queryContinueDragEvent, value);
             remove => Events.RemoveHandler(s_queryContinueDragEvent, value);
@@ -1677,7 +1677,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ToolStripItemOnQueryAccessibilityHelpDescr))]
-        public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
+        public event QueryAccessibilityHelpEventHandler? QueryAccessibilityHelp
         {
             add => Events.AddHandler(s_queryAccessibilityHelpEvent, value);
             remove => Events.RemoveHandler(s_queryAccessibilityHelpEvent, value);
@@ -1688,7 +1688,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal Color RawBackColor => Properties.GetColor(s_backColorProperty);
 
-        internal ToolStripRenderer Renderer
+        internal ToolStripRenderer? Renderer
         {
             get
             {
@@ -1780,19 +1780,19 @@ namespace System.Windows.Forms
             }
         }
 
-        internal Image MirroredImage
+        internal Image? MirroredImage
         {
             get
             {
                 if (_state[s_stateInvalidMirroredImage])
                 {
-                    Image image = Image;
+                    Image? image = Image;
                     if (image is null)
                     {
                         return null;
                     }
 
-                    Image mirroredImage = image.Clone() as Image;
+                    Image mirroredImage = (Image)image.Clone();
                     mirroredImage.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
                     Properties.SetObject(s_mirroredImageProperty, mirroredImage);
@@ -1808,7 +1808,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ToolStripItemOnRightToLeftChangedDescr))]
-        public event EventHandler RightToLeftChanged
+        public event EventHandler? RightToLeftChanged
         {
             add => Events.AddHandler(s_rightToLeftChangedEvent, value);
             remove => Events.RemoveHandler(s_rightToLeftChangedEvent, value);
@@ -1888,20 +1888,20 @@ namespace System.Windows.Forms
         [Bindable(true)]
         [SRDescription(nameof(SR.ToolStripItemTagDescr))]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag
+        public object? Tag
         {
             get
             {
                 if (Properties.ContainsObject(ToolStripItem.s_tagProperty))
                 {
-                    return _propertyStore.GetObject(ToolStripItem.s_tagProperty);
+                    return _propertyStore!.GetObject(ToolStripItem.s_tagProperty);
                 }
 
                 return null;
             }
             set => Properties.SetObject(ToolStripItem.s_tagProperty, value);
         }
-
+#nullable disable
         /// <summary>
         ///  The text of the item
         /// </summary>

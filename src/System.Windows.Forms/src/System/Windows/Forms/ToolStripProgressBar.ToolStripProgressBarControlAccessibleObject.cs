@@ -21,7 +21,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return _ownerToolStripProgressBarControl.Owner?.Owner.AccessibilityObject;
+                    return _ownerToolStripProgressBarControl.Owner?.Owner?.AccessibilityObject;
                 }
             }
 

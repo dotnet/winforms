@@ -820,7 +820,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void MoveControl(ToolStrip toolStripToDrag, Point screenLocation)
+        internal void MoveControl(ToolStrip? toolStripToDrag, Point screenLocation)
         {
             if (toolStripToDrag is not ISupportToolStripPanel draggedControl)
             {
@@ -837,7 +837,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Join(toolStripToDrag as ToolStrip, clientLocation);
+                Join(toolStripToDrag, clientLocation);
             }
         }
 

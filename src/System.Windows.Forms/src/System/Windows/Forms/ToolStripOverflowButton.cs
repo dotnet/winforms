@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ParentInternal.OverflowItems.Count > 0;
+                return ParentInternal is not null && ParentInternal.OverflowItems.Count > 0;
             }
         }
 

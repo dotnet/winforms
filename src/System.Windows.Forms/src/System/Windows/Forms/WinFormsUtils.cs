@@ -313,7 +313,7 @@ namespace System.Windows.Forms
             return string.Compare(string1, string2, ignoreCase, CultureInfo.InvariantCulture) == 0;
         }
 
-        public static string GetComponentName(IComponent component, string defaultNameValue)
+        public static string GetComponentName(IComponent component, string? defaultNameValue)
         {
             Debug.Assert(component is not null, "component passed here cannot be null");
             if (string.IsNullOrEmpty(defaultNameValue))

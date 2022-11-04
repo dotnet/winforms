@@ -126,7 +126,7 @@ namespace System.Windows.Forms
             {
                 if (_toolStripDropDownDirection == ToolStripDropDownDirection.Default)
                 {
-                    ToolStrip parent = ParentInternal;
+                    ToolStrip? parent = ParentInternal;
                     if (parent is not null)
                     {
                         ToolStripDropDownDirection dropDownDirection = parent.DefaultDropDownDirection;

@@ -492,7 +492,7 @@ namespace System.Windows.Forms
                 if (originalShortcut != value)
                 {
                     ClearShortcutCache();
-                    ToolStrip owner = Owner;
+                    ToolStrip? owner = Owner;
                     if (owner is not null)
                     {
                         // add to the shortcut caching system.
@@ -1085,7 +1085,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            ToolStripRenderer renderer = Renderer;
+            ToolStripRenderer renderer = Renderer!;
             Graphics g = e.Graphics;
             renderer.DrawMenuItemBackground(new ToolStripItemRenderEventArgs(g, this));
 

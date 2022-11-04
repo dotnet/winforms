@@ -254,7 +254,7 @@ namespace System.Windows.Forms
         {
             if (IsLink)
             {
-                ToolStrip parent = Parent;
+                ToolStrip? parent = Parent;
                 if (parent is not null)
                 {
                     _lastCursor = parent.Cursor;
@@ -269,7 +269,7 @@ namespace System.Windows.Forms
         {
             if (IsLink)
             {
-                ToolStrip parent = Parent;
+                ToolStrip? parent = Parent;
                 if (parent is not null)
                 {
                     parent.Cursor = _lastCursor;
@@ -334,7 +334,7 @@ namespace System.Windows.Forms
         {
             if (Owner is not null)
             {
-                ToolStripRenderer renderer = Renderer;
+                ToolStripRenderer renderer = Renderer!;
 
                 renderer.DrawLabelBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
 
@@ -349,7 +349,7 @@ namespace System.Windows.Forms
 
         internal void PaintText(Graphics g)
         {
-            ToolStripRenderer renderer = Renderer;
+            ToolStripRenderer renderer = Renderer!;
 
             if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
             {
