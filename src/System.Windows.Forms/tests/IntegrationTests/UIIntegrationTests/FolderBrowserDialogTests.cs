@@ -49,7 +49,7 @@ namespace System.Windows.Forms.UITests
                         return;
                     }
 
-                    TestOutputHelper?.WriteLine($"Couldn't find the dialog ({counter}/3). Retrying...");
+                    TestOutputHelper.WriteLine($"Couldn't find the dialog ({counter}/3). Retrying...");
                     timer.Start();
                 }
             };
@@ -67,8 +67,8 @@ namespace System.Windows.Forms.UITests
                 PInvoke.GetWindowThreadProcessId(hwnd, &processId);
                 if (processId == PInvoke.GetCurrentProcessId() && PInvoke.IsWindowVisible(hwnd))
                 {
-                    TestOutputHelper?.WriteLine($"Process ID: {processId}");
-                    TestOutputHelper?.WriteLine($"Dialog window found: 0x{hwnd.Value:X8}");
+                    TestOutputHelper.WriteLine($"Process ID: {processId}");
+                    TestOutputHelper.WriteLine($"Dialog window found: 0x{hwnd.Value:X8}");
 
                     PInvoke.SendMessage(hwnd, User32.WM.CLOSE);
 
