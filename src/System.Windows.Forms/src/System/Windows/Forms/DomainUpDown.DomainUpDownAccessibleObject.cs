@@ -11,7 +11,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete(
             Obsoletions.DomainUpDownAccessibleObjectMessage,
-            error: false,
+            error: true,
             DiagnosticId = Obsoletions.DomainUpDownAccessibleObjectDiagnosticId,
             UrlFormat = Obsoletions.SharedUrlFormat)]
         public class DomainUpDownAccessibleObject : ControlAccessibleObject
