@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -14,7 +12,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal sealed partial class CategoryGridEntry : GridEntry
     {
         private readonly string _name;
-        private static Dictionary<string, bool> s_categoryStates;
+        private static Dictionary<string, bool>? s_categoryStates;
         private static readonly object s_lock = new();
 
         public CategoryGridEntry(PropertyGrid ownerGrid, GridEntry parent, string name, IEnumerable<GridEntry> children)
@@ -42,7 +40,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             lock (s_lock)
             {
-                InternalExpanded = (bool)s_categoryStates[name];
+                InternalExpanded = s_categoryStates[name];
             }
 
             SetFlag(Flags.LabelBold, true);
@@ -85,14 +83,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 base.InternalExpanded = value;
                 lock (s_lock)
                 {
-                    s_categoryStates[_name] = value;
+                    s_categoryStates![_name] = value;
                 }
             }
         }
 
         public override GridItemType GridItemType => GridItemType.Category;
 
-        public override string HelpKeyword => null;
+        public override string? HelpKeyword => null;
 
         public override string PropertyLabel => _name;
 
