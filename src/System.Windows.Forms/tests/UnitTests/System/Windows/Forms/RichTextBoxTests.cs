@@ -10794,13 +10794,13 @@ namespace System.Windows.Forms.Tests
         private static unsafe string GetClassName(HWND hWnd)
         {
             int length = 0;
-            Span<char> buffer = stackalloc char[PInvoke.MAX_CLASS_NAME];
+            Span<char> buffer = stackalloc char[PInvoke.MaxClassName];
             fixed (char* lpClassName = buffer)
             {
                 length = PInvoke.GetClassName(hWnd, lpClassName, buffer.Length);
             }
 
-            return new string(buffer.Slice(0, length));
+            return new string(buffer[..length]);
         }
 
         /// <summary>

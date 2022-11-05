@@ -2556,7 +2556,8 @@ namespace System.Windows.Forms
                         HWND parentHandle = PInvoke.GetParent(this);
                         HWND lastParentHandle = parentHandle;
                         SetState(States.HostedInDialog, false);
-                        Span<char> buffer = stackalloc char[PInvoke.MAX_CLASS_NAME];
+                        Span<char> buffer = stackalloc char[PInvoke.MaxClassName];
+
                         while (!parentHandle.IsNull)
                         {
                             int length = 0;
@@ -2565,9 +2566,10 @@ namespace System.Windows.Forms
                                 length = PInvoke.GetClassName(lastParentHandle, lpClassName, buffer.Length);
                             }
 
-                            // class name #32770
+                            // #32770 is the standard windows dialog class name
+                            // https://learn.microsoft.com/en-au/windows/win32/winmsg/about-window-classes#system-classes
                             ReadOnlySpan<char> className = "#32770";
-                            if (className.Equals(buffer.Slice(0, length), StringComparison.Ordinal))
+                            if (className.Equals(buffer[..length], StringComparison.Ordinal))
                             {
                                 SetState(States.HostedInDialog, true);
                                 break;

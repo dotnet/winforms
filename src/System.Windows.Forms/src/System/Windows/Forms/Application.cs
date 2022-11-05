@@ -288,14 +288,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the path for the executable file that started the application.
         /// </summary>
-        public static string ExecutablePath
-        {
-            get
-            {
-                s_executablePath ??= Path.GetFullPath(PInvoke.GetModuleFileNameLongPath(HINSTANCE.Null));
-                return s_executablePath;
-            }
-        }
+        public static string ExecutablePath =>
+            s_executablePath ??= PInvoke.GetModuleFileNameLongPath(HINSTANCE.Null);
 
         /// <summary>
         ///  Gets the current <see cref="HighDpiMode"/> mode for the process.
