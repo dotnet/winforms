@@ -2,23 +2,32 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
-
 namespace System.Windows.Forms.Layout
 {
     internal partial class TableLayout
     {
-        private abstract class SpanComparer : IComparer
+        private abstract class SpanComparer : IComparer<LayoutInfo>
         {
             public abstract int GetSpan(LayoutInfo layoutInfo);
 
-            public int Compare(object x, object y)
+            public int Compare(LayoutInfo? x, LayoutInfo? y)
             {
-                LayoutInfo xInfo = (LayoutInfo)x;
-                LayoutInfo yInfo = (LayoutInfo)y;
-                return GetSpan(xInfo) - GetSpan(yInfo);
+                if (x is null && y is null)
+                {
+                    return 0;
+                }
+
+                if (x is null)
+                {
+                    return -1;
+                }
+
+                if (y is null)
+                {
+                    return 1;
+                }
+
+                return GetSpan(x) - GetSpan(y);
             }
         }
     }
