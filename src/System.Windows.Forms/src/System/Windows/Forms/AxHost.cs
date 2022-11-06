@@ -169,8 +169,8 @@ namespace System.Windows.Forms
 
         // CustomTypeDescriptor related state
 
-        private Hashtable _properties;
-        private Hashtable _propertyInfos;
+        private Dictionary<string, PropertyDescriptor> _properties;
+        private Dictionary<string, PropertyInfo> _propertyInfos;
         private PropertyDescriptorCollection _propsStash;
         private Attribute[] _attribsStash;
 
@@ -2733,11 +2733,11 @@ namespace System.Windows.Forms
 
             ArrayList returnProperties = new ArrayList();
 
-            _properties ??= new Hashtable();
+            _properties ??= new Dictionary<string, PropertyDescriptor>();
 
             if (_propertyInfos is null)
             {
-                _propertyInfos = new Hashtable();
+                _propertyInfos = new Dictionary<string, PropertyInfo>();
 
                 PropertyInfo[] propInfos = GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
 
@@ -2762,7 +2762,8 @@ namespace System.Windows.Forms
 
                     string propName = baseProps[i].Name;
                     PropertyDescriptor prop = null;
-                    PropertyInfo propInfo = (PropertyInfo)_propertyInfos[propName];
+
+                    _propertyInfos.TryGetValue(propName, out PropertyInfo propInfo);
 
                     // We do not support "write-only" properties that some activex controls support.
                     if (propInfo is not null && !propInfo.CanRead)
@@ -2789,7 +2790,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        PropertyDescriptor propDesc = (PropertyDescriptor)_properties[propName];
+                        _properties.TryGetValue(propName, out PropertyDescriptor propDesc);
                         Debug.Assert(propDesc is not null, $"Cannot find cached entry for: {propName}");
                         AxPropertyDescriptor axPropDesc = propDesc as AxPropertyDescriptor;
                         if ((propInfo is null && axPropDesc is not null) || (propInfo is not null && axPropDesc is null))
