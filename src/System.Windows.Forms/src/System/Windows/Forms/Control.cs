@@ -2567,7 +2567,7 @@ namespace System.Windows.Forms
                             }
 
                             // #32770 is the standard windows dialog class name
-                            // https://learn.microsoft.com/en-au/windows/win32/winmsg/about-window-classes#system-classes
+                            // https://learn.microsoft.com/windows/win32/winmsg/about-window-classes#system-classes
                             ReadOnlySpan<char> className = "#32770";
                             if (className.Equals(buffer[..length], StringComparison.Ordinal))
                             {

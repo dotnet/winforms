@@ -11,6 +11,11 @@ namespace Windows.Win32
     {
         public static unsafe string GetModuleFileNameLongPath(HINSTANCE hModule)
         {
+            if (TryGetModuleFileName(hModule, out char[] path))
+            {
+                return new string(path);
+            }
+
             char[] buffer;
             int bufferSize = 4096;
             // Allocate increasingly larger portions of memory until successful or we hit short.maxvalue.
@@ -29,7 +34,8 @@ namespace Windows.Win32
                     return string.Empty;
                 }
 
-                if (pathLength > 0 && (pathLength < buffer.Length || (WIN32_ERROR)Marshal.GetLastWin32Error() != WIN32_ERROR.ERROR_INSUFFICIENT_BUFFER))
+                // If the length equals the buffer size we need to check to see if we were told the buffer was insufficient (it was trimmed)
+                if (pathLength < buffer.Length - 1 || (WIN32_ERROR)Marshal.GetLastWin32Error() != WIN32_ERROR.ERROR_INSUFFICIENT_BUFFER)
                 {
                     // Get return value and return buffer to array pool.
                     string returnValue = new string(buffer, 0, (int)pathLength);
@@ -42,6 +48,30 @@ namespace Windows.Win32
             }
 
             return string.Empty;
+        }
+
+        private static unsafe bool TryGetModuleFileName(HINSTANCE hModule, out char[] bufferOut)
+        {
+            Span<char> buffer = stackalloc char[MAX_PATH];
+            bufferOut = Array.Empty<char>();
+            uint pathLength;
+            fixed (char* lpFilename = buffer)
+            {
+                pathLength = GetModuleFileName(hModule, lpFilename, (uint)buffer.Length);
+            }
+
+            if (pathLength == 0 || (WIN32_ERROR)Marshal.GetLastWin32Error() == WIN32_ERROR.ERROR_INSUFFICIENT_BUFFER)
+            {
+                return false;
+            }
+
+            if (pathLength < buffer.Length)
+            {
+                bufferOut = buffer[..(int)pathLength].ToArray();
+                return true;
+            }
+
+            return false;
         }
     }
 }
