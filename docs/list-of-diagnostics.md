@@ -2,7 +2,7 @@
 
 ## Obsoletions
 
-Per https://github.com/dotnet/designs/blob/master/accepted/2020/better-obsoletion/better-obsoletion.md and similar to https://github.com/dotnet/runtime/blob/main/docs/project/list-of-diagnostics.md, we now have a strategy for marking existing APIs as `[Obsolete]`. This takes advantage of the new diagnostic id and URL template mechanisms introduced to `ObsoleteAttribute` in .NET 5.
+Per https://github.com/dotnet/designs/blob/main/accepted/2020/better-obsoletion/better-obsoletion.md and similar to https://github.com/dotnet/runtime/blob/main/docs/project/list-of-diagnostics.md, we now have a strategy for marking existing APIs as `[Obsolete]`. This takes advantage of the new diagnostic id and URL template mechanisms introduced to `ObsoleteAttribute` in .NET 5.
 
 The diagnostic id values reserved for obsoletions are `WFDEV001` through `WFDEV999`. When obsoleting an API, claim the next three-digit identifier in the `WFDEV###` sequence and add it to the list below. The URL template for all obsoletions is `https://aka.ms/winforms-warnings/{0}`. The `{0}` placeholder is replaced by the compiler with the `WFDEV###` identifier.
 
@@ -21,8 +21,8 @@ The acceptance criteria for adding an obsoletion includes:
 * Apply the `:book: documentation: breaking` label to the PR that introduces the obsoletion
 * Follow up with the breaking change process to communicate and document the breaking change
     * In the breaking-change issue filed in [dotnet/docs](https://github.com/dotnet/docs), specifically mention that this breaking change is an obsoletion with a `WFDEV` diagnostic id
-    * The documentation team will produce a PR that adds the obsoletion to the [WFDEV warnings](https://docs.microsoft.com/dotnet/core/compatibility/winforms-obsoletions) page
-    * That PR will also add a new URL specific to this diagnostic ID; e.g. [WFDEV001](https://docs.microsoft.com/dotnet/core/compatibility/winforms-warnings/WFDEV001)
+    * The documentation team will produce a PR that adds the obsoletion to the [WFDEV warnings](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/obsoletions-overview) page
+    * That PR will also add a new URL specific to this diagnostic ID; e.g. [WFDEV001](https://learn.microsoft.com/dotnet/desktop/winforms/wfdev-diagnostics/wfdev001)
     * Connect with `@gewarren` or `@BillWagner` with any questions
 * Register the `WFDEV###` URL in `aka.ms`
     * The vanity name will be `winforms-warnings/WFDEV###`
