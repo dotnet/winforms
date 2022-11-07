@@ -392,16 +392,15 @@ namespace System.Windows.Forms
                 _storage = null;
             }
 
-            protected virtual void Dispose(bool disposing)
-            {
-                ReleaseResources();
-            }
+            protected virtual void Dispose(bool disposing) => ReleaseResources();
 
             public void Dispose()
             {
                 Dispose(true);
                 GC.SuppressFinalize(this);
             }
+
+            ~State() => Dispose(false);
         }
     }
 }
