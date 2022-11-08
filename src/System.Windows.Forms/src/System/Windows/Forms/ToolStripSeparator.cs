@@ -170,15 +170,19 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStrip? parent = ParentInternal;
-                parent ??= Owner;
+                ToolStrip? parent = ParentInternal ?? Owner;
+
+                if (parent is null)
+                {
+                    return true;
+                }
 
                 if (parent is ToolStripDropDownMenu dropDownMenu)
                 {
                     return false;
                 }
 
-                switch (parent!.LayoutStyle)
+                switch (parent.LayoutStyle)
                 {
                     case ToolStripLayoutStyle.VerticalStackWithOverflow:
                         return false;
