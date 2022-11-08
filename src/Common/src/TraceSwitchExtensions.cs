@@ -8,6 +8,7 @@ namespace System.Windows.Forms
 {
     internal static class TraceSwitchExtensions
     {
+        [Conditional("DEBUG")]
         public static void TraceVerbose(this TraceSwitch? traceSwitch, string message)
         {
             if (traceSwitch is not null && traceSwitch.TraceVerbose)
