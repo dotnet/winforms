@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Layout
             return low + ((hi - low) >> 1);
         }
 
-        private static void Sort(object[] array, IComparer comparer)
+        private static void Sort(LayoutInfo[] array, IComparer<LayoutInfo> comparer)
         {
             ArgumentNullException.ThrowIfNull(array);
 
