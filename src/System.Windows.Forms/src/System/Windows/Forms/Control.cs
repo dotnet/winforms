@@ -970,10 +970,10 @@ namespace System.Windows.Forms
                     return c;
                 }
 
-                Control? p = ParentInternal;
-                if (p is not null && p.CanAccessProperties)
+                Control? parent = ParentInternal;
+                if (parent is not null && parent.CanAccessProperties)
                 {
-                    c = p.BackColor;
+                    c = parent.BackColor;
                     if (IsValidBackColor(c))
                     {
                         return c;
@@ -1159,10 +1159,10 @@ namespace System.Windows.Forms
                 }
 
                 // Otherwise, see if the parent has one for us.
-                Control? p = ParentInternal;
-                if (p is not null && p.CanAccessProperties)
+                Control? parent = ParentInternal;
+                if (parent is not null && parent.CanAccessProperties)
                 {
-                    return p.BindingContext;
+                    return parent.BindingContext;
                 }
 
                 // Otherwise, we have no binding manager available.
@@ -1767,10 +1767,10 @@ namespace System.Windows.Forms
                     return localDefault;
                 }
 
-                Control? p = ParentInternal;
-                if (p is not null)
+                Control? parent = ParentInternal;
+                if (parent is not null)
                 {
-                    return p.Cursor;
+                    return parent.Cursor;
                 }
 
                 AmbientProperties? ambient = AmbientPropertiesService;
@@ -2357,10 +2357,10 @@ namespace System.Windows.Forms
                     return color;
                 }
 
-                Control? p = ParentInternal;
-                if (p is not null && p.CanAccessProperties)
+                Control? parent = ParentInternal;
+                if (parent is not null && parent.CanAccessProperties)
                 {
-                    return p.ForeColor;
+                    return parent.ForeColor;
                 }
 
                 Color c = Color.Empty;

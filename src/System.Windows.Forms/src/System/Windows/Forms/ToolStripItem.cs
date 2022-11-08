@@ -552,10 +552,10 @@ namespace System.Windows.Forms
                     return c;
                 }
 
-                Control? p = ParentInternal;
-                if (p is not null)
+                Control? parent = ParentInternal;
+                if (parent is not null)
                 {
-                    return p.BackColor;
+                    return parent.BackColor;
                 }
 
                 return Control.DefaultBackColor;
@@ -909,10 +909,10 @@ namespace System.Windows.Forms
                     return foreColor;
                 }
 
-                Control? p = ParentInternal;
-                if (p is not null)
+                Control? parent = ParentInternal;
+                if (parent is not null)
                 {
-                    return p.ForeColor;
+                    return parent.ForeColor;
                 }
 
                 return Control.DefaultForeColor;
