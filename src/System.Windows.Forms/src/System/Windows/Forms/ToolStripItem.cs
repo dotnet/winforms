@@ -1640,7 +1640,7 @@ namespace System.Windows.Forms
                 Size imageSize = Size.Empty;
                 if (usingImageList)
                 {
-                    imageSize = Owner!.ImageList!.ImageSize;
+                    imageSize = Owner?.ImageList?.ImageSize ?? Size.Empty;
                 }
                 else
                 {
