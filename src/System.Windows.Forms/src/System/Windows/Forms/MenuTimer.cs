@@ -77,7 +77,7 @@ namespace System.Windows.Forms
 
         public void Transition(ToolStripMenuItem fromItem, ToolStripMenuItem? toItem)
         {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, $"[MenuTimer.Transition] transitioning items {fromItem.ToString()} {toItem?.ToString()}");
+            ToolStrip.s_menuAutoExpandDebug.TraceVerbose($"[MenuTimer.Transition] transitioning items {fromItem} {toItem?.ToString()}");
 
             if (toItem is null && InTransition)
             {
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
             EndTransition(forceClose: false);
             if (CurrentItem is not null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
             {
-                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, "[MenuTimer.OnTick] calling OnMenuAutoExpand");
+                ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[MenuTimer.OnTick] calling OnMenuAutoExpand");
                 CurrentItem.OnMenuAutoExpand();
             }
         }

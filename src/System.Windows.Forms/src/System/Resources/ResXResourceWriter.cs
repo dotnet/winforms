@@ -8,6 +8,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace System.Resources
@@ -358,7 +359,7 @@ namespace System.Resources
         /// </summary>
         private void AddDataRow(string elementName, string name, object value)
         {
-            Debug.WriteLineIf(s_resValueProviderSwitch.TraceVerbose, "  resx: adding resource " + name);
+            s_resValueProviderSwitch.TraceVerbose($"  resx: adding resource {name}");
             switch (value)
             {
                 case string str:
@@ -630,12 +631,12 @@ namespace System.Resources
             }
 
             _hasBeenSaved = true;
-            Debug.WriteLineIf(s_resValueProviderSwitch.TraceVerbose, "writing XML");
+            s_resValueProviderSwitch.TraceVerbose("writing XML");
 
             Writer.WriteEndElement();
             Writer.Flush();
 
-            Debug.WriteLineIf(s_resValueProviderSwitch.TraceVerbose, "done");
+            s_resValueProviderSwitch.TraceVerbose("done");
         }
     }
 }

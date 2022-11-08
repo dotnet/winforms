@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="..\..\Common\src\Obsoletions.cs" Link="Common\Obsoletions.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
+    <Compile Include="..\..\Common\src\TraceSwitchExtensions.cs" Link="Common\TraceSwitchExtensions.cs" />
   </ItemGroup>
 
   <ItemGroup>

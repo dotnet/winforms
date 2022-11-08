@@ -937,7 +937,7 @@ namespace System.Windows.Forms
 
         protected override void OnDropDownHide(EventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, "[ToolStripMenuItem.OnDropDownHide] MenuTimer.Cancel called");
+            ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnDropDownHide] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
             base.OnDropDownHide(e);
         }
@@ -946,7 +946,7 @@ namespace System.Windows.Forms
         {
             // if someone has beaten us to the punch by arrowing around
             // cancel the current menu timer.
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, "[ToolStripMenuItem.OnDropDownShow] MenuTimer.Cancel called");
+            ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnDropDownShow] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
             if (ParentInternal is not null)
             {
@@ -972,7 +972,7 @@ namespace System.Windows.Forms
             // Opening should happen on mouse down
             // we use a mouse down ID to ensure that the reshow
 
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, "[ToolStripMenuItem.OnMouseDown] MenuTimer.Cancel called");
+            ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnMouseDown] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
             OnMouseButtonStateChange(e, /*isMouseDown=*/true);
         }
@@ -1034,9 +1034,9 @@ namespace System.Windows.Forms
             // If we are in a submenu pop down the submenu.
             if (ParentInternal is not null && ParentInternal.MenuAutoExpand && Selected)
             {
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging!.TraceVerbose, "received mouse enter - calling drop down");
+                ToolStripItem.s_mouseDebugging.TraceVerbose("received mouse enter - calling drop down");
 
-                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, "[ToolStripMenuItem.OnMouseEnter] MenuTimer.Cancel / MenuTimer.Start called");
+                ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnMouseEnter] MenuTimer.Cancel / MenuTimer.Start called");
 
                 MenuTimer.Cancel(this);
                 MenuTimer.Start(this);
@@ -1047,7 +1047,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseLeave(EventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose, "[ToolStripMenuItem.OnMouseLeave] MenuTimer.Cancel called");
+            ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[ToolStripMenuItem.OnMouseLeave] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
             base.OnMouseLeave(e);
         }

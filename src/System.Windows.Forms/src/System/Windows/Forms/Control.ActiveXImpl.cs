@@ -257,14 +257,14 @@ namespace System.Windows.Forms
                 HWND hwndParent,
                 RECT* lprcPosRect)
             {
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, $"AxSource:ActiveXImpl:DoVerb({iVerb})");
+                CompModSwitches.ActiveX.TraceVerbose($"AxSource:ActiveXImpl:DoVerb({iVerb})");
                 switch (iVerb)
                 {
                     case Ole32.OLEIVERB.SHOW:
                     case Ole32.OLEIVERB.INPLACEACTIVATE:
                     case Ole32.OLEIVERB.UIACTIVATE:
                     case Ole32.OLEIVERB.PRIMARY:
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Show, InPlaceActivate, UIActivate");
+                        CompModSwitches.ActiveX.TraceVerbose("DoVerb:Show, InPlaceActivate, UIActivate");
                         InPlaceActivate(iVerb);
 
                         // Now that we're active, send the lpmsg to the control if it is valid.
@@ -320,7 +320,7 @@ namespace System.Windows.Forms
                         break;
 
                     case Ole32.OLEIVERB.HIDE:
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Hide");
+                        CompModSwitches.ActiveX.TraceVerbose("DoVerb:Hide");
                         UIDeactivate();
                         InPlaceDeactivate();
                         if (_activeXState[s_inPlaceVisible])
@@ -332,7 +332,7 @@ namespace System.Windows.Forms
 
                     // All other verbs are not implemented.
                     default:
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Other");
+                        CompModSwitches.ActiveX.TraceVerbose("DoVerb:Other");
                         ThrowHr(HRESULT.E_NOTIMPL);
                         break;
                 }
@@ -779,7 +779,7 @@ namespace System.Windows.Forms
                 // If we're not already active, go and do it.
                 if (!_activeXState[s_inPlaceActive])
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplaceactive");
+                    CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> inplaceactive");
 
                     HRESULT hr = inPlaceSite.CanInPlaceActivate();
                     if (hr != HRESULT.S_OK)
@@ -800,7 +800,7 @@ namespace System.Windows.Forms
                 // And if we're not visible, do that too.
                 if (!_activeXState[s_inPlaceVisible])
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplacevisible");
+                    CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> inplacevisible");
                     Ole32.OLEINPLACEFRAMEINFO inPlaceFrameInfo = new()
                     {
                         cb = (uint)sizeof(Ole32.OLEINPLACEFRAMEINFO)
@@ -865,14 +865,14 @@ namespace System.Windows.Forms
                 // if we weren't asked to UIActivate, then we're done.
                 if (verb != Ole32.OLEIVERB.PRIMARY && verb != Ole32.OLEIVERB.UIACTIVATE)
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> not becoming UIActive");
+                    CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> not becoming UIActive");
                     return;
                 }
 
                 // if we're not already UI active, do sow now.
                 if (!_activeXState[s_uiActive])
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> uiactive");
+                    CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> uiactive");
                     _activeXState[s_uiActive] = true;
 
                     // inform the container of our intent
@@ -909,7 +909,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> already uiactive");
+                    CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> already uiactive");
                 }
             }
 

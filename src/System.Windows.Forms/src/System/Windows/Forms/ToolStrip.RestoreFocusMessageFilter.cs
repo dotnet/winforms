@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -58,7 +57,7 @@ namespace System.Windows.Forms
 
             private void RestoreFocusInternal()
             {
-                Debug.WriteLineIf(s_snapFocusDebug!.TraceVerbose, "[ToolStrip.RestoreFocusFilter] Detected a click, restoring focus.");
+                s_snapFocusDebug.TraceVerbose("[ToolStrip.RestoreFocusFilter] Detected a click, restoring focus.");
 
                 _ownerToolStrip.BeginInvoke(new BooleanMethodInvoker(_ownerToolStrip.RestoreFocusInternal), new object[] { ToolStripManager.ModalMenuFilter.InMenuMode });
 

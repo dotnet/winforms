@@ -24,7 +24,7 @@ namespace System.Windows.Forms
                 {
                     if (toolStripToDragAsRaftingControl.Stretch)
                     {
-                        Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, "TSP RM CanMove returns false - the item moving is stretched.");
+                        ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("TSP RM CanMove returns false - the item moving is stretched.");
                         return false;
                     }
                 }
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                     {
                         if (controlAsRaftingControl.Stretch)
                         {
-                            Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, "TSP RM CanMove returns false - the row already contains a stretched item.");
+                            ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("TSP RM CanMove returns false - the row already contains a stretched item.");
                             return false;
                         }
                     }

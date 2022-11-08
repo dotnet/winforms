@@ -3185,12 +3185,12 @@ namespace System.Windows.Forms
 
         private void UpdateOleCallback()
         {
-            Debug.WriteLineIf(RichTextDbg.TraceVerbose, "update ole callback (" + AllowDrop + ")");
+            RichTextDbg.TraceVerbose($"update ole callback ({AllowDrop})");
             if (IsHandleCreated)
             {
                 if (oleCallback is null)
                 {
-                    Debug.WriteLineIf(RichTextDbg.TraceVerbose, "binding ole callback");
+                    RichTextDbg.TraceVerbose("binding ole callback");
 
                     AllowOleObjects = true;
 

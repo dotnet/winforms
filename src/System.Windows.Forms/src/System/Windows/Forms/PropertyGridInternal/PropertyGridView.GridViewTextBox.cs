@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using static Interop;
@@ -277,7 +276,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override void SetVisibleCore(bool value)
             {
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"DropDownHolder:Visible({value})");
+                CompModSwitches.DebugGridView.TraceVerbose($"DropDownHolder:Visible({value})");
 
                 // Make sure we don't have the mouse captured if we're going invisible.
                 if (value == false && HookMouseDown)

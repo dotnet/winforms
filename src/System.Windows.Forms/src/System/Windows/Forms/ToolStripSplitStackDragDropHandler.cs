@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
         public void OnDragEnter(DragEventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_itemReorderDebug!.TraceVerbose, $"OnDragEnter: {e.ToString()}");
+            ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragEnter: {e}");
             if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
                 e.Effect = DragDropEffects.Move;
@@ -32,13 +32,13 @@ namespace System.Windows.Forms
 
         public void OnDragLeave(EventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_itemReorderDebug!.TraceVerbose, $"OnDragLeave: {e.ToString()}");
+            ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragLeave: {e}");
             _owner.ClearInsertionMark();
         }
 
         public void OnDragDrop(DragEventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_itemReorderDebug!.TraceVerbose, $"OnDragDrop: {e.ToString()}");
+            ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragDrop: {e}");
 
             if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
 
         public void OnDragOver(DragEventArgs e)
         {
-            Debug.WriteLineIf(ToolStrip.s_itemReorderDebug!.TraceVerbose, $"OnDragOver: {e.ToString()}");
+            ToolStrip.s_itemReorderDebug.TraceVerbose($"OnDragOver: {e}");
 
             if (e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
@@ -146,8 +146,8 @@ namespace System.Windows.Forms
                 ToolStripItem item = _owner.Items[i];
                 RelativeLocation relativeLocation = ComparePositions(item.Bounds, ownerClientAreaRelativeDropPoint);
 
-                Debug.WriteLineIf(ToolStrip.s_itemReorderDebug!.TraceVerbose, $"Drop relative loc {relativeLocation}");
-                Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, $"Index {i}");
+                ToolStrip.s_itemReorderDebug.TraceVerbose($"Drop relative loc {relativeLocation}");
+                ToolStrip.s_itemReorderDebug.TraceVerbose($"Index {i}");
 
                 Rectangle insertionRect = Rectangle.Empty;
                 switch (relativeLocation)
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
                 bounds.Inflate(_owner.DisplayedItems[i].Margin.Size);
                 if (bounds.Contains(ownerClientAreaRelativeDropPoint))
                 {
-                    Debug.WriteLineIf(ToolStrip.s_dropTargetDebug!.TraceVerbose, $"MATCH {_owner.DisplayedItems[i].Text} Bounds: {_owner.DisplayedItems[i].Bounds.ToString()}");
+                    ToolStrip.s_dropTargetDebug.TraceVerbose($"MATCH {_owner.DisplayedItems[i].Text} Bounds: {_owner.DisplayedItems[i].Bounds}");
 
                     // consider what to do about items not in the display
                     return _owner.Items.IndexOf(_owner.DisplayedItems[i]);

@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
@@ -41,7 +40,7 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Reading property {pszPropName} from OCXState propertybag.");
+                s_axHTraceSwitch.TraceVerbose($"Reading property {pszPropName} from OCXState propertybag.");
 
                 if (!_bag.Contains(pszPropName))
                 {
@@ -50,7 +49,7 @@ namespace System.Windows.Forms
                 }
 
                 *pVar = (VARIANT)_bag[pszPropName];
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\tValue={*pVar}");
+                s_axHTraceSwitch.TraceVerbose($"\tValue={*pVar}");
 
                 // The EE returns a VT_EMPTY for a null. The problem is that visual basic6 expects the caller to respect the
                 // "hint" it gives in the VariantType. For eg., for a VT_BSTR, it expects that the callee will null
@@ -67,10 +66,10 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Writing property {pszPropName} [{*pVar}] into OCXState propertybag.");
+                s_axHTraceSwitch.TraceVerbose($"Writing property {pszPropName} [{*pVar}] into OCXState propertybag.");
                 if (!pVar->GetType().IsSerializable)
                 {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t {pVar->GetType().FullName} is not serializable.");
+                    s_axHTraceSwitch.TraceVerbose($"\t {pVar->GetType().FullName} is not serializable.");
                     return HRESULT.S_OK;
                 }
 

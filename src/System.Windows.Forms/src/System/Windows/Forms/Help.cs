@@ -68,7 +68,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void ShowHelp(Control? parent, string? url, HelpNavigator command, object? parameter)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, "Help:: ShowHelp");
+            WindowsFormsHelpTrace.TraceVerbose("Help:: ShowHelp");
 
             switch (GetHelpFileType(url))
             {
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void ShowHelpIndex(Control? parent, string? url)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, "Help:: ShowHelpIndex");
+            WindowsFormsHelpTrace.TraceVerbose("Help:: ShowHelpIndex");
 
             ShowHelp(parent, url, HelpNavigator.Index, null);
         }
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static unsafe void ShowPopup(Control? parent, string caption, Point location)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, "Help:: ShowPopup");
+            WindowsFormsHelpTrace.TraceVerbose("Help:: ShowPopup");
 
             var pop = new HH_POPUPW
             {
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static unsafe void ShowHTML10Help(Control? parent, string? url, HelpNavigator command, object? param)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, $"Help:: ShowHTML10Help:: {url}, {command.ToString("G")}, {param}");
+            WindowsFormsHelpTrace.TraceVerbose($"Help:: ShowHTML10Help:: {url}, {command:G}, {param}");
 
             // See if we can get a full path and file name and if that will
             // resolve the out of memory condition with file names that include spaces.
@@ -222,7 +222,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static void ShowHTMLFile(Control? parent, string? url, HelpNavigator command, object? param)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, $"Help:: ShowHTMLHelp:: {url}, {command.ToString("G")}, {param}");
+            WindowsFormsHelpTrace.TraceVerbose($"Help:: ShowHTMLHelp:: {url}, {command:G}, {param}");
 
             Uri? file = Resolve(url);
 
@@ -258,14 +258,14 @@ namespace System.Windows.Forms
                 handle = Control.GetHandleRef(PInvoke.GetActiveWindow());
             }
 
-            Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, $"\tExecuting '{file}'");
+            WindowsFormsHelpTrace.TraceVerbose($"\tExecuting '{file}'");
             PInvoke.ShellExecute(handle.Handle, lpOperation: null, file.ToString(), lpParameters: null, lpDirectory: null, SHOW_WINDOW_CMD.SW_NORMAL);
             GC.KeepAlive(handle.Wrapper);
         }
 
         private static Uri? Resolve(string? partialUri)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, $"Help:: Resolve {partialUri}");
+            WindowsFormsHelpTrace.TraceVerbose($"Help:: Resolve {partialUri}");
             Debug.Indent();
 
             Uri? file = null;
@@ -285,7 +285,7 @@ namespace System.Windows.Forms
             if (file is not null && file.Scheme == "file")
             {
                 string localPath = file.LocalPath + file.Fragment;
-                Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "file, check for existence");
+                WindowsFormsHelpTrace.TraceVerbose("file, check for existence");
 
                 if (!File.Exists(localPath))
                 {
@@ -296,7 +296,7 @@ namespace System.Windows.Forms
 
             if (file is null)
             {
-                Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "try AppBase relative");
+                WindowsFormsHelpTrace.TraceVerbose("try AppBase relative");
                 try
                 {
                     // try relative to AppBase...
@@ -311,7 +311,7 @@ namespace System.Windows.Forms
                 if (file is not null && file.Scheme == "file")
                 {
                     string localPath = file.LocalPath + file.Fragment;
-                    Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "file, check for existence");
+                    WindowsFormsHelpTrace.TraceVerbose("file, check for existence");
                     if (!File.Exists(localPath))
                     {
                         // clear - file isn't there...
@@ -326,11 +326,11 @@ namespace System.Windows.Forms
 
         private static int GetHelpFileType(string? url)
         {
-            Debug.WriteLineIf(WindowsFormsHelpTrace!.TraceVerbose, "Help:: GetHelpFileType {url}");
+            WindowsFormsHelpTrace.TraceVerbose("Help:: GetHelpFileType {url}");
 
             if (url is null)
             {
-                Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "\tnull, must be Html File");
+                WindowsFormsHelpTrace.TraceVerbose("\tnull, must be Html File");
                 return HTMLFILE;
             }
 
@@ -338,17 +338,17 @@ namespace System.Windows.Forms
 
             if (file is null || file.Scheme == "file")
             {
-                Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "\tfile");
+                WindowsFormsHelpTrace.TraceVerbose("\tfile");
 
                 string ext = Path.GetExtension(file is null ? url : file.LocalPath + file.Fragment).ToLower(CultureInfo.InvariantCulture);
                 if (ext == ".chm" || ext == ".col")
                 {
-                    Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "\tchm or col, HtmlHelp 1.0 file");
+                    WindowsFormsHelpTrace.TraceVerbose("\tchm or col, HtmlHelp 1.0 file");
                     return HTML10HELP;
                 }
             }
 
-            Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "\tnot file, or odd extension, but be HTML");
+            WindowsFormsHelpTrace.TraceVerbose("\tnot file, or odd extension, but be HTML");
             return HTMLFILE;
         }
 

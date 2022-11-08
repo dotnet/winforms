@@ -682,8 +682,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private static void AdjustOrigin(Graphics g, Point newOrigin, ref Rectangle r)
         {
-            Debug.WriteLineIf(
-                s_gridViewDebugPaint.TraceVerbose,
+            s_gridViewDebugPaint.TraceVerbose(
                 $"Adjusting paint origin to ({newOrigin.X},{newOrigin.Y})");
 
             g.ResetTransform();
@@ -693,7 +692,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void CancelSplitterMove()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CancelSplitterMove");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CancelSplitterMove");
             if (_flags.HasFlag(Flags.IsSplitterMove))
             {
                 SetFlag(Flags.IsSplitterMove, false);
@@ -710,7 +709,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void ClearGridEntryEvents(GridEntryCollection entries, int startIndex, int count)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:ClearGridEntryEvents");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:ClearGridEntryEvents");
             if (entries is null)
             {
                 return;
@@ -736,7 +735,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void ClearGridEntries()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:ClearGridEntries");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:ClearGridEntries");
 
             if (!HasEntries)
             {
@@ -758,7 +757,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void CloseDropDownInternal(bool resetFocus)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CloseDropDown");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CloseDropDown");
 
             // The activation code in the DropDownHolder can cause this to recurse.
 
@@ -829,7 +828,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void CommonEditorHide(bool always = false)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CommonEditorHide");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CommonEditorHide");
 
             if (!always && !HasEntries)
             {
@@ -889,15 +888,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void CommonEditorSetup(Control control)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CommonEditorSetup");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CommonEditorSetup");
             control.Visible = false;
             Controls.Add(control);
         }
 
         private void CommonEditorUse(Control control, Rectangle targetRectangle)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CommonEditorUse");
-            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "Showing common editors");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CommonEditorUse");
+            s_gridViewDebugPaint.TraceVerbose("Showing common editors");
 
             Debug.Assert(control is not null, "Null control passed to CommonEditorUse");
 
@@ -937,7 +936,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private int CountPropertiesFromOutline(GridEntryCollection entries)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CountPropertiesFromOutline");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CountPropertiesFromOutline");
             if (entries is null)
             {
                 return 0;
@@ -1019,7 +1018,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (disposing)
             {
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Dispose");
+                CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:Dispose");
                 _scrollBar?.Dispose();
                 _listBox?.Dispose();
                 _dropDownHolder?.Dispose();
@@ -1152,7 +1151,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Drawing label for property {gridEntry.PropertyLabel}");
+            s_gridViewDebugPaint.TraceVerbose($"Drawing label for property {gridEntry.PropertyLabel}");
 
             var newOrigin = new Point(rect.X, rect.Y);
             clipRect = Rectangle.Intersect(rect, clipRect);
@@ -1203,7 +1202,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Drawing value for property {gridEntry.PropertyLabel}");
+            s_gridViewDebugPaint.TraceVerbose($"Drawing value for property {gridEntry.PropertyLabel}");
 
             Rectangle rect = GetRectangle(row, RowValue);
             var newOrigin = new Point(rect.X, rect.Y);
@@ -1286,14 +1285,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void DoubleClickRow(int row, bool toggleExpand, int type)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:DoubleClickRow");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:DoubleClickRow");
             GridEntry gridEntry = GetGridEntryFromRow(row);
             if (gridEntry is null)
             {
                 return;
             }
 
-            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Property {gridEntry.PropertyLabel} double clicked");
+            s_gridViewDebugPaint.TraceVerbose($"Property {gridEntry.PropertyLabel} double clicked");
 
             if (!toggleExpand || type == RowValue)
             {
@@ -1460,8 +1459,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void DropDownControl(Control control)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:DropDownControl");
-            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"DropDownControl(ctl = {control.GetType().Name})");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:DropDownControl");
+            s_gridViewDebugPaint.TraceVerbose($"DropDownControl(ctl = {control.GetType().Name})");
 
             _dropDownHolder ??= new(this);
             _dropDownHolder.Visible = false;
@@ -1530,7 +1529,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void DropDownUpdate()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:DropDownUpdate");
+            CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:DropDownUpdate");
             if (_dropDownHolder is not null && _dropDownHolder.GetUsed())
             {
                 int row = _selectedRow;
@@ -1630,7 +1629,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:FilterKeyPress()");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:FilterKeyPress()");
 
             EditTextBox.FilterKeyPress(keyChar);
         }
@@ -1872,7 +1871,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private int GetGridEntriesFromOutline(GridEntryCollection entries, int current, int target, GridEntry[] targetEntries)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:GetGridEntriesFromOutline");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:GetGridEntriesFromOutline");
             if (entries is null || entries.Count == 0)
             {
                 return current;
@@ -2053,9 +2052,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void InvalidateRows(int startRow, int endRow, int type)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:InvalidateRows");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:InvalidateRows");
 
-            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Invalidating rows {startRow} through {endRow}");
+            s_gridViewDebugPaint.TraceVerbose($"Invalidating rows {startRow} through {endRow}");
             Rectangle rect;
 
             // Invalidate from the start row down.
@@ -2129,7 +2128,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 newValue > ScrollBar.Maximum ||
                 (newValue + (ScrollBar.LargeChange - 1) >= TotalProperties))
             {
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView: move not needed, returning");
+                CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView: move not needed, returning");
                 return false;
             }
 
@@ -2223,7 +2222,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnChildLostFocus(object sender, EventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnChildLostFocus");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnChildLostFocus");
             InvokeLostFocus(this, e);
         }
 
@@ -2237,7 +2236,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void OnGotFocus(EventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnGotFocus");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnGotFocus");
 
             base.OnGotFocus(e);
 
@@ -2300,7 +2299,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnListChange(object sender, EventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnListChange");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnListChange");
             if (!DropDownListBox.InSetSelectedIndex())
             {
                 GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
@@ -2319,7 +2318,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnListClick(object sender, EventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnListClick");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnListClick");
             _ = GetGridEntryFromRow(_selectedRow);
 
             if (DropDownListBox.Items.Count == 0)
@@ -2354,7 +2353,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             string text = (string)DropDownListBox.Items[e.Index];
 
-            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Drawing list item, value='{text}'");
+            s_gridViewDebugPaint.TraceVerbose($"Drawing list item, value='{text}'");
             e.DrawBackground();
             e.DrawFocusRectangle();
 
@@ -2396,8 +2395,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void OnLostFocus(EventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnLostFocus");
-            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "PropertyGridView lost focus");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnLostFocus");
+            s_gridViewDebugPaint.TraceVerbose("PropertyGridView lost focus");
 
             if (e is not null)
             {
@@ -2413,7 +2412,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is not null)
             {
-                Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "removing gridEntry focus");
+                s_gridViewDebugPaint.TraceVerbose("removing gridEntry focus");
                 gridEntry.HasFocus = false;
                 CommonEditorHide();
                 InvalidateRow(_selectedRow);
@@ -2425,7 +2424,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (TotalProperties <= 0)
             {
                 var clearRect = new Rectangle(1, 1, Size.Width - 2, Size.Height - 2);
-                Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Filling empty gridview rect={clearRect}");
+                s_gridViewDebugPaint.TraceVerbose($"Filling empty gridview rect={clearRect}");
 
                 Color color = BackColor;
                 if (color.HasTransparency())
@@ -2445,7 +2444,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnEditChange(object sender, EventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditChange");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditChange");
             SetCommitError(ErrorState.None, EditTextBox.Focused);
 
             ToolTip.ToolTip = string.Empty;
@@ -2454,7 +2453,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnEditGotFocus(object sender, EventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditGotFocus");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditGotFocus");
 
             if (!EditTextBox.Visible)
             {
@@ -2484,7 +2483,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (_selectedGridEntry is not null && GetRowFromGridEntry(_selectedGridEntry) != -1)
             {
-                Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "adding gridEntry focus");
+                s_gridViewDebugPaint.TraceVerbose("adding gridEntry focus");
                 _selectedGridEntry.HasFocus = true;
                 InvalidateRow(_selectedRow);
 
@@ -2561,7 +2560,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnEditKeyDown(object sender, KeyEventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditKeyDown");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditKeyDown");
             if (!e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down))
             {
                 GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
@@ -2589,7 +2588,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnEditKeyPress(object sender, KeyPressEventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditKeyPress");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditKeyPress");
             GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is null)
             {
@@ -2604,7 +2603,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnEditLostFocus(object sender, EventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditLostFocus");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditLostFocus");
 
             // Believe it or not this can actually happen.
             if (EditTextBox.Focused || (_errorState == ErrorState.MessageBoxUp) || (_errorState == ErrorState.Thrown) || InPropertySet)
@@ -2648,7 +2647,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnEditMouseDown(object sender, MouseEventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditMouseDown");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEditMouseDown");
 
             if (!FocusInside)
             {
@@ -2691,7 +2690,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private bool OnEscape(Control sender)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEscape");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnEscape");
             if ((ModifierKeys & (Keys.Alt | Keys.Control)) != 0)
             {
                 return false;
@@ -3340,8 +3339,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnPaint");
-            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"On paint called.  Rect={e.ClipRectangle}");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnPaint");
+            s_gridViewDebugPaint.TraceVerbose($"On paint called.  Rect={e.ClipRectangle}");
             Graphics g = e.Graphics;
 
             int yPosition = 0;
@@ -3395,12 +3394,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // Draw splitter.
                     visibleCount = Math.Min(visibleCount, endRow + 1);
 
-                    Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "Drawing splitter");
+                    s_gridViewDebugPaint.TraceVerbose("Drawing splitter");
                     using var splitterPen = OwnerGrid.LineColor.GetCachedPenScope(SplitterWidth);
                     g.DrawLine(splitterPen, _labelWidth, location.Y, _labelWidth, visibleCount * (RowHeight + 1) + location.Y);
 
                     // Draw lines.
-                    Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "Drawing lines");
+                    s_gridViewDebugPaint.TraceVerbose("Drawing lines");
                     using var linePen = g.FindNearestColor(OwnerGrid.LineColor).GetCachedPenScope();
 
                     int currentRowHeight = 0;
@@ -3433,7 +3432,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         catch
                         {
-                            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose,
+                            s_gridViewDebugPaint.TraceVerbose(
                                 $"Exception thrown during painting property {GetGridEntryFromRow(i).PropertyLabel}");
                         }
                     }
@@ -3448,7 +3447,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     yPosition++;
                     var clearRect = new Rectangle(1, yPosition, Size.Width - 2, Size.Height - yPosition - 1);
-                    Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Filling remaining area rect={clearRect}");
+                    s_gridViewDebugPaint.TraceVerbose($"Filling remaining area rect={clearRect}");
 
                     using var backBrush = BackColor.GetCachedSolidBrushScope();
                     g.FillRectangle(backBrush, clearRect);
@@ -3674,7 +3673,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void OnResize(EventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnResize");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnResize");
 
             Rectangle newRect = ClientRectangle;
             int yDelta = _lastClientRect == Rectangle.Empty ? 0 : newRect.Height - _lastClientRect.Height;
@@ -3716,8 +3715,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnScroll(object sender, ScrollEventArgs e)
         {
-            Debug.WriteLineIf(
-                CompModSwitches.DebugGridView.TraceVerbose,
+            CompModSwitches.DebugGridView.TraceVerbose(
                 $"PropertyGridView:OnScroll({ScrollBar.Value} -> {e.NewValue})");
 
             if (!CommitEditTextBox() || !IsScrollValueValid(e.NewValue))
@@ -3732,7 +3730,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (_selectedGridEntry is not null)
             {
                 oldRow = GetRowFromGridEntry(oldGridEntry);
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "OnScroll: SelectedGridEntry=" + oldGridEntry.PropertyLabel);
+                CompModSwitches.DebugGridView.TraceVerbose($"OnScroll: SelectedGridEntry={oldGridEntry.PropertyLabel}");
             }
 
             ScrollBar.Value = e.NewValue;
@@ -3766,7 +3764,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public unsafe void PopupEditor(int row)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:PopupEditor");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:PopupEditor");
             GridEntry gridEntry = GetGridEntryFromRow(row);
             if (gridEntry is null)
             {
@@ -3910,7 +3908,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:ProcessDialogKey");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:ProcessDialogKey");
             if (HasEntries)
             {
                 Keys keyCode = keyData & Keys.KeyCode;
@@ -3919,7 +3917,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case Keys.F4:
                         if (FocusInside)
                         {
-                            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnF4");
+                            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnF4");
                             if (ModifierKeys != 0)
                             {
                                 return false;
@@ -4027,7 +4025,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void RecalculateProperties()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:RecalculateProperties");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:RecalculateProperties");
             int propertyCount = CountPropertiesFromOutline(TopLevelGridEntries);
             if (TotalProperties != propertyCount)
             {
@@ -4092,9 +4090,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void Refresh(bool fullRefresh, int startRow, int endRow)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Refresh");
-            Debug.WriteLineIf(
-                s_gridViewDebugPaint.TraceVerbose,
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:Refresh");
+            s_gridViewDebugPaint.TraceVerbose(
                 $"Refresh called for rows {startRow} through {endRow}");
             SetFlag(Flags.NeedsRefresh, true);
             GridEntry gridEntry = null;
@@ -4216,7 +4213,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void Reset()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Reset");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:Reset");
             GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is null)
             {
@@ -4315,7 +4312,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:SelectGridEntry({entry.PropertyLabel})");
+            CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:SelectGridEntry({entry.PropertyLabel})");
 
             int row = GetRowFromGridEntry(entry);
             if (row + GetScrollOffset() < 0)
@@ -4362,7 +4359,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void SelectRow(int row)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:SelectRow({row})");
+            CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:SelectRow({row})");
 
             if (!_flags.HasFlag(Flags.IsNewSelection))
             {
@@ -4545,7 +4542,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void SetConstants()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:SetConstants");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:SetConstants");
             Size size = GetOurSize();
 
             _visibleRows = (int)Math.Ceiling(((double)size.Height) / (1 + RowHeight));
@@ -4576,20 +4573,20 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _labelRatio = GetOurSize().Width / (double)(oldWidth - _location.X);
             }
 
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tsize       :{size}");
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tlocation   :{_location}");
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tvisibleRows:{_visibleRows}");
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tlabelWidth :{_labelWidth}");
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tlabelRatio :{_labelRatio}");
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\trowHeight  :{RowHeight}");
+            CompModSwitches.DebugGridView.TraceVerbose($"\tsize       :{size}");
+            CompModSwitches.DebugGridView.TraceVerbose($"\tlocation   :{_location}");
+            CompModSwitches.DebugGridView.TraceVerbose($"\tvisibleRows:{_visibleRows}");
+            CompModSwitches.DebugGridView.TraceVerbose($"\tlabelWidth :{_labelWidth}");
+            CompModSwitches.DebugGridView.TraceVerbose($"\tlabelRatio :{_labelRatio}");
+            CompModSwitches.DebugGridView.TraceVerbose($"\trowHeight  :{RowHeight}");
 #if DEBUG
             if (rgipesAll is null)
             {
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "\tIPE Count  :(null)");
+                CompModSwitches.DebugGridView.TraceVerbose("\tIPE Count  :(null)");
             }
             else
             {
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tIPE Count  :{rgipesAll.Count}");
+                CompModSwitches.DebugGridView.TraceVerbose($"\tIPE Count  :{rgipesAll.Count}");
             }
 #endif
         }
@@ -4711,7 +4708,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void SetScrollOffset(int offset)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:SetScrollOffset({offset})");
+            CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:SetScrollOffset({offset})");
             int newPosition = Math.Max(0, Math.Min(TotalProperties - _visibleRows + 1, offset));
             int oldPosition = ScrollBar.Value;
             if (newPosition != oldPosition && IsScrollValueValid(newPosition) && _visibleRows > 0)
@@ -4728,12 +4725,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         internal bool CommitEditTextBox()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Commit()");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:Commit()");
 
             if (_errorState == ErrorState.MessageBoxUp)
             {
-                Debug.WriteLineIf(
-                    CompModSwitches.DebugGridView.TraceVerbose,
+                CompModSwitches.DebugGridView.TraceVerbose(
                     "PropertyGridView:Commit() returning false because an error has been thrown or we are in a property set");
                 return false;
             }
@@ -4741,8 +4737,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (!EditTextBoxNeedsCommit)
             {
                 SetCommitError(ErrorState.None);
-                Debug.WriteLineIf(
-                    CompModSwitches.DebugGridView.TraceVerbose,
+                CompModSwitches.DebugGridView.TraceVerbose(
                     "PropertyGridView:Commit() returning true because no change has been made");
                 return true;
             }
@@ -4798,7 +4793,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal bool CommitValue(GridEntry entry, object value, bool closeDropDown = true)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:CommitValue({value?.ToString() ?? "null"})");
+            CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:CommitValue({value?.ToString() ?? "null"})");
 
             int propCount = entry.ChildCount;
             bool capture = EditTextBox.HookMouseDown;
@@ -4894,7 +4889,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private bool CommitText(string text)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:CommitValue({text ?? "null"})");
+            CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:CommitValue({text ?? "null"})");
 
             object value;
 
@@ -4955,7 +4950,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private bool SetScrollbarLength()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:SetScrollBarLength");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:SetScrollBarLength");
 
             if (TotalProperties == -1)
             {
@@ -5053,7 +5048,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             propertyName ??= "(unknown)";
 
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:ShowFormatExceptionMessage(prop={propertyName})");
+            CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:ShowFormatExceptionMessage(prop={propertyName})");
 
             // We have to uninstall our hook so the user can push the button!
             bool hooked = EditTextBox.HookMouseDown;
@@ -5128,7 +5123,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             propertyName ??= "(unknown)";
 
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:ShowInvalidMessage(prop={propertyName})");
+            CompModSwitches.DebugGridView.TraceVerbose($"PropertyGridView:ShowInvalidMessage(prop={propertyName})");
 
             // We have to uninstall our hook so the user can push the button.
             bool hooked = EditTextBox.HookMouseDown;
@@ -5326,7 +5321,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private bool UnfocusSelection()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:UnfocusSelection()");
+            CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:UnfocusSelection()");
             GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is null)
             {

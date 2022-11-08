@@ -1936,7 +1936,7 @@ namespace System.Windows.Forms
                     if (DisplayedItems[i].Selected)
                     {
                         DisplayedItems[i].Unselect();
-                        Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG ClearAllSelectionsExcept] Unselecting " + DisplayedItems[i].Text);
+                        s_selectionDebug.TraceVerbose($"[SelectDBG ClearAllSelectionsExcept] Unselecting {DisplayedItems[i].Text}");
                         invalidate = true;
                     }
 
@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms
                     // if we were the last toolstrip in the queue, exit menu mode.
                     if (exitMenuMode && ToolStripManager.ModalMenuFilter.GetActiveToolStrip() is null)
                     {
-                        Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "Exiting menu mode because we're the last toolstrip in the queue, and we've disposed.");
+                        ToolStrip.s_snapFocusDebug.TraceVerbose("Exiting menu mode because we're the last toolstrip in the queue, and we've disposed.");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
                     }
 
@@ -2212,7 +2212,7 @@ namespace System.Windows.Forms
             int current = DisplayedItems.IndexOf(start);
             if (current == -1)
             {
-                Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "Started from a visible = false item");
+                s_selectionDebug.TraceVerbose("Started from a visible = false item");
                 return null;
             }
 
@@ -2239,7 +2239,7 @@ namespace System.Windows.Forms
 
                 if (DisplayedItems[current].CanKeyboardSelect)
                 {
-                    Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG GetNextToolStripItem] selecting " + DisplayedItems[current].Text);
+                    s_selectionDebug.TraceVerbose($"[SelectDBG GetNextToolStripItem] selecting {DisplayedItems[current].Text}");
                     //ClearAllSelectionsExcept(Items[current]);
                     return DisplayedItems[current];
                 }
@@ -2600,12 +2600,12 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "firing mouse leave on " + _lastMouseActiveItem.ToString());
+                    ToolStripItem.s_mouseDebugging.TraceVerbose($"firing mouse leave on {_lastMouseActiveItem}");
                     _lastMouseActiveItem.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseLeave);
                 }
                 finally
                 {
-                    Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "setting last active item to null");
+                    ToolStripItem.s_mouseDebugging.TraceVerbose("setting last active item to null");
                     _lastMouseActiveItem = null;
                 }
             }
@@ -2856,7 +2856,7 @@ namespace System.Windows.Forms
                 {
                     ClearAllSelections();
                     ToolStripManager.ModalMenuFilter.MenuKeyToggle = true;
-                    Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.ProcessCmdKey] Detected a second ALT keypress while in Menu Mode.");
+                    s_snapFocusDebug.TraceVerbose("[ToolStrip.ProcessCmdKey] Detected a second ALT keypress while in Menu Mode.");
                     ToolStripManager.ModalMenuFilter.ExitMenuMode();
                 }
             }
@@ -2992,7 +2992,7 @@ namespace System.Windows.Forms
                 return retVal;
             }
 
-            Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] calling base");
+            s_selectionDebug.TraceVerbose("[SelectDBG ProcessDialogKey] calling base");
             return base.ProcessDialogKey(keyData);
         }
 
@@ -3228,7 +3228,7 @@ namespace System.Windows.Forms
         internal virtual bool ProcessArrowKey(Keys keyCode)
         {
             bool retVal = false;
-            Debug.WriteLineIf(s_menuAutoExpandDebug.TraceVerbose, "[ToolStrip.ProcessArrowKey] MenuTimer.Cancel called");
+            s_menuAutoExpandDebug.TraceVerbose("[ToolStrip.ProcessArrowKey] MenuTimer.Cancel called");
             ToolStripMenuItem.MenuTimer.Cancel();
 
             switch (keyCode)
@@ -3283,12 +3283,12 @@ namespace System.Windows.Forms
         {
             if (item is null)
             {
-                Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG NotifySelectionChange] none should be selected");
+                s_selectionDebug.TraceVerbose("[SelectDBG NotifySelectionChange] none should be selected");
                 ClearAllSelections();
             }
             else if (item.Selected)
             {
-                Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG NotifySelectionChange] Notify selection change: " + item.ToString() + ": " + item.Selected.ToString());
+                s_selectionDebug.TraceVerbose($"[SelectDBG NotifySelectionChange] Notify selection change: {item}: {item.Selected}");
                 ClearAllSelectionsExcept(item);
             }
         }
@@ -3520,7 +3520,7 @@ namespace System.Windows.Forms
             base.OnLeave(e);
             if (!IsDropDown)
             {
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "uninstalling RestoreFocusFilter");
+                s_snapFocusDebug.TraceVerbose("uninstalling RestoreFocusFilter");
 
                 // PERF,
 
@@ -3576,7 +3576,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs mea)
         {
-            Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "OnMouseMove called");
+            ToolStripItem.s_mouseDebugging.TraceVerbose("OnMouseMove called");
 
             ToolStripItem item = GetItemAt(mea.X, mea.Y);
 
@@ -3588,10 +3588,10 @@ namespace System.Windows.Forms
                 // control's WM_MOUSEMOVE. Waiting until this event gives us
                 // the actual coordinates.
 
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Item to get mouse move: {0}", (item is null) ? "null" : item.ToString()));
+                ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Item to get mouse move: {0}", (item is null) ? "null" : item.ToString()));
                 if (item != _lastMouseActiveItem)
                 {
-                    Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "This is a new item - last item to get was {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
+                    ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "This is a new item - last item to get was {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
 
                     // notify the item that we've moved on
                     HandleMouseLeave();
@@ -3601,7 +3601,7 @@ namespace System.Windows.Forms
 
                     if (_lastMouseActiveItem is not null)
                     {
-                        Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
+                        ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
                         item.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseEnter);
                     }
 
@@ -3620,7 +3620,7 @@ namespace System.Windows.Forms
 
             if (item is not null)
             {
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (item is null) ? "null" : item.ToString()));
+                ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (item is null) ? "null" : item.ToString()));
 
                 // Fire mouse move on the item
                 // Transpose this to "client coordinates" of the ToolStripItem.
@@ -3630,7 +3630,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (this is null) ? "null" : ToString()));
+                ToolStripItem.s_mouseDebugging.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (this is null) ? "null" : ToString()));
 
                 base.OnMouseMove(mea);
             }
@@ -4224,14 +4224,14 @@ namespace System.Windows.Forms
             ClearAllSelections();
             _lastMouseDownedItem = null;
 
-            Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.RestoreFocus] Someone has called RestoreFocus, exiting MenuMode.");
+            s_snapFocusDebug.TraceVerbose("[ToolStrip.RestoreFocus] Someone has called RestoreFocus, exiting MenuMode.");
             ToolStripManager.ModalMenuFilter.ExitMenuMode();
 
             if (!IsDropDown)
             {
                 // reset menu auto expansion.
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.RestoreFocus] Setting menu auto expand to false");
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.RestoreFocus] uninstalling RestoreFocusFilter");
+                s_snapFocusDebug.TraceVerbose("[ToolStrip.RestoreFocus] Setting menu auto expand to false");
+                s_snapFocusDebug.TraceVerbose("[ToolStrip.RestoreFocus] uninstalling RestoreFocusFilter");
 
                 // PERF,
 
@@ -4264,8 +4264,7 @@ namespace System.Windows.Forms
             {
                 Control control = FromHandle(_hwndThatLostFocus);
 
-                Debug.WriteLineIf(
-                    s_snapFocusDebug.TraceVerbose,
+                s_snapFocusDebug.TraceVerbose(
                     $"[ToolStrip RestoreFocus]: Will Restore Focus to: {WindowsFormsUtils.GetControlInformation(_hwndThatLostFocus)}");
 
                 _hwndThatLostFocus = default;
@@ -4382,19 +4381,19 @@ namespace System.Windows.Forms
             // which could accidentally change selection.
             if (_mouseEnterWhenShown == s_invalidMouseEnter)
             {
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] MouseEnter already reset.");
+                ToolStripItem.s_mouseDebugging.TraceVerbose("[TS: ShouldSelectItem] MouseEnter already reset.");
                 return true;
             }
 
             Point mousePosition = WindowsFormsUtils.LastCursorPoint;
             if (_mouseEnterWhenShown != mousePosition)
             {
-                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] Mouse position has changed - call Select().");
+                ToolStripItem.s_mouseDebugging.TraceVerbose("[TS: ShouldSelectItem] Mouse position has changed - call Select().");
                 _mouseEnterWhenShown = s_invalidMouseEnter;
                 return true;
             }
 
-            Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] Mouse hasnt actually moved yet.");
+            ToolStripItem.s_mouseDebugging.TraceVerbose("[TS: ShouldSelectItem] Mouse hasnt actually moved yet.");
 
             return false;
         }
@@ -4430,12 +4429,12 @@ namespace System.Windows.Forms
         {
             if (TabStop)
             {
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.SetFocus] Focusing toolstrip.");
+                s_snapFocusDebug.TraceVerbose("[ToolStrip.SetFocus] Focusing toolstrip.");
                 Focus();
             }
             else
             {
-                Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.SetFocus] Entering menu mode.");
+                s_snapFocusDebug.TraceVerbose("[ToolStrip.SetFocus] Entering menu mode.");
                 ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this, /*menuKeyPressed=*/false);
             }
         }
@@ -4601,7 +4600,7 @@ namespace System.Windows.Forms
             {
                 // NOT a SplitStack layout.  We don't change the order of the displayed items collection
                 // for custom keyboard handling override GetNextItem.
-                Debug.WriteLineIf(s_layoutDebugSwitch.TraceVerbose, "Setting Displayed Items: Current bounds: " + Bounds.ToString());
+                s_layoutDebugSwitch.TraceVerbose($"Setting Displayed Items: Current bounds: {Bounds}");
                 Rectangle clientBounds = ClientRectangle;
 
                 // for all other layout managers, we ignore overflow placement
@@ -4636,7 +4635,7 @@ namespace System.Windows.Forms
                         item.SetPlacement(ToolStripItemPlacement.None);
                     }
 
-                    Debug.WriteLineIf(s_layoutDebugSwitch.TraceVerbose, item.ToString() + Items[j].Bounds);
+                    s_layoutDebugSwitch.TraceVerbose(item.ToString() + Items[j].Bounds);
                 }
 
                 // For performance we calculate this here, since we're already iterating over the items.
@@ -4711,8 +4710,7 @@ namespace System.Windows.Forms
 
                         if (thisHwndRoot == otherHwndRoot && !thisHwndRoot.IsNull)
                         {
-                            Debug.WriteLineIf(
-                                s_snapFocusDebug.TraceVerbose,
+                            s_snapFocusDebug.TraceVerbose(
                                 $"[ToolStrip SnapFocus]: Caching for return focus:{WindowsFormsUtils.GetControlInformation(otherHwnd)}");
 
                             // We know we're in the same window heirarchy.
@@ -4918,7 +4916,7 @@ namespace System.Windows.Forms
                     SnapFocus(PInvoke.GetFocus());
                     if (!IsDropDown && !TabStop)
                     {
-                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "Installing restoreFocusFilter");
+                        s_snapFocusDebug.TraceVerbose("Installing restoreFocusFilter");
                         // PERF,
 
                         Application.ThreadContext.FromCurrent().AddMessageFilter(RestoreFocusFilter);

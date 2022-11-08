@@ -321,7 +321,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose, "[CELL] DRAGGING calling SetBounds " + bounds.ToString());
+                    ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose($"[CELL] DRAGGING calling SetBounds {bounds}");
                     base.SetBoundsCore(bounds, specified);
                     InnerElement.SetBounds(bounds, specified);
                 }
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
                 {
                     if (!ToolStripPanelRow.CachedBoundsMode)
                     {
-                        Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose, "[CELL] NOT DRAGGING calling SetBounds " + bounds.ToString());
+                        ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose($"[CELL] NOT DRAGGING calling SetBounds {bounds}");
                         base.SetBoundsCore(bounds, specified);
                         InnerElement.SetBounds(bounds, specified);
                     }

@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                         Guid g = GetPropertyPage((Ole32.DispatchID)_dispid.Value);
                         if (!Guid.Empty.Equals(g))
                         {
-                            Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"Making property: {Name} browsable because we found an property page.");
+                            s_axPropTraceSwitch.TraceVerbose($"Making property: {Name} browsable because we found an property page.");
                             AddAttribute(new BrowsableAttribute(true));
                         }
                     }
@@ -184,8 +184,7 @@ namespace System.Windows.Forms
                 {
                     if (!GetFlag(FlagCheckGetter))
                     {
-                        Debug.WriteLineIf(
-                            s_axPropTraceSwitch.TraceVerbose,
+                        s_axPropTraceSwitch.TraceVerbose(
                             $"Get failed for : {Name} with exception: {e.Message}. Making property non-browsable.");
                         SetFlag(FlagCheckGetter, true);
                         AddAttribute(new BrowsableAttribute(false));
@@ -381,8 +380,7 @@ namespace System.Windows.Forms
                                     // Show any non-browsable property that has an editor through a property page.
                                     if (!IsBrowsable)
                                     {
-                                        Debug.WriteLineIf(
-                                            s_axPropTraceSwitch.TraceVerbose,
+                                        s_axPropTraceSwitch.TraceVerbose(
                                             $"Making property: {Name} browsable because we found an editor.");
 
                                         AddAttribute(new BrowsableAttribute(true));
@@ -396,7 +394,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"could not get the type editor for property: {Name} Exception: {e}");
+                    s_axPropTraceSwitch.TraceVerbose($"could not get the type editor for property: {Name} Exception: {e}");
                 }
             }
         }

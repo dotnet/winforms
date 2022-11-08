@@ -3,7 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+#if DEBUG
 using System.Diagnostics;
+#endif
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Layout;
@@ -97,7 +99,7 @@ namespace System.Windows.Forms
                     return totalSize.Height < DisplayRectangle.Height;
                 }
 
-                Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, "VerticalRM.CanMove returns false - not enough room");
+                ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("VerticalRM.CanMove returns false - not enough room");
                 return false;
             }
 
@@ -177,7 +179,7 @@ namespace System.Windows.Forms
 
             private int MoveUp(int index, int spaceToFree)
             {
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, $"MoveUp: {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveUp: {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                 int freedSpace = 0;
 
                 Row.SuspendLayout();
@@ -185,7 +187,7 @@ namespace System.Windows.Forms
                 {
                     if (spaceToFree == 0 || index < 0)
                     {
-                        Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveUp Early EXIT - 0 ");
+                        ToolStripPanelMouseDebug.TraceVerbose("MoveUp Early EXIT - 0 ");
                         return 0;
                     }
 
@@ -232,7 +234,7 @@ namespace System.Windows.Forms
                                 }
                             }
 
-                            Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, $"MoveUp Recovered (Margin only): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
+                            ToolStripPanelMouseDebug.TraceVerbose($"MoveUp Recovered (Margin only): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                             return spaceToFree;
                         }
                     }
@@ -242,21 +244,21 @@ namespace System.Windows.Forms
                     Row.ResumeLayout(true);
                 }
 
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, $"MoveLeft Recovered Partial (Shrink): {freedSpace.ToString(CultureInfo.InvariantCulture)}");
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft Recovered Partial (Shrink): {freedSpace.ToString(CultureInfo.InvariantCulture)}");
 
                 return freedSpace;
             }
 
             private int MoveDown(int index, int spaceToFree)
             {
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, $"MoveDown: {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveDown: {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                 int freedSpace = 0;
                 Row.SuspendLayout();
                 try
                 {
                     if (spaceToFree == 0 || index < 0 || index >= Row.ControlsInternal.Count)
                     {
-                        Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveDown Early EXIT - 0 ");
+                        ToolStripPanelMouseDebug.TraceVerbose("MoveDown Early EXIT - 0 ");
                         return 0;
                     }
 
@@ -318,7 +320,7 @@ namespace System.Windows.Forms
                         cellMargin.Top += spaceToFree;
                         cell.Margin = cellMargin;
 
-                        Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, $"MoveDown Recovered (Margin only): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
+                        ToolStripPanelMouseDebug.TraceVerbose($"MoveDown Recovered (Margin only): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                         return spaceToFree;
                     }
 
@@ -336,7 +338,7 @@ namespace System.Windows.Forms
 
                         if (spaceToFree >= freedSpace)
                         {
-                            Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, $"MoveDown Recovered (Shrink): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
+                            ToolStripPanelMouseDebug.TraceVerbose($"MoveDown Recovered (Shrink): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                             Row.ResumeLayout(true);
                             return spaceToFree;
                         }
@@ -359,7 +361,7 @@ namespace System.Windows.Forms
                 }
 
                 int recoveredSpace = spaceToFree - freedSpace;
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, $"MoveDown Recovered Partial (Shrink): {recoveredSpace.ToString(CultureInfo.InvariantCulture)}");
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveDown Recovered Partial (Shrink): {recoveredSpace.ToString(CultureInfo.InvariantCulture)}");
 
                 return recoveredSpace;
             }
@@ -420,7 +422,7 @@ namespace System.Windows.Forms
 
             public override void JoinRow(ToolStrip toolStripToDrag, Point locationToDrag)
             {
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "Vertical JoinRow called ");
+                ToolStripPanelMouseDebug.TraceVerbose("Vertical JoinRow called ");
                 int index;
 
                 if (!Row.ControlsInternal.Contains(toolStripToDrag))

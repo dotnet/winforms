@@ -95,7 +95,7 @@ namespace System.Windows.Forms
                     return totalSize.Width < DisplayRectangle.Width;
                 }
 
-                Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, "HorizontalRM.CanMove returns false - not enough room");
+                ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("HorizontalRM.CanMove returns false - not enough room");
                 return false;
             }
 
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
 
             private int MoveLeft(int index, int spaceToFree)
             {
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveLeft: " + spaceToFree.ToString(CultureInfo.InvariantCulture));
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft: {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                 int freedSpace = 0;
 
                 Row.SuspendLayout();
@@ -183,7 +183,7 @@ namespace System.Windows.Forms
                 {
                     if (spaceToFree == 0 || index < 0)
                     {
-                        Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveLeft Early EXIT - 0 ");
+                        ToolStripPanelMouseDebug.TraceVerbose("MoveLeft Early EXIT - 0 ");
                         return 0;
                     }
 
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
                                 }
                             }
 
-                            Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveLeft Recovered (Margin only): " + spaceToFree.ToString(CultureInfo.InvariantCulture));
+                            ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft Recovered (Margin only): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                             return spaceToFree;
                         }
                     }
@@ -240,20 +240,20 @@ namespace System.Windows.Forms
                     Row.ResumeLayout(true);
                 }
 
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveLeft Recovered Partial (Shrink): " + freedSpace.ToString(CultureInfo.InvariantCulture));
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft Recovered Partial (Shrink): {freedSpace.ToString(CultureInfo.InvariantCulture)}");
                 return freedSpace;
             }
 
             private int MoveRight(int index, int spaceToFree)
             {
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveRight: " + spaceToFree.ToString(CultureInfo.InvariantCulture));
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveRight: {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                 int freedSpace = 0;
                 Row.SuspendLayout();
                 try
                 {
                     if (spaceToFree == 0 || index < 0 || index >= Row.ControlsInternal.Count)
                     {
-                        Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveRight Early EXIT - 0 ");
+                        ToolStripPanelMouseDebug.TraceVerbose("MoveRight Early EXIT - 0 ");
                         return 0;
                     }
 
@@ -322,7 +322,7 @@ namespace System.Windows.Forms
                             cell.Margin = cellMargin;
                         }
 
-                        Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveRight Recovered (Margin only): " + spaceToFree.ToString(CultureInfo.InvariantCulture));
+                        ToolStripPanelMouseDebug.TraceVerbose($"MoveRight Recovered (Margin only): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                         return spaceToFree;
                     }
 
@@ -340,7 +340,7 @@ namespace System.Windows.Forms
 
                         if (spaceToFree >= freedSpace)
                         {
-                            Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveRight Recovered (Shrink): " + spaceToFree.ToString(CultureInfo.InvariantCulture));
+                            ToolStripPanelMouseDebug.TraceVerbose($"MoveRight Recovered (Shrink): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                             Row.ResumeLayout(true);
                             return spaceToFree;
                         }
@@ -362,7 +362,7 @@ namespace System.Windows.Forms
                     Row.ResumeLayout(true);
                 }
 
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveRight Recovered Partial (Shrink): " + freedSpace.ToString(CultureInfo.InvariantCulture));
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveRight Recovered Partial (Shrink): {freedSpace.ToString(CultureInfo.InvariantCulture)}");
 
                 return freedSpace;
             }
@@ -410,7 +410,7 @@ namespace System.Windows.Forms
 
             public override void JoinRow(ToolStrip toolStripToDrag, Point locationToDrag)
             {
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "Horizontal JoinRow called ");
+                ToolStripPanelMouseDebug.TraceVerbose("Horizontal JoinRow called ");
                 int index;
 
                 if (!Row.ControlsInternal.Contains(toolStripToDrag))

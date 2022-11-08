@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms
@@ -21,7 +20,7 @@ namespace System.Windows.Forms
 
             public FormatEnumerator(IDataObject parent) : this(parent, parent.GetFormats())
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Constructed: " + parent.ToString());
+                CompModSwitches.DataObject.TraceVerbose($"FormatEnumerator: Constructed: {parent}");
             }
 
             private FormatEnumerator(FormatEnumerator source)
@@ -33,7 +32,7 @@ namespace System.Windows.Forms
 
             public FormatEnumerator(IDataObject parent, string[]? formats)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"FormatEnumerator: Constructed: {parent}, string[{(formats?.Length ?? 0)}]");
+                CompModSwitches.DataObject.TraceVerbose($"FormatEnumerator: Constructed: {parent}, string[{(formats?.Length ?? 0)}]");
 
                 _parent = parent;
 
@@ -77,7 +76,7 @@ namespace System.Windows.Forms
 
             public int Next(int celt, FORMATETC[] rgelt, int[]? pceltFetched)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Next");
+                CompModSwitches.DataObject.TraceVerbose("FormatEnumerator: Next");
                 if (_current < _formats.Count && celt > 0)
                 {
                     FORMATETC current = _formats[_current];
@@ -109,7 +108,7 @@ namespace System.Windows.Forms
 
             public int Skip(int celt)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Skip");
+                CompModSwitches.DataObject.TraceVerbose("FormatEnumerator: Skip");
                 if (_current + celt >= _formats.Count)
                 {
                     return (int)HRESULT.S_FALSE;
@@ -121,14 +120,14 @@ namespace System.Windows.Forms
 
             public int Reset()
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Reset");
+                CompModSwitches.DataObject.TraceVerbose("FormatEnumerator: Reset");
                 _current = 0;
                 return (int)HRESULT.S_OK;
             }
 
             public void Clone(out IEnumFORMATETC ppenum)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Clone");
+                CompModSwitches.DataObject.TraceVerbose("FormatEnumerator: Clone");
                 ppenum = new FormatEnumerator(this);
             }
         }
