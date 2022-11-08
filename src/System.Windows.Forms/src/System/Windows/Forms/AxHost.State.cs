@@ -22,14 +22,14 @@ namespace System.Windows.Forms
         /// </summary>
         [TypeConverter(typeof(TypeConverter))]
         [Serializable] // This exchanges with the native code.
-        public class State : ISerializable
+        public class State : ISerializable, IDisposable
         {
             private const int VERSION = 1;
             private int _length;
             private byte[]? _buffer;
             private MemoryStream? _memoryStream;
-            private IStorage.Interface? _storage;
-            private WinFormsComWrappers.LockBytesWrapper? _iLockBytes;
+            private unsafe IStorage* _storage;
+            private unsafe ILockBytes* _iLockBytes;
             private bool _manualUpdate;
             private string? _licenseKey;
             private readonly PropertyBagStream? _propertyBag;
@@ -163,37 +163,39 @@ namespace System.Windows.Forms
                     }
                 }
 
-                try
+                HRESULT hr = HRESULT.S_OK;
+                fixed (ILockBytes** pLockBytes = &_iLockBytes)
                 {
-                    _iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, true);
-                    if (_buffer is null)
-                    {
-                        _storage = Ole32.StgCreateDocfileOnILockBytes(
-                            _iLockBytes,
-                            Ole32.STGM.CREATE | Ole32.STGM.READWRITE | Ole32.STGM.SHARE_EXCLUSIVE);
-                    }
-                    else
-                    {
-                        _storage = Ole32.StgOpenStorageOnILockBytes(
-                            _iLockBytes,
-                            null,
-                            Ole32.STGM.READWRITE | Ole32.STGM.SHARE_EXCLUSIVE,
-                            IntPtr.Zero);
-                    }
+                    hr = PInvoke.CreateILockBytesOnHGlobal(hglobal, true, pLockBytes);
                 }
-                catch (Exception)
+
+                if (hr.Failed)
                 {
-                    if (_iLockBytes is null && hglobal != 0)
+                    PInvoke.GlobalFree(hglobal);
+                    ReleaseResources();
+                }
+
+                fixed (IStorage** pStorage = &_storage)
+                {
+                    hr = _buffer is null
+                        ? PInvoke.StgCreateDocfileOnILockBytes(
+                            _iLockBytes,
+                            STGM.STGM_CREATE | STGM.STGM_READWRITE | STGM.STGM_SHARE_EXCLUSIVE,
+                            reserved: 0,
+                            pStorage)
+                        : PInvoke.StgOpenStorageOnILockBytes(
+                            _iLockBytes,
+                            pstgPriority: null,
+                            STGM.STGM_READWRITE | STGM.STGM_SHARE_EXCLUSIVE,
+                            snbExclude: null,
+                            reserved: 0,
+                            pStorage);
+
+                    if (hr.Failed)
                     {
                         PInvoke.GlobalFree(hglobal);
+                        ReleaseResources();
                     }
-                    else
-                    {
-                        _iLockBytes?.Dispose();
-                        _iLockBytes = null;
-                    }
-
-                    _storage = null;
                 }
             }
 
@@ -202,7 +204,7 @@ namespace System.Windows.Forms
                 return _propertyBag;
             }
 
-            internal IStorage.Interface? GetStorage()
+            internal unsafe IStorage* GetStorage()
             {
                 if (_storage is null)
                 {
@@ -278,20 +280,17 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                bool result = ComHelpers.TryGetComPointer(_storage, out IStorage* pStorage);
-                using ComScope<IStorage> storage = new(pStorage);
-                Debug.Assert(result);
-                iPersistStorage.Save(storage, fSameAsLoad: true);
-                _storage.Commit(0);
+                iPersistStorage.Save(_storage, fSameAsLoad: true);
+                _storage->Commit(0);
                 iPersistStorage.HandsOffStorage();
                 try
                 {
                     _buffer = null;
                     _memoryStream = null;
-                    _iLockBytes.Stat(out Ole32.STATSTG stat, Ole32.STATFLAG.NONAME);
+                    _iLockBytes->Stat(out STATSTG stat, STATFLAG.STATFLAG_NONAME);
                     _length = (int)stat.cbSize;
                     _buffer = new byte[_length];
-                    nint hglobal = Ole32.GetHGlobalFromILockBytes(_iLockBytes);
+                    PInvoke.GetHGlobalFromILockBytes(_iLockBytes, out nint hglobal).ThrowOnFailure();
                     void* pointer = PInvoke.GlobalLock(hglobal);
                     try
                     {
@@ -312,7 +311,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    iPersistStorage.SaveCompleted(storage);
+                    iPersistStorage.SaveCompleted(_storage);
                 }
 
                 return this;
@@ -376,6 +375,32 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
+            private unsafe void ReleaseResources()
+            {
+                if (_iLockBytes is not null)
+                {
+                    _iLockBytes->Release();
+                }
+
+                if (_storage is not null)
+                {
+                    _storage->Release();
+                }
+
+                _iLockBytes = null;
+                _storage = null;
+            }
+
+            protected virtual void Dispose(bool disposing) => ReleaseResources();
+
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+
+            ~State() => Dispose(false);
         }
     }
 }

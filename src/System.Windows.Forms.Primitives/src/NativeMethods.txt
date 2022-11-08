@@ -46,6 +46,7 @@ CreateEnhMetaFileW
 CreateFontIndirectW
 CreateHalftonePalette
 CreateICW
+CreateILockBytesOnHGlobal
 CreateMenu
 CreatePatternBrush
 CreatePen
@@ -170,6 +171,7 @@ GetExitCodeThread
 GetFocus
 GetForegroundWindow
 GetGuiResources
+GetHGlobalFromILockBytes
 GetIconInfo
 GetKeyState
 GetKeyboardState
@@ -505,6 +507,8 @@ STG_E_FILENOTFOUND
 STG_E_INVALIDFLAG
 STG_E_INVALIDFUNCTION
 STG_E_INVALIDPOINTER
+StgCreateDocfileOnILockBytes
+StgOpenStorageOnILockBytes
 StretchDIBits
 SystemParametersInfo
 SystemParametersInfoForDpi

@@ -976,52 +976,45 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Load
             /// </summary>
-            internal void Load(IStorage.Interface stg)
+            internal HRESULT Load(IStorage* stg)
             {
-                IStream* stream;
-                try
-                {
-                    stg.OpenStream(
+                using ComScope<IStream> stream = new(null);
+                HRESULT hr = stg->OpenStream(
                         GetStreamName(),
                         null,
                         STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
                         0,
-                        &stream);
-                }
-                catch (COMException e) when (e.ErrorCode == (int)HRESULT.STG_E_FILENOTFOUND)
+                        stream);
+                if (hr == HRESULT.STG_E_FILENOTFOUND)
                 {
                     // For backward compatibility: We were earlier using GetType().FullName
                     // as the stream name in v1. Lets see if a stream by that name exists.
-                    stg.OpenStream(
+                    hr = stg->OpenStream(
                         GetType().FullName!,
                         null,
                         STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
                         0,
-                        &stream);
+                        stream);
                 }
 
-                Load((IStream.Interface)Marshal.GetObjectForIUnknown((nint)stream));
-                if (Marshal.IsComObject(stg))
+                if (hr.Succeeded)
                 {
-                    Marshal.ReleaseComObject(stg);
+                    Load(stream);
                 }
+
+                return hr;
             }
 
             /// <summary>
             ///  Implements IPersistStreamInit::Load
             /// </summary>
-            internal void Load(IStream.Interface stream)
+            internal void Load(IStream* stream)
             {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, load through that method.
                 PropertyBagStream bag = new PropertyBagStream();
                 bag.Read(stream);
                 Load(bag, null);
-
-                if (Marshal.IsComObject(stream))
-                {
-                    Marshal.ReleaseComObject(stream);
-                }
             }
 
             /// <summary>
@@ -1420,35 +1413,35 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Save
             /// </summary>
-            internal void Save(IStorage.Interface stg, BOOL fSameAsLoad)
+            internal HRESULT Save(IStorage* stg, BOOL fSameAsLoad)
             {
                 using ComScope<IStream> stream = new(null);
-                stg.CreateStream(
+                HRESULT hr = stg->CreateStream(
                     GetStreamName(),
                     STGM.STGM_WRITE | STGM.STGM_SHARE_EXCLUSIVE | STGM.STGM_CREATE,
                     0,
                     0,
                     stream);
-                Debug.Assert(!stream.IsNull, "Stream should be non-null, or an exception should have been thrown.");
+                Debug.Assert(hr.Succeeded, "Stream should be non-null.");
 
-                Save((IStream.Interface)Marshal.GetObjectForIUnknown((nint)stream.Value), true);
+                if (hr.Succeeded)
+                {
+                    Save(stream, fClearDirty: true);
+                }
+
+                return hr;
             }
 
             /// <summary>
             ///  Implements IPersistStreamInit::Save
             /// </summary>
-            internal void Save(IStream.Interface stream, BOOL fClearDirty)
+            internal void Save(IStream* stream, BOOL fClearDirty)
             {
-                // We do everything through property bags because we support full fidelity
-                // in them.  So, save through that method.
+                // We do everything through property bags because we support full fidelity in them.
+                // So, save through that method.
                 PropertyBagStream bag = new PropertyBagStream();
                 Save(bag, fClearDirty, false);
                 bag.Write(stream);
-
-                if (Marshal.IsComObject(stream))
-                {
-                    Marshal.ReleaseComObject(stream);
-                }
             }
 
             /// <summary>

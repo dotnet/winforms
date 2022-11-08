@@ -7,7 +7,7 @@ internal static partial class Interop
     internal static partial class Ole32
     {
         /// <summary>
-        ///  Type of the storage element. Used with <see cref="STATSTG"/>.
+        ///  Type of the storage element. Used with <see cref="Windows.Win32.System.Com.STATSTG"/>.
         /// <see href="https://docs.microsoft.com/en-us/windows/desktop/api/objidl/ne-objidl-tagstgty"/>
         /// </summary>
         public enum STGTY : uint
