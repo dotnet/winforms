@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -26,7 +25,7 @@ namespace System.Windows.Forms
 
         internal void Load()
         {
-            ArrayList savedToolStripSettingsObjects = new ArrayList();
+            List<SettingsStub> savedToolStripSettingsObjects = new();
 
             List<ToolStrip> toolStripControls = new();
             FindControls(true, form.Controls, toolStripControls);
@@ -88,7 +87,7 @@ namespace System.Windows.Forms
             return itemNames.ToString();
         }
 
-        private void ApplySettings(ArrayList toolStripSettingsToApply)
+        private void ApplySettings(List<SettingsStub> toolStripSettingsToApply)
         {
             if (toolStripSettingsToApply.Count == 0)
             {
