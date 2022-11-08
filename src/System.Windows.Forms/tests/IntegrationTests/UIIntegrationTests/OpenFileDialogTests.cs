@@ -15,6 +15,7 @@ namespace System.Windows.Forms.UITests
         {
         }
 
+        // Regression test for https://github.com/dotnet/winforms/issues/8108
         [WinFormsFact]
         public void OpenFileDialogTests_OpenWithNonExistingInitDirectory_Success()
         {
@@ -35,11 +36,9 @@ namespace System.Windows.Forms.UITests
 
         private class TestDialogForm : Form
         {
-            private const int MSGF_DIALOGBOX = 0;
-
             protected override void WndProc(ref Message m)
             {
-                if (m.MsgInternal == User32.WM.ENTERIDLE && m.WParamInternal == MSGF_DIALOGBOX)
+                if (m.MsgInternal == User32.WM.ENTERIDLE && m.WParamInternal == (uint)MSGF.DIALOGBOX)
                 {
                     HWND dialogHandle = (HWND)m.LParamInternal;
                     PInvoke.PostMessage(dialogHandle, User32.WM.CLOSE);
