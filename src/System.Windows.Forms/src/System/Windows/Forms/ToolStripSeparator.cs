@@ -264,8 +264,7 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            ToolStrip? parent = ParentInternal;
-            parent ??= Owner;
+            ToolStrip? parent = ParentInternal ?? Owner;
 
             if (parent is null)
             {
