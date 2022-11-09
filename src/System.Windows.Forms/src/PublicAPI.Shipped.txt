@@ -1207,7 +1207,7 @@ System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control? toInvok
 ~System.Windows.Forms.HtmlWindowCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.HtmlWindowCollection.this[int index].get -> System.Windows.Forms.HtmlWindow
 ~System.Windows.Forms.HtmlWindowCollection.this[string windowId].get -> System.Windows.Forms.HtmlWindow
-~System.Windows.Forms.IComponentEditorPageSite.GetControl() -> System.Windows.Forms.Control
+System.Windows.Forms.IComponentEditorPageSite.GetControl() -> System.Windows.Forms.Control!
 ~System.Windows.Forms.ICurrencyManagerProvider.CurrencyManager.get -> System.Windows.Forms.CurrencyManager
 ~System.Windows.Forms.ICurrencyManagerProvider.GetRelatedCurrencyManager(string dataMember) -> System.Windows.Forms.CurrencyManager
 ~System.Windows.Forms.IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(System.Windows.Forms.Control editingControl) -> void
