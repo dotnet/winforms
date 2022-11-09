@@ -26,7 +26,6 @@ namespace System.Windows.Forms
         private int _value;
         private readonly ScrollOrientation _scrollOrientation;
         private int _wheelDelta;
-        private bool _scaleScrollBarForDpiChange = true;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ScrollBar"/> class.
@@ -136,7 +135,7 @@ namespace System.Windows.Forms
         {
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-            if (_scaleScrollBarForDpiChange)
+            if (ScaleScrollBarForDpiChange)
             {
                 Scale((float)deviceDpiNew / deviceDpiOld);
             }
@@ -381,11 +380,7 @@ namespace System.Windows.Forms
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
         [SRDescription(nameof(SR.ControlDpiChangeScale))]
-        public bool ScaleScrollBarForDpiChange
-        {
-            get => _scaleScrollBarForDpiChange;
-            set => _scaleScrollBarForDpiChange = value;
-        }
+        public bool ScaleScrollBarForDpiChange { get; set; } = true;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
