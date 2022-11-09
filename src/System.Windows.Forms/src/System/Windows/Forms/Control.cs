@@ -7129,7 +7129,7 @@ namespace System.Windows.Forms
 
             m.ResultInternal = (LRESULT)((bytes.Length + nullBytes.Length) / sizeof(char));
         }
-
+#nullable enable
         // Used by form to notify the control that it has been "entered"
         internal void NotifyEnter()
         {
@@ -7173,7 +7173,7 @@ namespace System.Windows.Forms
         ///  Raises the <see cref="Click"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected void InvokeOnClick(Control toInvoke, EventArgs e)
+        protected void InvokeOnClick(Control? toInvoke, EventArgs e)
         {
             toInvoke?.OnClick(e);
         }
@@ -7194,7 +7194,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            object backBrush = Properties.GetObject(s_backBrushProperty);
+            object? backBrush = Properties.GetObject(s_backBrushProperty);
             if (backBrush is not null)
             {
                 if (GetState(States.OwnCtlBrush))
@@ -7216,7 +7216,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7244,7 +7244,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7286,7 +7286,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7334,7 +7334,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7360,7 +7360,7 @@ namespace System.Windows.Forms
                 eventHandler(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 for (int i = 0; i < controlsCollection.Count; i++)
@@ -7410,7 +7410,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7431,7 +7431,6 @@ namespace System.Windows.Forms
         protected virtual void OnFontChanged(EventArgs e)
         {
             // bail if disposing
-            //
             if (GetAnyDisposingInHierarchy())
             {
                 return;
@@ -7457,7 +7456,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             using (new LayoutTransaction(this, this, PropertyNames.Font, false))
             {
                 if (controlsCollection is not null)
@@ -7491,7 +7490,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7523,7 +7522,7 @@ namespace System.Windows.Forms
                 eh(this, e);
             }
 
-            ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
             if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7586,7 +7585,7 @@ namespace System.Windows.Forms
             if (Properties.ContainsObject(s_dataContextProperty))
             {
                 // If this DataContext was the same as the Parent's just became,
-                if (Equals(Properties.GetObject(s_dataContextProperty), Parent.DataContext))
+                if (Equals(Properties.GetObject(s_dataContextProperty), Parent?.DataContext))
                 {
                     // we need to make it ambient again by removing it.
                     Properties.RemoveObject(s_dataContextProperty);
@@ -7610,7 +7609,7 @@ namespace System.Windows.Forms
                 OnEnabledChanged(e);
             }
         }
-#nullable enable
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e)
         {
