@@ -135,7 +135,11 @@ namespace System.Windows.Forms
         protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
         {
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            Scale((float)deviceDpiNew / deviceDpiOld);
+
+            if (_scaleScrollBarForDpiChange)
+            {
+                Scale((float)deviceDpiNew / deviceDpiOld);
+            }
         }
 
         /// <summary>
