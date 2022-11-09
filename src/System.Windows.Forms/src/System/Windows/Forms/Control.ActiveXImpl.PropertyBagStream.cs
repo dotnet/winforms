@@ -24,26 +24,27 @@ namespace System.Windows.Forms
                 {
                     // Visual Basic's memory streams don't support seeking, so we have to work around this limitation
                     // here. We do this by copying the contents of the stream into a MemoryStream object.
-                    Stream stream = new DataStreamFromComStream(istream);
                     const int PAGE_SIZE = 0x1000; // one page (4096b)
                     byte[] streamData = new byte[PAGE_SIZE];
-                    int offset = 0;
-
-                    int count = stream.Read(streamData, offset, PAGE_SIZE);
-                    int totalCount = count;
-
-                    while (count == PAGE_SIZE)
+                    using (DataStreamFromComStream comStream = new(istream, ownsHandle: false))
                     {
-                        byte[] newChunk = new byte[streamData.Length + PAGE_SIZE];
-                        Array.Copy(streamData, newChunk, streamData.Length);
-                        streamData = newChunk;
+                        int offset = 0;
+                        int count = comStream.Read(streamData, offset, PAGE_SIZE);
+                        int totalCount = count;
 
-                        offset += PAGE_SIZE;
-                        count = stream.Read(streamData, offset, PAGE_SIZE);
-                        totalCount += count;
+                        while (count == PAGE_SIZE)
+                        {
+                            byte[] newChunk = new byte[streamData.Length + PAGE_SIZE];
+                            Array.Copy(streamData, newChunk, streamData.Length);
+                            streamData = newChunk;
+
+                            offset += PAGE_SIZE;
+                            count = comStream.Read(streamData, offset, PAGE_SIZE);
+                            totalCount += count;
+                        }
                     }
 
-                    stream = new MemoryStream(streamData);
+                    MemoryStream stream = new(streamData);
 
                     BinaryFormatter formatter = new BinaryFormatter();
                     try
@@ -94,8 +95,8 @@ namespace System.Windows.Forms
 
                 internal void Write(IStream* istream)
                 {
-                    Stream stream = new DataStreamFromComStream(istream);
-                    BinaryFormatter formatter = new BinaryFormatter();
+                    using DataStreamFromComStream stream = new(istream, ownsHandle: false);
+                    BinaryFormatter formatter = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                     formatter.Serialize(stream, _bag);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete

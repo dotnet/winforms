@@ -9,10 +9,12 @@ namespace System.Windows.Forms
     internal unsafe class DataStreamFromComStream : Stream
     {
         private IStream* _comStream;
+        private readonly bool _ownsHandle;
 
-        public DataStreamFromComStream(IStream* comStream) : base()
+        public DataStreamFromComStream(IStream* comStream, bool ownsHandle)
         {
             _comStream = comStream;
+            _ownsHandle = ownsHandle;
         }
 
         public override long Position
@@ -147,11 +149,17 @@ namespace System.Windows.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && _comStream is not null)
+            if (_comStream is not null)
             {
-                _comStream->Commit(STGC.STGC_DEFAULT);
-                // Can't release a COM stream from the finalizer thread.
-                _comStream->Release();
+                if (disposing)
+                {
+                    _comStream->Commit(STGC.STGC_DEFAULT);
+                }
+
+                if (_ownsHandle)
+                {
+                    _comStream->Release();
+                }
             }
 
             _comStream = null;
