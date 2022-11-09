@@ -7218,7 +7218,6 @@ namespace System.Windows.Forms.Tests
         {
             Type toolStripScrollButtonType = typeof(ToolStripScrollButton);
             var accessor = typeof(DpiHelper).TestAccessor();
-            Size defaultSize = new(16, 16);
             int oldDeviceDpi = DpiHelper.DeviceDpi;
             DpiTestData dpiTestData = new()
             {
@@ -7230,7 +7229,7 @@ namespace System.Windows.Forms.Tests
             try
             {
                 accessor.Dynamic.DeviceDpi = dpiTestData.Dpi;
-                Bitmap bitmap = DpiHelper.GetScaledBitmapFromIcon(toolStripScrollButtonType, dpiTestData.ResourceName, defaultSize);
+                using Bitmap bitmap = DpiHelper.GetScaledBitmapFromIcon(toolStripScrollButtonType, dpiTestData.ResourceName);
                 Assert.Equal(dpiTestData.ExpectedSide, bitmap.Width);
                 Assert.Equal(dpiTestData.ExpectedSide, bitmap.Height);
             }

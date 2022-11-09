@@ -179,19 +179,12 @@ namespace System.Windows.Forms
             // Set up images
             //
 
-            Bitmap moveFirstImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveFirst");
-            Bitmap movePreviousImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MovePrevious");
-            Bitmap moveNextImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveNext");
-            Bitmap moveLastImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveLast");
-            Bitmap addNewImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.AddNew");
-            Bitmap deleteImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.Delete");
-
-            MoveFirstItem.Image = moveFirstImage;
-            MovePreviousItem.Image = movePreviousImage;
-            MoveNextItem.Image = moveNextImage;
-            MoveLastItem.Image = moveLastImage;
-            AddNewItem.Image = addNewImage;
-            DeleteItem.Image = deleteImage;
+            MoveFirstItem.Image = DpiHelper.GetScaledBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveFirst");
+            MovePreviousItem.Image = DpiHelper.GetScaledBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MovePrevious");
+            MoveNextItem.Image = DpiHelper.GetScaledBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveNext");
+            MoveLastItem.Image = DpiHelper.GetScaledBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveLast");
+            AddNewItem.Image = DpiHelper.GetScaledBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.AddNew");
+            DeleteItem.Image = DpiHelper.GetScaledBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.Delete");
 
             MoveFirstItem.RightToLeftAutoMirrorImage = true;
             MovePreviousItem.RightToLeftAutoMirrorImage = true;

@@ -3956,7 +3956,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        protected virtual Bitmap SortByPropertyImage => DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBAlpha");
+        protected virtual Bitmap SortByPropertyImage => DpiHelper.GetScaledBitmapFromIcon(typeof(PropertyGrid), "PBAlpha");
 
         /// <summary>
         ///  This 16x16 Bitmap is applied to the button which displays properties under the assigned categories.
@@ -3964,7 +3964,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        protected virtual Bitmap SortByCategoryImage => DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBCategory");
+        protected virtual Bitmap SortByCategoryImage => DpiHelper.GetScaledBitmapFromIcon(typeof(PropertyGrid), "PBCategory");
 
         /// <summary>
         ///  This 16x16 Bitmap is applied to the button which displays property page in the designer pane.
@@ -3972,7 +3972,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        protected virtual Bitmap ShowPropertyPageImage => DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBPPage");
+        protected virtual Bitmap ShowPropertyPageImage => DpiHelper.GetScaledBitmapFromIcon(typeof(PropertyGrid), "PBPPage");
 
         // "Should" methods are used by the designer via reflection.
 

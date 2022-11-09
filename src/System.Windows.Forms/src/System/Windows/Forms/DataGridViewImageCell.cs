@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                s_errorBitmap ??= DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
+                s_errorBitmap ??= DpiHelper.GetScaledBitmapFromIcon(typeof(DataGridView), "ImageInError");
 
                 return s_errorBitmap;
             }

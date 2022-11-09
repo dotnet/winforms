@@ -57,7 +57,7 @@ namespace System.Windows.Forms
 
             _previewControl = new PrintPreviewControl();
             _imageList = new ImageList();
-            _imageList.Images.AddStrip(DpiHelper.GetBitmapFromIcon(typeof(PrintPreviewDialog), "PrintPreviewStrip"));
+            _imageList.Images.AddStrip(DpiHelper.GetScaledBitmapFromIcon(typeof(PrintPreviewDialog), "PrintPreviewStrip", new(112, 16)));
             InitForm();
         }
 
