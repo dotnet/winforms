@@ -147,13 +147,9 @@ namespace System.Windows.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (_comStream is not null)
+            if (disposing && _comStream is not null)
             {
-                if (disposing)
-                {
-                    _comStream->Commit(STGC.STGC_DEFAULT);
-                }
-
+                _comStream->Commit(STGC.STGC_DEFAULT);
                 // Can't release a COM stream from the finalizer thread.
                 _comStream->Release();
             }
