@@ -11,7 +11,7 @@ namespace System.Windows.Forms
         private IStream* _comStream;
         private readonly bool _ownsHandle;
 
-        public DataStreamFromComStream(IStream* comStream, bool ownsHandle)
+        public DataStreamFromComStream(IStream* comStream, bool ownsHandle) : base()
         {
             _comStream = comStream;
             _ownsHandle = ownsHandle;
