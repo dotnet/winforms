@@ -392,20 +392,7 @@ namespace System.Windows.Forms
                 _storage = null;
             }
 
-            protected virtual unsafe void Dispose(bool disposing)
-            {
-                if (disposing)
-                {
-                    ReleaseResources();
-                }
-                else
-                {
-                    // Unsafe to release COM references from the finalizer thread.
-                    // There is no guarantees whether it has or hasn't been collected.
-                    _iLockBytes = null;
-                    _storage = null;
-                }
-            }
+            protected virtual void Dispose(bool disposing) => ReleaseResources();
 
             public void Dispose()
             {
