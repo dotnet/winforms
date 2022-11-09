@@ -11,7 +11,7 @@ namespace System;
 
 /// <summary>
 ///  Helper class to host dialogs for testing.
-///  This is class typically passed as a parameter to a call to <see cref="CommonDialog.ShowDialog(IWin32Window?)"/>.
+///  This class is typically passed as a parameter to a call to <see cref="CommonDialog.ShowDialog(IWin32Window?)"/>.
 /// </summary>
 internal class DialogForm : Form
 {
