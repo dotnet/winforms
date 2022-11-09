@@ -30,10 +30,10 @@ namespace System.Windows.Forms
 
         public WeakRefCollection(int size)
         {
-            InnerList = new ArrayList(size);
+            InnerList = new List<WeakRefObject?>(size);
         }
 
-        public ArrayList InnerList { get; }
+        public List<WeakRefObject?> InnerList { get; }
 
         /// <summary>
         ///  Indicates the value where the collection should check its items to remove dead weakref left over.
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
             int currentCount = Count;
             for (int i = 0; i < currentCount; i++)
             {
-                object? item = this[currentIndex];
+                WeakRefObject? item = InnerList[currentIndex];
 
                 if (item is null)
                 {
@@ -128,7 +128,7 @@ namespace System.Windows.Forms
 
         public void Clear() => InnerList.Clear();
 
-        public bool IsFixedSize => InnerList.IsFixedSize;
+        public bool IsFixedSize => false;
 
         public bool Contains(object? value) => InnerList.Contains(CreateWeakRefObject(value));
 
@@ -147,18 +147,22 @@ namespace System.Windows.Forms
                 ScavengeReferences();
             }
 
-            return InnerList.Add(CreateWeakRefObject(value));
+            var weakRefObject = CreateWeakRefObject(value);
+            InnerList.Add(weakRefObject);
+
+            int index = InnerList.LastIndexOf(weakRefObject);
+            return index;
         }
 
         public int Count => InnerList.Count;
 
-        object ICollection.SyncRoot => InnerList.SyncRoot;
+        object ICollection.SyncRoot => this;
 
-        public bool IsReadOnly => InnerList.IsReadOnly;
+        public bool IsReadOnly => false;
 
-        public void CopyTo(Array array, int index) => InnerList.CopyTo(array, index);
+        public void CopyTo(Array array, int index) => InnerList.CopyTo((WeakRefObject?[])array, index);
 
-        bool ICollection.IsSynchronized => InnerList.IsSynchronized;
+        bool ICollection.IsSynchronized => false;
 
         public IEnumerator GetEnumerator() => InnerList.GetEnumerator();
 
