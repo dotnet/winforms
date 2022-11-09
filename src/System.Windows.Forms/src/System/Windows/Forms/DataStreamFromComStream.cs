@@ -10,6 +10,9 @@ namespace System.Windows.Forms
     {
         private IStream* _comStream;
 
+        /// <summary>
+        ///  Initializes a new instance that does not take ownership of <paramref name="comStream"/>.
+        /// </summary>
         public DataStreamFromComStream(IStream* comStream) : base()
         {
             _comStream = comStream;
@@ -147,24 +150,13 @@ namespace System.Windows.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (_comStream is not null)
+            if (disposing && _comStream is not null)
             {
-                if (disposing)
-                {
-                    _comStream->Commit(STGC.STGC_DEFAULT);
-                }
-
-                // Can't release a COM stream from the finalizer thread.
-                _comStream->Release();
+                _comStream->Commit(STGC.STGC_DEFAULT);
             }
 
             _comStream = null;
             base.Dispose(disposing);
-        }
-
-        ~DataStreamFromComStream()
-        {
-            Dispose(false);
         }
     }
 }

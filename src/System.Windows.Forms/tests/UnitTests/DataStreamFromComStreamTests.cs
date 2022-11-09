@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Tests
             using MemoryStream memoryStream = new();
             using var stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(memoryStream), out bool result);
             Assert.True(result);
-            var dataStream = new DataStreamFromComStream(stream);
+            using DataStreamFromComStream dataStream = new(stream);
             Assert.Throws<IOException>(() => dataStream.Write(new byte[bufferSize], index, count));
         }
 
@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests
             using MemoryStream memoryStream = new();
             using var stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(memoryStream), out bool result);
             Assert.True(result);
-            var dataStream = new DataStreamFromComStream(stream);
+            using DataStreamFromComStream dataStream = new(stream);
             dataStream.Write(new byte[bufferSize], index, count);
         }
     }
