@@ -2623,11 +2623,6 @@ namespace System.Windows.Forms.Tests
             control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
             Assert.Equal(expected, control.Size);
             Assert.False(control.IsHandleCreated);
-
-            // Call again.
-            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            Assert.Equal(expected, control.Size);
-            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
