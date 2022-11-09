@@ -1894,7 +1894,7 @@ namespace System.Windows.Forms
             {
                 if (Properties.ContainsObject(ToolStripItem.s_tagProperty))
                 {
-                    return _propertyStore!.GetObject(ToolStripItem.s_tagProperty);
+                    return Properties.GetObject(ToolStripItem.s_tagProperty);
                 }
 
                 return null;
