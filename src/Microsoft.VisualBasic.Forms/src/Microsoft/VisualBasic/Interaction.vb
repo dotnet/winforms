@@ -10,6 +10,8 @@ Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
+Imports Windows.Win32
+Imports Windows.Win32.Foundation
 
 Namespace Microsoft.VisualBasic
 
@@ -136,25 +138,21 @@ Namespace Microsoft.VisualBasic
         Public Sub AppActivateByTitle(Title As String)
             'As an optimization, we will only check the UI permission once we actually know we found the app to activate - we'll do that in AppActivateHelper
             Dim WindowHandle As IntPtr = NativeMethods.FindWindow(Nothing, Title) 'see if we can find the window using an exact match on the title
-            Const MAX_TITLE_LENGTH As Integer = 511
 
             '  if no match, search through all parent windows
             If IntPtr.op_Equality(WindowHandle, IntPtr.Zero) Then
                 Dim AppTitle As String
                 ' Old implementation uses MAX_TITLE_LENGTH characters, INCLUDING NULL character.
                 ' Interop code will extend string builder to handle NULL character.
-                Dim AppTitleBuilder As New StringBuilder(MAX_TITLE_LENGTH)
-                Dim AppTitleLength As Integer
-                Dim TitleLength As Integer = Len(Title)
+                Dim TitleLength As Integer = Title.Length
 
                 'Loop through all children of the desktop
                 WindowHandle = NativeMethods.GetWindow(NativeMethods.GetDesktopWindow(), NativeTypes.GW_CHILD)
                 Do While IntPtr.op_Inequality(WindowHandle, IntPtr.Zero)
                     '  get the window caption and test for a left-aligned substring
-                    AppTitleLength = NativeMethods.GetWindowText(WindowHandle, AppTitleBuilder, AppTitleBuilder.Capacity)
-                    AppTitle = AppTitleBuilder.ToString()
+                    AppTitle = PInvoke.GetWindowText(CType(WindowHandle, HWND))
 
-                    If AppTitleLength >= TitleLength Then
+                    If AppTitle.Length >= TitleLength Then
                         If String.Compare(AppTitle, 0, Title, 0, TitleLength, StringComparison.OrdinalIgnoreCase) = 0 Then
                             Exit Do 'found one
                         End If
@@ -170,10 +168,9 @@ Namespace Microsoft.VisualBasic
 
                     Do While IntPtr.op_Inequality(WindowHandle, IntPtr.Zero)
                         '  get the window caption and test for a right-aligned substring
-                        AppTitleLength = NativeMethods.GetWindowText(WindowHandle, AppTitleBuilder, AppTitleBuilder.Capacity)
-                        AppTitle = AppTitleBuilder.ToString()
+                        AppTitle = PInvoke.GetWindowText(CType(WindowHandle, HWND))
 
-                        If AppTitleLength >= TitleLength Then
+                        If AppTitle.Length >= TitleLength Then
                             If String.Compare(Right(AppTitle, TitleLength), 0, Title, 0, TitleLength, StringComparison.OrdinalIgnoreCase) = 0 Then
                                 Exit Do 'found a match
                             End If
