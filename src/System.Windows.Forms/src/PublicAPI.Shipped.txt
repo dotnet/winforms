@@ -2718,7 +2718,6 @@ override System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(S
 override System.Windows.Forms.DockingAttribute.Equals(object? obj) -> bool
 override System.Windows.Forms.DockingAttribute.GetHashCode() -> int
 override System.Windows.Forms.DockingAttribute.IsDefaultAttribute() -> bool
-override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.get -> string?
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.set -> void
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?

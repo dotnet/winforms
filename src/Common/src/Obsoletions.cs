@@ -14,13 +14,11 @@ internal static class Obsoletions
     // and ensure the "aka.ms/dotnet-warnings/{0}" URL points to documentation for the obsoletion
     // The diagnostic ids reserved for obsoletions are WFDEV### (WFDEV001 - WFDEV999).
 
-#pragma warning disable WFDEV002 // Type or member is obsolete
-    internal const string DomainUpDownAccessibleObjectMessage = $"{nameof(DomainUpDown.DomainUpDownAccessibleObject)} is no longer used to provide accessible support for {nameof(DomainUpDown)} controls.";
-#pragma warning restore WFDEV002 // Type or member is obsolete
+    internal const string DomainUpDownAccessibleObjectMessage = $"DomainUpDownAccessibleObject is no longer used to provide accessible support for {nameof(DomainUpDown)} controls. Use {nameof(Control.ControlAccessibleObject)} instead.";
     internal const string DomainUpDownAccessibleObjectDiagnosticId = "WFDEV002";
 
 #pragma warning disable WFDEV003 // Type or member is obsolete
     internal const string DomainItemAccessibleObjectMessage = $"{nameof(DomainUpDown.DomainItemAccessibleObject)} is no longer used to provide accessible support for {nameof(DomainUpDown)} items.";
-#pragma warning disable WFDEV003 // Type or member is obsolete
+#pragma warning restore WFDEV003 // Type or member is obsolete
     internal const string DomainItemAccessibleObjectDiagnosticId = "WFDEV003";
 }

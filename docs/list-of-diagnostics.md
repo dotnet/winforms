@@ -36,7 +36,7 @@ The acceptance criteria for adding an obsoletion includes:
 |  __`WFDEV001`__ | Casting to/from IntPtr is unsafe, use `WParamInternal`. |
 |  __`WFDEV001`__ | Casting to/from IntPtr is unsafe, use `LParamInternal`. |
 |  __`WFDEV001`__ | Casting to/from IntPtr is unsafe, use `ResultInternal`. |
-|  __`WFDEV002`__ | `DomainUpDown.DomainUpDownAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` controls. |
+|  __`WFDEV002`__ | `DomainUpDown.DomainUpDownAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` controls. Use `ControlAccessibleObject` instead. |
 |  __`WFDEV003`__ | `DomainUpDown.DomainItemAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` items. |
 
 
