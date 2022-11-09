@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests
             using MemoryStream memoryStream = new();
             using var stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(memoryStream), out bool result);
             Assert.True(result);
-            DataStreamFromComStream dataStream = new(stream, ownsHandle: false);
+            using DataStreamFromComStream dataStream = new(stream, ownsHandle: false);
             dataStream.Write(new byte[bufferSize], index, count);
         }
     }
