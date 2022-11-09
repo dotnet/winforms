@@ -100,7 +100,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' Sync object
         Private ReadOnly _networkAvailabilityChangeLock As New Object
 
-        Private _unhandledExceptionHandlers As ArrayList
+        Private _unhandledExceptionHandlers As List(Of UnhandledExceptionEventHandler)
         Private _processingUnhandledExceptionEvent As Boolean
 
         ' Tracks whether we need to create the network object so we can listen to the NetworkAvailabilityChanged event.
@@ -108,7 +108,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' Whether we have made it through the processing of OnInitialize.
         Private _finishedOnInitialize As Boolean
-        Private _networkAvailabilityEventHandlers As ArrayList
+        Private _networkAvailabilityEventHandlers As List(Of Devices.NetworkAvailableEventHandler)
         Private _networkObject As Devices.Network
 
 #Disable Warning IDE0032 ' Use auto property, Justification:=<Public API>
@@ -155,7 +155,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             AddHandler(value As Devices.NetworkAvailableEventHandler)
                 SyncLock _networkAvailabilityChangeLock
                     If _networkAvailabilityEventHandlers Is Nothing Then
-                        _networkAvailabilityEventHandlers = New ArrayList
+                        _networkAvailabilityEventHandlers = New List(Of Devices.NetworkAvailableEventHandler)
                     End If
 
                     _networkAvailabilityEventHandlers.Add(value)
@@ -227,7 +227,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' the user wrote their own handler to deal with the error instead.
             AddHandler(value As UnhandledExceptionEventHandler)
                 If _unhandledExceptionHandlers Is Nothing Then
-                    _unhandledExceptionHandlers = New ArrayList
+                    _unhandledExceptionHandlers = New List(Of UnhandledExceptionEventHandler)
                 End If
 
                 _unhandledExceptionHandlers.Add(value)
