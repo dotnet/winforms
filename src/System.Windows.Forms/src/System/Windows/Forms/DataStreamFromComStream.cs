@@ -9,12 +9,13 @@ namespace System.Windows.Forms
     internal unsafe class DataStreamFromComStream : Stream
     {
         private IStream* _comStream;
-        private readonly bool _ownsHandle;
 
-        public DataStreamFromComStream(IStream* comStream, bool ownsHandle) : base()
+        /// <summary>
+        ///  Initializes a new instance that does not take ownership of <paramref name="comStream"/>.
+        /// </summary>
+        public DataStreamFromComStream(IStream* comStream) : base()
         {
             _comStream = comStream;
-            _ownsHandle = ownsHandle;
         }
 
         public override long Position
@@ -149,26 +150,13 @@ namespace System.Windows.Forms
 
         protected override void Dispose(bool disposing)
         {
-            if (_comStream is not null)
+            if (disposing && _comStream is not null)
             {
-                if (disposing)
-                {
-                    _comStream->Commit(STGC.STGC_DEFAULT);
-                }
-
-                if (_ownsHandle)
-                {
-                    _comStream->Release();
-                }
+                _comStream->Commit(STGC.STGC_DEFAULT);
             }
 
             _comStream = null;
             base.Dispose(disposing);
-        }
-
-        ~DataStreamFromComStream()
-        {
-            Dispose(false);
         }
     }
 }

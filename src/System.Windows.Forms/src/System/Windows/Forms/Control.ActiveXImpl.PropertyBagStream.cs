@@ -26,7 +26,7 @@ namespace System.Windows.Forms
                     // here. We do this by copying the contents of the stream into a MemoryStream object.
                     const int PAGE_SIZE = 0x1000; // one page (4096b)
                     byte[] streamData = new byte[PAGE_SIZE];
-                    using (DataStreamFromComStream comStream = new(istream, ownsHandle: false))
+                    using (DataStreamFromComStream comStream = new(istream))
                     {
                         int offset = 0;
                         int count = comStream.Read(streamData, offset, PAGE_SIZE);
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
 
                 internal void Write(IStream* istream)
                 {
-                    using DataStreamFromComStream stream = new(istream, ownsHandle: false);
+                    using DataStreamFromComStream stream = new(istream);
                     BinaryFormatter formatter = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                     formatter.Serialize(stream, _bag);
