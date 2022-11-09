@@ -13,11 +13,9 @@ namespace Windows.Win32
         {
             Span<char> buffer = stackalloc char[MAX_PATH];
             uint pathLength;
-            bool isBufferTooSmall = false;
             fixed (char* lpFilename = buffer)
             {
                 pathLength = GetModuleFileName(hModule, lpFilename, (uint)buffer.Length);
-                isBufferTooSmall = (WIN32_ERROR)Marshal.GetLastWin32Error() == WIN32_ERROR.ERROR_INSUFFICIENT_BUFFER;
             }
 
             if (pathLength == 0)
@@ -25,7 +23,7 @@ namespace Windows.Win32
                 return string.Empty;
             }
 
-            if (pathLength < buffer.Length - 1 && !isBufferTooSmall)
+            if (pathLength < buffer.Length - 1)
             {
                 return new string(buffer[..(int)pathLength]);
             }
@@ -39,7 +37,6 @@ namespace Windows.Win32
                 fixed (char* lpFilename = lbuffer)
                 {
                     pathLength = GetModuleFileName(hModule, lpFilename, (uint)lbuffer.Length);
-                    isBufferTooSmall = (WIN32_ERROR)Marshal.GetLastWin32Error() == WIN32_ERROR.ERROR_INSUFFICIENT_BUFFER;
                 }
 
                 if (pathLength == 0)
@@ -49,7 +46,7 @@ namespace Windows.Win32
                 }
 
                 // If the length equals the buffer size we need to check to see if we were told the buffer was insufficient (it was trimmed)
-                if (pathLength < lbuffer.Length - 1 && !isBufferTooSmall)
+                if (pathLength < lbuffer.Length - 1)
                 {
                     // Get return value and return buffer to array pool.
                     string returnValue = new string(lbuffer, 0, (int)pathLength);
