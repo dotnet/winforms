@@ -765,7 +765,7 @@ namespace System.Windows.Forms.Layout
                     Strip strip = strips[i];
                     if (i < styles.Count)
                     {
-                        TableLayoutStyle style = (TableLayoutStyle)styles[i];
+                        TableLayoutStyle style = styles[i];
                         if (style.SizeType == SizeType.Percent)
                         {
                             totalPercent += style.Size;
@@ -784,7 +784,7 @@ namespace System.Windows.Forms.Layout
                 {
                     if (i < styles.Count)
                     {
-                        TableLayoutStyle style = (TableLayoutStyle)styles[i];
+                        TableLayoutStyle style = styles[i];
                         if (style.SizeType == SizeType.Percent)
                         {
                             float percentageOfTotal = style.Size / (float)totalPercent;
@@ -1207,7 +1207,7 @@ namespace System.Windows.Forms.Layout
             Sort(childrenInfo, PostAssignedPositionComparer.GetInstance);
             for (int i = 0; i < childrenInfo.Length; i++)
             {
-                LayoutInfo layoutInfo = (LayoutInfo)childrenInfo[i];
+                LayoutInfo layoutInfo = childrenInfo[i];
 
                 IArrangedElement element = layoutInfo.Element;
 
@@ -1487,7 +1487,7 @@ namespace System.Windows.Forms.Layout
             // this code may be useful for debugging, but doesnt work well with
             // row styles
 
-            ArrayList layoutInfos = new ArrayList(container.Children.Count);
+            List<LayoutInfo> layoutInfos = new List<LayoutInfo>(container.Children.Count);
             ContainerInfo containerInfo = GetContainerInfo(container);
             Strip[] rows = containerInfo.Rows;
             Strip[] columns = containerInfo.Columns;
@@ -1506,13 +1506,13 @@ namespace System.Windows.Forms.Layout
 
             for (int i = 0; i < layoutInfos.Count; i++)
             {
-                LayoutInfo layoutInfo1 = (LayoutInfo)layoutInfos[i];
+                LayoutInfo layoutInfo1 = layoutInfos[i];
 
                 Rectangle elementBounds1 = layoutInfo1.Element.Bounds;
                 Rectangle cellsOccupied1 = new Rectangle(layoutInfo1.ColumnStart, layoutInfo1.RowStart, layoutInfo1.ColumnSpan, layoutInfo1.RowSpan);
                 for (int j = i + 1; j < layoutInfos.Count; j++)
                 {
-                    LayoutInfo layoutInfo2 = (LayoutInfo)layoutInfos[j];
+                    LayoutInfo layoutInfo2 = layoutInfos[j];
                     Rectangle elementBounds2 = layoutInfo2.Element.Bounds;
                     Rectangle cellsOccupied2 = new Rectangle(layoutInfo2.ColumnStart, layoutInfo2.RowStart, layoutInfo2.ColumnSpan, layoutInfo2.RowSpan);
                     Debug.Assert(!cellsOccupied1.IntersectsWith(cellsOccupied2), "controls overlap in the same cell");
