@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Buffers;
-using System.Runtime.InteropServices;
 
 namespace Windows.Win32
 {
@@ -23,7 +22,7 @@ namespace Windows.Win32
                 return string.Empty;
             }
 
-            if (pathLength < buffer.Length - 1)
+            if (pathLength < buffer.Length)
             {
                 return new string(buffer[..(int)pathLength]);
             }
@@ -46,7 +45,7 @@ namespace Windows.Win32
                 }
 
                 // If the length equals the buffer size we need to check to see if we were told the buffer was insufficient (it was trimmed)
-                if (pathLength < lbuffer.Length - 1)
+                if (pathLength < lbuffer.Length)
                 {
                     // Get return value and return buffer to array pool.
                     string returnValue = new string(lbuffer, 0, (int)pathLength);
