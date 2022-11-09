@@ -1,9 +1,6 @@
 ﻿<Project InitialTargets="BuildPackage">
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
   <PropertyGroup>
-    <TargetFrameworkName>net</TargetFrameworkName>
-    <TargetFrameworkVersion>5.0</TargetFrameworkVersion>
-    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     
