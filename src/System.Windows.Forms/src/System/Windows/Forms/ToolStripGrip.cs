@@ -234,7 +234,7 @@ namespace System.Windows.Forms
         /// <param name="e"></param>
         protected override void OnMouseLeave(EventArgs e)
         {
-            if (_oldCursor is not null && !ParentInternal.IsInDesignMode)
+            if (_oldCursor is not null && ParentInternal is not null && !ParentInternal.IsInDesignMode)
             {
                 ParentInternal.Cursor = _oldCursor;
             }
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                 ToolStripPanelRow.ToolStripPanel.MoveControl(ParentInternal, /*startLocation,*/endLocation);
             }
 
-            if (!ParentInternal.IsInDesignMode)
+            if (ParentInternal is not null && !ParentInternal.IsInDesignMode)
             {
                 ParentInternal.Cursor = _oldCursor;
             }

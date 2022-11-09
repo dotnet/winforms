@@ -41,7 +41,7 @@ namespace System.Windows.Forms
                     {
                         if (Owner is ToolStripComboBoxControl toolStripComboBoxControl)
                         {
-                            return toolStripComboBoxControl.Owner?.Owner.AccessibilityObject;
+                            return toolStripComboBoxControl.Owner?.Owner?.AccessibilityObject;
                         }
 
                         return base.FragmentRoot;

@@ -748,7 +748,7 @@ namespace System.Windows.Forms
             {
                 if (ownerItem is not null)
                 {
-                    ToolStrip owner = ownerItem.ParentInternal;
+                    ToolStrip? owner = ownerItem.ParentInternal;
                     if (owner is not null)
                     {
                         return owner;

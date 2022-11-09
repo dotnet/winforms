@@ -197,7 +197,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            ToolStripRenderer renderer = Renderer;
+            ToolStripRenderer renderer = Renderer!;
             renderer.DrawButtonBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
 
             if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image)

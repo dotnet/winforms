@@ -221,7 +221,7 @@ namespace System.Windows.Forms
         {
             if (Owner is not null)
             {
-                ToolStripRenderer renderer = Renderer;
+                ToolStripRenderer renderer = Renderer!;
 
                 renderer.DrawToolStripStatusLabelBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
 

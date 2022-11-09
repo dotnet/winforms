@@ -413,10 +413,10 @@ namespace System.Windows.Forms
                 }
 
                 // try the parent
-                Control? p = ParentInternal;
-                if (p is not null && p.CanAccessProperties)
+                Control? parent = ParentInternal;
+                if (parent is not null && parent.CanAccessProperties)
                 {
-                    return p.BindingContext;
+                    return parent.BindingContext;
                 }
 
                 // we don't have a binding context

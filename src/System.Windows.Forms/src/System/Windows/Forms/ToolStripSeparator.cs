@@ -170,8 +170,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStrip parent = ParentInternal;
-                parent ??= Owner;
+                ToolStrip? parent = ParentInternal ?? Owner;
+
+                if (parent is null)
+                {
+                    return true;
+                }
 
                 if (parent is ToolStripDropDownMenu dropDownMenu)
                 {
@@ -260,8 +264,7 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            ToolStrip parent = ParentInternal;
-            parent ??= Owner;
+            ToolStrip? parent = ParentInternal ?? Owner;
 
             if (parent is null)
             {
@@ -292,7 +295,7 @@ namespace System.Windows.Forms
         {
             if (Owner is not null && ParentInternal is not null)
             {
-                Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
+                Renderer!.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
             }
         }
 
