@@ -26,7 +26,7 @@ namespace System.Windows.Forms
 
             private TypeConverter _converter;
             private UITypeEditor _editor;
-            private readonly ArrayList _updateAttributes = new();
+            private readonly List<Attribute> _updateAttributes = new();
             private int _flags;
 
             private const int FlagUpdatedEditorAndConverter = 0x00000001;
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                ArrayList attributes = new ArrayList(AttributeArray);
+                List<Attribute> attributes = new List<Attribute>(AttributeArray);
                 foreach (Attribute attr in _updateAttributes)
                 {
                     attributes.Add(attr);
