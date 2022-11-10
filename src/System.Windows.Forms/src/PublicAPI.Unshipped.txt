@@ -1,5 +1,4 @@
 System.Windows.Forms.AxHost.State.Dispose() -> void
-System.Windows.Forms.AxHost.State.~State() -> void
 System.Windows.Forms.PrintPreviewControl.TabStop.get -> bool
 System.Windows.Forms.PrintPreviewControl.TabStop.set -> void
 System.Windows.Forms.PrintPreviewControl.TabStopChanged -> System.EventHandler?
