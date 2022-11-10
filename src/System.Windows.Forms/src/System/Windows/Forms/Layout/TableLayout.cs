@@ -1421,9 +1421,9 @@ namespace System.Windows.Forms.Layout
         private static void Debug_VerifyAssignmentsAreCurrent(IArrangedElement container, ContainerInfo containerInfo)
         {
 #if DEBUG
-            Hashtable oldLayoutInfo = new Hashtable();
+            Dictionary<IArrangedElement, LayoutInfo> oldLayoutInfo = new();
             ArrangedElementCollection children = container.Children;
-            ArrayList childrenInfo = new ArrayList(children.Count);
+            List<LayoutInfo> childrenInfo = new(children.Count);
 
             int minSpace = 0;
             int minColumn = 0;
@@ -1466,10 +1466,10 @@ namespace System.Windows.Forms.Layout
             {
                 Debug.Assert(layoutInfo.Equals(oldLayoutInfo[layoutInfo.Element]),
                     "Cached assignment info is invalid: LayoutInfo has changed."
-                    + " old layoutinfo: " + ((LayoutInfo)oldLayoutInfo[layoutInfo.Element]).RowStart + " " + ((LayoutInfo)oldLayoutInfo[layoutInfo.Element]).ColumnStart
+                    + " old layoutinfo: " + oldLayoutInfo[layoutInfo.Element].RowStart + " " + oldLayoutInfo[layoutInfo.Element].ColumnStart
                     + " new layoutinfo: " + layoutInfo.RowStart + " " + layoutInfo.ColumnStart
                     + " and the element is " + layoutInfo.Element.ToString());
-                SetLayoutInfo(layoutInfo.Element, (LayoutInfo)oldLayoutInfo[layoutInfo.Element]);
+                SetLayoutInfo(layoutInfo.Element, oldLayoutInfo[layoutInfo.Element]);
             }
 
             // Restore the information in row and column strips. Note that whenever we do a AssignRowAndColumns()
@@ -1487,7 +1487,7 @@ namespace System.Windows.Forms.Layout
             // this code may be useful for debugging, but doesnt work well with
             // row styles
 
-            List<LayoutInfo> layoutInfos = new List<LayoutInfo>(container.Children.Count);
+            List<LayoutInfo> layoutInfos = new(container.Children.Count);
             ContainerInfo containerInfo = GetContainerInfo(container);
             Strip[] rows = containerInfo.Rows;
             Strip[] columns = containerInfo.Columns;
