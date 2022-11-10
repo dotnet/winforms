@@ -132,15 +132,9 @@ namespace System.Windows.Forms
 
             internal int Type { get; set; }
 
-            internal bool _GetManualUpdate()
-            {
-                return _manualUpdate;
-            }
+            internal bool _GetManualUpdate() => _manualUpdate;
 
-            internal string? _GetLicenseKey()
-            {
-                return _licenseKey;
-            }
+            internal string? _GetLicenseKey() => _licenseKey;
 
             private unsafe void CreateStorage()
             {
@@ -196,10 +190,7 @@ namespace System.Windows.Forms
                 _storage = new(storage);
             }
 
-            internal IPropertyBag.Interface? GetPropBag()
-            {
-                return _propertyBag;
-            }
+            internal IPropertyBag.Interface? GetPropBag() => _propertyBag;
 
             internal unsafe ComScope<IStorage> GetStorage()
             {
@@ -278,15 +269,15 @@ namespace System.Windows.Forms
                 }
 
                 using var storage = _storage.GetInterface();
-                iPersistStorage.Save(storage, fSameAsLoad: true);
-                storage.Value->Commit(0);
-                iPersistStorage.HandsOffStorage();
+                iPersistStorage.Save(storage, fSameAsLoad: true).ThrowOnFailure();
+                storage.Value->Commit(0).ThrowOnFailure();
+                iPersistStorage.HandsOffStorage().ThrowOnFailure();
                 try
                 {
                     _buffer = null;
                     _memoryStream = null;
                     using var lockBytes = _lockBytes.GetInterface();
-                    lockBytes.Value->Stat(out STATSTG stat, STATFLAG.STATFLAG_NONAME);
+                    lockBytes.Value->Stat(out STATSTG stat, STATFLAG.STATFLAG_NONAME).ThrowOnFailure();
                     _length = (int)stat.cbSize;
                     _buffer = new byte[_length];
                     PInvoke.GetHGlobalFromILockBytes(lockBytes, out nint hglobal).ThrowOnFailure();
@@ -310,7 +301,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    iPersistStorage.SaveCompleted(storage);
+                    iPersistStorage.SaveCompleted(storage).ThrowOnFailure();
                 }
 
                 return this;
