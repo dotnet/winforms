@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Buffers;
+using System.Diagnostics;
 
 namespace Windows.Win32
 {
@@ -10,11 +11,11 @@ namespace Windows.Win32
     {
         public static unsafe string GetModuleFileNameLongPath(HINSTANCE hModule)
         {
-            Span<char> buffer = stackalloc char[MAX_PATH];
+            Span<char> stackBuffer = stackalloc char[MAX_PATH];
             uint pathLength;
-            fixed (char* lpFilename = buffer)
+            fixed (char* lpFilename = stackBuffer)
             {
-                pathLength = GetModuleFileName(hModule, lpFilename, (uint)buffer.Length);
+                pathLength = GetModuleFileName(hModule, lpFilename, (uint)stackBuffer.Length);
             }
 
             if (pathLength == 0)
@@ -22,42 +23,43 @@ namespace Windows.Win32
                 return string.Empty;
             }
 
-            if (pathLength < buffer.Length)
+            if (pathLength < stackBuffer.Length)
             {
-                return new string(buffer[..(int)pathLength]);
+                return new string(stackBuffer[..(int)pathLength]);
             }
 
-            char[] lbuffer;
+            char[] buffer;
             int bufferSize = 4096;
             // Allocate increasingly larger portions of memory until successful or we hit short.maxvalue.
             for (int i = 1; bufferSize <= short.MaxValue; i++, bufferSize = 4096 * i)
             {
-                lbuffer = ArrayPool<char>.Shared.Rent(bufferSize);
-                fixed (char* lpFilename = lbuffer)
+                buffer = ArrayPool<char>.Shared.Rent(bufferSize);
+                fixed (char* lpFilename = buffer)
                 {
-                    pathLength = GetModuleFileName(hModule, lpFilename, (uint)lbuffer.Length);
+                    pathLength = GetModuleFileName(hModule, lpFilename, (uint)buffer.Length);
                 }
 
                 if (pathLength == 0)
                 {
-                    ArrayPool<char>.Shared.Return(lbuffer);
+                    ArrayPool<char>.Shared.Return(buffer);
                     return string.Empty;
                 }
 
                 // If the length equals the buffer size we need to check to see if we were told the buffer was insufficient (it was trimmed)
-                if (pathLength < lbuffer.Length)
+                if (pathLength < buffer.Length)
                 {
                     // Get return value and return buffer to array pool.
-                    string returnValue = new string(lbuffer, 0, (int)pathLength);
-                    ArrayPool<char>.Shared.Return(lbuffer);
+                    string returnValue = new string(buffer, 0, (int)pathLength);
+                    ArrayPool<char>.Shared.Return(buffer);
                     return returnValue;
                 }
 
                 // buffer was too small, return to array pool.
-                ArrayPool<char>.Shared.Return(lbuffer);
+                ArrayPool<char>.Shared.Return(buffer);
             }
 
-            throw new InvalidOperationException();
+            Debug.Fail($"Module File Name is greater than {short.MaxValue}.");
+            return string.Empty;
         }
     }
 }
