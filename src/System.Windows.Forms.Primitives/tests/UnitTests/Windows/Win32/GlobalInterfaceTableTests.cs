@@ -7,7 +7,6 @@ using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
 {
-
     public unsafe class GlobalInterfaceTableTests
     {
         [Fact]
