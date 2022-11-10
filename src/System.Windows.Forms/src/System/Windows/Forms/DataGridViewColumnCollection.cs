@@ -103,7 +103,7 @@ namespace System.Windows.Forms
 
         internal static IComparer<DataGridViewColumn> ColumnCollectionOrderComparer => System.Windows.Forms.DataGridViewColumnCollection.s_columnOrderComparer;
 
-        protected override ArrayList List => new ArrayList(_items);
+        protected override ArrayList List => ArrayList.Adapter(_items);
 
         protected DataGridView DataGridView { get; }
 
