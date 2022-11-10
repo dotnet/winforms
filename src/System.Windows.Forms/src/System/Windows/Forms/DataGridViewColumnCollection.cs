@@ -226,8 +226,8 @@ namespace System.Windows.Forms
 
             // Order the columns by ascending DisplayIndex so that their display indexes are not altered by the operation.
             // The columns with DisplayIndex == -1 are left untouched relative to each other and put at the end of the array.
-            List<DataGridViewColumn> initialColumns = new List<DataGridViewColumn>(dataGridViewColumns.Length);
-            List<DataGridViewColumn> sortedColumns = new List<DataGridViewColumn>(dataGridViewColumns.Length);
+            List<DataGridViewColumn> initialColumns = new(dataGridViewColumns.Length);
+            List<DataGridViewColumn> sortedColumns = new(dataGridViewColumns.Length);
 
             // All columns with DisplayIndex != -1 are put into the initialColumns array
             foreach (DataGridViewColumn dataGridViewColumn in dataGridViewColumns)
