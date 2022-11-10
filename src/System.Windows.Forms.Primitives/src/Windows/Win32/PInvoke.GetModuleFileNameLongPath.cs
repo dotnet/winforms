@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Buffers;
+using System.Windows.Forms.Primitives.Resources;
 
 namespace Windows.Win32
 {
@@ -57,7 +58,7 @@ namespace Windows.Win32
                 ArrayPool<char>.Shared.Return(lbuffer);
             }
 
-            return string.Empty;
+            throw new InvalidOperationException();
         }
     }
 }
