@@ -31,13 +31,11 @@ namespace Windows.Win32.Foundation
             return scope;
         }
 
-#if DEBUG
         ~AgileComPointer()
         {
             Debug.Fail("Did not dispose AgileComPointer");
             Dispose();
         }
-#endif
 
         public void Dispose()
         {
