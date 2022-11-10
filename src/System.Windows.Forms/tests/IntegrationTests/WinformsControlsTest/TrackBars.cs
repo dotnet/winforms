@@ -3,10 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms;
-using static Interop.ComCtl32;
-using static Interop;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using Newtonsoft.Json.Linq;
 
 namespace WinformsControlsTest
 {
@@ -41,8 +37,7 @@ namespace WinformsControlsTest
             }
             else
             { trackBar1.TickStyle = System.Windows.Forms.TickStyle.BottomRight; }
-        }
-    
+        }    
 
     private void numericMinimum_ValueChanged(object sender, EventArgs e)
         {
@@ -53,11 +48,9 @@ namespace WinformsControlsTest
 
         private void numericMaximum_ValueChanged(object sender, EventArgs e)
         {
-
             trackBar1.Maximum = Decimal.ToInt32(numericMaximum.Value);
             numericMinimum.Maximum = numericMaximum.Value;
             UpdateValueLabel();
-
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)

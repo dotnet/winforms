@@ -821,7 +821,7 @@ namespace System.Windows.Forms
             // check if the value of the max is greater then the taskbar size
             // if so then we divide the value by size and only that many ticks to be drawn on the screen
 
-            if (TickStyle != System.Windows.Forms.TickStyle.None)
+            if (TickStyle == System.Windows.Forms.TickStyle.None)
             {
                 return;
             }
@@ -838,12 +838,12 @@ namespace System.Windows.Forms
                 trackbarSize = Size.Height;
             }
 
-            if (maxValue > trackbarSize)
+            if (maxValue > trackbarSize && trackbarSize != 0)
             {
-                tickFrequency = (int)(maxValue / trackbarSize);
+              tickFrequency = (int)(maxValue / trackbarSize);
             }
 
-            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)tickFrequency);
+             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)tickFrequency);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1022,13 +1022,9 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
-
-                    // We must repaint the trackbar after changing the range.
-                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
-
                     SetTickFrequency();
-
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
                     Invalidate();
                 }
 

@@ -145,6 +145,7 @@ namespace WinformsControlsTest
             this.numericMinimum.Size = new System.Drawing.Size(150, 27);
             this.numericMinimum.TabIndex = 7;
             this.numericMinimum.ValueChanged += new System.EventHandler(this.numericMinimum_ValueChanged);
+            this.numericMinimum.Minimum = -1000000000;
             // 
             // numericMaximum
             // 
