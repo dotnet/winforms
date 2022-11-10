@@ -282,7 +282,7 @@ namespace System.Windows.Forms
                     _buffer = new byte[_length];
                     PInvoke.GetHGlobalFromILockBytes(lockBytes, out nint hglobal).ThrowOnFailure();
                     void* pointer = PInvoke.GlobalLock(hglobal);
- 
+
                     if (pointer is not null)
                     {
                         try
