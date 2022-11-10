@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     public class AutoCompleteStringCollection : IList
     {
         CollectionChangeEventHandler onCollectionChanged;
-        private readonly List<string> data = new List<string>();
+        private readonly List<string> data = new();
 
         public AutoCompleteStringCollection()
         {
