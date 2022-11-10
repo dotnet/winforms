@@ -14,16 +14,21 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
         {
             using var stream = ComHelpers.GetComScope<IStream>(new MyStream(), out bool success);
             Assert.True(success);
+
             uint count = stream.Value->AddRef();
             Assert.Equal(2u, count);
+
             count = stream.Value->Release();
             Assert.Equal(1u, count);
+
             uint cookie = GlobalInterfaceTable.RegisterInterface(stream.Value);
             count = stream.Value->AddRef();
             // +1 for the AddRef, and +1 for the git registration
             Assert.Equal(3u, count);
+
             count = stream.Value->Release();
             Assert.Equal(2u, count);
+
             GlobalInterfaceTable.RevokeInterface(cookie);
             count = stream.Value->AddRef();
             Assert.Equal(2u, count);
