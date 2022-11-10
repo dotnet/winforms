@@ -267,16 +267,13 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                List<Attribute> attributes = new List<Attribute>(AttributeArray);
+                List<Attribute> attributes = new(AttributeArray);
                 foreach (Attribute attr in _updateAttributes)
                 {
                     attributes.Add(attr);
                 }
 
-                Attribute[] temp = new Attribute[attributes.Count];
-                attributes.CopyTo(temp, 0);
-                AttributeArray = temp;
-
+                AttributeArray = attributes.ToArray();
                 _updateAttributes.Clear();
             }
 
