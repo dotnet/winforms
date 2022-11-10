@@ -241,8 +241,6 @@ GetWindow
 GetWindowDpiAwarenessContext
 GetWindowPlacement
 GetWindowRect
-GetWindowText
-GetWindowTextLength
 GetWindowThreadProcessId
 GetWorldTransform
 GlobalAlloc

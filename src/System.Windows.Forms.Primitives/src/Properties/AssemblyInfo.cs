@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 
-[assembly: InternalsVisibleTo("Microsoft.VisualBasic.Forms, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.Design, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.Design.Editors, PublicKey=00000000000000000400000000000000")]
