@@ -2975,7 +2975,8 @@ namespace System.Windows.Forms
                     _storageType = STG_STORAGE;
                     _ocxState = new State(this);
                     _iPersistStorage = persistStorage;
-                    HRESULT hr = _iPersistStorage.InitNew(_ocxState.GetStorage());
+                    using var storage = _ocxState.GetStorage();
+                    HRESULT hr = _iPersistStorage.InitNew(storage);
                     if (hr.Failed)
                     {
                         s_axHTraceSwitch.TraceVerbose(
@@ -3045,7 +3046,8 @@ namespace System.Windows.Forms
                     try
                     {
                         _iPersistStorage = (IPersistStorage.Interface)_instance;
-                        DepersistFromIStorage(_ocxState.GetStorage());
+                        using var storage = _ocxState.GetStorage();
+                        DepersistFromIStorage(storage);
                     }
                     catch (Exception e)
                     {

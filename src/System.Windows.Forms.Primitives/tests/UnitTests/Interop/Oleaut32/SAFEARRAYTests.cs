@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Runtime.InteropServices;
-using Xunit;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using static Windows.Win32.System.Com.ADVANCED_FEATURE_FLAGS;

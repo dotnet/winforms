@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Primitives.Tests.Windows.Win32

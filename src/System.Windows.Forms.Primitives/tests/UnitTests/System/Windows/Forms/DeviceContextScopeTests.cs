@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
-using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests

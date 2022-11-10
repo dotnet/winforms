@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using Moq;
-using Xunit;
 using static Interop;
 using static Interop.UiaCore;
 using static Interop.User32;

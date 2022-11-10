@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Xunit;
-
 namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 {
     public class LOGFONTWTests
