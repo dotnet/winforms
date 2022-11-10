@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         public int Add(string value)
         {
             data.Add(value);
-            int index = data.LastIndexOf(value);
+            int index = data.Count - 1;
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));
             return index;
         }
