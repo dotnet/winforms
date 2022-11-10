@@ -216,7 +216,7 @@ namespace System.Windows.Forms
             new WinCategoryAttribute("DDE")
         };
 
-        private Hashtable _objectDefinedCategoryNames; // Integer -> String
+        private Dictionary<VSSDK.PROPCAT, CategoryAttribute> _objectDefinedCategoryNames;
 
 #if DEBUG
         static AxHost()
@@ -2511,7 +2511,7 @@ namespace System.Windows.Forms
 
             if (_objectDefinedCategoryNames is not null)
             {
-                CategoryAttribute rval = (CategoryAttribute)_objectDefinedCategoryNames[propcat];
+                CategoryAttribute rval = _objectDefinedCategoryNames[propcat];
                 if (rval is not null)
                 {
                     return rval;
@@ -2522,8 +2522,8 @@ namespace System.Windows.Forms
             if (hr == HRESULT.S_OK && name is not null)
             {
                 var rval = new CategoryAttribute(name);
-                _objectDefinedCategoryNames ??= new Hashtable();
-                _objectDefinedCategoryNames.Add(propcat, rval);
+                _objectDefinedCategoryNames ??= new();
+                _objectDefinedCategoryNames[propcat] = rval;
                 return rval;
             }
 
