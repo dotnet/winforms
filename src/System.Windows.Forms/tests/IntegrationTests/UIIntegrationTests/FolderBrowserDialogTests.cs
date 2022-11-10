@@ -21,7 +21,7 @@ public class FolderBrowserDialogTests : ControlTestBase
     [InlineData(false)]
     public void FolderBrowserDialog_ShowDialog(bool autoUpgradeEnabled)
     {
-        using Host dialogOwnerForm = new(User32.WM.CLOSE);
+        using DialogHostForm dialogOwnerForm = new();
         using FolderBrowserDialog dialog = new()
         {
             AutoUpgradeEnabled = autoUpgradeEnabled,
