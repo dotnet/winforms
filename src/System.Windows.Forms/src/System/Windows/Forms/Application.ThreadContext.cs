@@ -747,8 +747,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal static ThreadContext FromId(uint id)
             {
-                ThreadContext context = s_contextHash[id];
-                if (context is null && id == PInvoke.GetCurrentThreadId())
+                if (!s_contextHash.TryGetValue(id, out ThreadContext context) && id == PInvoke.GetCurrentThreadId())
                 {
                     context = new ThreadContext();
                 }
