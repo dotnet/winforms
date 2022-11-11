@@ -10815,7 +10815,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            DefaultLayout.UpdateAnchorInfoV2(this);
+            DefaultLayout.UpdateAnchorInfoV2(this, overrideAnchors: true);
         }
 
         /// <summary>
@@ -12206,7 +12206,6 @@ namespace System.Windows.Forms
             _parent?.UpdateChildZOrder(this);
 
             UpdateBounds();
-            UpdateAnchorsIfRequired();
 
             // Let any interested sites know that we've now created a handle
             OnHandleCreated(EventArgs.Empty);

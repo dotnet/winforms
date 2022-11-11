@@ -59,11 +59,10 @@ Related to the "Missing controls" issue above, if the parent control is scaled t
 
  The proposal is that we calculate anchors for a control only if the following conditions are met:
 
-- The control's handle is created.
 - The control is parented.
-- The control's parent's handle is created.
+- The control's parent's layout is resumed.
 
- The initial anchor calculations would now happen whenever `WM_CREATE` message is received, or when control is parented. The anchors will be recalculated whenever there are changes in geometry (`Size`, `Location`, etc.), or whenever explicit layout event is triggered.
+ The initial anchor calculations would now happen whenever parent's layout is resumed, or when control is parented/resized and parent's layout is not suspended. The anchors will be recalculated whenever there are changes in geometry (`Size`, `Location`, etc.) or hierarchy (`ParentChanged`).
 
 ### Anchor calculations
 
@@ -99,7 +98,7 @@ private static void ComputeAnchorInfo(IArrangedElement element)
         SetAnchorInfo(element, anchorInfo);
     }
     Rectangle displayRect = element.Container.DisplayRectangle;
-    Rectangle elementBounds = element.Bounds;
+    Rectangle elementBounds = GetCachedBounds(element);
     int x = elementBounds.X;
     int y = elementBounds.Y;
     anchorInfo.Left = x;
@@ -108,8 +107,6 @@ private static void ComputeAnchorInfo(IArrangedElement element)
     anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
 }
 ```
-
-There may be cases where developers could be force-creating handles out of order, but those cases are not expected to be mainstream, and such cases will have to be manually handled by the application developer.
 
 ## Risk mitigation
 
