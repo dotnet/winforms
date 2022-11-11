@@ -30,32 +30,13 @@ namespace System.Windows.Forms
                 get
                 {
                     _owner.ApplyUpdateCachedItems();
-                    if (_owner.VirtualMode)
-                    {
-                        return _owner.VirtualListSize;
-                    }
-                    else
-                    {
-                        return _owner._itemCount;
-                    }
+                    return _owner.VirtualMode ? _owner.VirtualListSize : _owner._itemCount;
                 }
             }
 
-            public bool OwnerIsVirtualListView
-            {
-                get
-                {
-                    return _owner.VirtualMode;
-                }
-            }
+            public bool OwnerIsVirtualListView => _owner.VirtualMode;
 
-            public bool OwnerIsDesignMode
-            {
-                get
-                {
-                    return _owner.DesignMode;
-                }
-            }
+            public bool OwnerIsDesignMode => _owner.DesignMode;
 
             public ListViewItem this[int displayIndex]
             {
@@ -80,7 +61,7 @@ namespace System.Windows.Forms
 
                         if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
                         {
-                            return (ListViewItem)_owner._listItemsTable[DisplayIndexToID(displayIndex)];
+                            return _owner._listItemsTable[DisplayIndexToID(displayIndex)];
                         }
                         else
                         {

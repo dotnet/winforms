@@ -134,7 +134,7 @@ namespace System.Windows.Forms
         // listItemsArray is null if the handle is created; otherwise, it contains all Items.
         // We do not try to sort listItemsArray as items are added, but during a handle recreate
         // we will make sure we get the items in the same order the ListView displays them.
-        private readonly Hashtable _listItemsTable = new Hashtable(); // elements are ListViewItem's
+        private readonly Dictionary<int, ListViewItem> _listItemsTable = new(); // elements are ListViewItem's
         private List<ListViewItem>? _listViewItems = new();
 
         private Size _tileSize = Size.Empty;
@@ -2502,14 +2502,7 @@ namespace System.Windows.Forms
         private int CompareFunc(IntPtr lparam1, IntPtr lparam2, IntPtr lparamSort)
         {
             Debug.Assert(_listItemSorter is not null, "null sorter!");
-            if (_listItemSorter is not null)
-            {
-                return _listItemSorter.Compare(_listItemsTable[(int)lparam1], _listItemsTable[(int)lparam2]);
-            }
-            else
-            {
-                return 0;
-            }
+            return _listItemSorter is not null ? _listItemSorter.Compare(_listItemsTable[(int)lparam1], _listItemsTable[(int)lparam2]) : 0;
         }
 
         private unsafe int CompensateColumnHeaderResize(Message m, bool columnResizeCancelled)
