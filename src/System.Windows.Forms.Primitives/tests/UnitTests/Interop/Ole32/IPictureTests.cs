@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using Xunit;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
 {

@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Ole;
-using Xunit;
 
 namespace System.Windows.Forms.Primitives.Ole32Tests
 {

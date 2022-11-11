@@ -49,6 +49,12 @@ namespace Windows.Win32.Foundation
         }
 
         /// <summary>
+        ///  Attempts to get the specified interface for the given <paramref name="obj"/>.
+        /// </summary>
+        internal static HRESULT GetComPointer<T>(object? obj, out T* ppvObject) where T : unmanaged, INativeGuid
+            => GetComPointer(obj, T.NativeGuid, out ppvObject);
+
+        /// <summary>
         ///  Attempts to get the specified <paramref name="iid"/> interface for the given <paramref name="obj"/>.
         /// </summary>
         internal static HRESULT GetComPointer<T>(object? obj, Guid* iid, out T* ppvObject) where T : unmanaged

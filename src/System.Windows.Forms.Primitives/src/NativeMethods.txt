@@ -276,6 +276,7 @@ IFileDialogCustomize
 IFileDialogEvents
 IFileOpenDialog
 IFileSaveDialog
+IGlobalInterfaceTable
 IOleControl
 IOleInPlaceActiveObject
 IOleInPlaceObject
