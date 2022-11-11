@@ -297,8 +297,7 @@ namespace System.Windows.Forms
                         throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, richEditControlDllVersion));
                     }
 
-                    StringBuilder pathBuilder = UnsafeNativeMethods.GetModuleFileNameLongPath(new HandleRef(null, moduleHandle));
-                    string path = pathBuilder.ToString();
+                    string path = PInvoke.GetModuleFileNameLongPath(new HINSTANCE(moduleHandle));
                     FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(path);
 
                     Debug.Assert(versionInfo is not null && !string.IsNullOrEmpty(versionInfo.ProductVersion), "Couldn't get the version info for the richedit dll");

@@ -41,13 +41,12 @@ namespace System.Windows.Forms
             private unsafe BOOL Callback(HWND hwnd)
             {
                 Span<char> buffer = stackalloc char[AutoCompleteClassName.Length + 2];
-
                 fixed (char* b = buffer)
                 {
-                    int count = PInvoke.GetClassName(hwnd, (PWSTR)b, buffer.Length);
+                    int length = PInvoke.GetClassName(hwnd, (PWSTR)b, buffer.Length);
 
                     // Check class name and see if it's visible
-                    if (count == AutoCompleteClassName.Length && buffer.StartsWith(AutoCompleteClassName))
+                    if (length == AutoCompleteClassName.Length && buffer.StartsWith(AutoCompleteClassName))
                     {
                         ACNativeWindow.RegisterACWindow(hwnd, _shouldSubClass);
                     }

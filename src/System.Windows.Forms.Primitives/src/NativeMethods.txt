@@ -183,6 +183,7 @@ GetMenu
 GetMenuItemCount
 GetMessagePos
 GetMessageTime
+GetModuleFileName
 GetModuleHandle
 GetNearestColor
 GetObjectType

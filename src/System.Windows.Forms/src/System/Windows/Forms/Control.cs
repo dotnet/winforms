@@ -12,7 +12,6 @@ using System.Globalization;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
@@ -2545,7 +2544,7 @@ namespace System.Windows.Forms
             set => SetBounds(_x, _y, _width, value, BoundsSpecified.Height);
         }
 
-        internal bool HostedInWin32DialogManager
+        internal unsafe bool HostedInWin32DialogManager
         {
             get
             {
@@ -2560,22 +2559,21 @@ namespace System.Windows.Forms
                     {
                         HWND parentHandle = PInvoke.GetParent(this);
                         HWND lastParentHandle = parentHandle;
-
-                        StringBuilder sb = new StringBuilder(32);
-
                         SetState(States.HostedInDialog, false);
+                        Span<char> buffer = stackalloc char[PInvoke.MaxClassName];
 
                         while (!parentHandle.IsNull)
                         {
-                            int len = UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), null, 0);
-                            if (len > sb.Capacity)
+                            int length = 0;
+                            fixed (char* lpClassName = buffer)
                             {
-                                sb.Capacity = len + 5;
+                                length = PInvoke.GetClassName(lastParentHandle, lpClassName, buffer.Length);
                             }
 
-                            UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), sb, sb.Capacity);
-
-                            if (sb.ToString() == "#32770")
+                            // #32770 is the standard windows dialog class name
+                            // https://learn.microsoft.com/windows/win32/winmsg/about-window-classes#system-classes
+                            ReadOnlySpan<char> className = "#32770";
+                            if (className.Equals(buffer[..length], StringComparison.Ordinal))
                             {
                                 SetState(States.HostedInDialog, true);
                                 break;
