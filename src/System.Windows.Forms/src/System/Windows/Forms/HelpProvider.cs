@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         public virtual string GetHelpKeyword(Control ctl)
         {
             ArgumentNullException.ThrowIfNull(ctl);
-            return _keywords.TryGetValue(ctl, out string value) ? value : string.Empty;
+            return _keywords.TryGetValue(ctl, out string value) ? value : null;
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         public virtual string GetHelpString(Control ctl)
         {
             ArgumentNullException.ThrowIfNull(ctl);
-            return _helpStrings.TryGetValue(ctl, out string value) ? value : string.Empty;
+            return _helpStrings.TryGetValue(ctl, out string value) ? value : null;
         }
 
         /// <summary>
