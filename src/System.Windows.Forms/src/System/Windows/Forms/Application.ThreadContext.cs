@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -32,7 +31,7 @@ namespace System.Windows.Forms
 
             private static readonly UIntPtr s_invalidId = (UIntPtr)0xFFFFFFFF;
 
-            private static readonly Hashtable s_contextHash = new();
+            private static readonly Dictionary<uint, ThreadContext> s_contextHash = new();
 
             // When this gets to zero, we'll invoke a full garbage
             // collect and check for root/window leaks.
@@ -748,8 +747,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal static ThreadContext FromId(uint id)
             {
-                ThreadContext context = (ThreadContext)s_contextHash[id];
-                if (context is null && id == PInvoke.GetCurrentThreadId())
+                if (!s_contextHash.TryGetValue(id, out ThreadContext context) && id == PInvoke.GetCurrentThreadId())
                 {
                     context = new ThreadContext();
                 }
