@@ -267,11 +267,7 @@ namespace System.Windows.Forms
                 }
 
                 List<Attribute> attributes = new(AttributeArray);
-                foreach (Attribute attr in _updateAttributes)
-                {
-                    attributes.Add(attr);
-                }
-
+                attributes.AddRange(_updateAttributes);
                 AttributeArray = attributes.ToArray();
                 _updateAttributes.Clear();
             }
