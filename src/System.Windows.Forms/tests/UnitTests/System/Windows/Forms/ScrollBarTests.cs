@@ -2580,6 +2580,7 @@ namespace System.Windows.Forms.Tests
             {
                 yield return new object[] { scaleScrollBarForDpiChange, 100, 200 };
                 yield return new object[] { scaleScrollBarForDpiChange, 100, 100 };
+                yield return new object[] { scaleScrollBarForDpiChange, 0, 0 };
             }
         }
 
@@ -2606,6 +2607,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { true, 100, 200, new Size(10, 20), new Size(20, 40) };
             yield return new object[] { true, 200, 100, new Size(10, 20), new Size(5, 10) };
             yield return new object[] { true, 100, 100, new Size(10, 20), new Size(10, 20) };
+
+            // Invalid DPI values. Given we do not check the input explicitly for validity and
+            // simply try to calculate factor, passing invalid values like -100, -200 are equivalent
+            // to 100, 200 (factor = newDpi/oldDpi).
+            yield return new object[] { true, 0, 0, new Size(10, 20), Size.Empty };
 
             yield return new object[] { false, 100, 200, new Size(10, 20), new Size(10, 20) };
             yield return new object[] { false, 100, 100, new Size(10, 20), new Size(10, 20) };
