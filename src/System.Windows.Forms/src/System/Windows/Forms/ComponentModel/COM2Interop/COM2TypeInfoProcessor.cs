@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -10,10 +9,10 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
+using static Interop;
 using static Windows.Win32.System.Com.TYPEKIND;
 using static Windows.Win32.System.Com.VARENUM;
 using static Windows.Win32.System.Com.VARFLAGS;
-using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -55,7 +54,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private static Hashtable? s_builtEnums;
+        private static Dictionary<string, Type>? s_builtEnums;
         private static Dictionary<Guid, CachedProperties>? s_processedLibraries;
 
         /// <summary>
@@ -807,14 +806,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         try
                         {
                             string enumName = $"{pTypeInfoUnk}_{enumNameBstr.AsSpan()}";
-
-                            if (s_builtEnums is null)
+                            s_builtEnums ??= new();
+                            if (s_builtEnums.TryGetValue(enumName, out Type? outEnum))
                             {
-                                s_builtEnums = new Hashtable();
-                            }
-                            else if (s_builtEnums.ContainsKey(enumName))
-                            {
-                                return (Type?)s_builtEnums[enumName];
+                                return outEnum;
                             }
 
                             Type enumType = typeof(int);
