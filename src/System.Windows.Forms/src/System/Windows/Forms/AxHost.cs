@@ -2511,8 +2511,7 @@ namespace System.Windows.Forms
 
             if (_objectDefinedCategoryNames is not null)
             {
-                CategoryAttribute rval = _objectDefinedCategoryNames[propcat];
-                if (rval is not null)
+                if (_objectDefinedCategoryNames.TryGetValue(propcat, out CategoryAttribute rval))
                 {
                     return rval;
                 }
