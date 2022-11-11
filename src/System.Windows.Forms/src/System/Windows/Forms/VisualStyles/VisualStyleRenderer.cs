@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Drawing;
 using Microsoft.Win32;
 
@@ -17,7 +16,7 @@ namespace System.Windows.Forms.VisualStyles
         private const int NumberOfPossibleClasses = VisualStyleElement.Count; //used as size for themeHandles
 
         [ThreadStatic]
-        private static Hashtable? t_themeHandles; // per-thread cache of ThemeHandle objects.
+        private static Dictionary<string, ThemeHandle>? t_themeHandles; // per-thread cache of ThemeHandle objects.
 
         [ThreadStatic]
         private static long t_threadCacheVersion;
@@ -782,14 +781,6 @@ namespace System.Windows.Forms.VisualStyles
         public int LastHResult => (int)_lastHResult;
 
         /// <summary>
-        ///  Instantiates the ThemeHandle cache hashtable.
-        /// </summary>
-        private static void CreateThemeHandleHashtable()
-        {
-            t_themeHandles = new Hashtable(NumberOfPossibleClasses);
-        }
-
-        /// <summary>
         ///  Handles the ThemeChanged event. Basically, we need to ensure all per-thread theme handle
         ///  caches are refreshed.
         /// </summary>
@@ -822,7 +813,7 @@ namespace System.Windows.Forms.VisualStyles
 
             foreach (string className in classNames)
             {
-                var tHandle = (ThemeHandle?)t_themeHandles[className];
+                ThemeHandle? tHandle = t_themeHandles[className];
                 tHandle?.Dispose();
 
                 // We don't call IsSupported here, since that could cause RefreshCache to be called again,
@@ -849,31 +840,27 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         private static IntPtr GetHandle(string className, bool throwExceptionOnFail)
         {
-            if (t_themeHandles is null)
-            {
-                CreateThemeHandleHashtable();
-            }
-
+            t_themeHandles ??= new(NumberOfPossibleClasses);
             if (t_threadCacheVersion != s_globalCacheVersion)
             {
                 RefreshCache();
                 t_threadCacheVersion = s_globalCacheVersion;
             }
 
-            if (!t_themeHandles!.Contains(className))
+            if (!t_themeHandles.TryGetValue(className, out ThemeHandle? tHandle))
             {
                 // See if it is already in cache
-                ThemeHandle? tHandle = ThemeHandle.Create(className, throwExceptionOnFail);
+                tHandle = ThemeHandle.Create(className, throwExceptionOnFail);
                 if (tHandle is null)
                 {
                     return IntPtr.Zero;
                 }
 
-                t_themeHandles.Add(className, tHandle);
+                t_themeHandles[className] = tHandle;
                 return tHandle.Handle;
             }
 
-            return ((ThemeHandle)t_themeHandles[className]!).Handle;
+            return tHandle.Handle;
         }
 
         private static PInvoke.OpenThemeDataScope OpenThemeData(HWND hwnd, string classList)
