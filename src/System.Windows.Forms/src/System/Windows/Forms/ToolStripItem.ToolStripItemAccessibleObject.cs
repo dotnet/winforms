@@ -312,7 +312,7 @@ namespace System.Windows.Forms
                     if (Owner.IsOnDropDown)
                     {
                         // Return the owner item as the accessible parent.
-                        ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown();
+                        ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown()!;
                         return dropDown.AccessibilityObject;
                     }
 
