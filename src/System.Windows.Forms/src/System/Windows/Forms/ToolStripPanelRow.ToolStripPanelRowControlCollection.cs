@@ -6,7 +6,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -30,7 +29,7 @@ namespace System.Windows.Forms
         ///  is responsible for parenting and unparenting the controls (ToolStripPanelRows do NOT derive from
         ///  Control and thus are NOT hwnd backed).
         /// </summary>
-        internal class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IEnumerable
+        internal partial class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IEnumerable
         {
             private readonly ToolStripPanelRow _owner;
             private ArrangedElementCollection _cellCollection;
@@ -306,44 +305,6 @@ namespace System.Windows.Forms
                 for (int i = 0; i < InnerList.Count; i++)
                 {
                     array[index++] = GetControl(i);
-                }
-            }
-
-            ///  We want to pretend like we're only holding controls... so everywhere we've returned controls.
-            ///  but the problem is if you do a foreach, you'll get the cells not the controls.  So we've got
-            ///  to sort of write a wrapper class around the ArrayList enumerator.
-            private class ToolStripPanelCellToControlEnumerator : IEnumerator, ICloneable
-            {
-                private readonly IEnumerator _arrayListEnumerator;
-
-                internal ToolStripPanelCellToControlEnumerator(ArrayList list)
-                {
-                    _arrayListEnumerator = ((IEnumerable)list).GetEnumerator();
-                }
-
-                public virtual object Current
-                {
-                    get
-                    {
-                        ToolStripPanelCell cell = _arrayListEnumerator.Current as ToolStripPanelCell;
-                        Debug.Assert(cell is not null, "Expected ToolStripPanel cells only!!!" + _arrayListEnumerator.Current.GetType().ToString());
-                        return cell?.Control;
-                    }
-                }
-
-                public object Clone()
-                {
-                    return MemberwiseClone();
-                }
-
-                public virtual bool MoveNext()
-                {
-                    return _arrayListEnumerator.MoveNext();
-                }
-
-                public virtual void Reset()
-                {
-                    _arrayListEnumerator.Reset();
                 }
             }
         }
