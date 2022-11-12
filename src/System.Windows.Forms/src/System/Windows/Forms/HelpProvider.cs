@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
 
@@ -23,7 +22,7 @@ namespace System.Windows.Forms
     {
         private readonly Dictionary<Control, string> _helpStrings = new();
         private readonly Dictionary<Control, bool> _showHelp = new();
-        private readonly Hashtable _boundControls = new Hashtable();
+        private readonly List<Control> _boundControls = new();
         private readonly Dictionary<Control, string> _keywords = new();
         private readonly Dictionary<Control, HelpNavigator> _navigators = new();
 
@@ -247,13 +246,15 @@ namespace System.Windows.Forms
         /// </summary>
         private void UpdateEventBinding(Control ctl)
         {
-            if (GetShowHelp(ctl) && !_boundControls.ContainsKey(ctl))
+            bool showHelp = GetShowHelp(ctl);
+            bool isBound = _boundControls.Contains(ctl);
+            if (showHelp && !isBound)
             {
                 ctl.HelpRequested += new HelpEventHandler(OnControlHelp);
                 ctl.QueryAccessibilityHelp += new QueryAccessibilityHelpEventHandler(OnQueryAccessibilityHelp);
-                _boundControls[ctl] = ctl;
+                _boundControls.Add(ctl);
             }
-            else if (!GetShowHelp(ctl) && _boundControls.ContainsKey(ctl))
+            else if (!showHelp && isBound)
             {
                 ctl.HelpRequested -= new HelpEventHandler(OnControlHelp);
                 ctl.QueryAccessibilityHelp -= new QueryAccessibilityHelpEventHandler(OnQueryAccessibilityHelp);
