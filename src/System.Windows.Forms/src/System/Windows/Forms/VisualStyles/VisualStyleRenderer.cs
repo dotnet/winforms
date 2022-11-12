@@ -813,17 +813,17 @@ namespace System.Windows.Forms.VisualStyles
 
             foreach (string className in classNames)
             {
-                ThemeHandle? tHandle = t_themeHandles[className];
-                tHandle?.Dispose();
+                ThemeHandle? themeHandle = t_themeHandles[className];
+                themeHandle?.Dispose();
 
                 // We don't call IsSupported here, since that could cause RefreshCache to be called again,
                 // leading to stack overflow.
                 if (AreClientAreaVisualStylesSupported)
                 {
-                    tHandle = ThemeHandle.Create(className, false);
-                    if (tHandle is not null)
+                    themeHandle = ThemeHandle.Create(className, false);
+                    if (themeHandle is not null)
                     {
-                        t_themeHandles[className] = tHandle;
+                        t_themeHandles[className] = themeHandle;
                     }
                 }
             }
@@ -847,20 +847,19 @@ namespace System.Windows.Forms.VisualStyles
                 t_threadCacheVersion = s_globalCacheVersion;
             }
 
-            if (!t_themeHandles.TryGetValue(className, out ThemeHandle? tHandle))
+            if (!t_themeHandles.TryGetValue(className, out ThemeHandle? themeHandle))
             {
                 // See if it is already in cache
-                tHandle = ThemeHandle.Create(className, throwExceptionOnFail);
-                if (tHandle is null)
+                themeHandle = ThemeHandle.Create(className, throwExceptionOnFail);
+                if (themeHandle is null)
                 {
                     return IntPtr.Zero;
                 }
 
-                t_themeHandles[className] = tHandle;
-                return tHandle.Handle;
+                t_themeHandles[className] = themeHandle;
             }
 
-            return tHandle.Handle;
+            return themeHandle.Handle;
         }
 
         private static PInvoke.OpenThemeDataScope OpenThemeData(HWND hwnd, string classList)
