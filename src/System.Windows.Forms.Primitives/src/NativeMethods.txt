@@ -75,6 +75,7 @@ DISP_E_MEMBERNOTFOUND
 DISP_E_PARAMNOTFOUND
 DISP_E_UNKNOWNNAME
 DISPATCH_FLAGS
+DispatchMessage
 DISPID_*
 DISPPARAMS
 DPI_AWARENESS_CONTEXT_*
@@ -181,6 +182,7 @@ GetLocaleInfoEx
 GetMapMode
 GetMenu
 GetMenuItemCount
+GetMessage
 GetMessagePos
 GetMessageTime
 GetModuleFileName

@@ -821,7 +821,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolTip_WmShow_Invokes_AnnounceText_WithExpectedText_ForTabControlTabs()
+        public unsafe void ToolTip_WmShow_Invokes_AnnounceText_WithExpectedText_ForTabControlTabs()
         {
             using NoAssertContext context = new();
             Mock<TabControl> mockTabControl = new() { CallBase = true, Object = { ShowToolTips = true } };
@@ -855,7 +855,7 @@ namespace System.Windows.Forms.Tests
             // This will update the point returned by GetMessagePos which is used by PInvoke.TTM_POPUP to determine the tool to display.
             Assert.True(User32.PostMessageW(toolTip, User32.WM.MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)));
             MSG msg = default;
-            Assert.True(User32.PeekMessageW(ref msg, toolTip, User32.WM.MOUSEMOVE, User32.WM.MOUSEMOVE, User32.PM.REMOVE));
+            Assert.True(PInvoke.PeekMessage(&msg, toolTip, (uint)User32.WM.MOUSEMOVE, (uint)User32.WM.MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
 
             // Show the tooltip.
             PInvoke.SendMessage(toolTip, (User32.WM)PInvoke.TTM_POPUP);

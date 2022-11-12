@@ -531,7 +531,7 @@ namespace System.Windows.Forms.Design
             // ------ Duplicate code----------------------------------------------------------
         }
 
-        public bool DoBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
+        public unsafe bool DoBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
         {
             // if we're in a sizing operation, or the mouse isn't down, don't do this!
             if ((rules & SelectionRules.AllSizeable) != SelectionRules.None || Control.MouseButtons == MouseButtons.None)
@@ -573,10 +573,10 @@ namespace System.Windows.Forms.Design
             // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
             // but that causes a horrible flashing because GDI+ uses direct draw.
             MSG msg = default;
-            while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
+            while (PInvoke.PeekMessage(&msg, HWND.Null, (uint)User32.WM.PAINT, (uint)User32.WM.PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
             {
                 PInvoke.TranslateMessage(msg);
-                User32.DispatchMessageW(ref msg);
+                PInvoke.DispatchMessage(&msg);
             }
 
             // don't do any new painting...
