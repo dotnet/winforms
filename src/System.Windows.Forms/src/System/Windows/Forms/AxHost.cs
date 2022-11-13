@@ -2509,21 +2509,18 @@ namespace System.Windows.Forms
                 return s_categoryNames[index];
             }
 
-            if (_objectDefinedCategoryNames is not null)
+            if (_objectDefinedCategoryNames?.TryGetValue(propcat, out CategoryAttribute category) ?? false)
             {
-                if (_objectDefinedCategoryNames.TryGetValue(propcat, out CategoryAttribute rval))
-                {
-                    return rval;
-                }
+                return category;
             }
 
             hr = icp.GetCategoryName(propcat, PInvoke.GetThreadLocale(), out string name);
             if (hr == HRESULT.S_OK && name is not null)
             {
-                var rval = new CategoryAttribute(name);
+                category = new CategoryAttribute(name);
                 _objectDefinedCategoryNames ??= new();
-                _objectDefinedCategoryNames[propcat] = rval;
-                return rval;
+                _objectDefinedCategoryNames[propcat] = category;
+                return category;
             }
 
             return null;
