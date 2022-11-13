@@ -61,7 +61,8 @@ namespace System.Windows.Forms
 
                         if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
                         {
-                            return _owner._listItemsTable[DisplayIndexToID(displayIndex)];
+                            _owner._listItemsTable.TryGetValue(DisplayIndexToID(displayIndex), out ListViewItem item);
+                            return item;
                         }
                         else
                         {
@@ -306,7 +307,8 @@ namespace System.Windows.Forms
                 _owner.ApplyUpdateCachedItems();
                 if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
                 {
-                    return _owner._listItemsTable[item.ID] == item;
+                    return _owner._listItemsTable.TryGetValue(item.ID, out ListViewItem itemOut)
+                        && itemOut == item;
                 }
                 else
                 {
