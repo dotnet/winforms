@@ -2110,7 +2110,7 @@ namespace System.Windows.Forms
         public bool RaiseAutomationNotification(
             AutomationNotificationKind notificationKind,
             AutomationNotificationProcessing notificationProcessing,
-            string notificationText)
+            string? notificationText)
         {
             if (!s_notificationEventAvailable || !CanNotifyClients)
             {

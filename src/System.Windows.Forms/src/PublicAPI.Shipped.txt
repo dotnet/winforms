@@ -299,7 +299,7 @@
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.PaintBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.ToString() -> string
-~override System.Windows.Forms.ErrorProvider.Site.set -> void
+override System.Windows.Forms.ErrorProvider.Site.set -> void
 ~override System.Windows.Forms.HelpProvider.ToString() -> string
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
@@ -1087,26 +1087,26 @@ System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control? toInvok
 ~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption) -> void
 ~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.Design.IUIService.Styles.get -> System.Collections.IDictionary
-~System.Windows.Forms.ErrorProvider.BindToDataAndErrors(object newDataSource, string newDataMember) -> void
-~System.Windows.Forms.ErrorProvider.CanExtend(object extendee) -> bool
-~System.Windows.Forms.ErrorProvider.ContainerControl.get -> System.Windows.Forms.ContainerControl
-~System.Windows.Forms.ErrorProvider.ContainerControl.set -> void
-~System.Windows.Forms.ErrorProvider.DataMember.get -> string
-~System.Windows.Forms.ErrorProvider.DataMember.set -> void
-~System.Windows.Forms.ErrorProvider.DataSource.get -> object
-~System.Windows.Forms.ErrorProvider.DataSource.set -> void
-~System.Windows.Forms.ErrorProvider.ErrorProvider(System.ComponentModel.IContainer container) -> void
-~System.Windows.Forms.ErrorProvider.ErrorProvider(System.Windows.Forms.ContainerControl parentControl) -> void
-~System.Windows.Forms.ErrorProvider.GetError(System.Windows.Forms.Control control) -> string
-~System.Windows.Forms.ErrorProvider.GetIconAlignment(System.Windows.Forms.Control control) -> System.Windows.Forms.ErrorIconAlignment
-~System.Windows.Forms.ErrorProvider.GetIconPadding(System.Windows.Forms.Control control) -> int
-~System.Windows.Forms.ErrorProvider.Icon.get -> System.Drawing.Icon
-~System.Windows.Forms.ErrorProvider.Icon.set -> void
-~System.Windows.Forms.ErrorProvider.SetError(System.Windows.Forms.Control control, string value) -> void
-~System.Windows.Forms.ErrorProvider.SetIconAlignment(System.Windows.Forms.Control control, System.Windows.Forms.ErrorIconAlignment value) -> void
-~System.Windows.Forms.ErrorProvider.SetIconPadding(System.Windows.Forms.Control control, int padding) -> void
-~System.Windows.Forms.ErrorProvider.Tag.get -> object
-~System.Windows.Forms.ErrorProvider.Tag.set -> void
+System.Windows.Forms.ErrorProvider.BindToDataAndErrors(object? newDataSource, string? newDataMember) -> void
+System.Windows.Forms.ErrorProvider.CanExtend(object? extendee) -> bool
+System.Windows.Forms.ErrorProvider.ContainerControl.get -> System.Windows.Forms.ContainerControl?
+System.Windows.Forms.ErrorProvider.ContainerControl.set -> void
+System.Windows.Forms.ErrorProvider.DataMember.get -> string?
+System.Windows.Forms.ErrorProvider.DataMember.set -> void
+System.Windows.Forms.ErrorProvider.DataSource.get -> object?
+System.Windows.Forms.ErrorProvider.DataSource.set -> void
+System.Windows.Forms.ErrorProvider.ErrorProvider(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.ErrorProvider.ErrorProvider(System.Windows.Forms.ContainerControl! parentControl) -> void
+System.Windows.Forms.ErrorProvider.GetError(System.Windows.Forms.Control! control) -> string!
+System.Windows.Forms.ErrorProvider.GetIconAlignment(System.Windows.Forms.Control! control) -> System.Windows.Forms.ErrorIconAlignment
+System.Windows.Forms.ErrorProvider.GetIconPadding(System.Windows.Forms.Control! control) -> int
+System.Windows.Forms.ErrorProvider.Icon.get -> System.Drawing.Icon!
+System.Windows.Forms.ErrorProvider.Icon.set -> void
+System.Windows.Forms.ErrorProvider.SetError(System.Windows.Forms.Control! control, string? value) -> void
+System.Windows.Forms.ErrorProvider.SetIconAlignment(System.Windows.Forms.Control! control, System.Windows.Forms.ErrorIconAlignment value) -> void
+System.Windows.Forms.ErrorProvider.SetIconPadding(System.Windows.Forms.Control! control, int padding) -> void
+System.Windows.Forms.ErrorProvider.Tag.get -> object?
+System.Windows.Forms.ErrorProvider.Tag.set -> void
 ~System.Windows.Forms.HelpProvider.Tag.get -> object
 ~System.Windows.Forms.HelpProvider.Tag.set -> void
 ~System.Windows.Forms.HtmlDocument.ActiveElement.get -> System.Windows.Forms.HtmlElement
@@ -2009,7 +2009,7 @@ virtual System.Windows.Forms.Control.OnVisibleChanged(System.EventArgs! e) -> vo
 ~virtual System.Windows.Forms.DataGridViewRowCollection.InsertRange(int rowIndex, params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.HelpProvider.CanExtend(object target) -> bool
 ~virtual System.Windows.Forms.HelpProvider.GetHelpKeyword(System.Windows.Forms.Control ctl) -> string
 ~virtual System.Windows.Forms.HelpProvider.GetHelpNavigator(System.Windows.Forms.Control ctl) -> System.Windows.Forms.HelpNavigator
@@ -4947,7 +4947,7 @@ System.Windows.Forms.AccessibleNavigation.Right = 4 -> System.Windows.Forms.Acce
 System.Windows.Forms.AccessibleNavigation.Up = 1 -> System.Windows.Forms.AccessibleNavigation
 System.Windows.Forms.AccessibleObject
 System.Windows.Forms.AccessibleObject.AccessibleObject() -> void
-System.Windows.Forms.AccessibleObject.RaiseAutomationNotification(System.Windows.Forms.Automation.AutomationNotificationKind notificationKind, System.Windows.Forms.Automation.AutomationNotificationProcessing notificationProcessing, string! notificationText) -> bool
+System.Windows.Forms.AccessibleObject.RaiseAutomationNotification(System.Windows.Forms.Automation.AutomationNotificationKind notificationKind, System.Windows.Forms.Automation.AutomationNotificationProcessing notificationProcessing, string? notificationText) -> bool
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle) -> void
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle, int objid) -> void
 System.Windows.Forms.AccessibleRole
@@ -7341,7 +7341,7 @@ System.Windows.Forms.ErrorProvider.BlinkStyle.set -> void
 System.Windows.Forms.ErrorProvider.Clear() -> void
 System.Windows.Forms.ErrorProvider.ErrorProvider() -> void
 System.Windows.Forms.ErrorProvider.HasErrors.get -> bool
-System.Windows.Forms.ErrorProvider.RightToLeftChanged -> System.EventHandler
+System.Windows.Forms.ErrorProvider.RightToLeftChanged -> System.EventHandler?
 System.Windows.Forms.ErrorProvider.UpdateBinding() -> void
 System.Windows.Forms.FeatureSupport
 System.Windows.Forms.FeatureSupport.FeatureSupport() -> void
