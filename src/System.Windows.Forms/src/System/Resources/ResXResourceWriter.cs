@@ -511,7 +511,7 @@ namespace System.Resources
         private string GetAliasFromName(AssemblyName assemblyName)
         {
             _cachedAliases ??= new();
-            if (!_cachedAliases.TryGetValue(assemblyName.FullName, out string alias))
+            if (!_cachedAliases.TryGetValue(assemblyName.FullName, out string alias) || string.IsNullOrEmpty(alias))
             {
                 alias = assemblyName.Name;
                 AddAlias(alias, assemblyName);
