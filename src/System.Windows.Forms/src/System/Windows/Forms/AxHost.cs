@@ -2509,7 +2509,8 @@ namespace System.Windows.Forms
                 return s_categoryNames[index];
             }
 
-            if (_objectDefinedCategoryNames?.TryGetValue(propcat, out CategoryAttribute category) ?? false)
+            if (_objectDefinedCategoryNames?.TryGetValue(propcat, out CategoryAttribute category)
+                ?? false && category is not null)
             {
                 return category;
             }
