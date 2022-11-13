@@ -88,7 +88,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            class DateTimeMonthCalendar : MonthCalendar
+            private class DateTimeMonthCalendar : MonthCalendar
             {
                 protected override bool IsInputKey(Keys keyData) => keyData switch
                 {

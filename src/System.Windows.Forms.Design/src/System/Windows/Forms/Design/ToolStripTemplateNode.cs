@@ -1489,8 +1489,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private class TemplateTextBox : TextBox
         {
-            readonly TransparentToolStrip parent;
-            readonly ToolStripTemplateNode owner;
+            private readonly TransparentToolStrip parent;
+            private readonly ToolStripTemplateNode owner;
             private const int IMEMODE = 229;
 
             public TemplateTextBox(TransparentToolStrip parent, ToolStripTemplateNode owner) : base()
@@ -1581,8 +1581,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public class TransparentToolStrip : ToolStrip
         {
-            readonly ToolStripTemplateNode owner;
-            readonly IComponent currentItem;
+            private readonly ToolStripTemplateNode owner;
+            private readonly IComponent currentItem;
 
             public TransparentToolStrip(ToolStripTemplateNode owner)
             {

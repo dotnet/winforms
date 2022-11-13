@@ -21,10 +21,10 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionPrintPreviewControl))]
     public partial class PrintPreviewControl : Control
     {
-        Size virtualSize = new Size(1, 1);
-        Point position = new Point(0, 0);
-        Point lastOffset;
-        bool antiAlias;
+        private Size virtualSize = new Size(1, 1);
+        private Point position = new Point(0, 0);
+        private Point lastOffset;
+        private bool antiAlias;
 
         private const int SCROLL_PAGE = 100;
         private const int SCROLL_LINE = 5;
@@ -44,8 +44,8 @@ namespace System.Windows.Forms
         private Size imageSize = System.Drawing.Size.Empty; // 100ths of inch, not pixels
         private Point screendpi = Point.Empty;
         private double zoom = DefaultZoom;
-        bool pageInfoCalcPending;
-        bool exceptionPrinting;
+        private bool pageInfoCalcPending;
+        private bool exceptionPrinting;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="PrintPreviewControl"/> class.
@@ -486,7 +486,7 @@ namespace System.Windows.Forms
             base.OnResize(eventargs);
         }
 
-        void CalculatePageInfo()
+        private void CalculatePageInfo()
         {
             if (pageInfoCalcPending)
             {

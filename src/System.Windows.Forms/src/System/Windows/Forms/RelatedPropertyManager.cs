@@ -12,9 +12,9 @@ namespace System.Windows.Forms
 {
     internal class RelatedPropertyManager : PropertyManager
     {
-        BindingManagerBase parentManager;
-        string dataField;
-        PropertyDescriptor fieldInfo;
+        private BindingManagerBase parentManager;
+        private string dataField;
+        private PropertyDescriptor fieldInfo;
 
         internal RelatedPropertyManager(BindingManagerBase parentManager, string dataField) : base(GetCurrentOrNull(parentManager), dataField)
         {

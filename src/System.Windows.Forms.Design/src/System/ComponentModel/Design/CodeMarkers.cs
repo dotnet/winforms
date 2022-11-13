@@ -15,7 +15,7 @@ namespace System.ComponentModel.Design
         // Singleton access
         public static readonly CodeMarkers Instance = new CodeMarkers();
 
-        static class NativeMethods
+        private static class NativeMethods
         {
             [DllImport(TestDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void TestDllPerfCodeMarker(int nTimerID, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] byte[] aUserParams, int cbParams);
@@ -35,15 +35,15 @@ namespace System.ComponentModel.Design
         }
 
         // Atom name. This ATOM will be set by the host application when code markers are enabled in the registry.
-        const string AtomName = "VSCodeMarkersEnabled";
+        private const string AtomName = "VSCodeMarkersEnabled";
 
         // Internal Test CodeMarkers DLL name
-        const string TestDllName = "Microsoft.Internal.Performance.CodeMarkers.dll";
+        private const string TestDllName = "Microsoft.Internal.Performance.CodeMarkers.dll";
 
         // External Product CodeMarkers DLL name
-        const string ProductDllName = "Microsoft.VisualStudio.CodeMarkers.dll";
+        private const string ProductDllName = "Microsoft.VisualStudio.CodeMarkers.dll";
 
-        enum State
+        private enum State
         {
             /// <summary>
             ///  The atom is present. CodeMarkers are enabled.

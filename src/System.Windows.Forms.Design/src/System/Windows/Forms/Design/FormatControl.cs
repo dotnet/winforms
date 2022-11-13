@@ -99,7 +99,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        void customStringTextBox_TextChanged(object sender, EventArgs e)
+        private void customStringTextBox_TextChanged(object sender, EventArgs e)
         {
             CustomFormatType customFormatType = formatTypeListBox.SelectedItem as CustomFormatType;
             sampleLabel.Text = customFormatType.SampleString;
@@ -455,8 +455,8 @@ namespace System.Windows.Forms.Design
 
         private class DateTimeFormatsListBoxItem
         {
-            readonly DateTime value;
-            readonly string formatString;
+            private readonly DateTime value;
+            private readonly string formatString;
             public DateTimeFormatsListBoxItem(DateTime value, string formatString)
             {
                 this.value = value;
@@ -566,7 +566,7 @@ namespace System.Windows.Forms.Design
 
         private class NumericFormatType : FormatTypeClass
         {
-            readonly FormatControl _owner;
+            private readonly FormatControl _owner;
 
             public NumericFormatType(FormatControl owner)
             {
@@ -707,7 +707,7 @@ namespace System.Windows.Forms.Design
 
         private class CurrencyFormatType : FormatTypeClass
         {
-            readonly FormatControl _owner;
+            private readonly FormatControl _owner;
 
             public CurrencyFormatType(FormatControl owner)
             {
@@ -848,7 +848,7 @@ namespace System.Windows.Forms.Design
 
         private class DateTimeFormatType : FormatTypeClass
         {
-            readonly FormatControl _owner;
+            private readonly FormatControl _owner;
 
             public DateTimeFormatType(FormatControl owner)
             {
@@ -990,7 +990,7 @@ namespace System.Windows.Forms.Design
 
         private class ScientificFormatType : FormatTypeClass
         {
-            readonly FormatControl _owner;
+            private readonly FormatControl _owner;
 
             public ScientificFormatType(FormatControl owner)
             {
@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms.Design
 
         private class CustomFormatType : FormatTypeClass
         {
-            readonly FormatControl _owner;
+            private readonly FormatControl _owner;
 
             public CustomFormatType(FormatControl owner)
             {

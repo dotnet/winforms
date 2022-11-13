@@ -977,7 +977,7 @@ namespace System.Windows.Forms
         [MemberNotNull(nameof(_pageCounterItem))]
         [MemberNotNull(nameof(_pageCounter))]
         [MemberNotNull(nameof(_pageToolStripLabel))]
-        void InitForm()
+        private void InitForm()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(PrintPreviewDialog));
             _toolStrip1 = new ToolStrip();
@@ -1372,17 +1372,17 @@ namespace System.Windows.Forms
             return !Text.Equals(SR.PrintPreviewDialog_PrintPreview);
         }
 
-        void OncloseToolStripButtonClick(object? sender, EventArgs e)
+        private void OncloseToolStripButtonClick(object? sender, EventArgs e)
         {
             Close();
         }
 
-        void previewControl_StartPageChanged(object? sender, EventArgs e)
+        private void previewControl_StartPageChanged(object? sender, EventArgs e)
         {
             _pageCounter.Value = _previewControl.StartPage + 1;
         }
 
-        void CheckZoomMenu(ToolStripMenuItem? toChecked)
+        private void CheckZoomMenu(ToolStripMenuItem? toChecked)
         {
             foreach (ToolStripMenuItem item in _zoomToolStripSplitButton.DropDownItems)
             {
@@ -1390,70 +1390,70 @@ namespace System.Windows.Forms
             }
         }
 
-        void ZoomAuto(object? sender, EventArgs eventargs)
+        private void ZoomAuto(object? sender, EventArgs eventargs)
         {
             ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             _previewControl.AutoZoom = true;
         }
 
-        void Zoom500(object? sender, EventArgs eventargs)
+        private void Zoom500(object? sender, EventArgs eventargs)
         {
             ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             _previewControl.Zoom = 5.00;
         }
 
-        void Zoom250(object? sender, EventArgs eventargs)
+        private void Zoom250(object? sender, EventArgs eventargs)
         {
             ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             _previewControl.Zoom = 2.50;
         }
 
-        void Zoom150(object? sender, EventArgs eventargs)
+        private void Zoom150(object? sender, EventArgs eventargs)
         {
             ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             _previewControl.Zoom = 1.50;
         }
 
-        void Zoom100(object? sender, EventArgs eventargs)
+        private void Zoom100(object? sender, EventArgs eventargs)
         {
             ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             _previewControl.Zoom = 1.00;
         }
 
-        void Zoom75(object? sender, EventArgs eventargs)
+        private void Zoom75(object? sender, EventArgs eventargs)
         {
             ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             _previewControl.Zoom = .75;
         }
 
-        void Zoom50(object? sender, EventArgs eventargs)
+        private void Zoom50(object? sender, EventArgs eventargs)
         {
             ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             _previewControl.Zoom = .50;
         }
 
-        void Zoom25(object? sender, EventArgs eventargs)
+        private void Zoom25(object? sender, EventArgs eventargs)
         {
             ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             _previewControl.Zoom = .25;
         }
 
-        void Zoom10(object? sender, EventArgs eventargs)
+        private void Zoom10(object? sender, EventArgs eventargs)
         {
             ToolStripMenuItem? item = sender as ToolStripMenuItem;
             CheckZoomMenu(item);
             _previewControl.Zoom = .10;
         }
 
-        void OncloseToolStripButtonPaint(object? sender, PaintEventArgs e)
+        private void OncloseToolStripButtonPaint(object? sender, PaintEventArgs e)
         {
             if (sender is ToolStripItem item && !item.Selected)
             {
@@ -1462,42 +1462,42 @@ namespace System.Windows.Forms
             }
         }
 
-        void OnprintToolStripButtonClick(object? sender, EventArgs e)
+        private void OnprintToolStripButtonClick(object? sender, EventArgs e)
         {
             _previewControl.Document?.Print();
         }
 
-        void OnzoomToolStripSplitButtonClick(object? sender, EventArgs e)
+        private void OnzoomToolStripSplitButtonClick(object? sender, EventArgs e)
         {
             ZoomAuto(null, EventArgs.Empty);
         }
 
         //--------
-        void OnonepageToolStripButtonClick(object? sender, EventArgs e)
+        private void OnonepageToolStripButtonClick(object? sender, EventArgs e)
         {
             _previewControl.Rows = 1;
             _previewControl.Columns = 1;
         }
 
-        void OntwopagesToolStripButtonClick(object? sender, EventArgs e)
+        private void OntwopagesToolStripButtonClick(object? sender, EventArgs e)
         {
             _previewControl.Rows = 1;
             _previewControl.Columns = 2;
         }
 
-        void OnthreepagesToolStripButtonClick(object? sender, EventArgs e)
+        private void OnthreepagesToolStripButtonClick(object? sender, EventArgs e)
         {
             _previewControl.Rows = 1;
             _previewControl.Columns = 3;
         }
 
-        void OnfourpagesToolStripButtonClick(object? sender, EventArgs e)
+        private void OnfourpagesToolStripButtonClick(object? sender, EventArgs e)
         {
             _previewControl.Rows = 2;
             _previewControl.Columns = 2;
         }
 
-        void OnsixpagesToolStripButtonClick(object? sender, EventArgs e)
+        private void OnsixpagesToolStripButtonClick(object? sender, EventArgs e)
         {
             _previewControl.Rows = 2;
             _previewControl.Columns = 3;
@@ -1505,7 +1505,7 @@ namespace System.Windows.Forms
 
         //----------------------
 
-        void UpdownMove(object? sender, EventArgs eventargs)
+        private void UpdownMove(object? sender, EventArgs eventargs)
         {
             int pageNum = ((int)_pageCounter.Value) - 1;
             if (pageNum >= 0)

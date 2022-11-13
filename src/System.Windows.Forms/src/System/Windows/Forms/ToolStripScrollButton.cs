@@ -20,8 +20,7 @@ namespace System.Windows.Forms
 
         [ThreadStatic]
         private static Bitmap? t_downScrollImage;
-
-        const int AUTOSCROLL_UPDATE = 50;
+        private const int AUTOSCROLL_UPDATE = 50;
         private static readonly int AUTOSCROLL_PAUSE = SystemInformation.DoubleClickTime;
 
         private Timer? _mouseDownTimer;

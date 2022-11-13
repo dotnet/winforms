@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class DesignerVerbToolStripMenuItem : ToolStripMenuItem
     {
-        readonly DesignerVerb _verb;
+        private readonly DesignerVerb _verb;
 
         public DesignerVerbToolStripMenuItem(DesignerVerb verb)
         {

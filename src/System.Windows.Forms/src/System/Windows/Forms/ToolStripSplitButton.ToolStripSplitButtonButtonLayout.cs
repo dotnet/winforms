@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class ToolStripSplitButtonButtonLayout : ToolStripItemInternalLayout
         {
-            readonly ToolStripSplitButton _owner;
+            private readonly ToolStripSplitButton _owner;
 
             public ToolStripSplitButtonButtonLayout(ToolStripSplitButton owner)
                 : base(owner.SplitButtonButton)

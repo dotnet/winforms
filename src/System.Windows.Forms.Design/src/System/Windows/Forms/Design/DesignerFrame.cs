@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Design
             ForceDesignerRedraw(false);
         }
 
-        void OnSplitterMoved(object sender, SplitterEventArgs e)
+        private void OnSplitterMoved(object sender, SplitterEventArgs e)
         {
             // Dirty the designer.
             if (_designerSite.TryGetService(out IComponentChangeService changeService))
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+        private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
         {
             if (e.Category == UserPreferenceCategory.Window && _designer is not null)
             {
@@ -186,7 +186,7 @@ namespace System.Windows.Forms.Design
             return false;
         }
 
-        void SyncDesignerUI()
+        private void SyncDesignerUI()
         {
             Size selectionSize = DesignerUtils.GetAdornmentDimensions(AdornmentType.Maximum);
             _designerRegion.AutoScrollMargin = selectionSize;

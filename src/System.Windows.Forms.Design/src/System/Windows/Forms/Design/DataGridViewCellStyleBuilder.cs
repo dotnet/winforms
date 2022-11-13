@@ -333,7 +333,7 @@ namespace System.Windows.Forms.Design
 
         private class DialogDataGridViewCell : DataGridViewTextBoxCell
         {
-            DialogDataGridViewCellAccessibleObject _accObj;
+            private DialogDataGridViewCellAccessibleObject _accObj;
             protected override AccessibleObject CreateAccessibilityInstance()
             {
                 _accObj ??= new DialogDataGridViewCellAccessibleObject(this);
@@ -347,7 +347,7 @@ namespace System.Windows.Forms.Design
                 {
                 }
 
-                string _name = "";
+                private string _name = "";
                 public override string Name
                 {
                     get => _name;
