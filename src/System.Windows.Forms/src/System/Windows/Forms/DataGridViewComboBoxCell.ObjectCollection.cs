@@ -19,8 +19,8 @@ namespace System.Windows.Forms
         public class ObjectCollection : IList
         {
             private readonly DataGridViewComboBoxCell owner;
-            private ArrayList items;
-            private IComparer comparer;
+            private List<object> items;
+            private IComparer<object> comparer;
 
             public ObjectCollection(DataGridViewComboBoxCell owner)
             {
@@ -28,7 +28,7 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
-            private IComparer Comparer
+            private IComparer<object> Comparer
             {
                 get
                 {
@@ -52,11 +52,11 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Internal access to the actual data store.
             /// </summary>
-            internal ArrayList InnerArray
+            internal List<object> InnerArray
             {
                 get
                 {
-                    items ??= new ArrayList();
+                    items ??= new List<object>();
 
                     return items;
                 }
@@ -108,7 +108,8 @@ namespace System.Windows.Forms
 
                 ArgumentNullException.ThrowIfNull(item);
 
-                int index = InnerArray.Add(item);
+                InnerArray.Add(item);
+                int index = InnerArray.LastIndexOf(item);
 
                 bool success = false;
                 if (owner.Sorted)
@@ -141,7 +142,7 @@ namespace System.Windows.Forms
             {
                 //this.owner.CheckNoSharedCell();
                 owner.CheckNoDataSource();
-                AddRangeInternal((ICollection)items);
+                AddRangeInternal((ICollection<object>)items);
                 owner.OnItemsCollectionChanged();
             }
 
@@ -149,14 +150,14 @@ namespace System.Windows.Forms
             {
                 //this.owner.CheckNoSharedCell();
                 owner.CheckNoDataSource();
-                AddRangeInternal((ICollection)value);
+                AddRangeInternal((ICollection<object>)value);
                 owner.OnItemsCollectionChanged();
             }
 
             /// <summary>
             ///  Add range that bypasses the data source check.
             /// </summary>
-            internal void AddRangeInternal(ICollection items)
+            internal void AddRangeInternal(ICollection<object> items)
             {
                 ArgumentNullException.ThrowIfNull(items);
 

@@ -4,14 +4,13 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Globalization;
 
 namespace System.Windows.Forms
 {
     public partial class DataGridViewComboBoxCell : DataGridViewCell
     {
-        private sealed class ItemComparer : IComparer
+        private sealed class ItemComparer : IComparer<object>
         {
             private readonly DataGridViewComboBoxCell dataGridViewComboBoxCell;
 
