@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Design.Behavior
     {
         private readonly IServiceProvider _serviceProvider;             // standard service provider
         private readonly AdornerWindow _adornerWindow;                  // the transparent window all glyphs are drawn to
-        private readonly ArrayList _behaviorStack;                      // the stack behavior objects can be pushed to and popped from
+        private readonly List<Behavior> _behaviorStack;                      // the stack behavior objects can be pushed to and popped from
         private Behavior _captureBehavior;                              // the behavior that currently has capture; may be null
         private Glyph _hitTestedGlyph;                                  // the last valid glyph that was hit tested
         private IToolboxService _toolboxSvc;                            // allows us to have the toolbox choose a cursor
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             // Start with an empty adorner collection & no behavior on the stack
             Adorners = new BehaviorServiceAdornerCollection(this);
-            _behaviorStack = new ArrayList();
+            _behaviorStack = new();
 
             _hitTestedGlyph = null;
             _validDragArgs = null;
@@ -151,14 +151,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_behaviorStack != null && _behaviorStack.Count > 0)
-                {
-                    return (_behaviorStack[0] as Behavior);
-                }
-                else
-                {
-                    return null;
-                }
+                return _behaviorStack != null && _behaviorStack.Count > 0 ? _behaviorStack[0] : null;
             }
         }
 
@@ -364,7 +357,7 @@ namespace System.Windows.Forms.Design.Behavior
                 int index = _behaviorStack.IndexOf(behavior);
                 if ((index != -1) && (index < _behaviorStack.Count - 1))
                 {
-                    return _behaviorStack[index + 1] as Behavior;
+                    return _behaviorStack[index + 1];
                 }
             }
 
@@ -597,17 +590,12 @@ namespace System.Windows.Forms.Design.Behavior
 
         private Behavior GetAppropriateBehavior(Glyph g)
         {
-            if (_behaviorStack != null && _behaviorStack.Count > 0)
+            if (_behaviorStack is not null && _behaviorStack.Count > 0)
             {
-                return _behaviorStack[0] as Behavior;
+                return _behaviorStack[0];
             }
 
-            if (g != null && g.Behavior != null)
-            {
-                return g.Behavior;
-            }
-
-            return null;
+            return g is not null && g.Behavior is not null ? g.Behavior : null;
         }
 
         private void ShowError(Exception ex)
