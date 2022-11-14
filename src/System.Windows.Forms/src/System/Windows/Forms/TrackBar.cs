@@ -157,13 +157,13 @@ namespace System.Windows.Forms
                         cp.Style |= (int)PInvoke.TBS_NOTICKS;
                         break;
                     case TickStyle.TopLeft:
-                        cp.Style |= (int)(PInvoke.TBS_AUTOTICKS | PInvoke.TBS_TOP);
+                        cp.Style |= (int)(PInvoke.TBS_TOP);
                         break;
                     case TickStyle.BottomRight:
-                        cp.Style |= (int)(PInvoke.TBS_AUTOTICKS | PInvoke.TBS_BOTTOM);
+                        cp.Style |= (int)(PInvoke.TBS_BOTTOM);
                         break;
                     case TickStyle.Both:
-                        cp.Style |= (int)(PInvoke.TBS_AUTOTICKS | PInvoke.TBS_BOTH);
+                        cp.Style |= (int)(PInvoke.TBS_BOTH);
                         break;
                 }
 
@@ -1022,9 +1022,9 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SetTickFrequency();
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
+                    SetTickFrequency();
                     Invalidate();
                 }
 
