@@ -1018,9 +1018,9 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
+                    SetTickFrequency();
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
-                    SetTickFrequency();
                     Invalidate();
                 }
 
