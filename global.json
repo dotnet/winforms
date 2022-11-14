@@ -14,9 +14,9 @@
     "version": "6.0.111"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "6.0.0-beta.22560.1",
-    "Microsoft.DotNet.CMake.Sdk": "6.0.0-beta.22560.1",
-    "Microsoft.DotNet.Helix.Sdk": "6.0.0-beta.22560.1",
+    "Microsoft.DotNet.Arcade.Sdk": "6.0.0-beta.22561.1",
+    "Microsoft.DotNet.CMake.Sdk": "6.0.0-beta.22561.1",
+    "Microsoft.DotNet.Helix.Sdk": "6.0.0-beta.22561.1",
     "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
     "Microsoft.NET.Sdk.IL": "6.0.11-servicing.22523.4"
   },
