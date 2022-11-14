@@ -827,23 +827,19 @@ namespace System.Windows.Forms
             }
 
             int tickFrequency = _tickFrequency;
-            int trackbarSize;
+            int trackbarSize = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
             uint maxValue = (uint)(_minimum + _maximum);
-            if (Orientation == Orientation.Horizontal)
-            {
-                trackbarSize = Size.Width;
-            }
-            else
-            {
-                trackbarSize = Size.Height;
-            }
 
             if (maxValue > trackbarSize && trackbarSize != 0)
             {
-              tickFrequency = (int)(maxValue / trackbarSize);
+                tickFrequency = ((int)(maxValue / trackbarSize));
             }
 
-             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)tickFrequency);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
+            for (int i = tickFrequency; i < maxValue; i += tickFrequency)
+            {
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (LPARAM)i);
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
