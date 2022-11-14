@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public class DataGridViewSelectedColumnCollection : BaseCollection, IList
     {
-        private readonly ArrayList _items = new ArrayList();
+        private readonly List<DataGridViewColumn> _items = new List<DataGridViewColumn>();
 
         int IList.Add(object value)
         {
@@ -26,12 +26,22 @@ namespace System.Windows.Forms
 
         bool IList.Contains(object value)
         {
-            return _items.Contains(value);
+            return value switch
+            {
+                null => false,
+                DataGridViewColumn dataGridViewColumn => Contains(dataGridViewColumn),
+                _ => false,
+            };
         }
 
         int IList.IndexOf(object value)
         {
-            return _items.IndexOf(value);
+            return value switch
+            {
+                null => -1,
+                DataGridViewColumn dataGridViewColumn => _items.IndexOf(dataGridViewColumn),
+                _ => -1,
+            };
         }
 
         void IList.Insert(int index, object value)
@@ -67,7 +77,7 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array array, int index)
         {
-            _items.CopyTo(array, index);
+            _items.ToArray().CopyTo(array, index);
         }
 
         int ICollection.Count
@@ -98,7 +108,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return _items;
+                return ArrayList.Adapter(_items);
             }
         }
 
@@ -106,7 +116,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewColumn)_items[index];
+                return _items[index];
             }
         }
 
@@ -115,7 +125,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal int Add(DataGridViewColumn dataGridViewColumn)
         {
-            return _items.Add(dataGridViewColumn);
+            _items.Add(dataGridViewColumn);
+            return _items.LastIndexOf(dataGridViewColumn);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
