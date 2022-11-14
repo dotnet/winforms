@@ -807,9 +807,9 @@ namespace System.Windows.Forms
                 return;
             }
 
+            SetTickFrequency();
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
-            SetTickFrequency();
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
             SetTrackBarPosition();
