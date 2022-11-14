@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public class DataGridViewSelectedCellCollection : BaseCollection, IList
     {
-        private readonly ArrayList _items = new ArrayList();
+        private readonly List<DataGridViewCell> _items = new List<DataGridViewCell>();
 
         int IList.Add(object value)
         {
@@ -31,12 +31,22 @@ namespace System.Windows.Forms
 
         bool IList.Contains(object value)
         {
-            return _items.Contains(value);
+            return value switch
+            {
+                null => false,
+                DataGridViewCell dataGridViewCell => Contains(dataGridViewCell),
+                _ => false,
+            };
         }
 
         int IList.IndexOf(object value)
         {
-            return _items.IndexOf(value);
+            return value switch
+            {
+                null => -1,
+                DataGridViewCell dataGridViewCell => _items.IndexOf(dataGridViewCell),
+                _ => -1,
+            };
         }
 
         void IList.Insert(int index, object value)
@@ -72,8 +82,8 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array array, int index)
         {
-            _items.CopyTo(array, index);
-        }
+        	_items.ToArray().CopyTo(array, index);
+    	}
 
         int ICollection.Count
         {
@@ -103,7 +113,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return _items;
+                return ArrayList.Adapter(_items);
             }
         }
 
@@ -111,7 +121,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewCell)_items[index];
+                return _items[index];
             }
         }
 
@@ -121,7 +131,10 @@ namespace System.Windows.Forms
         internal int Add(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(!Contains(dataGridViewCell));
-            return _items.Add(dataGridViewCell);
+            _items.Add(dataGridViewCell);
+
+            var index = _items.LastIndexOf(dataGridViewCell);
+            return index;
         }
 
         /// <summary>
