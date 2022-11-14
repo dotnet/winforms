@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     public class DataGridViewCellCollection : BaseCollection, IList
     {
         private CollectionChangeEventHandler _onCollectionChanged;
-        private readonly ArrayList _items = new ArrayList();
+        private readonly List<DataGridViewCell> _items = new List<DataGridViewCell>();
         private readonly DataGridViewRow _owner;
 
         int IList.Add(object value)
@@ -33,12 +33,22 @@ namespace System.Windows.Forms
 
         bool IList.Contains(object value)
         {
-            return _items.Contains(value);
+            return value switch
+            {
+                null => false,
+                DataGridViewCell dataGridViewCell => Contains(dataGridViewCell),
+                _ => false,
+            };
         }
 
         int IList.IndexOf(object value)
         {
-            return _items.IndexOf(value);
+            return value switch
+            {
+                null => -1,
+                DataGridViewCell dataGridViewCell => _items.IndexOf(dataGridViewCell),
+                _ => -1,
+            };
         }
 
         void IList.Insert(int index, object value)
@@ -74,7 +84,7 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array array, int index)
         {
-            _items.CopyTo(array, index);
+            _items.ToArray().CopyTo(array, index);
         }
 
         int ICollection.Count
@@ -107,7 +117,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return _items;
+                return ArrayList.Adapter(_items);
             }
         }
 
@@ -118,7 +128,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewCell)_items[index];
+                return _items[index];
             }
             set
             {
@@ -136,7 +146,7 @@ namespace System.Windows.Forms
 
                 _owner.DataGridView?.OnReplacingCell(_owner, index);
 
-                DataGridViewCell oldDataGridViewCell = (DataGridViewCell)_items[index];
+                DataGridViewCell oldDataGridViewCell = _items[index];
                 _items[index] = dataGridViewCell;
                 dataGridViewCell.OwningRow = _owner;
                 dataGridViewCell.State = oldDataGridViewCell.State;
@@ -180,7 +190,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), nameof(columnName));
                 }
 
-                return (DataGridViewCell)_items[dataGridViewColumn.Index];
+                return _items[dataGridViewColumn.Index];
             }
             set
             {
@@ -226,7 +236,10 @@ namespace System.Windows.Forms
         internal int AddInternal(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(!dataGridViewCell.Selected);
-            int index = _items.Add(dataGridViewCell);
+
+            _items.Add(dataGridViewCell);
+            int index = _items.LastIndexOf(dataGridViewCell);
+
             dataGridViewCell.OwningRow = _owner;
             DataGridView dataGridView = _owner.DataGridView;
             if (dataGridView is not null && dataGridView.Columns.Count > index)
@@ -397,7 +410,7 @@ namespace System.Windows.Forms
 
         internal void RemoveAtInternal(int index)
         {
-            DataGridViewCell dataGridViewCell = (DataGridViewCell)_items[index];
+            DataGridViewCell dataGridViewCell = _items[index];
             _items.RemoveAt(index);
             dataGridViewCell.DataGridView = null;
             dataGridViewCell.OwningRow = null;
