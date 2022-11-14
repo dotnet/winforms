@@ -73,11 +73,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_host is null)
-                {
-                    throw new ObjectDisposedException(GetType().FullName);
-                }
-
+                ObjectDisposedException.ThrowIf(_host is null, this);
                 return ((IDesignerHost)_host).Container;
             }
         }
@@ -125,11 +121,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_serviceContainer is null)
-                {
-                    throw new ObjectDisposedException(GetType().FullName);
-                }
-
+                ObjectDisposedException.ThrowIf(_serviceContainer is null, this);
                 return _serviceContainer;
             }
         }
@@ -239,11 +231,7 @@ namespace System.ComponentModel.Design
         public void BeginLoad(DesignerLoader loader)
         {
             ArgumentNullException.ThrowIfNull(loader);
-
-            if (_host is null)
-            {
-                throw new ObjectDisposedException(GetType().FullName);
-            }
+            ObjectDisposedException.ThrowIf(_host is null, this);
 
             // Create the designer host.  We need the host so we can begin the loading process.
             _loadErrors = null;
@@ -256,12 +244,7 @@ namespace System.ComponentModel.Design
         public void BeginLoad(Type rootComponentType)
         {
             ArgumentNullException.ThrowIfNull(rootComponentType);
-
-            if (_host is null)
-            {
-                throw new ObjectDisposedException(GetType().FullName);
-            }
-
+            ObjectDisposedException.ThrowIf(_host is null, this);
             BeginLoad(new DefaultDesignerLoader(rootComponentType));
         }
 
@@ -280,11 +263,7 @@ namespace System.ComponentModel.Design
         protected internal virtual IDesigner CreateDesigner(IComponent component, bool rootDesigner)
         {
             ArgumentNullException.ThrowIfNull(component);
-
-            if (_host is null)
-            {
-                throw new ObjectDisposedException(GetType().FullName);
-            }
+            ObjectDisposedException.ThrowIf(_host is null, this);
 
             IDesigner designer;
             if (rootDesigner)
@@ -345,13 +324,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent, string containerName)
         {
-            if (_host is null)
-            {
-                throw new ObjectDisposedException(GetType().FullName);
-            }
-
+            ObjectDisposedException.ThrowIf(_host is null, this);
             ArgumentNullException.ThrowIfNull(owningComponent);
-
             return new SiteNestedContainer(owningComponent, containerName, _host);
         }
 

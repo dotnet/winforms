@@ -1421,15 +1421,9 @@ namespace System.Windows.Forms
             {
                 if (axIWebBrowser2 is null)
                 {
-                    if (!IsDisposed)
-                    {
-                        // This should call AttachInterfaces
-                        TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
-                    }
-                    else
-                    {
-                        throw new ObjectDisposedException(GetType().Name);
-                    }
+                    ObjectDisposedException.ThrowIf(IsDisposed, this);
+                    // This should call AttachInterfaces
+                    TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
                 }
 
                 // We still don't have this.axIWebBrowser2. Throw an exception.
