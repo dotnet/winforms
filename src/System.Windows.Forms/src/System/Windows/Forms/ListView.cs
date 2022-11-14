@@ -2502,7 +2502,16 @@ namespace System.Windows.Forms
         private int CompareFunc(IntPtr lparam1, IntPtr lparam2, IntPtr lparamSort)
         {
             Debug.Assert(_listItemSorter is not null, "null sorter!");
-            return _listItemSorter is not null ? _listItemSorter.Compare(_listItemsTable[(int)lparam1], _listItemsTable[(int)lparam2]) : 0;
+            if (_listItemSorter is not null)
+            {
+                _listItemsTable.TryGetValue((int)lparam1, out ListViewItem? x);
+                _listItemsTable.TryGetValue((int)lparam2, out ListViewItem? y);
+                return _listItemSorter.Compare(x, y);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         private unsafe int CompensateColumnHeaderResize(Message m, bool columnResizeCancelled)
