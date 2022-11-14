@@ -31,9 +31,9 @@ namespace System.Windows.Forms.Design
         //is the TemplateNode ContextMenu open. When the TemplateNode AddItems ContextMenu is opened we want to Disable all the Commands... And we enable them when the contextMenu closes...  But if the menu closes by "enter Key" we get OnKeyDefault and hence go into InSitu Edit Mode.. to avoid this we have a new flag to IGNORE the first OnKeyDefault.
         private bool _templateNodeContextMenuOpen;
         // old commands
-        private ArrayList _oldCommands;
+        private List<MenuCommand> _oldCommands;
         // our commands
-        private ArrayList _newCommands;
+        private List<MenuCommand> _newCommands;
         // need to add this separately since the VbDATA guys return us their paste command when the DataSource is copy pasted.
         private MenuCommand _oldCommandPaste;
         private MenuCommand _newCommandPaste;
@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms.Design
         // caches the old commands from the menuCommand service.
         private void PopulateOldCommands()
         {
-            _oldCommands ??= new ArrayList();
+            _oldCommands ??= new();
 
             IMenuCommandService mcs = MenuService;
             if (mcs != null)
@@ -1504,7 +1504,7 @@ namespace System.Windows.Forms.Design
         // populates a list of our custom commands to be added to menu command service.
         private void PopulateNewCommands()
         {
-            _newCommands ??= new ArrayList();
+            _newCommands ??= new();
 
             _newCommands.Add(new MenuCommand(new EventHandler(OnKeySelect), MenuCommands.KeySelectNext));
             _newCommands.Add(new MenuCommand(new EventHandler(OnKeySelect), MenuCommands.KeySelectPrevious));
