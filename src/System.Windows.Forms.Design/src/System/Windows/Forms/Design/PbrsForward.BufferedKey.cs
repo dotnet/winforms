@@ -6,7 +6,7 @@ namespace System.Windows.Forms.Design
 {
     internal partial class PbrsForward
     {
-        private struct BufferedKey
+        private readonly struct BufferedKey
         {
             public readonly Message KeyDown;
             public readonly Message KeyUp;
