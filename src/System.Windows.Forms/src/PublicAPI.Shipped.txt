@@ -21,7 +21,7 @@
 ~override System.Windows.Forms.AxHost.Site.set -> void
 ~override System.Windows.Forms.AxHost.Text.get -> string
 ~override System.Windows.Forms.AxHost.Text.set -> void
-~override System.Windows.Forms.BindingMemberInfo.Equals(object otherObject) -> bool
+override System.Windows.Forms.BindingMemberInfo.Equals(object? otherObject) -> bool
 ~override System.Windows.Forms.ComboBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ComboBox.BackgroundImage.set -> void
 ~override System.Windows.Forms.ComboBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -802,10 +802,10 @@ static System.Windows.Forms.Help.ShowPopup(System.Windows.Forms.Control? parent,
 ~System.Windows.Forms.BindingContext.Remove(object dataSource) -> void
 ~System.Windows.Forms.BindingContext.this[object dataSource, string dataMember].get -> System.Windows.Forms.BindingManagerBase
 ~System.Windows.Forms.BindingContext.this[object dataSource].get -> System.Windows.Forms.BindingManagerBase
-~System.Windows.Forms.BindingMemberInfo.BindingField.get -> string
-~System.Windows.Forms.BindingMemberInfo.BindingMember.get -> string
-~System.Windows.Forms.BindingMemberInfo.BindingMemberInfo(string dataMember) -> void
-~System.Windows.Forms.BindingMemberInfo.BindingPath.get -> string
+System.Windows.Forms.BindingMemberInfo.BindingField.get -> string!
+System.Windows.Forms.BindingMemberInfo.BindingMember.get -> string!
+System.Windows.Forms.BindingMemberInfo.BindingMemberInfo(string? dataMember) -> void
+System.Windows.Forms.BindingMemberInfo.BindingPath.get -> string!
 ~System.Windows.Forms.BindingNavigator.AddNewItem.get -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.BindingNavigator.AddNewItem.set -> void
 ~System.Windows.Forms.BindingNavigator.BindingNavigator(System.ComponentModel.IContainer container) -> void
