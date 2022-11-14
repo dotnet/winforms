@@ -216,7 +216,7 @@ namespace System.Windows.Forms
             new WinCategoryAttribute("DDE")
         };
 
-        private Hashtable _objectDefinedCategoryNames; // Integer -> String
+        private Dictionary<VSSDK.PROPCAT, CategoryAttribute> _objectDefinedCategoryNames;
 
 #if DEBUG
         static AxHost()
@@ -2509,22 +2509,19 @@ namespace System.Windows.Forms
                 return s_categoryNames[index];
             }
 
-            if (_objectDefinedCategoryNames is not null)
+            if (_objectDefinedCategoryNames?.TryGetValue(propcat, out CategoryAttribute category) ?? false
+                && category is not null)
             {
-                CategoryAttribute rval = (CategoryAttribute)_objectDefinedCategoryNames[propcat];
-                if (rval is not null)
-                {
-                    return rval;
-                }
+                return category;
             }
 
             hr = icp.GetCategoryName(propcat, PInvoke.GetThreadLocale(), out string name);
             if (hr == HRESULT.S_OK && name is not null)
             {
-                var rval = new CategoryAttribute(name);
-                _objectDefinedCategoryNames ??= new Hashtable();
-                _objectDefinedCategoryNames.Add(propcat, rval);
-                return rval;
+                category = new CategoryAttribute(name);
+                _objectDefinedCategoryNames ??= new();
+                _objectDefinedCategoryNames[propcat] = category;
+                return category;
             }
 
             return null;
