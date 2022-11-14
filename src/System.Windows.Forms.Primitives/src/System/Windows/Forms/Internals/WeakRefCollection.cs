@@ -92,7 +92,7 @@ namespace System.Windows.Forms
 
             for (int i = 0; i < Count; i++)
             {
-                WeakRefObject? item = (WeakRefObject?)InnerList[i];
+                WeakRefObject? item = InnerList[i];
                 if (item != other.InnerList[i])
                 {
                     if (item is null || !item.Equals(other.InnerList[i]))
