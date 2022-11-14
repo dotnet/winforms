@@ -1170,50 +1170,22 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "}");
             }
 
-            private bool LocalModalMessageLoop(Form form)
+            private unsafe bool LocalModalMessageLoop(Form form)
             {
                 try
                 {
                     // Execute the message loop until the active component tells us to stop.
-                    var msg = default(MSG);
-                    bool unicodeWindow = false;
+                    MSG msg = default;
                     bool continueLoop = true;
 
                     while (continueLoop)
                     {
-                        if (User32.PeekMessageW(ref msg))
+                        if (PInvoke.GetMessage(&msg, HWND.Null, 0, 0))
                         {
-                            // If the component wants us to process the message, do it.
-                            // The component manager hosts windows from many places.  We must be sensitive
-                            // to ansi / Unicode windows here.
-                            if (!msg.hwnd.IsNull && PInvoke.IsWindowUnicode(msg.hwnd))
-                            {
-                                unicodeWindow = true;
-                                if (!User32.GetMessageW(ref msg))
-                                {
-                                    continue;
-                                }
-                            }
-                            else
-                            {
-                                unicodeWindow = false;
-                                if (!User32.GetMessageA(ref msg))
-                                {
-                                    continue;
-                                }
-                            }
-
                             if (!PreTranslateMessage(ref msg))
                             {
                                 PInvoke.TranslateMessage(msg);
-                                if (unicodeWindow)
-                                {
-                                    User32.DispatchMessageW(ref msg);
-                                }
-                                else
-                                {
-                                    User32.DispatchMessageA(ref msg);
-                                }
+                                PInvoke.DispatchMessage(&msg);
                             }
 
                             if (form is not null)
@@ -1225,7 +1197,7 @@ namespace System.Windows.Forms
                         {
                             break;
                         }
-                        else if (!User32.PeekMessageW(ref msg))
+                        else if (!PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                         {
                             PInvoke.WaitMessage();
                         }
@@ -1442,15 +1414,12 @@ namespace System.Windows.Forms
             // - When a dialog is up, VS is completely disabled, including moving and resizing VS.
             // - After doing all this, you can ctrl-shift-N start a new project and VS is enabled.
 
-            /// <inheritdoc />
             BOOL IMsoComponent.FDebugMessage(IntPtr hInst, uint msg, IntPtr wparam, IntPtr lparam)
                 => true;
 
-            /// <inheritdoc />
             unsafe BOOL IMsoComponent.FPreTranslateMessage(MSG* msg)
                 => PreTranslateMessage(ref Unsafe.AsRef<MSG>(msg));
 
-            /// <inheritdoc />
             void IMsoComponent.OnEnterState(msocstate uStateID, BOOL fEnter)
             {
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, $"ComponentManager : OnEnterState({uStateID}, {fEnter})");
@@ -1475,18 +1444,15 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <inheritdoc />
             void IMsoComponent.OnAppActivate(BOOL fActive, uint dwOtherThreadID)
             {
             }
 
-            /// <inheritdoc />
             void IMsoComponent.OnLoseActivation()
             {
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Our component is losing activation.");
             }
 
-            /// <inheritdoc />
             unsafe void IMsoComponent.OnActivationChange(
                 IMsoComponent component,
                 BOOL fSameComponent,
@@ -1498,14 +1464,12 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : OnActivationChange");
             }
 
-            /// <inheritdoc />
             BOOL IMsoComponent.FDoIdle(msoidlef grfidlef)
             {
                 _idleHandler?.Invoke(Thread.CurrentThread, EventArgs.Empty);
                 return false;
             }
 
-            /// <inheritdoc />
             unsafe BOOL IMsoComponent.FContinueMessageLoop(
                 msoloop uReason,
                 void* pvLoopData,
@@ -1514,10 +1478,12 @@ namespace System.Windows.Forms
                 bool continueLoop = true;
 
                 // If we get a null message, and we have previously posted the WM_QUIT message,
-                // then someone ate the message...
+                // then someone ate the message.
                 if (pMsgPeeked is null && GetState(STATE_POSTEDQUIT))
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Abnormal loop termination, no WM_QUIT received");
+                    Debug.WriteLineIf(
+                        CompModSwitches.MSOComponentManager.TraceInfo,
+                        "ComponentManager : Abnormal loop termination, no WM_QUIT received");
                     continueLoop = false;
                 }
                 else
@@ -1553,7 +1519,7 @@ namespace System.Windows.Forms
                         case msoloop.DoEventsModal:
                             // For DoEvents, just see if there are more messages on the queue.
                             MSG temp = default;
-                            if (!User32.PeekMessageW(ref temp))
+                            if (!PInvoke.PeekMessage(&temp, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                             {
                                 continueLoop = false;
                             }
@@ -1565,10 +1531,8 @@ namespace System.Windows.Forms
                 return continueLoop;
             }
 
-            /// <inheritdoc />
             BOOL IMsoComponent.FQueryTerminate(BOOL fPromptUser) => true;
 
-            /// <inheritdoc />
             void IMsoComponent.Terminate()
             {
                 if (_messageLoopCount > 0 && ComponentManager is not Application.ComponentManager)
@@ -1579,7 +1543,6 @@ namespace System.Windows.Forms
                 Dispose(false);
             }
 
-            /// <inheritdoc />
             IntPtr IMsoComponent.HwndGetWindow(msocWindow dwWhich, uint dwReserved)
                 => IntPtr.Zero;
         }

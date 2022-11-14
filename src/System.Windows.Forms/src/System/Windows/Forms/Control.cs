@@ -5115,26 +5115,25 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void DestroyHandle()
         {
-            if (RecreatingHandle)
+            if (RecreatingHandle && _threadCallbackList is not null)
             {
-                if (_threadCallbackList is not null)
+                // See if we have a thread marshaling request pending.  If so, we will need to
+                // re-post it after recreating the handle.
+                lock (_threadCallbackList)
                 {
-                    // See if we have a thread marshaling request pending.  If so, we will need to
-                    // re-post it after recreating the handle.
-                    lock (_threadCallbackList)
+                    if (s_threadCallbackMessage != 0)
                     {
-                        if (s_threadCallbackMessage != 0)
+                        MSG msg = default;
+                        BOOL result = PInvoke.PeekMessage(
+                            &msg,
+                            this,
+                            (uint)s_threadCallbackMessage,
+                            (uint)s_threadCallbackMessage,
+                            PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE);
+
+                        if (result)
                         {
-                            var msg = default(MSG);
-                            BOOL result = User32.PeekMessageW(
-                                ref msg,
-                                this,
-                                s_threadCallbackMessage,
-                                s_threadCallbackMessage);
-                            if (result)
-                            {
-                                SetState(States.ThreadMarshalPending, true);
-                            }
+                            SetState(States.ThreadMarshalPending, true);
                         }
                     }
                 }
@@ -5145,20 +5144,17 @@ namespace System.Windows.Forms
             // wake up.  So, we put exceptions into all these items and wake up all threads.
             // If we are recreating the handle, then we're fine because recreation will re-post
             // the thread callback message to the new handle for us.
-            if (!RecreatingHandle)
+            if (!RecreatingHandle && _threadCallbackList is not null)
             {
-                if (_threadCallbackList is not null)
+                lock (_threadCallbackList)
                 {
-                    lock (_threadCallbackList)
-                    {
-                        Exception ex = new ObjectDisposedException(GetType().Name);
+                    Exception ex = new ObjectDisposedException(GetType().Name);
 
-                        while (_threadCallbackList.Count > 0)
-                        {
-                            ThreadMethodEntry entry = _threadCallbackList.Dequeue();
-                            entry._exception = ex;
-                            entry.Complete();
-                        }
+                    while (_threadCallbackList.Count > 0)
+                    {
+                        ThreadMethodEntry entry = _threadCallbackList.Dequeue();
+                        entry._exception = ex;
+                        entry.Complete();
                     }
                 }
             }
@@ -9778,8 +9774,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the event associated with key with the event data of
-        ///  e and a sender of this control.
+        ///  Raises the event associated with <paramref name="key"/> with the event data of <paramref name="e"/>
+        ///  and a sender of this control.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaisePaintEvent(object key, PaintEventArgs e)
@@ -9791,8 +9787,8 @@ namespace System.Windows.Forms
         {
             if (!IsDisposed)
             {
-                var msg = default(MSG);
-                while (User32.PeekMessageW(ref msg, this, msgMin, msgMax, User32.PM.REMOVE))
+                MSG msg = default;
+                while (PInvoke.PeekMessage(&msg, this, (uint)msgMin, (uint)msgMax, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
                 {
                     // No-op.
                 }

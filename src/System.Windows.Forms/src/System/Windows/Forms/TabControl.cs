@@ -2053,7 +2053,7 @@ namespace System.Windows.Forms
             return tcc.Cancel;
         }
 
-        private void WmTabBaseReLayout()
+        private unsafe void WmTabBaseReLayout()
         {
             BeginUpdate();
             _cachedDisplayRect = Rectangle.Empty;
@@ -2062,10 +2062,14 @@ namespace System.Windows.Forms
             Invalidate(true);
 
             // Remove other TabBaseReLayout messages from the message queue
-            var msg = default(MSG);
-            while (User32.PeekMessageW(ref msg, this, _tabBaseReLayoutMessage, _tabBaseReLayoutMessage, User32.PM.REMOVE))
+            MSG msg = default;
+            while (PInvoke.PeekMessage(
+                &msg,
+                this,
+                (uint)_tabBaseReLayoutMessage,
+                (uint)_tabBaseReLayoutMessage,
+                PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
             {
-                // No-op.
             }
         }
 

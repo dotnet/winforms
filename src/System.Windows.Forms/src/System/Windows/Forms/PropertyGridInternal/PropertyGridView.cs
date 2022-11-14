@@ -5044,7 +5044,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return result;
         }
 
-        private void ShowFormatExceptionMessage(string propertyName, Exception ex)
+        private unsafe void ShowFormatExceptionMessage(string propertyName, Exception ex)
         {
             propertyName ??= "(unknown)";
 
@@ -5060,12 +5060,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            var mouseMessage = default(MSG);
-            while (User32.PeekMessageW(ref mouseMessage,
-                IntPtr.Zero,
-                User32.WM.MOUSEFIRST,
-                User32.WM.MOUSELAST,
-                User32.PM.REMOVE))
+            MSG mouseMessage = default;
+            while (PInvoke.PeekMessage(
+                &mouseMessage,
+                HWND.Null,
+                (uint)User32.WM.MOUSEFIRST,
+                (uint)User32.WM.MOUSELAST,
+                PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
             {
                 // No-op.
             }
@@ -5119,7 +5120,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal void ShowInvalidMessage(string propertyName, Exception ex)
+        internal unsafe void ShowInvalidMessage(string propertyName, Exception ex)
         {
             propertyName ??= "(unknown)";
 
@@ -5136,8 +5137,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            var mouseMsg = default(MSG);
-            while (User32.PeekMessageW(ref mouseMsg, IntPtr.Zero, User32.WM.MOUSEFIRST, User32.WM.MOUSELAST, User32.PM.REMOVE))
+            MSG mouseMsg = default;
+            while (PInvoke.PeekMessage(
+                &mouseMsg,
+                HWND.Null,
+                (uint)User32.WM.MOUSEFIRST,
+                (uint)User32.WM.MOUSELAST,
+                PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
             {
                 // No-op.
             }

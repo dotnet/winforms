@@ -770,9 +770,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Hide the Region Property
-        /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
         public new Region? Region
