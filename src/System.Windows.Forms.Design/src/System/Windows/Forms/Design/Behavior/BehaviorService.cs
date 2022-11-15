@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Design.Behavior
     {
         private readonly IServiceProvider _serviceProvider;             // standard service provider
         private readonly AdornerWindow _adornerWindow;                  // the transparent window all glyphs are drawn to
-        private readonly List<Behavior> _behaviorStack;                      // the stack behavior objects can be pushed to and popped from
+        private readonly List<Behavior> _behaviorStack;                 // the stack behavior objects can be pushed to and popped from
         private Behavior _captureBehavior;                              // the behavior that currently has capture; may be null
         private Glyph _hitTestedGlyph;                                  // the last valid glyph that was hit tested
         private IToolboxService _toolboxSvc;                            // allows us to have the toolbox choose a cursor
