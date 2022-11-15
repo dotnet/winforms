@@ -293,8 +293,10 @@ namespace System.Windows.Forms.Design
                 if (snapLineTimer == null)
                 {
                     //instantiate our snapline timer
-                    snapLineTimer = new Timer();
-                    snapLineTimer.Interval = DesignerUtils.SNAPELINEDELAY;
+                    snapLineTimer = new Timer
+                    {
+                        Interval = DesignerUtils.SNAPELINEDELAY
+                    };
                     snapLineTimer.Tick += new EventHandler(OnSnapLineTimerExpire);
                 }
 
@@ -348,8 +350,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    WindowsFormsComponentEditor winEditor = editor as WindowsFormsComponentEditor;
-                    if (winEditor != null)
+                    if (editor is WindowsFormsComponentEditor winEditor)
                     {
                         IWin32Window parent = null;
 
@@ -493,7 +494,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            result = default(T);
+            result = default;
             return false;
         }
 
@@ -632,12 +633,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual object GetService(Type serviceType)
         {
-            if (site != null)
-            {
-                return site.GetService(serviceType);
-            }
-
-            return null;
+            return site?.GetService(serviceType);
         }
 
         /// <summary>
@@ -646,12 +642,7 @@ namespace System.Windows.Forms.Design
         private static Size GetSize(IComponent comp)
         {
             PropertyDescriptor prop = GetProperty(comp, "Size");
-            if (prop != null)
-            {
-                return (Size)prop.GetValue(comp);
-            }
-
-            return Size.Empty;
+            return prop != null ? (Size)prop.GetValue(comp) : Size.Empty;
         }
 
         /// <summary>
@@ -683,14 +674,7 @@ namespace System.Windows.Forms.Design
             //
             snapComponent = currentSnapComponent;
             snapProperty = currentSnapProp;
-            if (gridSizeProp != null)
-            {
-                snapSize = (Size)gridSizeProp.GetValue(snapComponent);
-            }
-            else
-            {
-                snapSize = Size.Empty;
-            }
+            snapSize = gridSizeProp != null ? (Size)gridSizeProp.GetValue(snapComponent) : Size.Empty;
         }
 
         /// <summary>
@@ -791,8 +775,7 @@ namespace System.Windows.Forms.Design
 
             if (selSvc != null)
             {
-                IComponent pri = selSvc.PrimarySelection as IComponent;
-                if (pri != null)
+                if (selSvc.PrimarySelection is IComponent pri)
                 {
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                     if (host != null)
@@ -816,8 +799,7 @@ namespace System.Windows.Forms.Design
 
             if (selSvc != null)
             {
-                IComponent comp = selSvc.PrimarySelection as IComponent;
-                if (comp != null)
+                if (selSvc.PrimarySelection is IComponent comp)
                 {
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                     if (host != null)
@@ -871,16 +853,9 @@ namespace System.Windows.Forms.Design
                                 Debug.Fail("Unknown command mapped to OnKeyMove: " + cmd.ToString());
                             }
 
-                            DesignerTransaction trans;
-
-                            if (selSvc.SelectionCount > 1)
-                            {
-                                trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponents, selSvc.SelectionCount));
-                            }
-                            else
-                            {
-                                trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
-                            }
+                            DesignerTransaction trans = selSvc.SelectionCount > 1
+                                ? host.CreateTransaction(string.Format(SR.DragDropMoveComponents, selSvc.SelectionCount))
+                                : host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
 
                             try
                             {
@@ -941,10 +916,7 @@ namespace System.Windows.Forms.Design
                                     {
                                         bool snapOn = false;
                                         Size snapSize = Size.Empty;
-                                        IComponent snapComponent = null;
-                                        PropertyDescriptor snapProperty = null;
-
-                                        GetSnapInformation(host, comp, out snapSize, out snapComponent, out snapProperty);
+                                        GetSnapInformation(host, comp, out snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty);
 
                                         if (snapProperty != null)
                                         {
@@ -958,9 +930,8 @@ namespace System.Windows.Forms.Design
 
                                             if (primaryControl != null)
                                             {
-                                                ParentControlDesigner parentDesigner = host.GetDesigner(primaryControl.Parent) as ParentControlDesigner;
                                                 //ask the parent to adjust our wanna-be snapped position
-                                                if (parentDesigner != null)
+                                                if (host.GetDesigner(primaryControl.Parent) is ParentControlDesigner parentDesigner)
                                                 {
                                                     Point loc = primaryControl.Location;
 
@@ -1017,8 +988,7 @@ namespace System.Windows.Forms.Design
                                     SelectionRules rules = SelectionRules.Moveable | SelectionRules.Visible;
                                     foreach (IComponent component in selSvc.GetSelectedComponents())
                                     {
-                                        ControlDesigner des = host.GetDesigner(component) as ControlDesigner;
-                                        if (des != null && ((des.SelectionRules & rules) != rules))
+                                        if (host.GetDesigner(component) is ControlDesigner des && ((des.SelectionRules & rules) != rules))
                                         {
                                             //the control must match the rules, if not, then we don't move it
                                             continue;
@@ -1116,8 +1086,7 @@ namespace System.Windows.Forms.Design
 
                         if (comp != null && host != null)
                         {
-                            ControlDesigner des = host.GetDesigner(comp) as ControlDesigner;
-                            if (des == null)
+                            if (host.GetDesigner(comp) is not ControlDesigner des)
                             {
                                 continue;
                             }
@@ -1264,8 +1233,7 @@ namespace System.Windows.Forms.Design
                     {
                         trans = host.CreateTransaction(string.Format(SR.CommandSetAlignToGrid, selectedComponents.Count));
 
-                        Control baseComponent = host.RootComponent as Control;
-                        if (baseComponent != null)
+                        if (host.RootComponent is Control baseComponent)
                         {
                             PropertyDescriptor prop = GetProperty(baseComponent, "GridSize");
                             if (prop != null)
@@ -1298,8 +1266,7 @@ namespace System.Windows.Forms.Design
                         IComponent component = comp as IComponent;
                         if (component != null && host != null)
                         {
-                            ControlDesigner des = host.GetDesigner(component) as ControlDesigner;
-                            if (des == null)
+                            if (host.GetDesigner(component) is not ControlDesigner des)
                             {
                                 continue;
                             }
@@ -1393,16 +1360,9 @@ namespace System.Windows.Forms.Design
                 {
                     if (host != null)
                     {
-                        string batchString;
-
-                        if (cmdID == StandardCommands.CenterHorizontally)
-                        {
-                            batchString = string.Format(SR.WindowsFormsCommandCenterX, selectedComponents.Count);
-                        }
-                        else
-                        {
-                            batchString = string.Format(SR.WindowsFormsCommandCenterY, selectedComponents.Count);
-                        }
+                        string batchString = cmdID == StandardCommands.CenterHorizontally
+                            ? string.Format(SR.WindowsFormsCommandCenterX, selectedComponents.Count)
+                            : string.Format(SR.WindowsFormsCommandCenterY, selectedComponents.Count);
 
                         trans = host.CreateTransaction(batchString);
                     }
@@ -1650,10 +1610,9 @@ namespace System.Windows.Forms.Design
                                 for (int i = 0; i < selComps.Length; i++)
                                 {
                                     object obj = selComps[i];
-                                    IComponent component = obj as IComponent;
                                     // We should never delete the base component.
                                     //
-                                    if (obj == host.RootComponent || component == null)
+                                    if (obj == host.RootComponent || obj is not IComponent component)
                                     {
                                         continue;
                                     }
@@ -1681,10 +1640,9 @@ namespace System.Windows.Forms.Design
                                 for (int i = 0; i < selComps.Length; i++)
                                 {
                                     object obj = selComps[i];
-                                    IComponent component = obj as IComponent;
                                     // We should never delete the base component.
                                     //
-                                    if (obj == host.RootComponent || component == null)
+                                    if (obj == host.RootComponent || obj is not IComponent component)
                                     {
                                         continue;
                                     }
@@ -1705,14 +1663,7 @@ namespace System.Windows.Forms.Design
                                         if (selectedControl.Parent != commonParent && !commonParent.Contains(selectedControl))
                                         {
                                             // look for internal parenting
-                                            if (selectedControl == commonParent || selectedControl.Contains(commonParent))
-                                            {
-                                                commonParent = selectedControl.Parent;
-                                            }
-                                            else
-                                            {
-                                                commonParent = null;
-                                            }
+                                            commonParent = selectedControl == commonParent || selectedControl.Contains(commonParent) ? selectedControl.Parent : null;
                                         }
                                     }
 
@@ -1824,8 +1775,7 @@ namespace System.Windows.Forms.Design
                                 // If it's not a component, we can't delete it.  It also may have already been deleted
                                 // as part of a parent operation, so we skip it.
                                 //
-                                IComponent c = obj as IComponent;
-                                if (c == null || c.Site == null)
+                                if (obj is not IComponent c || c.Site == null)
                                 {
                                     continue;
                                 }
@@ -1849,8 +1799,7 @@ namespace System.Windows.Forms.Design
                                         // if this is not a Control, see if we can get an ITreeDesigner from it,
                                         // and figure out the Component from that.
                                         //
-                                        ITreeDesigner designer = host.GetDesigner((IComponent)obj) as ITreeDesigner;
-                                        if (designer != null)
+                                        if (host.GetDesigner((IComponent)obj) is ITreeDesigner designer)
                                         {
                                             IDesigner parentDesigner = designer.Parent;
                                             if (parentDesigner != null)
@@ -1890,13 +1839,10 @@ namespace System.Windows.Forms.Design
                                     }
                                     else
                                     {
-                                        ITreeDesigner designer = host.GetDesigner((IComponent)obj) as ITreeDesigner;
-                                        ITreeDesigner commonParentDesigner = host.GetDesigner(commonParent) as ITreeDesigner;
-
                                         // for these we aren't as thorough as we are with the Control-based ones.
                                         // we just walk up the chain until we find that parent or the root component.
                                         //
-                                        if (designer != null && commonParentDesigner != null && designer.Parent != commonParentDesigner)
+                                        if (host.GetDesigner((IComponent)obj) is ITreeDesigner designer && host.GetDesigner(commonParent) is ITreeDesigner commonParentDesigner && designer.Parent != commonParentDesigner)
                                         {
                                             List<ITreeDesigner> designerChain = new();
                                             List<ITreeDesigner> parentDesignerChain = new();
@@ -1970,8 +1916,7 @@ namespace System.Windows.Forms.Design
 
                         if (commonParent != null && SelectionService.PrimarySelection == null)
                         {
-                            ITreeDesigner commonParentDesigner = host.GetDesigner(commonParent) as ITreeDesigner;
-                            if (commonParentDesigner != null && commonParentDesigner.Children != null)
+                            if (host.GetDesigner(commonParent) is ITreeDesigner commonParentDesigner && commonParentDesigner.Children != null)
                             {
                                 // choose the first child of the common parent if it has any.
                                 //
@@ -2051,8 +1996,7 @@ namespace System.Windows.Forms.Design
                 if (host == null)
                     return;   // nothing we can do here!
 
-                IDataObject dataObj = null;
-                bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out dataObj);
+                bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out IDataObject dataObj);
 
                 if (clipboardOperationSuccessful)
                 {
@@ -2071,8 +2015,7 @@ namespace System.Windows.Forms.Design
 
                     using (DesignerTransaction trans = host.CreateTransaction(SR.CommandSetPaste))
                     {
-                        byte[] bytes = data as byte[];
-                        if (bytes != null)
+                        if (data is byte[] bytes)
                         {
                             MemoryStream s = new MemoryStream(bytes);
                             if (s != null)
@@ -2179,8 +2122,7 @@ namespace System.Windows.Forms.Design
                                 }
                                 else
                                 {
-                                    string[] sa = obj as string[];
-                                    if (componentNames == null && sa != null)
+                                    if (componentNames == null && obj is string[] sa)
                                     {
                                         componentNames = sa;
                                         idx = 0;
@@ -2188,8 +2130,7 @@ namespace System.Windows.Forms.Design
                                     }
                                 }
 
-                                IEventBindingService evs = GetService(typeof(IEventBindingService)) as IEventBindingService;
-                                if (evs != null)
+                                if (GetService(typeof(IEventBindingService)) is IEventBindingService evs)
                                 {
                                     PropertyDescriptorCollection eventProps = evs.GetEventProperties(TypeDescriptor.GetEvents(curComp));
                                     foreach (PropertyDescriptor pd in eventProps)
@@ -2202,8 +2143,7 @@ namespace System.Windows.Forms.Design
                                             continue;
                                         }
 
-                                        string handler = pd.GetValue(curComp) as string;
-                                        if (handler != null)
+                                        if (pd.GetValue(curComp) is string handler)
                                         {
                                             pd.SetValue(curComp, null);
                                         }
@@ -2232,12 +2172,11 @@ namespace System.Windows.Forms.Design
                                         continue; //continue from here so that we don't add the associated component of a control that failed paste operation.
                                     }
 
-                                    ComponentDesigner cDesigner = host.GetDesigner(curComp) as ComponentDesigner;
                                     ICollection designerComps = null;
                                     // VSWhidbey 390442 - DGV has columns which are sited IComponents that don't
                                     // have designers.  in this case, ignore them.
 
-                                    if (cDesigner == null)
+                                    if (host.GetDesigner(curComp) is not ComponentDesigner cDesigner)
                                     {
                                         continue;
                                     }
@@ -2269,8 +2208,7 @@ namespace System.Windows.Forms.Design
                                     {
                                         if (parentComp != null)
                                         {
-                                            ParentControlDesigner parentDesigner = host.GetDesigner(parentComp) as ParentControlDesigner;
-                                            if (parentDesigner != null && !designerList.Contains(parentDesigner))
+                                            if (host.GetDesigner(parentComp) is ParentControlDesigner parentDesigner && !designerList.Contains(parentDesigner))
                                             {
                                                 parentDesigner.SuspendChangingEvents();
                                                 designerList.Add(parentDesigner);
@@ -2500,7 +2438,7 @@ namespace System.Windows.Forms.Design
                         trans = host.CreateTransaction();
 
                         IComponent baseComponent = host.RootComponent;
-                        if (baseComponent != null && baseComponent is Control)
+                        if (baseComponent is not null and Control)
                         {
                             PropertyDescriptor prop = GetProperty(baseComponent, "DrawGrid");
                             if (prop != null)
@@ -2583,9 +2521,7 @@ namespace System.Windows.Forms.Design
                         if (obj.Equals(selPrimary))
                             continue;
 
-                        IComponent comp = obj as IComponent;
-
-                        if (comp == null)
+                        if (obj is not IComponent comp)
                         {
                             continue;
                         }
@@ -2671,7 +2607,7 @@ namespace System.Windows.Forms.Design
                     trans = host.CreateTransaction(string.Format(SR.CommandSetSizeToGrid, selectedObjects.Length));
 
                     IComponent baseComponent = host.RootComponent;
-                    if (baseComponent != null && baseComponent is Control)
+                    if (baseComponent is not null and Control)
                     {
                         PropertyDescriptor prop = GetProperty(baseComponent, "CurrentGridSize");
                         if (prop != null)
@@ -2767,7 +2703,7 @@ namespace System.Windows.Forms.Design
                         trans = host.CreateTransaction(string.Format(SR.CommandSetPaste, 0));
 
                         IComponent baseComponent = host.RootComponent;
-                        if (baseComponent != null && baseComponent is Control)
+                        if (baseComponent is not null and Control)
                         {
                             PropertyDescriptor prop = GetProperty(baseComponent, "SnapToGrid");
                             if (prop != null)
@@ -2822,7 +2758,7 @@ namespace System.Windows.Forms.Design
                     trans = host.CreateTransaction(string.Format(SR.CommandSetFormatSpacing, selectedObjects.Length));
 
                     IComponent baseComponent = host.RootComponent;
-                    if (baseComponent != null && baseComponent is Control)
+                    if (baseComponent is not null and Control)
                     {
                         PropertyDescriptor prop = GetProperty(baseComponent, "CurrentGridSize");
                         if (prop != null)
@@ -2855,16 +2791,14 @@ namespace System.Windows.Forms.Design
                 {
                     sort = SORT_HORIZONTAL;
                 }
-                else if (cmdID == StandardCommands.VertSpaceConcatenate ||
-                         cmdID == StandardCommands.VertSpaceDecrease ||
-                         cmdID == StandardCommands.VertSpaceIncrease ||
-                         cmdID == StandardCommands.VertSpaceMakeEqual)
-                {
-                    sort = SORT_VERTICAL;
-                }
                 else
                 {
-                    throw new ArgumentException(SR.CommandSetUnknownSpacingCommand);
+                    sort = cmdID == StandardCommands.VertSpaceConcatenate ||
+                                             cmdID == StandardCommands.VertSpaceDecrease ||
+                                             cmdID == StandardCommands.VertSpaceIncrease ||
+                                             cmdID == StandardCommands.VertSpaceMakeEqual
+                        ? SORT_VERTICAL
+                        : throw new ArgumentException(SR.CommandSetUnknownSpacingCommand);
                 }
 
                 SortSelection(selectedObjects, sort);
@@ -2887,7 +2821,7 @@ namespace System.Windows.Forms.Design
                     {
                         curSize = Size.Empty;
 
-                        IComponent component = selectedObjects[n] as IComponent;
+                        IComponent component = selectedObjects[n];
 
                         if (component != null)
                         {
@@ -2916,7 +2850,7 @@ namespace System.Windows.Forms.Design
 
                     for (n = 0; n < selectedObjects.Length; n++)
                     {
-                        curComp = selectedObjects[n] as IComponent;
+                        curComp = selectedObjects[n];
                         if (curComp != null)
                         {
                             // only get the descriptors if we've changed component types
@@ -2955,7 +2889,7 @@ namespace System.Windows.Forms.Design
 
                     for (n = selectedObjects.Length - 1; n >= 0; n--)
                     {
-                        curComp = selectedObjects[n] as IComponent;
+                        curComp = selectedObjects[n];
                         if (curComp != null)
                         {
                             // only get the descriptors if we've changed component types
@@ -2994,14 +2928,9 @@ namespace System.Windows.Forms.Design
 
                     if (curSizeDesc != null && curLocDesc != null)
                     {
-                        if (sort == SORT_HORIZONTAL)
-                        {
-                            nEqualDelta = (lastSize.Width + lastLoc.X - curLoc.X - total) / (selectedObjects.Length - 1);
-                        }
-                        else
-                        {
-                            nEqualDelta = (lastSize.Height + lastLoc.Y - curLoc.Y - total) / (selectedObjects.Length - 1);
-                        }
+                        nEqualDelta = sort == SORT_HORIZONTAL
+                            ? (lastSize.Width + lastLoc.X - curLoc.X - total) / (selectedObjects.Length - 1)
+                            : (lastSize.Height + lastLoc.Y - curLoc.Y - total) / (selectedObjects.Length - 1);
 
                         if (nEqualDelta < 0)
                             nEqualDelta = 0;
@@ -3023,7 +2952,7 @@ namespace System.Windows.Forms.Design
                 //
                 for (int n = 0; n < selectedObjects.Length; n++)
                 {
-                    curComp = (IComponent)selectedObjects[n];
+                    curComp = selectedObjects[n];
 
                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(curComp);
 
@@ -3065,7 +2994,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     int lastIndex = Math.Max(0, n - 1);
-                    lastComp = (IComponent)selectedObjects[lastIndex];
+                    lastComp = selectedObjects[lastIndex];
                     if (lastComp.GetType() != curComp.GetType())
                     {
                         lastSizeDesc = GetProperty(lastComp, "Size");
@@ -3220,7 +3149,7 @@ namespace System.Windows.Forms.Design
                 ICollection selection = SelectionService.GetSelectedComponents();
                 foreach (object obj in selection)
                 {
-                    if (!(obj is Control))
+                    if (obj is not Control)
                     {
                         controlsOnlySelection = false;
                     }
@@ -3309,8 +3238,7 @@ namespace System.Windows.Forms.Design
                         {
                             // if the object is not sited to the same thing as the host container
                             // then don't allow copy. VSWhidbey# 275790
-                            IComponent comp = obj as IComponent;
-                            if (comp != null && comp.Site != null && comp.Site.Container == host.Container)
+                            if (obj is IComponent comp && comp.Site != null && comp.Site.Container == host.Container)
                             {
                                 enable = true;
                                 break;
@@ -3362,8 +3290,7 @@ namespace System.Windows.Forms.Design
                         {
                             // if the object is not sited to the same thing as the host container
                             // then don't allow delete. VSWhidbey# 275790
-                            IComponent comp = obj as IComponent;
-                            if (comp != null && (comp.Site == null || (comp.Site != null && comp.Site.Container != host.Container)))
+                            if (obj is IComponent comp && (comp.Site == null || (comp.Site != null && comp.Site.Container != host.Container)))
                             {
                                 cmd.Enabled = false;
                                 return;
@@ -3423,8 +3350,7 @@ namespace System.Windows.Forms.Design
 
             // Not being inherited.  Now look at the contents of the data
             //
-            IDataObject dataObj = null;
-            bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out dataObj);
+            bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out IDataObject dataObj);
 
             bool enable = false;
 
@@ -3668,7 +3594,7 @@ namespace System.Windows.Forms.Design
                         // We need only compare against one of our pasted controls, so
                         // pick the first one.
                         //
-                        Control pasteControl = (Control)controls[0];
+                        Control pasteControl = controls[0];
                         Rectangle pasteControlBounds = pasteControl.Bounds;
                         pasteControlBounds.Offset(offset);
                         pasteControlBounds.Offset(parentOffset);
@@ -3681,7 +3607,7 @@ namespace System.Windows.Forms.Design
                             {
                                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                                 IComponent baseComponent = host.RootComponent;
-                                if (baseComponent != null && baseComponent is Control)
+                                if (baseComponent is not null and Control)
                                 {
                                     PropertyDescriptor gs = GetProperty(baseComponent, "GridSize");
                                     if (gs != null)
@@ -4165,12 +4091,7 @@ namespace System.Windows.Forms.Design
                 Point qLoc = (Point)qProp.GetValue(q);
 
                 //if our lefts are equal, then compare tops
-                if (pLoc.X == qLoc.X)
-                {
-                    return pLoc.Y - qLoc.Y;
-                }
-
-                return pLoc.X - qLoc.X;
+                return pLoc.X == qLoc.X ? pLoc.Y - qLoc.Y : pLoc.X - qLoc.X;
             }
         }
 
@@ -4188,12 +4109,7 @@ namespace System.Windows.Forms.Design
                 Point qLoc = (Point)qProp.GetValue(q);
 
                 //if our tops are equal, then compare lefts
-                if (pLoc.Y == qLoc.Y)
-                {
-                    return pLoc.X - qLoc.X;
-                }
-
-                return pLoc.Y - qLoc.Y;
+                return pLoc.Y == qLoc.Y ? pLoc.X - qLoc.X : pLoc.Y - qLoc.Y;
             }
         }
 
@@ -4214,20 +4130,12 @@ namespace System.Windows.Forms.Design
                     return 0;
                 }
 
-                Control c1 = p as Control;
-                Control c2 = q as Control;
-
-                if (c1 == null || c2 == null)
+                if (p is not Control c1 || q is not Control c2)
                 {
                     return 1;
                 }
 
-                if (c1.Parent == c2.Parent && c1.Parent != null)
-                {
-                    return c1.Parent.Controls.GetChildIndex(c1) - c1.Parent.Controls.GetChildIndex(c2);
-                }
-
-                return 1;
+                return c1.Parent == c2.Parent && c1.Parent != null ? c1.Parent.Controls.GetChildIndex(c1) - c1.Parent.Controls.GetChildIndex(c2) : 1;
             }
         }
 
@@ -4240,17 +4148,7 @@ namespace System.Windows.Forms.Design
                     return 0;
                 }
 
-                if (c1 == null)
-                {
-                    return -1;
-                }
-
-                if (c2 == null)
-                {
-                    return 1;
-                }
-
-                return c1.TabIndex - c2.TabIndex;
+                return c1 == null ? -1 : c2 == null ? 1 : c1.TabIndex - c2.TabIndex;
             }
         }
     }

@@ -2546,7 +2546,7 @@ namespace System.Windows.Forms.Design
 
             private class TrayControlAccessibleObject : ControlAccessibleObject
             {
-                readonly ComponentTray _tray;
+                private readonly ComponentTray _tray;
                 public TrayControlAccessibleObject(TrayControl owner, ComponentTray tray) : base(owner)
                 {
                     _tray = tray;
