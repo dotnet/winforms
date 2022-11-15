@@ -95,6 +95,7 @@
     <MicrosoftCodeAnalysisNetAnalyzersVersion>7.0.0-preview1.22501.1</MicrosoftCodeAnalysisNetAnalyzersVersion>
     <DotNetAnalyzersDocumentationAnalyzersVersion>1.0.0-beta.59</DotNetAnalyzersDocumentationAnalyzersVersion>
     <StyleCopAnalyzersVersion>1.2.0-beta.354</StyleCopAnalyzersVersion>
+    <CSharpIsNullAnalyzersVersion>0.1.329</CSharpIsNullAnalyzersVersion>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
