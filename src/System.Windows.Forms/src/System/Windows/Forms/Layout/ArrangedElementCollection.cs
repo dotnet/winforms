@@ -12,22 +12,22 @@ namespace System.Windows.Forms.Layout
 
         internal ArrangedElementCollection()
         {
-            InnerList = new ArrayList(4);
+            InnerList = new(4);
         }
 
-        internal ArrangedElementCollection(ArrayList innerList)
+        internal ArrangedElementCollection(List<IArrangedElement> innerList)
         {
             InnerList = innerList;
         }
 
         private ArrangedElementCollection(int size)
         {
-            InnerList = new ArrayList(size);
+            InnerList = new(size);
         }
 
-        private protected ArrayList InnerList { get; }
+        private protected List<IArrangedElement> InnerList { get; }
 
-        internal virtual IArrangedElement this[int index] => (IArrangedElement)InnerList[index]!;
+        internal virtual IArrangedElement this[int index] => InnerList[index]!;
 
         public override bool Equals(object? obj)
         {
@@ -127,19 +127,28 @@ namespace System.Windows.Forms.Layout
 
         void IList.Clear() => InnerList.Clear();
 
-        bool IList.IsFixedSize => InnerList.IsFixedSize;
+        bool IList.IsFixedSize => false;
 
         bool IList.Contains(object? value) => InnerList.Contains(value);
 
-        public virtual bool IsReadOnly => InnerList.IsReadOnly;
+        public virtual bool IsReadOnly => false;
 
         void IList.RemoveAt(int index) => InnerList.RemoveAt(index);
 
-        void IList.Remove(object? value) => InnerList.Remove(value);
+        void IList.Remove(object? value) => InnerList.Remove((IArrangedElement)value);
 
-        int IList.Add(object? value) => InnerList.Add(value);
+        int IList.Add(object? value)
+        {
+            if (value is not null and IArrangedElement)
+            {
+                InnerList.Add((IArrangedElement)value);
+                return InnerList.Count - 1;
+            }
 
-        int IList.IndexOf(object? value) => InnerList.IndexOf(value);
+            return -1;
+        }
+
+        int IList.IndexOf(object? value) => InnerList.IndexOf((IArrangedElement)value);
 
         void IList.Insert(int index, object? value) => throw new NotSupportedException();
 
@@ -151,11 +160,11 @@ namespace System.Windows.Forms.Layout
 
         public virtual int Count => InnerList.Count;
 
-        object ICollection.SyncRoot => InnerList.SyncRoot;
+        object ICollection.SyncRoot => ((ICollection)InnerList).SyncRoot;
 
-        public void CopyTo(Array array, int index) => InnerList.CopyTo(array, index);
+        public void CopyTo(Array array, int index) => InnerList.CopyTo((IArrangedElement[])array, index);
 
-        bool ICollection.IsSynchronized => InnerList.IsSynchronized;
+        bool ICollection.IsSynchronized => ((ICollection)InnerList).IsSynchronized;
 
         public virtual IEnumerator GetEnumerator() => InnerList.GetEnumerator();
     }
