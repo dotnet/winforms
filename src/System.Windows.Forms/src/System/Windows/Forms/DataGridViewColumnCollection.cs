@@ -84,7 +84,7 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array array, int index)
         {
-            _items.CopyTo((DataGridViewColumn[])array, index);
+            ((ICollection)_items).CopyTo(array, index);
         }
 
         /* IEnumerable interface implementation */

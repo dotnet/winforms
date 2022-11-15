@@ -77,7 +77,7 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array array, int index)
         {
-            _items.ToArray().CopyTo(array, index);
+            ((ICollection)_items).CopyTo(array, index);
         }
 
         int ICollection.Count
