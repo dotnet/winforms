@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         private readonly DragComponent[] dragComponents;
-        private ArrayList dragObjects; // used to initialize the DragAssistanceManager
+        private List<IComponent> dragObjects; // used to initialize the DragAssistanceManager
         private readonly BehaviorDataObject data; //drag data that represents the controls we're dragging & the effect/action
         private readonly DragDropEffects allowedEffects; //initial allowed effects for the drag operation
         private DragDropEffects lastEffect; //the last effect we saw (used for determining a valid drop)
@@ -504,7 +504,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                                 if (numberOfTrayControlsAdded > 0)
                                 {
-                                    ArrayList listOfTrayControls = new ArrayList();
+                                    List<Control> listOfTrayControls = new();
                                     for (int i = 0; i < numberOfTrayControlsAdded; i++)
                                     {
                                         listOfTrayControls.Add(tray.Controls[numberOfOriginalTrayControls + i]);
@@ -885,7 +885,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void InitiateDrag(Point initialMouseLocation, ICollection dragComps)
         {
-            dragObjects = new ArrayList(dragComps);
+            dragObjects = (List<IComponent>)dragComps;
             DisableAdorners(serviceProviderSource, behaviorServiceSource, false);
             Control primaryControl = dragObjects[0] as Control;
             Control primaryParent = primaryControl?.Parent;

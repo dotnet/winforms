@@ -97,8 +97,6 @@ namespace System.Windows.Forms.Design
                 IComponent[] componentsArray = new IComponent[components.Count];
                 components.CopyTo(componentsArray, 0);
 
-                ArrayList trayComponents = null;
-
                 // Parent and locate each Control
                 //
                 defaultValues ??= new Hashtable();
@@ -151,16 +149,16 @@ namespace System.Windows.Forms.Design
                 // arrange them properly.
                 //
                 ComponentTray tray = (ComponentTray)host.GetService(typeof(ComponentTray));
-
+                List<Control> trayComponents = null;
                 if (tray != null)
                 {
                     foreach (IComponent component in componentsArray)
                     {
                         ComponentTray.TrayControl c = ComponentTray.GetTrayControlFromComponent(component);
 
-                        if (c != null)
+                        if (c is not null)
                         {
-                            trayComponents ??= new ArrayList();
+                            trayComponents ??= new();
 
                             trayComponents.Add(c);
                         }
