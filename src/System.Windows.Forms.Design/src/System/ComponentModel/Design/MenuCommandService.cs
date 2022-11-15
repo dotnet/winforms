@@ -195,9 +195,6 @@ namespace System.ComponentModel.Design
 
             if (_currentVerbs is null && _serviceProvider is not null)
             {
-                Dictionary<string, int> buildVerbs = null;
-                List<DesignerVerb> verbsOrder;
-
                 if (_selectionService is null)
                 {
                     _selectionService = GetService(typeof(ISelectionService)) as ISelectionService;
@@ -279,8 +276,8 @@ namespace System.ComponentModel.Design
                 }
 
                 // merge all
-                buildVerbs = new(verbCount, StringComparer.OrdinalIgnoreCase);
-                verbsOrder = new();
+                Dictionary<string, int> buildVerbs = new(verbCount, StringComparer.OrdinalIgnoreCase);
+                List<DesignerVerb> verbsOrder = new();
 
                 // PRIORITY ORDER FROM HIGH TO LOW: LOCAL VERBS - DESIGNERACTION VERBS - GLOBAL VERBS
                 if (useGlobalVerbs)
