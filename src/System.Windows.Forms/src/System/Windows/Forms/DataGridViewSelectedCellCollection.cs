@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public class DataGridViewSelectedCellCollection : BaseCollection, IList
     {
-        private readonly List<DataGridViewCell> _items = new List<DataGridViewCell>();
+        private readonly List<DataGridViewCell> _items = new();
 
         int IList.Add(object value)
         {
