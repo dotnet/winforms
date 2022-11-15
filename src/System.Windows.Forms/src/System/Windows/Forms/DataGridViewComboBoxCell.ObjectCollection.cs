@@ -240,20 +240,12 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
-                int count = InnerArray.Count;
-                for (int i = 0; i < count; i++)
-                {
-                    destination[i + arrayIndex] = InnerArray[i];
-                }
+                ((ICollection)InnerArray).CopyTo(destination, arrayIndex);
             }
 
             void ICollection.CopyTo(Array destination, int index)
             {
-                int count = InnerArray.Count;
-                for (int i = 0; i < count; i++)
-                {
-                    destination.SetValue(InnerArray[i], i + index);
-                }
+                ((ICollection)InnerArray).CopyTo(destination, index);
             }
 
             /// <summary>
