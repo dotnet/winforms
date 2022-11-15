@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
@@ -12,11 +11,11 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class DesignerActionService : IDisposable
     {
-        private readonly Hashtable _designerActionLists; // this is how we store 'em.  Syntax: key = object, value = DesignerActionListCollection
+        private readonly Dictionary<IComponent, DesignerActionListCollection> _designerActionLists; // this is how we store 'em.  Syntax: key = object, value = DesignerActionListCollection
         private DesignerActionListsChangedEventHandler _designerActionListsChanged;
         private readonly IServiceProvider _serviceProvider; // standard service provider
         private readonly ISelectionService _selSvc; // selection service
-        private readonly Hashtable _componentToVerbsEventHookedUp; //table component true/false
+        private readonly HashSet<IComponent> _componentToVerbsEventHookedUp; //Hashset of components which have events hooked up.
         // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accessed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
         private bool _reEntrantCode;
 
@@ -41,8 +40,8 @@ namespace System.ComponentModel.Design
                 _selSvc = serviceProvider.GetService(typeof(ISelectionService)) as ISelectionService;
             }
 
-            _designerActionLists = new Hashtable();
-            _componentToVerbsEventHookedUp = new Hashtable();
+            _designerActionLists = new();
+            _componentToVerbsEventHookedUp = new();
         }
 
         /// <summary>
@@ -62,8 +61,7 @@ namespace System.ComponentModel.Design
             ArgumentNullException.ThrowIfNull(comp);
             ArgumentNullException.ThrowIfNull(designerActionListCollection);
 
-            DesignerActionListCollection dhlc = (DesignerActionListCollection)_designerActionLists[comp];
-            if (dhlc is not null)
+            if (_designerActionLists.TryGetValue(comp, out DesignerActionListCollection dhlc))
             {
                 dhlc.AddRange(designerActionListCollection);
             }
@@ -94,19 +92,16 @@ namespace System.ComponentModel.Design
                 return;
             }
 
-            //this will represent the list of components we just cleared
-            ArrayList compsRemoved = new ArrayList(_designerActionLists.Count);
-            foreach (DictionaryEntry entry in _designerActionLists)
-            {
-                compsRemoved.Add(entry.Key);
-            }
+            // Get list of components
+            IComponent[] compsRemoved = _designerActionLists.Keys.ToArray();
 
-            //actually clear our hashtable
+            // Actually clear our dictionary.
             _designerActionLists.Clear();
-            //fire our DesignerActionsChanged event for each comp we just removed
+
+            // Fire our DesignerActionsChanged event for each comp we just removed.
             foreach (Component comp in compsRemoved)
             {
-                OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
+                OnDesignerActionListsChanged(new(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
             }
         }
 
@@ -116,8 +111,7 @@ namespace System.ComponentModel.Design
         public bool Contains(IComponent comp)
         {
             ArgumentNullException.ThrowIfNull(comp);
-
-            return _designerActionLists.Contains(comp);
+            return _designerActionLists.ContainsKey(comp);
         }
 
         /// <summary>
@@ -192,11 +186,11 @@ namespace System.ComponentModel.Design
                         DesignerVerbCollection verbs = dcs.Verbs;
                         if (verbs is not null && verbs.Count != 0)
                         {
-                            ArrayList verbsArray = new ArrayList();
-                            bool hookupEvents = _componentToVerbsEventHookedUp[component] is null;
+                            List<DesignerVerb> verbsArray = new();
+                            bool hookupEvents = !_componentToVerbsEventHookedUp.Contains(component);
                             if (hookupEvents)
                             {
-                                _componentToVerbsEventHookedUp[component] = true;
+                                _componentToVerbsEventHookedUp.Add(component);
                             }
 
                             foreach (DesignerVerb verb in verbs)
@@ -219,8 +213,7 @@ namespace System.ComponentModel.Design
 
                             if (verbsArray.Count != 0)
                             {
-                                DesignerActionVerbList davl = new DesignerActionVerbList((DesignerVerb[])verbsArray.ToArray(typeof(DesignerVerb)));
-                                actionLists.Add(davl);
+                                actionLists.Add(new DesignerActionVerbList(verbsArray.ToArray()));
                             }
                         }
                     }
@@ -277,8 +270,7 @@ namespace System.ComponentModel.Design
             ArgumentNullException.ThrowIfNull(component);
             ArgumentNullException.ThrowIfNull(actionLists);
 
-            DesignerActionListCollection pushCollection = (DesignerActionListCollection)_designerActionLists[component];
-            if (pushCollection is not null)
+            if (_designerActionLists.TryGetValue(component, out DesignerActionListCollection pushCollection))
             {
                 actionLists.AddRange(pushCollection);
                 // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
@@ -316,13 +308,10 @@ namespace System.ComponentModel.Design
         {
             ArgumentNullException.ThrowIfNull(comp);
 
-            if (!_designerActionLists.Contains(comp))
+            if (_designerActionLists.Remove(comp))
             {
-                return;
+                OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
             }
-
-            _designerActionLists.Remove(comp);
-            OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
         }
 
         /// <summary>
@@ -335,7 +324,7 @@ namespace System.ComponentModel.Design
             //find the associated component
             foreach (IComponent comp in _designerActionLists.Keys)
             {
-                if (((DesignerActionListCollection)_designerActionLists[comp]).Contains(actionList))
+                if (_designerActionLists.TryGetValue(comp, out DesignerActionListCollection dacl) && dacl.Contains(actionList))
                 {
                     Remove(comp, actionList);
                     break;
@@ -351,13 +340,7 @@ namespace System.ComponentModel.Design
             ArgumentNullException.ThrowIfNull(comp);
             ArgumentNullException.ThrowIfNull(actionList);
 
-            if (!_designerActionLists.Contains(comp))
-            {
-                return;
-            }
-
-            DesignerActionListCollection actionLists = (DesignerActionListCollection)_designerActionLists[comp];
-            if (!actionLists.Contains(actionList))
+            if (!_designerActionLists.TryGetValue(comp, out DesignerActionListCollection actionLists) || !actionLists.Contains(actionList))
             {
                 return;
             }
@@ -370,19 +353,13 @@ namespace System.ComponentModel.Design
             else
             {
                 //remove each instance of this action
-                ArrayList actionListsToRemove = new ArrayList(1);
-                foreach (DesignerActionList t in actionLists)
+                for (int i = actionLists.Count - 1; i >= 0; i--)
                 {
-                    if (actionList.Equals(t))
+                    if (actionList.Equals(actionLists[i]))
                     {
                         //found one to remove
-                        actionListsToRemove.Add(t);
+                        actionLists.RemoveAt(i);
                     }
-                }
-
-                foreach (DesignerActionList t in actionListsToRemove)
-                {
-                    actionLists.Remove(t);
                 }
 
                 OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
