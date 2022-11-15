@@ -156,13 +156,13 @@ namespace System.Windows.Forms
 
         public int Count => InnerList.Count;
 
-        object ICollection.SyncRoot => this;
+        object ICollection.SyncRoot => ((ICollection)InnerList).SyncRoot;
 
         public bool IsReadOnly => false;
 
         public void CopyTo(Array array, int index) => InnerList.CopyTo((WeakRefObject?[])array, index);
 
-        bool ICollection.IsSynchronized => false;
+        bool ICollection.IsSynchronized => ((ICollection)InnerList).IsSynchronized;
 
         public IEnumerator GetEnumerator() => InnerList.GetEnumerator();
 
