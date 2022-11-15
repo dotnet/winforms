@@ -28,7 +28,6 @@ namespace System.Windows.Forms
         {
             return value switch
             {
-                null => false,
                 DataGridViewColumn dataGridViewColumn => Contains(dataGridViewColumn),
                 _ => false,
             };
@@ -38,7 +37,6 @@ namespace System.Windows.Forms
         {
             return value switch
             {
-                null => -1,
                 DataGridViewColumn dataGridViewColumn => _items.IndexOf(dataGridViewColumn),
                 _ => -1,
             };

@@ -32,7 +32,6 @@ namespace System.Windows.Forms
         {
             return value switch
             {
-                null => false,
                 DataGridViewRow dataGridViewRow => Contains(dataGridViewRow),
                 _ => false,
             };
@@ -42,7 +41,6 @@ namespace System.Windows.Forms
         {
             return value switch
             {
-                null => -1,
                 DataGridViewRow dataGridViewRow => _items.IndexOf(dataGridViewRow),
                 _ => -1,
             };
