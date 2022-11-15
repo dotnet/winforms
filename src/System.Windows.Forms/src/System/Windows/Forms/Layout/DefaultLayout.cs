@@ -368,19 +368,6 @@ namespace System.Windows.Forms.Layout
             return LocalAppContextSwitches.AnchorLayoutV2 && element is Control control;
         }
 
-        private static void LayoutAnchoredControlsV2(Control container)
-        {
-            Debug.Assert(LocalAppContextSwitches.AnchorLayoutV2, $"AnchorLayoutV2 should be called only when {LocalAppContextSwitches.AnchorLayoutV2SwitchName} is enabled.");
-
-            // If the container handle is not created, no need to compute anchors for its children controls.
-            if (!container.IsHandleCreated)
-            {
-                //return;
-            }
-
-            LayoutAnchoredControls(container, updateAnchorInfoIfNeeded: true);
-        }
-
         private static void LayoutAnchoredControls(IArrangedElement container, bool updateAnchorInfoIfNeeded = false)
         {
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\tAnchor Processing");
@@ -405,16 +392,7 @@ namespace System.Windows.Forms.Layout
 
                 if (GetAnchorInfo(element) is null)
                 {
-                    // It is possible that the parent's handle might not have been created
-                    // when the control's handle was created. If that's the case, compute the control's anchors.
-                    if (updateAnchorInfoIfNeeded)
-                    {
-                        UpdateAnchorInfoV2((Control)element);
-                    }
-                    else
-                    {
-                        Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
-                    }
+                    Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
                 }
 
                 SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, measureOnly: false));
@@ -698,14 +676,7 @@ namespace System.Windows.Forms.Layout
             {
                 // In the case of anchors, where we currently are defines the preferred size,
                 // so don't recalculate the positions of everything.
-                if (UseAnchorLayoutV2(container))
-                {
-                    LayoutAnchoredControlsV2((Control)container);
-                }
-                else
-                {
-                    LayoutAnchoredControls(container);
-                }
+                LayoutAnchoredControls(container);
             }
 
             if (autoSize)
@@ -870,14 +841,14 @@ namespace System.Windows.Forms.Layout
         }
 
         /// <summary>
-        ///  Updates anchors calculations if the control is parented and both control's and its parent's handle are created.
+        ///  Updates anchors calculations if the control is parented and the parent's layout is resumed.
         /// </summary>
         /// <devdoc>
         ///  This is the new behavior introduced in .NET 8.0. Refer to
         ///  https://github.com/dotnet/winforms/blob/tree/main/docs/design/anchor-layout-changes-in-net80.md for more details.
         ///  Developers may opt-out of this new behavior using switch <see cref="LocalAppContextSwitches.AnchorLayoutV2"/>.
         /// </devdoc>
-        internal static void UpdateAnchorInfoV2(Control control, bool overrideAnchors = false)
+        internal static void UpdateAnchorInfoV2(Control control, bool recalculateAnchors = false)
         {
             if (!CommonProperties.GetNeedsAnchorLayout(control))
             {
@@ -907,7 +878,10 @@ namespace System.Windows.Forms.Layout
                 anchorInfo = new AnchorInfo();
                 SetAnchorInfo(control, anchorInfo);
             }
-            else if (!overrideAnchors)
+
+            // Only control's Size or Parent change, prompts recalculation of anchors. Otherwise,
+            // we skip updating anchors for the control.
+            else if (!recalculateAnchors)
             {
                 return;
             }
