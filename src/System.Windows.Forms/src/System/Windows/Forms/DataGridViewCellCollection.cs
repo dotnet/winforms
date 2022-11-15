@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     public class DataGridViewCellCollection : BaseCollection, IList
     {
         private CollectionChangeEventHandler _onCollectionChanged;
-        private readonly List<DataGridViewCell> _items = new List<DataGridViewCell>();
+        private readonly List<DataGridViewCell> _items = new();
         private readonly DataGridViewRow _owner;
 
         int IList.Add(object value)
