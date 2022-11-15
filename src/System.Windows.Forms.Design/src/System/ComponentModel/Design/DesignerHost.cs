@@ -1412,9 +1412,9 @@ namespace System.ComponentModel.Design
         void IServiceContainer.AddService(Type serviceType, object serviceInstance)
         {
             // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-            object sc = GetService(typeof(IServiceContainer));
-            ObjectDisposedException.ThrowIf(sc is not IServiceContainer, typeof(IServiceContainer));
-            ((IServiceContainer)sc).AddService(serviceType, serviceInstance);
+            IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+            ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
+            sc.AddService(serviceType, serviceInstance);
         }
 
         /// <summary>
@@ -1423,9 +1423,9 @@ namespace System.ComponentModel.Design
         void IServiceContainer.AddService(Type serviceType, object serviceInstance, bool promote)
         {
             // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-            object sc = GetService(typeof(IServiceContainer));
-            ObjectDisposedException.ThrowIf(sc is not IServiceContainer, typeof(IServiceContainer));
-            ((IServiceContainer)sc).AddService(serviceType, serviceInstance, promote);
+            IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+            ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
+            sc.AddService(serviceType, serviceInstance, promote);
         }
 
         /// <summary>
@@ -1434,9 +1434,9 @@ namespace System.ComponentModel.Design
         void IServiceContainer.AddService(Type serviceType, ServiceCreatorCallback callback)
         {
             // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-            object sc = GetService(typeof(IServiceContainer));
-            ObjectDisposedException.ThrowIf(sc is not IServiceContainer, typeof(IServiceContainer));
-            ((IServiceContainer)sc).AddService(serviceType, callback);
+            IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+            ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
+            sc.AddService(serviceType, callback);
         }
 
         /// <summary>
@@ -1445,9 +1445,9 @@ namespace System.ComponentModel.Design
         void IServiceContainer.AddService(Type serviceType, ServiceCreatorCallback callback, bool promote)
         {
             // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-            object sc = GetService(typeof(IServiceContainer));
-            ObjectDisposedException.ThrowIf(sc is not IServiceContainer, typeof(IServiceContainer));
-            ((IServiceContainer)sc).AddService(serviceType, callback, promote);
+            IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+            ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
+            sc.AddService(serviceType, callback, promote);
         }
 
         /// <summary>
@@ -1456,9 +1456,9 @@ namespace System.ComponentModel.Design
         void IServiceContainer.RemoveService(Type serviceType)
         {
             // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-            object sc = GetService(typeof(IServiceContainer));
-            ObjectDisposedException.ThrowIf(sc is not IServiceContainer, typeof(IServiceContainer));
-            ((IServiceContainer)sc).RemoveService(serviceType);
+            IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+            ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
+            sc.RemoveService(serviceType);
         }
 
         /// <summary>
@@ -1467,9 +1467,9 @@ namespace System.ComponentModel.Design
         void IServiceContainer.RemoveService(Type serviceType, bool promote)
         {
             // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
-            object sc = GetService(typeof(IServiceContainer));
-            ObjectDisposedException.ThrowIf(sc is not IServiceContainer, typeof(IServiceContainer));
-            ((IServiceContainer)sc).RemoveService(serviceType, promote);
+            IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
+            ObjectDisposedException.ThrowIf(sc is null, typeof(IServiceContainer));
+            sc.RemoveService(serviceType, promote);
         }
 
         /// <summary>
