@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                 ArgumentNullException.ThrowIfNull(item);
 
                 InnerArray.Add(item);
-                int index = InnerArray.LastIndexOf(item);
+                int index = InnerArray.Count - 1;
 
                 bool success = false;
                 if (owner.Sorted)

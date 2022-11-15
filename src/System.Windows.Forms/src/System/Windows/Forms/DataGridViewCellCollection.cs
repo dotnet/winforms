@@ -236,7 +236,7 @@ namespace System.Windows.Forms
             Debug.Assert(!dataGridViewCell.Selected);
 
             _items.Add(dataGridViewCell);
-            int index = _items.LastIndexOf(dataGridViewCell);
+            int index = _items.Count - 1;
 
             dataGridViewCell.OwningRow = _owner;
             DataGridView dataGridView = _owner.DataGridView;

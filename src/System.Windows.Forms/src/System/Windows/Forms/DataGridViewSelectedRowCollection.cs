@@ -129,7 +129,7 @@ namespace System.Windows.Forms
         {
             _items.Add(dataGridViewRow);
 
-            var index = _items.LastIndexOf(dataGridViewRow);
+            int index = _items.Count - 1;
             return index;
         }
 
