@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
         private DesignerExtenders designerExtenders;
         private InheritanceUI inheritanceUI;
         private PbrsForward pbrsFwd;
-        private ArrayList suspendedComponents;
+        private List<Control> suspendedComponents;
         private UndoEngine undoEngine;
         private bool initializing;   // is the designer initializing?
 
@@ -910,19 +910,16 @@ namespace System.Windows.Forms.Design
         {
             // attempt to suspend all components within the icontainer
             // plus the root component's parent.
-            //
-            IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-            if (host != null)
+            if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
                 IContainer container = host.Container;
                 if (container != null)
                 {
-                    suspendedComponents = new ArrayList(container.Components.Count + 1);
+                    suspendedComponents = new(container.Components.Count + 1);
 
                     foreach (IComponent comp in container.Components)
                     {
-                        Control control = comp as Control;
-                        if (control != null)
+                        if (comp is Control control)
                         {
                             control.SuspendLayout();
                             //add this control to our suspended components list so we can resume
@@ -932,8 +929,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     // Also suspend the root component's parent.
-                    Control root = host.RootComponent as Control;
-                    if (root != null)
+                    if (host.RootComponent is Control root)
                     {
                         Control rootParent = root.Parent;
                         if (rootParent != null)
