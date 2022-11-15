@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Diagnostics;
 
 namespace System.ComponentModel.Design
@@ -20,7 +19,7 @@ namespace System.ComponentModel.Design
         private static readonly object s_eventDesignerDisposed = new object();
         private static readonly object s_eventSelectionChanged = new object();
 
-        private ArrayList _designerList;                    // read write list used as data for the collection
+        private List<IDesignerHost> _designerList;          // read write list used as data for the collection
         private DesignerCollection _designerCollection;     // public read only view of the above list
         private IDesignerHost _activeDesigner;              // the currently active designer.  Can be null
         private EventHandlerList _events;                   // list of events.  Can be null
@@ -139,8 +138,7 @@ namespace System.ComponentModel.Design
             IDesignerHost host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;
             Debug.Assert(host is not null, "Design surface did not provide us with a designer host");
 
-            _designerList ??= new ArrayList();
-
+            _designerList ??= new();
             _designerList.Add(host);
 
             // Hookup an object disposed handler on the design surface so we know when it's gone.
@@ -338,10 +336,8 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                _designerList ??= new ArrayList();
-
+                _designerList ??= new();
                 _designerCollection ??= new DesignerCollection(_designerList);
-
                 return _designerCollection;
             }
         }
