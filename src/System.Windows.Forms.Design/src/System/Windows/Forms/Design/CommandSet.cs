@@ -505,12 +505,10 @@ namespace System.Windows.Forms.Design
         ///  allow you to constrain the set of selected objects to visible, movable,
         ///  sizeable or all objects.
         /// </summary>
-        private object[] FilterSelection(object[] components, SelectionRules selectionRules)
+        private IComponent[] FilterSelection(IComponent[] components, SelectionRules selectionRules)
         {
-            object[] selection = null;
-
             if (components == null)
-                return Array.Empty<object>();
+                return Array.Empty<IComponent>();
 
             // Mask off any selection object that doesn't adhere to the given ruleset.
             // We can ignore this if the ruleset is zero, as all components would be accepted.
@@ -520,22 +518,20 @@ namespace System.Windows.Forms.Design
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 if (host != null)
                 {
-                    ArrayList list = new ArrayList();
-
+                    List<IComponent> list = new();
                     foreach (IComponent comp in components)
                     {
-                        ControlDesigner des = host.GetDesigner(comp) as ControlDesigner;
-                        if (des != null && (des.SelectionRules & selectionRules) == selectionRules)
+                        if (host.GetDesigner(comp) is ControlDesigner des && (des.SelectionRules & selectionRules) == selectionRules)
                         {
                             list.Add(comp);
                         }
                     }
 
-                    selection = list.ToArray();
+                    return list.ToArray();
                 }
             }
 
-            return selection ?? Array.Empty<object>();
+            return Array.Empty<IComponent>();
         }
 
         /// <summary>
@@ -567,7 +563,7 @@ namespace System.Windows.Forms.Design
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
             if (host != null)
             {
-                ArrayList copySelection = new ArrayList();
+                List<IComponent> copySelection = new();
                 foreach (IComponent comp in selectedComponents)
                 {
                     copySelection.Add(comp);
@@ -580,10 +576,9 @@ namespace System.Windows.Forms.Design
             return selectedComponents;
         }
 
-        private void GetAssociatedComponents(IComponent component, IDesignerHost host, ArrayList list)
+        private void GetAssociatedComponents(IComponent component, IDesignerHost host, List<IComponent> list)
         {
-            ComponentDesigner designer = host.GetDesigner(component) as ComponentDesigner;
-            if (designer == null)
+            if (host.GetDesigner(component) is not ComponentDesigner designer)
             {
                 return;
             }
@@ -907,7 +902,7 @@ namespace System.Windows.Forms.Design
                                     //Don't snap if we are moving a component in the ComponentTray
                                     if (invertSnap && useSnapLines && primaryControl != null)
                                     {
-                                        ArrayList selComps = new ArrayList(selSvc.GetSelectedComponents());
+                                        List<IComponent> selComps = (List<IComponent>)selSvc.GetSelectedComponents();
 
                                         //create our snapline engine
                                         dragManager = new DragAssistanceManager(comp.Site, selComps);
@@ -1640,7 +1635,7 @@ namespace System.Windows.Forms.Design
                             IComponentChangeService changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                             DesignerTransaction trans = null;
 
-                            ArrayList designerList = new ArrayList();
+                            List<ParentControlDesigner> designerList = new();
                             try
                             {
                                 trans = host.CreateTransaction(string.Format(SR.CommandSetCutMultiple, cutCount));
@@ -1665,14 +1660,13 @@ namespace System.Windows.Forms.Design
 
                                     //Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
                                     // see bug 488115
-                                    Control c = obj as Control;
-                                    if (c != null)
+                                    if (obj is Control c)
                                     {
                                         Control parent = c.Parent;
                                         if (parent != null)
                                         {
-                                            ParentControlDesigner designer = host.GetDesigner(parent) as ParentControlDesigner;
-                                            if (designer != null && !designerList.Contains(designer))
+                                            if (host.GetDesigner(parent) is ParentControlDesigner designer
+                                                && !designerList.Contains(designer))
                                             {
                                                 designer.SuspendChangingEvents();
                                                 designerList.Add(designer);
@@ -1724,7 +1718,7 @@ namespace System.Windows.Forms.Design
 
                                     if (component != null)
                                     {
-                                        ArrayList al = new ArrayList();
+                                        List<IComponent> al = new();
                                         GetAssociatedComponents(component, host, al);
                                         foreach (IComponent comp in al)
                                         {
@@ -1795,29 +1789,27 @@ namespace System.Windows.Forms.Design
                         DesignerTransaction trans = null;
                         IComponent commonParent = null;
                         bool commonParentSet = false;
-                        ArrayList designerList = new ArrayList();
+                        List<ParentControlDesigner> designerList = new();
                         try
                         {
                             trans = host.CreateTransaction(desc);
                             SelectionService.SetSelectedComponents(Array.Empty<object>(), SelectionTypes.Replace);
                             foreach (object obj in comps)
                             {
-                                IComponent comp = obj as IComponent;
-                                if (comp == null || comp.Site == null)
+                                if (obj is not IComponent comp || comp.Site == null)
                                 {
                                     continue;
                                 }
 
                                 //Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
                                 // see bug 488115
-                                Control c = obj as Control;
-                                if (c != null)
+                                if (obj is Control c)
                                 {
                                     Control parent = c.Parent;
                                     if (parent != null)
                                     {
-                                        ParentControlDesigner designer = host.GetDesigner(parent) as ParentControlDesigner;
-                                        if (designer != null && !designerList.Contains(designer))
+                                        if (host.GetDesigner(parent) is ParentControlDesigner designer
+                                            && !designerList.Contains(designer))
                                         {
                                             designer.SuspendChangingEvents();
                                             designerList.Add(designer);
@@ -1906,8 +1898,8 @@ namespace System.Windows.Forms.Design
                                         //
                                         if (designer != null && commonParentDesigner != null && designer.Parent != commonParentDesigner)
                                         {
-                                            ArrayList designerChain = new ArrayList();
-                                            ArrayList parentDesignerChain = new ArrayList();
+                                            List<ITreeDesigner> designerChain = new();
+                                            List<ITreeDesigner> parentDesignerChain = new();
 
                                             // walk the chain of designers from the current parent designer
                                             // up to the root component, and for the current component designer.
@@ -1929,8 +1921,8 @@ namespace System.Windows.Forms.Design
                                             // now that we've got the trees built up, start comparing them from the ends to see where
                                             // they diverge.
                                             //
-                                            ArrayList shorterList = designerChain.Count < parentDesignerChain.Count ? designerChain : parentDesignerChain;
-                                            ArrayList longerList = (shorterList == designerChain ? parentDesignerChain : designerChain);
+                                            List<ITreeDesigner> shorterList = designerChain.Count < parentDesignerChain.Count ? designerChain : parentDesignerChain;
+                                            List<ITreeDesigner> longerList = (shorterList == designerChain ? parentDesignerChain : designerChain);
                                             commonParentDesigner = null;
 
                                             if (shorterList.Count > 0 && longerList.Count > 0)
@@ -1944,27 +1936,19 @@ namespace System.Windows.Forms.Design
                                                         break;
                                                     }
 
-                                                    commonParentDesigner = (ITreeDesigner)shorterList[shortIndex];
+                                                    commonParentDesigner = shorterList[shortIndex];
                                                     shortIndex--;
                                                     longIndex--;
                                                 }
                                             }
 
                                             // alright, what have we got?
-                                            //
-                                            if (commonParentDesigner != null)
-                                            {
-                                                commonParent = commonParentDesigner.Component;
-                                            }
-                                            else
-                                            {
-                                                commonParent = null;
-                                            }
+                                            commonParent = commonParentDesigner?.Component;
                                         }
                                     }
                                 }
 
-                                ArrayList al = new ArrayList();
+                                List<IComponent> al = new();
                                 GetAssociatedComponents((IComponent)obj, host, al);
                                 foreach (IComponent comp in al)
                                 {
@@ -2053,7 +2037,7 @@ namespace System.Windows.Forms.Design
         protected void OnMenuPaste(object sender, EventArgs e)
         {
             Cursor oldCursor = Cursor.Current;
-            ArrayList designerList = new ArrayList();
+            List<ParentControlDesigner> designerList = new();
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
@@ -2143,8 +2127,8 @@ namespace System.Windows.Forms.Design
                             object[] allComponents = new object[components.Count];
                             components.CopyTo(allComponents, 0);
 
-                            ArrayList selectComps = new ArrayList();
-                            ArrayList controls = new ArrayList();
+                            List<IComponent> selectComps = new();
+                            List<Control> controls = new();
                             string[] componentNames = null;
                             int idx = 0;
 
@@ -2268,7 +2252,7 @@ namespace System.Windows.Forms.Design
                                         parentComp = parentCompDesigner.Component as Component;
                                     }
 
-                                    ArrayList associatedComps = new ArrayList();
+                                    List<IComponent> associatedComps = new();
 
                                     if (parentComp != null)
                                     {
@@ -2324,10 +2308,9 @@ namespace System.Windows.Forms.Design
                                         selectComps.Add(curComp);
                                     }
 
-                                    Control c = curComp as Control;
                                     bool changeName = false;
 
-                                    if (c != null)
+                                    if (curComp is Control c)
                                     {
                                         // if the text is the same as the name, remember it.
                                         // After we add the control, we'll update the text with
@@ -2360,7 +2343,7 @@ namespace System.Windows.Forms.Design
                             }
 
                             // Find those controls that have ControlDesigners and center them on the designer surface
-                            ArrayList compsWithControlDesigners = new ArrayList();
+                            List<Control> compsWithControlDesigners = new();
                             foreach (Control c in controls)
                             {
                                 IDesigner des = host.GetDesigner(c);
@@ -2396,7 +2379,7 @@ namespace System.Windows.Forms.Design
 
                                 if (numberOfTrayControlsAdded > 0)
                                 {
-                                    ArrayList listOfTrayControls = new ArrayList();
+                                    List<Control> listOfTrayControls = new();
                                     for (int i = 0; i < numberOfTrayControlsAdded; i++)
                                     {
                                         listOfTrayControls.Add(tray.Controls[numberOfOriginalTrayControls + i]);
@@ -2420,8 +2403,8 @@ namespace System.Windows.Forms.Design
                             SelectionService.SetSelectedComponents(selectComps.ToArray(), SelectionTypes.Replace);
 
                             // and bring them to the front - but only if we can mess with the Z-order. VSWhidbey 515990
-                            ParentControlDesigner parentControlDesigner = designer as ParentControlDesigner;
-                            if (parentControlDesigner != null && parentControlDesigner.AllowSetChildIndexOnDrop)
+                            if (designer is ParentControlDesigner parentControlDesigner
+                                && parentControlDesigner.AllowSetChildIndexOnDrop)
                             {
                                 MenuCommand btf = MenuService.FindCommand(StandardCommands.BringToFront);
                                 btf?.Invoke();
@@ -2555,7 +2538,7 @@ namespace System.Windows.Forms.Design
                 Cursor.Current = Cursors.WaitCursor;
 
                 ICollection sel = SelectionService.GetSelectedComponents();
-                object[] selectedObjects = new object[sel.Count];
+                IComponent[] selectedObjects = new IComponent[sel.Count];
                 sel.CopyTo(selectedObjects, 0);
 
                 selectedObjects = FilterSelection(selectedObjects, SelectionRules.Visible);
@@ -2565,8 +2548,7 @@ namespace System.Windows.Forms.Design
                 Size primarySize = Size.Empty;
                 Size itemSize = Size.Empty;
                 PropertyDescriptor sizeProp;
-                IComponent component = selPrimary as IComponent;
-                if (component != null)
+                if (selPrimary is IComponent component)
                 {
                     sizeProp = GetProperty(component, "Size");
                     if (sizeProp == null)
@@ -2672,7 +2654,7 @@ namespace System.Windows.Forms.Design
                 Cursor.Current = Cursors.WaitCursor;
 
                 ICollection sel = SelectionService.GetSelectedComponents();
-                object[] selectedObjects = new object[sel.Count];
+                IComponent[] selectedObjects = new IComponent[sel.Count];
                 sel.CopyTo(selectedObjects, 0);
                 selectedObjects = FilterSelection(selectedObjects, SelectionRules.Visible);
 
@@ -2832,7 +2814,7 @@ namespace System.Windows.Forms.Design
                 //
                 Size grid = Size.Empty;
                 ICollection sel = SelectionService.GetSelectedComponents();
-                object[] selectedObjects = new object[sel.Count];
+                IComponent[] selectedObjects = new IComponent[sel.Count];
                 sel.CopyTo(selectedObjects, 0);
 
                 if (host != null)
@@ -3507,15 +3489,14 @@ namespace System.Windows.Forms.Design
         {
             object[] newObjects = new object[objects.Count + 1];
             int idx = 1;
-            ArrayList names = new ArrayList(objects.Count);
+            List<string> names = new(objects.Count);
 
             foreach (object o in objects)
             {
-                IComponent comp = o as IComponent;
-                if (comp != null)
+                if (o is IComponent comp)
                 {
                     string name = null;
-                    if (comp.Site != null)
+                    if (comp.Site is not null)
                     {
                         name = comp.Site.Name;
                     }
@@ -3526,9 +3507,7 @@ namespace System.Windows.Forms.Design
                 newObjects[idx++] = o;
             }
 
-            string[] nameArray = new string[names.Count];
-            names.CopyTo(nameArray, 0);
-            newObjects[0] = nameArray;
+            newObjects[0] = names.ToArray();
             return newObjects;
         }
 
@@ -3591,7 +3570,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private void UpdatePastePositions(ArrayList controls)
+        private void UpdatePastePositions(List<Control> controls)
         {
             if (controls.Count == 0)
             {
@@ -3602,8 +3581,8 @@ namespace System.Windows.Forms.Design
             // is the location needed to center the controls in the parent.
             // If there is no parent, we relocate to 0, 0.
             //
-            Control parentControl = ((Control)controls[0]).Parent;
-            Point min = ((Control)controls[0]).Location;
+            Control parentControl = controls[0].Parent;
+            Point min = controls[0].Location;
             Point max = min;
             foreach (Control c in controls)
             {
@@ -3785,10 +3764,8 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private static void UpdatePasteTabIndex(Control componentControl, object parentComponent)
+        private static void UpdatePasteTabIndex(Control componentControl, Control parentControl)
         {
-            Control parentControl = parentComponent as Control;
-
             if (parentControl == null || componentControl == null)
             {
                 return;
@@ -3836,7 +3813,7 @@ namespace System.Windows.Forms.Design
             private readonly IUIService uiService;
 
             private readonly CommandSet commandSet;
-            private static Hashtable commandStatusHash;       // list of the command statuses we are tracking.
+            private static Dictionary<EventHandler, StatusState> commandStatusHash;       // Dictionary of the command statuses we are tracking.
             private bool updatingCommand; // flag we set when we're updating the command so we don't call back on the status handler.
 
             public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, IUIService uiService) : this(commandSet, statusHandler, invokeHandler, id, false, uiService)
@@ -3879,23 +3856,22 @@ namespace System.Windows.Forms.Design
                     //
                     lock (typeof(CommandSetItem))
                     {
-                        commandStatusHash ??= new Hashtable();
+                        commandStatusHash ??= new();
                     }
 
                     //
-                    // UNDONE:CommandSetItem is put in a static hashtable, and CommandSetItem
+                    // UNDONE:CommandSetItem is put in a static dictionary, and CommandSetItem
                     // references CommandSet, CommandSet reference FormDesigner. If we don't
-                    // remove the CommandSetItem from the static hashtable, FormDesigner is
+                    // remove the CommandSetItem from the static dictionary, FormDesigner is
                     // leaked. This demonstrates a bad design. We should not keep a static
-                    // hashtable for all the items, instead, we should keep a hashtable per
+                    // dictionary for all the items, instead, we should keep a dictionary per
                     // Designer. When designer is disposed, all command items got disposed
                     // automatically. However, at this time, we would pick a simple way with
                     // low risks to fix this.
                     //
                     // if this handler isn't already in there, add it.
                     //
-                    StatusState state = commandStatusHash[statusHandler] as StatusState;
-                    if (state == null)
+                    if (!commandStatusHash.TryGetValue(statusHandler, out StatusState state) || state is null)
                     {
                         state = new StatusState();
                         commandStatusHash.Add(statusHandler, state);
@@ -3915,9 +3891,8 @@ namespace System.Windows.Forms.Design
                     // check to see if this is a command we have hashed up and if it's version stamp
                     // is the same as our current selection version.
                     //
-                    if (commandSet != null && commandStatusHash.Contains(statusHandler))
+                    if (commandSet != null && commandStatusHash.TryGetValue(statusHandler, out StatusState state))
                     {
-                        StatusState state = commandStatusHash[statusHandler] as StatusState;
                         if (state != null && state.SelectionVersion == commandSet.SelectionVersion)
                         {
                             return true;
@@ -3933,7 +3908,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             private void ApplyCachedStatus()
             {
-                if (commandSet != null && commandStatusHash.Contains(statusHandler))
+                if (commandSet != null && commandStatusHash.TryGetValue(statusHandler, out StatusState state))
                 {
                     try
                     {
@@ -3943,7 +3918,6 @@ namespace System.Windows.Forms.Design
 
                         // and push the state into this command.
                         //
-                        StatusState state = commandStatusHash[statusHandler] as StatusState;
                         state.ApplyState(this);
                     }
                     finally
@@ -3996,22 +3970,16 @@ namespace System.Windows.Forms.Design
             }
 
             ///<summary>
-            /// Saves the status for this command to the statusstate that's stored in the hashtable
+            /// Saves the status for this command to the statusstate that's stored in the dictionary
             /// based on our status handler delegate.
             ///</summary>
             private void SaveCommandStatus()
             {
-                if (commandSet != null)
+                if (commandSet is not null)
                 {
-                    StatusState state;
-
                     // see if we need to create one of these StatusState dudes.
                     //
-                    if (commandStatusHash.Contains(statusHandler))
-                    {
-                        state = commandStatusHash[statusHandler] as StatusState;
-                    }
-                    else
+                    if (!commandStatusHash.TryGetValue(statusHandler, out StatusState state))
                     {
                         state = new StatusState();
                     }
@@ -4064,12 +4032,11 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Remove this command item from the static hashtable to avoid leaking this object.
+            /// Remove this command item from the static dictionary to avoid leaking this object.
             /// </summary>
             public virtual void Dispose()
             {
-                StatusState state = commandStatusHash[statusHandler] as StatusState;
-                if (state != null)
+                if (commandStatusHash.TryGetValue(statusHandler, out StatusState state) && state is not null)
                 {
                     state.refCount--;
                     if (state.refCount == 0)
@@ -4264,13 +4231,10 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private class TabIndexCompare : IComparer
+        private class TabIndexCompare : IComparer<Control>
         {
-            public int Compare(object p, object q)
+            public int Compare(Control c1, Control c2)
             {
-                Control c1 = p as Control;
-                Control c2 = q as Control;
-
                 if (c1 == c2)
                 {
                     return 0;

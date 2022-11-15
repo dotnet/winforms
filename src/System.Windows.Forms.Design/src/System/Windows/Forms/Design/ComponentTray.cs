@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
         private Point whiteSpace = Point.Empty; // space to leave between components.
         private Size grabHandle = Size.Empty; // Size of the grab handles.
 
-        private ArrayList controls; // List of items in the tray in the order of their layout.
+        private List<Control> controls; // List of items in the tray in the order of their layout.
         private SelectionUIHandler dragHandler; // the thing responsible for handling mouse drags
         private ISelectionUIService selectionUISvc; // selection UI; we use this a lot
         private IToolboxService toolboxService; // cached for drag/drop
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Design
             AllowDrop = true;
             Text = "ComponentTray"; // makes debugging easier
             SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
-            controls = new ArrayList();
+            controls = new();
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
             IExtenderProviderService es = (IExtenderProviderService)GetService(typeof(IExtenderProviderService));
             Debug.Assert(es != null, "Component tray wants an extender provider service, but there isn't one.");
@@ -1314,7 +1314,7 @@ namespace System.Windows.Forms.Design
 
             if (mouseDragStart != InvalidPoint && e.Button == MouseButtons.Left)
             {
-                object[] comps;
+                IComponent[] comps;
                 Capture = false;
                 Cursor.Clip = Rectangle.Empty;
                 if (mouseDragEnd != InvalidPoint)
@@ -1332,12 +1332,12 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-                    comps = Array.Empty<object>();
+                    comps = Array.Empty<IComponent>();
                 }
 
                 if (comps.Length == 0)
                 {
-                    comps = new object[] { mainDesigner.Component };
+                    comps = new IComponent[] { mainDesigner.Component };
                 }
 
                 try
@@ -1361,9 +1361,9 @@ namespace System.Windows.Forms.Design
             base.OnMouseUp(e);
         }
 
-        private object[] GetComponentsInRect(Rectangle rect)
+        private IComponent[] GetComponentsInRect(Rectangle rect)
         {
-            ArrayList list = new ArrayList();
+            List<IComponent> list = new();
             int controlCount = Controls.Count;
             for (int i = 0; i < controlCount; i++)
             {
@@ -1501,14 +1501,7 @@ namespace System.Windows.Forms.Design
                         inheritanceUI.RemoveInheritedControl(c);
                     }
 
-                    if (controls != null)
-                    {
-                        int index = controls.IndexOf(c);
-                        if (index != -1)
-                        {
-                            controls.RemoveAt(index);
-                        }
-                    }
+                    controls?.Remove(c);
                 }
                 finally
                 {
@@ -1718,7 +1711,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        internal void UpdatePastePositions(ArrayList components)
+        internal void UpdatePastePositions(List<Control> components)
         {
             foreach (TrayControl c in components)
             {
@@ -1732,7 +1725,7 @@ namespace System.Windows.Forms.Design
                     Control prevCtl = null;
                     if (controls.Count > 1)
                     {
-                        prevCtl = (Control)controls[controls.Count - 1];
+                        prevCtl = controls[controls.Count - 1];
                     }
 
                     PositionInNextAutoSlot(c, prevCtl, true);
@@ -1768,7 +1761,7 @@ namespace System.Windows.Forms.Design
                         Debug.Assert(index >= 1, "Got the wrong index, how could that be?");
                         if (index >= 1)
                         {
-                            prevCtl = (Control)controls[index - 1];
+                            prevCtl = controls[index - 1];
                         }
                     }
 
@@ -1790,7 +1783,7 @@ namespace System.Windows.Forms.Design
                         Debug.Assert(index >= 1, "Got the wrong index, how could that be?");
                         if (index >= 1)
                         {
-                            prevCtl = (Control)controls[index - 1];
+                            prevCtl = controls[index - 1];
                         }
                     }
 
@@ -2746,14 +2739,14 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        internal class AutoArrangeComparer : IComparer
+        internal class AutoArrangeComparer : IComparer<Control>
         {
-            int IComparer.Compare(object o1, object o2)
+            int IComparer<Control>.Compare(Control o1, Control o2)
             {
                 Debug.Assert(o1 != null && o2 != null, "Null objects sent for comparison!!!");
-                Point tcLoc1 = ((Control)o1).Location;
-                Point tcLoc2 = ((Control)o2).Location;
-                int height = ((Control)o1).Height / 2;
+                Point tcLoc1 = o1.Location;
+                Point tcLoc2 = o2.Location;
+                int height = o1.Height / 2;
                 // If they are at the same location, they are equal.
                 if (tcLoc1.X == tcLoc2.X && tcLoc1.Y == tcLoc2.Y)
                 {
