@@ -151,7 +151,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                return _behaviorStack != null && _behaviorStack.Count > 0 ? _behaviorStack[0] : null;
+                return _behaviorStack is not null && _behaviorStack.Count > 0 ? _behaviorStack[0] : null;
             }
         }
 
