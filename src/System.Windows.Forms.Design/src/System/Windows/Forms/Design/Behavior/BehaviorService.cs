@@ -590,12 +590,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         private Behavior GetAppropriateBehavior(Glyph g)
         {
-            if (_behaviorStack is not null && _behaviorStack.Count > 0)
-            {
-                return _behaviorStack[0];
-            }
-
-            return g is not null && g.Behavior is not null ? g.Behavior : null;
+            return _behaviorStack is not null && _behaviorStack.Count > 0 ? _behaviorStack[0] : g?.Behavior;
         }
 
         private void ShowError(Exception ex)
@@ -833,14 +828,14 @@ namespace System.Windows.Forms.Design.Behavior
         private void TestHook_GetAllSnapLines(ref Message m)
         {
             string snapLineInfo = string.Empty;
-            if (!(_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host))
+            if (_serviceProvider.GetService(typeof(IDesignerHost)) is not IDesignerHost host)
             {
                 return;
             }
 
             foreach (Component comp in host.Container.Components)
             {
-                if (!(comp is Control))
+                if (comp is not Control)
                 {
                     continue;
                 }
