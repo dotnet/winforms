@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private SnapLine[] GenerateSnapLines(SelectionRules rules, Point loc)
         {
-            ArrayList lines = new ArrayList(2);
+            List<SnapLine> lines = new(2);
             //the four margins and edges of our control
             if ((rules & SelectionRules.BottomSizeable) != 0)
             {
@@ -192,10 +192,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            SnapLine[] l = new SnapLine[lines.Count];
-            lines.CopyTo(l);
-
-            return l;
+            return lines.ToArray();
         }
 
         /// <summary>
