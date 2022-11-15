@@ -956,8 +956,10 @@ namespace System.Windows.Forms.Design
             if (selSvc is not null)
             {
                 MenuCommand cmd = (MenuCommand)sender;
-                _shiftPressed = cmd.CommandID.Equals(MenuCommands.KeySizeWidthIncrease) || cmd.CommandID.Equals(MenuCommands.KeySizeWidthDecrease) ||
-                   cmd.CommandID.Equals(MenuCommands.KeySizeHeightDecrease) || cmd.CommandID.Equals(MenuCommands.KeySizeHeightIncrease);
+                _shiftPressed = cmd.CommandID.Equals(MenuCommands.KeySizeWidthIncrease)
+                    || cmd.CommandID.Equals(MenuCommands.KeySizeWidthDecrease)
+                    || cmd.CommandID.Equals(MenuCommands.KeySizeHeightDecrease)
+                    || cmd.CommandID.Equals(MenuCommands.KeySizeHeightIncrease);
 
                 // check for ContextMenu..
                 if (selSvc.PrimarySelection is ContextMenuStrip contextStrip)
@@ -1198,7 +1200,9 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            targetSelection = parent is ToolStripOverflow ? GetNextItem(parent, toolStripItem, ArrowDirection.Left) : (object)parent.OwnerItem;
+                            targetSelection = parent is ToolStripOverflow
+                                ? GetNextItem(parent, toolStripItem, ArrowDirection.Left)
+                                : (object)parent.OwnerItem;
                         }
                     }
 
