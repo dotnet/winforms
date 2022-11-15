@@ -142,7 +142,7 @@ namespace System.Windows.Forms
             {
                 //this.owner.CheckNoSharedCell();
                 owner.CheckNoDataSource();
-                AddRangeInternal((ICollection<object>)items);
+                AddRangeInternal(items);
                 owner.OnItemsCollectionChanged();
             }
 
