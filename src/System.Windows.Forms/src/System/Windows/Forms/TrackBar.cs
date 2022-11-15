@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         private static readonly object s_scrollEvent = new object();
         private static readonly object s_valueChangedEvent = new object();
         private static readonly object s_rightToLeftChangedEvent = new object();
-
+        private bool _autoTicks = true;
         private bool _autoSize = true;
         private int _largeChange = 5;
         private int _maximum = 10;
@@ -158,12 +158,27 @@ namespace System.Windows.Forms
                         break;
                     case TickStyle.TopLeft:
                         cp.Style |= (int)(PInvoke.TBS_TOP);
+                        if (_autoTicks)
+                        {
+                            cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
+                        }
+
                         break;
                     case TickStyle.BottomRight:
                         cp.Style |= (int)(PInvoke.TBS_BOTTOM);
+                        if (_autoTicks)
+                        {
+                            cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
+                        }
+
                         break;
                     case TickStyle.Both:
                         cp.Style |= (int)(PInvoke.TBS_BOTH);
+                        if (_autoTicks)
+                        {
+                            cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
+                        }
+
                         break;
                 }
 
@@ -807,9 +822,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            SetTickFrequency();
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
+            SetTickFrequency();
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
             SetTrackBarPosition();
@@ -828,11 +843,12 @@ namespace System.Windows.Forms
 
             int tickFrequency = _tickFrequency;
             int trackbarSize = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
-            uint maxValue = (uint)(_minimum + _maximum);
+            uint maxValue = (uint)(System.Math.Abs(_minimum) + _maximum);
 
             if (maxValue > trackbarSize && trackbarSize != 0)
             {
                 tickFrequency = ((int)(maxValue / trackbarSize));
+                _autoTicks = false;
             }
 
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
@@ -1018,9 +1034,9 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SetTickFrequency();
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
+                    SetTickFrequency();
                     Invalidate();
                 }
 

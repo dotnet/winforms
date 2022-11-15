@@ -31,7 +31,7 @@ namespace WinformsControlsTest
 
         private void tickstyleNone_CheckedChanged(object sender, EventArgs e)
         {
-            if (trackBar1.TickStyle.Equals(System.Windows.Forms.TickStyle.BottomRight))
+            if (trackBar1.TickStyle == TickStyle.BottomRight)
             {
                 trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
             }
