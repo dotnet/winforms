@@ -21,6 +21,11 @@ namespace System.Windows.Forms
             public DataGridViewTextBoxEditingControlAccessibleObject(DataGridViewTextBoxEditingControl ownerControl) : base(ownerControl)
             { }
 
+            internal void ClearParent()
+            {
+                _parentAccessibleObject = null;
+            }
+
             public override AccessibleObject? Parent => _parentAccessibleObject;
 
             public override string Name => Owner.AccessibleName ?? SR.DataGridView_AccEditingControlAccName;

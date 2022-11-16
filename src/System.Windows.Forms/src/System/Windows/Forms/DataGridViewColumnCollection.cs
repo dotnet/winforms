@@ -1109,6 +1109,17 @@ namespace System.Windows.Forms
             Debug.Assert(!DataGridView.InDisplayIndexAdjustments);
 
             DataGridViewColumn dataGridViewColumn = _items[index];
+
+            if (DataGridView.IsAccessibilityObjectCreated && OsVersion.IsWindows8OrGreater())
+            {
+                foreach (DataGridViewRow row in DataGridView.Rows)
+                {
+                    row.Cells[index].ReleaseUiaProvider();
+                }
+
+                dataGridViewColumn.HeaderCell.ReleaseUiaProvider();
+            }
+
             DataGridView.OnRemovingColumn(dataGridViewColumn, out Point newCurrentCell, force);
             InvalidateCachedColumnsOrder();
             _items.RemoveAt(index);
