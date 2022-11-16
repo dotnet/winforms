@@ -190,7 +190,7 @@ namespace System.Windows.Forms
 
             public bool Contains(Control? control)
             {
-                return InnerList.Contains(control);
+                return control is null ? false : InnerList.Contains(control);
             }
 
             /// <summary>
@@ -259,7 +259,7 @@ namespace System.Windows.Forms
 
             public int IndexOf(Control? control)
             {
-                return InnerList.IndexOf(control);
+                return control is null ? -1 : InnerList.IndexOf(control);
             }
 
             /// <summary>
