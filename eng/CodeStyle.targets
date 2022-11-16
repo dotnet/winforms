@@ -22,5 +22,9 @@
   <ItemGroup>
     <PackageReference Include="DotNetAnalyzers.DocumentationAnalyzers" Version="$(DotNetAnalyzersDocumentationAnalyzersVersion)" PrivateAssets="all" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="CSharpIsNullAnalyzer" Version="$(CSharpIsNullAnalyzersVersion)" PrivateAssets="all" />
+  </ItemGroup>
 
 </Project>
