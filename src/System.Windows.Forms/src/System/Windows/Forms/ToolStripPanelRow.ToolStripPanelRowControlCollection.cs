@@ -81,7 +81,8 @@ namespace System.Windows.Forms
                     throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip)));
                 }
 
-                int index = InnerList.Add(control.ToolStripPanelCell);
+                InnerList.Add(control.ToolStripPanelCell);
+                int index = InnerList.Count - 1;
 
                 OnAdd(control, index);
                 return index;
@@ -145,7 +146,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override IEnumerator GetEnumerator() { return new ToolStripPanelCellToControlEnumerator(InnerList); }
+            public override IEnumerator GetEnumerator() { return new ToolStripPanelCellToControlEnumerator((IEnumerable<ToolStripPanelCell>)InnerList); }
 
             private Control GetControl(int index)
             {
@@ -177,11 +178,11 @@ namespace System.Windows.Forms
 
             void IList.Clear() { Clear(); }
 
-            bool IList.IsFixedSize { get { return InnerList.IsFixedSize; } }
+            bool IList.IsFixedSize => false;
 
             bool IList.Contains(object value) { return InnerList.Contains(value); }
 
-            bool IList.IsReadOnly { get { return InnerList.IsReadOnly; } }
+            bool IList.IsReadOnly => false;
 
             void IList.RemoveAt(int index) { RemoveAt(index); }
 

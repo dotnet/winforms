@@ -184,7 +184,7 @@ namespace System.Windows.Forms
                 ControlCollection ccOther = Owner.CreateControlsInstance();
 
                 // We add using InnerList to prevent unnecessary parent cycle checks, etc.
-                ccOther.InnerList.AddRange(this);
+                ccOther.InnerList.AddRange(InnerList);
                 return ccOther;
             }
 

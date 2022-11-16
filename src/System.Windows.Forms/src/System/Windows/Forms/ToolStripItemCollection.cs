@@ -105,7 +105,10 @@ namespace System.Windows.Forms
             CheckCanAddOrInsertItem(value);
 
             SetOwner(value);
-            int retVal = InnerList.Add(value);
+
+            InnerList.Add(value);
+            int retVal = InnerList.Count - 1;
+
             if (_itemsCollection && _owner is not null)
             {
                 _owner.OnItemAddedInternal(value);
@@ -291,7 +294,7 @@ namespace System.Windows.Forms
         public override bool IsReadOnly { get { return _isReadOnly; } }
 
         void IList.Clear() { Clear(); }
-        bool IList.IsFixedSize { get { return InnerList.IsFixedSize; } }
+        bool IList.IsFixedSize => false;
         bool IList.Contains(object value) { return InnerList.Contains(value); }
         void IList.RemoveAt(int index) { RemoveAt(index); }
         void IList.Remove(object value) { Remove(value as ToolStripItem); }
