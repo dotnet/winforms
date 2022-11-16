@@ -132,9 +132,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the Win32 handle for this <see cref="Cursor"/>.
         /// </summary>
-        public IntPtr Handle => _handle.IsNull
-            ? throw new ObjectDisposedException(string.Format(SR.ObjectDisposed, GetType().Name))
-            : (nint)_handle;
+        public IntPtr Handle
+        {
+            get
+            {
+                ObjectDisposedException.ThrowIf(_handle.IsNull, this);
+                return (nint)_handle;
+            }
+        }
 
         /// <summary>
         ///  Returns the "hot" location of the cursor.
