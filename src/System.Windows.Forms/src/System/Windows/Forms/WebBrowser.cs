@@ -1428,9 +1428,7 @@ namespace System.Windows.Forms
                 }
 
                 // We still don't have this.axIWebBrowser2. Throw an exception.
-                return axIWebBrowser2 is null
-                    ? throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2)
-                    : axIWebBrowser2;
+                return axIWebBrowser2 ?? throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
             }
         }
     }
