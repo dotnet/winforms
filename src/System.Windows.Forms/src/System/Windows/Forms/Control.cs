@@ -4942,11 +4942,7 @@ namespace System.Windows.Forms
         protected virtual void CreateHandle()
         {
             IntPtr userCookie = IntPtr.Zero;
-
-            if (GetState(States.Disposed))
-            {
-                throw new ObjectDisposedException(GetType().Name);
-            }
+            ObjectDisposedException.ThrowIf(GetState(States.Disposed), this);
 
             if (GetState(States.CreatingHandle))
             {
