@@ -187,11 +187,7 @@ namespace System.ComponentModel.Design
                         if (verbs is not null && verbs.Count != 0)
                         {
                             List<DesignerVerb> verbsArray = new();
-                            bool hookupEvents = !_componentToVerbsEventHookedUp.Contains(component);
-                            if (hookupEvents)
-                            {
-                                _componentToVerbsEventHookedUp.Add(component);
-                            }
+                            bool hookupEvents = _componentToVerbsEventHookedUp.Add(component);
 
                             foreach (DesignerVerb verb in verbs)
                             {
