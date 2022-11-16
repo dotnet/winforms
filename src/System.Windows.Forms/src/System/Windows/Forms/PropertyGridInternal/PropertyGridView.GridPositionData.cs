@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -12,7 +11,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         internal class GridPositionData
         {
-            private readonly ArrayList _expandedState;
+            private readonly List<GridEntryCollection> _expandedState;
             private readonly GridEntryCollection _selectedItemTree;
             private readonly int _itemRow;
 

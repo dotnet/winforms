@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -4226,7 +4225,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private static void ResetOrigin(Graphics g) => g.ResetTransform();
 
-        internal void RestoreHierarchyState(ArrayList expandedItems)
+        internal void RestoreHierarchyState(List<GridEntryCollection> expandedItems)
         {
             if (expandedItems is null)
             {
@@ -4239,14 +4238,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal ArrayList SaveHierarchyState(GridEntryCollection entries, ArrayList expandedItems = null)
+        internal List<GridEntryCollection> SaveHierarchyState(GridEntryCollection entries, List<GridEntryCollection> expandedItems = null)
         {
             if (entries is null)
             {
-                return new ArrayList();
+                return new();
             }
 
-            expandedItems ??= new ArrayList();
+            expandedItems ??= new();
 
             for (int i = 0; i < entries.Count; i++)
             {
