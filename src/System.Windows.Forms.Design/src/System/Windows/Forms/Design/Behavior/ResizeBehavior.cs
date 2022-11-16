@@ -201,14 +201,14 @@ namespace System.Windows.Forms.Design.Behavior
         private void InitiateResize()
         {
             bool useSnapLines = BehaviorService.UseSnapLines;
-            ArrayList components = new ArrayList();
+            List<IComponent> components = new();
             //check to see if the current designer participate with SnapLines cache the control bounds
             for (int i = 0; i < _resizeComponents.Length; i++)
             {
                 _resizeComponents[i].resizeBounds = ((Control)(_resizeComponents[i].resizeControl)).Bounds;
                 if (useSnapLines)
                 {
-                    components.Add(_resizeComponents[i].resizeControl);
+                    components.Add((Control)_resizeComponents[i].resizeControl);
                 }
 
                 if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost designerHost)

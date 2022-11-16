@@ -639,7 +639,7 @@ namespace System.Windows.Forms.Design
                                     //If we CTRL+Arrow and we're using SnapLines - snap to the next location
                                     if (invertSnap && useSnapLines)
                                     {
-                                        ArrayList selComps = new ArrayList(selSvc.GetSelectedComponents());
+                                        List<IComponent> selComps = (List<IComponent>)selSvc.GetSelectedComponents();
 
                                         //create our snapline engine
                                         dragManager = new DragAssistanceManager(des.Component.Site, selComps);
