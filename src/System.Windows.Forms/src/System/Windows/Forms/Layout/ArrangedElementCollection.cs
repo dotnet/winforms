@@ -129,7 +129,7 @@ namespace System.Windows.Forms.Layout
 
         bool IList.IsFixedSize => false;
 
-        bool IList.Contains(object? value) => InnerList.Contains(value);
+        bool IList.Contains(object? value) => (value is IArrangedElement element) ? InnerList.Contains(element) : false;
 
         public virtual bool IsReadOnly => false;
 
