@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public class DataGridViewSelectedColumnCollection : BaseCollection, IList
     {
-        private readonly List<DataGridViewColumn> _items = new List<DataGridViewColumn>();
+        private readonly List<DataGridViewColumn> _items = new();
 
         int IList.Add(object value)
         {
