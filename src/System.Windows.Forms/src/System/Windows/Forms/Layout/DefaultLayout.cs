@@ -204,7 +204,7 @@ namespace System.Windows.Forms.Layout
                 // to the parent's width.
                 if (IsAnchored(anchors, AnchorStyles.Right))
                 {
-                    anchorInfo.Left = displayRect.Width - bounds.Width - anchorInfo.Right;
+                    anchorInfo.Left = displayRect.Width - width - anchorInfo.Right;
                 }
                 else
                 {
@@ -231,7 +231,7 @@ namespace System.Windows.Forms.Layout
                 // the parent's height.
                 if (IsAnchored(anchors, AnchorStyles.Bottom))
                 {
-                    anchorInfo.Top = displayRect.Height - bounds.Height - anchorInfo.Bottom;
+                    anchorInfo.Top = displayRect.Height - height - anchorInfo.Bottom;
                 }
                 else
                 {

@@ -349,12 +349,12 @@ namespace System.Windows.Forms
         // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
         private Dictionary<int, Font>? _dpiFonts;
 
-#if DEBUG
         internal int LayoutSuspendCount
         {
             get { return _layoutSuspendCount; }
         }
 
+#if DEBUG
         internal void AssertLayoutSuspendCount(int value)
         {
             Debug.Assert(value == _layoutSuspendCount, "Suspend/Resume layout mismatch!");
