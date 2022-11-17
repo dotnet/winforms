@@ -5522,11 +5522,6 @@ Chcete jej nahradit?</target>
         <target state="translated">Hodnotu Null nelze převést na typ {1}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">Položka GridItem byla uvolněna a nelze ji již použít.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">Položku GridItem nelze rozbalit.</target>
@@ -7429,11 +7424,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">OK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">Položka {0} byla uvolněna a nelze ji již použít.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">

@@ -5522,11 +5522,6 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Der NULL-Wert kann nicht in den Typ {1} konvertiert werden.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">Das GridItem wurde entfernt und kann nicht mehr verwendet werden.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">Das GridItem kann nicht erweitert werden.</target>
@@ -7429,11 +7424,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">OK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">{0} wurde entfernt und kann nicht mehr verwwendet werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">

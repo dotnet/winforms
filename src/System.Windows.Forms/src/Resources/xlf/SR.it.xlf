@@ -5522,11 +5522,6 @@ Sostituirlo?</target>
         <target state="translated">Impossibile convertire il valore null nel tipo '{1}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">La classe GridItem è stata eliminata e non può più essere utilizzata.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">La classe GridItem non può essere espansa.</target>
@@ -7429,11 +7424,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">OK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">'{0}' è stato eliminato e non può più essere utilizzato.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">
