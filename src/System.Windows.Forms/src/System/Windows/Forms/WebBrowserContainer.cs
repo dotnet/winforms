@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -17,14 +15,14 @@ namespace System.Windows.Forms
     internal class WebBrowserContainer : IOleContainer.Interface, Ole32.IOleInPlaceFrame
     {
         private readonly WebBrowserBase parent;
-        private IContainer assocContainer;  // associated IContainer...
-                                            // the assocContainer may be null, in which case all this container does is
-                                            // forward [de]activation messages to the requisite container...
-        private WebBrowserBase siteUIActive;
-        private WebBrowserBase siteActive;
+        private IContainer? assocContainer;  // associated IContainer...
+                                             // the assocContainer may be null, in which case all this container does is
+                                             // forward [de]activation messages to the requisite container...
+        private WebBrowserBase? siteUIActive;
+        private WebBrowserBase? siteActive;
         private readonly HashSet<Control> containerCache = new();
-        private HashSet<Control> components;
-        private WebBrowserBase ctlInEditMode;
+        private HashSet<Control>? components;
+        private WebBrowserBase? ctlInEditMode;
 
         internal WebBrowserContainer(WebBrowserBase parent)
         {
@@ -109,7 +107,7 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(IOleInPlaceActiveObject.Interface pActiveObject, string pszObjName)
+        unsafe HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(IOleInPlaceActiveObject.Interface? pActiveObject, string? pszObjName)
         {
             if (pActiveObject is null)
             {
@@ -122,7 +120,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            WebBrowserBase ctl = null;
+            WebBrowserBase? ctl = null;
             if (pActiveObject is IOleObject.Interface oleObject)
             {
                 IOleClientSite* clientSite;
@@ -194,7 +192,7 @@ namespace System.Windows.Forms
         //
         private void ListAXControls(List<object> list, bool fuseOcx)
         {
-            HashSet<Control> components = GetComponents();
+            HashSet<Control>? components = GetComponents();
             if (components is null)
             {
                 return;
@@ -220,27 +218,27 @@ namespace System.Windows.Forms
             }
         }
 
-        private HashSet<Control> GetComponents()
+        private HashSet<Control>? GetComponents()
         {
             FillComponentsTable(GetParentsContainer());
             return components;
         }
 
-        private IContainer GetParentsContainer()
+        private IContainer? GetParentsContainer()
         {
-            IContainer rval = GetParentIContainer();
+            IContainer? rval = GetParentIContainer();
             Debug.Assert(rval is null || assocContainer is null || rval == assocContainer,
                          "mismatch between getIPD & aContainer");
             return rval ?? assocContainer;
         }
 
-        private IContainer GetParentIContainer()
+        private IContainer? GetParentIContainer()
         {
             ISite site = parent.Site;
             return site is not null && site.DesignMode ? site.Container : null;
         }
 
-        private void FillComponentsTable(IContainer container)
+        private void FillComponentsTable(IContainer? container)
         {
             if (container is not null)
             {
@@ -276,7 +274,7 @@ namespace System.Windows.Forms
                 {
                     if (checkHashSet)
                     {
-                        components.Add(ctls[i]);
+                        components?.Add(ctls[i]);
                     }
                 }
             }
@@ -306,11 +304,9 @@ namespace System.Windows.Forms
 
         private bool RegisterControl(WebBrowserBase ctl)
         {
-            ISite site = ctl.Site;
-            if (site is not null)
+            if (ctl.Site is ISite site)
             {
-                IContainer cont = site.Container;
-                if (cont is not null)
+                if (site.Container is IContainer cont)
                 {
                     if (assocContainer is not null)
                     {
@@ -319,8 +315,7 @@ namespace System.Windows.Forms
                     else
                     {
                         assocContainer = cont;
-                        IComponentChangeService ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                        if (ccs is not null)
+                        if (site.GetService(typeof(IComponentChangeService)) is IComponentChangeService ccs)
                         {
                             ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                         }
@@ -333,7 +328,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        private void OnComponentRemoved(object sender, ComponentEventArgs e)
+        private void OnComponentRemoved(object? sender, ComponentEventArgs e)
         {
             if (sender == assocContainer && e.Component is Control c)
             {
@@ -355,12 +350,10 @@ namespace System.Windows.Forms
 
             if (assocContainer is null)
             {
-                ISite site = ctl.Site;
-                if (site is not null)
+                if (ctl.Site is ISite site)
                 {
                     assocContainer = site.Container;
-                    IComponentChangeService ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                    if (ccs is not null)
+                    if (site.GetService(typeof(IComponentChangeService)) is IComponentChangeService ccs)
                     {
                         ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                     }
@@ -374,7 +367,7 @@ namespace System.Windows.Forms
             containerCache.Remove(ctl);
         }
 
-        internal static WebBrowserContainer FindContainerForControl(WebBrowserBase ctl)
+        internal static WebBrowserContainer? FindContainerForControl(WebBrowserBase ctl)
         {
             if (ctl is not null)
             {
@@ -399,10 +392,7 @@ namespace System.Windows.Forms
         }
 
         internal static string GetNameForControl(Control ctl)
-        {
-            string name = (ctl.Site is not null) ? ctl.Site.Name : ctl.Name;
-            return name ?? "";
-        }
+            => ctl.Site is not null ? ctl.Site.Name ?? string.Empty : ctl.Name;
 
         internal void OnUIActivate(WebBrowserBase site)
         {
