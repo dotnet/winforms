@@ -16,7 +16,7 @@ namespace System.ComponentModel.Design
     public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, IComponentInitializer
     {
         private InheritanceAttribute _inheritanceAttribute;
-        private Hashtable _inheritedProps;
+        private Dictionary<string, InheritedPropertyDescriptor> _inheritedProps;
         private DesignerVerbCollection _verbs;
         private DesignerActionListCollection _actionLists;
         private ShadowPropertyCollection _shadowProperties;
@@ -365,7 +365,7 @@ namespace System.ComponentModel.Design
 
         private void InitializeInheritedProperties()
         {
-            Hashtable props = new Hashtable();
+            Dictionary<string, InheritedPropertyDescriptor> props = new();
             InheritanceAttribute inheritanceAttribute = InheritanceAttribute;
             bool readOnlyInherit = inheritanceAttribute is not null && inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly);
 
@@ -393,13 +393,11 @@ namespace System.ComponentModel.Design
                         continue;
                     }
 
-                    PropertyDescriptor inheritedProp = (PropertyDescriptor)props[prop.Name];
-
-                    if (inheritedProp is null)
+                    if (!props.ContainsKey(prop.Name))
                     {
                         // This ia a publicly inherited component.  We replace all component properties with inherited
                         // versions that reset the default property values to those that are currently on the component.
-                        props[prop.Name] = new InheritedPropertyDescriptor(prop, Component);
+                        props.Add(prop.Name, new(prop, Component));
                     }
                 }
             }
@@ -656,17 +654,15 @@ namespace System.ComponentModel.Design
             }
 
             // otherwise apply our inherited properties to the actual property list.
-            foreach (DictionaryEntry de in _inheritedProps)
+            foreach (var de in _inheritedProps)
             {
-                if (de.Value is InheritedPropertyDescriptor inheritedPropDesc)
+                // replace the property descriptor it was created with with the new one in case we're shadowing
+                PropertyDescriptor newInnerProp = (PropertyDescriptor)properties[de.Key];
+                if (newInnerProp is not null)
                 {
-                    // replace the property descriptor it was created with with the new one in case we're shadowing
-                    PropertyDescriptor newInnerProp = (PropertyDescriptor)properties[de.Key];
-                    if (newInnerProp is not null)
-                    {
-                        inheritedPropDesc.PropertyDescriptor = newInnerProp;
-                        properties[de.Key] = inheritedPropDesc;
-                    }
+                    InheritedPropertyDescriptor inheritedPropDesc = de.Value;
+                    inheritedPropDesc.PropertyDescriptor = newInnerProp;
+                    properties[de.Key] = inheritedPropDesc;
                 }
             }
         }
