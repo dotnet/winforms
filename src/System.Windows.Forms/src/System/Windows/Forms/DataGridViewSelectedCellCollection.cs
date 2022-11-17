@@ -131,8 +131,7 @@ namespace System.Windows.Forms
             Debug.Assert(!Contains(dataGridViewCell));
             _items.Add(dataGridViewCell);
 
-            int index = _items.Count - 1;
-            return index;
+            return _items.Count - 1;
         }
 
         /// <summary>
