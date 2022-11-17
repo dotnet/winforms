@@ -843,7 +843,7 @@ namespace System.Windows.Forms
 
             int tickFrequency = _tickFrequency;
             int trackbarSize = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
-            uint maxValue = (uint)(System.Math.Abs(_minimum) + _maximum);
+            uint maxValue = (uint)(-_minimum+_maximum);
 
             if (maxValue > trackbarSize && trackbarSize != 0)
             {
