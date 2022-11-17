@@ -124,7 +124,7 @@ namespace System.Windows.Forms
         internal int Add(DataGridViewColumn dataGridViewColumn)
         {
             _items.Add(dataGridViewColumn);
-            return _items.LastIndexOf(dataGridViewColumn);
+            return _items.Count - 1;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
