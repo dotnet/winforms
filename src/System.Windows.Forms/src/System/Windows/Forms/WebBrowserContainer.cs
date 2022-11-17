@@ -4,13 +4,12 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Windows.Win32.System.Ole;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -23,8 +22,8 @@ namespace System.Windows.Forms
                                             // forward [de]activation messages to the requisite container...
         private WebBrowserBase siteUIActive;
         private WebBrowserBase siteActive;
-        private readonly Hashtable containerCache = new Hashtable();  // name -> Control
-        private Hashtable components;  // Control -> any
+        private readonly HashSet<Control> containerCache = new();
+        private HashSet<Control> components;
         private WebBrowserBase ctlInEditMode;
 
         internal WebBrowserContainer(WebBrowserBase parent)
@@ -56,7 +55,7 @@ namespace System.Windows.Forms
             if ((grfFlags & OLECONTF.OLECONTF_EMBEDDINGS) != 0)
             {
                 Debug.Assert(parent is not null, "gotta have it...");
-                ArrayList list = new ArrayList();
+                List<object> list = new();
                 ListAXControls(list, true);
                 if (list.Count > 0)
                 {
@@ -193,48 +192,42 @@ namespace System.Windows.Forms
         //
         // Private helper methods:
         //
-        private void ListAXControls(ArrayList list, bool fuseOcx)
+        private void ListAXControls(List<object> list, bool fuseOcx)
         {
-            Hashtable components = GetComponents();
+            HashSet<Control> components = GetComponents();
             if (components is null)
             {
                 return;
             }
 
-            Control[] ctls = new Control[components.Keys.Count];
-            components.Keys.CopyTo(ctls, 0);
-            if (ctls is not null)
+            foreach (Control ctl in components)
             {
-                for (int i = 0; i < ctls.Length; i++)
+                if (ctl is WebBrowserBase webBrowserBase)
                 {
-                    Control ctl = ctls[i];
-                    if (ctl is WebBrowserBase webBrowserBase)
+                    if (fuseOcx)
                     {
-                        if (fuseOcx)
+                        object ax = webBrowserBase.activeXInstance;
+                        if (ax is not null)
                         {
-                            object ax = webBrowserBase.activeXInstance;
-                            if (ax is not null)
-                            {
-                                list.Add(ax);
-                            }
+                            list.Add(ax);
                         }
-                        else
-                        {
-                            list.Add(ctl);
-                        }
+                    }
+                    else
+                    {
+                        list.Add(ctl);
                     }
                 }
             }
         }
 
-        private Hashtable GetComponents()
+        private HashSet<Control> GetComponents()
         {
-            return GetComponents(GetParentsContainer());
+            FillComponentsTable(GetParentsContainer());
+            return components;
         }
 
         private IContainer GetParentsContainer()
         {
-            //
             IContainer rval = GetParentIContainer();
             Debug.Assert(rval is null || assocContainer is null || rval == assocContainer,
                          "mismatch between getIPD & aContainer");
@@ -244,18 +237,7 @@ namespace System.Windows.Forms
         private IContainer GetParentIContainer()
         {
             ISite site = parent.Site;
-            if (site is not null && site.DesignMode)
-            {
-                return site.Container;
-            }
-
-            return null;
-        }
-
-        private Hashtable GetComponents(IContainer cont)
-        {
-            FillComponentsTable(cont);
-            return components;
+            return site is not null && site.DesignMode ? site.Container : null;
         }
 
         private void FillComponentsTable(IContainer container)
@@ -265,12 +247,12 @@ namespace System.Windows.Forms
                 ComponentCollection comps = container.Components;
                 if (comps is not null)
                 {
-                    components = new Hashtable();
+                    components = new();
                     foreach (IComponent comp in comps)
                     {
-                        if (comp is Control && comp != parent && comp.Site is not null)
+                        if (comp is Control ctrl && comp != parent && comp.Site is not null)
                         {
-                            components.Add(comp, comp);
+                            components.Add(ctrl);
                         }
                     }
 
@@ -280,22 +262,21 @@ namespace System.Windows.Forms
 
             Debug.Assert(parent.Site is null, "Parent is sited but we could not find IContainer!!!");
 
-            bool checkHashTable = true;
-            Control[] ctls = new Control[containerCache.Values.Count];
-            containerCache.Values.CopyTo(ctls, 0);
+            bool checkHashSet = true;
+            Control[] ctls = containerCache.ToArray();
             if (ctls is not null)
             {
                 if (ctls.Length > 0 && components is null)
                 {
-                    components = new Hashtable();
-                    checkHashTable = false;
+                    components = new();
+                    checkHashSet = false;
                 }
 
                 for (int i = 0; i < ctls.Length; i++)
                 {
-                    if (checkHashTable && !components.Contains(ctls[i]))
+                    if (checkHashSet)
                     {
-                        components.Add(ctls[i], ctls[i]);
+                        components.Add(ctls[i]);
                     }
                 }
             }
@@ -310,11 +291,11 @@ namespace System.Windows.Forms
                 return;
             }
 
-            components ??= new Hashtable();
+            components ??= new();
 
             if (ctl != parent && !components.Contains(ctl))
             {
-                components.Add(ctl, ctl);
+                components.Add(ctl);
             }
 
             foreach (Control c in ctl.Controls)
@@ -370,7 +351,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), nameof(ctl));
             }
 
-            containerCache.Add(ctl, ctl);
+            containerCache.Add(ctl);
 
             if (assocContainer is null)
             {
