@@ -11,15 +11,13 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using Accessibility;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides an implementation for an object that can be inspected by an
-    ///  accessibility application.
+    ///  Provides an implementation for an object that can be inspected by an accessibility application.
     /// </summary>
     public partial class AccessibleObject :
         StandardOleMarshalObject,

@@ -10,9 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
-using Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Design

@@ -5,7 +5,6 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using ComWrappers = Interop.WinFormsComWrappers;
-using Windows.Win32.System.Com;
 
 namespace Windows.Win32.UI.Shell;
 
