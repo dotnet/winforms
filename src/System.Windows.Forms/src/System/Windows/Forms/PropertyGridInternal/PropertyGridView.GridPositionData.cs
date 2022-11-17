@@ -4,7 +4,6 @@
 
 #nullable disable
 
-
 namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class PropertyGridView
