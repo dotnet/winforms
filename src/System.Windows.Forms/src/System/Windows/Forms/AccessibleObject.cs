@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using Accessibility;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using static Interop;
 
@@ -1801,14 +1802,13 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
-                ref IID.IAccessible,
+                ref IID.GetRef<global::Windows.Win32.UI.Accessibility.IAccessible>(),
                 ref acc);
 
-            Guid IID_IEnumVariant = IID.IEnumVariant;
             Oleacc.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
-                ref IID_IEnumVariant,
+                ref IID.GetRef<IEnumVARIANT>(),
                 out var enumVariantPtr);
 
             if (enumVariantPtr != IntPtr.Zero)

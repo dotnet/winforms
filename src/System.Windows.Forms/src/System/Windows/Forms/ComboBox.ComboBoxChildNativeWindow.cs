@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 using static Interop.User32;
 
@@ -126,7 +128,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private void WmGetObject(ref Message m)
+            private unsafe void WmGetObject(ref Message m)
             {
                 if (m.LParamInternal != NativeMethods.UiaRootObjectId && (int)m.LParamInternal != OBJID.CLIENT)
                 {
@@ -152,19 +154,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    IntPtr pUnknown = Marshal.GetIUnknownForObject(accessibilityObject!);
-
-                    try
-                    {
-                        m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(
-                            in IID.IAccessible,
-                            m.WParamInternal,
-                            new HandleRef(this, pUnknown));
-                    }
-                    finally
-                    {
-                        Marshal.Release(pUnknown);
-                    }
+                    m.ResultInternal = accessibilityObject.GetLRESULT(m.WParamInternal);
                 }
                 catch (Exception e)
                 {

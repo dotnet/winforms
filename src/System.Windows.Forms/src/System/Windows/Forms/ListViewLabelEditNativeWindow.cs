@@ -146,21 +146,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // https://docs.microsoft.com/windows/win32/winauto/how-to-handle-wm-getobject
-            // Get an Lresult for the accessibility Object for this control.
             try
             {
-                // Obtain the Lresult.
-                IntPtr pUnknown = Marshal.GetIUnknownForObject(EnsureWinEventHooksInstalledAndGetAccessibilityObject());
-
-                try
-                {
-                    m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, new HandleRef(this, pUnknown));
-                }
-                finally
-                {
-                    Marshal.Release(pUnknown);
-                }
+                m.ResultInternal = EnsureWinEventHooksInstalledAndGetAccessibilityObject().GetLRESULT(m.WParamInternal);
             }
             catch (Exception ex)
             {

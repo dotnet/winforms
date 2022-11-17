@@ -93,7 +93,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            void AttemptStopEvents(object? trash)
+            private void AttemptStopEvents(object? trash)
             {
                 if (_connectionPoint is null)
                 {

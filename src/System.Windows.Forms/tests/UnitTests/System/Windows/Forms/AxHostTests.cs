@@ -1594,19 +1594,18 @@ namespace System.Windows.Forms.Tests
             IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromCursor(original);
             Assert.NotNull(iPicture);
 
-            iPicture.get_Handle(out uint handle).ThrowOnFailure();
-            iPicture.get_Type(out short type).ThrowOnFailure();
-            iPicture.get_Width(out int width).ThrowOnFailure();
-            iPicture.get_Height(out int height).ThrowOnFailure();
-            iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+            OLE_HANDLE handle = iPicture.Handle;
+            short type = iPicture.Type;
+            int width = iPicture.Width;
+            int height = iPicture.Height;
+            uint attributes = iPicture.Attributes;
 
             Assert.NotEqual(0u, handle);
             Assert.True(iPicture.get_hPal(out _).Failed);
             Assert.Equal(3, type);
             Assert.Equal(847, width);
             Assert.Equal(847, height);
-            HDC curDc;
-            Assert.True(iPicture.get_CurDC(&curDc).Failed);
+            Assert.Throws<Exception>(() => iPicture.CurDC);
             Assert.Equal(2u, attributes);
 
             Assert.Throws<InvalidCastException>(() => SubAxHost.GetPictureFromIPicture(iPicture));
@@ -1684,14 +1683,13 @@ namespace System.Windows.Forms.Tests
             IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
             Assert.NotNull(iPicture);
 
-            iPicture.get_Handle(out uint handle).ThrowOnFailure();
-            iPicture.get_hPal(out uint hPal).ThrowOnFailure();
-            iPicture.get_Type(out short type).ThrowOnFailure();
-            iPicture.get_Width(out int width).ThrowOnFailure();
-            iPicture.get_Height(out int height).ThrowOnFailure();
-            iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
-            HDC curDc;
-            iPicture.get_CurDC(&curDc).ThrowOnFailure();
+            OLE_HANDLE handle = iPicture.Handle;
+            iPicture.get_hPal(out OLE_HANDLE hPal).ThrowOnFailure();
+            short type = iPicture.Type;
+            int width = iPicture.Width;
+            int height = iPicture.Height;
+            uint attributes = iPicture.Attributes;
+            HDC curDc = iPicture.CurDC;
 
             Assert.NotEqual(0u, handle);
             Assert.Equal(0u, hPal);
@@ -1714,19 +1712,18 @@ namespace System.Windows.Forms.Tests
             IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
             Assert.NotNull(iPicture);
 
-            iPicture.get_Handle(out uint handle).ThrowOnFailure();
-            iPicture.get_Type(out short type).ThrowOnFailure();
-            iPicture.get_Width(out int width).ThrowOnFailure();
-            iPicture.get_Height(out int height).ThrowOnFailure();
-            iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+            OLE_HANDLE handle = iPicture.Handle;
+            short type = iPicture.Type;
+            int width = iPicture.Width;
+            int height = iPicture.Height;
+            uint attributes = iPicture.Attributes;
 
             Assert.NotEqual(0u, handle);
             Assert.True(iPicture.get_hPal(out _).Failed);
             Assert.Equal(4, type);
             Assert.Equal(19972, width);
             Assert.Equal(28332, height);
-            HDC curDc;
-            Assert.True(iPicture.get_CurDC(&curDc).Failed);
+            Assert.Throws<Exception>(() => iPicture.CurDC);
             Assert.Equal(3u, attributes);
 
             var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));

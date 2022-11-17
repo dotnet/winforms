@@ -11,7 +11,7 @@ namespace Windows.Win32.Foundation
     ///  Finalizable wrapper for COM pointers that gives agile access to the specified interface.
     /// </summary>
     internal sealed unsafe class AgileComPointer<TInterface> : IDisposable
-        where TInterface : unmanaged, INativeGuid
+        where TInterface : unmanaged, IComIID
     {
         private readonly uint _cookie;
 

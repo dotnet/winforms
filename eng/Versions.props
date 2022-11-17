@@ -46,7 +46,7 @@
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
     <MicrosoftNETCoreILAsmVersion>$(MicrosoftNETCoreILAsmPackageVersion)</MicrosoftNETCoreILAsmVersion>
-    <MicrosoftWindowsCsWin32PackageVersion>0.2.98-beta</MicrosoftWindowsCsWin32PackageVersion>
+    <MicrosoftWindowsCsWin32PackageVersion>0.2.138-beta</MicrosoftWindowsCsWin32PackageVersion>
   </PropertyGroup>
   <!-- Docs / Intellisense -->
   <PropertyGroup>

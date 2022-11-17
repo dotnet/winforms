@@ -21,7 +21,7 @@ namespace Windows.Win32
         internal readonly ref struct OpenThemeDataScope
 #endif
         {
-            public nint HTheme { get; }
+            public HTHEME HTheme { get; }
 
             /// <summary>
             ///  Opens the requested theme data using <see cref="OpenThemeData(HWND, string)"/>.
@@ -31,13 +31,13 @@ namespace Windows.Win32
                 HTheme = OpenThemeData(hwnd, pszClassList);
             }
 
-            public static implicit operator nint(in OpenThemeDataScope scope) => scope.HTheme;
+            public static implicit operator HTHEME(in OpenThemeDataScope scope) => scope.HTheme;
 
-            public bool IsNull => HTheme == 0;
+            public bool IsNull => HTheme.IsNull;
 
             public void Dispose()
             {
-                if (HTheme != 0)
+                if (!HTheme.IsNull)
                 {
                     CloseThemeData(HTheme);
                 }

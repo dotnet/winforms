@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
         {
             PICTDESC desc = GetPICTDESCFromPicture(image);
             using ComScope<IPictureDisp> picture = new(null);
-            PInvoke.OleCreatePictureIndirect(&desc, IPictureDisp.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+            PInvoke.OleCreatePictureIndirect(&desc, IID.Get<IPictureDisp>(), fOwn: true, picture).ThrowOnFailure();
             return (IPictureDisp.Interface)Marshal.GetObjectForIUnknown(picture);
         }
 
@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
         {
             PICTDESC desc = PICTDESC.FromIcon(Icon.FromHandle(cursorHandle), copy: true);
             using ComScope<IPicture> picture = new(null);
-            PInvoke.OleCreatePictureIndirect(&desc, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+            PInvoke.OleCreatePictureIndirect(&desc, IID.Get<IPicture>(), fOwn: true, picture).ThrowOnFailure();
             return (IPicture.Interface)Marshal.GetObjectForIUnknown(picture);
         }
 
@@ -36,23 +36,23 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
         {
             PICTDESC desc = GetPICTDESCFromPicture(image);
             using ComScope<IPicture> picture = new(null);
-            PInvoke.OleCreatePictureIndirect(&desc, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+            PInvoke.OleCreatePictureIndirect(&desc, IID.Get<IPicture>(), fOwn: true, picture).ThrowOnFailure();
             return (IPicture.Interface)Marshal.GetObjectForIUnknown(picture);
         }
 
         public static Image? GetPictureFromIPicture(object picture)
         {
-            uint hPal = default;
+            OLE_HANDLE hPal = default;
             IPicture.Interface pict = (IPicture.Interface)picture;
-            pict.get_Type(out short type).ThrowOnFailure();
+            short type = pict.Type;
             if (type == (short)PICTYPE.PICTYPE_BITMAP)
             {
                 pict.get_hPal(&hPal);
             }
 
-            pict.get_Handle(out uint handle).ThrowOnFailure();
-            pict.get_Width(out int width).ThrowOnFailure();
-            pict.get_Height(out int height).ThrowOnFailure();
+            OLE_HANDLE handle = pict.Handle;
+            int width = pict.Width;
+            int height = pict.Height;
 
             return GetPictureFromParams(handle, (PICTYPE)type, hPal, (uint)width, (uint)height);
         }

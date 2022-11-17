@@ -9,10 +9,8 @@ using Windows.Win32.System.Com;
 
 namespace Windows.Win32.UI.Shell;
 
-internal unsafe partial struct IFileDialogEvents : INativeGuid, IPopulateVTable<IFileDialogEvents.Vtbl>, IUnknown.Interface
+internal unsafe partial struct IFileDialogEvents : IPopulateVTable<IFileDialogEvents.Vtbl>
 {
-    static Guid* INativeGuid.NativeGuid => (Guid*)Unsafe.AsPointer(ref Unsafe.AsRef(in Guid));
-
     public static void PopulateVTable(Vtbl* vtable)
     {
         vtable->OnFileOk_4 = &OnFileOk;
