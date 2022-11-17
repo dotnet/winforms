@@ -534,7 +534,7 @@ override System.Windows.Forms.ToolStripSeparator.Image.get -> System.Drawing.Ima
 override System.Windows.Forms.ToolStripSeparator.Image.set -> void
 override System.Windows.Forms.ToolStripSeparator.OnFontChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripSeparator.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
-override System.Windows.Forms.ToolStripSeparator.Text.get -> string!
+override System.Windows.Forms.ToolStripSeparator.Text.get -> string?
 override System.Windows.Forms.ToolStripSeparator.Text.set -> void
 override System.Windows.Forms.ToolStripSplitButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripSplitButton.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown!
@@ -1462,9 +1462,9 @@ System.Windows.Forms.ToolStripItem.Command.get -> System.Windows.Input.ICommand?
 System.Windows.Forms.ToolStripItem.Command.set -> void
 System.Windows.Forms.ToolStripItem.CommandParameter.get -> object?
 System.Windows.Forms.ToolStripItem.CommandParameter.set -> void
-~System.Windows.Forms.ToolStripItem.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects) -> System.Windows.Forms.DragDropEffects
-~System.Windows.Forms.ToolStripItem.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
-~System.Windows.Forms.ToolStripItem.GetCurrentParent() -> System.Windows.Forms.ToolStrip
+System.Windows.Forms.ToolStripItem.DoDragDrop(object! data, System.Windows.Forms.DragDropEffects allowedEffects) -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.ToolStripItem.DoDragDrop(object! data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap? dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.ToolStripItem.GetCurrentParent() -> System.Windows.Forms.ToolStrip?
 System.Windows.Forms.ToolStripItem.ImageKey.get -> string!
 System.Windows.Forms.ToolStripItem.ImageKey.set -> void
 System.Windows.Forms.ToolStripItem.Name.get -> string?
@@ -1478,8 +1478,8 @@ System.Windows.Forms.ToolStripItem.Tag.get -> object?
 System.Windows.Forms.ToolStripItem.Tag.set -> void
 System.Windows.Forms.ToolStripItem.ToolStripItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
 System.Windows.Forms.ToolStripItem.ToolStripItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
-~System.Windows.Forms.ToolStripItem.ToolTipText.get -> string
-~System.Windows.Forms.ToolStripItem.ToolTipText.set -> void
+System.Windows.Forms.ToolStripItem.ToolTipText.get -> string?
+System.Windows.Forms.ToolStripItem.ToolTipText.set -> void
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text) -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text, System.Drawing.Image image) -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
@@ -2129,50 +2129,50 @@ virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownOpened(System.Event
 virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownShow(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripItem.BackgroundImage.get -> System.Drawing.Image?
 virtual System.Windows.Forms.ToolStripItem.BackgroundImage.set -> void
-~virtual System.Windows.Forms.ToolStripItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+virtual System.Windows.Forms.ToolStripItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 virtual System.Windows.Forms.ToolStripItem.Font.get -> System.Drawing.Font!
 virtual System.Windows.Forms.ToolStripItem.Font.set -> void
 virtual System.Windows.Forms.ToolStripItem.Image.get -> System.Drawing.Image?
 virtual System.Windows.Forms.ToolStripItem.Image.set -> void
-~virtual System.Windows.Forms.ToolStripItem.OnAvailableChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnBackColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnClick(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnCommandCanExecuteChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnCommandChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnCommandParameterChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDisplayStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDoubleClick(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDragDrop(System.Windows.Forms.DragEventArgs dragEvent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDragEnter(System.Windows.Forms.DragEventArgs dragEvent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDragLeave(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDragOver(System.Windows.Forms.DragEventArgs dragEvent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnEnabledChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnFontChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnForeColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnGiveFeedback(System.Windows.Forms.GiveFeedbackEventArgs giveFeedbackEvent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnLocationChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseEnter(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseHover(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseLeave(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseMove(System.Windows.Forms.MouseEventArgs mea) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnAvailableChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnBackColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnClick(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnCommandCanExecuteChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnCommandChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnCommandParameterChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDisplayStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDoubleClick(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDragDrop(System.Windows.Forms.DragEventArgs! dragEvent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDragEnter(System.Windows.Forms.DragEventArgs! dragEvent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDragLeave(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDragOver(System.Windows.Forms.DragEventArgs! dragEvent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnEnabledChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnFontChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnForeColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnGiveFeedback(System.Windows.Forms.GiveFeedbackEventArgs! giveFeedbackEvent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnLocationChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseEnter(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseHover(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseLeave(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseMove(System.Windows.Forms.MouseEventArgs! mea) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnOwnerChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnOwnerFontChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnParentBackColorChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnParentBackColorChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnParentChanged(System.Windows.Forms.ToolStrip oldParent, System.Windows.Forms.ToolStrip newParent) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnParentEnabledChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnParentForeColorChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnParentRightToLeftChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnQueryContinueDrag(System.Windows.Forms.QueryContinueDragEventArgs queryContinueDragEvent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnRequestCommandExecute(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnQueryContinueDrag(System.Windows.Forms.QueryContinueDragEventArgs! queryContinueDragEvent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnRequestCommandExecute(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnRightToLeftChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnTextChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripItem.OnVisibleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.Text.get -> string
-~virtual System.Windows.Forms.ToolStripItem.Text.set -> void
+virtual System.Windows.Forms.ToolStripItem.Text.get -> string?
+virtual System.Windows.Forms.ToolStripItem.Text.set -> void
 ~virtual System.Windows.Forms.ToolStripItemCollection.ContainsKey(string key) -> bool
 ~virtual System.Windows.Forms.ToolStripItemCollection.IndexOfKey(string key) -> int
 ~virtual System.Windows.Forms.ToolStripItemCollection.RemoveByKey(string key) -> void
@@ -11324,7 +11324,7 @@ System.Windows.Forms.ToolStripItem.RightToLeftAutoMirrorImage.get -> bool
 System.Windows.Forms.ToolStripItem.RightToLeftAutoMirrorImage.set -> void
 System.Windows.Forms.ToolStripItem.RightToLeftChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripItem.Select() -> void
-System.Windows.Forms.ToolStripItem.TextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.TextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripItem.TextImageRelation.get -> System.Windows.Forms.TextImageRelation
 System.Windows.Forms.ToolStripItem.TextImageRelation.set -> void
 System.Windows.Forms.ToolStripItem.ToolStripItem() -> void
@@ -11333,7 +11333,7 @@ System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.AddState(System
 System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToolStripItemAccessibleObject(System.Windows.Forms.ToolStripItem! ownerItem) -> void
 System.Windows.Forms.ToolStripItem.Visible.get -> bool
 System.Windows.Forms.ToolStripItem.Visible.set -> void
-System.Windows.Forms.ToolStripItem.VisibleChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.VisibleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripItem.Width.get -> int
 System.Windows.Forms.ToolStripItem.Width.set -> void
 System.Windows.Forms.ToolStripItemAlignment

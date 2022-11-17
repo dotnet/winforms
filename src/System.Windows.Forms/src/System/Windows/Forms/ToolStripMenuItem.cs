@@ -988,7 +988,7 @@ namespace System.Windows.Forms
             bool showDropDown = true;
             if (IsOnDropDown)
             {
-                ToolStripDropDown dropDown = GetCurrentParentDropDown() as ToolStripDropDown;
+                ToolStripDropDown dropDown = GetCurrentParentDropDown()!;
 
                 // Right click support for context menus.
                 // used in ToolStripItem to determine whether to fire click OnMouseUp.

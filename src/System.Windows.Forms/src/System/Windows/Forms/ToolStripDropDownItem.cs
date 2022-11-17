@@ -595,7 +595,7 @@ namespace System.Windows.Forms
 
                     // we're on a drop down but we're heading back up the chain.
                     // remember to select the item that displayed this dropdown.
-                    ToolStripDropDown parent = GetCurrentParentDropDown();
+                    ToolStripDropDown? parent = GetCurrentParentDropDown();
                     if (parent is not null && !parent.IsFirstDropDown)
                     {
                         // we're walking back up the dropdown chain.

@@ -952,7 +952,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (TryGetExplicitlySetFont(out Font font))
+                if (TryGetExplicitlySetFont(out Font? font))
                 {
                     return font;
                 }
@@ -1901,7 +1901,7 @@ namespace System.Windows.Forms
             }
             set => Properties.SetObject(ToolStripItem.s_tagProperty, value);
         }
-#nullable disable
+
         /// <summary>
         ///  The text of the item
         /// </summary>
@@ -1909,13 +1909,13 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         [Localizable(true)]
         [SRDescription(nameof(SR.ToolStripItemTextDescr))]
-        public virtual string Text
+        public virtual string? Text
         {
             get
             {
                 if (Properties.ContainsObject(ToolStripItem.s_textProperty))
                 {
-                    return (string)Properties.GetObject(ToolStripItem.s_textProperty);
+                    return (string?)Properties.GetObject(ToolStripItem.s_textProperty);
                 }
 
                 return string.Empty;
@@ -1954,7 +1954,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ToolStripItemOnTextChangedDescr))]
-        public event EventHandler TextChanged
+        public event EventHandler? TextChanged
         {
             add => Events.AddHandler(s_textChangedEvent, value);
             remove => Events.RemoveHandler(s_textChangedEvent, value);
@@ -1969,7 +1969,7 @@ namespace System.Windows.Forms
                 ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
                 if (Properties.ContainsObject(ToolStripItem.s_textDirectionProperty))
                 {
-                    textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty);
+                    textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty)!;
                 }
 
                 if (textDirection == ToolStripTextDirection.Inherit)
@@ -2023,17 +2023,17 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         [Localizable(true)]
-        public string ToolTipText
+        public string? ToolTipText
         {
             get
             {
                 if (AutoToolTip && string.IsNullOrEmpty(_toolTipText))
                 {
-                    string toolText = Text;
+                    string? toolText = Text;
                     if (WindowsFormsUtils.ContainsMnemonic(toolText))
                     {
                         // this shouldn't be called a lot so we can take the perf hit here.
-                        toolText = string.Join("", toolText.Split('&'));
+                        toolText = string.Join(string.Empty, toolText.Split('&'));
                     }
 
                     return toolText;
@@ -2058,7 +2058,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ToolStripItemOnVisibleChangedDescr))]
-        public event EventHandler VisibleChanged
+        public event EventHandler? VisibleChanged
         {
             add => Events.AddHandler(s_visibleChangedEvent, value);
             remove => Events.RemoveHandler(s_visibleChangedEvent, value);
@@ -2102,7 +2102,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Image image = Image;
+            Image? image = Image;
             if (image is null)
             {
                 return;
@@ -2124,10 +2124,10 @@ namespace System.Windows.Forms
         {
             if (Control.ModifierKeys == Keys.Alt)
             {
-                if (ParentInternal.Items.Contains(this) && ParentInternal.AllowItemReorder)
+                if (ParentInternal is not null && ParentInternal.Items.Contains(this) && ParentInternal.AllowItemReorder)
                 {
                     // we only drag
-                    ToolStripItem item = this as ToolStripItem;
+                    ToolStripItem item = this;
                     DoDragDrop(item, DragDropEffects.Move);
                     return true;
                 }
@@ -2227,14 +2227,13 @@ namespace System.Windows.Forms
         ///  </para>
         /// </remarks>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+        public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
-            IComDataObject dataObject = null;
+            IComDataObject? dataObject = data as IComDataObject;
 
-            dataObject = data as IComDataObject;
             if (dataObject is null)
             {
-                DataObject iwdata = null;
+                DataObject? iwdata = null;
                 if (data is IDataObject idataObject)
                 {
                     iwdata = new DataObject(idataObject);
@@ -2289,7 +2288,7 @@ namespace System.Windows.Forms
         ///  Else if the parent does not support reordering of items (Parent.AllowItemReorder = false) -
         ///  then call back on the ToolStripItem's OnQueryContinueDrag/OnGiveFeedback methods.
         /// </summary>
-        internal Ole32.IDropSource CreateDropSource(IComDataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
+        internal Ole32.IDropSource CreateDropSource(IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
             if (ParentInternal is not null && ParentInternal.AllowItemReorder && ParentInternal.ItemReorderDropSource is not null)
             {
@@ -2309,7 +2308,7 @@ namespace System.Windows.Forms
                     OnLocationChanged(e);
                     break;
                 case ToolStripItemEventType.Paint:
-                    HandlePaint(e as PaintEventArgs);
+                    HandlePaint((PaintEventArgs)e);
                     break;
                 case ToolStripItemEventType.MouseHover:
                     // disabled toolstrip items should show tooltips.
@@ -2368,16 +2367,16 @@ namespace System.Windows.Forms
                 switch (met)
                 {
                     case ToolStripItemEventType.MouseMove:
-                        HandleMouseMove(e as MouseEventArgs);
+                        HandleMouseMove((MouseEventArgs)e);
                         break;
                     case ToolStripItemEventType.MouseHover:
-                        HandleMouseHover(e as EventArgs);
+                        HandleMouseHover(e);
                         break;
                     case ToolStripItemEventType.MouseUp:
-                        HandleMouseUp(e as MouseEventArgs);
+                        HandleMouseUp((MouseEventArgs)e);
                         break;
                     case ToolStripItemEventType.MouseDown:
-                        HandleMouseDown(e as MouseEventArgs);
+                        HandleMouseDown((MouseEventArgs)e);
                         break;
                     case ToolStripItemEventType.Click:
                         HandleClick(e);
@@ -2392,15 +2391,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private Font GetOwnerFont() => Owner?.Font;
+        private Font? GetOwnerFont() => Owner?.Font;
 
         /// <summary>
         ///  We don't want a public settable property and usually owner will work
         ///  except for things like the overflow button
         /// </summary>
-        public ToolStrip GetCurrentParent() => Parent;
+        public ToolStrip? GetCurrentParent() => Parent;
 
-        internal ToolStripDropDown GetCurrentParentDropDown()
+        internal ToolStripDropDown? GetCurrentParentDropDown()
         {
             if (ParentInternal is not null)
             {
@@ -2645,7 +2644,7 @@ namespace System.Windows.Forms
         {
             s_mouseDebugging.TraceVerbose($"[{Text}] MouseUp");
 
-            bool fireMouseUp = (ParentInternal.LastMouseDownedItem == this);
+            bool fireMouseUp = (ParentInternal?.LastMouseDownedItem == this);
 
             if (!fireMouseUp && !MouseDownAndUpMustBeInSameItem)
             {
@@ -2654,7 +2653,7 @@ namespace System.Windows.Forms
                 // that the mouse has actually moved from when a dropdown has been opened -
                 // otherwise we may accidentally click what's underneath the mouse at the time
                 // the dropdown is opened.
-                fireMouseUp = ParentInternal.ShouldSelectItem();
+                fireMouseUp = ParentInternal is not null && ParentInternal.ShouldSelectItem();
             }
 
             if (_state[s_stateMouseDownAndNoDrag] || fireMouseUp)
@@ -2750,9 +2749,9 @@ namespace System.Windows.Forms
         void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs)
             => OnQueryContinueDrag(queryContinueDragEventArgs);
 
-        private void OnAnimationFrameChanged(object o, EventArgs e)
+        private void OnAnimationFrameChanged(object? o, EventArgs e)
         {
-            ToolStrip parent = ParentInternal;
+            ToolStrip? parent = ParentInternal;
             if (parent is not null)
             {
                 if (parent.Disposing || parent.IsDisposed)
@@ -2762,7 +2761,7 @@ namespace System.Windows.Forms
 
                 if (parent.IsHandleCreated && parent.InvokeRequired)
                 {
-                    parent.BeginInvoke(new EventHandler(OnAnimationFrameChanged), new object[] { o, e });
+                    parent.BeginInvoke(new EventHandler(OnAnimationFrameChanged), new object?[] { o, e });
                     return;
                 }
 
@@ -2788,7 +2787,7 @@ namespace System.Windows.Forms
         [RequiresPreviewFeatures]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnCommandCanExecuteChanged(EventArgs e)
-            => ((EventHandler)Events[s_commandCanExecuteChangedEvent])?.Invoke(this, e);
+            => ((EventHandler?)Events[s_commandCanExecuteChangedEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Raises the <see cref="ToolStripItem.CommandParameterChanged"/> event.
@@ -2866,7 +2865,7 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEvent)
-            => ((GiveFeedbackEventHandler)Events[s_giveFeedbackEvent])?.Invoke(this, giveFeedbackEvent);
+            => ((GiveFeedbackEventHandler?)Events[s_giveFeedbackEvent])?.Invoke(this, giveFeedbackEvent);
 
         internal virtual void OnImageScalingSizeChanged(EventArgs e)
         {
@@ -2982,7 +2981,7 @@ namespace System.Windows.Forms
                 OnBackColorChanged(e);
             }
         }
-
+#nullable disable
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.
         /// </summary>
