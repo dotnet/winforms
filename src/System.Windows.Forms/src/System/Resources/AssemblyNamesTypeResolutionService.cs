@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
+using System.Collections.Concurrent;
 using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -14,35 +12,24 @@ namespace System.Resources
     internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
     {
         private AssemblyName[] _names;
-        private Hashtable _cachedAssemblies;
-        private Hashtable _cachedTypes;
+        private ConcurrentDictionary<AssemblyName, Assembly>? _cachedAssemblies;
+        private ConcurrentDictionary<string, Type>? _cachedTypes;
 
-        private static readonly string s_dotNetPath = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), "dotnet\\shared");
-        private static readonly string s_dotNetPathX86 = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)"), "dotnet\\shared");
+        private static readonly string s_dotNetPath = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles") ?? string.Empty, "dotnet\\shared");
+        private static readonly string s_dotNetPathX86 = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)") ?? string.Empty, "dotnet\\shared");
 
         internal AssemblyNamesTypeResolutionService(AssemblyName[] names)
         {
             _names = names;
         }
 
-        public Assembly GetAssembly(AssemblyName name)
-        {
-            return GetAssembly(name, true);
-        }
+        public Assembly? GetAssembly(AssemblyName name) => GetAssembly(name, true);
 
         [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Handles single file case")]
-        public Assembly GetAssembly(AssemblyName name, bool throwOnError)
+        public Assembly? GetAssembly(AssemblyName name, bool throwOnError)
         {
-            Assembly result = null;
-
-            _cachedAssemblies ??= Hashtable.Synchronized(new Hashtable());
-
-            if (_cachedAssemblies.Contains(name))
-            {
-                result = _cachedAssemblies[name] as Assembly;
-            }
-
-            if (result is null)
+            _cachedAssemblies ??= new();
+            if (!_cachedAssemblies.TryGetValue(name, out Assembly? result) || result is null)
             {
                 result = Assembly.Load(name.FullName);
                 if (result is not null)
@@ -78,31 +65,26 @@ namespace System.Resources
         [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Returns null if in a single file")]
         public string GetPathOfAssembly(AssemblyName name)
         {
-#pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308
-            return name.CodeBase;
-#pragma warning restore SYSLIB0044 // Type or member is obsolete
-        }
-
-        public Type GetType(string name)
-        {
-            return GetType(name, true);
-        }
-
-        public Type GetType(string name, bool throwOnError)
-        {
-            return GetType(name, throwOnError, false);
-        }
-
-        public Type GetType(string name, bool throwOnError, bool ignoreCase)
-        {
-            Type result = null;
-
-            // Check type cache first
-            _cachedTypes ??= Hashtable.Synchronized(new Hashtable(StringComparer.Ordinal));
-
-            if (_cachedTypes.Contains(name))
+            try
             {
-                result = _cachedTypes[name] as Type;
+                return Assembly.Load(name).Location;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        public Type? GetType(string name) => GetType(name, true);
+
+        public Type? GetType(string name, bool throwOnError) => GetType(name, throwOnError, false);
+
+        public Type? GetType(string name, bool throwOnError, bool ignoreCase)
+        {
+            // Check type cache first
+            _cachedTypes ??= new(StringComparer.Ordinal);
+            if (_cachedTypes.TryGetValue(name, out Type? result) && result is not null)
+            {
                 return result;
             }
 
@@ -120,8 +102,8 @@ namespace System.Resources
                 int pos = name.IndexOf(',');
                 if (pos > 0 && pos < name.Length - 1)
                 {
-                    string fullName = name.Substring(pos + 1).Trim();
-                    AssemblyName assemblyName = null;
+                    string fullName = name[(pos + 1)..].Trim();
+                    AssemblyName? assemblyName = null;
                     try
                     {
                         assemblyName = new AssemblyName(fullName);
@@ -152,7 +134,7 @@ namespace System.Resources
                 // Search each reference assembly
                 foreach (AssemblyName asmName in _names)
                 {
-                    Assembly asm = GetAssembly(asmName, false);
+                    Assembly? asm = GetAssembly(asmName, false);
                     if (asm is not null)
                     {
                         result = asm.GetType(name, false, ignoreCase);
@@ -161,7 +143,7 @@ namespace System.Resources
                             int indexOfComma = name.IndexOf(',');
                             if (indexOfComma != -1)
                             {
-                                string shortName = name.Substring(0, indexOfComma);
+                                string shortName = name[..indexOfComma];
                                 result = asm.GetType(shortName, false, ignoreCase);
                             }
                         }
@@ -196,13 +178,10 @@ namespace System.Resources
         ///  This is matching %windir%\Microsoft.NET\Framework*, so both 32bit and 64bit framework will be covered.
         /// </summary>
         private static bool IsDotNetAssembly(string assemblyPath)
-        {
-            return assemblyPath is not null && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase) || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
-        }
+            => assemblyPath is not null
+            && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase)
+            || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
 
-        public void ReferenceAssembly(AssemblyName name)
-        {
-            throw new NotSupportedException();
-        }
+        public void ReferenceAssembly(AssemblyName name) => throw new NotSupportedException();
     }
 }
