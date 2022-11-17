@@ -129,8 +129,7 @@ namespace System.Windows.Forms
         {
             _items.Add(dataGridViewRow);
 
-            int index = _items.Count - 1;
-            return index;
+            return _items.Count - 1;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
