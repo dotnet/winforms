@@ -12,7 +12,7 @@ namespace System.ComponentModel.Design
         protected sealed class ShadowPropertyCollection
         {
             private readonly ComponentDesigner _designer;
-            private Dictionary<string, PropertyDescriptor> _properties;
+            private Dictionary<string, object> _properties;
             private Dictionary<string, PropertyDescriptor> _descriptors;
 
             internal ShadowPropertyCollection(ComponentDesigner designer) => _designer = designer;
@@ -28,9 +28,9 @@ namespace System.ComponentModel.Design
                     ArgumentNullException.ThrowIfNull(propertyName);
 
                     // First, check to see if the name is in the given properties table
-                    if (_properties is not null && _properties.TryGetValue(propertyName, out PropertyDescriptor property))
+                    if (_properties is not null && _properties.TryGetValue(propertyName, out object prop))
                     {
-                        return property;
+                        return prop;
                     }
 
                     // Next, check to see if the name is in the descriptors table.  If it isn't, we will search the
@@ -42,7 +42,7 @@ namespace System.ComponentModel.Design
                 set
                 {
                     _properties ??= new();
-                    _properties[propertyName] = (PropertyDescriptor)value;
+                    _properties[propertyName] = value;
                 }
             }
 
@@ -58,9 +58,12 @@ namespace System.ComponentModel.Design
             {
                 _descriptors ??= new();
 
-                return _descriptors.TryGetValue(propertyName, out PropertyDescriptor property)
-                    ? property
-                    : TypeDescriptor.GetProperties(_designer.Component)[propertyName];
+                if (_descriptors.TryGetValue(propertyName, out PropertyDescriptor property))
+                {
+                    return property;
+                }
+
+                return TypeDescriptor.GetProperties(_designer.Component.GetType())[propertyName];
             }
 
             /// <summary>
