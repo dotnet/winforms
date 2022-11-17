@@ -294,7 +294,7 @@ namespace System.Windows.Forms
         private ScrollBars _scrollBars;
         private LayoutData _layout;
         private Rectangle _normalClientRectangle;
-        private readonly ArrayList _lstRows;
+        private readonly List<DataGridViewRow> _lstRows;
         private int _availableWidthForFillColumns;
 
         private BorderStyle _borderStyle;
@@ -411,7 +411,7 @@ namespace System.Windows.Forms
                                     | State2_UsedFillWeightsDirty] = true;
 
             DisplayedBandsInfo = new DisplayedBandsData();
-            _lstRows = new ArrayList();
+            _lstRows = new List<DataGridViewRow>();
 
             _converters = new Hashtable(8);
             GridPenColor = DefaultGridColor;
@@ -2413,9 +2413,9 @@ namespace System.Windows.Forms
             get
             {
                 _editingPanel ??= new DataGridViewEditingPanel(this)
-                    {
-                        AccessibleName = SR.DataGridView_AccEditingPanelAccName
-                    };
+                {
+                    AccessibleName = SR.DataGridView_AccEditingPanelAccName
+                };
 
                 return _editingPanel;
             }
