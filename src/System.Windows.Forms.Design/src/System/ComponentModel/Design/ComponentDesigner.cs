@@ -654,7 +654,7 @@ namespace System.ComponentModel.Design
             }
 
             // otherwise apply our inherited properties to the actual property list.
-            foreach (var de in _inheritedProps)
+            foreach (KeyValuePair<string, InheritedPropertyDescriptor> de in _inheritedProps)
             {
                 // replace the property descriptor it was created with with the new one in case we're shadowing
                 PropertyDescriptor newInnerProp = (PropertyDescriptor)properties[de.Key];
