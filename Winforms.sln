@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31808.319
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinformsControlsTest", "src\System.Windows.Forms\tests\IntegrationTests\WinformsControlsTest\WinformsControlsTest.csproj", "{657472B8-FDA3-49DF-B8BE-0246046A4348}"
+	ProjectSection(ProjectDependencies) = postProject
+		{93651A99-C9EB-4F83-8A66-DF9D21574550} = {93651A99-C9EB-4F83-8A66-DF9D21574550}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms", "src\System.Windows.Forms\src\System.Windows.Forms.csproj", "{0D23A41B-2626-4703-9E4A-87C07F69B0B2}"
 EndProject
@@ -148,6 +151,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.UI.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\UIIntegrationTests\System.Windows.Forms.UI.IntegrationTests.csproj", "{5A6AFB8C-0EFE-4466-BD77-0F4159151AE6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accessibility_Core_App", "src\System.Windows.Forms\tests\AccessibilityTests\Accessibility_Core_App.csproj", "{317E131C-EA24-47A4-96EE-5A66DED10501}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AxHosts", "src\System.Windows.Forms\tests\AxHosts\AxHosts.csproj", "{93651A99-C9EB-4F83-8A66-DF9D21574550}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -801,6 +806,22 @@ Global
 		{317E131C-EA24-47A4-96EE-5A66DED10501}.Release|x64.Build.0 = Release|Any CPU
 		{317E131C-EA24-47A4-96EE-5A66DED10501}.Release|x86.ActiveCfg = Release|Any CPU
 		{317E131C-EA24-47A4-96EE-5A66DED10501}.Release|x86.Build.0 = Release|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Debug|arm64.Build.0 = Debug|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Debug|x64.Build.0 = Debug|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Debug|x86.Build.0 = Debug|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Release|arm64.ActiveCfg = Release|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Release|arm64.Build.0 = Release|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Release|x64.ActiveCfg = Release|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Release|x64.Build.0 = Release|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Release|x86.ActiveCfg = Release|Any CPU
+		{93651A99-C9EB-4F83-8A66-DF9D21574550}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -855,6 +876,7 @@ Global
 		{3129970B-A4EB-46AC-B163-18A5557B11BD} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{5A6AFB8C-0EFE-4466-BD77-0F4159151AE6} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{317E131C-EA24-47A4-96EE-5A66DED10501} = {D390F7D2-1E11-4DEE-B7F1-4FD0681A81F0}
+		{93651A99-C9EB-4F83-8A66-DF9D21574550} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
