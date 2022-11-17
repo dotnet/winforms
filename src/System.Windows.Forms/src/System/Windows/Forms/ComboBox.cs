@@ -3060,7 +3060,7 @@ namespace System.Windows.Forms
 
                 // Some accessibility tools (e.g., NVDA) could recognize ComboBox as IAccessible object
                 // and ignore UIA focus change event. For such cases we need to additionaly raise MSAA focus event.
-                // childID = CHILDID_SELF - 1 (the -1 is because WinForms always adds 1 to the value)
+                // childID = CHILDID_SELF - 1 (the -1 will resolve to CHILDID_SELF when we call NotifyWinEvent)
                 AccessibilityNotifyClients(AccessibleEvents.Focus, childID: -1);
 
                 // Notify Collapsed/expanded property change.
