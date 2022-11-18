@@ -1605,7 +1605,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, type);
             Assert.Equal(847, width);
             Assert.Equal(847, height);
-            Assert.Throws<Exception>(() => iPicture.CurDC);
+            Assert.Throws<COMException>(() => iPicture.CurDC);
             Assert.Equal(2u, attributes);
 
             Assert.Throws<InvalidCastException>(() => SubAxHost.GetPictureFromIPicture(iPicture));
@@ -1723,7 +1723,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, type);
             Assert.Equal(19972, width);
             Assert.Equal(28332, height);
-            Assert.Throws<Exception>(() => iPicture.CurDC);
+            Assert.Throws<COMException>(() => iPicture.CurDC);
             Assert.Equal(3u, attributes);
 
             var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));
