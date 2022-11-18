@@ -198,7 +198,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            foreach (Control ctl in components)
+            foreach (Control ctl in components.ToArray())
             {
                 if (ctl is WebBrowserBase webBrowserBase)
                 {
