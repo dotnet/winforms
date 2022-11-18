@@ -392,7 +392,7 @@ namespace System.Windows.Forms
         }
 
         internal static string GetNameForControl(Control ctl)
-            => ctl.Site is not null ? ctl.Site.Name ?? string.Empty : ctl.Name;
+            => ctl.Site is not null ? ctl.Site.Name ?? string.Empty : ctl.Name ?? string.Empty;
 
         internal void OnUIActivate(WebBrowserBase site)
         {
