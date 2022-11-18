@@ -17,7 +17,12 @@
     <ResolveComReferenceSilent>true</ResolveComReferenceSilent>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--
+    Restoring during a command line build will use whichever MSBuild is on the path. When running in a VS developer
+    command prompt that will be the .NET Framework build of MSBuild in the VS directory. On the CI this ends up
+    being the .NET Core version of MSBuild, which does not support having COMReference items.
+  -->
+  <ItemGroup Condition="'$(Restore)' == ''">
     <COMReference Include="WMPLib">
       <VersionMinor>0</VersionMinor>
       <VersionMajor>1</VersionMajor>
