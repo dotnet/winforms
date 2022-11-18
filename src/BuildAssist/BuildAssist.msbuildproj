@@ -7,10 +7,14 @@
     <_AxHostsPath>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', 'System.Windows.Forms', 'tests', 'AxHosts', 'AxHosts.csproj'))</_AxHostsPath>
     <_ProjectArgs>/p:Configuration=$(Configuration) /p:Platform=AnyCPU</_ProjectArgs>
   </PropertyGroup>
-  <Target Name="BuildAxHosts" BeforeTargets="AfterBuild">
-    <Exec Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs)" />
+
+  <Target Name="BuildAxHosts" BeforeTargets="AfterBuild;FindFrameworkMsBuild">
+    <Exec Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs)"
+          WorkingDirectory="$(VSINSTALLDIR)\MSBuild\Current\Bin\amd64"/>
   </Target>
-  <Target Name="CleanAxHosts" BeforeTargets="AfterClean">
-    <Exec Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs) /t:Clean" />
+
+  <Target Name="CleanAxHosts" BeforeTargets="AfterClean;FindFrameworkMsBuild">
+    <Exec Command="msbuild.exe $(_AxHostsPath) $(_ProjectArgs) /t:Clean"
+          WorkingDirectory="$(VSINSTALLDIR)\MSBuild\Current\Bin\amd64"/>
   </Target>
 </Project>
