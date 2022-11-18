@@ -101,5 +101,6 @@
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
     <MicrosoftWindowsDesktopAppRefv30PackageVersion>3.0.0</MicrosoftWindowsDesktopAppRefv30PackageVersion>
     <NewtonsoftJsonVersion>13.0.1</NewtonsoftJsonVersion>
+    <VsWherePackageVersion>2.6.7</VsWherePackageVersion>
   </PropertyGroup>
 </Project>
