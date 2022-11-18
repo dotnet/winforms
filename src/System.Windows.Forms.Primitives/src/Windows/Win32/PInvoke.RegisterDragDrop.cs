@@ -19,8 +19,12 @@ namespace Windows.Win32
 
             // RegisterDragDrop calls AddRef()
             HRESULT result = RegisterDragDrop(hwnd.Handle, dropTarget);
-            uint count = dropTarget->Release();
-            Debug.Assert(count > 0);
+            if (result.Succeeded)
+            {
+                uint count = dropTarget->Release();
+                Debug.Assert(count > 0);
+            }
+
             GC.KeepAlive(hwnd.Wrapper);
             return result;
         }

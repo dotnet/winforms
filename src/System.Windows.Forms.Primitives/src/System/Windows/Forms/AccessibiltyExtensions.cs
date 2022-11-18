@@ -12,7 +12,7 @@ namespace System.Windows.Forms
         /// <inheritdoc cref="PInvoke.LresultFromObject(Guid*, WPARAM, IUnknown*)"/>
         internal static LRESULT GetLRESULT(this IAccessible accessible, WPARAM wparam)
         {
-            // https://docs.microsoft.com/windows/win32/winauto/how-to-handle-wm-getobject
+            // https://learn.microsoft.com/windows/win32/winauto/how-to-handle-wm-getobject
 
             using var unknown = ComHelpers.GetComScope<IUnknown>(accessible, out HRESULT hr);
 
