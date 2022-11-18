@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using static Interop;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms
 {
@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     ///  Implements a basic data transfer mechanism.
     /// </summary>
     [ClassInterface(ClassInterfaceType.None)]
-    public partial class DataObject : IDataObject, IComDataObject
+    public partial class DataObject : IDataObject, ComTypes.IDataObject
     {
         private const string CF_DEPRECATED_FILENAME = "FileName";
         private const string CF_DEPRECATED_FILENAMEW = "FileNameW";
@@ -55,9 +55,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="IComDataObject"/>.
+        ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="ComTypes.IDataObject"/>.
         /// </summary>
-        internal DataObject(IComDataObject data)
+        internal DataObject(ComTypes.IDataObject data)
         {
             if (data is DataObject dataObject)
             {
@@ -92,7 +92,7 @@ namespace System.Windows.Forms
             {
                 _innerData = dataObject;
             }
-            else if (data is IComDataObject comDataObject)
+            else if (data is ComTypes.IDataObject comDataObject)
             {
                 _innerData = new OleConverter(comDataObject);
             }
@@ -302,12 +302,7 @@ namespace System.Windows.Forms
             // Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
-            if (GetData(ConvertToDataFormats(format), false) is string text)
-            {
-                return text;
-            }
-
-            return string.Empty;
+            return GetData(ConvertToDataFormats(format), false) is string text ? text : string.Empty;
         }
 
         public virtual void SetAudio(byte[] audioBytes)
@@ -470,9 +465,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
+        int ComTypes.IDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
         {
             CompModSwitches.DataObject.TraceVerbose("DAdvise");
             if (_innerData is OleConverter converter)
@@ -485,9 +480,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        void IComDataObject.DUnadvise(int dwConnection)
+        void ComTypes.IDataObject.DUnadvise(int dwConnection)
         {
             CompModSwitches.DataObject.TraceVerbose("DUnadvise");
             if (_innerData is OleConverter converter)
@@ -500,9 +495,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        int IComDataObject.EnumDAdvise(out IEnumSTATDATA? enumAdvise)
+        int ComTypes.IDataObject.EnumDAdvise(out IEnumSTATDATA? enumAdvise)
         {
             CompModSwitches.DataObject.TraceVerbose("EnumDAdvise");
             if (_innerData is OleConverter converter)
@@ -515,9 +510,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
+        IEnumFORMATETC ComTypes.IDataObject.EnumFormatEtc(DATADIR dwDirection)
         {
             CompModSwitches.DataObject.TraceVerbose($"EnumFormatEtc: {dwDirection}");
             if (_innerData is OleConverter converter)
@@ -534,9 +529,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Part of IComDataObject, used to interop with OLE.
+        /// Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
+        int ComTypes.IDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
         {
             CompModSwitches.DataObject.TraceVerbose("GetCanonicalFormatEtc");
             if (_innerData is OleConverter converter)
@@ -544,14 +539,14 @@ namespace System.Windows.Forms
                 return converter.OleDataObject.GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
             }
 
-            pformatetcOut = default(FORMATETC);
+            pformatetcOut = default;
             return DATA_S_SAMEFORMATETC;
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
+        void ComTypes.IDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
         {
             CompModSwitches.DataObject.TraceVerbose("GetData");
             if (_innerData is OleConverter converter)
@@ -564,7 +559,7 @@ namespace System.Windows.Forms
                 string formatName = DataFormats.GetFormat(formatetc.cfFormat).Name;
                 if (!_innerData.GetDataPresent(formatName))
                 {
-                    medium = default(STGMEDIUM);
+                    medium = default;
                     CompModSwitches.DataObject.TraceVerbose($" drag-and-drop private format requested '{formatName}' not present");
                     return;
                 }
@@ -577,7 +572,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            medium = default(STGMEDIUM);
+            medium = default;
 
             if (!GetTymedUseable(formatetc.tymed))
             {
@@ -597,7 +592,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    ((IComDataObject)this).GetDataHere(ref formatetc, ref medium);
+                    ((ComTypes.IDataObject)this).GetDataHere(ref formatetc, ref medium);
                 }
                 catch
                 {
@@ -609,14 +604,14 @@ namespace System.Windows.Forms
             else
             {
                 medium.tymed = formatetc.tymed;
-                ((IComDataObject)this).GetDataHere(ref formatetc, ref medium);
+                ((ComTypes.IDataObject)this).GetDataHere(ref formatetc, ref medium);
             }
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
+        void ComTypes.IDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
         {
             CompModSwitches.DataObject.TraceVerbose("GetDataHere");
             if (_innerData is OleConverter converter)
@@ -630,9 +625,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        int IComDataObject.QueryGetData(ref FORMATETC formatetc)
+        int ComTypes.IDataObject.QueryGetData(ref FORMATETC formatetc)
         {
             CompModSwitches.DataObject.TraceVerbose("QueryGetData");
             if (_innerData is OleConverter converter)
@@ -672,9 +667,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
+        void ComTypes.IDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
         {
             CompModSwitches.DataObject.TraceVerbose("SetData");
             if (_innerData is OleConverter converter)
@@ -960,7 +955,7 @@ namespace System.Windows.Forms
                         return HRESULT.E_OUTOFMEMORY;
                     }
 
-                    byte* ptr = (byte*)PInvoke.GlobalLock((nint)newHandle);
+                    byte* ptr = (byte*)PInvoke.GlobalLock(newHandle);
                     if (ptr is null)
                     {
                         return HRESULT.E_OUTOFMEMORY;

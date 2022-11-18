@@ -6,10 +6,11 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static unsafe HRESULT GetThemeFont(IHandle hTheme, HDC hdc, int iPartId, int iStateId, int iPropId, out LOGFONTW pFont)
+        public static unsafe HRESULT GetThemeFont<T>(T hTheme, HDC hdc, int iPartId, int iStateId, int iPropId, out LOGFONTW pFont)
+            where T : IHandle<HTHEME>
         {
             HRESULT result = GetThemeFont(hTheme.Handle, hdc, iPartId, iStateId, iPropId, out pFont);
-            GC.KeepAlive(hTheme);
+            GC.KeepAlive(hTheme.Wrapper);
             return result;
         }
     }

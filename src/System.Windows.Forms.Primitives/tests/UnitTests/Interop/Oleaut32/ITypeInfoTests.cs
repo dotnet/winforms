@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.Equal(HRESULT.S_OK, hr);
 
             void* pvObj = null;
-            hr = typeInfo.Value->CreateInstance(null, IPictureDisp.NativeGuid, &pvObj);
+            hr = typeInfo.Value->CreateInstance(null, IID.Get<IPictureDisp>(), &pvObj);
             Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
         }
 

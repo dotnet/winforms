@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -226,29 +225,31 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetAcceptDrops(bool accept)
         {
-            if (accept && _owner.IsHandleCreated)
+            if (!accept || !_owner.IsHandleCreated)
             {
-                try
-                {
-                    if (Application.OleRequired() != System.Threading.ApartmentState.STA)
-                    {
-                        throw new ThreadStateException(SR.ThreadMustBeSTA);
-                    }
+                return;
+            }
 
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {_owner.Handle}");
-
-                    // Register
-                    HRESULT n = Ole32.RegisterDragDrop(_owner, new DropTarget(this));
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{n}");
-                    if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
-                    {
-                        throw Marshal.GetExceptionForHR((int)n)!;
-                    }
-                }
-                catch (Exception e)
+            try
+            {
+                if (Application.OleRequired() != ApartmentState.STA)
                 {
-                    throw new InvalidOperationException(SR.DragDropRegFailed, e);
+                    throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
+
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {_owner.Handle}");
+
+                // Register
+                HRESULT hr = PInvoke.RegisterDragDrop(_owner, new DropTarget(this));
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{hr}");
+                if (hr.Failed && hr != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
+                {
+                    throw Marshal.GetExceptionForHR((int)hr)!;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(SR.DragDropRegFailed, e);
             }
         }
 

@@ -10,9 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
-using Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Design
@@ -1821,32 +1819,9 @@ namespace System.Windows.Forms.Design
                     break;
 
                 case User32.WM.GETOBJECT:
-                    // See "How to Handle WM_GETOBJECT" in MSDN
                     if (m.LParamInternal == User32.OBJID.CLIENT)
                     {
-                        // Get an Lresult for the accessibility Object for this control
-                        IAccessible iacc = AccessibilityObject;
-                        if (iacc is null)
-                        {
-                            // Accessibility is not supported on this control
-                            m.ResultInternal = (LRESULT)0;
-                        }
-                        else
-                        {
-                            // Obtain the Lresult
-                            IntPtr punkAcc = Marshal.GetIUnknownForObject(iacc);
-                            try
-                            {
-                                m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(
-                                    in IID.IAccessible,
-                                    (nint)m.WParamInternal,
-                                    punkAcc);
-                            }
-                            finally
-                            {
-                                Marshal.Release(punkAcc);
-                            }
-                        }
+                        m.ResultInternal = AccessibilityObject?.GetLRESULT(m.WParamInternal) ?? default;
                     }
                     else
                     {

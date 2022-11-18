@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
@@ -20,8 +19,8 @@ using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
 using static Interop;
 using Com = Windows.Win32.System.Com;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -3104,7 +3103,7 @@ namespace System.Windows.Forms
             {
                 value?.AddReflectChild();
 
-                Control? existing = _reflectParent as Control;
+                Control? existing = _reflectParent;
                 _reflectParent = value;
                 existing?.RemoveReflectChild();
             }
@@ -5316,9 +5315,9 @@ namespace System.Windows.Forms
             Point cursorOffset,
             bool useDefaultDragImage)
         {
-            IComDataObject dataObject;
+            ComTypes.IDataObject dataObject;
 
-            if (data is IComDataObject comDataObject)
+            if (data is ComTypes.IDataObject comDataObject)
             {
                 dataObject = comDataObject;
             }
@@ -10216,46 +10215,48 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetAcceptDrops(bool accept)
         {
-            if (accept != GetState(States.DropTarget) && IsHandleCreated)
+            if (accept == GetState(States.DropTarget) || !IsHandleCreated)
             {
-                try
+                return;
+            }
+
+            try
+            {
+                if (Application.OleRequired() != ApartmentState.STA)
                 {
-                    if (Application.OleRequired() != ApartmentState.STA)
-                    {
-                        throw new ThreadStateException(SR.ThreadMustBeSTA);
-                    }
-
-                    if (accept)
-                    {
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {Handle}");
-
-                        // Register
-                        HRESULT n = Ole32.RegisterDragDrop(this, new DropTarget(this));
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{n}");
-                        if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
-                        {
-                            throw Marshal.GetExceptionForHR((int)n)!;
-                        }
-                    }
-                    else
-                    {
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Revoking drop target: {Handle}");
-
-                        // Revoke
-                        HRESULT n = PInvoke.RevokeDragDrop(this);
-                        Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{n}");
-                        if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_NOTREGISTERED)
-                        {
-                            throw Marshal.GetExceptionForHR((int)n)!;
-                        }
-                    }
-
-                    SetState(States.DropTarget, accept);
+                    throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
-                catch (Exception e)
+
+                if (accept)
                 {
-                    throw new InvalidOperationException(SR.DragDropRegFailed, e);
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {Handle}");
+
+                    // Register
+                    HRESULT hr = PInvoke.RegisterDragDrop(this, new DropTarget(this));
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{hr}");
+                    if (hr != HRESULT.S_OK && hr != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
+                    {
+                        throw Marshal.GetExceptionForHR((int)hr)!;
+                    }
                 }
+                else
+                {
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Revoking drop target: {Handle}");
+
+                    // Revoke
+                    HRESULT hr = PInvoke.RevokeDragDrop(this);
+                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{hr}");
+                    if (hr != HRESULT.S_OK && hr != HRESULT.DRAGDROP_E_NOTREGISTERED)
+                    {
+                        throw Marshal.GetExceptionForHR((int)hr)!;
+                    }
+                }
+
+                SetState(States.DropTarget, accept);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(SR.DragDropRegFailed, e);
             }
         }
 
@@ -12103,7 +12104,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the WM_GETOBJECT message. Used for accessibility.
         /// </summary>
-        private void WmGetObject(ref Message m)
+        private unsafe void WmGetObject(ref Message m)
         {
             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
 
@@ -12131,24 +12132,11 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Get an Lresult for the accessibility Object for this control.
             try
             {
                 // Obtain the Lresult.
-                IntPtr pUnknown = Marshal.GetIUnknownForObject(accessibleObject);
-
-                try
-                {
-                    m.ResultInternal = (LRESULT)Oleacc.LresultFromObject(
-                        in IID.IAccessible,
-                        m.WParamInternal,
-                        new HandleRef(accessibleObject, pUnknown));
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"LresultFromObject returned {m.ResultInternal}");
-                }
-                finally
-                {
-                    Marshal.Release(pUnknown);
-                }
+                m.ResultInternal = accessibleObject.GetLRESULT(m.WParamInternal);
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"LresultFromObject returned {m.ResultInternal}");
             }
             catch (Exception e)
             {
@@ -12559,7 +12547,7 @@ namespace System.Windows.Forms
                 switch ((ComCtl32.TTN)nmhdr->code)
                 {
                     case ComCtl32.TTN.SHOW:
-                        m.ResultInternal = (LRESULT)PInvoke.SendMessage(
+                        m.ResultInternal = PInvoke.SendMessage(
                             nmhdr->hwndFrom,
                             User32.WM.REFLECT | m.MsgInternal,
                             m.WParamInternal,
@@ -12604,7 +12592,7 @@ namespace System.Windows.Forms
                 // Empirically, we have observed that the 64 bit HWND is just a sign extension of the 32-bit ctrl ID
                 // Since WParam is already 64-bit, we need to discard the high dword first and then re-extend the
                 // 32-bit value treating it as signed.
-                p = (HWND)(nint)ctrlId;
+                p = (HWND)ctrlId;
             }
 
             if (!ReflectMessage(p, ref m))
@@ -14299,13 +14287,13 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT Ole32.IViewObject.SetAdvise(Ole32.DVASPECT aspects, Ole32.ADVF advf, IAdviseSink pAdvSink)
+        HRESULT Ole32.IViewObject.SetAdvise(Ole32.DVASPECT aspects, Ole32.ADVF advf, ComTypes.IAdviseSink pAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
             return ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
         }
 
-        unsafe HRESULT Ole32.IViewObject.GetAdvise(Ole32.DVASPECT* pAspects, Ole32.ADVF* pAdvf, IAdviseSink[] ppAdvSink)
+        unsafe HRESULT Ole32.IViewObject.GetAdvise(Ole32.DVASPECT* pAspects, Ole32.ADVF* pAdvf, ComTypes.IAdviseSink[] ppAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
             return ActiveXInstance.GetAdvise(pAspects, pAdvf, ppAdvSink);
@@ -14366,13 +14354,13 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT Ole32.IViewObject2.SetAdvise(Ole32.DVASPECT aspects, Ole32.ADVF advf, IAdviseSink pAdvSink)
+        HRESULT Ole32.IViewObject2.SetAdvise(Ole32.DVASPECT aspects, Ole32.ADVF advf, ComTypes.IAdviseSink pAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
             return ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
         }
 
-        unsafe HRESULT Ole32.IViewObject2.GetAdvise(Ole32.DVASPECT* pAspects, Ole32.ADVF* pAdvf, IAdviseSink[] ppAdvSink)
+        unsafe HRESULT Ole32.IViewObject2.GetAdvise(Ole32.DVASPECT* pAspects, Ole32.ADVF* pAdvf, ComTypes.IAdviseSink[] ppAdvSink)
         {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
             return ActiveXInstance.GetAdvise(pAspects, pAdvf, ppAdvSink);

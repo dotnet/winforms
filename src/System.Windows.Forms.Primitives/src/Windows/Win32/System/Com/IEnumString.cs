@@ -8,10 +8,8 @@ using ComWrappers = Interop.WinFormsComWrappers;
 
 namespace Windows.Win32.System.Com
 {
-    internal unsafe partial struct IEnumString : IPopulateVTable<IEnumString.Vtbl>, INativeGuid
+    internal unsafe partial struct IEnumString : IPopulateVTable<IEnumString.Vtbl>
     {
-        static Guid* INativeGuid.NativeGuid => (Guid*)Unsafe.AsPointer(ref Unsafe.AsRef(in Guid));
-
         public static void PopulateVTable(Vtbl* vtable)
         {
             vtable->Next_4 = &Next;

@@ -393,20 +393,18 @@ namespace System.Windows.Forms
             try
             {
                 using ComScope<IPicture> picture = new(null);
-                PInvoke.OleCreatePictureIndirect(lpPictDesc: null, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
+                PInvoke.OleCreatePictureIndirect(lpPictDesc: null, IID.Get<IPicture>(), fOwn: true, picture).ThrowOnFailure();
 
                 using ComScope<IPersistStream> persist = new(null);
-                picture.Value->QueryInterface(IPersistStream.NativeGuid, persist).ThrowOnFailure();
+                picture.Value->QueryInterface(IID.Get<IPersistStream>(), persist).ThrowOnFailure();
 
                 using var pStream = ComHelpers.GetComScope<IStream>(stream, out bool result);
                 Debug.Assert(result);
                 persist.Value->Load(pStream);
 
-                picture.Value->get_Type(out short type).ThrowOnFailure();
-                if (type == (short)PICTYPE.PICTYPE_ICON)
+                if (picture.Value->Type == (short)PICTYPE.PICTYPE_ICON)
                 {
-                    picture.Value->get_Handle(out uint handle).ThrowOnFailure();
-                    HICON cursorHandle = (HICON)(int)handle;
+                    HICON cursorHandle = (HICON)picture.Value->Handle;
                     Size picSize = GetIconSize(cursorHandle);
                     if (DpiHelper.IsScalingRequired)
                     {

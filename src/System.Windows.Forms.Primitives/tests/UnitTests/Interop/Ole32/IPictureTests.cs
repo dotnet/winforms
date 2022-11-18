@@ -19,12 +19,12 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
 
             IPicture.Interface picture = MockAxHost.GetIPictureFromCursor(arrow.Handle);
             Assert.NotNull(picture);
-            picture.get_Type(out short type).ThrowOnFailure();
+            short type = picture.Type;
             Assert.Equal((short)PICTYPE.PICTYPE_ICON, type);
 
-            picture.get_Height(out int height).ThrowOnFailure();
+            int height = picture.Height;
             Assert.Equal(arrow.Size.Height, GdiHelper.HimetricToPixelY(height));
-            picture.get_Width(out int width).ThrowOnFailure();
+            int width = picture.Width;
             Assert.Equal(arrow.Size.Width, GdiHelper.HimetricToPixelX(width));
         }
 
@@ -36,12 +36,12 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
             using Bitmap bitmap = icon.ToBitmap();
             IPicture.Interface picture = MockAxHost.GetIPictureFromPicture(bitmap);
             Assert.NotNull(picture);
-            picture.get_Type(out short type).ThrowOnFailure();
+            short type = picture.Type;
             Assert.Equal((short)PICTYPE.PICTYPE_BITMAP, type);
 
-            picture.get_Height(out int height).ThrowOnFailure();
+            int height = picture.Height;
             Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY(height));
-            picture.get_Width(out int width).ThrowOnFailure();
+            int width = picture.Width;
             Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX(width));
         }
 

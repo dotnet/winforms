@@ -140,7 +140,7 @@ internal partial class Interop
                 try
                 {
                     var formatEtc = instance.EnumFormatEtc((ComTypes.DATADIR)(int)direction);
-                    if (!ComHelpers.TryGetComPointer(formatEtc, IID.IEnumFORMATETC, out IEnumFORMATETC* formatEtcPtr))
+                    if (!ComHelpers.TryGetComPointer(formatEtc, out IEnumFORMATETC* formatEtcPtr))
                     {
                         return HRESULT.E_NOINTERFACE;
                     }
@@ -191,7 +191,7 @@ internal partial class Interop
                     return result;
                 }
 
-                if (!ComHelpers.TryGetComPointer(enumAdvice, IID.IEnumSTATDATA, out IEnumSTATDATA* enumAdvicePtr))
+                if (!ComHelpers.TryGetComPointer(enumAdvice, out IEnumSTATDATA* enumAdvicePtr))
                 {
                     return HRESULT.E_NOINTERFACE;
                 }

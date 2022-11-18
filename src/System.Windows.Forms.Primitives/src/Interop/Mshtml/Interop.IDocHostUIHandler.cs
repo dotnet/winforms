@@ -72,8 +72,8 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT GetDropTarget(
-                Ole32.IDropTarget pDropTarget,
-                out Ole32.IDropTarget ppDropTarget);
+                IDropTarget.Interface pDropTarget,
+                out IDropTarget.Interface ppDropTarget);
 
             [PreserveSig]
             HRESULT GetExternal(
