@@ -65,14 +65,9 @@ namespace System.Resources
         [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Returns null if in a single file")]
         public string GetPathOfAssembly(AssemblyName name)
         {
-            try
-            {
-                return Assembly.Load(name).Location;
-            }
-            catch
-            {
-                return string.Empty;
-            }
+#pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308
+            return name.CodeBase ?? string.Empty;
+#pragma warning restore SYSLIB0044 // Type or member is obsolete
         }
 
         public Type? GetType(string name) => GetType(name, true);
