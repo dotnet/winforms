@@ -33,10 +33,12 @@ namespace WinformsControlsTest
         {
             if (trackBar1.TickStyle == TickStyle.BottomRight)
             {
-                trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
+                trackBar1.TickStyle = TickStyle.None;
             }
             else
-            { trackBar1.TickStyle = System.Windows.Forms.TickStyle.BottomRight; }
+            {
+                trackBar1.TickStyle = TickStyle.BottomRight;
+            }
         }    
 
     private void numericMinimum_ValueChanged(object sender, EventArgs e)

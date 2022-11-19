@@ -158,27 +158,15 @@ namespace System.Windows.Forms
                         break;
                     case TickStyle.TopLeft:
                         cp.Style |= (int)(PInvoke.TBS_TOP);
-                        if (_autoTicks)
-                        {
-                            cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
-                        }
-
+                        EnableAutoTicksIfRequired();
                         break;
                     case TickStyle.BottomRight:
                         cp.Style |= (int)(PInvoke.TBS_BOTTOM);
-                        if (_autoTicks)
-                        {
-                            cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
-                        }
-
+                        EnableAutoTicksIfRequired();
                         break;
                     case TickStyle.Both:
                         cp.Style |= (int)(PInvoke.TBS_BOTH);
-                        if (_autoTicks)
-                        {
-                            cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
-                        }
-
+                        EnableAutoTicksIfRequired();
                         break;
                 }
 
@@ -196,6 +184,14 @@ namespace System.Windows.Forms
                 }
 
                 return cp;
+
+                void EnableAutoTicksIfRequired()
+                {
+                     if (_autoTicks)
+                     {
+                        cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
+                     }
+                }
             }
         }
 
@@ -831,30 +827,47 @@ namespace System.Windows.Forms
             AdjustSize();
         }
 
+        private bool AutoDrawTicks
+        {
+            get
+            {
+                if (TickStyle == TickStyle.None)
+                {
+                    return true;
+                }
+
+                int tickFrequency = _tickFrequency;
+                int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
+                int range = _maximum - _minimum;
+
+                return range <= maxTickCount || maxTickCount == 0;
+            }
+        }
+
         private void SetTickFrequency()
         {
-            // check if the value of the max is greater then the taskbar size
-            // if so then we divide the value by size and only that many ticks to be drawn on the screen
+            // Check if the value of the max is greater then the taskbar size.
+            // If so then we divide the value by size and only that many ticks to be drawn on the screen.
 
-            if (TickStyle == System.Windows.Forms.TickStyle.None)
+            if (TickStyle == TickStyle.None || AutoDrawTicks)
             {
                 return;
             }
 
             int tickFrequency = _tickFrequency;
-            int trackbarSize = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
-            uint maxValue = (uint)(-_minimum+_maximum);
+            int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
+            int range = _maximum - _minimum;
 
-            if (maxValue > trackbarSize && trackbarSize != 0)
+            if (range > maxTickCount && maxTickCount != 0)
             {
-                tickFrequency = ((int)(maxValue / trackbarSize));
-                _autoTicks = false;
+                tickFrequency = range / maxTickCount;
             }
 
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
-            for (int i = tickFrequency; i < maxValue; i += tickFrequency)
+            for (int i = _minimum + tickFrequency; i < _maximum - tickFrequency; i += tickFrequency)
             {
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (LPARAM)i);
+                LRESULT lresult = PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
+                Debug.Assert((bool)(BOOL)lresult);
             }
         }
 
