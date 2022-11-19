@@ -40,10 +40,7 @@ namespace System.Resources
             TextFileEncoding = textFileEncoding;
         }
 
-        internal ResXFileRef Clone()
-        {
-            return new ResXFileRef(FileName, TypeName, TextFileEncoding);
-        }
+        internal ResXFileRef Clone() => new ResXFileRef(FileName, TypeName, TextFileEncoding);
 
         public string FileName { get; private set; }
 
@@ -64,7 +61,8 @@ namespace System.Resources
 
             for (i = 0; (i < path1.Length) && (i < path2.Length); ++i)
             {
-                if ((path1[i] != path2[i]) && (compareCase || (char.ToLower(path1[i], CultureInfo.InvariantCulture) != char.ToLower(path2[i], CultureInfo.InvariantCulture))))
+                if ((path1[i] != path2[i])
+                    && (compareCase || (char.ToLower(path1[i], CultureInfo.InvariantCulture) != char.ToLower(path2[i], CultureInfo.InvariantCulture))))
                 {
                     break;
                 }
@@ -91,7 +89,7 @@ namespace System.Resources
             {
                 if (path1[i] == Path.DirectorySeparatorChar)
                 {
-                    relPath.Append(".." + Path.DirectorySeparatorChar);
+                    relPath.Append($"..{Path.DirectorySeparatorChar}");
                 }
             }
 
@@ -114,17 +112,17 @@ namespace System.Resources
 
             if (FileName.IndexOf(';') != -1 || FileName.IndexOf('\"') != -1)
             {
-                result += ("\"" + FileName + "\";");
+                result += $"\"{FileName}\";";
             }
             else
             {
-                result += (FileName + ";");
+                result += $"{FileName};";
             }
 
             result += TypeName;
             if (TextFileEncoding is not null)
             {
-                result += (";" + TextFileEncoding.WebName);
+                result += $";{TextFileEncoding.WebName}";
             }
 
             return result;

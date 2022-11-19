@@ -70,7 +70,7 @@ namespace System.Resources
         {
         }
 
-        public ResXResourceReader(TextReader reader, ITypeResolutionService typeResolver) : this(reader, typeResolver, (IAliasResolver)null)
+        public ResXResourceReader(TextReader reader, ITypeResolutionService typeResolver) : this(reader, typeResolver, null)
         {
         }
 
@@ -81,11 +81,11 @@ namespace System.Resources
             _aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(Stream stream) : this(stream, (ITypeResolutionService)null, (IAliasResolver)null)
+        public ResXResourceReader(Stream stream) : this(stream, (ITypeResolutionService)null, null)
         {
         }
 
-        public ResXResourceReader(Stream stream, ITypeResolutionService typeResolver) : this(stream, typeResolver, (IAliasResolver)null)
+        public ResXResourceReader(Stream stream, ITypeResolutionService typeResolver) : this(stream, typeResolver, null)
         {
         }
 
@@ -96,7 +96,7 @@ namespace System.Resources
             _aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(Stream stream, AssemblyName[] assemblyNames) : this(stream, assemblyNames, (IAliasResolver)null)
+        public ResXResourceReader(Stream stream, AssemblyName[] assemblyNames) : this(stream, assemblyNames, null)
         {
         }
 
@@ -107,7 +107,7 @@ namespace System.Resources
             _aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(TextReader reader, AssemblyName[] assemblyNames) : this(reader, assemblyNames, (IAliasResolver)null)
+        public ResXResourceReader(TextReader reader, AssemblyName[] assemblyNames) : this(reader, assemblyNames, null)
         {
         }
 
@@ -118,7 +118,7 @@ namespace System.Resources
             _aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(string fileName, AssemblyName[] assemblyNames) : this(fileName, assemblyNames, (IAliasResolver)null)
+        public ResXResourceReader(string fileName, AssemblyName[] assemblyNames) : this(fileName, assemblyNames, null)
         {
         }
 
@@ -139,10 +139,7 @@ namespace System.Resources
         /// </summary>
         public string BasePath
         {
-            get
-            {
-                return _basePath;
-            }
+            get => _basePath;
             set
             {
                 if (_isReaderDirty)
@@ -162,10 +159,7 @@ namespace System.Resources
         /// </summary>
         public bool UseResXDataNodes
         {
-            get
-            {
-                return _useResXDataNodes;
-            }
+            get => _useResXDataNodes;
             set
             {
                 if (_isReaderDirty)
@@ -233,42 +227,44 @@ namespace System.Resources
         /// </summary>
         private void EnsureResData()
         {
-            if (_resData is null)
+            if (_resData is not null)
             {
-                _resData = new ListDictionary();
-                _resMetadata = new ListDictionary();
+                return;
+            }
 
-                XmlTextReader contentReader = null;
+            _resData = new ListDictionary();
+            _resMetadata = new ListDictionary();
 
-                try
+            XmlTextReader contentReader = null;
+
+            try
+            {
+                // Read data
+                if (_fileContents is not null)
                 {
-                    // Read data in any which way
-                    if (_fileContents is not null)
-                    {
-                        contentReader = new XmlTextReader(new StringReader(_fileContents));
-                    }
-                    else if (_reader is not null)
-                    {
-                        contentReader = new XmlTextReader(_reader);
-                    }
-                    else if (_fileName is not null || _stream is not null)
-                    {
-                        _stream ??= new FileStream(_fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-
-                        contentReader = new XmlTextReader(_stream);
-                    }
-
-                    SetupNameTable(contentReader);
-                    contentReader.WhitespaceHandling = WhitespaceHandling.None;
-                    ParseXml(contentReader);
+                    contentReader = new XmlTextReader(new StringReader(_fileContents));
                 }
-                finally
+                else if (_reader is not null)
                 {
-                    if (_fileName is not null && _stream is not null)
-                    {
-                        _stream.Close();
-                        _stream = null;
-                    }
+                    contentReader = new XmlTextReader(_reader);
+                }
+                else if (_fileName is not null || _stream is not null)
+                {
+                    _stream ??= new FileStream(_fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+                    contentReader = new XmlTextReader(_stream);
+                }
+
+                SetupNameTable(contentReader);
+                contentReader.WhitespaceHandling = WhitespaceHandling.None;
+                ParseXml(contentReader);
+            }
+            finally
+            {
+                if (_fileName is not null && _stream is not null)
+                {
+                    _stream.Close();
+                    _stream = null;
                 }
             }
         }
@@ -277,36 +273,27 @@ namespace System.Resources
         ///  Creates a reader with the specified file contents.
         /// </summary>
         public static ResXResourceReader FromFileContents(string fileContents)
-        {
-            return FromFileContents(fileContents, (ITypeResolutionService)null);
-        }
+            => FromFileContents(fileContents, (ITypeResolutionService)null);
 
         /// <summary>
         ///  Creates a reader with the specified file contents.
         /// </summary>
         public static ResXResourceReader FromFileContents(string fileContents, ITypeResolutionService typeResolver)
-        {
-            return new ResXResourceReader(typeResolver)
+            => new ResXResourceReader(typeResolver)
             {
                 _fileContents = fileContents
             };
-        }
 
         /// <summary>
         ///  Creates a reader with the specified file contents.
         /// </summary>
         public static ResXResourceReader FromFileContents(string fileContents, AssemblyName[] assemblyNames)
-        {
-            return new ResXResourceReader(assemblyNames)
+            => new ResXResourceReader(assemblyNames)
             {
                 _fileContents = fileContents
             };
-        }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IDictionaryEnumerator GetEnumerator()
         {
@@ -329,7 +316,7 @@ namespace System.Resources
         /// </summary>
         private static Point GetPosition(XmlReader reader)
         {
-            Point pt = new Point(0, 0);
+            Point pt = default;
 
             if (reader is IXmlLineInfo lineInfo)
             {
@@ -458,108 +445,48 @@ namespace System.Resources
         private void ParseResHeaderNode(XmlReader reader)
         {
             string name = reader[ResXResourceWriter.NameStr];
-            if (name is not null)
+            if (name is null)
             {
-                reader.ReadStartElement();
+                return;
+            }
 
-                // The "1.1" schema requires the correct casing of the strings
-                // in the resheader, however the "1.0" schema had a different
-                // casing. By checking the Equals first, we should
-                // see significant performance improvements.
+            reader.ReadStartElement();
 
-                if (name == ResXResourceWriter.VersionStr)
+            // The "1.1" schema requires the correct casing of the strings in the resheader, however the "1.0" schema
+            // had a different casing. By checking the Equals first, we should see significant performance improvements.
+
+            if (name == ResXResourceWriter.VersionStr)
+            {
+                _resHeaderVersion = reader.NodeType == XmlNodeType.Element ? reader.ReadElementString() : reader.Value.Trim();
+            }
+            else if (name == ResXResourceWriter.ResMimeTypeStr)
+            {
+                _resHeaderMimeType = reader.NodeType == XmlNodeType.Element ? reader.ReadElementString() : reader.Value.Trim();
+            }
+            else if (name == ResXResourceWriter.ReaderStr)
+            {
+                _resHeaderReaderType = reader.NodeType == XmlNodeType.Element ? reader.ReadElementString() : reader.Value.Trim();
+            }
+            else if (name == ResXResourceWriter.WriterStr)
+            {
+                _resHeaderWriterType = reader.NodeType == XmlNodeType.Element ? reader.ReadElementString() : reader.Value.Trim();
+            }
+            else
+            {
+                switch (name.ToLower(CultureInfo.InvariantCulture))
                 {
-                    if (reader.NodeType == XmlNodeType.Element)
-                    {
-                        _resHeaderVersion = reader.ReadElementString();
-                    }
-                    else
-                    {
-                        _resHeaderVersion = reader.Value.Trim();
-                    }
-                }
-                else if (name == ResXResourceWriter.ResMimeTypeStr)
-                {
-                    if (reader.NodeType == XmlNodeType.Element)
-                    {
-                        _resHeaderMimeType = reader.ReadElementString();
-                    }
-                    else
-                    {
-                        _resHeaderMimeType = reader.Value.Trim();
-                    }
-                }
-                else if (name == ResXResourceWriter.ReaderStr)
-                {
-                    if (reader.NodeType == XmlNodeType.Element)
-                    {
-                        _resHeaderReaderType = reader.ReadElementString();
-                    }
-                    else
-                    {
-                        _resHeaderReaderType = reader.Value.Trim();
-                    }
-                }
-                else if (name == ResXResourceWriter.WriterStr)
-                {
-                    if (reader.NodeType == XmlNodeType.Element)
-                    {
-                        _resHeaderWriterType = reader.ReadElementString();
-                    }
-                    else
-                    {
-                        _resHeaderWriterType = reader.Value.Trim();
-                    }
-                }
-                else
-                {
-                    switch (name.ToLower(CultureInfo.InvariantCulture))
-                    {
-                        case ResXResourceWriter.VersionStr:
-                            if (reader.NodeType == XmlNodeType.Element)
-                            {
-                                _resHeaderVersion = reader.ReadElementString();
-                            }
-                            else
-                            {
-                                _resHeaderVersion = reader.Value.Trim();
-                            }
-
-                            break;
-                        case ResXResourceWriter.ResMimeTypeStr:
-                            if (reader.NodeType == XmlNodeType.Element)
-                            {
-                                _resHeaderMimeType = reader.ReadElementString();
-                            }
-                            else
-                            {
-                                _resHeaderMimeType = reader.Value.Trim();
-                            }
-
-                            break;
-                        case ResXResourceWriter.ReaderStr:
-                            if (reader.NodeType == XmlNodeType.Element)
-                            {
-                                _resHeaderReaderType = reader.ReadElementString();
-                            }
-                            else
-                            {
-                                _resHeaderReaderType = reader.Value.Trim();
-                            }
-
-                            break;
-                        case ResXResourceWriter.WriterStr:
-                            if (reader.NodeType == XmlNodeType.Element)
-                            {
-                                _resHeaderWriterType = reader.ReadElementString();
-                            }
-                            else
-                            {
-                                _resHeaderWriterType = reader.Value.Trim();
-                            }
-
-                            break;
-                    }
+                    case ResXResourceWriter.VersionStr:
+                        _resHeaderVersion = reader.NodeType == XmlNodeType.Element ? reader.ReadElementString() : reader.Value.Trim();
+                        break;
+                    case ResXResourceWriter.ResMimeTypeStr:
+                        _resHeaderMimeType = reader.NodeType == XmlNodeType.Element ? reader.ReadElementString() : reader.Value.Trim();
+                        break;
+                    case ResXResourceWriter.ReaderStr:
+                        _resHeaderReaderType = reader.NodeType == XmlNodeType.Element ? reader.ReadElementString() : reader.Value.Trim();
+                        break;
+                    case ResXResourceWriter.WriterStr:
+                        _resHeaderWriterType = reader.NodeType == XmlNodeType.Element ? reader.ReadElementString() : reader.Value.Trim();
+                        break;
                 }
             }
         }
@@ -601,63 +528,61 @@ namespace System.Resources
                 assemblyName = _aliasResolver.ResolveAlias(alias);
             }
 
-            if (assemblyName is not null)
-            {
-                nodeInfo.TypeName = GetTypeFromTypeName(typeName) + ", " + assemblyName.FullName;
-            }
-            else
-            {
-                nodeInfo.TypeName = reader[ResXResourceWriter.TypeStr];
-            }
+            nodeInfo.TypeName = assemblyName is not null
+                ? $"{GetTypeFromTypeName(typeName)}, {assemblyName.FullName}"
+                : reader[ResXResourceWriter.TypeStr];
 
             nodeInfo.MimeType = reader[ResXResourceWriter.MimeTypeStr];
 
-            bool finishedReadingDataNode = false;
             nodeInfo.ReaderPosition = GetPosition(reader);
-            while (!finishedReadingDataNode && reader.Read())
+            while (reader.Read())
             {
-                if (reader.NodeType == XmlNodeType.EndElement && (reader.LocalName.Equals(ResXResourceWriter.DataStr) || reader.LocalName.Equals(ResXResourceWriter.MetadataStr)))
+                if (reader.NodeType == XmlNodeType.EndElement
+                    && (reader.LocalName.Equals(ResXResourceWriter.DataStr) || reader.LocalName.Equals(ResXResourceWriter.MetadataStr)))
                 {
-                    // we just found </data>, quit or </metadata>
-                    finishedReadingDataNode = true;
+                    // We just found </data>, quit or </metadata>
+                    break;
                 }
-                else
+
+                // Could be a <value> or a <comment>
+                if (reader.NodeType != XmlNodeType.Element)
                 {
-                    // could be a <value> or a <comment>
-                    if (reader.NodeType == XmlNodeType.Element)
-                    {
-                        if (reader.Name.Equals(ResXResourceWriter.ValueStr))
-                        {
-                            WhitespaceHandling oldValue = reader.WhitespaceHandling;
-                            try
-                            {
-                                // based on the documentation at https://docs.microsoft.com/dotnet/api/system.xml.xmltextreader.whitespacehandling
-                                // this is ok because:
-                                // "Because the XmlTextReader does not have DTD information available to it,
-                                // SignificantWhitespace nodes are only returned within the an xml:space='preserve' scope."
-                                // the xml:space would not be present for anything else than string and char (see ResXResourceWriter)
-                                // so this would not cause any breaking change while reading data from Everett (we never outputted
-                                // xml:space then) or from whidbey that is not specifically either a string or a char.
-                                // However please note that manually editing a resx file in Everett and in Whidbey because of the addition
-                                // of xml:space=preserve might have different consequences...
-                                reader.WhitespaceHandling = WhitespaceHandling.Significant;
-                                nodeInfo.ValueData = reader.ReadString();
-                            }
-                            finally
-                            {
-                                reader.WhitespaceHandling = oldValue;
-                            }
-                        }
-                        else if (reader.Name.Equals(ResXResourceWriter.CommentStr))
-                        {
-                            nodeInfo.Comment = reader.ReadString();
-                        }
-                    }
-                    else
-                    {
-                        // weird, no <xxxx> tag, just the inside of <data> as text
-                        nodeInfo.ValueData = reader.Value.Trim();
-                    }
+                    // No <xxxx> tag, just the inside of <data> as text.
+                    nodeInfo.ValueData = reader.Value.Trim();
+                    continue;
+                }
+
+                if (reader.Name.Equals(ResXResourceWriter.CommentStr))
+                {
+                    nodeInfo.Comment = reader.ReadString();
+                    continue;
+                }
+
+                if (!reader.Name.Equals(ResXResourceWriter.ValueStr))
+                {
+                    continue;
+                }
+
+                WhitespaceHandling oldValue = reader.WhitespaceHandling;
+                try
+                {
+                    // Based on the documentation at https://docs.microsoft.com/dotnet/api/system.xml.xmltextreader.whitespacehandling
+                    // this is ok because:
+                    //
+                    //  "Because the XmlTextReader does not have DTD information available to it,
+                    //   SignificantWhitespace nodes are only returned within the an xml:space='preserve' scope."
+                    //
+                    // The xml:space would not be present for anything else than string and char (see ResXResourceWriter)
+                    // so this would not cause any breaking change while reading data from Everett (we never output
+                    // xml:space then) or from whidbey that is not specifically either a string or a char.
+                    // However please note that manually editing a resx file in Everett and in Whidbey because of the addition
+                    // of xml:space=preserve might have different consequences.
+                    reader.WhitespaceHandling = WhitespaceHandling.Significant;
+                    nodeInfo.ValueData = reader.ReadString();
+                }
+                finally
+                {
+                    reader.WhitespaceHandling = oldValue;
                 }
             }
 
@@ -675,27 +600,20 @@ namespace System.Resources
             else
             {
                 IDictionary data = (isMetaData ? _resMetadata : _resData);
-                if (_assemblyNames is null)
-                {
-                    data[nodeInfo.Name] = dataNode.GetValue(_typeResolver);
-                }
-                else
-                {
-                    data[nodeInfo.Name] = dataNode.GetValue(_assemblyNames);
-                }
+                data[nodeInfo.Name] = _assemblyNames is null ? dataNode.GetValue(_typeResolver) : dataNode.GetValue(_assemblyNames);
             }
         }
 
         private static string GetAliasFromTypeName(string typeName)
         {
             int indexStart = typeName.IndexOf(',');
-            return typeName.Substring(indexStart + 2);
+            return typeName[(indexStart + 2)..];
         }
 
         private static string GetTypeFromTypeName(string typeName)
         {
             int indexStart = typeName.IndexOf(',');
-            return typeName.Substring(0, indexStart);
+            return typeName[..indexStart];
         }
     }
 }

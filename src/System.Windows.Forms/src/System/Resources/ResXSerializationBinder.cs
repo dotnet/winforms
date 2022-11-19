@@ -36,7 +36,7 @@ namespace System.Resources
                 return null;
             }
 
-            typeName = typeName + ", " + assemblyName;
+            typeName = $"{typeName}, {assemblyName}";
 
             Type type = _typeResolver.GetType(typeName);
             if (type is null)
@@ -44,7 +44,7 @@ namespace System.Resources
                 string[] typeParts = typeName.Split(',');
 
                 // Break up the assembly name from the rest of the assembly strong name.
-                // we try 1) FQN 2) FQN without a version 3) just the short name
+                // we try 1) FQN 2) FQN without a version 3) just the short name.
                 if (typeParts is not null && typeParts.Length > 2)
                 {
                     string partialName = typeParts[0].Trim();
@@ -52,9 +52,10 @@ namespace System.Resources
                     for (int i = 1; i < typeParts.Length; ++i)
                     {
                         string typePart = typeParts[i].Trim();
-                        if (!typePart.StartsWith("Version=") && !typePart.StartsWith("version="))
+                        if (!typePart.StartsWith("Version=", StringComparison.Ordinal)
+                            && !typePart.StartsWith("version=", StringComparison.Ordinal))
                         {
-                            partialName = partialName + ", " + typePart;
+                            partialName = $"{partialName}, {typePart}";
                         }
                     }
 

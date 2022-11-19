@@ -13,8 +13,7 @@ using System.Xml;
 namespace System.Resources
 {
     /// <summary>
-    ///  ResX resource writer. See the text in "ResourceSchema" for more
-    ///  information.
+    ///  ResX resource writer. See the text in "ResourceSchema" for more information.
     /// </summary>
     public class ResXResourceWriter : IResourceWriter
     {
@@ -45,54 +44,54 @@ namespace System.Resources
         public static readonly string ResMimeType = "text/microsoft-resx";
         public static readonly string Version = "2.0";
 
-        public static readonly string ResourceSchema = @"
-    <xsd:schema id=""root"" xmlns="""" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:msdata=""urn:schemas-microsoft-com:xml-msdata"">
-        <xsd:import namespace=""http://www.w3.org/XML/1998/namespace""/>
-        <xsd:element name=""root"" msdata:IsDataSet=""true"">
-            <xsd:complexType>
-                <xsd:choice maxOccurs=""unbounded"">
-                    <xsd:element name=""metadata"">
-                        <xsd:complexType>
-                            <xsd:sequence>
-                            <xsd:element name=""value"" type=""xsd:string"" minOccurs=""0""/>
-                            </xsd:sequence>
-                            <xsd:attribute name=""name"" use=""required"" type=""xsd:string""/>
-                            <xsd:attribute name=""type"" type=""xsd:string""/>
-                            <xsd:attribute name=""mimetype"" type=""xsd:string""/>
-                            <xsd:attribute ref=""xml:space""/>
-                        </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element name=""assembly"">
-                      <xsd:complexType>
-                        <xsd:attribute name=""alias"" type=""xsd:string""/>
-                        <xsd:attribute name=""name"" type=""xsd:string""/>
-                      </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element name=""data"">
-                        <xsd:complexType>
-                            <xsd:sequence>
-                                <xsd:element name=""value"" type=""xsd:string"" minOccurs=""0"" msdata:Ordinal=""1"" />
-                                <xsd:element name=""comment"" type=""xsd:string"" minOccurs=""0"" msdata:Ordinal=""2"" />
-                            </xsd:sequence>
-                            <xsd:attribute name=""name"" type=""xsd:string"" use=""required"" msdata:Ordinal=""1"" />
-                            <xsd:attribute name=""type"" type=""xsd:string"" msdata:Ordinal=""3"" />
-                            <xsd:attribute name=""mimetype"" type=""xsd:string"" msdata:Ordinal=""4"" />
-                            <xsd:attribute ref=""xml:space""/>
-                        </xsd:complexType>
-                    </xsd:element>
-                    <xsd:element name=""resheader"">
-                        <xsd:complexType>
-                            <xsd:sequence>
-                                <xsd:element name=""value"" type=""xsd:string"" minOccurs=""0"" msdata:Ordinal=""1"" />
-                            </xsd:sequence>
-                            <xsd:attribute name=""name"" type=""xsd:string"" use=""required"" />
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:choice>
-            </xsd:complexType>
-        </xsd:element>
-        </xsd:schema>
-        ";
+        public static readonly string ResourceSchema = """
+            <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+                <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+                <xsd:element name="root" msdata:IsDataSet="true">
+                    <xsd:complexType>
+                        <xsd:choice maxOccurs="unbounded">
+                            <xsd:element name="metadata">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                    <xsd:attribute name="name" use="required" type="xsd:string"/>
+                                    <xsd:attribute name="type" type="xsd:string"/>
+                                    <xsd:attribute name="mimetype" type="xsd:string"/>
+                                    <xsd:attribute ref="xml:space"/>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="assembly">
+                                <xsd:complexType>
+                                    <xsd:attribute name="alias" type="xsd:string"/>
+                                    <xsd:attribute name="name" type="xsd:string"/>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="data">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                        <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                                    </xsd:sequence>
+                                    <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                                    <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                                    <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                                    <xsd:attribute ref="xml:space"/>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="resheader">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                    </xsd:sequence>
+                                    <xsd:attribute name="name" type="xsd:string" use="required" />
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:choice>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:schema>
+            """;
 #pragma warning restore IDE1006 // Naming Styles
 
         private readonly string _fileName;
@@ -163,12 +162,12 @@ namespace System.Resources
                 }
                 else if (_stream is not null)
                 {
-                    _xmlTextWriter = new XmlTextWriter(_stream, System.Text.Encoding.UTF8);
+                    _xmlTextWriter = new XmlTextWriter(_stream, Encoding.UTF8);
                 }
                 else
                 {
                     Debug.Assert(_fileName is not null, "Nothing to output to");
-                    _xmlTextWriter = new XmlTextWriter(_fileName, System.Text.Encoding.UTF8);
+                    _xmlTextWriter = new XmlTextWriter(_fileName, Encoding.UTF8);
                 }
 
                 _xmlTextWriter.Formatting = Formatting.Indented;
@@ -260,7 +259,7 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///  Adds aliases to the resource file...
+        ///  Adds aliases to the resource file.
         /// </summary>
         public virtual void AddAlias(string aliasName, AssemblyName assemblyName)
         {
@@ -293,9 +292,8 @@ namespace System.Resources
         public void AddResource(string name, byte[] value) => AddDataRow(DataStr, name, value);
 
         /// <summary>
-        ///  Adds a resource to the resources. If the resource is a string,
-        ///  it will be saved that way, otherwise it will be serialized
-        ///  and stored as in binary.
+        ///  Adds a resource to the resources. If the resource is a string, it will be saved that way, otherwise it
+        ///  will be serialized and stored as in binary.
         /// </summary>
         public void AddResource(string name, object value)
         {
@@ -319,17 +317,14 @@ namespace System.Resources
         /// </summary>
         public void AddResource(ResXDataNode node)
         {
-            // we're modifying the node as we're adding it to the resxwriter
-            // this is BAD, so we clone it. adding it to a writer doesnt change it
-            // we're messing with a copy
+            // Clone the node to work on a copy.
             ResXDataNode nodeClone = node.DeepClone();
-
             ResXFileRef fileRef = nodeClone.FileRef;
             string modifiedBasePath = BasePath;
 
             if (!string.IsNullOrEmpty(modifiedBasePath))
             {
-                if (!modifiedBasePath.EndsWith("\\"))
+                if (!modifiedBasePath.EndsWith('\\'))
                 {
                     modifiedBasePath += "\\";
                 }
@@ -345,9 +340,7 @@ namespace System.Resources
         ///  Adds a blob resource to the resources.
         /// </summary>
         private void AddDataRow(string elementName, string name, byte[] value)
-        {
-            AddDataRow(elementName, name, ToBase64WrappedString(value), TypeNameWithAssembly(typeof(byte[])), null, null);
-        }
+            => AddDataRow(elementName, name, ToBase64WrappedString(value), TypeNameWithAssembly(typeof(byte[])), null, null);
 
         /// <summary>
         ///  Adds a resource to the resources. If the resource is a string,
@@ -442,11 +435,8 @@ namespace System.Resources
 
                 if (!string.IsNullOrEmpty(alias) && !string.IsNullOrEmpty(type) && elementName == DataStr)
                 {
-                    // CHANGE: we still output version information. This might have
-                    // to change in 3.2
-                    string typeName = GetTypeName(type);
-                    string typeValue = typeName + ", " + alias;
-                    Writer.WriteAttributeString(TypeStr, typeValue);
+                    // CHANGE: we still output version information. This might have to change in 3.2
+                    Writer.WriteAttributeString(TypeStr, $"{GetTypeName(type)}, {alias}");
                 }
                 else
                 {
@@ -524,10 +514,7 @@ namespace System.Resources
         /// <summary>
         ///  Closes any files or streams locked by the writer.
         /// </summary>
-        public void Close()
-        {
-            Dispose();
-        }
+        public void Close() => Dispose();
 
         public virtual void Dispose()
         {
@@ -544,44 +531,30 @@ namespace System.Resources
                     Generate();
                 }
 
-                if (_xmlTextWriter is not null)
-                {
-                    _xmlTextWriter.Close();
-                    _xmlTextWriter = null;
-                }
+                _xmlTextWriter?.Close();
+                _xmlTextWriter = null;
 
-                if (_stream is not null)
-                {
-                    _stream.Close();
-                    _stream = null;
-                }
+                _stream?.Close();
+                _stream = null;
 
-                if (_textWriter is not null)
-                {
-                    _textWriter.Close();
-                    _textWriter = null;
-                }
+                _textWriter?.Close();
+                _textWriter = null;
             }
         }
 
         private static string GetTypeName(string typeName)
         {
             int indexStart = typeName.IndexOf(',');
-            return ((indexStart == -1) ? typeName : typeName.Substring(0, indexStart));
+            return (indexStart == -1) ? typeName : typeName[..indexStart];
         }
 
         private static string GetFullName(string typeName)
         {
             int indexStart = typeName.IndexOf(',');
-            if (indexStart == -1)
-            {
-                return null;
-            }
-
-            return typeName.Substring(indexStart + 2);
+            return indexStart == -1 ? null : typeName[(indexStart + 2)..];
         }
 
-        static string ToBase64WrappedString(byte[] data)
+        private static string ToBase64WrappedString(byte[] data)
         {
             const int lineWrap = 80;
             const string crlf = "\r\n";
@@ -589,8 +562,10 @@ namespace System.Resources
             string raw = Convert.ToBase64String(data);
             if (raw.Length > lineWrap)
             {
-                StringBuilder output = new StringBuilder(raw.Length + (raw.Length / lineWrap) * 3); // word wrap on lineWrap chars, \r\n
+                // Word wrap on lineWrap chars, \r\n.
+                StringBuilder output = new(raw.Length + (raw.Length / lineWrap) * 3);
                 int current = 0;
+
                 for (; current < raw.Length - lineWrap; current += lineWrap)
                 {
                     output.Append(crlf);

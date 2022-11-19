@@ -15,19 +15,16 @@ namespace System.Resources
         public string TypeName;
         public string MimeType;
         public string ValueData;
-        public Point ReaderPosition; //only used to track position in the reader
+        public Point ReaderPosition; // Only used to track position in the reader
 
-        internal DataNodeInfo Clone()
+        internal DataNodeInfo Clone() => new()
         {
-            return new DataNodeInfo
-            {
-                Name = Name,
-                Comment = Comment,
-                TypeName = TypeName,
-                MimeType = MimeType,
-                ValueData = ValueData,
-                ReaderPosition = new Point(ReaderPosition.X, ReaderPosition.Y)
-            };
-        }
+            Name = Name,
+            Comment = Comment,
+            TypeName = TypeName,
+            MimeType = MimeType,
+            ValueData = ValueData,
+            ReaderPosition = ReaderPosition
+        };
     }
 }
