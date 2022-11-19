@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -34,7 +33,7 @@ namespace System.Resources
         internal const string AssemblyStr = "assembly";
         internal const string AliasStr = "alias";
 
-        private Hashtable _cachedAliases;
+        private Dictionary<string, string> _cachedAliases;
 
         private static readonly TraceSwitch s_resValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
 
@@ -266,9 +265,7 @@ namespace System.Resources
         public virtual void AddAlias(string aliasName, AssemblyName assemblyName)
         {
             ArgumentNullException.ThrowIfNull(assemblyName);
-
-            _cachedAliases ??= new Hashtable();
-
+            _cachedAliases ??= new();
             _cachedAliases[assemblyName.FullName] = aliasName;
         }
 
@@ -513,11 +510,8 @@ namespace System.Resources
 
         private string GetAliasFromName(AssemblyName assemblyName)
         {
-            _cachedAliases ??= new Hashtable();
-
-            string alias = (string)_cachedAliases[assemblyName.FullName];
-
-            if (string.IsNullOrEmpty(alias))
+            _cachedAliases ??= new();
+            if (!_cachedAliases.TryGetValue(assemblyName.FullName, out string alias) || string.IsNullOrEmpty(alias))
             {
                 alias = assemblyName.Name;
                 AddAlias(alias, assemblyName);
