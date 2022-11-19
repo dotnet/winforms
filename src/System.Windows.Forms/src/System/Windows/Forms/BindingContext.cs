@@ -15,14 +15,14 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(CollectionChanged))]
     public partial class BindingContext : ICollection
     {
-        private readonly Hashtable _listManagers;
+        private readonly Dictionary<HashKey, WeakReference> _listManagers;
 
         /// <summary>
         ///  Initializes a new instance of the System.Windows.Forms.BindingContext class.
         /// </summary>
         public BindingContext()
         {
-            _listManagers = new Hashtable();
+            _listManagers = new();
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         void ICollection.CopyTo(Array ar, int index)
         {
             ScrubWeakRefs();
-            _listManagers.CopyTo(ar, index);
+            ((ICollection)_listManagers).CopyTo(ar, index);
         }
 
         /// <summary>
@@ -231,8 +231,7 @@ namespace System.Windows.Forms
 
             // Check for previously created binding manager
             HashKey key = GetKey(dataSource, dataMember);
-            WeakReference? wRef = _listManagers[key] as WeakReference;
-            if (wRef is not null)
+            if (_listManagers.TryGetValue(key, out WeakReference wRef) && wRef is not null)
             {
                 bindingManagerBase = (BindingManagerBase?)wRef.Target;
             }
@@ -327,13 +326,12 @@ namespace System.Windows.Forms
 
         private void ScrubWeakRefs()
         {
-            ArrayList? cleanupList = null;
-            foreach (DictionaryEntry de in _listManagers)
+            List<HashKey> cleanupList = null;
+            foreach (KeyValuePair<HashKey, WeakReference> de in _listManagers)
             {
-                WeakReference wRef = (WeakReference)de.Value!;
-                if (wRef.Target is null)
+                if (de.Value.Target is null)
                 {
-                    cleanupList ??= new ArrayList();
+                    cleanupList ??= new();
 
                     cleanupList.Add(de.Key);
                 }
@@ -341,7 +339,7 @@ namespace System.Windows.Forms
 
             if (cleanupList is not null)
             {
-                foreach (object o in cleanupList)
+                foreach (HashKey o in cleanupList)
                 {
                     _listManagers.Remove(o);
                 }
