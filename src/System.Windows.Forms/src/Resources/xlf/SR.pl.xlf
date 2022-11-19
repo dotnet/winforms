@@ -5522,11 +5522,6 @@ Czy chcesz go zamienić?</target>
         <target state="translated">Wartości zerowej nie można przekonwertować na typ '{1}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">Element GridItem został usunięty i nie może być już używany.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">Nie można rozszerzyć elementu GridItem.</target>
@@ -7429,11 +7424,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">OK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">Pole '{0}' zostało usunięte i nie można go już używać.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">

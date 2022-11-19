@@ -506,11 +506,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (Disposed)
-                {
-                    throw new ObjectDisposedException(SR.GridItemDisposed);
-                }
-
+                ObjectDisposedException.ThrowIf(Disposed, typeof(GridItem));
                 if (IsExpandable && _children is not null && _children.Count == 0)
                 {
                     CreateChildren();
@@ -700,11 +696,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (Disposed)
-                {
-                    throw new ObjectDisposedException(SR.GridItemDisposed);
-                }
-
+                ObjectDisposedException.ThrowIf(Disposed, typeof(GridItem));
                 return ParentGridEntry;
             }
         }
