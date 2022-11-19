@@ -18,9 +18,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             public override unsafe object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
             {
                 ArgumentNullException.ThrowIfNull(context);
-                object component = context.Instance;
+                object? component = context.Instance;
 
-                if (Marshal.IsComObject(component) && component is Oleaut32.IDispatch pDisp)
+                if (component is not null
+                    && Marshal.IsComObject(component)
+                    && component is Oleaut32.IDispatch pDisp)
                 {
                     EXCEPINFO pExcepInfo = default(EXCEPINFO);
                     DISPPARAMS dispParams = default(DISPPARAMS);
