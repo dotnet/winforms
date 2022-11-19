@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
@@ -17,36 +16,37 @@ namespace System.Resources
     {
         public class Converter : TypeConverter
         {
-            public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+            public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
                 => sourceType == typeof(string);
 
-            public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+            public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
                 => destinationType == typeof(string);
 
-            public override object ConvertTo(
-                ITypeDescriptorContext context,
-                CultureInfo culture,
-                object value,
+            public override object? ConvertTo(
+                ITypeDescriptorContext? context,
+                CultureInfo? culture,
+                object? value,
                 Type destinationType)
             {
-                object created = null;
-                if (destinationType == typeof(string))
+                object? created = null;
+                if (destinationType == typeof(string) && value is ResXFileRef fileRef)
                 {
-                    created = ((ResXFileRef)value).ToString();
+                    created = fileRef.ToString();
                 }
 
                 return created;
             }
 
             // "value" is the parameter name of ConvertFrom, which calls this method.
-            internal static string[] ParseResxFileRefString(string stringValue)
+            [return: NotNullIfNotNull(nameof(stringValue))]
+            internal static string[]? ParseResxFileRefString(string stringValue)
             {
                 if (stringValue is null)
                 {
                     return null;
                 }
 
-                string[] result = null;
+                string[]? result = null;
 
                 stringValue = stringValue.Trim();
                 string fileName;
@@ -93,9 +93,9 @@ namespace System.Resources
                 return result;
             }
 
-            public override object ConvertFrom(
-                ITypeDescriptorContext context,
-                CultureInfo culture,
+            public override object? ConvertFrom(
+                ITypeDescriptorContext? context,
+                CultureInfo? culture,
                 object value)
             {
                 if (value is not string stringValue)
@@ -105,7 +105,7 @@ namespace System.Resources
 
                 string[] parts = ParseResxFileRefString(stringValue);
                 string fileName = parts[0];
-                Type toCreate = Type.GetType(parts[1], true);
+                Type? toCreate = Type.GetType(parts[1], true);
 
                 // Special case string and byte[].
                 if (toCreate == typeof(string))
@@ -123,7 +123,7 @@ namespace System.Resources
 
                 // This is a regular file, we call it's constructor with a stream as a parameter
                 // or if it's a byte array we just return that.
-                byte[] temp = null;
+                byte[]? temp = null;
 
                 using (FileStream fileStream = new(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
@@ -151,12 +151,14 @@ namespace System.Resources
                     return ico.ToBitmap();
                 }
 
-                return Activator.CreateInstance(
-                    toCreate,
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance,
-                    null,
-                    new object[] { memoryStream },
-                    null);
+                return toCreate is null
+                    ? null
+                    : Activator.CreateInstance(
+                        toCreate,
+                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance,
+                        null,
+                        new object[] { memoryStream },
+                        null);
             }
         }
     }

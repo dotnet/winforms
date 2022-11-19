@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
@@ -40,13 +38,14 @@ namespace System.Resources
             TextFileEncoding = textFileEncoding;
         }
 
-        internal ResXFileRef Clone() => new ResXFileRef(FileName, TypeName, TextFileEncoding);
+        internal ResXFileRef Clone()
+            => TextFileEncoding is null ? new(FileName, TypeName) : new(FileName, TypeName, TextFileEncoding);
 
         public string FileName { get; private set; }
 
         public string TypeName { get; }
 
-        public Encoding TextFileEncoding { get; }
+        public Encoding? TextFileEncoding { get; }
 
         /// <summary>
         ///  path1+result = path2

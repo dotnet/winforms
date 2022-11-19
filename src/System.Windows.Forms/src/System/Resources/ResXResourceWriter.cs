@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -32,7 +31,7 @@ namespace System.Resources
         internal const string AssemblyStr = "assembly";
         internal const string AliasStr = "alias";
 
-        private Dictionary<string, string> _cachedAliases;
+        private Dictionary<string, string?>? _cachedAliases;
 
         private static readonly TraceSwitch s_resValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
 
@@ -94,27 +93,26 @@ namespace System.Resources
             """;
 #pragma warning restore IDE1006 // Naming Styles
 
-        private readonly string _fileName;
-        private Stream _stream;
-        private TextWriter _textWriter;
-        private XmlTextWriter _xmlTextWriter;
+        private readonly string? _fileName;
+        private Stream? _stream;
+        private TextWriter? _textWriter;
+        private XmlTextWriter? _xmlTextWriter;
 
         private bool _hasBeenSaved;
-        private bool _initialized;
 
-        private readonly Func<Type, string> _typeNameConverter; // no public property to be consistent with ResXDataNode class.
+        private readonly Func<Type?, string>? _typeNameConverter; // no public property to be consistent with ResXDataNode class.
 
         /// <summary>
         ///  Base Path for ResXFileRefs.
         /// </summary>
-        public string BasePath { get; set; }
+        public string? BasePath { get; set; }
 
         /// <summary>
         ///  Creates a new ResXResourceWriter that will write to the specified file.
         /// </summary>
         public ResXResourceWriter(string fileName) => _fileName = fileName;
 
-        public ResXResourceWriter(string fileName, Func<Type, string> typeNameConverter)
+        public ResXResourceWriter(string fileName, Func<Type?, string> typeNameConverter)
         {
             _fileName = fileName;
             _typeNameConverter = typeNameConverter;
@@ -125,7 +123,7 @@ namespace System.Resources
         /// </summary>
         public ResXResourceWriter(Stream stream) => _stream = stream;
 
-        public ResXResourceWriter(Stream stream, Func<Type, string> typeNameConverter)
+        public ResXResourceWriter(Stream stream, Func<Type?, string> typeNameConverter)
         {
             _stream = stream;
             _typeNameConverter = typeNameConverter;
@@ -136,7 +134,7 @@ namespace System.Resources
         /// </summary>
         public ResXResourceWriter(TextWriter textWriter) => _textWriter = textWriter;
 
-        public ResXResourceWriter(TextWriter textWriter, Func<Type, string> typeNameConverter)
+        public ResXResourceWriter(TextWriter textWriter, Func<Type?, string> typeNameConverter)
         {
             _textWriter = textWriter;
             _typeNameConverter = typeNameConverter;
@@ -144,43 +142,42 @@ namespace System.Resources
 
         ~ResXResourceWriter()
         {
-            Dispose(false);
+            Dispose(disposing: false);
         }
 
+        [MemberNotNull(nameof(_xmlTextWriter))]
         private void InitializeWriter()
         {
-            if (_xmlTextWriter is null)
+            if (_xmlTextWriter is not null)
             {
-                bool writeHeaderRequired = false;
+                return;
+            }
 
-                if (_textWriter is not null)
-                {
-                    _textWriter.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                    writeHeaderRequired = true;
+            bool writeHeaderRequired = false;
 
-                    _xmlTextWriter = new XmlTextWriter(_textWriter);
-                }
-                else if (_stream is not null)
-                {
-                    _xmlTextWriter = new XmlTextWriter(_stream, Encoding.UTF8);
-                }
-                else
-                {
-                    Debug.Assert(_fileName is not null, "Nothing to output to");
-                    _xmlTextWriter = new XmlTextWriter(_fileName, Encoding.UTF8);
-                }
+            if (_textWriter is not null)
+            {
+                _textWriter.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                writeHeaderRequired = true;
 
-                _xmlTextWriter.Formatting = Formatting.Indented;
-                _xmlTextWriter.Indentation = 2;
-
-                if (!writeHeaderRequired)
-                {
-                    _xmlTextWriter.WriteStartDocument(); // writes <?xml version="1.0" encoding="utf-8"?>
-                }
+                _xmlTextWriter = new XmlTextWriter(_textWriter);
+            }
+            else if (_stream is not null)
+            {
+                _xmlTextWriter = new XmlTextWriter(_stream, Encoding.UTF8);
             }
             else
             {
-                _xmlTextWriter.WriteStartDocument();
+                Debug.Assert(_fileName is not null, "Nothing to output to");
+                _xmlTextWriter = new XmlTextWriter(_fileName, Encoding.UTF8);
+            }
+
+            _xmlTextWriter.Formatting = Formatting.Indented;
+            _xmlTextWriter.Indentation = 2;
+
+            if (!writeHeaderRequired)
+            {
+                _xmlTextWriter.WriteStartDocument(); // writes <?xml version="1.0" encoding="utf-8"?>
             }
 
             _xmlTextWriter.WriteStartElement("root");
@@ -241,19 +238,13 @@ namespace System.Resources
             }
 
             _xmlTextWriter.WriteEndElement();
-
-            _initialized = true;
         }
 
         private XmlWriter Writer
         {
             get
             {
-                if (!_initialized)
-                {
-                    InitializeWriter();
-                }
-
+                InitializeWriter();
                 return _xmlTextWriter;
             }
         }
@@ -261,7 +252,7 @@ namespace System.Resources
         /// <summary>
         ///  Adds aliases to the resource file.
         /// </summary>
-        public virtual void AddAlias(string aliasName, AssemblyName assemblyName)
+        public virtual void AddAlias(string? aliasName, AssemblyName assemblyName)
         {
             ArgumentNullException.ThrowIfNull(assemblyName);
             _cachedAliases ??= new();
@@ -278,24 +269,24 @@ namespace System.Resources
         ///  Adds the given value to the collection of metadata.  These name/value pairs
         ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
         /// </summary>
-        public void AddMetadata(string name, string value) => AddDataRow(MetadataStr, name, value);
+        public void AddMetadata(string name, string? value) => AddDataRow(MetadataStr, name, value);
 
         /// <summary>
         ///  Adds the given value to the collection of metadata.  These name/value pairs
         ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
         /// </summary>
-        public void AddMetadata(string name, object value) => AddDataRow(MetadataStr, name, value);
+        public void AddMetadata(string name, object? value) => AddDataRow(MetadataStr, name, value);
 
         /// <summary>
         ///  Adds a blob resource to the resources.
         /// </summary>
-        public void AddResource(string name, byte[] value) => AddDataRow(DataStr, name, value);
+        public void AddResource(string name, byte[]? value) => AddDataRow(DataStr, name, value);
 
         /// <summary>
         ///  Adds a resource to the resources. If the resource is a string, it will be saved that way, otherwise it
         ///  will be serialized and stored as in binary.
         /// </summary>
-        public void AddResource(string name, object value)
+        public void AddResource(string name, object? value)
         {
             if (value is ResXDataNode node)
             {
@@ -310,7 +301,7 @@ namespace System.Resources
         /// <summary>
         ///  Adds a string resource to the resources.
         /// </summary>
-        public void AddResource(string name, string value) => AddDataRow(DataStr, name, value);
+        public void AddResource(string name, string? value) => AddDataRow(DataStr, name, value);
 
         /// <summary>
         ///  Adds a string resource to the resources.
@@ -319,8 +310,8 @@ namespace System.Resources
         {
             // Clone the node to work on a copy.
             ResXDataNode nodeClone = node.DeepClone();
-            ResXFileRef fileRef = nodeClone.FileRef;
-            string modifiedBasePath = BasePath;
+            ResXFileRef? fileRef = nodeClone.FileRef;
+            string? modifiedBasePath = BasePath;
 
             if (!string.IsNullOrEmpty(modifiedBasePath))
             {
@@ -339,15 +330,20 @@ namespace System.Resources
         /// <summary>
         ///  Adds a blob resource to the resources.
         /// </summary>
-        private void AddDataRow(string elementName, string name, byte[] value)
-            => AddDataRow(elementName, name, ToBase64WrappedString(value), TypeNameWithAssembly(typeof(byte[])), null, null);
+        private void AddDataRow(string elementName, string name, byte[]? value)
+            => AddDataRow(
+                elementName,
+                name,
+                value is null ? null : ToBase64WrappedString(value),
+                MultitargetUtil.GetAssemblyQualifiedName(typeof(byte[]), _typeNameConverter),
+                mimeType: null,
+                comment: null);
 
         /// <summary>
-        ///  Adds a resource to the resources. If the resource is a string,
-        ///  it will be saved that way, otherwise it will be serialized
-        ///  and stored as in binary.
+        ///  Adds a resource to the resources. If the resource is a string, it will be saved that way, otherwise it
+        ///  will be serialized and stored as in binary.
         /// </summary>
-        private void AddDataRow(string elementName, string name, object value)
+        private void AddDataRow(string elementName, string name, object? value)
         {
             s_resValueProviderSwitch.TraceVerbose($"  resx: adding resource {name}");
             switch (value)
@@ -379,10 +375,10 @@ namespace System.Resources
         /// <summary>
         ///  Adds a string resource to the resources.
         /// </summary>
-        private void AddDataRow(string elementName, string name, string value)
+        private void AddDataRow(string elementName, string name, string? value)
         {
             // if it's a null string, set it here as a resxnullref
-            string typeName =
+            string? typeName =
                 value is null
                     ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), _typeNameConverter)
                     : null;
@@ -393,30 +389,35 @@ namespace System.Resources
         ///  Adds a new row to the Resources table. This helper is used because
         ///  we want to always late bind to the columns for greater flexibility.
         /// </summary>
-        private void AddDataRow(string elementName, string name, string value, string type, string mimeType, string comment)
+        private void AddDataRow(string elementName, string name, string? value, string? type, string? mimeType, string? comment)
         {
             if (_hasBeenSaved)
             {
                 throw new InvalidOperationException(SR.ResXResourceWriterSaved);
             }
 
-            string alias = null;
+            string? alias = null;
             if (!string.IsNullOrEmpty(type) && elementName == DataStr)
             {
-                string assemblyName = GetFullName(type);
+                string? assemblyName = GetFullName(type);
                 if (string.IsNullOrEmpty(assemblyName))
                 {
                     try
                     {
-                        Type typeObject = Type.GetType(type);
+                        Type? typeObject = Type.GetType(type);
                         if (typeObject == typeof(string))
                         {
                             type = null;
                         }
                         else if (typeObject is not null)
                         {
-                            assemblyName = GetFullName(MultitargetUtil.GetAssemblyQualifiedName(typeObject, _typeNameConverter));
-                            alias = GetAliasFromName(new AssemblyName(assemblyName));
+                            string? qualifiedName = MultitargetUtil.GetAssemblyQualifiedName(typeObject, _typeNameConverter);
+                            if (qualifiedName is not null)
+                            {
+                                // Let this throw argument null for bad type name (to match old behavior)
+                                assemblyName = GetFullName(qualifiedName);
+                                alias = GetAliasFromName(new AssemblyName(assemblyName!));
+                            }
                         }
                     }
                     catch
@@ -425,7 +426,8 @@ namespace System.Resources
                 }
                 else
                 {
-                    alias = GetAliasFromName(new AssemblyName(GetFullName(type)));
+                    // Let this throw argument null for bad type name (to match old behavior)
+                    alias = GetAliasFromName(new AssemblyName(GetFullName(type)!));
                 }
             }
 
@@ -480,7 +482,7 @@ namespace System.Resources
             Writer.WriteEndElement();
         }
 
-        private void AddAssemblyRow(string elementName, string alias, string name)
+        private void AddAssemblyRow(string elementName, string? alias, string? name)
         {
             Writer.WriteStartElement(elementName);
             {
@@ -498,10 +500,10 @@ namespace System.Resources
             Writer.WriteEndElement();
         }
 
-        private string GetAliasFromName(AssemblyName assemblyName)
+        private string? GetAliasFromName(AssemblyName assemblyName)
         {
             _cachedAliases ??= new();
-            if (!_cachedAliases.TryGetValue(assemblyName.FullName, out string alias) || string.IsNullOrEmpty(alias))
+            if (!_cachedAliases.TryGetValue(assemblyName.FullName, out string? alias) || string.IsNullOrEmpty(alias))
             {
                 alias = assemblyName.Name;
                 AddAlias(alias, assemblyName);
@@ -548,7 +550,7 @@ namespace System.Resources
             return (indexStart == -1) ? typeName : typeName[..indexStart];
         }
 
-        private static string GetFullName(string typeName)
+        private static string? GetFullName(string typeName)
         {
             int indexStart = typeName.IndexOf(',');
             return indexStart == -1 ? null : typeName[(indexStart + 2)..];
@@ -581,12 +583,6 @@ namespace System.Resources
             }
 
             return raw;
-        }
-
-        private string TypeNameWithAssembly(Type type)
-        {
-            string result = MultitargetUtil.GetAssemblyQualifiedName(type, _typeNameConverter);
-            return result;
         }
 
         /// <summary>

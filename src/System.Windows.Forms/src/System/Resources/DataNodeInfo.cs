@@ -2,19 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Resources
 {
     internal class DataNodeInfo
     {
-        public string Name;
-        public string Comment;
-        public string TypeName;
-        public string MimeType;
-        public string ValueData;
+        public required string Name { get; set; }
+        public string? Comment { get; set; }
+        public string? TypeName { get; set; }
+        public string? MimeType { get; set; }
+        public string ValueData { get; set; } = string.Empty;
         public Point ReaderPosition; // Only used to track position in the reader
 
         internal DataNodeInfo Clone() => new()
