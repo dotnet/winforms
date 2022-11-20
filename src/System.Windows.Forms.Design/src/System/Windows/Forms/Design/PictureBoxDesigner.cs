@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_actionLists == null)
+                if (_actionLists is null)
                 {
                     _actionLists = new DesignerActionListCollection();
                     _actionLists.Add(new PictureBoxActionList(this));

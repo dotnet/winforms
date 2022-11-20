@@ -26,7 +26,7 @@ namespace System.Drawing
         {
             get
             {
-                if (_suffix == null)
+                if (_suffix is null)
                 {
                     _suffix = string.Empty;
                     var section = ConfigurationManager.GetSection("system.drawing") as SystemDrawingSection;

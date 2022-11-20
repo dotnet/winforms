@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Design
 
         private static IComponent GetDragOwnerComponent(IDataObject data)
         {
-            if (currentDrags == null || !currentDrags.Contains(data))
+            if (currentDrags is null || !currentDrags.Contains(data))
             {
                 return null;
             }
@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Design
                 if (dataObj is ComponentDataObjectWrapper)
                 {
                     object[] dragObjs = GetDraggingObjects(dataObj, true);
-                    if (dragObjs == null)
+                    if (dragObjs is null)
                     {
                         return false;
                     }
@@ -131,13 +131,13 @@ namespace System.Windows.Forms.Design
                 {
                     object serializationData = dataObj.GetData(DataFormat, false);
 
-                    if (serializationData == null)
+                    if (serializationData is null)
                     {
                         return false;
                     }
 
                     IDesignerSerializationService ds = (IDesignerSerializationService)GetService(typeof(IDesignerSerializationService));
-                    if (ds == null)
+                    if (ds is null)
                     {
                         return false;
                     }
@@ -403,13 +403,13 @@ namespace System.Windows.Forms.Design
             Control comp;
             Control parentControl = client.GetDesignerControl();
 
-            if (selectionHandler == null)
+            if (selectionHandler is null)
             {
                 Debug.Fail("selectionHandler should not be null");
                 return Point.Empty;
             }
 
-            if (comps == null)
+            if (comps is null)
             {
                 return Point.Empty;
             }
@@ -718,7 +718,7 @@ namespace System.Windows.Forms.Design
             //
             freezePainting = false;
 
-            if (selectionHandler == null)
+            if (selectionHandler is null)
             {
                 Debug.Fail("selectionHandler should not be null");
                 de.Effect = DragDropEffects.None;
@@ -799,7 +799,7 @@ namespace System.Windows.Forms.Design
                         // to make sure we pick up design time props, etc.
                         //
                         IComponent dragOwner = GetDragOwnerComponent(de.Data);
-                        bool newContainer = dragOwner == null || client.Component == null || dragOwner.Site.Container != client.Component.Site.Container;
+                        bool newContainer = dragOwner is null || client.Component is null || dragOwner.Site.Container != client.Component.Site.Container;
                         bool collapseChildren = false;
                         if (de.Effect == DragDropEffects.Copy || newContainer)
                         {
@@ -824,7 +824,7 @@ namespace System.Windows.Forms.Design
                     {
                         object serializationData = dataObj.GetData(DataFormat, true);
 
-                        if (serializationData == null)
+                        if (serializationData is null)
                         {
                             Debug.Fail("data object didn't return any data, so how did we allow the drop?");
                             components = Array.Empty<IComponent>();
@@ -862,7 +862,7 @@ namespace System.Windows.Forms.Design
                             {
                                 comp = components[i] as IComponent;
 
-                                if (comp == null)
+                                if (comp is null)
                                 {
                                     comp = null;
                                     continue;
@@ -905,7 +905,7 @@ namespace System.Windows.Forms.Design
                                     else
                                     {
                                         // make sure the component was added to this client
-                                        if (client.GetControlForComponent(comp) == null)
+                                        if (client.GetControlForComponent(comp) is null)
                                         {
                                             updateLocation = false;
                                         }
@@ -1142,7 +1142,7 @@ namespace System.Windows.Forms.Design
 
         public void DoOleGiveFeedback(GiveFeedbackEventArgs e)
         {
-            if (selectionHandler == null)
+            if (selectionHandler is null)
             {
                 Debug.Fail("selectionHandler should not be null");
             }
@@ -1166,7 +1166,7 @@ namespace System.Windows.Forms.Design
                 components = cdo.Components;
             }
 
-            if (!topLevelOnly || components == null)
+            if (!topLevelOnly || components is null)
             {
                 return components;
             }
@@ -1198,13 +1198,13 @@ namespace System.Windows.Forms.Design
             foreach (object comp in compList)
             {
                 Control c = comp as Control;
-                if (c == null && comp != null)
+                if (c is null && comp != null)
                 {
                     topLevel.Add(comp);
                 }
                 else if (c != null)
                 {
-                    if (c.Parent == null || !compList.Contains(c.Parent))
+                    if (c.Parent is null || !compList.Contains(c.Parent))
                     {
                         topLevel.Add(comp);
                     }

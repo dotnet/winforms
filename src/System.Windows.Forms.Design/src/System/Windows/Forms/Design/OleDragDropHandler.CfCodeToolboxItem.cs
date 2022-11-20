@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Design
             protected override IComponent[] CreateComponentsCore(IDesignerHost host, IDictionary defaultValues)
             {
                 IDesignerSerializationService ds = (IDesignerSerializationService)host.GetService(typeof(IDesignerSerializationService));
-                if (ds == null)
+                if (ds is null)
                 {
                     return null;
                 }
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Design
                         {
                             Control childControl = component as Control;
 
-                            if (childControl != null && childControl != parentControl && childControl.Parent == null)
+                            if (childControl != null && childControl != parentControl && childControl.Parent is null)
                             {
                                 if (bounds.IsEmpty)
                                 {
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.Design
                             Form form = childControl as Form;
                             if (childControl != null
                                 && !(form != null && form.TopLevel) // Don't add top-level forms
-                                && childControl.Parent == null)
+                                && childControl.Parent is null)
                             {
                                 defaultValues["Offset"] = new Size(childControl.Bounds.X - bounds.X, childControl.Bounds.Y - bounds.Y);
                                 parentControlDesigner.AddControl(childControl, defaultValues);

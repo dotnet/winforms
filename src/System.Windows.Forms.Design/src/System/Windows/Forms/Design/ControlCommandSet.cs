@@ -301,7 +301,7 @@ namespace System.Windows.Forms.Design
             {
                 Control c = obj as Control;
 
-                if (c == null || c.Site == null)
+                if (c is null || c.Site is null)
                 {
                     return false;
                 }
@@ -318,7 +318,7 @@ namespace System.Windows.Forms.Design
             {
                 Control c = component as Control;
 
-                if (c == null || c.Site == null)
+                if (c is null || c.Site is null)
                 {
                     return false;
                 }
@@ -395,7 +395,7 @@ namespace System.Windows.Forms.Design
             if (ctrl != null)
             {
                 Control c = ctrl.Parent;
-                while (c != null && currentSnapComponent == null)
+                while (c != null && currentSnapComponent is null)
                 {
                     props = TypeDescriptor.GetProperties(c);
                     currentSnapProp = props["SnapToGrid"];
@@ -419,7 +419,7 @@ namespace System.Windows.Forms.Design
 
             props = TypeDescriptor.GetProperties(currentSnapComponent);
 
-            if (currentSnapProp == null)
+            if (currentSnapProp is null)
             {
                 currentSnapProp = props["SnapToGrid"];
                 if (currentSnapProp != null && currentSnapProp.PropertyType != typeof(bool))
@@ -428,7 +428,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (gridSizeProp == null)
+            if (gridSizeProp is null)
             {
                 gridSizeProp = props["GridSize"];
                 if (gridSizeProp != null && gridSizeProp.PropertyType != typeof(Size))
@@ -885,7 +885,7 @@ namespace System.Windows.Forms.Design
                             {
                                 PropertyDescriptor prop = GetProperty(comp, "Locked");
                                 //check to see the prop is not null & not readonly
-                                if (prop == null)
+                                if (prop is null)
                                 {
                                     continue;
                                 }
@@ -984,7 +984,7 @@ namespace System.Windows.Forms.Design
 
             Debug.Assert(SelectionService != null, "Need SelectionService for sizing command");
 
-            if (SelectionService == null)
+            if (SelectionService is null)
             {
                 return;
             }
@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms.Design
         {
             MenuCommand cmd = (MenuCommand)sender;
 
-            if (baseControl == null)
+            if (baseControl is null)
             {
                 cmd.Enabled = false;
                 return;
@@ -1209,7 +1209,7 @@ namespace System.Windows.Forms.Design
 
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
 
-            if (host == null)
+            if (host is null)
             {
                 return;
             }
@@ -1344,7 +1344,7 @@ namespace System.Windows.Forms.Design
                 {
                     Debug.Assert(SelectionService != null, "Need SelectionService for sizing command");
 
-                    if (SelectionService == null)
+                    if (SelectionService is null)
                     {
                         return;
                     }
@@ -1408,7 +1408,7 @@ namespace System.Windows.Forms.Design
             ISelectionService selSvc = SelectionService;
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
 
-            if (selSvc == null || host == null || !(host.RootComponent is Control))
+            if (selSvc is null || host is null || !(host.RootComponent is Control))
             {
                 return;
             }
@@ -1452,7 +1452,7 @@ namespace System.Windows.Forms.Design
                         controlSiteContainer = DesignerUtils.CheckForNestedContainer(nextControl.Site.Container); // ...necessary to support SplitterPanel components
                     }
 
-                    if (nextControl == null || nextControl.Site == null || controlSiteContainer != container)
+                    if (nextControl is null || nextControl.Site is null || controlSiteContainer != container)
                     {
                         next = current;
                     }
@@ -1475,7 +1475,7 @@ namespace System.Windows.Forms.Design
 
             ISelectionService selSvc = SelectionService;
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (selSvc == null || host == null || !(host.RootComponent is Control))
+            if (selSvc is null || host is null || !(host.RootComponent is Control))
             {
                 return;
             }
@@ -1492,7 +1492,7 @@ namespace System.Windows.Forms.Design
             currentSelection = selSvc.PrimarySelection;
             ctl = currentSelection as Control;
 
-            if (targetSelection == null && ctl != null && (baseCtl.Contains(ctl) || baseCtl == currentSelection))
+            if (targetSelection is null && ctl != null && (baseCtl.Contains(ctl) || baseCtl == currentSelection))
             {
                 // Our current selection is a control.  Select the next control in
                 // the z-order.
@@ -1508,7 +1508,7 @@ namespace System.Windows.Forms.Design
                 targetSelection = ctl;
             }
 
-            if (targetSelection == null)
+            if (targetSelection is null)
             {
                 ComponentTray tray = (ComponentTray)GetService(typeof(ComponentTray));
                 if (tray != null)
@@ -1557,7 +1557,7 @@ namespace System.Windows.Forms.Design
                     //
                     for (int c = 0; c < ctlControls.Count; c++)
                     {
-                        if (found == null || found.TabIndex > ctlControls[c].TabIndex)
+                        if (found is null || found.TabIndex > ctlControls[c].TabIndex)
                         {
                             found = ctlControls[c];
                         }
@@ -1603,7 +1603,7 @@ namespace System.Windows.Forms.Design
                                 // Check to see if this control replaces the "best match" we've already
                                 // found.
                                 //
-                                if (found == null || found.TabIndex > parentControls[c].TabIndex)
+                                if (found is null || found.TabIndex > parentControls[c].TabIndex)
                                 {
                                     // Finally, check to make sure that if this tab index is the same as ctl,
                                     // that we've already encountered ctl in the z-order.  If it isn't the same,
@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms.Design
                                 // Check to see if this control replaces the "best match" we've already
                                 // found.
                                 //
-                                if (found == null || found.TabIndex < parentControls[c].TabIndex)
+                                if (found is null || found.TabIndex < parentControls[c].TabIndex)
                                 {
                                     // Finally, check to make sure that if this tab index is the same as ctl,
                                     // that we've already encountered ctl in the z-order.  If it isn't the same,
@@ -1726,7 +1726,7 @@ namespace System.Windows.Forms.Design
                     //
                     for (int c = ctlControls.Count - 1; c >= 0; c--)
                     {
-                        if (found == null || found.TabIndex < ctlControls[c].TabIndex)
+                        if (found is null || found.TabIndex < ctlControls[c].TabIndex)
                         {
                             found = ctlControls[c];
                         }
@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms.Design
                     if (cX.Parent == cY.Parent)
                     {
                         Control parent = cX.Parent;
-                        if (parent == null)
+                        if (parent is null)
                         {
                             return 0;
                         }
@@ -1786,11 +1786,11 @@ namespace System.Windows.Forms.Design
                             return 1;
                         }
                     }
-                    else if (cX.Parent == null || cX.Contains(cY))
+                    else if (cX.Parent is null || cX.Contains(cY))
                     {
                         return 1;
                     }
-                    else if (cY.Parent == null || cY.Contains(cX))
+                    else if (cY.Parent is null || cY.Contains(cX))
                     {
                         return -1;
                     }

@@ -248,7 +248,7 @@ namespace System.Windows.Forms.Design
             // the user cancels out of moving them.  So, we create a "BoundsInfo" object for
             // each control that saves this state.
             //
-            if (originalCoords == null && !finalMove)
+            if (originalCoords is null && !finalMove)
             {
                 originalCoords = new BoundsInfo[controls.Length];
                 for (int i = 0; i < controls.Length; i++)
@@ -456,7 +456,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-                        if (leftProp == null || topProp == null)
+                        if (leftProp is null || topProp is null)
                         {
                             PropertyDescriptor locationProp = TypeDescriptor.GetProperties(components[i])["Location"];
                             if (locationProp != null && !locationProp.IsReadOnly)

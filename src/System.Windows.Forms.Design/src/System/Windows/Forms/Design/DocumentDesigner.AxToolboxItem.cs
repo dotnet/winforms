@@ -121,10 +121,10 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (axctlType == null)
+                if (axctlType is null)
                 {
                     IUIService uiSvc = (IUIService)host.GetService(typeof(IUIService));
-                    if (uiSvc == null)
+                    if (uiSvc is null)
                     {
                         RTLAwareMessageBox.Show(null, SR.AxImportFailed, null, MessageBoxButtons.OK, MessageBoxIcon.Error,
                                         MessageBoxDefaultButton.Button1, 0);
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Design
 
                 // Missing reference will show up as an empty string.
                 //
-                if (path == null || path.Length <= 0)
+                if (path is null || path.Length <= 0)
                 {
                     return null;
                 }
@@ -234,13 +234,13 @@ namespace System.Windows.Forms.Design
                 Type type;
                 type = Type.GetType("EnvDTE.ProjectItem, " + AssemblyRef.EnvDTE);
 
-                if (type == null)
+                if (type is null)
                 {
                     return null;
                 }
 
                 object ext = host.GetService(type);
-                if (ext == null)
+                if (ext is null)
                     return null;
 
                 string name = ext.GetType().InvokeMember("Name", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, ext, null, CultureInfo.InvariantCulture).ToString();
@@ -264,7 +264,7 @@ namespace System.Windows.Forms.Design
             {
                 string controlKey = "CLSID\\" + clsid;
                 RegistryKey key = Registry.ClassesRoot.OpenSubKey(controlKey);
-                if (key == null)
+                if (key is null)
                 {
                     if (AxToolSwitch.TraceVerbose)
                         Debug.WriteLine("No registry key found for: " + controlKey);
@@ -331,7 +331,7 @@ namespace System.Windows.Forms.Design
                 //
                 // If that fails, try to load the TLB based on the TypeLib guid key.
                 //
-                if (pTLB == null)
+                if (pTLB is null)
                 {
                     RegistryKey inprocServerKey = key.OpenSubKey("InprocServer32");
                     if (inprocServerKey != null)

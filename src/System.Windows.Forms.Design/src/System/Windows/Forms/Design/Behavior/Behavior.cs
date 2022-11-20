@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </param>
         protected Behavior(bool callParentBehavior, BehaviorService? behaviorService)
         {
-            if ((callParentBehavior) && (behaviorService == null))
+            if ((callParentBehavior) && (behaviorService is null))
             {
                 throw new ArgumentException(null, nameof(behaviorService));
             }

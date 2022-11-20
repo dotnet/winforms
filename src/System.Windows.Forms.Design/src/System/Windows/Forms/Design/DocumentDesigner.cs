@@ -292,7 +292,7 @@ namespace System.Windows.Forms.Design
         internal virtual bool CanDropComponents(DragEventArgs de)
         {
             // If there is no tray we bail.
-            if (componentTray == null)
+            if (componentTray is null)
                 return true;
 
             // Figure out if any of the components in the drag-drop are children
@@ -307,7 +307,7 @@ namespace System.Windows.Forms.Design
                 for (int i = 0; i < dragComps.Length; i++)
                 {
                     IComponent comp = dragComps[i] as IComponent;
-                    if (host == null || dragComps[i] == null || comp == null)
+                    if (host is null || dragComps[i] is null || comp is null)
                     {
                         continue;
                     }
@@ -663,7 +663,7 @@ namespace System.Windows.Forms.Design
                 //
                 object sel = s.PrimarySelection;
 
-                if (sel == null || !(sel is Control))
+                if (sel is null || !(sel is Control))
                 {
                     sel = null;
 
@@ -880,7 +880,7 @@ namespace System.Windows.Forms.Design
                     //
                     string category = "CLSID\\" + clsid + "\\Implemented Categories\\{" + htmlDesignTime.ToString() + "}";
                     designtimeKey = Registry.ClassesRoot.OpenSubKey(category);
-                    return (designtimeKey == null);
+                    return (designtimeKey is null);
                 }
 
                 return false;
@@ -967,13 +967,13 @@ namespace System.Windows.Forms.Design
                 //
                 ToolStripDesigner td = host.GetDesigner(component) as ToolStripDesigner;
 
-                if (td == null)
+                if (td is null)
                 {
                     ControlDesigner cd = host.GetDesigner(component) as ControlDesigner;
                     if (cd != null)
                     {
                         Form form = cd.Control as Form;
-                        if (form == null || !form.TopLevel)
+                        if (form is null || !form.TopLevel)
                         {
                             addControl = false;
                         }
@@ -983,7 +983,7 @@ namespace System.Windows.Forms.Design
                 if (addControl &&
                     TypeDescriptor.GetAttributes(component).Contains(DesignTimeVisibleAttribute.Yes))
                 {
-                    if (componentTray == null)
+                    if (componentTray is null)
                     {
                         ISplitWindowService sws = (ISplitWindowService)GetService(typeof(ISplitWindowService));
                         if (sws != null)
@@ -1134,7 +1134,7 @@ namespace System.Windows.Forms.Design
 
             IDataObject dataObject = serializedData as IDataObject;
 
-            if (dataObject == null)
+            if (dataObject is null)
             {
                 Debug.Fail("Toolbox service didn't pass us a data object; that should never happen");
                 return null;
@@ -1164,7 +1164,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnDesignerActivate(object source, EventArgs evevent)
         {
-            if (undoEngine == null)
+            if (undoEngine is null)
             {
                 undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
                 if (undoEngine != null)

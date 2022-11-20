@@ -256,7 +256,7 @@ namespace System.Windows.Forms.Design
 
             IComponent root = designerHost.RootComponent;
             Component startComp = ToolStripItem;
-            if (startComp == null || root == null)
+            if (startComp is null || root is null)
             {
                 return parentControls;
             }
@@ -529,7 +529,7 @@ namespace System.Windows.Forms.Design
         // Need to Fire ComponentChanging on all the DropDownItems. Please see "MorphToolStripItem" function for more details.
         private void FireComponentChanging(ToolStripDropDownItem parent)
         {
-            if (parent == null)
+            if (parent is null)
             {
                 return;
             }
@@ -551,7 +551,7 @@ namespace System.Windows.Forms.Design
 
         private void FireComponentChanged(ToolStripDropDownItem parent)
         {
-            if (parent == null)
+            if (parent is null)
             {
                 return;
             }
@@ -573,7 +573,7 @@ namespace System.Windows.Forms.Design
 
         public void GetGlyphs(ref GlyphCollection glyphs, Behavior.Behavior standardBehavior)
         {
-            if (ImmediateParent == null)
+            if (ImmediateParent is null)
             {
                 return;
             }
