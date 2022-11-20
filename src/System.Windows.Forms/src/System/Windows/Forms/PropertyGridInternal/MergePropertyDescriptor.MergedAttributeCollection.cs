@@ -68,6 +68,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     _foundAttributes[attributeType] = value;
                 }
+
                 return value;
             }
         }
