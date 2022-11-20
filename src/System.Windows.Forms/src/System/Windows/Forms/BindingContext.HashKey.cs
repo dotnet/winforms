@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Globalization;
 
 namespace System.Windows.Forms
@@ -16,7 +14,7 @@ namespace System.Windows.Forms
             private readonly int _dataSourceHashCode;
             private readonly string _dataMember;
 
-            internal HashKey(object dataSource, string dataMember)
+            internal HashKey(object dataSource, string? dataMember)
             {
                 ArgumentNullException.ThrowIfNull(dataSource);
                 dataMember ??= string.Empty;
@@ -30,9 +28,9 @@ namespace System.Windows.Forms
 
             public override int GetHashCode() => HashCode.Combine(_dataSourceHashCode, _dataMember);
 
-            public override bool Equals(object target)
+            public override bool Equals(object? target)
             {
-                if (!(target is HashKey keyTarget))
+                if (target is not HashKey keyTarget)
                 {
                     return false;
                 }
