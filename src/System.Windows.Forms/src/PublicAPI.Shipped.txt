@@ -632,7 +632,7 @@ static System.Resources.ResXResourceReader.FromFileContents(string! fileContents
 ~static System.Windows.Forms.AxHost.GetIPictureFromPicture(System.Drawing.Image image) -> object
 ~static System.Windows.Forms.AxHost.GetPictureFromIPicture(object picture) -> System.Drawing.Image
 ~static System.Windows.Forms.AxHost.GetPictureFromIPictureDisp(object picture) -> System.Drawing.Image
-~static System.Windows.Forms.BindingContext.UpdateBinding(System.Windows.Forms.BindingContext newBindingContext, System.Windows.Forms.Binding binding) -> void
+static System.Windows.Forms.BindingContext.UpdateBinding(System.Windows.Forms.BindingContext? newBindingContext, System.Windows.Forms.Binding! binding) -> void
 ~static System.Windows.Forms.Control.FromChildHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
@@ -796,12 +796,12 @@ System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter! tex
 ~System.Windows.Forms.Binding.NullValue.get -> object
 ~System.Windows.Forms.Binding.NullValue.set -> void
 ~System.Windows.Forms.Binding.PropertyName.get -> string
-~System.Windows.Forms.BindingContext.Add(object dataSource, System.Windows.Forms.BindingManagerBase listManager) -> void
-~System.Windows.Forms.BindingContext.Contains(object dataSource) -> bool
-~System.Windows.Forms.BindingContext.Contains(object dataSource, string dataMember) -> bool
-~System.Windows.Forms.BindingContext.Remove(object dataSource) -> void
-~System.Windows.Forms.BindingContext.this[object dataSource, string dataMember].get -> System.Windows.Forms.BindingManagerBase
-~System.Windows.Forms.BindingContext.this[object dataSource].get -> System.Windows.Forms.BindingManagerBase
+System.Windows.Forms.BindingContext.Add(object! dataSource, System.Windows.Forms.BindingManagerBase! listManager) -> void
+System.Windows.Forms.BindingContext.Contains(object! dataSource) -> bool
+System.Windows.Forms.BindingContext.Contains(object! dataSource, string? dataMember) -> bool
+System.Windows.Forms.BindingContext.Remove(object! dataSource) -> void
+System.Windows.Forms.BindingContext.this[object! dataSource, string? dataMember].get -> System.Windows.Forms.BindingManagerBase!
+System.Windows.Forms.BindingContext.this[object! dataSource].get -> System.Windows.Forms.BindingManagerBase!
 System.Windows.Forms.BindingMemberInfo.BindingField.get -> string!
 System.Windows.Forms.BindingMemberInfo.BindingMember.get -> string!
 System.Windows.Forms.BindingMemberInfo.BindingMemberInfo(string? dataMember) -> void
@@ -1664,9 +1664,9 @@ virtual System.Resources.ResXResourceWriter.AddAlias(string? aliasName, System.R
 ~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
 ~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
 ~virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs cevent) -> void
-~virtual System.Windows.Forms.BindingContext.AddCore(object dataSource, System.Windows.Forms.BindingManagerBase listManager) -> void
-~virtual System.Windows.Forms.BindingContext.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs ccevent) -> void
-~virtual System.Windows.Forms.BindingContext.RemoveCore(object dataSource) -> void
+virtual System.Windows.Forms.BindingContext.AddCore(object! dataSource, System.Windows.Forms.BindingManagerBase! listManager) -> void
+virtual System.Windows.Forms.BindingContext.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs! ccevent) -> void
+virtual System.Windows.Forms.BindingContext.RemoveCore(object! dataSource) -> void
 ~virtual System.Windows.Forms.BindingSource.Add(object value) -> int
 ~virtual System.Windows.Forms.BindingSource.AddNew() -> object
 ~virtual System.Windows.Forms.BindingSource.ApplySort(System.ComponentModel.ListSortDescriptionCollection sorts) -> void
@@ -5275,7 +5275,7 @@ System.Windows.Forms.BindingCompleteState.Success = 0 -> System.Windows.Forms.Bi
 System.Windows.Forms.BindingContext
 System.Windows.Forms.BindingContext.BindingContext() -> void
 System.Windows.Forms.BindingContext.Clear() -> void
-System.Windows.Forms.BindingContext.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler
+System.Windows.Forms.BindingContext.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler?
 System.Windows.Forms.BindingContext.IsReadOnly.get -> bool
 System.Windows.Forms.BindingManagerBase
 System.Windows.Forms.BindingManagerBase.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler!

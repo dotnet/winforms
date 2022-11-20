@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -83,7 +81,7 @@ namespace System.Windows.Forms
         ///  Gets the System.Windows.Forms.BindingManagerBase associated with the specified
         ///  data source and data member.
         /// </summary>
-        public BindingManagerBase this[object dataSource, string dataMember]
+        public BindingManagerBase this[object dataSource, string? dataMember]
         {
             get => EnsureListManager(dataSource, dataMember);
         }
@@ -124,7 +122,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.collectionChangedEventDescr))]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Browsable(false)]
-        public event CollectionChangeEventHandler CollectionChanged
+        public event CollectionChangeEventHandler? CollectionChanged
         {
             add
             {
@@ -166,12 +164,12 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether the System.Windows.Forms.BindingContext
         ///  contains the specified data source and data member.
         /// </summary>
-        public bool Contains(object dataSource, string dataMember)
+        public bool Contains(object dataSource, string? dataMember)
         {
             return _listManagers.ContainsKey(GetKey(dataSource, dataMember));
         }
 
-        private static HashKey GetKey(object dataSource, string dataMember)
+        private static HashKey GetKey(object dataSource, string? dataMember)
         {
             return new HashKey(dataSource, dataMember);
         }
@@ -214,9 +212,9 @@ namespace System.Windows.Forms
         ///  - If the data source is an ICurrencyManagerProvider, just delegate to the data
         ///  source.
         /// </summary>
-        private BindingManagerBase EnsureListManager(object dataSource, string dataMember)
+        private BindingManagerBase EnsureListManager(object dataSource, string? dataMember)
         {
-            BindingManagerBase bindingManagerBase = null;
+            BindingManagerBase? bindingManagerBase = null;
 
             dataMember ??= string.Empty;
 
@@ -233,10 +231,10 @@ namespace System.Windows.Forms
 
             // Check for previously created binding manager
             HashKey key = GetKey(dataSource, dataMember);
-            WeakReference wRef = _listManagers[key] as WeakReference;
+            WeakReference? wRef = _listManagers[key] as WeakReference;
             if (wRef is not null)
             {
-                bindingManagerBase = (BindingManagerBase)wRef.Target;
+                bindingManagerBase = (BindingManagerBase?)wRef.Target;
             }
 
             if (bindingManagerBase is not null)
@@ -267,7 +265,7 @@ namespace System.Windows.Forms
 
                 BindingManagerBase formerManager = EnsureListManager(dataSource, dataPath);
 
-                PropertyDescriptor prop = formerManager.GetItemProperties().Find(dataField, true);
+                PropertyDescriptor? prop = formerManager.GetItemProperties().Find(dataField, true);
                 if (prop is null)
                 {
                     throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
@@ -329,10 +327,10 @@ namespace System.Windows.Forms
 
         private void ScrubWeakRefs()
         {
-            ArrayList cleanupList = null;
+            ArrayList? cleanupList = null;
             foreach (DictionaryEntry de in _listManagers)
             {
-                WeakReference wRef = (WeakReference)de.Value;
+                WeakReference wRef = (WeakReference)de.Value!;
                 if (wRef.Target is null)
                 {
                     cleanupList ??= new ArrayList();
@@ -355,7 +353,7 @@ namespace System.Windows.Forms
         ///  that support IBindableComponent, to update their Bindings when the value of
         ///  IBindableComponent.BindingContext is changed.
         /// </summary>
-        public static void UpdateBinding(BindingContext newBindingContext, Binding binding)
+        public static void UpdateBinding(BindingContext? newBindingContext, Binding binding)
         {
             ArgumentNullException.ThrowIfNull(binding);
 
