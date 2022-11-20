@@ -1904,7 +1904,7 @@ namespace System.Windows.Forms
 
                 Debug.Assert(_ptCurrentCell.Y != -1);
 
-                bool previousVisibleColumnExists = (null != Columns.GetPreviousColumn(Columns[_ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None));
+                bool previousVisibleColumnExists = (Columns.GetPreviousColumn(Columns[_ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None) is not null);
                 bool previousVisibleRowExists = (-1 != Rows.GetPreviousRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible));
 
                 return !previousVisibleColumnExists && !previousVisibleRowExists;
@@ -1922,7 +1922,7 @@ namespace System.Windows.Forms
 
                 Debug.Assert(_ptCurrentCell.Y != -1);
 
-                bool nextVisibleColumnExists = (null != Columns.GetNextColumn(Columns[_ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None));
+                bool nextVisibleColumnExists = (Columns.GetNextColumn(Columns[_ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None) is not null);
                 bool nextVisibleRowExists = (-1 != Rows.GetNextRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible));
 
                 return !nextVisibleColumnExists && !nextVisibleRowExists;

@@ -1830,7 +1830,7 @@ namespace System.Windows.Forms
 
         private void ImageListChangedHandle(object sender, EventArgs e)
         {
-            if ((null != sender) && (sender == imageList) && IsHandleCreated)
+            if ((sender is not null) && (sender == imageList) && IsHandleCreated)
             {
                 BeginUpdate();
                 foreach (TreeNode node in Nodes)
@@ -1874,7 +1874,7 @@ namespace System.Windows.Forms
 
         private void StateImageListChangedHandle(object sender, EventArgs e)
         {
-            if ((null != sender) && (sender == stateImageList) && IsHandleCreated)
+            if ((sender is not null) && (sender == stateImageList) && IsHandleCreated)
             {
                 // Since the native treeview requires the state imagelist to be 1-indexed we need to
                 // re add the images if the original collection had changed.
