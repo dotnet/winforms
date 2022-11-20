@@ -701,15 +701,8 @@ namespace System.Windows.Forms.Design
                 tabGlyphs = new Rectangle[tabControls.Count];
             }
 
-            if (tabComplete is null)
-            {
-                tabComplete = new ArrayList();
-            }
-
-            if (tabNext is null)
-            {
-                tabNext = new Hashtable();
-            }
+            tabComplete ??= new ArrayList();
+            tabNext ??= new Hashtable();
 
             if (region is null)
             {
