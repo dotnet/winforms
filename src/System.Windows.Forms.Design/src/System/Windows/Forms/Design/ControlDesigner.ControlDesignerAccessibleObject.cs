@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Design
                 {
                     AccessibleStates state = _control.AccessibilityObject.State;
                     ISelectionService s = SelectionService;
-                    if (s != null)
+                    if (s is not null)
                     {
                         if (s.GetComponentSelected(_control))
                         {
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Design
                 if (_control.AccessibilityObject.GetChild(index) is Control.ControlAccessibleObject childAccObj)
                 {
                     AccessibleObject cao = GetDesignerAccessibleObject(childAccObj);
-                    if (cao != null)
+                    if (cao is not null)
                     {
                         return cao;
                     }

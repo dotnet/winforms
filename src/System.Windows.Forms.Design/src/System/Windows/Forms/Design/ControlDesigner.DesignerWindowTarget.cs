@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design
 
             public void Dispose()
             {
-                if (_designer != null)
+                if (_designer is not null)
                 {
                     _designer.Control.WindowTarget = _oldTarget;
                     _designer = null;
@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Design
                 // to do default processing with the designer's DefWndProc.  So, we stuff ourselves into the designers
                 // window target and call their WndProc.
                 ControlDesigner currentDesigner = _designer;
-                if (currentDesigner != null)
+                if (currentDesigner is not null)
                 {
                     IDesignerTarget designerTarget = currentDesigner.DesignerTarget;
                     currentDesigner.DesignerTarget = this;

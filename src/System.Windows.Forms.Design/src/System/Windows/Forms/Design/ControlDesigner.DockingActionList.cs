@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
             private string GetActionName()
             {
                 PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
-                if (dockProp != null)
+                if (dockProp is not null)
                 {
                     DockStyle dockStyle = (DockStyle)dockProp.GetValue(Component);
                     if (dockStyle == DockStyle.Fill)
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
             {
                 DesignerActionItemCollection items = new DesignerActionItemCollection();
                 string actionName = GetActionName();
-                if (actionName != null)
+                if (actionName is not null)
                 {
                     items.Add(new DesignerActionVerbItem(new DesignerVerb(GetActionName(), OnDockActionClick)));
                 }
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Design
 
             private void OnDockActionClick(object sender, EventArgs e)
             {
-                if (sender is DesignerVerb designerVerb && _host != null)
+                if (sender is DesignerVerb designerVerb && _host is not null)
                 {
                     using DesignerTransaction t = _host.CreateTransaction(designerVerb.Text);
 

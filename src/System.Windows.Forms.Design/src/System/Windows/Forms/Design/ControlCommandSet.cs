@@ -267,7 +267,7 @@ namespace System.Windows.Forms.Design
                                   MenuCommands.KeySelectPrevious),
             };
 
-            if (MenuService != null)
+            if (MenuService is not null)
             {
                 for (int i = 0; i < commandSet.Length; i++)
                 {
@@ -278,10 +278,10 @@ namespace System.Windows.Forms.Design
             // Get the base control object.
             //
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null)
+            if (host is not null)
             {
                 Control comp = host.RootComponent as Control;
-                if (comp != null)
+                if (comp is not null)
                 {
                     baseControl = comp;
                 }
@@ -326,7 +326,7 @@ namespace System.Windows.Forms.Design
                 // walk up the parent chain, checking each component to see if it's
                 // in the selection list.  If it is, we've got a bad selection.
                 //
-                for (Control parent = c.Parent; parent != null; parent = parent.Parent)
+                for (Control parent = c.Parent; parent is not null; parent = parent.Parent)
                 {
                     // if this parent has already been okayed, skip it.
                     //
@@ -336,7 +336,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     object hashItem = itemHash[parent];
-                    if (hashItem != null && hashItem != component)
+                    if (hashItem is not null && hashItem != component)
                     {
                         return false;
                     }
@@ -358,7 +358,7 @@ namespace System.Windows.Forms.Design
         // We don't need to Dispose baseControl
         public override void Dispose()
         {
-            if (MenuService != null)
+            if (MenuService is not null)
             {
                 for (int i = 0; i < commandSet.Length; i++)
                 {
@@ -367,7 +367,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (tabOrder != null)
+            if (tabOrder is not null)
             {
                 tabOrder.Dispose();
                 tabOrder = null;
@@ -392,16 +392,16 @@ namespace System.Windows.Forms.Design
             // snap property.  If it fails to find one, it just gets the base component.
             //
             Control ctrl = component as Control;
-            if (ctrl != null)
+            if (ctrl is not null)
             {
                 Control c = ctrl.Parent;
-                while (c != null && currentSnapComponent is null)
+                while (c is not null && currentSnapComponent is null)
                 {
                     props = TypeDescriptor.GetProperties(c);
                     currentSnapProp = props["SnapToGrid"];
-                    if (currentSnapProp != null)
+                    if (currentSnapProp is not null)
                     {
-                        if (currentSnapProp.PropertyType == typeof(bool) && c.Site != null && c.Site.Container == container)
+                        if (currentSnapProp.PropertyType == typeof(bool) && c.Site is not null && c.Site.Container == container)
                         {
                             currentSnapComponent = c;
                         }
@@ -422,7 +422,7 @@ namespace System.Windows.Forms.Design
             if (currentSnapProp is null)
             {
                 currentSnapProp = props["SnapToGrid"];
-                if (currentSnapProp != null && currentSnapProp.PropertyType != typeof(bool))
+                if (currentSnapProp is not null && currentSnapProp.PropertyType != typeof(bool))
                 {
                     currentSnapProp = null;
                 }
@@ -431,7 +431,7 @@ namespace System.Windows.Forms.Design
             if (gridSizeProp is null)
             {
                 gridSizeProp = props["GridSize"];
-                if (gridSizeProp != null && gridSizeProp.PropertyType != typeof(Size))
+                if (gridSizeProp is not null && gridSizeProp.PropertyType != typeof(Size))
                 {
                     gridSizeProp = null;
                 }
@@ -442,7 +442,7 @@ namespace System.Windows.Forms.Design
             //
             snapComponent = currentSnapComponent;
             snapProperty = currentSnapProp;
-            if (gridSizeProp != null)
+            if (gridSizeProp is not null)
             {
                 snapSize = (Size)gridSizeProp.GetValue(snapComponent);
             }
@@ -480,7 +480,7 @@ namespace System.Windows.Forms.Design
             ArrayList lines = new ArrayList(2);
 
             Point pt = BehaviorService.ControlToAdornerWindow(primaryControl);
-            bool fRTL = (primaryControl.Parent != null && primaryControl.Parent.IsMirrored);
+            bool fRTL = (primaryControl.Parent is not null && primaryControl.Parent.IsMirrored);
 
             //remember that snaplines must be in adornerwindow coordinates
 
@@ -530,24 +530,24 @@ namespace System.Windows.Forms.Design
             // Arrow keys.  Begin a drag if the selection isn't locked.
             //
             ISelectionService selSvc = SelectionService;
-            if (selSvc != null)
+            if (selSvc is not null)
             {
                 IComponent comp = selSvc.PrimarySelection as IComponent;
-                if (comp != null)
+                if (comp is not null)
                 {
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                    if (host != null)
+                    if (host is not null)
                     {
                         //This will excluded components in the ComponentTray, but that's okay, they are not resizable to begin with.
                         ControlDesigner des = host.GetDesigner(comp) as ControlDesigner;
-                        if (des != null && ((des.SelectionRules & SelectionRules.Locked) == 0))
+                        if (des is not null && ((des.SelectionRules & SelectionRules.Locked) == 0))
                         {
                             //Possibly flip our size adjustments depending on the dock prop of the control.
                             //EX: If the control is docked right, then shift+left arrow will cause
                             //the control's width to decrease when it should increase
                             bool flipOffset = false;
                             PropertyDescriptor dockProp = TypeDescriptor.GetProperties(comp)["Dock"];
-                            if (dockProp != null)
+                            if (dockProp is not null)
                             {
                                 DockStyle docked = (DockStyle)dockProp.GetValue(comp);
                                 flipOffset = (docked == DockStyle.Bottom) || (docked == DockStyle.Right);
@@ -624,14 +624,14 @@ namespace System.Windows.Forms.Design
                             {
                                 //if we can find the behaviorservice, then we can use it and the SnapLineEngine to help us
                                 //move these controls...
-                                if (BehaviorService != null)
+                                if (BehaviorService is not null)
                                 {
                                     Control primaryControl = comp as Control;
 
                                     bool useSnapLines = BehaviorService.UseSnapLines;
 
                                     // If we have previous snaplines, we always want to erase them, no matter what. VS Whidbey #397709
-                                    if (dragManager != null)
+                                    if (dragManager is not null)
                                     {
                                         EndDragManager();
                                     }
@@ -700,7 +700,7 @@ namespace System.Windows.Forms.Design
 
                                         GetSnapInformation(host, comp, out snapSize, out snapComponent, out snapProperty);
 
-                                        if (snapProperty != null)
+                                        if (snapProperty is not null)
                                         {
                                             snapOn = (bool)snapProperty.GetValue(snapComponent);
                                         }
@@ -708,7 +708,7 @@ namespace System.Windows.Forms.Design
                                         if (snapOn && !snapSize.IsEmpty)
                                         {
                                             ParentControlDesigner parentDesigner = host.GetDesigner(primaryControl.Parent) as ParentControlDesigner;
-                                            if (parentDesigner != null)
+                                            if (parentDesigner is not null)
                                             {
                                                 //ask the parent to adjust our wanna-be snapped position
                                                 moveOffsetX *= snapSize.Width;
@@ -769,7 +769,7 @@ namespace System.Windows.Forms.Design
                                     foreach (IComponent component in selSvc.GetSelectedComponents())
                                     {
                                         des = host.GetDesigner(component) as ControlDesigner;
-                                        if (des != null && ((des.SelectionRules & rules) != rules))
+                                        if (des is not null && ((des.SelectionRules & rules) != rules))
                                         {
                                             //the control must match the rules, if not, then we don't resize it
                                             continue;
@@ -777,20 +777,20 @@ namespace System.Windows.Forms.Design
 
                                         Control control = component as Control;
 
-                                        if (control != null)
+                                        if (control is not null)
                                         {
                                             int offsetY = moveOffsetY; //we don't want to change moveOFfsetY for all subsequent controls, so cache it off
 
                                             if (checkForIntegralHeight)
                                             {
                                                 PropertyDescriptor propIntegralHeight = TypeDescriptor.GetProperties(component)["IntegralHeight"];
-                                                if (propIntegralHeight != null)
+                                                if (propIntegralHeight is not null)
                                                 {
                                                     object value = propIntegralHeight.GetValue(component);
                                                     if (value is bool && (bool)value)
                                                     {
                                                         PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(component)["ItemHeight"];
-                                                        if (propItemHeight != null)
+                                                        if (propItemHeight is not null)
                                                         {
                                                             offsetY *= (int)propItemHeight.GetValue(component); //adjust for integralheight
                                                         }
@@ -799,7 +799,7 @@ namespace System.Windows.Forms.Design
                                             }
 
                                             PropertyDescriptor propSize = TypeDescriptor.GetProperties(component)["Size"];
-                                            if (propSize != null)
+                                            if (propSize is not null)
                                             {
                                                 Size size = (Size)propSize.GetValue(component);
                                                 size += new Size(moveOffsetX, offsetY);
@@ -808,7 +808,7 @@ namespace System.Windows.Forms.Design
                                         }
 
                                         //change the Status information ....
-                                        if (control == selSvc.PrimarySelection && statusCommandUI != null)
+                                        if (control == selSvc.PrimarySelection && statusCommandUI is not null)
                                         {
                                             statusCommandUI.SetStatusInformation(control);
                                         }
@@ -820,7 +820,7 @@ namespace System.Windows.Forms.Design
                             {
                                 trans?.Commit();
 
-                                if (dragManager != null)
+                                if (dragManager is not null)
                                 {
                                     //start our timer for the snaplines
                                     SnapLineTimer.Start();
@@ -865,11 +865,11 @@ namespace System.Windows.Forms.Design
 
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
 
-                if (host != null)
+                if (host is not null)
                 {
                     ComponentCollection components = host.Container.Components;
 
-                    if (components != null && components.Count > 0)
+                    if (components is not null && components.Count > 0)
                     {
                         DesignerTransaction trans = null;
 
@@ -940,8 +940,8 @@ namespace System.Windows.Forms.Design
             MenuCommand cmd = (MenuCommand)sender;
             if (cmd.Checked)
             {
-                Debug.Assert(tabOrder != null, "Tab order and menu enabling are out of sync");
-                if (tabOrder != null)
+                Debug.Assert(tabOrder is not null, "Tab order and menu enabling are out of sync");
+                if (tabOrder is not null)
                 {
                     tabOrder.Dispose();
                     tabOrder = null;
@@ -956,10 +956,10 @@ namespace System.Windows.Forms.Design
                 //
                 ISelectionService selSvc = SelectionService;
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null && selSvc != null)
+                if (host is not null && selSvc is not null)
                 {
                     object baseComp = host.RootComponent;
-                    if (baseComp != null)
+                    if (baseComp is not null)
                     {
                         selSvc.SetSelectedComponents(new object[] { baseComp }, SelectionTypes.Replace);
                     }
@@ -982,7 +982,7 @@ namespace System.Windows.Forms.Design
             MenuCommand cmd = (MenuCommand)sender;
             CommandID cmdID = cmd.CommandID;
 
-            Debug.Assert(SelectionService != null, "Need SelectionService for sizing command");
+            Debug.Assert(SelectionService is not null, "Need SelectionService for sizing command");
 
             if (SelectionService is null)
             {
@@ -1033,13 +1033,13 @@ namespace System.Windows.Forms.Design
                             // If SplitterPanel is selected and you choose the SendToBack (or BringToFront) option then it should
                             // perform the operation on the Owner (namely SplitContainer)
                             IComponent selComp = selectedComponents[i] as IComponent;
-                            if (selComp != null)
+                            if (selComp is not null)
                             {
                                 INestedSite nestedSite = selComp.Site as INestedSite;
-                                if (nestedSite != null)
+                                if (nestedSite is not null)
                                 {
                                     INestedContainer nestedContainer = nestedSite.Container as INestedContainer;
-                                    if (nestedContainer != null)
+                                    if (nestedContainer is not null)
                                     {
                                         control = nestedContainer.Owner as Control;
                                         selectedComponents[i] = control; // set this so that we don't have to re-do this logic in the BringToFront case down.
@@ -1047,20 +1047,20 @@ namespace System.Windows.Forms.Design
                                 }
                             }
 
-                            if (control != null)
+                            if (control is not null)
                             {
                                 Control parent = control.Parent;
                                 PropertyDescriptor controlsProp = null;
-                                if (parent != null)
+                                if (parent is not null)
                                 {
-                                    if (ccs != null)
+                                    if (ccs is not null)
                                     {
                                         try
                                         {
                                             if (!parentList.Contains(parent))
                                             {
                                                 controlsProp = TypeDescriptor.GetProperties(parent)["Controls"];
-                                                if (controlsProp != null)
+                                                if (controlsProp is not null)
                                                 {
                                                     // For a perf improvement, we will
                                                     // call OnComponentChanging only once per parent to make sure we do not do unnecessary serialization for Undo
@@ -1118,13 +1118,13 @@ namespace System.Windows.Forms.Design
                 finally
                 {
                     // Do not fire changed events if the transaction was canceled
-                    if ((null != trans) && !trans.Canceled)
+                    if ((trans is not null) && !trans.Canceled)
                     {
                         foreach (Control parent in parentList)
                         {
                             PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(parent)["Controls"];
-                            Debug.Assert(ccs != null && controlsProp != null, "Wrong parent in parent list");
-                            if (ccs != null && controlsProp != null)
+                            Debug.Assert(ccs is not null && controlsProp is not null, "Wrong parent in parent list");
+                            if (ccs is not null && controlsProp is not null)
                             {
                                 ccs.OnComponentChanged(parent, controlsProp);
                             }
@@ -1155,7 +1155,7 @@ namespace System.Windows.Forms.Design
         {
             MenuCommand cmd = (MenuCommand)sender;
             bool enabled = false;
-            if (baseControl != null && baseControl.Controls.Count > 0)
+            if (baseControl is not null && baseControl.Controls.Count > 0)
             {
                 enabled = true;
             }
@@ -1201,7 +1201,7 @@ namespace System.Windows.Forms.Design
             //Get the locked property of the base control first...
             //
             PropertyDescriptor lockedProp = TypeDescriptor.GetProperties(baseControl)["Locked"];
-            if (lockedProp != null && ((bool)lockedProp.GetValue(baseControl)))
+            if (lockedProp is not null && ((bool)lockedProp.GetValue(baseControl)))
             {
                 cmd.Checked = true;
                 return;
@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms.Design
             foreach (object component in baseDesigner.AssociatedComponents)
             {
                 lockedProp = TypeDescriptor.GetProperties(component)["Locked"];
-                if (lockedProp != null && ((bool)lockedProp.GetValue(component)))
+                if (lockedProp is not null && ((bool)lockedProp.GetValue(component)))
                 {
                     cmd.Checked = true;
                     return;
@@ -1245,7 +1245,7 @@ namespace System.Windows.Forms.Design
         protected void OnStatusMultiSelectPrimary(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
-            cmd.Enabled = controlsOnlySelection && selCount > 1 && primarySelection != null;
+            cmd.Enabled = controlsOnlySelection && selCount > 1 && primarySelection is not null;
         }
 
         /// <summary>
@@ -1267,18 +1267,18 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void OnStatusShowGrid(object sender, EventArgs e)
         {
-            if (site != null)
+            if (site is not null)
             {
                 IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-                if (host != null)
+                if (host is not null)
                 {
                     IComponent baseComponent = host.RootComponent;
-                    if (baseComponent != null && baseComponent is Control)
+                    if (baseComponent is not null && baseComponent is Control)
                     {
                         PropertyDescriptor prop = GetProperty(baseComponent, "DrawGrid");
-                        if (prop != null)
+                        if (prop is not null)
                         {
                             bool drawGrid = (bool)prop.GetValue(baseComponent);
                             MenuCommand cmd = (MenuCommand)sender;
@@ -1296,18 +1296,18 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void OnStatusSnapToGrid(object sender, EventArgs e)
         {
-            if (site != null)
+            if (site is not null)
             {
                 IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-                if (host != null)
+                if (host is not null)
                 {
                     IComponent baseComponent = host.RootComponent;
-                    if (baseComponent != null && baseComponent is Control)
+                    if (baseComponent is not null && baseComponent is Control)
                     {
                         PropertyDescriptor prop = GetProperty(baseComponent, "SnapToGrid");
-                        if (prop != null)
+                        if (prop is not null)
                         {
                             bool snapToGrid = (bool)prop.GetValue(baseComponent);
                             MenuCommand cmd = (MenuCommand)sender;
@@ -1331,18 +1331,18 @@ namespace System.Windows.Forms.Design
         {
             MenuCommand cmd = (MenuCommand)sender;
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null)
+            if (host is not null)
             {
                 ComponentCollection comps = host.Container.Components;
                 object baseComp = host.RootComponent;
 
                 // The form by itself is one component, so this means
                 // we need more than two.
-                bool enable = (comps != null && comps.Count > 2 && controlsOnlySelection);
+                bool enable = (comps is not null && comps.Count > 2 && controlsOnlySelection);
 
                 if (enable)
                 {
-                    Debug.Assert(SelectionService != null, "Need SelectionService for sizing command");
+                    Debug.Assert(SelectionService is not null, "Need SelectionService for sizing command");
 
                     if (SelectionService is null)
                     {
@@ -1417,7 +1417,7 @@ namespace System.Windows.Forms.Design
 
             Control component = selSvc.PrimarySelection as Control;
             Control current;
-            if (component != null)
+            if (component is not null)
             {
                 current = component;
             }
@@ -1428,7 +1428,7 @@ namespace System.Windows.Forms.Design
 
             if (backwards)
             {
-                if (current != null)
+                if (current is not null)
                 {
                     if (current.Controls.Count > 0)
                     {
@@ -1442,12 +1442,12 @@ namespace System.Windows.Forms.Design
             }
             else
             {
-                if (current != null)
+                if (current is not null)
                 {
                     next = current.Parent;
                     Control nextControl = next as Control;
                     IContainer controlSiteContainer = null;
-                    if (nextControl != null && nextControl.Site != null)
+                    if (nextControl is not null && nextControl.Site is not null)
                     {
                         controlSiteContainer = DesignerUtils.CheckForNestedContainer(nextControl.Site.Container); // ...necessary to support SplitterPanel components
                     }
@@ -1492,14 +1492,14 @@ namespace System.Windows.Forms.Design
             currentSelection = selSvc.PrimarySelection;
             ctl = currentSelection as Control;
 
-            if (targetSelection is null && ctl != null && (baseCtl.Contains(ctl) || baseCtl == currentSelection))
+            if (targetSelection is null && ctl is not null && (baseCtl.Contains(ctl) || baseCtl == currentSelection))
             {
                 // Our current selection is a control.  Select the next control in
                 // the z-order.
                 //
-                while (null != (ctl = GetNextControlInTab(baseCtl, ctl, !backwards)))
+                while ((ctl = GetNextControlInTab(baseCtl, ctl, !backwards)) is not null)
                 {
-                    if (ctl.Site != null && ctl.Site.Container == ctl.Container)
+                    if (ctl.Site is not null && ctl.Site.Container == ctl.Container)
                     {
                         break;
                     }
@@ -1511,21 +1511,21 @@ namespace System.Windows.Forms.Design
             if (targetSelection is null)
             {
                 ComponentTray tray = (ComponentTray)GetService(typeof(ComponentTray));
-                if (tray != null)
+                if (tray is not null)
                 {
                     targetSelection = tray.GetNextComponent((IComponent)currentSelection, !backwards);
-                    if (targetSelection != null)
+                    if (targetSelection is not null)
                     {
                         IComponent selection = targetSelection as IComponent;
                         ControlDesigner controlDesigner = host.GetDesigner(selection) as ControlDesigner;
                         // In Whidbey controls like ToolStrips have componentTray presence, So don't select them again
                         // through component tray since here we select only Components. Hence only
                         // components that have ComponentDesigners should be selected via the ComponentTray.
-                        while (controlDesigner != null)
+                        while (controlDesigner is not null)
                         {
                             // if the targetSelection from the Tray is a control .. try the next one.
                             selection = tray.GetNextComponent(selection, !backwards);
-                            if (selection != null)
+                            if (selection is not null)
                             {
                                 controlDesigner = host.GetDesigner(selection) as ControlDesigner;
                             }
@@ -1549,7 +1549,7 @@ namespace System.Windows.Forms.Design
             {
                 Control.ControlCollection ctlControls = ctl.Controls;
 
-                if (ctlControls != null && ctlControls.Count > 0)
+                if (ctlControls is not null && ctlControls.Count > 0)
                 {
                     Control found = null;
 
@@ -1581,7 +1581,7 @@ namespace System.Windows.Forms.Design
 
                     Control.ControlCollection parentControls = p.Controls;
 
-                    if (parentControls != null)
+                    if (parentControls is not null)
                     {
                         parentControlCount = parentControls.Count;
                     }
@@ -1625,7 +1625,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    if (found != null)
+                    if (found is not null)
                     {
                         return found;
                     }
@@ -1649,7 +1649,7 @@ namespace System.Windows.Forms.Design
 
                     Control.ControlCollection parentControls = p.Controls;
 
-                    if (parentControls != null)
+                    if (parentControls is not null)
                     {
                         parentControlCount = parentControls.Count;
                     }
@@ -1696,7 +1696,7 @@ namespace System.Windows.Forms.Design
                     // If we were unable to find a control we should return the control's parent.  However, if that parent is us, return
                     // NULL.
                     //
-                    if (found != null)
+                    if (found is not null)
                     {
                         ctl = found;
                     }
@@ -1717,7 +1717,7 @@ namespace System.Windows.Forms.Design
                 //
                 Control.ControlCollection ctlControls = ctl.Controls;
 
-                while (ctlControls != null && ctlControls.Count > 0)
+                while (ctlControls is not null && ctlControls.Count > 0)
                 {
                     Control found = null;
 
@@ -1768,7 +1768,7 @@ namespace System.Windows.Forms.Design
 
                 Control cX = x as Control;
                 Control cY = y as Control;
-                if (cX != null && cY != null)
+                if (cX is not null && cY is not null)
                 {
                     if (cX.Parent == cY.Parent)
                     {
@@ -1800,11 +1800,11 @@ namespace System.Windows.Forms.Design
                         return PARAM.ToInt(cX.Parent.Handle) - PARAM.ToInt(cY.Parent.Handle);
                     }
                 }
-                else if (cY != null)
+                else if (cY is not null)
                 {
                     return -1;
                 }
-                else if (cX != null)
+                else if (cX is not null)
                 {
                     return 1;
                 }

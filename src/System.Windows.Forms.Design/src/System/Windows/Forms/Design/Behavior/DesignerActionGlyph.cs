@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal void InvalidateOwnerLocation()
         {
-            if (_alternativeParent != null)
+            if (_alternativeParent is not null)
             {
                 // alternative parent and adorner are exclusive...
                 _alternativeParent.Invalidate(_bounds);
@@ -162,7 +162,7 @@ namespace System.Windows.Forms.Design.Behavior
             IComponent relatedComponent = ((DesignerActionBehavior)Behavior).RelatedComponent;
             Point topRight = Point.Empty;
             //handle the case that our comp is a control
-            if (relatedComponent is Control relatedControl && !(relatedComponent is ToolStripDropDown) && _adorner != null)
+            if (relatedComponent is Control relatedControl && !(relatedComponent is ToolStripDropDown) && _adorner is not null)
             {
                 topRight = _adorner.BehaviorService.ControlToAdornerWindow(relatedControl);
                 topRight.X += relatedControl.Width;
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (_alternativeParent is ComponentTray compTray)
                 {
                     ComponentTray.TrayControl trayControl = ComponentTray.GetTrayControlFromComponent(relatedComponent);
-                    if (trayControl != null)
+                    if (trayControl is not null)
                     {
                         _alternativeBounds = trayControl.Bounds;
                     }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                 IComponent panelComponent = behavior.ParentUI.LastPanelComponent;
                 IComponent relatedComponent = behavior.RelatedComponent;
-                if (panelComponent != null && panelComponent == relatedComponent)
+                if (panelComponent is not null && panelComponent == relatedComponent)
                 {
                     image = GlyphImageOpened;
                 }
@@ -239,7 +239,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     _insidePaint = true;
                     pe.Graphics.DrawImage(image, _bounds.Left, _bounds.Top);
-                    if (MouseOver || (panelComponent != null && panelComponent == relatedComponent))
+                    if (MouseOver || (panelComponent is not null && panelComponent == relatedComponent))
                     {
                         pe.Graphics.FillRectangle(DesignerUtils.HoverBrush, Rectangle.Inflate(_bounds, -1, -1));
                     }

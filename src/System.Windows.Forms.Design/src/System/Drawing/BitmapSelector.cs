@@ -30,10 +30,10 @@ namespace System.Drawing
                 {
                     _suffix = string.Empty;
                     var section = ConfigurationManager.GetSection("system.drawing") as SystemDrawingSection;
-                    if (section != null)
+                    if (section is not null)
                     {
                         var value = section.BitmapSuffix;
-                        if (value != null && value is string)
+                        if (value is not null && value is string)
                         {
                             _suffix = value;
                         }
@@ -105,7 +105,7 @@ namespace System.Drawing
 
         private static bool DoesAssemblyHaveCustomAttribute(Assembly assembly, Type attrType)
         {
-            if (attrType != null)
+            if (attrType is not null)
             {
                 var attr = assembly.GetCustomAttributes(attrType, false);
                 if (attr.Length > 0)
@@ -165,7 +165,7 @@ namespace System.Drawing
                     {
                         string newName = AppendSuffix(originalName);
                         Stream stream = GetResourceStreamHelper(assembly, type, newName);
-                        if (stream != null)
+                        if (stream is not null)
                         {
                             return stream;
                         }
@@ -187,10 +187,10 @@ namespace System.Drawing
                         assemblyName.ProcessorArchitecture = ProcessorArchitecture.None;
 #pragma warning restore SYSLIB0037 // Type or member is obsolete
                         Assembly satellite = Assembly.Load(assemblyName);
-                        if (satellite != null)
+                        if (satellite is not null)
                         {
                             Stream stream = GetResourceStreamHelper(satellite, type, originalName);
-                            if (stream != null)
+                            if (stream is not null)
                             {
                                 return stream;
                             }

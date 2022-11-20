@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
 
             // In Whidbey, default the TabStop to true.
             PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["TabStop"];
-            if (prop != null && prop.PropertyType == typeof(bool) && !prop.IsReadOnly && prop.IsBrowsable)
+            if (prop is not null && prop.PropertyType == typeof(bool) && !prop.IsReadOnly && prop.IsBrowsable)
             {
                 prop.SetValue(Component, true);
             }

@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Design
 
                 BorderStyle borderStyle = BorderStyle.Fixed3D;
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["BorderStyle"];
-                if (prop != null)
+                if (prop is not null)
                 {
                     borderStyle = (BorderStyle)prop.GetValue(Component);
                 }

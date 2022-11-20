@@ -94,7 +94,7 @@ namespace System.Drawing.Design
                 _value = value;
 
                 // Select the current cursor
-                if (value != null)
+                if (value is not null)
                 {
                     for (int i = 0; i < Items.Count; i++)
                     {

@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design
 
         public void RefreshItem()
         {
-            if (_verb != null)
+            if (_verb is not null)
             {
                 Visible = _verb.Visible;
                 Enabled = _verb.Enabled;

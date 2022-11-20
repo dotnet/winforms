@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop != null)
+                if (prop is not null)
                 {
                     properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(TextBoxDesigner), prop, empty);
                 }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 TextBox tb = Control as TextBox;
-                Debug.Assert(tb != null, "Designed control is not a TextBox.");
+                Debug.Assert(tb is not null, "Designed control is not a TextBox.");
 
                 if (tb.UseSystemPasswordChar)
                 {
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.Design
             set
             {
                 TextBox tb = Control as TextBox;
-                Debug.Assert(tb != null, "Designed control is not a TextBox.");
+                Debug.Assert(tb is not null, "Designed control is not a TextBox.");
 
                 passwordChar = value;
                 tb.PasswordChar = value;

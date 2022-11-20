@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design
             // CONSIDER: Is this the correct function for doing this?
             Control control = Control;
 
-            if (control != null && control.Handle != IntPtr.Zero)
+            if (control is not null && control.Handle != IntPtr.Zero)
             {
                 PInvoke.RevokeDragDrop((HWND)control.Handle);
                 // DragAcceptFiles(control.Handle, false);
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop != null)
+                if (prop is not null)
                 {
                     properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(RichTextBoxDesigner), prop, empty);
                 }
@@ -97,7 +97,7 @@ namespace System.Windows.Forms.Design
             set
             {
                 string oldText = Control.Text;
-                if (value != null)
+                if (value is not null)
                 {
                     value = value.Replace("\r\n", "\n");
                 }

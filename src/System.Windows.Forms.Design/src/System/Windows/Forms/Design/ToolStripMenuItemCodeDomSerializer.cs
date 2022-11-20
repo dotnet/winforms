@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design
             ToolStrip parent = item.GetCurrentParent();
 
             // Don't Serialize if we are Dummy Item ...
-            if ((item != null) && !(item.IsOnDropDown) && (parent != null) && (parent.Site is null))
+            if ((item is not null) && !(item.IsOnDropDown) && (parent is not null) && (parent.Site is null))
             {
                 //don't serialize anything...
                 return null;
