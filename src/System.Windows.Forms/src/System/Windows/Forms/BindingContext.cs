@@ -7,7 +7,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 
 namespace System.Windows.Forms
 {
@@ -16,7 +15,7 @@ namespace System.Windows.Forms
     ///  objects for a Win Form.
     /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
-    public class BindingContext : ICollection
+    public partial class BindingContext : ICollection
     {
         private readonly Hashtable _listManagers;
 
@@ -175,37 +174,6 @@ namespace System.Windows.Forms
         private static HashKey GetKey(object dataSource, string dataMember)
         {
             return new HashKey(dataSource, dataMember);
-        }
-
-        private class HashKey
-        {
-            private readonly WeakReference _wRef;
-            private readonly int _dataSourceHashCode;
-            private readonly string _dataMember;
-
-            internal HashKey(object dataSource, string dataMember)
-            {
-                ArgumentNullException.ThrowIfNull(dataSource);
-                dataMember ??= string.Empty;
-
-                // The dataMember should be case insensitive, so convert the
-                // dataMember to lower case
-                _wRef = new WeakReference(dataSource, false);
-                _dataSourceHashCode = dataSource.GetHashCode();
-                _dataMember = dataMember.ToLower(CultureInfo.InvariantCulture);
-            }
-
-            public override int GetHashCode() => HashCode.Combine(_dataSourceHashCode, _dataMember);
-
-            public override bool Equals(object target)
-            {
-                if (!(target is HashKey keyTarget))
-                {
-                    return false;
-                }
-
-                return _wRef.Target == keyTarget._wRef.Target && _dataMember == keyTarget._dataMember;
-            }
         }
 
         /// <summary>
