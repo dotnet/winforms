@@ -474,14 +474,14 @@ namespace System.Windows.Forms.Design
             }
 
             ISite site = control.Site;
-            if (site == null || site.Container != host)
+            if (site is null || site.Container != host)
             {
                 return false;
             }
 
             PropertyDescriptor prop = TypeDescriptor.GetProperties(control)["TabIndex"];
 
-            if (prop == null || !prop.IsBrowsable)
+            if (prop is null || !prop.IsBrowsable)
             {
                 return false;
             }
@@ -694,24 +694,17 @@ namespace System.Windows.Forms.Design
         {
             base.OnPaint(e);
 
-            if (null == tabControls)
+            if (tabControls is null)
             {
                 tabControls = new ArrayList();
                 GetTabbing((Control)host.RootComponent, tabControls);
                 tabGlyphs = new Rectangle[tabControls.Count];
             }
 
-            if (null == tabComplete)
-            {
-                tabComplete = new ArrayList();
-            }
+            tabComplete ??= new ArrayList();
+            tabNext ??= new Hashtable();
 
-            if (null == tabNext)
-            {
-                tabNext = new Hashtable();
-            }
-
-            if (null == region)
+            if (region is null)
             {
                 DrawTabs(tabControls, e.Graphics, true);
             }

@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design
 
             protected IComponent GetBaseComponent(object o)
             {
-                if (baseComponent == null)
+                if (baseComponent is null)
                 {
                     ISite site = ((IComponent)o).Site;
                     if (site != null)

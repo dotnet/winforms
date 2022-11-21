@@ -174,7 +174,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_actionLists == null)
+                if (_actionLists is null)
                 {
                     _actionLists = new DesignerActionListCollection();
                     _actionLists.Add(new ListViewActionList(this));
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.Design
             else
             {
                 string message = ex.Message;
-                if (message == null || message.Length == 0)
+                if (message is null || message.Length == 0)
                 {
                     message = ex.ToString();
                 }

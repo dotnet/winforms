@@ -180,7 +180,7 @@ namespace System.Windows.Forms.Design
             {
                 // don't do anything here during loading, if a refactor changed it we don't want to do anything
                 IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-                if (host == null || (host != null && !host.Loading))
+                if (host is null || (host != null && !host.Loading))
                 {
                     Component.Site.Name = value;
                 }
@@ -881,7 +881,7 @@ namespace System.Windows.Forms.Design
         {
             foreach (Control child in firstChild.Controls)
             {
-                if (child == null || _host == null || _host.GetDesigner(child) is ControlDesigner)
+                if (child is null || _host is null || _host.GetDesigner(child) is ControlDesigner)
                 {
                     continue;
                 }

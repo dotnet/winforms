@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Design
             {
                 case WM_PRIVATE_POSTCHAR:
 
-                    if (bufferedChars == null)
+                    if (bufferedChars is null)
                     {
                         return;
                     }
