@@ -446,7 +446,7 @@ namespace System.Windows.Forms
 
             internal void RaiseFocusChanged()
             {
-                ToolStrip root = _ownerItem.RootToolStrip;
+                ToolStrip? root = _ownerItem.RootToolStrip;
                 if (root is not null && root.IsHandleCreated && root.SupportsUiaProviders)
                 {
                     RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);

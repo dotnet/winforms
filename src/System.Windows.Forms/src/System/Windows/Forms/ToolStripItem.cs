@@ -2981,11 +2981,11 @@ namespace System.Windows.Forms
                 OnBackColorChanged(e);
             }
         }
-#nullable disable
+
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.
         /// </summary>
-        protected virtual void OnParentChanged(ToolStrip oldParent, ToolStrip newParent)
+        protected virtual void OnParentChanged(ToolStrip? oldParent, ToolStrip? newParent)
         {
             SetAmbientMargin();
             if ((oldParent is not null) && (oldParent.DropTargetManager is not null))
@@ -3068,7 +3068,7 @@ namespace System.Windows.Forms
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
             if (Properties.ContainsObject(ToolStripItem.s_textDirectionProperty))
             {
-                textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty);
+                textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty)!;
             }
 
             if (textDirection == ToolStripTextDirection.Inherit)
@@ -3169,35 +3169,35 @@ namespace System.Windows.Forms
         }
 
         internal void RaiseCancelEvent(object key, CancelEventArgs e)
-            => ((CancelEventHandler)Events[key])?.Invoke(this, e);
+            => ((CancelEventHandler?)Events[key])?.Invoke(this, e);
 
         internal void RaiseDragEvent(object key, DragEventArgs e)
-            => ((DragEventHandler)Events[key])?.Invoke(this, e);
+            => ((DragEventHandler?)Events[key])?.Invoke(this, e);
 
         internal void RaiseKeyEvent(object key, KeyEventArgs e)
-            => ((KeyEventHandler)Events[key])?.Invoke(this, e);
+            => ((KeyEventHandler?)Events[key])?.Invoke(this, e);
 
         internal void RaiseKeyPressEvent(object key, KeyPressEventArgs e)
-            => ((KeyPressEventHandler)Events[key])?.Invoke(this, e);
+            => ((KeyPressEventHandler?)Events[key])?.Invoke(this, e);
 
         internal void RaiseMouseEvent(object key, MouseEventArgs e)
-            => ((MouseEventHandler)Events[key])?.Invoke(this, e);
+            => ((MouseEventHandler?)Events[key])?.Invoke(this, e);
 
         internal void RaisePaintEvent(object key, PaintEventArgs e)
-            => ((PaintEventHandler)Events[key])?.Invoke(this, e);
+            => ((PaintEventHandler?)Events[key])?.Invoke(this, e);
 
         internal void RaiseQueryContinueDragEvent(object key, QueryContinueDragEventArgs e)
-            => ((QueryContinueDragEventHandler)Events[key])?.Invoke(this, e);
+            => ((QueryContinueDragEventHandler?)Events[key])?.Invoke(this, e);
 
         internal virtual void ReleaseUiaProvider()
         {
-            if (TryGetAccessibilityObject(out AccessibleObject accessibleObject))
+            if (TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
             {
                 UiaCore.UiaDisconnectProvider(accessibleObject);
                 Properties.SetObject(s_accessibilityProperty, null);
             }
 
-            bool TryGetAccessibilityObject(out AccessibleObject accessibleObject)
+            bool TryGetAccessibilityObject(out AccessibleObject? accessibleObject)
             {
                 accessibleObject = Properties.GetObject(s_accessibilityProperty) as AccessibleObject;
                 return accessibleObject is not null;
@@ -3463,7 +3463,7 @@ namespace System.Windows.Forms
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
             if (Properties.ContainsObject(ToolStripItem.s_textDirectionProperty))
             {
-                textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty);
+                textDirection = (ToolStripTextDirection)Properties.GetObject(ToolStripItem.s_textDirectionProperty)!;
             }
 
             return textDirection != ToolStripTextDirection.Inherit;
@@ -3529,7 +3529,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal Point TranslatePoint(Point fromPoint, ToolStripPointType fromPointType, ToolStripPointType toPointType)
         {
-            ToolStrip parent = ParentInternal;
+            ToolStrip? parent = ParentInternal;
 
             parent ??= (IsOnOverflow && Owner is not null) ? Owner.OverflowButton.DropDown : Owner;
 
@@ -3603,7 +3603,7 @@ namespace System.Windows.Forms
             return toolStripItemPlacement != ToolStripItemPlacement.Main || bounds.Height <= 0 || bounds.Width <= 0;
         }
 
-        internal ToolStrip RootToolStrip
+        internal ToolStrip? RootToolStrip
         {
             get
             {
@@ -3711,7 +3711,7 @@ namespace System.Windows.Forms
 
         void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
 
-        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => ToolTipText;
+        string? IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => ToolTipText;
 
         bool IKeyboardToolTip.ShowsOwnToolTip() => true;
 
@@ -3737,9 +3737,9 @@ namespace System.Windows.Forms
         /// <summary>
         /// Query font from property bag.
         /// </summary>
-        internal bool TryGetExplicitlySetFont(out Font local)
+        internal bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? local)
         {
-            local = (Font)Properties.GetObject(s_fontProperty);
+            local = (Font?)Properties.GetObject(s_fontProperty);
 
             return local is not null;
         }

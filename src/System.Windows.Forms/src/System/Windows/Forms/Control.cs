@@ -5706,7 +5706,7 @@ namespace System.Windows.Forms
             return (control == this) ? null : control;
         }
 
-        private protected virtual string GetCaptionForTool(ToolTip toolTip)
+        private protected virtual string? GetCaptionForTool(ToolTip toolTip)
         {
             IKeyboardToolTip? host = ToolStripControlHost;
 
@@ -14406,7 +14406,7 @@ namespace System.Windows.Forms
 
         void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
 
-        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => GetCaptionForTool(toolTip);
+        string? IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => GetCaptionForTool(toolTip);
 
         bool IKeyboardToolTip.ShowsOwnToolTip()
         {

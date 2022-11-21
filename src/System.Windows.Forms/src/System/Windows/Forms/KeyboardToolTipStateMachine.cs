@@ -183,7 +183,7 @@ namespace System.Windows.Forms
 
         private SmState ShowToolTip(IKeyboardToolTip tool, ToolTip toolTip)
         {
-            string toolTipText = tool.GetCaptionForTool(toolTip);
+            string? toolTipText = tool.GetCaptionForTool(toolTip);
 
             int autoPopDelay = toolTip.IsPersistent ?
                 0 :

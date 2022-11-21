@@ -496,7 +496,7 @@ override System.Windows.Forms.ToolStripDropDownMenu.LayoutEngine.get -> System.W
 override System.Windows.Forms.ToolStripDropDownMenu.OnFontChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownMenu.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownMenu.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
-~override System.Windows.Forms.ToolStripItem.ToString() -> string
+override System.Windows.Forms.ToolStripItem.ToString() -> string!
 override System.Windows.Forms.ToolStripLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripLabel.OnFontChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripLabel.OnMouseEnter(System.EventArgs! e) -> void
@@ -2158,19 +2158,19 @@ virtual System.Windows.Forms.ToolStripItem.OnMouseHover(System.EventArgs! e) -> 
 virtual System.Windows.Forms.ToolStripItem.OnMouseLeave(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripItem.OnMouseMove(System.Windows.Forms.MouseEventArgs! mea) -> void
 virtual System.Windows.Forms.ToolStripItem.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnOwnerChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnOwnerFontChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnOwnerChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnOwnerFontChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripItem.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripItem.OnParentBackColorChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnParentChanged(System.Windows.Forms.ToolStrip oldParent, System.Windows.Forms.ToolStrip newParent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnParentEnabledChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnParentForeColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnParentRightToLeftChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnParentChanged(System.Windows.Forms.ToolStrip? oldParent, System.Windows.Forms.ToolStrip? newParent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnParentEnabledChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnParentForeColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnParentRightToLeftChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripItem.OnQueryContinueDrag(System.Windows.Forms.QueryContinueDragEventArgs! queryContinueDragEvent) -> void
 virtual System.Windows.Forms.ToolStripItem.OnRequestCommandExecute(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnRightToLeftChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnTextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnVisibleChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnRightToLeftChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnTextChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnVisibleChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ToolStripItem.Text.get -> string?
 virtual System.Windows.Forms.ToolStripItem.Text.set -> void
 ~virtual System.Windows.Forms.ToolStripItemCollection.ContainsKey(string key) -> bool
