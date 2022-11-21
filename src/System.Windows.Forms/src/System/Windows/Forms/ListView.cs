@@ -3222,7 +3222,7 @@ namespace System.Windows.Forms
         {
             // On the final EndUpdate, check to see if we've got any cached items.
             // If we do, insert them as normal, then turn off the painting freeze.
-            if (--_updateCounter == 0 && null != Properties.GetObject(PropDelayedUpdateItems))
+            if (--_updateCounter == 0 && Properties.GetObject(PropDelayedUpdateItems) is not null)
             {
                 ApplyUpdateCachedItems();
             }

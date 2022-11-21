@@ -3158,7 +3158,7 @@ namespace System.Windows.Forms
                 int oldCurrentCellX = _ptCurrentCell.X;
                 DataGridViewDataErrorEventArgs dgvdee = CancelEditPrivate(/*ref dataGridViewCurrentCell, context*/);
 
-                if (null != dgvdee)
+                if (dgvdee is not null)
                 {
                     if (dgvdee.ThrowException)
                     {
@@ -3866,7 +3866,7 @@ namespace System.Windows.Forms
                     false /*fireRowLeave*/,
                     false /*fireRowEnter*/,
                     false /*fireLeave*/);
-                if (null != dgvdee)
+                if (dgvdee is not null)
                 {
                     if (dgvdee.ThrowException)
                     {
@@ -4120,7 +4120,7 @@ namespace System.Windows.Forms
                 forCurrentRowChange /*fireRowLeave*/,
                 forCurrentRowChange /*fireRowEnter*/,
                 false /*fireLeave*/);
-            if (null != dgvdee)
+            if (dgvdee is not null)
             {
                 if (dgvdee.ThrowException)
                 {
@@ -4134,7 +4134,7 @@ namespace System.Windows.Forms
 
                 // Restore old value
                 dgvdee = CancelEditPrivate();
-                if (null != dgvdee)
+                if (dgvdee is not null)
                 {
                     if (dgvdee.ThrowException)
                     {
@@ -6319,7 +6319,7 @@ namespace System.Windows.Forms
 
                     // Restore old value
                     dgvdee = CancelEditPrivate();
-                    if (null != dgvdee)
+                    if (dgvdee is not null)
                     {
                         if (dgvdee.ThrowException)
                         {
@@ -22033,7 +22033,7 @@ namespace System.Windows.Forms
                             false /*fireRowLeave*/,
                             false /*fireRowEnter*/,
                             false /*fireLeave*/);
-                        if (null != dgvdee)
+                        if (dgvdee is not null)
                         {
                             if (dgvdee.ThrowException)
                             {
