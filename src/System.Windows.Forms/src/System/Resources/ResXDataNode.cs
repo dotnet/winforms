@@ -442,7 +442,7 @@ namespace System.Resources
                 }
                 else
                 {
-                    // Serialize to string inside the nodeInfo.
+                    // Serialize to string inside the _nodeInfo.
                     FillDataNodeInfoFromObject(_nodeInfo, _value);
                 }
             }

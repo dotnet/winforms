@@ -103,7 +103,8 @@ namespace System.Resources
         private readonly Func<Type?, string>? _typeNameConverter; // no public property to be consistent with ResXDataNode class.
 
         /// <summary>
-        ///  Base Path for ResXFileRefs.
+        ///  A path that, if prepended to the relative file path specified in a <see cref="ResXFileRef"/> object,
+        ///  yields an absolute path to an XML resource file.
         /// </summary>
         public string? BasePath { get; set; }
 
@@ -130,7 +131,8 @@ namespace System.Resources
         }
 
         /// <summary>
-        ///  Creates a new ResXResourceWriter that will write to the specified TextWriter.
+        ///  Initializes a new instance of the <see cref="ResXResourceWriter"/> class that writes to the specified
+        ///  <see cref="TextWriter"/> object.
         /// </summary>
         public ResXResourceWriter(TextWriter textWriter) => _textWriter = textWriter;
 
@@ -315,9 +317,9 @@ namespace System.Resources
 
             if (!string.IsNullOrEmpty(modifiedBasePath))
             {
-                if (!modifiedBasePath.EndsWith('\\'))
+                if (!Path.EndsInDirectorySeparator(modifiedBasePath))
                 {
-                    modifiedBasePath += "\\";
+                    modifiedBasePath += Path.DirectorySeparatorChar;
                 }
 
                 fileRef?.MakeFilePathRelative(modifiedBasePath);
@@ -437,7 +439,6 @@ namespace System.Resources
 
                 if (!string.IsNullOrEmpty(alias) && !string.IsNullOrEmpty(type) && elementName == DataStr)
                 {
-                    // CHANGE: we still output version information. This might have to change in 3.2
                     Writer.WriteAttributeString(TypeStr, $"{GetTypeName(type)}, {alias}");
                 }
                 else

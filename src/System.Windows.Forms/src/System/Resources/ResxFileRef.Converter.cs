@@ -121,7 +121,7 @@ namespace System.Resources
                     }
                 }
 
-                // This is a regular file, we call it's constructor with a stream as a parameter
+                // This is a regular file, we call its constructor with a stream as a parameter
                 // or if it's a byte array we just return that.
                 byte[]? temp = null;
 

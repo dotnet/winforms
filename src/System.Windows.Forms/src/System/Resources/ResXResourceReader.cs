@@ -53,11 +53,12 @@ namespace System.Resources
             _aliasResolver = new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(string fileName) : this(fileName, (ITypeResolutionService?)null, null)
+        public ResXResourceReader(string fileName) : this(fileName, typeResolver: null, aliasResolver: null)
         {
         }
 
-        public ResXResourceReader(string fileName, ITypeResolutionService? typeResolver) : this(fileName, typeResolver, null)
+        public ResXResourceReader(string fileName, ITypeResolutionService? typeResolver)
+            : this(fileName, typeResolver, aliasResolver: null)
         {
         }
 
@@ -68,11 +69,12 @@ namespace System.Resources
             _aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(TextReader reader) : this(reader, (ITypeResolutionService?)null, null)
+        public ResXResourceReader(TextReader reader) : this(reader, typeResolver: null, aliasResolver: null)
         {
         }
 
-        public ResXResourceReader(TextReader reader, ITypeResolutionService typeResolver) : this(reader, typeResolver, null)
+        public ResXResourceReader(TextReader reader, ITypeResolutionService typeResolver)
+            : this(reader, typeResolver, aliasResolver: null)
         {
         }
 
@@ -83,11 +85,12 @@ namespace System.Resources
             _aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(Stream stream) : this(stream, (ITypeResolutionService?)null, null)
+        public ResXResourceReader(Stream stream) : this(stream, typeResolver: null, aliasResolver: null)
         {
         }
 
-        public ResXResourceReader(Stream stream, ITypeResolutionService typeResolver) : this(stream, typeResolver, null)
+        public ResXResourceReader(Stream stream, ITypeResolutionService typeResolver)
+            : this(stream, typeResolver, aliasResolver: null)
         {
         }
 
@@ -98,7 +101,8 @@ namespace System.Resources
             _aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(Stream stream, AssemblyName[] assemblyNames) : this(stream, assemblyNames, null)
+        public ResXResourceReader(Stream stream, AssemblyName[] assemblyNames)
+            : this(stream, assemblyNames, aliasResolver: null)
         {
         }
 
@@ -120,7 +124,8 @@ namespace System.Resources
             _aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(string fileName, AssemblyName[] assemblyNames) : this(fileName, assemblyNames, null)
+        public ResXResourceReader(string fileName, AssemblyName[] assemblyNames)
+            : this(fileName, assemblyNames, aliasResolver: null)
         {
         }
 
@@ -245,7 +250,7 @@ namespace System.Resources
 
             try
             {
-                // Read data
+                // Create the reader and parse the XML
                 if (_fileContents is not null)
                 {
                     contentReader = new XmlTextReader(new StringReader(_fileContents));
@@ -578,7 +583,7 @@ namespace System.Resources
                 WhitespaceHandling oldValue = reader.WhitespaceHandling;
                 try
                 {
-                    // Based on the documentation at https://docs.microsoft.com/dotnet/api/system.xml.xmltextreader.whitespacehandling
+                    // Based on the documentation at https://learn.microsoft.com/dotnet/api/system.xml.xmltextreader.whitespacehandling
                     // this is ok because:
                     //
                     //  "Because the XmlTextReader does not have DTD information available to it,
