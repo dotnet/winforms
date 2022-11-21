@@ -64,7 +64,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 _foundAttributes ??= new();
-                if (value is Attribute)
+                if (value is not null)
                 {
                     _foundAttributes[attributeType] = value;
                 }
