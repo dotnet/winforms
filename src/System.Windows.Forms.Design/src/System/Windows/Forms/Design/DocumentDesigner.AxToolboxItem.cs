@@ -63,10 +63,10 @@ namespace System.Windows.Forms.Design
                 RegistryKey key = Registry.ClassesRoot.OpenSubKey(controlKey);
 
                 //fail later -- not for tooltip info...
-                if (key != null)
+                if (key is not null)
                 {
                     RegistryKey verKey = key.OpenSubKey("Version");
-                    if (verKey != null)
+                    if (verKey is not null)
                     {
                         version = (string)verKey.GetValue("");
                         verKey.Close();
@@ -82,12 +82,12 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override IComponent[] CreateComponentsCore(IDesignerHost host)
             {
-                Debug.Assert(host != null, "Designer host is null!!!");
+                Debug.Assert(host is not null, "Designer host is null!!!");
 
                 // Get the DTE References object
                 //
                 object references = GetReferences(host);
-                if (references != null)
+                if (references is not null)
                 {
                     try
                     {
@@ -101,11 +101,11 @@ namespace System.Windows.Forms.Design
 
                         args[4] = "";
                         object tlbRef = references.GetType().InvokeMember("AddActiveX", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, references, args, CultureInfo.InvariantCulture);
-                        Debug.Assert(tlbRef != null, "Null reference returned by AddActiveX (tlbimp) by the project system for: " + clsid);
+                        Debug.Assert(tlbRef is not null, "Null reference returned by AddActiveX (tlbimp) by the project system for: " + clsid);
 
                         args[4] = "aximp";
                         object axRef = references.GetType().InvokeMember("AddActiveX", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, references, args, CultureInfo.InvariantCulture);
-                        Debug.Assert(axRef != null, "Null reference returned by AddActiveX (aximp) by the project system for: " + clsid);
+                        Debug.Assert(axRef is not null, "Null reference returned by AddActiveX (aximp) by the project system for: " + clsid);
 
                         axctlType = GetAxTypeFromReference(axRef, host);
                     }
@@ -148,7 +148,7 @@ namespace System.Windows.Forms.Design
                     throw;
                 }
 
-                Debug.Assert(comps[0] != null, "Could not create instance of ActiveX control wrappers!!!");
+                Debug.Assert(comps[0] is not null, "Could not create instance of ActiveX control wrappers!!!");
                 return comps;
             }
 
@@ -183,10 +183,10 @@ namespace System.Windows.Forms.Design
                 Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Checking: " + fullPath);
 
                 ITypeResolutionService trs = (ITypeResolutionService)host.GetService(typeof(ITypeResolutionService));
-                Debug.Assert(trs != null, "No type resolution service found.");
+                Debug.Assert(trs is not null, "No type resolution service found.");
 
                 Assembly a = trs.GetAssembly(AssemblyName.GetAssemblyName(fullPath));
-                Debug.Assert(a != null, "No assembly found at " + fullPath);
+                Debug.Assert(a is not null, "No assembly found at " + fullPath);
 
                 return GetAxTypeFromAssembly(a);
             }
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     object[] attrs = t.GetCustomAttributes(typeof(AxHost.ClsidAttribute), false);
-                    Debug.Assert(attrs != null && attrs.Length == 1, "Invalid number of GuidAttributes found on: " + t.FullName);
+                    Debug.Assert(attrs is not null && attrs.Length == 1, "Invalid number of GuidAttributes found on: " + t.FullName);
 
                     AxHost.ClsidAttribute guid = (AxHost.ClsidAttribute)attrs[0];
                     if (string.Equals(guid.Value, clsid, StringComparison.OrdinalIgnoreCase))
@@ -229,7 +229,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             private static object GetReferences(IDesignerHost host)
             {
-                Debug.Assert(host != null, "Null Designer Host");
+                Debug.Assert(host is not null, "Null Designer Host");
 
                 Type type;
                 type = Type.GetType("EnvDTE.ProjectItem, " + AssemblyRef.EnvDTE);
@@ -246,13 +246,13 @@ namespace System.Windows.Forms.Design
                 string name = ext.GetType().InvokeMember("Name", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, ext, null, CultureInfo.InvariantCulture).ToString();
 
                 object project = ext.GetType().InvokeMember("ContainingProject", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, ext, null, CultureInfo.InvariantCulture);
-                Debug.Assert(project != null, "No DTE Project for the current project item: " + name);
+                Debug.Assert(project is not null, "No DTE Project for the current project item: " + name);
 
                 object vsproject = project.GetType().InvokeMember("Object", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, project, null, CultureInfo.InvariantCulture);
-                Debug.Assert(vsproject != null, "No VS Project for the current project item: " + name);
+                Debug.Assert(vsproject is not null, "No VS Project for the current project item: " + name);
 
                 object references = vsproject.GetType().InvokeMember("References", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, vsproject, null, CultureInfo.InvariantCulture);
-                Debug.Assert(references != null, "No References for the current project item: " + name);
+                Debug.Assert(references is not null, "No References for the current project item: " + name);
 
                 return references;
             }
@@ -279,12 +279,12 @@ namespace System.Windows.Forms.Design
                 //
                 RegistryKey tlbKey = key.OpenSubKey("TypeLib");
 
-                if (tlbKey != null)
+                if (tlbKey is not null)
                 {
                     // Get the major and minor version numbers.
                     //
                     RegistryKey verKey = key.OpenSubKey("Version");
-                    Debug.Assert(verKey != null, "No version registry key found for: " + controlKey);
+                    Debug.Assert(verKey is not null, "No version registry key found for: " + controlKey);
 
                     string ver = (string)verKey.GetValue("");
                     int dot = ver.IndexOf('.');
@@ -334,10 +334,10 @@ namespace System.Windows.Forms.Design
                 if (pTLB is null)
                 {
                     RegistryKey inprocServerKey = key.OpenSubKey("InprocServer32");
-                    if (inprocServerKey != null)
+                    if (inprocServerKey is not null)
                     {
                         string inprocServer = (string)inprocServerKey.GetValue("");
-                        Debug.Assert(inprocServer != null, "No valid InprocServer32 found for: " + controlKey);
+                        Debug.Assert(inprocServer is not null, "No valid InprocServer32 found for: " + controlKey);
                         inprocServerKey.Close();
 
                         pTLB = Oleaut32.LoadTypeLib(inprocServer);
@@ -346,7 +346,7 @@ namespace System.Windows.Forms.Design
 
                 key.Close();
 
-                if (pTLB != null)
+                if (pTLB is not null)
                 {
                     try
                     {

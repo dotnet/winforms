@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public override void OnDragEnter(Glyph g, DragEventArgs e)
             {
-                if (_designer != null && _designer.Control != null)
+                if (_designer is not null && _designer.Control is not null)
                 {
                     _controlRect = _designer.Control.RectangleToScreen(_designer.Control.ClientRectangle);
                 }
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Design
                 // If we are not over a valid drop area, then do not allow the drag/drop. Now that all
                 // dragging/dropping is done via the behavior service and adorner window, we have to do our own
                 // validation, and cannot rely on the OS to do it for us.
-                if (e != null && _controlRect != Rectangle.Empty && !_controlRect.Contains(new Point(e.X, e.Y)))
+                if (e is not null && _controlRect != Rectangle.Empty && !_controlRect.Contains(new Point(e.X, e.Y)))
                 {
                     e.Effect = DragDropEffects.None;
                     return;

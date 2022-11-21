@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Design
         private void InsertToolStripItem(Type t)
         {
             IDesignerHost designerHost = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-            Debug.Assert(designerHost != null, "Why didn't we get a designer host?");
+            Debug.Assert(designerHost is not null, "Why didn't we get a designer host?");
             ToolStrip parent = ParentTool;
             int dummyIndex = parent.Items.IndexOf(_currentItem);
             DesignerTransaction newItemTransaction = designerHost.CreateTransaction(SR.ToolStripAddingItem);
@@ -96,18 +96,18 @@ namespace System.Windows.Forms.Design
                     }
 
                     PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(component)["Image"];
-                    Debug.Assert(imageProperty != null, "Could not find 'Image' property in ToolStripItem.");
-                    if (imageProperty != null && image != null)
+                    Debug.Assert(imageProperty is not null, "Could not find 'Image' property in ToolStripItem.");
+                    if (imageProperty is not null && image is not null)
                     {
                         imageProperty.SetValue(component, image);
                     }
 
                     PropertyDescriptor dispProperty = TypeDescriptor.GetProperties(component)["DisplayStyle"];
-                    Debug.Assert(dispProperty != null, "Could not find 'DisplayStyle' property in ToolStripItem.");
+                    Debug.Assert(dispProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
                     dispProperty?.SetValue(component, ToolStripItemDisplayStyle.Image);
 
                     PropertyDescriptor imageTransProperty = TypeDescriptor.GetProperties(component)["ImageTransparentColor"];
-                    Debug.Assert(imageTransProperty != null, "Could not find 'DisplayStyle' property in ToolStripItem.");
+                    Debug.Assert(imageTransProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
                     imageTransProperty?.SetValue(component, Color.Magenta);
                 }
 
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Design
             }
             catch (Exception ex)
             {
-                if (newItemTransaction != null)
+                if (newItemTransaction is not null)
                 {
                     newItemTransaction.Cancel();
                     newItemTransaction = null;

@@ -108,7 +108,7 @@ namespace System.Windows.Forms.Design
 
         protected virtual bool CanDropDataObject(IDataObject dataObj)
         {
-            if (dataObj != null)
+            if (dataObj is not null)
             {
                 if (dataObj is ComponentDataObjectWrapper)
                 {
@@ -217,7 +217,7 @@ namespace System.Windows.Forms.Design
             {
                 try
                 {
-                    if (host != null)
+                    if (host is not null)
                         trans = host.CreateTransaction(string.Format(SR.DesignerBatchCreateTool, tool.ToString()));
                 }
                 catch (CheckoutException cxe)
@@ -235,7 +235,7 @@ namespace System.Windows.Forms.Design
                         // First check if we are currently in localization mode (i.e., language is non-default).
                         // If so, we should not permit addition of new components. This is an intentional
                         // change from Everett - see VSWhidbey #292249.
-                        if (host != null && CurrentlyLocalizing(host.RootComponent))
+                        if (host is not null && CurrentlyLocalizing(host.RootComponent))
                         {
                             IUIService uiService = (IUIService)GetService(typeof(IUIService));
                             uiService?.ShowMessage(SR.LocalizingCannotAdd);
@@ -247,12 +247,12 @@ namespace System.Windows.Forms.Design
                         // Create a dictionary of default values that the designer can
                         // use to initialize a control with.
                         Hashtable defaultValues = new Hashtable();
-                        if (parent != null)
+                        if (parent is not null)
                             defaultValues["Parent"] = parent;
 
                         // adjust the location if we are in a mirrored parent. That is because the origin
                         // will then be in the upper right rather than upper left.
-                        if (parent != null && parent.IsMirrored)
+                        if (parent is not null && parent.IsMirrored)
                         {
                             x += width;
                         }
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.Design
                         if (hasSize)
                             defaultValues["Size"] = new Size(width, height);
                         //store off extra behavior drag/drop information
-                        if (e != null)
+                        if (e is not null)
                             defaultValues["ToolboxSnapDragDropEventArgs"] = e;
 
                         comps = tool.CreateComponents(host, defaultValues);
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Design
                         IUIService uiService = (IUIService)GetService(typeof(IUIService));
 
                         string exceptionMessage = string.Empty;
-                        if (ex.InnerException != null)
+                        if (ex.InnerException is not null)
                         {
                             exceptionMessage = ex.InnerException.ToString();
                         }
@@ -303,7 +303,7 @@ namespace System.Windows.Forms.Design
                             exceptionMessage = ex.Message;
                         }
 
-                        if (uiService != null)
+                        if (uiService is not null)
                         {
                             uiService.ShowError(ex, string.Format(SR.FailedToCreateComponent, tool.DisplayName, exceptionMessage));
                         }
@@ -317,7 +317,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (toolboxSvc != null && tool.Equals(toolboxSvc.GetSelectedToolboxItem(host)))
+                    if (toolboxSvc is not null && tool.Equals(toolboxSvc.GetSelectedToolboxItem(host)))
                     {
                         toolboxSvc.SelectedToolboxItemUsed();
                     }
@@ -332,7 +332,7 @@ namespace System.Windows.Forms.Design
 
             // Finally, select the newly created components.
             //
-            if (selSvc != null && comps.Length > 0)
+            if (selSvc is not null && comps.Length > 0)
             {
                 host?.Activate();
 
@@ -358,11 +358,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private static bool CurrentlyLocalizing(IComponent rootComponent)
         {
-            if (rootComponent != null)
+            if (rootComponent is not null)
             {
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(rootComponent)["Language"];
 
-                if (prop != null && prop.PropertyType == typeof(Globalization.CultureInfo))
+                if (prop is not null && prop.PropertyType == typeof(Globalization.CultureInfo))
                 {
                     Globalization.CultureInfo ci = (Globalization.CultureInfo)prop.GetValue(rootComponent);
                     if (!ci.Equals(Globalization.CultureInfo.InvariantCulture))
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.Design
         {
             foreach (Control c in controls)
             {
-                if (c != null)
+                if (c is not null)
                 {
                     if (c.AllowDrop)
                     {
@@ -437,7 +437,7 @@ namespace System.Windows.Forms.Design
                 bool readOnlyLocation = true;
 
                 PropertyDescriptor loc = TypeDescriptor.GetProperties(comps[i])["Location"];
-                if (loc != null)
+                if (loc is not null)
                 {
                     readOnlyLocation = loc.IsReadOnly;
                 }
@@ -597,7 +597,7 @@ namespace System.Windows.Forms.Design
             foreach (object comp in components)
             {
                 Control ctl = comp as Control;
-                if (ctl != null && ctl.HasChildren)
+                if (ctl is not null && ctl.HasChildren)
                 {
                     DisableDragDropChildren(ctl.Controls, allowDropChanged);
                 }
@@ -606,7 +606,7 @@ namespace System.Windows.Forms.Design
             DragDropEffects effect = DragDropEffects.None;
             IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
             DesignerTransaction trans = null;
-            if (host != null)
+            if (host is not null)
             {
                 trans = host.CreateTransaction(string.Format(SR.DragDropDragComponents, components.Length));
             }
@@ -629,7 +629,7 @@ namespace System.Windows.Forms.Design
 
                 freezePainting = oldFreezePainting;
 
-                if (trans != null)
+                if (trans is not null)
                 {
                     ((IDisposable)trans).Dispose();
                 }
@@ -641,9 +641,9 @@ namespace System.Windows.Forms.Design
             bool isLocalMove = isMove && localDragInside;
 
             ISelectionUIService selectionUISvc = (ISelectionUIService)GetService(typeof(ISelectionUIService));
-            Debug.Assert(selectionUISvc != null, "Unable to get selection ui service when adding child control");
+            Debug.Assert(selectionUISvc is not null, "Unable to get selection ui service when adding child control");
 
-            if (selectionUISvc != null)
+            if (selectionUISvc is not null)
             {
                 // We must check to ensure that UI service is still in drag mode.  It is
                 // possible that the user hit escape, which will cancel drag mode.
@@ -840,9 +840,9 @@ namespace System.Windows.Forms.Design
                     // now we need to offset the components locations from the drop mouse
                     // point to the parent, since their current locations are relative
                     // the mouse pointer
-                    if (components != null && components.Length > 0)
+                    if (components is not null && components.Length > 0)
                     {
-                        Debug.Assert(container != null, "Didn't get a container from the site!");
+                        Debug.Assert(container is not null, "Didn't get a container from the site!");
                         string name;
                         IComponent comp = null;
 
@@ -886,7 +886,7 @@ namespace System.Windows.Forms.Design
                                     // it didn't, so let's check for the regular Location
                                     loc ??= TypeDescriptor.GetProperties(comp)["Location"];
 
-                                    if (loc != null && !loc.IsReadOnly)
+                                    if (loc is not null && !loc.IsReadOnly)
                                     {
                                         Rectangle bounds = default(Rectangle);
                                         Point pt = (Point)loc.GetValue(comp);
@@ -914,7 +914,7 @@ namespace System.Windows.Forms.Design
                                     if (updateLocation)
                                     {
                                         ParentControlDesigner parentDesigner = client as ParentControlDesigner;
-                                        if (parentDesigner != null)
+                                        if (parentDesigner is not null)
                                         {
                                             Control c = client.GetControlForComponent(comp);
                                             dropPt = parentDesigner.GetSnappedPoint(c.Location);
@@ -963,9 +963,9 @@ namespace System.Windows.Forms.Design
                 if (localDragInside)
                 {
                     ISelectionUIService selectionUISvc = (ISelectionUIService)GetService(typeof(ISelectionUIService));
-                    Debug.Assert(selectionUISvc != null, "Unable to get selection ui service when adding child control");
+                    Debug.Assert(selectionUISvc is not null, "Unable to get selection ui service when adding child control");
 
-                    if (selectionUISvc != null)
+                    if (selectionUISvc is not null)
                     {
                         // We must check to ensure that UI service is still in drag mode.  It is
                         // possible that the user hit escape, which will cancel drag mode.
@@ -1148,7 +1148,7 @@ namespace System.Windows.Forms.Design
             }
 
             e.UseDefaultCursors = ((!localDragInside && !forceDrawFrames) || ((e.Effect & (DragDropEffects.Copy)) != 0)) || e.Effect == DragDropEffects.None;
-            if (!e.UseDefaultCursors && selectionHandler != null)
+            if (!e.UseDefaultCursors && selectionHandler is not null)
             {
                 selectionHandler.SetCursor();
             }
@@ -1198,11 +1198,11 @@ namespace System.Windows.Forms.Design
             foreach (object comp in compList)
             {
                 Control c = comp as Control;
-                if (c is null && comp != null)
+                if (c is null && comp is not null)
                 {
                     topLevel.Add(comp);
                 }
-                else if (c != null)
+                else if (c is not null)
                 {
                     if (c.Parent is null || !compList.Contains(c.Parent))
                     {

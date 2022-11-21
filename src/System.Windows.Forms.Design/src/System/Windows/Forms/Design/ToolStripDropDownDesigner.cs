@@ -55,14 +55,14 @@ namespace System.Windows.Forms.Design
                 DesignerActionListCollection actionLists = new DesignerActionListCollection();
                 actionLists.AddRange(base.ActionLists);
                 ContextMenuStripActionList cmActionList = new ContextMenuStripActionList(this);
-                if (cmActionList != null)
+                if (cmActionList is not null)
                 {
                     actionLists.Add(cmActionList);
                 }
 
                 // finally add the verbs for this component there...
                 DesignerVerbCollection cmVerbs = Verbs;
-                if (cmVerbs != null && cmVerbs.Count != 0)
+                if (cmVerbs is not null && cmVerbs.Count != 0)
                 {
                     DesignerVerb[] cmverbsArray = new DesignerVerb[cmVerbs.Count];
                     cmVerbs.CopyTo(cmverbsArray, 0);
@@ -129,7 +129,7 @@ namespace System.Windows.Forms.Design
             get => dropDown.RightToLeft;
             set
             {
-                if (menuItem != null && designMenu != null && value != RightToLeft)
+                if (menuItem is not null && designMenu is not null && value != RightToLeft)
                 {
                     Rectangle bounds = Rectangle.Empty;
                     try
@@ -162,12 +162,12 @@ namespace System.Windows.Forms.Design
             {
                 if (string.IsNullOrEmpty((string)ShadowProperties[SettingsKeyName]))
                 {
-                    if (Component is IPersistComponentSettings persistableComponent && host != null)
+                    if (Component is IPersistComponentSettings persistableComponent && host is not null)
                     {
                         if (persistableComponent.SettingsKey is null)
                         {
                             IComponent rootComponent = host.RootComponent;
-                            if (rootComponent != null && rootComponent != persistableComponent)
+                            if (rootComponent is not null && rootComponent != persistableComponent)
                             {
                                 ShadowProperties[SettingsKeyName] = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", rootComponent.Site.Name, Component.Site.Name);
                             }
@@ -234,25 +234,25 @@ namespace System.Windows.Forms.Design
             if (disposing)
             {
                 // Unhook our services
-                if (_selectionService != null)
+                if (_selectionService is not null)
                 {
                     _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
                     _selectionService.SelectionChanging -= new EventHandler(OnSelectionChanging);
                 }
 
                 DisposeMenu();
-                if (designMenu != null)
+                if (designMenu is not null)
                 {
                     designMenu.Dispose();
                     designMenu = null;
                 }
 
-                if (dummyToolStripGlyph != null)
+                if (dummyToolStripGlyph is not null)
                 {
                     dummyToolStripGlyph = null;
                 }
 
-                if (_undoEngine != null)
+                if (_undoEngine is not null)
                 {
                     _undoEngine.Undone -= new EventHandler(OnUndone);
                 }
@@ -269,14 +269,14 @@ namespace System.Windows.Forms.Design
             HideMenu();
             if (host.RootComponent is Control form)
             {
-                if (designMenu != null)
+                if (designMenu is not null)
                 {
                     form.Controls.Remove(designMenu);
                 }
 
-                if (menuItem != null)
+                if (menuItem is not null)
                 {
-                    if (_nestedContainer != null)
+                    if (_nestedContainer is not null)
                     {
                         _nestedContainer.Dispose();
                         _nestedContainer = null;
@@ -317,7 +317,7 @@ namespace System.Windows.Forms.Design
             // Query for the Behavior Service and Remove Glyph....
             if (TryGetService(out BehaviorService _))
             {
-                if (dummyToolStripGlyph != null && TryGetService(out SelectionManager selectionManager))
+                if (dummyToolStripGlyph is not null && TryGetService(out SelectionManager selectionManager))
                 {
                     if (selectionManager.BodyGlyphAdorner.Glyphs.Contains(dummyToolStripGlyph))
                     {
@@ -331,7 +331,7 @@ namespace System.Windows.Forms.Design
             }
 
             // Unhook all the events for DesignMenuItem
-            if (menuItem != null)
+            if (menuItem is not null)
             {
                 if (host.GetDesigner(menuItem) is ToolStripMenuItemDesigner itemDesigner)
                 {
@@ -367,7 +367,7 @@ namespace System.Windows.Forms.Design
             if (TryGetService(out _selectionService))
             {
                 // first select the rootComponent and then hook on the events... but not if we are loading - VSWhidbey #484576
-                if (host != null && !host.Loading)
+                if (host is not null && !host.Loading)
                 {
                     _selectionService.SetSelectedComponents(new IComponent[] { host.RootComponent }, SelectionTypes.Replace);
                 }
@@ -395,7 +395,7 @@ namespace System.Windows.Forms.Design
                     BackColor = SystemColors.Window,
                     Name = Component.Site.Name
                 };
-                menuItem.Text = (dropDown != null) ? dropDown.GetType().Name : menuItem.Name;
+                menuItem.Text = (dropDown is not null) ? dropDown.GetType().Name : menuItem.Name;
                 designMenu.Items.Add(menuItem);
                 form.Controls.Add(designMenu);
                 designMenu.SendToBack();
@@ -445,7 +445,7 @@ namespace System.Windows.Forms.Design
                 else
                 {
                     ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(comp);
-                    if (itemDesigner != null)
+                    if (itemDesigner is not null)
                     {
                         topmost = ToolStripItemDesigner.GetFirstDropDown(currentItem);
                     }
@@ -459,17 +459,17 @@ namespace System.Windows.Forms.Design
                     parent = ((ToolStripItem)comp).Owner as ToolStripDropDown;
                 }
 
-                if (parent != null && parent.Visible)
+                if (parent is not null && parent.Visible)
                 {
                     ToolStripItem ownerItem = parent.OwnerItem;
-                    if (ownerItem != null && ownerItem == menuItem)
+                    if (ownerItem is not null && ownerItem == menuItem)
                     {
                         topmost = menuItem.DropDown;
                     }
                     else
                     {
                         ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(ownerItem);
-                        if (itemDesigner != null)
+                        if (itemDesigner is not null)
                         {
                             topmost = ToolStripItemDesigner.GetFirstDropDown((ToolStripDropDownItem)ownerItem);
                         }
@@ -477,7 +477,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (topmost != null)
+            if (topmost is not null)
             {
                 ToolStripItem topMostItem = topmost.OwnerItem;
                 if (topMostItem == menuItem)
@@ -538,7 +538,7 @@ namespace System.Windows.Forms.Design
                 // Selection change would remove our Glyph from the BodyGlyph Collection.
                 if (TryGetService(out SelectionManager selectionManager))
                 {
-                    if (dummyToolStripGlyph != null)
+                    if (dummyToolStripGlyph is not null)
                     {
                         selectionManager.BodyGlyphAdorner.Glyphs.Insert(0, dummyToolStripGlyph);
                     }
@@ -561,7 +561,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop != null)
+                if (prop is not null)
                 {
                     properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ToolStripDropDownDesigner), prop, empty);
                 }
@@ -655,7 +655,7 @@ namespace System.Windows.Forms.Design
             menuItem.Visible = true;
 
             // Check if this is a design-time DropDown
-            if (currentParent != null && currentParent != menuItem)
+            if (currentParent is not null && currentParent != menuItem)
             {
                 if (host.GetDesigner(currentParent) is ToolStripMenuItemDesigner ownerItemDesigner)
                 {
@@ -683,7 +683,7 @@ namespace System.Windows.Forms.Design
             if (TryGetService(out BehaviorService behaviorService))
             {
                 // Show the contextMenu only if the dummy menuStrip is contained in the Form. Refer to VsWhidbey 484317 for more details.
-                if (itemDesigner != null && parent != null)
+                if (itemDesigner is not null && parent is not null)
                 {
                     Rectangle parentBounds = behaviorService.ControlRectInAdornerWindow(parent);
                     Rectangle menuBounds = behaviorService.ControlRectInAdornerWindow(designMenu);
@@ -702,7 +702,7 @@ namespace System.Windows.Forms.Design
                     GetService<SelectionManager>()?.BodyGlyphAdorner.Glyphs.Insert(0, dummyToolStripGlyph);
                 }
 
-                if (selectedItem != null)
+                if (selectedItem is not null)
                 {
                     GetService<ToolStripKeyboardHandlingService>().SelectedDesignerControl = selectedItem;
                 }
@@ -710,7 +710,7 @@ namespace System.Windows.Forms.Design
         }
 
         // Should the designer serialize the settings?
-        private bool ShouldSerializeSettingsKey() => (Component is IPersistComponentSettings persistableComponent && persistableComponent.SaveSettings && SettingsKey != null);
+        private bool ShouldSerializeSettingsKey() => (Component is IPersistComponentSettings persistableComponent && persistableComponent.SaveSettings && SettingsKey is not null);
 
         /// <summary>
         /// Since we're shadowing ToolStripDropDown AutoClose, we get called here to determine whether or not to serialize
@@ -732,7 +732,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnUndone(object source, EventArgs e)
         {
-            if (_selectionService != null && Component.Equals(_selectionService.PrimarySelection))
+            if (_selectionService is not null && Component.Equals(_selectionService.PrimarySelection))
             {
                 HideMenu();
                 ShowMenu();

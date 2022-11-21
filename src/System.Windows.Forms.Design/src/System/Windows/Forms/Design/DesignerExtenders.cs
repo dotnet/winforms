@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void Dispose()
         {
-            if (extenderService != null && providers != null)
+            if (extenderService is not null && providers is not null)
             {
                 for (int i = 0; i < providers.Length; i++)
                 {

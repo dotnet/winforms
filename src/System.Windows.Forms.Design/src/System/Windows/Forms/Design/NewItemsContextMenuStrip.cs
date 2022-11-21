@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Design
                 Groups["StandardList"].Items.Add(item);
                 if (_convertTo)
                 {
-                    if (item is ItemTypeToolStripMenuItem toolItem && _currentItem != null && toolItem.ItemType == _currentItem.GetType())
+                    if (item is ItemTypeToolStripMenuItem toolItem && _currentItem is not null && toolItem.ItemType == _currentItem.GetType())
                     {
                         toolItem.Enabled = false;
                     }
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Design
                 Groups["CustomList"].Items.Add(item);
                 if (_convertTo)
                 {
-                    if (item is ItemTypeToolStripMenuItem toolItem && _currentItem != null && toolItem.ItemType == _currentItem.GetType())
+                    if (item is ItemTypeToolStripMenuItem toolItem && _currentItem is not null && toolItem.ItemType == _currentItem.GetType())
                     {
                         toolItem.Enabled = false;
                     }

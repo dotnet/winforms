@@ -45,10 +45,10 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (serializationStream is null && Components != null)
+                    if (serializationStream is null && Components is not null)
                     {
                         IDesignerSerializationService ds = (IDesignerSerializationService)serviceProvider.GetService(typeof(IDesignerSerializationService));
-                        if (ds != null)
+                        if (ds is not null)
                         {
                             object[] comps = new object[components.Length];
                             for (int i = 0; i < components.Length; i++)
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (components is null && (serializationStream != null || serializationData != null))
+                    if (components is null && (serializationStream is not null || serializationData is not null))
                     {
                         Deserialize(null, false);
                         if (components is null)
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Design
                     selectedComponents = new ArrayList(components);
 
                 IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
                     ArrayList copySelection = new ArrayList();
                     foreach (IComponent comp in selectedComponents)
@@ -248,14 +248,14 @@ namespace System.Windows.Forms.Design
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                     }
 
-                    if (removeCurrentComponents && components != null)
+                    if (removeCurrentComponents && components is not null)
                     {
                         foreach (IComponent removeComp in components)
                         {
-                            if (host is null && removeComp.Site != null)
+                            if (host is null && removeComp.Site is not null)
                             {
                                 host = (IDesignerHost)removeComp.Site.GetService(typeof(IDesignerHost));
-                                if (host != null)
+                                if (host is not null)
                                 {
                                     trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponents, components.Length));
                                 }

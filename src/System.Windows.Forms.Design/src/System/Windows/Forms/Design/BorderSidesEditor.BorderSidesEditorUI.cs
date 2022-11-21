@@ -365,7 +365,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
-                Debug.Assert(edSvc != null);
+                Debug.Assert(edSvc is not null);
 
                 EditorService = edSvc;
                 originalValue = Value = value;

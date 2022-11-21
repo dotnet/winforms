@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
                 string name = "";
                 if (binding.DataSource is IComponent comp)
                 {
-                    if (comp.Site != null)
+                    if (comp.Site is not null)
                     {
                         name = comp.Site.Name;
                     }

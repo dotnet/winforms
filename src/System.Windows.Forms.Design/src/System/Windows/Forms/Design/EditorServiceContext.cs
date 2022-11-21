@@ -31,13 +31,13 @@ namespace System.Windows.Forms.Design
             if (prop is null)
             {
                 prop = TypeDescriptor.GetDefaultProperty(designer.Component);
-                if (prop != null && typeof(ICollection).IsAssignableFrom(prop.PropertyType))
+                if (prop is not null && typeof(ICollection).IsAssignableFrom(prop.PropertyType))
                 {
                     _targetProperty = prop;
                 }
             }
 
-            Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collection editor with.");
+            Debug.Assert(_targetProperty is not null, "Need PropertyDescriptor for ICollection property to associate collection editor with.");
         }
 
         internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor prop, string newVerbText) : this(designer, prop)
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_designer.Component.Site != null)
+                if (_designer.Component.Site is not null)
                 {
                     return _designer.Component.Site.Container;
                 }
@@ -129,7 +129,7 @@ namespace System.Windows.Forms.Design
                 return this;
             }
 
-            if (_designer.Component != null && _designer.Component.Site != null)
+            if (_designer.Component is not null && _designer.Component.Site is not null)
             {
                 return _designer.Component.Site.GetService(serviceType);
             }
@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Design
         DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
         {
             IUIService uiSvc = (IUIService)((IServiceProvider)this).GetService(typeof(IUIService));
-            if (uiSvc != null)
+            if (uiSvc is not null)
             {
                 return uiSvc.ShowDialog(dialog);
             }
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Design
 
             CollectionEditor itemsEditor = TypeDescriptor.GetEditor(propertyValue, typeof(UITypeEditor)) as CollectionEditor;
 
-            Debug.Assert(itemsEditor != null, "Didn't get a collection editor for type '" + _targetProperty.PropertyType.FullName + "'");
+            Debug.Assert(itemsEditor is not null, "Didn't get a collection editor for type '" + _targetProperty.PropertyType.FullName + "'");
             itemsEditor?.EditValue(this, this, propertyValue);
         }
     }

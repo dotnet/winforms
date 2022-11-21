@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Design
             _designerSite = site;
             _designerRegion = new OverlayControl(site);
             _uiService = _designerSite.GetService(typeof(IUIService)) as IUIService;
-            if (_uiService != null)
+            if (_uiService is not null)
             {
                 if (_uiService.Styles["ArtboardBackground"] is Color)
                 {
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (_designer != null)
+                if (_designer is not null)
                 {
                     Control designerHolder = _designer;
                     _designer = null;
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design
                     designerHolder.Parent = null;
                 }
 
-                if (_splitter != null)
+                if (_splitter is not null)
                 {
                     _splitter.SplitterMoved -= new SplitterEventHandler(OnSplitterMoved);
                 }
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.Design
         {
             ForceDesignerRedraw(true);
             ISelectionService selSvc = (ISelectionService)_designerSite.GetService(typeof(ISelectionService));
-            if (selSvc != null)
+            if (selSvc is not null)
             {
                 if (selSvc.PrimarySelection is Control ctrl && !ctrl.IsDisposed)
                 {
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.Design
 
         void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
         {
-            if (e.Category == UserPreferenceCategory.Window && _designer != null)
+            if (e.Category == UserPreferenceCategory.Window && _designer is not null)
             {
                 SyncDesignerUI();
             }
@@ -315,7 +315,7 @@ namespace System.Windows.Forms.Design
             if (_splitter is null)
             {
                 _splitter = new Splitter();
-                if (_uiService != null && _uiService.Styles["HorizontalResizeGrip"] is Color)
+                if (_uiService is not null && _uiService.Styles["HorizontalResizeGrip"] is Color)
                 {
                     _splitter.BackColor = (Color)_uiService.Styles["HorizontalResizeGrip"];
                 }
@@ -429,7 +429,7 @@ namespace System.Windows.Forms.Design
             {
                 base.OnCreateControl();
                 // Loop through all of the overlays, create them, and hook them up
-                if (_overlayList != null)
+                if (_overlayList is not null)
                 {
                     foreach (Control c in _overlayList)
                     {
@@ -451,7 +451,7 @@ namespace System.Windows.Forms.Design
 
                 // Loop through all of the overlays and size them.  Also make sure that they are still on top of the
                 // zorder, because a handle recreate could have changed this.
-                if (_overlayList != null)
+                if (_overlayList is not null)
                 {
                     foreach (Control c in _overlayList)
                     {
@@ -568,7 +568,7 @@ namespace System.Windows.Forms.Design
                 base.WndProc(ref m);
                 if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)m.WParamInternal.LOWORD == User32.WM.CREATE)
                 {
-                    if (_overlayList != null)
+                    if (_overlayList is not null)
                     {
                         bool ourWindow = false;
                         foreach (Control c in _overlayList)
@@ -593,7 +593,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
-                else if ((m.Msg == (int)User32.WM.VSCROLL || m.Msg == (int)User32.WM.HSCROLL) && BehaviorService != null)
+                else if ((m.Msg == (int)User32.WM.VSCROLL || m.Msg == (int)User32.WM.HSCROLL) && BehaviorService is not null)
                 {
                     BehaviorService.SyncSelection();
                 }

@@ -30,10 +30,10 @@ namespace System.Windows.Forms.Design
                 if (baseComponent is null)
                 {
                     ISite site = ((IComponent)o).Site;
-                    if (site != null)
+                    if (site is not null)
                     {
                         IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-                        if (host != null)
+                        if (host is not null)
                         {
                             baseComponent = host.RootComponent;
                         }
@@ -80,7 +80,7 @@ namespace System.Windows.Forms.Design
             public virtual string GetName(IComponent comp)
             {
                 ISite site = comp.Site;
-                if (site != null)
+                if (site is not null)
                 {
                     return site.Name;
                 }
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Design
             public static void SetName(IComponent comp, string newName)
             {
                 ISite site = comp.Site;
-                if (site != null)
+                if (site is not null)
                 {
                     site.Name = newName;
                 }

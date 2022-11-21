@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
 
         public void RefreshItem()
         {
-            if (_menuCommand != null)
+            if (_menuCommand is not null)
             {
                 Visible = _menuCommand.Visible;
                 Enabled = _menuCommand.Enabled;
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
                     _cachedImage = true;
                     try
                     {
-                        if (_name != null)
+                        if (_name is not null)
                         {
                             _image = new Icon(typeof(ToolStripMenuItem), _name).ToBitmap();
                         }
@@ -102,11 +102,11 @@ namespace System.Windows.Forms.Design
 
         protected override void OnClick(EventArgs e)
         {
-            if (_menuCommand != null)
+            if (_menuCommand is not null)
             {
                 _menuCommand.Invoke();
             }
-            else if (MenuService != null)
+            else if (MenuService is not null)
             {
                 if (MenuService.GlobalInvoke(_menuID))
                 {

@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (isTarget)
                 {
                     //we will remove padding snaplines from targets - it doesn't make sense to snap to the target's padding lines
-                    if (snapLine.Filter != null && snapLine.Filter.StartsWith(SnapLine.Padding))
+                    if (snapLine.Filter is not null && snapLine.Filter.StartsWith(SnapLine.Padding))
                     {
                         continue;
                     }
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
 
                     // store off the bounds in our dictionary, so if we draw snaplines we know the length of the line we need to remember different bounds based on what type of snapline this is.
-                    if ((snapLine.Filter != null) && snapLine.Filter.StartsWith(SnapLine.Padding))
+                    if ((snapLine.Filter is not null) && snapLine.Filter.StartsWith(SnapLine.Padding))
                     {
                         _snapLineToBounds.Add(snapLine, controlRect);
                     }
@@ -252,14 +252,14 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private Line[] EraseOldSnapLines(Line[] lines, List<Line> tempLines)
         {
-            if (lines != null)
+            if (lines is not null)
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
                     bool foundMatch = false;
                     Line line = lines[i];
                     Rectangle invalidRect;
-                    if (tempLines != null)
+                    if (tempLines is not null)
                     {
                         for (int j = 0; j < tempLines.Count; j++)
                         {
@@ -270,14 +270,14 @@ namespace System.Windows.Forms.Design.Behavior
                             }
 
                             Line[] diffs = Line.GetDiffs(line, tempLines[j]);
-                            if (diffs != null)
+                            if (diffs is not null)
                             {
                                 for (int k = 0; k < diffs.Length; k++)
                                 {
                                     invalidRect = new Rectangle(diffs[k].x1, diffs[k].y1, diffs[k].x2 - diffs[k].x1, diffs[k].y2 - diffs[k].y1);
 
                                     invalidRect.Inflate(1, 1);
-                                    if (_backgroundImage != null)
+                                    if (_backgroundImage is not null)
                                     {
                                         _graphics.DrawImage(_backgroundImage, invalidRect, invalidRect, GraphicsUnit.Pixel);
                                     }
@@ -297,7 +297,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         invalidRect = new Rectangle(line.x1, line.y1, line.x2 - line.x1, line.y2 - line.y1);
                         invalidRect.Inflate(1, 1);
-                        if (_backgroundImage != null)
+                        if (_backgroundImage is not null)
                         {
                             _graphics.DrawImage(_backgroundImage, invalidRect, invalidRect, GraphicsUnit.Pixel);
                         }
@@ -309,7 +309,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            if (tempLines != null)
+            if (tempLines is not null)
             {
                 // Now, store off all the new lines (from the temp structures), so next time around (next mousemove message) we know which lines to erase and which ones to keep
                 lines = new Line[tempLines.Count];
@@ -334,7 +334,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         internal Line[] GetRecentLines()
         {
-            if (_recentLines != null)
+            if (_recentLines is not null)
             {
                 return _recentLines;
             }
@@ -374,7 +374,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool AddChildCompSnaplines(IComponent comp, List<IComponent> dragComponents, Rectangle clipBounds, Control targetControl)
         {
             if (!(comp is Control control) || //has to be a control to get snaplines
-               (dragComponents != null && dragComponents.Contains(comp) && !_ctrlDrag) || //cannot be something that we are dragging, unless we are in a ctrlDrag
+               (dragComponents is not null && dragComponents.Contains(comp) && !_ctrlDrag) || //cannot be something that we are dragging, unless we are in a ctrlDrag
                IsChildOfParent(control, targetControl) || //cannot be a child of the control we will drag
                !clipBounds.IntersectsWith(control.Bounds) || //has to be partially visible on the rootcomp's surface
                control.Parent is null || // control must have a parent.
@@ -405,8 +405,8 @@ namespace System.Windows.Forms.Design.Behavior
             if (_resizing &&
                 (designer is ParentControlDesigner) &&
                 (control.AutoSize) &&
-                (targetControl != null) &&
-                (targetControl.Parent != null) &&
+                (targetControl is not null) &&
+                (targetControl.Parent is not null) &&
                 (targetControl.Parent.Equals(control)))
             {
                 return false;
@@ -422,7 +422,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             // our targetControl will always be the 0th component in our dragComponents array list (a.k.a. the primary selected component).
             Control targetControl = null;
-            if (dragComponents != null && dragComponents.Count > 0)
+            if (dragComponents is not null && dragComponents.Count > 0)
             {
                 targetControl = dragComponents[0] as Control;
             }
@@ -432,27 +432,27 @@ namespace System.Windows.Forms.Design.Behavior
             Rectangle clipBounds = new Rectangle(0, 0, rootControl.ClientRectangle.Width, rootControl.ClientRectangle.Height);
             clipBounds.Inflate(-1, -1);
             //determine the screen offset from our rootComponent to the AdornerWindow (since all drag notification coords will be in adorner window coords)
-            if (targetControl != null)
+            if (targetControl is not null)
             {
                 _dragOffset = _behaviorService.ControlToAdornerWindow(targetControl);
             }
             else
             {
                 _dragOffset = _behaviorService.MapAdornerWindowPoint(rootControl.Handle, Point.Empty);
-                if (rootControl.Parent != null && rootControl.Parent.IsMirrored)
+                if (rootControl.Parent is not null && rootControl.Parent.IsMirrored)
                 {
                     _dragOffset.Offset(-rootControl.Width, 0);
                 }
             }
 
-            if (targetControl != null)
+            if (targetControl is not null)
             {
                 bool disposeDesigner = false;
                 //get all the target snapline information we need to create one then
                 if (!(host.GetDesigner(targetControl) is ControlDesigner designer))
                 {
                     designer = TypeDescriptor.CreateDesigner(targetControl, typeof(IDesigner)) as ControlDesigner;
-                    if (designer != null)
+                    if (designer is not null)
                     {
                         //Make sure the control is not forced visible
                         designer.ForceVisible = false;
@@ -461,7 +461,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
 
-                AddSnapLines(designer, _targetHorizontalSnapLines, _targetVerticalSnapLines, true, targetControl != null);
+                AddSnapLines(designer, _targetHorizontalSnapLines, _targetVerticalSnapLines, true, targetControl is not null);
                 if (disposeDesigner)
                 {
                     designer.Dispose();
@@ -480,7 +480,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     if (AddControlSnaplinesWhenResizing(designer, comp as Control, targetControl))
                     {
-                        AddSnapLines(designer, _horizontalSnapLines, _verticalSnapLines, false, targetControl != null);
+                        AddSnapLines(designer, _horizontalSnapLines, _verticalSnapLines, false, targetControl is not null);
                     }
 
                     // Does the designer have internal control designers for which we need to add snaplines (like SplitPanelContainer, ToolStripContainer)
@@ -488,11 +488,11 @@ namespace System.Windows.Forms.Design.Behavior
                     for (int i = 0; i < numInternalDesigners; i++)
                     {
                         ControlDesigner internalDesigner = designer.InternalControlDesigner(i);
-                        if (internalDesigner != null &&
+                        if (internalDesigner is not null &&
                             AddChildCompSnaplines(internalDesigner.Component, dragComponents, clipBounds, targetControl) &&
                             AddControlSnaplinesWhenResizing(internalDesigner, internalDesigner.Component as Control, targetControl))
                         {
-                            AddSnapLines(internalDesigner, _horizontalSnapLines, _verticalSnapLines, false, targetControl != null);
+                            AddSnapLines(internalDesigner, _horizontalSnapLines, _verticalSnapLines, false, targetControl is not null);
                         }
                     }
                 }
@@ -514,7 +514,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             Control currentParent = child.Parent;
-            while (currentParent != null)
+            while (currentParent is not null)
             {
                 if (currentParent.Equals(parent))
                 {
@@ -532,7 +532,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private static bool IsMarginOrPaddingSnapLine(SnapLine snapLine)
         {
-            return snapLine.Filter != null && (snapLine.Filter.StartsWith(SnapLine.Margin) || snapLine.Filter.StartsWith(SnapLine.Padding));
+            return snapLine.Filter is not null && (snapLine.Filter.StartsWith(SnapLine.Margin) || snapLine.Filter.StartsWith(SnapLine.Padding));
         }
 
         /// <summary>
@@ -782,7 +782,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 Line curLine = currentLines[i];
                 Line mergedLine = Line.Overlap(snapLine, curLine);
-                if (mergedLine != null)
+                if (mergedLine is not null)
                 {
                     currentLines[i] = mergedLine;
                     merged = true;
@@ -1046,7 +1046,7 @@ namespace System.Windows.Forms.Design.Behavior
         internal void OnMouseUp()
         {
             // Here, we store off our recent snapline info to the behavior service - this is used for testing purposes
-            if (_behaviorService != null)
+            if (_behaviorService is not null)
             {
                 Line[] recent = GetRecentLines();
                 string[] lines = new string[recent.Length];
@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             EraseSnapLines();
             _graphics.Dispose();
-            if (_disposeEdgePen && _edgePen != null)
+            if (_disposeEdgePen && _edgePen is not null)
             {
                 _edgePen.Dispose();
             }
