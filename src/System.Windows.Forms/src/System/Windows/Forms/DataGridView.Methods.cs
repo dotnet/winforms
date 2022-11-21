@@ -6923,7 +6923,7 @@ namespace System.Windows.Forms
 
         internal TypeConverter GetCachedTypeConverter(Type type)
         {
-            if (_converters.TryGetValue(type, out TypeConverter converter) && converter is not null)
+            if (_converters.TryGetValue(type, out TypeConverter converter))
             {
                 return converter;
             }
