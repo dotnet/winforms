@@ -40,8 +40,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 if (_foundAttributes is not null
-                    && _foundAttributes.TryGetValue(attributeType, out Attribute? value)
-                    && value is not null)
+                    && _foundAttributes.TryGetValue(attributeType, out Attribute? value))
                 {
                     return value;
                 }
