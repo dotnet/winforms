@@ -132,7 +132,7 @@ namespace System.Windows.Forms.Design
                         {
                             Control childControl = component as Control;
                             Form form = childControl as Form;
-                            if (childControl is not null 
+                            if (childControl is not null
                                 && !(form is not null && form.TopLevel) // Don't add top-level forms
                                 && childControl.Parent is null)
                             {
