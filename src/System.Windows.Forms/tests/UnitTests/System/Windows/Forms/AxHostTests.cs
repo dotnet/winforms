@@ -7,6 +7,7 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 using Windows.Win32.System.Com;
@@ -3086,6 +3087,36 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void AxHost_MediaPlayer_Serialize_Success()
+        {
+            using Form form = new();
+            using AxWMPLib.AxWindowsMediaPlayer player = new();
+            ((ISupportInitialize)player).BeginInit();
+            form.Controls.Add(player);
+            ((ISupportInitialize)player).EndInit();
+
+            string url = $"{Path.GetTempPath()}testurl1";
+            string uiMode = "none";
+            player.URL = url;
+            player.uiMode = uiMode;
+
+            BinaryFormatter formatter = new();
+            using MemoryStream stream = new();
+#pragma warning disable SYSLIB0011
+            formatter.Serialize(stream, player.OcxState);
+
+            player.URL = $"{Path.GetTempPath()}testurl2";
+            player.uiMode = "full";
+
+            stream.Position = 0;
+            player.OcxState = (AxHost.State)formatter.Deserialize(stream);
+#pragma warning disable SYSLIB0011
+
+            Assert.Equal(url, player.URL);
+            Assert.Equal(uiMode, player.uiMode);
         }
 
         private class SubComponentEditor : ComponentEditor
