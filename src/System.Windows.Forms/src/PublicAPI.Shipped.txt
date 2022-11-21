@@ -1,11 +1,11 @@
 #nullable enable
-~override System.Resources.ResXFileRef.Converter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Resources.ResXFileRef.Converter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Resources.ResXFileRef.Converter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Resources.ResXFileRef.Converter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Resources.ResXFileRef.ToString() -> string
-~override System.Resources.ResXResourceSet.GetDefaultReader() -> System.Type
-~override System.Resources.ResXResourceSet.GetDefaultWriter() -> System.Type
+override System.Resources.ResXFileRef.Converter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Resources.ResXFileRef.Converter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Resources.ResXFileRef.Converter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Resources.ResXFileRef.Converter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Resources.ResXFileRef.ToString() -> string!
+override System.Resources.ResXResourceSet.GetDefaultReader() -> System.Type!
+override System.Resources.ResXResourceSet.GetDefaultWriter() -> System.Type!
 ~override System.Windows.Forms.AxHost.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.AxHost.BackgroundImage.set -> void
 ~override System.Windows.Forms.AxHost.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -583,20 +583,20 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~override System.Windows.Forms.WindowsFormsSynchronizationContext.CreateCopy() -> System.Threading.SynchronizationContext
 ~override System.Windows.Forms.WindowsFormsSynchronizationContext.Post(System.Threading.SendOrPostCallback d, object state) -> void
 ~override System.Windows.Forms.WindowsFormsSynchronizationContext.Send(System.Threading.SendOrPostCallback d, object state) -> void
-~static readonly System.Resources.ResXResourceWriter.BinSerializedObjectMimeType -> string
-~static readonly System.Resources.ResXResourceWriter.ByteArraySerializedObjectMimeType -> string
-~static readonly System.Resources.ResXResourceWriter.DefaultSerializedObjectMimeType -> string
-~static readonly System.Resources.ResXResourceWriter.ResMimeType -> string
-~static readonly System.Resources.ResXResourceWriter.ResourceSchema -> string
-~static readonly System.Resources.ResXResourceWriter.SoapSerializedObjectMimeType -> string
-~static readonly System.Resources.ResXResourceWriter.Version -> string
+static readonly System.Resources.ResXResourceWriter.BinSerializedObjectMimeType -> string!
+static readonly System.Resources.ResXResourceWriter.ByteArraySerializedObjectMimeType -> string!
+static readonly System.Resources.ResXResourceWriter.DefaultSerializedObjectMimeType -> string!
+static readonly System.Resources.ResXResourceWriter.ResMimeType -> string!
+static readonly System.Resources.ResXResourceWriter.ResourceSchema -> string!
+static readonly System.Resources.ResXResourceWriter.SoapSerializedObjectMimeType -> string!
+static readonly System.Resources.ResXResourceWriter.Version -> string!
 ~static readonly System.Windows.Forms.DataGridView.HitTestInfo.Nowhere -> System.Windows.Forms.DataGridView.HitTestInfo
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Default -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Yes -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
-~static System.Resources.ResXResourceReader.FromFileContents(string fileContents) -> System.Resources.ResXResourceReader
-~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> System.Resources.ResXResourceReader
-~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.Reflection.AssemblyName[] assemblyNames) -> System.Resources.ResXResourceReader
+static System.Resources.ResXResourceReader.FromFileContents(string! fileContents) -> System.Resources.ResXResourceReader!
+static System.Resources.ResXResourceReader.FromFileContents(string! fileContents, System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> System.Resources.ResXResourceReader!
+static System.Resources.ResXResourceReader.FromFileContents(string! fileContents, System.Reflection.AssemblyName![]! assemblyNames) -> System.Resources.ResXResourceReader!
 ~static System.Windows.Forms.Application.AddMessageFilter(System.Windows.Forms.IMessageFilter value) -> void
 ~static System.Windows.Forms.Application.CommonAppDataPath.get -> string
 ~static System.Windows.Forms.Application.CommonAppDataRegistry.get -> Microsoft.Win32.RegistryKey
@@ -699,54 +699,54 @@ static System.Windows.Forms.Help.ShowPopup(System.Windows.Forms.Control? parent,
 ~System.Drawing.Design.IPropertyValueUIService.GetPropertyUIValueItems(System.ComponentModel.ITypeDescriptorContext context, System.ComponentModel.PropertyDescriptor propDesc) -> System.Drawing.Design.PropertyValueUIItem[]
 ~System.Drawing.Design.IPropertyValueUIService.RemovePropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
 ~System.Drawing.Design.PropertyValueUIItem.PropertyValueUIItem(System.Drawing.Image uiItemImage, System.Drawing.Design.PropertyValueUIItemInvokeHandler handler, string tooltip) -> void
-~System.Resources.ResXDataNode.Comment.get -> string
-~System.Resources.ResXDataNode.Comment.set -> void
-~System.Resources.ResXDataNode.FileRef.get -> System.Resources.ResXFileRef
-~System.Resources.ResXDataNode.GetValue(System.ComponentModel.Design.ITypeResolutionService typeResolver) -> object
-~System.Resources.ResXDataNode.GetValue(System.Reflection.AssemblyName[] names) -> object
-~System.Resources.ResXDataNode.GetValueTypeName(System.ComponentModel.Design.ITypeResolutionService typeResolver) -> string
-~System.Resources.ResXDataNode.GetValueTypeName(System.Reflection.AssemblyName[] names) -> string
-~System.Resources.ResXDataNode.Name.get -> string
-~System.Resources.ResXDataNode.Name.set -> void
-~System.Resources.ResXDataNode.ResXDataNode(string name, object value) -> void
-~System.Resources.ResXDataNode.ResXDataNode(string name, object value, System.Func<System.Type, string> typeNameConverter) -> void
-~System.Resources.ResXDataNode.ResXDataNode(string name, System.Resources.ResXFileRef fileRef) -> void
-~System.Resources.ResXDataNode.ResXDataNode(string name, System.Resources.ResXFileRef fileRef, System.Func<System.Type, string> typeNameConverter) -> void
-~System.Resources.ResXFileRef.FileName.get -> string
-~System.Resources.ResXFileRef.ResXFileRef(string fileName, string typeName) -> void
-~System.Resources.ResXFileRef.ResXFileRef(string fileName, string typeName, System.Text.Encoding textFileEncoding) -> void
-~System.Resources.ResXFileRef.TextFileEncoding.get -> System.Text.Encoding
-~System.Resources.ResXFileRef.TypeName.get -> string
-~System.Resources.ResXResourceReader.BasePath.get -> string
-~System.Resources.ResXResourceReader.BasePath.set -> void
-~System.Resources.ResXResourceReader.GetEnumerator() -> System.Collections.IDictionaryEnumerator
-~System.Resources.ResXResourceReader.GetMetadataEnumerator() -> System.Collections.IDictionaryEnumerator
-~System.Resources.ResXResourceReader.ResXResourceReader(string fileName) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(string fileName, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(string fileName, System.Reflection.AssemblyName[] assemblyNames) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream stream) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream stream, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream stream, System.Reflection.AssemblyName[] assemblyNames) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader reader) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader reader, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader reader, System.Reflection.AssemblyName[] assemblyNames) -> void
-~System.Resources.ResXResourceSet.ResXResourceSet(string fileName) -> void
-~System.Resources.ResXResourceSet.ResXResourceSet(System.IO.Stream stream) -> void
-~System.Resources.ResXResourceWriter.AddMetadata(string name, byte[] value) -> void
-~System.Resources.ResXResourceWriter.AddMetadata(string name, object value) -> void
-~System.Resources.ResXResourceWriter.AddMetadata(string name, string value) -> void
-~System.Resources.ResXResourceWriter.AddResource(string name, byte[] value) -> void
-~System.Resources.ResXResourceWriter.AddResource(string name, object value) -> void
-~System.Resources.ResXResourceWriter.AddResource(string name, string value) -> void
-~System.Resources.ResXResourceWriter.AddResource(System.Resources.ResXDataNode node) -> void
-~System.Resources.ResXResourceWriter.BasePath.get -> string
-~System.Resources.ResXResourceWriter.BasePath.set -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(string fileName) -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(string fileName, System.Func<System.Type, string> typeNameConverter) -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.Stream stream) -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.Stream stream, System.Func<System.Type, string> typeNameConverter) -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter textWriter) -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter textWriter, System.Func<System.Type, string> typeNameConverter) -> void
+System.Resources.ResXDataNode.Comment.get -> string!
+System.Resources.ResXDataNode.Comment.set -> void
+System.Resources.ResXDataNode.FileRef.get -> System.Resources.ResXFileRef?
+System.Resources.ResXDataNode.GetValue(System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> object?
+System.Resources.ResXDataNode.GetValue(System.Reflection.AssemblyName![]! names) -> object?
+System.Resources.ResXDataNode.GetValueTypeName(System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> string?
+System.Resources.ResXDataNode.GetValueTypeName(System.Reflection.AssemblyName![]! names) -> string?
+System.Resources.ResXDataNode.Name.get -> string!
+System.Resources.ResXDataNode.Name.set -> void
+System.Resources.ResXDataNode.ResXDataNode(string! name, object? value) -> void
+System.Resources.ResXDataNode.ResXDataNode(string! name, object? value, System.Func<System.Type?, string!>? typeNameConverter) -> void
+System.Resources.ResXDataNode.ResXDataNode(string! name, System.Resources.ResXFileRef! fileRef) -> void
+System.Resources.ResXDataNode.ResXDataNode(string! name, System.Resources.ResXFileRef! fileRef, System.Func<System.Type?, string!>? typeNameConverter) -> void
+System.Resources.ResXFileRef.FileName.get -> string!
+System.Resources.ResXFileRef.ResXFileRef(string! fileName, string! typeName) -> void
+System.Resources.ResXFileRef.ResXFileRef(string! fileName, string! typeName, System.Text.Encoding! textFileEncoding) -> void
+System.Resources.ResXFileRef.TextFileEncoding.get -> System.Text.Encoding?
+System.Resources.ResXFileRef.TypeName.get -> string!
+System.Resources.ResXResourceReader.BasePath.get -> string?
+System.Resources.ResXResourceReader.BasePath.set -> void
+System.Resources.ResXResourceReader.GetEnumerator() -> System.Collections.IDictionaryEnumerator!
+System.Resources.ResXResourceReader.GetMetadataEnumerator() -> System.Collections.IDictionaryEnumerator!
+System.Resources.ResXResourceReader.ResXResourceReader(string! fileName) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(string! fileName, System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(string! fileName, System.Reflection.AssemblyName![]! assemblyNames) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream! stream) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream! stream, System.ComponentModel.Design.ITypeResolutionService! typeResolver) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream! stream, System.Reflection.AssemblyName![]! assemblyNames) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader! reader) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader! reader, System.ComponentModel.Design.ITypeResolutionService! typeResolver) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader! reader, System.Reflection.AssemblyName![]! assemblyNames) -> void
+System.Resources.ResXResourceSet.ResXResourceSet(string! fileName) -> void
+System.Resources.ResXResourceSet.ResXResourceSet(System.IO.Stream! stream) -> void
+System.Resources.ResXResourceWriter.AddMetadata(string! name, byte[]! value) -> void
+System.Resources.ResXResourceWriter.AddMetadata(string! name, object? value) -> void
+System.Resources.ResXResourceWriter.AddMetadata(string! name, string? value) -> void
+System.Resources.ResXResourceWriter.AddResource(string! name, byte[]? value) -> void
+System.Resources.ResXResourceWriter.AddResource(string! name, object? value) -> void
+System.Resources.ResXResourceWriter.AddResource(string! name, string? value) -> void
+System.Resources.ResXResourceWriter.AddResource(System.Resources.ResXDataNode! node) -> void
+System.Resources.ResXResourceWriter.BasePath.get -> string?
+System.Resources.ResXResourceWriter.BasePath.set -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(string! fileName) -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(string! fileName, System.Func<System.Type?, string!>! typeNameConverter) -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.Stream! stream) -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.Stream! stream, System.Func<System.Type?, string!>! typeNameConverter) -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter! textWriter) -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter! textWriter, System.Func<System.Type?, string!>! typeNameConverter) -> void
 ~System.Windows.Forms.AutoCompleteStringCollection.Add(string value) -> int
 ~System.Windows.Forms.AutoCompleteStringCollection.AddRange(string[] value) -> void
 ~System.Windows.Forms.AutoCompleteStringCollection.Contains(string value) -> bool
@@ -1658,7 +1658,7 @@ System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(System.Windows.Forms.Cont
 ~virtual System.Drawing.Design.PropertyValueUIItem.Image.get -> System.Drawing.Image
 ~virtual System.Drawing.Design.PropertyValueUIItem.InvokeHandler.get -> System.Drawing.Design.PropertyValueUIItemInvokeHandler
 ~virtual System.Drawing.Design.PropertyValueUIItem.ToolTip.get -> string
-~virtual System.Resources.ResXResourceWriter.AddAlias(string aliasName, System.Reflection.AssemblyName assemblyName) -> void
+virtual System.Resources.ResXResourceWriter.AddAlias(string? aliasName, System.Reflection.AssemblyName! assemblyName) -> void
 ~virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object
 ~virtual System.Windows.Forms.BaseCollection.List.get -> System.Collections.ArrayList
 ~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void

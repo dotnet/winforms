@@ -20,7 +20,6 @@ namespace System.Resources
             public AssemblyName? ResolveAlias(string alias)
             {
                 _cachedAliases.TryGetValue(alias, out AssemblyName? result);
-
                 return result;
             }
 

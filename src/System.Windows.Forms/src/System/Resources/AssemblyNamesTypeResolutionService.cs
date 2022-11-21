@@ -18,10 +18,7 @@ namespace System.Resources
         private static readonly string s_dotNetPath = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles") ?? string.Empty, "dotnet\\shared");
         private static readonly string s_dotNetPathX86 = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)") ?? string.Empty, "dotnet\\shared");
 
-        internal AssemblyNamesTypeResolutionService(AssemblyName[] names)
-        {
-            _names = names;
-        }
+        internal AssemblyNamesTypeResolutionService(AssemblyName[] names) => _names = names;
 
         public Assembly? GetAssembly(AssemblyName name) => GetAssembly(name, true);
 
@@ -29,31 +26,33 @@ namespace System.Resources
         public Assembly? GetAssembly(AssemblyName name, bool throwOnError)
         {
             _cachedAssemblies ??= new();
-            if (!_cachedAssemblies.TryGetValue(name, out Assembly? result) || result is null)
+            if (_cachedAssemblies.TryGetValue(name, out Assembly? result) && result is not null)
             {
-                result = Assembly.Load(name.FullName);
-                if (result is not null)
+                return result;
+            }
+
+            result = Assembly.Load(name.FullName);
+            if (result is not null)
+            {
+                _cachedAssemblies[name] = result;
+            }
+            else if (_names is not null)
+            {
+                foreach (AssemblyName assemblyName in _names.Where(an => an.Equals(name)))
                 {
-                    _cachedAssemblies[name] = result;
-                }
-                else if (_names is not null)
-                {
-                    foreach (AssemblyName asmName in _names.Where(an => an.Equals(name)))
+                    try
                     {
-                        try
+                        result = Assembly.LoadFrom(GetPathOfAssembly(assemblyName));
+                        if (result is not null)
                         {
-                            result = Assembly.LoadFrom(GetPathOfAssembly(asmName));
-                            if (result is not null)
-                            {
-                                _cachedAssemblies[asmName] = result;
-                            }
+                            _cachedAssemblies[assemblyName] = result;
                         }
-                        catch
+                    }
+                    catch
+                    {
+                        if (throwOnError)
                         {
-                            if (throwOnError)
-                            {
-                                throw;
-                            }
+                            throw;
                         }
                     }
                 }
@@ -127,19 +126,19 @@ namespace System.Resources
                 }
 
                 // Search each reference assembly
-                foreach (AssemblyName asmName in _names)
+                foreach (AssemblyName assemblyName in _names)
                 {
-                    Assembly? asm = GetAssembly(asmName, false);
-                    if (asm is not null)
+                    Assembly? assembly = GetAssembly(assemblyName, false);
+                    if (assembly is not null)
                     {
-                        result = asm.GetType(name, false, ignoreCase);
+                        result = assembly.GetType(name, false, ignoreCase);
                         if (result is null)
                         {
                             int indexOfComma = name.IndexOf(',');
                             if (indexOfComma != -1)
                             {
                                 string shortName = name[..indexOfComma];
-                                result = asm.GetType(shortName, false, ignoreCase);
+                                result = assembly.GetType(shortName, false, ignoreCase);
                             }
                         }
                     }
