@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     // Miscellaneous utilities
     internal static class ImageListUtils
     {
-        public static PropertyDescriptor? GetImageListProperty(PropertyDescriptor currentComponent, ref object instance)
+        public static PropertyDescriptor? GetImageListProperty(PropertyDescriptor? currentComponent, ref object instance)
         {
             // Multiple selection is not supported.
             if (instance is object[])
@@ -18,7 +18,9 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            if (!currentComponent.TryGetAttribute(out RelatedImageListAttribute? relatedAttribute) || relatedAttribute.RelatedImageList is null)
+            if (currentComponent is null
+                || !currentComponent.TryGetAttribute(out RelatedImageListAttribute? relatedAttribute)
+                || relatedAttribute.RelatedImageList is null)
             {
                 return null;
             }
