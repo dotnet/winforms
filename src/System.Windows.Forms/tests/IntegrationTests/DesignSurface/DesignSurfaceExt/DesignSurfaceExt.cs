@@ -28,7 +28,7 @@ namespace DesignSurfaceExt
         {
             IServiceContainer serviceProvider = GetService(typeof(IServiceContainer)) as IServiceContainer;
             DesignerOptionService opsService = serviceProvider.GetService(typeof(DesignerOptionService)) as DesignerOptionService;
-            if (null != opsService)
+            if (opsService is not null)
             {
                 serviceProvider.RemoveService(typeof(DesignerOptionService));
             }
@@ -41,7 +41,7 @@ namespace DesignSurfaceExt
         {
             IServiceContainer serviceProvider = GetService(typeof(IServiceContainer)) as IServiceContainer;
             DesignerOptionService opsService = serviceProvider.GetService(typeof(DesignerOptionService)) as DesignerOptionService;
-            if (null != opsService)
+            if (opsService is not null)
             {
                 serviceProvider.RemoveService(typeof(DesignerOptionService));
             }
@@ -54,7 +54,7 @@ namespace DesignSurfaceExt
         {
             IServiceContainer serviceProvider = GetService(typeof(IServiceContainer)) as IServiceContainer;
             DesignerOptionService opsService = serviceProvider.GetService(typeof(DesignerOptionService)) as DesignerOptionService;
-            if (null != opsService)
+            if (opsService is not null)
             {
                 serviceProvider.RemoveService(typeof(DesignerOptionService));
             }
@@ -67,7 +67,7 @@ namespace DesignSurfaceExt
         {
             IServiceContainer serviceProvider = GetService(typeof(IServiceContainer)) as IServiceContainer;
             DesignerOptionService opsService = serviceProvider.GetService(typeof(DesignerOptionService)) as DesignerOptionService;
-            if (null != opsService)
+            if (opsService is not null)
             {
                 serviceProvider.RemoveService(typeof(DesignerOptionService));
             }
@@ -95,7 +95,7 @@ namespace DesignSurfaceExt
                     return null;
                 //- check if the root component has already been set
                 //- if so then rollback (return without do nothing)
-                if (null != host.RootComponent)
+                if (host.RootComponent is not null)
                     return null;
                 //-
                 //-
@@ -320,7 +320,7 @@ namespace DesignSurfaceExt
             //-
             //- 1. NameCreationService
             _nameCreationService = new NameCreationServiceImp();
-            if (_nameCreationService != null)
+            if (_nameCreationService is not null)
             {
                 ServiceContainer.RemoveService(typeof(INameCreationService), false);
                 ServiceContainer.AddService(typeof(INameCreationService), _nameCreationService);
@@ -330,7 +330,7 @@ namespace DesignSurfaceExt
             //-
             //- 2. CodeDomComponentSerializationService
             _codeDomComponentSerializationService = new CodeDomComponentSerializationService(ServiceContainer);
-            if (_codeDomComponentSerializationService != null)
+            if (_codeDomComponentSerializationService is not null)
             {
                 //- the CodeDomComponentSerializationService is ready to be replaced
                 ServiceContainer.RemoveService(typeof(ComponentSerializationService), false);
@@ -341,7 +341,7 @@ namespace DesignSurfaceExt
             //-
             //- 3. IDesignerSerializationService
             _designerSerializationService = new DesignerSerializationServiceImpl(ServiceContainer);
-            if (_designerSerializationService != null)
+            if (_designerSerializationService is not null)
             {
                 //- the IDesignerSerializationService is ready to be replaced
                 ServiceContainer.RemoveService(typeof(IDesignerSerializationService), false);
@@ -354,7 +354,7 @@ namespace DesignSurfaceExt
             _undoEngine = new UndoEngineExt(ServiceContainer);
             //- disable the UndoEngine
             _undoEngine.Enabled = false;
-            if (_undoEngine != null)
+            if (_undoEngine is not null)
             {
                 //- the UndoEngine is ready to be replaced
                 ServiceContainer.RemoveService(typeof(UndoEngine), false);

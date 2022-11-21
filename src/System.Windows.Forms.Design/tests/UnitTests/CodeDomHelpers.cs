@@ -117,7 +117,7 @@ namespace System.Windows.Forms.TestUtilities
             string GetType(CodeTypeReference reference)
             {
                 Type result = Type.GetType(reference.BaseType);
-                if (result != null)
+                if (result is not null)
                 {
                     return $"typeof({result.Name})";
                 }

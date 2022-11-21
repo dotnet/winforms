@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Tests
         {
             List<T> list = new List<T>(linkedList.Count);
             var node = linkedList.First;
-            while (node != null)
+            while (node is not null)
             {
                 list.Add(node);
                 node = node.Next;

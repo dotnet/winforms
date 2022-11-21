@@ -276,7 +276,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     {
                         // This method returns a COM object, thus increments the RCW reference count and we want to release it later.
                         var range = textDocument.Range(start, start + length);
-                        if (range != null)
+                        if (range is not null)
                         {
                             try
                             {
@@ -297,7 +297,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
             finally
             {
                 // release RCW reference count
-                if (oleInterface != null)
+                if (oleInterface is not null)
                 {
                     Marshal.ReleaseComObject(oleInterface);
                 }

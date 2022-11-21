@@ -1831,9 +1831,9 @@ namespace System.Windows.Forms.Tests
 
             Assert.False(document != document);
             Assert.True(document != newDocument);
-            Assert.True((HtmlDocument)null != document);
-            Assert.True(document != (HtmlDocument)null);
-            Assert.False((HtmlDocument)null != (HtmlDocument)null);
+            Assert.True(document is not null);
+            Assert.True((HtmlDocument)null is not null);
+            Assert.False((HtmlDocument)null is not null);
         }
 #pragma warning restore CS1718
 

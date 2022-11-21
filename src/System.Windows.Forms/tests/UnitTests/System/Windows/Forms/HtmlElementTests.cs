@@ -2361,9 +2361,9 @@ namespace System.Windows.Forms.Tests
             Assert.False(element1 != element1);
             Assert.False(element1 != element2);
             Assert.True(element1 != element3);
-            Assert.True((HtmlElement)null != element1);
-            Assert.True(element1 != (HtmlElement)null);
-            Assert.False((HtmlElement)null != (HtmlElement)null);
+            Assert.True(element1 is not null);
+            Assert.True((HtmlElement)null is not null);
+            Assert.False((HtmlElement)null is not null);
         }
 #pragma warning restore CS1718
 

@@ -44,7 +44,7 @@ namespace TestConsole
             {
                 IDesignSurfaceExt isurf = _listOfDesignSurface[i];
                 _selectionService = (ISelectionService)(isurf.GetIDesignerHost().GetService(typeof(ISelectionService)));
-                if (null != _selectionService)
+                if (_selectionService is not null)
                     _selectionService.SelectionChanged += new System.EventHandler(OnSelectionChanged);
             }
         }
@@ -56,7 +56,7 @@ namespace TestConsole
                 return;
 
             IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-            if (null != isurf)
+            if (isurf is not null)
             {
                 ISelectionService selectionService = isurf.GetIDesignerHost().GetService(typeof(ISelectionService)) as ISelectionService;
                 propertyGrid.SelectedObject = selectionService.PrimarySelection;
@@ -251,7 +251,7 @@ namespace TestConsole
         {
             //- find out the DesignSurfaceExt control hosted by the TabPage
             IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
-            if (null != isurf)
+            if (isurf is not null)
                 propertyGrid.SelectedObject = isurf.GetIDesignerHost().RootComponent;
         }
 

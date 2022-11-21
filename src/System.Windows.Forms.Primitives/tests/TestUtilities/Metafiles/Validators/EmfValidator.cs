@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Metafiles
                 },
                 state);
 
-            if (currentValidator != null)
+            if (currentValidator is not null)
             {
                 Assert.False(
                     currentValidator.FailIfIncomplete,

@@ -62,7 +62,7 @@ namespace System.Windows.Forms.UITests
             await _joinableTaskCollection.JoinTillEmptyAsync();
             JoinableTaskContext = null!;
             JoinableTaskFactory = null!;
-            if (_denyExecutionSynchronizationContext != null)
+            if (_denyExecutionSynchronizationContext is not null)
             {
                 SynchronizationContext.SetSynchronizationContext(_denyExecutionSynchronizationContext.UnderlyingContext);
                 _denyExecutionSynchronizationContext.ThrowIfSwitchOccurred();
