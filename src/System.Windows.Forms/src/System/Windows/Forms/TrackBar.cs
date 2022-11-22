@@ -29,7 +29,6 @@ namespace System.Windows.Forms
         private static readonly object s_scrollEvent = new object();
         private static readonly object s_valueChangedEvent = new object();
         private static readonly object s_rightToLeftChangedEvent = new object();
-        private bool _autoTicks = true;
         private bool _autoSize = true;
         private int _largeChange = 5;
         private int _maximum = 10;
@@ -187,7 +186,7 @@ namespace System.Windows.Forms
 
                 void EnableAutoTicksIfRequired()
                 {
-                     if (_autoTicks)
+                     if (AutoDrawTicks)
                      {
                         cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
                      }
@@ -838,7 +837,7 @@ namespace System.Windows.Forms
 
                 int tickFrequency = _tickFrequency;
                 int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
-                int range = _maximum - _minimum;
+                uint range = (uint)(_maximum - _minimum);
 
                 return range <= maxTickCount || maxTickCount == 0;
             }
@@ -856,15 +855,14 @@ namespace System.Windows.Forms
 
             int tickFrequency = _tickFrequency;
             int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
-            int range = _maximum - _minimum;
-
+            uint range = (uint)(_maximum - _minimum);
             if (range > maxTickCount && maxTickCount != 0)
             {
-                tickFrequency = range / maxTickCount;
+                tickFrequency = (int)(range / maxTickCount);
             }
 
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
-            for (int i = _minimum + tickFrequency; i < _maximum - tickFrequency; i += tickFrequency)
+            for (int i = (_minimum + tickFrequency); i < _maximum - tickFrequency; i += tickFrequency)
             {
                 LRESULT lresult = PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
                 Debug.Assert((bool)(BOOL)lresult);
