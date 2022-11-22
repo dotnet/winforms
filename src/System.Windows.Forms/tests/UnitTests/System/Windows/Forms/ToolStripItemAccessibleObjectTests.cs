@@ -175,6 +175,148 @@ namespace System.Windows.Forms.Tests
             Assert.Null(toolStripItem.AccessibilityObject.GetPropertyValue(UIA.ValueValuePropertyId));
         }
 
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
+        {
+            using ToolStrip toolStrip = new();
+            toolStrip.Items.Add("");
+            toolStrip.PerformLayout();
+            toolStrip.CreateControl();
+
+            AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
+            AccessibleObject expected = toolStrip.AccessibilityObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_FragmentNavigate_Parent_ReturnsNull_IfHandleNotCreated()
+        {
+            using ToolStrip toolStrip = new();
+            toolStrip.Items.Add("");
+
+            AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.Parent));
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_FragmentNavigate_Child_ReturnExpected()
+        {
+            using ToolStrip toolStrip = new();
+            toolStrip.Items.Add("");
+
+            AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_FragmentNavigate_Sibling_ReturnExpected()
+        {
+            using ToolStrip toolStrip = new() { AutoSize = false, Size = new(300, 30) };
+
+            toolStrip.Items.Add("");
+            toolStrip.Items.Add("");
+
+            toolStrip.PerformLayout();
+
+            AccessibleObject grip = toolStrip.Grip.AccessibilityObject;
+            AccessibleObject item1 = toolStrip.Items[0].AccessibilityObject;
+            AccessibleObject item2 = toolStrip.Items[1].AccessibilityObject;
+
+            Assert.Equal(item1, grip.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(item2, item1.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Null(item2.FragmentNavigate(NavigateDirection.NextSibling));
+
+            Assert.Equal(item1, item2.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Equal(grip, item1.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Null(grip.FragmentNavigate(NavigateDirection.PreviousSibling));
+
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_FragmentNavigate_PreviousSibling_ReturnExpected_IfGripHidden()
+        {
+            using ToolStrip toolStrip = new() { GripStyle = ToolStripGripStyle.Hidden };
+
+            toolStrip.Items.Add("");
+
+            toolStrip.PerformLayout();
+
+            AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfItemsAligned()
+        {
+            using ToolStrip toolStrip = new() { AutoSize = false, Size = new(300, 30) };
+
+            toolStrip.Items.Add("");
+            toolStrip.Items.Add("");
+
+            toolStrip.Items[0].Alignment = ToolStripItemAlignment.Right;
+
+            toolStrip.PerformLayout();
+
+            AccessibleObject grip = toolStrip.Grip.AccessibilityObject;
+            AccessibleObject item1 = toolStrip.Items[0].AccessibilityObject;
+            AccessibleObject item2 = toolStrip.Items[1].AccessibilityObject;
+
+            Assert.Equal(item2, grip.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(item1, item2.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Null(item1.FragmentNavigate(NavigateDirection.NextSibling));
+
+            Assert.Equal(item2, item1.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Equal(grip, item2.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Null(grip.FragmentNavigate(NavigateDirection.PreviousSibling));
+
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_FragmentNavigate_Sibling_ReturnExpected_IfItemsSkipped()
+        {
+            using ToolStrip toolStrip = new() { AutoSize = false, Size = new(300, 30) };
+
+            ToolStripItem CreateSkippedItem()
+            {
+                return new ToolStripControlHost(new Label());
+            }
+
+            toolStrip.Items.Add(CreateSkippedItem());
+            toolStrip.Items.Add("");
+            toolStrip.Items.Add(CreateSkippedItem());
+            toolStrip.Items.Add("");
+            toolStrip.Items.Add(CreateSkippedItem());
+
+            toolStrip.Items[0].Alignment = ToolStripItemAlignment.Right;
+
+            toolStrip.PerformLayout();
+
+            AccessibleObject grip = toolStrip.Grip.AccessibilityObject;
+            AccessibleObject item2 = toolStrip.Items[1].AccessibilityObject;
+            AccessibleObject item4 = toolStrip.Items[3].AccessibilityObject;
+
+            Assert.Equal(item2, grip.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(item4, item2.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Null(item4.FragmentNavigate(NavigateDirection.NextSibling));
+
+            Assert.Equal(item2, item4.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Equal(grip, item2.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Null(grip.FragmentNavigate(NavigateDirection.PreviousSibling));
+
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
         private class SubToolStripItem : ToolStripItem
         {
             public SubToolStripItem() : base()
