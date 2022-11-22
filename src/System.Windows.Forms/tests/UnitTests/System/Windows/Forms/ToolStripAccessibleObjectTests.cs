@@ -23,6 +23,8 @@ namespace System.Windows.Forms.Tests
         public void ToolStripAccessibleObject_FragmentNavigate_FirstChild_ThumbButton()
         {
             using ToolStrip toolStrip = new ToolStrip();
+            toolStrip.CreateControl();
+
             var accessibleObject = toolStrip.AccessibilityObject;
 
             UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
