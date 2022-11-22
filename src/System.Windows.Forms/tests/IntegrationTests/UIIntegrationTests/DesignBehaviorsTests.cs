@@ -309,7 +309,7 @@ namespace System.Windows.Forms.UITests
 
             protected override void PerformLoad(IDesignerSerializationManager serializationManager)
             {
-                if (LoaderHost == null)
+                if (LoaderHost is null)
                     return;
 
                 ArrayList errors = new();

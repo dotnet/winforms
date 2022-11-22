@@ -91,7 +91,7 @@ namespace DesignSurfaceExt
                 //- if we are not not able to get it
                 //- then rollback (return without do nothing)
                 IDesignerHost host = GetIDesignerHost();
-                if (null == host)
+                if (host is null)
                     return null;
                 //- check if the root component has already been set
                 //- if so then rollback (return without do nothing)
@@ -161,7 +161,7 @@ namespace DesignSurfaceExt
             {
                 //- step.1
                 IComponent newComp = CreateComponent<TControl>(out IDesignerHost host);
-                if (null == newComp)
+                if (newComp is null)
                     return null;
 
                 //-
@@ -206,11 +206,11 @@ namespace DesignSurfaceExt
                 //- if we are not able to get it
                 //- then rollback (return without do nothing)
                 host = GetIDesignerHost();
-                if (null == host)
+                if (host is null)
                     return default;
                 //- check if the root component has already been set
                 //- if not so then rollback (return without do nothing)
-                if (null == host.RootComponent)
+                if (host.RootComponent is null)
                     return default;
                 //-
                 //-
@@ -220,10 +220,10 @@ namespace DesignSurfaceExt
                 //- then rollback (return without do nothing)
                 //- else do the initialization
                 IComponent newComp = host.CreateComponent(typeof(TComponent));
-                if (null == newComp)
+                if (newComp is null)
                     return default;
                 IDesigner designer = host.GetDesigner(newComp);
-                if (null == designer)
+                if (designer is null)
                     return default;
                 if (designer is IComponentInitializer)
                     ((IComponentInitializer)designer).InitializeNewComponent(null);

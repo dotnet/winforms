@@ -2338,9 +2338,9 @@ namespace System.Windows.Forms.Tests
             Assert.True(element1 == element1);
             Assert.True(element1 == element2);
             Assert.False(element1 == element3);
-            Assert.False((HtmlElement)null == element1);
-            Assert.False(element1 == (HtmlElement)null);
-            Assert.True((HtmlElement)null == (HtmlElement)null);
+            Assert.False(element1 is null);
+            Assert.False((HtmlElement)null is null);
+            Assert.True((HtmlElement)null is null);
         }
 
         [WinFormsFact]
