@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildAssist\BuildAssist.msbuildproj" />
     <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />
@@ -27,6 +28,15 @@
   <ItemGroup>
     <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
     <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(TargetFramework)\System.Drawing.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AxInterop.WMPLib">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\AxInterop.WMPLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.WMPLib">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\Interop.WMPLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

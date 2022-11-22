@@ -942,14 +942,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (hr == HRESULT.E_ABORT || hr == HRESULT.OLE_E_PROMPTSAVECANCELLED)
-            {
-                return;
-            }
-            else if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
+            if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
             {
                 OnValueChanged(component, EventArgs.Empty);
                 _lastValue = value;
+                return;
+            }
+
+            if (hr == HRESULT.E_ABORT || hr == HRESULT.OLE_E_PROMPTSAVECANCELLED)
+            {
+                // Cancelled checkout, etc.
+                return;
             }
 
             if (dispatch is Oleaut32.ISupportErrorInfo iSupportErrorInfo)

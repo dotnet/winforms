@@ -73,19 +73,5 @@ namespace Windows.Win32.Foundation
         /// </summary>
         internal static bool TryGetComPointer<T>(object? obj, out T* ppvObject) where T : unmanaged, IComIID
             => GetComPointer(obj, out ppvObject).Succeeded;
-
-        /// <summary>
-        ///  Helper to get a property value from an <see cref="IDispatch"/> interface.
-        /// </summary>
-        internal static HRESULT GetDispatchProperty(
-            IDispatch* dispatch,
-            uint dispId,
-            VARIANT* pVar,
-            uint lcid = 0)
-        {
-            Guid riid = Guid.Empty;
-            DISPPARAMS disparams = default;
-            return dispatch->Invoke((int)dispId, &riid, lcid, DISPATCH_FLAGS.DISPATCH_PROPERTYGET, &disparams, pVar, null, null);
-        }
     }
 }
