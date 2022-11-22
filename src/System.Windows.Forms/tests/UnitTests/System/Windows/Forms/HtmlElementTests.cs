@@ -2319,7 +2319,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, (HRESULT)ex.HResult);
         }
 
-#pragma warning disable CS1718, CSIsNull001, CSIsNull002 // Disable "Comparison made to same variable" warning.
+#pragma warning disable CS1718 // Disable "Comparison made to same variable" warning.
         [WinFormsFact]
         public async Task HtmlElement_OperatorEquals_Invoke_ReturnsExpected()
         {
@@ -2365,7 +2365,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(element1 != (HtmlElement)null);
             Assert.False((HtmlElement)null != (HtmlElement)null);
         }
-#pragma warning restore CS1718, CSIsNull001, CSIsNull002
+#pragma warning restore CS1718
 
         [WinFormsFact]
         public async Task HtmlElement_Click_InvokeEvent_Success()
