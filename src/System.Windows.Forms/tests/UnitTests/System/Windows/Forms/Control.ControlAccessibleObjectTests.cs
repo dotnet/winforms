@@ -1129,7 +1129,7 @@ namespace System.Windows.Forms.Tests
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
             Assert.Equal(createControl, ownerControl.IsHandleCreated);
             IAccessible iAccessible = accessibleObject;
-            Assert.Equal(createControl, iAccessible.accParent != null);
+            Assert.Equal(createControl, iAccessible.accParent is not null);
         }
 
         [WinFormsFact]

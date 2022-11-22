@@ -31,7 +31,7 @@ namespace TestConsole
             get
             {
                 string name = string.Empty;
-                if (_control != null)
+                if (_control is not null)
                 {
                     CustomButton control = _control;
                     name = control.Name;
@@ -48,7 +48,7 @@ namespace TestConsole
         private string GetActionName()
         {
             PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)[nameof(CustomButton.BackColor)];
-            if (dockProp != null)
+            if (dockProp is not null)
             {
                 Color backColor = (Color)dockProp.GetValue(Component);
                 if (backColor != Color.Yellow)

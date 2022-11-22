@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Metafiles
 
             EMREXTTEXTOUTW* textOut = record.ExtTextOutWRecord;
 
-            if (_text != null)
+            if (_text is not null)
             {
                 Assert.Equal(_text, textOut->emrtext.GetText().ToString());
             }

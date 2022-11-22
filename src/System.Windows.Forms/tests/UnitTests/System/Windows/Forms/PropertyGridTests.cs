@@ -3907,7 +3907,7 @@ namespace System.Windows.Forms.Tests
             object @object = new();
             propertyGrid.SelectedObject = @object;
             GridItem selectedItem = propertyGrid.SelectedGridItem;
-            Assert.True(selectedItem != null);
+            Assert.True(selectedItem is not null);
             Assert.Equal("System.Object", selectedItem.Label);
             Assert.IsAssignableFrom<IRootGridEntry>(selectedItem);
             SingleSelectRootGridEntry gridEntry = Assert.IsAssignableFrom<SingleSelectRootGridEntry>(selectedItem);

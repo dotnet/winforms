@@ -53,7 +53,7 @@ namespace WinformsControlsTest
                 MessageBox.Show("Image loading cancelled");
             }
 
-            if (e.Error != null)
+            if (e.Error is not null)
             {
                 MessageBox.Show(e.Error.Message, $"{e.Error.GetType().FullName} occurred");
             }
