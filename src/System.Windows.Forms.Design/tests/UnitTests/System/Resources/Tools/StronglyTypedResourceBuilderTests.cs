@@ -2,15 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
+using AxWMPLib;
 using Microsoft.CSharp;
 using Xunit;
-using System.CodeDom;
-using System.Reflection;
 
 namespace System.Resources.Tools.Tests;
 
@@ -574,6 +577,81 @@ public partial class StronglyTypedResourceBuilderTests
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
         ValidateResultAudio(GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
+    }
+
+    [WinFormsFact]
+    public static void StronglyTypedResourceBuilder_Create_OcxState_FromMemory()
+    {
+        TypeConverter converter = TypeDescriptor.GetConverter(typeof(AxHost.State));
+        Assert.Equal(typeof(TypeConverter), converter.GetType());
+
+        TypeDescriptionProvider parentProvider = TypeDescriptor.GetProvider(typeof(AxHost.State));
+        TypeDescriptionProvider newProvider = new AxHostStateTypeDescriptionProvider(parentProvider);
+        try
+        {
+            TypeDescriptor.AddProvider(newProvider, typeof(AxHost.State));
+            TypeConverter newConverter = TypeDescriptor.GetConverter(typeof(AxHost.State));
+            Assert.Equal(typeof(AxHost.StateConverter), newConverter.GetType());
+
+            using Form form = new();
+            using AxWindowsMediaPlayer mediaPlayer = new();
+            ((ISupportInitialize)mediaPlayer).BeginInit();
+            form.Controls.Add(mediaPlayer);
+            ((ISupportInitialize)mediaPlayer).EndInit();
+
+            string expectedUrl = $"{Path.GetTempPath()}testurl1";
+            mediaPlayer.URL = expectedUrl;
+
+            ResXDataNode node = new("MediaPlayer1", newConverter.ConvertTo(mediaPlayer.OcxState, typeof(byte[])));
+            using var temp = TempFile.Create();
+            using (ResXResourceWriter resxWriter = new(temp.Path))
+            {
+                resxWriter.AddResource(node);
+                resxWriter.Generate();
+            }
+
+            var compileUnit = StronglyTypedResourceBuilder.Create(
+                resxFile: temp.Path,
+                baseName: "Resources",
+                generatedCodeNamespace: "Namespace",
+                s_cSharpProvider,
+                internalClass: false,
+                out _);
+
+            using ResXResourceReader reader = new(temp.Path);
+            var mediaPlayerPropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "MediaPlayer1");
+            byte[] resourceByte = Assert.IsType<byte[]>(mediaPlayerPropertyInfo.GetValue(obj: null));
+            AxHost.State state = Assert.IsType<AxHost.State>(newConverter.ConvertFrom(resourceByte));
+
+            string changedUrl = $"{Path.GetTempPath()}testurl2";
+            mediaPlayer.URL = changedUrl;
+            Assert.Equal(changedUrl, mediaPlayer.URL);
+
+            mediaPlayer.OcxState = state;
+            Assert.Equal(expectedUrl, mediaPlayer.URL);
+        }
+        finally
+        {
+            TypeDescriptor.RemoveProvider(newProvider, typeof(AxHost.State));
+        }
+    }
+
+    public class AxHostStateTypeDescriptionProvider : TypeDescriptionProvider
+    {
+        public AxHostStateTypeDescriptionProvider(TypeDescriptionProvider parent) : base(parent)
+        {
+        }
+
+        public override ICustomTypeDescriptor GetTypeDescriptor(
+            [DynamicallyAccessedMembers((DynamicallyAccessedMemberTypes)(-1))] Type objectType,
+            object instance) => new TypeConverterProvider(base.GetTypeDescriptor(objectType, instance));
+
+        private class TypeConverterProvider : CustomTypeDescriptor
+        {
+            private static TypeConverter s_converter = new AxHost.StateConverter();
+            public TypeConverterProvider(ICustomTypeDescriptor parent) : base(parent) { }
+            public override TypeConverter GetConverter() => s_converter;
+        }
     }
 
     private static PropertyInfo GetPropertyInfo(

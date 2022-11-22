@@ -53,12 +53,11 @@ namespace System.Windows.Forms
                 _propertyBag = propertyBag;
             }
 
-            internal State(MemoryStream memoryStream)
-            {
-                _memoryStream = memoryStream;
-                _length = (int)memoryStream.Length;
-                InitializeFromStream(memoryStream);
-            }
+            // Construct State using StateConverter information.
+            // We do not want to save the memoryStream since it contains
+            // extra information to construct the State. This same scenario
+            // occurs in deserialization constructor.
+            internal State(MemoryStream memoryStream) => InitializeFromStream(memoryStream);
 
             // create on init new w/ storage...
             internal State(AxHost control)
