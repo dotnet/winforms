@@ -15,38 +15,15 @@ namespace System.Windows.Forms
         /// </summary>
         public class StateConverter : TypeConverter
         {
-            /// <summary>
-            ///  Gets a value indicating whether this converter can
-            ///  convert an object in the given source type to the native type of the converter
-            ///  using the context.
-            /// </summary>
+            /// <inheritdoc/>
             public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
-            {
-                if (sourceType == typeof(byte[]))
-                {
-                    return true;
-                }
+                => sourceType == typeof(byte[]) || base.CanConvertFrom(context, sourceType);
 
-                return base.CanConvertFrom(context, sourceType);
-            }
-
-            /// <summary>
-            ///  Gets a value indicating whether this converter can
-            ///  convert an object to the given destination type using the context.
-            /// </summary>
+            /// <inheritdoc/>
             public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
-            {
-                if (destinationType == typeof(byte[]))
-                {
-                    return true;
-                }
+                => destinationType == typeof(byte[]) || base.CanConvertTo(context, destinationType);
 
-                return base.CanConvertTo(context, destinationType);
-            }
-
-            /// <summary>
-            ///  Converts the given object to the converter's native type.
-            /// </summary>
+            /// <inheritdoc/>
             public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
             {
                 if (value is byte[] valueAsBytes)
@@ -58,30 +35,24 @@ namespace System.Windows.Forms
                 return base.ConvertFrom(context, culture, value);
             }
 
-            /// <summary>
-            ///  Converts the given object to another type.  The most common types to convert
-            ///  are to and from a string object.  The default implementation will make a call
-            ///  to ToString on the object if the object is valid and if the destination
-            ///  type is string.  If this cannot convert to the destination type, this will
-            ///  throw a NotSupportedException.
-            /// </summary>
+            /// <inheritdoc/>
             public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
             {
                 ArgumentNullException.ThrowIfNull(destinationType);
 
                 if (destinationType == typeof(byte[]))
                 {
-                    if (value is not null)
-                    {
-                        using MemoryStream ms = new MemoryStream();
-                        State state = (State)value;
-                        state.Save(ms);
-                        ms.Close();
-                        return ms.ToArray();
-                    }
-                    else
+                    if (value is null)
                     {
                         return Array.Empty<byte>();
+                    }
+
+                    if (value is State state)
+                    {
+                        using MemoryStream memoryStream = new();
+                        state.Save(memoryStream);
+                        memoryStream.Close();
+                        return memoryStream.ToArray();
                     }
                 }
 
