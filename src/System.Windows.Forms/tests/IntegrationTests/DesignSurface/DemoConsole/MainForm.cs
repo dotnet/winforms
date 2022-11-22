@@ -52,7 +52,7 @@ namespace TestConsole
         //- When the selection changes this sets the PropertyGrid's selected component
         private void OnSelectionChanged(object sender, System.EventArgs e)
         {
-            if (_selectionService == null)
+            if (_selectionService is null)
                 return;
 
             IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
@@ -215,7 +215,7 @@ namespace TestConsole
                 //- step.4
                 //- display the DesignSurface
                 Control view = surface.GetView();
-                if (null == view)
+                if (view is null)
                     return;
                 //- change some properties
                 view.Text = "Test Form N. " + n.ToString();

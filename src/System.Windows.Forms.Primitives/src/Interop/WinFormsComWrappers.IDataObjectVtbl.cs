@@ -40,8 +40,7 @@ internal partial class Interop
                 try
                 {
                     instance.GetData(ref *(ComTypes.FORMATETC*)format, out var medium);
-                    pMedium->pUnkForRelease = medium.pUnkForRelease == null
-                        ? null
+                    pMedium->pUnkForRelease = medium.pUnkForRelease is null ? null
                         : (IUnknown*)(void*)Marshal.GetIUnknownForObject(medium.pUnkForRelease);
                     pMedium->tymed = (TYMED)medium.tymed;
                     pMedium->Anonymous.hGlobal = medium.unionmember;

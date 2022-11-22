@@ -33,7 +33,7 @@ namespace System.Windows.Forms.UITests
 
         internal void ThrowIfSwitchOccurred()
         {
-            if (_failedTransfer.Value == null)
+            if (_failedTransfer.Value is null)
             {
                 return;
             }
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.UITests
         {
             try
             {
-                if (_failedTransfer.Value == null)
+                if (_failedTransfer.Value is null)
                 {
                     ThrowFailedTransferExceptionForCapture();
                 }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.UITests
         {
             try
             {
-                if (_failedTransfer.Value == null)
+                if (_failedTransfer.Value is null)
                 {
                     ThrowFailedTransferExceptionForCapture();
                 }

@@ -443,7 +443,7 @@ this is the third line.";
 
         public static object UiaGetReservedNotSupportedValue()
         {
-            if (notSupportedValue == null)
+            if (notSupportedValue is null)
             {
                 UiaGetReservedNotSupportedValue(out notSupportedValue);
             }
