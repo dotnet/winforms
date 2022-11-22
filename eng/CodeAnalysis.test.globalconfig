@@ -1883,3 +1883,9 @@ dotnet_diagnostic.xUnit3000.severity = warning
 
 # xUnit3001: Classes that implement Xunit.Abstractions.IXunitSerializable must have a public parameterless constructor
 dotnet_diagnostic.xUnit3001.severity = warning
+
+# CSIsNull001 to catch uses of == null
+dotnet_diagnostic.CSIsNull001.severity = warning
+
+# CSIsNull002 to catch uses of != null
+dotnet_diagnostic.CSIsNull002.severity = warning
