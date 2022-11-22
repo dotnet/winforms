@@ -856,12 +856,15 @@ namespace System.Windows.Forms.Layout
             }
 
             Debug.Assert(LocalAppContextSwitches.AnchorLayoutV2, $"AnchorLayoutV2 should be called only when {LocalAppContextSwitches.AnchorLayoutV2SwitchName} is enabled.");
-
             Control parent = control.Parent;
 
             // Check if control is ready for anchors calculation.
             if (parent is null
-                || parent.LayoutSuspendCount != 0)
+                // Design time scenarios suspend layout while deserializing the designer. This is an extra suspension
+                // outside of serialized source and happen only in design-time scenario. Hence, checking for
+                // LayoutSuspendCount > 1.
+                || (control.IsAncestorSiteInDesignMode && parent.LayoutSuspendCount > 1)
+                || (!control.IsAncestorSiteInDesignMode && parent.LayoutSuspendCount != 0))
             {
                 return;
             }
