@@ -442,6 +442,7 @@ RegisterDragDrop
 ReleaseCapture
 RestoreDC
 RevokeDragDrop
+REGDB_E_CLASSNOTREG
 RoundRect
 RPC_E_CHANGED_MODE
 SafeArrayGetRecordInfo

@@ -32,8 +32,11 @@ namespace System.Windows.Forms.Primitives.Tests.Interop
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public unsafe void FromLowHighUnsigned_x64_Result()
         {
-            Assert.Equal((long)0x0000000003040102, (long)PARAM.FromLowHighUnsigned(0x0102, 0x0304));
-            Assert.Equal((long)0x00000000F3F4F1F2, (long)PARAM.FromLowHighUnsigned(0xF1F2, 0xF3F4));
+            if (Environment.Is64BitProcess)
+            {
+                Assert.Equal((long)0x0000000003040102, (long)PARAM.FromLowHighUnsigned(0x0102, 0x0304));
+                Assert.Equal((long)0x00000000F3F4F1F2, (long)PARAM.FromLowHighUnsigned(0xF1F2, 0xF3F4));
+            }
         }
 
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]

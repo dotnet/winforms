@@ -1618,18 +1618,19 @@ namespace System.Windows.Forms.Tests
             original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
             using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp, out bool succeeded);
-
             Assert.True(succeeded);
+            IDispatch* dispatch = (IDispatch*)iPictureDisp.Value;
+
             using VARIANT variant = default;
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            dispatch->GetProperty(PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
             Assert.NotEqual(0u, variant.data.uintVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
+            dispatch->GetProperty(PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
             Assert.Equal(0u, variant.data.uintVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            dispatch->GetProperty(PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             Assert.Equal(1, variant.data.iVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            dispatch->GetProperty(PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
             Assert.Equal(265u, variant.data.uintVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            dispatch->GetProperty(PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
             Assert.Equal(291u, variant.data.uintVal);
 
             var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPictureDisp(disp));
@@ -1645,17 +1646,17 @@ namespace System.Windows.Forms.Tests
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
 
             using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp, out bool succeeded);
-
             Assert.True(succeeded);
+
             using VARIANT variant = default;
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
             Assert.NotEqual(0u, variant.data.uintVal);
-            Assert.True(ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).Failed);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            Assert.True(iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HPAL, &variant).Failed);
+            iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             Assert.Equal(4, variant.data.iVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
             Assert.Equal(19972u, variant.data.uintVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
             Assert.Equal(28332u, variant.data.uintVal);
 
             var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPictureDisp(disp));

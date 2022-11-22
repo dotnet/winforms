@@ -11,7 +11,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -3866,63 +3865,27 @@ namespace System.Windows.Forms
         }
 
         // Mapping functions:
-        private static PICTDESC GetPICTDESCFromPicture(Image image) => image switch
-        {
-            Bitmap bmp => PICTDESC.FromBitmap(bmp),
-            Metafile mf => PICTDESC.FromMetafile(mf),
-            _ => throw new ArgumentException(SR.AXUnknownImage, nameof(image))
-        };
 
         /// <summary>
         ///  Maps from a System.Drawing.Image to an OLE IPicture
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureFromPicture(Image image)
-        {
-            if (image is null)
-            {
-                return null;
-            }
-
-            PICTDESC pictdesc = GetPICTDESCFromPicture(image);
-            using ComScope<IPicture> picture = new(null);
-            PInvoke.OleCreatePictureIndirect(&pictdesc, IID.Get<IPicture>(), fOwn: true, picture).ThrowOnFailure();
-            return Marshal.GetObjectForIUnknown(picture);
-        }
+            => image is null ? null : IPicture.CreateObjectFromImage(image);
 
         /// <summary>
         ///  Maps from a System.Drawing.Cursor to an OLE IPicture
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureFromCursor(Cursor cursor)
-        {
-            if (cursor is null)
-            {
-                return null;
-            }
-
-            PICTDESC desc = PICTDESC.FromIcon(Icon.FromHandle(cursor.Handle), copy: true);
-            using ComScope<IPicture> picture = new(null);
-            PInvoke.OleCreatePictureIndirect(&desc, IID.Get<IPicture>(), fOwn: true, picture).ThrowOnFailure();
-            return Marshal.GetObjectForIUnknown(picture);
-        }
+            => cursor is null ? null : IPicture.CreateObjectFromIcon(Icon.FromHandle(cursor.Handle), copy: true);
 
         /// <summary>
         ///  Maps from a System.Drawing.Image to an OLE IPictureDisp
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureDispFromPicture(Image image)
-        {
-            if (image is null)
-            {
-                return null;
-            }
-
-            PICTDESC desc = GetPICTDESCFromPicture(image);
-            using ComScope<IPictureDisp> pictureDisp = new(null);
-            PInvoke.OleCreatePictureIndirect(&desc, IID.Get<IPictureDisp>(), fOwn: true, pictureDisp).ThrowOnFailure();
-            return Marshal.GetObjectForIUnknown(pictureDisp);
-        }
+            => image is null ? null : IPictureDisp.CreateObjectFromImage(image);
 
         /// <summary>
         ///  Maps from an OLE IPicture to a System.Drawing.Image
@@ -3935,15 +3898,17 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            OLE_HANDLE paletteHandle = default;
-            IPicture.Interface iPicture = (IPicture.Interface)picture;
-            PICTYPE type = (PICTYPE)iPicture.Type;
-            if (type == PICTYPE.PICTYPE_BITMAP)
-            {
-                iPicture.get_hPal(&paletteHandle);
-            }
+            using var iPicture = ComHelpers.GetComScope<IPictureDisp>(picture, out HRESULT hr);
+            hr.ThrowOnFailure();
 
-            return GetPictureFromParams(iPicture.Handle, type, paletteHandle, iPicture.Width, iPicture.Height);
+            try
+            {
+                return iPicture.Value->ToImage();
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException(SR.AXUnknownImage, nameof(picture));
+            }
         }
 
         /// <summary>
@@ -3957,69 +3922,16 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            OLE_HANDLE paletteHandle = default;
-            using var pict = ComHelpers.GetComScope<IDispatch>(picture, out HRESULT hr);
+            using var pictureDisp = ComHelpers.GetComScope<IPictureDisp>(picture, out HRESULT hr);
             hr.ThrowOnFailure();
-            using VARIANT variant = default;
-            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
-            PICTYPE type = (PICTYPE)variant.data.iVal;
-            if (type == PICTYPE.PICTYPE_BITMAP)
+
+            try
             {
-                ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
-                paletteHandle = (OLE_HANDLE)variant.data.uintVal;
+                return pictureDisp.Value->ToImage();
             }
-
-            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
-            OLE_HANDLE handle = (OLE_HANDLE)variant.data.uintVal;
-
-            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
-            int width = variant.data.intVal;
-
-            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
-            int height = variant.data.intVal;
-
-            return GetPictureFromParams(handle, type, paletteHandle, width, height);
-        }
-
-        private static Image GetPictureFromParams(
-            OLE_HANDLE handle,
-            PICTYPE type,
-            OLE_HANDLE paletteHandle,
-            int width,
-            int height)
-        {
-            switch (type)
+            catch (InvalidOperationException)
             {
-                case PICTYPE.PICTYPE_ICON:
-                    return (Image)(Icon.FromHandle((HICON)handle).Clone());
-                case PICTYPE.PICTYPE_METAFILE:
-                    WmfPlaceableFileHeader header = new WmfPlaceableFileHeader
-                    {
-                        BboxRight = (short)width,
-                        BboxBottom = (short)height
-                    };
-
-                    using (var metafile = new Metafile((HMETAFILE)handle, header, deleteWmf: false))
-                    {
-                        return (Image)metafile.Clone();
-                    }
-
-                case PICTYPE.PICTYPE_ENHMETAFILE:
-                    using (var metafile = new Metafile((HENHMETAFILE)handle, deleteEmf: false))
-                    {
-                        return (Image)metafile.Clone();
-                    }
-
-                case PICTYPE.PICTYPE_BITMAP:
-                    return Image.FromHbitmap((HBITMAP)handle, (HPALETTE)paletteHandle);
-                case PICTYPE.PICTYPE_NONE:
-                    // MSDN says this should not be a valid value, but comctl32 returns it.
-                    return null;
-                case PICTYPE.PICTYPE_UNINITIALIZED:
-                    return null;
-                default:
-                    Debug.Fail($"Invalid image type {type}");
-                    throw new ArgumentException(SR.AXUnknownImage, nameof(type));
+                throw new ArgumentException(SR.AXUnknownImage, nameof(picture));
             }
         }
 
