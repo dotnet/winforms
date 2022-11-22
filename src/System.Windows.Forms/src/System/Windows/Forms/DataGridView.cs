@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -351,7 +350,7 @@ namespace System.Windows.Forms
 
         private Timer _vertScrollTimer, _horizScrollTimer;
 
-        private readonly Hashtable _converters;
+        private readonly Dictionary<Type, TypeConverter> _converters;
         private static Color s_defaultBackColor = SystemColors.Window;
         private static Color s_defaultBackgroundColor = SystemColors.ControlDark;
         private Color _backgroundColor = s_defaultBackgroundColor;
@@ -413,7 +412,7 @@ namespace System.Windows.Forms
             DisplayedBandsInfo = new DisplayedBandsData();
             _lstRows = new List<DataGridViewRow>();
 
-            _converters = new Hashtable(8);
+            _converters = new(8);
             GridPenColor = DefaultGridColor;
 
             _selectedBandIndexes = new DataGridViewIntLinkedList();
