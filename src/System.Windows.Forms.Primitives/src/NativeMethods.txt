@@ -352,6 +352,7 @@ IsAccelerator
 IsAppThemed
 IsChild
 IShellItem
+ISpecifyPropertyPages
 IsProcessDPIAware
 IsThemeBackgroundPartiallyTransparent
 IsThemePartDefined
@@ -398,6 +399,7 @@ LVSIL_*
 LVTILEVIEWINFO_FLAGS
 LVTILEVIEWINFO_MASK
 MapWindowPoints
+MEMBERID_NIL
 MessageBeep
 MCGRIDINFO_FLAGS
 MCGRIDINFO_PART
@@ -431,6 +433,7 @@ OLE_E_INVALIDRECT
 OLE_E_NOCONNECTION
 OLE_E_PROMPTSAVECANCELLED
 OleCreatePictureIndirect
+OleCreatePropertyFrame
 OleFlushClipboard
 OleInitialize
 OleUninitialize

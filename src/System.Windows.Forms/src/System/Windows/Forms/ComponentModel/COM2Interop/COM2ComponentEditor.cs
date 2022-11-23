@@ -5,9 +5,8 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using static Interop;
-using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -19,26 +18,26 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 // Check for a property page.
                 Guid guid = Guid.Empty;
-                HRESULT hr = perPropertyBrowsing.MapPropertyToPage((int)DispatchID.MEMBERID_NIL, &guid);
+                HRESULT hr = perPropertyBrowsing.MapPropertyToPage(PInvoke.MEMBERID_NIL, &guid);
                 if (hr.Succeeded && !guid.Equals(Guid.Empty))
                 {
                     return true;
                 }
             }
 
-            if (comObject is ISpecifyPropertyPages ispp)
+            if (comObject is ISpecifyPropertyPages.Interface ispp)
             {
-                CAUUID uuids = default;
+                CAUUID pages = default;
                 try
                 {
-                    HRESULT hr = ispp.GetPages(&uuids);
-                    return hr.Succeeded && uuids.cElems > 0;
+                    HRESULT hr = ispp.GetPages(&pages);
+                    return hr.Succeeded && pages.cElems > 0;
                 }
                 finally
                 {
-                    if (uuids.pElems is not null)
+                    if (pages.pElems is not null)
                     {
-                        Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
+                        Marshal.FreeCoTaskMem((IntPtr)pages.pElems);
                     }
                 }
             }
@@ -48,35 +47,36 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public override unsafe bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
         {
-            IntPtr handle = (parent is null ? IntPtr.Zero : parent.Handle);
+            HWND handle = parent is null ? HWND.Null : (HWND)parent.Handle;
 
             // Try to get the page guid
             if (obj is IPerPropertyBrowsing.Interface perPropertyBrowsing)
             {
                 // Check for a property page.
                 Guid guid = Guid.Empty;
-                HRESULT hr = perPropertyBrowsing.MapPropertyToPage((int)DispatchID.MEMBERID_NIL, &guid);
+                HRESULT hr = perPropertyBrowsing.MapPropertyToPage(PInvoke.MEMBERID_NIL, &guid);
                 if (hr.Succeeded & !guid.Equals(Guid.Empty))
                 {
                     IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
                     try
                     {
-                        Oleaut32.OleCreatePropertyFrame(
-                            new HandleRef(parent, handle),
+                        PInvoke.OleCreatePropertyFrame(
+                            handle,
                             0,
                             0,
                             "PropertyPages",
                             1,
-                            &pUnk,
+                            (IUnknown**)(void**)&pUnk,
                             1,
-                            &guid,
+                            in guid,
                             PInvoke.GetThreadLocale(),
                             0,
-                            IntPtr.Zero);
+                            null);
                         return true;
                     }
                     finally
                     {
+                        GC.KeepAlive(parent);
                         Marshal.Release(pUnk);
                     }
                 }
@@ -96,22 +96,24 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
                     try
                     {
-                        Oleaut32.OleCreatePropertyFrame(
-                            new HandleRef(parent, handle),
+                        Guid guid = *uuids.pElems;
+                        PInvoke.OleCreatePropertyFrame(
+                            handle,
                             0,
                             0,
                             "PropertyPages",
                             1,
-                            &pUnk,
+                            (IUnknown**)(void**)pUnk,
                             uuids.cElems,
-                            uuids.pElems,
+                            guid,
                             PInvoke.GetThreadLocale(),
                             0,
-                            IntPtr.Zero);
+                            null);
                         return true;
                     }
                     finally
                     {
+                        GC.KeepAlive(parent);
                         Marshal.Release(pUnk);
                         if (uuids.pElems is not null)
                         {

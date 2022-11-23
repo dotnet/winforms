@@ -15,7 +15,7 @@ internal unsafe class ComClassFactory : IDisposable
     private readonly string _filePath;
     public Guid ClassId { get; }
     private readonly HINSTANCE _instance;
-    private readonly IClassFactory* _classFactory;
+    private AgileComPointer<IClassFactory> _classFactory;
 
     private const string ExportMethodName = "DllGetClassObject";
 
@@ -23,6 +23,8 @@ internal unsafe class ComClassFactory : IDisposable
         string filePath,
         Guid classId)
     {
+        HRESULT result = PInvoke.OleInitialize(pvReserved: (void*)null);
+
         _filePath = filePath;
         ClassId = classId;
         _instance = PInvoke.LoadLibraryEx(filePath, HANDLE.Null, default);
@@ -30,6 +32,8 @@ internal unsafe class ComClassFactory : IDisposable
         {
             throw new Win32Exception();
         }
+
+        string name = PInvoke.GetModuleFileNameLongPath(_instance);
 
         // Dynamically get the class factory method.
 
@@ -44,7 +48,7 @@ internal unsafe class ComClassFactory : IDisposable
         ((delegate* unmanaged<Guid*, Guid*, void**, HRESULT>)proc.Value)(
             &classId, IID.Get<IClassFactory>(),
             (void**)&classFactory).ThrowOnFailure();
-        _classFactory = classFactory;
+        _classFactory = new(classFactory);
     }
 
     internal HRESULT CreateInstance(out IUnknown* unknown)
@@ -52,20 +56,21 @@ internal unsafe class ComClassFactory : IDisposable
         unknown = default;
         fixed (IUnknown** u = &unknown)
         {
-            return _classFactory->CreateInstance(null, IID.Get<IUnknown>(), (void**)u);
+            using var factory = _classFactory.GetInterface();
+            return factory.Value->CreateInstance(null, IID.Get<IUnknown>(), (void**)u);
         }
     }
 
     internal HRESULT CreateInstance(out object unknown)
     {
         HRESULT result = CreateInstance(out IUnknown* punk);
-        unknown = punk is null ? null : Marshal.GetObjectForIUnknown((nint)punk);
+        unknown = result.Failed || punk is null ? null : Marshal.GetObjectForIUnknown((nint)punk);
         return result;
     }
 
     public void Dispose()
     {
-        _classFactory->Release();
+        _classFactory.Dispose();
         PInvoke.FreeLibrary(_instance);
     }
 }

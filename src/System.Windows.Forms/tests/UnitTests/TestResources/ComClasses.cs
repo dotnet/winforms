@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests.TestResources;
 
 internal static class ComClasses
 {
-    public static ComClassFactory? VisualBasicSimpleControl { get; }
+    internal static ComClassFactory? VisualBasicSimpleControl { get; }
         = RuntimeInformation.ProcessArchitecture == Architecture.X86
             ? new ComClassFactory(
                 // This is actually a .ocx
