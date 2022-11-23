@@ -1744,7 +1744,7 @@ dotnet_diagnostic.IDE2003.severity = silent
 dotnet_diagnostic.IDE2004.severity = silent
 
 # CSIsNull001 to catch uses of == null
-dotnet_diagnostic.CSIsNull001.severity = suggestion
+dotnet_diagnostic.CSIsNull001.severity = warning
 
 # CSIsNull002 to catch uses of != null
-dotnet_diagnostic.CSIsNull002.severity = suggestion
+dotnet_diagnostic.CSIsNull002.severity = warning
