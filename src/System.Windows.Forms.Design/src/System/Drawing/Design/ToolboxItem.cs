@@ -348,8 +348,7 @@ namespace System.Drawing.Design
         /// </summary>
         protected virtual IComponent[] CreateComponentsCore(IDesignerHost host)
         {
-            ArrayList comps = new ArrayList();
-
+            List<IComponent> comps = new();
             Type createType = GetType(host, AssemblyName, TypeName, true);
             if (createType is not null)
             {
@@ -359,13 +358,11 @@ namespace System.Drawing.Design
                 }
                 else if (typeof(IComponent).IsAssignableFrom(createType))
                 {
-                    comps.Add(TypeDescriptor.CreateInstance(null, createType, null, null));
+                    comps.Add((IComponent)TypeDescriptor.CreateInstance(null, createType, null, null));
                 }
             }
 
-            IComponent[] temp = new IComponent[comps.Count];
-            comps.CopyTo(temp, 0);
-            return temp;
+            return comps.ToArray();
         }
 
         /// <summary>
@@ -723,7 +720,7 @@ namespace System.Drawing.Design
                     }
 
                     bool filterContainsType = false;
-                    ArrayList array = new ArrayList();
+                    List<ToolboxItemFilterAttribute> array = new();
                     foreach (Attribute a in TypeDescriptor.GetAttributes(type))
                     {
                         if (a is ToolboxItemFilterAttribute ta)
@@ -742,7 +739,7 @@ namespace System.Drawing.Design
                         array.Add(new ToolboxItemFilterAttribute(TypeName));
                     }
 
-                    Filter = (ToolboxItemFilterAttribute[])array.ToArray(typeof(ToolboxItemFilterAttribute));
+                    Filter = array.ToArray();
                 }
             }
         }
@@ -823,14 +820,14 @@ namespace System.Drawing.Design
             }
 
             info.AddValue(nameof(Locked), Locked);
-            ArrayList propertyNames = new ArrayList(Properties.Count);
+            List<string> propertyNames = new(Properties.Count);
             foreach (DictionaryEntry de in Properties)
             {
-                propertyNames.Add(de.Key);
+                propertyNames.Add((string)de.Key);
                 info.AddValue((string)de.Key, de.Value);
             }
 
-            info.AddValue("PropertyNames", (string[])propertyNames.ToArray(typeof(string)));
+            info.AddValue("PropertyNames", propertyNames.ToArray());
         }
 
         /// <summary>
