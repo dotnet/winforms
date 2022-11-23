@@ -335,7 +335,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var imagePropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
+        var imagePropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
         using Bitmap expected = (Bitmap)Image.FromFile(@"Resources\Image1.png");
         ValidateResultBitmap(imagePropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Bitmap)));
     }
@@ -364,7 +364,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var imagePropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
+        var imagePropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
         ValidateResultBitmap(imagePropertyInfo, bitmap, converter);
     }
 
@@ -391,7 +391,7 @@ public partial class StronglyTypedResourceBuilderTests
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        var imagePropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
+        var imagePropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
         using Bitmap expected = (Bitmap)Image.FromFile(@"Resources\Image1.png");
         ValidateResultBitmap(imagePropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Bitmap)));
     }
@@ -416,7 +416,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var iconPropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
+        var iconPropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
         using Icon expected = new(@"Resources\Icon1.ico");
         ValidateResultIcon(iconPropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Icon)));
     }
@@ -444,7 +444,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var iconPropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
+        var iconPropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
         ValidateResultIcon(iconPropertyInfo, icon, converter);
     }
 
@@ -471,7 +471,7 @@ public partial class StronglyTypedResourceBuilderTests
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        var iconPropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
+        var iconPropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
         using Icon expected = new(@"Resources\Icon1.ico");
         ValidateResultIcon(iconPropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Icon)));
     }
@@ -497,7 +497,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        ValidateResultTxtFileContent(GetPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
+        ValidateResultTxtFileContent(compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
     }
 
     [Fact]
@@ -527,7 +527,7 @@ public partial class StronglyTypedResourceBuilderTests
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        ValidateResultTxtFileContent(GetPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
+        ValidateResultTxtFileContent(compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
     }
 
     [Fact]
@@ -550,7 +550,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        ValidateResultAudio(GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
+        ValidateResultAudio(compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
     }
 
     [Fact]
@@ -576,64 +576,56 @@ public partial class StronglyTypedResourceBuilderTests
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        ValidateResultAudio(GetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
+        ValidateResultAudio(compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
     }
 
     [WinFormsFact]
-    public static void StronglyTypedResourceBuilder_Create_OcxState_FromMemory()
+    public static void StronglyTypedResourceBuilder_Create_AxHost_FromMemory_SerializeWith_StateConverter()
     {
+        // AxHost.StateConverter is not properly registered as a converter for AxHost.State.
+        // Temporarily register StateConverter as State's converter and test serialization.
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(AxHost.State));
         Assert.Equal(typeof(TypeConverter), converter.GetType());
+        using var scope = CustomConverter.RegisterConverter(typeof(AxHost.State), new AxHost.StateConverter());
+        converter = TypeDescriptor.GetConverter(typeof(AxHost.State));
+        Assert.Equal(typeof(AxHost.StateConverter), converter.GetType());
 
-        TypeDescriptionProvider parentProvider = TypeDescriptor.GetProvider(typeof(AxHost.State));
-        TypeDescriptionProvider newProvider = new AxHostStateTypeDescriptionProvider(parentProvider);
-        try
+        using Form form = new();
+        using AxWindowsMediaPlayer mediaPlayer = new();
+        ((ISupportInitialize)mediaPlayer).BeginInit();
+        form.Controls.Add(mediaPlayer);
+        ((ISupportInitialize)mediaPlayer).EndInit();
+
+        string expectedUrl = $"{Path.GetTempPath()}testurl1";
+        mediaPlayer.URL = expectedUrl;
+
+        ResXDataNode node = new("MediaPlayer1", converter.ConvertTo(mediaPlayer.OcxState, typeof(byte[])));
+        using var temp = TempFile.Create();
+        using (ResXResourceWriter resxWriter = new(temp.Path))
         {
-            TypeDescriptor.AddProvider(newProvider, typeof(AxHost.State));
-            TypeConverter newConverter = TypeDescriptor.GetConverter(typeof(AxHost.State));
-            Assert.Equal(typeof(AxHost.StateConverter), newConverter.GetType());
-
-            using Form form = new();
-            using AxWindowsMediaPlayer mediaPlayer = new();
-            ((ISupportInitialize)mediaPlayer).BeginInit();
-            form.Controls.Add(mediaPlayer);
-            ((ISupportInitialize)mediaPlayer).EndInit();
-
-            string expectedUrl = $"{Path.GetTempPath()}testurl1";
-            mediaPlayer.URL = expectedUrl;
-
-            ResXDataNode node = new("MediaPlayer1", newConverter.ConvertTo(mediaPlayer.OcxState, typeof(byte[])));
-            using var temp = TempFile.Create();
-            using (ResXResourceWriter resxWriter = new(temp.Path))
-            {
-                resxWriter.AddResource(node);
-                resxWriter.Generate();
-            }
-
-            var compileUnit = StronglyTypedResourceBuilder.Create(
-                resxFile: temp.Path,
-                baseName: "Resources",
-                generatedCodeNamespace: "Namespace",
-                s_cSharpProvider,
-                internalClass: false,
-                out _);
-
-            using ResXResourceReader reader = new(temp.Path);
-            var mediaPlayerPropertyInfo = GetPropertyInfo(reader.GetEnumerator(), compileUnit, "MediaPlayer1");
-            byte[] resourceByte = Assert.IsType<byte[]>(mediaPlayerPropertyInfo.GetValue(obj: null));
-            AxHost.State state = Assert.IsType<AxHost.State>(newConverter.ConvertFrom(resourceByte));
-
-            string changedUrl = $"{Path.GetTempPath()}testurl2";
-            mediaPlayer.URL = changedUrl;
-            Assert.Equal(changedUrl, mediaPlayer.URL);
-
-            mediaPlayer.OcxState = state;
-            Assert.Equal(expectedUrl, mediaPlayer.URL);
+            resxWriter.AddResource(node);
+            resxWriter.Generate();
         }
-        finally
-        {
-            TypeDescriptor.RemoveProvider(newProvider, typeof(AxHost.State));
-        }
+
+        var compileUnit = StronglyTypedResourceBuilder.Create(
+            resxFile: temp.Path,
+            baseName: "Resources",
+            generatedCodeNamespace: "Namespace",
+            s_cSharpProvider,
+            internalClass: false,
+            out _);
+
+        using ResXResourceReader reader = new(temp.Path);
+        var mediaPlayerPropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "MediaPlayer1");
+        byte[] resourceByte = Assert.IsType<byte[]>(mediaPlayerPropertyInfo.GetValue(obj: null));
+        AxHost.State state = Assert.IsType<AxHost.State>(converter.ConvertFrom(resourceByte));
+
+        string changedUrl = $"{Path.GetTempPath()}testurl2";
+        mediaPlayer.URL = changedUrl;
+        Assert.Equal(changedUrl, mediaPlayer.URL);
+
+        mediaPlayer.OcxState = state;
+        Assert.Equal(expectedUrl, mediaPlayer.URL);
     }
 
     public class AxHostStateTypeDescriptionProvider : TypeDescriptionProvider
@@ -654,16 +646,18 @@ public partial class StronglyTypedResourceBuilderTests
         }
     }
 
-    private static PropertyInfo GetPropertyInfo(
-        IDictionaryEnumerator enumerator,
+    // Utilizes ResourceWriter to save the resources and gets the specified
+    // PropertyInfo.
+    private static PropertyInfo compileAndGetPropertyInfo(
+        IDictionaryEnumerator resources,
         CodeCompileUnit compileUnit,
         string propertyName)
     {
         using MemoryStream resourceStream = new();
         using ResourceWriter resourceWriter = new(resourceStream);
-        while (enumerator.MoveNext())
+        while (resources.MoveNext())
         {
-            resourceWriter.AddResource((string)enumerator.Key, enumerator.Value);
+            resourceWriter.AddResource((string)resources.Key, resources.Value);
         }
 
         resourceWriter.Generate();

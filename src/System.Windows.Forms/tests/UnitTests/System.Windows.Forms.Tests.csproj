@@ -36,6 +36,9 @@
     <Content Include="bitmaps\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="..\AxHosts\AxHosts.resx" Link="Resources\AxHosts.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <EmbeddedResource Include="bitmaps\10x16_one_entry_32bit.ico">
       <LogicalName>System.Windows.Forms.Design.Tests.CustomPropertyTab</LogicalName>
     </EmbeddedResource>
@@ -54,6 +57,10 @@
     <Reference Include="Interop.WMPLib">
       <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\Interop.WMPLib.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>
