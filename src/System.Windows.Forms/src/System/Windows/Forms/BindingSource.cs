@@ -90,7 +90,7 @@ namespace System.Windows.Forms
             _dataMember = dataMember;
 
             // Set inner list to something, so that the currency manager doesn't have an issue.
-            _innerList = new ArrayList();
+            _innerList = new List<object>();
 
             // Set up the currency manager
             _currencyManager = new CurrencyManager(this);
@@ -980,7 +980,7 @@ namespace System.Windows.Forms
                 return new ListSortDescriptionCollection();
             }
 
-            ArrayList sorts = new ArrayList();
+            List<ListSortDescription> sorts = new();
             PropertyDescriptorCollection props = _currencyManager.GetItemProperties();
 
             string[] split = sortString.Split(new char[] { ',' });
@@ -1004,14 +1004,9 @@ namespace System.Windows.Forms
                 // Handle brackets
                 if (current.StartsWith("["))
                 {
-                    if (current.EndsWith("]"))
-                    {
-                        current = current.Substring(1, current.Length - 2);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(SR.BindingSourceBadSortString);
-                    }
+                    current = current.EndsWith("]")
+                        ? current.Substring(1, current.Length - 2)
+                        : throw new ArgumentException(SR.BindingSourceBadSortString);
                 }
 
                 // Find the property
@@ -1025,9 +1020,7 @@ namespace System.Windows.Forms
                 sorts.Add(new ListSortDescription(prop, ascending ? ListSortDirection.Ascending : ListSortDirection.Descending));
             }
 
-            ListSortDescription[] result = new ListSortDescription[sorts.Count];
-            sorts.CopyTo(result);
-            return new ListSortDescriptionCollection(result);
+            return new ListSortDescriptionCollection(sorts.ToArray());
         }
 
         public void RemoveCurrent()
