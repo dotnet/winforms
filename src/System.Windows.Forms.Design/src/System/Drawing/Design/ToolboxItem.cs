@@ -80,12 +80,7 @@ namespace System.Drawing.Design
             get
             {
                 AssemblyName[] names = (AssemblyName[])Properties["DependentAssemblies"];
-                if (names is not null)
-                {
-                    return (AssemblyName[])names.Clone();
-                }
-
-                return null;
+                return names is not null ? (AssemblyName[])names.Clone() : null;
             }
             set
             {
@@ -348,8 +343,7 @@ namespace System.Drawing.Design
         /// </summary>
         protected virtual IComponent[] CreateComponentsCore(IDesignerHost host)
         {
-            ArrayList comps = new ArrayList();
-
+            List<IComponent> comps = new();
             Type createType = GetType(host, AssemblyName, TypeName, true);
             if (createType is not null)
             {
@@ -359,13 +353,11 @@ namespace System.Drawing.Design
                 }
                 else if (typeof(IComponent).IsAssignableFrom(createType))
                 {
-                    comps.Add(TypeDescriptor.CreateInstance(null, createType, null, null));
+                    comps.Add((IComponent)TypeDescriptor.CreateInstance(provider: null, createType, argTypes: null, args: null));
                 }
             }
 
-            IComponent[] temp = new IComponent[comps.Count];
-            comps.CopyTo(temp, 0);
-            return temp;
+            return comps.ToArray();
         }
 
         /// <summary>
@@ -723,7 +715,7 @@ namespace System.Drawing.Design
                     }
 
                     bool filterContainsType = false;
-                    ArrayList array = new ArrayList();
+                    List<ToolboxItemFilterAttribute> filterItems = new();
                     foreach (Attribute a in TypeDescriptor.GetAttributes(type))
                     {
                         if (a is ToolboxItemFilterAttribute ta)
@@ -733,16 +725,16 @@ namespace System.Drawing.Design
                                 filterContainsType = true;
                             }
 
-                            array.Add(ta);
+                            filterItems.Add(ta);
                         }
                     }
 
                     if (!filterContainsType)
                     {
-                        array.Add(new ToolboxItemFilterAttribute(TypeName));
+                        filterItems.Add(new ToolboxItemFilterAttribute(TypeName));
                     }
 
-                    Filter = (ToolboxItemFilterAttribute[])array.ToArray(typeof(ToolboxItemFilterAttribute));
+                    Filter = filterItems.ToArray();
                 }
             }
         }
@@ -823,14 +815,14 @@ namespace System.Drawing.Design
             }
 
             info.AddValue(nameof(Locked), Locked);
-            ArrayList propertyNames = new ArrayList(Properties.Count);
+            List<string> propertyNames = new(Properties.Count);
             foreach (DictionaryEntry de in Properties)
             {
-                propertyNames.Add(de.Key);
+                propertyNames.Add((string)de.Key);
                 info.AddValue((string)de.Key, de.Value);
             }
 
-            info.AddValue("PropertyNames", (string[])propertyNames.ToArray(typeof(string)));
+            info.AddValue("PropertyNames", propertyNames.ToArray());
         }
 
         /// <summary>
@@ -1011,12 +1003,9 @@ namespace System.Drawing.Design
             {
                 ArgumentNullException.ThrowIfNull(key);
 
-                if (!(key is string propertyName) || propertyName.Length == 0)
-                {
-                    throw new ArgumentException(SR.ToolboxItemInvalidKey, nameof(key));
-                }
-
-                return propertyName;
+                return !(key is string propertyName) || propertyName.Length == 0
+                    ? throw new ArgumentException(SR.ToolboxItemInvalidKey, nameof(key))
+                    : propertyName;
             }
 
             public override void Remove(object key)
