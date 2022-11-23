@@ -299,12 +299,12 @@ namespace System.Windows.Forms.Design
             HashSet<Control> itemHash = new(sel.Count);
             foreach (object obj in sel)
             {
-                if (obj is not Control c || c.Site is null)
+                if (obj is not Control control || control.Site is null)
                 {
                     return false;
                 }
 
-                itemHash.Add(c);
+                itemHash.Add(control);
             }
 
             Control okParent = null;
