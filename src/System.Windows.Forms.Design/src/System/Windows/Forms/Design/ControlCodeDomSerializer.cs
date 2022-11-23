@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
@@ -31,11 +30,11 @@ namespace System.Windows.Forms.Design
 
             //Attempt to suspend all components within the icontainer
             IContainer container = (IContainer)manager.GetService(typeof(IContainer));
-            ArrayList suspendedComponents = null;
+            List<Control> suspendedComponents = null;
 
             if (container is not null)
             {
-                suspendedComponents = new ArrayList(container.Components.Count);
+                suspendedComponents = new(container.Components.Count);
 
                 foreach (IComponent comp in container.Components)
                 {
