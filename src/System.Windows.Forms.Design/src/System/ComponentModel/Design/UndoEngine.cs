@@ -1009,9 +1009,9 @@ namespace System.ComponentModel.Design
                             if (UndoEngine.GetService(typeof(ISelectionService)) is ISelectionService ss)
                             {
                                 List<IComponent> list = new(_lastSelection.Keys.Count);
-                                foreach (string name in _lastSelection.Keys)
+                                foreach ((string name, IContainer container) in _lastSelection)
                                 {
-                                    IComponent comp = _lastSelection[name].Components[name];
+                                    IComponent comp = container.Components[name];
                                     if (comp is not null)
                                     {
                                         list.Add(comp);
