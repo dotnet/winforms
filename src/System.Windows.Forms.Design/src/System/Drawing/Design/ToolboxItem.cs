@@ -80,12 +80,7 @@ namespace System.Drawing.Design
             get
             {
                 AssemblyName[] names = (AssemblyName[])Properties["DependentAssemblies"];
-                if (names is not null)
-                {
-                    return (AssemblyName[])names.Clone();
-                }
-
-                return null;
+                return names is not null ? (AssemblyName[])names.Clone() : null;
             }
             set
             {
@@ -358,7 +353,7 @@ namespace System.Drawing.Design
                 }
                 else if (typeof(IComponent).IsAssignableFrom(createType))
                 {
-                    comps.Add((IComponent)TypeDescriptor.CreateInstance(null, createType, null, null));
+                    comps.Add((IComponent)TypeDescriptor.CreateInstance(provider: null, createType, argTypes: null, args: null));
                 }
             }
 
@@ -720,7 +715,7 @@ namespace System.Drawing.Design
                     }
 
                     bool filterContainsType = false;
-                    List<ToolboxItemFilterAttribute> array = new();
+                    List<ToolboxItemFilterAttribute> filterItems = new();
                     foreach (Attribute a in TypeDescriptor.GetAttributes(type))
                     {
                         if (a is ToolboxItemFilterAttribute ta)
@@ -730,16 +725,16 @@ namespace System.Drawing.Design
                                 filterContainsType = true;
                             }
 
-                            array.Add(ta);
+                            filterItems.Add(ta);
                         }
                     }
 
                     if (!filterContainsType)
                     {
-                        array.Add(new ToolboxItemFilterAttribute(TypeName));
+                        filterItems.Add(new ToolboxItemFilterAttribute(TypeName));
                     }
 
-                    Filter = array.ToArray();
+                    Filter = filterItems.ToArray();
                 }
             }
         }
@@ -1008,12 +1003,9 @@ namespace System.Drawing.Design
             {
                 ArgumentNullException.ThrowIfNull(key);
 
-                if (!(key is string propertyName) || propertyName.Length == 0)
-                {
-                    throw new ArgumentException(SR.ToolboxItemInvalidKey, nameof(key));
-                }
-
-                return propertyName;
+                return !(key is string propertyName) || propertyName.Length == 0
+                    ? throw new ArgumentException(SR.ToolboxItemInvalidKey, nameof(key))
+                    : propertyName;
             }
 
             public override void Remove(object key)
