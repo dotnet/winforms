@@ -311,21 +311,13 @@ namespace System.Windows.Forms.Design
 
             // just walk up the chain for each selected item...if any other items
             // are in that chain, fail.
-            //
-            foreach (object component in sel)
+            foreach (Control component in sel)
             {
-                if (component is not Control c || c.Site is null)
-                {
-                    return false;
-                }
-
                 // walk up the parent chain, checking each component to see if it's
                 // in the selection list.  If it is, we've got a bad selection.
-                //
-                for (Control parent = c.Parent; parent is not null; parent = parent.Parent)
+                for (Control parent = component.Parent; parent is not null; parent = parent.Parent)
                 {
                     // if this parent has already been okayed, skip it.
-                    //
                     if (parent == okParent)
                     {
                         continue;
@@ -339,8 +331,7 @@ namespace System.Windows.Forms.Design
 
                 // mark that this component checked out okay, so any siblings (or children of siblings) of this control
                 // are ok.
-                //
-                okParent = c.Parent;
+                okParent = component.Parent;
             }
 
             return true;
