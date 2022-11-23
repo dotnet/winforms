@@ -335,7 +335,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var imagePropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
+        var imagePropertyInfo = CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
         using Bitmap expected = (Bitmap)Image.FromFile(@"Resources\Image1.png");
         ValidateResultBitmap(imagePropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Bitmap)));
     }
@@ -364,7 +364,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var imagePropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
+        var imagePropertyInfo = CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
         ValidateResultBitmap(imagePropertyInfo, bitmap, converter);
     }
 
@@ -391,7 +391,7 @@ public partial class StronglyTypedResourceBuilderTests
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        var imagePropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
+        var imagePropertyInfo = CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Image1");
         using Bitmap expected = (Bitmap)Image.FromFile(@"Resources\Image1.png");
         ValidateResultBitmap(imagePropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Bitmap)));
     }
@@ -416,7 +416,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var iconPropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
+        var iconPropertyInfo = CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
         using Icon expected = new(@"Resources\Icon1.ico");
         ValidateResultIcon(iconPropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Icon)));
     }
@@ -444,7 +444,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var iconPropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
+        var iconPropertyInfo = CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
         ValidateResultIcon(iconPropertyInfo, icon, converter);
     }
 
@@ -471,7 +471,7 @@ public partial class StronglyTypedResourceBuilderTests
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        var iconPropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
+        var iconPropertyInfo = CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Icon1");
         using Icon expected = new(@"Resources\Icon1.ico");
         ValidateResultIcon(iconPropertyInfo, expected, TypeDescriptor.GetConverter(typeof(Icon)));
     }
@@ -497,7 +497,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        ValidateResultTxtFileContent(compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
+        ValidateResultTxtFileContent(CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
     }
 
     [Fact]
@@ -527,7 +527,7 @@ public partial class StronglyTypedResourceBuilderTests
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        ValidateResultTxtFileContent(compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
+        ValidateResultTxtFileContent(CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "TextFile1"));
     }
 
     [Fact]
@@ -550,7 +550,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        ValidateResultAudio(compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
+        ValidateResultAudio(CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
     }
 
     [Fact]
@@ -576,7 +576,7 @@ public partial class StronglyTypedResourceBuilderTests
         resxWriter.Generate();
         resxStream.Position = 0;
         using ResXResourceReader reader = new(resxStream);
-        ValidateResultAudio(compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
+        ValidateResultAudio(CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "Audio1"));
     }
 
     [WinFormsFact]
@@ -614,7 +614,7 @@ public partial class StronglyTypedResourceBuilderTests
             out _);
 
         using ResXResourceReader reader = new(temp.Path);
-        var mediaPlayerPropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "MediaPlayer1");
+        var mediaPlayerPropertyInfo = CompileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "MediaPlayer1");
         byte[] resourceByte = Assert.IsType<byte[]>(mediaPlayerPropertyInfo.GetValue(obj: null));
         AxHost.State state = Assert.IsType<AxHost.State>(scope.Converter.ConvertFrom(resourceByte));
 
@@ -646,7 +646,7 @@ public partial class StronglyTypedResourceBuilderTests
 
     // Utilizes ResourceWriter to save the resources and gets the specified
     // PropertyInfo.
-    private static PropertyInfo compileAndGetPropertyInfo(
+    private static PropertyInfo CompileAndGetPropertyInfo(
         IDictionaryEnumerator resources,
         CodeCompileUnit compileUnit,
         string propertyName)
