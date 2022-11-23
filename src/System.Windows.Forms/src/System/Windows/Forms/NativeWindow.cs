@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                 if (PInvoke.IsWindow(handle))
                 {
                     uint id = PInvoke.GetWindowThreadProcessId(handle, out _);
-                    Application.ThreadContext context = Application.ThreadContext.FromId(id);
+                    Application.ThreadContext? context = Application.ThreadContext.FromId(id);
                     nint threadHandle = context is null ? 0 : context.Handle;
 
                     if (threadHandle != 0)

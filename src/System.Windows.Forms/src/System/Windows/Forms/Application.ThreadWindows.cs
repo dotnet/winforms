@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using static Interop;
@@ -24,7 +22,7 @@ namespace System.Windows.Forms
             private int _windowCount;
             private HWND _activeHwnd;
             private HWND _focusedHwnd;
-            internal ThreadWindows _previousThreadWindows;
+            internal ThreadWindows? _previousThreadWindows;
             private readonly bool _onlyWinForms = true;
 
             internal ThreadWindows(bool onlyWinForms)
@@ -47,7 +45,7 @@ namespace System.Windows.Forms
 
                     if (_onlyWinForms)
                     {
-                        Control c = Control.FromHandle(hWnd);
+                        Control? c = Control.FromHandle(hWnd);
                         if (c is null)
                         {
                             add = false;
@@ -78,7 +76,7 @@ namespace System.Windows.Forms
                     HWND hWnd = _windows[i];
                     if (PInvoke.IsWindow(hWnd))
                     {
-                        Control c = Control.FromHandle(hWnd);
+                        Control? c = Control.FromHandle(hWnd);
                         c?.Dispose();
                     }
                 }
@@ -90,7 +88,7 @@ namespace System.Windows.Forms
                 if (!_onlyWinForms && !state)
                 {
                     _activeHwnd = PInvoke.GetActiveWindow();
-                    Control activatingControl = ThreadContext.FromCurrent().ActivatingControl;
+                    Control? activatingControl = ThreadContext.FromCurrent().ActivatingControl;
                     if (activatingControl is not null)
                     {
                         _focusedHwnd = activatingControl.HWND;
