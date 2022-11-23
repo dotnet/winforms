@@ -15,7 +15,7 @@ public static class CustomConverter
     public static RegistrationScope RegisterConverter(Type type, TypeConverter converter)
     {
         TypeDescriptionProvider parentProvider = TypeDescriptor.GetProvider(type);
-        TypeDescriptionProvider newProvider = new CustomTypeDescriptionProvider(parentProvider, converter);
+        CustomTypeDescriptionProvider newProvider = new(parentProvider, converter);
         TypeDescriptor.AddProvider(newProvider, type);
         return new RegistrationScope(type, newProvider);
     }
@@ -25,26 +25,18 @@ public static class CustomConverter
     ///  This is meant to be utilized in a <see langword="using"/> statement to ensure
     ///  <see cref="TypeDescriptor.RemoveProvider(TypeDescriptionProvider, Type)"/> is called when going out of scope with the using.
     /// </summary>
-    public ref struct RegistrationScope
+    public readonly ref struct RegistrationScope
     {
         private readonly Type _type;
         private readonly TypeDescriptionProvider _provider;
-        private TypeConverter _converter;
 
         public RegistrationScope(Type type, TypeDescriptionProvider provider)
         {
             _type = type;
             _provider = provider;
-            _converter = TypeDescriptor.GetConverter(type);
         }
 
-        public TypeConverter Converter => _converter;
-
-        public void Dispose()
-        {
-            TypeDescriptor.RemoveProvider(_provider, _type);
-            _converter = null;
-        }
+        public void Dispose() => TypeDescriptor.RemoveProvider(_provider, _type);
     }
 
     public class CustomTypeDescriptionProvider : TypeDescriptionProvider
