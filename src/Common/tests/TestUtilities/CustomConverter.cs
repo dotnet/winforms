@@ -25,18 +25,26 @@ public static class CustomConverter
     ///  This is meant to be utilized in a <see langword="using"/> statement to ensure
     ///  <see cref="TypeDescriptor.RemoveProvider(TypeDescriptionProvider, Type)"/> is called when going out of scope with the using.
     /// </summary>
-    public readonly ref struct RegistrationScope
+    public ref struct RegistrationScope
     {
         private readonly Type _type;
         private readonly TypeDescriptionProvider _provider;
+        private TypeConverter _converter;
 
         public RegistrationScope(Type type, TypeDescriptionProvider provider)
         {
             _type = type;
             _provider = provider;
+            _converter = TypeDescriptor.GetConverter(type);
         }
 
-        public void Dispose() => TypeDescriptor.RemoveProvider(_provider, _type);
+        public TypeConverter Converter => _converter;
+
+        public void Dispose()
+        {
+            TypeDescriptor.RemoveProvider(_provider, _type);
+            _converter = null;
+        }
     }
 
     public class CustomTypeDescriptionProvider : TypeDescriptionProvider
@@ -44,9 +52,7 @@ public static class CustomConverter
         private TypeConverter _converter;
 
         public CustomTypeDescriptionProvider(TypeDescriptionProvider parent, TypeConverter converter) : base(parent)
-        {
-            _converter = converter;
-        }
+            => _converter = converter;
 
         public override ICustomTypeDescriptor GetTypeDescriptor(
             [DynamicallyAccessedMembers((DynamicallyAccessedMemberTypes)(-1))] Type objectType,
@@ -57,9 +63,7 @@ public static class CustomConverter
             private static TypeConverter _converter;
 
             public TypeConverterProvider(ICustomTypeDescriptor parent, TypeConverter converter) : base(parent)
-            {
-                _converter = converter;
-            }
+                => _converter = converter;
 
             public override TypeConverter GetConverter() => _converter;
         }

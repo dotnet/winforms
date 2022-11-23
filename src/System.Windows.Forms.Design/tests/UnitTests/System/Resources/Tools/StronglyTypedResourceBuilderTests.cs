@@ -584,11 +584,9 @@ public partial class StronglyTypedResourceBuilderTests
     {
         // AxHost.StateConverter is not properly registered as a converter for AxHost.State.
         // Temporarily register StateConverter as State's converter and test serialization.
-        TypeConverter converter = TypeDescriptor.GetConverter(typeof(AxHost.State));
-        Assert.Equal(typeof(TypeConverter), converter.GetType());
+        Assert.Equal(typeof(TypeConverter), TypeDescriptor.GetConverter(typeof(AxHost.State)).GetType());
         using var scope = CustomConverter.RegisterConverter(typeof(AxHost.State), new AxHost.StateConverter());
-        converter = TypeDescriptor.GetConverter(typeof(AxHost.State));
-        Assert.Equal(typeof(AxHost.StateConverter), converter.GetType());
+        Assert.Equal(typeof(AxHost.StateConverter), scope.Converter.GetType());
 
         using Form form = new();
         using AxWindowsMediaPlayer mediaPlayer = new();
@@ -599,7 +597,7 @@ public partial class StronglyTypedResourceBuilderTests
         string expectedUrl = $"{Path.GetTempPath()}testurl1";
         mediaPlayer.URL = expectedUrl;
 
-        ResXDataNode node = new("MediaPlayer1", converter.ConvertTo(mediaPlayer.OcxState, typeof(byte[])));
+        ResXDataNode node = new("MediaPlayer1", scope.Converter.ConvertTo(mediaPlayer.OcxState, typeof(byte[])));
         using var temp = TempFile.Create();
         using (ResXResourceWriter resxWriter = new(temp.Path))
         {
@@ -618,7 +616,7 @@ public partial class StronglyTypedResourceBuilderTests
         using ResXResourceReader reader = new(temp.Path);
         var mediaPlayerPropertyInfo = compileAndGetPropertyInfo(reader.GetEnumerator(), compileUnit, "MediaPlayer1");
         byte[] resourceByte = Assert.IsType<byte[]>(mediaPlayerPropertyInfo.GetValue(obj: null));
-        AxHost.State state = Assert.IsType<AxHost.State>(converter.ConvertFrom(resourceByte));
+        AxHost.State state = Assert.IsType<AxHost.State>(scope.Converter.ConvertFrom(resourceByte));
 
         string changedUrl = $"{Path.GetTempPath()}testurl2";
         mediaPlayer.URL = changedUrl;
