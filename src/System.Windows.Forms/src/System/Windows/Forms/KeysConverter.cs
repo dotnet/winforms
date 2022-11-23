@@ -230,7 +230,7 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(destinationType);
 
-            if (value is Keys || value is int)
+            if (value is Keys or int)
             {
                 bool asString = destinationType == typeof(string);
                 bool asEnum = false;
@@ -243,7 +243,8 @@ namespace System.Windows.Forms
                 {
                     Keys key = (Keys)value;
                     bool added = false;
-                    ArrayList terms = new ArrayList();
+                    List<string> termStrings = new();
+                    List<Enum> termKeys = new();
                     Keys modifiers = (key & Keys.Modifiers);
 
                     // First, iterate through and do the modifiers. These are
@@ -258,14 +259,14 @@ namespace System.Windows.Forms
                             {
                                 if (added)
                                 {
-                                    terms.Add("+");
+                                    termStrings.Add("+");
                                 }
 
-                                terms.Add(keyString);
+                                termStrings.Add(keyString);
                             }
                             else
                             {
-                                terms.Add(keyValue);
+                                termKeys.Add(keyValue);
                             }
 
                             added = true;
@@ -279,7 +280,7 @@ namespace System.Windows.Forms
 
                     if (added && asString)
                     {
-                        terms.Add("+");
+                        termStrings.Add("+");
                     }
 
                     for (int i = 0; i < DisplayOrder.Count; i++)
@@ -290,11 +291,11 @@ namespace System.Windows.Forms
                         {
                             if (asString)
                             {
-                                terms.Add(keyString);
+                                termStrings.Add(keyString);
                             }
                             else
                             {
-                                terms.Add(keyValue);
+                                termKeys.Add(keyValue);
                             }
 
                             added = true;
@@ -310,18 +311,18 @@ namespace System.Windows.Forms
                     {
                         if (asString)
                         {
-                            terms.Add(((Enum)keyOnly).ToString());
+                            termStrings.Add(keyOnly.ToString());
                         }
                         else
                         {
-                            terms.Add((Enum)keyOnly);
+                            termKeys.Add(keyOnly);
                         }
                     }
 
                     if (asString)
                     {
                         StringBuilder b = new StringBuilder(32);
-                        foreach (string t in terms)
+                        foreach (string t in termStrings)
                         {
                             b.Append(t);
                         }
@@ -330,7 +331,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return (Enum[])terms.ToArray(typeof(Enum));
+                        return termKeys.ToArray();
                     }
                 }
             }
@@ -348,18 +349,9 @@ namespace System.Windows.Forms
         {
             if (_values is null)
             {
-                ArrayList list = new ArrayList();
-
-                ICollection<Keys> keys = KeyNames.Values;
-
-                foreach (object o in keys)
-                {
-                    list.Add(o);
-                }
-
-                list.Sort(this);
-
-                _values = new StandardValuesCollection(list.ToArray());
+                Keys[] list = KeyNames.Values.ToArray();
+                Array.Sort(list, this);
+                _values = new StandardValuesCollection(list);
             }
 
             return _values;
