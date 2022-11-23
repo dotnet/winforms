@@ -2717,8 +2717,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            ArrayList returnProperties = new ArrayList();
-
+            List<PropertyDescriptor> returnProperties = new();
             _properties ??= new Dictionary<string, PropertyDescriptor>();
 
             if (_propertyInfos is null)
@@ -2807,7 +2806,7 @@ namespace System.Windows.Forms
 
                     if (browse is not null)
                     {
-                        ArrayList removeList = null;
+                        List<PropertyDescriptor> removeList = null;
 
                         foreach (PropertyDescriptor prop in returnProperties)
                         {
@@ -2815,14 +2814,14 @@ namespace System.Windows.Forms
                                 && prop.TryGetAttribute(out BrowsableAttribute browsableAttribute)
                                 && !browsableAttribute.Equals(browse))
                             {
-                                removeList ??= new ArrayList();
+                                removeList ??= new();
                                 removeList.Add(prop);
                             }
                         }
 
                         if (removeList is not null)
                         {
-                            foreach (object prop in removeList)
+                            foreach (PropertyDescriptor prop in removeList)
                             {
                                 returnProperties.Remove(prop);
                             }
@@ -2831,12 +2830,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            PropertyDescriptor[] temp = new PropertyDescriptor[returnProperties.Count];
-            returnProperties.CopyTo(temp, 0);
-
             // Update our stashed values.
             s_axHTraceSwitch.TraceVerbose($"Updating stashed values for : {attributes?.Length.ToString() ?? "<null>"}");
-            _propsStash = new PropertyDescriptorCollection(temp);
+            _propsStash = new PropertyDescriptorCollection(returnProperties.ToArray());
             _attribsStash = attributes;
 
             return _propsStash;
