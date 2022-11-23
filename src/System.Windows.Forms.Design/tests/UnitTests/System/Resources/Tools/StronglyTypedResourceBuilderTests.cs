@@ -626,24 +626,6 @@ public partial class StronglyTypedResourceBuilderTests
         Assert.Equal(expectedUrl, mediaPlayer.URL);
     }
 
-    public class AxHostStateTypeDescriptionProvider : TypeDescriptionProvider
-    {
-        public AxHostStateTypeDescriptionProvider(TypeDescriptionProvider parent) : base(parent)
-        {
-        }
-
-        public override ICustomTypeDescriptor GetTypeDescriptor(
-            [DynamicallyAccessedMembers((DynamicallyAccessedMemberTypes)(-1))] Type objectType,
-            object instance) => new TypeConverterProvider(base.GetTypeDescriptor(objectType, instance));
-
-        private class TypeConverterProvider : CustomTypeDescriptor
-        {
-            private static TypeConverter s_converter = new AxHost.StateConverter();
-            public TypeConverterProvider(ICustomTypeDescriptor parent) : base(parent) { }
-            public override TypeConverter GetConverter() => s_converter;
-        }
-    }
-
     // Utilizes ResourceWriter to save the resources and gets the specified
     // PropertyInfo.
     private static PropertyInfo CompileAndGetPropertyInfo(
