@@ -1008,9 +1008,8 @@ namespace System.ComponentModel.Design
                         {
                             if (UndoEngine.GetService(typeof(ISelectionService)) is ISelectionService ss)
                             {
-                                string[] names = _lastSelection.Keys.ToArray();
-                                List<IComponent> list = new(names.Length);
-                                foreach (string name in names)
+                                List<IComponent> list = new(_lastSelection.Keys.Count);
+                                foreach (string name in _lastSelection.Keys)
                                 {
                                     IComponent comp = _lastSelection[name].Components[name];
                                     if (comp is not null)
