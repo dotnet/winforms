@@ -1012,13 +1012,10 @@ namespace System.ComponentModel.Design
                                 List<IComponent> list = new(names.Length);
                                 foreach (string name in names)
                                 {
-                                    if (name is not null)
+                                    IComponent comp = _lastSelection[name].Components[name];
+                                    if (comp is not null)
                                     {
-                                        IComponent comp = _lastSelection[name].Components[name];
-                                        if (comp is not null)
-                                        {
-                                            list.Add(comp);
-                                        }
+                                        list.Add(comp);
                                     }
                                 }
 
