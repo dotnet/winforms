@@ -188,10 +188,7 @@ namespace System.Windows.Forms
                 return ccOther;
             }
 
-            public bool Contains(Control? control)
-            {
-                return control is null ? false : InnerList.Contains(control);
-            }
+            public bool Contains(Control? control) => control is null ? false : InnerList.Contains(control);
 
             /// <summary>
             ///  Searches for Controls by their Name property, builds up an array
@@ -257,10 +254,7 @@ namespace System.Windows.Forms
                 return new ControlCollectionEnumerator(this);
             }
 
-            public int IndexOf(Control? control)
-            {
-                return control is null ? -1 : InnerList.IndexOf(control);
-            }
+            public int IndexOf(Control? control) => control is null ? -1 : InnerList.IndexOf(control);
 
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
