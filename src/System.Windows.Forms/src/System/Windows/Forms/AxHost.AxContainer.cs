@@ -240,7 +240,7 @@ namespace System.Windows.Forms
                 LockComponents();
                 try
                 {
-                    List<object> l = null;
+                    List<object> activeXControlList = null;
                     bool selected = (dwWhich & GC_WCH.FSELECTED) != 0;
                     bool reverse = (dwWhich & GC_WCH.FREVERSEDIR) != 0;
                     // Note that visual basic actually ignores the next/prev flags... we will not
@@ -297,14 +297,14 @@ namespace System.Windows.Forms
                             ctl = null;
                             break;
                         case GC_WCH.CONTAINER:
-                            l = new();
-                            MaybeAdd(l, ctl, selected, dwOleContF, false);
+                            activeXControlList = new();
+                            MaybeAdd(activeXControlList, ctl, selected, dwOleContF, false);
                             while (ctl is not null)
                             {
                                 AxContainer cont = FindContainerForControl(ctl);
                                 if (cont is not null)
                                 {
-                                    MaybeAdd(l, cont._parent, selected, dwOleContF, true);
+                                    MaybeAdd(activeXControlList, cont._parent, selected, dwOleContF, true);
                                     ctl = cont._parent;
                                 }
                                 else
@@ -321,9 +321,9 @@ namespace System.Windows.Forms
                             break;
                     }
 
-                    if (l is null)
+                    if (activeXControlList is null)
                     {
-                        l = new();
+                        activeXControlList = new();
                         if (last == -1 && ctls is not null)
                         {
                             last = ctls.Length;
@@ -331,16 +331,16 @@ namespace System.Windows.Forms
 
                         if (ctl is not null)
                         {
-                            MaybeAdd(l, ctl, selected, dwOleContF, false);
+                            MaybeAdd(activeXControlList, ctl, selected, dwOleContF, false);
                         }
 
                         for (int i = first; i < last; i++)
                         {
-                            MaybeAdd(l, ctls[i], selected, dwOleContF, false);
+                            MaybeAdd(activeXControlList, ctls[i], selected, dwOleContF, false);
                         }
                     }
 
-                    object[] rval = l.ToArray();
+                    object[] rval = activeXControlList.ToArray();
                     if (reverse)
                     {
                         for (int i = 0, j = rval.Length - 1; i < j; i++, j--)
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private void MaybeAdd(List<object> l, Control ctl, bool selected, OLECONTF dwOleContF, bool ignoreBelong)
+            private void MaybeAdd(List<object> list, Control ctl, bool selected, OLECONTF dwOleContF, bool ignoreBelong)
             {
                 if (!ignoreBelong && ctl != _parent && !GetControlBelongs(ctl))
                 {
@@ -377,14 +377,14 @@ namespace System.Windows.Forms
 
                 if (ctl is AxHost hostctl && (dwOleContF & OLECONTF.EMBEDDINGS) != 0)
                 {
-                    l.Add(hostctl.GetOcx());
+                    list.Add(hostctl.GetOcx());
                 }
                 else if ((dwOleContF & OLECONTF.OTHERS) != 0)
                 {
                     object item = GetProxyForControl(ctl);
                     if (item is not null)
                     {
-                        l.Add(item);
+                        list.Add(item);
                     }
                 }
             }
