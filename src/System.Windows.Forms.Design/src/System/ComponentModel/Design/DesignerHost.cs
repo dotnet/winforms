@@ -693,7 +693,7 @@ namespace System.ComponentModel.Design
                 && _designers.TryGetValue(_rootComponent, out IDesigner designer)
                 && designer is not null)
             {
-                helpService.RemoveContextAttribute("Keyword", "Designer_" + designer.GetType().FullName);
+                helpService.RemoveContextAttribute("Keyword", $"Designer_{designer.GetType().FullName}");
             }
 
             ISelectionService selectionService = (ISelectionService)GetService(typeof(ISelectionService));
@@ -1211,7 +1211,7 @@ namespace System.ComponentModel.Design
                     // Offer up our base help attribute
                     if (GetService(typeof(IHelpService)) is IHelpService helpService)
                     {
-                        helpService.AddContextAttribute("Keyword", "Designer_" + rootDesigner.GetType().FullName, HelpKeywordType.F1Keyword);
+                        helpService.AddContextAttribute("Keyword", $"Designer_{rootDesigner.GetType().FullName}", HelpKeywordType.F1Keyword);
                     }
 
                     // and let everyone know that we're loaded
@@ -1221,7 +1221,7 @@ namespace System.ComponentModel.Design
                     }
                     catch (Exception ex)
                     {
-                        Debug.Fail("Exception thrown on LoadComplete event handler.  You should not throw here : " + ex.ToString());
+                        Debug.Fail($"Exception thrown on LoadComplete event handler.  You should not throw here : {ex}");
                         // The load complete failed.  Put us back in the loading state and unload.
                         _state[s_stateLoading] = true;
                         Unload();
