@@ -23,23 +23,25 @@ namespace System.Windows.Forms
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             StandardValuesCollection values = base.GetStandardValues(context);
-            var list = new ArrayList();
-            int count = values.Count;
+            List<object> list = new();
             bool personalSeen = false;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
-                if (values[i] is Environment.SpecialFolder specialFolder &&
+                if (values[i] is object currentItem)
+                {
+                    if (currentItem is Environment.SpecialFolder specialFolder &&
                     specialFolder.Equals(Environment.SpecialFolder.Personal))
-                {
-                    if (!personalSeen)
                     {
-                        personalSeen = true;
-                        list.Add(values[i]);
+                        if (!personalSeen)
+                        {
+                            personalSeen = true;
+                            list.Add(currentItem);
+                        }
                     }
-                }
-                else
-                {
-                    list.Add(values[i]);
+                    else
+                    {
+                        list.Add(currentItem);
+                    }
                 }
             }
 
