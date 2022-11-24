@@ -1139,8 +1139,6 @@ namespace System.ComponentModel.Design
         {
             ArgumentNullException.ThrowIfNull(component);
 
-            // It's important NOT to use "_designers[component]" here because we want to
-            // avoid throwing an exception if the component is not in the dictionary.
             _designers.TryGetValue(component, out IDesigner designer);
 
             return designer;
