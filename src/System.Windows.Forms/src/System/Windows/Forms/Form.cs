@@ -5178,7 +5178,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner is not null) && owner.GetExtendedStyle().HasFlag(User32.WS_EX.TOPMOST))
+            if ((owner is not null) && !owner.GetExtendedStyle().HasFlag(User32.WS_EX.TOPMOST))
             {
                 // It's not the top-most window
                 if (owner is Control ownerControl)
@@ -5253,7 +5253,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner is not null) && owner.GetExtendedStyle().HasFlag(User32.WS_EX.TOPMOST))
+            if ((owner is not null) && !owner.GetExtendedStyle().HasFlag(User32.WS_EX.TOPMOST))
             {
                 // It's not the top-most window
                 if (owner is Control ownerControl)
