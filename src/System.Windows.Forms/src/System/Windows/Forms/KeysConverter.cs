@@ -243,8 +243,8 @@ namespace System.Windows.Forms
                 {
                     Keys key = (Keys)value;
                     bool added = false;
-                    List<string> termStrings = new();
-                    List<Enum> termKeys = new();
+                    List<string> termStrings = asString ? new() : null;
+                    List<Enum> termKeys = asEnum ? new() : null;
                     Keys modifiers = (key & Keys.Modifiers);
 
                     // First, iterate through and do the modifiers. These are
