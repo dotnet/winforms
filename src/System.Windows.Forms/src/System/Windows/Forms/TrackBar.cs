@@ -868,7 +868,7 @@ namespace System.Windows.Forms
             int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
             int ticksDrawn;
             uint range = (uint)(_maximum - _minimum);
-            if (_tickFrequency > 1)
+            if (_tickFrequency!=1)
             {
                ticksDrawn = (int)(range / _tickFrequency);
                 if(ticksDrawn<maxTickCount)
