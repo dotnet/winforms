@@ -16,8 +16,8 @@ namespace System.Windows.Forms
     public abstract partial class AxHost
     {
         /// <summary>
-        ///  The class which encapsulates the persisted state of the underlying activeX control
-        ///  An instance of this class my be obtained either by calling getOcxState on an
+        ///  The class which encapsulates the persisted state of the underlying activeX control.
+        ///  An instance of this class my be obtained either by calling <see cref="OcxState"/> on an
         ///  AxHost object, or by reading in from a stream.
         /// </summary>
         [TypeConverter(typeof(TypeConverter))]
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
             private const string PropertyBagSerializationName = "PropertyBagBinary";
             private const string DataSerializationName = "Data";
 
-            // Create on save from ipersist stream
+            // Create on save from IPersistStream.
             internal State(MemoryStream memoryStream, int storageType, AxHost control, PropertyBagStream propertyBag)
             {
                 Type = storageType;
@@ -48,19 +48,15 @@ namespace System.Windows.Forms
                 _licenseKey = control.GetLicenseKey();
             }
 
-            internal State(PropertyBagStream propertyBag)
-            {
-                _propertyBag = propertyBag;
-            }
+            internal State(PropertyBagStream propertyBag) => _propertyBag = propertyBag;
 
-            internal State(MemoryStream memoryStream)
-            {
-                _memoryStream = memoryStream;
-                _length = (int)memoryStream.Length;
-                InitializeFromStream(memoryStream);
-            }
+            // Construct State using StateConverter information.
+            // We do not want to save the memoryStream since it contains
+            // extra information to construct the State. This same scenario
+            // occurs in deserialization constructor.
+            internal State(MemoryStream memoryStream) => InitializeFromStream(memoryStream);
 
-            // create on init new w/ storage...
+            // Create on init new with storage.
             internal State(AxHost control)
             {
                 CreateStorage();
@@ -77,7 +73,7 @@ namespace System.Windows.Forms
                 _manualUpdate = manualUpdate;
                 _licenseKey = licKey;
 
-                InitializeBufferFromStream(ms);
+                InitializeFromStream(ms, initializeBufferOnly: true);
             }
 
             /// <summary>
@@ -91,7 +87,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                for (; enumerator.MoveNext();)
+                while (enumerator.MoveNext())
                 {
                     if (string.Equals(enumerator.Name, DataSerializationName, StringComparison.InvariantCultureIgnoreCase))
                     {
@@ -100,8 +96,8 @@ namespace System.Windows.Forms
                             byte[]? data = enumerator.Value as byte[];
                             if (data is not null)
                             {
-                                using var datMemoryStream = new MemoryStream(data);
-                                InitializeFromStream(datMemoryStream);
+                                using MemoryStream memoryStream = new(data);
+                                InitializeFromStream(memoryStream);
                             }
                         }
                         catch (Exception e)
@@ -118,8 +114,8 @@ namespace System.Windows.Forms
                             if (data is not null)
                             {
                                 _propertyBag = new PropertyBagStream();
-                                using var datMemoryStream = new MemoryStream(data);
-                                _propertyBag.Read(datMemoryStream);
+                                using MemoryStream memoryStream = new(data);
+                                _propertyBag.Read(memoryStream);
                             }
                         }
                         catch (Exception e)
@@ -222,40 +218,32 @@ namespace System.Windows.Forms
                 return new Ole32.GPStream(_memoryStream);
             }
 
-            private void InitializeFromStream(Stream ids)
+            private void InitializeFromStream(Stream dataStream, bool initializeBufferOnly = false)
             {
-                using var br = new BinaryReader(ids);
+                using BinaryReader binaryReader = new(dataStream);
 
-                Type = br.ReadInt32();
-                int version = br.ReadInt32();
-                _manualUpdate = br.ReadBoolean();
-                int cc = br.ReadInt32();
-                if (cc != 0)
+                if (!initializeBufferOnly)
                 {
-                    _licenseKey = new string(br.ReadChars(cc));
+                    Type = binaryReader.ReadInt32();
+                    int version = binaryReader.ReadInt32();
+                    _manualUpdate = binaryReader.ReadBoolean();
+                    int cc = binaryReader.ReadInt32();
+                    if (cc != 0)
+                    {
+                        _licenseKey = new string(binaryReader.ReadChars(cc));
+                    }
+
+                    for (int skipUnits = binaryReader.ReadInt32(); skipUnits > 0; skipUnits--)
+                    {
+                        int lengthRead = binaryReader.ReadInt32();
+                        dataStream.Position += lengthRead;
+                    }
                 }
 
-                for (int skipUnits = br.ReadInt32(); skipUnits > 0; skipUnits--)
-                {
-                    int len = br.ReadInt32();
-                    ids.Position += len;
-                }
-
-                _length = br.ReadInt32();
+                _length = binaryReader.ReadInt32();
                 if (_length > 0)
                 {
-                    _buffer = br.ReadBytes(_length);
-                }
-            }
-
-            private void InitializeBufferFromStream(Stream ids)
-            {
-                using var br = new BinaryReader(ids);
-
-                _length = br.ReadInt32();
-                if (_length > 0)
-                {
-                    _buffer = br.ReadBytes(_length);
+                    _buffer = binaryReader.ReadBytes(_length);
                 }
             }
 
@@ -310,26 +298,26 @@ namespace System.Windows.Forms
 
             internal void Save(MemoryStream stream)
             {
-                using var bw = new BinaryWriter(stream);
+                using BinaryWriter binaryWriter = new(stream);
 
-                bw.Write(Type);
-                bw.Write(VERSION);
-                bw.Write(_manualUpdate);
+                binaryWriter.Write(Type);
+                binaryWriter.Write(VERSION);
+                binaryWriter.Write(_manualUpdate);
                 if (_licenseKey is not null)
                 {
-                    bw.Write(_licenseKey.Length);
-                    bw.Write(_licenseKey.ToCharArray());
+                    binaryWriter.Write(_licenseKey.Length);
+                    binaryWriter.Write(_licenseKey.ToCharArray());
                 }
                 else
                 {
-                    bw.Write(0);
+                    binaryWriter.Write(0);
                 }
 
-                bw.Write(0); // skip units
-                bw.Write(_length);
+                binaryWriter.Write(0); // skip units
+                binaryWriter.Write(_length);
                 if (_buffer is not null)
                 {
-                    bw.Write(_buffer);
+                    binaryWriter.Write(_buffer);
                 }
                 else if (_memoryStream is not null)
                 {
@@ -345,20 +333,20 @@ namespace System.Windows.Forms
             /// <summary>
             ///  ISerializable private implementation
             /// </summary>
-            void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
+            void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
             {
-                using var stream = new MemoryStream();
+                using MemoryStream stream = new();
                 Save(stream);
 
-                si.AddValue(DataSerializationName, stream.ToArray());
+                info.AddValue(DataSerializationName, stream.ToArray());
 
                 if (_propertyBag is not null)
                 {
                     try
                     {
-                        using var propertyBagBinaryStream = new MemoryStream();
+                        using MemoryStream propertyBagBinaryStream = new();
                         _propertyBag.Write(propertyBagBinaryStream);
-                        si.AddValue(PropertyBagSerializationName, propertyBagBinaryStream.ToArray());
+                        info.AddValue(PropertyBagSerializationName, propertyBagBinaryStream.ToArray());
                     }
                     catch (Exception e)
                     {
