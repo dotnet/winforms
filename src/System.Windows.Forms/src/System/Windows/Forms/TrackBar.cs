@@ -853,26 +853,38 @@ namespace System.Windows.Forms
             // Check if the value of the max is greater then the taskbar size.
             // If so then we divide the value by size and only that many ticks to be drawn on the screen.
 
-            if (AutoDrawTicks)
-            {
-                return;
-            }
-
-            if (_AutoTicksRecreate!)
+            if (!_AutoTicksRecreate)
             {
                 RecreateHandle();
             }
 
-            int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
-            uint range = (uint)(_maximum - _minimum);
-
-            if (range > maxTickCount && maxTickCount != 0)
+            if (AutoDrawTicks)
             {
-                _tickFrequency = (int)(range / maxTickCount);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
+                return;
+            }
+
+            bool tickFreqFine = true;
+            int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
+            int ticksDrawn;
+            uint range = (uint)(_maximum - _minimum);
+            if (_tickFrequency > 1)
+            {
+               ticksDrawn = (int)(range / _tickFrequency);
+                if(ticksDrawn<maxTickCount)
+                {
+                    tickFreqFine = false;
+                }
+            }
+
+            int ticksDrawnFrequency = _tickFrequency;
+            if (range > maxTickCount && maxTickCount != 0 && tickFreqFine)
+            {
+                ticksDrawnFrequency = (int)(range / maxTickCount);
             }
 
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
-            for (int i = (_minimum + _tickFrequency); i < _maximum - _tickFrequency; i += _tickFrequency)
+            for (int i = (_minimum + ticksDrawnFrequency); i < _maximum - ticksDrawnFrequency; i += ticksDrawnFrequency)
             {
                 LRESULT lresult = PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
                 Debug.Assert((bool)(BOOL)lresult);
