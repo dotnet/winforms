@@ -47,13 +47,15 @@ namespace System.Windows.Forms
                         return Array.Empty<byte>();
                     }
 
-                    if (value is State state)
+                    if (value is not State state)
                     {
-                        using MemoryStream memoryStream = new();
-                        state.Save(memoryStream);
-                        memoryStream.Close();
-                        return memoryStream.ToArray();
+                        throw GetConvertToException(value, destinationType);
                     }
+
+                    using MemoryStream memoryStream = new();
+                    state.Save(memoryStream);
+                    memoryStream.Close();
+                    return memoryStream.ToArray();
                 }
 
                 return base.ConvertTo(context, culture, value, destinationType);
