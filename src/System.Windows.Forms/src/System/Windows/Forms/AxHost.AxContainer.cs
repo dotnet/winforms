@@ -4,17 +4,16 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Ole = Windows.Win32.System.Ole;
-using Com = Windows.Win32.System.Com;
 using static Interop;
 using static Interop.Ole32;
+using Com = Windows.Win32.System.Com;
+using Ole = Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms
 {
@@ -31,9 +30,9 @@ namespace System.Windows.Forms
             private AxHost _siteUIActive;
             private AxHost _siteActive;
             private bool _formAlreadyCreated;
-            private readonly Dictionary<Control, Control> _containerCache = new();  // name -> Control
+            private readonly HashSet<Control> _containerCache = new();
             private int _lockCount;
-            private Dictionary<Control, Control> _components;  // Control -> any
+            private HashSet<Control> _components;  // Control -> any
             private Dictionary<Control, Oleaut32.IExtender> _proxyCache;
             private AxHost _controlInEditMode;
 
@@ -109,12 +108,12 @@ namespace System.Windows.Forms
                 CultureInfo culture,
                 string[] namedParameters)
             {
-                foreach (var (keyControl, valueControl) in _containerCache)
+                foreach (Control ctl in _containerCache)
                 {
-                    string ctlName = GetNameForControl(keyControl);
+                    string ctlName = GetNameForControl(ctl);
                     if (ctlName.Equals(name))
                     {
-                        return GetProxyForControl(valueControl);
+                        return GetProxyForControl(ctl);
                     }
                 }
 
@@ -179,12 +178,12 @@ namespace System.Windows.Forms
             {
                 lock (this)
                 {
-                    if (_containerCache.ContainsKey(ctl))
+                    if (_containerCache.Contains(ctl))
                     {
                         throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), nameof(ctl));
                     }
 
-                    _containerCache.Add(ctl, ctl);
+                    _containerCache.Add(ctl);
 
                     if (_associatedContainer is null)
                     {
@@ -241,7 +240,7 @@ namespace System.Windows.Forms
                 LockComponents();
                 try
                 {
-                    ArrayList l = null;
+                    List<object> activeXControlList = null;
                     bool selected = (dwWhich & GC_WCH.FSELECTED) != 0;
                     bool reverse = (dwWhich & GC_WCH.FREVERSEDIR) != 0;
                     // Note that visual basic actually ignores the next/prev flags... we will not
@@ -298,14 +297,14 @@ namespace System.Windows.Forms
                             ctl = null;
                             break;
                         case GC_WCH.CONTAINER:
-                            l = new ArrayList();
-                            MaybeAdd(l, ctl, selected, dwOleContF, false);
+                            activeXControlList = new();
+                            MaybeAdd(activeXControlList, ctl, selected, dwOleContF, false);
                             while (ctl is not null)
                             {
                                 AxContainer cont = FindContainerForControl(ctl);
                                 if (cont is not null)
                                 {
-                                    MaybeAdd(l, cont._parent, selected, dwOleContF, true);
+                                    MaybeAdd(activeXControlList, cont._parent, selected, dwOleContF, true);
                                     ctl = cont._parent;
                                 }
                                 else
@@ -316,16 +315,15 @@ namespace System.Windows.Forms
 
                             break;
                         case GC_WCH.ALL:
-                            Dictionary<Control, Control> htbl = GetComponents();
-                            ctls = new Control[htbl.Keys.Count];
-                            htbl.Keys.CopyTo(ctls, 0);
+                            HashSet<Control> htbl = GetComponents();
+                            ctls = htbl.ToArray();
                             ctl = _parent;
                             break;
                     }
 
-                    if (l is null)
+                    if (activeXControlList is null)
                     {
-                        l = new ArrayList();
+                        activeXControlList = new();
                         if (last == -1 && ctls is not null)
                         {
                             last = ctls.Length;
@@ -333,17 +331,16 @@ namespace System.Windows.Forms
 
                         if (ctl is not null)
                         {
-                            MaybeAdd(l, ctl, selected, dwOleContF, false);
+                            MaybeAdd(activeXControlList, ctl, selected, dwOleContF, false);
                         }
 
                         for (int i = first; i < last; i++)
                         {
-                            MaybeAdd(l, ctls[i], selected, dwOleContF, false);
+                            MaybeAdd(activeXControlList, ctls[i], selected, dwOleContF, false);
                         }
                     }
 
-                    object[] rval = new object[l.Count];
-                    l.CopyTo(rval, 0);
+                    object[] rval = activeXControlList.ToArray();
                     if (reverse)
                     {
                         for (int i = 0, j = rval.Length - 1; i < j; i++, j--)
@@ -362,7 +359,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private void MaybeAdd(ArrayList l, Control ctl, bool selected, OLECONTF dwOleContF, bool ignoreBelong)
+            private void MaybeAdd(List<object> list, Control ctl, bool selected, OLECONTF dwOleContF, bool ignoreBelong)
             {
                 if (!ignoreBelong && ctl != _parent && !GetControlBelongs(ctl))
                 {
@@ -380,14 +377,14 @@ namespace System.Windows.Forms
 
                 if (ctl is AxHost hostctl && (dwOleContF & OLECONTF.EMBEDDINGS) != 0)
                 {
-                    l.Add(hostctl.GetOcx());
+                    list.Add(hostctl.GetOcx());
                 }
                 else if ((dwOleContF & OLECONTF.OTHERS) != 0)
                 {
                     object item = GetProxyForControl(ctl);
                     if (item is not null)
                     {
-                        l.Add(item);
+                        list.Add(item);
                     }
                 }
             }
@@ -404,7 +401,7 @@ namespace System.Windows.Forms
                         {
                             if (comp is Control control && comp != _parent && comp.Site is not null)
                             {
-                                _components.Add(control, control);
+                                _components.Add(control);
                             }
                         }
 
@@ -416,8 +413,7 @@ namespace System.Windows.Forms
                 s_axHTraceSwitch.TraceVerbose("Did not find a container in FillComponentsTable!!!");
 
                 bool checkHashTable = true;
-                Control[] ctls = new Control[_containerCache.Values.Count];
-                _containerCache.Values.CopyTo(ctls, 0);
+                Control[] ctls = _containerCache.ToArray();
                 if (ctls is not null)
                 {
                     if (ctls.Length > 0 && _components is null)
@@ -428,9 +424,9 @@ namespace System.Windows.Forms
 
                     for (int i = 0; i < ctls.Length; i++)
                     {
-                        if (checkHashTable && !_components.ContainsKey(ctls[i]))
+                        if (checkHashTable)
                         {
-                            _components.Add(ctls[i], ctls[i]);
+                            _components.Add(ctls[i]);
                         }
                     }
                 }
@@ -447,9 +443,9 @@ namespace System.Windows.Forms
 
                 _components ??= new();
 
-                if (ctl != _parent && !_components.ContainsKey(ctl))
+                if (ctl != _parent)
                 {
-                    _components.Add(ctl, ctl);
+                    _components.Add(ctl);
                 }
 
                 foreach (Control c in ctl.Controls)
@@ -458,12 +454,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            private Dictionary<Control, Control> GetComponents()
+            private HashSet<Control> GetComponents()
             {
                 return GetComponents(GetParentsContainer());
             }
 
-            private Dictionary<Control, Control> GetComponents(IContainer cont)
+            private HashSet<Control> GetComponents(IContainer cont)
             {
                 if (_lockCount == 0)
                 {
@@ -475,8 +471,8 @@ namespace System.Windows.Forms
 
             private bool GetControlBelongs(Control ctl)
             {
-                Dictionary<Control, Control> comps = GetComponents();
-                return comps.ContainsKey(ctl);
+                HashSet<Control> comps = GetComponents();
+                return comps.Contains(ctl);
             }
 
             private IContainer GetParentIsDesigned()
@@ -622,34 +618,34 @@ namespace System.Windows.Forms
                 }
             }
 
-            private void ListAxControls(ArrayList list, bool fuseOcx)
+            private List<AxHost> GetAxControls()
             {
-                var components = GetComponents();
-                if (components is null)
+                List<AxHost> controls = new();
+                HashSet<Control> components = GetComponents();
+                foreach (Control ctl in components)
                 {
-                    return;
-                }
-
-                Control[] ctls = new Control[components.Keys.Count];
-                components.Keys.CopyTo(ctls, 0);
-                if (ctls is not null)
-                {
-                    for (int i = 0; i < ctls.Length; i++)
+                    if (ctl is AxHost hostctl)
                     {
-                        Control ctl = ctls[i];
-                        if (ctl is AxHost hostctl)
-                        {
-                            if (fuseOcx)
-                            {
-                                list.Add(hostctl.GetOcx());
-                            }
-                            else
-                            {
-                                list.Add(ctl);
-                            }
-                        }
+                        controls.Add(hostctl);
                     }
                 }
+
+                return controls;
+            }
+
+            private List<object> GetAxControlsOcx()
+            {
+                List<object> controls = new();
+                HashSet<Control> components = GetComponents();
+                foreach (Control ctl in components)
+                {
+                    if (ctl is AxHost hostctl)
+                    {
+                        controls.Add(hostctl.GetOcx());
+                    }
+                }
+
+                return controls;
             }
 
             internal void ControlCreated(AxHost invoker)
@@ -677,13 +673,9 @@ namespace System.Windows.Forms
                 }
 
                 _formAlreadyCreated = true;
-                ArrayList l = new ArrayList();
-                ListAxControls(l, false);
-                AxHost[] axControls = new AxHost[l.Count];
-                l.CopyTo(axControls, 0);
-                for (int i = 0; i < axControls.Length; i++)
+                List<AxHost> axControls = GetAxControls();
+                foreach (AxHost control in axControls)
                 {
-                    AxHost control = axControls[i];
                     if (control.GetOcState() >= OC_RUNNING && control.IsUserMode() && control.AwaitingDefreezing())
                     {
                         control.Freeze(false);
@@ -718,12 +710,10 @@ namespace System.Windows.Forms
                 if ((grfFlags & Ole.OLECONTF.OLECONTF_EMBEDDINGS) != 0)
                 {
                     Debug.Assert(_parent is not null, "gotta have it...");
-                    ArrayList list = new ArrayList();
-                    ListAxControls(list, true);
+                    List<object> list = GetAxControlsOcx();
                     if (list.Count > 0)
                     {
-                        object[] temp = new object[list.Count];
-                        list.CopyTo(temp, 0);
+                        object[] temp = list.ToArray();
                         result = ComHelpers.TryGetComPointer(new EnumUnknown(temp), out *ppenum);
                         Debug.Assert(result);
                         return HRESULT.S_OK;
