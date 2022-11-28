@@ -577,7 +577,7 @@ namespace System.ComponentModel.Design
             private List<IComponent> _ignoreAddingList; // the list of objects that are currently being added.  We ignore change events between adding and added.
             private List<IComponent> _ignoreAddedList; // the list of objects that are added. We do not serialize before state for change events that happen in the same transaction
             private bool _reverse; // if true, we walk the events list from the bottom up
-            private readonly Hashtable _lastSelection; // the selection as it was before we gathered undo info
+            private readonly Dictionary<string, IContainer> _lastSelection; // the selection as it was before we gathered undo info
 
             public UndoUnit(UndoEngine engine, string name)
             {
@@ -591,7 +591,7 @@ namespace System.ComponentModel.Design
                 if (UndoEngine.GetService(typeof(ISelectionService)) is ISelectionService ss)
                 {
                     ICollection selection = ss.GetSelectedComponents();
-                    Hashtable selectedNames = new Hashtable();
+                    Dictionary<string, IContainer> selectedNames = new();
                     foreach (object sel in selection)
                     {
                         if (sel is IComponent comp && comp.Site is not null)
@@ -1008,18 +1008,13 @@ namespace System.ComponentModel.Design
                         {
                             if (UndoEngine.GetService(typeof(ISelectionService)) is ISelectionService ss)
                             {
-                                string[] names = new string[_lastSelection.Keys.Count];
-                                _lastSelection.Keys.CopyTo(names, 0);
-                                ArrayList list = new ArrayList(names.Length);
-                                foreach (string name in names)
+                                List<IComponent> list = new(_lastSelection.Keys.Count);
+                                foreach ((string name, IContainer container) in _lastSelection)
                                 {
-                                    if (name is not null)
+                                    IComponent comp = container.Components[name];
+                                    if (comp is not null)
                                     {
-                                        object comp = ((Container)_lastSelection[name]).Components[name];
-                                        if (comp is not null)
-                                        {
-                                            list.Add(comp);
-                                        }
+                                        list.Add(comp);
                                     }
                                 }
 
