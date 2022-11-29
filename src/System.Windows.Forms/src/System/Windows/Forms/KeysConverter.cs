@@ -133,12 +133,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
-            if (destinationType == typeof(Enum[]))
-            {
-                return true;
-            }
-
-            return base.CanConvertTo(context, destinationType);
+            return destinationType == typeof(Enum[]) ? true : base.CanConvertTo(context, destinationType);
         }
 
         /// <summary>
@@ -233,18 +228,13 @@ namespace System.Windows.Forms
             if (value is Keys or int)
             {
                 bool asString = destinationType == typeof(string);
-                bool asEnum = false;
-                if (!asString)
-                {
-                    asEnum = destinationType == typeof(Enum[]);
-                }
-
+                bool asEnum = !asString && destinationType == typeof(Enum[]);
                 if (asString || asEnum)
                 {
                     Keys key = (Keys)value;
                     bool added = false;
-                    List<string> termStrings = asString ? new() : null;
-                    List<Enum> termKeys = asEnum ? new() : null;
+                    StringBuilder termStrings = new(32);
+                    List<Enum> termKeys = new();
                     Keys modifiers = (key & Keys.Modifiers);
 
                     // First, iterate through and do the modifiers. These are
@@ -259,10 +249,10 @@ namespace System.Windows.Forms
                             {
                                 if (added)
                                 {
-                                    termStrings.Add("+");
+                                    termStrings.Append('+');
                                 }
 
-                                termStrings.Add(keyString);
+                                termStrings.Append(keyString);
                             }
                             else
                             {
@@ -273,14 +263,14 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    // Now reset and do the key values.  Here, we quit if
+                    // Now reset and do the key values. Here, we quit if
                     // we find a match.
                     Keys keyOnly = key & Keys.KeyCode;
                     bool foundKey = false;
 
                     if (added && asString)
                     {
-                        termStrings.Add("+");
+                        termStrings.Append('+');
                     }
 
                     for (int i = 0; i < DisplayOrder.Count; i++)
@@ -291,7 +281,7 @@ namespace System.Windows.Forms
                         {
                             if (asString)
                             {
-                                termStrings.Add(keyString);
+                                termStrings.Append(keyString);
                             }
                             else
                             {
@@ -305,13 +295,13 @@ namespace System.Windows.Forms
                     }
 
                     // Finally, if the key wasn't in our list, add it to
-                    // the end anyway.  Here we just pull the key value out
+                    // the end anyway. Here we just pull the key value out
                     // of the enum.
                     if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
                     {
                         if (asString)
                         {
-                            termStrings.Add(keyOnly.ToString());
+                            termStrings.Append(keyOnly.ToString());
                         }
                         else
                         {
@@ -319,20 +309,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (asString)
-                    {
-                        StringBuilder b = new StringBuilder(32);
-                        foreach (string t in termStrings)
-                        {
-                            b.Append(t);
-                        }
-
-                        return b.ToString();
-                    }
-                    else
-                    {
-                        return termKeys.ToArray();
-                    }
+                    return asString ? termStrings.ToString() : termKeys.ToArray();
                 }
             }
 
