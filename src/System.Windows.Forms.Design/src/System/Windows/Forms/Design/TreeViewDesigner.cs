@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (_treeView != null)
+                if (_treeView is not null)
                 {
                     _treeView.AfterExpand -= TreeViewInvalidate;
                     _treeView.AfterCollapse -= TreeViewInvalidate;
@@ -62,8 +62,8 @@ namespace System.Windows.Forms.Design
         {
             base.Initialize(component);
             _treeView = component as TreeView;
-            Debug.Assert(_treeView != null, "TreeView is null in TreeViewDesigner");
-            if (_treeView != null)
+            Debug.Assert(_treeView is not null, "TreeView is null in TreeViewDesigner");
+            if (_treeView is not null)
             {
                 _treeView.AfterExpand += TreeViewInvalidate;
                 _treeView.AfterCollapse += TreeViewInvalidate;

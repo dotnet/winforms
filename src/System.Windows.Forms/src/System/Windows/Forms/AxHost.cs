@@ -4,14 +4,12 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -97,11 +95,8 @@ namespace System.Windows.Forms
         private static int s_logPixelsX = -1;
         private static int s_logPixelsY = -1;
 
-        private static readonly Guid s_icf2_Guid = typeof(Ole32.IClassFactory2).GUID;
-        private static readonly Guid s_ifont_Guid = typeof(Ole32.IFont).GUID;
-        private static readonly Guid s_ifontDisp_Guid = typeof(Ole32.IFontDisp).GUID;
-        private static readonly Guid s_ivbformat_Guid = typeof(Ole32.IVBFormat).GUID;
-        private static readonly Guid s_ioleobject_Guid = IOleObject.Guid;
+        private static readonly Guid s_ivbformat_Guid = IID.GetRef<IVBFormat>();
+        private static readonly Guid s_ioleobject_Guid = IID.GetRef<IOleObject>();
         private static readonly Guid s_dataSource_Guid = new("{7C0FFAB3-CD84-11D0-949A-00A0C91110ED}");
         private static readonly Guid s_windowsMediaPlayer_Clsid = new("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
         private static readonly Guid s_comctlImageCombo_Clsid = new("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
@@ -425,9 +420,9 @@ namespace System.Windows.Forms
             get
             {
                 RightToLeft rtol = base.RightToLeft;
-                return rtol == System.Windows.Forms.RightToLeft.Yes;
+                return rtol == Forms.RightToLeft.Yes;
             }
-            set => base.RightToLeft = (value) ? System.Windows.Forms.RightToLeft.Yes : System.Windows.Forms.RightToLeft.No;
+            set => base.RightToLeft = (value) ? Forms.RightToLeft.Yes : Forms.RightToLeft.No;
         }
 
         [Browsable(false)]
@@ -1757,15 +1752,7 @@ namespace System.Windows.Forms
             return true;
         }
 
-        protected override bool ProcessDialogKey(Keys keyData)
-        {
-            if (_ignoreDialogKeys)
-            {
-                return false;
-            }
-
-            return base.ProcessDialogKey(keyData);
-        }
+        protected override bool ProcessDialogKey(Keys keyData) => !_ignoreDialogKeys && base.ProcessDialogKey(keyData);
 
         /// <summary>
         ///  This method is called by the application's message loop to pre-process
@@ -2283,17 +2270,17 @@ namespace System.Windows.Forms
                     Control ctl = this;
                     while (ctl is not null)
                     {
-                        if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.No)
+                        if (ctl.RightToLeft == Forms.RightToLeft.No)
                         {
                             return false;
                         }
 
-                        if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.Yes)
+                        if (ctl.RightToLeft == Forms.RightToLeft.Yes)
                         {
                             return true;
                         }
 
-                        if (ctl.RightToLeft == System.Windows.Forms.RightToLeft.Inherit)
+                        if (ctl.RightToLeft == Forms.RightToLeft.Inherit)
                         {
                             ctl = ctl.Parent;
                         }
@@ -2378,7 +2365,7 @@ namespace System.Windows.Forms
                 ref clsid,
                 Ole32.CLSCTX.INPROC_SERVER,
                 IntPtr.Zero,
-                in s_icf2_Guid,
+                in IID.GetRef<IClassFactory2>(),
                 out Ole32.IClassFactory2 icf2);
 
             if (!hr.Succeeded)
@@ -2432,7 +2419,7 @@ namespace System.Windows.Forms
                     ref clsid,
                     Ole32.CLSCTX.INPROC_SERVER,
                     IntPtr.Zero,
-                    in s_icf2_Guid,
+                    in IID.GetRef<IClassFactory2>(),
                     out Ole32.IClassFactory2 icf2);
                 if (hr.Succeeded)
                 {
@@ -2729,8 +2716,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            ArrayList returnProperties = new ArrayList();
-
+            List<PropertyDescriptor> returnProperties = new();
             _properties ??= new Dictionary<string, PropertyDescriptor>();
 
             if (_propertyInfos is null)
@@ -2819,7 +2805,7 @@ namespace System.Windows.Forms
 
                     if (browse is not null)
                     {
-                        ArrayList removeList = null;
+                        List<PropertyDescriptor> removeList = null;
 
                         foreach (PropertyDescriptor prop in returnProperties)
                         {
@@ -2827,14 +2813,14 @@ namespace System.Windows.Forms
                                 && prop.TryGetAttribute(out BrowsableAttribute browsableAttribute)
                                 && !browsableAttribute.Equals(browse))
                             {
-                                removeList ??= new ArrayList();
+                                removeList ??= new();
                                 removeList.Add(prop);
                             }
                         }
 
                         if (removeList is not null)
                         {
-                            foreach (object prop in removeList)
+                            foreach (PropertyDescriptor prop in removeList)
                             {
                                 returnProperties.Remove(prop);
                             }
@@ -2843,12 +2829,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            PropertyDescriptor[] temp = new PropertyDescriptor[returnProperties.Count];
-            returnProperties.CopyTo(temp, 0);
-
             // Update our stashed values.
             s_axHTraceSwitch.TraceVerbose($"Updating stashed values for : {attributes?.Length.ToString() ?? "<null>"}");
-            _propsStash = new PropertyDescriptorCollection(temp);
+            _propsStash = new PropertyDescriptorCollection(returnProperties.ToArray());
             _attribsStash = attributes;
 
             return _propsStash;
@@ -3145,15 +3128,7 @@ namespace System.Windows.Forms
             // nop...  windows forms wrapper will override...
         }
 
-        private bool CanShowPropertyPages()
-        {
-            if (GetOcState() < OC_RUNNING)
-            {
-                return false;
-            }
-
-            return GetOcx() is Ole32.ISpecifyPropertyPages;
-        }
+        private bool CanShowPropertyPages() => GetOcState() >= OC_RUNNING && GetOcx() is Ole32.ISpecifyPropertyPages;
 
         public unsafe bool HasPropertyPages()
         {
@@ -3163,16 +3138,10 @@ namespace System.Windows.Forms
             }
 
             Ole32.ISpecifyPropertyPages ispp = (Ole32.ISpecifyPropertyPages)GetOcx();
-            var uuids = default(Ole32.CAUUID);
+            Ole32.CAUUID uuids = default;
             try
             {
-                HRESULT hr = ispp.GetPages(&uuids);
-                if (!hr.Succeeded)
-                {
-                    return false;
-                }
-
-                return uuids.cElems > 0;
+                return ispp.GetPages(&uuids).Succeeded && uuids.cElems > 0;
             }
             finally
             {
@@ -3564,7 +3533,7 @@ namespace System.Windows.Forms
             // OleInitialize(). The EE calls CoInitializeEx() on the thread, but I believe
             // that is not good enough for DragDrop.
             //
-            if (Application.OleRequired() != System.Threading.ApartmentState.STA)
+            if (Application.OleRequired() != ApartmentState.STA)
             {
                 throw new ThreadStateException(SR.ThreadMustBeSTA);
             }
@@ -3664,14 +3633,7 @@ namespace System.Windows.Forms
         }
 
         internal override bool CanSelectCore()
-        {
-            if (!GetControlEnabled() || _axState[s_rejectSelection])
-            {
-                return false;
-            }
-
-            return base.CanSelectCore();
-        }
+            => GetControlEnabled() && !_axState[s_rejectSelection] && base.CanSelectCore();
 
         /// <summary>
         ///  Frees all resources associated with this control. This method may not be
@@ -3898,71 +3860,27 @@ namespace System.Windows.Forms
         }
 
         // Mapping functions:
-        private static PICTDESC GetPICTDESCFromPicture(Image image)
-        {
-            if (image is Bitmap bmp)
-            {
-                return PICTDESC.FromBitmap(bmp);
-            }
-
-            if (image is Metafile mf)
-            {
-                return PICTDESC.FromMetafile(mf);
-            }
-
-            throw new ArgumentException(SR.AXUnknownImage, nameof(image));
-        }
 
         /// <summary>
         ///  Maps from a System.Drawing.Image to an OLE IPicture
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureFromPicture(Image image)
-        {
-            if (image is null)
-            {
-                return null;
-            }
-
-            PICTDESC pictdesc = GetPICTDESCFromPicture(image);
-            using ComScope<IPicture> picture = new(null);
-            PInvoke.OleCreatePictureIndirect(&pictdesc, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
-            return Marshal.GetObjectForIUnknown(picture);
-        }
+            => image is null ? null : IPicture.CreateObjectFromImage(image);
 
         /// <summary>
         ///  Maps from a System.Drawing.Cursor to an OLE IPicture
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureFromCursor(Cursor cursor)
-        {
-            if (cursor is null)
-            {
-                return null;
-            }
-
-            PICTDESC desc = PICTDESC.FromIcon(Icon.FromHandle(cursor.Handle), copy: true);
-            using ComScope<IPicture> picture = new(null);
-            PInvoke.OleCreatePictureIndirect(&desc, IPicture.NativeGuid, fOwn: true, picture).ThrowOnFailure();
-            return Marshal.GetObjectForIUnknown(picture);
-        }
+            => cursor is null ? null : IPicture.CreateObjectFromIcon(Icon.FromHandle(cursor.Handle), copy: true);
 
         /// <summary>
         ///  Maps from a System.Drawing.Image to an OLE IPictureDisp
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureDispFromPicture(Image image)
-        {
-            if (image is null)
-            {
-                return null;
-            }
-
-            PICTDESC desc = GetPICTDESCFromPicture(image);
-            using ComScope<IPictureDisp> pictureDisp = new(null);
-            PInvoke.OleCreatePictureIndirect(&desc, IPictureDisp.NativeGuid, fOwn: true, pictureDisp).ThrowOnFailure();
-            return Marshal.GetObjectForIUnknown(pictureDisp);
-        }
+            => image is null ? null : IPictureDisp.CreateObjectFromImage(image);
 
         /// <summary>
         ///  Maps from an OLE IPicture to a System.Drawing.Image
@@ -3975,18 +3893,17 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            uint hPal = default;
-            IPicture.Interface pict = (IPicture.Interface)picture;
-            pict.get_Type(out short type).ThrowOnFailure();
-            if (type == (short)PICTYPE.PICTYPE_BITMAP)
-            {
-                pict.get_hPal(&hPal);
-            }
+            using var iPicture = ComHelpers.GetComScope<IPictureDisp>(picture, out HRESULT hr);
+            hr.ThrowOnFailure();
 
-            pict.get_Handle(out uint handle).ThrowOnFailure();
-            pict.get_Width(out int width).ThrowOnFailure();
-            pict.get_Height(out int height).ThrowOnFailure();
-            return GetPictureFromParams(handle, (PICTYPE)type, hPal, (uint)width, (uint)height);
+            try
+            {
+                return iPicture.Value->ToImage();
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException(SR.AXUnknownImage, nameof(picture));
+            }
         }
 
         /// <summary>
@@ -4000,71 +3917,16 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            uint hPal = default;
-            using var pict = ComHelpers.GetComScope<IDispatch>(picture, out HRESULT hr);
+            using var pictureDisp = ComHelpers.GetComScope<IPictureDisp>(picture, out HRESULT hr);
             hr.ThrowOnFailure();
-            using VARIANT variant = default;
-            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
-            PICTYPE type = (PICTYPE)variant.data.iVal;
-            if (type == PICTYPE.PICTYPE_BITMAP)
+
+            try
             {
-                ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
-                hPal = variant.data.uintVal;
+                return pictureDisp.Value->ToImage();
             }
-
-            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
-            uint handle = variant.data.uintVal;
-
-            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
-            uint width = variant.data.uintVal;
-
-            ComHelpers.GetDispatchProperty(pict, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
-            uint height = variant.data.uintVal;
-
-            return GetPictureFromParams(handle, type, hPal, width, height);
-        }
-
-        private static Image GetPictureFromParams(
-            uint handle,
-            PICTYPE type,
-            uint paletteHandle,
-            uint width,
-            uint height)
-        {
-            nint extendedHandle = (int)handle;
-            switch (type)
+            catch (InvalidOperationException)
             {
-                case PICTYPE.PICTYPE_ICON:
-                    return (Image)(Icon.FromHandle(extendedHandle).Clone());
-                case PICTYPE.PICTYPE_METAFILE:
-                    WmfPlaceableFileHeader header = new WmfPlaceableFileHeader
-                    {
-                        BboxRight = (short)width,
-                        BboxBottom = (short)height
-                    };
-
-                    using (var metafile = new Metafile(extendedHandle, header, deleteWmf: false))
-                    {
-                        return (Image)metafile.Clone();
-                    }
-
-                case PICTYPE.PICTYPE_ENHMETAFILE:
-                    using (var metafile = new Metafile(extendedHandle, deleteEmf: false))
-                    {
-                        return (Image)metafile.Clone();
-                    }
-
-                case PICTYPE.PICTYPE_BITMAP:
-                    nint extendedPaletteHandle = (int)paletteHandle;
-                    return Image.FromHbitmap(extendedHandle, extendedPaletteHandle);
-                case PICTYPE.PICTYPE_NONE:
-                    // MSDN says this should not be a valid value, but comctl32 returns it...
-                    return null;
-                case PICTYPE.PICTYPE_UNINITIALIZED:
-                    return null;
-                default:
-                    Debug.Fail($"Invalid image type {type}");
-                    throw new ArgumentException(SR.AXUnknownImage, nameof(type));
+                throw new ArgumentException(SR.AXUnknownImage, nameof(picture));
             }
         }
 
@@ -4134,7 +3996,7 @@ namespace System.Windows.Forms
             try
             {
                 Oleaut32.FONTDESC fontDesc = GetFONTDESCFromFont(font);
-                return Oleaut32.OleCreateFontIndirect(ref fontDesc, in s_ifont_Guid);
+                return Oleaut32.OleCreateFontIndirect(ref fontDesc, in IID.GetRef<IFont>());
             }
             catch
             {
@@ -4158,12 +4020,9 @@ namespace System.Windows.Forms
             try
             {
                 Font f = Font.FromHfont(oleFont.hFont);
-                if (f.Unit == GraphicsUnit.Point)
-                {
-                    return f;
-                }
-
-                return new Font(f.Name, f.SizeInPoints, f.Style, GraphicsUnit.Point, f.GdiCharSet, f.GdiVerticalFont);
+                return f.Unit == GraphicsUnit.Point
+                    ? f
+                    : new(f.Name, f.SizeInPoints, f.Style, GraphicsUnit.Point, f.GdiCharSet, f.GdiVerticalFont);
             }
             catch (Exception e)
             {
@@ -4189,7 +4048,7 @@ namespace System.Windows.Forms
             }
 
             Oleaut32.FONTDESC fontdesc = GetFONTDESCFromFont(font);
-            return Oleaut32.OleCreateIFontDispIndirect(ref fontdesc, in s_ifontDisp_Guid);
+            return Oleaut32.OleCreateIFontDispIndirect(ref fontdesc, in IID.GetRef<IFontDisp>());
         }
 
         /// <summary>
@@ -4271,12 +4130,9 @@ namespace System.Windows.Forms
 
             // User controls & other visual basic related controls give us coordinates as floats in twips
             // but MFC controls give us integers as pixels.
-            if (o.GetType() == typeof(float))
-            {
-                return Twip2Pixel(Convert.ToDouble(o, CultureInfo.InvariantCulture), xDirection);
-            }
-
-            return Convert.ToInt32(o, CultureInfo.InvariantCulture);
+            return o.GetType() == typeof(float)
+                ? Twip2Pixel(Convert.ToDouble(o, CultureInfo.InvariantCulture), xDirection)
+                : Convert.ToInt32(o, CultureInfo.InvariantCulture);
         }
 
         private static short Convert2short(object o)

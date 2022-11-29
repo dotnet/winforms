@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 ContainerControl c = Control as ContainerControl;
-                if (c != null)
+                if (c is not null)
                 {
                     return c.CurrentAutoScaleDimensions;
                 }
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Design
             set
             {
                 ContainerControl c = Control as ContainerControl;
-                if (c != null)
+                if (c is not null)
                 {
                     c.AutoScaleDimensions = value;
                 }
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 ContainerControl c = Control as ContainerControl;
-                if (c != null)
+                if (c is not null)
                 {
                     return c.AutoScaleMode;
                 }
@@ -112,14 +112,14 @@ namespace System.Windows.Forms.Design
             {
                 ShadowProperties[nameof(AutoScaleMode)] = value;
                 ContainerControl c = Control as ContainerControl;
-                if (c != null && c.AutoScaleMode != value)
+                if (c is not null && c.AutoScaleMode != value)
                 {
                     c.AutoScaleMode = value;
 
                     // If we're not loading and this changes update
                     // the current auto scale dimensions.
                     IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-                    if (host != null && !host.Loading)
+                    if (host is not null && !host.Loading)
                     {
                         c.AutoScaleDimensions = c.CurrentAutoScaleDimensions;
                     }
@@ -190,11 +190,11 @@ namespace System.Windows.Forms.Design
                 {
                     queriedTabOrder = true;
                     IMenuCommandService menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-                    if (menuCommandService != null)
+                    if (menuCommandService is not null)
                         tabOrderCommand = menuCommandService.FindCommand(StandardCommands.TabOrder);
                 }
 
-                if (tabOrderCommand != null)
+                if (tabOrderCommand is not null)
                 {
                     return tabOrderCommand.Checked;
                 }
@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Design
             set
             {
                 trayAutoArrange = value;
-                if (componentTray != null)
+                if (componentTray is not null)
                 {
                     componentTray.AutoArrange = trayAutoArrange;
                 }
@@ -236,7 +236,7 @@ namespace System.Windows.Forms.Design
             set
             {
                 trayLargeIcon = value;
-                if (componentTray != null)
+                if (componentTray is not null)
                 {
                     componentTray.ShowLargeIcons = trayLargeIcon;
                 }
@@ -250,7 +250,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (componentTray != null)
+                if (componentTray is not null)
                 {
                     return componentTray.Height;
                 }
@@ -263,7 +263,7 @@ namespace System.Windows.Forms.Design
             set
             {
                 trayHeight = value;
-                if (componentTray != null)
+                if (componentTray is not null)
                 {
                     componentTray.Height = trayHeight;
                 }
@@ -278,10 +278,10 @@ namespace System.Windows.Forms.Design
         Control IOleDragClient.GetControlForComponent(object component)
         {
             Control c = GetControl(component);
-            if (c != null)
+            if (c is not null)
                 return c;
 
-            if (componentTray != null)
+            if (componentTray is not null)
             {
                 return ((IOleDragClient)componentTray).GetControlForComponent(component);
             }
@@ -292,7 +292,7 @@ namespace System.Windows.Forms.Design
         internal virtual bool CanDropComponents(DragEventArgs de)
         {
             // If there is no tray we bail.
-            if (componentTray == null)
+            if (componentTray is null)
                 return true;
 
             // Figure out if any of the components in the drag-drop are children
@@ -301,13 +301,13 @@ namespace System.Windows.Forms.Design
             OleDragDropHandler ddh = GetOleDragHandler();
             object[] dragComps = OleDragDropHandler.GetDraggingObjects(de);
 
-            if (dragComps != null)
+            if (dragComps is not null)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 for (int i = 0; i < dragComps.Length; i++)
                 {
                     IComponent comp = dragComps[i] as IComponent;
-                    if (host == null || dragComps[i] == null || comp == null)
+                    if (host is null || dragComps[i] is null || comp is null)
                     {
                         continue;
                     }
@@ -350,10 +350,10 @@ namespace System.Windows.Forms.Design
                 AxToolboxItem tool;
                 // Look to see if we have already cached the ToolboxItem.
                 //
-                if (axTools != null)
+                if (axTools is not null)
                 {
                     tool = (AxToolboxItem)axTools[clsid];
-                    if (tool != null)
+                    if (tool is not null)
                     {
                         if (AxToolSwitch.TraceVerbose)
                             Debug.WriteLine("Found AxToolboxItem in tool cache");
@@ -377,13 +377,13 @@ namespace System.Windows.Forms.Design
         private static ToolboxItem CreateCfCodeToolboxItem(IDataObject dataObject)
         {
             object serializationData = dataObject.GetData(OleDragDropHandler.NestedToolboxItemFormat, false);
-            if (serializationData != null)
+            if (serializationData is not null)
             {
                 return (ToolboxItem)serializationData;
             }
 
             serializationData = dataObject.GetData(OleDragDropHandler.DataFormat, false);
-            if (serializationData != null)
+            if (serializationData is not null)
             {    //backcompat
                 return new OleDragDropHandler.CfCodeToolboxItem(serializationData);
                 ;
@@ -400,13 +400,13 @@ namespace System.Windows.Forms.Design
             if (disposing)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                Debug.Assert(host != null, "Must have a designer host on dispose");
+                Debug.Assert(host is not null, "Must have a designer host on dispose");
 
-                if (host != null)
+                if (host is not null)
                 {
                     //Remove Adorner Window which hosts DropDowns.
                     ToolStripAdornerWindowService toolWindow = (ToolStripAdornerWindowService)GetService(typeof(ToolStripAdornerWindowService));
-                    if (toolWindow != null)
+                    if (toolWindow is not null)
                     {
                         toolWindow.Dispose();
                         host.RemoveService(typeof(ToolStripAdornerWindowService));
@@ -418,10 +418,10 @@ namespace System.Windows.Forms.Design
                     // If the tray wasn't destroyed, then we got some sort of imbalance
                     // in our add/remove calls.  Don't sweat it, but do remove the tray.
                     //
-                    if (componentTray != null)
+                    if (componentTray is not null)
                     {
                         ISplitWindowService sws = (ISplitWindowService)GetService(typeof(ISplitWindowService));
-                        if (sws != null)
+                        if (sws is not null)
                         {
                             sws.RemoveSplitWindow(componentTray);
                             componentTray.Dispose();
@@ -432,24 +432,24 @@ namespace System.Windows.Forms.Design
                     }
 
                     IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                    if (cs != null)
+                    if (cs is not null)
                     {
                         cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
                         cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                         cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                     }
 
-                    if (undoEngine != null)
+                    if (undoEngine is not null)
                     {
                         undoEngine.Undoing -= new EventHandler(OnUndoing);
                         undoEngine.Undone -= new EventHandler(OnUndone);
                     }
 
-                    if (toolboxCreator != null)
+                    if (toolboxCreator is not null)
                     {
                         IToolboxService toolbox = (IToolboxService)GetService(typeof(IToolboxService));
-                        Debug.Assert(toolbox != null, "No toolbox service available");
-                        if (toolbox != null)
+                        Debug.Assert(toolbox is not null, "No toolbox service available");
+                        if (toolbox is not null)
                         {
                             Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Removing DocumentDesigner as CLSID ToolboxItemCreator");
                             toolbox.RemoveCreator(AxClipFormat, host);
@@ -466,26 +466,26 @@ namespace System.Windows.Forms.Design
                 }
 
                 ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
-                if (ss != null)
+                if (ss is not null)
                 {
                     ss.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 }
 
-                if (behaviorService != null)
+                if (behaviorService is not null)
                 {
                     behaviorService.Dispose();
                     behaviorService = null;
                 }
 
-                if (selectionManager != null)
+                if (selectionManager is not null)
                 {
                     selectionManager.Dispose();
                     selectionManager = null;
                 }
 
-                if (componentTray != null)
+                if (componentTray is not null)
                 {
-                    if (host != null)
+                    if (host is not null)
                     {
                         ISplitWindowService sws = (ISplitWindowService)GetService(typeof(ISplitWindowService));
                         sws?.RemoveSplitWindow(componentTray);
@@ -495,40 +495,40 @@ namespace System.Windows.Forms.Design
                     componentTray = null;
                 }
 
-                if (pbrsFwd != null)
+                if (pbrsFwd is not null)
                 {
                     pbrsFwd.Dispose();
                     pbrsFwd = null;
                 }
 
-                if (frame != null)
+                if (frame is not null)
                 {
                     frame.Dispose();
                     frame = null;
                 }
 
-                if (commandSet != null)
+                if (commandSet is not null)
                 {
                     commandSet.Dispose();
                     commandSet = null;
                 }
 
-                if (inheritanceService != null)
+                if (inheritanceService is not null)
                 {
                     inheritanceService.Dispose();
                     inheritanceService = null;
                 }
 
-                if (inheritanceUI != null)
+                if (inheritanceUI is not null)
                 {
                     inheritanceUI.Dispose();
                     inheritanceUI = null;
                 }
 
-                if (designBindingValueUIHandler != null)
+                if (designBindingValueUIHandler is not null)
                 {
                     IPropertyValueUIService pvUISvc = (IPropertyValueUIService)GetService(typeof(IPropertyValueUIService));
-                    if (pvUISvc != null)
+                    if (pvUISvc is not null)
                     {
                         pvUISvc.RemovePropertyValueUIHandler(new PropertyValueUIHandler(designBindingValueUIHandler.OnGetUIValueItem));
                         pvUISvc = null;
@@ -538,7 +538,7 @@ namespace System.Windows.Forms.Design
                     designBindingValueUIHandler = null;
                 }
 
-                if (designerExtenders != null)
+                if (designerExtenders is not null)
                 {
                     designerExtenders.Dispose();
                     designerExtenders = null;
@@ -546,7 +546,7 @@ namespace System.Windows.Forms.Design
 
                 axTools?.Clear();
 
-                if (host != null)
+                if (host is not null)
                 {
                     host.RemoveService(typeof(BehaviorService));
                     host.RemoveService(typeof(ToolStripAdornerWindowService));
@@ -581,21 +581,21 @@ namespace System.Windows.Forms.Design
 
                 bool locked = false;
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["Locked"];
-                if (prop != null)
+                if (prop is not null)
                 {
                     locked = (bool)prop.GetValue(Component);
                 }
 
                 bool autoSize = false;
                 prop = TypeDescriptor.GetProperties(Component)["AutoSize"];
-                if (prop != null)
+                if (prop is not null)
                 {
                     autoSize = (bool)prop.GetValue(Component);
                 }
 
                 AutoSizeMode mode = AutoSizeMode.GrowOnly;
                 prop = TypeDescriptor.GetProperties(Component)["AutoSizeMode"];
-                if (prop != null)
+                if (prop is not null)
                 {
                     mode = (AutoSizeMode)prop.GetValue(Component);
                 }
@@ -655,7 +655,7 @@ namespace System.Windows.Forms.Design
             ISelectionService s = (ISelectionService)GetService(typeof(ISelectionService));
             ParentControlDesigner parentControlDesigner = null;
 
-            if (s != null)
+            if (s is not null)
             {
                 // We first try the primary selection.  If that is null
                 // or isn't a Control, we then walk the set of selected
@@ -663,7 +663,7 @@ namespace System.Windows.Forms.Design
                 //
                 object sel = s.PrimarySelection;
 
-                if (sel == null || !(sel is Control))
+                if (sel is null || !(sel is Control))
                 {
                     sel = null;
 
@@ -679,7 +679,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (sel != null)
+                if (sel is not null)
                 {
                     // Now that we have our currently selected component
                     // we can walk up the parent chain looking for a frame
@@ -690,13 +690,13 @@ namespace System.Windows.Forms.Design
 
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
 
-                    if (host != null)
+                    if (host is not null)
                     {
-                        while (c != null)
+                        while (c is not null)
                         {
                             ParentControlDesigner designer = host.GetDesigner(c) as ParentControlDesigner;
 
-                            if (designer != null)
+                            if (designer is not null)
                             {
                                 parentControlDesigner = designer;
                                 break;
@@ -740,19 +740,19 @@ namespace System.Windows.Forms.Design
             // back color.
             //
             PropertyDescriptor backProp = TypeDescriptor.GetProperties(Component.GetType())["BackColor"];
-            if (backProp != null && backProp.PropertyType == typeof(Color) && !backProp.ShouldSerializeValue(Component))
+            if (backProp is not null && backProp.PropertyType == typeof(Color) && !backProp.ShouldSerializeValue(Component))
             {
                 Control.BackColor = SystemColors.Control;
             }
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
             IExtenderProviderService exps = (IExtenderProviderService)GetService(typeof(IExtenderProviderService));
-            if (exps != null)
+            if (exps is not null)
             {
                 designerExtenders = new DesignerExtenders(exps);
             }
 
-            if (host != null)
+            if (host is not null)
             {
                 host.Activated += new EventHandler(OnDesignerActivate);
                 host.Deactivated += new EventHandler(OnDesignerDeactivate);
@@ -783,7 +783,7 @@ namespace System.Windows.Forms.Design
                 // And component add and remove events for our tray
                 //
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                if (cs != null)
+                if (cs is not null)
                 {
                     cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
                     cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
@@ -815,7 +815,7 @@ namespace System.Windows.Forms.Design
 
                 IPropertyValueUIService pvUISvc = (IPropertyValueUIService)component.Site.GetService(typeof(IPropertyValueUIService));
 
-                if (pvUISvc != null)
+                if (pvUISvc is not null)
                 {
                     designBindingValueUIHandler = new DesignBindingValueUIHandler();
                     pvUISvc.AddPropertyValueUIHandler(new PropertyValueUIHandler(designBindingValueUIHandler.OnGetUIValueItem));
@@ -824,7 +824,7 @@ namespace System.Windows.Forms.Design
                 // Add the DocumentDesigner as a creator of CLSID toolbox items.
                 //
                 IToolboxService toolbox = (IToolboxService)host.GetService(typeof(IToolboxService));
-                if (toolbox != null)
+                if (toolbox is not null)
                 {
                     Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Adding DocumentDesigner as CLSID ToolboxItemCreator");
                     toolboxCreator = new ToolboxItemCreatorCallback(OnCreateToolboxItem);
@@ -842,7 +842,7 @@ namespace System.Windows.Forms.Design
 
             // Setup our menu command structure.
             //
-            Debug.Assert(component.Site != null, "Designer host should have given us a site by now.");
+            Debug.Assert(component.Site is not null, "Designer host should have given us a site by now.");
             commandSet = new ControlCommandSet(component.Site);
 
             // Finally hook the designer view into the frame.  We do this last because the frame may
@@ -871,7 +871,7 @@ namespace System.Windows.Forms.Design
             {
                 string controlKey = "CLSID\\" + clsid + "\\Control";
                 key = Registry.ClassesRoot.OpenSubKey(controlKey);
-                if (key != null)
+                if (key is not null)
                 {
                     // ASURT 36817:
                     // We are not going to support design-time controls for this revision. We use the guids under
@@ -880,7 +880,7 @@ namespace System.Windows.Forms.Design
                     //
                     string category = "CLSID\\" + clsid + "\\Implemented Categories\\{" + htmlDesignTime.ToString() + "}";
                     designtimeKey = Registry.ClassesRoot.OpenSubKey(category);
-                    return (designtimeKey == null);
+                    return (designtimeKey is null);
                 }
 
                 return false;
@@ -896,7 +896,7 @@ namespace System.Windows.Forms.Design
         private void OnUndone(object source, EventArgs e)
         {
             //resume all suspended comps we found earlier
-            if (suspendedComponents != null)
+            if (suspendedComponents is not null)
             {
                 foreach (Control c in suspendedComponents)
                 {
@@ -913,7 +913,7 @@ namespace System.Windows.Forms.Design
             if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
                 IContainer container = host.Container;
-                if (container != null)
+                if (container is not null)
                 {
                     suspendedComponents = new(container.Components.Count + 1);
 
@@ -932,7 +932,7 @@ namespace System.Windows.Forms.Design
                     if (host.RootComponent is Control root)
                     {
                         Control rootParent = root.Parent;
-                        if (rootParent != null)
+                        if (rootParent is not null)
                         {
                             rootParent.SuspendLayout();
                             suspendedComponents.Add(rootParent);
@@ -950,7 +950,7 @@ namespace System.Windows.Forms.Design
         private void OnComponentAdded(object source, ComponentEventArgs ce)
         {
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null)
+            if (host is not null)
             {
                 IComponent component = ce.Component;
 
@@ -967,13 +967,13 @@ namespace System.Windows.Forms.Design
                 //
                 ToolStripDesigner td = host.GetDesigner(component) as ToolStripDesigner;
 
-                if (td == null)
+                if (td is null)
                 {
                     ControlDesigner cd = host.GetDesigner(component) as ControlDesigner;
-                    if (cd != null)
+                    if (cd is not null)
                     {
                         Form form = cd.Control as Form;
-                        if (form == null || !form.TopLevel)
+                        if (form is null || !form.TopLevel)
                         {
                             addControl = false;
                         }
@@ -983,10 +983,10 @@ namespace System.Windows.Forms.Design
                 if (addControl &&
                     TypeDescriptor.GetAttributes(component).Contains(DesignTimeVisibleAttribute.Yes))
                 {
-                    if (componentTray == null)
+                    if (componentTray is null)
                     {
                         ISplitWindowService sws = (ISplitWindowService)GetService(typeof(ISplitWindowService));
-                        if (sws != null)
+                        if (sws is not null)
                         {
                             componentTray = new ComponentTray(this, Component.Site);
                             sws.AddSplitWindow(componentTray);
@@ -999,7 +999,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    if (componentTray != null)
+                    if (componentTray is not null)
                     {
                         // Suspend the layout of the tray through the loading
                         // process. This way, we won't continuously try to layout
@@ -1007,7 +1007,7 @@ namespace System.Windows.Forms.Design
                         // the controls restore themselves to their persisted state
                         // and then let auto-arrange kick in once.
                         //
-                        if (host != null && host.Loading && !trayLayoutSuspended)
+                        if (host is not null && host.Loading && !trayLayoutSuspended)
                         {
                             trayLayoutSuspended = true;
                             componentTray.SuspendLayout();
@@ -1028,14 +1028,14 @@ namespace System.Windows.Forms.Design
         {
             // ToolStrip is designableAsControl but has a ComponentTray Entry ... so special case it out.
             bool designableAsControl = (ce.Component is Control && !(ce.Component is ToolStrip)) && !(ce.Component is Form && ((Form)ce.Component).TopLevel);
-            if (!designableAsControl && componentTray != null)
+            if (!designableAsControl && componentTray is not null)
             {
                 componentTray.RemoveComponent(ce.Component);
 
                 if (componentTray.ComponentCount == 0)
                 {
                     ISplitWindowService sws = (ISplitWindowService)GetService(typeof(ISplitWindowService));
-                    if (sws != null)
+                    if (sws is not null)
                     {
                         sws.RemoveSplitWindow(componentTray);
                         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -1055,10 +1055,10 @@ namespace System.Windows.Forms.Design
         protected override void OnContextMenu(int x, int y)
         {
             IMenuCommandService mcs = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-            if (mcs != null)
+            if (mcs is not null)
             {
                 ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
-                if (selSvc != null)
+                if (selSvc is not null)
                 {
                     // Here we check to see if we're the only component selected.  If not, then
                     // we'll display the standard component menu.
@@ -1072,13 +1072,13 @@ namespace System.Windows.Forms.Design
                     else
                     {
                         Component selComp = selSvc.PrimarySelection as Component;
-                        if (selComp != null)
+                        if (selComp is not null)
                         {
                             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                            if (host != null)
+                            if (host is not null)
                             {
                                 ComponentDesigner compDesigner = host.GetDesigner(selComp) as ComponentDesigner;
-                                if (compDesigner != null)
+                                if (compDesigner is not null)
                                 {
                                     compDesigner.ShowContextMenu(x, y);
                                     return;
@@ -1098,7 +1098,7 @@ namespace System.Windows.Forms.Design
         protected override void OnCreateHandle()
         {
             // Don't call base unless our inheritance service is already running.
-            if (inheritanceService != null)
+            if (inheritanceService is not null)
             {
                 base.OnCreateHandle();
             }
@@ -1134,7 +1134,7 @@ namespace System.Windows.Forms.Design
 
             IDataObject dataObject = serializedData as IDataObject;
 
-            if (dataObject == null)
+            if (dataObject is null)
             {
                 Debug.Fail("Toolbox service didn't pass us a data object; that should never happen");
                 return null;
@@ -1164,10 +1164,10 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnDesignerActivate(object source, EventArgs evevent)
         {
-            if (undoEngine == null)
+            if (undoEngine is null)
             {
                 undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
-                if (undoEngine != null)
+                if (undoEngine is not null)
                 {
                     undoEngine.Undoing += new EventHandler(OnUndoing);
                     undoEngine.Undone += new EventHandler(OnUndone);
@@ -1200,13 +1200,13 @@ namespace System.Windows.Forms.Design
 
             // Restore the tray layout.
             //
-            if (trayLayoutSuspended && componentTray != null)
+            if (trayLayoutSuspended && componentTray is not null)
                 componentTray.ResumeLayout();
 
             // Select this component.
             //
             ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
-            if (ss != null)
+            if (ss is not null)
             {
                 ss.SelectionChanged += new EventHandler(OnSelectionChanged);
                 ss.SetSelectedComponents(new object[] { Component }, SelectionTypes.Replace);
@@ -1217,7 +1217,7 @@ namespace System.Windows.Forms.Design
         private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
         {
             Control ctrl = e.Component as Control;
-            if (ctrl != null && ctrl.IsHandleCreated)
+            if (ctrl is not null && ctrl.IsHandleCreated)
             {
                 User32.NotifyWinEvent((int)AccessibleEvents.LocationChange, new HandleRef(ctrl, ctrl.Handle), User32.OBJID.CLIENT, 0);
                 if (frame.Focused)
@@ -1234,7 +1234,7 @@ namespace System.Windows.Forms.Design
         private void OnSelectionChanged(object sender, EventArgs e)
         {
             ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
-            if (svc != null)
+            if (svc is not null)
             {
                 ICollection selComponents = svc.GetSelectedComponents();
 
@@ -1244,7 +1244,7 @@ namespace System.Windows.Forms.Design
                 foreach (object selObj in selComponents)
                 {
                     Control c = selObj as Control;
-                    if (c != null)
+                    if (c is not null)
                     {
                         Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionAdd, control = " + c.ToString());
                         User32.NotifyWinEvent((int)AccessibleEvents.SelectionAdd, new HandleRef(c, c.Handle), User32.OBJID.CLIENT, 0);
@@ -1252,7 +1252,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 Control primary = svc.PrimarySelection as Control;
-                if (primary != null)
+                if (primary is not null)
                 {
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: Focus, control = " + primary.ToString());
                     User32.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(primary, primary.Handle), User32.OBJID.CLIENT, 0);
@@ -1263,7 +1263,7 @@ namespace System.Windows.Forms.Design
                 //
                 IHelpService hs = (IHelpService)GetService(typeof(IHelpService));
 
-                if (hs != null)
+                if (hs is not null)
                 {
                     ushort type = 0;
                     string[] types = new string[]
@@ -1362,20 +1362,20 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop != null)
+                if (prop is not null)
                 {
                     properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(DocumentDesigner), prop, empty);
                 }
             }
 
             prop = (PropertyDescriptor)properties["AutoScaleDimensions"];
-            if (prop != null)
+            if (prop is not null)
             {
                 properties["AutoScaleDimensions"] = TypeDescriptor.CreateProperty(typeof(DocumentDesigner), prop, DesignerSerializationVisibilityAttribute.Visible);
             }
 
             prop = (PropertyDescriptor)properties["AutoScaleMode"];
-            if (prop != null)
+            if (prop is not null)
             {
                 properties["AutoScaleMode"] = TypeDescriptor.CreateProperty(typeof(DocumentDesigner), prop, DesignerSerializationVisibilityAttribute.Visible, BrowsableAttribute.Yes);
             }
@@ -1383,7 +1383,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < noBrowseProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[noBrowseProps[i]];
-                if (prop != null)
+                if (prop is not null)
                 {
                     properties[noBrowseProps[i]] = TypeDescriptor.CreateProperty(prop.ComponentType, prop, BrowsableAttribute.No, DesignerSerializationVisibilityAttribute.Hidden);
                 }
@@ -1451,10 +1451,10 @@ namespace System.Windows.Forms.Design
             // If the tab order UI is showing, don't allow us to place a tool.
             //
             IMenuCommandService mcs = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-            if (mcs != null)
+            if (mcs is not null)
             {
                 MenuCommand cmd = mcs.FindCommand(StandardCommands.TabOrder);
-                if (cmd != null && cmd.Checked)
+                if (cmd is not null && cmd.Checked)
                 {
                     return;
                 }

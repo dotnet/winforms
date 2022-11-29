@@ -8,7 +8,8 @@ using System.Drawing;
 using Windows.Win32.System.Ole;
 using static Interop;
 using static Interop.Mshtml;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Ole = Windows.Win32.System.Ole;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms
 {
@@ -136,7 +137,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT IDocHostUIHandler.GetDropTarget(Ole32.IDropTarget pDropTarget, out Ole32.IDropTarget ppDropTarget)
+            HRESULT IDocHostUIHandler.GetDropTarget(Ole.IDropTarget.Interface pDropTarget, out Ole.IDropTarget.Interface ppDropTarget)
             {
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.
@@ -181,7 +182,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_FALSE;
             }
 
-            HRESULT IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet)
+            HRESULT IDocHostUIHandler.FilterDataObject(ComTypes.IDataObject pDO, out ComTypes.IDataObject ppDORet)
             {
                 // Set to null no matter what we return, to prevent the marshaller
                 // from having issues if the pointer points to random stuff.

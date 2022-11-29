@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
 
@@ -21,11 +20,11 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionHelpProvider))]
     public class HelpProvider : Component, IExtenderProvider
     {
-        private readonly Hashtable _helpStrings = new Hashtable();
-        private readonly Hashtable _showHelp = new Hashtable();
-        private readonly Hashtable _boundControls = new Hashtable();
-        private readonly Hashtable _keywords = new Hashtable();
-        private readonly Hashtable _navigators = new Hashtable();
+        private readonly Dictionary<Control, string> _helpStrings = new();
+        private readonly Dictionary<Control, bool> _showHelp = new();
+        private readonly List<Control> _boundControls = new();
+        private readonly Dictionary<Control, string> _keywords = new();
+        private readonly Dictionary<Control, HelpNavigator> _navigators = new();
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="HelpProvider"/> class.
@@ -67,8 +66,7 @@ namespace System.Windows.Forms
         public virtual string GetHelpKeyword(Control ctl)
         {
             ArgumentNullException.ThrowIfNull(ctl);
-
-            return (string)_keywords[ctl];
+            return _keywords.TryGetValue(ctl, out string value) ? value : null;
         }
 
         /// <summary>
@@ -80,9 +78,7 @@ namespace System.Windows.Forms
         public virtual HelpNavigator GetHelpNavigator(Control ctl)
         {
             ArgumentNullException.ThrowIfNull(ctl);
-
-            object nav = _navigators[ctl];
-            return nav is null ? HelpNavigator.AssociateIndex : (HelpNavigator)nav;
+            return _navigators.TryGetValue(ctl, out HelpNavigator value) ? value : HelpNavigator.AssociateIndex;
         }
 
         /// <summary>
@@ -94,8 +90,7 @@ namespace System.Windows.Forms
         public virtual string GetHelpString(Control ctl)
         {
             ArgumentNullException.ThrowIfNull(ctl);
-
-            return (string)_helpStrings[ctl];
+            return _helpStrings.TryGetValue(ctl, out string value) ? value : null;
         }
 
         /// <summary>
@@ -106,9 +101,7 @@ namespace System.Windows.Forms
         public virtual bool GetShowHelp(Control ctl)
         {
             ArgumentNullException.ThrowIfNull(ctl);
-
-            object b = _showHelp[ctl];
-            return b is null ? false : (bool)b;
+            return _showHelp.TryGetValue(ctl, out bool value) ? value : false;
         }
 
         /// <summary>
@@ -253,13 +246,15 @@ namespace System.Windows.Forms
         /// </summary>
         private void UpdateEventBinding(Control ctl)
         {
-            if (GetShowHelp(ctl) && !_boundControls.ContainsKey(ctl))
+            bool showHelp = GetShowHelp(ctl);
+            bool isBound = _boundControls.Contains(ctl);
+            if (showHelp && !isBound)
             {
                 ctl.HelpRequested += new HelpEventHandler(OnControlHelp);
                 ctl.QueryAccessibilityHelp += new QueryAccessibilityHelpEventHandler(OnQueryAccessibilityHelp);
-                _boundControls[ctl] = ctl;
+                _boundControls.Add(ctl);
             }
-            else if (!GetShowHelp(ctl) && _boundControls.ContainsKey(ctl))
+            else if (!showHelp && isBound)
             {
                 ctl.HelpRequested -= new HelpEventHandler(OnControlHelp);
                 ctl.QueryAccessibilityHelp -= new QueryAccessibilityHelpEventHandler(OnQueryAccessibilityHelp);
@@ -270,6 +265,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a string representation for this control.
         /// </summary>
-        public override string ToString() => base.ToString() + ", HelpNamespace: " + HelpNamespace;
+        public override string ToString() => $"{base.ToString()}, HelpNamespace: {HelpNamespace}";
     }
 }

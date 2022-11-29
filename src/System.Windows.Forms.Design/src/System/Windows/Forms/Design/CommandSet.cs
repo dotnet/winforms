@@ -66,14 +66,14 @@ namespace System.Windows.Forms.Design
             this.site = site;
 
             eventService = (IEventHandlerService)site.GetService(typeof(IEventHandlerService));
-            Debug.Assert(eventService != null, "Command set must have the event service.  Is command set being initialized too early?");
+            Debug.Assert(eventService is not null, "Command set must have the event service.  Is command set being initialized too early?");
 
             eventService.EventHandlerChanged += new EventHandler(OnEventHandlerChanged);
 
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-            if (host != null)
+            if (host is not null)
             {
                 host.Activated += new EventHandler(UpdateClipboardItems);
             }
@@ -210,14 +210,14 @@ namespace System.Windows.Forms.Design
             };
 
             selectionService = (ISelectionService)site.GetService(typeof(ISelectionService));
-            Debug.Assert(selectionService != null, "CommandSet relies on the selection service, which is unavailable.");
-            if (selectionService != null)
+            Debug.Assert(selectionService is not null, "CommandSet relies on the selection service, which is unavailable.");
+            if (selectionService is not null)
             {
                 selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
 
             menuService = (IMenuCommandService)site.GetService(typeof(IMenuCommandService));
-            if (menuService != null)
+            if (menuService is not null)
             {
                 for (int i = 0; i < commandSet.Length; i++)
                 {
@@ -230,7 +230,7 @@ namespace System.Windows.Forms.Design
             // dictionary of the root component.  Our host may pull this GUID out and use it.
             //
             IDictionaryService ds = site.GetService(typeof(IDictionaryService)) as IDictionaryService;
-            Debug.Assert(ds != null, "No dictionary service");
+            Debug.Assert(ds is not null, "No dictionary service");
             ds?.SetValue(typeof(CommandID), new CommandID(new Guid("BA09E2AF-9DF2-4068-B2F0-4C7E5CC19E2F"), 0));
         }
 
@@ -290,11 +290,13 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (snapLineTimer == null)
+                if (snapLineTimer is null)
                 {
                     //instantiate our snapline timer
-                    snapLineTimer = new Timer();
-                    snapLineTimer.Interval = DesignerUtils.SNAPELINEDELAY;
+                    snapLineTimer = new Timer
+                    {
+                        Interval = DesignerUtils.SNAPELINEDELAY
+                    };
                     snapLineTimer.Tick += new EventHandler(OnSnapLineTimerExpire);
                 }
 
@@ -318,7 +320,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     ComponentEditor editor = (ComponentEditor)TypeDescriptor.GetEditor(obj, typeof(ComponentEditor));
-                    if (editor == null)
+                    if (editor is null)
                     {
                         return false;
                     }
@@ -326,7 +328,7 @@ namespace System.Windows.Forms.Design
                     bool success = false;
                     IComponentChangeService changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-                    if (changeService != null)
+                    if (changeService is not null)
                     {
                         try
                         {
@@ -348,8 +350,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    WindowsFormsComponentEditor winEditor = editor as WindowsFormsComponentEditor;
-                    if (winEditor != null)
+                    if (editor is WindowsFormsComponentEditor winEditor)
                     {
                         IWin32Window parent = null;
 
@@ -392,7 +393,7 @@ namespace System.Windows.Forms.Design
         // We don't need to Dispose snapLineTimer
         public virtual void Dispose()
         {
-            if (menuService != null)
+            if (menuService is not null)
             {
                 for (int i = 0; i < commandSet.Length; i++)
                 {
@@ -403,26 +404,26 @@ namespace System.Windows.Forms.Design
                 menuService = null;
             }
 
-            if (selectionService != null)
+            if (selectionService is not null)
             {
                 selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 selectionService = null;
             }
 
-            if (eventService != null)
+            if (eventService is not null)
             {
                 eventService.EventHandlerChanged -= new EventHandler(OnEventHandlerChanged);
                 eventService = null;
             }
 
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
-            if (host != null)
+            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
+            if (host is not null)
             {
                 host.Activated -= new EventHandler(UpdateClipboardItems);
             }
 
-            if (snapLineTimer != null)
+            if (snapLineTimer is not null)
             {
                 snapLineTimer.Stop();
                 snapLineTimer.Tick -= new EventHandler(OnSnapLineTimerExpire);
@@ -439,7 +440,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void EndDragManager()
         {
-            if (dragManager != null)
+            if (dragManager is not null)
             {
                 snapLineTimer?.Stop();
 
@@ -452,7 +453,7 @@ namespace System.Windows.Forms.Design
         // Returns true if the action is successful, false otherwise
         internal static bool ExecuteSafely(Action action, bool throwOnException)
         {
-            if (action != null)
+            if (action is not null)
             {
                 try
                 {
@@ -477,7 +478,7 @@ namespace System.Windows.Forms.Design
         // Output of call to func is available in result out parameter
         private static bool ExecuteSafely<T>(Func<T> func, bool throwOnException, out T result)
         {
-            if (func != null)
+            if (func is not null)
             {
                 try
                 {
@@ -493,7 +494,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            result = default(T);
+            result = default;
             return false;
         }
 
@@ -505,12 +506,10 @@ namespace System.Windows.Forms.Design
         ///  allow you to constrain the set of selected objects to visible, movable,
         ///  sizeable or all objects.
         /// </summary>
-        private object[] FilterSelection(object[] components, SelectionRules selectionRules)
+        private IComponent[] FilterSelection(IComponent[] components, SelectionRules selectionRules)
         {
-            object[] selection = null;
-
-            if (components == null)
-                return Array.Empty<object>();
+            if (components is null)
+                return Array.Empty<IComponent>();
 
             // Mask off any selection object that doesn't adhere to the given ruleset.
             // We can ignore this if the ruleset is zero, as all components would be accepted.
@@ -518,24 +517,22 @@ namespace System.Windows.Forms.Design
             if (selectionRules != SelectionRules.None)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
-                    ArrayList list = new ArrayList();
-
+                    List<IComponent> list = new();
                     foreach (IComponent comp in components)
                     {
-                        ControlDesigner des = host.GetDesigner(comp) as ControlDesigner;
-                        if (des != null && (des.SelectionRules & selectionRules) == selectionRules)
+                        if (host.GetDesigner(comp) is ControlDesigner des && (des.SelectionRules & selectionRules) == selectionRules)
                         {
                             list.Add(comp);
                         }
                     }
 
-                    selection = list.ToArray();
+                    return list.ToArray();
                 }
             }
 
-            return selection ?? Array.Empty<object>();
+            return Array.Empty<IComponent>();
         }
 
         /// <summary>
@@ -565,9 +562,9 @@ namespace System.Windows.Forms.Design
 
             selectedComponents = comps;
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-            if (host != null)
+            if (host is not null)
             {
-                ArrayList copySelection = new ArrayList();
+                List<IComponent> copySelection = new();
                 foreach (IComponent comp in selectedComponents)
                 {
                     copySelection.Add(comp);
@@ -580,17 +577,16 @@ namespace System.Windows.Forms.Design
             return selectedComponents;
         }
 
-        private void GetAssociatedComponents(IComponent component, IDesignerHost host, ArrayList list)
+        private void GetAssociatedComponents(IComponent component, IDesignerHost host, List<IComponent> list)
         {
-            ComponentDesigner designer = host.GetDesigner(component) as ComponentDesigner;
-            if (designer == null)
+            if (host.GetDesigner(component) is not ComponentDesigner designer)
             {
                 return;
             }
 
             foreach (IComponent childComp in designer.AssociatedComponents)
             {
-                if (childComp.Site != null)
+                if (childComp.Site is not null)
                 {
                     list.Add(childComp);
                     GetAssociatedComponents(childComp, host, list);
@@ -605,7 +601,7 @@ namespace System.Windows.Forms.Design
         {
             PropertyDescriptor prop = GetProperty(comp, "Location");
 
-            if (prop != null)
+            if (prop is not null)
             {
                 try
                 {
@@ -637,12 +633,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual object GetService(Type serviceType)
         {
-            if (site != null)
-            {
-                return site.GetService(serviceType);
-            }
-
-            return null;
+            return site?.GetService(serviceType);
         }
 
         /// <summary>
@@ -651,12 +642,7 @@ namespace System.Windows.Forms.Design
         private static Size GetSize(IComponent comp)
         {
             PropertyDescriptor prop = GetProperty(comp, "Size");
-            if (prop != null)
-            {
-                return (Size)prop.GetValue(comp);
-            }
-
-            return Size.Empty;
+            return prop is not null ? (Size)prop.GetValue(comp) : Size.Empty;
         }
 
         /// <summary>
@@ -672,13 +658,13 @@ namespace System.Windows.Forms.Design
             props = TypeDescriptor.GetProperties(currentSnapComponent);
 
             PropertyDescriptor currentSnapProp = props["SnapToGrid"];
-            if (currentSnapProp != null && currentSnapProp.PropertyType != typeof(bool))
+            if (currentSnapProp is not null && currentSnapProp.PropertyType != typeof(bool))
             {
                 currentSnapProp = null;
             }
 
             PropertyDescriptor gridSizeProp = props["GridSize"];
-            if (gridSizeProp != null && gridSizeProp.PropertyType != typeof(Size))
+            if (gridSizeProp is not null && gridSizeProp.PropertyType != typeof(Size))
             {
                 gridSizeProp = null;
             }
@@ -688,14 +674,7 @@ namespace System.Windows.Forms.Design
             //
             snapComponent = currentSnapComponent;
             snapProperty = currentSnapProp;
-            if (gridSizeProp != null)
-            {
-                snapSize = (Size)gridSizeProp.GetValue(snapComponent);
-            }
-            else
-            {
-                snapSize = Size.Empty;
-            }
+            snapSize = gridSizeProp is not null ? (Size)gridSizeProp.GetValue(snapComponent) : Size.Empty;
         }
 
         /// <summary>
@@ -708,7 +687,7 @@ namespace System.Windows.Forms.Design
             // look if it's ok to change
             IComponentChangeService changeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             // is it ok to change?
-            if (changeSvc != null)
+            if (changeSvc is not null)
             {
                 try
                 {
@@ -794,13 +773,12 @@ namespace System.Windows.Forms.Design
             //
             ISelectionService selSvc = SelectionService;
 
-            if (selSvc != null)
+            if (selSvc is not null)
             {
-                IComponent pri = selSvc.PrimarySelection as IComponent;
-                if (pri != null)
+                if (selSvc.PrimarySelection is IComponent pri)
                 {
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                    if (host != null)
+                    if (host is not null)
                     {
                         IDesigner designer = host.GetDesigner(pri);
 
@@ -819,16 +797,15 @@ namespace System.Windows.Forms.Design
             //
             ISelectionService selSvc = SelectionService;
 
-            if (selSvc != null)
+            if (selSvc is not null)
             {
-                IComponent comp = selSvc.PrimarySelection as IComponent;
-                if (comp != null)
+                if (selSvc.PrimarySelection is IComponent comp)
                 {
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                    if (host != null)
+                    if (host is not null)
                     {
                         PropertyDescriptor lockedProp = TypeDescriptor.GetProperties(comp)["Locked"];
-                        if (lockedProp == null || (lockedProp.PropertyType == typeof(bool) && ((bool)lockedProp.GetValue(comp))) == false)
+                        if (lockedProp is null || (lockedProp.PropertyType == typeof(bool) && ((bool)lockedProp.GetValue(comp))) == false)
                         {
                             CommandID cmd = ((MenuCommand)sender).CommandID;
                             bool invertSnap = false;
@@ -876,38 +853,31 @@ namespace System.Windows.Forms.Design
                                 Debug.Fail("Unknown command mapped to OnKeyMove: " + cmd.ToString());
                             }
 
-                            DesignerTransaction trans;
-
-                            if (selSvc.SelectionCount > 1)
-                            {
-                                trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponents, selSvc.SelectionCount));
-                            }
-                            else
-                            {
-                                trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
-                            }
+                            DesignerTransaction trans = selSvc.SelectionCount > 1
+                                ? host.CreateTransaction(string.Format(SR.DragDropMoveComponents, selSvc.SelectionCount))
+                                : host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
 
                             try
                             {
                                 //if we can find the behaviorservice, then we can use it and the SnapLineEngine to help us
                                 //move these controls...
-                                if (BehaviorService != null)
+                                if (BehaviorService is not null)
                                 {
                                     Control primaryControl = comp as Control; //this can be null (when we are moving a component in the ComponentTray)
 
                                     bool useSnapLines = BehaviorService.UseSnapLines;
 
                                     // If we have previous snaplines, we always want to erase them, no matter what. VS Whidbey #397709
-                                    if (dragManager != null)
+                                    if (dragManager is not null)
                                     {
                                         EndDragManager();
                                     }
 
                                     //If we CTRL+Arrow and we're using SnapLines - snap to the next location
                                     //Don't snap if we are moving a component in the ComponentTray
-                                    if (invertSnap && useSnapLines && primaryControl != null)
+                                    if (invertSnap && useSnapLines && primaryControl is not null)
                                     {
-                                        ArrayList selComps = new ArrayList(selSvc.GetSelectedComponents());
+                                        List<IComponent> selComps = (List<IComponent>)selSvc.GetSelectedComponents();
 
                                         //create our snapline engine
                                         dragManager = new DragAssistanceManager(comp.Site, selComps);
@@ -946,12 +916,9 @@ namespace System.Windows.Forms.Design
                                     {
                                         bool snapOn = false;
                                         Size snapSize = Size.Empty;
-                                        IComponent snapComponent = null;
-                                        PropertyDescriptor snapProperty = null;
+                                        GetSnapInformation(host, comp, out snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty);
 
-                                        GetSnapInformation(host, comp, out snapSize, out snapComponent, out snapProperty);
-
-                                        if (snapProperty != null)
+                                        if (snapProperty is not null)
                                         {
                                             snapOn = (bool)snapProperty.GetValue(snapComponent);
                                         }
@@ -961,11 +928,10 @@ namespace System.Windows.Forms.Design
                                             moveOffsetX *= snapSize.Width;
                                             moveOffsetY *= snapSize.Height;
 
-                                            if (primaryControl != null)
+                                            if (primaryControl is not null)
                                             {
-                                                ParentControlDesigner parentDesigner = host.GetDesigner(primaryControl.Parent) as ParentControlDesigner;
                                                 //ask the parent to adjust our wanna-be snapped position
-                                                if (parentDesigner != null)
+                                                if (host.GetDesigner(primaryControl.Parent) is ParentControlDesigner parentDesigner)
                                                 {
                                                     Point loc = primaryControl.Location;
 
@@ -1005,7 +971,7 @@ namespace System.Windows.Forms.Design
                                         else
                                         {
                                             // In this case we are just going to move 1 pixel, so let's adjust for Mirroring
-                                            if (primaryControl != null && primaryControl.Parent.IsMirrored)
+                                            if (primaryControl is not null && primaryControl.Parent.IsMirrored)
                                             {
                                                 moveOffsetX *= -1;
                                             }
@@ -1013,7 +979,7 @@ namespace System.Windows.Forms.Design
                                     }
                                     else
                                     {
-                                        if (primaryControl != null && primaryControl.Parent.IsMirrored)
+                                        if (primaryControl is not null && primaryControl.Parent.IsMirrored)
                                         {
                                             moveOffsetX *= -1;
                                         }
@@ -1022,8 +988,7 @@ namespace System.Windows.Forms.Design
                                     SelectionRules rules = SelectionRules.Moveable | SelectionRules.Visible;
                                     foreach (IComponent component in selSvc.GetSelectedComponents())
                                     {
-                                        ControlDesigner des = host.GetDesigner(component) as ControlDesigner;
-                                        if (des != null && ((des.SelectionRules & rules) != rules))
+                                        if (host.GetDesigner(component) is ControlDesigner des && ((des.SelectionRules & rules) != rules))
                                         {
                                             //the control must match the rules, if not, then we don't move it
                                             continue;
@@ -1032,7 +997,7 @@ namespace System.Windows.Forms.Design
                                         // Components are always moveable and visible
 
                                         PropertyDescriptor propLoc = TypeDescriptor.GetProperties(component)["Location"];
-                                        if (propLoc != null)
+                                        if (propLoc is not null)
                                         {
                                             Point loc = (Point)propLoc.GetValue(component);
                                             loc.Offset(moveOffsetX, moveOffsetY);
@@ -1040,7 +1005,7 @@ namespace System.Windows.Forms.Design
                                         }
 
                                         //change the Status information ....
-                                        if (component == selSvc.PrimarySelection && statusCommandUI != null)
+                                        if (component == selSvc.PrimarySelection && statusCommandUI is not null)
                                         {
                                             statusCommandUI.SetStatusInformation(component as Component);
                                         }
@@ -1051,7 +1016,7 @@ namespace System.Windows.Forms.Design
                             {
                                 trans?.Commit();
 
-                                if (dragManager != null)
+                                if (dragManager is not null)
                                 {
                                     //start our timer for the snaplines
                                     SnapLineTimer.Start();
@@ -1081,7 +1046,7 @@ namespace System.Windows.Forms.Design
             Point primaryLocation = GetLocation(primarySelection);
             Size primarySize = GetSize(primarySelection);
 
-            if (SelectionService == null)
+            if (SelectionService is null)
             {
                 return;
             }
@@ -1099,11 +1064,11 @@ namespace System.Windows.Forms.Design
                 // of properties.
                 //
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
                 DesignerTransaction trans = null;
                 try
                 {
-                    if (host != null)
+                    if (host is not null)
                     {
                         trans = host.CreateTransaction(string.Format(SR.CommandSetAlignByPrimary, comps.Count));
                     }
@@ -1119,10 +1084,9 @@ namespace System.Windows.Forms.Design
 
                         IComponent comp = obj as IComponent;
 
-                        if (comp != null && host != null)
+                        if (comp is not null && host is not null)
                         {
-                            ControlDesigner des = host.GetDesigner(comp) as ControlDesigner;
-                            if (des == null)
+                            if (host.GetDesigner(comp) is not ControlDesigner des)
                             {
                                 continue;
                             }
@@ -1136,7 +1100,7 @@ namespace System.Windows.Forms.Design
 
                         // Skip all components that are locked
                         //
-                        if (lockProp != null)
+                        if (lockProp is not null)
                         {
                             if ((bool)lockProp.GetValue(comp))
                                 continue;
@@ -1144,7 +1108,7 @@ namespace System.Windows.Forms.Design
 
                         // Skip all components that don't have a location property
                         //
-                        if (locProp == null || locProp.IsReadOnly)
+                        if (locProp is null || locProp.IsReadOnly)
                         {
                             continue;
                         }
@@ -1157,7 +1121,7 @@ namespace System.Windows.Forms.Design
                             id.Equals(StandardCommands.AlignVerticalCenters) ||
                             id.Equals(StandardCommands.AlignRight))
                         {
-                            if (sizeProp == null || sizeProp.IsReadOnly)
+                            if (sizeProp is null || sizeProp.IsReadOnly)
                             {
                                 continue;
                             }
@@ -1248,7 +1212,7 @@ namespace System.Windows.Forms.Design
             Size gridSize = Size.Empty;
             int delta;
 
-            if (SelectionService == null)
+            if (SelectionService is null)
             {
                 return;
             }
@@ -1260,25 +1224,24 @@ namespace System.Windows.Forms.Design
 
                 ICollection selectedComponents = SelectionService.GetSelectedComponents();
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
                 DesignerTransaction trans = null;
 
                 try
                 {
-                    if (host != null)
+                    if (host is not null)
                     {
                         trans = host.CreateTransaction(string.Format(SR.CommandSetAlignToGrid, selectedComponents.Count));
 
-                        Control baseComponent = host.RootComponent as Control;
-                        if (baseComponent != null)
+                        if (host.RootComponent is Control baseComponent)
                         {
                             PropertyDescriptor prop = GetProperty(baseComponent, "GridSize");
-                            if (prop != null)
+                            if (prop is not null)
                             {
                                 gridSize = (Size)prop.GetValue(baseComponent);
                             }
 
-                            if (prop == null || gridSize.IsEmpty)
+                            if (prop is null || gridSize.IsEmpty)
                             {
                                 //bail silently here
                                 return;
@@ -1292,7 +1255,7 @@ namespace System.Windows.Forms.Design
                     {
                         // first check to see if the component is locked, if so - don't move it...
                         PropertyDescriptor lockedProp = GetProperty(comp, "Locked");
-                        if (lockedProp != null && ((bool)lockedProp.GetValue(comp)))
+                        if (lockedProp is not null && ((bool)lockedProp.GetValue(comp)))
                         {
                             continue;
                         }
@@ -1301,10 +1264,9 @@ namespace System.Windows.Forms.Design
                         // it's something in the component tray) then don't try to align it to grid.
                         //
                         IComponent component = comp as IComponent;
-                        if (component != null && host != null)
+                        if (component is not null && host is not null)
                         {
-                            ControlDesigner des = host.GetDesigner(component) as ControlDesigner;
-                            if (des == null)
+                            if (host.GetDesigner(component) is not ControlDesigner des)
                             {
                                 continue;
                             }
@@ -1314,7 +1276,7 @@ namespace System.Windows.Forms.Design
                         PropertyDescriptor locProp = GetProperty(comp, "Location");
 
                         // get the current value
-                        if (locProp == null || locProp.IsReadOnly)
+                        if (locProp is null || locProp.IsReadOnly)
                         {
                             continue;
                         }
@@ -1374,7 +1336,7 @@ namespace System.Windows.Forms.Design
             MenuCommand cmd = (MenuCommand)sender;
             CommandID cmdID = cmd.CommandID;
 
-            if (SelectionService == null)
+            if (SelectionService is null)
             {
                 return;
             }
@@ -1391,23 +1353,16 @@ namespace System.Windows.Forms.Design
                 Point loc = Point.Empty;
 
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
                 DesignerTransaction trans = null;
 
                 try
                 {
-                    if (host != null)
+                    if (host is not null)
                     {
-                        string batchString;
-
-                        if (cmdID == StandardCommands.CenterHorizontally)
-                        {
-                            batchString = string.Format(SR.WindowsFormsCommandCenterX, selectedComponents.Count);
-                        }
-                        else
-                        {
-                            batchString = string.Format(SR.WindowsFormsCommandCenterY, selectedComponents.Count);
-                        }
+                        string batchString = cmdID == StandardCommands.CenterHorizontally
+                            ? string.Format(SR.WindowsFormsCommandCenterX, selectedComponents.Count)
+                            : string.Format(SR.WindowsFormsCommandCenterY, selectedComponents.Count);
 
                         trans = host.CreateTransaction(batchString);
                     }
@@ -1431,7 +1386,7 @@ namespace System.Windows.Forms.Design
 
                             // Skip all components that don't have location and size properties
                             //
-                            if (locProp == null || sizeProp == null || locProp.IsReadOnly || sizeProp.IsReadOnly)
+                            if (locProp is null || sizeProp is null || locProp.IsReadOnly || sizeProp.IsReadOnly)
                             {
                                 continue;
                             }
@@ -1439,7 +1394,7 @@ namespace System.Windows.Forms.Design
                             // Also, skip all locked components...
                             //
                             PropertyDescriptor lockProp = props["Locked"];
-                            if (lockProp != null && (bool)lockProp.GetValue(comp))
+                            if (lockProp is not null && (bool)lockProp.GetValue(comp))
                             {
                                 continue;
                             }
@@ -1464,7 +1419,7 @@ namespace System.Windows.Forms.Design
 
                     //if we never found a viewParent (some read-only inherited scenarios
                     //then simply bail
-                    if (viewParent == null)
+                    if (viewParent is null)
                     {
                         return;
                     }
@@ -1556,7 +1511,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void OnMenuCopy(object sender, EventArgs e)
         {
-            if (SelectionService == null)
+            if (SelectionService is null)
             {
                 return;
             }
@@ -1571,8 +1526,8 @@ namespace System.Windows.Forms.Design
                 selectedComponents = PrependComponentNames(selectedComponents);
 
                 IDesignerSerializationService ds = (IDesignerSerializationService)GetService(typeof(IDesignerSerializationService));
-                Debug.Assert(ds != null, "No designer serialization service -- we cannot copy to clipboard");
-                if (ds != null)
+                Debug.Assert(ds is not null, "No designer serialization service -- we cannot copy to clipboard");
+                if (ds is not null)
                 {
                     object serializationData = ds.Serialize(selectedComponents);
                     MemoryStream stream = new MemoryStream();
@@ -1602,7 +1557,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void OnMenuCut(object sender, EventArgs e)
         {
-            if (SelectionService == null)
+            if (SelectionService is null)
             {
                 return;
             }
@@ -1617,8 +1572,8 @@ namespace System.Windows.Forms.Design
 
                 selectedComponents = PrependComponentNames(selectedComponents);
                 IDesignerSerializationService ds = (IDesignerSerializationService)GetService(typeof(IDesignerSerializationService));
-                Debug.Assert(ds != null, "No designer serialization service -- we cannot copy to clipboard");
-                if (ds != null)
+                Debug.Assert(ds is not null, "No designer serialization service -- we cannot copy to clipboard");
+                if (ds is not null)
                 {
                     object serializationData = ds.Serialize(selectedComponents);
                     MemoryStream stream = new MemoryStream();
@@ -1635,12 +1590,12 @@ namespace System.Windows.Forms.Design
                         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                         Control commonParent = null;
 
-                        if (host != null)
+                        if (host is not null)
                         {
                             IComponentChangeService changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                             DesignerTransaction trans = null;
 
-                            ArrayList designerList = new ArrayList();
+                            List<ParentControlDesigner> designerList = new();
                             try
                             {
                                 trans = host.CreateTransaction(string.Format(SR.CommandSetCutMultiple, cutCount));
@@ -1655,24 +1610,22 @@ namespace System.Windows.Forms.Design
                                 for (int i = 0; i < selComps.Length; i++)
                                 {
                                     object obj = selComps[i];
-                                    IComponent component = obj as IComponent;
                                     // We should never delete the base component.
                                     //
-                                    if (obj == host.RootComponent || component == null)
+                                    if (obj == host.RootComponent || obj is not IComponent component)
                                     {
                                         continue;
                                     }
 
                                     //Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
                                     // see bug 488115
-                                    Control c = obj as Control;
-                                    if (c != null)
+                                    if (obj is Control c)
                                     {
                                         Control parent = c.Parent;
-                                        if (parent != null)
+                                        if (parent is not null)
                                         {
-                                            ParentControlDesigner designer = host.GetDesigner(parent) as ParentControlDesigner;
-                                            if (designer != null && !designerList.Contains(designer))
+                                            if (host.GetDesigner(parent) is ParentControlDesigner designer
+                                                && !designerList.Contains(designer))
                                             {
                                                 designer.SuspendChangingEvents();
                                                 designerList.Add(designer);
@@ -1687,10 +1640,9 @@ namespace System.Windows.Forms.Design
                                 for (int i = 0; i < selComps.Length; i++)
                                 {
                                     object obj = selComps[i];
-                                    IComponent component = obj as IComponent;
                                     // We should never delete the base component.
                                     //
-                                    if (obj == host.RootComponent || component == null)
+                                    if (obj == host.RootComponent || obj is not IComponent component)
                                     {
                                         continue;
                                     }
@@ -1700,31 +1652,24 @@ namespace System.Windows.Forms.Design
                                     //Cannot use idx = 1 to check (see diff) due to the call to PrependComponentNames, which
                                     //adds non IComponent objects to the beginning of selectedComponents. Thus when we finally get
                                     //here idx would be > 1.
-                                    if (commonParent == null && c != null)
+                                    if (commonParent is null && c is not null)
                                     {
                                         commonParent = c.Parent;
                                     }
-                                    else if (commonParent != null && c != null)
+                                    else if (commonParent is not null && c is not null)
                                     {
                                         Control selectedControl = c;
 
                                         if (selectedControl.Parent != commonParent && !commonParent.Contains(selectedControl))
                                         {
                                             // look for internal parenting
-                                            if (selectedControl == commonParent || selectedControl.Contains(commonParent))
-                                            {
-                                                commonParent = selectedControl.Parent;
-                                            }
-                                            else
-                                            {
-                                                commonParent = null;
-                                            }
+                                            commonParent = selectedControl == commonParent || selectedControl.Contains(commonParent) ? selectedControl.Parent : null;
                                         }
                                     }
 
-                                    if (component != null)
+                                    if (component is not null)
                                     {
-                                        ArrayList al = new ArrayList();
+                                        List<IComponent> al = new();
                                         GetAssociatedComponents(component, host, al);
                                         foreach (IComponent comp in al)
                                         {
@@ -1744,11 +1689,11 @@ namespace System.Windows.Forms.Design
                                 }
                             }
 
-                            if (commonParent != null)
+                            if (commonParent is not null)
                             {
                                 SelectionService.SetSelectedComponents(new object[] { commonParent }, SelectionTypes.Replace);
                             }
-                            else if (SelectionService.PrimarySelection == null)
+                            else if (SelectionService.PrimarySelection is null)
                             {
                                 SelectionService.SetSelectedComponents(new object[] { host.RootComponent }, SelectionTypes.Replace);
                             }
@@ -1775,17 +1720,17 @@ namespace System.Windows.Forms.Design
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-                if (site != null)
+                if (site is not null)
                 {
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                    Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+                    Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-                    if (SelectionService == null)
+                    if (SelectionService is null)
                     {
                         return;
                     }
 
-                    if (host != null)
+                    if (host is not null)
                     {
                         IComponentChangeService changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
@@ -1795,29 +1740,27 @@ namespace System.Windows.Forms.Design
                         DesignerTransaction trans = null;
                         IComponent commonParent = null;
                         bool commonParentSet = false;
-                        ArrayList designerList = new ArrayList();
+                        List<ParentControlDesigner> designerList = new();
                         try
                         {
                             trans = host.CreateTransaction(desc);
                             SelectionService.SetSelectedComponents(Array.Empty<object>(), SelectionTypes.Replace);
                             foreach (object obj in comps)
                             {
-                                IComponent comp = obj as IComponent;
-                                if (comp == null || comp.Site == null)
+                                if (obj is not IComponent comp || comp.Site is null)
                                 {
                                     continue;
                                 }
 
                                 //Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
                                 // see bug 488115
-                                Control c = obj as Control;
-                                if (c != null)
+                                if (obj is Control c)
                                 {
                                     Control parent = c.Parent;
-                                    if (parent != null)
+                                    if (parent is not null)
                                     {
-                                        ParentControlDesigner designer = host.GetDesigner(parent) as ParentControlDesigner;
-                                        if (designer != null && !designerList.Contains(designer))
+                                        if (host.GetDesigner(parent) is ParentControlDesigner designer
+                                            && !designerList.Contains(designer))
                                         {
                                             designer.SuspendChangingEvents();
                                             designerList.Add(designer);
@@ -1832,8 +1775,7 @@ namespace System.Windows.Forms.Design
                                 // If it's not a component, we can't delete it.  It also may have already been deleted
                                 // as part of a parent operation, so we skip it.
                                 //
-                                IComponent c = obj as IComponent;
-                                if (c == null || c.Site == null)
+                                if (obj is not IComponent c || c.Site is null)
                                 {
                                     continue;
                                 }
@@ -1848,7 +1790,7 @@ namespace System.Windows.Forms.Design
                                 Control control = obj as Control;
                                 if (!commonParentSet)
                                 {
-                                    if (control != null)
+                                    if (control is not null)
                                     {
                                         commonParent = control.Parent;
                                     }
@@ -1857,22 +1799,21 @@ namespace System.Windows.Forms.Design
                                         // if this is not a Control, see if we can get an ITreeDesigner from it,
                                         // and figure out the Component from that.
                                         //
-                                        ITreeDesigner designer = host.GetDesigner((IComponent)obj) as ITreeDesigner;
-                                        if (designer != null)
+                                        if (host.GetDesigner((IComponent)obj) is ITreeDesigner designer)
                                         {
                                             IDesigner parentDesigner = designer.Parent;
-                                            if (parentDesigner != null)
+                                            if (parentDesigner is not null)
                                             {
                                                 commonParent = parentDesigner.Component;
                                             }
                                         }
                                     }
 
-                                    commonParentSet = (commonParent != null);
+                                    commonParentSet = (commonParent is not null);
                                 }
-                                else if (commonParent != null)
+                                else if (commonParent is not null)
                                 {
-                                    if (control != null && commonParent is Control)
+                                    if (control is not null && commonParent is Control)
                                     {
                                         Control selectedControl = control;
                                         Control controlCommonParent = (Control)commonParent;
@@ -1887,7 +1828,7 @@ namespace System.Windows.Forms.Design
                                             else
                                             {
                                                 // start walking up until we find a common parent
-                                                while (controlCommonParent != null && !controlCommonParent.Contains(selectedControl))
+                                                while (controlCommonParent is not null && !controlCommonParent.Contains(selectedControl))
                                                 {
                                                     controlCommonParent = controlCommonParent.Parent;
                                                 }
@@ -1898,29 +1839,26 @@ namespace System.Windows.Forms.Design
                                     }
                                     else
                                     {
-                                        ITreeDesigner designer = host.GetDesigner((IComponent)obj) as ITreeDesigner;
-                                        ITreeDesigner commonParentDesigner = host.GetDesigner(commonParent) as ITreeDesigner;
-
                                         // for these we aren't as thorough as we are with the Control-based ones.
                                         // we just walk up the chain until we find that parent or the root component.
                                         //
-                                        if (designer != null && commonParentDesigner != null && designer.Parent != commonParentDesigner)
+                                        if (host.GetDesigner((IComponent)obj) is ITreeDesigner designer && host.GetDesigner(commonParent) is ITreeDesigner commonParentDesigner && designer.Parent != commonParentDesigner)
                                         {
-                                            ArrayList designerChain = new ArrayList();
-                                            ArrayList parentDesignerChain = new ArrayList();
+                                            List<ITreeDesigner> designerChain = new();
+                                            List<ITreeDesigner> parentDesignerChain = new();
 
                                             // walk the chain of designers from the current parent designer
                                             // up to the root component, and for the current component designer.
                                             //
                                             for (designer = designer.Parent as ITreeDesigner;
-                                                 designer != null;
+                                                 designer is not null;
                                                  designer = designer.Parent as ITreeDesigner)
                                             {
                                                 designerChain.Add(designer);
                                             }
 
                                             for (commonParentDesigner = commonParentDesigner.Parent as ITreeDesigner;
-                                                 commonParentDesigner != null;
+                                                 commonParentDesigner is not null;
                                                  commonParentDesigner = commonParentDesigner.Parent as ITreeDesigner)
                                             {
                                                 parentDesignerChain.Add(commonParentDesigner);
@@ -1929,8 +1867,8 @@ namespace System.Windows.Forms.Design
                                             // now that we've got the trees built up, start comparing them from the ends to see where
                                             // they diverge.
                                             //
-                                            ArrayList shorterList = designerChain.Count < parentDesignerChain.Count ? designerChain : parentDesignerChain;
-                                            ArrayList longerList = (shorterList == designerChain ? parentDesignerChain : designerChain);
+                                            List<ITreeDesigner> shorterList = designerChain.Count < parentDesignerChain.Count ? designerChain : parentDesignerChain;
+                                            List<ITreeDesigner> longerList = (shorterList == designerChain ? parentDesignerChain : designerChain);
                                             commonParentDesigner = null;
 
                                             if (shorterList.Count > 0 && longerList.Count > 0)
@@ -1944,27 +1882,19 @@ namespace System.Windows.Forms.Design
                                                         break;
                                                     }
 
-                                                    commonParentDesigner = (ITreeDesigner)shorterList[shortIndex];
+                                                    commonParentDesigner = shorterList[shortIndex];
                                                     shortIndex--;
                                                     longIndex--;
                                                 }
                                             }
 
                                             // alright, what have we got?
-                                            //
-                                            if (commonParentDesigner != null)
-                                            {
-                                                commonParent = commonParentDesigner.Component;
-                                            }
-                                            else
-                                            {
-                                                commonParent = null;
-                                            }
+                                            commonParent = commonParentDesigner?.Component;
                                         }
                                     }
                                 }
 
-                                ArrayList al = new ArrayList();
+                                List<IComponent> al = new();
                                 GetAssociatedComponents((IComponent)obj, host, al);
                                 foreach (IComponent comp in al)
                                 {
@@ -1984,17 +1914,16 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-                        if (commonParent != null && SelectionService.PrimarySelection == null)
+                        if (commonParent is not null && SelectionService.PrimarySelection is null)
                         {
-                            ITreeDesigner commonParentDesigner = host.GetDesigner(commonParent) as ITreeDesigner;
-                            if (commonParentDesigner != null && commonParentDesigner.Children != null)
+                            if (host.GetDesigner(commonParent) is ITreeDesigner commonParentDesigner && commonParentDesigner.Children is not null)
                             {
                                 // choose the first child of the common parent if it has any.
                                 //
                                 foreach (IDesigner designer in commonParentDesigner.Children)
                                 {
                                     IComponent component = designer.Component;
-                                    if (component.Site != null)
+                                    if (component.Site is not null)
                                     {
                                         commonParent = component;
                                         break;
@@ -2011,7 +1940,7 @@ namespace System.Windows.Forms.Design
 
                                     // 126240 -- make sure we've got a sited thing.
                                     //
-                                    while (controlCommonParent != null && controlCommonParent.Site == null)
+                                    while (controlCommonParent is not null && controlCommonParent.Site is null)
                                     {
                                         controlCommonParent = controlCommonParent.Parent;
                                     }
@@ -2020,7 +1949,7 @@ namespace System.Windows.Forms.Design
                                 }
                             }
 
-                            if (commonParent != null)
+                            if (commonParent is not null)
                             {
                                 SelectionService.SetSelectedComponents(new object[] { commonParent }, SelectionTypes.Replace);
                             }
@@ -2031,7 +1960,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            if (SelectionService.PrimarySelection == null)
+                            if (SelectionService.PrimarySelection is null)
                             {
                                 SelectionService.SetSelectedComponents(new object[] { host.RootComponent }, SelectionTypes.Replace);
                             }
@@ -2053,7 +1982,7 @@ namespace System.Windows.Forms.Design
         protected void OnMenuPaste(object sender, EventArgs e)
         {
             Cursor oldCursor = Cursor.Current;
-            ArrayList designerList = new ArrayList();
+            List<ParentControlDesigner> designerList = new();
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
@@ -2063,12 +1992,11 @@ namespace System.Windows.Forms.Design
                 ICollection associatedCompsOfFailedControl = null;
 
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
-                if (host == null)
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
+                if (host is null)
                     return;   // nothing we can do here!
 
-                IDataObject dataObj = null;
-                bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out dataObj);
+                bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out IDataObject dataObj);
 
                 if (clipboardOperationSuccessful)
                 {
@@ -2079,7 +2007,7 @@ namespace System.Windows.Forms.Design
                     int numberOfOriginalTrayControls = 0;
                     // Get the current number of controls in the Component Tray in the target
                     tray = GetService(typeof(ComponentTray)) as ComponentTray;
-                    numberOfOriginalTrayControls = tray != null ? tray.Controls.Count : 0;
+                    numberOfOriginalTrayControls = tray is not null ? tray.Controls.Count : 0;
 
                     // We understand two things:  CF_DESIGNER, and toolbox items.
                     //
@@ -2087,17 +2015,16 @@ namespace System.Windows.Forms.Design
 
                     using (DesignerTransaction trans = host.CreateTransaction(SR.CommandSetPaste))
                     {
-                        byte[] bytes = data as byte[];
-                        if (bytes != null)
+                        if (data is byte[] bytes)
                         {
                             MemoryStream s = new MemoryStream(bytes);
-                            if (s != null)
+                            if (s is not null)
                             {
                                 // CF_DESIGNER was put on the clipboard by us using the designer
                                 // serialization service.
                                 //
                                 IDesignerSerializationService ds = (IDesignerSerializationService)GetService(typeof(IDesignerSerializationService));
-                                if (ds != null)
+                                if (ds is not null)
                                 {
                                     BinaryFormatter formatter = new BinaryFormatter();
                                     s.Seek(0, SeekOrigin.Begin);
@@ -2117,10 +2044,10 @@ namespace System.Windows.Forms.Design
                             //
                             IToolboxService ts = (IToolboxService)GetService(typeof(IToolboxService));
 
-                            if (ts != null && ts.IsSupported(dataObj, host))
+                            if (ts is not null && ts.IsSupported(dataObj, host))
                             {
                                 ToolboxItem ti = ts.DeserializeToolboxItem(dataObj, host);
-                                if (ti != null)
+                                if (ti is not null)
                                 {
                                     using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                                     {
@@ -2134,7 +2061,7 @@ namespace System.Windows.Forms.Design
 
                         // Now, if we got some components, hook 'em up!
                         //
-                        if (components != null && components.Count > 0)
+                        if (components is not null && components.Count > 0)
                         {
                             IComponent curComp;
                             string name;
@@ -2143,8 +2070,8 @@ namespace System.Windows.Forms.Design
                             object[] allComponents = new object[components.Count];
                             components.CopyTo(allComponents, 0);
 
-                            ArrayList selectComps = new ArrayList();
-                            ArrayList controls = new ArrayList();
+                            List<IComponent> selectComps = new();
+                            List<Control> controls = new();
                             string[] componentNames = null;
                             int idx = 0;
 
@@ -2162,7 +2089,7 @@ namespace System.Windows.Forms.Design
                             dragClient = false;
                             ITreeDesigner tree = host.GetDesigner(selectedComponent) as ITreeDesigner;
 
-                            while (!dragClient && tree != null)
+                            while (!dragClient && tree is not null)
                             {
                                 if (tree is IOleDragClient)
                                 {
@@ -2188,15 +2115,14 @@ namespace System.Windows.Forms.Design
                                 // that were created.
                                 if (obj is IComponent)
                                 {
-                                    if (componentNames != null && idx < componentNames.Length)
+                                    if (componentNames is not null && idx < componentNames.Length)
                                     {
                                         name = componentNames[idx++];
                                     }
                                 }
                                 else
                                 {
-                                    string[] sa = obj as string[];
-                                    if (componentNames == null && sa != null)
+                                    if (componentNames is null && obj is string[] sa)
                                     {
                                         componentNames = sa;
                                         idx = 0;
@@ -2204,8 +2130,7 @@ namespace System.Windows.Forms.Design
                                     }
                                 }
 
-                                IEventBindingService evs = GetService(typeof(IEventBindingService)) as IEventBindingService;
-                                if (evs != null)
+                                if (GetService(typeof(IEventBindingService)) is IEventBindingService evs)
                                 {
                                     PropertyDescriptorCollection eventProps = evs.GetEventProperties(TypeDescriptor.GetEvents(curComp));
                                     foreach (PropertyDescriptor pd in eventProps)
@@ -2213,13 +2138,12 @@ namespace System.Windows.Forms.Design
                                         // If we couldn't find a property for this event, or of the property is read only, then
                                         // abort.
                                         //
-                                        if (pd == null || pd.IsReadOnly)
+                                        if (pd is null || pd.IsReadOnly)
                                         {
                                             continue;
                                         }
 
-                                        string handler = pd.GetValue(curComp) as string;
-                                        if (handler != null)
+                                        if (pd.GetValue(curComp) is string handler)
                                         {
                                             pd.SetValue(curComp, null);
                                         }
@@ -2230,7 +2154,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     bool foundAssociatedControl = false;
                                     // If we have failed to add a control in this Paste operation ...
-                                    if (associatedCompsOfFailedControl != null)
+                                    if (associatedCompsOfFailedControl is not null)
                                     {
                                         // then don't add its children controls.
                                         foreach (Component comp in associatedCompsOfFailedControl)
@@ -2248,12 +2172,11 @@ namespace System.Windows.Forms.Design
                                         continue; //continue from here so that we don't add the associated component of a control that failed paste operation.
                                     }
 
-                                    ComponentDesigner cDesigner = host.GetDesigner(curComp) as ComponentDesigner;
                                     ICollection designerComps = null;
                                     // VSWhidbey 390442 - DGV has columns which are sited IComponents that don't
                                     // have designers.  in this case, ignore them.
 
-                                    if (cDesigner == null)
+                                    if (host.GetDesigner(curComp) is not ComponentDesigner cDesigner)
                                     {
                                         continue;
                                     }
@@ -2263,16 +2186,16 @@ namespace System.Windows.Forms.Design
 
                                     ComponentDesigner parentCompDesigner = ((ITreeDesigner)cDesigner).Parent as ComponentDesigner;
                                     Component parentComp = null;
-                                    if (parentCompDesigner != null)
+                                    if (parentCompDesigner is not null)
                                     {
                                         parentComp = parentCompDesigner.Component as Component;
                                     }
 
-                                    ArrayList associatedComps = new ArrayList();
+                                    List<IComponent> associatedComps = new();
 
-                                    if (parentComp != null)
+                                    if (parentComp is not null)
                                     {
-                                        if (parentCompDesigner != null)
+                                        if (parentCompDesigner is not null)
                                         {
                                             foreach (IComponent childComp in parentCompDesigner.AssociatedComponents)
                                             {
@@ -2281,12 +2204,11 @@ namespace System.Windows.Forms.Design
                                         }
                                     }
 
-                                    if (parentComp == null || !(associatedComps.Contains(curComp)))
+                                    if (parentComp is null || !(associatedComps.Contains(curComp)))
                                     {
-                                        if (parentComp != null)
+                                        if (parentComp is not null)
                                         {
-                                            ParentControlDesigner parentDesigner = host.GetDesigner(parentComp) as ParentControlDesigner;
-                                            if (parentDesigner != null && !designerList.Contains(parentDesigner))
+                                            if (host.GetDesigner(parentComp) is ParentControlDesigner parentDesigner && !designerList.Contains(parentDesigner))
                                             {
                                                 parentDesigner.SuspendChangingEvents();
                                                 designerList.Add(parentDesigner);
@@ -2306,7 +2228,7 @@ namespace System.Windows.Forms.Design
                                         }
 
                                         Control designerControl = ((IOleDragClient)designer).GetControlForComponent(curComp);
-                                        if (designerControl != null)
+                                        if (designerControl is not null)
                                         {
                                             controls.Add(designerControl);
                                         }
@@ -2324,16 +2246,15 @@ namespace System.Windows.Forms.Design
                                         selectComps.Add(curComp);
                                     }
 
-                                    Control c = curComp as Control;
                                     bool changeName = false;
 
-                                    if (c != null)
+                                    if (curComp is Control c)
                                     {
                                         // if the text is the same as the name, remember it.
                                         // After we add the control, we'll update the text with
                                         // the new name.
                                         //
-                                        if (name != null && name.Equals(c.Text))
+                                        if (name is not null && name.Equals(c.Text))
                                         {
                                             changeName = true;
                                         }
@@ -2343,13 +2264,13 @@ namespace System.Windows.Forms.Design
                                     {
                                         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(curComp);
                                         PropertyDescriptor nameProp = props["Name"];
-                                        if (nameProp != null && nameProp.PropertyType == typeof(string))
+                                        if (nameProp is not null && nameProp.PropertyType == typeof(string))
                                         {
                                             string newName = (string)nameProp.GetValue(curComp);
                                             if (!newName.Equals(name))
                                             {
                                                 PropertyDescriptor textProp = props["Text"];
-                                                if (textProp != null && textProp.PropertyType == nameProp.PropertyType)
+                                                if (textProp is not null && textProp.PropertyType == nameProp.PropertyType)
                                                 {
                                                     textProp.SetValue(curComp, nameProp.GetValue(curComp));
                                                 }
@@ -2360,7 +2281,7 @@ namespace System.Windows.Forms.Design
                             }
 
                             // Find those controls that have ControlDesigners and center them on the designer surface
-                            ArrayList compsWithControlDesigners = new ArrayList();
+                            List<Control> compsWithControlDesigners = new();
                             foreach (Control c in controls)
                             {
                                 IDesigner des = host.GetDesigner(c);
@@ -2390,13 +2311,13 @@ namespace System.Windows.Forms.Design
                             // the paste target did not have a tray already, so let's go get it - if there is one
                             tray ??= GetService(typeof(ComponentTray)) as ComponentTray;
 
-                            if (tray != null)
+                            if (tray is not null)
                             {
                                 int numberOfTrayControlsAdded = tray.Controls.Count - numberOfOriginalTrayControls;
 
                                 if (numberOfTrayControlsAdded > 0)
                                 {
-                                    ArrayList listOfTrayControls = new ArrayList();
+                                    List<Control> listOfTrayControls = new();
                                     for (int i = 0; i < numberOfTrayControlsAdded; i++)
                                     {
                                         listOfTrayControls.Add(tray.Controls[numberOfOriginalTrayControls + i]);
@@ -2420,8 +2341,8 @@ namespace System.Windows.Forms.Design
                             SelectionService.SetSelectedComponents(selectComps.ToArray(), SelectionTypes.Replace);
 
                             // and bring them to the front - but only if we can mess with the Z-order. VSWhidbey 515990
-                            ParentControlDesigner parentControlDesigner = designer as ParentControlDesigner;
-                            if (parentControlDesigner != null && parentControlDesigner.AllowSetChildIndexOnDrop)
+                            if (designer is ParentControlDesigner parentControlDesigner
+                                && parentControlDesigner.AllowSetChildIndexOnDrop)
                             {
                                 MenuCommand btf = MenuService.FindCommand(StandardCommands.BringToFront);
                                 btf?.Invoke();
@@ -2455,22 +2376,22 @@ namespace System.Windows.Forms.Design
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-                if (site != null)
+                if (site is not null)
                 {
-                    Debug.Assert(SelectionService != null, "We need the SelectionService, but we can't find it!");
-                    if (SelectionService == null)
+                    Debug.Assert(SelectionService is not null, "We need the SelectionService, but we can't find it!");
+                    if (SelectionService is null)
                     {
                         return;
                     }
 
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                    Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+                    Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-                    if (host != null)
+                    if (host is not null)
                     {
                         ComponentCollection components = host.Container.Components;
                         object[] selComps;
-                        if (components == null || components.Count == 0)
+                        if (components is null || components.Count == 0)
                         {
                             selComps = Array.Empty<IComponent>();
                         }
@@ -2503,12 +2424,12 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void OnMenuShowGrid(object sender, EventArgs e)
         {
-            if (site != null)
+            if (site is not null)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-                if (host != null)
+                if (host is not null)
                 {
                     DesignerTransaction trans = null;
 
@@ -2517,10 +2438,10 @@ namespace System.Windows.Forms.Design
                         trans = host.CreateTransaction();
 
                         IComponent baseComponent = host.RootComponent;
-                        if (baseComponent != null && baseComponent is Control)
+                        if (baseComponent is not null and Control)
                         {
                             PropertyDescriptor prop = GetProperty(baseComponent, "DrawGrid");
-                            if (prop != null)
+                            if (prop is not null)
                             {
                                 bool drawGrid = (bool)prop.GetValue(baseComponent);
                                 prop.SetValue(baseComponent, !drawGrid);
@@ -2544,7 +2465,7 @@ namespace System.Windows.Forms.Design
             MenuCommand cmd = (MenuCommand)sender;
             CommandID cmdID = cmd.CommandID;
 
-            if (SelectionService == null)
+            if (SelectionService is null)
             {
                 return;
             }
@@ -2555,7 +2476,7 @@ namespace System.Windows.Forms.Design
                 Cursor.Current = Cursors.WaitCursor;
 
                 ICollection sel = SelectionService.GetSelectedComponents();
-                object[] selectedObjects = new object[sel.Count];
+                IComponent[] selectedObjects = new IComponent[sel.Count];
                 sel.CopyTo(selectedObjects, 0);
 
                 selectedObjects = FilterSelection(selectedObjects, SelectionRules.Visible);
@@ -2565,11 +2486,10 @@ namespace System.Windows.Forms.Design
                 Size primarySize = Size.Empty;
                 Size itemSize = Size.Empty;
                 PropertyDescriptor sizeProp;
-                IComponent component = selPrimary as IComponent;
-                if (component != null)
+                if (selPrimary is IComponent component)
                 {
                     sizeProp = GetProperty(component, "Size");
-                    if (sizeProp == null)
+                    if (sizeProp is null)
                     {
                         //if we couldn't get a valid size for our primary selection, we'll fail silently
                         return;
@@ -2578,20 +2498,20 @@ namespace System.Windows.Forms.Design
                     primarySize = (Size)sizeProp.GetValue(component);
                 }
 
-                if (selPrimary == null)
+                if (selPrimary is null)
                 {
                     return;
                 }
 
-                Debug.Assert(null != selectedObjects, "queryStatus should have disabled this");
+                Debug.Assert(selectedObjects is not null, "queryStatus should have disabled this");
 
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
                 DesignerTransaction trans = null;
 
                 try
                 {
-                    if (host != null)
+                    if (host is not null)
                     {
                         trans = host.CreateTransaction(string.Format(SR.CommandSetSize, selectedObjects.Length));
                     }
@@ -2601,16 +2521,14 @@ namespace System.Windows.Forms.Design
                         if (obj.Equals(selPrimary))
                             continue;
 
-                        IComponent comp = obj as IComponent;
-
-                        if (comp == null)
+                        if (obj is not IComponent comp)
                         {
                             continue;
                         }
 
                         //if the component is locked, no sizing is allowed...
                         PropertyDescriptor lockedDesc = GetProperty(obj, "Locked");
-                        if (lockedDesc != null && (bool)lockedDesc.GetValue(obj))
+                        if (lockedDesc is not null && (bool)lockedDesc.GetValue(obj))
                         {
                             continue;
                         }
@@ -2619,7 +2537,7 @@ namespace System.Windows.Forms.Design
 
                         // Skip all components that don't have a size property
                         //
-                        if (sizeProp == null || sizeProp.IsReadOnly)
+                        if (sizeProp is null || sizeProp.IsReadOnly)
                         {
                             continue;
                         }
@@ -2657,14 +2575,14 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void OnMenuSizeToGrid(object sender, EventArgs e)
         {
-            if (SelectionService == null)
+            if (SelectionService is null)
             {
                 return;
             }
 
             Cursor oldCursor = Cursor.Current;
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
             DesignerTransaction trans = null;
 
             try
@@ -2672,27 +2590,27 @@ namespace System.Windows.Forms.Design
                 Cursor.Current = Cursors.WaitCursor;
 
                 ICollection sel = SelectionService.GetSelectedComponents();
-                object[] selectedObjects = new object[sel.Count];
+                IComponent[] selectedObjects = new IComponent[sel.Count];
                 sel.CopyTo(selectedObjects, 0);
                 selectedObjects = FilterSelection(selectedObjects, SelectionRules.Visible);
 
                 Size size = Size.Empty;
                 Point loc = Point.Empty;
 
-                Debug.Assert(null != selectedObjects, "queryStatus should have disabled this");
+                Debug.Assert(selectedObjects is not null, "queryStatus should have disabled this");
                 Size grid = Size.Empty;
                 PropertyDescriptor sizeProp = null;
                 PropertyDescriptor locProp = null;
 
-                if (host != null)
+                if (host is not null)
                 {
                     trans = host.CreateTransaction(string.Format(SR.CommandSetSizeToGrid, selectedObjects.Length));
 
                     IComponent baseComponent = host.RootComponent;
-                    if (baseComponent != null && baseComponent is Control)
+                    if (baseComponent is not null and Control)
                     {
                         PropertyDescriptor prop = GetProperty(baseComponent, "CurrentGridSize");
-                        if (prop != null)
+                        if (prop is not null)
                         {
                             grid = (Size)prop.GetValue(baseComponent);
                         }
@@ -2705,7 +2623,7 @@ namespace System.Windows.Forms.Design
                     {
                         IComponent comp = obj as IComponent;
 
-                        if (obj == null)
+                        if (obj is null)
                         {
                             continue;
                         }
@@ -2713,10 +2631,10 @@ namespace System.Windows.Forms.Design
                         sizeProp = GetProperty(comp, "Size");
                         locProp = GetProperty(comp, "Location");
 
-                        Debug.Assert(sizeProp != null, "No size property on component");
-                        Debug.Assert(locProp != null, "No location property on component");
+                        Debug.Assert(sizeProp is not null, "No size property on component");
+                        Debug.Assert(locProp is not null, "No location property on component");
 
-                        if (sizeProp == null || locProp == null || sizeProp.IsReadOnly || locProp.IsReadOnly)
+                        if (sizeProp is null || locProp is null || sizeProp.IsReadOnly || locProp.IsReadOnly)
                         {
                             continue;
                         }
@@ -2756,7 +2674,7 @@ namespace System.Windows.Forms.Design
             }
 
             IMenuCommandService menuSvc = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-            if (menuSvc != null)
+            if (menuSvc is not null)
             {
                 if (menuSvc.GlobalInvoke(StandardCommands.PropertiesWindow))
                 {
@@ -2772,11 +2690,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void OnMenuSnapToGrid(object sender, EventArgs e)
         {
-            if (site != null)
+            if (site is not null)
             {
                 IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
 
-                if (host != null)
+                if (host is not null)
                 {
                     DesignerTransaction trans = null;
 
@@ -2785,10 +2703,10 @@ namespace System.Windows.Forms.Design
                         trans = host.CreateTransaction(string.Format(SR.CommandSetPaste, 0));
 
                         IComponent baseComponent = host.RootComponent;
-                        if (baseComponent != null && baseComponent is Control)
+                        if (baseComponent is not null and Control)
                         {
                             PropertyDescriptor prop = GetProperty(baseComponent, "SnapToGrid");
-                            if (prop != null)
+                            if (prop is not null)
                             {
                                 bool snapToGrid = (bool)prop.GetValue(baseComponent);
                                 prop.SetValue(baseComponent, !snapToGrid);
@@ -2814,14 +2732,14 @@ namespace System.Windows.Forms.Design
             CommandID cmdID = cmd.CommandID;
             DesignerTransaction trans = null;
 
-            if (SelectionService == null)
+            if (SelectionService is null)
             {
                 return;
             }
 
             Cursor oldCursor = Cursor.Current;
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
             try
             {
@@ -2832,18 +2750,18 @@ namespace System.Windows.Forms.Design
                 //
                 Size grid = Size.Empty;
                 ICollection sel = SelectionService.GetSelectedComponents();
-                object[] selectedObjects = new object[sel.Count];
+                IComponent[] selectedObjects = new IComponent[sel.Count];
                 sel.CopyTo(selectedObjects, 0);
 
-                if (host != null)
+                if (host is not null)
                 {
                     trans = host.CreateTransaction(string.Format(SR.CommandSetFormatSpacing, selectedObjects.Length));
 
                     IComponent baseComponent = host.RootComponent;
-                    if (baseComponent != null && baseComponent is Control)
+                    if (baseComponent is not null and Control)
                     {
                         PropertyDescriptor prop = GetProperty(baseComponent, "CurrentGridSize");
-                        if (prop != null)
+                        if (prop is not null)
                         {
                             grid = (Size)prop.GetValue(baseComponent);
                         }
@@ -2854,7 +2772,7 @@ namespace System.Windows.Forms.Design
 
                 int nEqualDelta = 0;
 
-                Debug.Assert(null != selectedObjects, "queryStatus should have disabled this");
+                Debug.Assert(selectedObjects is not null, "queryStatus should have disabled this");
 
                 PropertyDescriptor curSizeDesc = null, lastSizeDesc = null;
                 PropertyDescriptor curLocDesc = null, lastLocDesc = null;
@@ -2873,16 +2791,14 @@ namespace System.Windows.Forms.Design
                 {
                     sort = SORT_HORIZONTAL;
                 }
-                else if (cmdID == StandardCommands.VertSpaceConcatenate ||
-                         cmdID == StandardCommands.VertSpaceDecrease ||
-                         cmdID == StandardCommands.VertSpaceIncrease ||
-                         cmdID == StandardCommands.VertSpaceMakeEqual)
-                {
-                    sort = SORT_VERTICAL;
-                }
                 else
                 {
-                    throw new ArgumentException(SR.CommandSetUnknownSpacingCommand);
+                    sort = cmdID == StandardCommands.VertSpaceConcatenate ||
+                                             cmdID == StandardCommands.VertSpaceDecrease ||
+                                             cmdID == StandardCommands.VertSpaceIncrease ||
+                                             cmdID == StandardCommands.VertSpaceMakeEqual
+                        ? SORT_VERTICAL
+                        : throw new ArgumentException(SR.CommandSetUnknownSpacingCommand);
                 }
 
                 SortSelection(selectedObjects, sort);
@@ -2891,7 +2807,7 @@ namespace System.Windows.Forms.Design
                 //
                 object primary = SelectionService.PrimarySelection;
                 int primaryIndex = 0;
-                if (primary != null)
+                if (primary is not null)
                     primaryIndex = Array.IndexOf(selectedObjects, primary);
 
                 // And compute delta values for Make Equal
@@ -2905,14 +2821,14 @@ namespace System.Windows.Forms.Design
                     {
                         curSize = Size.Empty;
 
-                        IComponent component = selectedObjects[n] as IComponent;
+                        IComponent component = selectedObjects[n];
 
-                        if (component != null)
+                        if (component is not null)
                         {
                             curComp = component;
 
                             curSizeDesc = GetProperty(curComp, "Size");
-                            if (curSizeDesc != null)
+                            if (curSizeDesc is not null)
                             {
                                 curSize = (Size)curSizeDesc.GetValue(curComp);
                             }
@@ -2934,11 +2850,11 @@ namespace System.Windows.Forms.Design
 
                     for (n = 0; n < selectedObjects.Length; n++)
                     {
-                        curComp = selectedObjects[n] as IComponent;
-                        if (curComp != null)
+                        curComp = selectedObjects[n];
+                        if (curComp is not null)
                         {
                             // only get the descriptors if we've changed component types
-                            if (lastComp == null || curComp.GetType() != lastComp.GetType())
+                            if (lastComp is null || curComp.GetType() != lastComp.GetType())
                             {
                                 curSizeDesc = GetProperty(curComp, "Size");
                                 curLocDesc = GetProperty(curComp, "Location");
@@ -2946,7 +2862,7 @@ namespace System.Windows.Forms.Design
 
                             lastComp = curComp;
 
-                            if (curLocDesc != null)
+                            if (curLocDesc is not null)
                             {
                                 curLoc = (Point)curLocDesc.GetValue(curComp);
                             }
@@ -2955,7 +2871,7 @@ namespace System.Windows.Forms.Design
                                 continue;
                             }
 
-                            if (curSizeDesc != null)
+                            if (curSizeDesc is not null)
                             {
                                 curSize = (Size)curSizeDesc.GetValue(curComp);
                             }
@@ -2973,11 +2889,11 @@ namespace System.Windows.Forms.Design
 
                     for (n = selectedObjects.Length - 1; n >= 0; n--)
                     {
-                        curComp = selectedObjects[n] as IComponent;
-                        if (curComp != null)
+                        curComp = selectedObjects[n];
+                        if (curComp is not null)
                         {
                             // only get the descriptors if we've changed component types
-                            if (lastComp == null || curComp.GetType() != lastComp.GetType())
+                            if (lastComp is null || curComp.GetType() != lastComp.GetType())
                             {
                                 curSizeDesc = GetProperty(curComp, "Size");
                                 curLocDesc = GetProperty(curComp, "Location");
@@ -2985,7 +2901,7 @@ namespace System.Windows.Forms.Design
 
                             lastComp = curComp;
 
-                            if (curLocDesc != null)
+                            if (curLocDesc is not null)
                             {
                                 lastLoc = (Point)curLocDesc.GetValue(curComp);
                             }
@@ -2994,7 +2910,7 @@ namespace System.Windows.Forms.Design
                                 continue;
                             }
 
-                            if (curSizeDesc != null)
+                            if (curSizeDesc is not null)
                             {
                                 lastSize = (Size)curSizeDesc.GetValue(curComp);
                             }
@@ -3003,23 +2919,18 @@ namespace System.Windows.Forms.Design
                                 continue;
                             }
 
-                            if (curSizeDesc != null && curLocDesc != null)
+                            if (curSizeDesc is not null && curLocDesc is not null)
                             {
                                 break;
                             }
                         }
                     }
 
-                    if (curSizeDesc != null && curLocDesc != null)
+                    if (curSizeDesc is not null && curLocDesc is not null)
                     {
-                        if (sort == SORT_HORIZONTAL)
-                        {
-                            nEqualDelta = (lastSize.Width + lastLoc.X - curLoc.X - total) / (selectedObjects.Length - 1);
-                        }
-                        else
-                        {
-                            nEqualDelta = (lastSize.Height + lastLoc.Y - curLoc.Y - total) / (selectedObjects.Length - 1);
-                        }
+                        nEqualDelta = sort == SORT_HORIZONTAL
+                            ? (lastSize.Width + lastLoc.X - curLoc.X - total) / (selectedObjects.Length - 1)
+                            : (lastSize.Height + lastLoc.Y - curLoc.Y - total) / (selectedObjects.Length - 1);
 
                         if (nEqualDelta < 0)
                             nEqualDelta = 0;
@@ -3028,10 +2939,10 @@ namespace System.Windows.Forms.Design
 
                 curComp = lastComp = null;
 
-                if (primary != null)
+                if (primary is not null)
                 {
                     PropertyDescriptor primaryLocDesc = GetProperty(primary, "Location");
-                    if (primaryLocDesc != null)
+                    if (primaryLocDesc is not null)
                     {
                         primaryLoc = (Point)primaryLocDesc.GetValue(primary);
                     }
@@ -3041,19 +2952,19 @@ namespace System.Windows.Forms.Design
                 //
                 for (int n = 0; n < selectedObjects.Length; n++)
                 {
-                    curComp = (IComponent)selectedObjects[n];
+                    curComp = selectedObjects[n];
 
                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(curComp);
 
                     //Check to see if the component we are about to move is locked...
                     //
                     PropertyDescriptor lockedDesc = props["Locked"];
-                    if (lockedDesc != null && (bool)lockedDesc.GetValue(curComp))
+                    if (lockedDesc is not null && (bool)lockedDesc.GetValue(curComp))
                     {
                         continue; // locked property of our component is true, so don't move it
                     }
 
-                    if (lastComp == null || lastComp.GetType() != curComp.GetType())
+                    if (lastComp is null || lastComp.GetType() != curComp.GetType())
                     {
                         curSizeDesc = props["Size"];
                         curLocDesc = props["Location"];
@@ -3064,7 +2975,7 @@ namespace System.Windows.Forms.Design
                         curLocDesc = lastLocDesc;
                     }
 
-                    if (curLocDesc != null)
+                    if (curLocDesc is not null)
                     {
                         curLoc = (Point)curLocDesc.GetValue(curComp);
                     }
@@ -3073,7 +2984,7 @@ namespace System.Windows.Forms.Design
                         continue;
                     }
 
-                    if (curSizeDesc != null)
+                    if (curSizeDesc is not null)
                     {
                         curSize = (Size)curSizeDesc.GetValue(curComp);
                     }
@@ -3083,7 +2994,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     int lastIndex = Math.Max(0, n - 1);
-                    lastComp = (IComponent)selectedObjects[lastIndex];
+                    lastComp = selectedObjects[lastIndex];
                     if (lastComp.GetType() != curComp.GetType())
                     {
                         lastSizeDesc = GetProperty(lastComp, "Size");
@@ -3095,7 +3006,7 @@ namespace System.Windows.Forms.Design
                         lastLocDesc = curLocDesc;
                     }
 
-                    if (lastLocDesc != null)
+                    if (lastLocDesc is not null)
                     {
                         lastLoc = (Point)lastLocDesc.GetValue(lastComp);
                     }
@@ -3104,7 +3015,7 @@ namespace System.Windows.Forms.Design
                         continue;
                     }
 
-                    if (lastSizeDesc != null)
+                    if (lastSizeDesc is not null)
                     {
                         lastSize = (Size)lastSizeDesc.GetValue(lastComp);
                     }
@@ -3204,7 +3115,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void OnSelectionChanged(object sender, EventArgs e)
         {
-            if (SelectionService == null/*: UNDONE: BehaviorWork  || SelectionUIService == null*/)
+            if (SelectionService is null)
             {
                 return;
             }
@@ -3216,14 +3127,14 @@ namespace System.Windows.Forms.Design
             selCount = SelectionService.SelectionCount;
 
             IDesignerHost designerHost = (IDesignerHost)GetService(typeof(IDesignerHost));
-            Debug.Assert(designerHost != null, "Failed to get designer host");
+            Debug.Assert(designerHost is not null, "Failed to get designer host");
 
             // if the base component is selected, we'll say that nothing's selected
             // so we don't get wierd behavior
-            if (selCount > 0 && designerHost != null)
+            if (selCount > 0 && designerHost is not null)
             {
                 object baseComponent = designerHost.RootComponent;
-                if (baseComponent != null && SelectionService.GetComponentSelected(baseComponent))
+                if (baseComponent is not null && SelectionService.GetComponentSelected(baseComponent))
                 {
                     selCount = 0;
                 }
@@ -3238,7 +3149,7 @@ namespace System.Windows.Forms.Design
                 ICollection selection = SelectionService.GetSelectedComponents();
                 foreach (object obj in selection)
                 {
-                    if (!(obj is Control))
+                    if (obj is not Control)
                     {
                         controlsOnlySelection = false;
                     }
@@ -3263,7 +3174,7 @@ namespace System.Windows.Forms.Design
         {
             Control marshalControl = BehaviorService.AdornerWindowControl;
 
-            if (marshalControl != null && marshalControl.IsHandleCreated)
+            if (marshalControl is not null && marshalControl.IsHandleCreated)
             {
                 marshalControl.BeginInvoke(new EventHandler(OnSnapLineTimerExpireMarshalled), new object[] { sender, e });
             }
@@ -3309,12 +3220,12 @@ namespace System.Windows.Forms.Design
             bool enable = false;
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (!selectionInherited && host != null && !host.Loading)
+            if (!selectionInherited && host is not null && !host.Loading)
             {
                 ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || selSvc != null, "ISelectionService not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || selSvc is not null, "ISelectionService not found");
 
-                if (selSvc != null)
+                if (selSvc is not null)
                 {
                     // There must also be a component in the mix, and not the base component
                     //
@@ -3327,8 +3238,7 @@ namespace System.Windows.Forms.Design
                         {
                             // if the object is not sited to the same thing as the host container
                             // then don't allow copy. VSWhidbey# 275790
-                            IComponent comp = obj as IComponent;
-                            if (comp != null && comp.Site != null && comp.Site.Container == host.Container)
+                            if (obj is IComponent comp && comp.Site is not null && comp.Site.Container == host.Container)
                             {
                                 enable = true;
                                 break;
@@ -3370,18 +3280,17 @@ namespace System.Windows.Forms.Design
             else
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
                     ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
-                    if (selSvc != null)
+                    if (selSvc is not null)
                     {
                         ICollection selectedComponents = selSvc.GetSelectedComponents();
                         foreach (object obj in selectedComponents)
                         {
                             // if the object is not sited to the same thing as the host container
                             // then don't allow delete. VSWhidbey# 275790
-                            IComponent comp = obj as IComponent;
-                            if (comp != null && (comp.Site == null || (comp.Site != null && comp.Site.Container != host.Container)))
+                            if (obj is IComponent comp && (comp.Site is null || (comp.Site is not null && comp.Site.Container != host.Container)))
                             {
                                 cmd.Enabled = false;
                                 return;
@@ -3420,17 +3329,17 @@ namespace System.Windows.Forms.Design
             // Before we even look at the data format, check to see if the thing we're going to paste
             // into is privately inherited.  If it is, then we definitely cannot paste.
             //
-            if (primarySelection != null)
+            if (primarySelection is not null)
             {
-                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
 
-                if (host != null && host.GetDesigner(primarySelection) is ParentControlDesigner)
+                if (host is not null && host.GetDesigner(primarySelection) is ParentControlDesigner)
                 {
                     // This component is a target for our paste operation.  We must ensure
                     // that it is not privately inherited.
                     //
                     InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(primarySelection)[typeof(InheritanceAttribute)];
-                    Debug.Assert(attr != null, "Type descriptor gave us a null attribute -- problem in type descriptor");
+                    Debug.Assert(attr is not null, "Type descriptor gave us a null attribute -- problem in type descriptor");
                     if (attr.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
                     {
                         cmd.Enabled = false;
@@ -3441,12 +3350,11 @@ namespace System.Windows.Forms.Design
 
             // Not being inherited.  Now look at the contents of the data
             //
-            IDataObject dataObj = null;
-            bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out dataObj);
+            bool clipboardOperationSuccessful = ExecuteSafely(Clipboard.GetDataObject, false, out IDataObject dataObj);
 
             bool enable = false;
 
-            if (clipboardOperationSuccessful && dataObj != null)
+            if (clipboardOperationSuccessful && dataObj is not null)
             {
                 if (dataObj.GetDataPresent(CF_DESIGNER))
                 {
@@ -3457,9 +3365,9 @@ namespace System.Windows.Forms.Design
                     // Not ours, check to see if the toolbox service understands this
                     //
                     IToolboxService ts = (IToolboxService)GetService(typeof(IToolboxService));
-                    if (ts != null)
+                    if (ts is not null)
                     {
-                        enable = (host != null ? ts.IsSupported(dataObj, host) : ts.IsToolboxItem(dataObj));
+                        enable = (host is not null ? ts.IsSupported(dataObj, host) : ts.IsToolboxItem(dataObj));
                     }
                 }
             }
@@ -3470,7 +3378,7 @@ namespace System.Windows.Forms.Design
         private void OnStatusPrimarySelection(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
-            cmd.Enabled = primarySelection != null;
+            cmd.Enabled = primarySelection is not null;
         }
 
         protected virtual void OnStatusSelectAll(object sender, EventArgs e)
@@ -3507,15 +3415,14 @@ namespace System.Windows.Forms.Design
         {
             object[] newObjects = new object[objects.Count + 1];
             int idx = 1;
-            ArrayList names = new ArrayList(objects.Count);
+            List<string> names = new(objects.Count);
 
             foreach (object o in objects)
             {
-                IComponent comp = o as IComponent;
-                if (comp != null)
+                if (o is IComponent comp)
                 {
                     string name = null;
-                    if (comp.Site != null)
+                    if (comp.Site is not null)
                     {
                         name = comp.Site.Name;
                     }
@@ -3526,9 +3433,7 @@ namespace System.Windows.Forms.Design
                 newObjects[idx++] = o;
             }
 
-            string[] nameArray = new string[names.Count];
-            names.CopyTo(nameArray, 0);
-            newObjects[0] = nameArray;
+            newObjects[0] = names.ToArray();
             return newObjects;
         }
 
@@ -3591,7 +3496,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private void UpdatePastePositions(ArrayList controls)
+        private void UpdatePastePositions(List<Control> controls)
         {
             if (controls.Count == 0)
             {
@@ -3602,8 +3507,8 @@ namespace System.Windows.Forms.Design
             // is the location needed to center the controls in the parent.
             // If there is no parent, we relocate to 0, 0.
             //
-            Control parentControl = ((Control)controls[0]).Parent;
-            Point min = ((Control)controls[0]).Location;
+            Control parentControl = controls[0].Parent;
+            Point min = controls[0].Location;
             Point max = min;
             foreach (Control c in controls)
             {
@@ -3643,7 +3548,7 @@ namespace System.Windows.Forms.Design
             // control because preserving the relationship between controls
             // is more important than obscuring a control.
             //
-            if (parentControl != null)
+            if (parentControl is not null)
             {
                 bool bumpIt;
                 bool wrapped = false;
@@ -3689,7 +3594,7 @@ namespace System.Windows.Forms.Design
                         // We need only compare against one of our pasted controls, so
                         // pick the first one.
                         //
-                        Control pasteControl = (Control)controls[0];
+                        Control pasteControl = controls[0];
                         Rectangle pasteControlBounds = pasteControl.Bounds;
                         pasteControlBounds.Offset(offset);
                         pasteControlBounds.Offset(parentOffset);
@@ -3702,10 +3607,10 @@ namespace System.Windows.Forms.Design
                             {
                                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                                 IComponent baseComponent = host.RootComponent;
-                                if (baseComponent != null && baseComponent is Control)
+                                if (baseComponent is not null and Control)
                                 {
                                     PropertyDescriptor gs = GetProperty(baseComponent, "GridSize");
-                                    if (gs != null)
+                                    if (gs is not null)
                                     {
                                         gridSize = (Size)gs.GetValue(baseComponent);
                                     }
@@ -3785,11 +3690,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private static void UpdatePasteTabIndex(Control componentControl, object parentComponent)
+        private static void UpdatePasteTabIndex(Control componentControl, Control parentControl)
         {
-            Control parentControl = parentComponent as Control;
-
-            if (parentControl == null || componentControl == null)
+            if (parentControl is null || componentControl is null)
             {
                 return;
             }
@@ -3836,7 +3739,7 @@ namespace System.Windows.Forms.Design
             private readonly IUIService uiService;
 
             private readonly CommandSet commandSet;
-            private static Hashtable commandStatusHash;       // list of the command statuses we are tracking.
+            private static Dictionary<EventHandler, StatusState> commandStatusHash;       // Dictionary of the command statuses we are tracking.
             private bool updatingCommand; // flag we set when we're updating the command so we don't call back on the status handler.
 
             public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, IUIService uiService) : this(commandSet, statusHandler, invokeHandler, id, false, uiService)
@@ -3869,7 +3772,7 @@ namespace System.Windows.Forms.Design
                 // and then filling in the results we get, so we can easily retrieve them when
                 // the selection hasn't changed.
                 //
-                if (optimizeStatus && statusHandler != null)
+                if (optimizeStatus && statusHandler is not null)
                 {
                     // we use this as our sentinel of when we're doing this.
                     //
@@ -3879,23 +3782,22 @@ namespace System.Windows.Forms.Design
                     //
                     lock (typeof(CommandSetItem))
                     {
-                        commandStatusHash ??= new Hashtable();
+                        commandStatusHash ??= new();
                     }
 
                     //
-                    // UNDONE:CommandSetItem is put in a static hashtable, and CommandSetItem
+                    // UNDONE:CommandSetItem is put in a static dictionary, and CommandSetItem
                     // references CommandSet, CommandSet reference FormDesigner. If we don't
-                    // remove the CommandSetItem from the static hashtable, FormDesigner is
+                    // remove the CommandSetItem from the static dictionary, FormDesigner is
                     // leaked. This demonstrates a bad design. We should not keep a static
-                    // hashtable for all the items, instead, we should keep a hashtable per
+                    // dictionary for all the items, instead, we should keep a dictionary per
                     // Designer. When designer is disposed, all command items got disposed
                     // automatically. However, at this time, we would pick a simple way with
                     // low risks to fix this.
                     //
                     // if this handler isn't already in there, add it.
                     //
-                    StatusState state = commandStatusHash[statusHandler] as StatusState;
-                    if (state == null)
+                    if (!commandStatusHash.TryGetValue(statusHandler, out StatusState state) || state is null)
                     {
                         state = new StatusState();
                         commandStatusHash.Add(statusHandler, state);
@@ -3915,10 +3817,9 @@ namespace System.Windows.Forms.Design
                     // check to see if this is a command we have hashed up and if it's version stamp
                     // is the same as our current selection version.
                     //
-                    if (commandSet != null && commandStatusHash.Contains(statusHandler))
+                    if (commandSet is not null && commandStatusHash.TryGetValue(statusHandler, out StatusState state))
                     {
-                        StatusState state = commandStatusHash[statusHandler] as StatusState;
-                        if (state != null && state.SelectionVersion == commandSet.SelectionVersion)
+                        if (state is not null && state.SelectionVersion == commandSet.SelectionVersion)
                         {
                             return true;
                         }
@@ -3933,7 +3834,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             private void ApplyCachedStatus()
             {
-                if (commandSet != null && commandStatusHash.Contains(statusHandler))
+                if (commandSet is not null && commandStatusHash.TryGetValue(statusHandler, out StatusState state))
                 {
                     try
                     {
@@ -3943,7 +3844,6 @@ namespace System.Windows.Forms.Design
 
                         // and push the state into this command.
                         //
-                        StatusState state = commandStatusHash[statusHandler] as StatusState;
                         state.ApplyState(this);
                     }
                     finally
@@ -3962,10 +3862,10 @@ namespace System.Windows.Forms.Design
                 //
                 try
                 {
-                    if (eventService != null)
+                    if (eventService is not null)
                     {
                         IMenuStatusHandler msh = (IMenuStatusHandler)eventService.GetHandler(typeof(IMenuStatusHandler));
-                        if (msh != null && msh.OverrideInvoke(this))
+                        if (msh is not null && msh.OverrideInvoke(this))
                         {
                             return;
                         }
@@ -3996,22 +3896,16 @@ namespace System.Windows.Forms.Design
             }
 
             ///<summary>
-            /// Saves the status for this command to the statusstate that's stored in the hashtable
+            /// Saves the status for this command to the statusstate that's stored in the dictionary
             /// based on our status handler delegate.
             ///</summary>
             private void SaveCommandStatus()
             {
-                if (commandSet != null)
+                if (commandSet is not null)
                 {
-                    StatusState state;
-
                     // see if we need to create one of these StatusState dudes.
                     //
-                    if (commandStatusHash.Contains(statusHandler))
-                    {
-                        state = commandStatusHash[statusHandler] as StatusState;
-                    }
-                    else
+                    if (!commandStatusHash.TryGetValue(statusHandler, out StatusState state))
                     {
                         state = new StatusState();
                     }
@@ -4029,16 +3923,16 @@ namespace System.Windows.Forms.Design
             {
                 // We allow outside parties to override the availability of particular menu commands.
                 //
-                if (eventService != null)
+                if (eventService is not null)
                 {
                     IMenuStatusHandler msh = (IMenuStatusHandler)eventService.GetHandler(typeof(IMenuStatusHandler));
-                    if (msh != null && msh.OverrideStatus(this))
+                    if (msh is not null && msh.OverrideStatus(this))
                     {
                         return;
                     }
                 }
 
-                if (statusHandler != null)
+                if (statusHandler is not null)
                 {
                     // if we need to update our status,
                     // call the status handler.  otherwise,
@@ -4064,12 +3958,11 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Remove this command item from the static hashtable to avoid leaking this object.
+            /// Remove this command item from the static dictionary to avoid leaking this object.
             /// </summary>
             public virtual void Dispose()
             {
-                StatusState state = commandStatusHash[statusHandler] as StatusState;
-                if (state != null)
+                if (commandStatusHash.TryGetValue(statusHandler, out StatusState state) && state is not null)
                 {
                     state.refCount--;
                     if (state.refCount == 0)
@@ -4198,12 +4091,7 @@ namespace System.Windows.Forms.Design
                 Point qLoc = (Point)qProp.GetValue(q);
 
                 //if our lefts are equal, then compare tops
-                if (pLoc.X == qLoc.X)
-                {
-                    return pLoc.Y - qLoc.Y;
-                }
-
-                return pLoc.X - qLoc.X;
+                return pLoc.X == qLoc.X ? pLoc.Y - qLoc.Y : pLoc.X - qLoc.X;
             }
         }
 
@@ -4221,12 +4109,7 @@ namespace System.Windows.Forms.Design
                 Point qLoc = (Point)qProp.GetValue(q);
 
                 //if our tops are equal, then compare lefts
-                if (pLoc.Y == qLoc.Y)
-                {
-                    return pLoc.X - qLoc.X;
-                }
-
-                return pLoc.Y - qLoc.Y;
+                return pLoc.Y == qLoc.Y ? pLoc.X - qLoc.X : pLoc.Y - qLoc.Y;
             }
         }
 
@@ -4234,11 +4117,11 @@ namespace System.Windows.Forms.Design
         {
             public int Compare(object p, object q)
             {
-                if (p == null)
+                if (p is null)
                 {
                     return -1;
                 }
-                else if (q == null)
+                else if (q is null)
                 {
                     return 1;
                 }
@@ -4247,46 +4130,25 @@ namespace System.Windows.Forms.Design
                     return 0;
                 }
 
-                Control c1 = p as Control;
-                Control c2 = q as Control;
-
-                if (c1 == null || c2 == null)
+                if (p is not Control c1 || q is not Control c2)
                 {
                     return 1;
                 }
 
-                if (c1.Parent == c2.Parent && c1.Parent != null)
-                {
-                    return c1.Parent.Controls.GetChildIndex(c1) - c1.Parent.Controls.GetChildIndex(c2);
-                }
-
-                return 1;
+                return c1.Parent == c2.Parent && c1.Parent is not null ? c1.Parent.Controls.GetChildIndex(c1) - c1.Parent.Controls.GetChildIndex(c2) : 1;
             }
         }
 
-        private class TabIndexCompare : IComparer
+        private class TabIndexCompare : IComparer<Control>
         {
-            public int Compare(object p, object q)
+            public int Compare(Control c1, Control c2)
             {
-                Control c1 = p as Control;
-                Control c2 = q as Control;
-
                 if (c1 == c2)
                 {
                     return 0;
                 }
 
-                if (c1 == null)
-                {
-                    return -1;
-                }
-
-                if (c2 == null)
-                {
-                    return 1;
-                }
-
-                return c1.TabIndex - c2.TabIndex;
+                return c1 is null ? -1 : c2 is null ? 1 : c1.TabIndex - c2.TabIndex;
             }
         }
     }

@@ -7,7 +7,6 @@ using System.Windows.Forms.ComponentModel.Com2Interop;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
 {
@@ -40,17 +39,9 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
                 _type = type;
             }
 
-            public override HRESULT get_Handle(uint* pHandle)
-            {
-                *pHandle = PARAM.ToUInt(_handle);
-                return HRESULT.S_OK;
-            }
+            public override OLE_HANDLE Handle => new((uint)(int)_handle);
 
-            public override HRESULT get_Type(short* pType)
-            {
-                *pType = (short)_type;
-                return HRESULT.S_OK;
-            }
+            public override short Type => (short)_type;
         }
 
         [Fact]
@@ -129,9 +120,9 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
             IPicture.Interface picture = (IPicture.Interface)Instance.ConvertManagedToNative(exclamationIcon, null, ref cancelSet);
 
             Assert.False(cancelSet);
-            picture.get_Type(out short type).ThrowOnFailure();
-            picture.get_Height(out int height).ThrowOnFailure();
-            picture.get_Width(out int width).ThrowOnFailure();
+            short type = picture.Type;
+            int height = picture.Height;
+            int width = picture.Width;
             Assert.Equal((short)PICTYPE.PICTYPE_ICON, type);
             Assert.Equal(exclamationIcon.Height, GdiHelper.HimetricToPixelY(height));
             Assert.Equal(exclamationIcon.Width, GdiHelper.HimetricToPixelX(width));
@@ -152,9 +143,9 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
             IPicture.Interface picture = (IPicture.Interface)Instance.ConvertManagedToNative(bitmap, null, ref cancelSet);
 
             Assert.False(cancelSet);
-            picture.get_Type(out short type).ThrowOnFailure();
-            picture.get_Height(out int height).ThrowOnFailure();
-            picture.get_Width(out int width).ThrowOnFailure();
+            short type = picture.Type;
+            int height = picture.Height;
+            int width = picture.Width;
             Assert.Equal((short)PICTYPE.PICTYPE_BITMAP, type);
             Assert.Equal(bitmap.Height, GdiHelper.HimetricToPixelY(height));
             Assert.Equal(bitmap.Width, GdiHelper.HimetricToPixelX(width));
@@ -181,34 +172,32 @@ namespace System.Windows.Forms.Tests.ComponentModel.Com2Interop
 
         private unsafe class IPictureMock : IPicture.Interface
         {
-            public virtual HRESULT get_Handle(uint* pHandle) => HRESULT.S_OK;
-
-            public virtual HRESULT get_hPal(uint* phPal) => HRESULT.S_OK;
-
-            public virtual HRESULT get_Type(short* pType) => HRESULT.S_OK;
-
-            public virtual HRESULT get_Width(int* pWidth) => HRESULT.S_OK;
-
-            public virtual HRESULT get_Height(int* pHeight) => HRESULT.S_OK;
-
             public virtual HRESULT Render(HDC hDC, int x, int y, int cx, int cy, int xSrc, int ySrc, int cxSrc, int cySrc, RECT* pRcWBounds)
                 => HRESULT.S_OK;
-
-            public virtual HRESULT set_hPal(uint hPal) => HRESULT.S_OK;
-
-            public virtual HRESULT get_CurDC(HDC* phDC) => HRESULT.S_OK;
-
-            public virtual HRESULT SelectPicture(HDC hDCIn, HDC* phDCOut, uint* phBmpOut) => HRESULT.S_OK;
-
-            public virtual HRESULT get_KeepOriginalFormat(BOOL* pKeep) => HRESULT.S_OK;
-
-            public virtual HRESULT put_KeepOriginalFormat(BOOL keep) => HRESULT.S_OK;
 
             public virtual HRESULT PictureChanged() => HRESULT.S_OK;
 
             public virtual HRESULT SaveAsFile(IStream* pStream, BOOL fSaveMemCopy, int* pCbSize) => HRESULT.S_OK;
 
-            public virtual HRESULT get_Attributes(uint* pDwAttr) => HRESULT.S_OK;
+            public virtual OLE_HANDLE Handle => default;
+
+            public virtual HRESULT get_hPal(OLE_HANDLE* phPal) => HRESULT.S_OK;
+
+            public virtual short Type => default;
+
+            public virtual int Width => default;
+
+            public virtual int Height => default;
+
+            public virtual HRESULT set_hPal(OLE_HANDLE hPal) => HRESULT.S_OK;
+
+            public HDC CurDC => default;
+
+            public virtual HRESULT SelectPicture(HDC hDCIn, HDC* phDCOut, OLE_HANDLE* phBmpOut) => HRESULT.S_OK;
+
+            public virtual BOOL KeepOriginalFormat { get => default; set { } }
+
+            public virtual uint Attributes => default;
         }
     }
 }

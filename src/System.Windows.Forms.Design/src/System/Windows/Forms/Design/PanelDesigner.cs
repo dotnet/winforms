@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design
         protected virtual void DrawBorder(Graphics graphics)
         {
             Panel panel = (Panel)Component; // if the panel is invisible, bail now
-            if (panel == null || !panel.Visible)
+            if (panel is null || !panel.Visible)
             {
                 return;
             }

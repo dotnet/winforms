@@ -198,8 +198,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [AllowNull]
-        public override string Text
+        public override string? Text
         {
             get => base.Text;
             set => base.Text = value;

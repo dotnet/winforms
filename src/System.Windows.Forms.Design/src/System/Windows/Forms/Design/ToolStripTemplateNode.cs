@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Design
             _designerHost = (IDesignerHost)component.Site.GetService(typeof(IDesignerHost));
             _designer = _designerHost.GetDesigner(component);
             _designSurface = (DesignSurface)component.Site.GetService(typeof(DesignSurface));
-            if (_designSurface != null)
+            if (_designSurface is not null)
             {
                 _designSurface.Flushed += new EventHandler(OnLoaderFlushed);
             }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Design
                 {
                     _active = value;
 
-                    if (KeyboardService != null)
+                    if (KeyboardService is not null)
                     {
                         KeyboardService.TemplateNodeActive = value;
                     }
@@ -163,22 +163,22 @@ namespace System.Windows.Forms.Design
                     {
                         //Active.. Fire Activated
                         OnActivated(new EventArgs());
-                        if (KeyboardService != null)
+                        if (KeyboardService is not null)
                         {
                             KeyboardService.ActiveTemplateNode = this;
                         }
 
                         IMenuCommandService menuService = (IMenuCommandService)_component.Site.GetService(typeof(IMenuCommandService));
-                        if (menuService != null)
+                        if (menuService is not null)
                         {
                             _oldUndoCommand = menuService.FindCommand(StandardCommands.Undo);
-                            if (_oldUndoCommand != null)
+                            if (_oldUndoCommand is not null)
                             {
                                 menuService.RemoveCommand(_oldUndoCommand);
                             }
 
                             _oldRedoCommand = menuService.FindCommand(StandardCommands.Redo);
-                            if (_oldRedoCommand != null)
+                            if (_oldRedoCommand is not null)
                             {
                                 menuService.RemoveCommand(_oldRedoCommand);
                             }
@@ -198,13 +198,13 @@ namespace System.Windows.Forms.Design
                     else
                     {
                         OnDeactivated(new EventArgs());
-                        if (KeyboardService != null)
+                        if (KeyboardService is not null)
                         {
                             KeyboardService.ActiveTemplateNode = null;
                         }
 
                         IMenuCommandService menuService = (IMenuCommandService)_component.Site.GetService(typeof(IMenuCommandService));
-                        if (menuService != null)
+                        if (menuService is not null)
                         {
                             for (int i = 0; i < _addCommands.Length; i++)
                             {
@@ -212,12 +212,12 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-                        if (_oldUndoCommand != null)
+                        if (_oldUndoCommand is not null)
                         {
                             menuService.AddCommand(_oldUndoCommand);
                         }
 
-                        if (_oldRedoCommand != null)
+                        if (_oldRedoCommand is not null)
                         {
                             menuService.AddCommand(_oldRedoCommand);
                         }
@@ -308,7 +308,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal TextBox EditBox
         {
-            get => (_centerTextBox != null) ? (TextBox)_centerTextBox.Control : null;
+            get => (_centerTextBox is not null) ? (TextBox)_centerTextBox.Control : null;
         }
 
         /// <summary>
@@ -389,18 +389,18 @@ namespace System.Windows.Forms.Design
         private void AddNewItemClick(object sender, EventArgs e)
         {
             // Close the DropDown.. Important for Morphing ....
-            if (_addItemButton != null)
+            if (_addItemButton is not null)
             {
                 _addItemButton.DropDown.Visible = false;
             }
 
-            if (_component is ToolStrip && SelectionService != null)
+            if (_component is ToolStrip && SelectionService is not null)
             {
                 // Stop the Designer from closing the Overflow if its open
                 ToolStripDesigner designer = _designerHost.GetDesigner(_component) as ToolStripDesigner;
                 try
                 {
-                    if (designer != null)
+                    if (designer is not null)
                     {
                         designer.DontCloseOverflow = true;
                     }
@@ -409,7 +409,7 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (designer != null)
+                    if (designer is not null)
                     {
                         designer.DontCloseOverflow = false;
                     }
@@ -417,7 +417,7 @@ namespace System.Windows.Forms.Design
             }
 
             ItemTypeToolStripMenuItem senderItem = (ItemTypeToolStripMenuItem)sender;
-            if (_lastSelection != null)
+            if (_lastSelection is not null)
             {
                 _lastSelection.Checked = false;
             }
@@ -440,7 +440,7 @@ namespace System.Windows.Forms.Design
                 CommitEditor(true, false, false);
             }
 
-            if (KeyboardService != null)
+            if (KeyboardService is not null)
             {
                 KeyboardService.TemplateNodeActive = false;
             }
@@ -455,18 +455,18 @@ namespace System.Windows.Forms.Design
             if (e.Button == MouseButtons.Right)
             {
                 // Don't show the DesignerContextMenu if there is any active templateNode.
-                if (KeyboardService != null && KeyboardService.TemplateNodeActive)
+                if (KeyboardService is not null && KeyboardService.TemplateNodeActive)
                 {
                     return;
                 }
 
-                if (KeyboardService != null)
+                if (KeyboardService is not null)
                 {
                     KeyboardService.SelectedDesignerControl = _controlHost;
                 }
 
                 SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
-                if (BehaviorService != null)
+                if (BehaviorService is not null)
                 {
                     Point loc = BehaviorService.ControlToAdornerWindow(_miniToolStrip);
                     loc = BehaviorService.AdornerWindowPointToScreen(loc);
@@ -478,7 +478,7 @@ namespace System.Windows.Forms.Design
             {
                 if (_hotRegion.Contains(e.Location) && !KeyboardService.TemplateNodeActive)
                 {
-                    if (KeyboardService != null)
+                    if (KeyboardService is not null)
                     {
                         KeyboardService.SelectedDesignerControl = _controlHost;
                     }
@@ -486,7 +486,7 @@ namespace System.Windows.Forms.Design
                     SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                     ToolStripDropDown oldContextMenu = _contextMenu;
                     // PERF: Consider refresh mechanism for the derived items.
-                    if (oldContextMenu != null)
+                    if (oldContextMenu is not null)
                     {
                         oldContextMenu.Closed -= new ToolStripDropDownClosedEventHandler(OnContextMenuClosed);
                         oldContextMenu.Closing -= OnContextMenuClosing;
@@ -547,14 +547,14 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-                        if (_designer != null)
+                        if (_designer is not null)
                         {
                             ((ToolStripMenuItemDesigner)_designer).EditTemplateNode(true);
                         }
                         else
                         {
                             ISelectionService cachedSelSvc = (ISelectionService)svcProvider.GetService(typeof(ISelectionService));
-                            if (cachedSelSvc.PrimarySelection is ToolStripItem selectedItem && _designerHost != null)
+                            if (cachedSelSvc.PrimarySelection is ToolStripItem selectedItem && _designerHost is not null)
                             {
                                 if (_designerHost.GetDesigner(selectedItem) is ToolStripMenuItemDesigner itemDesigner)
                                 {
@@ -583,7 +583,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void CenterLabelMouseEnter(object sender, EventArgs e)
         {
-            if (_renderer != null && !KeyboardService.TemplateNodeActive)
+            if (_renderer is not null && !KeyboardService.TemplateNodeActive)
             {
                 if (_renderer.State != (int)TemplateNodeSelectionState.HotRegionSelected)
                 {
@@ -598,7 +598,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void CenterLabelMouseMove(object sender, MouseEventArgs e)
         {
-            if (_renderer != null && !KeyboardService.TemplateNodeActive)
+            if (_renderer is not null && !KeyboardService.TemplateNodeActive)
             {
                 if (_renderer.State != (int)TemplateNodeSelectionState.HotRegionSelected)
                 {
@@ -621,14 +621,14 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void CenterLabelMouseLeave(object sender, EventArgs e)
         {
-            if (_renderer != null && !KeyboardService.TemplateNodeActive)
+            if (_renderer is not null && !KeyboardService.TemplateNodeActive)
             {
                 if (_renderer.State != (int)TemplateNodeSelectionState.HotRegionSelected)
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.None;
                 }
 
-                if (KeyboardService != null && KeyboardService.SelectedDesignerControl == _controlHost)
+                if (KeyboardService is not null && KeyboardService.SelectedDesignerControl == _controlHost)
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
                 }
@@ -642,7 +642,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void CenterTextBoxMouseEnter(object sender, EventArgs e)
         {
-            if (_renderer != null)
+            if (_renderer is not null)
             {
                 _renderer.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
                 _miniToolStrip.Invalidate();
@@ -654,7 +654,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void CenterTextBoxMouseLeave(object sender, EventArgs e)
         {
-            if (_renderer != null && !Active)
+            if (_renderer is not null && !Active)
             {
                 _renderer.State = (int)TemplateNodeSelectionState.None;
                 _miniToolStrip.Invalidate();
@@ -666,10 +666,10 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal void CloseEditor()
         {
-            if (_miniToolStrip != null)
+            if (_miniToolStrip is not null)
             {
                 Active = false;
-                if (_lastSelection != null)
+                if (_lastSelection is not null)
                 {
                     _lastSelection.Dispose();
                     _lastSelection = null;
@@ -687,7 +687,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (_centerLabel != null)
+                if (_centerLabel is not null)
                 {
                     _centerLabel.MouseUp -= new MouseEventHandler(CenterLabelClick);
                     _centerLabel.MouseEnter -= new EventHandler(CenterLabelMouseEnter);
@@ -697,7 +697,7 @@ namespace System.Windows.Forms.Design
                     _centerLabel = null;
                 }
 
-                if (_addItemButton != null)
+                if (_addItemButton is not null)
                 {
                     _addItemButton.MouseMove -= new MouseEventHandler(OnMouseMove);
                     _addItemButton.MouseUp -= new MouseEventHandler(OnMouseUp);
@@ -708,7 +708,7 @@ namespace System.Windows.Forms.Design
                     _addItemButton = null;
                 }
 
-                if (_contextMenu != null)
+                if (_contextMenu is not null)
                 {
                     _contextMenu.Closed -= new ToolStripDropDownClosedEventHandler(OnContextMenuClosed);
                     _contextMenu.Closing -= OnContextMenuClosing;
@@ -720,7 +720,7 @@ namespace System.Windows.Forms.Design
                 _miniToolStrip.Dispose();
                 _miniToolStrip = null;
                 // Surface can be null. VS Whidbey #572862
-                if (_designSurface != null)
+                if (_designSurface is not null)
                 {
                     _designSurface.Flushed -= new EventHandler(OnLoaderFlushed);
                     _designSurface = null;
@@ -737,7 +737,7 @@ namespace System.Windows.Forms.Design
         internal void Commit(bool enterKeyPressed, bool tabKeyPressed)
         {
             // Commit only if we are still available !!
-            if (_miniToolStrip != null && _inSituMode)
+            if (_miniToolStrip is not null && _inSituMode)
             {
                 string text = ((TextBox)(_centerTextBox.Control)).Text;
                 if (string.IsNullOrEmpty(text))
@@ -770,7 +770,7 @@ namespace System.Windows.Forms.Design
                     ToolStripItemType = typeof(ToolStripSeparator);
                 }
 
-                if (ToolStripItemType != null)
+                if (ToolStripItemType is not null)
                 {
                     selectedType = ToolStripItemType;
                     ToolStripItemType = null;
@@ -804,14 +804,14 @@ namespace System.Windows.Forms.Design
             // After the node is commited the templateNode gets the selection. But the original selection is not invalidated. consider following case
             // FOO -> BAR -> TEMPLATENODE node
             // When the TemplateNode is committed "FOO" is selected but after the commit is complete, The TemplateNode gets the selection but "FOO" is never invalidated and hence retains selection. So we get the selection and then invalidate it at the end of this function. Get the currentSelection to invalidate
-            string text = (_centerTextBox != null) ? ((TextBox)(_centerTextBox.Control)).Text : string.Empty;
+            string text = (_centerTextBox is not null) ? ((TextBox)(_centerTextBox.Control)).Text : string.Empty;
             ExitInSituEdit();
             FocusForm();
             CommitTextToDesigner(text, commit, enterKeyPressed, tabKeyPressed);
             // finally Invalidate the selection rect ...
             if (SelectionService.PrimarySelection is ToolStripItem curSel)
             {
-                if (_designerHost != null)
+                if (_designerHost is not null)
                 {
                     if (_designerHost.GetDesigner(curSel) is ToolStripItemDesigner designer)
                     {
@@ -844,7 +844,7 @@ namespace System.Windows.Forms.Design
                     Active = true;
                     _inSituMode = true;
                     // set the renderer state to Selected...
-                    if (_renderer != null)
+                    if (_renderer is not null)
                     {
                         _renderer.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
                     }
@@ -909,7 +909,7 @@ namespace System.Windows.Forms.Design
         private void ExitInSituEdit()
         {
             // put the ToolStripTemplateNode back into "non edit state"
-            if (_centerTextBox != null && _inSituMode)
+            if (_centerTextBox is not null && _inSituMode)
             {
                 _miniToolStrip.Parent?.SuspendLayout();
 
@@ -951,7 +951,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal void FocusEditor(ToolStripItem currentItem)
         {
-            if (currentItem != null)
+            if (currentItem is not null)
             {
                 _centerLabel.Text = currentItem.Text;
             }
@@ -994,7 +994,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnContextMenuClosed(object sender, ToolStripDropDownClosedEventArgs e)
         {
-            if (_renderer != null)
+            if (_renderer is not null)
             {
                 _renderer.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
                 _miniToolStrip.Invalidate();
@@ -1015,7 +1015,7 @@ namespace System.Windows.Forms.Design
         private void OnContextMenuOpened(object sender, EventArgs e)
         {
             // Disable All Commands .. the Commands would be reenabled by AddNewItemClick call.
-            if (KeyboardService != null)
+            if (KeyboardService is not null)
             {
                 KeyboardService.TemplateNodeContextMenuOpen = true;
             }
@@ -1095,8 +1095,8 @@ namespace System.Windows.Forms.Design
         {
             //exit Insitu with committing....
             Active = false;
-            Debug.Assert(_centerTextBox.Control != null, "The TextBox is null");
-            if (_centerTextBox.Control != null)
+            Debug.Assert(_centerTextBox.Control is not null, "The TextBox is null");
+            if (_centerTextBox.Control is not null)
             {
                 string text = ((TextBox)(_centerTextBox.Control)).Text;
                 if (string.IsNullOrEmpty(text))
@@ -1124,7 +1124,7 @@ namespace System.Windows.Forms.Design
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (BehaviorService != null)
+                if (BehaviorService is not null)
                 {
                     Point loc = BehaviorService.ControlToAdornerWindow(_miniToolStrip);
                     loc = BehaviorService.AdornerWindowPointToScreen(loc);
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnMouseDown(object sender, MouseEventArgs e)
         {
-            if (KeyboardService != null)
+            if (KeyboardService is not null)
             {
                 KeyboardService.SelectedDesignerControl = _controlHost;
             }
@@ -1153,9 +1153,9 @@ namespace System.Windows.Forms.Design
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             _renderer.State = (int)TemplateNodeSelectionState.None;
-            if (_renderer != null)
+            if (_renderer is not null)
             {
-                if (_addItemButton != null)
+                if (_addItemButton is not null)
                 {
                     if (_addItemButton.ButtonBounds.Contains(e.Location))
                     {
@@ -1176,14 +1176,14 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnMouseLeave(object sender, EventArgs e)
         {
-            if (SelectionService != null)
+            if (SelectionService is not null)
             {
-                if (SelectionService.PrimarySelection is ToolStripItem && _renderer != null && _renderer.State != (int)TemplateNodeSelectionState.HotRegionSelected)
+                if (SelectionService.PrimarySelection is ToolStripItem && _renderer is not null && _renderer.State != (int)TemplateNodeSelectionState.HotRegionSelected)
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.None;
                 }
 
-                if (KeyboardService != null && KeyboardService.SelectedDesignerControl == _controlHost)
+                if (KeyboardService is not null && KeyboardService.SelectedDesignerControl == _controlHost)
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
                 }
@@ -1248,7 +1248,7 @@ namespace System.Windows.Forms.Design
         internal void RollBack()
         {
             // RollBack only iff we are still available !!
-            if (_miniToolStrip != null && _inSituMode)
+            if (_miniToolStrip is not null && _inSituMode)
             {
                 CommitEditor(false, false, false);
             }
@@ -1261,7 +1261,7 @@ namespace System.Windows.Forms.Design
 
         internal void ShowDropDownMenu()
         {
-            if (_addItemButton != null)
+            if (_addItemButton is not null)
             {
                 if (!_isPopulated)
                 {
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms.Design
             }
             else
             {
-                if (BehaviorService != null)
+                if (BehaviorService is not null)
                 {
                     Point loc = BehaviorService.ControlToAdornerWindow(_miniToolStrip);
                     loc = BehaviorService.AdornerWindowPointToScreen(loc);
@@ -1309,7 +1309,7 @@ namespace System.Windows.Forms.Design
 
                     _contextMenu.Show(translatedBounds.X, translatedBounds.Y + translatedBounds.Height);
                     _contextMenu.Focus();
-                    if (_renderer != null)
+                    if (_renderer is not null)
                     {
                         _renderer.State = (int)TemplateNodeSelectionState.HotRegionSelected;
                         _miniToolStrip.Invalidate();
@@ -1994,7 +1994,7 @@ namespace System.Windows.Forms.Design
             protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
             {
                 ToolStripItem item = e.Item as ToolStripLabel;
-                if (item != null && string.Equals(item.Name, CenterLabelName, StringComparison.InvariantCulture) && SystemInformation.HighContrast)
+                if (item is not null && string.Equals(item.Name, CenterLabelName, StringComparison.InvariantCulture) && SystemInformation.HighContrast)
                 {
                     // "Type Here" node always has white background, text should be painted in black
                     e.TextColor = Color.Black;

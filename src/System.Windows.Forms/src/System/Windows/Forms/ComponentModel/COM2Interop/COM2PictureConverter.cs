@@ -17,8 +17,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         private object? _lastManaged;
 
-        // OLE_HANDLE
-        private uint _lastNativeHandle;
+        private OLE_HANDLE _lastNativeHandle;
         private WeakReference? _pictureRef;
 
         private Type _pictureType = typeof(Bitmap);
@@ -43,7 +42,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Debug.Assert(nativeValue is IPicture.Interface, "nativevalue is not IPicture");
 
             IPicture.Interface nativePicture = (IPicture.Interface)nativeValue;
-            nativePicture.get_Handle(out uint handle).ThrowOnFailure();
+            OLE_HANDLE handle = nativePicture.Handle;
 
             if (_lastManaged is not null && handle == _lastNativeHandle)
             {
@@ -54,8 +53,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 // GDI handles are sign extended 32 bit values.
                 // We need to first cast to int so sign extension happens correctly.
-                nint extendedHandle = (int)handle;
-                nativePicture.get_Type(out short type).ThrowOnFailure();
+                nint extendedHandle = (int)handle.Value;
+                short type = nativePicture.Type;
                 switch ((PICTYPE)type)
                 {
                     case PICTYPE.PICTYPE_ICON:
@@ -119,9 +118,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
 
                 using ComScope<IPicture> picture = new(null);
-                PInvoke.OleCreatePictureIndirect(&pictdesc, IPicture.NativeGuid, own, picture).ThrowOnFailure();
+                PInvoke.OleCreatePictureIndirect(&pictdesc, IID.Get<IPicture>(), own, picture).ThrowOnFailure();
                 _lastManaged = managedValue;
-                picture.Value->get_Handle(out _lastNativeHandle);
+                _lastNativeHandle = picture.Value->Handle;
                 var pictureObject = Marshal.GetObjectForIUnknown(picture);
                 _pictureRef = new WeakReference(pictureObject);
                 return pictureObject;
@@ -129,7 +128,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             else
             {
                 _lastManaged = null;
-                _lastNativeHandle = 0;
+                _lastNativeHandle = default;
                 _pictureRef = null;
                 return null;
             }

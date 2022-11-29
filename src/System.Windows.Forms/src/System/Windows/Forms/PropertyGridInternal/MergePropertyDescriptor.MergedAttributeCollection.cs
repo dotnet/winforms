@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
@@ -16,17 +13,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             private readonly MergePropertyDescriptor _owner;
 
-            private AttributeCollection[] _attributeCollections;
-            private IDictionary _foundAttributes;
+            private AttributeCollection[]? _attributeCollections;
+            private Dictionary<Type, Attribute>? _foundAttributes;
 
-            public MergedAttributeCollection(MergePropertyDescriptor owner) : base((Attribute[])null)
+            public MergedAttributeCollection(MergePropertyDescriptor owner) : base(attributes: null)
             {
                 _owner = owner;
             }
 
-            public override Attribute this[[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type attributeType] => GetCommonAttribute(attributeType);
+            public override Attribute? this[[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type attributeType] => GetCommonAttribute(attributeType);
 
-            private Attribute GetCommonAttribute([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)]Type attributeType)
+            private Attribute? GetCommonAttribute([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type attributeType)
             {
                 if (_attributeCollections is null)
                 {
@@ -42,14 +39,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return GetDefaultAttribute(attributeType);
                 }
 
-                Attribute value;
-                if (_foundAttributes is not null)
+                if (_foundAttributes is not null
+                    && _foundAttributes.TryGetValue(attributeType, out Attribute? value))
                 {
-                    value = _foundAttributes[attributeType] as Attribute;
-                    if (value is not null)
-                    {
-                        return value;
-                    }
+                    return value;
                 }
 
                 value = _attributeCollections[0][attributeType];
@@ -61,7 +54,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 for (int i = 1; i < _attributeCollections.Length; i++)
                 {
-                    Attribute newValue = _attributeCollections[i][attributeType];
+                    Attribute? newValue = _attributeCollections[i][attributeType];
                     if (!value.Equals(newValue))
                     {
                         value = GetDefaultAttribute(attributeType);
@@ -69,8 +62,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                _foundAttributes ??= new Hashtable();
-                _foundAttributes[attributeType] = value;
+                _foundAttributes ??= new();
+                if (value is not null)
+                {
+                    _foundAttributes[attributeType] = value;
+                }
+
                 return value;
             }
         }

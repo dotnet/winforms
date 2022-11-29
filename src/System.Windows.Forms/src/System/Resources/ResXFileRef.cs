@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
@@ -41,15 +39,13 @@ namespace System.Resources
         }
 
         internal ResXFileRef Clone()
-        {
-            return new ResXFileRef(FileName, TypeName, TextFileEncoding);
-        }
+            => TextFileEncoding is null ? new(FileName, TypeName) : new(FileName, TypeName, TextFileEncoding);
 
         public string FileName { get; private set; }
 
         public string TypeName { get; }
 
-        public Encoding TextFileEncoding { get; }
+        public Encoding? TextFileEncoding { get; }
 
         /// <summary>
         ///  path1+result = path2
@@ -64,7 +60,8 @@ namespace System.Resources
 
             for (i = 0; (i < path1.Length) && (i < path2.Length); ++i)
             {
-                if ((path1[i] != path2[i]) && (compareCase || (char.ToLower(path1[i], CultureInfo.InvariantCulture) != char.ToLower(path2[i], CultureInfo.InvariantCulture))))
+                if ((path1[i] != path2[i])
+                    && (compareCase || (char.ToLower(path1[i], CultureInfo.InvariantCulture) != char.ToLower(path2[i], CultureInfo.InvariantCulture))))
                 {
                     break;
                 }
@@ -91,7 +88,7 @@ namespace System.Resources
             {
                 if (path1[i] == Path.DirectorySeparatorChar)
                 {
-                    relPath.Append(".." + Path.DirectorySeparatorChar);
+                    relPath.Append($"..{Path.DirectorySeparatorChar}");
                 }
             }
 
@@ -114,17 +111,17 @@ namespace System.Resources
 
             if (FileName.IndexOf(';') != -1 || FileName.IndexOf('\"') != -1)
             {
-                result += ("\"" + FileName + "\";");
+                result += $"\"{FileName}\";";
             }
             else
             {
-                result += (FileName + ";");
+                result += $"{FileName};";
             }
 
             result += TypeName;
             if (TextFileEncoding is not null)
             {
-                result += (";" + TextFileEncoding.WebName);
+                result += $";{TextFileEncoding.WebName}";
             }
 
             return result;

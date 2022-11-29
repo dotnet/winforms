@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design.Behavior
                 s_adornerWindowList.Remove(this);
 
                 // Unregister the mouse hook once all adorner windows have been disposed.
-                if (s_adornerWindowList.Count == 0 && s_mouseHook != null)
+                if (s_adornerWindowList.Count == 0 && s_mouseHook is not null)
                 {
                     s_mouseHook.Dispose();
                     s_mouseHook = null;
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Design.Behavior
             /// </summary>
             protected override void Dispose(bool disposing)
             {
-                if (disposing && DesignerFrame != null)
+                if (disposing && DesignerFrame is not null)
                 {
                     DesignerFrame = null;
                 }
@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Design.Behavior
             ///  Returns true if the DesignerFrame is created and not being disposed.
             /// </summary>
             internal bool DesignerFrameValid
-                => DesignerFrame != null && !DesignerFrame.IsDisposed && DesignerFrame.IsHandleCreated;
+                => DesignerFrame is not null && !DesignerFrame.IsDisposed && DesignerFrame.IsHandleCreated;
 
             public IEnumerable<Adorner> Adorners { get; private set; }
 

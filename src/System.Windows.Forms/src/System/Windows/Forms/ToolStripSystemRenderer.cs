@@ -666,7 +666,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                ToolStrip parent = item.GetCurrentParent();
+                ToolStrip? parent = item.GetCurrentParent();
                 if ((parent is not null) && (state != ToolBarState.Checked) && (item.BackColor != parent.BackColor))
                 {
                     FillBackground(g, fillRect, item.BackColor);

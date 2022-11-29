@@ -3158,7 +3158,7 @@ namespace System.Windows.Forms
                 int oldCurrentCellX = _ptCurrentCell.X;
                 DataGridViewDataErrorEventArgs dgvdee = CancelEditPrivate(/*ref dataGridViewCurrentCell, context*/);
 
-                if (null != dgvdee)
+                if (dgvdee is not null)
                 {
                     if (dgvdee.ThrowException)
                     {
@@ -3866,7 +3866,7 @@ namespace System.Windows.Forms
                     false /*fireRowLeave*/,
                     false /*fireRowEnter*/,
                     false /*fireLeave*/);
-                if (null != dgvdee)
+                if (dgvdee is not null)
                 {
                     if (dgvdee.ThrowException)
                     {
@@ -4120,7 +4120,7 @@ namespace System.Windows.Forms
                 forCurrentRowChange /*fireRowLeave*/,
                 forCurrentRowChange /*fireRowEnter*/,
                 false /*fireLeave*/);
-            if (null != dgvdee)
+            if (dgvdee is not null)
             {
                 if (dgvdee.ThrowException)
                 {
@@ -4134,7 +4134,7 @@ namespace System.Windows.Forms
 
                 // Restore old value
                 dgvdee = CancelEditPrivate();
-                if (null != dgvdee)
+                if (dgvdee is not null)
                 {
                     if (dgvdee.ThrowException)
                     {
@@ -6319,7 +6319,7 @@ namespace System.Windows.Forms
 
                     // Restore old value
                     dgvdee = CancelEditPrivate();
-                    if (null != dgvdee)
+                    if (dgvdee is not null)
                     {
                         if (dgvdee.ThrowException)
                         {
@@ -6923,12 +6923,12 @@ namespace System.Windows.Forms
 
         internal TypeConverter GetCachedTypeConverter(Type type)
         {
-            if (_converters.ContainsKey(type))
+            if (_converters.TryGetValue(type, out TypeConverter converter))
             {
-                return (TypeConverter)_converters[type];
+                return converter;
             }
 
-            TypeConverter converter = TypeDescriptor.GetConverter(type);
+            converter = TypeDescriptor.GetConverter(type);
             _converters.Add(type, converter);
             return converter;
         }
@@ -22033,7 +22033,7 @@ namespace System.Windows.Forms
                             false /*fireRowLeave*/,
                             false /*fireRowEnter*/,
                             false /*fireLeave*/);
-                        if (null != dgvdee)
+                        if (dgvdee is not null)
                         {
                             if (dgvdee.ThrowException)
                             {
@@ -26102,6 +26102,44 @@ namespace System.Windows.Forms
         {
             Cursor.Clip = Rectangle.Empty;
             Capture = false;
+        }
+
+        internal override void ReleaseUiaProvider(IntPtr handle)
+        {
+            if (!IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            if (OsVersion.IsWindows8OrGreater())
+            {
+                foreach (DataGridViewRow row in Rows)
+                {
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        cell.ReleaseUiaProvider();
+                    }
+
+                    row.HeaderCell.ReleaseUiaProvider();
+                    row.ReleaseUiaProvider();
+                }
+
+                foreach (DataGridViewColumn column in Columns)
+                {
+                    column.HeaderCell.ReleaseUiaProvider();
+                }
+
+                _editingPanel?.ReleaseUiaProvider(IntPtr.Zero);
+                _editingPanelAccessibleObject = null;
+                _topLeftHeaderCell?.ReleaseUiaProvider();
+
+                if (AccessibilityObject is DataGridViewAccessibleObject accessibleObject)
+                {
+                    accessibleObject.ReleaseChildUiaProviders();
+                }
+            }
+
+            base.ReleaseUiaProvider(handle);
         }
 
         private void RemoveIndividualReadOnlyCellsInColumn(int columnIndex)

@@ -13,7 +13,7 @@ namespace DesignSurfaceExt
 
         public string CreateName(IContainer container, Type type)
         {
-            if (null == container)
+            if (container is null)
                 return string.Empty;
 
             ComponentCollection cc = container.Components;

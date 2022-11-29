@@ -7,6 +7,7 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 using Windows.Win32.System.Com;
@@ -1594,19 +1595,18 @@ namespace System.Windows.Forms.Tests
             IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromCursor(original);
             Assert.NotNull(iPicture);
 
-            iPicture.get_Handle(out uint handle).ThrowOnFailure();
-            iPicture.get_Type(out short type).ThrowOnFailure();
-            iPicture.get_Width(out int width).ThrowOnFailure();
-            iPicture.get_Height(out int height).ThrowOnFailure();
-            iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+            OLE_HANDLE handle = iPicture.Handle;
+            short type = iPicture.Type;
+            int width = iPicture.Width;
+            int height = iPicture.Height;
+            uint attributes = iPicture.Attributes;
 
             Assert.NotEqual(0u, handle);
             Assert.True(iPicture.get_hPal(out _).Failed);
             Assert.Equal(3, type);
             Assert.Equal(847, width);
             Assert.Equal(847, height);
-            HDC curDc;
-            Assert.True(iPicture.get_CurDC(&curDc).Failed);
+            Assert.Throws<COMException>(() => iPicture.CurDC);
             Assert.Equal(2u, attributes);
 
             Assert.Throws<InvalidCastException>(() => SubAxHost.GetPictureFromIPicture(iPicture));
@@ -1619,18 +1619,19 @@ namespace System.Windows.Forms.Tests
             original.SetPixel(1, 2, Color.FromArgb(unchecked((int)0xFF010203)));
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
             using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp, out bool succeeded);
-
             Assert.True(succeeded);
+            IDispatch* dispatch = (IDispatch*)iPictureDisp.Value;
+
             using VARIANT variant = default;
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            dispatch->GetProperty(PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
             Assert.NotEqual(0u, variant.data.uintVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
+            dispatch->GetProperty(PInvoke.DISPID_PICT_HPAL, &variant).ThrowOnFailure();
             Assert.Equal(0u, variant.data.uintVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            dispatch->GetProperty(PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             Assert.Equal(1, variant.data.iVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            dispatch->GetProperty(PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
             Assert.Equal(265u, variant.data.uintVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            dispatch->GetProperty(PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
             Assert.Equal(291u, variant.data.uintVal);
 
             var result = Assert.IsType<Bitmap>(SubAxHost.GetPictureFromIPictureDisp(disp));
@@ -1646,17 +1647,17 @@ namespace System.Windows.Forms.Tests
             object disp = SubAxHost.GetIPictureDispFromPicture(original);
 
             using var iPictureDisp = ComHelpers.GetComScope<IDispatch>(disp, out bool succeeded);
-
             Assert.True(succeeded);
+
             using VARIANT variant = default;
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
+            iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HANDLE, &variant).ThrowOnFailure();
             Assert.NotEqual(0u, variant.data.uintVal);
-            Assert.True(ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HPAL, &variant).Failed);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            Assert.True(iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HPAL, &variant).Failed);
+            iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             Assert.Equal(4, variant.data.iVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
             Assert.Equal(19972u, variant.data.uintVal);
-            ComHelpers.GetDispatchProperty(iPictureDisp, PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            iPictureDisp.Value->GetProperty(PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
             Assert.Equal(28332u, variant.data.uintVal);
 
             var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPictureDisp(disp));
@@ -1684,14 +1685,13 @@ namespace System.Windows.Forms.Tests
             IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
             Assert.NotNull(iPicture);
 
-            iPicture.get_Handle(out uint handle).ThrowOnFailure();
-            iPicture.get_hPal(out uint hPal).ThrowOnFailure();
-            iPicture.get_Type(out short type).ThrowOnFailure();
-            iPicture.get_Width(out int width).ThrowOnFailure();
-            iPicture.get_Height(out int height).ThrowOnFailure();
-            iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
-            HDC curDc;
-            iPicture.get_CurDC(&curDc).ThrowOnFailure();
+            OLE_HANDLE handle = iPicture.Handle;
+            iPicture.get_hPal(out OLE_HANDLE hPal).ThrowOnFailure();
+            short type = iPicture.Type;
+            int width = iPicture.Width;
+            int height = iPicture.Height;
+            uint attributes = iPicture.Attributes;
+            HDC curDc = iPicture.CurDC;
 
             Assert.NotEqual(0u, handle);
             Assert.Equal(0u, hPal);
@@ -1714,19 +1714,18 @@ namespace System.Windows.Forms.Tests
             IPicture.Interface iPicture = (IPicture.Interface)SubAxHost.GetIPictureFromPicture(original);
             Assert.NotNull(iPicture);
 
-            iPicture.get_Handle(out uint handle).ThrowOnFailure();
-            iPicture.get_Type(out short type).ThrowOnFailure();
-            iPicture.get_Width(out int width).ThrowOnFailure();
-            iPicture.get_Height(out int height).ThrowOnFailure();
-            iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
+            OLE_HANDLE handle = iPicture.Handle;
+            short type = iPicture.Type;
+            int width = iPicture.Width;
+            int height = iPicture.Height;
+            uint attributes = iPicture.Attributes;
 
             Assert.NotEqual(0u, handle);
             Assert.True(iPicture.get_hPal(out _).Failed);
             Assert.Equal(4, type);
             Assert.Equal(19972, width);
             Assert.Equal(28332, height);
-            HDC curDc;
-            Assert.True(iPicture.get_CurDC(&curDc).Failed);
+            Assert.Throws<COMException>(() => iPicture.CurDC);
             Assert.Equal(3u, attributes);
 
             var result = Assert.IsType<Metafile>(SubAxHost.GetPictureFromIPicture(iPicture));
@@ -3089,6 +3088,36 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void AxHost_MediaPlayer_Serialize_Success()
+        {
+            using Form form = new();
+            using AxWMPLib.AxWindowsMediaPlayer player = new();
+            ((ISupportInitialize)player).BeginInit();
+            form.Controls.Add(player);
+            ((ISupportInitialize)player).EndInit();
+
+            string url = $"{Path.GetTempPath()}testurl1";
+            string uiMode = "none";
+            player.URL = url;
+            player.uiMode = uiMode;
+
+            BinaryFormatter formatter = new();
+            using MemoryStream stream = new();
+#pragma warning disable SYSLIB0011
+            formatter.Serialize(stream, player.OcxState);
+
+            player.URL = $"{Path.GetTempPath()}testurl2";
+            player.uiMode = "full";
+
+            stream.Position = 0;
+            player.OcxState = (AxHost.State)formatter.Deserialize(stream);
+#pragma warning disable SYSLIB0011
+
+            Assert.Equal(url, player.URL);
+            Assert.Equal(uiMode, player.uiMode);
         }
 
         private class SubComponentEditor : ComponentEditor

@@ -103,12 +103,7 @@ internal unsafe partial struct VARIANT : IDisposable
                 if (byRef)
                 {
                     // CLR returns VT_EMPTY | VT_BYREF data as nuint.
-                    if (IntPtr.Size == 8)
-                    {
-                        return (ulong)data;
-                    }
-
-                    return (uint)data;
+                    return IntPtr.Size == 8 ? (ulong)data : (object)(uint)data;
                 }
 
                 return null;
@@ -161,7 +156,7 @@ internal unsafe partial struct VARIANT : IDisposable
             case VT_DECIMAL:
                 return ((DECIMAL*)data)->ToDecimal();
             case VT_BOOL:
-                return (*(VARIANT_BOOL*)data) != VARIANT_BOOL.FALSE;
+                return (*(VARIANT_BOOL*)data) != VARIANT_BOOL.VARIANT_FALSE;
             case VT_VARIANT:
                 // We only support VT_VARIANT | VT_BYREF.
                 if (!byRef)
@@ -302,7 +297,7 @@ internal unsafe partial struct VARIANT : IDisposable
                             var result = GetSpan<bool>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
-                                result[i] = data[i] != VARIANT_BOOL.FALSE;
+                                result[i] = data[i] != VARIANT_BOOL.VARIANT_FALSE;
                             }
 
                             break;
@@ -363,14 +358,7 @@ internal unsafe partial struct VARIANT : IDisposable
                             var result = GetSpan<object?>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
-                                if (data[i] == IntPtr.Zero)
-                                {
-                                    result[i] = null;
-                                }
-                                else
-                                {
-                                    result[i] = Marshal.GetObjectForIUnknown(data[i]);
-                                }
+                                result[i] = data[i] == IntPtr.Zero ? null : Marshal.GetObjectForIUnknown(data[i]);
                             }
 
                             break;
@@ -535,7 +523,7 @@ internal unsafe partial struct VARIANT : IDisposable
             case VT_BOOL:
                 {
                     VARIANT_BOOL data = psa->GetValue<VARIANT_BOOL>(indices);
-                    SetValue(array, data != VARIANT_BOOL.FALSE, indices, lowerBounds);
+                    SetValue(array, data != VARIANT_BOOL.VARIANT_FALSE, indices, lowerBounds);
                     break;
                 }
 
@@ -634,62 +622,25 @@ internal unsafe partial struct VARIANT : IDisposable
             throw new SafeArrayTypeMismatchException();
         }
 
-        switch (vt)
+        elementType = vt switch
         {
-            case VT_I1:
-                elementType = typeof(sbyte);
-                break;
-            case VT_UI1:
-                elementType = typeof(byte);
-                break;
-            case VT_I2:
-                elementType = typeof(short);
-                break;
-            case VT_UI2:
-                elementType = typeof(ushort);
-                break;
-            case VT_I4:
-            case VT_INT:
-                elementType = typeof(int);
-                break;
-            case VT_I8:
-                elementType = typeof(long);
-                break;
-            case VT_UI8:
-                elementType = typeof(ulong);
-                break;
-            case VT_UI4:
-            case VT_UINT:
-            case VT_ERROR:
-                elementType = typeof(uint);
-                break;
-            case VT_R4:
-                elementType = typeof(float);
-                break;
-            case VT_R8:
-                elementType = typeof(double);
-                break;
-            case VT_BOOL:
-                elementType = typeof(bool);
-                break;
-            case VT_DECIMAL:
-            case VT_CY:
-                elementType = typeof(decimal);
-                break;
-            case VT_DATE:
-                elementType = typeof(DateTime);
-                break;
-            case VT_BSTR:
-                elementType = typeof(string);
-                break;
-            case VT_DISPATCH:
-            case VT_UNKNOWN:
-            case VT_VARIANT:
-                elementType = typeof(object);
-                break;
-            default:
-                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
-        }
+            VT_I1 => typeof(sbyte),
+            VT_UI1 => typeof(byte),
+            VT_I2 => typeof(short),
+            VT_UI2 => typeof(ushort),
+            VT_I4 or VT_INT => typeof(int),
+            VT_I8 => typeof(long),
+            VT_UI8 => typeof(ulong),
+            VT_UI4 or VT_UINT or VT_ERROR => typeof(uint),
+            VT_R4 => typeof(float),
+            VT_R8 => typeof(double),
+            VT_BOOL => typeof(bool),
+            VT_DECIMAL or VT_CY => typeof(decimal),
+            VT_DATE => typeof(DateTime),
+            VT_BSTR => typeof(string),
+            VT_DISPATCH or VT_UNKNOWN or VT_VARIANT => typeof(object),
+            _ => throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt)),
+        };
 
         if (psa->cDims == 1 && psa->Bounds[0].lLbound == 0)
         {
@@ -784,7 +735,7 @@ internal unsafe partial struct VARIANT : IDisposable
                     var result = new bool[data.Length];
                     for (int i = 0; i < data.Length; i++)
                     {
-                        result[i] = data[i] != VARIANT_BOOL.FALSE;
+                        result[i] = data[i] != VARIANT_BOOL.VARIANT_FALSE;
                     }
 
                     return result;

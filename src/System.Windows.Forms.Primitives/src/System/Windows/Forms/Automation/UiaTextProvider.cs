@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Automation
 
         public static double[] RectListToDoubleArray(List<Rectangle> rectArray)
         {
-            if (rectArray == null || rectArray.Count == 0)
+            if (rectArray is null || rectArray.Count == 0)
             {
                 return Array.Empty<double>();
             }

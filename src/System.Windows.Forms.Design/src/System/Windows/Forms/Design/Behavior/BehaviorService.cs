@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             // Use the adornerWindow as an overlay
             IOverlayService os = (IOverlayService)serviceProvider.GetService(typeof(IOverlayService));
-            if (os != null)
+            if (os is not null)
             {
                 AdornerWindowIndex = os.PushOverlay(_adornerWindow);
             }
@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal int AdornerWindowIndex { get; } = -1;
 
-        internal bool HasCapture => _captureBehavior != null;
+        internal bool HasCapture => _captureBehavior is not null;
 
         /// <summary>
         ///  Returns the LayoutMode setting of the current designer session.  Either SnapLines or SnapToGrid.
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.Design.Behavior
                 menuCommandHandler = menuCommandService as MenuCommandHandler;
             }
 
-            if (menuCommandHandler != null && _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
+            if (menuCommandHandler is not null && _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
                 IMenuCommandService oldMenuCommandService = menuCommandHandler.MenuService;
                 host.RemoveService(typeof(IMenuCommandService));
@@ -352,7 +352,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Behavior GetNextBehavior(Behavior behavior)
         {
-            if (_behaviorStack != null && _behaviorStack.Count > 0)
+            if (_behaviorStack is not null && _behaviorStack.Count > 0)
             {
                 int index = _behaviorStack.IndexOf(behavior);
                 if ((index != -1) && (index < _behaviorStack.Count - 1))
@@ -420,7 +420,7 @@ namespace System.Windows.Forms.Design.Behavior
                 _adornerWindow.Capture = false;
 
                 // Defensive:  adornerWindow should get a WM_CAPTURECHANGED, but do this by hand if it didn't.
-                if (_captureBehavior != null)
+                if (_captureBehavior is not null)
                 {
                     OnLoseCapture();
                     Debug.Assert(_captureBehavior is null, "OnLostCapture should have cleared captureBehavior");
@@ -448,7 +448,7 @@ namespace System.Windows.Forms.Design.Behavior
             _behaviorStack.Insert(0, behavior);
 
             // If there is a capture behavior, and it isn't this behavior, notify it that it no longer has capture.
-            if (_captureBehavior != null && _captureBehavior != behavior)
+            if (_captureBehavior is not null && _captureBehavior != behavior)
             {
                 OnLoseCapture();
             }
@@ -486,7 +486,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal void OnLoseCapture()
         {
-            if (_captureBehavior != null)
+            if (_captureBehavior is not null)
             {
                 Behavior b = _captureBehavior;
                 _captureBehavior = null;
@@ -512,7 +512,7 @@ namespace System.Windows.Forms.Design.Behavior
                 for (int j = 0; j < Adorners[i].Glyphs.Count; j++)
                 {
                     Cursor hitTestCursor = Adorners[i].Glyphs[j].GetHitTest(pt);
-                    if (hitTestCursor != null)
+                    if (hitTestCursor is not null)
                     {
                         // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave. VSWhidbey #396611
                         Glyph newGlyph = Adorners[i].Glyphs[j];
@@ -536,7 +536,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (_validDragArgs is null)
             {
                 Cursor cursor = Cursors.Default;
-                if ((_behaviorStack != null) && (_behaviorStack.Count > 0))
+                if ((_behaviorStack is not null) && (_behaviorStack.Count > 0))
                 {
                     if (_behaviorStack[0] is Behavior behavior)
                     {
@@ -560,13 +560,13 @@ namespace System.Windows.Forms.Design.Behavior
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
 
-            if (behavior != null)
+            if (behavior is not null)
             {
                 if (behavior.DisableAllCommands)
                 {
                     MenuCommand menuCommand = menuService.FindCommand(commandID);
 
-                    if (menuCommand != null)
+                    if (menuCommand is not null)
                     {
                         menuCommand.Enabled = false;
                     }
@@ -577,7 +577,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     // Check to see if the behavior wants to interrupt this command
                     MenuCommand menuCommand = behavior.FindCommand(commandID);
-                    if (menuCommand != null)
+                    if (menuCommand is not null)
                     {
                         // The behavior chose to interrupt - so return the new command
                         return menuCommand;
@@ -619,15 +619,15 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void InvokeMouseEnterLeave(Glyph leaveGlyph, Glyph enterGlyph)
         {
-            if (leaveGlyph != null)
+            if (leaveGlyph is not null)
             {
-                if (enterGlyph != null && leaveGlyph.Equals(enterGlyph))
+                if (enterGlyph is not null && leaveGlyph.Equals(enterGlyph))
                 {
                     // Same glyph - no change
                     return;
                 }
 
-                if (_validDragArgs != null)
+                if (_validDragArgs is not null)
                 {
                     OnDragLeave(leaveGlyph, EventArgs.Empty);
                 }
@@ -637,9 +637,9 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            if (enterGlyph != null)
+            if (enterGlyph is not null)
             {
-                if (_validDragArgs != null)
+                if (_validDragArgs is not null)
                 {
                     OnDragEnter(enterGlyph, _validDragArgs);
                 }
@@ -668,7 +668,7 @@ namespace System.Windows.Forms.Design.Behavior
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tForwarding to behavior");
             behavior.OnDragEnter(g, e);
 
-            if (g != null && g is ControlBodyGlyph && e.Effect == DragDropEffects.None)
+            if (g is not null && g is ControlBodyGlyph && e.Effect == DragDropEffects.None)
             {
                 _dragEnterReplies[g] = this; // dummy value, we just need to set something.
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tCalled DragEnter on this glyph. Caching");
@@ -787,7 +787,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void TestHook_GetRecentSnapLines(ref Message m)
         {
             string snapLineInfo = string.Empty;
-            if (_testHook_RecentSnapLines != null)
+            if (_testHook_RecentSnapLines is not null)
             {
                 foreach (string line in _testHook_RecentSnapLines)
                 {
@@ -867,7 +867,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             if (_hitTestedGlyph is null ||
-               (_hitTestedGlyph != null && !_dragEnterReplies.ContainsKey(_hitTestedGlyph)))
+               (_hitTestedGlyph is not null && !_dragEnterReplies.ContainsKey(_hitTestedGlyph)))
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tFound glyph, forwarding to behavior");
                 behavior.OnDragOver(_hitTestedGlyph, e);

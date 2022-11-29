@@ -14,11 +14,11 @@
     "version": "8.0.100-alpha.1.22512.5"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "8.0.0-beta.22554.2",
-    "Microsoft.DotNet.CMake.Sdk": "8.0.0-beta.22554.2",
-    "Microsoft.DotNet.Helix.Sdk": "8.0.0-beta.22554.2",
+    "Microsoft.DotNet.Arcade.Sdk": "8.0.0-beta.22578.1",
+    "Microsoft.DotNet.CMake.Sdk": "8.0.0-beta.22578.1",
+    "Microsoft.DotNet.Helix.Sdk": "8.0.0-beta.22578.1",
     "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
-    "Microsoft.NET.Sdk.IL": "8.0.0-alpha.1.22559.2"
+    "Microsoft.NET.Sdk.IL": "8.0.0-alpha.1.22578.7"
   },
   "native-tools": {
     "cmake": "latest"

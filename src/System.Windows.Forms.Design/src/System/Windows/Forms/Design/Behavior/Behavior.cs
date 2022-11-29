@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </param>
         protected Behavior(bool callParentBehavior, BehaviorService? behaviorService)
         {
-            if ((callParentBehavior) && (behaviorService == null))
+            if ((callParentBehavior) && (behaviorService is null))
             {
                 throw new ArgumentException(null, nameof(behaviorService));
             }
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_callParentBehavior && GetNextBehavior != null)
+                if (_callParentBehavior && GetNextBehavior is not null)
                 {
                     return GetNextBehavior.DisableAllCommands;
                 }
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             try
             {
-                if (_callParentBehavior && GetNextBehavior != null)
+                if (_callParentBehavior && GetNextBehavior is not null)
                 {
                     return GetNextBehavior.FindCommand(commandId);
                 }
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private Behavior? GetGlyphBehavior(Glyph? g)
         {
-            return g?.Behavior != null && g.Behavior != this ? g.Behavior : null;
+            return g?.Behavior is not null && g.Behavior != this ? g.Behavior : null;
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual void OnLoseCapture(Glyph? g, EventArgs e)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 GetNextBehavior.OnLoseCapture(g, e);
             }
@@ -128,7 +128,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual bool OnMouseDoubleClick(Glyph? g, MouseButtons button, Point mouseLoc)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 return GetNextBehavior.OnMouseDoubleClick(g, button, mouseLoc);
             }
@@ -150,7 +150,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual bool OnMouseDown(Glyph? g, MouseButtons button, Point mouseLoc)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 return GetNextBehavior.OnMouseDown(g, button, mouseLoc);
             }
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual bool OnMouseEnter(Glyph? g)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 return GetNextBehavior.OnMouseEnter(g);
             }
@@ -191,7 +191,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual bool OnMouseHover(Glyph? g, Point mouseLoc)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 return GetNextBehavior.OnMouseHover(g, mouseLoc);
             }
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual bool OnMouseLeave(Glyph? g)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 return GetNextBehavior.OnMouseLeave(g);
             }
@@ -231,7 +231,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual bool OnMouseMove(Glyph? g, MouseButtons button, Point mouseLoc)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 return GetNextBehavior.OnMouseMove(g, button, mouseLoc);
             }
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual bool OnMouseUp(Glyph? g, MouseButtons button)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 return GetNextBehavior.OnMouseUp(g, button);
             }
@@ -275,7 +275,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual void OnDragDrop(Glyph? g, DragEventArgs e)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 GetNextBehavior.OnDragDrop(g, e);
             }
@@ -290,7 +290,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual void OnDragEnter(Glyph? g, DragEventArgs e)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 GetNextBehavior.OnDragEnter(g, e);
             }
@@ -305,7 +305,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual void OnDragLeave(Glyph? g, EventArgs e)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 GetNextBehavior.OnDragLeave(g, e);
             }
@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual void OnDragOver(Glyph? g, DragEventArgs e)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 GetNextBehavior.OnDragOver(g, e);
             }
@@ -339,7 +339,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual void OnGiveFeedback(Glyph? g, GiveFeedbackEventArgs e)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 GetNextBehavior.OnGiveFeedback(g, e);
             }
@@ -354,7 +354,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public virtual void OnQueryContinueDrag(Glyph? g, QueryContinueDragEventArgs e)
         {
-            if (_callParentBehavior && GetNextBehavior != null)
+            if (_callParentBehavior && GetNextBehavior is not null)
             {
                 GetNextBehavior.OnQueryContinueDrag(g, e);
             }

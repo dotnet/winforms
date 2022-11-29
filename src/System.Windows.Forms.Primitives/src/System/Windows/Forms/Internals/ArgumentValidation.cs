@@ -16,7 +16,7 @@ namespace System.Windows.Forms
 
         internal static T OrThrowIfNullWithMessage<T>(this T? argument, string message, [CallerArgumentExpression("argument")] string? paramName = null)
         {
-            if (argument == null)
+            if (argument is null)
             {
                 throw new ArgumentNullException(paramName, message);
             }

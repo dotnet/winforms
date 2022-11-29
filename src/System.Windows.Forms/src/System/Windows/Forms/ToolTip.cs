@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -73,7 +72,7 @@ namespace System.Windows.Forms
         ///  Adding a tool twice breaks the ToolTip, so we need to track which
         ///  tools are created to prevent this.
         /// </summary>
-        private readonly Hashtable _created = new();
+        private readonly HashSet<Control> _created = new();
 
         private bool _cancelled;
 
@@ -870,13 +869,13 @@ namespace System.Windows.Forms
                                   && TopLevelControl is not null
                                   && TopLevelControl.IsHandleCreated;
 
-            if (!_created.ContainsKey(control)
+            if (!_created.Contains(control)
                 && !string.IsNullOrEmpty(caption)
                 && handlesCreated && !DesignMode)
             {
                 // Call the SendMessage through a function.
                 SetToolInfo(control, caption);
-                _created[control] = control;
+                _created.Add(control);
             }
 
             if (control.IsHandleCreated && _topLevelControl is null)
@@ -890,12 +889,12 @@ namespace System.Windows.Forms
         private void MouseMove(object sender, MouseEventArgs me)
         {
             var control = (Control)sender;
-            if (!_created.ContainsKey(control) && control.IsHandleCreated && TopLevelControl is not null)
+            if (!_created.Contains(control) && control.IsHandleCreated && TopLevelControl is not null)
             {
                 CreateRegion(control);
             }
 
-            if (_created.ContainsKey(control))
+            if (_created.Contains(control))
             {
                 control.MouseMove -= MouseMove;
             }
@@ -927,7 +926,7 @@ namespace System.Windows.Forms
                 handlesCreated = handlesCreated && GetHandleCreated();
             }
 
-            if (_created.ContainsKey(control) && handlesCreated && !DesignMode)
+            if (_created.Contains(control) && handlesCreated && !DesignMode)
             {
                 new ToolInfoWrapper<Control>(control).SendMessage(this, (User32.WM)PInvoke.TTM_DELTOOLW);
                 _created.Remove(control);

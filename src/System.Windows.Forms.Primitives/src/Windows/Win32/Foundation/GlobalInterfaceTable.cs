@@ -23,7 +23,7 @@ namespace Windows.Win32.Foundation
                     g,
                     pUnkOuter: null,
                     CLSCTX.CLSCTX_INPROC_SERVER,
-                    IGlobalInterfaceTable.NativeGuid,
+                    IID.Get<IGlobalInterfaceTable>(),
                     (void**)git).ThrowOnFailure();
             }
         }
@@ -34,12 +34,12 @@ namespace Windows.Win32.Foundation
         /// </summary>
         /// <returns>The cookie used to refer to the interface in the table.</returns>
         public static uint RegisterInterface<TInterface>(TInterface* @interface)
-            where TInterface : unmanaged, INativeGuid
+            where TInterface : unmanaged, IComIID
         {
             uint cookie;
             s_globalInterfaceTable->RegisterInterfaceInGlobal(
                 (IUnknown*)@interface,
-                TInterface.NativeGuid,
+                IID.Get<TInterface>(),
                 &cookie).ThrowOnFailure();
             return cookie;
         }
@@ -49,10 +49,10 @@ namespace Windows.Win32.Foundation
         ///  <see cref="RegisterInterface{TInterface}(TInterface*)"/>
         /// </summary>
         public static ComScope<TInterface> GetInterface<TInterface>(uint cookie, out HRESULT result)
-            where TInterface : unmanaged, INativeGuid
+            where TInterface : unmanaged, IComIID
         {
             ComScope<TInterface> @interface = new(null);
-            result = s_globalInterfaceTable->GetInterfaceFromGlobal(cookie, TInterface.NativeGuid, @interface);
+            result = s_globalInterfaceTable->GetInterfaceFromGlobal(cookie, IID.Get<TInterface>(), @interface);
             return @interface;
         }
 

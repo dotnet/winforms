@@ -5522,11 +5522,6 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">Null değeri '{1}' türüne dönüştürülemez.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">GridItem atıldı, artık kullanılamaz.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">GridItem genişletilemez.</target>
@@ -7429,11 +7424,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">Tamam</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">Bırakılan '{0}' artık kullanılamaz.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">

@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (dataBitmap == null)
+                if (dataBitmap is null)
                 {
                     dataBitmap = new Bitmap(typeof(DesignBindingValueUIHandler), "BoundProperty.bmp");
                     dataBitmap.MakeTransparent();

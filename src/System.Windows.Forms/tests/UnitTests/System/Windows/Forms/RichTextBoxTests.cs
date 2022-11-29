@@ -16,6 +16,7 @@ using static Interop.Richedit;
 using static Interop.User32;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests
 {
@@ -311,9 +312,9 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
-            var dropTarget = new CustomDropTarget();
+            DropTargetMock dropTarget = new();
             Assert.Equal(ApartmentState.STA, Application.OleRequired());
-            Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+            Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, PInvoke.RegisterDragDrop(control, dropTarget));
 
             control.AllowDrop = value;
             Assert.Equal(value, control.AllowDrop);
@@ -337,29 +338,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        private class CustomDropTarget : Ole32.IDropTarget
-        {
-            public HRESULT DragEnter([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT DragOver(uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT DragLeave()
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT Drop([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         [Theory]
@@ -1286,9 +1264,9 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
-            var dropTarget = new CustomDropTarget();
+            DropTargetMock dropTarget = new();
             Assert.Equal(ApartmentState.STA, Application.OleRequired());
-            Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+            Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, PInvoke.RegisterDragDrop(control, dropTarget));
 
             control.EnableAutoDragDrop = value;
             Assert.Equal(value, control.EnableAutoDragDrop);

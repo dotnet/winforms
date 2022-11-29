@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Design.Behavior
             _componentToDesigner = new Hashtable();
 
             IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
-            if (cs != null)
+            if (cs is not null)
             {
                 cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
                 cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (_designerHost.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
             {
                 PropertyDescriptor p = options.Options.Properties["UseSmartTags"];
-                if (p != null && p.PropertyType == typeof(bool) && (bool)p.GetValue(null))
+                if (p is not null && p.PropertyType == typeof(bool) && (bool)p.GetValue(null))
                 {
                     _designerActionUI = new DesignerActionUI(serviceProvider, _selectionAdorner);
                     behaviorService.DesignerActionUI = _designerActionUI;
@@ -153,10 +153,10 @@ namespace System.Windows.Forms.Design.Behavior
         private void AddControlGlyphs(Control c, GlyphSelectionType selType)
         {
             ControlDesigner cd = (ControlDesigner)_componentToDesigner[c];
-            if (cd != null)
+            if (cd is not null)
             {
                 ControlBodyGlyph bodyGlyph = cd.GetControlGlyphInternal(selType);
-                if (bodyGlyph != null)
+                if (bodyGlyph is not null)
                 {
                     _bodyAdorner.Glyphs.Add(bodyGlyph);
                     if (selType == GlyphSelectionType.SelectedPrimary ||
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
 
                 GlyphCollection glyphs = cd.GetGlyphs(selType);
-                if (glyphs != null)
+                if (glyphs is not null)
                 {
                     _selectionAdorner.Glyphs.AddRange(glyphs);
                     if (selType == GlyphSelectionType.SelectedPrimary ||
@@ -200,23 +200,23 @@ namespace System.Windows.Forms.Design.Behavior
         // We don't need to Dispose rootComponent.
         public void Dispose()
         {
-            if (_designerHost != null)
+            if (_designerHost is not null)
             {
                 _designerHost.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
                 _designerHost = null;
             }
 
-            if (_serviceProvider != null)
+            if (_serviceProvider is not null)
             {
                 IComponentChangeService cs = (IComponentChangeService)_serviceProvider.GetService(typeof(IComponentChangeService));
-                if (cs != null)
+                if (cs is not null)
                 {
                     cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
                     cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                     cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                 }
 
-                if (_selSvc != null)
+                if (_selSvc is not null)
                 {
                     _selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
                     _selSvc = null;
@@ -225,7 +225,7 @@ namespace System.Windows.Forms.Design.Behavior
                 _serviceProvider = null;
             }
 
-            if (_behaviorService != null)
+            if (_behaviorService is not null)
             {
                 _behaviorService.Adorners.Remove(_bodyAdorner);
                 _behaviorService.Adorners.Remove(_selectionAdorner);
@@ -234,19 +234,19 @@ namespace System.Windows.Forms.Design.Behavior
                 _behaviorService = null;
             }
 
-            if (_selectionAdorner != null)
+            if (_selectionAdorner is not null)
             {
                 _selectionAdorner.Glyphs.Clear();
                 _selectionAdorner = null;
             }
 
-            if (_bodyAdorner != null)
+            if (_bodyAdorner is not null)
             {
                 _bodyAdorner.Glyphs.Clear();
                 _bodyAdorner = null;
             }
 
-            if (_designerActionUI != null)
+            if (_designerActionUI is not null)
             {
                 _designerActionUI.Dispose();
                 _designerActionUI = null;
@@ -408,7 +408,7 @@ namespace System.Windows.Forms.Design.Behavior
             using (Graphics g = _behaviorService.AdornerWindowGraphics)
             {
                 // If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
-                if (toRefresh.IsEmpty(g) && primarySelection != null && !primarySelection.Equals(_prevPrimarySelection))
+                if (toRefresh.IsEmpty(g) && primarySelection is not null && !primarySelection.Equals(_prevPrimarySelection))
                 {
                     for (int i = 0; i < _curSelectionBounds.Length; i++)
                     {
@@ -450,7 +450,7 @@ namespace System.Windows.Forms.Design.Behavior
                 _curSelectionBounds = new Rectangle[selComps.Count];
                 AddAllControlGlyphs(_rootComponent, selComps, primarySelection);
 
-                if (_prevSelectionBounds != null)
+                if (_prevSelectionBounds is not null)
                 {
                     Region toUpdate = DetermineRegionToRefresh(primarySelection);
                     using (Graphics g = _behaviorService.AdornerWindowGraphics)

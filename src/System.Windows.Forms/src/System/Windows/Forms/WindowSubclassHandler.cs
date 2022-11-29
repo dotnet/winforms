@@ -87,10 +87,7 @@ namespace System.Windows.Forms
         /// <exception cref="InvalidOperationException"><see cref="Open"/> was already called.</exception>
         public unsafe void Open()
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(WindowSubclassHandler));
-            }
+            ObjectDisposedException.ThrowIf(_disposed, this);
 
             if (_opened)
             {

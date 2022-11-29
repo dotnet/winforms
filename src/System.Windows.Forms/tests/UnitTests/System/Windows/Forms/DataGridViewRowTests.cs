@@ -1480,7 +1480,7 @@ namespace System.Windows.Forms.Tests
             {
                 HeaderCell = value
             };
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1493,7 +1493,7 @@ namespace System.Windows.Forms.Tests
 
             // Set same.
             row.HeaderCell = value;
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1516,7 +1516,7 @@ namespace System.Windows.Forms.Tests
             };
             row.HeaderCell = value;
 
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1529,7 +1529,7 @@ namespace System.Windows.Forms.Tests
 
             // Set same.
             row.HeaderCell = value;
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1576,7 +1576,7 @@ namespace System.Windows.Forms.Tests
             DataGridViewRow row = control.Rows[0];
 
             row.HeaderCell = value;
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1589,7 +1589,7 @@ namespace System.Windows.Forms.Tests
 
             // Set same.
             row.HeaderCell = value;
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1616,7 +1616,7 @@ namespace System.Windows.Forms.Tests
 
             row.HeaderCell = value;
 
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1629,7 +1629,7 @@ namespace System.Windows.Forms.Tests
 
             // Set same.
             row.HeaderCell = value;
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1653,7 +1653,7 @@ namespace System.Windows.Forms.Tests
             DataGridViewRow row = control.Rows.SharedRow(0);
 
             row.HeaderCell = value;
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1666,7 +1666,7 @@ namespace System.Windows.Forms.Tests
 
             // Set same.
             row.HeaderCell = value;
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1693,7 +1693,7 @@ namespace System.Windows.Forms.Tests
 
             row.HeaderCell = value;
 
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -1706,7 +1706,7 @@ namespace System.Windows.Forms.Tests
 
             // Set same.
             row.HeaderCell = value;
-            if (value != null)
+            if (value is not null)
             {
                 Assert.Same(value, row.HeaderCell);
             }
@@ -2131,17 +2131,17 @@ namespace System.Windows.Forms.Tests
                 ColumnCount = 2
             };
 
-            if (rowsDefaultCellStyle != null)
+            if (rowsDefaultCellStyle is not null)
             {
                 control.RowsDefaultCellStyle = rowsDefaultCellStyle;
             }
 
-            if (alternatingRowsDefaultCellStyle != null)
+            if (alternatingRowsDefaultCellStyle is not null)
             {
                 control.AlternatingRowsDefaultCellStyle = alternatingRowsDefaultCellStyle;
             }
 
-            if (gridDefaultCellStyle != null)
+            if (gridDefaultCellStyle is not null)
             {
                 control.DefaultCellStyle = gridDefaultCellStyle;
             }
@@ -2150,7 +2150,7 @@ namespace System.Windows.Forms.Tests
             control.Rows.Add(new SubDataGridViewRow());
 
             DataGridViewRow row = control.Rows[index];
-            if (rowDefaultCellStyle != null)
+            if (rowDefaultCellStyle is not null)
             {
                 row.DefaultCellStyle = rowDefaultCellStyle;
             }
