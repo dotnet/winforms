@@ -125,47 +125,21 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        void IList.Clear() => InnerList.Clear();
+        void IList.Clear() => ((IList)InnerList).Clear();
 
-        bool IList.IsFixedSize => false;
+        bool IList.IsFixedSize => ((IList)InnerList).IsFixedSize;
 
-        bool IList.Contains(object? value) => (value is IArrangedElement element) ? InnerList.Contains(element) : false;
+        bool IList.Contains(object? value) => ((IList)InnerList).Contains(value);
 
-        public virtual bool IsReadOnly => false;
+        public virtual bool IsReadOnly => ((IList)InnerList).IsReadOnly;
 
-        void IList.RemoveAt(int index) => InnerList.RemoveAt(index);
+        void IList.RemoveAt(int index) => ((IList)InnerList).RemoveAt(index);
 
-        void IList.Remove(object? value)
-        {
-            if (value is IArrangedElement element)
-            {
-                InnerList.Remove(element);
-            }
-        }
+        void IList.Remove(object? value) => ((IList)InnerList).Remove(value);
 
-        int IList.Add(object? value)
-        {
-            if (value is IArrangedElement element)
-            {
-                InnerList.Add(element);
+        int IList.Add(object? value) => ((IList)InnerList).Add(value);
 
-                int index = InnerList.Count - 1;
-                return index;
-            }
-            else
-            {
-                return -1;
-            }
-        }
-
-        int IList.IndexOf(object? value)
-        {
-            return value switch
-            {
-                IArrangedElement element => InnerList.IndexOf(element),
-                _ => -1,
-            };
-        }
+        int IList.IndexOf(object? value) => ((IList)InnerList).IndexOf(value);
 
         void IList.Insert(int index, object? value) => throw new NotSupportedException();
 
