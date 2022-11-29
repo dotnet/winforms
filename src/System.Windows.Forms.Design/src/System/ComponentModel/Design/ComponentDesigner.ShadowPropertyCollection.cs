@@ -28,9 +28,9 @@ namespace System.ComponentModel.Design
                     ArgumentNullException.ThrowIfNull(propertyName);
 
                     // First, check to see if the name is in the given properties table
-                    if (_properties is not null && _properties.TryGetValue(propertyName, out object prop))
+                    if (_properties is not null && _properties.TryGetValue(propertyName, out object existing))
                     {
-                        return prop;
+                        return existing;
                     }
 
                     // Next, check to see if the name is in the descriptors table.  If it isn't, we will search the
