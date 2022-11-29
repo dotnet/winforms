@@ -81,8 +81,7 @@ namespace System.Windows.Forms
                     throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, nameof(ToolStrip)));
                 }
 
-                InnerList.Add(control.ToolStripPanelCell);
-                int index = InnerList.Count - 1;
+                int index = ((IList)InnerList).Add(control.ToolStripPanelCell);
 
                 OnAdd(control, index);
                 return index;
@@ -178,11 +177,11 @@ namespace System.Windows.Forms
 
             void IList.Clear() { Clear(); }
 
-            bool IList.IsFixedSize => false;
+            bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
 
             bool IList.Contains(object value) { return InnerList.Contains(value); }
 
-            bool IList.IsReadOnly => false;
+            bool IList.IsReadOnly { get { return ((IList)InnerList).IsReadOnly; } }
 
             void IList.RemoveAt(int index) { RemoveAt(index); }
 
