@@ -2572,6 +2572,49 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void Form_Show_SetsOwnerToTopLevelForm_WhenShownWithControlAsOwner()
+        {
+            using Form parent = new();
+            using Control control = new();
+            parent.Controls.Add(control);
+            parent.Show();
+            using Form form = new();
+            Form owner = null;
+            form.Load += (object sender, EventArgs e) =>
+            {
+                owner = ((Form)sender).Owner;
+                form.Close();
+            };
+
+            form.Show(owner: control);
+
+            Assert.Same(owner, parent);
+            Assert.False(form.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Form_ShowDialog_SetsOwnerToTopLevelForm_WhenShownWithControlAsOwner()
+        {
+            using Form parent = new();
+            using Control control = new();
+            parent.Controls.Add(control);
+            parent.Show();
+
+            using Form form = new();
+            Form owner = null;
+            form.Load += (object sender, EventArgs e) =>
+            {
+                owner = ((Form)sender).Owner;
+                form.Close();
+            };
+
+            form.ShowDialog(owner: control);
+
+            Assert.Same(owner, parent);
+            Assert.False(form.IsHandleCreated);
+        }
+
         public class SubForm : Form
         {
             public new const int ScrollStateAutoScrolling = Form.ScrollStateAutoScrolling;
