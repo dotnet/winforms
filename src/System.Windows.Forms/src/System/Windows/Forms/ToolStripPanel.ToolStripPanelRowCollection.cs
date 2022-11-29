@@ -46,9 +46,7 @@ namespace System.Windows.Forms
             {
                 ArgumentNullException.ThrowIfNull(value);
 
-                InnerList.Add(value);
-                int retVal = InnerList.Count - 1;
-
+                int retVal = ((IList)InnerList).Add(value);
                 OnAdd(value, retVal);
                 return retVal;
             }
@@ -117,9 +115,9 @@ namespace System.Windows.Forms
             }
 
             void IList.Clear() { Clear(); }
-            bool IList.IsFixedSize => false;
+            bool IList.IsFixedSize { get { return ((IList)InnerList).IsFixedSize; } }
             bool IList.Contains(object value) { return InnerList.Contains(value); }
-            bool IList.IsReadOnly => false;
+            bool IList.IsReadOnly { get { return ((IList)InnerList).IsReadOnly; } }
             void IList.RemoveAt(int index) { RemoveAt(index); }
             void IList.Remove(object value) { Remove(value as ToolStripPanelRow); }
             int IList.Add(object value) { return Add(value as ToolStripPanelRow); }
