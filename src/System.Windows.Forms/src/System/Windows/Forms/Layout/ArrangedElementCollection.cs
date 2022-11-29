@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Layout
 
         private protected List<IArrangedElement> InnerList { get; }
 
-        internal virtual IArrangedElement this[int index] => InnerList[index]!;
+        internal virtual IArrangedElement this[int index] => InnerList[index];
 
         public override bool Equals(object? obj)
         {
