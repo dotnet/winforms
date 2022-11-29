@@ -44,7 +44,12 @@ namespace System.Windows.Forms
         void ICollection.CopyTo(Array ar, int index)
         {
             ScrubWeakRefs();
-            ((ICollection)_listManagers).CopyTo(ar, index);
+
+            int i = index;
+            foreach (KeyValuePair<HashKey, WeakReference> kvp in _listManagers)
+            {
+                ar.SetValue(new DictionaryEntry(kvp.Key, kvp.Value), i++);
+            }
         }
 
         /// <summary>
@@ -53,7 +58,9 @@ namespace System.Windows.Forms
         IEnumerator IEnumerable.GetEnumerator()
         {
             ScrubWeakRefs();
-            return _listManagers.GetEnumerator();
+            return _listManagers
+                .Select(kvp => new DictionaryEntry(kvp.Key, kvp.Value))
+                .GetEnumerator();
         }
 
         /// <summary>
