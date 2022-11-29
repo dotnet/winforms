@@ -27,21 +27,23 @@ namespace System.Windows.Forms
             bool personalSeen = false;
             for (int i = 0; i < values.Count; i++)
             {
-                if (values[i] is object currentItem)
+                if (values[i] is not object currentItem)
                 {
-                    if (currentItem is Environment.SpecialFolder specialFolder &&
+                    continue;
+                }
+
+                if (currentItem is Environment.SpecialFolder specialFolder &&
                     specialFolder.Equals(Environment.SpecialFolder.Personal))
+                {
+                    if (!personalSeen)
                     {
-                        if (!personalSeen)
-                        {
-                            personalSeen = true;
-                            list.Add(currentItem);
-                        }
-                    }
-                    else
-                    {
+                        personalSeen = true;
                         list.Add(currentItem);
                     }
+                }
+                else
+                {
+                    list.Add(currentItem);
                 }
             }
 

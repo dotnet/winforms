@@ -21,15 +21,13 @@ namespace System.Windows.Forms
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
-            const string ListItems = "ListItems";
             StandardValuesCollection values = base.GetStandardValues(context);
             List<object> list = new();
             for (int i = 0; i < values.Count; i++)
             {
                 if (values[i] is object currentItem)
                 {
-                    string? currentItemText = currentItem.ToString();
-                    if (!string.IsNullOrEmpty(currentItemText) && !currentItemText.Equals(ListItems))
+                    if (string.Equals(currentItem.ToString(), "ListItems"))
                     {
                         list.Add(currentItem);
                     }
