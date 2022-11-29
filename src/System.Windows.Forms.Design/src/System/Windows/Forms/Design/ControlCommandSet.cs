@@ -296,47 +296,34 @@ namespace System.Windows.Forms.Design
         {
             ICollection sel = SelectionService.GetSelectedComponents();
 
-            Hashtable itemHash = new Hashtable(sel.Count);
+            HashSet<Control> itemHash = new(sel.Count);
             foreach (object obj in sel)
             {
-                Control c = obj as Control;
-
-                if (c is null || c.Site is null)
+                if (obj is not Control control || control.Site is null)
                 {
                     return false;
                 }
 
-                itemHash.Add(obj, obj);
+                itemHash.Add(control);
             }
 
             Control okParent = null;
 
             // just walk up the chain for each selected item...if any other items
             // are in that chain, fail.
-            //
-            foreach (object component in sel)
+            foreach (Control component in sel)
             {
-                Control c = component as Control;
-
-                if (c is null || c.Site is null)
-                {
-                    return false;
-                }
-
                 // walk up the parent chain, checking each component to see if it's
                 // in the selection list.  If it is, we've got a bad selection.
-                //
-                for (Control parent = c.Parent; parent is not null; parent = parent.Parent)
+                for (Control parent = component.Parent; parent is not null; parent = parent.Parent)
                 {
                     // if this parent has already been okayed, skip it.
-                    //
                     if (parent == okParent)
                     {
                         continue;
                     }
 
-                    object hashItem = itemHash[parent];
-                    if (hashItem is not null && hashItem != component)
+                    if (itemHash.Contains(parent) && parent != component)
                     {
                         return false;
                     }
@@ -344,8 +331,7 @@ namespace System.Windows.Forms.Design
 
                 // mark that this component checked out okay, so any siblings (or children of siblings) of this control
                 // are ok.
-                //
-                okParent = c.Parent;
+                okParent = component.Parent;
             }
 
             return true;
@@ -475,9 +461,9 @@ namespace System.Windows.Forms.Design
         ///  Builds up an array of snaplines used during resize to adjust/snap
         ///  the controls bounds.
         /// </summary>
-        private ArrayList GenerateSnapLines(SelectionRules rules, Control primaryControl, int directionOffsetX, int directionOffsetY)
+        private List<SnapLine> GenerateSnapLines(SelectionRules rules, Control primaryControl, int directionOffsetX, int directionOffsetY)
         {
-            ArrayList lines = new ArrayList(2);
+            List<SnapLine> lines = new(2);
 
             Point pt = BehaviorService.ControlToAdornerWindow(primaryControl);
             bool fRTL = (primaryControl.Parent is not null && primaryControl.Parent.IsMirrored);
@@ -644,7 +630,7 @@ namespace System.Windows.Forms.Design
                                         //create our snapline engine
                                         dragManager = new DragAssistanceManager(des.Component.Site, selComps);
 
-                                        ArrayList targetSnaplines = GenerateSnapLines(des.SelectionRules, primaryControl, moveOffsetX, moveOffsetY);
+                                        List<SnapLine> targetSnaplines = GenerateSnapLines(des.SelectionRules, primaryControl, moveOffsetX, moveOffsetY);
 
                                         //ask our snapline engine to find the nearest snap position with the given direction
                                         Point snappedOffset = dragManager.OffsetToNearestSnapLocation(primaryControl, targetSnaplines, new Point(moveOffsetX, moveOffsetY));
@@ -989,8 +975,8 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            ArrayList layoutParentList = new ArrayList();
-            ArrayList parentList = new ArrayList();
+            List<Control> layoutParentList = new();
+            List<Control> parentList = new();
             Cursor oldCursor = Cursor.Current;
             try
             {
