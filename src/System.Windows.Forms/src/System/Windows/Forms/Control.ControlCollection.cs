@@ -184,14 +184,11 @@ namespace System.Windows.Forms
                 ControlCollection ccOther = Owner.CreateControlsInstance();
 
                 // We add using InnerList to prevent unnecessary parent cycle checks, etc.
-                ccOther.InnerList.AddRange(this);
+                ccOther.InnerList.AddRange(InnerList);
                 return ccOther;
             }
 
-            public bool Contains(Control? control)
-            {
-                return InnerList.Contains(control);
-            }
+            public bool Contains(Control? control) => ((IList)InnerList).Contains(control);
 
             /// <summary>
             ///  Searches for Controls by their Name property, builds up an array
@@ -257,10 +254,7 @@ namespace System.Windows.Forms
                 return new ControlCollectionEnumerator(this);
             }
 
-            public int IndexOf(Control? control)
-            {
-                return InnerList.IndexOf(control);
-            }
+            public int IndexOf(Control? control) => ((IList)InnerList).IndexOf(control);
 
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.

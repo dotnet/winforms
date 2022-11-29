@@ -18,9 +18,9 @@ namespace System.Windows.Forms
             {
                 private readonly IEnumerator _arrayListEnumerator;
 
-                internal ToolStripPanelCellToControlEnumerator(ArrayList list)
+                internal ToolStripPanelCellToControlEnumerator(IEnumerable<ToolStripPanelCell> list)
                 {
-                    _arrayListEnumerator = ((IEnumerable)list).GetEnumerator();
+                    _arrayListEnumerator = list.GetEnumerator();
                 }
 
                 public virtual object? Current
