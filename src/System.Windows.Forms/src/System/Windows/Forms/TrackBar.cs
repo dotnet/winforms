@@ -186,7 +186,7 @@ namespace System.Windows.Forms
                 void EnableAutoTicksIfRequired()
                 {
                     _autoDrawTicks = false;
-                    if (ShouldAutoDrawTicks)
+                    if (ShouldAutoDrawTicks())
                      {
                         _autoDrawTicks = true;
                         cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
@@ -569,7 +569,7 @@ namespace System.Windows.Forms
 
                 _tickFrequency = value;
                 bool recreateHandle = false;
-                if (IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks)
+                if (IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks())
                 {
                     recreateHandle = true;
                 }
@@ -828,7 +828,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Debug.Assert(_autoDrawTicks == ShouldAutoDrawTicks);
+            Debug.Assert(_autoDrawTicks == ShouldAutoDrawTicks());
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
             DrawTicks();
@@ -838,24 +838,22 @@ namespace System.Windows.Forms
             AdjustSize();
         }
 
-        private bool ShouldAutoDrawTicks
+        private bool ShouldAutoDrawTicks()
         {
-            get
-            {
-                if (TickStyle == TickStyle.None)
-                {
-                    return true;
-                }
+        if (TickStyle == TickStyle.None)
+        {
+            return true;
+        }
 
-                int size = Orientation == Orientation.Horizontal ? Size.Width : Size.Height;
-                if (size == 0)
-                {
-                    return true;
-                }
+        int size = Orientation == Orientation.Horizontal ? Size.Width : Size.Height;
+        if (size == 0)
+        {
+            return true;
+        }
 
-                uint range = (uint)(_maximum - _minimum);
-                return range <= (size / 2);
-            }
+        uint range = (uint)(_maximum - _minimum);
+        return range <= (size / 2);
+
         }
 
         private void DrawTicks()
@@ -1066,7 +1064,7 @@ namespace System.Windows.Forms
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
                     bool recreateHandle = false;
-                    if (_autoDrawTicks != ShouldAutoDrawTicks)
+                    if (_autoDrawTicks != ShouldAutoDrawTicks())
                     {
                         recreateHandle = true;
                     }
