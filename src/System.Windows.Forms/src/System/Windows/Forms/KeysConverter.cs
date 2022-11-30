@@ -246,7 +246,7 @@ namespace System.Windows.Forms
                 {
                     string keyString = DisplayOrder[i];
                     Keys keyValue = _keyNames[keyString];
-                    if (((int)keyValue & (int)modifiers) != 0)
+                    if (keyValue.HasFlag(modifiers))
                     {
                         termKeys.Add(keyValue);
                     }
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
                 {
                     string keyString = DisplayOrder[i];
                     Keys keyValue = _keyNames[keyString];
-                    if (((int)keyValue & (int)modifiers) != 0)
+                    if (keyValue.HasFlag(modifiers))
                     {
                         if (added)
                         {
@@ -309,7 +309,7 @@ namespace System.Windows.Forms
                 Keys keyOnly = key & Keys.KeyCode;
                 bool foundKey = false;
 
-                if (added && asString)
+                if (added)
                 {
                     termStrings.Append('+');
                 }
@@ -321,8 +321,6 @@ namespace System.Windows.Forms
                     if (keyValue.Equals(keyOnly))
                     {
                         termStrings.Append(keyString);
-
-                        added = true;
                         foundKey = true;
                         break;
                     }
