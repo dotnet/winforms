@@ -119,12 +119,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
-            if (sourceType == typeof(string) || sourceType == typeof(Enum[]))
-            {
-                return true;
-            }
-
-            return base.CanConvertFrom(context, sourceType);
+            return sourceType == typeof(string) || sourceType == typeof(Enum[]) ? true : base.CanConvertFrom(context, sourceType);
         }
 
         /// <summary>
@@ -225,92 +220,94 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(destinationType);
 
-            if (value is Keys or int)
+            if (value is not Keys and not int)
             {
-                bool asString = destinationType == typeof(string);
-                bool asEnum = !asString && destinationType == typeof(Enum[]);
-                if (asString || asEnum)
+                return base.ConvertTo(context, culture, value, destinationType);
+            }
+
+            bool asString = destinationType == typeof(string);
+            bool asEnum = !asString && destinationType == typeof(Enum[]);
+            if (asString || asEnum)
+            {
+                Keys key = (Keys)value;
+                bool added = false;
+                StringBuilder termStrings = new(32);
+                List<Enum> termKeys = new();
+                Keys modifiers = (key & Keys.Modifiers);
+
+                // First, iterate through and do the modifiers. These are
+                // additive, so we support things like Ctrl + Alt
+                for (int i = 0; i < DisplayOrder.Count; i++)
                 {
-                    Keys key = (Keys)value;
-                    bool added = false;
-                    StringBuilder termStrings = new(32);
-                    List<Enum> termKeys = new();
-                    Keys modifiers = (key & Keys.Modifiers);
-
-                    // First, iterate through and do the modifiers. These are
-                    // additive, so we support things like Ctrl + Alt
-                    for (int i = 0; i < DisplayOrder.Count; i++)
-                    {
-                        string keyString = DisplayOrder[i];
-                        Keys keyValue = _keyNames[keyString];
-                        if (((int)keyValue & (int)modifiers) != 0)
-                        {
-                            if (asString)
-                            {
-                                if (added)
-                                {
-                                    termStrings.Append('+');
-                                }
-
-                                termStrings.Append(keyString);
-                            }
-                            else
-                            {
-                                termKeys.Add(keyValue);
-                            }
-
-                            added = true;
-                        }
-                    }
-
-                    // Now reset and do the key values. Here, we quit if
-                    // we find a match.
-                    Keys keyOnly = key & Keys.KeyCode;
-                    bool foundKey = false;
-
-                    if (added && asString)
-                    {
-                        termStrings.Append('+');
-                    }
-
-                    for (int i = 0; i < DisplayOrder.Count; i++)
-                    {
-                        string keyString = DisplayOrder[i];
-                        Keys keyValue = _keyNames[keyString];
-                        if (keyValue.Equals(keyOnly))
-                        {
-                            if (asString)
-                            {
-                                termStrings.Append(keyString);
-                            }
-                            else
-                            {
-                                termKeys.Add(keyValue);
-                            }
-
-                            added = true;
-                            foundKey = true;
-                            break;
-                        }
-                    }
-
-                    // Finally, if the key wasn't in our list, add it to
-                    // the end anyway. Here we just pull the key value out
-                    // of the enum.
-                    if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
+                    string keyString = DisplayOrder[i];
+                    Keys keyValue = _keyNames[keyString];
+                    if (((int)keyValue & (int)modifiers) != 0)
                     {
                         if (asString)
                         {
-                            termStrings.Append(keyOnly.ToString());
+                            if (added)
+                            {
+                                termStrings.Append('+');
+                            }
+
+                            termStrings.Append(keyString);
                         }
                         else
                         {
-                            termKeys.Add(keyOnly);
+                            termKeys.Add(keyValue);
                         }
-                    }
 
-                    return asString ? termStrings.ToString() : termKeys.ToArray();
+                        added = true;
+                    }
                 }
+
+                // Now reset and do the key values. Here, we quit if
+                // we find a match.
+                Keys keyOnly = key & Keys.KeyCode;
+                bool foundKey = false;
+
+                if (added && asString)
+                {
+                    termStrings.Append('+');
+                }
+
+                for (int i = 0; i < DisplayOrder.Count; i++)
+                {
+                    string keyString = DisplayOrder[i];
+                    Keys keyValue = _keyNames[keyString];
+                    if (keyValue.Equals(keyOnly))
+                    {
+                        if (asString)
+                        {
+                            termStrings.Append(keyString);
+                        }
+                        else
+                        {
+                            termKeys.Add(keyValue);
+                        }
+
+                        added = true;
+                        foundKey = true;
+                        break;
+                    }
+                }
+
+                // Finally, if the key wasn't in our list, add it to
+                // the end anyway. Here we just pull the key value out
+                // of the enum.
+                if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
+                {
+                    if (asString)
+                    {
+                        termStrings.Append(keyOnly.ToString());
+                    }
+                    else
+                    {
+                        termKeys.Add(keyOnly);
+                    }
+                }
+
+                return asString ? termStrings.ToString() : termKeys.ToArray();
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
