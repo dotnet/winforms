@@ -174,27 +174,7 @@ namespace System.Windows.Forms
                 if (fragmentIndex < items.Count)
                 {
                     ToolStripItem item = items[fragmentIndex];
-                    if (item.Available && item.Alignment == ToolStripItemAlignment.Left)
-                    {
-                        return GetItemAccessibleObject(item);
-                    }
-                }
-
-                List<ToolStripItem> orderedItems = new();
-                for (int i = 0, current = 0; i < _owningToolStrip.Items.Count; i++)
-                {
-                    ToolStripItem item = _owningToolStrip.Items[i];
-                    orderedItems.Insert(current, item);
-                    if (item.Alignment == ToolStripItemAlignment.Left)
-                    {
-                        current++;
-                    }
-                }
-
-                if (fragmentIndex < orderedItems.Count)
-                {
-                    ToolStripItem item = orderedItems[fragmentIndex];
-                    if (item.Available && item.Alignment == ToolStripItemAlignment.Right)
+                    if (item.Available)
                     {
                         return GetItemAccessibleObject(item);
                     }
@@ -216,6 +196,67 @@ namespace System.Windows.Forms
 
                     return item.AccessibilityObject;
                 }
+
+                bool ShouldItemBeSkipped(Control hostedControl)
+                    => hostedControl is null
+                        || !hostedControl.SupportsUiaProviders
+                        || (hostedControl is Label label && string.IsNullOrEmpty(label.Text));
+
+                //  Returns the next or the previous ToolStrip item, that is considered a valid navigation fragment (e.g. a control,
+                //  that supports UIA providers and not a ToolStripControlHost). This method removes hosted ToolStrip
+                //  items that are native controls (their accessible objects are provided by Windows),
+                //  from the accessibility tree. It's necessary, because hosted native controls internally add accessible objects
+                //  to the accessibility tree, and thus create duplicated. To avoid duplicates, remove hosted items with native accessibility objects from the tree.
+                AccessibleObject? GetFollowingChildFragment(int index, ToolStripItemCollection items, UiaCore.NavigateDirection direction)
+                {
+                    switch (direction)
+                    {
+                        // "direction" is not used for navigation. This method is helper only.
+                        // FirstChild, LastChild are used when searching non-native hosted child items of the ToolStrip.
+                        // NextSibling, PreviousSibling are used when searching an item siblings.
+                        case UiaCore.NavigateDirection.FirstChild:
+                        case UiaCore.NavigateDirection.NextSibling:
+                            for (int i = index + 1; i < items.Count; i++)
+                            {
+                                ToolStripItem item = items[i];
+                                if (item is ToolStripControlHost controlHostItem)
+                                {
+                                    if (ShouldItemBeSkipped(controlHostItem.Control))
+                                    {
+                                        continue;
+                                    }
+
+                                    return controlHostItem.ControlAccessibilityObject;
+                                }
+
+                                return item.AccessibilityObject;
+                            }
+
+                            break;
+
+                        case UiaCore.NavigateDirection.LastChild:
+                        case UiaCore.NavigateDirection.PreviousSibling:
+                            for (int i = index - 1; i >= 0; i--)
+                            {
+                                ToolStripItem item = items[i];
+                                if (item is ToolStripControlHost controlHostItem)
+                                {
+                                    if (ShouldItemBeSkipped(controlHostItem.Control))
+                                    {
+                                        continue;
+                                    }
+
+                                    return controlHostItem.ControlAccessibilityObject;
+                                }
+
+                                return item.AccessibilityObject;
+                            }
+
+                            break;
+                    }
+
+                    return null;
+                }
             }
 
             internal int GetChildOverflowFragmentCount()
@@ -226,64 +267,6 @@ namespace System.Windows.Forms
                 }
 
                 return _owningToolStrip.OverflowItems.Count;
-            }
-
-            /// <summary>
-            ///  Returns the next or the previous ToolStrip item, that is considered a valid navigation fragment (e.g. a control,
-            ///  that supports UIA providers and not a <see cref="ToolStripControlHost"/>). This method removes hosted ToolStrip
-            ///  items that are native controls (their accessible objects are provided by Windows),
-            ///  from the accessibility tree. It's necessary, because hosted native controls internally add accessible objects
-            ///  to the accessibility tree, and thus create duplicated. To avoid duplicates, remove hosted items with native accessibility objects from the tree.
-            /// </summary>
-            private static AccessibleObject? GetFollowingChildFragment(int index, ToolStripItemCollection items, UiaCore.NavigateDirection direction)
-            {
-                switch (direction)
-                {
-                    // "direction" is not used for navigation. This method is helper only.
-                    // FirstChild, LastChild are used when searching non-native hosted child items of the ToolStrip.
-                    // NextSibling, PreviousSibling are used when searching an item siblings.
-                    case UiaCore.NavigateDirection.FirstChild:
-                    case UiaCore.NavigateDirection.NextSibling:
-                        for (int i = index + 1; i < items.Count; i++)
-                        {
-                            ToolStripItem item = items[i];
-                            if (item is ToolStripControlHost controlHostItem)
-                            {
-                                if (ShouldItemBeSkipped(controlHostItem.Control))
-                                {
-                                    continue;
-                                }
-
-                                return controlHostItem.ControlAccessibilityObject;
-                            }
-
-                            return item.AccessibilityObject;
-                        }
-
-                        break;
-
-                    case UiaCore.NavigateDirection.LastChild:
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                        for (int i = index - 1; i >= 0; i--)
-                        {
-                            ToolStripItem item = items[i];
-                            if (item is ToolStripControlHost controlHostItem)
-                            {
-                                if (ShouldItemBeSkipped(controlHostItem.Control))
-                                {
-                                    continue;
-                                }
-
-                                return controlHostItem.ControlAccessibilityObject;
-                            }
-
-                            return item.AccessibilityObject;
-                        }
-
-                        break;
-                }
-
-                return null;
             }
 
             internal int GetChildFragmentCount()
@@ -311,10 +294,10 @@ namespace System.Windows.Forms
                 ToolStripItemCollection items;
                 ToolStripItemPlacement placement = child.Owner.Placement;
 
-                if (_owningToolStrip is ToolStripOverflow)
+                if (_owningToolStrip is ToolStripOverflow overflow)
                 {
                     // Overflow items in ToolStripOverflow host are in DisplayedItems collection.
-                    items = _owningToolStrip.DisplayedItems;
+                    items = overflow.DisplayedItems;
                 }
                 else
                 {
@@ -329,21 +312,10 @@ namespace System.Windows.Forms
                         : _owningToolStrip.OverflowItems;
                 }
 
-                // First we walk through the head aligned items.
                 for (int index = 0; index < items.Count; index++)
                 {
                     ToolStripItem item = items[index];
-                    if (item.Available && item.Alignment == ToolStripItemAlignment.Left && child.Owner == items[index])
-                    {
-                        return index;
-                    }
-                }
-
-                // If we didn't find it, then we walk through the tail aligned items.
-                for (int index = 0; index < items.Count; index++)
-                {
-                    ToolStripItem item = items[index];
-                    if (item.Available && item.Alignment == ToolStripItemAlignment.Right && child.Owner == items[index])
+                    if (item.Available && child.Owner == item)
                     {
                         return index;
                     }
@@ -420,16 +392,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            private static bool ShouldItemBeSkipped(Control hostedControl)
-                => hostedControl is null
-                    || !hostedControl.SupportsUiaProviders
-                    || (hostedControl is Label label && string.IsNullOrEmpty(label.Text));
-
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 => this;
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
+                if (!_owningToolStrip.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.FirstChild:

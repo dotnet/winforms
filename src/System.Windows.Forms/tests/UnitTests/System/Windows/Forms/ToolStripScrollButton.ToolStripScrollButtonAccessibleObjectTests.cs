@@ -43,6 +43,17 @@ namespace System.Windows.Forms.Tests
             dropDownMenu.UpdateDisplayedItems();
 
             AccessibleObject accessibleObject = dropDownMenu.AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+
+            if (!createControl)
+            {
+                return;
+            }
+
+            dropDownMenu.CreateControl(fIgnoreVisible: true);
+
             AccessibleObject upScrollButtonAccessibleObject = dropDownMenu.UpScrollButton.AccessibilityObject;
             AccessibleObject itemAccessibleObject1 = dropDownMenu.Items[0].AccessibilityObject;
             AccessibleObject itemAccessibleObject2 = dropDownMenu.Items[1].AccessibilityObject;
@@ -94,6 +105,17 @@ namespace System.Windows.Forms.Tests
             dropDownMenu.UpdateDisplayedItems();
 
             AccessibleObject accessibleObject = dropDownMenu.AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+
+            if (!createControl)
+            {
+                return;
+            }
+
+            dropDownMenu.CreateControl(fIgnoreVisible: true);
+
             AccessibleObject itemAccessibleObject1 = dropDownMenu.Items[0].AccessibilityObject;
             AccessibleObject itemAccessibleObject2 = dropDownMenu.Items[1].AccessibilityObject;
 
