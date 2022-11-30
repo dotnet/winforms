@@ -25,6 +25,14 @@ namespace System.Windows.Forms
         [MemberNotNull(nameof(_displayOrder))]
         private void Initialize()
         {
+            if (_keyNames is not null && _displayOrder is not null)
+            {
+                return;
+            }
+
+            Debug.Assert(_displayOrder is null);
+            Debug.Assert(_keyNames is null);
+
             _keyNames = new Dictionary<string, Keys>(34);
             _displayOrder = new List<string>(34);
 
@@ -83,15 +91,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_keyNames is null)
-                {
-                    Debug.Assert(_displayOrder is null);
-                    Initialize();
-                }
-
-#pragma warning disable CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
+                Initialize();
                 return _keyNames;
-#pragma warning restore CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
             }
         }
 
@@ -101,15 +102,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_displayOrder is null)
-                {
-                    Debug.Assert(_keyNames is null);
-                    Initialize();
-                }
-
-#pragma warning disable CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
+                Initialize();
                 return _displayOrder;
-#pragma warning restore CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
             }
         }
 
