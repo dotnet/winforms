@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
@@ -27,11 +28,7 @@ namespace System.Windows.Forms
             bool personalSeen = false;
             for (int i = 0; i < values.Count; i++)
             {
-                if (values[i] is not object currentItem)
-                {
-                    continue;
-                }
-
+                object? currentItem = values[i];
                 if (currentItem is Environment.SpecialFolder specialFolder &&
                     specialFolder.Equals(Environment.SpecialFolder.Personal))
                 {
@@ -43,7 +40,11 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    list.Add(currentItem);
+                    Debug.Assert(currentItem is not null);
+                    if (currentItem is not null)
+                    {
+                        list.Add(currentItem);
+                    }
                 }
             }
 
