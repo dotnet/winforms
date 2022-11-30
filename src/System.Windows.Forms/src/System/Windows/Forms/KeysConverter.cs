@@ -230,8 +230,13 @@ namespace System.Windows.Forms
             if (asString || asEnum)
             {
                 Keys key = (Keys)value;
-                bool added = false;
-                StringBuilder termStrings = new(32);
+                return asString ? GetTermsString(key) : GetTermKeys(key);
+            }
+
+            return base.ConvertTo(context, culture, value, destinationType);
+
+            Enum[] GetTermKeys(Keys key)
+            {
                 List<Enum> termKeys = new();
                 Keys modifiers = (key & Keys.Modifiers);
 
@@ -243,20 +248,58 @@ namespace System.Windows.Forms
                     Keys keyValue = _keyNames[keyString];
                     if (((int)keyValue & (int)modifiers) != 0)
                     {
-                        if (asString)
-                        {
-                            if (added)
-                            {
-                                termStrings.Append('+');
-                            }
+                        termKeys.Add(keyValue);
+                    }
+                }
 
-                            termStrings.Append(keyString);
-                        }
-                        else
+                // Now reset and do the key values. Here, we quit if
+                // we find a match.
+                Keys keyOnly = key & Keys.KeyCode;
+                bool foundKey = false;
+
+                for (int i = 0; i < DisplayOrder.Count; i++)
+                {
+                    string keyString = DisplayOrder[i];
+                    Keys keyValue = _keyNames[keyString];
+                    if (keyValue.Equals(keyOnly))
+                    {
+                        termKeys.Add(keyValue);
+                        foundKey = true;
+                        break;
+                    }
+                }
+
+                // Finally, if the key wasn't in our list, add it to
+                // the end anyway. Here we just pull the key value out
+                // of the enum.
+                if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
+                {
+                    termKeys.Add(keyOnly);
+                }
+
+                return termKeys.ToArray();
+            }
+
+            string GetTermsString(Keys key)
+            {
+                bool added = false;
+                StringBuilder termStrings = new(32);
+                Keys modifiers = (key & Keys.Modifiers);
+
+                // First, iterate through and do the modifiers. These are
+                // additive, so we support things like Ctrl + Alt
+                for (int i = 0; i < DisplayOrder.Count; i++)
+                {
+                    string keyString = DisplayOrder[i];
+                    Keys keyValue = _keyNames[keyString];
+                    if (((int)keyValue & (int)modifiers) != 0)
+                    {
+                        if (added)
                         {
-                            termKeys.Add(keyValue);
+                            termStrings.Append('+');
                         }
 
+                        termStrings.Append(keyString);
                         added = true;
                     }
                 }
@@ -277,14 +320,7 @@ namespace System.Windows.Forms
                     Keys keyValue = _keyNames[keyString];
                     if (keyValue.Equals(keyOnly))
                     {
-                        if (asString)
-                        {
-                            termStrings.Append(keyString);
-                        }
-                        else
-                        {
-                            termKeys.Add(keyValue);
-                        }
+                        termStrings.Append(keyString);
 
                         added = true;
                         foundKey = true;
@@ -297,20 +333,11 @@ namespace System.Windows.Forms
                 // of the enum.
                 if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
                 {
-                    if (asString)
-                    {
-                        termStrings.Append(keyOnly.ToString());
-                    }
-                    else
-                    {
-                        termKeys.Add(keyOnly);
-                    }
+                    termStrings.Append(keyOnly.ToString());
                 }
 
-                return asString ? termStrings.ToString() : termKeys.ToArray();
+                return termStrings.ToString();
             }
-
-            return base.ConvertTo(context, culture, value, destinationType);
         }
 
         /// <summary>
