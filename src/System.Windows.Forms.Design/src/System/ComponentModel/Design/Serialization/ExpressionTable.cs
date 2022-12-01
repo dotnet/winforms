@@ -13,13 +13,7 @@ namespace System.ComponentModel.Design.Serialization
     {
         private Dictionary<object, ExpressionInfo> _expressions;
 
-        private Dictionary<object, ExpressionInfo> Expressions
-        {
-            get
-            {
-                return _expressions ??= new(new ReferenceComparer());
-            }
-        }
+        private Dictionary<object, ExpressionInfo> Expressions => _expressions ??= new(new ReferenceComparer());
 
         internal void SetExpression(object value, CodeExpression expression, bool isPreset)
         {
@@ -34,18 +28,15 @@ namespace System.ComponentModel.Design.Serialization
 
         private class ExpressionInfo
         {
-            private readonly CodeExpression _expression;
-            private readonly bool _isPreset;
-
             internal ExpressionInfo(CodeExpression expression, bool isPreset)
             {
-                _expression = expression;
-                _isPreset = isPreset;
+                Expression = expression;
+                IsPreset = isPreset;
             }
 
-            internal CodeExpression Expression => _expression;
+            internal CodeExpression Expression { get; init; }
 
-            internal bool IsPreset => _isPreset;
+            internal bool IsPreset { get; init; }
         }
 
         private class ReferenceComparer : IEqualityComparer<object>

@@ -280,19 +280,20 @@ namespace System.Windows.Forms
                 for (int i = 0; i < values.Length; i++)
                 {
                     ArgumentNullException.ThrowIfNull(values[i], nameof(values));
+                    ColumnHeader header = values[i];
 
-                    if (values[i].DisplayIndex == -1)
+                    if (header.DisplayIndex == -1)
                     {
-                        values[i].DisplayIndexInternal = i;
+                        header.DisplayIndexInternal = i;
                     }
 
-                    if (!usedIndices.Contains(values[i].DisplayIndex) && values[i].DisplayIndex >= 0 && values[i].DisplayIndex < values.Length)
+                    if (!usedIndices.Contains(header.DisplayIndex) && header.DisplayIndex >= 0 && header.DisplayIndex < values.Length)
                     {
-                        usedIndices.Add(values[i].DisplayIndex);
+                        usedIndices.Add(header.DisplayIndex);
                     }
 
-                    indices[i] = values[i].DisplayIndex;
-                    Add(values[i]);
+                    indices[i] = header.DisplayIndex;
+                    Add(header);
                 }
 
                 if (usedIndices.Count == values.Length)
