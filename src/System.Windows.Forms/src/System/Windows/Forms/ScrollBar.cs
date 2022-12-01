@@ -131,14 +131,15 @@ namespace System.Windows.Forms
 
         protected override Padding DefaultMargin => Padding.Empty;
 
-        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+        protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
-            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-
-            if (ScaleScrollBarForDpiChange)
+            // Skip scaling if opted out.
+            if (!ScaleScrollBarForDpiChange)
             {
-                Scale((float)deviceDpiNew / deviceDpiOld);
+                return;
             }
+
+            base.ScaleControl(factor, specified);
         }
 
         /// <summary>
