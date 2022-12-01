@@ -279,8 +279,8 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < values.Length; i++)
                 {
-                    ArgumentNullException.ThrowIfNull(values[i], nameof(values));
-                    ColumnHeader header = values[i];
+                    ColumnHeader? header = values[i];
+                    ArgumentNullException.ThrowIfNull(header, nameof(values));
 
                     if (header.DisplayIndex == -1)
                     {
