@@ -44,7 +44,7 @@ namespace Windows.Win32.Foundation
             }
 
             IUnknown* ccw = null;
-            if (Interop.WinFormsComWrappers.IsSupportedObject(obj))
+            if (obj is IManagedWrapper)
             {
                 ccw = (IUnknown*)Interop.WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None);
             }

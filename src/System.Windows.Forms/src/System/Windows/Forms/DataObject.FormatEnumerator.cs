@@ -3,7 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.ComTypes;
+using static System.Runtime.InteropServices.ComWrappers;
+using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
 {
@@ -12,11 +15,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
-        private class FormatEnumerator : IEnumFORMATETC
+        private class FormatEnumerator : IEnumFORMATETC, Com.IManagedWrapper
         {
             private IDataObject _parent;
             private readonly List<FORMATETC> _formats = new List<FORMATETC>();
             private int _current;
+            private static ComInterfaceTable? s_comInterfaceTable;
 
             public FormatEnumerator(IDataObject parent) : this(parent, parent.GetFormats())
             {
@@ -129,6 +133,29 @@ namespace System.Windows.Forms
             {
                 CompModSwitches.DataObject.TraceVerbose("FormatEnumerator: Clone");
                 ppenum = new FormatEnumerator(this);
+            }
+
+            unsafe ComInterfaceTable Com.IManagedWrapper.GetComInterfaceTable()
+            {
+                if (s_comInterfaceTable is null)
+                {
+                    Com.IEnumFORMATETC.Vtbl* vtable = (Com.IEnumFORMATETC.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(Com.IEnumFORMATETC.Vtbl), sizeof(Com.IEnumFORMATETC.Vtbl));
+                    Interop.WinFormsComWrappers.PopulateIUnknownVTable((Com.IUnknown.Vtbl*)vtable);
+
+                    Interop.WinFormsComWrappers.IEnumFORMATETCVtbl.PopulateVTable(vtable);
+
+                    ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IEnumFORMATETC), sizeof(ComInterfaceEntry));
+                    wrapperEntry[0].IID = *IID.Get<Com.IEnumFORMATETC>();
+                    wrapperEntry[0].Vtable = (nint)(void*)vtable;
+
+                    s_comInterfaceTable = new ComInterfaceTable()
+                    {
+                        Entries = wrapperEntry,
+                        Count = 1
+                    };
+                }
+
+                return (ComInterfaceTable)s_comInterfaceTable;
             }
         }
     }

@@ -3,17 +3,22 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Runtime.CompilerServices;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
+using static System.Runtime.InteropServices.ComWrappers;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
-    internal class DropSource : Ole32.IDropSource, Ole32.IDropSourceNotify
+    internal class DropSource : Ole32.IDropSource, Ole32.IDropSourceNotify, IManagedWrapper
     {
         private readonly ISupportOleDropSource _peer;
         private readonly IComDataObject _dataObject;
         private IntPtr _lastHwndTarget;
         private GiveFeedbackEventArgs? _lastGiveFeedbacEventArgs;
+        private static ComInterfaceTable? s_comInterfaceTable;
 
         public DropSource(ISupportOleDropSource peer, IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
         {
@@ -112,6 +117,34 @@ namespace System.Windows.Forms
             }
 
             return HRESULT.S_OK;
+        }
+
+        unsafe ComInterfaceTable IManagedWrapper.GetComInterfaceTable()
+        {
+            if (s_comInterfaceTable is null)
+            {
+                IDropSource.Vtbl* dropSourceVtable = (IDropSource.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDropSource.Vtbl), sizeof(IDropSource.Vtbl));
+                IDropSourceNotify.Vtbl* dropSourceNotifyVtable = (IDropSourceNotify.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDropSourceNotify.Vtbl), sizeof(IDropSourceNotify.Vtbl));
+                WinFormsComWrappers.PopulateIUnknownVTable((IUnknown.Vtbl*)dropSourceVtable);
+                WinFormsComWrappers.PopulateIUnknownVTable((IUnknown.Vtbl*)dropSourceNotifyVtable);
+
+                WinFormsComWrappers.IDropSourceVtbl.PopulateVTable(dropSourceVtable);
+                WinFormsComWrappers.IDropSourceNotifyVtbl.PopulateVTable(dropSourceNotifyVtable);
+
+                ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(Ole32.IDropSource), sizeof(ComInterfaceEntry) * 2);
+                wrapperEntry[0].IID = *IID.Get<IDropSource>();
+                wrapperEntry[0].Vtable = (nint)(void*)dropSourceVtable;
+                wrapperEntry[1].IID = *IID.Get<IDropSourceNotify>();
+                wrapperEntry[1].Vtable = (nint)(void*)dropSourceNotifyVtable;
+
+                s_comInterfaceTable = new ComInterfaceTable()
+                {
+                    Entries = wrapperEntry,
+                    Count = 2
+                };
+            }
+
+            return (ComInterfaceTable)s_comInterfaceTable;
         }
     }
 }

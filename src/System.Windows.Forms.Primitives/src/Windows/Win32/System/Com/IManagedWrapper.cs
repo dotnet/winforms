@@ -5,7 +5,9 @@
 namespace Windows.Win32.System.Com;
 
 /// <summary>
-///  An interface that provides a COM callable wrapper for the implmenting class.
+///  An interface that provides a COM callable wrapper for the implementing class.
+///  The implementing class should not be public and unsealed as it can be derived from
+///  and COM interfaces can be added. This is meant to be a fixed set of interfaces.
 /// </summary>
 internal unsafe interface IManagedWrapper
 {

@@ -14,30 +14,12 @@ internal partial class Interop
     {
         internal static class IEnumFORMATETCVtbl
         {
-            private static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
+            public static void PopulateVTable(Com.IEnumFORMATETC.Vtbl* vtable)
             {
-                Com.IEnumFORMATETC.Vtbl* vtblRaw = (Com.IEnumFORMATETC.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IEnumFORMATETCVtbl), sizeof(Com.IEnumFORMATETC.Vtbl));
-                vtblRaw->QueryInterface_1 = (delegate* unmanaged[Stdcall]<Com.IEnumFORMATETC*, Guid*, void**, HRESULT>)fpQueryInterface;
-                vtblRaw->AddRef_2 = (delegate* unmanaged[Stdcall]<Com.IEnumFORMATETC*, uint>)fpAddRef;
-                vtblRaw->Release_3 = (delegate* unmanaged[Stdcall]<Com.IEnumFORMATETC*, uint>)fpRelease;
-                vtblRaw->Next_4 = &Next;
-                vtblRaw->Skip_5 = &Skip;
-                vtblRaw->Reset_6 = &Reset;
-                vtblRaw->Clone_7 = &Clone;
-
-                return (IntPtr)vtblRaw;
-            }
-
-            internal static ComInterfaceEntry* InitializeEntry()
-            {
-                GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
-
-                IntPtr iEnumFormatCVtbl = Create(fpQueryInterface, fpAddRef, fpRelease);
-
-                ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-                wrapperEntry->IID = *IID.Get<Com.IEnumFORMATETC>();
-                wrapperEntry->Vtable = iEnumFormatCVtbl;
-                return wrapperEntry;
+                vtable->Next_4 = &Next;
+                vtable->Skip_5 = &Skip;
+                vtable->Reset_6 = &Reset;
+                vtable->Clone_7 = &Clone;
             }
 
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]

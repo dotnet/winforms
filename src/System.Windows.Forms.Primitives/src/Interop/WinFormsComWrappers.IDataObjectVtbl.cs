@@ -14,35 +14,17 @@ internal partial class Interop
     {
         internal static class IDataObjectVtbl
         {
-            private static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
+            public static void PopulateVTable(IDataObject.Vtbl* vtable)
             {
-                IDataObject.Vtbl* vtblRaw = (IDataObject.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDataObject.Vtbl), sizeof(IDataObject.Vtbl));
-                vtblRaw->QueryInterface_1 = (delegate* unmanaged[Stdcall]<IDataObject*, Guid*, void**, HRESULT>)fpQueryInterface;
-                vtblRaw->AddRef_2 = (delegate* unmanaged[Stdcall]<IDataObject*, uint>)fpAddRef;
-                vtblRaw->Release_3 = (delegate* unmanaged[Stdcall]<IDataObject*, uint>)fpRelease;
-                vtblRaw->GetData_4 = &GetData;
-                vtblRaw->GetDataHere_5 = &GetDataHere;
-                vtblRaw->QueryGetData_6 = &QueryGetData;
-                vtblRaw->GetCanonicalFormatEtc_7 = &GetCanonicalFormatEtc;
-                vtblRaw->SetData_8 = &SetData;
-                vtblRaw->EnumFormatEtc_9 = &EnumFormatEtc;
-                vtblRaw->DAdvise_10 = &DAdvise;
-                vtblRaw->DUnadvise_11 = &DUnadvise;
-                vtblRaw->EnumDAdvise_12 = &EnumDAdvise;
-
-                return (IntPtr)vtblRaw;
-            }
-
-            internal static ComInterfaceEntry* InitializeEntry()
-            {
-                GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
-
-                IntPtr iDataObjectVtbl = Create(fpQueryInterface, fpAddRef, fpRelease);
-
-                ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-                wrapperEntry->IID = *IID.Get<IDataObject>();
-                wrapperEntry->Vtable = iDataObjectVtbl;
-                return wrapperEntry;
+                vtable->GetData_4 = &GetData;
+                vtable->GetDataHere_5 = &GetDataHere;
+                vtable->QueryGetData_6 = &QueryGetData;
+                vtable->GetCanonicalFormatEtc_7 = &GetCanonicalFormatEtc;
+                vtable->SetData_8 = &SetData;
+                vtable->EnumFormatEtc_9 = &EnumFormatEtc;
+                vtable->DAdvise_10 = &DAdvise;
+                vtable->DUnadvise_11 = &DUnadvise;
+                vtable->EnumDAdvise_12 = &EnumDAdvise;
             }
 
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]

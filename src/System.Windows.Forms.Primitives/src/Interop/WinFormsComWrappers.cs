@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 internal partial class Interop
 {
@@ -17,9 +16,6 @@ internal partial class Interop
     internal unsafe partial class WinFormsComWrappers : ComWrappers
     {
         private const int S_OK = 0;
-        private static readonly ComInterfaceEntry* s_enumFormatEtcEntry = IEnumFORMATETCVtbl.InitializeEntry();
-        private static readonly ComInterfaceEntry* s_dropSourceEntry = IDropSourceVtbl.InitializeEntry();
-        private static readonly ComInterfaceEntry* s_dataObjectEntry = IDataObjectVtbl.InitializeEntry();
 
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
 
@@ -33,80 +29,8 @@ internal partial class Interop
             unknown->Release_3 = (delegate* unmanaged[Stdcall]<IUnknown*, uint>)fpRelease;
         }
 
-        /// <summary>
-        ///  Check to see if the given object is supported by our ComWrappers implementation.
-        /// </summary>
-        internal static bool IsSupportedObject(object obj)
-        {
-            // This maps to what we're currently doing in ComputeVtables. We currently presume only one match, so
-            // if we see that we get multiple matches we're going to not claim it as supported.
-
-            // We need to figure out a more direct way of tying objects to our ComWrappers implementation. Going by
-            // interface is fragile unless we check the object for all supported interfaces and dynamically build
-            // the ComInterfaceEntry table for it. This seems slow, perhaps we need some sort of deliberate interface
-            // on our classes we're exposing to COM to give the data?
-
-            int count = 0;
-
-            if (obj is IStream.Interface)
-            {
-                count++;
-            }
-
-            if (obj is IFileDialogEvents.Interface)
-            {
-                count++;
-            }
-
-            if (obj is Ole32.IDropSource)
-            {
-                count++;
-            }
-
-            if (obj is IDropTarget.Interface)
-            {
-                count++;
-            }
-
-            if (obj is IEnumString.Interface)
-            {
-                count++;
-            }
-
-            if (obj is ComTypes.IEnumFORMATETC)
-            {
-                count++;
-            }
-
-            if (obj is ComTypes.IDataObject)
-            {
-                count++;
-            }
-
-            Debug.Assert(count < 2);
-            return count == 1;
-        }
-
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
-            if (obj is Ole32.IDropSource)
-            {
-                count = 2;
-                return s_dropSourceEntry;
-            }
-
-            if (obj is ComTypes.IEnumFORMATETC)
-            {
-                count = 1;
-                return s_enumFormatEtcEntry;
-            }
-
-            if (obj is ComTypes.IDataObject)
-            {
-                count = 1;
-                return s_dataObjectEntry;
-            }
-
             if (obj is not IManagedWrapper vtables)
             {
                 Debug.Fail("object does not implement IManagedWrapper");
