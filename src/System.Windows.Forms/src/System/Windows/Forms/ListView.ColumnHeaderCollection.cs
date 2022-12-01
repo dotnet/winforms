@@ -274,7 +274,7 @@ namespace System.Windows.Forms
             {
                 ArgumentNullException.ThrowIfNull(values);
 
-                Dictionary<int, int> usedIndices = new();
+                HashSet<int> usedIndices = new();
                 int[] indices = new int[values.Length];
 
                 for (int i = 0; i < values.Length; i++)
@@ -286,9 +286,9 @@ namespace System.Windows.Forms
                         values[i].DisplayIndexInternal = i;
                     }
 
-                    if (!usedIndices.ContainsKey(values[i].DisplayIndex) && values[i].DisplayIndex >= 0 && values[i].DisplayIndex < values.Length)
+                    if (!usedIndices.Contains(values[i].DisplayIndex) && values[i].DisplayIndex >= 0 && values[i].DisplayIndex < values.Length)
                     {
-                        usedIndices.Add(values[i].DisplayIndex, i);
+                        usedIndices.Add(values[i].DisplayIndex);
                     }
 
                     indices[i] = values[i].DisplayIndex;
