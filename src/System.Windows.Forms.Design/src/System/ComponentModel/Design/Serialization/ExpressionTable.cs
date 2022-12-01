@@ -34,9 +34,9 @@ namespace System.ComponentModel.Design.Serialization
                 IsPreset = isPreset;
             }
 
-            internal CodeExpression Expression { get; init; }
+            internal CodeExpression Expression { get; }
 
-            internal bool IsPreset { get; init; }
+            internal bool IsPreset { get; }
         }
 
         private class ReferenceComparer : IEqualityComparer<object>
