@@ -27,18 +27,10 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         internal CodeExpression GetExpression(object value)
-        {
-            CodeExpression expression = null;
-            if (Expressions[value] is ExpressionInfo info)
-            {
-                expression = info.Expression;
-            }
-
-            return expression;
-        }
+            => Expressions.TryGetValue(value, out ExpressionInfo info) ? info.Expression : null;
 
         internal bool ContainsPresetExpression(object value)
-            => Expressions[value] is ExpressionInfo info && info.IsPreset;
+            => Expressions.TryGetValue(value, out ExpressionInfo info) && info.IsPreset;
 
         private class ExpressionInfo
         {
