@@ -119,7 +119,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (needMassage)
                     {
-                        ArrayList list = new ArrayList(values.Count);
+                        List<MemberAttributes> list = new(values.Count);
 
                         foreach (MemberAttributes value in values)
                         {
