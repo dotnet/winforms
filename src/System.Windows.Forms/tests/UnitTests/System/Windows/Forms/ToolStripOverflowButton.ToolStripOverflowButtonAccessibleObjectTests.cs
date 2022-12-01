@@ -75,5 +75,51 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, actual);
         }
+
+        [WinFormsFact]
+        public void ToolStripOverflowButtonAccessibleObject_FragmentNavigate_Child_ReturnExpected()
+        {
+            using ToolStrip toolStrip = new() { AutoSize = false, Size = new(30, 30) };
+
+            toolStrip.Items.Add(string.Empty);
+            toolStrip.Items.Add(string.Empty);
+            toolStrip.Items.Add(string.Empty);
+
+            toolStrip.CreateControl();
+            toolStrip.PerformLayout();
+
+            AccessibleObject accessibleObject = toolStrip.OverflowButton.AccessibilityObject;
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+
+            toolStrip.OverflowButton.DropDown.Show();
+
+            AccessibleObject expected = toolStrip.OverflowButton.DropDown.AccessibilityObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        }
+
+        [WinFormsFact]
+        public void ToolStripOverflowButtonAccessibleObject_FragmentNavigate_Siblings_ReturnExpected()
+        {
+            using ToolStrip toolStrip = new() { AutoSize = false, Size = new(60, 30) };
+
+            // 1 item displayed and 2 overflown
+            toolStrip.Items.Add(string.Empty);
+            toolStrip.Items.Add(string.Empty);
+            toolStrip.Items.Add(string.Empty);
+
+            toolStrip.PerformLayout();
+
+            AccessibleObject overflowButton = toolStrip.OverflowButton.AccessibilityObject;
+            AccessibleObject item1 = toolStrip.Items[0].AccessibilityObject;
+
+            Assert.Null(overflowButton.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(item1, overflowButton.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+
+            Assert.False(toolStrip.IsHandleCreated);
+        }
     }
 }
