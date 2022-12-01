@@ -11,7 +11,7 @@ internal static partial class Interop
 {
     internal static partial class Ole32
     {
-        public sealed unsafe class GPStream : IStream.Interface, IManagedWrapper<IStream>
+        public sealed unsafe class GPStream : IStream.Interface, IManagedWrapper<IStream, ISequentialStream>
         {
             private readonly Stream _dataStream;
 
