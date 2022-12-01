@@ -276,7 +276,6 @@ namespace System.Windows.Forms
 
             string GetTermsString(Keys key)
             {
-                bool added = false;
                 StringBuilder termStrings = new(32);
                 Keys modifiers = (key & Keys.Modifiers);
 
@@ -288,13 +287,7 @@ namespace System.Windows.Forms
                     Keys keyValue = _keyNames[keyString];
                     if (keyValue.HasFlag(modifiers))
                     {
-                        if (added)
-                        {
-                            termStrings.Append('+');
-                        }
-
-                        termStrings.Append(keyString);
-                        added = true;
+                        termStrings.Append(keyString).Append('+');
                     }
                 }
 
@@ -302,11 +295,6 @@ namespace System.Windows.Forms
                 // we find a match.
                 Keys keyOnly = key & Keys.KeyCode;
                 bool foundKey = false;
-
-                if (added)
-                {
-                    termStrings.Append('+');
-                }
 
                 for (int i = 0; i < DisplayOrder.Count; i++)
                 {
