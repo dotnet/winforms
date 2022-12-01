@@ -107,9 +107,9 @@ namespace System.Windows.Forms.Tests
             using ToolStrip toolStrip = new() { AutoSize = false, Size = new(60, 30) };
 
             // 1 item displayed and 2 overflown
-            toolStrip.Items.Add("");
-            toolStrip.Items.Add("");
-            toolStrip.Items.Add("");
+            toolStrip.Items.Add(string.Empty);
+            toolStrip.Items.Add(string.Empty);
+            toolStrip.Items.Add(string.Empty);
 
             toolStrip.PerformLayout();
 

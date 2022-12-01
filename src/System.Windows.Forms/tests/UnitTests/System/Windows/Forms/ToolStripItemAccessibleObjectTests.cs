@@ -179,7 +179,7 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItemAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
         {
             using ToolStrip toolStrip = new();
-            toolStrip.Items.Add("");
+            toolStrip.Items.Add(string.Empty);
             toolStrip.PerformLayout();
             toolStrip.CreateControl();
 
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItemAccessibleObject_FragmentNavigate_Parent_ReturnsNull_IfHandleNotCreated()
         {
             using ToolStrip toolStrip = new();
-            toolStrip.Items.Add("");
+            toolStrip.Items.Add(string.Empty);
 
             AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
 
@@ -205,7 +205,7 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItemAccessibleObject_FragmentNavigate_Child_ReturnExpected()
         {
             using ToolStrip toolStrip = new();
-            toolStrip.Items.Add("");
+            toolStrip.Items.Add(string.Empty);
 
             AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
 
@@ -219,8 +219,8 @@ namespace System.Windows.Forms.Tests
         {
             using ToolStrip toolStrip = new() { AutoSize = false, Size = new(300, 30) };
 
-            toolStrip.Items.Add("");
-            toolStrip.Items.Add("");
+            toolStrip.Items.Add(string.Empty);
+            toolStrip.Items.Add(string.Empty);
 
             toolStrip.PerformLayout();
 
@@ -244,7 +244,7 @@ namespace System.Windows.Forms.Tests
         {
             using ToolStrip toolStrip = new() { GripStyle = ToolStripGripStyle.Hidden };
 
-            toolStrip.Items.Add("");
+            toolStrip.Items.Add(string.Empty);
 
             toolStrip.PerformLayout();
 
@@ -260,8 +260,8 @@ namespace System.Windows.Forms.Tests
         {
             using ToolStrip toolStrip = new() { AutoSize = false, Size = new(300, 30) };
 
-            toolStrip.Items.Add("");
-            toolStrip.Items.Add("");
+            toolStrip.Items.Add(string.Empty);
+            toolStrip.Items.Add(string.Empty);
 
             toolStrip.Items[0].Alignment = ToolStripItemAlignment.Right;
 
@@ -293,9 +293,9 @@ namespace System.Windows.Forms.Tests
             }
 
             toolStrip.Items.Add(CreateSkippedItem());
-            toolStrip.Items.Add("");
+            toolStrip.Items.Add(string.Empty);
             toolStrip.Items.Add(CreateSkippedItem());
-            toolStrip.Items.Add("");
+            toolStrip.Items.Add(string.Empty);
             toolStrip.Items.Add(CreateSkippedItem());
 
             toolStrip.Items[0].Alignment = ToolStripItemAlignment.Right;
