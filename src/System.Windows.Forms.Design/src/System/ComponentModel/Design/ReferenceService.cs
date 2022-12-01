@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -16,9 +15,9 @@ namespace System.ComponentModel.Design
         private static readonly Attribute[] _attributes = new Attribute[] { DesignerSerializationVisibilityAttribute.Content };
 
         private IServiceProvider _provider; // service provider we use to get to other services
-        private ArrayList _addedComponents; // list of newly added components
-        private ArrayList _removedComponents; // list of newly removed components
-        private ArrayList _references; // our current list of references
+        private List<IComponent> _addedComponents; // list of newly added components
+        private List<IComponent> _removedComponents; // list of newly removed components
+        private List<ReferenceHolder> _references; // our current list of references
         private bool _populating;
 
         /// <summary>
@@ -66,10 +65,7 @@ namespace System.ComponentModel.Design
             // If the references are null, create them for the first time and connect up our events to listen to changes to the container. Otherwise, check to see if the added or removed lists contain anything for us to sync up.
             if (_references is null)
             {
-                if (_provider is null)
-                {
-                    throw new ObjectDisposedException("IReferenceService");
-                }
+                ObjectDisposedException.ThrowIf(_provider is null, typeof(IReferenceService));
 
                 IComponentChangeService cs = _provider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
                 Debug.Assert(cs is not null, "Reference service relies on IComponentChangeService");
@@ -80,13 +76,13 @@ namespace System.ComponentModel.Design
                     cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
                 }
 
-                if (!(_provider.GetService(typeof(IContainer)) is IContainer container))
+                if (_provider.GetService(typeof(IContainer)) is not IContainer container)
                 {
                     Debug.Fail("Reference service cannot operate without IContainer");
                     throw new InvalidOperationException();
                 }
 
-                _references = new ArrayList(container.Components.Count);
+                _references = new(container.Components.Count);
                 foreach (IComponent component in container.Components)
                 {
                     CreateReferences(component);
@@ -131,10 +127,9 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnComponentAdded(object sender, ComponentEventArgs cevent)
         {
-            _addedComponents ??= new ArrayList();
-
+            _addedComponents ??= new();
             IComponent compAdded = cevent.Component;
-            if (!(compAdded.Site is INestedSite))
+            if (compAdded.Site is not INestedSite)
             {
                 _addedComponents.Add(compAdded);
                 _removedComponents?.Remove(compAdded);
@@ -146,10 +141,9 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnComponentRemoved(object sender, ComponentEventArgs cevent)
         {
-            _removedComponents ??= new ArrayList();
-
+            _removedComponents ??= new();
             IComponent compRemoved = cevent.Component;
-            if (!(compRemoved.Site is INestedSite))
+            if (compRemoved.Site is not INestedSite)
             {
                 _removedComponents.Add(compRemoved);
                 _addedComponents?.Remove(compRemoved);
@@ -181,7 +175,7 @@ namespace System.ComponentModel.Design
                 int size = _references.Count;
                 for (int i = size - 1; i >= 0; i--)
                 {
-                    if (ReferenceEquals(((ReferenceHolder)_references[i]).SitedComponent, component))
+                    if (ReferenceEquals(_references[i].SitedComponent, component))
                     {
                         _references.RemoveAt(i);
                     }
@@ -275,7 +269,7 @@ namespace System.ComponentModel.Design
 
             for (int i = 0; i < references.Length; i++)
             {
-                references[i] = ((ReferenceHolder)_references[i]).Reference;
+                references[i] = _references[i].Reference;
             }
 
             return references;
@@ -289,8 +283,7 @@ namespace System.ComponentModel.Design
             ArgumentNullException.ThrowIfNull(baseType);
 
             EnsureReferences();
-            ArrayList results = new ArrayList(_references.Count);
-
+            List<object> results = new(_references.Count);
             foreach (ReferenceHolder holder in _references)
             {
                 object reference = holder.Reference;
@@ -300,9 +293,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            object[] references = new object[results.Count];
-            results.CopyTo(references, 0);
-            return references;
+            return results.ToArray();
         }
 
         /// <summary>

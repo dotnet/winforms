@@ -2578,10 +2578,9 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool scaleScrollBarForDpiChange in new bool[] { true, false })
             {
-                yield return new object[] { scaleScrollBarForDpiChange, 1, 2 };
-                yield return new object[] { scaleScrollBarForDpiChange, 1, 1 };
+                yield return new object[] { scaleScrollBarForDpiChange, 100, 200 };
+                yield return new object[] { scaleScrollBarForDpiChange, 100, 100 };
                 yield return new object[] { scaleScrollBarForDpiChange, 0, 0 };
-                yield return new object[] { scaleScrollBarForDpiChange, -1, -2 };
             }
         }
 
@@ -2605,33 +2604,30 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> RescaleConstantsForDpi_WithSize_TestData()
         {
-            yield return new object[] { true, 1, 2, new Size(20, 40), new Size(40, 80) };
-            yield return new object[] { true, 1, 1, new Size(10, 20), new Size(10, 20) };
-            yield return new object[] { true, 0, 0, Size.Empty, Size.Empty };
-            yield return new object[] { true, -1, -2, new Size(20, 40), new Size(40, 80) };
+            yield return new object[] { true, 100, 200, new Size(10, 20), new Size(20, 40) };
+            yield return new object[] { true, 200, 100, new Size(10, 20), new Size(5, 10) };
+            yield return new object[] { true, 100, 100, new Size(10, 20), new Size(10, 20) };
 
-            yield return new object[] { false, 1, 2, new Size(20, 40), new Size(40, 80) };
-            yield return new object[] { false, 1, 1, new Size(10, 20), new Size(10, 20) };
-            yield return new object[] { false, 0, 0, Size.Empty, Size.Empty };
-            yield return new object[] { false, -1, -2, new Size(20, 40), new Size(40, 80) };
+            // Invalid DPI values. Given we do not check the input explicitly for validity and
+            // simply try to calculate factor, passing invalid values like -100, -200 are equivalent
+            // to 100, 200 (factor = newDpi/oldDpi).
+            yield return new object[] { true, 0, 0, new Size(10, 20), Size.Empty };
+
+            yield return new object[] { false, 100, 200, new Size(10, 20), new Size(10, 20) };
+            yield return new object[] { false, 100, 100, new Size(10, 20), new Size(10, 20) };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(RescaleConstantsForDpi_WithSize_TestData))]
-        public void ScrollBar_RescaleConstantsForDpi_InvokeWithSize_Nop(bool scaleScrollBarForDpiChange, int deviceDpiOld, int deviceDpiNew, Size expected1, Size expected2)
+        public void ScrollBar_RescaleConstantsForDpi_InvokeWithSize_Nop(bool scaleScrollBarForDpiChange, int deviceDpiOld, int deviceDpiNew, Size controlSize, Size expected)
         {
             using var control = new SubScrollBar
             {
                 ScaleScrollBarForDpiChange = scaleScrollBarForDpiChange,
-                Size = new Size(10, 20)
+                Size = controlSize
             };
             control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            Assert.Equal(expected1, control.Size);
-            Assert.False(control.IsHandleCreated);
-
-            // Call again.
-            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            Assert.Equal(expected2, control.Size);
+            Assert.Equal(expected, control.Size);
             Assert.False(control.IsHandleCreated);
         }
 

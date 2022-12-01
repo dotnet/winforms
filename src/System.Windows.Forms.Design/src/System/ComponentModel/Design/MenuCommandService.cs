@@ -18,11 +18,11 @@ namespace System.ComponentModel.Design
     public class MenuCommandService : IMenuCommandService, IDisposable
     {
         private IServiceProvider _serviceProvider;
-        private readonly Dictionary<Guid, ArrayList> _commandGroups;
+        private readonly Dictionary<Guid, List<MenuCommand>> _commandGroups;
         private readonly object _commandGroupsLock;
         private readonly EventHandler _commandChangedHandler;
         private MenuCommandsChangedEventHandler _commandsChangedHandler;
-        private ArrayList _globalVerbs;
+        private List<DesignerVerb> _globalVerbs;
         private ISelectionService _selectionService;
 
         internal static TraceSwitch MENUSERVICE = new TraceSwitch("MENUSERVICE", "MenuCommandService: Track menu command routing");
@@ -46,7 +46,7 @@ namespace System.ComponentModel.Design
         {
             _serviceProvider = serviceProvider;
             _commandGroupsLock = new object();
-            _commandGroups = new Dictionary<Guid, ArrayList>();
+            _commandGroups = new();
             _commandChangedHandler = new EventHandler(OnCommandChanged);
             TypeDescriptor.Refreshed += new RefreshEventHandler(OnTypeRefreshed);
         }
@@ -97,13 +97,14 @@ namespace System.ComponentModel.Design
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, SR.MenuCommandService_DuplicateCommand, command.CommandID.ToString()));
             }
 
-            ArrayList commandsList;
             lock (_commandGroupsLock)
             {
-                if (!_commandGroups.TryGetValue(command.CommandID.Guid, out commandsList))
+                if (!_commandGroups.TryGetValue(command.CommandID.Guid, out List<MenuCommand> commandsList))
                 {
-                    commandsList = new ArrayList();
-                    commandsList.Add(command);
+                    commandsList = new()
+                    {
+                        command
+                    };
                     _commandGroups.Add(command.CommandID.Guid, commandsList);
                 }
                 else
@@ -129,8 +130,7 @@ namespace System.ComponentModel.Design
         {
             ArgumentNullException.ThrowIfNull(verb);
 
-            _globalVerbs ??= new ArrayList();
-
+            _globalVerbs ??= new();
             _globalVerbs.Add(verb);
             OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandAdded, verb));
             EnsureVerbs();
@@ -169,9 +169,9 @@ namespace System.ComponentModel.Design
 
                 lock (_commandGroupsLock)
                 {
-                    foreach (KeyValuePair<Guid, ArrayList> group in _commandGroups)
+                    foreach (KeyValuePair<Guid, List<MenuCommand>> group in _commandGroups)
                     {
-                        ArrayList commands = group.Value;
+                        List<MenuCommand> commands = group.Value;
                         foreach (MenuCommand command in commands)
                         {
                             command.CommandChanged -= _commandChangedHandler;
@@ -195,9 +195,6 @@ namespace System.ComponentModel.Design
 
             if (_currentVerbs is null && _serviceProvider is not null)
             {
-                Hashtable buildVerbs = null;
-                ArrayList verbsOrder;
-
                 if (_selectionService is null)
                 {
                     _selectionService = GetService(typeof(ISelectionService)) as ISelectionService;
@@ -279,16 +276,17 @@ namespace System.ComponentModel.Design
                 }
 
                 // merge all
-                buildVerbs = new Hashtable(verbCount, StringComparer.OrdinalIgnoreCase);
-                verbsOrder = new ArrayList(verbCount);
+                Dictionary<string, int> buildVerbs = new(verbCount, StringComparer.OrdinalIgnoreCase);
+                List<DesignerVerb> verbsOrder = new();
 
                 // PRIORITY ORDER FROM HIGH TO LOW: LOCAL VERBS - DESIGNERACTION VERBS - GLOBAL VERBS
                 if (useGlobalVerbs)
                 {
                     for (int i = 0; i < _globalVerbs.Count; i++)
                     {
-                        string key = ((DesignerVerb)_globalVerbs[i]).Text;
-                        buildVerbs[key] = verbsOrder.Add(_globalVerbs[i]);
+                        string key = _globalVerbs[i].Text;
+                        verbsOrder.Add(_globalVerbs[i]);
+                        buildVerbs[key] = verbsOrder.Count - 1;
                     }
                 }
 
@@ -297,7 +295,8 @@ namespace System.ComponentModel.Design
                     for (int i = 0; i < designerActionVerbs.Count; i++)
                     {
                         string key = designerActionVerbs[i].Text;
-                        buildVerbs[key] = verbsOrder.Add(designerActionVerbs[i]);
+                        verbsOrder.Add(designerActionVerbs[i]);
+                        buildVerbs[key] = verbsOrder.Count - 1;
                     }
                 }
 
@@ -306,7 +305,8 @@ namespace System.ComponentModel.Design
                     for (int i = 0; i < localVerbs.Count; i++)
                     {
                         string key = localVerbs[i].Text;
-                        buildVerbs[key] = verbsOrder.Add(localVerbs[i]);
+                        verbsOrder.Add(localVerbs[i]);
+                        buildVerbs[key] = verbsOrder.Count - 1;
                     }
                 }
 
@@ -315,16 +315,16 @@ namespace System.ComponentModel.Design
                 int j = 0;
                 for (int i = 0; i < verbsOrder.Count; i++)
                 {
-                    DesignerVerb value = (DesignerVerb)verbsOrder[i];
+                    DesignerVerb value = verbsOrder[i];
                     string key = value.Text;
-                    if ((int)buildVerbs[key] == i)
+                    if (buildVerbs[key] == i)
                     { // there's not been a duplicate for this entry
                         result[j] = value;
                         j++;
                     }
                 }
 
-                _currentVerbs = new DesignerVerbCollection(result);
+                _currentVerbs = new(result);
             }
         }
 
@@ -346,7 +346,7 @@ namespace System.ComponentModel.Design
             Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "MCS Searching for command: " + guid.ToString() + " : " + id.ToString(CultureInfo.CurrentCulture));
 
             // Search in the list of commands only if the command group is known
-            ArrayList commands;
+            List<MenuCommand> commands;
             lock (_commandGroupsLock)
             {
                 _commandGroups.TryGetValue(guid, out commands);
@@ -413,7 +413,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected ICollection GetCommandList(Guid guid)
         {
-            ArrayList commands = null;
+            List<MenuCommand> commands = null;
             lock (_commandGroupsLock)
             {
                 _commandGroups.TryGetValue(guid, out commands);
@@ -427,13 +427,7 @@ namespace System.ComponentModel.Design
         protected object GetService(Type serviceType)
         {
             ArgumentNullException.ThrowIfNull(serviceType);
-
-            if (_serviceProvider is not null)
-            {
-                return _serviceProvider.GetService(serviceType);
-            }
-
-            return null;
+            return _serviceProvider?.GetService(serviceType);
         }
 
         /// <summary>
@@ -526,10 +520,9 @@ namespace System.ComponentModel.Design
         {
             ArgumentNullException.ThrowIfNull(command);
 
-            ArrayList commands;
             lock (_commandGroupsLock)
             {
-                if (_commandGroups.TryGetValue(command.CommandID.Guid, out commands))
+                if (_commandGroups.TryGetValue(command.CommandID.Guid, out List<MenuCommand> commands))
                 {
                     int index = commands.IndexOf(command);
                     if (-1 != index)

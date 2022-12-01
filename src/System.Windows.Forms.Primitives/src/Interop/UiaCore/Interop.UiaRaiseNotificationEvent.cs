@@ -14,7 +14,7 @@ internal partial class Interop
             IRawElementProviderSimple provider,
             AutomationNotificationKind notificationKind,
             AutomationNotificationProcessing notificationProcessing,
-            [MarshalAs(UnmanagedType.BStr)] string displayString,
+            [MarshalAs(UnmanagedType.BStr)] string? displayString,
             [MarshalAs(UnmanagedType.BStr)] string activityId);
     }
 }

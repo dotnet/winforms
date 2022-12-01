@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Windows.Forms.PropertyGridInternal;
 using Xunit;
 using static Interop;
@@ -104,6 +106,121 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, actual);
             Assert.False(propertyGrid.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
+        {
+            using PropertyGrid propertyGrid = new();
+            PropertyGrid.PropertyGridAccessibleObject accessibleObject = new(propertyGrid);
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected()
+        {
+            using PropertyGrid propertyGrid = new();
+            PropertyGrid.PropertyGridAccessibleObject accessibleObject = new(propertyGrid);
+
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected()
+        {
+            using PropertyGrid propertyGrid = new();
+            PropertyGrid.PropertyGridAccessibleObject accessibleObject = new(propertyGrid);
+
+            AccessibleObject expected = propertyGrid.ToolbarAccessibleObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected_IfToolbarHidden()
+        {
+            using PropertyGrid propertyGrid = new() { ToolbarVisible = false };
+            PropertyGrid.PropertyGridAccessibleObject accessibleObject = new(propertyGrid);
+
+            AccessibleObject expected = propertyGrid.GridViewAccessibleObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_FragmentNavigate_LastChild_ReturnsExpected()
+        {
+            using PropertyGrid propertyGrid = new();
+            PropertyGrid.PropertyGridAccessibleObject accessibleObject = new(propertyGrid);
+
+            AccessibleObject expected = propertyGrid.HelpPaneAccessibleObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_FragmentNavigate_LastChild_ReturnsExpected_IfHelpHidden()
+        {
+            using PropertyGrid propertyGrid = new() { HelpVisible = false };
+
+            // Assign an object with commands to make CommandsPane visible
+            using Component component = new();
+            component.Site = new SiteWithMenuCommands();
+            propertyGrid.SelectedObject = component;
+
+            PropertyGrid.PropertyGridAccessibleObject accessibleObject = new(propertyGrid);
+
+            AccessibleObject expected = propertyGrid.CommandsPaneAccessibleObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_FragmentNavigate_LastChild_ReturnsExpected_IfHelpAndCommandsHidden()
+        {
+            using PropertyGrid propertyGrid = new() { HelpVisible = false, CommandsVisibleIfAvailable = false };
+            PropertyGrid.PropertyGridAccessibleObject accessibleObject = new(propertyGrid);
+
+            AccessibleObject expected = propertyGrid.GridViewAccessibleObject;
+
+            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        }
+
+        private class SiteWithMenuCommands : ISite
+        {
+            private class MenuCommandService : IMenuCommandService
+            {
+                public DesignerVerbCollection Verbs { get; } = new DesignerVerbCollection(new[] { new DesignerVerb("", null) });
+
+                public void AddCommand(MenuCommand command) => throw new NotImplementedException();
+
+                public void AddVerb(DesignerVerb verb) => throw new NotImplementedException();
+
+                public MenuCommand FindCommand(CommandID commandID) => throw new NotImplementedException();
+
+                public bool GlobalInvoke(CommandID commandID) => throw new NotImplementedException();
+
+                public void RemoveCommand(MenuCommand command) => throw new NotImplementedException();
+
+                public void RemoveVerb(DesignerVerb verb) => throw new NotImplementedException();
+
+                public void ShowContextMenu(CommandID menuID, int x, int y) => throw new NotImplementedException();
+            }
+
+            public IComponent Component { get; }
+
+            public IContainer Container { get; }
+
+            public bool DesignMode => false;
+
+            public string Name { get; set; }
+
+            public object GetService(Type serviceType)
+            {
+                return serviceType == typeof(IMenuCommandService) ? new MenuCommandService() : null;
+            }
         }
     }
 }

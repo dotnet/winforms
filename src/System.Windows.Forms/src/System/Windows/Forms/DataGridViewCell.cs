@@ -491,6 +491,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal bool IsAccessibilityObjectCreated => Properties.GetObject(s_propCellAccessibilityObject) is AccessibleObject;
+
         /// <summary>
         ///  Indicates whether or not the parent grid view for this element has an accessible object associated with it.
         /// </summary>
@@ -1292,8 +1294,9 @@ namespace System.Windows.Forms
                 Type editingControlType = DataGridView.EditingControl.GetType();
 
                 return
-                    (editingControlType == typeof(DataGridViewComboBoxEditingControl) && !editingControlType.IsSubclassOf(typeof(DataGridViewComboBoxEditingControl))) ||
-                    (editingControlType == typeof(DataGridViewTextBoxEditingControl) && !editingControlType.IsSubclassOf(typeof(DataGridViewTextBoxEditingControl)));
+                    IsAccessibilityObjectCreated &&
+                    ((editingControlType == typeof(DataGridViewComboBoxEditingControl) && !editingControlType.IsSubclassOf(typeof(DataGridViewComboBoxEditingControl))) ||
+                    (editingControlType == typeof(DataGridViewTextBoxEditingControl) && !editingControlType.IsSubclassOf(typeof(DataGridViewTextBoxEditingControl))));
             }
         }
 
@@ -4054,6 +4057,21 @@ namespace System.Windows.Forms
             DataGridView.EditingPanel.Location = new Point(xEditingPanel, yEditingPanel);
             DataGridView.EditingPanel.Size = new Size(wEditingPanel, hEditingPanel);
             return new Rectangle(xEditingControl, yEditingControl, wEditingControl, hEditingControl);
+        }
+
+        internal virtual void ReleaseUiaProvider()
+        {
+            if (!IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            if (OsVersion.IsWindows8OrGreater())
+            {
+                UiaCore.UiaDisconnectProvider(AccessibilityObject);
+            }
+
+            Properties.SetObject(s_propCellAccessibilityObject, null);
         }
 
         protected virtual bool SetValue(int rowIndex, object value)

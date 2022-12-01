@@ -325,7 +325,7 @@ namespace System.Windows.Forms
                 else
                 {
                     using ComScope<IFileDialogCustomize> customize = new(null);
-                    if (dialog->QueryInterface(IFileDialogCustomize.NativeGuid, customize).Succeeded)
+                    if (dialog->QueryInterface(IID.Get<IFileDialogCustomize>(), customize).Succeeded)
                     {
                         customize.Value->AddText(0, _descriptionText).ThrowOnFailure();
                     }

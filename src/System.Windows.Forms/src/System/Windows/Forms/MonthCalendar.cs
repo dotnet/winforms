@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Layout;
@@ -107,7 +106,7 @@ namespace System.Windows.Forms
         private DateTime _selectionStart;
         private DateTime _selectionEnd;
         private DateTime _focusedDate;
-        private SelectionRange _currentDisplayRange;
+        private SelectionRange? _currentDisplayRange;
         private Day _firstDayOfWeek = DefaultFirstDayOfWeek;
         private MONTH_CALDENDAR_MESSAGES_VIEW _mcCurView = MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH;
         private MONTH_CALDENDAR_MESSAGES_VIEW _mcOldView = MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH;
@@ -126,11 +125,11 @@ namespace System.Windows.Forms
         private readonly List<DateTime> _annualBoldDates = new();
         private readonly List<DateTime> _monthlyBoldDates = new();
 
-        private DateRangeEventHandler _onDateChanged;
-        private DateRangeEventHandler _onDateSelected;
-        private EventHandler _onRightToLeftLayoutChanged;
-        private EventHandler _onCalendarViewChanged;
-        private EventHandler _onDisplayRangeChanged;
+        private DateRangeEventHandler? _onDateChanged;
+        private DateRangeEventHandler? _onDateSelected;
+        private EventHandler? _onRightToLeftLayoutChanged;
+        private EventHandler? _onCalendarViewChanged;
+        private EventHandler? _onDisplayRangeChanged;
 
         /// <summary>
         ///  Creates a new MonthCalendar object. Styles are the default for a regular
@@ -215,7 +214,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -223,7 +222,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -239,7 +238,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -437,7 +436,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -585,7 +584,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler PaddingChanged
+        public new event EventHandler? PaddingChanged
         {
             add => base.PaddingChanged += value;
             remove => base.PaddingChanged -= value;
@@ -892,6 +891,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public override string Text
         {
             get => base.Text;
@@ -900,7 +900,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -1066,7 +1066,7 @@ namespace System.Windows.Forms
             _datesToBoldMonthly |= 0x00000001 << (date.Day - 1);
         }
 
-        private event EventHandler CalendarViewChanged
+        private event EventHandler? CalendarViewChanged
         {
             add => _onCalendarViewChanged += value;
             remove => _onCalendarViewChanged -= value;
@@ -1074,7 +1074,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.MonthCalendarOnDateChangedDescr))]
-        public event DateRangeEventHandler DateChanged
+        public event DateRangeEventHandler? DateChanged
         {
             add => _onDateChanged += value;
             remove => _onDateChanged -= value;
@@ -1090,13 +1090,13 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.MonthCalendarOnDateSelectedDescr))]
-        public event DateRangeEventHandler DateSelected
+        public event DateRangeEventHandler? DateSelected
         {
             add => _onDateSelected += value;
             remove => _onDateSelected -= value;
         }
 
-        private event EventHandler DisplayRangeChanged
+        private event EventHandler? DisplayRangeChanged
         {
             add => _onDisplayRangeChanged += value;
             remove => _onDisplayRangeChanged -= value;
@@ -1104,7 +1104,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -1112,7 +1112,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -1128,7 +1128,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint
+        public new event PaintEventHandler? Paint
         {
             add => base.Paint += value;
             remove => base.Paint -= value;
@@ -1136,7 +1136,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-        public event EventHandler RightToLeftLayoutChanged
+        public event EventHandler? RightToLeftLayoutChanged
         {
             add => _onRightToLeftLayoutChanged += value;
             remove => _onRightToLeftLayoutChanged -= value;
@@ -1756,7 +1756,7 @@ namespace System.Windows.Forms
 
             // Second argument to GetPreferredWidth and GetPreferredHeight is a boolean specifying if we should update the number of rows/columns.
             // We only want to update the number of rows/columns if we are not currently being scaled.
-            bool updateRowsAndColumns = !DpiHelper.IsScalingRequirementMet || !IsCurrentlyBeingScaled;
+            bool updateRowsAndColumns = !DpiHelper.IsScalingRequirementMet || !ScalingInProgress;
 
             if (width != oldBounds.Width)
             {

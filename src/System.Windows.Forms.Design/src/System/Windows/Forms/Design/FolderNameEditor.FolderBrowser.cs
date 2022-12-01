@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Design
             public unsafe DialogResult ShowDialog(IWin32Window owner)
             {
                 // Get/find an owner HWND for this dialog.
-                HWND hWndOwner = owner != null ? (HWND)owner.Handle : PInvoke.GetActiveWindow();
+                HWND hWndOwner = owner is not null ? (HWND)owner.Handle : PInvoke.GetActiveWindow();
 
                 // Get the IDL for the specific start location.
                 PInvoke.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out ITEMIDLIST* listHandle);

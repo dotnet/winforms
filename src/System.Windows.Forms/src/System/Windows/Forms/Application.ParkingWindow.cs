@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -76,9 +74,8 @@ namespace System.Windows.Forms
                 // This is important for scenarios where apps leak controls until after the
                 // messagepump is gone and then decide to clean them up.  We should clean
                 // up the parkingwindow in this case and a postmessage won't do it.
-
                 uint id = PInvoke.GetWindowThreadProcessId(HWNDInternal, out _);
-                ThreadContext context = ThreadContext.FromId(id);
+                ThreadContext? context = ThreadContext.FromId(id);
 
                 // We only do this if the ThreadContext tells us that we are currently
                 // handling a window message.
@@ -142,7 +139,7 @@ namespace System.Windows.Forms
 
             // Do nothing on layout to reduce the calls into the LayoutEngine while debugging.
             protected override void OnLayout(LayoutEventArgs levent) { }
-            void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string affectedProperty) { }
+            void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string? affectedProperty) { }
 
             protected override void WndProc(ref Message m)
             {

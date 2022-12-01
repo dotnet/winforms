@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 ListView lv = Control as ListView;
-                if (lv != null)
+                if (lv is not null)
                 {
                     return lv.Columns;
                 }
@@ -114,14 +114,14 @@ namespace System.Windows.Forms.Design
         {
             PropertyDescriptor ownerDrawProp = (PropertyDescriptor)properties["OwnerDraw"];
 
-            if (ownerDrawProp != null)
+            if (ownerDrawProp is not null)
             {
                 properties["OwnerDraw"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), ownerDrawProp, Array.Empty<Attribute>());
             }
 
             PropertyDescriptor viewProp = (PropertyDescriptor)properties["View"];
 
-            if (viewProp != null)
+            if (viewProp is not null)
             {
                 properties["View"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), viewProp, Array.Empty<Attribute>());
             }
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_actionLists == null)
+                if (_actionLists is null)
                 {
                     _actionLists = new DesignerActionListCollection();
                     _actionLists.Add(new ListViewActionList(this));
@@ -186,14 +186,14 @@ namespace System.Windows.Forms.Design
 
         private static void ShowErrorDialog(IUIService uiService, Exception ex, Control control)
         {
-            if (uiService != null)
+            if (uiService is not null)
             {
                 uiService.ShowError(ex);
             }
             else
             {
                 string message = ex.Message;
-                if (message == null || message.Length == 0)
+                if (message is null || message.Length == 0)
                 {
                     message = ex.ToString();
                 }

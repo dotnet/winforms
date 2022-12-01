@@ -2572,6 +2572,54 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
+        public static IEnumerable<object[]> FormShow_TestData()
+        {
+            // Test with control passed as owner.
+            yield return new Action<Form, Control>[]
+            {
+                (Form form, Control control) => form.Show(owner: control)
+            };
+            yield return new Action<Form, Control>[]
+            {
+                (Form form, Control control) => form.ShowDialog(owner: control)
+            };
+
+            // Test with parent form passed as owner.
+            yield return new Action<Form, Control>[]
+            {
+                (Form form, Control control) => form.Show(owner: control.FindForm())
+            };
+            yield return new Action<Form, Control>[]
+            {
+                (Form form, Control control) => form.ShowDialog(owner: control.FindForm())
+            };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(FormShow_TestData))]
+        public void Form_Show_SetsOwnerToTopLevelForm_WhenShownWithOwner(Action<Form, Control> showAction)
+        {
+            // Regression test for https://github.com/dotnet/winforms/issues/8280
+
+            using Form parent = new();
+            using Control control = new();
+            parent.Controls.Add(control);
+            parent.Show();
+
+            using Form child = new();
+            Form owner = null;
+            child.Load += (object sender, EventArgs e) =>
+            {
+                owner = ((Form)sender).Owner;
+                child.Close();
+            };
+
+            showAction(child, control);
+
+            Assert.Same(parent, owner);
+            Assert.False(child.IsHandleCreated);
+        }
+
         public class SubForm : Form
         {
             public new const int ScrollStateAutoScrolling = Form.ScrollStateAutoScrolling;

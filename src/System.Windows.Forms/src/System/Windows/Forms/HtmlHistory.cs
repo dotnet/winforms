@@ -24,11 +24,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (disposed)
-                {
-                    throw new ObjectDisposedException(GetType().Name);
-                }
-
+                ObjectDisposedException.ThrowIf(disposed, this);
                 return htmlHistory;
             }
         }

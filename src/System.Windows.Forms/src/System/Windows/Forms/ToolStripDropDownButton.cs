@@ -180,7 +180,7 @@ namespace System.Windows.Forms
         {
             if (Owner is not null)
             {
-                ToolStripRenderer renderer = Renderer;
+                ToolStripRenderer renderer = Renderer!;
                 Graphics g = e.Graphics;
 
                 renderer.DrawDropDownButtonBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));

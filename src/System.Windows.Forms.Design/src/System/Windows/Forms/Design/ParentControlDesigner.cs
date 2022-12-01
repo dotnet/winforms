@@ -182,7 +182,7 @@ namespace System.Windows.Forms.Design
                     //our grid/snap setting from it - instead of our options page
                     //
                     ParentControlDesigner parent = GetParentControlDesignerOfParent();
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         _drawGrid = parent.DrawGrid;
                     }
@@ -223,7 +223,7 @@ namespace System.Windows.Forms.Design
                     // 'cause they might to change along with us, unless the user has explicitly set
                     // those values...
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                    if (host != null)
+                    if (host is not null)
                     {
                         // for (int i = 0; i < children.Length; i++) {
                         foreach (Control child in Control.Controls)
@@ -271,7 +271,7 @@ namespace System.Windows.Forms.Design
                     //our grid/snap setting from it - instead of our options page
                     //
                     ParentControlDesigner parent = GetParentControlDesignerOfParent();
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         _gridSize = parent.GridSize;
                     }
@@ -316,7 +316,7 @@ namespace System.Windows.Forms.Design
                 // 'cause they might to change along with us, unless the user has explicitly set
                 // those values...
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
                     foreach (Control child in Control.Controls)
                     {
@@ -390,7 +390,7 @@ namespace System.Windows.Forms.Design
             {
                 ArrayList snapLines = base.SnapLines as ArrayList;
 
-                if (snapLines == null)
+                if (snapLines is null)
                 {
                     Debug.Fail("why did base.SnapLines return null?");
                     snapLines = new ArrayList(4);
@@ -405,7 +405,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (Component != null)
+                if (Component is not null)
                 {
                     return Component.Site;
                 }
@@ -435,14 +435,14 @@ namespace System.Windows.Forms.Design
                     //our grid/snap setting from it - instead of our options page
                     //
                     ParentControlDesigner parent = GetParentControlDesignerOfParent();
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         _gridSnap = parent.SnapToGrid;
                     }
                     else
                     {
                         object optionValue = DesignerUtils.GetOptionValue(ServiceProvider, "SnapToGrid");
-                        if (optionValue != null && optionValue is bool)
+                        if (optionValue is not null && optionValue is bool)
                         {
                             _gridSnap = (bool)optionValue;
                         }
@@ -471,7 +471,7 @@ namespace System.Windows.Forms.Design
                     // 'cause they might to change along with us, unless the user has explicitly set
                     // those values...
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                    if (host != null)
+                    if (host is not null)
                     {
                         foreach (Control child in Control.Controls)
                         {
@@ -503,14 +503,14 @@ namespace System.Windows.Forms.Design
             Point location = Point.Empty;
             Size size = Size.Empty;
             Size offset = new Size(0, 0);
-            bool hasLocation = (defaultValues != null && defaultValues.Contains("Location"));
-            bool hasSize = (defaultValues != null && defaultValues.Contains("Size"));
+            bool hasLocation = (defaultValues is not null && defaultValues.Contains("Location"));
+            bool hasSize = (defaultValues is not null && defaultValues.Contains("Size"));
 
             if (hasLocation)
                 location = (Point)defaultValues["Location"];
             if (hasSize)
                 size = (Size)defaultValues["Size"];
-            if (defaultValues != null && defaultValues.Contains("Offset"))
+            if (defaultValues is not null && defaultValues.Contains("Offset"))
             {
                 offset = (Size)defaultValues["Offset"];
             }
@@ -522,11 +522,8 @@ namespace System.Windows.Forms.Design
             // Otherwise, proceed with the parenting and locating.
             //
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null
-                && newChild != null
-                && !Control.Contains(newChild)
-                && (host.GetDesigner(newChild) as ControlDesigner) != null
-                && !(newChild is Form && ((Form)newChild).TopLevel))
+            if (host is not null && newChild is not null && !Control.Contains(newChild)
+                && (host.GetDesigner(newChild) as ControlDesigner) is not null && !(newChild is Form && ((Form)newChild).TopLevel))
             {
                 Rectangle bounds = default(Rectangle);
 
@@ -546,7 +543,7 @@ namespace System.Windows.Forms.Design
                     ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
                     object primarySelection = selSvc.PrimarySelection;
                     Control selectedControl = null;
-                    if (primarySelection != null)
+                    if (primarySelection is not null)
                     {
                         selectedControl = ((IOleDragClient)this).GetControlForComponent(primarySelection);
                     }
@@ -554,7 +551,7 @@ namespace System.Windows.Forms.Design
                     // If the resulting control that came back isn't sited, it's not part of the
                     // design surface and should not be used as a marker.
                     //
-                    if (selectedControl != null && selectedControl.Site == null)
+                    if (selectedControl is not null && selectedControl.Site is null)
                     {
                         selectedControl = null;
                     }
@@ -562,7 +559,7 @@ namespace System.Windows.Forms.Design
                     // if the currently selected container is this parent
                     // control, default to 0,0
                     //
-                    if (primarySelection == Component || selectedControl == null)
+                    if (primarySelection == Component || selectedControl is null)
                     {
                         bounds.X = DefaultControlLocation.X;
                         bounds.Y = DefaultControlLocation.Y;
@@ -619,10 +616,10 @@ namespace System.Windows.Forms.Design
 
                 //check to see if we have additional information for bounds from
                 //the behaviorservice dragdrop logic
-                if (defaultValues != null && defaultValues.Contains("ToolboxSnapDragDropEventArgs"))
+                if (defaultValues is not null && defaultValues.Contains("ToolboxSnapDragDropEventArgs"))
                 {
                     ToolboxSnapDragDropEventArgs e = defaultValues["ToolboxSnapDragDropEventArgs"] as ToolboxSnapDragDropEventArgs;
-                    Debug.Assert(e != null, "Why can't we get a ToolboxSnapDragDropEventArgs object out of our default values?");
+                    Debug.Assert(e is not null, "Why can't we get a ToolboxSnapDragDropEventArgs object out of our default values?");
 
                     Rectangle snappedBounds = DesignerUtils.GetBoundsFromToolboxSnapDragDropInfo(e, bounds, Control.IsMirrored);
 
@@ -632,7 +629,7 @@ namespace System.Windows.Forms.Design
                     //never properly adjust the snap drag info.  This cause the control to be added @ 0,0 w.r.t.
                     //the adorner window.
                     Control rootControl = host.RootComponent as Control;
-                    if (rootControl != null && snappedBounds.IntersectsWith(rootControl.ClientRectangle))
+                    if (rootControl is not null && snappedBounds.IntersectsWith(rootControl.ClientRectangle))
                     {
                         bounds = snappedBounds;
                     }
@@ -650,7 +647,7 @@ namespace System.Windows.Forms.Design
                 // these values if it does.
                 //
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(newChild);
-                if (props != null)
+                if (props is not null)
                 {
                     PropertyDescriptor prop = props["Size"];
                     prop?.SetValue(newChild, new Size(bounds.Width, bounds.Height));
@@ -664,7 +661,7 @@ namespace System.Windows.Forms.Design
 
                     Point pt = new Point(bounds.X, bounds.Y);
                     ScrollableControl p = newChild.Parent as ScrollableControl;
-                    if (p != null)
+                    if (p is not null)
                     {
                         Point ptScroll = p.AutoScrollPosition;
                         pt.Offset(-ptScroll.X, -ptScroll.Y); //always want to add the control below/right of the AutoScrollPosition
@@ -688,7 +685,7 @@ namespace System.Windows.Forms.Design
         {
             Control control = GetControl(component);
 
-            if (control != null)
+            if (control is not null)
             {
                 Control parent = control;
 
@@ -703,10 +700,10 @@ namespace System.Windows.Forms.Design
                     childSite = ((IComponent)children[i]).Site;
 
                     IContainer childContainer;
-                    if (childSite != null)
+                    if (childSite is not null)
                     {
                         name = childSite.Name;
-                        if (container.Components[name] != null)
+                        if (container.Components[name] is not null)
                         {
                             name = null;
                         }
@@ -726,7 +723,7 @@ namespace System.Windows.Forms.Design
 
                     childContainer?.Remove(children[i]);
 
-                    if (name != null)
+                    if (name is not null)
                     {
                         container.Add(children[i], name);
                     }
@@ -785,7 +782,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
                     _changeService.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
                     _changeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
@@ -972,7 +969,7 @@ namespace System.Windows.Forms.Design
                 container = DesignerUtils.CheckForNestedContainer(container); // ...necessary to support SplitterPanel components
 
                 if (child.Visible && ((containRect && rect.Contains(bounds)) || (!containRect && bounds.IntersectsWith(rect))) &&
-                    child.Site != null && child.Site.Container == container)
+                    child.Site is not null && child.Site.Container == container)
                 {
                     list.Add(child);
                 }
@@ -987,13 +984,13 @@ namespace System.Windows.Forms.Design
         protected Control GetControl(object component)
         {
             IComponent comp = component as IComponent;
-            if (comp != null)
+            if (comp is not null)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
                     ControlDesigner cd = host.GetDesigner(comp) as ControlDesigner;
-                    if (cd != null)
+                    if (cd is not null)
                     {
                         return cd.Control;
                     }
@@ -1034,7 +1031,7 @@ namespace System.Windows.Forms.Design
             PropertyDescriptor prop = TypeDescriptor.GetProperties(component)["AutoSize"];
 
             Size size;
-            if (prop != null &&
+            if (prop is not null &&
                 !(prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden) ||
                   prop.Attributes.Contains(BrowsableAttribute.No)))
             {
@@ -1042,7 +1039,7 @@ namespace System.Windows.Forms.Design
                 if (autoSize)
                 {
                     prop = TypeDescriptor.GetProperties(component)["PreferredSize"];
-                    if (prop != null)
+                    if (prop is not null)
                     {
                         size = (Size)prop.GetValue(component);
                         if (size != Size.Empty)
@@ -1057,7 +1054,7 @@ namespace System.Windows.Forms.Design
             //
             prop = TypeDescriptor.GetProperties(component)["Size"];
 
-            if (prop != null)
+            if (prop is not null)
             {
                 // first, let's see if we can get a valid size...
                 size = (Size)prop.GetValue(component);
@@ -1066,7 +1063,7 @@ namespace System.Windows.Forms.Design
                 if (size.Width <= 0 || size.Height <= 0)
                 {
                     var sizeAttr = (DefaultValueAttribute)prop.Attributes[typeof(DefaultValueAttribute)];
-                    if (sizeAttr != null)
+                    if (sizeAttr is not null)
                     {
                         return ((Size)sizeAttr.Value);
                     }
@@ -1096,7 +1093,7 @@ namespace System.Windows.Forms.Design
             Control parent = Control.Parent;
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
 
-            if (parent != null && host != null && host.RootComponent != Component)
+            if (parent is not null && host is not null && host.RootComponent != Component)
             {
                 Rectangle parentRect = BehaviorService.ControlRectInAdornerWindow(parent);
                 Rectangle nonClipRect = Rectangle.Intersect(parentRect, controlRect);
@@ -1172,7 +1169,7 @@ namespace System.Windows.Forms.Design
         {
             Control parent = Control.Parent;
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (parent != null && host != null)
+            if (parent is not null && host is not null)
             {
                 return (host.GetDesigner(parent) as ParentControlDesigner);
             }
@@ -1313,10 +1310,10 @@ namespace System.Windows.Forms.Design
             // connect these up.
             //
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null)
+            if (host is not null)
             {
                 _changeService = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
-                if (_changeService != null)
+                if (_changeService is not null)
                 {
                     _changeService.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
                     _changeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
@@ -1338,28 +1335,28 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            if (defaultValues != null && defaultValues["Size"] != null && defaultValues["Location"] != null && defaultValues["Parent"] != null)
+            if (defaultValues is not null && defaultValues["Size"] is not null && defaultValues["Location"] is not null && defaultValues["Parent"] is not null)
             {
                 //build our rect that may have covered some child controls
                 Rectangle bounds = new Rectangle((Point)defaultValues["Location"], (Size)defaultValues["Size"]);
 
                 //ask the parent to give us the comps within this rect
                 IComponent parent = defaultValues["Parent"] as IComponent;
-                if (parent == null)
+                if (parent is null)
                 {
                     Debug.Fail("Couldn't get the parent instance from 'defaultValues'");
                     return;
                 }
 
                 IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-                if (host == null)
+                if (host is null)
                 {
                     Debug.Fail("Failed to IDesignerHost");
                     return;
                 }
 
                 ParentControlDesigner parentDesigner = host.GetDesigner(parent) as ParentControlDesigner;
-                if (parentDesigner == null)
+                if (parentDesigner is null)
                 {
                     Debug.Fail("Could not get ParentControlDesigner for " + parent);
                     return;
@@ -1367,7 +1364,7 @@ namespace System.Windows.Forms.Design
 
                 object[] comps = parentDesigner.GetComponentsInRect(bounds, true, true /* component should be fully contained*/);
 
-                if (comps == null || comps.Length == 0)
+                if (comps is null || comps.Length == 0)
                 {
                     //no comps to re-parent
                     return;
@@ -1398,7 +1395,7 @@ namespace System.Windows.Forms.Design
 
             object defaultValue = null;
 
-            if (optSvc == null)
+            if (optSvc is null)
             {
                 if (optionName.Equals("ShowGrid"))
                 {
@@ -1418,13 +1415,13 @@ namespace System.Windows.Forms.Design
                 defaultValue = DesignerUtils.GetOptionValue(ServiceProvider, optionName);
             }
 
-            if (defaultValue != null)
+            if (defaultValue is not null)
             {
                 return defaultValue.Equals(value);
             }
             else
             {
-                return value == null;
+                return value is null;
             }
         }
 
@@ -1433,7 +1430,7 @@ namespace System.Windows.Forms.Design
         private void OnComponentRemoving(object sender, ComponentEventArgs e)
         {
             Control comp = e.Component as Control;
-            if (comp != null && comp.Parent != null && comp.Parent == Control)
+            if (comp is not null && comp.Parent is not null && comp.Parent == Control)
             {
                 _pendingRemoveControl = comp;
                 //We suspend Component Changing Events for bulk operations to avoid unnecessary serialization\deserialization for undo
@@ -1498,7 +1495,7 @@ namespace System.Windows.Forms.Design
             }
 
             DropSourceBehavior.BehaviorDataObject data = de.Data as DropSourceBehavior.BehaviorDataObject;
-            if (data != null)
+            if (data is not null)
             {
                 data.Target = Component;
                 data.EndDragDrop(AllowSetChildIndexOnDrop);
@@ -1507,16 +1504,16 @@ namespace System.Windows.Forms.Design
             }
 
             // this should only occur when D&Ding between component trays on two separate forms.
-            else if (_mouseDragTool == null && data == null)
+            else if (_mouseDragTool is null && data is null)
             {
                 OleDragDropHandler ddh = GetOleDragHandler();
-                if (ddh != null)
+                if (ddh is not null)
                 {
                     IOleDragClient target = ddh.Destination;
-                    if (target != null && target.Component != null && target.Component.Site != null)
+                    if (target is not null && target.Component is not null && target.Component.Site is not null)
                     {
                         IContainer container = target.Component.Site.Container;
-                        if (container != null)
+                        if (container is not null)
                         {
                             object[] dragComps = OleDragDropHandler.GetDraggingObjects(de);
                             for (int i = 0; i < dragComps.Length; i++)
@@ -1529,7 +1526,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (_mouseDragTool != null)
+            if (_mouseDragTool is not null)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 host?.Activate();
@@ -1572,7 +1569,7 @@ namespace System.Windows.Forms.Design
 
             DropSourceBehavior.BehaviorDataObject behDataObject = null;
             DropSourceBehavior.BehaviorDataObject data = de.Data as DropSourceBehavior.BehaviorDataObject;
-            if (data != null)
+            if (data is not null)
             {
                 behDataObject = data;
                 behDataObject.Target = Component;
@@ -1584,10 +1581,10 @@ namespace System.Windows.Forms.Design
             // dropped here.
             //
             IMenuCommandService ms = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-            if (ms != null)
+            if (ms is not null)
             {
                 MenuCommand tabCommand = ms.FindCommand(StandardCommands.TabOrder);
-                if (tabCommand != null && tabCommand.Checked)
+                if (tabCommand is not null && tabCommand.Checked)
                 {
                     de.Effect = DragDropEffects.None;
                     return;
@@ -1597,7 +1594,7 @@ namespace System.Windows.Forms.Design
             // Get the objects that are being dragged
             //
             object[] dragComps;
-            if (behDataObject != null && behDataObject.DragComponents != null)
+            if (behDataObject is not null && behDataObject.DragComponents is not null)
             {
                 dragComps = new object[behDataObject.DragComponents.Count];
                 behDataObject.DragComponents.CopyTo(dragComps, 0);
@@ -1611,10 +1608,10 @@ namespace System.Windows.Forms.Design
             Control draggedControl = null;
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null)
+            if (host is not null)
             {
                 DocumentDesigner parentDesigner = host.GetDesigner(host.RootComponent) as DocumentDesigner;
-                if (parentDesigner != null)
+                if (parentDesigner is not null)
                 {
                     if (!parentDesigner.CanDropComponents(de))
                     {
@@ -1624,9 +1621,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (dragComps != null)
+            if (dragComps is not null)
             {
-                if (data == null)
+                if (data is null)
                 {
                     // This should only be true, when moving a component from the Tray,
                     // to a new form. In this case, we are moving targets.
@@ -1636,7 +1633,7 @@ namespace System.Windows.Forms.Design
                 for (int i = 0; i < dragComps.Length; i++)
                 {
                     IComponent comp = dragComps[i] as IComponent;
-                    if (host == null || comp == null)
+                    if (host is null || comp is null)
                     {
                         continue;
                     }
@@ -1646,7 +1643,7 @@ namespace System.Windows.Forms.Design
                         // If we are dropping on a new target, then check to see if any of the components
                         // are inherited. If so, don't allow them to be moved.
                         InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(comp)[typeof(InheritanceAttribute)];
-                        if (attr != null && !attr.Equals(InheritanceAttribute.NotInherited) && !attr.Equals(InheritanceAttribute.InheritedReadOnly))
+                        if (attr is not null && !attr.Equals(InheritanceAttribute.NotInherited) && !attr.Equals(InheritanceAttribute.InheritedReadOnly))
                         {
                             de.Effect = DragDropEffects.None;
                             return;
@@ -1662,14 +1659,14 @@ namespace System.Windows.Forms.Design
                     }
 
                     Control ctrl = dragComps[i] as Control;
-                    if (draggedControl == null && ctrl != null)
+                    if (draggedControl is null && ctrl is not null)
                     {
                         draggedControl = ctrl;
                     }
 
                     // oh well, it's not a control so it doesn't matter
                     //
-                    if (draggedControl == null)
+                    if (draggedControl is null)
                     {
                         continue;
                     }
@@ -1695,7 +1692,7 @@ namespace System.Windows.Forms.Design
 
                 // should only occur when dragging and dropping
                 // from the component tray.
-                if (data == null)
+                if (data is null)
                 {
                     PerformDragEnter(de, host);
                 }
@@ -1705,13 +1702,13 @@ namespace System.Windows.Forms.Design
 
             // Only assume the items came from the ToolBox if dragComps == null
             //
-            if (_toolboxService != null && dragComps == null)
+            if (_toolboxService is not null && dragComps is null)
             {
                 _mouseDragTool = _toolboxService.DeserializeToolboxItem(de.Data, host);
 
                 //If we have a valid toolbox item to drag and
                 //we haven't pushed our behavior, then do so now...
-                if ((_mouseDragTool != null) && BehaviorService != null && BehaviorService.UseSnapLines)
+                if ((_mouseDragTool is not null) && BehaviorService is not null && BehaviorService.UseSnapLines)
                 {
                     //demand create
                     _toolboxItemSnapLineBehavior ??= new ToolboxItemSnapLineBehavior(Component.Site, BehaviorService, this, AllowGenericDragBox);
@@ -1723,7 +1720,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (_mouseDragTool != null)
+                if (_mouseDragTool is not null)
                 {
                     PerformDragEnter(de, host);
                 }
@@ -1768,7 +1765,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragLeave(EventArgs e)
         {
             //if we're dragging around our generic snapline box - let's remove it here
-            if (_toolboxItemSnapLineBehavior != null && _toolboxItemSnapLineBehavior.IsPushed)
+            if (_toolboxItemSnapLineBehavior is not null && _toolboxItemSnapLineBehavior.IsPushed)
             {
                 BehaviorService.PopBehavior(_toolboxItemSnapLineBehavior);
                 _toolboxItemSnapLineBehavior.IsPushed = false;
@@ -1783,7 +1780,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragOver(DragEventArgs de)
         {
             DropSourceBehavior.BehaviorDataObject data = de.Data as DropSourceBehavior.BehaviorDataObject;
-            if (data != null)
+            if (data is not null)
             {
                 data.Target = Component;
                 de.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
@@ -1795,11 +1792,11 @@ namespace System.Windows.Forms.Design
             // dropped here.
             //
             IMenuCommandService ms = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-            if (ms != null)
+            if (ms is not null)
             {
                 MenuCommand tabCommand = ms.FindCommand(StandardCommands.TabOrder);
-                Debug.Assert(tabCommand != null, "Missing tab order command");
-                if (tabCommand != null && tabCommand.Checked)
+                Debug.Assert(tabCommand is not null, "Missing tab order command");
+                if (tabCommand is not null && tabCommand.Checked)
                 {
                     de.Effect = DragDropEffects.None;
                     return;
@@ -1807,10 +1804,10 @@ namespace System.Windows.Forms.Design
             }
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null)
+            if (host is not null)
             {
                 DocumentDesigner parentDesigner = host.GetDesigner(host.RootComponent) as DocumentDesigner;
-                if (parentDesigner != null)
+                if (parentDesigner is not null)
                 {
                     if (!parentDesigner.CanDropComponents(de))
                     {
@@ -1820,7 +1817,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (_mouseDragTool != null)
+            if (_mouseDragTool is not null)
             {
                 Debug.Assert(0 != (de.AllowedEffect & DragDropEffects.Copy), "DragDropEffect.Move isn't allowed?");
                 de.Effect = DragDropEffects.Copy;
@@ -1854,7 +1851,7 @@ namespace System.Windows.Forms.Design
             {
                 _toolboxService ??= (IToolboxService)GetService(typeof(IToolboxService));
 
-                if (_toolboxService != null)
+                if (_toolboxService is not null)
                 {
                     _mouseDragTool = _toolboxService.GetSelectedToolboxItem((IDesignerHost)GetService(typeof(IDesignerHost)));
                 }
@@ -1863,7 +1860,7 @@ namespace System.Windows.Forms.Design
             // Set the mouse capture and clipping to this control.
             control.Capture = true;
 
-            _mouseDragFrame = (_mouseDragTool == null) ? FrameStyle.Dashed : FrameStyle.Thick;
+            _mouseDragFrame = (_mouseDragTool is null) ? FrameStyle.Dashed : FrameStyle.Thick;
 
             // Setting this non-null signifies that we are dragging with the mouse.
             _mouseDragBase = new Point(x, y);
@@ -1880,7 +1877,7 @@ namespace System.Windows.Forms.Design
             //UNDONE: Behavior Work
             //Debug.Assert(escapeHandler == null, "Why is there already an escape handler?");
 
-            if (eventSvc != null && _escapeHandler == null)
+            if (eventSvc is not null && _escapeHandler is null)
             {
                 _escapeHandler = new EscapeHandler(this);
                 eventSvc.PushHandler(_escapeHandler);
@@ -1901,7 +1898,7 @@ namespace System.Windows.Forms.Design
             //
             if (_mouseDragBase == InvalidPoint)
             {
-                Debug.Assert(_graphics == null);
+                Debug.Assert(_graphics is null);
                 // make sure we force the drag end
                 base.OnMouseDragEnd(cancel);
                 return;
@@ -1921,7 +1918,7 @@ namespace System.Windows.Forms.Design
             Cursor.Clip = Rectangle.Empty;
 
             // Clear out the drag frame.
-            if (!offset.IsEmpty && _graphics != null)
+            if (!offset.IsEmpty && _graphics is not null)
             {
                 Rectangle frameRect = new Rectangle(offset.X - _adornerWindowToScreenOffset.X,
                                                      offset.Y - _adornerWindowToScreenOffset.Y,
@@ -1939,14 +1936,14 @@ namespace System.Windows.Forms.Design
                 _graphics.ResetClip();
             }
 
-            if (_graphics != null)
+            if (_graphics is not null)
             {
                 _graphics.Dispose();
                 _graphics = null;
             }
 
             //destroy the snapline engine (if we used it)
-            if (_dragManager != null)
+            if (_dragManager is not null)
             {
                 _dragManager.OnMouseUp();
                 _dragManager = null;
@@ -1955,14 +1952,14 @@ namespace System.Windows.Forms.Design
             // Get the event handler service and pop our handler.
             //
             IEventHandlerService eventSvc = (IEventHandlerService)GetService(typeof(IEventHandlerService));
-            if (eventSvc != null && _escapeHandler != null)
+            if (eventSvc is not null && _escapeHandler is not null)
             {
                 eventSvc.PopHandler(_escapeHandler);
                 _escapeHandler = null;
             }
 
             // Set Status Information - but only if the offset is not empty, if it is, the user didn't move the mouse
-            if (_statusCommandUI != null && !offset.IsEmpty)
+            if (_statusCommandUI is not null && !offset.IsEmpty)
             {
                 Point location = new(baseVar.X, baseVar.Y);
                 location = Control.PointToClient(location);
@@ -1973,7 +1970,7 @@ namespace System.Windows.Forms.Design
             if (offset.IsEmpty && !cancel)
             {
                 // BUT, if we have a selected tool, create it here
-                if (tool != null)
+                if (tool is not null)
                 {
                     try
                     {
@@ -2005,7 +2002,7 @@ namespace System.Windows.Forms.Design
 
             // If we have a valid toolbox item, create the tool
             //
-            if (tool != null)
+            if (tool is not null)
             {
                 try
                 {
@@ -2043,7 +2040,7 @@ namespace System.Windows.Forms.Design
                 // select them.
                 //
                 var selSvc = (ISelectionService)GetService(typeof(ISelectionService));
-                if (selSvc != null)
+                if (selSvc is not null)
                 {
                     object[] selection = GetComponentsInRect(offset, true, false /*component does not need to be fully contained*/);
                     if (selection.Length > 0)
@@ -2063,7 +2060,7 @@ namespace System.Windows.Forms.Design
         {
             //if we pushed a snapline behavior during a drag operation - make sure we have popped it
             //if we're now receiving mouse move messages.
-            if (_toolboxItemSnapLineBehavior != null && _toolboxItemSnapLineBehavior.IsPushed)
+            if (_toolboxItemSnapLineBehavior is not null && _toolboxItemSnapLineBehavior.IsPushed)
             {
                 BehaviorService.PopBehavior(_toolboxItemSnapLineBehavior);
                 _toolboxItemSnapLineBehavior.IsPushed = false;
@@ -2090,12 +2087,12 @@ namespace System.Windows.Forms.Design
             //and use it when the user drags a reversible rect -- but only if the
             //parentcontroldesigner wants to allow Snaplines
 
-            if (_dragManager == null && ParticipatesWithSnapLines && _mouseDragTool != null && BehaviorService.UseSnapLines)
+            if (_dragManager is null && ParticipatesWithSnapLines && _mouseDragTool is not null && BehaviorService.UseSnapLines)
             {
                 _dragManager = new DragAssistanceManager(Component.Site);
             }
 
-            if (_dragManager != null)
+            if (_dragManager is not null)
             {
                 //here, we build up our new rect (offset by the adorner window)
                 //and ask the snapline engine to adjust our coords
@@ -2123,7 +2120,7 @@ namespace System.Windows.Forms.Design
             // If we're dragging out a new component, update the drag rectangle
             // to use snaps, if they're set.
             //
-            if (_mouseDragTool != null)
+            if (_mouseDragTool is not null)
             {
                 // To snap properly, we must snap in client coordinates.  So, convert, snap
                 // and re-convert.
@@ -2136,7 +2133,7 @@ namespace System.Windows.Forms.Design
             _graphics ??= BehaviorService.AdornerWindowGraphics;
 
             // And draw the new drag frame
-            if (!_mouseDragOffset.IsEmpty && _graphics != null)
+            if (!_mouseDragOffset.IsEmpty && _graphics is not null)
             {
                 Rectangle frameRect = new Rectangle(_mouseDragOffset.X - _adornerWindowToScreenOffset.X,
                                                      _mouseDragOffset.Y - _adornerWindowToScreenOffset.Y,
@@ -2179,7 +2176,7 @@ namespace System.Windows.Forms.Design
             }
 
             // We are looking at the primary control
-            if (_statusCommandUI != null)
+            if (_statusCommandUI is not null)
             {
                 Point offset = new(_mouseDragOffset.X, _mouseDragOffset.Y);
                 offset = Control.PointToClient(offset);
@@ -2238,7 +2235,7 @@ namespace System.Windows.Forms.Design
 
             try
             {
-                if (_toolboxService == null || !_toolboxService.SetCursor() || InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
+                if (_toolboxService is null || !_toolboxService.SetCursor() || InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
                 {
                     Cursor.Current = Cursors.Default;
                 }
@@ -2311,7 +2308,7 @@ namespace System.Windows.Forms.Design
                 //get the location of our parent - so we can correctly offset the new lasso'd controls
                 //once they are re-parented
                 Point parentLoc = Point.Empty;
-                if (locationProp != null)
+                if (locationProp is not null)
                 {
                     parentLoc = (Point)locationProp.GetValue(newParent);
                 }
@@ -2328,20 +2325,20 @@ namespace System.Windows.Forms.Design
 
                     //do not want to reparent any control that is inherited readonly
                     InheritanceAttribute inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(control)[typeof(InheritanceAttribute)];
-                    if (inheritanceAttribute != null && inheritanceAttribute == InheritanceAttribute.InheritedReadOnly)
+                    if (inheritanceAttribute is not null && inheritanceAttribute == InheritanceAttribute.InheritedReadOnly)
                     {
                         continue;
                     }
 
                     //get the current location of the control
                     PropertyDescriptor locProp = TypeDescriptor.GetProperties(control)["Location"];
-                    if (locProp != null)
+                    if (locProp is not null)
                     {
                         controlLoc = (Point)locProp.GetValue(control);
                     }
 
                     //fire comp changing on parent and control
-                    if (oldParent != null)
+                    if (oldParent is not null)
                     {
                         changeService?.OnComponentChanging(oldParent, controlsProp);
 
@@ -2357,7 +2354,7 @@ namespace System.Windows.Forms.Design
                     //this condition will determine which way we need to 'offset' our control location
                     //based on whether we are moving controls into a child or bringing them out to
                     //a parent
-                    if (oldParent != null)
+                    if (oldParent is not null)
                     {
                         if (oldParent.Controls.Contains(newParent))
                         {
@@ -2373,7 +2370,7 @@ namespace System.Windows.Forms.Design
                     locProp.SetValue(control, newLoc);
 
                     //fire our comp changed events
-                    if (changeService != null && oldParent != null)
+                    if (changeService is not null && oldParent is not null)
                     {
                         changeService.OnComponentChanged(oldParent, controlsProp);
                     }
@@ -2396,7 +2393,7 @@ namespace System.Windows.Forms.Design
             //setting...
             //
             ParentControlDesigner parent = GetParentControlDesignerOfParent();
-            if (parent != null)
+            if (parent is not null)
             {
                 return !(DrawGrid == parent.DrawGrid);
             }
@@ -2416,7 +2413,7 @@ namespace System.Windows.Forms.Design
             //setting...
             //
             ParentControlDesigner parent = GetParentControlDesignerOfParent();
-            if (parent != null)
+            if (parent is not null)
             {
                 return !(SnapToGrid == parent.SnapToGrid);
             }
@@ -2436,7 +2433,7 @@ namespace System.Windows.Forms.Design
             //setting...
             //
             ParentControlDesigner parent = GetParentControlDesignerOfParent();
-            if (parent != null)
+            if (parent is not null)
             {
                 return !(GridSize.Equals(parent.GridSize));
             }
@@ -2495,7 +2492,7 @@ namespace System.Windows.Forms.Design
             if (!firstAdd)
             {
                 // just a move, so reparent
-                if (component.Site != null)
+                if (component.Site is not null)
                 {
                     oldContainer = component.Site.Container;
                     containerMove = container != oldContainer;
@@ -2509,13 +2506,13 @@ namespace System.Windows.Forms.Design
                 {
                     // check if there's already a component by this name in the
                     // container
-                    if (name != null && container.Components[name] != null)
+                    if (name is not null && container.Components[name] is not null)
                     {
                         name = null;
                     }
 
                     // add it back
-                    if (name != null)
+                    if (name is not null)
                     {
                         container.Add(component, name);
                     }
@@ -2535,7 +2532,7 @@ namespace System.Windows.Forms.Design
                 {
                     IUIService uiSvc = (IUIService)GetService(typeof(IUIService));
                     string error = string.Format(SR.DesignerCantParentType, component.GetType().Name, Component.GetType().Name);
-                    if (uiSvc != null)
+                    if (uiSvc is not null)
                     {
                         uiSvc.ShowError(error);
                     }
@@ -2573,13 +2570,13 @@ namespace System.Windows.Forms.Design
             //
             Control c = GetControl(component);
 
-            if (c != null)
+            if (c is not null)
             {
                 // set it's handler to this
                 Control parent = GetParentForComponent(component);
                 Form form = c as Form;
 
-                if (form == null || !form.TopLevel)
+                if (form is null || !form.TopLevel)
                 {
                     if (c.Parent != parent)
                     {
@@ -2587,7 +2584,7 @@ namespace System.Windows.Forms.Design
                         // we want to insert rather than add it, so we add then move
                         // to the beginning
 
-                        if (c.Parent != null)
+                        if (c.Parent is not null)
                         {
                             Control cParent = c.Parent;
                             _changeService?.OnComponentChanging(cParent, controlsProp);
@@ -2596,7 +2593,7 @@ namespace System.Windows.Forms.Design
                             _changeService?.OnComponentChanged(cParent, controlsProp, cParent.Controls, cParent.Controls);
                         }
 
-                        if (_suspendChanging == 0 && _changeService != null)
+                        if (_suspendChanging == 0 && _changeService is not null)
                         {
                             _changeService.OnComponentChanging(parent, controlsProp);
                         }
@@ -2621,7 +2618,7 @@ namespace System.Windows.Forms.Design
                 c.Invalidate(true);
             }
 
-            if (localDesignerHost != null && containerMove)
+            if (localDesignerHost is not null && containerMove)
             {
                 // sburke -- looks like we always want to do this to ensure that sited children get
                 // handled properly.  if we respected the boolean before, the ui selection handlers
@@ -2656,17 +2653,17 @@ namespace System.Windows.Forms.Design
         {
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
 
-            if (host != null)
+            if (host is not null)
             {
                 IDesigner designer = host.GetDesigner(component);
                 bool disposeDesigner = false;
 
                 // we need to create one then
-                if (designer == null)
+                if (designer is null)
                 {
                     designer = TypeDescriptor.CreateDesigner(component, typeof(IDesigner));
                     ControlDesigner cd = designer as ControlDesigner;
-                    if (cd != null)
+                    if (cd is not null)
                     {
                         //Make sure the component doesn't get set to Visible
                         cd.ForceVisible = false;
@@ -2679,12 +2676,12 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     ComponentDesigner cd = designer as ComponentDesigner;
-                    if (cd != null)
+                    if (cd is not null)
                     {
                         if (cd.CanBeAssociatedWith(this))
                         {
                             ControlDesigner controlDesigner = cd as ControlDesigner;
-                            if (controlDesigner != null)
+                            if (controlDesigner is not null)
                             {
                                 return CanParent(controlDesigner);
                             }

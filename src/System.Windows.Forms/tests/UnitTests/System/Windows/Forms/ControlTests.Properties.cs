@@ -5,12 +5,12 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests
 {
@@ -237,9 +237,9 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
-            var dropTarget = new CustomDropTarget();
+            DropTargetMock dropTarget = new();
             Assert.Equal(ApartmentState.STA, Application.OleRequired());
-            Assert.Equal(HRESULT.S_OK, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+            Assert.Equal(HRESULT.S_OK, PInvoke.RegisterDragDrop(control, dropTarget));
 
             control.AllowDrop = value;
             Assert.Equal(value, control.AllowDrop);
@@ -263,29 +263,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        private class CustomDropTarget : Ole32.IDropTarget
-        {
-            public HRESULT DragEnter([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT DragOver(uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT DragLeave()
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT Drop([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         [Fact] // non-UI thread

@@ -16,6 +16,7 @@ using static Interop.Richedit;
 using static Interop.User32;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests
 {
@@ -311,9 +312,9 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
-            var dropTarget = new CustomDropTarget();
+            DropTargetMock dropTarget = new();
             Assert.Equal(ApartmentState.STA, Application.OleRequired());
-            Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+            Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, PInvoke.RegisterDragDrop(control, dropTarget));
 
             control.AllowDrop = value;
             Assert.Equal(value, control.AllowDrop);
@@ -337,29 +338,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        private class CustomDropTarget : Ole32.IDropTarget
-        {
-            public HRESULT DragEnter([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT DragOver(uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT DragLeave()
-            {
-                throw new NotImplementedException();
-            }
-
-            public HRESULT Drop([MarshalAs(UnmanagedType.Interface)] object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         [Theory]
@@ -1286,9 +1264,9 @@ namespace System.Windows.Forms.Tests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
-            var dropTarget = new CustomDropTarget();
+            DropTargetMock dropTarget = new();
             Assert.Equal(ApartmentState.STA, Application.OleRequired());
-            Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, Ole32.RegisterDragDrop(control.Handle, dropTarget));
+            Assert.Equal(HRESULT.DRAGDROP_E_ALREADYREGISTERED, PInvoke.RegisterDragDrop(control, dropTarget));
 
             control.EnableAutoDragDrop = value;
             Assert.Equal(value, control.EnableAutoDragDrop);
@@ -10584,7 +10562,7 @@ namespace System.Windows.Forms.Tests
             using var control = new RichTextBox();
             control.CreateControl();
 
-            Assert.Contains("RICHEDIT50W", GetClassName(control.Handle), StringComparison.InvariantCultureIgnoreCase);
+            Assert.Contains("RICHEDIT50W", GetClassName(control.HWND), StringComparison.Ordinal);
         }
 
         [WinFormsFact]
@@ -10593,13 +10571,13 @@ namespace System.Windows.Forms.Tests
             using (var riched32 = new RichEdit())
             {
                 riched32.CreateControl();
-                Assert.Contains(".RichEdit.", GetClassName(riched32.Handle), StringComparison.InvariantCultureIgnoreCase);
+                Assert.Contains(".RichEdit.", GetClassName(riched32.HWND), StringComparison.Ordinal);
             }
 
             using (var riched20 = new RichEdit20W())
             {
                 riched20.CreateControl();
-                Assert.Contains(".RichEdit20W.", GetClassName(riched20.Handle), StringComparison.InvariantCultureIgnoreCase);
+                Assert.Contains(".RichEdit20W.", GetClassName(riched20.HWND), StringComparison.Ordinal);
 
                 string rtfString = @"{\rtf1\ansi{" +
                     @"The next line\par " +
@@ -10615,8 +10593,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(riched20.Text, richTextBox.Text);
                 Assert.Equal(richTextBox.Text.Length, richTextBox.TextLength);
 
-                int startOfIs = riched20.Text.IndexOf("is");
-                int endOfHidden = riched20.Text.IndexOf("hidden") + "hidden".Length;
+                int startOfIs = riched20.Text.IndexOf("is", StringComparison.Ordinal);
+                int endOfHidden = riched20.Text.IndexOf("hidden", StringComparison.Ordinal) + "hidden".Length;
                 richTextBox.Select(startOfIs, endOfHidden - startOfIs);
                 Assert.Equal("is ###NOT### hidden", richTextBox.SelectedText);
             }
@@ -10791,12 +10769,16 @@ namespace System.Windows.Forms.Tests
             public new void WndProc(ref Message m) => base.WndProc(ref m);
         }
 
-        private static string GetClassName(IntPtr hWnd)
+        private static unsafe string GetClassName(HWND hWnd)
         {
-            const int MaxClassName = 256;
-            StringBuilder sb = new StringBuilder(MaxClassName);
-            UnsafeNativeMethods.GetClassName(new HandleRef(null, hWnd), sb, MaxClassName);
-            return sb.ToString();
+            int length = 0;
+            Span<char> buffer = stackalloc char[PInvoke.MaxClassName];
+            fixed (char* lpClassName = buffer)
+            {
+                length = PInvoke.GetClassName(hWnd, lpClassName, buffer.Length);
+            }
+
+            return new string(buffer[..length]);
         }
 
         /// <summary>

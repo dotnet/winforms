@@ -5522,11 +5522,6 @@ Do you want to replace it?</source>
         <target state="translated">null 값을 '{1}' 형식으로 변환할 수 없습니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">GridItem은 삭제되었으며 더 이상 사용할 수 없습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">GridItem을 확장할 수 없습니다.</target>
@@ -6616,11 +6611,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">현재 접근성 개체는 {0} 보기의 ListView에만 해당됩니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">현재 접근성 개체는 {0}, {1} 또는 {2} 보기의 ListView에만 해당됩니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">ListView 항목이 ListView에 연결되어 있지 않으면 접근성 개체를 가져올 수 없습니다.</target>
@@ -7434,11 +7424,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">확인</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">삭제된 '{0}'은(는) 더 이상 사용할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">

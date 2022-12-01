@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design
             base.InitializeNewComponent(defaultValues);
 
             PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["UseVisualStyleBackColor"];
-            if (prop != null && prop.PropertyType == typeof(bool) && !prop.IsReadOnly && prop.IsBrowsable)
+            if (prop is not null && prop.PropertyType == typeof(bool) && !prop.IsReadOnly && prop.IsBrowsable)
             {
                 // Dev10 Bug 685319: We should set the UseVisualStyleBackColor to trun only
                 // when this property has not been set/changed by user
@@ -56,12 +56,12 @@ namespace System.Windows.Forms.Design
                 PropertyDescriptor prop;
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
 
-                if ((prop = props["TextAlign"]) != null)
+                if ((prop = props["TextAlign"]) is not null)
                 {
                     alignment = (ContentAlignment)prop.GetValue(Component);
                 }
 
-                if ((prop = props["FlatStyle"]) != null)
+                if ((prop = props["FlatStyle"]) is not null)
                 {
                     flatStyle = (FlatStyle)prop.GetValue(Component);
                 }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
                 if ((Control is CheckBox) || (Control is RadioButton))
                 {
                     Appearance appearance = Appearance.Normal;
-                    if ((prop = props["Appearance"]) != null)
+                    if ((prop = props["Appearance"]) is not null)
                     {
                         appearance = (Appearance)prop.GetValue(Component);
                     }

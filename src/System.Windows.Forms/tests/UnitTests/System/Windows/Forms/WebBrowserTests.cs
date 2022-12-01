@@ -1779,13 +1779,13 @@ namespace System.Windows.Forms.Tests
                 ScrollBarsEnabled = value
             };
             Assert.Equal(value, control.ScrollBarsEnabled);
-            Assert.Equal(!value, control.ActiveXInstance != null);
+            Assert.Equal(!value, control.ActiveXInstance is not null);
             Assert.Equal(!value, control.IsHandleCreated);
 
             // Set same.
             control.ScrollBarsEnabled = value;
             Assert.Equal(value, control.ScrollBarsEnabled);
-            Assert.Equal(!value, control.ActiveXInstance != null);
+            Assert.Equal(!value, control.ActiveXInstance is not null);
             Assert.Equal(!value, control.IsHandleCreated);
 
             // Set different.
@@ -2141,7 +2141,7 @@ namespace System.Windows.Forms.Tests
             // Set different.
             control.Visible = !value;
             Assert.Equal(!value, control.Visible);
-            Assert.Equal(!value, control.ActiveXInstance != null);
+            Assert.Equal(!value, control.ActiveXInstance is not null);
             Assert.Equal(!value, control.IsHandleCreated);
         }
 

@@ -69,7 +69,7 @@ namespace System.Windows.Forms
                 get
                 {
                     var name = base.Name;
-                    return name != null || !_owningTextBoxBase.PasswordProtect ? name : string.Empty;
+                    return name is not null || !_owningTextBoxBase.PasswordProtect ? name : string.Empty;
                 }
                 set => base.Name = value;
             }

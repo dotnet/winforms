@@ -45,10 +45,10 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (serializationStream == null && Components != null)
+                    if (serializationStream is null && Components is not null)
                     {
                         IDesignerSerializationService ds = (IDesignerSerializationService)serviceProvider.GetService(typeof(IDesignerSerializationService));
-                        if (ds != null)
+                        if (ds is not null)
                         {
                             object[] comps = new object[components.Length];
                             for (int i = 0; i < components.Length; i++)
@@ -75,10 +75,10 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (components == null && (serializationStream != null || serializationData != null))
+                    if (components is null && (serializationStream is not null || serializationData is not null))
                     {
                         Deserialize(null, false);
-                        if (components == null)
+                        if (components is null)
                         {
                             return Array.Empty<object>();
                         }
@@ -107,26 +107,26 @@ namespace System.Windows.Forms.Design
             /// </summary>
             private object[] GetComponentList(object[] components, ArrayList list, int index)
             {
-                if (serviceProvider == null)
+                if (serviceProvider is null)
                 {
                     return components;
                 }
 
                 ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
 
-                if (selSvc == null)
+                if (selSvc is null)
                 {
                     return components;
                 }
 
                 ICollection selectedComponents;
-                if (components == null)
+                if (components is null)
                     selectedComponents = selSvc.GetSelectedComponents();
                 else
                     selectedComponents = new ArrayList(components);
 
                 IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
                     ArrayList copySelection = new ArrayList();
                     foreach (IComponent comp in selectedComponents)
@@ -146,7 +146,7 @@ namespace System.Windows.Forms.Design
             private void GetAssociatedComponents(IComponent component, IDesignerHost host, ArrayList list)
             {
                 ComponentDesigner designer = host.GetDesigner(component) as ComponentDesigner;
-                if (designer == null)
+                if (designer is null)
                 {
                     return;
                 }
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.Design
 
                 try
                 {
-                    if (serializationData == null)
+                    if (serializationData is null)
                     {
                         BinaryFormatter formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
@@ -248,14 +248,14 @@ namespace System.Windows.Forms.Design
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                     }
 
-                    if (removeCurrentComponents && components != null)
+                    if (removeCurrentComponents && components is not null)
                     {
                         foreach (IComponent removeComp in components)
                         {
-                            if (host == null && removeComp.Site != null)
+                            if (host is null && removeComp.Site is not null)
                             {
                                 host = (IDesignerHost)removeComp.Site.GetService(typeof(IDesignerHost));
-                                if (host != null)
+                                if (host is not null)
                                 {
                                     trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponents, components.Length));
                                 }
@@ -287,7 +287,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (components[i] is Control c)
                         {
-                            if (c.Parent == null)
+                            if (c.Parent is null)
                             {
                                 topComps.Add(components[i]);
                             }

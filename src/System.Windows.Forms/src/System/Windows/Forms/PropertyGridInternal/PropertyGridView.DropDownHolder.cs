@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -17,11 +15,11 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         internal sealed partial class DropDownHolder : Form, IMouseHookClient
         {
-            private Control _currentControl;             // the control that is hosted in the holder
+            private Control? _currentControl;            // the control that is hosted in the holder
             private readonly PropertyGridView _gridView; // the owner gridview
             private readonly MouseHook _mouseHook;       // we use this to hook mouse downs, etc. to know when to close the dropdown.
 
-            private LinkLabel _createNewLinkLabel;
+            private LinkLabel? _createNewLinkLabel;
 
             // Resizing
 
@@ -46,7 +44,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 new(SystemInformation.VerticalScrollBarWidth * 4, SystemInformation.HorizontalScrollBarHeight * 4);
 
             // Our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.
-            private Bitmap _sizeGripGlyph;
+            private Bitmap? _sizeGripGlyph;
 
             private const int DropDownHolderBorder = 1;
             private const int MoveTypeNone = 0x0;
@@ -77,7 +75,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     cp.Style |= unchecked((int)(WINDOW_STYLE.WS_POPUP | WINDOW_STYLE.WS_BORDER));
                     cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_TOOLWINDOW;
                     cp.ClassStyle |= (int)WNDCLASS_STYLES.CS_DROPSHADOW;
-                    if (_gridView is not null)
+                    if (_gridView is not null && _gridView.ParentInternal is not null)
                     {
                         cp.Parent = _gridView.ParentInternal.Handle;
                     }
@@ -173,9 +171,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public Control Component => _currentControl;
+            public Control? Component => _currentControl;
 
-            private static InstanceCreationEditor GetInstanceCreationEditor(PropertyDescriptorGridEntry entry)
+            private static InstanceCreationEditor? GetInstanceCreationEditor(PropertyDescriptorGridEntry? entry)
             {
                 // First we look on the property type, and if we don't find that we'll go up to the editor type
                 // itself.  That way people can associate the InstanceCreationEditor with the type of DropDown
@@ -192,10 +190,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Now check if there is a dropdown UI type editor. If so, use that.
                 if (editor is null)
                 {
-                    UITypeEditor ute = entry.UITypeEditor;
+                    UITypeEditor? ute = entry.UITypeEditor;
                     if (ute is not null && ute.GetEditStyle() == UITypeEditorEditStyle.DropDown)
                     {
-                        editor = (InstanceCreationEditor)TypeDescriptor.GetEditor(ute, typeof(InstanceCreationEditor));
+                        editor = (InstanceCreationEditor?)TypeDescriptor.GetEditor(ute, typeof(InstanceCreationEditor));
                     }
                 }
 
@@ -249,7 +247,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public void FocusComponent()
             {
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:FocusComponent()");
+                CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:FocusComponent()");
                 if (_currentControl is not null && Visible)
                 {
                     _currentControl.Focus();
@@ -287,7 +285,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-            private void OnCurrentControlResize(object o, EventArgs e)
+            private void OnCurrentControlResize(object? o, EventArgs e)
             {
                 if (_currentControl is null || _resizing)
                 {
@@ -329,9 +327,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            private void OnNewLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+            private void OnNewLinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
             {
-                InstanceCreationEditor editor = e.Link.LinkData as InstanceCreationEditor;
+                InstanceCreationEditor? editor = e.Link?.LinkData as InstanceCreationEditor;
 
                 Debug.Assert(editor is not null, "How do we have a link without the InstanceCreationEditor?");
                 if (editor is not null && _gridView?.SelectedGridEntry is not null)
@@ -341,7 +339,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         _gridView.CloseDropDown();
 
-                        object newValue = editor.CreateInstance(_gridView.SelectedGridEntry, createType);
+                        object? newValue = editor.CreateInstance(_gridView.SelectedGridEntry, createType);
 
                         if (newValue is not null)
                         {
@@ -557,7 +555,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Font = _gridView.Font;
 
                 // Check to see if we're going to be adding an InstanceCreationEditor.
-                InstanceCreationEditor editor = control is not null
+                InstanceCreationEditor? editor = control is not null
                     ? GetInstanceCreationEditor(_gridView.SelectedGridEntry as PropertyDescriptorGridEntry)
                     : null;
 
@@ -582,8 +580,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 _currentControl = control;
-                Debug.WriteLineIf(
-                    CompModSwitches.DebugGridView.TraceVerbose,
+                CompModSwitches.DebugGridView.TraceVerbose(
                     $"DropDownHolder:SetComponent({control.GetType().Name})");
 
                 DockPadding.All = 0;
@@ -674,7 +671,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (m.MsgInternal == User32.WM.ACTIVATE)
                 {
                     SetState(States.Modal, true);
-                    Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
+                    CompModSwitches.DebugGridView.TraceVerbose("DropDownHolder:WM_ACTIVATE()");
                     HWND activatedWindow = (HWND)m.LParamInternal;
                     if (Visible && (User32.WA)m.WParamInternal.LOWORD == User32.WA.INACTIVE && !OwnsWindow(activatedWindow))
                     {

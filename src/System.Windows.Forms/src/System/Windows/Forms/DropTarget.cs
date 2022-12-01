@@ -4,13 +4,15 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
-using static Interop;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Windows.Win32.System.SystemServices;
+using Ole = Windows.Win32.System.Ole;
+using Com = Windows.Win32.System.Com;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    internal class DropTarget : Ole32.IDropTarget
+    internal unsafe class DropTarget : Ole.IDropTarget.Interface
     {
         private IDataObject? _lastDataObject;
         private DragDropEffects _lastEffect = DragDropEffects.None;
@@ -48,7 +50,7 @@ namespace System.Windows.Forms
             DragDropHelper.ClearDropDescription(_lastDataObject);
         }
 
-        private DragEventArgs? CreateDragEventArgs(object? pDataObj, uint grfKeyState, Point pt, uint pdwEffect)
+        private DragEventArgs? CreateDragEventArgs(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT pdwEffect)
         {
             IDataObject? data;
 
@@ -58,13 +60,14 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (pDataObj is IDataObject dataObject)
+                object? obj = Marshal.GetObjectForIUnknown((nint)pDataObj);
+                if (obj is IDataObject dataObject)
                 {
                     data = dataObject;
                 }
-                else if (pDataObj is IComDataObject)
+                else if (obj is ComTypes.IDataObject nativeDataObject)
                 {
-                    data = new DataObject(pDataObj);
+                    data = new DataObject(nativeDataObject);
                 }
                 else
                 {
@@ -73,12 +76,12 @@ namespace System.Windows.Forms
             }
 
             DragEventArgs drgevent = _lastDragEventArgs is null
-                ? new DragEventArgs(data, (int)grfKeyState, pt.X, pt.Y, (DragDropEffects)pdwEffect, _lastEffect)
+                ? new DragEventArgs(data, (int)grfKeyState, pt.x, pt.y, (DragDropEffects)pdwEffect, _lastEffect)
                 : new DragEventArgs(
                     data,
                     (int)grfKeyState,
-                    pt.X,
-                    pt.Y,
+                    pt.x,
+                    pt.y,
                     (DragDropEffects)pdwEffect,
                     _lastEffect,
                     _lastDragEventArgs.DropImageType,
@@ -89,59 +92,68 @@ namespace System.Windows.Forms
             return drgevent;
         }
 
-        HRESULT Ole32.IDropTarget.DragEnter(object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
+        HRESULT Ole.IDropTarget.Interface.DragEnter(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragEnter received");
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\t{pt.x},{pt.y}");
             Debug.Assert(pDataObj is not null, "OleDragEnter didn't give us a valid data object.");
-            DragEventArgs? drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
 
-            if (drgevent is not null)
+            if (pdwEffect is null)
             {
-                _owner.OnDragEnter(drgevent);
-                pdwEffect = (uint)drgevent.Effect;
-                _lastEffect = drgevent.Effect;
+                return HRESULT.E_INVALIDARG;
+            }
 
-                if (drgevent.DropImageType > DropImageType.Invalid)
+            if (CreateDragEventArgs(pDataObj, grfKeyState, pt, *pdwEffect) is { } dragEvent)
+            {
+                _owner.OnDragEnter(dragEvent);
+                *pdwEffect = (Ole.DROPEFFECT)dragEvent.Effect;
+                _lastEffect = dragEvent.Effect;
+
+                if (dragEvent.DropImageType > DropImageType.Invalid)
                 {
-                    UpdateDropDescription(drgevent);
-                    DragDropHelper.DragEnter(_hwndTarget, drgevent);
+                    UpdateDropDescription(dragEvent);
+                    DragDropHelper.DragEnter(_hwndTarget, dragEvent);
                 }
             }
             else
             {
-                pdwEffect = (uint)DragDropEffects.None;
+                *pdwEffect = Ole.DROPEFFECT.DROPEFFECT_NONE;
             }
 
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IDropTarget.DragOver(uint grfKeyState, Point pt, ref uint pdwEffect)
+        HRESULT Ole.IDropTarget.Interface.DragOver(MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragOver received");
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
-            DragEventArgs? drgevent = CreateDragEventArgs(null, grfKeyState, pt, pdwEffect);
-            if (drgevent is not null)
-            {
-                _owner.OnDragOver(drgevent);
-                pdwEffect = (uint)drgevent.Effect;
-                _lastEffect = drgevent.Effect;
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\t{pt.x},{pt.y}");
 
-                if (drgevent.DropImageType > DropImageType.Invalid)
+            if (pdwEffect is null)
+            {
+                return HRESULT.E_INVALIDARG;
+            }
+
+            if (CreateDragEventArgs(null, grfKeyState, pt, *pdwEffect) is { } dragEvent)
+            {
+                _owner.OnDragOver(dragEvent);
+                *pdwEffect = (Ole.DROPEFFECT)dragEvent.Effect;
+                _lastEffect = dragEvent.Effect;
+
+                if (dragEvent.DropImageType > DropImageType.Invalid)
                 {
-                    UpdateDropDescription(drgevent);
-                    DragDropHelper.DragOver(drgevent);
+                    UpdateDropDescription(dragEvent);
+                    DragDropHelper.DragOver(dragEvent);
                 }
             }
             else
             {
-                pdwEffect = (uint)DragDropEffects.None;
+                *pdwEffect = Ole.DROPEFFECT.DROPEFFECT_NONE;
             }
 
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IDropTarget.DragLeave()
+        HRESULT Ole.IDropTarget.Interface.DragLeave()
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             _owner.OnDragLeave(EventArgs.Empty);
@@ -155,26 +167,30 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IDropTarget.Drop(object pDataObj, uint grfKeyState, Point pt, ref uint pdwEffect)
+        HRESULT Ole.IDropTarget.Interface.Drop(Com.IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, Ole.DROPEFFECT* pdwEffect)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDrop received");
-            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
-            DragEventArgs? drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
+            Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\t{pt.x},{pt.y}");
 
-            if (drgevent is not null)
+            if (pdwEffect is null)
             {
-                _owner.OnDragDrop(drgevent);
-                pdwEffect = (uint)drgevent.Effect;
+                return HRESULT.E_INVALIDARG;
+            }
+
+            if (CreateDragEventArgs(pDataObj, grfKeyState, pt, *pdwEffect) is { } dragEvent)
+            {
+                _owner.OnDragDrop(dragEvent);
+                *pdwEffect = (Ole.DROPEFFECT)dragEvent.Effect;
 
                 if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
                 {
                     ClearDropDescription();
-                    DragDropHelper.Drop(drgevent);
+                    DragDropHelper.Drop(dragEvent);
                 }
             }
             else
             {
-                pdwEffect = (uint)DragDropEffects.None;
+                *pdwEffect = Ole.DROPEFFECT.DROPEFFECT_NONE;
             }
 
             _lastEffect = DragDropEffects.None;

@@ -387,7 +387,7 @@ namespace System.Windows.Forms
                 }
 
                 int nextControlTabIndex = toolStrip.TabIndex;
-                Debug.WriteLineIf(ToolStrip.s_controlTabDebug.TraceVerbose, "SELECTNEXTTOOLSTRIP: start: " + startTabIndex.ToString(CultureInfo.CurrentCulture) + " " + start.Name);
+                ToolStrip.s_controlTabDebug.TraceVerbose($"SELECTNEXTTOOLSTRIP: start: {startTabIndex.ToString(CultureInfo.CurrentCulture)} {start.Name}");
                 // since CanChangeSelection can iterate through all the items in a toolstrip,
                 // defer the checking until we think we've got a viable TabIndex candidate.
                 // this brings it to O(n+m) instead of O(n*m) where n is # toolstrips & m is avg number
@@ -396,7 +396,7 @@ namespace System.Windows.Forms
                 {
                     if (nextControlTabIndex >= startTabIndex && CanChangeSelection(start, toolStrip))
                     {
-                        Debug.WriteLineIf(ToolStrip.s_controlTabDebug.TraceVerbose, "FORWARD considering selection " + toolStrip.Name + " " + toolStrip.TabIndex.ToString(CultureInfo.CurrentCulture));
+                        ToolStrip.s_controlTabDebug.TraceVerbose($"FORWARD considering selection {toolStrip.Name} {toolStrip.TabIndex.ToString(CultureInfo.CurrentCulture)}");
                         if (nextControl is null)
                         {
                             nextControl = toolStrip;
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
                               && CanChangeSelection(start, toolStrip))
                     {
                         // We've found a candidate for wrapping (the one with the smallest tab index in the collection)
-                        Debug.WriteLineIf(ToolStrip.s_controlTabDebug.TraceVerbose, "\tFORWARD new wrap candidate " + toolStrip.Name);
+                        ToolStrip.s_controlTabDebug.TraceVerbose($"\tFORWARD new wrap candidate {toolStrip.Name}");
                         wrappedControl = toolStrip;
                     }
                 }
@@ -420,7 +420,7 @@ namespace System.Windows.Forms
                 {
                     if (nextControlTabIndex <= startTabIndex && CanChangeSelection(start, toolStrip))
                     {
-                        Debug.WriteLineIf(ToolStrip.s_controlTabDebug.TraceVerbose, "\tREVERSE selecting " + toolStrip.Name);
+                        ToolStrip.s_controlTabDebug.TraceVerbose($"\tREVERSE selecting {toolStrip.Name}");
                         if (nextControl is null)
                         {
                             nextControl = toolStrip;
@@ -436,13 +436,13 @@ namespace System.Windows.Forms
                                && CanChangeSelection(start, toolStrip))
                     {
                         // We've found a candidate for wrapping (the one with the largest tab index in the collection)
-                        Debug.WriteLineIf(ToolStrip.s_controlTabDebug.TraceVerbose, "\tREVERSE new wrap candidate " + toolStrip.Name);
+                        ToolStrip.s_controlTabDebug.TraceVerbose($"\tREVERSE new wrap candidate {toolStrip.Name}");
 
                         wrappedControl = toolStrip;
                     }
                     else
                     {
-                        Debug.WriteLineIf(ToolStrip.s_controlTabDebug.TraceVerbose, "\tREVERSE skipping wrap candidate " + toolStrip.Name + toolStrip.TabIndex.ToString(CultureInfo.CurrentCulture));
+                        ToolStrip.s_controlTabDebug.TraceVerbose($"\tREVERSE skipping wrap candidate {toolStrip.Name}{toolStrip.TabIndex.ToString(CultureInfo.CurrentCulture)}");
                     }
                 }
 
@@ -457,12 +457,12 @@ namespace System.Windows.Forms
 
             if (nextControl is not null)
             {
-                Debug.WriteLineIf(ToolStrip.s_controlTabDebug.TraceVerbose, "SELECTING " + nextControl.Name);
+                ToolStrip.s_controlTabDebug.TraceVerbose($"SELECTING {nextControl.Name}");
                 return ChangeSelection(start, nextControl);
             }
             else if (wrappedControl is not null)
             {
-                Debug.WriteLineIf(ToolStrip.s_controlTabDebug.TraceVerbose, "WRAPPING " + wrappedControl.Name);
+                ToolStrip.s_controlTabDebug.TraceVerbose($"WRAPPING {wrappedControl.Name}");
 
                 return ChangeSelection(start, wrappedControl);
             }
@@ -774,7 +774,7 @@ namespace System.Windows.Forms
         {
             for (int i = 0; i < ToolStrips.Count; i++)
             {
-                if (ToolStrips[i] is ToolStrip t && t.Shortcuts.Contains(shortcut))
+                if (ToolStrips[i] is ToolStrip t && t.Shortcuts.ContainsKey(shortcut))
                 {
                     return true;
                 }
@@ -789,21 +789,21 @@ namespace System.Windows.Forms
         /// </summary>
         internal static bool ProcessCmdKey(ref Message m, Keys keyData)
         {
-            Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - processing: [" + keyData.ToString() + "]");
+            Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - processing: [{keyData}]");
             if (ToolStripManager.IsValidShortcut(keyData))
             {
                 // If we're at the toplevel, check the toolstrips for matching shortcuts.
                 // Win32 menus are handled in Form.ProcessCmdKey, but we can't guarantee that
                 // toolstrips will be hosted in a form. ToolStrips have a hash of shortcuts
                 // per container, so this should hopefully be a quick search.
-                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - IsValidShortcut: [" + keyData.ToString() + "]");
+                Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - IsValidShortcut: [{keyData}]");
 
                 return ToolStripManager.ProcessShortcut(ref m, keyData);
             }
 
             if (m.Msg == (int)User32.WM.SYSKEYDOWN)
             {
-                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [" + keyData.ToString() + "]");
+                Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [{keyData}]");
                 ToolStripManager.ModalMenuFilter.ProcessMenuKeyDown(ref m);
             }
 
@@ -828,7 +828,7 @@ namespace System.Windows.Forms
 
             if (activeControlInChain is not null && IsValidShortcut(shortcut))
             {
-                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - processing: [" + shortcut.ToString() + "]");
+                Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessShortcut - processing: [{shortcut}]");
 
                 // Start from the focused control and work your way up the parent chain
                 do
@@ -836,12 +836,12 @@ namespace System.Windows.Forms
                     // Check the context menu strip first.
                     if (activeControlInChain.ContextMenuStrip is not null)
                     {
-                        if (activeControlInChain.ContextMenuStrip.Shortcuts.ContainsKey(shortcut))
+                        if (activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem item))
                         {
-                            ToolStripMenuItem item = activeControlInChain.ContextMenuStrip.Shortcuts[shortcut] as ToolStripMenuItem;
                             if (item.ProcessCmdKey(ref m, shortcut))
                             {
-                                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessShortcut - found item on context menu: [" + item.ToString() + "]");
+                                Control.s_controlKeyboardRouting.TraceVerbose(
+                                    $"ToolStripManager.ProcessShortcut - found item on context menu: [{item}]");
                                 return true;
                             }
                         }
@@ -941,12 +941,11 @@ namespace System.Windows.Forms
 
                         if (isAssociatedContextMenu || rootWindowsMatch || isDoublyAssignedContextMenuStrip)
                         {
-                            if (toolStrip.Shortcuts[shortcut] is ToolStripMenuItem item)
+                            if (toolStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem item))
                             {
                                 if (item.ProcessCmdKey(ref m, shortcut))
                                 {
-                                    Debug.WriteLineIf(
-                                        Control.s_controlKeyboardRouting.TraceVerbose,
+                                    Control.s_controlKeyboardRouting.TraceVerbose(
                                         $"ToolStripManager.ProcessShortcut - found item on toolstrip: [{item}]");
                                     retVal = true;
                                     break;
@@ -975,13 +974,13 @@ namespace System.Windows.Forms
         /// </summary>
         internal static bool ProcessMenuKey(ref Message m)
         {
-            Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, $"ToolStripManager.ProcessMenuKey: [{m}]");
+            Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessMenuKey: [{m}]");
             if (!IsThreadUsingToolStrips())
             {
                 return false;
             }
 
-            Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] Determining whether we should send focus to MenuStrip");
+            ToolStrip.s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] Determining whether we should send focus to MenuStrip");
 
             Keys keyData = (Keys)(nint)m.LParamInternal;
 
@@ -1003,7 +1002,7 @@ namespace System.Windows.Forms
                         menuStripToActivate = GetMainMenuStrip(toplevelControl);
                     }
 
-                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[ProcessMenuKey] MenuStripToActivate is: {0}", menuStripToActivate));
+                    ToolStrip.s_snapFocusDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "[ProcessMenuKey] MenuStripToActivate is: {0}", menuStripToActivate));
                 }
             }
 
@@ -1032,14 +1031,14 @@ namespace System.Windows.Forms
                 {
                     // If it's Shift+F10 and we're already InMenuMode, then we
                     // need to cancel this message, otherwise we'll enter the native modal menu loop.
-                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, $"[ProcessMenuKey] DETECTED SHIFT+F10{keyData}");
+                    ToolStrip.s_snapFocusDebug.TraceVerbose($"[ProcessMenuKey] DETECTED SHIFT+F10{keyData}");
                     return ToolStripManager.ModalMenuFilter.InMenuMode;
                 }
                 else
                 {
                     if (menuStripToActivate is not null && !ModalMenuFilter.MenuKeyToggle)
                     {
-                        Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] attempting to set focus to menustrip");
+                        ToolStrip.s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] attempting to set focus to menustrip");
 
                         // If we've alt-tabbed away don't snap/restore focus.
                         HWND topmostParentOfMenu = PInvoke.GetAncestor(menuStripToActivate, GET_ANCESTOR_FLAGS.GA_ROOT);
@@ -1047,13 +1046,13 @@ namespace System.Windows.Forms
 
                         if (topmostParentOfMenu == foregroundWindow)
                         {
-                            Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] ToolStripManager call MenuStrip.OnMenuKey");
+                            ToolStrip.s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] ToolStripManager call MenuStrip.OnMenuKey");
                             return menuStripToActivate.OnMenuKey();
                         }
                     }
                     else if (menuStripToActivate is not null)
                     {
-                        Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] Resetting MenuKeyToggle");
+                        ToolStrip.s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] Resetting MenuKeyToggle");
                         ModalMenuFilter.MenuKeyToggle = false;
                         return true;
                     }

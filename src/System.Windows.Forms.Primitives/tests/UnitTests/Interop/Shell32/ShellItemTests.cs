@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using Windows.Win32.UI.Shell.Common;
-using Xunit;
 
 namespace System.Windows.Forms.Tests.Interop.Shell32Tests
 {

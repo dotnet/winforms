@@ -134,7 +134,7 @@ namespace System.Windows.Forms
         // listItemsArray is null if the handle is created; otherwise, it contains all Items.
         // We do not try to sort listItemsArray as items are added, but during a handle recreate
         // we will make sure we get the items in the same order the ListView displays them.
-        private readonly Hashtable _listItemsTable = new Hashtable(); // elements are ListViewItem's
+        private readonly Dictionary<int, ListViewItem> _listItemsTable = new(); // elements are ListViewItem's
         private List<ListViewItem>? _listViewItems = new();
 
         private Size _tileSize = Size.Empty;
@@ -2504,7 +2504,9 @@ namespace System.Windows.Forms
             Debug.Assert(_listItemSorter is not null, "null sorter!");
             if (_listItemSorter is not null)
             {
-                return _listItemSorter.Compare(_listItemsTable[(int)lparam1], _listItemsTable[(int)lparam2]);
+                _listItemsTable.TryGetValue((int)lparam1, out ListViewItem? x);
+                _listItemsTable.TryGetValue((int)lparam2, out ListViewItem? y);
+                return _listItemSorter.Compare(x, y);
             }
             else
             {
@@ -3220,7 +3222,7 @@ namespace System.Windows.Forms
         {
             // On the final EndUpdate, check to see if we've got any cached items.
             // If we do, insert them as normal, then turn off the painting freeze.
-            if (--_updateCounter == 0 && null != Properties.GetObject(PropDelayedUpdateItems))
+            if (--_updateCounter == 0 && Properties.GetObject(PropDelayedUpdateItems) is not null)
             {
                 ApplyUpdateCachedItems();
             }

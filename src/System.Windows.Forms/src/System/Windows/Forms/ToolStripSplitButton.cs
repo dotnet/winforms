@@ -560,7 +560,7 @@ namespace System.Windows.Forms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            ToolStripRenderer renderer = Renderer;
+            ToolStripRenderer? renderer = Renderer;
             if (renderer is not null)
             {
                 InvalidateSplitButtonLayout();

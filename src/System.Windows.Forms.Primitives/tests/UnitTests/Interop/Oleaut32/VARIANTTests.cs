@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Runtime.InteropServices;
-using Xunit;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using static Windows.Win32.System.Com.ADVANCED_FEATURE_FLAGS;
@@ -30,7 +29,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             => new()
             {
                 vt = VT_BOOL,
-                data = new() { boolVal = value ? (short)VARIANT_BOOL.TRUE : (short)VARIANT_BOOL.FALSE }
+                data = new() { boolVal = value ? VARIANT_BOOL.VARIANT_TRUE : VARIANT_BOOL.VARIANT_FALSE }
             };
 
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
@@ -3830,7 +3829,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> ArrayBOOL_TestData()
         {
             yield return new object[] { Array.Empty<VARIANT_BOOL>(), Array.Empty<bool>() };
-            yield return new object[] { new VARIANT_BOOL[] { VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE }, new bool[] { true, false, true } };
+            yield return new object[] { new VARIANT_BOOL[] { VARIANT_BOOL.VARIANT_TRUE, VARIANT_BOOL.VARIANT_FALSE, VARIANT_BOOL.VARIANT_TRUE }, new bool[] { true, false, true } };
         }
 
         [StaTheory]
@@ -3890,8 +3889,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             {
                 new VARIANT_BOOL[2, 3]
                 {
-                    { VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE },
-                    { VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE }
+                    { VARIANT_BOOL.VARIANT_TRUE, VARIANT_BOOL.VARIANT_FALSE, VARIANT_BOOL.VARIANT_TRUE },
+                    { VARIANT_BOOL.VARIANT_FALSE, VARIANT_BOOL.VARIANT_TRUE, VARIANT_BOOL.VARIANT_FALSE }
                 },
                 new bool[2, 3]
                 {

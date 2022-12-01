@@ -196,7 +196,7 @@ namespace System.ComponentModel.Design.Serialization
             private readonly IServiceProvider _provider;
 
             // These fields persist across the store
-            private readonly ArrayList _objectNames;
+            private readonly List<string> _objectNames;
             private Hashtable _objectState;
             private LocalResourceManager _resources;
             private AssemblyName[] _assemblies;
@@ -212,7 +212,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 _provider = provider;
                 _objects = new Hashtable();
-                _objectNames = new ArrayList();
+                _objectNames = new List<string>();
                 _shimObjectNames = new List<string>();
             }
 
@@ -613,7 +613,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 internal static ComponentListCodeDomSerializer s_instance = new ComponentListCodeDomSerializer();
                 private Hashtable _statementsTable;
-                Dictionary<string, ArrayList> _expressions;
+                Dictionary<string, List<CodeExpression>> _expressions;
                 private Hashtable _objectState; // only used during deserialization
                 private bool _applyDefaults = true;
                 private readonly Hashtable _nameResolveGuard = new Hashtable();
@@ -636,15 +636,9 @@ namespace System.ComponentModel.Design.Serialization
                     else if (data is CodeExpression expression)
                     {
                         // we handle expressions a little differently since they don't have a LHS or RHS they won't show up correctly in the statement table. We will deserialize them explicitly.
-                        ArrayList exps = null;
-                        if (_expressions.ContainsKey(name))
+                        if (!_expressions.TryGetValue(name, out List<CodeExpression> exps))
                         {
-                            exps = _expressions[name];
-                        }
-
-                        if (exps is null)
-                        {
-                            exps = new ArrayList();
+                            exps = new();
                             _expressions[name] = exps;
                         }
 
@@ -662,7 +656,7 @@ namespace System.ComponentModel.Design.Serialization
                 internal void Deserialize(IDesignerSerializationManager manager, IDictionary objectState, IList objectNames, bool applyDefaults)
                 {
                     CodeStatementCollection completeStatements = new CodeStatementCollection();
-                    _expressions = new Dictionary<string, ArrayList>();
+                    _expressions = new();
                     _applyDefaults = applyDefaults;
                     foreach (string name in objectNames)
                     {
@@ -957,7 +951,7 @@ namespace System.ComponentModel.Design.Serialization
                             DeserializeModifier(manager, name, state[StateModifier]);
                         }
 
-                        if (_expressions.TryGetValue(name, out ArrayList exps))
+                        if (_expressions.TryGetValue(name, out List<CodeExpression> exps))
                         {
                             foreach (CodeExpression exp in exps)
                             {
@@ -974,7 +968,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!resolved)
                         {
                             // this is condition 2 of the comment at the start of this method.
-                            if (_expressions.TryGetValue(name, out ArrayList exps))
+                            if (_expressions.TryGetValue(name, out List<CodeExpression> exps))
                             {
                                 foreach (CodeExpression exp in exps)
                                 {

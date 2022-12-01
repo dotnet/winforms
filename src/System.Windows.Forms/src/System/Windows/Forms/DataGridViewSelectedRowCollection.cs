@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public class DataGridViewSelectedRowCollection : BaseCollection, IList
     {
-        private readonly ArrayList _items = new ArrayList();
+        private readonly List<DataGridViewRow> _items = new();
 
         int IList.Add(object value)
         {
@@ -30,12 +30,20 @@ namespace System.Windows.Forms
 
         bool IList.Contains(object value)
         {
-            return _items.Contains(value);
+            return value switch
+            {
+                DataGridViewRow dataGridViewRow => Contains(dataGridViewRow),
+                _ => false,
+            };
         }
 
         int IList.IndexOf(object value)
         {
-            return _items.IndexOf(value);
+            return value switch
+            {
+                DataGridViewRow dataGridViewRow => _items.IndexOf(dataGridViewRow),
+                _ => -1,
+            };
         }
 
         void IList.Insert(int index, object value)
@@ -71,7 +79,7 @@ namespace System.Windows.Forms
 
         void ICollection.CopyTo(Array array, int index)
         {
-            _items.CopyTo(array, index);
+            ((ICollection)_items).CopyTo(array, index);
         }
 
         int ICollection.Count
@@ -102,7 +110,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return _items;
+                return ArrayList.Adapter(_items);
             }
         }
 
@@ -110,7 +118,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataGridViewRow)_items[index];
+                return _items[index];
             }
         }
 
@@ -119,7 +127,9 @@ namespace System.Windows.Forms
         /// </summary>
         internal int Add(DataGridViewRow dataGridViewRow)
         {
-            return _items.Add(dataGridViewRow);
+            _items.Add(dataGridViewRow);
+
+            return _items.Count - 1;
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

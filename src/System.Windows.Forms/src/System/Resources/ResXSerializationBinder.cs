@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
@@ -16,35 +14,37 @@ namespace System.Resources
 
     internal class ResXSerializationBinder : SerializationBinder
     {
-        private readonly ITypeResolutionService _typeResolver;
-        private readonly Func<Type, string> _typeNameConverter;
+        private readonly ITypeResolutionService? _typeResolver;
+        private readonly Func<Type?, string>? _typeNameConverter;
 
-        internal ResXSerializationBinder(ITypeResolutionService typeResolver)
+        internal ResXSerializationBinder(ITypeResolutionService? typeResolver)
         {
             _typeResolver = typeResolver;
         }
 
-        internal ResXSerializationBinder(Func<Type, string> typeNameConverter)
+        internal ResXSerializationBinder(Func<Type?, string>? typeNameConverter)
         {
             _typeNameConverter = typeNameConverter;
         }
 
-        public override Type BindToType(string assemblyName, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]string typeName)
+        public override Type? BindToType(
+            string assemblyName,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] string typeName)
         {
             if (_typeResolver is null)
             {
                 return null;
             }
 
-            typeName = typeName + ", " + assemblyName;
+            typeName = $"{typeName}, {assemblyName}";
 
-            Type type = _typeResolver.GetType(typeName);
+            Type? type = _typeResolver.GetType(typeName);
             if (type is null)
             {
                 string[] typeParts = typeName.Split(',');
 
                 // Break up the assembly name from the rest of the assembly strong name.
-                // we try 1) FQN 2) FQN without a version 3) just the short name
+                // we try 1) FQN 2) FQN without a version 3) just the short name.
                 if (typeParts is not null && typeParts.Length > 2)
                 {
                     string partialName = typeParts[0].Trim();
@@ -52,9 +52,10 @@ namespace System.Resources
                     for (int i = 1; i < typeParts.Length; ++i)
                     {
                         string typePart = typeParts[i].Trim();
-                        if (!typePart.StartsWith("Version=") && !typePart.StartsWith("version="))
+                        if (!typePart.StartsWith("Version=", StringComparison.Ordinal)
+                            && !typePart.StartsWith("version=", StringComparison.Ordinal))
                         {
-                            partialName = partialName + ", " + typePart;
+                            partialName = $"{partialName}, {typePart}";
                         }
                     }
 
@@ -68,7 +69,7 @@ namespace System.Resources
         }
 
         // Get the multitarget-aware string representation for the give type.
-        public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
+        public override void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
         {
             // Normally we don't change typeName when changing the target framework,
             // only assembly version or assembly name might change, thus we are setting
@@ -86,13 +87,13 @@ namespace System.Resources
             typeName = null;
             if (_typeNameConverter is not null)
             {
-                string assemblyQualifiedTypeName = MultitargetUtil.GetAssemblyQualifiedName(serializedType, _typeNameConverter);
+                string? assemblyQualifiedTypeName = MultitargetUtil.GetAssemblyQualifiedName(serializedType, _typeNameConverter);
                 if (!string.IsNullOrEmpty(assemblyQualifiedTypeName))
                 {
                     int pos = assemblyQualifiedTypeName.IndexOf(',');
                     if (pos > 0 && pos < assemblyQualifiedTypeName.Length - 1)
                     {
-                        assemblyName = assemblyQualifiedTypeName.Substring(pos + 1).TrimStart();
+                        assemblyName = assemblyQualifiedTypeName[(pos + 1)..].TrimStart();
                         string newTypeName = assemblyQualifiedTypeName.Substring(0, pos);
                         if (!string.Equals(newTypeName, serializedType.FullName, StringComparison.InvariantCulture))
                         {

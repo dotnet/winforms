@@ -52,7 +52,7 @@ namespace System.Windows.Forms
             private IAdviseSink? _viewAdviseSink;
             private BitVector32 _activeXState;
             private readonly AmbientProperty[] _ambientProperties;
-            private IntPtr _accelTable;
+            private HACCEL _accelTable;
             private short _accelCount = -1;
             private RECT* _adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
 
@@ -257,14 +257,14 @@ namespace System.Windows.Forms
                 HWND hwndParent,
                 RECT* lprcPosRect)
             {
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, $"AxSource:ActiveXImpl:DoVerb({iVerb})");
+                CompModSwitches.ActiveX.TraceVerbose($"AxSource:ActiveXImpl:DoVerb({iVerb})");
                 switch (iVerb)
                 {
                     case Ole32.OLEIVERB.SHOW:
                     case Ole32.OLEIVERB.INPLACEACTIVATE:
                     case Ole32.OLEIVERB.UIACTIVATE:
                     case Ole32.OLEIVERB.PRIMARY:
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Show, InPlaceActivate, UIActivate");
+                        CompModSwitches.ActiveX.TraceVerbose("DoVerb:Show, InPlaceActivate, UIActivate");
                         InPlaceActivate(iVerb);
 
                         // Now that we're active, send the lpmsg to the control if it is valid.
@@ -320,7 +320,7 @@ namespace System.Windows.Forms
                         break;
 
                     case Ole32.OLEIVERB.HIDE:
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Hide");
+                        CompModSwitches.ActiveX.TraceVerbose("DoVerb:Hide");
                         UIDeactivate();
                         InPlaceDeactivate();
                         if (_activeXState[s_inPlaceVisible])
@@ -332,7 +332,7 @@ namespace System.Windows.Forms
 
                     // All other verbs are not implemented.
                     default:
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "DoVerb:Other");
+                        CompModSwitches.ActiveX.TraceVerbose("DoVerb:Other");
                         ThrowHr(HRESULT.E_NOTIMPL);
                         break;
                 }
@@ -585,7 +585,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal IOleClientSite.Interface? GetClientSite() => _clientSite;
 
-            internal unsafe HRESULT GetControlInfo(Ole32.CONTROLINFO* pCI)
+            internal unsafe HRESULT GetControlInfo(CONTROLINFO* pControlInfo)
             {
                 if (_accelCount == -1)
                 {
@@ -596,9 +596,9 @@ namespace System.Windows.Forms
 
                     if (_accelCount > 0)
                     {
-                        // In the worst case we may have two accelerators per mnemonic:  one lower case and
+                        // In the worst case we may have two accelerators per mnemonic: one lower case and
                         // one upper case, hence the * 2 below.
-                        var accelerators = new User32.ACCEL[_accelCount * 2];
+                        var accelerators = new ACCEL[_accelCount * 2];
                         Debug.Indent();
 
                         ushort cmd = 0;
@@ -606,24 +606,24 @@ namespace System.Windows.Forms
 
                         foreach (char ch in mnemonicList)
                         {
-                            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Mnemonic: " + ch.ToString());
+                            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Mnemonic: {ch}");
 
                             short scan = PInvoke.VkKeyScan(ch);
                             ushort key = (ushort)(scan & 0x00FF);
-                            if (ch >= 'A' && ch <= 'Z')
+                            if (ch is >= 'A' and <= 'Z')
                             {
-                                // Lower case letter
-                                accelerators[_accelCount++] = new User32.ACCEL
+                                // Lowercase letter.
+                                accelerators[_accelCount++] = new ACCEL
                                 {
-                                    fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY,
+                                    fVirt = ACCEL_VIRT_FLAGS.FALT | ACCEL_VIRT_FLAGS.FVIRTKEY,
                                     key = key,
                                     cmd = cmd
                                 };
 
-                                // Upper case letter
-                                accelerators[_accelCount++] = new User32.ACCEL
+                                // Uppercase letter.
+                                accelerators[_accelCount++] = new ACCEL
                                 {
-                                    fVirt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY | User32.AcceleratorFlags.FSHIFT,
+                                    fVirt = ACCEL_VIRT_FLAGS.FALT | ACCEL_VIRT_FLAGS.FVIRTKEY | ACCEL_VIRT_FLAGS.FSHIFT,
                                     key = key,
                                     cmd = cmd
                                 };
@@ -631,13 +631,13 @@ namespace System.Windows.Forms
                             else
                             {
                                 // Some non-printable character.
-                                User32.AcceleratorFlags virt = User32.AcceleratorFlags.FALT | User32.AcceleratorFlags.FVIRTKEY;
+                                ACCEL_VIRT_FLAGS virt = ACCEL_VIRT_FLAGS.FALT | ACCEL_VIRT_FLAGS.FVIRTKEY;
                                 if ((scan & 0x0100) != 0)
                                 {
-                                    virt |= User32.AcceleratorFlags.FSHIFT;
+                                    virt |= ACCEL_VIRT_FLAGS.FSHIFT;
                                 }
 
-                                accelerators[_accelCount++] = new User32.ACCEL
+                                accelerators[_accelCount++] = new ACCEL
                                 {
                                     fVirt = virt,
                                     key = key,
@@ -652,21 +652,21 @@ namespace System.Windows.Forms
 
                         // Now create an accelerator table and then free our memory.
 
-                        if (_accelTable != IntPtr.Zero)
+                        if (!_accelTable.IsNull)
                         {
-                            PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(this, (HACCEL)_accelTable));
-                            _accelTable = IntPtr.Zero;
+                            PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(_control, _accelTable));
+                            _accelTable = HACCEL.Null;
                         }
 
-                        fixed (User32.ACCEL* pAccelerators = accelerators)
+                        fixed (ACCEL* pAccelerators = accelerators)
                         {
-                            _accelTable = User32.CreateAcceleratorTableW(pAccelerators, _accelCount);
+                            _accelTable = PInvoke.CreateAcceleratorTable(pAccelerators, _accelCount);
                         }
                     }
                 }
 
-                pCI->cAccel = (ushort)_accelCount;
-                pCI->hAccel = _accelTable;
+                pControlInfo->cAccel = (ushort)_accelCount;
+                pControlInfo->hAccel = _accelTable;
                 return HRESULT.S_OK;
             }
 
@@ -779,7 +779,7 @@ namespace System.Windows.Forms
                 // If we're not already active, go and do it.
                 if (!_activeXState[s_inPlaceActive])
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplaceactive");
+                    CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> inplaceactive");
 
                     HRESULT hr = inPlaceSite.CanInPlaceActivate();
                     if (hr != HRESULT.S_OK)
@@ -800,7 +800,7 @@ namespace System.Windows.Forms
                 // And if we're not visible, do that too.
                 if (!_activeXState[s_inPlaceVisible])
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplacevisible");
+                    CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> inplacevisible");
                     Ole32.OLEINPLACEFRAMEINFO inPlaceFrameInfo = new()
                     {
                         cb = (uint)sizeof(Ole32.OLEINPLACEFRAMEINFO)
@@ -865,14 +865,14 @@ namespace System.Windows.Forms
                 // if we weren't asked to UIActivate, then we're done.
                 if (verb != Ole32.OLEIVERB.PRIMARY && verb != Ole32.OLEIVERB.UIACTIVATE)
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> not becoming UIActive");
+                    CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> not becoming UIActive");
                     return;
                 }
 
                 // if we're not already UI active, do sow now.
                 if (!_activeXState[s_uiActive])
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> uiactive");
+                    CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> uiactive");
                     _activeXState[s_uiActive] = true;
 
                     // inform the container of our intent
@@ -909,7 +909,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> already uiactive");
+                    CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> already uiactive");
                 }
             }
 
@@ -976,52 +976,45 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Load
             /// </summary>
-            internal void Load(IStorage.Interface stg)
+            internal HRESULT Load(IStorage* stg)
             {
-                IStream* stream;
-                try
-                {
-                    stg.OpenStream(
+                using ComScope<IStream> stream = new(null);
+                HRESULT hr = stg->OpenStream(
                         GetStreamName(),
                         null,
                         STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
                         0,
-                        &stream);
-                }
-                catch (COMException e) when (e.ErrorCode == (int)HRESULT.STG_E_FILENOTFOUND)
+                        stream);
+                if (hr == HRESULT.STG_E_FILENOTFOUND)
                 {
                     // For backward compatibility: We were earlier using GetType().FullName
                     // as the stream name in v1. Lets see if a stream by that name exists.
-                    stg.OpenStream(
+                    hr = stg->OpenStream(
                         GetType().FullName!,
                         null,
                         STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
                         0,
-                        &stream);
+                        stream);
                 }
 
-                Load((IStream.Interface)Marshal.GetObjectForIUnknown((nint)stream));
-                if (Marshal.IsComObject(stg))
+                if (hr.Succeeded)
                 {
-                    Marshal.ReleaseComObject(stg);
+                    Load(stream);
                 }
+
+                return hr;
             }
 
             /// <summary>
             ///  Implements IPersistStreamInit::Load
             /// </summary>
-            internal void Load(IStream.Interface stream)
+            internal void Load(IStream* stream)
             {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, load through that method.
                 PropertyBagStream bag = new PropertyBagStream();
                 bag.Read(stream);
                 Load(bag, null);
-
-                if (Marshal.IsComObject(stream))
-                {
-                    Marshal.ReleaseComObject(stream);
-                }
             }
 
             /// <summary>
@@ -1420,35 +1413,35 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistStorage::Save
             /// </summary>
-            internal void Save(IStorage.Interface stg, BOOL fSameAsLoad)
+            internal HRESULT Save(IStorage* stg, BOOL fSameAsLoad)
             {
                 using ComScope<IStream> stream = new(null);
-                stg.CreateStream(
+                HRESULT hr = stg->CreateStream(
                     GetStreamName(),
                     STGM.STGM_WRITE | STGM.STGM_SHARE_EXCLUSIVE | STGM.STGM_CREATE,
                     0,
                     0,
                     stream);
-                Debug.Assert(!stream.IsNull, "Stream should be non-null, or an exception should have been thrown.");
+                Debug.Assert(hr.Succeeded, "Stream should be non-null.");
 
-                Save((IStream.Interface)Marshal.GetObjectForIUnknown((nint)stream.Value), true);
+                if (hr.Succeeded)
+                {
+                    Save(stream, fClearDirty: true);
+                }
+
+                return hr;
             }
 
             /// <summary>
             ///  Implements IPersistStreamInit::Save
             /// </summary>
-            internal void Save(IStream.Interface stream, BOOL fClearDirty)
+            internal void Save(IStream* stream, BOOL fClearDirty)
             {
-                // We do everything through property bags because we support full fidelity
-                // in them.  So, save through that method.
+                // We do everything through property bags because we support full fidelity in them.
+                // So, save through that method.
                 PropertyBagStream bag = new PropertyBagStream();
                 Save(bag, fClearDirty, false);
                 bag.Write(stream);
-
-                if (Marshal.IsComObject(stream))
-                {
-                    Marshal.ReleaseComObject(stream);
-                }
             }
 
             /// <summary>
@@ -1592,10 +1585,10 @@ namespace System.Windows.Forms
                     buttonControl.NotifyDefault((bool)obj!);
                 }
 
-                if (_clientSite is null && _accelTable != IntPtr.Zero)
+                if (_clientSite is null && !_accelTable.IsNull)
                 {
-                    PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(this, (HACCEL)_accelTable));
-                    _accelTable = IntPtr.Zero;
+                    PInvoke.DestroyAcceleratorTable(new HandleRef<HACCEL>(_control, _accelTable));
+                    _accelTable = HACCEL.Null;
                     _accelCount = -1;
                 }
 

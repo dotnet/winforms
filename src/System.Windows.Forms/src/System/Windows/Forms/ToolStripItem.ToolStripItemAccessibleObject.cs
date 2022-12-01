@@ -120,7 +120,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string name = _ownerItem.AccessibleName;
+                    string? name = _ownerItem.AccessibleName;
                     if (name is not null)
                     {
                         return name;
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
 
                 if (Owner is not null)
                 {
-                    ToolStrip parent = Owner.ParentInternal;
+                    ToolStrip? parent = Owner.ParentInternal;
                     if (parent is null)
                     {
                         return null;
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
                     if (Owner.IsOnDropDown)
                     {
                         // Return the owner item as the accessible parent.
-                        ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown();
+                        ToolStripDropDown dropDown = Owner.GetCurrentParentDropDown()!;
                         return dropDown.AccessibilityObject;
                     }
 
@@ -446,7 +446,7 @@ namespace System.Windows.Forms
 
             internal void RaiseFocusChanged()
             {
-                ToolStrip root = _ownerItem.RootToolStrip;
+                ToolStrip? root = _ownerItem.RootToolStrip;
                 if (root is not null && root.IsHandleCreated && root.SupportsUiaProviders)
                 {
                     RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);

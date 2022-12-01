@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Design
             public ChildSubClass(ControlDesigner designer, IntPtr hwnd)
             {
                 _designer = designer;
-                if (designer != null)
+                if (designer is not null)
                 {
                     designer.DisposingHandler += new EventHandler(OnDesignerDisposing);
                 }
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design
                 finally
                 {
                     // make sure the designer wasn't destroyed
-                    if (_designer != null && _designer.Component != null)
+                    if (_designer is not null && _designer.Component is not null)
                     {
                         _designer.DesignerTarget = designerTarget;
                     }

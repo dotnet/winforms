@@ -5522,11 +5522,6 @@ Voulez-vous le remplacer ?</target>
         <target state="translated">Impossible de convertir la valeur null en type '{1}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">Le GridItem a été supprimé et ne peut plus être utilisé.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">Le GridItem ne peut pas être développé.</target>
@@ -6616,11 +6611,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">L’objet d’accessibilité actuel est uniquement destiné à ListView dans l’affichage {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">L’objet d’accessibilité actuel est uniquement destiné à ListView dans l’affichage {0}, {1} ou {2}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">Impossible d'obtenir un objet d'accessibilité lorsque ListViewItem n'est pas attaché à une ListView</target>
@@ -7434,11 +7424,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">OK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">'{0}' supprimé ne peut plus être utilisé.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">

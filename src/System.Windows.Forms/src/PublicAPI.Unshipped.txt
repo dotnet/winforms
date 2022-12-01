@@ -1,3 +1,4 @@
+System.Windows.Forms.AxHost.State.Dispose() -> void
 System.Windows.Forms.PrintPreviewControl.TabStop.get -> bool
 System.Windows.Forms.PrintPreviewControl.TabStop.set -> void
 System.Windows.Forms.PrintPreviewControl.TabStopChanged -> System.EventHandler?
@@ -6,3 +7,5 @@ override System.Windows.Forms.MaskedTextBox.CreateAccessibilityInstance() -> Sys
 override System.Windows.Forms.MaskedTextBox.OnGotFocus(System.EventArgs! e) -> void
 override System.Windows.Forms.MaskedTextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.TextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+virtual System.Windows.Forms.AxHost.State.Dispose(bool disposing) -> void
+*REMOVED*override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!

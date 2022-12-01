@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
@@ -38,7 +39,7 @@ namespace System.Windows.Forms
         ///  this is your function. If you have a character "t" and want match it to &amp;Text
         ///  Control.IsMnemonic is a better bet.
         /// </summary>
-        public static bool ContainsMnemonic(string? text)
+        public static bool ContainsMnemonic([NotNullWhen(true)] string? text)
         {
             if (text is not null)
             {
@@ -313,7 +314,7 @@ namespace System.Windows.Forms
             return string.Compare(string1, string2, ignoreCase, CultureInfo.InvariantCulture) == 0;
         }
 
-        public static string GetComponentName(IComponent component, string defaultNameValue)
+        public static string GetComponentName(IComponent component, string? defaultNameValue)
         {
             Debug.Assert(component is not null, "component passed here cannot be null");
             if (string.IsNullOrEmpty(defaultNameValue))

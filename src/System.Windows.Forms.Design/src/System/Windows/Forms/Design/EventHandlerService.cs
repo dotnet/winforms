@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Design
 
             object handler = _handlers.FirstOrDefault(handlerType.IsInstanceOfType);
 
-            if (handler != null)
+            if (handler is not null)
             {
                 _lastHandler = handler;
                 _lastHandlerType = handlerType;
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Design
             ArgumentNullException.ThrowIfNull(handler);
 
             var node = _handlers.Find(handler);
-            if (node != null)
+            if (node is not null)
             {
                 _handlers.Remove(node);
                 _lastHandler = null;

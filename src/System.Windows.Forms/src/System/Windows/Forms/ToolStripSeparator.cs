@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Design;
 
@@ -33,7 +32,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -78,7 +77,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler EnabledChanged
+        public new event EventHandler? EnabledChanged
         {
             add => base.EnabledChanged += value;
             remove => base.EnabledChanged -= value;
@@ -95,7 +94,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DisplayStyleChanged
+        public new event EventHandler? DisplayStyleChanged
         {
             add => base.DisplayStyleChanged += value;
             remove => base.DisplayStyleChanged -= value;
@@ -104,6 +103,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public override Font Font
         {
             get => base.Font;
@@ -122,7 +122,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override Image Image
+        public override Image? Image
         {
             get => base.Image;
             set => base.Image = value;
@@ -141,6 +141,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public new string ImageKey
         {
             get => base.ImageKey;
@@ -169,8 +170,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                ToolStrip parent = ParentInternal;
-                parent ??= Owner;
+                ToolStrip? parent = ParentInternal ?? Owner;
+
+                if (parent is null)
+                {
+                    return true;
+                }
 
                 if (parent is ToolStripDropDownMenu dropDownMenu)
                 {
@@ -193,7 +198,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override string Text
+        public override string? Text
         {
             get => base.Text;
             set => base.Text = value;
@@ -201,7 +206,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -237,7 +242,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public new string ToolTipText
+        public new string? ToolTipText
         {
             get => base.ToolTipText;
             set => base.ToolTipText = value;
@@ -258,8 +263,7 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            ToolStrip parent = ParentInternal;
-            parent ??= Owner;
+            ToolStrip? parent = ParentInternal ?? Owner;
 
             if (parent is null)
             {
@@ -290,7 +294,7 @@ namespace System.Windows.Forms
         {
             if (Owner is not null && ParentInternal is not null)
             {
-                Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
+                Renderer!.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
             }
         }
 

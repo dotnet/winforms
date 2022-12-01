@@ -1,11 +1,11 @@
 #nullable enable
-~override System.Resources.ResXFileRef.Converter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Resources.ResXFileRef.Converter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Resources.ResXFileRef.Converter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Resources.ResXFileRef.Converter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Resources.ResXFileRef.ToString() -> string
-~override System.Resources.ResXResourceSet.GetDefaultReader() -> System.Type
-~override System.Resources.ResXResourceSet.GetDefaultWriter() -> System.Type
+override System.Resources.ResXFileRef.Converter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Resources.ResXFileRef.Converter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Resources.ResXFileRef.Converter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Resources.ResXFileRef.Converter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Resources.ResXFileRef.ToString() -> string!
+override System.Resources.ResXResourceSet.GetDefaultReader() -> System.Type!
+override System.Resources.ResXResourceSet.GetDefaultWriter() -> System.Type!
 ~override System.Windows.Forms.AxHost.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.AxHost.BackgroundImage.set -> void
 ~override System.Windows.Forms.AxHost.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -21,7 +21,7 @@
 ~override System.Windows.Forms.AxHost.Site.set -> void
 ~override System.Windows.Forms.AxHost.Text.get -> string
 ~override System.Windows.Forms.AxHost.Text.set -> void
-~override System.Windows.Forms.BindingMemberInfo.Equals(object otherObject) -> bool
+override System.Windows.Forms.BindingMemberInfo.Equals(object? otherObject) -> bool
 ~override System.Windows.Forms.ComboBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ComboBox.BackgroundImage.set -> void
 ~override System.Windows.Forms.ComboBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -299,7 +299,7 @@
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.PaintBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.ToString() -> string
-~override System.Windows.Forms.ErrorProvider.Site.set -> void
+override System.Windows.Forms.ErrorProvider.Site.set -> void
 ~override System.Windows.Forms.HelpProvider.ToString() -> string
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
@@ -327,20 +327,20 @@ override System.Windows.Forms.LinkLabel.Text.set -> void
 ~override System.Windows.Forms.MdiClient.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
 override System.Windows.Forms.MenuStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.MenuStrip.CreateDefaultItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
-~override System.Windows.Forms.MonthCalendar.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.MonthCalendar.BackgroundImage.set -> void
-~override System.Windows.Forms.MonthCalendar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.MonthCalendar.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.MonthCalendar.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnForeColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.MonthCalendar.Text.get -> string
-~override System.Windows.Forms.MonthCalendar.Text.set -> void
-~override System.Windows.Forms.MonthCalendar.ToString() -> string
+override System.Windows.Forms.MonthCalendar.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.MonthCalendar.BackgroundImage.set -> void
+override System.Windows.Forms.MonthCalendar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.MonthCalendar.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.MonthCalendar.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnForeColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.MonthCalendar.Text.get -> string!
+override System.Windows.Forms.MonthCalendar.Text.set -> void
+override System.Windows.Forms.MonthCalendar.ToString() -> string!
 ~override System.Windows.Forms.PictureBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.PictureBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.PictureBox.Font.get -> System.Drawing.Font
@@ -393,10 +393,10 @@ override System.Windows.Forms.MenuStrip.CreateDefaultItem(string? text, System.D
 ~override System.Windows.Forms.RichTextBox.SelectedText.set -> void
 ~override System.Windows.Forms.RichTextBox.Text.get -> string
 ~override System.Windows.Forms.RichTextBox.Text.set -> void
-~override System.Windows.Forms.StatusStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.StatusStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
-~override System.Windows.Forms.StatusStrip.OnLayout(System.Windows.Forms.LayoutEventArgs levent) -> void
-~override System.Windows.Forms.StatusStrip.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
+override System.Windows.Forms.StatusStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.StatusStrip.CreateDefaultItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
+override System.Windows.Forms.StatusStrip.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+override System.Windows.Forms.StatusStrip.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 ~override System.Windows.Forms.TabControl.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TabControl.BackgroundImage.set -> void
 ~override System.Windows.Forms.TabControl.ControlCollection.Add(System.Windows.Forms.Control value) -> void
@@ -419,14 +419,14 @@ override System.Windows.Forms.MenuStrip.CreateDefaultItem(string? text, System.D
 ~override System.Windows.Forms.TabControl.ToString() -> string
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.Equals(object other) -> bool
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.ToString() -> string
-~override System.Windows.Forms.ToolStrip.BindingContext.get -> System.Windows.Forms.BindingContext
-~override System.Windows.Forms.ToolStrip.BindingContext.set -> void
+override System.Windows.Forms.ToolStrip.BindingContext.get -> System.Windows.Forms.BindingContext?
+override System.Windows.Forms.ToolStrip.BindingContext.set -> void
 ~override System.Windows.Forms.ToolStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStrip.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.ToolStrip.Cursor.get -> System.Windows.Forms.Cursor
-~override System.Windows.Forms.ToolStrip.Cursor.set -> void
-~override System.Windows.Forms.ToolStrip.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ToolStrip.Font.set -> void
+override System.Windows.Forms.ToolStrip.Cursor.get -> System.Windows.Forms.Cursor!
+override System.Windows.Forms.ToolStrip.Cursor.set -> void
+override System.Windows.Forms.ToolStrip.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ToolStrip.Font.set -> void
 ~override System.Windows.Forms.ToolStrip.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 ~override System.Windows.Forms.ToolStrip.OnDockChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStrip.OnEnabledChanged(System.EventArgs e) -> void
@@ -470,50 +470,50 @@ override System.Windows.Forms.ToolStripComboBox.ToString() -> string!
 ~override System.Windows.Forms.ToolStripControlHost.Site.set -> void
 ~override System.Windows.Forms.ToolStripControlHost.Text.get -> string
 ~override System.Windows.Forms.ToolStripControlHost.Text.set -> void
-~override System.Windows.Forms.ToolStripDropDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripDropDown.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle style) -> System.Windows.Forms.LayoutSettings
-~override System.Windows.Forms.ToolStripDropDown.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ToolStripDropDown.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ToolStripDropDown.Font.set -> void
-~override System.Windows.Forms.ToolStripDropDown.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDown.OnItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDown.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDown.OnMouseUp(System.Windows.Forms.MouseEventArgs mea) -> void
-~override System.Windows.Forms.ToolStripDropDown.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDown.OnVisibleChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStripDropDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripDropDown.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle style) -> System.Windows.Forms.LayoutSettings!
+override System.Windows.Forms.ToolStripDropDown.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ToolStripDropDown.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ToolStripDropDown.Font.set -> void
+override System.Windows.Forms.ToolStripDropDown.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDown.OnItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDown.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDown.OnMouseUp(System.Windows.Forms.MouseEventArgs! mea) -> void
+override System.Windows.Forms.ToolStripDropDown.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDown.OnVisibleChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripDropDownButton.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown!
 override System.Windows.Forms.ToolStripDropDownButton.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownButton.OnMouseLeave(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownButton.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownButton.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
-~override System.Windows.Forms.ToolStripDropDownItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripDropDownItem.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDownItem.OnRightToLeftChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ToolStripDropDownItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripDropDownItem.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripDropDownItem.OnRightToLeftChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownMenu.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripDropDownMenu.CreateDefaultItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
 override System.Windows.Forms.ToolStripDropDownMenu.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 override System.Windows.Forms.ToolStripDropDownMenu.OnFontChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownMenu.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
 override System.Windows.Forms.ToolStripDropDownMenu.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
-~override System.Windows.Forms.ToolStripItem.ToString() -> string
+override System.Windows.Forms.ToolStripItem.ToString() -> string!
 override System.Windows.Forms.ToolStripLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripLabel.OnFontChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripLabel.OnMouseEnter(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripLabel.OnMouseLeave(System.EventArgs! e) -> void
 override System.Windows.Forms.ToolStripLabel.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripMenuItem.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown
-~override System.Windows.Forms.ToolStripMenuItem.OnClick(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnDropDownHide(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnDropDownShow(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnMouseEnter(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnOwnerChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripMenuItem.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
+override System.Windows.Forms.ToolStripMenuItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripMenuItem.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown!
+override System.Windows.Forms.ToolStripMenuItem.OnClick(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnDropDownHide(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnDropDownShow(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnMouseEnter(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnOwnerChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripMenuItem.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.ToolStripOverflow.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripOverflow.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection!
 override System.Windows.Forms.ToolStripOverflow.Items.get -> System.Windows.Forms.ToolStripItemCollection!
@@ -525,17 +525,17 @@ override System.Windows.Forms.ToolStripProgressBar.OnSubscribeControlEvents(Syst
 override System.Windows.Forms.ToolStripProgressBar.OnUnsubscribeControlEvents(System.Windows.Forms.Control? control) -> void
 override System.Windows.Forms.ToolStripProgressBar.Text.get -> string!
 override System.Windows.Forms.ToolStripProgressBar.Text.set -> void
-~override System.Windows.Forms.ToolStripSeparator.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ToolStripSeparator.BackgroundImage.set -> void
-~override System.Windows.Forms.ToolStripSeparator.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripSeparator.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ToolStripSeparator.Font.set -> void
-~override System.Windows.Forms.ToolStripSeparator.Image.get -> System.Drawing.Image
-~override System.Windows.Forms.ToolStripSeparator.Image.set -> void
-~override System.Windows.Forms.ToolStripSeparator.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripSeparator.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSeparator.Text.get -> string
-~override System.Windows.Forms.ToolStripSeparator.Text.set -> void
+override System.Windows.Forms.ToolStripSeparator.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripSeparator.BackgroundImage.set -> void
+override System.Windows.Forms.ToolStripSeparator.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ToolStripSeparator.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ToolStripSeparator.Font.set -> void
+override System.Windows.Forms.ToolStripSeparator.Image.get -> System.Drawing.Image?
+override System.Windows.Forms.ToolStripSeparator.Image.set -> void
+override System.Windows.Forms.ToolStripSeparator.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ToolStripSeparator.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSeparator.Text.get -> string?
+override System.Windows.Forms.ToolStripSeparator.Text.set -> void
 override System.Windows.Forms.ToolStripSplitButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ToolStripSplitButton.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown!
 override System.Windows.Forms.ToolStripSplitButton.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
@@ -583,20 +583,20 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~override System.Windows.Forms.WindowsFormsSynchronizationContext.CreateCopy() -> System.Threading.SynchronizationContext
 ~override System.Windows.Forms.WindowsFormsSynchronizationContext.Post(System.Threading.SendOrPostCallback d, object state) -> void
 ~override System.Windows.Forms.WindowsFormsSynchronizationContext.Send(System.Threading.SendOrPostCallback d, object state) -> void
-~static readonly System.Resources.ResXResourceWriter.BinSerializedObjectMimeType -> string
-~static readonly System.Resources.ResXResourceWriter.ByteArraySerializedObjectMimeType -> string
-~static readonly System.Resources.ResXResourceWriter.DefaultSerializedObjectMimeType -> string
-~static readonly System.Resources.ResXResourceWriter.ResMimeType -> string
-~static readonly System.Resources.ResXResourceWriter.ResourceSchema -> string
-~static readonly System.Resources.ResXResourceWriter.SoapSerializedObjectMimeType -> string
-~static readonly System.Resources.ResXResourceWriter.Version -> string
+static readonly System.Resources.ResXResourceWriter.BinSerializedObjectMimeType -> string!
+static readonly System.Resources.ResXResourceWriter.ByteArraySerializedObjectMimeType -> string!
+static readonly System.Resources.ResXResourceWriter.DefaultSerializedObjectMimeType -> string!
+static readonly System.Resources.ResXResourceWriter.ResMimeType -> string!
+static readonly System.Resources.ResXResourceWriter.ResourceSchema -> string!
+static readonly System.Resources.ResXResourceWriter.SoapSerializedObjectMimeType -> string!
+static readonly System.Resources.ResXResourceWriter.Version -> string!
 ~static readonly System.Windows.Forms.DataGridView.HitTestInfo.Nowhere -> System.Windows.Forms.DataGridView.HitTestInfo
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Default -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Yes -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
-~static System.Resources.ResXResourceReader.FromFileContents(string fileContents) -> System.Resources.ResXResourceReader
-~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> System.Resources.ResXResourceReader
-~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.Reflection.AssemblyName[] assemblyNames) -> System.Resources.ResXResourceReader
+static System.Resources.ResXResourceReader.FromFileContents(string! fileContents) -> System.Resources.ResXResourceReader!
+static System.Resources.ResXResourceReader.FromFileContents(string! fileContents, System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> System.Resources.ResXResourceReader!
+static System.Resources.ResXResourceReader.FromFileContents(string! fileContents, System.Reflection.AssemblyName![]! assemblyNames) -> System.Resources.ResXResourceReader!
 ~static System.Windows.Forms.Application.AddMessageFilter(System.Windows.Forms.IMessageFilter value) -> void
 ~static System.Windows.Forms.Application.CommonAppDataPath.get -> string
 ~static System.Windows.Forms.Application.CommonAppDataRegistry.get -> Microsoft.Win32.RegistryKey
@@ -632,7 +632,7 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~static System.Windows.Forms.AxHost.GetIPictureFromPicture(System.Drawing.Image image) -> object
 ~static System.Windows.Forms.AxHost.GetPictureFromIPicture(object picture) -> System.Drawing.Image
 ~static System.Windows.Forms.AxHost.GetPictureFromIPictureDisp(object picture) -> System.Drawing.Image
-~static System.Windows.Forms.BindingContext.UpdateBinding(System.Windows.Forms.BindingContext newBindingContext, System.Windows.Forms.Binding binding) -> void
+static System.Windows.Forms.BindingContext.UpdateBinding(System.Windows.Forms.BindingContext? newBindingContext, System.Windows.Forms.Binding! binding) -> void
 ~static System.Windows.Forms.Control.FromChildHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
@@ -640,12 +640,12 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
-~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url) -> void
-~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url, string keyword) -> void
-~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url, System.Windows.Forms.HelpNavigator command, object parameter) -> void
-~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url, System.Windows.Forms.HelpNavigator navigator) -> void
-~static System.Windows.Forms.Help.ShowHelpIndex(System.Windows.Forms.Control parent, string url) -> void
-~static System.Windows.Forms.Help.ShowPopup(System.Windows.Forms.Control parent, string caption, System.Drawing.Point location) -> void
+static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control? parent, string? url) -> void
+static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control? parent, string? url, string? keyword) -> void
+static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control? parent, string? url, System.Windows.Forms.HelpNavigator command, object? parameter) -> void
+static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control? parent, string? url, System.Windows.Forms.HelpNavigator navigator) -> void
+static System.Windows.Forms.Help.ShowHelpIndex(System.Windows.Forms.Control? parent, string? url) -> void
+static System.Windows.Forms.Help.ShowPopup(System.Windows.Forms.Control? parent, string! caption, System.Drawing.Point location) -> void
 ~static System.Windows.Forms.HtmlDocument.operator !=(System.Windows.Forms.HtmlDocument left, System.Windows.Forms.HtmlDocument right) -> bool
 ~static System.Windows.Forms.HtmlDocument.operator ==(System.Windows.Forms.HtmlDocument left, System.Windows.Forms.HtmlDocument right) -> bool
 ~static System.Windows.Forms.HtmlElement.operator !=(System.Windows.Forms.HtmlElement left, System.Windows.Forms.HtmlElement right) -> bool
@@ -699,54 +699,54 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~System.Drawing.Design.IPropertyValueUIService.GetPropertyUIValueItems(System.ComponentModel.ITypeDescriptorContext context, System.ComponentModel.PropertyDescriptor propDesc) -> System.Drawing.Design.PropertyValueUIItem[]
 ~System.Drawing.Design.IPropertyValueUIService.RemovePropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
 ~System.Drawing.Design.PropertyValueUIItem.PropertyValueUIItem(System.Drawing.Image uiItemImage, System.Drawing.Design.PropertyValueUIItemInvokeHandler handler, string tooltip) -> void
-~System.Resources.ResXDataNode.Comment.get -> string
-~System.Resources.ResXDataNode.Comment.set -> void
-~System.Resources.ResXDataNode.FileRef.get -> System.Resources.ResXFileRef
-~System.Resources.ResXDataNode.GetValue(System.ComponentModel.Design.ITypeResolutionService typeResolver) -> object
-~System.Resources.ResXDataNode.GetValue(System.Reflection.AssemblyName[] names) -> object
-~System.Resources.ResXDataNode.GetValueTypeName(System.ComponentModel.Design.ITypeResolutionService typeResolver) -> string
-~System.Resources.ResXDataNode.GetValueTypeName(System.Reflection.AssemblyName[] names) -> string
-~System.Resources.ResXDataNode.Name.get -> string
-~System.Resources.ResXDataNode.Name.set -> void
-~System.Resources.ResXDataNode.ResXDataNode(string name, object value) -> void
-~System.Resources.ResXDataNode.ResXDataNode(string name, object value, System.Func<System.Type, string> typeNameConverter) -> void
-~System.Resources.ResXDataNode.ResXDataNode(string name, System.Resources.ResXFileRef fileRef) -> void
-~System.Resources.ResXDataNode.ResXDataNode(string name, System.Resources.ResXFileRef fileRef, System.Func<System.Type, string> typeNameConverter) -> void
-~System.Resources.ResXFileRef.FileName.get -> string
-~System.Resources.ResXFileRef.ResXFileRef(string fileName, string typeName) -> void
-~System.Resources.ResXFileRef.ResXFileRef(string fileName, string typeName, System.Text.Encoding textFileEncoding) -> void
-~System.Resources.ResXFileRef.TextFileEncoding.get -> System.Text.Encoding
-~System.Resources.ResXFileRef.TypeName.get -> string
-~System.Resources.ResXResourceReader.BasePath.get -> string
-~System.Resources.ResXResourceReader.BasePath.set -> void
-~System.Resources.ResXResourceReader.GetEnumerator() -> System.Collections.IDictionaryEnumerator
-~System.Resources.ResXResourceReader.GetMetadataEnumerator() -> System.Collections.IDictionaryEnumerator
-~System.Resources.ResXResourceReader.ResXResourceReader(string fileName) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(string fileName, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(string fileName, System.Reflection.AssemblyName[] assemblyNames) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream stream) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream stream, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream stream, System.Reflection.AssemblyName[] assemblyNames) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader reader) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader reader, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> void
-~System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader reader, System.Reflection.AssemblyName[] assemblyNames) -> void
-~System.Resources.ResXResourceSet.ResXResourceSet(string fileName) -> void
-~System.Resources.ResXResourceSet.ResXResourceSet(System.IO.Stream stream) -> void
-~System.Resources.ResXResourceWriter.AddMetadata(string name, byte[] value) -> void
-~System.Resources.ResXResourceWriter.AddMetadata(string name, object value) -> void
-~System.Resources.ResXResourceWriter.AddMetadata(string name, string value) -> void
-~System.Resources.ResXResourceWriter.AddResource(string name, byte[] value) -> void
-~System.Resources.ResXResourceWriter.AddResource(string name, object value) -> void
-~System.Resources.ResXResourceWriter.AddResource(string name, string value) -> void
-~System.Resources.ResXResourceWriter.AddResource(System.Resources.ResXDataNode node) -> void
-~System.Resources.ResXResourceWriter.BasePath.get -> string
-~System.Resources.ResXResourceWriter.BasePath.set -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(string fileName) -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(string fileName, System.Func<System.Type, string> typeNameConverter) -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.Stream stream) -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.Stream stream, System.Func<System.Type, string> typeNameConverter) -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter textWriter) -> void
-~System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter textWriter, System.Func<System.Type, string> typeNameConverter) -> void
+System.Resources.ResXDataNode.Comment.get -> string!
+System.Resources.ResXDataNode.Comment.set -> void
+System.Resources.ResXDataNode.FileRef.get -> System.Resources.ResXFileRef?
+System.Resources.ResXDataNode.GetValue(System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> object?
+System.Resources.ResXDataNode.GetValue(System.Reflection.AssemblyName![]! names) -> object?
+System.Resources.ResXDataNode.GetValueTypeName(System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> string?
+System.Resources.ResXDataNode.GetValueTypeName(System.Reflection.AssemblyName![]! names) -> string?
+System.Resources.ResXDataNode.Name.get -> string!
+System.Resources.ResXDataNode.Name.set -> void
+System.Resources.ResXDataNode.ResXDataNode(string! name, object? value) -> void
+System.Resources.ResXDataNode.ResXDataNode(string! name, object? value, System.Func<System.Type?, string!>? typeNameConverter) -> void
+System.Resources.ResXDataNode.ResXDataNode(string! name, System.Resources.ResXFileRef! fileRef) -> void
+System.Resources.ResXDataNode.ResXDataNode(string! name, System.Resources.ResXFileRef! fileRef, System.Func<System.Type?, string!>? typeNameConverter) -> void
+System.Resources.ResXFileRef.FileName.get -> string!
+System.Resources.ResXFileRef.ResXFileRef(string! fileName, string! typeName) -> void
+System.Resources.ResXFileRef.ResXFileRef(string! fileName, string! typeName, System.Text.Encoding! textFileEncoding) -> void
+System.Resources.ResXFileRef.TextFileEncoding.get -> System.Text.Encoding?
+System.Resources.ResXFileRef.TypeName.get -> string!
+System.Resources.ResXResourceReader.BasePath.get -> string?
+System.Resources.ResXResourceReader.BasePath.set -> void
+System.Resources.ResXResourceReader.GetEnumerator() -> System.Collections.IDictionaryEnumerator!
+System.Resources.ResXResourceReader.GetMetadataEnumerator() -> System.Collections.IDictionaryEnumerator!
+System.Resources.ResXResourceReader.ResXResourceReader(string! fileName) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(string! fileName, System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(string! fileName, System.Reflection.AssemblyName![]! assemblyNames) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream! stream) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream! stream, System.ComponentModel.Design.ITypeResolutionService! typeResolver) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.Stream! stream, System.Reflection.AssemblyName![]! assemblyNames) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader! reader) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader! reader, System.ComponentModel.Design.ITypeResolutionService! typeResolver) -> void
+System.Resources.ResXResourceReader.ResXResourceReader(System.IO.TextReader! reader, System.Reflection.AssemblyName![]! assemblyNames) -> void
+System.Resources.ResXResourceSet.ResXResourceSet(string! fileName) -> void
+System.Resources.ResXResourceSet.ResXResourceSet(System.IO.Stream! stream) -> void
+System.Resources.ResXResourceWriter.AddMetadata(string! name, byte[]! value) -> void
+System.Resources.ResXResourceWriter.AddMetadata(string! name, object? value) -> void
+System.Resources.ResXResourceWriter.AddMetadata(string! name, string? value) -> void
+System.Resources.ResXResourceWriter.AddResource(string! name, byte[]? value) -> void
+System.Resources.ResXResourceWriter.AddResource(string! name, object? value) -> void
+System.Resources.ResXResourceWriter.AddResource(string! name, string? value) -> void
+System.Resources.ResXResourceWriter.AddResource(System.Resources.ResXDataNode! node) -> void
+System.Resources.ResXResourceWriter.BasePath.get -> string?
+System.Resources.ResXResourceWriter.BasePath.set -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(string! fileName) -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(string! fileName, System.Func<System.Type?, string!>! typeNameConverter) -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.Stream! stream) -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.Stream! stream, System.Func<System.Type?, string!>! typeNameConverter) -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter! textWriter) -> void
+System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter! textWriter, System.Func<System.Type?, string!>! typeNameConverter) -> void
 ~System.Windows.Forms.AutoCompleteStringCollection.Add(string value) -> int
 ~System.Windows.Forms.AutoCompleteStringCollection.AddRange(string[] value) -> void
 ~System.Windows.Forms.AutoCompleteStringCollection.Contains(string value) -> bool
@@ -796,16 +796,16 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~System.Windows.Forms.Binding.NullValue.get -> object
 ~System.Windows.Forms.Binding.NullValue.set -> void
 ~System.Windows.Forms.Binding.PropertyName.get -> string
-~System.Windows.Forms.BindingContext.Add(object dataSource, System.Windows.Forms.BindingManagerBase listManager) -> void
-~System.Windows.Forms.BindingContext.Contains(object dataSource) -> bool
-~System.Windows.Forms.BindingContext.Contains(object dataSource, string dataMember) -> bool
-~System.Windows.Forms.BindingContext.Remove(object dataSource) -> void
-~System.Windows.Forms.BindingContext.this[object dataSource, string dataMember].get -> System.Windows.Forms.BindingManagerBase
-~System.Windows.Forms.BindingContext.this[object dataSource].get -> System.Windows.Forms.BindingManagerBase
-~System.Windows.Forms.BindingMemberInfo.BindingField.get -> string
-~System.Windows.Forms.BindingMemberInfo.BindingMember.get -> string
-~System.Windows.Forms.BindingMemberInfo.BindingMemberInfo(string dataMember) -> void
-~System.Windows.Forms.BindingMemberInfo.BindingPath.get -> string
+System.Windows.Forms.BindingContext.Add(object! dataSource, System.Windows.Forms.BindingManagerBase! listManager) -> void
+System.Windows.Forms.BindingContext.Contains(object! dataSource) -> bool
+System.Windows.Forms.BindingContext.Contains(object! dataSource, string? dataMember) -> bool
+System.Windows.Forms.BindingContext.Remove(object! dataSource) -> void
+System.Windows.Forms.BindingContext.this[object! dataSource, string? dataMember].get -> System.Windows.Forms.BindingManagerBase!
+System.Windows.Forms.BindingContext.this[object! dataSource].get -> System.Windows.Forms.BindingManagerBase!
+System.Windows.Forms.BindingMemberInfo.BindingField.get -> string!
+System.Windows.Forms.BindingMemberInfo.BindingMember.get -> string!
+System.Windows.Forms.BindingMemberInfo.BindingMemberInfo(string? dataMember) -> void
+System.Windows.Forms.BindingMemberInfo.BindingPath.get -> string!
 ~System.Windows.Forms.BindingNavigator.AddNewItem.get -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.BindingNavigator.AddNewItem.set -> void
 ~System.Windows.Forms.BindingNavigator.BindingNavigator(System.ComponentModel.IContainer container) -> void
@@ -867,7 +867,7 @@ override System.Windows.Forms.ToolStripTextBox.OnUnsubscribeControlEvents(System
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey key) -> void
 System.Windows.Forms.Control.InvokeGotFocus(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
 System.Windows.Forms.Control.InvokeLostFocus(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
-~System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
+System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
 ~System.Windows.Forms.Control.ScaleBitmapLogicalToDevice(ref System.Drawing.Bitmap logicalBitmap) -> void
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember) -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled) -> System.Windows.Forms.Binding
@@ -1087,26 +1087,26 @@ System.Windows.Forms.Control.InvokeLostFocus(System.Windows.Forms.Control? toInv
 ~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption) -> void
 ~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.Design.IUIService.Styles.get -> System.Collections.IDictionary
-~System.Windows.Forms.ErrorProvider.BindToDataAndErrors(object newDataSource, string newDataMember) -> void
-~System.Windows.Forms.ErrorProvider.CanExtend(object extendee) -> bool
-~System.Windows.Forms.ErrorProvider.ContainerControl.get -> System.Windows.Forms.ContainerControl
-~System.Windows.Forms.ErrorProvider.ContainerControl.set -> void
-~System.Windows.Forms.ErrorProvider.DataMember.get -> string
-~System.Windows.Forms.ErrorProvider.DataMember.set -> void
-~System.Windows.Forms.ErrorProvider.DataSource.get -> object
-~System.Windows.Forms.ErrorProvider.DataSource.set -> void
-~System.Windows.Forms.ErrorProvider.ErrorProvider(System.ComponentModel.IContainer container) -> void
-~System.Windows.Forms.ErrorProvider.ErrorProvider(System.Windows.Forms.ContainerControl parentControl) -> void
-~System.Windows.Forms.ErrorProvider.GetError(System.Windows.Forms.Control control) -> string
-~System.Windows.Forms.ErrorProvider.GetIconAlignment(System.Windows.Forms.Control control) -> System.Windows.Forms.ErrorIconAlignment
-~System.Windows.Forms.ErrorProvider.GetIconPadding(System.Windows.Forms.Control control) -> int
-~System.Windows.Forms.ErrorProvider.Icon.get -> System.Drawing.Icon
-~System.Windows.Forms.ErrorProvider.Icon.set -> void
-~System.Windows.Forms.ErrorProvider.SetError(System.Windows.Forms.Control control, string value) -> void
-~System.Windows.Forms.ErrorProvider.SetIconAlignment(System.Windows.Forms.Control control, System.Windows.Forms.ErrorIconAlignment value) -> void
-~System.Windows.Forms.ErrorProvider.SetIconPadding(System.Windows.Forms.Control control, int padding) -> void
-~System.Windows.Forms.ErrorProvider.Tag.get -> object
-~System.Windows.Forms.ErrorProvider.Tag.set -> void
+System.Windows.Forms.ErrorProvider.BindToDataAndErrors(object? newDataSource, string? newDataMember) -> void
+System.Windows.Forms.ErrorProvider.CanExtend(object? extendee) -> bool
+System.Windows.Forms.ErrorProvider.ContainerControl.get -> System.Windows.Forms.ContainerControl?
+System.Windows.Forms.ErrorProvider.ContainerControl.set -> void
+System.Windows.Forms.ErrorProvider.DataMember.get -> string?
+System.Windows.Forms.ErrorProvider.DataMember.set -> void
+System.Windows.Forms.ErrorProvider.DataSource.get -> object?
+System.Windows.Forms.ErrorProvider.DataSource.set -> void
+System.Windows.Forms.ErrorProvider.ErrorProvider(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.ErrorProvider.ErrorProvider(System.Windows.Forms.ContainerControl! parentControl) -> void
+System.Windows.Forms.ErrorProvider.GetError(System.Windows.Forms.Control! control) -> string!
+System.Windows.Forms.ErrorProvider.GetIconAlignment(System.Windows.Forms.Control! control) -> System.Windows.Forms.ErrorIconAlignment
+System.Windows.Forms.ErrorProvider.GetIconPadding(System.Windows.Forms.Control! control) -> int
+System.Windows.Forms.ErrorProvider.Icon.get -> System.Drawing.Icon!
+System.Windows.Forms.ErrorProvider.Icon.set -> void
+System.Windows.Forms.ErrorProvider.SetError(System.Windows.Forms.Control! control, string? value) -> void
+System.Windows.Forms.ErrorProvider.SetIconAlignment(System.Windows.Forms.Control! control, System.Windows.Forms.ErrorIconAlignment value) -> void
+System.Windows.Forms.ErrorProvider.SetIconPadding(System.Windows.Forms.Control! control, int padding) -> void
+System.Windows.Forms.ErrorProvider.Tag.get -> object?
+System.Windows.Forms.ErrorProvider.Tag.set -> void
 ~System.Windows.Forms.HelpProvider.Tag.get -> object
 ~System.Windows.Forms.HelpProvider.Tag.set -> void
 ~System.Windows.Forms.HtmlDocument.ActiveElement.get -> System.Windows.Forms.HtmlElement
@@ -1207,7 +1207,7 @@ System.Windows.Forms.Control.InvokeLostFocus(System.Windows.Forms.Control? toInv
 ~System.Windows.Forms.HtmlWindowCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.HtmlWindowCollection.this[int index].get -> System.Windows.Forms.HtmlWindow
 ~System.Windows.Forms.HtmlWindowCollection.this[string windowId].get -> System.Windows.Forms.HtmlWindow
-~System.Windows.Forms.IComponentEditorPageSite.GetControl() -> System.Windows.Forms.Control
+System.Windows.Forms.IComponentEditorPageSite.GetControl() -> System.Windows.Forms.Control!
 ~System.Windows.Forms.ICurrencyManagerProvider.CurrencyManager.get -> System.Windows.Forms.CurrencyManager
 ~System.Windows.Forms.ICurrencyManagerProvider.GetRelatedCurrencyManager(string dataMember) -> System.Windows.Forms.CurrencyManager
 ~System.Windows.Forms.IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(System.Windows.Forms.Control editingControl) -> void
@@ -1225,14 +1225,14 @@ System.Windows.Forms.LinkLabel.Link.Name.get -> string!
 System.Windows.Forms.LinkLabel.Link.Name.set -> void
 System.Windows.Forms.LinkLabel.Link.Tag.get -> object?
 System.Windows.Forms.LinkLabel.Link.Tag.set -> void
-~System.Windows.Forms.LinkLabel.LinkCollection.Add(int start, int length) -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.LinkLabel.LinkCollection.Add(int start, int length, object linkData) -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.LinkLabel.LinkCollection.Add(System.Windows.Forms.LinkLabel.Link value) -> int
-~System.Windows.Forms.LinkLabel.LinkCollection.Contains(System.Windows.Forms.LinkLabel.Link link) -> bool
-~System.Windows.Forms.LinkLabel.LinkCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.LinkLabel.LinkCollection.IndexOf(System.Windows.Forms.LinkLabel.Link link) -> int
-~System.Windows.Forms.LinkLabel.LinkCollection.LinkCollection(System.Windows.Forms.LinkLabel owner) -> void
-~System.Windows.Forms.LinkLabel.LinkCollection.Remove(System.Windows.Forms.LinkLabel.Link value) -> void
+System.Windows.Forms.LinkLabel.LinkCollection.Add(int start, int length) -> System.Windows.Forms.LinkLabel.Link!
+System.Windows.Forms.LinkLabel.LinkCollection.Add(int start, int length, object? linkData) -> System.Windows.Forms.LinkLabel.Link!
+System.Windows.Forms.LinkLabel.LinkCollection.Add(System.Windows.Forms.LinkLabel.Link! value) -> int
+System.Windows.Forms.LinkLabel.LinkCollection.Contains(System.Windows.Forms.LinkLabel.Link! link) -> bool
+System.Windows.Forms.LinkLabel.LinkCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.LinkLabel.LinkCollection.IndexOf(System.Windows.Forms.LinkLabel.Link! link) -> int
+System.Windows.Forms.LinkLabel.LinkCollection.LinkCollection(System.Windows.Forms.LinkLabel! owner) -> void
+System.Windows.Forms.LinkLabel.LinkCollection.Remove(System.Windows.Forms.LinkLabel.Link! value) -> void
 System.Windows.Forms.LinkLabel.Links.get -> System.Windows.Forms.LinkLabel.LinkCollection!
 System.Windows.Forms.LinkLabel.OverrideCursor.get -> System.Windows.Forms.Cursor?
 System.Windows.Forms.LinkLabel.OverrideCursor.set -> void
@@ -1293,17 +1293,17 @@ System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms
 ~System.Windows.Forms.MdiClient.ControlCollection.ControlCollection(System.Windows.Forms.MdiClient owner) -> void
 System.Windows.Forms.MenuStrip.MdiWindowListItem.get -> System.Windows.Forms.ToolStripMenuItem?
 System.Windows.Forms.MenuStrip.MdiWindowListItem.set -> void
-~System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.get -> System.DateTime[]
-~System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.set -> void
-~System.Windows.Forms.MonthCalendar.BoldedDates.get -> System.DateTime[]
-~System.Windows.Forms.MonthCalendar.BoldedDates.set -> void
-~System.Windows.Forms.MonthCalendar.GetDisplayRange(bool visible) -> System.Windows.Forms.SelectionRange
-~System.Windows.Forms.MonthCalendar.HitTest(int x, int y) -> System.Windows.Forms.MonthCalendar.HitTestInfo
-~System.Windows.Forms.MonthCalendar.HitTest(System.Drawing.Point point) -> System.Windows.Forms.MonthCalendar.HitTestInfo
-~System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.get -> System.DateTime[]
-~System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.set -> void
-~System.Windows.Forms.MonthCalendar.SelectionRange.get -> System.Windows.Forms.SelectionRange
-~System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
+System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.get -> System.DateTime[]!
+System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.set -> void
+System.Windows.Forms.MonthCalendar.BoldedDates.get -> System.DateTime[]!
+System.Windows.Forms.MonthCalendar.BoldedDates.set -> void
+System.Windows.Forms.MonthCalendar.GetDisplayRange(bool visible) -> System.Windows.Forms.SelectionRange!
+System.Windows.Forms.MonthCalendar.HitTest(int x, int y) -> System.Windows.Forms.MonthCalendar.HitTestInfo!
+System.Windows.Forms.MonthCalendar.HitTest(System.Drawing.Point point) -> System.Windows.Forms.MonthCalendar.HitTestInfo!
+System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.get -> System.DateTime[]!
+System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.set -> void
+System.Windows.Forms.MonthCalendar.SelectionRange.get -> System.Windows.Forms.SelectionRange!
+System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
 ~System.Windows.Forms.PictureBox.ErrorImage.get -> System.Drawing.Image
 ~System.Windows.Forms.PictureBox.ErrorImage.set -> void
 ~System.Windows.Forms.PictureBox.Image.get -> System.Drawing.Image
@@ -1391,21 +1391,21 @@ System.Windows.Forms.MenuStrip.MdiWindowListItem.set -> void
 ~System.Windows.Forms.TableLayoutStyleCollection.Add(System.Windows.Forms.TableLayoutStyle style) -> int
 ~System.Windows.Forms.TableLayoutStyleCollection.this[int index].get -> System.Windows.Forms.TableLayoutStyle
 ~System.Windows.Forms.TableLayoutStyleCollection.this[int index].set -> void
-~System.Windows.Forms.ToolStrip.Controls.get -> System.Windows.Forms.Control.ControlCollection
+System.Windows.Forms.ToolStrip.Controls.get -> System.Windows.Forms.Control.ControlCollection!
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point point) -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStrip.GetItemAt(int x, int y) -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStrip.GetItemAt(System.Drawing.Point point) -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStrip.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties
-~System.Windows.Forms.ToolStrip.ImageList.get -> System.Windows.Forms.ImageList
-~System.Windows.Forms.ToolStrip.ImageList.set -> void
+System.Windows.Forms.ToolStrip.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties!
+System.Windows.Forms.ToolStrip.ImageList.get -> System.Windows.Forms.ImageList?
+System.Windows.Forms.ToolStrip.ImageList.set -> void
 ~System.Windows.Forms.ToolStrip.LayoutSettings.get -> System.Windows.Forms.LayoutSettings
 ~System.Windows.Forms.ToolStrip.LayoutSettings.set -> void
 ~System.Windows.Forms.ToolStrip.OverflowButton.get -> System.Windows.Forms.ToolStripOverflowButton
 ~System.Windows.Forms.ToolStrip.Renderer.get -> System.Windows.Forms.ToolStripRenderer
 ~System.Windows.Forms.ToolStrip.Renderer.set -> void
 ~System.Windows.Forms.ToolStrip.SetItemLocation(System.Windows.Forms.ToolStripItem item, System.Drawing.Point location) -> void
-~System.Windows.Forms.ToolStrip.ToolStrip(params System.Windows.Forms.ToolStripItem[] items) -> void
+System.Windows.Forms.ToolStrip.ToolStrip(params System.Windows.Forms.ToolStripItem![]! items) -> void
 ~System.Windows.Forms.ToolStrip.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
 System.Windows.Forms.ToolStripButton.ToolStripButton(string? text) -> void
 System.Windows.Forms.ToolStripButton.ToolStripButton(string? text, System.Drawing.Image? image) -> void
@@ -1429,57 +1429,57 @@ System.Windows.Forms.ToolStripComboBox.ToolStripComboBox(System.Windows.Forms.Co
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
-~System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.set -> void
-~System.Windows.Forms.ToolStripDropDown.OverflowButton.get -> System.Windows.Forms.ToolStripOverflowButton
-~System.Windows.Forms.ToolStripDropDown.OwnerItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripDropDown.OwnerItem.set -> void
-~System.Windows.Forms.ToolStripDropDown.Region.get -> System.Drawing.Region
-~System.Windows.Forms.ToolStripDropDown.Region.set -> void
-~System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control control, int x, int y) -> void
-~System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control control, System.Drawing.Point position) -> void
-~System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control control, System.Drawing.Point position, System.Windows.Forms.ToolStripDropDownDirection direction) -> void
+System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.set -> void
+System.Windows.Forms.ToolStripDropDown.OverflowButton.get -> System.Windows.Forms.ToolStripOverflowButton!
+System.Windows.Forms.ToolStripDropDown.OwnerItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.ToolStripDropDown.OwnerItem.set -> void
+System.Windows.Forms.ToolStripDropDown.Region.get -> System.Drawing.Region?
+System.Windows.Forms.ToolStripDropDown.Region.set -> void
+System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control! control, int x, int y) -> void
+System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control! control, System.Drawing.Point position) -> void
+System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control! control, System.Drawing.Point position, System.Windows.Forms.ToolStripDropDownDirection direction) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? text) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? text, System.Drawing.Image? image) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? text, System.Drawing.Image? image, params System.Windows.Forms.ToolStripItem![]? dropDownItems) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
 System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(System.Drawing.Image? image) -> void
-~System.Windows.Forms.ToolStripDropDownItem.DropDown.get -> System.Windows.Forms.ToolStripDropDown
-~System.Windows.Forms.ToolStripDropDownItem.DropDown.set -> void
-~System.Windows.Forms.ToolStripDropDownItem.DropDownItems.get -> System.Windows.Forms.ToolStripItemCollection
-~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, params System.Windows.Forms.ToolStripItem[] dropDownItems) -> void
-~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
-~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripItem.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
-~System.Windows.Forms.ToolStripItem.AccessibleDefaultActionDescription.get -> string
-~System.Windows.Forms.ToolStripItem.AccessibleDefaultActionDescription.set -> void
-~System.Windows.Forms.ToolStripItem.AccessibleDescription.get -> string
-~System.Windows.Forms.ToolStripItem.AccessibleDescription.set -> void
-~System.Windows.Forms.ToolStripItem.AccessibleName.get -> string
-~System.Windows.Forms.ToolStripItem.AccessibleName.set -> void
-~System.Windows.Forms.ToolStripItem.Command.get -> System.Windows.Input.ICommand
-~System.Windows.Forms.ToolStripItem.Command.set -> void
-~System.Windows.Forms.ToolStripItem.CommandParameter.get -> object
-~System.Windows.Forms.ToolStripItem.CommandParameter.set -> void
-~System.Windows.Forms.ToolStripItem.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects) -> System.Windows.Forms.DragDropEffects
-~System.Windows.Forms.ToolStripItem.DoDragDrop(object data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
-~System.Windows.Forms.ToolStripItem.GetCurrentParent() -> System.Windows.Forms.ToolStrip
-~System.Windows.Forms.ToolStripItem.ImageKey.get -> string
-~System.Windows.Forms.ToolStripItem.ImageKey.set -> void
-~System.Windows.Forms.ToolStripItem.Name.get -> string
-~System.Windows.Forms.ToolStripItem.Name.set -> void
-~System.Windows.Forms.ToolStripItem.Owner.get -> System.Windows.Forms.ToolStrip
-~System.Windows.Forms.ToolStripItem.Owner.set -> void
-~System.Windows.Forms.ToolStripItem.OwnerItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripItem.Parent.get -> System.Windows.Forms.ToolStrip
-~System.Windows.Forms.ToolStripItem.Parent.set -> void
-~System.Windows.Forms.ToolStripItem.Tag.get -> object
-~System.Windows.Forms.ToolStripItem.Tag.set -> void
-~System.Windows.Forms.ToolStripItem.ToolStripItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
-~System.Windows.Forms.ToolStripItem.ToolStripItem(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripItem.ToolTipText.get -> string
-~System.Windows.Forms.ToolStripItem.ToolTipText.set -> void
+System.Windows.Forms.ToolStripDropDownItem.DropDown.get -> System.Windows.Forms.ToolStripDropDown!
+System.Windows.Forms.ToolStripDropDownItem.DropDown.set -> void
+System.Windows.Forms.ToolStripDropDownItem.DropDownItems.get -> System.Windows.Forms.ToolStripItemCollection!
+System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string? text, System.Drawing.Image? image, params System.Windows.Forms.ToolStripItem![]? dropDownItems) -> void
+System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
+System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
+System.Windows.Forms.ToolStripItem.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!
+System.Windows.Forms.ToolStripItem.AccessibleDefaultActionDescription.get -> string?
+System.Windows.Forms.ToolStripItem.AccessibleDefaultActionDescription.set -> void
+System.Windows.Forms.ToolStripItem.AccessibleDescription.get -> string?
+System.Windows.Forms.ToolStripItem.AccessibleDescription.set -> void
+System.Windows.Forms.ToolStripItem.AccessibleName.get -> string?
+System.Windows.Forms.ToolStripItem.AccessibleName.set -> void
+System.Windows.Forms.ToolStripItem.Command.get -> System.Windows.Input.ICommand?
+System.Windows.Forms.ToolStripItem.Command.set -> void
+System.Windows.Forms.ToolStripItem.CommandParameter.get -> object?
+System.Windows.Forms.ToolStripItem.CommandParameter.set -> void
+System.Windows.Forms.ToolStripItem.DoDragDrop(object! data, System.Windows.Forms.DragDropEffects allowedEffects) -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.ToolStripItem.DoDragDrop(object! data, System.Windows.Forms.DragDropEffects allowedEffects, System.Drawing.Bitmap? dragImage, System.Drawing.Point cursorOffset, bool useDefaultDragImage) -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.ToolStripItem.GetCurrentParent() -> System.Windows.Forms.ToolStrip?
+System.Windows.Forms.ToolStripItem.ImageKey.get -> string!
+System.Windows.Forms.ToolStripItem.ImageKey.set -> void
+System.Windows.Forms.ToolStripItem.Name.get -> string?
+System.Windows.Forms.ToolStripItem.Name.set -> void
+System.Windows.Forms.ToolStripItem.Owner.get -> System.Windows.Forms.ToolStrip?
+System.Windows.Forms.ToolStripItem.Owner.set -> void
+System.Windows.Forms.ToolStripItem.OwnerItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.ToolStripItem.Parent.get -> System.Windows.Forms.ToolStrip?
+System.Windows.Forms.ToolStripItem.Parent.set -> void
+System.Windows.Forms.ToolStripItem.Tag.get -> object?
+System.Windows.Forms.ToolStripItem.Tag.set -> void
+System.Windows.Forms.ToolStripItem.ToolStripItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
+System.Windows.Forms.ToolStripItem.ToolStripItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
+System.Windows.Forms.ToolStripItem.ToolTipText.get -> string?
+System.Windows.Forms.ToolStripItem.ToolTipText.set -> void
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text) -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text, System.Drawing.Image image) -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
@@ -1500,15 +1500,15 @@ System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text, System.Drawing.
 System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text, System.Drawing.Image? image, bool isLink, System.EventHandler? onClick) -> void
 System.Windows.Forms.ToolStripLabel.ToolStripLabel(string? text, System.Drawing.Image? image, bool isLink, System.EventHandler? onClick, string? name) -> void
 System.Windows.Forms.ToolStripLabel.ToolStripLabel(System.Drawing.Image? image) -> void
-~System.Windows.Forms.ToolStripMenuItem.ShortcutKeyDisplayString.get -> string
-~System.Windows.Forms.ToolStripMenuItem.ShortcutKeyDisplayString.set -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, params System.Windows.Forms.ToolStripItem[] dropDownItems) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string text, System.Drawing.Image image, System.EventHandler onClick, System.Windows.Forms.Keys shortcutKeys) -> void
-~System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(System.Drawing.Image image) -> void
+System.Windows.Forms.ToolStripMenuItem.ShortcutKeyDisplayString.get -> string?
+System.Windows.Forms.ToolStripMenuItem.ShortcutKeyDisplayString.set -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text, System.Drawing.Image? image) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text, System.Drawing.Image? image, params System.Windows.Forms.ToolStripItem![]? dropDownItems) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick, string? name) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(string? text, System.Drawing.Image? image, System.EventHandler? onClick, System.Windows.Forms.Keys shortcutKeys) -> void
+System.Windows.Forms.ToolStripMenuItem.ToolStripMenuItem(System.Drawing.Image? image) -> void
 System.Windows.Forms.ToolStripOverflow.ToolStripOverflow(System.Windows.Forms.ToolStripItem! parentItem) -> void
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Add(System.Windows.Forms.ToolStripPanelRow value) -> int
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection value) -> void
@@ -1527,10 +1527,10 @@ System.Windows.Forms.ToolStripOverflow.ToolStripOverflow(System.Windows.Forms.To
 ~System.Windows.Forms.ToolStripPanelRow.ToolStripPanelRow(System.Windows.Forms.ToolStripPanel parent) -> void
 System.Windows.Forms.ToolStripProgressBar.ProgressBar.get -> System.Windows.Forms.ProgressBar!
 System.Windows.Forms.ToolStripProgressBar.ToolStripProgressBar(string? name) -> void
-~System.Windows.Forms.ToolStripSeparator.ImageKey.get -> string
-~System.Windows.Forms.ToolStripSeparator.ImageKey.set -> void
-~System.Windows.Forms.ToolStripSeparator.ToolTipText.get -> string
-~System.Windows.Forms.ToolStripSeparator.ToolTipText.set -> void
+System.Windows.Forms.ToolStripSeparator.ImageKey.get -> string!
+System.Windows.Forms.ToolStripSeparator.ImageKey.set -> void
+System.Windows.Forms.ToolStripSeparator.ToolTipText.get -> string?
+System.Windows.Forms.ToolStripSeparator.ToolTipText.set -> void
 System.Windows.Forms.ToolStripSplitButton.DefaultItem.get -> System.Windows.Forms.ToolStripItem?
 System.Windows.Forms.ToolStripSplitButton.DefaultItem.set -> void
 System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string? text) -> void
@@ -1658,15 +1658,15 @@ System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(System.Windows.Forms.Cont
 ~virtual System.Drawing.Design.PropertyValueUIItem.Image.get -> System.Drawing.Image
 ~virtual System.Drawing.Design.PropertyValueUIItem.InvokeHandler.get -> System.Drawing.Design.PropertyValueUIItemInvokeHandler
 ~virtual System.Drawing.Design.PropertyValueUIItem.ToolTip.get -> string
-~virtual System.Resources.ResXResourceWriter.AddAlias(string aliasName, System.Reflection.AssemblyName assemblyName) -> void
+virtual System.Resources.ResXResourceWriter.AddAlias(string? aliasName, System.Reflection.AssemblyName! assemblyName) -> void
 ~virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object
 ~virtual System.Windows.Forms.BaseCollection.List.get -> System.Collections.ArrayList
 ~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
 ~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
 ~virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs cevent) -> void
-~virtual System.Windows.Forms.BindingContext.AddCore(object dataSource, System.Windows.Forms.BindingManagerBase listManager) -> void
-~virtual System.Windows.Forms.BindingContext.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs ccevent) -> void
-~virtual System.Windows.Forms.BindingContext.RemoveCore(object dataSource) -> void
+virtual System.Windows.Forms.BindingContext.AddCore(object! dataSource, System.Windows.Forms.BindingManagerBase! listManager) -> void
+virtual System.Windows.Forms.BindingContext.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs! ccevent) -> void
+virtual System.Windows.Forms.BindingContext.RemoveCore(object! dataSource) -> void
 ~virtual System.Windows.Forms.BindingSource.Add(object value) -> int
 ~virtual System.Windows.Forms.BindingSource.AddNew() -> object
 ~virtual System.Windows.Forms.BindingSource.ApplySort(System.ComponentModel.ListSortDescriptionCollection sorts) -> void
@@ -1709,20 +1709,20 @@ System.Windows.Forms.ToolStripTextBox.ToolStripTextBox(System.Windows.Forms.Cont
 ~virtual System.Windows.Forms.ComboBox.OnSelectedItemChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnAutoSizeChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnBackColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnBackgroundImageChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnBackgroundImageLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnBindingContextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnCausesValidationChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnAutoSizeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnBackColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnBackgroundImageChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnBackgroundImageLayoutChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnBindingContextChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnCausesValidationChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnClick(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnClientSizeChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.Control.OnContextMenuStripChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnContextMenuStripChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnControlAdded(System.Windows.Forms.ControlEventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnControlRemoved(System.Windows.Forms.ControlEventArgs! e) -> void
-~virtual System.Windows.Forms.Control.OnCursorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnDataContextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnDockChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnCursorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnDataContextChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnDockChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnDoubleClick(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnDpiChangedAfterParent(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnDpiChangedBeforeParent(System.EventArgs! e) -> void
@@ -1730,10 +1730,10 @@ virtual System.Windows.Forms.Control.OnDragDrop(System.Windows.Forms.DragEventAr
 virtual System.Windows.Forms.Control.OnDragEnter(System.Windows.Forms.DragEventArgs! drgevent) -> void
 virtual System.Windows.Forms.Control.OnDragLeave(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnDragOver(System.Windows.Forms.DragEventArgs! drgevent) -> void
-~virtual System.Windows.Forms.Control.OnEnabledChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnEnabledChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnEnter(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.Control.OnFontChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnForeColorChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnFontChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnForeColorChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnGiveFeedback(System.Windows.Forms.GiveFeedbackEventArgs! gfbevent) -> void
 virtual System.Windows.Forms.Control.OnGotFocus(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnHandleCreated(System.EventArgs! e) -> void
@@ -1759,19 +1759,19 @@ virtual System.Windows.Forms.Control.OnMouseMove(System.Windows.Forms.MouseEvent
 virtual System.Windows.Forms.Control.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnMove(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.Control.OnParentBackColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnParentBackgroundImageChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnParentBindingContextChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnParentBackColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnParentBackgroundImageChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnParentBindingContextChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnParentChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.Control.OnParentCursorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnParentDataContextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Control.OnParentEnabledChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnParentCursorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnParentDataContextChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.OnParentEnabledChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnParentFontChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnParentForeColorChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnParentRightToLeftChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnParentVisibleChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnPrint(System.Windows.Forms.PaintEventArgs! e) -> void
-~virtual System.Windows.Forms.Control.OnRightToLeftChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnRightToLeftChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnTabIndexChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnTabStopChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnTextChanged(System.EventArgs! e) -> void
@@ -2009,7 +2009,7 @@ virtual System.Windows.Forms.Control.OnVisibleChanged(System.EventArgs! e) -> vo
 ~virtual System.Windows.Forms.DataGridViewRowCollection.InsertRange(int rowIndex, params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.HelpProvider.CanExtend(object target) -> bool
 ~virtual System.Windows.Forms.HelpProvider.GetHelpKeyword(System.Windows.Forms.Control ctl) -> string
 ~virtual System.Windows.Forms.HelpProvider.GetHelpNavigator(System.Windows.Forms.Control ctl) -> System.Windows.Forms.HelpNavigator
@@ -2022,12 +2022,12 @@ virtual System.Windows.Forms.Control.OnVisibleChanged(System.EventArgs! e) -> vo
 ~virtual System.Windows.Forms.HelpProvider.SetHelpNavigator(System.Windows.Forms.Control ctl, System.Windows.Forms.HelpNavigator navigator) -> void
 ~virtual System.Windows.Forms.HelpProvider.SetHelpString(System.Windows.Forms.Control ctl, string helpString) -> void
 ~virtual System.Windows.Forms.HelpProvider.SetShowHelp(System.Windows.Forms.Control ctl, bool value) -> void
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.RemoveByKey(string key) -> void
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].get -> System.Windows.Forms.LinkLabel.Link
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].set -> void
-~virtual System.Windows.Forms.LinkLabel.LinkCollection.this[string key].get -> System.Windows.Forms.LinkLabel.Link
+virtual System.Windows.Forms.LinkLabel.LinkCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.LinkLabel.LinkCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.LinkLabel.LinkCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].get -> System.Windows.Forms.LinkLabel.Link!
+virtual System.Windows.Forms.LinkLabel.LinkCollection.this[int index].set -> void
+virtual System.Windows.Forms.LinkLabel.LinkCollection.this[string! key].get -> System.Windows.Forms.LinkLabel.Link?
 virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs! e) -> void
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, int imageIndex) -> System.Windows.Forms.ListViewItem
 ~virtual System.Windows.Forms.ListView.ListViewItemCollection.Add(string key, string text, string imageKey) -> System.Windows.Forms.ListViewItem
@@ -2049,9 +2049,9 @@ virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLa
 ~virtual System.Windows.Forms.ListViewItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 virtual System.Windows.Forms.MenuStrip.OnMenuActivate(System.EventArgs! e) -> void
 virtual System.Windows.Forms.MenuStrip.OnMenuDeactivate(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.MonthCalendar.OnDateChanged(System.Windows.Forms.DateRangeEventArgs drevent) -> void
-~virtual System.Windows.Forms.MonthCalendar.OnDateSelected(System.Windows.Forms.DateRangeEventArgs drevent) -> void
-~virtual System.Windows.Forms.MonthCalendar.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.MonthCalendar.OnDateChanged(System.Windows.Forms.DateRangeEventArgs! drevent) -> void
+virtual System.Windows.Forms.MonthCalendar.OnDateSelected(System.Windows.Forms.DateRangeEventArgs! drevent) -> void
+virtual System.Windows.Forms.MonthCalendar.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.AsyncCompletedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs e) -> void
@@ -2085,9 +2085,9 @@ virtual System.Windows.Forms.MenuStrip.OnMenuDeactivate(System.EventArgs! e) -> 
 ~virtual System.Windows.Forms.TableLayoutControlCollection.Add(System.Windows.Forms.Control control, int column, int row) -> void
 ~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStrip.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle layoutStyle) -> System.Windows.Forms.LayoutSettings
-~virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection
+virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection!
 ~virtual System.Windows.Forms.ToolStrip.GetNextItem(System.Windows.Forms.ToolStripItem start, System.Windows.Forms.ArrowDirection direction) -> System.Windows.Forms.ToolStripItem
-~virtual System.Windows.Forms.ToolStrip.Items.get -> System.Windows.Forms.ToolStripItemCollection
+virtual System.Windows.Forms.ToolStrip.Items.get -> System.Windows.Forms.ToolStripItemCollection!
 ~virtual System.Windows.Forms.ToolStrip.OnBeginDrag(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStrip.OnEndDrag(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStrip.OnItemAdded(System.Windows.Forms.ToolStripItemEventArgs e) -> void
@@ -2117,69 +2117,69 @@ virtual System.Windows.Forms.ToolStripComboBox.OnTextUpdate(System.EventArgs! e)
 ~virtual System.Windows.Forms.ToolStripControlHost.OnUnsubscribeControlEvents(System.Windows.Forms.Control control) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnValidated(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripControlHost.OnValidating(System.ComponentModel.CancelEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDown.OnClosed(System.Windows.Forms.ToolStripDropDownClosedEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDown.OnClosing(System.Windows.Forms.ToolStripDropDownClosingEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDown.OnOpened(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDown.OnOpening(System.ComponentModel.CancelEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDownItem.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown
-~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownClosed(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownHide(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownOpened(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownShow(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.BackgroundImage.get -> System.Drawing.Image
-~virtual System.Windows.Forms.ToolStripItem.BackgroundImage.set -> void
-~virtual System.Windows.Forms.ToolStripItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.ToolStripItem.Font.get -> System.Drawing.Font
-~virtual System.Windows.Forms.ToolStripItem.Font.set -> void
-~virtual System.Windows.Forms.ToolStripItem.Image.get -> System.Drawing.Image
-~virtual System.Windows.Forms.ToolStripItem.Image.set -> void
-~virtual System.Windows.Forms.ToolStripItem.OnAvailableChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnBackColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnClick(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnCommandCanExecuteChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnCommandChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnCommandParameterChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDisplayStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDoubleClick(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDragDrop(System.Windows.Forms.DragEventArgs dragEvent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDragEnter(System.Windows.Forms.DragEventArgs dragEvent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDragLeave(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnDragOver(System.Windows.Forms.DragEventArgs dragEvent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnEnabledChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnFontChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnForeColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnGiveFeedback(System.Windows.Forms.GiveFeedbackEventArgs giveFeedbackEvent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnLocationChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseEnter(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseHover(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseLeave(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseMove(System.Windows.Forms.MouseEventArgs mea) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnMouseUp(System.Windows.Forms.MouseEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnOwnerChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnOwnerFontChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnParentBackColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnParentChanged(System.Windows.Forms.ToolStrip oldParent, System.Windows.Forms.ToolStrip newParent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnParentEnabledChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnParentForeColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnParentRightToLeftChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnQueryContinueDrag(System.Windows.Forms.QueryContinueDragEventArgs queryContinueDragEvent) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnRequestCommandExecute(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnRightToLeftChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnTextChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.OnVisibleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripItem.Text.get -> string
-~virtual System.Windows.Forms.ToolStripItem.Text.set -> void
+virtual System.Windows.Forms.ToolStripDropDown.OnClosed(System.Windows.Forms.ToolStripDropDownClosedEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDown.OnClosing(System.Windows.Forms.ToolStripDropDownClosingEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDown.OnOpened(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDown.OnOpening(System.ComponentModel.CancelEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDownItem.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown!
+virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownClosed(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownHide(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownItemClicked(System.Windows.Forms.ToolStripItemClickedEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownOpened(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripDropDownItem.OnDropDownShow(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.BackgroundImage.get -> System.Drawing.Image?
+virtual System.Windows.Forms.ToolStripItem.BackgroundImage.set -> void
+virtual System.Windows.Forms.ToolStripItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+virtual System.Windows.Forms.ToolStripItem.Font.get -> System.Drawing.Font!
+virtual System.Windows.Forms.ToolStripItem.Font.set -> void
+virtual System.Windows.Forms.ToolStripItem.Image.get -> System.Drawing.Image?
+virtual System.Windows.Forms.ToolStripItem.Image.set -> void
+virtual System.Windows.Forms.ToolStripItem.OnAvailableChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnBackColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnClick(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnCommandCanExecuteChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnCommandChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnCommandParameterChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDisplayStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDoubleClick(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDragDrop(System.Windows.Forms.DragEventArgs! dragEvent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDragEnter(System.Windows.Forms.DragEventArgs! dragEvent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDragLeave(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnDragOver(System.Windows.Forms.DragEventArgs! dragEvent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnEnabledChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnFontChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnForeColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnGiveFeedback(System.Windows.Forms.GiveFeedbackEventArgs! giveFeedbackEvent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnLayout(System.Windows.Forms.LayoutEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnLocationChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseEnter(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseHover(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseLeave(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseMove(System.Windows.Forms.MouseEventArgs! mea) -> void
+virtual System.Windows.Forms.ToolStripItem.OnMouseUp(System.Windows.Forms.MouseEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnOwnerChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnOwnerFontChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnPaint(System.Windows.Forms.PaintEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnParentBackColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnParentChanged(System.Windows.Forms.ToolStrip? oldParent, System.Windows.Forms.ToolStrip? newParent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnParentEnabledChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnParentForeColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnParentRightToLeftChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnQueryContinueDrag(System.Windows.Forms.QueryContinueDragEventArgs! queryContinueDragEvent) -> void
+virtual System.Windows.Forms.ToolStripItem.OnRequestCommandExecute(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnRightToLeftChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnTextChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.OnVisibleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripItem.Text.get -> string?
+virtual System.Windows.Forms.ToolStripItem.Text.set -> void
 ~virtual System.Windows.Forms.ToolStripItemCollection.ContainsKey(string key) -> bool
 ~virtual System.Windows.Forms.ToolStripItemCollection.IndexOfKey(string key) -> int
 ~virtual System.Windows.Forms.ToolStripItemCollection.RemoveByKey(string key) -> void
 ~virtual System.Windows.Forms.ToolStripItemCollection.this[int index].get -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStripItemCollection.this[string key].get -> System.Windows.Forms.ToolStripItem
-~virtual System.Windows.Forms.ToolStripMenuItem.OnCheckedChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripMenuItem.OnCheckStateChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ToolStripMenuItem.OnCheckedChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripMenuItem.OnCheckStateChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.this[int index].get -> System.Windows.Forms.ToolStripPanelRow
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlAdded(System.Windows.Forms.Control control, int index) -> void
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlRemoved(System.Windows.Forms.Control control, int index) -> void
@@ -2718,7 +2718,6 @@ override System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(S
 override System.Windows.Forms.DockingAttribute.Equals(object? obj) -> bool
 override System.Windows.Forms.DockingAttribute.GetHashCode() -> int
 override System.Windows.Forms.DockingAttribute.IsDefaultAttribute() -> bool
-override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.get -> string?
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.set -> void
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
@@ -4948,7 +4947,7 @@ System.Windows.Forms.AccessibleNavigation.Right = 4 -> System.Windows.Forms.Acce
 System.Windows.Forms.AccessibleNavigation.Up = 1 -> System.Windows.Forms.AccessibleNavigation
 System.Windows.Forms.AccessibleObject
 System.Windows.Forms.AccessibleObject.AccessibleObject() -> void
-System.Windows.Forms.AccessibleObject.RaiseAutomationNotification(System.Windows.Forms.Automation.AutomationNotificationKind notificationKind, System.Windows.Forms.Automation.AutomationNotificationProcessing notificationProcessing, string! notificationText) -> bool
+System.Windows.Forms.AccessibleObject.RaiseAutomationNotification(System.Windows.Forms.Automation.AutomationNotificationKind notificationKind, System.Windows.Forms.Automation.AutomationNotificationProcessing notificationProcessing, string? notificationText) -> bool
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle) -> void
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(nint handle, int objid) -> void
 System.Windows.Forms.AccessibleRole
@@ -5276,7 +5275,7 @@ System.Windows.Forms.BindingCompleteState.Success = 0 -> System.Windows.Forms.Bi
 System.Windows.Forms.BindingContext
 System.Windows.Forms.BindingContext.BindingContext() -> void
 System.Windows.Forms.BindingContext.Clear() -> void
-System.Windows.Forms.BindingContext.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler
+System.Windows.Forms.BindingContext.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler?
 System.Windows.Forms.BindingContext.IsReadOnly.get -> bool
 System.Windows.Forms.BindingManagerBase
 System.Windows.Forms.BindingManagerBase.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler!
@@ -7342,7 +7341,7 @@ System.Windows.Forms.ErrorProvider.BlinkStyle.set -> void
 System.Windows.Forms.ErrorProvider.Clear() -> void
 System.Windows.Forms.ErrorProvider.ErrorProvider() -> void
 System.Windows.Forms.ErrorProvider.HasErrors.get -> bool
-System.Windows.Forms.ErrorProvider.RightToLeftChanged -> System.EventHandler
+System.Windows.Forms.ErrorProvider.RightToLeftChanged -> System.EventHandler?
 System.Windows.Forms.ErrorProvider.UpdateBinding() -> void
 System.Windows.Forms.FeatureSupport
 System.Windows.Forms.FeatureSupport.FeatureSupport() -> void
@@ -9068,14 +9067,14 @@ System.Windows.Forms.MonthCalendar
 System.Windows.Forms.MonthCalendar.AddAnnuallyBoldedDate(System.DateTime date) -> void
 System.Windows.Forms.MonthCalendar.AddBoldedDate(System.DateTime date) -> void
 System.Windows.Forms.MonthCalendar.AddMonthlyBoldedDate(System.DateTime date) -> void
-System.Windows.Forms.MonthCalendar.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.MonthCalendar.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.MonthCalendar.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.MonthCalendar.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.MonthCalendar.CalendarDimensions.get -> System.Drawing.Size
 System.Windows.Forms.MonthCalendar.CalendarDimensions.set -> void
-System.Windows.Forms.MonthCalendar.Click -> System.EventHandler
-System.Windows.Forms.MonthCalendar.DateChanged -> System.Windows.Forms.DateRangeEventHandler
-System.Windows.Forms.MonthCalendar.DateSelected -> System.Windows.Forms.DateRangeEventHandler
-System.Windows.Forms.MonthCalendar.DoubleClick -> System.EventHandler
+System.Windows.Forms.MonthCalendar.Click -> System.EventHandler?
+System.Windows.Forms.MonthCalendar.DateChanged -> System.Windows.Forms.DateRangeEventHandler?
+System.Windows.Forms.MonthCalendar.DateSelected -> System.Windows.Forms.DateRangeEventHandler?
+System.Windows.Forms.MonthCalendar.DoubleClick -> System.EventHandler?
 System.Windows.Forms.MonthCalendar.FirstDayOfWeek.get -> System.Windows.Forms.Day
 System.Windows.Forms.MonthCalendar.FirstDayOfWeek.set -> void
 System.Windows.Forms.MonthCalendar.HitArea
@@ -9098,7 +9097,7 @@ System.Windows.Forms.MonthCalendar.HitTestInfo.Point.get -> System.Drawing.Point
 System.Windows.Forms.MonthCalendar.HitTestInfo.Time.get -> System.DateTime
 System.Windows.Forms.MonthCalendar.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.MonthCalendar.ImeMode.set -> void
-System.Windows.Forms.MonthCalendar.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.MonthCalendar.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.MonthCalendar.MaxDate.get -> System.DateTime
 System.Windows.Forms.MonthCalendar.MaxDate.set -> void
 System.Windows.Forms.MonthCalendar.MaxSelectionCount.get -> int
@@ -9106,19 +9105,19 @@ System.Windows.Forms.MonthCalendar.MaxSelectionCount.set -> void
 System.Windows.Forms.MonthCalendar.MinDate.get -> System.DateTime
 System.Windows.Forms.MonthCalendar.MinDate.set -> void
 System.Windows.Forms.MonthCalendar.MonthCalendar() -> void
-System.Windows.Forms.MonthCalendar.MouseClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.MonthCalendar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.MonthCalendar.MouseClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.MonthCalendar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.MonthCalendar.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.MonthCalendar.Padding.set -> void
-System.Windows.Forms.MonthCalendar.PaddingChanged -> System.EventHandler
-System.Windows.Forms.MonthCalendar.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.MonthCalendar.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.MonthCalendar.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.MonthCalendar.RemoveAllAnnuallyBoldedDates() -> void
 System.Windows.Forms.MonthCalendar.RemoveAllBoldedDates() -> void
 System.Windows.Forms.MonthCalendar.RemoveAllMonthlyBoldedDates() -> void
 System.Windows.Forms.MonthCalendar.RemoveAnnuallyBoldedDate(System.DateTime date) -> void
 System.Windows.Forms.MonthCalendar.RemoveBoldedDate(System.DateTime date) -> void
 System.Windows.Forms.MonthCalendar.RemoveMonthlyBoldedDate(System.DateTime date) -> void
-System.Windows.Forms.MonthCalendar.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.MonthCalendar.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.MonthCalendar.ScrollChange.get -> int
 System.Windows.Forms.MonthCalendar.ScrollChange.set -> void
 System.Windows.Forms.MonthCalendar.SelectionEnd.get -> System.DateTime
@@ -9137,7 +9136,7 @@ System.Windows.Forms.MonthCalendar.ShowWeekNumbers.set -> void
 System.Windows.Forms.MonthCalendar.SingleMonthSize.get -> System.Drawing.Size
 System.Windows.Forms.MonthCalendar.Size.get -> System.Drawing.Size
 System.Windows.Forms.MonthCalendar.Size.set -> void
-System.Windows.Forms.MonthCalendar.TextChanged -> System.EventHandler
+System.Windows.Forms.MonthCalendar.TextChanged -> System.EventHandler?
 System.Windows.Forms.MonthCalendar.TitleBackColor.get -> System.Drawing.Color
 System.Windows.Forms.MonthCalendar.TitleBackColor.set -> void
 System.Windows.Forms.MonthCalendar.TitleForeColor.get -> System.Drawing.Color
@@ -10375,7 +10374,7 @@ System.Windows.Forms.StatusStrip.LayoutStyle.get -> System.Windows.Forms.ToolStr
 System.Windows.Forms.StatusStrip.LayoutStyle.set -> void
 System.Windows.Forms.StatusStrip.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.StatusStrip.Padding.set -> void
-System.Windows.Forms.StatusStrip.PaddingChanged -> System.EventHandler
+System.Windows.Forms.StatusStrip.PaddingChanged -> System.EventHandler?
 System.Windows.Forms.StatusStrip.ShowItemToolTips.get -> bool
 System.Windows.Forms.StatusStrip.ShowItemToolTips.set -> void
 System.Windows.Forms.StatusStrip.SizeGripBounds.get -> System.Drawing.Rectangle
@@ -10902,22 +10901,22 @@ System.Windows.Forms.ToolStrip.AutoScrollMinSize.get -> System.Drawing.Size
 System.Windows.Forms.ToolStrip.AutoScrollMinSize.set -> void
 System.Windows.Forms.ToolStrip.AutoScrollPosition.get -> System.Drawing.Point
 System.Windows.Forms.ToolStrip.AutoScrollPosition.set -> void
-System.Windows.Forms.ToolStrip.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.ToolStrip.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.ToolStrip.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolStrip.BackColor.set -> void
-System.Windows.Forms.ToolStrip.BeginDrag -> System.EventHandler
+System.Windows.Forms.ToolStrip.BeginDrag -> System.EventHandler?
 System.Windows.Forms.ToolStrip.CanOverflow.get -> bool
 System.Windows.Forms.ToolStrip.CanOverflow.set -> void
 System.Windows.Forms.ToolStrip.CausesValidation.get -> bool
 System.Windows.Forms.ToolStrip.CausesValidation.set -> void
-System.Windows.Forms.ToolStrip.CausesValidationChanged -> System.EventHandler
-System.Windows.Forms.ToolStrip.ControlAdded -> System.Windows.Forms.ControlEventHandler
-System.Windows.Forms.ToolStrip.ControlRemoved -> System.Windows.Forms.ControlEventHandler
-System.Windows.Forms.ToolStrip.CursorChanged -> System.EventHandler
-System.Windows.Forms.ToolStrip.EndDrag -> System.EventHandler
+System.Windows.Forms.ToolStrip.CausesValidationChanged -> System.EventHandler?
+System.Windows.Forms.ToolStrip.ControlAdded -> System.Windows.Forms.ControlEventHandler?
+System.Windows.Forms.ToolStrip.ControlRemoved -> System.Windows.Forms.ControlEventHandler?
+System.Windows.Forms.ToolStrip.CursorChanged -> System.EventHandler?
+System.Windows.Forms.ToolStrip.EndDrag -> System.EventHandler?
 System.Windows.Forms.ToolStrip.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.ToolStrip.ForeColor.set -> void
-System.Windows.Forms.ToolStrip.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.ToolStrip.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.ToolStrip.GripDisplayStyle.get -> System.Windows.Forms.ToolStripGripDisplayStyle
 System.Windows.Forms.ToolStrip.GripMargin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ToolStrip.GripMargin.set -> void
@@ -10929,9 +10928,9 @@ System.Windows.Forms.ToolStrip.ImageScalingSize.get -> System.Drawing.Size
 System.Windows.Forms.ToolStrip.ImageScalingSize.set -> void
 System.Windows.Forms.ToolStrip.IsCurrentlyDragging.get -> bool
 System.Windows.Forms.ToolStrip.IsDropDown.get -> bool
-System.Windows.Forms.ToolStrip.ItemAdded -> System.Windows.Forms.ToolStripItemEventHandler
-System.Windows.Forms.ToolStrip.ItemClicked -> System.Windows.Forms.ToolStripItemClickedEventHandler
-System.Windows.Forms.ToolStrip.ItemRemoved -> System.Windows.Forms.ToolStripItemEventHandler
+System.Windows.Forms.ToolStrip.ItemAdded -> System.Windows.Forms.ToolStripItemEventHandler?
+System.Windows.Forms.ToolStrip.ItemClicked -> System.Windows.Forms.ToolStripItemClickedEventHandler?
+System.Windows.Forms.ToolStrip.ItemRemoved -> System.Windows.Forms.ToolStripItemEventHandler?
 System.Windows.Forms.ToolStrip.LayoutCompleted -> System.EventHandler
 System.Windows.Forms.ToolStrip.LayoutStyle.get -> System.Windows.Forms.ToolStripLayoutStyle
 System.Windows.Forms.ToolStrip.LayoutStyle.set -> void
@@ -11129,64 +11128,64 @@ System.Windows.Forms.ToolStripDropDown.AllowTransparency.get -> bool
 System.Windows.Forms.ToolStripDropDown.AllowTransparency.set -> void
 System.Windows.Forms.ToolStripDropDown.AutoClose.get -> bool
 System.Windows.Forms.ToolStripDropDown.AutoClose.set -> void
-System.Windows.Forms.ToolStripDropDown.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.BackgroundImageLayoutChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.BindingContextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.BackgroundImageLayoutChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.BindingContextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.CanOverflow.get -> bool
 System.Windows.Forms.ToolStripDropDown.CanOverflow.set -> void
-System.Windows.Forms.ToolStripDropDown.ChangeUICues -> System.Windows.Forms.UICuesEventHandler
+System.Windows.Forms.ToolStripDropDown.ChangeUICues -> System.Windows.Forms.UICuesEventHandler?
 System.Windows.Forms.ToolStripDropDown.Close() -> void
 System.Windows.Forms.ToolStripDropDown.Close(System.Windows.Forms.ToolStripDropDownCloseReason reason) -> void
-System.Windows.Forms.ToolStripDropDown.Closed -> System.Windows.Forms.ToolStripDropDownClosedEventHandler
-System.Windows.Forms.ToolStripDropDown.Closing -> System.Windows.Forms.ToolStripDropDownClosingEventHandler
-System.Windows.Forms.ToolStripDropDown.ContextMenuStripChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.DockChanged -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.Closed -> System.Windows.Forms.ToolStripDropDownClosedEventHandler?
+System.Windows.Forms.ToolStripDropDown.Closing -> System.Windows.Forms.ToolStripDropDownClosingEventHandler?
+System.Windows.Forms.ToolStripDropDown.ContextMenuStripChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.DockChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.DropShadowEnabled.get -> bool
 System.Windows.Forms.ToolStripDropDown.DropShadowEnabled.set -> void
-System.Windows.Forms.ToolStripDropDown.Enter -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.FontChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.ForeColorChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler
+System.Windows.Forms.ToolStripDropDown.Enter -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.FontChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.ForeColorChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler?
 System.Windows.Forms.ToolStripDropDown.GripDisplayStyle.get -> System.Windows.Forms.ToolStripGripDisplayStyle
 System.Windows.Forms.ToolStripDropDown.GripMargin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ToolStripDropDown.GripMargin.set -> void
 System.Windows.Forms.ToolStripDropDown.GripRectangle.get -> System.Drawing.Rectangle
 System.Windows.Forms.ToolStripDropDown.GripStyle.get -> System.Windows.Forms.ToolStripGripStyle
 System.Windows.Forms.ToolStripDropDown.GripStyle.set -> void
-System.Windows.Forms.ToolStripDropDown.HelpRequested -> System.Windows.Forms.HelpEventHandler
-System.Windows.Forms.ToolStripDropDown.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.HelpRequested -> System.Windows.Forms.HelpEventHandler?
+System.Windows.Forms.ToolStripDropDown.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.IsAutoGenerated.get -> bool
-System.Windows.Forms.ToolStripDropDown.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.ToolStripDropDown.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.ToolStripDropDown.KeyUp -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.ToolStripDropDown.Leave -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.ToolStripDropDown.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.ToolStripDropDown.KeyUp -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.ToolStripDropDown.Leave -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.Location.get -> System.Drawing.Point
 System.Windows.Forms.ToolStripDropDown.Location.set -> void
 System.Windows.Forms.ToolStripDropDown.Opacity.get -> double
 System.Windows.Forms.ToolStripDropDown.Opacity.set -> void
-System.Windows.Forms.ToolStripDropDown.Opened -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.Opening -> System.ComponentModel.CancelEventHandler
-System.Windows.Forms.ToolStripDropDown.RegionChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.Scroll -> System.Windows.Forms.ScrollEventHandler
+System.Windows.Forms.ToolStripDropDown.Opened -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.Opening -> System.ComponentModel.CancelEventHandler?
+System.Windows.Forms.ToolStripDropDown.RegionChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.Scroll -> System.Windows.Forms.ScrollEventHandler?
 System.Windows.Forms.ToolStripDropDown.Show() -> void
 System.Windows.Forms.ToolStripDropDown.Show(int x, int y) -> void
 System.Windows.Forms.ToolStripDropDown.Show(System.Drawing.Point position, System.Windows.Forms.ToolStripDropDownDirection direction) -> void
 System.Windows.Forms.ToolStripDropDown.Show(System.Drawing.Point screenLocation) -> void
 System.Windows.Forms.ToolStripDropDown.Stretch.get -> bool
 System.Windows.Forms.ToolStripDropDown.Stretch.set -> void
-System.Windows.Forms.ToolStripDropDown.StyleChanged -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.StyleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.TabIndex.get -> int
 System.Windows.Forms.ToolStripDropDown.TabIndex.set -> void
-System.Windows.Forms.ToolStripDropDown.TabIndexChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.TabStopChanged -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.TextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripDropDown.TabIndexChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.TabStopChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.TextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDown.ToolStripDropDown() -> void
 System.Windows.Forms.ToolStripDropDown.ToolStripDropDownAccessibleObject
 System.Windows.Forms.ToolStripDropDown.ToolStripDropDownAccessibleObject.ToolStripDropDownAccessibleObject(System.Windows.Forms.ToolStripDropDown! owner) -> void
 System.Windows.Forms.ToolStripDropDown.TopLevel.get -> bool
 System.Windows.Forms.ToolStripDropDown.TopLevel.set -> void
-System.Windows.Forms.ToolStripDropDown.Validated -> System.EventHandler
-System.Windows.Forms.ToolStripDropDown.Validating -> System.ComponentModel.CancelEventHandler
+System.Windows.Forms.ToolStripDropDown.Validated -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDown.Validating -> System.ComponentModel.CancelEventHandler?
 System.Windows.Forms.ToolStripDropDown.Visible.get -> bool
 System.Windows.Forms.ToolStripDropDown.Visible.set -> void
 System.Windows.Forms.ToolStripDropDownButton
@@ -11218,12 +11217,12 @@ System.Windows.Forms.ToolStripDropDownDirection.Default = 7 -> System.Windows.Fo
 System.Windows.Forms.ToolStripDropDownDirection.Left = 4 -> System.Windows.Forms.ToolStripDropDownDirection
 System.Windows.Forms.ToolStripDropDownDirection.Right = 5 -> System.Windows.Forms.ToolStripDropDownDirection
 System.Windows.Forms.ToolStripDropDownItem
-System.Windows.Forms.ToolStripDropDownItem.DropDownClosed -> System.EventHandler
+System.Windows.Forms.ToolStripDropDownItem.DropDownClosed -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDownItem.DropDownDirection.get -> System.Windows.Forms.ToolStripDropDownDirection
 System.Windows.Forms.ToolStripDropDownItem.DropDownDirection.set -> void
-System.Windows.Forms.ToolStripDropDownItem.DropDownItemClicked -> System.Windows.Forms.ToolStripItemClickedEventHandler
-System.Windows.Forms.ToolStripDropDownItem.DropDownOpened -> System.EventHandler
-System.Windows.Forms.ToolStripDropDownItem.DropDownOpening -> System.EventHandler
+System.Windows.Forms.ToolStripDropDownItem.DropDownItemClicked -> System.Windows.Forms.ToolStripItemClickedEventHandler?
+System.Windows.Forms.ToolStripDropDownItem.DropDownOpened -> System.EventHandler?
+System.Windows.Forms.ToolStripDropDownItem.DropDownOpening -> System.EventHandler?
 System.Windows.Forms.ToolStripDropDownItem.HasDropDown.get -> bool
 System.Windows.Forms.ToolStripDropDownItem.HideDropDown() -> void
 System.Windows.Forms.ToolStripDropDownItem.ShowDropDown() -> void
@@ -11263,26 +11262,26 @@ System.Windows.Forms.ToolStripItem.AutoToolTip.get -> bool
 System.Windows.Forms.ToolStripItem.AutoToolTip.set -> void
 System.Windows.Forms.ToolStripItem.Available.get -> bool
 System.Windows.Forms.ToolStripItem.Available.set -> void
-System.Windows.Forms.ToolStripItem.AvailableChanged -> System.EventHandler
-System.Windows.Forms.ToolStripItem.BackColorChanged -> System.EventHandler
-System.Windows.Forms.ToolStripItem.Click -> System.EventHandler
-System.Windows.Forms.ToolStripItem.CommandCanExecuteChanged -> System.EventHandler
-System.Windows.Forms.ToolStripItem.CommandChanged -> System.EventHandler
-System.Windows.Forms.ToolStripItem.CommandParameterChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.AvailableChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.BackColorChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.Click -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.CommandCanExecuteChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.CommandChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.CommandParameterChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripItem.ContentRectangle.get -> System.Drawing.Rectangle
-System.Windows.Forms.ToolStripItem.DisplayStyleChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.DisplayStyleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripItem.Dock.get -> System.Windows.Forms.DockStyle
 System.Windows.Forms.ToolStripItem.Dock.set -> void
-System.Windows.Forms.ToolStripItem.DoubleClick -> System.EventHandler
+System.Windows.Forms.ToolStripItem.DoubleClick -> System.EventHandler?
 System.Windows.Forms.ToolStripItem.DoubleClickEnabled.get -> bool
 System.Windows.Forms.ToolStripItem.DoubleClickEnabled.set -> void
-System.Windows.Forms.ToolStripItem.DragDrop -> System.Windows.Forms.DragEventHandler
-System.Windows.Forms.ToolStripItem.DragEnter -> System.Windows.Forms.DragEventHandler
-System.Windows.Forms.ToolStripItem.DragLeave -> System.EventHandler
-System.Windows.Forms.ToolStripItem.DragOver -> System.Windows.Forms.DragEventHandler
-System.Windows.Forms.ToolStripItem.EnabledChanged -> System.EventHandler
-System.Windows.Forms.ToolStripItem.ForeColorChanged -> System.EventHandler
-System.Windows.Forms.ToolStripItem.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler
+System.Windows.Forms.ToolStripItem.DragDrop -> System.Windows.Forms.DragEventHandler?
+System.Windows.Forms.ToolStripItem.DragEnter -> System.Windows.Forms.DragEventHandler?
+System.Windows.Forms.ToolStripItem.DragLeave -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.DragOver -> System.Windows.Forms.DragEventHandler?
+System.Windows.Forms.ToolStripItem.EnabledChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.ForeColorChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler?
 System.Windows.Forms.ToolStripItem.Height.get -> int
 System.Windows.Forms.ToolStripItem.Height.set -> void
 System.Windows.Forms.ToolStripItem.ImageAlign.get -> System.Drawing.ContentAlignment
@@ -11298,34 +11297,34 @@ System.Windows.Forms.ToolStripItem.Invalidate(System.Drawing.Rectangle r) -> voi
 System.Windows.Forms.ToolStripItem.IsDisposed.get -> bool
 System.Windows.Forms.ToolStripItem.IsOnDropDown.get -> bool
 System.Windows.Forms.ToolStripItem.IsOnOverflow.get -> bool
-System.Windows.Forms.ToolStripItem.LocationChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.LocationChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripItem.Margin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ToolStripItem.Margin.set -> void
 System.Windows.Forms.ToolStripItem.MergeAction.get -> System.Windows.Forms.MergeAction
 System.Windows.Forms.ToolStripItem.MergeAction.set -> void
 System.Windows.Forms.ToolStripItem.MergeIndex.get -> int
 System.Windows.Forms.ToolStripItem.MergeIndex.set -> void
-System.Windows.Forms.ToolStripItem.MouseDown -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.ToolStripItem.MouseEnter -> System.EventHandler
-System.Windows.Forms.ToolStripItem.MouseHover -> System.EventHandler
-System.Windows.Forms.ToolStripItem.MouseLeave -> System.EventHandler
-System.Windows.Forms.ToolStripItem.MouseMove -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.ToolStripItem.MouseUp -> System.Windows.Forms.MouseEventHandler
+System.Windows.Forms.ToolStripItem.MouseDown -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.ToolStripItem.MouseEnter -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.MouseHover -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.MouseLeave -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.MouseMove -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.ToolStripItem.MouseUp -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.ToolStripItem.Overflow.get -> System.Windows.Forms.ToolStripItemOverflow
 System.Windows.Forms.ToolStripItem.Overflow.set -> void
-System.Windows.Forms.ToolStripItem.OwnerChanged -> System.EventHandler
-System.Windows.Forms.ToolStripItem.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.ToolStripItem.OwnerChanged -> System.EventHandler?
+System.Windows.Forms.ToolStripItem.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.ToolStripItem.PerformClick() -> void
 System.Windows.Forms.ToolStripItem.Placement.get -> System.Windows.Forms.ToolStripItemPlacement
-System.Windows.Forms.ToolStripItem.QueryAccessibilityHelp -> System.Windows.Forms.QueryAccessibilityHelpEventHandler
-System.Windows.Forms.ToolStripItem.QueryContinueDrag -> System.Windows.Forms.QueryContinueDragEventHandler
+System.Windows.Forms.ToolStripItem.QueryAccessibilityHelp -> System.Windows.Forms.QueryAccessibilityHelpEventHandler?
+System.Windows.Forms.ToolStripItem.QueryContinueDrag -> System.Windows.Forms.QueryContinueDragEventHandler?
 System.Windows.Forms.ToolStripItem.ResetMargin() -> void
 System.Windows.Forms.ToolStripItem.ResetPadding() -> void
 System.Windows.Forms.ToolStripItem.RightToLeftAutoMirrorImage.get -> bool
 System.Windows.Forms.ToolStripItem.RightToLeftAutoMirrorImage.set -> void
-System.Windows.Forms.ToolStripItem.RightToLeftChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.RightToLeftChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripItem.Select() -> void
-System.Windows.Forms.ToolStripItem.TextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.TextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripItem.TextImageRelation.get -> System.Windows.Forms.TextImageRelation
 System.Windows.Forms.ToolStripItem.TextImageRelation.set -> void
 System.Windows.Forms.ToolStripItem.ToolStripItem() -> void
@@ -11334,7 +11333,7 @@ System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.AddState(System
 System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToolStripItemAccessibleObject(System.Windows.Forms.ToolStripItem! ownerItem) -> void
 System.Windows.Forms.ToolStripItem.Visible.get -> bool
 System.Windows.Forms.ToolStripItem.Visible.set -> void
-System.Windows.Forms.ToolStripItem.VisibleChanged -> System.EventHandler
+System.Windows.Forms.ToolStripItem.VisibleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripItem.Width.get -> int
 System.Windows.Forms.ToolStripItem.Width.set -> void
 System.Windows.Forms.ToolStripItemAlignment
@@ -11422,12 +11421,12 @@ System.Windows.Forms.ToolStripManagerRenderMode.System = 1 -> System.Windows.For
 System.Windows.Forms.ToolStripMenuItem
 System.Windows.Forms.ToolStripMenuItem.Checked.get -> bool
 System.Windows.Forms.ToolStripMenuItem.Checked.set -> void
-System.Windows.Forms.ToolStripMenuItem.CheckedChanged -> System.EventHandler
+System.Windows.Forms.ToolStripMenuItem.CheckedChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripMenuItem.CheckOnClick.get -> bool
 System.Windows.Forms.ToolStripMenuItem.CheckOnClick.set -> void
 System.Windows.Forms.ToolStripMenuItem.CheckState.get -> System.Windows.Forms.CheckState
 System.Windows.Forms.ToolStripMenuItem.CheckState.set -> void
-System.Windows.Forms.ToolStripMenuItem.CheckStateChanged -> System.EventHandler
+System.Windows.Forms.ToolStripMenuItem.CheckStateChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripMenuItem.IsMdiWindowListEntry.get -> bool
 System.Windows.Forms.ToolStripMenuItem.Overflow.get -> System.Windows.Forms.ToolStripItemOverflow
 System.Windows.Forms.ToolStripMenuItem.Overflow.set -> void
@@ -11581,10 +11580,10 @@ System.Windows.Forms.ToolStripSeparator.AutoToolTip.get -> bool
 System.Windows.Forms.ToolStripSeparator.AutoToolTip.set -> void
 System.Windows.Forms.ToolStripSeparator.DisplayStyle.get -> System.Windows.Forms.ToolStripItemDisplayStyle
 System.Windows.Forms.ToolStripSeparator.DisplayStyle.set -> void
-System.Windows.Forms.ToolStripSeparator.DisplayStyleChanged -> System.EventHandler
+System.Windows.Forms.ToolStripSeparator.DisplayStyleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripSeparator.DoubleClickEnabled.get -> bool
 System.Windows.Forms.ToolStripSeparator.DoubleClickEnabled.set -> void
-System.Windows.Forms.ToolStripSeparator.EnabledChanged -> System.EventHandler
+System.Windows.Forms.ToolStripSeparator.EnabledChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripSeparator.ImageAlign.get -> System.Drawing.ContentAlignment
 System.Windows.Forms.ToolStripSeparator.ImageAlign.set -> void
 System.Windows.Forms.ToolStripSeparator.ImageIndex.get -> int
@@ -11597,7 +11596,7 @@ System.Windows.Forms.ToolStripSeparator.RightToLeftAutoMirrorImage.get -> bool
 System.Windows.Forms.ToolStripSeparator.RightToLeftAutoMirrorImage.set -> void
 System.Windows.Forms.ToolStripSeparator.TextAlign.get -> System.Drawing.ContentAlignment
 System.Windows.Forms.ToolStripSeparator.TextAlign.set -> void
-System.Windows.Forms.ToolStripSeparator.TextChanged -> System.EventHandler
+System.Windows.Forms.ToolStripSeparator.TextChanged -> System.EventHandler?
 System.Windows.Forms.ToolStripSeparator.TextImageRelation.get -> System.Windows.Forms.TextImageRelation
 System.Windows.Forms.ToolStripSeparator.TextImageRelation.set -> void
 System.Windows.Forms.ToolStripSeparator.ToolStripSeparator() -> void

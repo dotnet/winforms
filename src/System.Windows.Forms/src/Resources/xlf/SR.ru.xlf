@@ -5523,11 +5523,6 @@ Do you want to replace it?</source>
         <target state="translated">Пустое значение невозможно привести к типу '{1}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">GridItem ликвидирован и не может использоваться в дальнейшем.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">Невозможно расширить GridItem.</target>
@@ -6617,11 +6612,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Текущий объект специальных возможностей предназначен только для ListView в представлении {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">Текущий объект специальных возможностей предназначен только для ListView в представлениях {0}, {1} или {2}.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">Невозможно получить объект доступа, если ListViewItem не присоединен к ListView.</target>
@@ -7435,11 +7425,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">ОК</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">Выгруженный '{0}' больше использовать нельзя.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">

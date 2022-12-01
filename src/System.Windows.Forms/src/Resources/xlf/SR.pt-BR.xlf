@@ -5522,11 +5522,6 @@ Deseja substituí-lo?</target>
         <target state="translated">Valor nulo não pode ser convertido no tipo '{1}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">O GridItem foi descartado e não pode mais ser usado.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">O GridItem não pode ser expandido.</target>
@@ -6616,11 +6611,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">O objeto de acessibilidade atual é somente para a ListView no modo de exibição {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">O objeto de acessibilidade atual é apenas para ListView no modo de exibição {0}, {1} ou {2}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">Não é possível obter o objeto de acessibilidade quando o Item ListView não está anexado a um ListView.</target>
@@ -7434,11 +7424,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">OK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">'{0}' descartado não pode mais ser usado.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">

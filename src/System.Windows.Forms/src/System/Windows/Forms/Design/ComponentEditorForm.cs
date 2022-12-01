@@ -415,7 +415,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override bool PreProcessMessage(ref Message msg)
         {
-            if (null != _pageSites && _pageSites[_activePage].GetPageControl().IsPageMessage(ref msg))
+            if (_pageSites is not null && _pageSites[_activePage].GetPageControl().IsPageMessage(ref msg))
             {
                 return true;
             }

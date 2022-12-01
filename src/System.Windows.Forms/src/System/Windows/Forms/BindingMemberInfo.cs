@@ -2,16 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public struct BindingMemberInfo : IEquatable<BindingMemberInfo>
     {
-        private readonly string _dataList;
-        private readonly string _dataField;
+        private readonly string? _dataList;
+        private readonly string? _dataField;
 
-        public BindingMemberInfo(string dataMember)
+        public BindingMemberInfo(string? dataMember)
         {
             dataMember ??= string.Empty;
 
@@ -33,11 +31,11 @@ namespace System.Windows.Forms
         public string BindingField => _dataField ?? string.Empty;
 
         public string BindingMember
-        {
-            get => BindingPath.Length > 0 ? BindingPath + "." + BindingField : BindingField;
-        }
+            => BindingPath.Length > 0
+                ? BindingPath + "." + BindingField
+                : BindingField;
 
-        public override bool Equals(object otherObject)
+        public override bool Equals(object? otherObject)
         {
             if (otherObject is not BindingMemberInfo otherMember)
             {

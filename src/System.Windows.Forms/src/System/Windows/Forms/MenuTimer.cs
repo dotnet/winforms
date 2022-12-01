@@ -38,7 +38,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose && currentItem != value, "[MenuTimer.CurrentItem] changed: " + ((value is null) ? "null" : value.ToString()));
+                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug!.TraceVerbose && currentItem != value, $"[MenuTimer.CurrentItem] changed: {(value is null ? "null" : value.ToString())}");
                 currentItem = value;
             }
         }
@@ -75,16 +75,17 @@ namespace System.Windows.Forms
             }
         }
 
-        public void Transition(ToolStripMenuItem fromItem, ToolStripMenuItem toItem)
+        public void Transition(ToolStripMenuItem fromItem, ToolStripMenuItem? toItem)
         {
-            Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[MenuTimer.Transition] transitioning items " + fromItem.ToString() + " " + toItem.ToString());
+            ToolStrip.s_menuAutoExpandDebug.TraceVerbose($"[MenuTimer.Transition] transitioning items {fromItem} {toItem?.ToString()}");
 
             if (toItem is null && InTransition)
             {
                 Cancel();
+
                 // in this case we're likely to have hit an item that's not a menu item
                 // or nothing is selected.
-                EndTransition(/*forceClose*/ true);
+                EndTransition(forceClose: true);
                 return;
             }
 
@@ -165,7 +166,7 @@ namespace System.Windows.Forms
                 // that onmouseleave we make sure there's a selected menu item.
                 if (toolStrip.IsDropDown && toolStrip.ActiveDropDowns.Count > 0)
                 {
-                    ToolStripMenuItem? menuItem = (toolStrip.ActiveDropDowns[0] as ToolStripDropDown)?.OwnerItem as ToolStripMenuItem;
+                    ToolStripMenuItem? menuItem = toolStrip.ActiveDropDowns[0].OwnerItem as ToolStripMenuItem;
                     if (menuItem is not null && menuItem.Pressed)
                     {
                         menuItem.Select();
@@ -186,7 +187,7 @@ namespace System.Windows.Forms
             EndTransition(forceClose: false);
             if (CurrentItem is not null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
             {
-                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[MenuTimer.OnTick] calling OnMenuAutoExpand");
+                ToolStrip.s_menuAutoExpandDebug.TraceVerbose("[MenuTimer.OnTick] calling OnMenuAutoExpand");
                 CurrentItem.OnMenuAutoExpand();
             }
         }

@@ -56,7 +56,7 @@ Namespace Microsoft.VisualBasic.Devices
                     Return
                 End Try
                 SyncLock _syncObject 'we don't want our event firing before we've finished setting up the infrastructure.  Also, need to assure there are no races in here so we don't hook up the OS listener twice, etc.
-                    If _networkAvailabilityEventHandlers Is Nothing Then _networkAvailabilityEventHandlers = New ArrayList
+                    If _networkAvailabilityEventHandlers Is Nothing Then _networkAvailabilityEventHandlers = New List(Of NetworkAvailableEventHandler)
                     _networkAvailabilityEventHandlers.Add(handler)
 
                     'Only setup the event Marshalling infrastructure once
@@ -745,7 +745,7 @@ Namespace Microsoft.VisualBasic.Devices
         ' Object for syncing
         Private ReadOnly _syncObject As New Object()
 
-        Private _networkAvailabilityEventHandlers As ArrayList 'Holds the listeners to our NetworkAvailability changed event
+        Private _networkAvailabilityEventHandlers As List(Of NetworkAvailableEventHandler) 'Holds the listeners to our NetworkAvailability changed event
 
         Private _synchronizationContext As SynchronizationContext
         Private _networkAvailabilityChangedCallback As SendOrPostCallback 'Used for marshalling the network address changed event to the foreground thread

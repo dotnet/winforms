@@ -152,7 +152,7 @@ namespace System.Windows.Forms.VisualStyles
         public static bool SupportsFlatMenus =>
             Application.RenderWithVisualStyles
             && PInvoke.GetThemeSysBool(
-                SetParameters(VisualStyleElement.Window.Caption.Active).Handle,
+                SetParameters(VisualStyleElement.Window.Caption.Active).HTHEME,
                 THEME_PROPERTY_SYMBOL_ID.TMT_FLATMENUS);
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace System.Windows.Forms.VisualStyles
                 }
 
                 PInvoke.GetThemeSysInt(
-                    SetParameters(VisualStyleElement.Window.Caption.Active).Handle,
+                    SetParameters(VisualStyleElement.Window.Caption.Active).HTHEME,
                     THEME_PROPERTY_SYMBOL_ID.TMT_MINCOLORDEPTH,
                     out int depth);
 

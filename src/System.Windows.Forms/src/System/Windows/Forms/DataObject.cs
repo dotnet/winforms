@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using static Interop;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms
 {
@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     ///  Implements a basic data transfer mechanism.
     /// </summary>
     [ClassInterface(ClassInterfaceType.None)]
-    public partial class DataObject : IDataObject, IComDataObject
+    public partial class DataObject : IDataObject, ComTypes.IDataObject
     {
         private const string CF_DEPRECATED_FILENAME = "FileName";
         private const string CF_DEPRECATED_FILENAMEW = "FileNameW";
@@ -49,15 +49,15 @@ namespace System.Windows.Forms
         /// </summary>
         internal DataObject(IDataObject data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject based on IDataObject");
+            CompModSwitches.DataObject.TraceVerbose("Constructed DataObject based on IDataObject");
             _innerData = data;
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="IComDataObject"/>.
+        ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="ComTypes.IDataObject"/>.
         /// </summary>
-        internal DataObject(IComDataObject data)
+        internal DataObject(ComTypes.IDataObject data)
         {
             if (data is DataObject dataObject)
             {
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject based on IComDataObject");
+                CompModSwitches.DataObject.TraceVerbose("Constructed DataObject based on IComDataObject");
                 _innerData = new OleConverter(data);
             }
 
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         /// </summary>
         public DataObject()
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject standalone");
+            CompModSwitches.DataObject.TraceVerbose("Constructed DataObject standalone");
             _innerData = new DataStore();
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
         }
@@ -87,12 +87,12 @@ namespace System.Windows.Forms
         /// </summary>
         public DataObject(object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Constructed DataObject base on Object: {data}");
+            CompModSwitches.DataObject.TraceVerbose($"Constructed DataObject base on Object: {data}");
             if (data is IDataObject dataObject && !Marshal.IsComObject(data))
             {
                 _innerData = dataObject;
             }
-            else if (data is IComDataObject comDataObject)
+            else if (data is ComTypes.IDataObject comDataObject)
             {
                 _innerData = new OleConverter(comDataObject);
             }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual object? GetData(string format, bool autoConvert)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Request data: {format}, {autoConvert}");
+            CompModSwitches.DataObject.TraceVerbose($"Request data: {format}, {autoConvert}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
             return _innerData.GetData(format, autoConvert);
         }
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual object? GetData(string format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Request data: {format}");
+            CompModSwitches.DataObject.TraceVerbose($"Request data: {format}");
             return GetData(format, true);
         }
 
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual object? GetData(Type format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Request data: {format?.FullName ?? "(null)"}");
+            CompModSwitches.DataObject.TraceVerbose($"Request data: {format?.FullName ?? "(null)"}");
             return format is null ? null : GetData(format.FullName!);
         }
 
@@ -183,14 +183,14 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual bool GetDataPresent(Type format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Check data: {format?.FullName ?? "(null)"}");
+            CompModSwitches.DataObject.TraceVerbose($"Check data: {format?.FullName ?? "(null)"}");
             if (format is null)
             {
                 return false;
             }
 
             bool present = GetDataPresent(format.FullName!);
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"  ret: {present}");
+            CompModSwitches.DataObject.TraceVerbose($"  ret: {present}");
             return present;
         }
 
@@ -200,10 +200,10 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual bool GetDataPresent(string format, bool autoConvert)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Check data: {format}, {autoConvert}");
+            CompModSwitches.DataObject.TraceVerbose($"Check data: {format}, {autoConvert}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
             bool present = _innerData.GetDataPresent(format, autoConvert);
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"  ret: {present}");
+            CompModSwitches.DataObject.TraceVerbose($"  ret: {present}");
             return present;
         }
 
@@ -213,9 +213,9 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual bool GetDataPresent(string format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Check data: {format}");
+            CompModSwitches.DataObject.TraceVerbose($"Check data: {format}");
             bool present = GetDataPresent(format, autoConvert: true);
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"  ret: {present}");
+            CompModSwitches.DataObject.TraceVerbose($"  ret: {present}");
             return present;
         }
 
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual string[] GetFormats(bool autoConvert)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Check formats: {autoConvert}");
+            CompModSwitches.DataObject.TraceVerbose($"Check formats: {autoConvert}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
             return _innerData.GetFormats(autoConvert);
         }
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual string[] GetFormats()
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check formats:");
+            CompModSwitches.DataObject.TraceVerbose("Check formats:");
             return GetFormats(autoConvert: true);
         }
 
@@ -302,12 +302,7 @@ namespace System.Windows.Forms
             // Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
-            if (GetData(ConvertToDataFormats(format), false) is string text)
-            {
-                return text;
-            }
-
-            return string.Empty;
+            return GetData(ConvertToDataFormats(format), false) is string text ? text : string.Empty;
         }
 
         public virtual void SetAudio(byte[] audioBytes)
@@ -470,11 +465,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
+        int ComTypes.IDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DAdvise");
+            CompModSwitches.DataObject.TraceVerbose("DAdvise");
             if (_innerData is OleConverter converter)
             {
                 return converter.OleDataObject.DAdvise(ref pFormatetc, advf, pAdvSink, out pdwConnection);
@@ -485,11 +480,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        void IComDataObject.DUnadvise(int dwConnection)
+        void ComTypes.IDataObject.DUnadvise(int dwConnection)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DUnadvise");
+            CompModSwitches.DataObject.TraceVerbose("DUnadvise");
             if (_innerData is OleConverter converter)
             {
                 converter.OleDataObject.DUnadvise(dwConnection);
@@ -500,11 +495,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        int IComDataObject.EnumDAdvise(out IEnumSTATDATA? enumAdvise)
+        int ComTypes.IDataObject.EnumDAdvise(out IEnumSTATDATA? enumAdvise)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumDAdvise");
+            CompModSwitches.DataObject.TraceVerbose("EnumDAdvise");
             if (_innerData is OleConverter converter)
             {
                 return converter.OleDataObject.EnumDAdvise(out enumAdvise);
@@ -515,11 +510,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
+        IEnumFORMATETC ComTypes.IDataObject.EnumFormatEtc(DATADIR dwDirection)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"EnumFormatEtc: {dwDirection}");
+            CompModSwitches.DataObject.TraceVerbose($"EnumFormatEtc: {dwDirection}");
             if (_innerData is OleConverter converter)
             {
                 return converter.OleDataObject.EnumFormatEtc(dwDirection);
@@ -534,26 +529,26 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Part of IComDataObject, used to interop with OLE.
+        /// Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
+        int ComTypes.IDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetCanonicalFormatEtc");
+            CompModSwitches.DataObject.TraceVerbose("GetCanonicalFormatEtc");
             if (_innerData is OleConverter converter)
             {
                 return converter.OleDataObject.GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
             }
 
-            pformatetcOut = default(FORMATETC);
+            pformatetcOut = default;
             return DATA_S_SAMEFORMATETC;
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
+        void ComTypes.IDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetData");
+            CompModSwitches.DataObject.TraceVerbose("GetData");
             if (_innerData is OleConverter converter)
             {
                 converter.OleDataObject.GetData(ref formatetc, out medium);
@@ -564,20 +559,20 @@ namespace System.Windows.Forms
                 string formatName = DataFormats.GetFormat(formatetc.cfFormat).Name;
                 if (!_innerData.GetDataPresent(formatName))
                 {
-                    medium = default(STGMEDIUM);
-                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $" drag-and-drop private format requested '{formatName}' not present");
+                    medium = default;
+                    CompModSwitches.DataObject.TraceVerbose($" drag-and-drop private format requested '{formatName}' not present");
                     return;
                 }
 
                 if (_innerData.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
                     medium = dragDropFormat.GetData();
-                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $" drag-and-drop private format retrieved '{formatName}'");
+                    CompModSwitches.DataObject.TraceVerbose($" drag-and-drop private format retrieved '{formatName}'");
                     return;
                 }
             }
 
-            medium = default(STGMEDIUM);
+            medium = default;
 
             if (!GetTymedUseable(formatetc.tymed))
             {
@@ -597,7 +592,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    ((IComDataObject)this).GetDataHere(ref formatetc, ref medium);
+                    ((ComTypes.IDataObject)this).GetDataHere(ref formatetc, ref medium);
                 }
                 catch
                 {
@@ -609,16 +604,16 @@ namespace System.Windows.Forms
             else
             {
                 medium.tymed = formatetc.tymed;
-                ((IComDataObject)this).GetDataHere(ref formatetc, ref medium);
+                ((ComTypes.IDataObject)this).GetDataHere(ref formatetc, ref medium);
             }
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
+        void ComTypes.IDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetDataHere");
+            CompModSwitches.DataObject.TraceVerbose("GetDataHere");
             if (_innerData is OleConverter converter)
             {
                 converter.OleDataObject.GetDataHere(ref formatetc, ref medium);
@@ -630,11 +625,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        int IComDataObject.QueryGetData(ref FORMATETC formatetc)
+        int ComTypes.IDataObject.QueryGetData(ref FORMATETC formatetc)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData");
+            CompModSwitches.DataObject.TraceVerbose("QueryGetData");
             if (_innerData is OleConverter converter)
             {
                 return converter.OleDataObject.QueryGetData(ref formatetc);
@@ -646,8 +641,7 @@ namespace System.Windows.Forms
                 {
                     if (formatetc.cfFormat == 0)
                     {
-                        Debug.WriteLineIf(
-                            CompModSwitches.DataObject.TraceVerbose,
+                        CompModSwitches.DataObject.TraceVerbose(
                             "QueryGetData::returning S_FALSE because cfFormat == 0");
                         return (int)HRESULT.S_FALSE;
                     }
@@ -666,19 +660,18 @@ namespace System.Windows.Forms
                 return (int)HRESULT.DV_E_DVASPECT;
             }
 
-            Debug.WriteLineIf(
-                CompModSwitches.DataObject.TraceVerbose,
+            CompModSwitches.DataObject.TraceVerbose(
                 $"QueryGetData::cfFormat {(ushort)formatetc.cfFormat} found");
 
             return (int)HRESULT.S_OK;
         }
 
         /// <summary>
-        ///  Part of IComDataObject, used to interop with OLE.
+        ///  Part of <see cref="ComTypes.IDataObject"/>, used to interop with OLE.
         /// </summary>
-        void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
+        void ComTypes.IDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "SetData");
+            CompModSwitches.DataObject.TraceVerbose("SetData");
             if (_innerData is OleConverter converter)
             {
                 converter.OleDataObject.SetData(ref pFormatetcIn, ref pmedium, fRelease);
@@ -690,12 +683,12 @@ namespace System.Windows.Forms
                 if (_innerData.GetDataPresent(formatName) && _innerData.GetData(formatName) is DragDropFormat dragDropFormat)
                 {
                     dragDropFormat.RefreshData(pFormatetcIn.cfFormat, pmedium, !fRelease);
-                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $" drag-and-drop private format refreshed '{formatName}'");
+                    CompModSwitches.DataObject.TraceVerbose($" drag-and-drop private format refreshed '{formatName}'");
                 }
                 else
                 {
                     _innerData.SetData(formatName, new DragDropFormat(pFormatetcIn.cfFormat, pmedium, !fRelease));
-                    Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $" drag-and-drop private format loaded '{formatName}'");
+                    CompModSwitches.DataObject.TraceVerbose($" drag-and-drop private format loaded '{formatName}'");
                 }
 
                 return;
@@ -962,7 +955,7 @@ namespace System.Windows.Forms
                         return HRESULT.E_OUTOFMEMORY;
                     }
 
-                    byte* ptr = (byte*)PInvoke.GlobalLock((nint)newHandle);
+                    byte* ptr = (byte*)PInvoke.GlobalLock(newHandle);
                     if (ptr is null)
                     {
                         return HRESULT.E_OUTOFMEMORY;
@@ -1020,8 +1013,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(string format, bool autoConvert, object? data)
         {
-            Debug.WriteLineIf(
-                CompModSwitches.DataObject.TraceVerbose,
+            CompModSwitches.DataObject.TraceVerbose(
                 $"Set data: {format}, {autoConvert}, {data ?? "(null)"}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
             _innerData.SetData(format, autoConvert, data);
@@ -1032,7 +1024,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(string format, object? data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Set data: {format}, {data ?? "(null)"}");
+            CompModSwitches.DataObject.TraceVerbose($"Set data: {format}, {data ?? "(null)"}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
             _innerData.SetData(format, data);
         }
@@ -1042,8 +1034,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(Type format, object? data)
         {
-            Debug.WriteLineIf(
-                CompModSwitches.DataObject.TraceVerbose,
+            CompModSwitches.DataObject.TraceVerbose(
                 $"Set data: {format?.FullName ?? "(null)"}, {data ?? "(null)"}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
             _innerData.SetData(format!, data);
@@ -1054,7 +1045,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetData(object? data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Set data: {data ?? "(null)"}");
+            CompModSwitches.DataObject.TraceVerbose($"Set data: {data ?? "(null)"}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
             _innerData.SetData(data);
         }

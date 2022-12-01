@@ -28,17 +28,11 @@ namespace System.Windows.Forms
                     DropShadowEnabled = false;
                     Bounds = bounds;
 
-                    // caching as this is unlikely to change during the lifetime
-                    // of the dropdown.
-
-                    Rectangle regionRect = bounds;    //create a region the size of the client area
-                    regionRect.Inflate(-1, -1);        //squish down by one pixel
-
-                    Region rgn = new Region(bounds);  // create region
-                    rgn.Exclude(regionRect);          // exclude the center part
-
-                    // set it into the toolstripdropdown’s region
-                    Region = rgn;
+                    // Set a clipping region with the center excluded.
+                    Region region = new(bounds);
+                    bounds.Inflate(-1, -1);
+                    region.Exclude(bounds);
+                    Region = region;
                 }
 
                 // ForceSynchronousPaint - peeks through the message queue, looking for WM_PAINTs
@@ -47,7 +41,7 @@ namespace System.Windows.Forms
                 // When we're changing the location of the feedback dropdown, we need to
                 // force WM_PAINTS to happen, as things that don't respond to WM_ERASEBKGND
                 // have bits of the dropdown region drawn all over them.
-                private void ForceSynchronousPaint()
+                private unsafe void ForceSynchronousPaint()
                 {
                     if (IsDisposed || _numPaintsServiced != 0)
                     {
@@ -57,12 +51,17 @@ namespace System.Windows.Forms
                     // Protect against re-entrancy.
                     try
                     {
-                        MSG msg = default(MSG);
-                        while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE))
+                        MSG msg = default;
+                        while (PInvoke.PeekMessage(
+                            &msg,
+                            HWND.Null,
+                            (uint)User32.WM.PAINT,
+                            (uint)User32.WM.PAINT,
+                            PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
                         {
                             PInvoke.UpdateWindow(msg.hwnd);
 
-                            // Infinite loop protection
+                            // Infinite loop protection.
                             if (_numPaintsServiced++ > MaxPaintsToService)
                             {
                                 Debug.Fail("Somehow we've gotten ourself in a situation where we're pumping an unreasonable number of paint messages, investigate.");
@@ -82,7 +81,7 @@ namespace System.Windows.Forms
 
                 protected override void OnPaintBackground(PaintEventArgs e)
                 {
-                    // respond to everything in WM_ERASEBKGND
+                    // Respond to everything in WM_ERASEBKGND.
                     Renderer.DrawToolStripBackground(new ToolStripRenderEventArgs(e.Graphics, this));
                     Renderer.DrawToolStripBorder(new ToolStripRenderEventArgs(e.Graphics, this));
                 }
@@ -96,7 +95,8 @@ namespace System.Windows.Forms
                 public void MoveTo(Point newLocation)
                 {
                     Location = newLocation;
-                    // if we don't force a paint here, we'll only send WM_ERASEBKGNDs right away
+
+                    // If we don't force a paint here, we'll only send WM_ERASEBKGNDs right away
                     // and leave rectangles all over controls that don't respond to that window message.
                     ForceSynchronousPaint();
                 }

@@ -17,8 +17,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides an implementation for an object that can be inspected by an
-    ///  accessibility application.
+    ///  Provides an implementation for an object that can be inspected by an accessibility application.
     /// </summary>
     public partial class AccessibleObject :
         StandardOleMarshalObject,
@@ -88,7 +87,10 @@ namespace System.Windows.Forms
         {
         }
 
-        // This constructor is used ONLY for wrapping system IAccessible objects
+        /// <devdoc>
+        ///  This constructor is used ONLY for wrapping system IAccessible objects
+        ///  that are returned by the IAccessible methods.
+        /// </devdoc>
         private AccessibleObject(IAccessible? accessible)
         {
             _systemIAccessible = new SystemIAccessibleWrapper(accessible);
@@ -377,7 +379,7 @@ namespace System.Windows.Forms
 
         internal virtual bool IsIAccessibleExSupported()
         {
-            // Override this, in your derived class, to enable IAccessibleEx support
+            // Override this, in your derived class, to enable IAccessibleEx support.
             return false;
         }
 
@@ -945,7 +947,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Perform a hit test
+        ///  Perform a hit test.
         /// </summary>
         object? IAccessible.accHitTest(int xLeft, int yTop)
         {
@@ -1106,12 +1108,12 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void DoDefaultAction()
         {
-            // By default, just does the system default action if available
+            // By default, does the system default action if available.
             _systemIAccessible.accDoDefaultAction(0);
         }
 
         /// <summary>
-        ///  Returns a child Accessible object
+        ///  Returns a child Accessible object.
         /// </summary>
         object? IAccessible.get_accChild(object childID)
         {
@@ -1123,7 +1125,7 @@ namespace System.Windows.Forms
                     CompModSwitches.MSAA.TraceInfo,
                     $"AccessibleObject.GetAccChild: this = {ToString()}, childID = {childID}");
 
-                // Return self for CHILDID_SELF
+                // Return self for CHILDID_SELF.
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
                 {
                     return AsIAccessible(this);
@@ -1236,7 +1238,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns the appropriate child from the Accessible Child Collection, if available
+        ///  Returns the appropriate child from the Accessible Child Collection, if available.
         /// </summary>
         private AccessibleObject? GetAccessibleChild(object childID)
         {
@@ -1798,14 +1800,13 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
-                ref IID.IAccessible,
+                ref IID.GetRef<global::Windows.Win32.UI.Accessibility.IAccessible>(),
                 ref acc);
 
-            Guid IID_IEnumVariant = IID.IEnumVariant;
             Oleacc.CreateStdAccessibleObject(
                 new HandleRef(this, handle),
                 objid,
-                ref IID_IEnumVariant,
+                ref IID.GetRef<IEnumVARIANT>(),
                 out var enumVariantPtr);
 
             if (enumVariantPtr != IntPtr.Zero)
@@ -1875,15 +1876,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private AccessibleObject? WrapIAccessible(object? iacc)
+        private AccessibleObject? WrapIAccessible(object? iAccessible)
         {
-            if (iacc is not IAccessible accessible)
+            if (iAccessible is not IAccessible accessible)
             {
                 return null;
             }
 
-            // Check to see if this object already wraps iacc
-            if (_systemIAccessible.SystemIAccessibleInternal == iacc)
+            // Check to see if this object already wraps iAccessible.
+            if (_systemIAccessible.SystemIAccessibleInternal == iAccessible)
             {
                 return this;
             }
@@ -2107,7 +2108,7 @@ namespace System.Windows.Forms
         public bool RaiseAutomationNotification(
             AutomationNotificationKind notificationKind,
             AutomationNotificationProcessing notificationProcessing,
-            string notificationText)
+            string? notificationText)
         {
             if (!s_notificationEventAvailable || !CanNotifyClients)
             {

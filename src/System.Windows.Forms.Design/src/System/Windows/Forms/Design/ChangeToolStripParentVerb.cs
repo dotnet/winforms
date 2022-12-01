@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal ChangeToolStripParentVerb(string text, ToolStripDesigner designer)
         {
-            Debug.Assert(designer != null, "Can't have a StandardMenuStripVerb without an associated designer");
+            Debug.Assert(designer is not null, "Can't have a StandardMenuStripVerb without an associated designer");
             _designer = designer;
             _provider = designer.Component.Site;
             _host = (IDesignerHost)_provider.GetService(typeof(IDesignerHost));
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design
                     // close the DAP first - this is so that the autoshown panel on drag drop here is not conflicting with the currently opened panel
                     // if the verb was called from the panel
                     ToolStrip toolStrip = _designer.Component as ToolStrip;
-                    if (toolStrip != null && _designer != null && _designer.Component != null && _provider != null)
+                    if (toolStrip is not null && _designer is not null && _designer.Component is not null && _provider is not null)
                     {
                         DesignerActionUIService dapuisvc = _provider.GetService(typeof(DesignerActionUIService)) as DesignerActionUIService;
                         dapuisvc.HideUI(toolStrip);
@@ -59,25 +59,25 @@ namespace System.Windows.Forms.Design
                     // Get OleDragHandler ...
                     ToolboxItem tbi = new ToolboxItem(typeof(ToolStripContainer));
                     OleDragDropHandler ddh = rootDesigner.GetOleDragHandler();
-                    if (ddh != null)
+                    if (ddh is not null)
                     {
                         IComponent[] newComp = ddh.CreateTool(tbi, root, 0, 0, 0, 0, false, false);
                         if (newComp[0] is ToolStripContainer tsc)
                         {
-                            if (toolStrip != null)
+                            if (toolStrip is not null)
                             {
                                 var changeService = _provider.GetService<IComponentChangeService>();
                                 Control newParent = GetParent(tsc, toolStrip);
                                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
                                 Control oldParent = toolStrip.Parent;
-                                if (oldParent != null)
+                                if (oldParent is not null)
                                 {
                                     changeService.OnComponentChanging(oldParent, controlsProp);
                                     //remove control from the old parent
                                     oldParent.Controls.Remove(toolStrip);
                                 }
 
-                                if (newParent != null)
+                                if (newParent is not null)
                                 {
                                     changeService.OnComponentChanging(newParent, controlsProp);
                                     //finally add & relocate the control with the new parent
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Design
                                 }
 
                                 //fire our comp changed events
-                                if (changeService != null && oldParent != null && newParent != null)
+                                if (changeService is not null && oldParent is not null && newParent is not null)
                                 {
                                     changeService.OnComponentChanged(oldParent, controlsProp);
                                     changeService.OnComponentChanged(newParent, controlsProp);
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Design
                     uiService.ShowError(e.Message);
                 }
 
-                if (changeParent != null)
+                if (changeParent is not null)
                 {
                     changeParent.Cancel();
                     changeParent = null;

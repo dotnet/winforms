@@ -89,7 +89,7 @@ namespace System.Drawing.Design
                         null);
 
                     Type myClass = GetType();
-                    if (!myClass.Equals(e.GetType()) && e != null && myClass.IsInstanceOfType(e))
+                    if (!myClass.Equals(e.GetType()) && e is not null && myClass.IsInstanceOfType(e))
                     {
                         filter += $"|{CreateFilterEntry(e)}";
                     }

@@ -313,32 +313,38 @@ namespace System.Windows.Forms
 
                 if (hitTestInfo.Item is not null)
                 {
+                    AccessibleObject itemAccessibleObject = hitTestInfo.Item.AccessibilityObject;
+
                     if (hitTestInfo.SubItem is not null)
                     {
                         return _owningListView.View switch
                         {
-                            View.Details => ((ListViewItem.ListViewItemDetailsAccessibleObject)hitTestInfo.Item.AccessibilityObject)
+                            View.Details => ((ListViewItem.ListViewItemDetailsAccessibleObject)itemAccessibleObject)
                                 .GetChild(hitTestInfo.SubItem.Index, point),
 
                             // Only additional ListViewSubItem are displayed in the accessibility tree if the ListView
                             // in the "Tile" view (the first ListViewSubItem is responsible for the ListViewItem)
-                            View.Tile => hitTestInfo.SubItem.Index > 0 ? hitTestInfo.SubItem.AccessibilityObject : hitTestInfo.Item.AccessibilityObject,
-                            _ => hitTestInfo.Item.AccessibilityObject
+                            View.Tile => hitTestInfo.SubItem.Index > 0 ? hitTestInfo.SubItem.AccessibilityObject : itemAccessibleObject,
+                            _ => itemAccessibleObject
                         };
                     }
 
-                    if (hitTestInfo.Item.AccessibilityObject is ListViewItem.ListViewItemDetailsAccessibleObject itemAccessibleObject)
+                    if (itemAccessibleObject is ListViewItem.ListViewItemDetailsAccessibleObject itemDetailsAccessibleObject)
                     {
                         for (int i = 1; i < _owningListView.Columns.Count; i++)
                         {
-                            if (itemAccessibleObject.GetSubItemBounds(i).Contains(point))
+                            if (itemDetailsAccessibleObject.GetSubItemBounds(i).Contains(point))
                             {
-                                return itemAccessibleObject.GetDetailsSubItemOrFake(i);
+                                return itemDetailsAccessibleObject.GetDetailsSubItemOrFake(i);
                             }
                         }
                     }
+                    else if (itemAccessibleObject is ListViewItem.ListViewItemWithImageAccessibleObject itemIconAccessibleObject)
+                    {
+                        return itemIconAccessibleObject.GetAccessibleObject(point);
+                    }
 
-                    return hitTestInfo.Item.AccessibilityObject;
+                    return itemAccessibleObject;
                 }
 
                 return null;

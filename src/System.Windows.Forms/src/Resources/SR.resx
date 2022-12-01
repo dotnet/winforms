@@ -3293,9 +3293,6 @@ Do you want to replace it?</value>
   <data name="FormWindowStateDescr" xml:space="preserve">
     <value>Determines the initial visual state of the form.</value>
   </data>
-  <data name="GridItemDisposed" xml:space="preserve">
-    <value>The GridItem has been disposed and is no longer usable.</value>
-  </data>
   <data name="GridItemNotExpandable" xml:space="preserve">
     <value>The GridItem cannot be expanded.</value>
   </data>
@@ -4362,9 +4359,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="NumericUpDownValueDescr" xml:space="preserve">
     <value>The current value of the numeric up-down control.</value>
-  </data>
-  <data name="ObjectDisposed" xml:space="preserve">
-    <value>Disposed '{0}' can no longer be used.</value>
   </data>
   <data name="ObjectHasParent" xml:space="preserve">
     <value>Object already has a parent.</value>
@@ -6831,9 +6825,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ListViewItemAccessibilityObjectInvalidViewException" xml:space="preserve">
     <value>The current accessibility object is only for the ListView in {0} view</value>
-  </data>
-  <data name="ListViewItemAccessibilityObjectInvalidViewsException" xml:space="preserve">
-    <value>The current accessibility object is only for the ListView in {0}, {1} or {2} view</value>
   </data>
   <data name="TrackBarLargeDecreaseButtonName" xml:space="preserve">
     <value>Large decrease</value>

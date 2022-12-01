@@ -75,13 +75,13 @@ namespace System.Windows.Forms.Design
             _overlayService?.RemoveOverlay(_toolStripAdornerWindow);
 
             _toolStripAdornerWindow.Dispose();
-            if (_behaviorService != null)
+            if (_behaviorService is not null)
             {
                 _behaviorService.Adorners.Remove(_dropDownAdorner);
                 _behaviorService = null;
             }
 
-            if (_dropDownAdorner != null)
+            if (_dropDownAdorner is not null)
             {
                 _dropDownAdorner.Glyphs.Clear();
                 _dropDownAdorner = null;
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.Design
             {
                 if (disposing)
                 {
-                    if (_designerFrame != null)
+                    if (_designerFrame is not null)
                     {
                         _designerFrame = null;
                     }

@@ -2,10 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
+#if DEBUG
 using System.Diagnostics;
+#endif
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Layout;
@@ -16,7 +16,8 @@ namespace System.Windows.Forms
     {
         private class VerticalRowManager : ToolStripPanelRowManager
         {
-            public VerticalRowManager(ToolStripPanelRow owner) : base(owner)
+            public VerticalRowManager(ToolStripPanelRow owner)
+                : base(owner)
             {
                 owner.SuspendLayout();
                 FlowLayoutSettings.WrapContents = false;
@@ -98,7 +99,7 @@ namespace System.Windows.Forms
                     return totalSize.Height < DisplayRectangle.Height;
                 }
 
-                Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, "VerticalRM.CanMove returns false - not enough room");
+                ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("VerticalRM.CanMove returns false - not enough room");
                 return false;
             }
 
@@ -111,7 +112,7 @@ namespace System.Windows.Forms
                 if (spaceToFree > 0)
                 {
                     // we should shrink the last guy and then move him.
-                    ToolStripPanelCell lastCellOnRow = GetNextVisibleCell(Row.Cells.Count - 1,  /*forward*/false);
+                    ToolStripPanelCell? lastCellOnRow = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
                     if (lastCellOnRow is null)
                     {
                         return 0;
@@ -178,7 +179,7 @@ namespace System.Windows.Forms
 
             private int MoveUp(int index, int spaceToFree)
             {
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveUp: " + spaceToFree.ToString(CultureInfo.InvariantCulture));
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveUp: {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                 int freedSpace = 0;
 
                 Row.SuspendLayout();
@@ -186,14 +187,14 @@ namespace System.Windows.Forms
                 {
                     if (spaceToFree == 0 || index < 0)
                     {
-                        Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveUp Early EXIT - 0 ");
+                        ToolStripPanelMouseDebug.TraceVerbose("MoveUp Early EXIT - 0 ");
                         return 0;
                     }
 
                     // remove all margins starting from the index.
                     for (int i = index; i >= 0; i--)
                     {
-                        ToolStripPanelCell cell = (ToolStripPanelCell)Row.Cells[i];
+                        ToolStripPanelCell? cell = (ToolStripPanelCell)Row.Cells[i];
                         if (!cell.Visible && !cell.ControlInDesignMode)
                         {
                             continue;
@@ -224,7 +225,7 @@ namespace System.Windows.Forms
                             // add the space we freed to the next guy.
                             if (index + 1 < Row.Cells.Count)
                             {
-                                cell = GetNextVisibleCell(index + 1, /*forward*/true);
+                                cell = GetNextVisibleCell(index + 1, forward: true);
                                 if (cell is not null)
                                 {
                                     cellMargin = cell.Margin;
@@ -233,7 +234,7 @@ namespace System.Windows.Forms
                                 }
                             }
 
-                            Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveUp Recovered (Margin only): " + spaceToFree.ToString(CultureInfo.InvariantCulture));
+                            ToolStripPanelMouseDebug.TraceVerbose($"MoveUp Recovered (Margin only): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                             return spaceToFree;
                         }
                     }
@@ -243,25 +244,25 @@ namespace System.Windows.Forms
                     Row.ResumeLayout(true);
                 }
 
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveLeft Recovered Partial (Shrink): " + freedSpace.ToString(CultureInfo.InvariantCulture));
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveLeft Recovered Partial (Shrink): {freedSpace.ToString(CultureInfo.InvariantCulture)}");
 
                 return freedSpace;
             }
 
             private int MoveDown(int index, int spaceToFree)
             {
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveDown: " + spaceToFree.ToString(CultureInfo.InvariantCulture));
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveDown: {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                 int freedSpace = 0;
                 Row.SuspendLayout();
                 try
                 {
                     if (spaceToFree == 0 || index < 0 || index >= Row.ControlsInternal.Count)
                     {
-                        Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveDown Early EXIT - 0 ");
+                        ToolStripPanelMouseDebug.TraceVerbose("MoveDown Early EXIT - 0 ");
                         return 0;
                     }
 
-                    ToolStripPanelCell cell;
+                    ToolStripPanelCell? cell;
                     Padding cellMargin;
 
                     // remove all margins after this point in the index.
@@ -299,7 +300,7 @@ namespace System.Windows.Forms
                     // add in the space at the end of the row.
                     if (Row.Cells.Count > 0 && (spaceToFree > freedSpace))
                     {
-                        ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward*/false);
+                        ToolStripPanelCell? lastCell = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
                         if (lastCell is not null)
                         {
                             freedSpace += DisplayRectangle.Bottom - lastCell.Bounds.Bottom;
@@ -319,7 +320,7 @@ namespace System.Windows.Forms
                         cellMargin.Top += spaceToFree;
                         cell.Margin = cellMargin;
 
-                        Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveDown Recovered (Margin only): " + spaceToFree.ToString(CultureInfo.InvariantCulture));
+                        ToolStripPanelMouseDebug.TraceVerbose($"MoveDown Recovered (Margin only): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                         return spaceToFree;
                     }
 
@@ -337,7 +338,7 @@ namespace System.Windows.Forms
 
                         if (spaceToFree >= freedSpace)
                         {
-                            Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveDown Recovered (Shrink): " + spaceToFree.ToString(CultureInfo.InvariantCulture));
+                            ToolStripPanelMouseDebug.TraceVerbose($"MoveDown Recovered (Shrink): {spaceToFree.ToString(CultureInfo.InvariantCulture)}");
                             Row.ResumeLayout(true);
                             return spaceToFree;
                         }
@@ -345,7 +346,7 @@ namespace System.Windows.Forms
 
                     if (Row.Cells.Count == 1)
                     {
-                        cell = GetNextVisibleCell(index, /*forward*/true);
+                        cell = GetNextVisibleCell(index, forward: true);
                         if (cell is not null)
                         {
                             cellMargin = cell.Margin;
@@ -360,7 +361,7 @@ namespace System.Windows.Forms
                 }
 
                 int recoveredSpace = spaceToFree - freedSpace;
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "MoveDown Recovered Partial (Shrink): " + recoveredSpace.ToString(CultureInfo.InvariantCulture));
+                ToolStripPanelMouseDebug.TraceVerbose($"MoveDown Recovered Partial (Shrink): {recoveredSpace.ToString(CultureInfo.InvariantCulture)}");
 
                 return recoveredSpace;
             }
@@ -374,36 +375,39 @@ namespace System.Windows.Forms
                 {
                     // take a look at the last guy.  if his right edge exceeds
                     // the new bounds, then we should go ahead and push him into view.
-                    ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward=*/false);
+                    ToolStripPanelCell? lastCell = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
                     int spaceToFree = (lastCell is not null) ? lastCell.Bounds.Bottom - newBounds.Height : 0;
 
                     if (spaceToFree > 0)
                     {
                         // we should shrink the last guy and then move him.
-                        ToolStripPanelCell lastCellOnRow = GetNextVisibleCell(Row.Cells.Count - 1,  /*forward*/false);
-
-                        Padding cellMargin = lastCellOnRow.Margin;
-
-                        // only check margin.left as we are only concerned with getting bottom edge of
-                        // the toolstrip into view. (space after the fact doesnt count).
-                        if (cellMargin.Top >= spaceToFree)
+                        ToolStripPanelCell? lastCellOnRow = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
+                        if (lastCellOnRow is not null)
                         {
-                            cellMargin.Top -= spaceToFree;
-                            cellMargin.Bottom = 0;
-                            lastCellOnRow.Margin = cellMargin;
-                            spaceToFree = 0;
-                        }
-                        else
-                        {
-                            spaceToFree -= lastCellOnRow.Margin.Top;
-                            cellMargin.Top = 0;
-                            cellMargin.Bottom = 0;
-                            lastCellOnRow.Margin = cellMargin;
-                        }
+                            Padding cellMargin = lastCellOnRow.Margin;
 
-                        spaceToFree -= lastCellOnRow.Shrink(spaceToFree);
-                        // start moving the toolstrips before this guy.
-                        MoveUp(Row.Cells.Count - 1, spaceToFree);
+                            // only check margin.left as we are only concerned with getting bottom edge of
+                            // the toolstrip into view. (space after the fact doesnt count).
+                            if (cellMargin.Top >= spaceToFree)
+                            {
+                                cellMargin.Top -= spaceToFree;
+                                cellMargin.Bottom = 0;
+                                lastCellOnRow.Margin = cellMargin;
+                                spaceToFree = 0;
+                            }
+                            else
+                            {
+                                spaceToFree -= lastCellOnRow.Margin.Top;
+                                cellMargin.Top = 0;
+                                cellMargin.Bottom = 0;
+                                lastCellOnRow.Margin = cellMargin;
+                            }
+
+                            spaceToFree -= lastCellOnRow.Shrink(spaceToFree);
+
+                            // start moving the toolstrips before this guy.
+                            MoveUp(Row.Cells.Count - 1, spaceToFree);
+                        }
                     }
                 }
             }
@@ -418,7 +422,7 @@ namespace System.Windows.Forms
 
             public override void JoinRow(ToolStrip toolStripToDrag, Point locationToDrag)
             {
-                Debug.WriteLineIf(ToolStripPanelMouseDebug.TraceVerbose, "Vertical JoinRow called ");
+                ToolStripPanelMouseDebug.TraceVerbose("Vertical JoinRow called ");
                 int index;
 
                 if (!Row.ControlsInternal.Contains(toolStripToDrag))
@@ -431,7 +435,7 @@ namespace System.Windows.Forms
                             // walk through the columns and determine which column you want to insert into.
                             for (index = 0; index < Row.Cells.Count; index++)
                             {
-                                ToolStripPanelCell cell = Row.Cells[index] as ToolStripPanelCell;
+                                ToolStripPanelCell cell = (ToolStripPanelCell)Row.Cells[index];
                                 if (!cell.Visible && !cell.ControlInDesignMode)
                                 {
                                     continue;
@@ -483,7 +487,7 @@ namespace System.Windows.Forms
 
                             if (index < Row.ControlsInternal.Count - 1)
                             {
-                                ToolStripPanelCell nextCell = GetNextVisibleCell(index + 1,  /*forward*/true);
+                                ToolStripPanelCell? nextCell = GetNextVisibleCell(index + 1, forward: true);
                                 if (nextCell is not null)
                                 {
                                     Padding nextCellMargin = nextCell.Margin;
@@ -519,8 +523,8 @@ namespace System.Windows.Forms
                             else
                             {
                                 // we're adding to the end.
-                                ToolStripPanelCell nextCell = GetNextVisibleCell(Row.Cells.Count - 2,  /*forward*/false);
-                                ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1,  /*forward*/false);
+                                ToolStripPanelCell? nextCell = GetNextVisibleCell(Row.Cells.Count - 2, forward: false);
+                                ToolStripPanelCell? lastCell = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
 
                                 // count the stuff at the end of the row as freed space
                                 if (nextCell is not null && lastCell is not null)
@@ -545,7 +549,7 @@ namespace System.Windows.Forms
                                 // we need to take care of pushing over the new cell.
                                 if (freedSpace - controlToDragWidth > 0)
                                 {
-                                    ToolStripPanelCell newCell = Row.Cells[index] as ToolStripPanelCell;
+                                    ToolStripPanelCell newCell = (ToolStripPanelCell)Row.Cells[index];
                                     Padding newCellMargin = newCell.Margin;
                                     newCellMargin.Top = freedSpace - controlToDragWidth;
                                     newCell.Margin = newCellMargin;
@@ -564,7 +568,7 @@ namespace System.Windows.Forms
 #endif
                             if (Row.Cells.Count > 0)
                             {
-                                ToolStripPanelCell cell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward*/false);
+                                ToolStripPanelCell? cell = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
                                 if (cell is not null)
                                 {
                                     Padding cellMargin = cell.Margin;
@@ -597,7 +601,7 @@ namespace System.Windows.Forms
                             int spaceOccupiedByCell = cell.Margin.Vertical + cell.Bounds.Height;
 
                             // add the space occupied by the cell to the next one.
-                            ToolStripPanelCell nextCell = GetNextVisibleCell(index + 1, /*forward*/true);
+                            ToolStripPanelCell? nextCell = GetNextVisibleCell(index + 1, forward: true);
                             if (nextCell is not null)
                             {
                                 Padding nextCellMargin = nextCell.Margin;

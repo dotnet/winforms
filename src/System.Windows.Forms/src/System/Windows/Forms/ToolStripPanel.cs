@@ -701,14 +701,14 @@ namespace System.Windows.Forms
 
             if (CurrentFeedbackRect is null)
             {
-                Debug.WriteLineIf(s_toolStripPanelFeedbackDebug!.TraceVerbose, $"FEEDBACK: creating NEW feedback at {screenLocation.ToString()}");
+                s_toolStripPanelFeedbackDebug.TraceVerbose($"FEEDBACK: creating NEW feedback at {screenLocation}");
 
                 CurrentFeedbackRect = new FeedbackRectangle(toolStripToDrag.ClientRectangle);
             }
 
             if (!CurrentFeedbackRect.Visible)
             {
-                Debug.WriteLineIf(s_toolStripPanelFeedbackDebug!.TraceVerbose, $"FEEDBACK: Showing NEW feedback at {screenLocation.ToString()}");
+                s_toolStripPanelFeedbackDebug.TraceVerbose($"FEEDBACK: Showing NEW feedback at {screenLocation}");
                 toolStripToDrag.SuspendCaptureMode();
                 try
                 {
@@ -722,7 +722,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.WriteLineIf(s_toolStripPanelFeedbackDebug!.TraceVerbose, $"FEEDBACK: Moving feedback to {screenLocation.ToString()}");
+                s_toolStripPanelFeedbackDebug.TraceVerbose($"FEEDBACK: Moving feedback to {screenLocation}");
                 CurrentFeedbackRect.Move(screenLocation);
             }
         }
@@ -820,7 +820,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void MoveControl(ToolStrip toolStripToDrag, Point screenLocation)
+        internal void MoveControl(ToolStrip? toolStripToDrag, Point screenLocation)
         {
             if (toolStripToDrag is not ISupportToolStripPanel draggedControl)
             {
@@ -831,13 +831,13 @@ namespace System.Windows.Forms
             Point clientLocation = PointToClient(screenLocation);
             if (!DragBounds.Contains(clientLocation))
             {
-                Debug.WriteLineIf(s_toolStripPanelDebug!.TraceVerbose, string.Format(CultureInfo.CurrentCulture, $"RC.MoveControl - Point {{0}} is not in current rafting container drag bounds {{1}}, calling MoveOutsideContainer", clientLocation, DragBounds));
+                s_toolStripPanelDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, $"RC.MoveControl - Point {{0}} is not in current rafting container drag bounds {{1}}, calling MoveOutsideContainer", clientLocation, DragBounds));
                 MoveOutsideContainer(toolStripToDrag, screenLocation);
                 return;
             }
             else
             {
-                Join(toolStripToDrag as ToolStrip, clientLocation);
+                Join(toolStripToDrag, clientLocation);
             }
         }
 
@@ -899,19 +899,19 @@ namespace System.Windows.Forms
             if (pointInCurrentRow)
             {
                 // Point INSIDE same rafting row
-                Debug.WriteLineIf(s_toolStripPanelDebug!.TraceVerbose, $"RC.MoveControl - Point  {clientLocation}is in the same row as the control{draggedControl.ToolStripPanelRow.DragBounds}");
+                s_toolStripPanelDebug.TraceVerbose($"RC.MoveControl - Point  {clientLocation}is in the same row as the control{draggedControl.ToolStripPanelRow.DragBounds}");
                 draggedControl.ToolStripPanelRow.MoveControl(toolStripToDrag, GetStartLocation(toolStripToDrag), clientLocation);
             }
             else
             {
                 // Point OUTSIDE current rafting row.
 
-                Debug.WriteLineIf(s_toolStripPanelDebug!.TraceVerbose, $"RC.MoveControl - Point {clientLocation} is outside the current rafting row.");
+                s_toolStripPanelDebug.TraceVerbose($"RC.MoveControl - Point {clientLocation} is outside the current rafting row.");
 
                 ToolStripPanelRow? row = PointToRow(clientLocation);
                 if (row is null)
                 {
-                    Debug.WriteLineIf(s_toolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere is no row corresponding to this point, creating a new one."));
+                    s_toolStripPanelDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "\tThere is no row corresponding to this point, creating a new one."));
 
                     // there's no row at this point so lets create one
                     int index = RowsInternal.Count;
@@ -950,7 +950,7 @@ namespace System.Windows.Forms
                         // up disposing this one and causing great amounts of flicker.
                         row = previousRow;
 
-                        Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, "Reusing previous row");
+                        ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose("Reusing previous row");
                         // Move the ToolStrip to the new Location in the existing row.
                         if (toolStripToDrag.IsInDesignMode)
                         {
@@ -961,14 +961,14 @@ namespace System.Windows.Forms
                     else
                     {
                         // Create a new row and insert it.
-                        Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, $"Inserting a new row at {index.ToString(CultureInfo.InvariantCulture)}");
+                        ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose($"Inserting a new row at {index.ToString(CultureInfo.InvariantCulture)}");
                         row = new ToolStripPanelRow(this);
                         RowsInternal.Insert(index, row);
                     }
                 }
                 else if (!row.CanMove(toolStripToDrag))
                 {
-                    Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere was a row, but we can't add the control to it, creating/inserting new row."));
+                    ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "\tThere was a row, but we can't add the control to it, creating/inserting new row."));
 
                     // we have a row at that point, but its too full or doesnt want
                     // anyone to join it.
@@ -978,7 +978,7 @@ namespace System.Windows.Forms
                     {
                         if (index > 0 && index - 1 == RowsInternal.IndexOf(currentToolStripPanelRow))
                         {
-                            Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tAttempts to leave the current row failed as there's no space in the next row.  Since there's only one control, just keep the row."));
+                            ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "\tAttempts to leave the current row failed as there's no space in the next row.  Since there's only one control, just keep the row."));
                             return;
                         }
                     }
@@ -1002,7 +1002,7 @@ namespace System.Windows.Forms
 
                 if (changedRow)
                 {
-                    Debug.WriteLineIf(s_toolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tCalling JoinRow."));
+                    s_toolStripPanelDebug.TraceVerbose(string.Format(CultureInfo.CurrentCulture, "\tCalling JoinRow."));
                     currentToolStripPanelRow?.LeaveRow(toolStripToDrag);
 
                     row.JoinRow(toolStripToDrag, clientLocation);

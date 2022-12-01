@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Design
                 PropertyDescriptor prop;
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
 
-                if ((prop = props["TextAlign"]) != null)
+                if ((prop = props["TextAlign"]) is not null)
                 {
                     alignment = (ContentAlignment)prop.GetValue(Component);
                 }
@@ -45,13 +45,13 @@ namespace System.Windows.Forms.Design
                 //a single text-baseline for the label (and linklabel) control
                 int baseline = DesignerUtils.GetTextBaseline(Control, alignment);
 
-                if ((prop = props["AutoSize"]) != null)
+                if ((prop = props["AutoSize"]) is not null)
                 {
                     if ((bool)prop.GetValue(Component) == false)
                     {
                         //Only adjust if AutoSize is false
                         BorderStyle borderStyle = BorderStyle.None;
-                        if ((prop = props["BorderStyle"]) != null)
+                        if ((prop = props["BorderStyle"]) is not null)
                         {
                             borderStyle = (BorderStyle)prop.GetValue(Component);
                         }
@@ -64,13 +64,13 @@ namespace System.Windows.Forms.Design
 
                 // VSWhidbey# 414468
                 Label label = Control as Label;
-                if (label != null && label.BorderStyle == BorderStyle.None)
+                if (label is not null && label.BorderStyle == BorderStyle.None)
                 {
                     Type type = Type.GetType("System.Windows.Forms.Label");
-                    if (type != null)
+                    if (type is not null)
                     {
                         MethodInfo info = type.GetMethod("GetLeadingTextPaddingFromTextFormatFlags", BindingFlags.Instance | BindingFlags.NonPublic);
-                        if (info != null)
+                        if (info is not null)
                         {
                             int offset = (int)info.Invoke(Component, null);
                             bool rtl = (label.RightToLeft == RightToLeft.Yes);
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Design
                             {
                                 // remove previous padding snaplines
                                 SnapLine snapLine = snapLines[i] as SnapLine;
-                                if (snapLine != null && snapLine.SnapLineType == (rtl ? SnapLineType.Right : SnapLineType.Left))
+                                if (snapLine is not null && snapLine.SnapLineType == (rtl ? SnapLineType.Right : SnapLineType.Left))
                                 {
                                     snapLine.AdjustOffset(rtl ? -offset : offset);
                                     break;
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.Design
                 object component = Component;
 
                 PropertyDescriptor propAutoSize = TypeDescriptor.GetProperties(component)["AutoSize"];
-                if (propAutoSize != null)
+                if (propAutoSize is not null)
                 {
                     bool autoSize = (bool)propAutoSize.GetValue(component);
 

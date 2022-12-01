@@ -5522,11 +5522,6 @@ Do you want to replace it?</source>
         <target state="translated">無法將 Null 值轉換為類型 '{1}'。</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">GridItem 已經處置且不能再使用。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">無法展開 GridItem。</target>
@@ -6616,11 +6611,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">目前的協助工具物件僅適用於 {0} 檢視中的 ListView</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">目前的協助工具物件僅適用於 {0}、 {1} 或 {2} 檢視中的 ListView</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">當 ListViewItem 未附加到 ListView 時，無法取得 accessiblity 物件。</target>
@@ -7434,11 +7424,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">確定</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">已經處置過的 '{0}' 無法再使用。</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">

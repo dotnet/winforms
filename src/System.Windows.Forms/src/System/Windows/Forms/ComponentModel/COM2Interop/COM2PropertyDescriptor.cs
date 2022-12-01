@@ -82,8 +82,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             [GUID_COLOR] = typeof(Com2ColorConverter),
             [typeof(Ole32.IFontDisp).GUID] = typeof(Com2FontConverter),
             [typeof(Ole32.IFont).GUID] = typeof(Com2FontConverter),
-            [IPictureDisp.Guid] = typeof(Com2PictureConverter),
-            [IPicture.Guid] = typeof(Com2PictureConverter)
+            [IID.GetRef<IPictureDisp>()] = typeof(Com2PictureConverter),
+            [IID.GetRef<IPicture>()] = typeof(Com2PictureConverter)
         };
 
         private readonly Com2DataTypeToManagedDataTypeConverter? _valueConverter;
@@ -909,7 +909,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Oleaut32.IDispatch dispatch = (Oleaut32.IDispatch)owner;
 
-            EXCEPINFO excepInfo = default(EXCEPINFO);
+            EXCEPINFO excepInfo = default;
             Ole32.DispatchID namedArg = Ole32.DispatchID.PROPERTYPUT;
             DISPPARAMS dispParams = new()
             {
@@ -918,7 +918,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 rgdispidNamedArgs = (int*)&namedArg
             };
 
-            using VARIANT variant = default(VARIANT);
+            using VARIANT variant = default;
             Marshal.GetNativeVariantForObject(value, (IntPtr)(&variant));
             dispParams.rgvarg = &variant;
             Guid guid = Guid.Empty;
@@ -942,14 +942,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (hr == HRESULT.E_ABORT || hr == HRESULT.OLE_E_PROMPTSAVECANCELLED)
-            {
-                return;
-            }
-            else if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
+            if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
             {
                 OnValueChanged(component, EventArgs.Empty);
                 _lastValue = value;
+                return;
+            }
+
+            if (hr == HRESULT.E_ABORT || hr == HRESULT.OLE_E_PROMPTSAVECANCELLED)
+            {
+                // Cancelled checkout, etc.
+                return;
             }
 
             if (dispatch is Oleaut32.ISupportErrorInfo iSupportErrorInfo)

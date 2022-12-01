@@ -5522,11 +5522,6 @@ Chcete jej nahradit?</target>
         <target state="translated">Hodnotu Null nelze převést na typ {1}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">Položka GridItem byla uvolněna a nelze ji již použít.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">Položku GridItem nelze rozbalit.</target>
@@ -6616,11 +6611,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Aktuální objekt přístupnosti je určený jenom pro ovládací prvek ListView v zobrazení {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">Aktuální objekt přístupnosti je určený jenom pro ovládací prvek ListView v zobrazení {0}, {1} nebo {2}.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
         <source>Cannot get accessiblity object when ListViewItem is not attached to a ListView.</source>
         <target state="translated">Nelze načíst objekt přístupnosti, pokud položka ListViewItem není připojena k ListView.</target>
@@ -7434,11 +7424,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">OK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">Položka {0} byla uvolněna a nelze ji již použít.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">

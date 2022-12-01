@@ -6,11 +6,14 @@ using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
 {
-    internal class DataStreamFromComStream : Stream
+    internal unsafe class DataStreamFromComStream : Stream
     {
-        private IStream.Interface _comStream;
+        private IStream* _comStream;
 
-        public DataStreamFromComStream(IStream.Interface comStream) : base()
+        /// <summary>
+        ///  Initializes a new instance that does not take ownership of <paramref name="comStream"/>.
+        /// </summary>
+        public DataStreamFromComStream(IStream* comStream) : base()
         {
             _comStream = comStream;
         }
@@ -28,29 +31,11 @@ namespace System.Windows.Forms
             }
         }
 
-        public override bool CanWrite
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool CanWrite => true;
 
-        public override bool CanSeek
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool CanSeek => true;
 
-        public override bool CanRead
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool CanRead => true;
 
         public override long Length
         {
@@ -91,14 +76,14 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="buffer">The buffer receiving the data</param>
         /// <returns>The number of bytes read</returns>
-        public override unsafe int Read(Span<byte> buffer)
+        public override int Read(Span<byte> buffer)
         {
             uint bytesRead = 0;
             if (!buffer.IsEmpty)
             {
                 fixed (byte* ch = &buffer[0])
                 {
-                    _comStream.Read(ch, (uint)buffer.Length, &bytesRead);
+                    _comStream->Read(ch, (uint)buffer.Length, &bytesRead);
                 }
             }
 
@@ -107,13 +92,13 @@ namespace System.Windows.Forms
 
         public override void SetLength(long value)
         {
-            _comStream.SetSize((ulong)value);
+            _comStream->SetSize((ulong)value);
         }
 
-        public override unsafe long Seek(long offset, SeekOrigin origin)
+        public override long Seek(long offset, SeekOrigin origin)
         {
             ulong newPosition = 0;
-            _comStream.Seek(offset, origin, &newPosition);
+            _comStream->Seek(offset, origin, &newPosition);
             return (long)newPosition;
         }
 
@@ -144,7 +129,7 @@ namespace System.Windows.Forms
         ///  Writes the data contained in the given buffer
         /// </summary>
         /// <param name="buffer">The buffer to write</param>
-        public override unsafe void Write(ReadOnlySpan<byte> buffer)
+        public override void Write(ReadOnlySpan<byte> buffer)
         {
             if (buffer.IsEmpty)
             {
@@ -152,15 +137,9 @@ namespace System.Windows.Forms
             }
 
             uint bytesWritten = 0;
-            try
+            fixed (byte* b = &buffer[0])
             {
-                fixed (byte* b = &buffer[0])
-                {
-                    _comStream.Write(b, (uint)buffer.Length, &bytesWritten);
-                }
-            }
-            catch
-            {
+                _comStream->Write(b, (uint)buffer.Length, &bytesWritten);
             }
 
             if (bytesWritten < buffer.Length)
@@ -171,25 +150,13 @@ namespace System.Windows.Forms
 
         protected override void Dispose(bool disposing)
         {
-            try
+            if (disposing && _comStream is not null)
             {
-                if (disposing && _comStream is not null)
-                {
-                    _comStream.Commit(STGC.STGC_DEFAULT);
-                }
-
-                // Can't release a COM stream from the finalizer thread.
-                _comStream = null!;
+                _comStream->Commit(STGC.STGC_DEFAULT);
             }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
 
-        ~DataStreamFromComStream()
-        {
-            Dispose(false);
+            _comStream = null;
+            base.Dispose(disposing);
         }
     }
 }

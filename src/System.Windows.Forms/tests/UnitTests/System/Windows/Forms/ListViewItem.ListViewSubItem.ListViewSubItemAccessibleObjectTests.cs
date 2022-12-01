@@ -974,6 +974,72 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_GetColumnHeaderItems_IsExpected()
+        {
+            using ListView control = GetListViewWithSubItemData(
+                View.Details,
+                createControl: false,
+                virtualMode: false,
+                showGroups: false,
+                columnCount: 3,
+                subItemCount: 2);
+
+            ListViewSubItemAccessibleObject_GetColumnHeaderItems_IsExpected_Internal(control);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_GetColumnHeaderItems_IsExpected_WithImage()
+        {
+            using ImageList imageCollection = new();
+            imageCollection.Images.Add(Form.DefaultIcon);
+            using ListView control = GetListViewWithSubItemData(
+                View.Details,
+                createControl: false,
+                virtualMode: false,
+                showGroups: false,
+                columnCount: 3,
+                subItemCount: 2);
+            control.SmallImageList = imageCollection;
+            control.Items[0].ImageIndex = 0;
+
+            ListViewSubItemAccessibleObject_GetColumnHeaderItems_IsExpected_Internal(control);
+        }
+
+        private void ListViewSubItemAccessibleObject_GetColumnHeaderItems_IsExpected_Internal(ListView control)
+        {
+            ListView.ColumnHeaderCollection columns = control.Columns;
+            for (int i = 0; i < columns.Count; i++)
+            {
+                var subItemAccessibleObject = (ListViewSubItemAccessibleObject)control.Items[0].SubItems[i].AccessibilityObject;
+                AccessibleObject columnHeaderAccessibleObject = columns[i].AccessibilityObject;
+                UiaCore.IRawElementProviderSimple[] columnHeaderItems = subItemAccessibleObject.GetColumnHeaderItems();
+
+                Assert.Equal(1, columnHeaderItems.Length);
+                Assert.Same(columnHeaderAccessibleObject, columnHeaderItems[0]);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewSubItemAccessibleObject_GetColumnHeaderItems_ReturnsNull_NoColumsViews(View view)
+        {
+            using ListView control = GetListViewWithSubItemData(
+                view,
+                createControl: false,
+                virtualMode: false,
+                showGroups: false,
+                columnCount: 3,
+                subItemCount: 2);
+
+            var subItemAccessibleObject = (ListViewSubItemAccessibleObject)control.Items[0].SubItems[1].AccessibilityObject;
+
+            Assert.Null(subItemAccessibleObject.GetColumnHeaderItems());
+        }
+
+        [WinFormsFact]
         public void ListViewSubItemAccessibleObject_State_ReturnsFocusable()
         {
             using ListView listview = new();

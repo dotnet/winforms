@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
-
 namespace System.Windows.Forms.Layout
 {
     internal partial class TableLayout
@@ -11,12 +9,12 @@ namespace System.Windows.Forms.Layout
         // Private value type used by the Sort methods.
         private struct SorterObjectArray
         {
-            private readonly object[] keys;
-            private readonly IComparer comparer;
+            private readonly LayoutInfo[] keys;
+            private readonly IComparer<LayoutInfo> comparer;
 
-            internal SorterObjectArray(object[] keys, IComparer comparer)
+            internal SorterObjectArray(LayoutInfo[] keys, IComparer<LayoutInfo> comparer)
             {
-                comparer ??= Comparer.Default;
+                comparer ??= Comparer<LayoutInfo>.Default;
 
                 this.keys = keys;
                 this.comparer = comparer;
@@ -30,9 +28,7 @@ namespace System.Windows.Forms.Layout
                     {
                         if (comparer.Compare(keys[a], keys[b]) > 0)
                         {
-                            object temp = keys[a];
-                            keys[a] = keys[b];
-                            keys[b] = temp;
+                            (keys[a], keys[b]) = (keys[b], keys[a]);
                         }
                     }
                     catch (IndexOutOfRangeException)
@@ -62,7 +58,7 @@ namespace System.Windows.Forms.Layout
                     SwapIfGreaterWithItems(i, j);      // swap the low with the high
                     SwapIfGreaterWithItems(middle, j); // swap the middle with the high
 
-                    object x = keys[middle];
+                    LayoutInfo x = keys[middle];
                     do
                     {
                         // Add a try block here to detect IComparers (or their
@@ -95,9 +91,7 @@ namespace System.Windows.Forms.Layout
 
                         if (i < j)
                         {
-                            object key = keys[i];
-                            keys[i] = keys[j];
-                            keys[j] = key;
+                            (keys[i], keys[j]) = (keys[j], keys[i]);
                         }
 
                         i++;

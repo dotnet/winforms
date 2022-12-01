@@ -88,7 +88,7 @@ namespace System.Windows.Forms.Design
             {
                 inheritanceUI ??= (InheritanceUI)GetService(typeof(InheritanceUI));
 
-                if (inheritanceUI != null)
+                if (inheritanceUI is not null)
                 {
                     pe.Graphics.DrawImage(InheritanceUI.InheritanceGlyph, 0, 0);
                 }

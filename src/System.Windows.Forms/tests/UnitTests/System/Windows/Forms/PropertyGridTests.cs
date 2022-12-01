@@ -2687,6 +2687,80 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>(() => control.SelectedObjects = new object[] { null });
         }
 
+        private ISite CreateISiteObject()
+        {
+            var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
+            var mockPropertyValueUIService = new Mock<IPropertyValueUIService>(MockBehavior.Strict);
+            var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+            mockDesignerHost
+               .Setup(h => h.Container)
+               .Returns((IContainer)null);
+            mockDesignerHost
+                .Setup(h => h.GetService(typeof(IComponentChangeService)))
+                .Returns(mockComponentChangeService.Object);
+            mockDesignerHost
+                .Setup(h => h.GetService(typeof(IPropertyValueUIService)))
+                .Returns(mockPropertyValueUIService.Object);
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(mockDesignerHost.Object);
+            return mockSite.Object;
+        }
+
+        [WinFormsFact]
+        public void PropertyGrid_Site_ShouldSaveSelectedTabIndex()
+        {
+            using PropertyGrid propertyGrid = new();
+            var propertyGridTestAccessor = propertyGrid.TestAccessor();
+
+            propertyGrid.Site = CreateISiteObject();
+            Assert.NotNull(propertyGrid.ActiveDesigner);
+
+            propertyGridTestAccessor.SaveSelectedTabIndex();
+            Dictionary<int, int> _designerSelections = propertyGridTestAccessor._designerSelections;
+            Assert.NotNull(_designerSelections);
+            Assert.True(_designerSelections.ContainsKey(propertyGrid.ActiveDesigner.GetHashCode()));
+
+            int savedTabIndex = _designerSelections[propertyGrid.ActiveDesigner.GetHashCode()];
+            int selectedTabIndex = -1;
+            Assert.NotEqual(savedTabIndex, selectedTabIndex);
+
+            bool isInvokeMethodSuccessful = propertyGridTestAccessor.TryGetSavedTabIndex(out selectedTabIndex);
+            Assert.True(isInvokeMethodSuccessful);
+            Assert.Equal(savedTabIndex, selectedTabIndex);
+        }
+
+        [WinFormsFact]
+        public void PropertyGrid_SiteChange_ShouldNotSaveSelectedTabIndex()
+        {
+            using PropertyGrid propertyGrid = new();
+            var propertyGridTestAccessor = propertyGrid.TestAccessor();
+            propertyGrid.Site = CreateISiteObject();
+            var previousActiveDesigner = propertyGrid.ActiveDesigner;
+            propertyGridTestAccessor.SaveSelectedTabIndex();
+
+            //Set other Site
+            propertyGrid.Site = CreateISiteObject();
+            Assert.NotNull(propertyGrid.ActiveDesigner);
+            Assert.NotEqual(previousActiveDesigner, propertyGrid.ActiveDesigner);
+
+            int selectedTabIndex = -1;
+            bool isInvokeMethodSuccessful = propertyGridTestAccessor.TryGetSavedTabIndex(out selectedTabIndex);
+            Assert.False(isInvokeMethodSuccessful);
+            Assert.Equal(-1, selectedTabIndex);
+
+            Dictionary<int, int> _designerSelections = propertyGridTestAccessor._designerSelections;
+            Assert.NotNull(_designerSelections);
+            Assert.True(_designerSelections.ContainsKey(previousActiveDesigner.GetHashCode()));
+        }
+
         public static IEnumerable<object[]> Site_Set_TestData()
         {
             yield return new object[] { null };
@@ -3833,7 +3907,7 @@ namespace System.Windows.Forms.Tests
             object @object = new();
             propertyGrid.SelectedObject = @object;
             GridItem selectedItem = propertyGrid.SelectedGridItem;
-            Assert.True(selectedItem != null);
+            Assert.True(selectedItem is not null);
             Assert.Equal("System.Object", selectedItem.Label);
             Assert.IsAssignableFrom<IRootGridEntry>(selectedItem);
             SingleSelectRootGridEntry gridEntry = Assert.IsAssignableFrom<SingleSelectRootGridEntry>(selectedItem);

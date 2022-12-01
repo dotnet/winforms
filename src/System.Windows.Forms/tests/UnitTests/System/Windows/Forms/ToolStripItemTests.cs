@@ -4515,7 +4515,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageIndex = value;
                 Assert.Equal(expected, item.ImageIndex);
                 Assert.Empty(item.ImageKey);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(1, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
 
@@ -4523,7 +4523,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageIndex = value;
                 Assert.Equal(expected, item.ImageIndex);
                 Assert.Empty(item.ImageKey);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(2, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
             }
@@ -5017,7 +5017,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageKey = value;
                 Assert.Equal(expected, item.ImageKey);
                 Assert.Equal(-1, item.ImageIndex);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(1, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
 
@@ -5025,7 +5025,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageKey = value;
                 Assert.Equal(expected, item.ImageKey);
                 Assert.Equal(-1, item.ImageIndex);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(2, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
             }

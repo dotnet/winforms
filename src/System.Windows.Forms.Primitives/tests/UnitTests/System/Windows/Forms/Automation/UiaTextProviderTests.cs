@@ -5,7 +5,6 @@
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Moq;
-using Xunit;
 using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Automation

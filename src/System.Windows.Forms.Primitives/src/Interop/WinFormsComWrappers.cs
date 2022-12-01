@@ -8,13 +8,12 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
 internal partial class Interop
 {
     /// <summary>
     ///  The ComWrappers implementation for System.Windows.Forms.Primitive's COM interop usages.
-    ///
-    ///  Supports IStream COM interface.
     /// </summary>
     internal unsafe partial class WinFormsComWrappers : ComWrappers
     {
@@ -24,7 +23,7 @@ internal partial class Interop
         private static readonly ComInterfaceEntry* s_enumStringEntry = InitializeEntry<IEnumString, IEnumString.Vtbl>();
         private static readonly ComInterfaceEntry* s_enumFormatEtcEntry = InitializeIEnumFORMATETCEntry();
         private static readonly ComInterfaceEntry* s_dropSourceEntry = InitializeIDropSourceEntry();
-        private static readonly ComInterfaceEntry* s_dropTargetEntry = InitializeIDropTargetEntry();
+        private static readonly ComInterfaceEntry* s_dropTargetEntry = InitializeEntry<IDropTarget, IDropTarget.Vtbl>();
         private static readonly ComInterfaceEntry* s_dataObjectEntry = InitializeIDataObjectEntry();
 
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
@@ -32,7 +31,7 @@ internal partial class Interop
         private WinFormsComWrappers() { }
 
         private static ComInterfaceEntry* InitializeEntry<TComInterface, TVTable>()
-            where TComInterface : unmanaged, IPopulateVTable<TVTable>, INativeGuid
+            where TComInterface : unmanaged, IPopulateVTable<TVTable>, IComIID
             where TVTable : unmanaged
         {
             TVTable* vtable = (TVTable*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(TComInterface), sizeof(TVTable));
@@ -47,7 +46,7 @@ internal partial class Interop
             TComInterface.PopulateVTable(vtable);
 
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = *TComInterface.NativeGuid;
+            wrapperEntry->IID = *IID.Get<TComInterface>();
             wrapperEntry->Vtable = (nint)(void*)vtable;
             return wrapperEntry;
         }
@@ -59,7 +58,7 @@ internal partial class Interop
             IntPtr iEnumFormatCVtbl = IEnumFORMATETCVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
 
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = IID.IEnumFORMATETC;
+            wrapperEntry->IID = *IID.Get<IEnumFORMATETC>();
             wrapperEntry->Vtable = iEnumFormatCVtbl;
             return wrapperEntry;
         }
@@ -72,22 +71,10 @@ internal partial class Interop
             IntPtr iDropSourceNotifyVtbl = IDropSourceNotifyVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
 
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry) * 2);
-            wrapperEntry[0].IID = IID.IDropSource;
+            wrapperEntry[0].IID = *IID.Get<IDropSource>();
             wrapperEntry[0].Vtable = iDropSourceVtbl;
-            wrapperEntry[1].IID = IID.IDropSourceNotify;
+            wrapperEntry[1].IID = *IID.Get<IDropSourceNotify>();
             wrapperEntry[1].Vtable = iDropSourceNotifyVtbl;
-            return wrapperEntry;
-        }
-
-        private static ComInterfaceEntry* InitializeIDropTargetEntry()
-        {
-            GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
-
-            IntPtr iDropTargetVtbl = IDropTargetVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
-
-            ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = IID.IDropTarget;
-            wrapperEntry->Vtable = iDropTargetVtbl;
             return wrapperEntry;
         }
 
@@ -98,13 +85,24 @@ internal partial class Interop
             IntPtr iDataObjectVtbl = IDataObjectVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
 
             ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
-            wrapperEntry->IID = IID.IDataObject;
+            wrapperEntry->IID = *IID.Get<IDataObject>();
             wrapperEntry->Vtable = iDataObjectVtbl;
             return wrapperEntry;
         }
 
+        /// <summary>
+        ///  Check to see if the given object is supported by our ComWrappers implementation.
+        /// </summary>
         internal static bool IsSupportedObject(object obj)
         {
+            // This maps to what we're currently doing in ComputeVtables. We currently presume only one match, so
+            // if we see that we get multiple matches we're going to not claim it as supported.
+
+            // We need to figure out a more direct way of tying objects to our ComWrappers implementation. Going by
+            // interface is fragile unless we check the object for all supported interfaces and dynamically build
+            // the ComInterfaceEntry table for it. This seems slow, perhaps we need some sort of deliberate interface
+            // on our classes we're exposing to COM to give the data?
+
             int count = 0;
 
             if (obj is IStream.Interface)
@@ -122,7 +120,7 @@ internal partial class Interop
                 count++;
             }
 
-            if (obj is Ole32.IDropTarget)
+            if (obj is IDropTarget.Interface)
             {
                 count++;
             }
@@ -166,7 +164,7 @@ internal partial class Interop
                 return s_dropSourceEntry;
             }
 
-            if (obj is Ole32.IDropTarget)
+            if (obj is IDropTarget.Interface)
             {
                 count = 1;
                 return s_dropTargetEntry;
@@ -199,32 +197,21 @@ internal partial class Interop
                 || flags == CreateObjectFlags.None
                 || flags == CreateObjectFlags.Unwrap);
 
-            Guid errorInfoIID = IID.IErrorInfo;
-            int hr = Marshal.QueryInterface(externalComObject, ref errorInfoIID, out IntPtr errorInfoComObject);
+            int hr = Marshal.QueryInterface(externalComObject, ref IID.GetRef<IErrorInfo>(), out IntPtr errorInfoComObject);
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);
                 return new ErrorInfoWrapper(errorInfoComObject);
             }
 
-            Guid enumFormatEtcIID = IID.IEnumFORMATETC;
-            hr = Marshal.QueryInterface(externalComObject, ref enumFormatEtcIID, out IntPtr enumFormatEtcComObject);
+            hr = Marshal.QueryInterface(externalComObject, ref IID.GetRef<IEnumFORMATETC>(), out IntPtr enumFormatEtcComObject);
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);
                 return new EnumFORMATETCWrapper(enumFormatEtcComObject);
             }
 
-            Guid lockBytesIID = IID.ILockBytes;
-            hr = Marshal.QueryInterface(externalComObject, ref lockBytesIID, out IntPtr lockBytesComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new LockBytesWrapper(lockBytesComObject);
-            }
-
-            Guid enumVariantIID = IID.IEnumVariant;
-            hr = Marshal.QueryInterface(externalComObject, ref enumVariantIID, out IntPtr enumVariantComObject);
+            hr = Marshal.QueryInterface(externalComObject, ref IID.GetRef<IEnumVARIANT>(), out IntPtr enumVariantComObject);
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);

@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using Moq;
-using Xunit;
 using static Interop;
 using static Interop.UiaCore;
 using static Interop.User32;
@@ -412,7 +411,7 @@ this is the third line.";
 
             ITextRangeProvider? actual = ((ITextRangeProvider)textRange).FindText(textToSearch, backward, ignoreCase);
 
-            if (foundText != null)
+            if (foundText is not null)
             {
                 Assert.Equal(foundText, actual?.GetText(5000));
             }
@@ -444,7 +443,7 @@ this is the third line.";
 
         public static object UiaGetReservedNotSupportedValue()
         {
-            if (notSupportedValue == null)
+            if (notSupportedValue is null)
             {
                 UiaGetReservedNotSupportedValue(out notSupportedValue);
             }

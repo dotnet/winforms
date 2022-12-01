@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -42,25 +41,25 @@ namespace System.Windows.Forms
 
         public void EnsureRegistered()
         {
-            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "Ensuring drop target registered");
+            DragDropDebug.TraceVerbose("Ensuring drop target registered");
             SetAcceptDrops(true);
         }
 
         public void EnsureUnRegistered()
         {
-            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "Attempting to unregister droptarget");
+            DragDropDebug.TraceVerbose("Attempting to unregister droptarget");
             for (int i = 0; i < _owner.Items.Count; i++)
             {
                 if (_owner.Items[i].AllowDrop)
                 {
-                    Debug.WriteLineIf(DragDropDebug.TraceVerbose, "An item still has allowdrop set to true - can't unregister");
+                    DragDropDebug.TraceVerbose("An item still has allowdrop set to true - can't unregister");
                     return; // can't unregister this as a drop target unless everyone is done.
                 }
             }
 
             if (_owner.AllowDrop || _owner.AllowItemReorder)
             {
-                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "The ToolStrip has AllowDrop or AllowItemReorder set to true - can't unregister");
+                DragDropDebug.TraceVerbose("The ToolStrip has AllowDrop or AllowItemReorder set to true - can't unregister");
                 return;  // can't unregister this as a drop target if ToolStrip is still accepting drops
             }
 
@@ -78,13 +77,13 @@ namespace System.Windows.Forms
 
         public void OnDragEnter(DragEventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG ENTER] ==============");
+            DragDropDebug.TraceVerbose("[DRAG ENTER] ==============");
 
             // If we are supporting Item Reordering
             // and this is a ToolStripItem - snitch it.
             if (_owner.AllowItemReorder && e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
-                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ItemReorderTarget taking this...");
+                DragDropDebug.TraceVerbose("ItemReorderTarget taking this...");
                 _lastDropTarget = _owner.ItemReorderDropTarget;
             }
             else
@@ -94,14 +93,14 @@ namespace System.Windows.Forms
                 if ((item is not null) && (item.AllowDrop))
                 {
                     // the item wants this event
-                    Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStripItem taking this: " + item.ToString());
+                    DragDropDebug.TraceVerbose($"ToolStripItem taking this: {item}");
 
                     _lastDropTarget = ((IDropTarget)item);
                 }
                 else if (_owner.AllowDrop)
                 {
                     // the ToolStrip wants this event
-                    Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStrip taking this because AllowDrop set to true.");
+                    DragDropDebug.TraceVerbose("ToolStrip taking this because AllowDrop set to true.");
                     _lastDropTarget = ((IDropTarget)_owner);
                 }
                 else
@@ -114,7 +113,7 @@ namespace System.Windows.Forms
                     // and we don't have a ToolStripItem contain within the data (say someone drags a link
                     // from IE over the ToolStrip)
 
-                    Debug.WriteLineIf(DragDropDebug.TraceVerbose, "No one wanted it.");
+                    DragDropDebug.TraceVerbose("No one wanted it.");
 
                     _lastDropTarget = null;
                 }
@@ -122,7 +121,7 @@ namespace System.Windows.Forms
 
             if (_lastDropTarget is not null)
             {
-                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragEnter on target...");
+                DragDropDebug.TraceVerbose("Calling OnDragEnter on target...");
 #if DEBUG
                 _dropTargetIsEntered = true;
 #endif
@@ -132,7 +131,7 @@ namespace System.Windows.Forms
 
         public void OnDragOver(DragEventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG OVER] ==============");
+            DragDropDebug.TraceVerbose("[DRAG OVER] ==============");
 
             IDropTarget? newDropTarget = null;
 
@@ -140,7 +139,7 @@ namespace System.Windows.Forms
             // and this is a ToolStripItem - snitch it.
             if (_owner.AllowItemReorder && e.Data is not null && e.Data.GetDataPresent(typeof(ToolStripItem)))
             {
-                Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "ItemReorderTarget taking this...");
+                DragDropDebug.TraceVerbose("ItemReorderTarget taking this...");
                 newDropTarget = _owner.ItemReorderDropTarget;
             }
             else
@@ -150,18 +149,18 @@ namespace System.Windows.Forms
                 if ((item is not null) && (item.AllowDrop))
                 {
                     // the item wants this event
-                    Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStripItem taking this: " + item.ToString());
+                    DragDropDebug.TraceVerbose($"ToolStripItem taking this: {item}");
                     newDropTarget = ((IDropTarget)item);
                 }
                 else if (_owner.AllowDrop)
                 {
                     // the ToolStrip wants this event
-                    Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStrip taking this because AllowDrop set to true.");
+                    DragDropDebug.TraceVerbose("ToolStrip taking this because AllowDrop set to true.");
                     newDropTarget = ((IDropTarget)_owner);
                 }
                 else
                 {
-                    Debug.WriteLineIf(DragDropDebug.TraceVerbose, "No one wanted it.");
+                    DragDropDebug.TraceVerbose("No one wanted it.");
                     newDropTarget = null;
                 }
             }
@@ -170,25 +169,25 @@ namespace System.Windows.Forms
             // we need to create drag enter and leave events
             if (newDropTarget != _lastDropTarget)
             {
-                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "NEW DROP TARGET!");
+                DragDropDebug.TraceVerbose("NEW DROP TARGET!");
                 UpdateDropTarget(newDropTarget, e);
             }
 
             // now call drag over
             if (_lastDropTarget is not null)
             {
-                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragOver on target...");
+                DragDropDebug.TraceVerbose("Calling OnDragOver on target...");
                 _lastDropTarget.OnDragOver(e);
             }
         }
 
         public void OnDragLeave(EventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG LEAVE] ==============");
+            DragDropDebug.TraceVerbose("[DRAG LEAVE] ==============");
 
             if (_lastDropTarget is not null)
             {
-                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragLeave on current target...");
+                DragDropDebug.TraceVerbose("Calling OnDragLeave on current target...");
 #if DEBUG
                 _dropTargetIsEntered = false;
 #endif
@@ -205,11 +204,11 @@ namespace System.Windows.Forms
 
         public void OnDragDrop(DragEventArgs e)
         {
-            Debug.WriteLineIf(DragDropDebug!.TraceVerbose, "[DRAG DROP] ==============");
+            DragDropDebug.TraceVerbose("[DRAG DROP] ==============");
 
             if (_lastDropTarget is not null)
             {
-                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragDrop on current target...");
+                DragDropDebug.TraceVerbose("Calling OnDragDrop on current target...");
 
                 _lastDropTarget.OnDragDrop(e);
             }
@@ -226,29 +225,31 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetAcceptDrops(bool accept)
         {
-            if (accept && _owner.IsHandleCreated)
+            if (!accept || !_owner.IsHandleCreated)
             {
-                try
-                {
-                    if (Application.OleRequired() != System.Threading.ApartmentState.STA)
-                    {
-                        throw new ThreadStateException(SR.ThreadMustBeSTA);
-                    }
+                return;
+            }
 
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {_owner.Handle}");
-
-                    // Register
-                    HRESULT n = Ole32.RegisterDragDrop(_owner, new DropTarget(this));
-                    Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{n}");
-                    if (n != HRESULT.S_OK && n != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
-                    {
-                        throw Marshal.GetExceptionForHR((int)n)!;
-                    }
-                }
-                catch (Exception e)
+            try
+            {
+                if (Application.OleRequired() != ApartmentState.STA)
                 {
-                    throw new InvalidOperationException(SR.DragDropRegFailed, e);
+                    throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
+
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"Registering as drop target: {_owner.Handle}");
+
+                // Register
+                HRESULT hr = PInvoke.RegisterDragDrop(_owner, new DropTarget(this));
+                Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"   ret:{hr}");
+                if (hr.Failed && hr != HRESULT.DRAGDROP_E_ALREADYREGISTERED)
+                {
+                    throw Marshal.GetExceptionForHR((int)hr)!;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(SR.DragDropRegFailed, e);
             }
         }
 

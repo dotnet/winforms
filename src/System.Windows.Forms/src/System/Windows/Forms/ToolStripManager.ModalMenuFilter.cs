@@ -140,7 +140,7 @@ namespace System.Windows.Forms
 
                 if (!InMenuMode)
                 {
-                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "___________Entering MenuMode....");
+                    ToolStrip.s_snapFocusDebug.TraceVerbose("___________Entering MenuMode....");
 #if DEBUG
                     _justEnteredMenuMode = true;
 #endif
@@ -193,7 +193,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "___________Exiting MenuMode....");
+                    ToolStrip.s_snapFocusDebug.TraceVerbose("___________Exiting MenuMode....");
 
                     if (_messageHook is not null)
                     {
@@ -309,7 +309,7 @@ namespace System.Windows.Forms
                 // There's no more dropdowns left in the chain
                 if (GetActiveToolStrip() is null)
                 {
-                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.CloseActiveDropDown] Calling exit because there are no more dropdowns left to activate.");
+                    ToolStrip.s_snapFocusDebug.TraceVerbose("[ModalMenuFilter.CloseActiveDropDown] Calling exit because there are no more dropdowns left to activate.");
                     ExitMenuMode();
 
                     // Make sure we roll selection off  the toplevel toolstrip.
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
 
             private void ProcessMouseButtonPressed(HWND hwndMouseMessageIsFrom, Point location)
             {
-                Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.ProcessMouseButtonPressed] Found a mouse down.");
+                ToolStrip.s_snapFocusDebug.TraceVerbose("[ModalMenuFilter.ProcessMouseButtonPressed] Found a mouse down.");
 
                 int countDropDowns = _inputFilterQueue?.Count ?? 0;
                 for (int i = 0; i < countDropDowns; i++)
@@ -370,8 +370,7 @@ namespace System.Windows.Forms
 
                                 // We're a toplevel toolstrip and we've clicked somewhere else.
                                 // Exit menu mode
-                                Debug.WriteLineIf(
-                                    ToolStrip.s_snapFocusDebug.TraceVerbose,
+                                ToolStrip.s_snapFocusDebug.TraceVerbose(
                                     "[ModalMenuFilter.ProcessMouseButtonPressed] Calling exit because we're a toplevel toolstrip and we've clicked somewhere else.");
 
                                 ExitMenuModeCore();
@@ -385,7 +384,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.ProcessMouseButtonPressed] active toolstrip is null.");
+                        ToolStrip.s_snapFocusDebug.TraceVerbose("[ModalMenuFilter.ProcessMouseButtonPressed] active toolstrip is null.");
                         break;
                     }
                 }
@@ -468,8 +467,7 @@ namespace System.Windows.Forms
                             && (ToolStripDropDown.GetFirstDropDown(toolStrip)
                             != ToolStripDropDown.GetFirstDropDown(currentActiveToolStrip)))
                         {
-                            Debug.WriteLineIf(
-                                ToolStrip.s_snapFocusDebug.TraceVerbose,
+                            ToolStrip.s_snapFocusDebug.TraceVerbose(
                                 "[ModalMenuFilter.SetActiveToolStripCore] Detected a new dropdown not in this chain opened, Dismissing everything in the old chain. ");
                             _inputFilterQueue.Remove(currentActiveToolStrip);
 
@@ -489,8 +487,7 @@ namespace System.Windows.Forms
 
                 if (!InMenuMode && _inputFilterQueue.Count > 0)
                 {
-                    Debug.WriteLineIf(
-                        ToolStrip.s_snapFocusDebug.TraceVerbose,
+                    ToolStrip.s_snapFocusDebug.TraceVerbose(
                         $"[ModalMenuFilter.SetActiveToolStripCore] Setting {WindowsFormsUtils.GetControlInformation(toolStrip.HWND)} active.");
                     EnterMenuModeCore();
                 }
@@ -505,14 +502,14 @@ namespace System.Windows.Forms
 
             internal static void SuspendMenuMode()
             {
-                Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter] SuspendMenuMode");
+                ToolStrip.s_snapFocusDebug.TraceVerbose("[ModalMenuFilter] SuspendMenuMode");
 
                 Instance._suspendMenuMode = true;
             }
 
             internal static void ResumeMenuMode()
             {
-                Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter] ResumeMenuMode");
+                ToolStrip.s_snapFocusDebug.TraceVerbose("[ModalMenuFilter] ResumeMenuMode");
                 Instance._suspendMenuMode = false;
             }
 
@@ -585,8 +582,7 @@ namespace System.Windows.Forms
                     if (activeWindowHandle.Handle.IsNull)
                     {
                         // we don't know what it was cause it's on another thread or doesnt exist
-                        Debug.WriteLineIf(
-                            ToolStrip.s_snapFocusDebug.TraceVerbose,
+                        ToolStrip.s_snapFocusDebug.TraceVerbose(
                             $"[ModalMenuFilter.PreFilterMessage] Dismissing because: {WindowsFormsUtils.GetControlInformation(activeWindowHandle.Handle)} has gotten activation. ");
                         ProcessActivationChange();
                     }
@@ -595,8 +591,7 @@ namespace System.Windows.Forms
                         && !IsChildOrSameWindow(activeWindowHandle, ActiveHwnd))
                     {
                         // and NOT a child of the active hwnd
-                        Debug.WriteLineIf(
-                            ToolStrip.s_snapFocusDebug.TraceVerbose,
+                        ToolStrip.s_snapFocusDebug.TraceVerbose(
                             $"[ModalMenuFilter.PreFilterMessage] Calling ProcessActivationChange because: {WindowsFormsUtils.GetControlInformation(activeWindowHandle.Handle)} has gotten activation.");
                         ProcessActivationChange();
                     }
@@ -683,8 +678,7 @@ namespace System.Windows.Forms
 
                             if (!activeToolStrip.ContainsFocus)
                             {
-                                Debug.WriteLineIf(
-                                    ToolStrip.s_snapFocusDebug.TraceVerbose,
+                                ToolStrip.s_snapFocusDebug.TraceVerbose(
                                     $"[ModalMenuFilter.PreFilterMessage] MODIFYING Keyboard message {m}");
 
                                 // Route all keyboard messages to the active dropdown.
@@ -692,8 +686,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                Debug.WriteLineIf(
-                                    ToolStrip.s_snapFocusDebug.TraceVerbose,
+                                ToolStrip.s_snapFocusDebug.TraceVerbose(
                                     $"[ModalMenuFilter.PreFilterMessage] got Keyboard message {m}");
                             }
 

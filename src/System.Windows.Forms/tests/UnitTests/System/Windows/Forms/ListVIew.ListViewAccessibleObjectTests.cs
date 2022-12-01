@@ -129,8 +129,8 @@ namespace System.Windows.Forms.Tests
 
             AccessibleObject firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
             AccessibleObject lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            Assert.IsType<ListViewItemBaseAccessibleObject>(firstChild);
-            Assert.IsType<ListViewItemBaseAccessibleObject>(lastChild);
+            Assert.IsAssignableFrom<ListViewItemBaseAccessibleObject>(firstChild);
+            Assert.IsAssignableFrom<ListViewItemBaseAccessibleObject>(lastChild);
             Assert.NotEqual(firstChild, lastChild);
             Assert.True(listView.IsHandleCreated);
         }
@@ -170,8 +170,8 @@ namespace System.Windows.Forms.Tests
 
             AccessibleObject firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
             AccessibleObject lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            Assert.IsType<ListViewItemBaseAccessibleObject>(firstChild);
-            Assert.IsType<ListViewItemBaseAccessibleObject>(lastChild);
+            Assert.IsAssignableFrom<ListViewItemBaseAccessibleObject>(firstChild);
+            Assert.IsAssignableFrom<ListViewItemBaseAccessibleObject>(lastChild);
             Assert.NotEqual(firstChild, lastChild);
             Assert.True(listView.IsHandleCreated);
         }

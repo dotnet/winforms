@@ -8,11 +8,13 @@ namespace Windows.Win32
 {
     internal static partial class PInvoke
     {
-        public static BOOL PostMessage(
-           IHandle<HWND> hWnd,
+        /// <inheritdoc cref="PostMessage(HWND, uint, WPARAM, LPARAM)"/>
+        public static BOOL PostMessage<T>(
+           T hWnd,
            WM Msg,
            WPARAM wParam = default,
            LPARAM lParam = default)
+           where T : IHandle<HWND>
         {
             BOOL result = PostMessage(hWnd.Handle, (uint)Msg, wParam, lParam);
             GC.KeepAlive(hWnd.Wrapper);

@@ -847,7 +847,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Debug.WriteLineIf(s_autoScrolling!.TraceVerbose, "ScrollControlIntoView(" + activeControl.GetType().FullName + ")");
+            s_autoScrolling.TraceVerbose($"ScrollControlIntoView({activeControl.GetType().FullName})");
             Debug.Indent();
 
             Rectangle client = ClientRectangle;
@@ -857,7 +857,7 @@ namespace System.Windows.Forms
                 && (HScroll || VScroll)
                 && (client.Width > 0 && client.Height > 0))
             {
-                Debug.WriteLineIf(s_autoScrolling.TraceVerbose, "Calculating...");
+                s_autoScrolling.TraceVerbose("Calculating...");
 
                 Point scrollLocation = ScrollToControl(activeControl);
                 SetScrollState(ScrollStateUserHasScrolled, false);
@@ -886,7 +886,7 @@ namespace System.Windows.Forms
             Rectangle bounds = activeControl.Bounds;
             if (activeControl.ParentInternal != this)
             {
-                Debug.WriteLineIf(s_autoScrolling!.TraceVerbose, "not direct child, original bounds: " + bounds);
+                s_autoScrolling.TraceVerbose($"not direct child, original bounds: {bounds}");
 
                 if (activeControl.ParentInternal is null)
                 {
@@ -896,7 +896,7 @@ namespace System.Windows.Forms
                 bounds = RectangleToClient(activeControl.ParentInternal.RectangleToScreen(bounds));
             }
 
-            Debug.WriteLineIf(s_autoScrolling!.TraceVerbose, "adjusted bounds: " + bounds);
+            s_autoScrolling.TraceVerbose($"adjusted bounds: {bounds}");
 
             if (bounds.X < xMargin)
             {

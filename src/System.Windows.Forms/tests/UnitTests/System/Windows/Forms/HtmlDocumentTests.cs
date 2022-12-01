@@ -1795,7 +1795,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("about:blank", newDocument.Url.OriginalString);
         }
 
-#pragma warning disable CS1718 // Disable "Comparison made to same variable" warning.
+#pragma warning disable CS1718, CSIsNull001, CSIsNull002 // Disable "Comparison made to same variable" warning.
         [WinFormsFact]
         public async Task HtmlDocument_OperatorEquals_Invoke_ReturnsExpected()
         {
@@ -1835,7 +1835,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(document != (HtmlDocument)null);
             Assert.False((HtmlDocument)null != (HtmlDocument)null);
         }
-#pragma warning restore CS1718
+#pragma warning restore CS1718, CSIsNull001, CSIsNull002
 
         [WinFormsFact]
         public async Task HtmlDocument_Click_InvokeEvent_Success()

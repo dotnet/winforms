@@ -208,13 +208,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Constructs the new instance of the accessibility object for this control. Subclasses
-        ///  should not call base.CreateAccessibilityObject.
-        /// </summary>
-        protected override AccessibleObject CreateAccessibilityInstance()
-            => new DomainUpDownAccessibleObject(this);
-
-        /// <summary>
         ///  Displays the next item in the object collection.
         /// </summary>
         public override void DownButton()

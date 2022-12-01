@@ -40,8 +40,7 @@ internal partial class Interop
                 try
                 {
                     instance.GetData(ref *(ComTypes.FORMATETC*)format, out var medium);
-                    pMedium->pUnkForRelease = medium.pUnkForRelease == null
-                        ? null
+                    pMedium->pUnkForRelease = medium.pUnkForRelease is null ? null
                         : (IUnknown*)(void*)Marshal.GetIUnknownForObject(medium.pUnkForRelease);
                     pMedium->tymed = (TYMED)medium.tymed;
                     pMedium->Anonymous.hGlobal = medium.unionmember;
@@ -140,7 +139,7 @@ internal partial class Interop
                 try
                 {
                     var formatEtc = instance.EnumFormatEtc((ComTypes.DATADIR)(int)direction);
-                    if (!ComHelpers.TryGetComPointer(formatEtc, IID.IEnumFORMATETC, out IEnumFORMATETC* formatEtcPtr))
+                    if (!ComHelpers.TryGetComPointer(formatEtc, out IEnumFORMATETC* formatEtcPtr))
                     {
                         return HRESULT.E_NOINTERFACE;
                     }
@@ -191,7 +190,7 @@ internal partial class Interop
                     return result;
                 }
 
-                if (!ComHelpers.TryGetComPointer(enumAdvice, IID.IEnumSTATDATA, out IEnumSTATDATA* enumAdvicePtr))
+                if (!ComHelpers.TryGetComPointer(enumAdvice, out IEnumSTATDATA* enumAdvicePtr))
                 {
                     return HRESULT.E_NOINTERFACE;
                 }

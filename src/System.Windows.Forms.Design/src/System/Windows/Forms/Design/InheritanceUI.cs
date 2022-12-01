@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void RemoveInheritedControl(Control c)
         {
-            if (_tooltip != null && _tooltip.GetToolTip(c).Length > 0)
+            if (_tooltip is not null && _tooltip.GetToolTip(c).Length > 0)
             {
                 _tooltip.SetToolTip(c, null);
                 // Also, set all of its non-sited children

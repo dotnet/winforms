@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Design
             _serviceProvider = serviceProvider;
             _comp = comp;
 
-            if (_serviceProvider != null)
+            if (_serviceProvider is not null)
             {
                 _helpService = (IHelpService)serviceProvider.GetService(typeof(IHelpService));
             }

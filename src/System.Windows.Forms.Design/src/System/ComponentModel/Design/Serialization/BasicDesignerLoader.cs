@@ -85,11 +85,7 @@ namespace System.ComponentModel.Design.Serialization
                     return _host;
                 }
 
-                if (_hostInitialized)
-                {
-                    throw new ObjectDisposedException(GetType().Name);
-                }
-
+                ObjectDisposedException.ThrowIf(_hostInitialized, this);
                 throw new InvalidOperationException(SR.BasicDesignerLoaderNotInitialized);
             }
         }
