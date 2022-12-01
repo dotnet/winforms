@@ -14,7 +14,7 @@ internal partial class Interop
     {
         internal static class IDataObjectVtbl
         {
-            public static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
+            private static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
             {
                 IDataObject.Vtbl* vtblRaw = (IDataObject.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDataObject.Vtbl), sizeof(IDataObject.Vtbl));
                 vtblRaw->QueryInterface_1 = (delegate* unmanaged[Stdcall]<IDataObject*, Guid*, void**, HRESULT>)fpQueryInterface;
@@ -31,6 +31,18 @@ internal partial class Interop
                 vtblRaw->EnumDAdvise_12 = &EnumDAdvise;
 
                 return (IntPtr)vtblRaw;
+            }
+
+            internal static ComInterfaceEntry* InitializeEntry()
+            {
+                GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+                IntPtr iDataObjectVtbl = Create(fpQueryInterface, fpAddRef, fpRelease);
+
+                ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry));
+                wrapperEntry->IID = *IID.Get<IDataObject>();
+                wrapperEntry->Vtable = iDataObjectVtbl;
+                return wrapperEntry;
             }
 
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]

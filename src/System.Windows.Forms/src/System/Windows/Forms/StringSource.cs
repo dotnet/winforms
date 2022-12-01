@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     ///  This class is responsible for initializing the SHAutoComplete COM object and setting options in it.
     ///  The StringSource contains an array of Strings which is passed to the COM object as the custom source.
     /// </summary>
-    internal unsafe class StringSource : IEnumString.Interface
+    internal unsafe class StringSource : IEnumString.Interface, IManagedWrapper<IEnumString>
     {
         private string[] strings;
         private int current;

@@ -13,7 +13,7 @@ internal partial class Interop
     {
         internal static class IDropSourceVtbl
         {
-            public static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
+            private static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
             {
                 IDropSource.Vtbl* vtblRaw = (IDropSource.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDropSourceVtbl), sizeof(IDropSource.Vtbl));
                 vtblRaw->QueryInterface_1 = (delegate* unmanaged[Stdcall]<IDropSource*, Guid*, void**, HRESULT>)fpQueryInterface;
@@ -23,6 +23,21 @@ internal partial class Interop
                 vtblRaw->GiveFeedback_5 = &GiveFeedback;
 
                 return (IntPtr)vtblRaw;
+            }
+
+            internal static ComInterfaceEntry* InitializeEntry()
+            {
+                GetIUnknownImpl(out IntPtr fpQueryInterface, out IntPtr fpAddRef, out IntPtr fpRelease);
+
+                IntPtr iDropSourceVtbl = Create(fpQueryInterface, fpAddRef, fpRelease);
+                IntPtr iDropSourceNotifyVtbl = IDropSourceNotifyVtbl.Create(fpQueryInterface, fpAddRef, fpRelease);
+
+                ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(WinFormsComWrappers), sizeof(ComInterfaceEntry) * 2);
+                wrapperEntry[0].IID = *IID.Get<IDropSource>();
+                wrapperEntry[0].Vtable = iDropSourceVtbl;
+                wrapperEntry[1].IID = *IID.Get<IDropSourceNotify>();
+                wrapperEntry[1].Vtable = iDropSourceNotifyVtbl;
+                return wrapperEntry;
             }
 
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]

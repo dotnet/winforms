@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
             stream.Value->Release();
         }
 
-        internal class MyStream : IStream.Interface
+        internal class MyStream : IStream.Interface, IManagedWrapper<IStream>
         {
             public unsafe HRESULT Read(void* pv, uint cb, [Optional] uint* pcbRead)
             {

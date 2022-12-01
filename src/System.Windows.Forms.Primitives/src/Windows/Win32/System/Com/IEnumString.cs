@@ -8,9 +8,9 @@ using ComWrappers = Interop.WinFormsComWrappers;
 
 namespace Windows.Win32.System.Com
 {
-    internal unsafe partial struct IEnumString : IPopulateVTable<IEnumString.Vtbl>
+    internal unsafe partial struct IEnumString : IVTable<IEnumString, IEnumString.Vtbl>
     {
-        public static void PopulateVTable(Vtbl* vtable)
+        static void IVTable<IEnumString, Vtbl>.PopulateComInterfaceVTable(Vtbl* vtable)
         {
             vtable->Next_4 = &Next;
             vtable->Skip_5 = &Skip;
