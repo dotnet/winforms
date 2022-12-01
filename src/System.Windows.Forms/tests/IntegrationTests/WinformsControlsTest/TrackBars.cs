@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,7 +14,6 @@ namespace WinformsControlsTest
 
             trackBar1.Minimum = -100;
             trackBar1.Maximum = 100;
-
             numericMinimum.Value = trackBar1.Minimum;
             numericMaximum.Value = trackBar1.Maximum;
             numericFrequency.Value = trackBar1.TickFrequency;
@@ -74,8 +73,13 @@ namespace WinformsControlsTest
         private void numericMinimum_ValueChanged(object sender, EventArgs e)
         {
             trackBar1.Minimum = (int)Math.Max(numericMinimum.Value, int.MinValue);
-            numericMaximum.Minimum = numericMinimum.Value;
+            numericMaximum.Minimum = numericMinimum.Value;        
             numericFrequency.Maximum = (int)Math.Min(numericMaximum.Value - numericMaximum.Minimum, int.MaxValue);
+            if (numericFrequency.Maximum == 0)
+            {
+                numericFrequency.Minimum = 1;
+            }
+
             UpdateValueLabel();
         }
 
@@ -84,6 +88,11 @@ namespace WinformsControlsTest
             trackBar1.Maximum = (int)Math.Min(numericMaximum.Value, int.MaxValue);
             numericMinimum.Maximum = numericMaximum.Value;
             numericFrequency.Maximum = (int)Math.Min(numericMaximum.Value - numericMaximum.Minimum, int.MaxValue);
+            if (numericFrequency.Maximum == 0)
+            {
+                numericFrequency.Minimum = 1;
+            }
+
             UpdateValueLabel();
         }
 

@@ -856,21 +856,26 @@ namespace System.Windows.Forms
 
         }
 
+
         private void DrawTicks()
         {
             // Check if the value of the max is greater then the taskbar size.
             // If so then we divide the value by size and only that many ticks to be drawn on the screen.
-
+            int ticksDrawnFrequency = _tickFrequency;
             if (_autoDrawTicks)
             {
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)ticksDrawnFrequency);
                 return;
             }
 
             int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
             uint range = (uint)(_maximum - _minimum);
-            int ticksDrawnFrequency = _tickFrequency;
-            int ticksDrawn = (int)(range / ticksDrawnFrequency);
+            int ticksDrawn=1;
+
+            if (ticksDrawnFrequency != 0)
+            {
+                ticksDrawn = (int)(range / ticksDrawnFrequency);
+            }
 
             if (maxTickCount != 0 && ticksDrawn > maxTickCount)
             {
@@ -1061,23 +1066,21 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
-                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
                     bool recreateHandle = false;
                     if (_autoDrawTicks != ShouldAutoDrawTicks())
                     {
                         recreateHandle = true;
                     }
 
-                    if (!recreateHandle && IsHandleCreated)
-                    {
-                        DrawTicks();
-                        Invalidate();
-                    }
-                    else
+                    if (recreateHandle)
                     {
                         RecreateHandle();
                     }
+
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
+                    DrawTicks();
+                    Invalidate();
                 }
 
                 // When we change the range, the comctl32 trackbar's internal position can change
