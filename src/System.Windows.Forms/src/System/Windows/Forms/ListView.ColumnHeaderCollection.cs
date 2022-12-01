@@ -274,7 +274,7 @@ namespace System.Windows.Forms
             {
                 ArgumentNullException.ThrowIfNull(values);
 
-                Hashtable usedIndices = new Hashtable();
+                Dictionary<int, int> usedIndices = new();
                 int[] indices = new int[values.Length];
 
                 for (int i = 0; i < values.Length; i++)
