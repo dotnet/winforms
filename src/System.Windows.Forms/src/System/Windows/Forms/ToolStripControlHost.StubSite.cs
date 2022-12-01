@@ -10,17 +10,17 @@ namespace System.Windows.Forms
 {
     public partial class ToolStripControlHost
     {
-        /// <remarks>
-        ///  <para>Our implementation of ISite:
+        /// <devdoc>
+        ///  Our implementation of ISite:
         ///  Since the Control which is wrapped by ToolStripControlHost is a runtime instance, there is no way of knowing
         ///  whether the control is in runtime or designtime.
         ///  This implementation of ISite would be set to Control.Site when ToolStripControlHost.Site is set at DesignTime. (Refer to Site property on ToolStripControlHost)
         ///  This implementation just returns the DesignMode property to be ToolStripControlHost's DesignMode property.
-        ///  Everything else is pretty much default implementation.</para>
-        /// </remarks>
+        ///  Everything else is pretty much default implementation.
+        /// </devdoc>
         private class StubSite : ISite, IDictionaryService
         {
-            private Dictionary<string, object>? _dictionary;
+            private Dictionary<object, object>? _dictionary;
             private readonly IComponent _comp;
             private readonly IComponent _owner;
 
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                 // We have to implement our own dictionary service. If we don't,
                 // the properties of the underlying component will end up being
                 // overwritten by our own properties when GetProperties is called
-                return service == typeof(IDictionaryService) ? this : (_owner.Site?.GetService(service));
+                return service == typeof(IDictionaryService) ? this : _owner.Site?.GetService(service);
             }
 
             /// <summary>
@@ -81,15 +81,17 @@ namespace System.Windows.Forms
             /// </summary>
             object? IDictionaryService.GetKey(object? value)
             {
-                if (_dictionary is not null)
+                if (value is null || _dictionary is null)
                 {
-                    foreach (var item in _dictionary)
+                    return null;
+                }
+
+                foreach (var item in _dictionary)
+                {
+                    object o = item.Value;
+                    if (value.Equals(o))
                     {
-                        object o = item.Value;
-                        if (value is not null && value.Equals(o))
-                        {
-                            return item.Key;
-                        }
+                        return item.Key;
                     }
                 }
 
@@ -101,10 +103,9 @@ namespace System.Windows.Forms
             /// </summary>
             object? IDictionaryService.GetValue(object key)
             {
-                return key is not string keyString
-                    ? null
-                    : _dictionary is not null
-                      && _dictionary.TryGetValue(keyString, out object? value) ? value : null;
+                object? value = null;
+                _dictionary?.TryGetValue(key, out value);
+                return value;
             }
 
             /// <summary>
@@ -115,19 +116,15 @@ namespace System.Windows.Forms
             void IDictionaryService.SetValue(object key, object? value)
             {
                 _dictionary ??= new();
-
-                if (key is not string keyString)
-                {
-                    return;
-                }
+                ArgumentNullException.ThrowIfNull(key);
 
                 if (value is not object)
                 {
-                    _dictionary.Remove(keyString);
+                    _dictionary.Remove(key);
                 }
                 else
                 {
-                    _dictionary[keyString] = value;
+                    _dictionary[key] = value;
                 }
             }
         }

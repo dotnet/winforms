@@ -1812,69 +1812,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(c.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ToolStripControlHost_Site_GetControlSiteContainerAfterSettingNull_ThrowsNullReferenceException()
-        {
-            using var c = new Control();
-            using var item = new ToolStripControlHost(c);
-
-            using var container = new Container();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Container)
-                .Returns(container);
-            mockSite
-                .Setup(s => s.GetService(typeof(AmbientProperties)))
-                .Returns(null);
-            item.Site = mockSite.Object;
-            ISite oldSite = c.Site;
-
-            item.Site = null;
-            Assert.Throws<NullReferenceException>(() => oldSite.Container);
-        }
-
-        [WinFormsFact]
-        public void ToolStripControlHost_Site_GetControlSiteDesignModeAfterSettingNull_ThrowsNullReferenceException()
-        {
-            using var c = new Control();
-            using var item = new ToolStripControlHost(c);
-
-            using var container = new Container();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Container)
-                .Returns(container);
-            mockSite
-                .Setup(s => s.GetService(typeof(AmbientProperties)))
-                .Returns(null);
-            item.Site = mockSite.Object;
-            ISite oldSite = c.Site;
-
-            item.Site = null;
-            Assert.Throws<NullReferenceException>(() => oldSite.DesignMode);
-        }
-
-        [WinFormsFact]
-        public void ToolStripControlHost_Site_GetControlSiteNameAfterSettingNull_ThrowsNullReferenceException()
-        {
-            using var c = new Control();
-            using var item = new ToolStripControlHost(c);
-
-            using var container = new Container();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Container)
-                .Returns(container);
-            mockSite
-                .Setup(s => s.GetService(typeof(AmbientProperties)))
-                .Returns(null);
-            item.Site = mockSite.Object;
-            ISite oldSite = c.Site;
-
-            item.Site = null;
-            Assert.Throws<NullReferenceException>(() => oldSite.Name);
-        }
-
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ToolStripControlHost_Site_SetControlSiteName_GetReturnsExpected(string value, string expected)
@@ -1910,27 +1847,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, c.Site.Name);
             mockSite.VerifySet(s => s.Name = value, Times.Exactly(2));
             Assert.False(c.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void ToolStripControlHost_Site_SetControlSiteNameAfterSettingNull_ThrowsNullReferenceException()
-        {
-            using var c = new Control();
-            using var item = new ToolStripControlHost(c);
-
-            using var container = new Container();
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
-            mockSite
-                .Setup(s => s.Container)
-                .Returns(container);
-            mockSite
-                .Setup(s => s.GetService(typeof(AmbientProperties)))
-                .Returns(null);
-            item.Site = mockSite.Object;
-            ISite oldSite = c.Site;
-
-            item.Site = null;
-            Assert.Throws<NullReferenceException>(() => oldSite.Name = "name");
         }
 
         public static IEnumerable<object[]> Site_GetService_TestData()
