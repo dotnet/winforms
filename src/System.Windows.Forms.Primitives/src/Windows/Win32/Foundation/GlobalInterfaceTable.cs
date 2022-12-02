@@ -40,7 +40,7 @@ namespace Windows.Win32.Foundation
             s_globalInterfaceTable->RegisterInterfaceInGlobal(
                 (IUnknown*)@interface,
                 IID.Get<TInterface>(),
-                &cookie).ThrowOnFailure();
+                &cookie);
             return cookie;
         }
 

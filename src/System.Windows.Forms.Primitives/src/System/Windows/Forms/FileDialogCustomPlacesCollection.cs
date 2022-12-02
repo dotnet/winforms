@@ -16,7 +16,7 @@ namespace System.Windows.Forms
                 using ComScope<IShellItem> shellItem = new(customPlace.GetNativePath());
                 if (!shellItem.IsNull)
                 {
-                    dialog->AddPlace(shellItem, 0).ThrowOnFailure();
+                    dialog->AddPlace(shellItem, 0);
                 }
             }
         }

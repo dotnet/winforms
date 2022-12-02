@@ -149,12 +149,12 @@ namespace System.Windows.Forms
                 return Array.Empty<string>();
             }
 
-            items.Value->GetCount(out uint count).ThrowOnFailure();
+            items.Value->GetCount(out uint count);
             string[] files = new string[count];
             for (uint i = 0; i < count; ++i)
             {
                 using ComScope<IShellItem> item = new(null);
-                items.Value->GetItemAt(i, item).ThrowOnFailure();
+                items.Value->GetItemAt(i, item);
                 files[i] = GetFilePathFromShellItem(item);
             }
 

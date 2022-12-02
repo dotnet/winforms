@@ -27,8 +27,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
                 fixed (int* pRgDispId = rgDispId)
                 fixed (PWSTR* pRgszNames = rgszNames)
                 {
-                    HRESULT hr = picture.Value->GetIDsOfNames(&riid, pRgszNames, (uint)rgszNames.Length, PInvoke.GetThreadLocale(), pRgDispId);
-                    Assert.Equal(HRESULT.S_OK, hr);
+                    picture.Value->GetIDsOfNames(&riid, pRgszNames, (uint)rgszNames.Length, PInvoke.GetThreadLocale(), pRgDispId);
                     Assert.Equal(new PWSTR[] { width, other }, rgszNames);
                     
                     Assert.Equal(new int[] { (int)PInvoke.DISPID_PICT_WIDTH, PInvoke.DISPID_UNKNOWN }, rgDispId);
@@ -44,8 +43,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.False(picture.IsNull);
 
             using ComScope<ITypeInfo> typeInfo = new(null);
-            HRESULT hr = picture.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            picture.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo);
         }
 
         [StaFact]
@@ -56,8 +54,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.False(picture.IsNull);
 
             uint ctInfo = uint.MaxValue;
-            HRESULT hr = picture.Value->GetTypeInfoCount(&ctInfo);
-            Assert.Equal(HRESULT.S_OK, hr);
+            picture.Value->GetTypeInfoCount(&ctInfo);
             Assert.Equal(1u, ctInfo);
         }
 

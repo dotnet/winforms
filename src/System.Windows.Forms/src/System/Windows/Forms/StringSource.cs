@@ -56,9 +56,9 @@ namespace System.Windows.Forms
 
             bool result = ComHelpers.TryGetComPointer(this, out IEnumString* pEnumString);
             Debug.Assert(result);
-            HRESULT hr = _autoComplete2->Init(edit.Handle, (IUnknown*)pEnumString, (PCWSTR)null, (PCWSTR)null).ThrowOnFailure();
+            _autoComplete2->Init(edit.Handle, (IUnknown*)pEnumString, (PCWSTR)null, (PCWSTR)null);
             GC.KeepAlive(edit.Wrapper);
-            return hr.Succeeded;
+            return true;
         }
 
         public void ReleaseAutoComplete()

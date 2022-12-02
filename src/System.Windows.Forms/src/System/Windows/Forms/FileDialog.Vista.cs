@@ -45,7 +45,7 @@ namespace System.Windows.Forms
 
             Debug.Assert(success);
 
-            dialog->Advise(events, out uint eventCookie).ThrowOnFailure();
+            dialog->Advise(events, out uint eventCookie);
             try
             {
                 returnValue = dialog->Show(hWndOwner) == HRESULT.S_OK;
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                dialog->Unadvise(eventCookie).ThrowOnFailure();
+                dialog->Unadvise(eventCookie);
                 uint count = events->Release();
                 Debug.Assert(count == 0);
             }
@@ -65,24 +65,24 @@ namespace System.Windows.Forms
             {
                 // IFileDialog::SetClientGuid should be called immediately after creation of the dialog object.
                 // https://learn.microsoft.com/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
-                dialog->SetClientGuid(in clientGuid).ThrowOnFailure();
+                dialog->SetClientGuid(in clientGuid);
             }
 
-            dialog->SetDefaultExtension(DefaultExt).ThrowOnFailure();
-            dialog->SetFileName(FileName).ThrowOnFailure();
+            dialog->SetDefaultExtension(DefaultExt);
+            dialog->SetFileName(FileName);
 
             if (!string.IsNullOrEmpty(InitialDirectory))
             {
                 using ComScope<IShellItem> initialDirectory = new(PInvoke.SHCreateShellItem(InitialDirectory));
                 if (!initialDirectory.IsNull)
                 {
-                    dialog->SetDefaultFolder(initialDirectory).ThrowOnFailure();
-                    dialog->SetFolder(initialDirectory).ThrowOnFailure();
+                    dialog->SetDefaultFolder(initialDirectory);
+                    dialog->SetFolder(initialDirectory);
                 }
             }
 
-            dialog->SetTitle(Title).ThrowOnFailure();
-            dialog->SetOptions(GetOptions()).ThrowOnFailure();
+            dialog->SetTitle(Title);
+            dialog->SetOptions(GetOptions());
             SetFileTypes(dialog);
 
             _customPlaces.Apply(dialog);
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
             try
             {
                 Thread.MemoryBarrier();
-                dialog->GetFileTypeIndex(out uint filterIndexTemp).ThrowOnFailure();
+                dialog->GetFileTypeIndex(out uint filterIndexTemp);
                 FilterIndex = unchecked((int)filterIndexTemp);
                 _fileNames = ProcessVistaFiles(dialog);
                 if (ProcessFileNames(_fileNames))
@@ -200,10 +200,10 @@ namespace System.Windows.Forms
             {
                 fixed (COMDLG_FILTERSPEC* fi = filterItems)
                 {
-                    dialog->SetFileTypes((uint)filterItems.Length, fi).ThrowOnFailure();
+                    dialog->SetFileTypes((uint)filterItems.Length, fi);
                 }
 
-                dialog->SetFileTypeIndex(unchecked((uint)FilterIndex)).ThrowOnFailure();
+                dialog->SetFileTypeIndex(unchecked((uint)FilterIndex));
             }
         }
 
@@ -250,9 +250,7 @@ namespace System.Windows.Forms
 
         private protected static unsafe string GetFilePathFromShellItem(IShellItem* item)
         {
-            HRESULT hr = item->GetDisplayName(SIGDN.SIGDN_DESKTOPABSOLUTEPARSING, out PWSTR ppszName);
-            hr.ThrowOnFailure();
-
+            item->GetDisplayName(SIGDN.SIGDN_DESKTOPABSOLUTEPARSING, out PWSTR ppszName);
             return ppszName.ToStringAndCoTaskMemFree()!;
         }
 
