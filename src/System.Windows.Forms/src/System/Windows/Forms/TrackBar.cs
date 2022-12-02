@@ -148,8 +148,12 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = PInvoke.TRACKBAR_CLASS;
+                if (ShouldAutoDrawTicks())
+                {
+                    _autoDrawTicks = true;
+                }
 
-                switch (_tickStyle)
+                    switch (_tickStyle)
                 {
                     case TickStyle.None:
                         cp.Style |= (int)PInvoke.TBS_NOTICKS;
@@ -853,14 +857,19 @@ namespace System.Windows.Forms
 
         uint range = (uint)(_maximum - _minimum);
         return range <= (size / 2);
-
         }
 
-
+        /// <summary>
+        ///  Check if the value of the max is greater then the taskbar size.
+        ///  If so then we divide the value by size and only that many ticks to be drawn on the screen.
+        /// </summary>
         private void DrawTicks()
         {
-            // Check if the value of the max is greater then the taskbar size.
-            // If so then we divide the value by size and only that many ticks to be drawn on the screen.
+            if (_tickStyle == TickStyle.None)
+            {
+                return;
+            }
+
             int ticksDrawnFrequency = _tickFrequency;
             if (_autoDrawTicks)
             {
@@ -871,7 +880,6 @@ namespace System.Windows.Forms
             int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
             uint range = (uint)(_maximum - _minimum);
             int ticksDrawn = 1;
-
             if (ticksDrawnFrequency != 0)
             {
                 ticksDrawn = (int)(range / ticksDrawnFrequency);
@@ -883,7 +891,7 @@ namespace System.Windows.Forms
             }
 
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
-            for (int i = (_minimum + ticksDrawnFrequency); i < _maximum - ticksDrawnFrequency; i += ticksDrawnFrequency)
+            for (int i = _minimum + ticksDrawnFrequency; i < _maximum - ticksDrawnFrequency; i += ticksDrawnFrequency)
             {
                 LRESULT lresult = PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
                 Debug.Assert((bool)(BOOL)lresult);
@@ -1072,15 +1080,17 @@ namespace System.Windows.Forms
                         recreateHandle = true;
                     }
 
-                    if (recreateHandle)
+                    if (!recreateHandle)
+                    {
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
+                        DrawTicks();
+                        Invalidate();
+                    }
+                    else
                     {
                         RecreateHandle();
                     }
-
-                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
-                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
-                    DrawTicks();
-                    Invalidate();
                 }
 
                 // When we change the range, the comctl32 trackbar's internal position can change
