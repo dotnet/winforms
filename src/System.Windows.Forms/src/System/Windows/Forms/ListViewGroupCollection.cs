@@ -25,13 +25,13 @@ namespace System.Windows.Forms
 
         public int Count => List.Count;
 
-        object ICollection.SyncRoot => ((ICollection)List).SyncRoot;
+        object ICollection.SyncRoot => this;
 
-        bool ICollection.IsSynchronized => ((ICollection)List).IsSynchronized;
+        bool ICollection.IsSynchronized => true;
 
-        bool IList.IsFixedSize => ((IList)List).IsFixedSize;
+        bool IList.IsFixedSize => false;
 
-        bool IList.IsReadOnly => ((IList)List).IsReadOnly;
+        bool IList.IsReadOnly => false;
 
         private List<ListViewGroup> List => _list ??= new List<ListViewGroup>();
 

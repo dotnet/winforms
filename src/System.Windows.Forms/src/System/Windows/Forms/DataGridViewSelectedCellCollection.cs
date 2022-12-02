@@ -48,9 +48,9 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
-        bool IList.IsFixedSize => ((IList)_items).IsFixedSize;
+        bool IList.IsFixedSize => true;
 
-        bool IList.IsReadOnly => ((IList)_items).IsReadOnly;
+        bool IList.IsReadOnly => true;
 
         object IList.this[int index]
         {
@@ -62,9 +62,9 @@ namespace System.Windows.Forms
 
         int ICollection.Count => _items.Count;
 
-        bool ICollection.IsSynchronized => ((IList)_items).IsSynchronized;
+        bool ICollection.IsSynchronized => false;
 
-        object ICollection.SyncRoot => ((IList)_items).SyncRoot;
+        object ICollection.SyncRoot => this;
 
         IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
 

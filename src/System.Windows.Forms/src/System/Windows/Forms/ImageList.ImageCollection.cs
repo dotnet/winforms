@@ -109,13 +109,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            object ICollection.SyncRoot => ((IList)_imageInfoCollection).SyncRoot;
+            object ICollection.SyncRoot => this;
 
-            bool ICollection.IsSynchronized => ((IList)_imageInfoCollection).IsSynchronized;
+            bool ICollection.IsSynchronized => false;
 
-            bool IList.IsFixedSize => ((IList)_imageInfoCollection).IsFixedSize;
+            bool IList.IsFixedSize => false;
 
-            public bool IsReadOnly => ((IList)_imageInfoCollection).IsReadOnly;
+            public bool IsReadOnly => false;
 
             /// <summary>
             ///  Determines if the ImageList has any images, without forcing a handle creation.
