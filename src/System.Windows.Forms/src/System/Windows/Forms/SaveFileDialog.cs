@@ -158,7 +158,7 @@ namespace System.Windows.Forms
         private protected override unsafe string[] ProcessVistaFiles(IFileDialog* dialog)
         {
             using ComScope<IShellItem> item = new(null);
-            dialog->GetResult(item).ThrowOnFailure();
+            dialog->GetResult(item);
             return item.IsNull ? Array.Empty<string>() : new string[] { GetFilePathFromShellItem(item) };
         }
 
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
                 in CLSID.FileSaveDialog,
                 pUnkOuter: null,
                 CLSCTX.CLSCTX_INPROC_SERVER | CLSCTX.CLSCTX_LOCAL_SERVER | CLSCTX.CLSCTX_REMOTE_SERVER,
-                out IFileDialog* fileDialog).ThrowOnFailure();
+                out IFileDialog* fileDialog);
 
             return fileDialog;
         }

@@ -258,14 +258,14 @@ namespace System.Windows.Forms
 
                 using var storage = _storage.GetInterface();
                 iPersistStorage.Save(storage, fSameAsLoad: true).ThrowOnFailure();
-                storage.Value->Commit(0).ThrowOnFailure();
+                storage.Value->Commit(0);
                 iPersistStorage.HandsOffStorage().ThrowOnFailure();
                 try
                 {
                     _buffer = null;
                     _memoryStream = null;
                     using var lockBytes = _lockBytes.GetInterface();
-                    lockBytes.Value->Stat(out STATSTG stat, STATFLAG.STATFLAG_NONAME).ThrowOnFailure();
+                    lockBytes.Value->Stat(out STATSTG stat, STATFLAG.STATFLAG_NONAME);
                     _length = (int)stat.cbSize;
                     _buffer = new byte[_length];
                     PInvoke.GetHGlobalFromILockBytes(lockBytes, out nint hglobal).ThrowOnFailure();

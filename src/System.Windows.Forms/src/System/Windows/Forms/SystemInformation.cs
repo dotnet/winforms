@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using Windows.Win32.System.StationsAndDesktops;
-using Windows.Win32.System.SystemServices;
 using Windows.Win32.UI.Accessibility;
 using static Windows.Win32.UI.WindowsAndMessaging.SYSTEM_METRICS_INDEX;
 using static Windows.Win32.UI.WindowsAndMessaging.SYSTEM_PARAMETERS_INFO_ACTION;
@@ -465,7 +464,7 @@ namespace System.Windows.Forms
             {
                 if (MultiMonitorSupport)
                 {
-                    return new (PInvoke.GetSystemMetrics(SM_XVIRTUALSCREEN),
+                    return new(PInvoke.GetSystemMetrics(SM_XVIRTUALSCREEN),
                         PInvoke.GetSystemMetrics(SM_YVIRTUALSCREEN),
                         PInvoke.GetSystemMetrics(SM_CXVIRTUALSCREEN),
                         PInvoke.GetSystemMetrics(SM_CYVIRTUALSCREEN));
@@ -826,7 +825,7 @@ namespace System.Windows.Forms
             {
                 // Try to open the input desktop. If it fails with access denied assume
                 // the app is running on a secure desktop.
-                HDESK desktop = PInvoke.OpenInputDesktop(0, false, (uint)DESKTOP_ACCESS_FLAGS.DESKTOP_SWITCHDESKTOP);
+                HDESK desktop = PInvoke.OpenInputDesktop(0, false, DESKTOP_ACCESS_FLAGS.DESKTOP_SWITCHDESKTOP);
                 if (desktop.IsNull)
                 {
                     return Marshal.GetLastWin32Error() == (int)WIN32_ERROR.ERROR_ACCESS_DENIED;
