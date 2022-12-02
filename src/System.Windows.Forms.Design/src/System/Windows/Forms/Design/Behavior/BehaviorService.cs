@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly MenuCommandHandler _menuCommandHandler;        // private object that handles all menu commands
         private bool _useSnapLines;                                     // indicates if this designer session is using snaplines or snapping to a grid
         private bool _queriedSnapLines;                                 // only query for this once since we require the user restart design sessions when this changes
-        private readonly Hashtable _dragEnterReplies;                   // we keep track of whether glyph has already responded to a DragEnter this D&D.
+        private readonly HashSet<Glyph> _dragEnterReplies;              // we keep track of whether glyph has already responded to a DragEnter this D&D.
         private static readonly TraceSwitch s_dragDropSwitch
             = new TraceSwitch("BSDRAGDROP", "Behavior service drag & drop messages");
 
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Design.Behavior
                 AdornerWindowIndex = os.PushOverlay(_adornerWindow);
             }
 
-            _dragEnterReplies = new Hashtable();
+            _dragEnterReplies = new();
 
             // Start with an empty adorner collection & no behavior on the stack
             Adorners = new BehaviorServiceAdornerCollection(this);
@@ -670,7 +670,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             if (g is not null && g is ControlBodyGlyph && e.Effect == DragDropEffects.None)
             {
-                _dragEnterReplies[g] = this; // dummy value, we just need to set something.
+                _dragEnterReplies.Add(g);
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tCalled DragEnter on this glyph. Caching");
             }
         }
@@ -867,7 +867,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             if (_hitTestedGlyph is null ||
-               (_hitTestedGlyph is not null && !_dragEnterReplies.ContainsKey(_hitTestedGlyph)))
+               (_hitTestedGlyph is not null && !_dragEnterReplies.Contains(_hitTestedGlyph)))
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tFound glyph, forwarding to behavior");
                 behavior.OnDragOver(_hitTestedGlyph, e);

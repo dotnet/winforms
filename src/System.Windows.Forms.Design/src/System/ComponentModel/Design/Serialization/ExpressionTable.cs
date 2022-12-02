@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
-using System.Collections;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -12,17 +11,9 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     internal sealed class ExpressionTable
     {
-        private Hashtable _expressions;
+        private Dictionary<object, ExpressionInfo> _expressions;
 
-        private Hashtable Expressions
-        {
-            get
-            {
-                _expressions ??= new Hashtable(new ReferenceComparer());
-
-                return _expressions;
-            }
-        }
+        private Dictionary<object, ExpressionInfo> Expressions => _expressions ??= new(new ReferenceComparer());
 
         internal void SetExpression(object value, CodeExpression expression, bool isPreset)
         {
@@ -30,66 +21,31 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         internal CodeExpression GetExpression(object value)
-        {
-            CodeExpression expression = null;
-            if (Expressions[value] is ExpressionInfo info)
-            {
-                expression = info.Expression;
-            }
-
-            return expression;
-        }
+            => Expressions.TryGetValue(value, out ExpressionInfo info) ? info.Expression : null;
 
         internal bool ContainsPresetExpression(object value)
-        {
-            if (Expressions[value] is ExpressionInfo info)
-            {
-                return info.IsPreset;
-            }
-            else
-            {
-                return false;
-            }
-        }
+            => Expressions.TryGetValue(value, out ExpressionInfo info) && info.IsPreset;
 
         private class ExpressionInfo
         {
-            readonly CodeExpression _expression;
-            readonly bool _isPreset;
-
             internal ExpressionInfo(CodeExpression expression, bool isPreset)
             {
-                _expression = expression;
-                _isPreset = isPreset;
+                Expression = expression;
+                IsPreset = isPreset;
             }
 
-            internal CodeExpression Expression
-            {
-                get => _expression;
-            }
+            internal CodeExpression Expression { get; }
 
-            internal bool IsPreset
-            {
-                get => _isPreset;
-            }
+            internal bool IsPreset { get; }
         }
 
-        private class ReferenceComparer : IEqualityComparer
+        private class ReferenceComparer : IEqualityComparer<object>
         {
-            bool IEqualityComparer.Equals(object x, object y)
-            {
-                return ReferenceEquals(x, y);
-            }
+            bool IEqualityComparer<object>.Equals(object x, object y)
+                => ReferenceEquals(x, y);
 
-            int IEqualityComparer.GetHashCode(object x)
-            {
-                if (x is not null)
-                {
-                    return x.GetHashCode();
-                }
-
-                return 0;
-            }
+            int IEqualityComparer<object>.GetHashCode(object x)
+                => x is not null ? x.GetHashCode() : 0;
         }
     }
 }
