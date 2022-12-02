@@ -21,58 +21,23 @@ namespace System.Windows.Forms
         private readonly List<DataGridViewCell> _items = new();
         private readonly DataGridViewRow _owner;
 
-        int IList.Add(object value)
-        {
-            return Add((DataGridViewCell)value);
-        }
+        int IList.Add(object value) => Add((DataGridViewCell)value);
 
-        void IList.Clear()
-        {
-            Clear();
-        }
+        void IList.Clear() => Clear();
 
-        bool IList.Contains(object value)
-        {
-            return value switch
-            {
-                DataGridViewCell dataGridViewCell => Contains(dataGridViewCell),
-                _ => false,
-            };
-        }
+        bool IList.Contains(object value) => ((IList)_items).Contains(value);
 
-        int IList.IndexOf(object value)
-        {
-            return value switch
-            {
-                DataGridViewCell dataGridViewCell => _items.IndexOf(dataGridViewCell),
-                _ => -1,
-            };
-        }
+        int IList.IndexOf(object value) => ((IList)_items).IndexOf(value);
 
-        void IList.Insert(int index, object value)
-        {
-            Insert(index, (DataGridViewCell)value);
-        }
+        void IList.Insert(int index, object value) => Insert(index, (DataGridViewCell)value);
 
-        void IList.Remove(object value)
-        {
-            Remove((DataGridViewCell)value);
-        }
+        void IList.Remove(object value) => Remove((DataGridViewCell)value);
 
-        void IList.RemoveAt(int index)
-        {
-            RemoveAt(index);
-        }
+        void IList.RemoveAt(int index) => RemoveAt(index);
 
-        bool IList.IsFixedSize
-        {
-            get { return false; }
-        }
+        bool IList.IsFixedSize => ((IList)_items).IsFixedSize;
 
-        bool IList.IsReadOnly
-        {
-            get { return false; }
-        }
+        bool IList.IsReadOnly => ((IList)_items).IsReadOnly;
 
         object IList.this[int index]
         {
@@ -80,30 +45,15 @@ namespace System.Windows.Forms
             set { this[index] = (DataGridViewCell)value; }
         }
 
-        void ICollection.CopyTo(Array array, int index)
-        {
-            ((ICollection)_items).CopyTo(array, index);
-        }
+        void ICollection.CopyTo(Array array, int index) => ((ICollection)_items).CopyTo(array, index);
 
-        int ICollection.Count
-        {
-            get { return _items.Count; }
-        }
+        int ICollection.Count => _items.Count;
 
-        bool ICollection.IsSynchronized
-        {
-            get { return false; }
-        }
+        bool ICollection.IsSynchronized => ((ICollection)_items).IsSynchronized;
 
-        object ICollection.SyncRoot
-        {
-            get { return this; }
-        }
+        object ICollection.SyncRoot => ((ICollection)_items).SyncRoot;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _items.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
 
         public DataGridViewCellCollection(DataGridViewRow dataGridViewRow)
         {
@@ -235,9 +185,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(!dataGridViewCell.Selected);
 
-            _items.Add(dataGridViewCell);
-            int index = _items.Count - 1;
-
+            int index = ((IList)_items).Add(dataGridViewCell);
             dataGridViewCell.OwningRow = _owner;
             DataGridView dataGridView = _owner.DataGridView;
             if (dataGridView is not null && dataGridView.Columns.Count > index)
