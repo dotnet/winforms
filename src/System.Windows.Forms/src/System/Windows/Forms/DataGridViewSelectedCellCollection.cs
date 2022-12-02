@@ -29,23 +29,9 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
-        bool IList.Contains(object value)
-        {
-            return value switch
-            {
-                DataGridViewCell dataGridViewCell => Contains(dataGridViewCell),
-                _ => false,
-            };
-        }
+        bool IList.Contains(object value) => ((IList)_items).Contains(value);
 
-        int IList.IndexOf(object value)
-        {
-            return value switch
-            {
-                DataGridViewCell dataGridViewCell => _items.IndexOf(dataGridViewCell),
-                _ => -1,
-            };
-        }
+        int IList.IndexOf(object value) => ((IList)_items).IndexOf(value);
 
         void IList.Insert(int index, object value)
         {
@@ -62,15 +48,9 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
         }
 
-        bool IList.IsFixedSize
-        {
-            get { return true; }
-        }
+        bool IList.IsFixedSize => ((IList)_items).IsFixedSize;
 
-        bool IList.IsReadOnly
-        {
-            get { return true; }
-        }
+        bool IList.IsReadOnly => ((IList)_items).IsReadOnly;
 
         object IList.this[int index]
         {
@@ -78,30 +58,15 @@ namespace System.Windows.Forms
             set { throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection); }
         }
 
-        void ICollection.CopyTo(Array array, int index)
-        {
-            ((ICollection)_items).CopyTo(array, index);
-        }
+        void ICollection.CopyTo(Array array, int index) => ((ICollection)_items).CopyTo(array, index);
 
-        int ICollection.Count
-        {
-            get { return _items.Count; }
-        }
+        int ICollection.Count => _items.Count;
 
-        bool ICollection.IsSynchronized
-        {
-            get { return false; }
-        }
+        bool ICollection.IsSynchronized => ((IList)_items).IsSynchronized;
 
-        object ICollection.SyncRoot
-        {
-            get { return this; }
-        }
+        object ICollection.SyncRoot => ((IList)_items).SyncRoot;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _items.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
 
         internal DataGridViewSelectedCellCollection()
         {
@@ -129,9 +94,7 @@ namespace System.Windows.Forms
         internal int Add(DataGridViewCell dataGridViewCell)
         {
             Debug.Assert(!Contains(dataGridViewCell));
-            _items.Add(dataGridViewCell);
-
-            return _items.Count - 1;
+            return ((IList)_items).Add(dataGridViewCell);
         }
 
         /// <summary>
@@ -156,15 +119,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Checks to see if a DataGridViewCell is contained in this collection.
         /// </summary>
-        public bool Contains(DataGridViewCell dataGridViewCell)
-        {
-            return _items.IndexOf(dataGridViewCell) != -1;
-        }
+        public bool Contains(DataGridViewCell dataGridViewCell) => ((IList)_items).Contains(dataGridViewCell);
 
-        public void CopyTo(DataGridViewCell[] array, int index)
-        {
-            _items.CopyTo(array, index);
-        }
+        public void CopyTo(DataGridViewCell[] array, int index) => _items.CopyTo(array, index);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Insert(int index, DataGridViewCell dataGridViewCell)

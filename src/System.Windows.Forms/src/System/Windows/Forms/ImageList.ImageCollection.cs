@@ -109,13 +109,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            object ICollection.SyncRoot => this;
+            object ICollection.SyncRoot => ((IList)_imageInfoCollection).SyncRoot;
 
-            bool ICollection.IsSynchronized => false;
+            bool ICollection.IsSynchronized => ((IList)_imageInfoCollection).IsSynchronized;
 
-            bool IList.IsFixedSize => false;
+            bool IList.IsFixedSize => ((IList)_imageInfoCollection).IsFixedSize;
 
-            public bool IsReadOnly => false;
+            public bool IsReadOnly => ((IList)_imageInfoCollection).IsReadOnly;
 
             /// <summary>
             ///  Determines if the ImageList has any images, without forcing a handle creation.
@@ -320,8 +320,7 @@ namespace System.Windows.Forms
                 {
                     if (_owner._originals is not null)
                     {
-                        _owner._originals.Add(original);
-                        index = _owner._originals.Count - 1;
+                        index = ((IList)_owner._originals).Add(original);
                     }
 
                     if (_owner.HandleCreated)
@@ -338,8 +337,7 @@ namespace System.Windows.Forms
                 {
                     if (_owner._originals is not null)
                     {
-                        _owner._originals.Add(original);
-                        index = _owner._originals.Count - 1;
+                        index = ((IList)_owner._originals).Add(original);
                     }
 
                     if (_owner.HandleCreated)

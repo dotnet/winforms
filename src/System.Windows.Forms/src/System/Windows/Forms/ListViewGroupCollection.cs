@@ -25,13 +25,13 @@ namespace System.Windows.Forms
 
         public int Count => List.Count;
 
-        object ICollection.SyncRoot => this;
+        object ICollection.SyncRoot => ((ICollection)List).SyncRoot;
 
-        bool ICollection.IsSynchronized => true;
+        bool ICollection.IsSynchronized => ((ICollection)List).IsSynchronized;
 
-        bool IList.IsFixedSize => false;
+        bool IList.IsFixedSize => ((IList)List).IsFixedSize;
 
-        bool IList.IsReadOnly => false;
+        bool IList.IsReadOnly => ((IList)List).IsReadOnly;
 
         private List<ListViewGroup> List => _list ??= new List<ListViewGroup>();
 
@@ -123,8 +123,7 @@ namespace System.Windows.Forms
 
             CheckListViewItems(group);
             group.ListView = _listView;
-            List.Add(group);
-            int index = List.Count - 1;
+            int index = ((IList)List).Add(group);
             if (_listView.IsHandleCreated)
             {
                 _listView.InsertGroupInListView(List.Count, group);
