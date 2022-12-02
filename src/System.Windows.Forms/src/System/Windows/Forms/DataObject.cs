@@ -11,8 +11,11 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using Com = Windows.Win32.System.Com;
 using static Interop;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
+using static System.Runtime.InteropServices.ComWrappers;
+using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms
 {
@@ -20,7 +23,7 @@ namespace System.Windows.Forms
     ///  Implements a basic data transfer mechanism.
     /// </summary>
     [ClassInterface(ClassInterfaceType.None)]
-    public partial class DataObject : IDataObject, ComTypes.IDataObject
+    public partial class DataObject : IDataObject, ComTypes.IDataObject, Com.IManagedWrapper
     {
         private const string CF_DEPRECATED_FILENAME = "FileName";
         private const string CF_DEPRECATED_FILENAMEW = "FileNameW";
@@ -36,6 +39,7 @@ namespace System.Windows.Forms
             };
 
         private readonly IDataObject _innerData;
+        private static ComInterfaceTable? s_comInterfaceTable;
 
         // We use this to identify that a stream is actually a serialized object.  On read,
         // we don't know if the contents of a stream were saved "raw" or if the stream is really
@@ -1048,6 +1052,29 @@ namespace System.Windows.Forms
             CompModSwitches.DataObject.TraceVerbose($"Set data: {data ?? "(null)"}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
             _innerData.SetData(data);
+        }
+
+        unsafe ComInterfaceTable Com.IManagedWrapper.GetComInterfaceTable()
+        {
+            if (s_comInterfaceTable is null)
+            {
+                Com.IDataObject.Vtbl* vtable = (Com.IDataObject.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(Com.IDataObject.Vtbl), sizeof(Com.IDataObject.Vtbl));
+                WinFormsComWrappers.PopulateIUnknownVTable((Com.IUnknown.Vtbl*)vtable);
+
+                WinFormsComWrappers.IDataObjectVtbl.PopulateVTable(vtable);
+
+                ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDataObject), sizeof(ComInterfaceEntry));
+                wrapperEntry[0].IID = *IID.Get<Com.IDataObject>();
+                wrapperEntry[0].Vtable = (nint)(void*)vtable;
+
+                s_comInterfaceTable = new ComInterfaceTable()
+                {
+                    Entries = wrapperEntry,
+                    Count = 1
+                };
+            }
+
+            return (ComInterfaceTable)s_comInterfaceTable;
         }
     }
 }

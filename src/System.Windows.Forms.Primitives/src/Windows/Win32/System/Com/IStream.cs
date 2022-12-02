@@ -8,9 +8,9 @@ using ComWrappers = Interop.WinFormsComWrappers;
 
 namespace Windows.Win32.System.Com
 {
-    internal unsafe partial struct IStream : IPopulateVTable<IStream.Vtbl>
+    internal unsafe partial struct IStream : IVTable<IStream, IStream.Vtbl>
     {
-        public static void PopulateVTable(Vtbl* vtable)
+        static void IVTable<IStream, Vtbl>.PopulateComInterfaceVTable(Vtbl* vtable)
         {
             vtable->Read_4 = &Read;
             vtable->Write_5 = &Write;
