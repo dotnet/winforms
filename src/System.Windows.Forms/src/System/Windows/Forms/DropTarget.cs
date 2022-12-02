@@ -9,10 +9,11 @@ using Ole = Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
 {
-    internal unsafe class DropTarget : Ole.IDropTarget.Interface
+    internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ole.IDropTarget>
     {
         private IDataObject? _lastDataObject;
         private DragDropEffects _lastEffect = DragDropEffects.None;

@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
@@ -23,23 +24,27 @@ namespace System.Windows.Forms
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             StandardValuesCollection values = base.GetStandardValues(context);
-            var list = new ArrayList();
-            int count = values.Count;
+            List<object> list = new();
             bool personalSeen = false;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
-                if (values[i] is Environment.SpecialFolder specialFolder &&
+                object? currentItem = values[i];
+                if (currentItem is Environment.SpecialFolder specialFolder &&
                     specialFolder.Equals(Environment.SpecialFolder.Personal))
                 {
                     if (!personalSeen)
                     {
                         personalSeen = true;
-                        list.Add(values[i]);
+                        list.Add(currentItem);
                     }
                 }
                 else
                 {
-                    list.Add(values[i]);
+                    Debug.Assert(currentItem is not null);
+                    if (currentItem is not null)
+                    {
+                        list.Add(currentItem);
+                    }
                 }
             }
 

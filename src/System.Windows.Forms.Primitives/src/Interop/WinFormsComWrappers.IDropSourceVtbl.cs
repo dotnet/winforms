@@ -13,16 +13,10 @@ internal partial class Interop
     {
         internal static class IDropSourceVtbl
         {
-            public static IntPtr Create(IntPtr fpQueryInterface, IntPtr fpAddRef, IntPtr fpRelease)
+            public static void PopulateVTable(IDropSource.Vtbl* vtable)
             {
-                IDropSource.Vtbl* vtblRaw = (IDropSource.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDropSourceVtbl), sizeof(IDropSource.Vtbl));
-                vtblRaw->QueryInterface_1 = (delegate* unmanaged[Stdcall]<IDropSource*, Guid*, void**, HRESULT>)fpQueryInterface;
-                vtblRaw->AddRef_2 = (delegate* unmanaged[Stdcall]<IDropSource*, uint>)fpAddRef;
-                vtblRaw->Release_3 = (delegate* unmanaged[Stdcall]<IDropSource*, uint>)fpRelease;
-                vtblRaw->QueryContinueDrag_4 = &QueryContinueDrag;
-                vtblRaw->GiveFeedback_5 = &GiveFeedback;
-
-                return (IntPtr)vtblRaw;
+                vtable->QueryContinueDrag_4 = &QueryContinueDrag;
+                vtable->GiveFeedback_5 = &GiveFeedback;
             }
 
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]

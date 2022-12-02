@@ -11,23 +11,23 @@ namespace System.Windows.Forms.Layout
         internal static ArrangedElementCollection Empty = new ArrangedElementCollection(0);
 
         internal ArrangedElementCollection()
+            : this(4)
         {
-            InnerList = new ArrayList(4);
         }
 
-        internal ArrangedElementCollection(ArrayList innerList)
+        internal ArrangedElementCollection(List<IArrangedElement> innerList)
         {
             InnerList = innerList;
         }
 
         private ArrangedElementCollection(int size)
         {
-            InnerList = new ArrayList(size);
+            InnerList = new List<IArrangedElement>(size);
         }
 
-        private protected ArrayList InnerList { get; }
+        private protected List<IArrangedElement> InnerList { get; }
 
-        internal virtual IArrangedElement this[int index] => (IArrangedElement)InnerList[index]!;
+        internal virtual IArrangedElement this[int index] => InnerList[index];
 
         public override bool Equals(object? obj)
         {
@@ -125,21 +125,21 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        void IList.Clear() => InnerList.Clear();
+        void IList.Clear() => ((IList)InnerList).Clear();
 
-        bool IList.IsFixedSize => InnerList.IsFixedSize;
+        bool IList.IsFixedSize => ((IList)InnerList).IsFixedSize;
 
-        bool IList.Contains(object? value) => InnerList.Contains(value);
+        bool IList.Contains(object? value) => ((IList)InnerList).Contains(value);
 
-        public virtual bool IsReadOnly => InnerList.IsReadOnly;
+        public virtual bool IsReadOnly => ((IList)InnerList).IsReadOnly;
 
-        void IList.RemoveAt(int index) => InnerList.RemoveAt(index);
+        void IList.RemoveAt(int index) => ((IList)InnerList).RemoveAt(index);
 
-        void IList.Remove(object? value) => InnerList.Remove(value);
+        void IList.Remove(object? value) => ((IList)InnerList).Remove(value);
 
-        int IList.Add(object? value) => InnerList.Add(value);
+        int IList.Add(object? value) => ((IList)InnerList).Add(value);
 
-        int IList.IndexOf(object? value) => InnerList.IndexOf(value);
+        int IList.IndexOf(object? value) => ((IList)InnerList).IndexOf(value);
 
         void IList.Insert(int index, object? value) => throw new NotSupportedException();
 
@@ -151,11 +151,11 @@ namespace System.Windows.Forms.Layout
 
         public virtual int Count => InnerList.Count;
 
-        object ICollection.SyncRoot => InnerList.SyncRoot;
+        object ICollection.SyncRoot => ((ICollection)InnerList).SyncRoot;
 
-        public void CopyTo(Array array, int index) => InnerList.CopyTo(array, index);
+        public void CopyTo(Array array, int index) => ((ICollection)InnerList).CopyTo(array, index);
 
-        bool ICollection.IsSynchronized => InnerList.IsSynchronized;
+        bool ICollection.IsSynchronized => ((ICollection)InnerList).IsSynchronized;
 
         public virtual IEnumerator GetEnumerator() => InnerList.GetEnumerator();
     }

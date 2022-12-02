@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
-
 namespace System.ComponentModel.Design
 {
     public partial class ComponentDesigner
@@ -14,8 +12,8 @@ namespace System.ComponentModel.Design
         protected sealed class ShadowPropertyCollection
         {
             private readonly ComponentDesigner _designer;
-            private Hashtable _properties;
-            private Hashtable _descriptors;
+            private Dictionary<string, object> _properties;
+            private Dictionary<string, PropertyDescriptor> _descriptors;
 
             internal ShadowPropertyCollection(ComponentDesigner designer) => _designer = designer;
 
@@ -30,9 +28,9 @@ namespace System.ComponentModel.Design
                     ArgumentNullException.ThrowIfNull(propertyName);
 
                     // First, check to see if the name is in the given properties table
-                    if (_properties is not null && _properties.ContainsKey(propertyName))
+                    if (_properties is not null && _properties.TryGetValue(propertyName, out object existing))
                     {
-                        return _properties[propertyName];
+                        return existing;
                     }
 
                     // Next, check to see if the name is in the descriptors table.  If it isn't, we will search the
@@ -43,7 +41,7 @@ namespace System.ComponentModel.Design
                 }
                 set
                 {
-                    _properties ??= new Hashtable();
+                    _properties ??= new();
                     _properties[propertyName] = value;
                 }
             }
@@ -58,12 +56,14 @@ namespace System.ComponentModel.Design
             /// </summary>
             private PropertyDescriptor GetShadowedPropertyDescriptor(string propertyName)
             {
-                _descriptors ??= new Hashtable();
+                _descriptors ??= new();
 
-                PropertyDescriptor property = (PropertyDescriptor)_descriptors[propertyName];
-                property ??= TypeDescriptor.GetProperties(_designer.Component.GetType())[propertyName];
+                if (_descriptors.TryGetValue(propertyName, out PropertyDescriptor property))
+                {
+                    return property;
+                }
 
-                return property;
+                return TypeDescriptor.GetProperties(_designer.Component.GetType())[propertyName];
             }
 
             /// <summary>

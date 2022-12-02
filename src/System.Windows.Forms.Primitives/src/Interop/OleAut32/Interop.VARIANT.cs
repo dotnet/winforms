@@ -218,7 +218,7 @@ internal unsafe partial struct VARIANT : IDisposable
     private static Type GetRecordElementType(IRecordInfo* record)
     {
         Guid guid;
-        record->GetGuid(&guid).ThrowOnFailure();
+        record->GetGuid(&guid);
 
         Type? t = global::System.Type.GetTypeFromCLSID(guid);
         if (t is null || !t.IsValueType)

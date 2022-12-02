@@ -10,9 +10,9 @@ using ComWrappers = Interop.WinFormsComWrappers;
 
 namespace Windows.Win32.System.Ole;
 
-internal unsafe partial struct IDropTarget : IPopulateVTable<IDropTarget.Vtbl>
+internal unsafe partial struct IDropTarget : IVTable<IDropTarget, IDropTarget.Vtbl>
 {
-    public static void PopulateVTable(Vtbl* vtable)
+    static void IVTable<IDropTarget, Vtbl>.PopulateComInterfaceVTable(Vtbl* vtable)
     {
         vtable->DragEnter_4 = &DragEnter;
         vtable->DragOver_5 = &DragOver;

@@ -7,7 +7,7 @@ using Windows.Win32.System.SystemServices;
 
 namespace Windows.Win32.System.Ole
 {
-    internal unsafe class DropTargetMock : IDropTarget.Interface
+    internal unsafe class DropTargetMock : IDropTarget.Interface, IManagedWrapper<IDropTarget>
     {
         public virtual HRESULT DragEnter(IDataObject* pDataObj, MODIFIERKEYS_FLAGS grfKeyState, POINTL pt, DROPEFFECT* pdwEffect)
         {

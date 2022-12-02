@@ -48,7 +48,7 @@ internal unsafe partial struct IPicture
             PICTYPE type = (PICTYPE)picture->Type;
             if (type == PICTYPE.PICTYPE_BITMAP)
             {
-                picture->get_hPal(&paletteHandle).ThrowOnFailure();
+                paletteHandle = picture->hPal;
             }
 
             return OLE_HANDLE.OleHandleToImage(picture->Handle, type, paletteHandle, picture->Width, picture->Height);

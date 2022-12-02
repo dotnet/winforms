@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     ///  This class is responsible for initializing the SHAutoComplete COM object and setting options in it.
     ///  The StringSource contains an array of Strings which is passed to the COM object as the custom source.
     /// </summary>
-    internal unsafe class StringSource : IEnumString.Interface
+    internal unsafe class StringSource : IEnumString.Interface, IManagedWrapper<IEnumString>
     {
         private string[] strings;
         private int current;
@@ -56,9 +56,9 @@ namespace System.Windows.Forms
 
             bool result = ComHelpers.TryGetComPointer(this, out IEnumString* pEnumString);
             Debug.Assert(result);
-            HRESULT hr = _autoComplete2->Init(edit.Handle, (IUnknown*)pEnumString, (PCWSTR)null, (PCWSTR)null).ThrowOnFailure();
+            _autoComplete2->Init(edit.Handle, (IUnknown*)pEnumString, (PCWSTR)null, (PCWSTR)null);
             GC.KeepAlive(edit.Wrapper);
-            return hr.Succeeded;
+            return true;
         }
 
         public void ReleaseAutoComplete()

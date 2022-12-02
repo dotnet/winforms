@@ -250,17 +250,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Displays a folder browser dialog box.
         /// </summary>
-        /// <param name="hWndOwner">A handle to the window that owns the folder browser dialog.</param>
+        /// <param name="hwndOwner">A handle to the window that owns the folder browser dialog.</param>
         /// <returns>
         ///  <see langword="true" /> if the folder browser dialog was successfully run; otherwise, <see langword="false" />.
         /// </returns>
-        protected override bool RunDialog(IntPtr hWndOwner) =>
+        protected override bool RunDialog(IntPtr hwndOwner) =>
 
             // If running the Vista dialog fails (e.g. on Server Core), we fall back to the
             // legacy dialog.
-            UseVistaDialogInternal && TryRunDialogVista((HWND)hWndOwner, out bool returnValue)
+            UseVistaDialogInternal && TryRunDialogVista((HWND)hwndOwner, out bool returnValue)
                 ? returnValue
-                : RunDialogOld((HWND)hWndOwner);
+                : RunDialogOld((HWND)hwndOwner);
 
         private unsafe bool TryRunDialogVista(HWND owner, out bool returnValue)
         {
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
             {
                 // IFileDialog::SetClientGuid should be called immediately after creation of the dialog object.
                 // https://docs.microsoft.com/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
-                dialog->SetClientGuid(in clientGuid).ThrowOnFailure();
+                dialog->SetClientGuid(in clientGuid);
             }
 
             // Description
@@ -320,27 +320,27 @@ namespace System.Windows.Forms
             {
                 if (UseDescriptionForTitle)
                 {
-                    dialog->SetTitle(_descriptionText).ThrowOnFailure();
+                    dialog->SetTitle(_descriptionText);
                 }
                 else
                 {
                     using ComScope<IFileDialogCustomize> customize = new(null);
                     if (dialog->QueryInterface(IID.Get<IFileDialogCustomize>(), customize).Succeeded)
                     {
-                        customize.Value->AddText(0, _descriptionText).ThrowOnFailure();
+                        customize.Value->AddText(0, _descriptionText);
                     }
                 }
             }
 
-            dialog->SetOptions(_options).ThrowOnFailure();
+            dialog->SetOptions(_options);
 
             if (!string.IsNullOrEmpty(_initialDirectory))
             {
                 using ComScope<IShellItem> initialDirectory = new(PInvoke.SHCreateShellItem(_initialDirectory));
                 if (!initialDirectory.IsNull)
                 {
-                    dialog->SetDefaultFolder(initialDirectory).ThrowOnFailure();
-                    dialog->SetFolder(initialDirectory).ThrowOnFailure();
+                    dialog->SetDefaultFolder(initialDirectory);
+                    dialog->SetFolder(initialDirectory);
                 }
             }
 
@@ -349,13 +349,13 @@ namespace System.Windows.Forms
                 string? parent = Path.GetDirectoryName(_selectedPath);
                 if (parent is null || !string.IsNullOrEmpty(_initialDirectory) || !Directory.Exists(parent))
                 {
-                    dialog->SetFileName(_selectedPath).ThrowOnFailure();
+                    dialog->SetFileName(_selectedPath);
                 }
                 else
                 {
                     string folder = Path.GetFileName(_selectedPath);
-                    dialog->SetFolder(PInvoke.SHCreateItemFromParsingName(parent)).ThrowOnFailure();
-                    dialog->SetFileName(folder).ThrowOnFailure();
+                    dialog->SetFolder(PInvoke.SHCreateItemFromParsingName(parent));
+                    dialog->SetFileName(folder);
                 }
             }
         }
@@ -380,10 +380,10 @@ namespace System.Windows.Forms
         private unsafe void GetResult(IFileOpenDialog* dialog)
         {
             using ComScope<IShellItem> item = new(null);
-            dialog->GetResult(item).ThrowOnFailure();
+            dialog->GetResult(item);
             if (!item.IsNull)
             {
-                item.Value->GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out PWSTR ppszName).ThrowOnFailure();
+                item.Value->GetDisplayName(SIGDN.SIGDN_FILESYSPATH, out PWSTR ppszName);
                 _selectedPath = new(ppszName);
                 Marshal.FreeCoTaskMem((nint)(void*)ppszName);
             }

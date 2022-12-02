@@ -5,13 +5,13 @@
 using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Com = Windows.Win32.System.Com;
+using Windows.Win32.System.Com;
 
 internal static partial class Interop
 {
     internal static partial class Ole32
     {
-        public sealed unsafe class GPStream : Com.IStream.Interface
+        public sealed unsafe class GPStream : IStream.Interface, IManagedWrapper<IStream, ISequentialStream>
         {
             private readonly Stream _dataStream;
 
@@ -38,7 +38,7 @@ internal static partial class Interop
 
             public Stream GetDataStream() => _dataStream;
 
-            HRESULT Com.IStream.Interface.Clone(Com.IStream** ppstm)
+            HRESULT IStream.Interface.Clone(IStream** ppstm)
             {
                 if (ppstm is null)
                 {
@@ -48,13 +48,13 @@ internal static partial class Interop
                 // The cloned object should have the same current "position"
                 bool result = ComHelpers.TryGetComPointer(
                     new GPStream(_dataStream) { _virtualPosition = _virtualPosition },
-                    out Com.IStream* pStream);
+                    out IStream* pStream);
                 Debug.Assert(result);
                 *ppstm = pStream;
                 return HRESULT.S_OK;
             }
 
-            HRESULT Com.IStream.Interface.Commit(Com.STGC grfCommitFlags)
+            HRESULT IStream.Interface.Commit(Windows.Win32.System.Com.STGC grfCommitFlags)
             {
                 _dataStream.Flush();
 
@@ -63,7 +63,7 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            HRESULT Com.IStream.Interface.CopyTo(Com.IStream* pstm, ulong cb, ulong* pcbRead, ulong* pcbWritten)
+            HRESULT IStream.Interface.CopyTo(IStream* pstm, ulong cb, ulong* pcbRead, ulong* pcbWritten)
             {
                 if (pstm is null)
                 {
@@ -82,7 +82,7 @@ internal static partial class Interop
                     {
                         uint read = remaining < (ulong)buffer.Length ? (uint)remaining : (uint)buffer.Length;
 
-                        ((Com.IStream.Interface)this).Read(b, read, &read);
+                        ((IStream.Interface)this).Read(b, read, &read);
                         remaining -= read;
                         totalRead += read;
 
@@ -108,7 +108,7 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            HRESULT Com.ISequentialStream.Interface.Read(void* pv, uint cb, uint* pcbRead)
+            HRESULT ISequentialStream.Interface.Read(void* pv, uint cb, uint* pcbRead)
             {
                 if (pv is null)
                 {
@@ -126,10 +126,10 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            HRESULT Com.IStream.Interface.Read(void* pv, uint cb, uint* pcbRead)
-                => ((Com.ISequentialStream.Interface)this).Read(pv, cb, pcbRead);
+            HRESULT IStream.Interface.Read(void* pv, uint cb, uint* pcbRead)
+                => ((ISequentialStream.Interface)this).Read(pv, cb, pcbRead);
 
-            HRESULT Com.IStream.Interface.Seek(long dlibMove, SeekOrigin dwOrigin, ulong* plibNewPosition)
+            HRESULT IStream.Interface.Seek(long dlibMove, SeekOrigin dwOrigin, ulong* plibNewPosition)
             {
                 long position = _virtualPosition == -1 ? _dataStream.Position : _virtualPosition;
                 long length = _dataStream.Length;
@@ -181,20 +181,20 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            HRESULT Com.IStream.Interface.SetSize(ulong libNewSize)
+            HRESULT IStream.Interface.SetSize(ulong libNewSize)
             {
                 _dataStream.SetLength(checked((long)libNewSize));
                 return HRESULT.S_OK;
             }
 
-            HRESULT Com.IStream.Interface.Stat(Com.STATSTG* pstatstg, Com.STATFLAG grfStatFlag)
+            HRESULT IStream.Interface.Stat(STATSTG* pstatstg, Windows.Win32.System.Com.STATFLAG grfStatFlag)
             {
                 if (pstatstg is null)
                 {
                     return HRESULT.STG_E_INVALIDPOINTER;
                 }
 
-                *pstatstg = new Com.STATSTG
+                *pstatstg = new STATSTG
                 {
                     cbSize = (ulong)_dataStream.Length,
                     type = (uint)STGTY.STREAM,
@@ -202,12 +202,12 @@ internal static partial class Interop
                     // Default read/write access is READ, which == 0
                     grfMode = _dataStream.CanWrite
                         ? _dataStream.CanRead
-                            ? Com.STGM.STGM_READWRITE
-                            : Com.STGM.STGM_WRITE
-                        : Com.STGM.STGM_READ
+                            ? STGM.STGM_READWRITE
+                            : STGM.STGM_WRITE
+                        : STGM.STGM_READ
                 };
 
-                if (grfStatFlag == Com.STATFLAG.STATFLAG_DEFAULT)
+                if (grfStatFlag == Windows.Win32.System.Com.STATFLAG.STATFLAG_DEFAULT)
                 {
                     // Caller wants a name
                     pstatstg->pwcsName = (char*)Marshal.StringToCoTaskMemUni(_dataStream is FileStream fs ? fs.Name : _dataStream.ToString());
@@ -217,15 +217,15 @@ internal static partial class Interop
             }
 
             /// Returns HRESULT.STG_E_INVALIDFUNCTION as a documented way to say we don't support locking
-            HRESULT Com.IStream.Interface.LockRegion(ulong libOffset, ulong cb, Com.LOCKTYPE dwLockType) => HRESULT.STG_E_INVALIDFUNCTION;
+            HRESULT IStream.Interface.LockRegion(ulong libOffset, ulong cb, LOCKTYPE dwLockType) => HRESULT.STG_E_INVALIDFUNCTION;
 
             // We never report ourselves as Transacted, so we can just ignore this.
-            HRESULT Com.IStream.Interface.Revert() => HRESULT.S_OK;
+            HRESULT IStream.Interface.Revert() => HRESULT.S_OK;
 
             /// Returns HRESULT.STG_E_INVALIDFUNCTION as a documented way to say we don't support locking
-            HRESULT Com.IStream.Interface.UnlockRegion(ulong libOffset, ulong cb, uint dwLockType) => HRESULT.STG_E_INVALIDFUNCTION;
+            HRESULT IStream.Interface.UnlockRegion(ulong libOffset, ulong cb, uint dwLockType) => HRESULT.STG_E_INVALIDFUNCTION;
 
-            HRESULT Com.ISequentialStream.Interface.Write(void* pv, uint cb, uint* pcbWritten)
+            HRESULT ISequentialStream.Interface.Write(void* pv, uint cb, uint* pcbWritten)
             {
                 if (pv is null)
                 {
@@ -243,8 +243,8 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            HRESULT Com.IStream.Interface.Write(void* pv, uint cb, uint* pcbWritten)
-                => ((Com.ISequentialStream.Interface)this).Write(pv, cb, pcbWritten);
+            HRESULT IStream.Interface.Write(void* pv, uint cb, uint* pcbWritten)
+                => ((ISequentialStream.Interface)this).Write(pv, cb, pcbWritten);
         }
     }
 }

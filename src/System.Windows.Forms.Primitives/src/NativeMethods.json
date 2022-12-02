@@ -1,5 +1,20 @@
 {
   "$schema": "https://aka.ms/CsWin32.schema.json",
   "allowMarshaling": false,
-  "useSafeHandles": false
+  "useSafeHandles": false,
+  "comInterop": {
+    "preserveSigMethods": [
+      "IAutoComplete2.SetOptions",
+      "IDispatch.Invoke",
+      "IFileDialog.Show",
+      "IFileDialog.GetResult",
+      "IFileOpenDialog.GetResults",
+      "IFileOpenDialog.Show",
+      "IGlobalInterfaceTable.GetInterfaceFromGlobal",
+      "IGlobalInterfaceTable.RevokeInterfaceFromGlobal",
+      "IStorage.CreateStream",
+      "IStorage.OpenStream",
+      "IUnknown.QueryInterface"
+    ]
+  }
 }
