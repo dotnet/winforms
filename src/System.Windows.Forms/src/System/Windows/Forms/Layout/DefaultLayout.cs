@@ -881,11 +881,10 @@ namespace System.Windows.Forms.Layout
                 anchorInfo = new AnchorInfo();
                 SetAnchorInfo(control, anchorInfo);
             }
-
-            // Only control's Size or Parent change, prompts recalculation of anchors. Otherwise,
-            // we skip updating anchors for the control.
             else if (!recalculateAnchors)
             {
+                // Only control's Size or Parent change, prompts recalculation of anchors. Otherwise,
+                // we skip updating anchors for the control.
                 return;
             }
 
