@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design
         //
         private static readonly Guid htmlDesignTime = new Guid("73CEF3DD-AE85-11CF-A406-00AA00C00940");
 
-        private Hashtable axTools;
+        private Dictionary<string, AxToolboxItem> axTools;
         private static readonly TraceSwitch AxToolSwitch = new TraceSwitch("AxTool", "ActiveX Toolbox Tracing");
         private const string AxClipFormat = "CLSID";
         private ToolboxItemCreatorCallback toolboxCreator;
@@ -331,47 +331,37 @@ namespace System.Windows.Forms.Design
         private ToolboxItem CreateAxToolboxItem(IDataObject dataObject)
         {
             // Read the stream out of the dataobject and get hold of the CLSID of the Toolbox item.
-            //
             MemoryStream stm = (MemoryStream)dataObject.GetData(AxClipFormat, true);
             int len = (int)stm.Length;
             byte[] bytes = new byte[len];
             stm.Read(bytes, 0, len);
 
             string clsid = Text.Encoding.Default.GetString(bytes);
-            int index = clsid.IndexOf("}");
-            clsid = clsid.Substring(0, index + 1);
-            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "\tCLSID of the Toolbox item: " + clsid);
+            int index = clsid.IndexOf('}');
+            clsid = clsid[..(index + 1)];
+            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"\tCLSID of the Toolbox item: {clsid}");
 
             // Look to see if we can find the Control key for this CLSID. If present, create a
             // new AxToolboxItem and add it to the cache.
-            //
-            if (IsSupportedActiveXControl(clsid))
-            {
-                AxToolboxItem tool;
-                // Look to see if we have already cached the ToolboxItem.
-                //
-                if (axTools is not null)
-                {
-                    tool = (AxToolboxItem)axTools[clsid];
-                    if (tool is not null)
-                    {
-                        if (AxToolSwitch.TraceVerbose)
-                            Debug.WriteLine("Found AxToolboxItem in tool cache");
-                        return tool;
-                    }
-                }
-
-                tool = new AxToolboxItem(clsid);
-                axTools ??= new Hashtable();
-
-                axTools.Add(clsid, tool);
-                Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "\tAdded AxToolboxItem");
-                return tool;
-            }
-            else
+            if (!IsSupportedActiveXControl(clsid))
             {
                 return null;
             }
+
+            // Look to see if we have already cached the ToolboxItem.
+            if (axTools is not null && axTools.TryGetValue(clsid, out AxToolboxItem tool))
+            {
+                if (AxToolSwitch.TraceVerbose)
+                    Debug.WriteLine("Found AxToolboxItem in tool cache");
+                return tool;
+            }
+
+            // Create a new AxToolboxItem and add it to the cache.
+            tool = new AxToolboxItem(clsid);
+            axTools ??= new();
+            axTools[clsid] = tool;
+            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "\tAdded AxToolboxItem");
+            return tool;
         }
 
         private static ToolboxItem CreateCfCodeToolboxItem(IDataObject dataObject)
@@ -869,7 +859,7 @@ namespace System.Windows.Forms.Design
 
             try
             {
-                string controlKey = "CLSID\\" + clsid + "\\Control";
+                string controlKey = $"CLSID\\{clsid}\\Control";
                 key = Registry.ClassesRoot.OpenSubKey(controlKey);
                 if (key is not null)
                 {
@@ -878,7 +868,7 @@ namespace System.Windows.Forms.Design
                     // HKCR\Component Categories to decide which categories to avoid. Currently the only one is
                     // the "HTML Design-time Control" category implemented by VID controls.
                     //
-                    string category = "CLSID\\" + clsid + "\\Implemented Categories\\{" + htmlDesignTime.ToString() + "}";
+                    string category = $"CLSID\\{clsid}\\Implemented Categories\\{{{htmlDesignTime}}}";
                     designtimeKey = Registry.ClassesRoot.OpenSubKey(category);
                     return (designtimeKey is null);
                 }
@@ -1120,7 +1110,7 @@ namespace System.Windows.Forms.Design
                 return new ToolStripAdornerWindowService(Component.Site, frame);
             }
 
-            Debug.Fail("Called back to create a service we don't know how to create: " + serviceType.Name);
+            Debug.Fail($"Called back to create a service we don't know how to create: {serviceType.Name}");
             return null;
         }
 
@@ -1130,7 +1120,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private ToolboxItem OnCreateToolboxItem(object serializedData, string format)
         {
-            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Checking to see if: " + format + " is supported.");
+            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Checking to see if: {format} is supported.");
 
             IDataObject dataObject = serializedData as IDataObject;
 
@@ -1246,7 +1236,7 @@ namespace System.Windows.Forms.Design
                     Control c = selObj as Control;
                     if (c is not null)
                     {
-                        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionAdd, control = " + c.ToString());
+                        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, control = {c.ToString()}");
                         User32.NotifyWinEvent((int)AccessibleEvents.SelectionAdd, new HandleRef(c, c.Handle), User32.OBJID.CLIENT, 0);
                     }
                 }
@@ -1254,7 +1244,7 @@ namespace System.Windows.Forms.Design
                 Control primary = svc.PrimarySelection as Control;
                 if (primary is not null)
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: Focus, control = " + primary.ToString());
+                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: Focus, control = {primary.ToString()}");
                     User32.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(primary, primary.Handle), User32.OBJID.CLIENT, 0);
                 }
 

@@ -731,13 +731,13 @@ namespace System.Windows.Forms.Layout
             string diff = string.Empty;
             if (PreferredSize.TraceVerbose)
             {
-                if (element.Properties.GetObject(_lastKnownStateProperty) is Hashtable propertyHash)
+                if (element.Properties.GetObject(_lastKnownStateProperty) is Dictionary<string, string?> propertyHash)
                 {
                     foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(element))
                     {
-                        if (propertyHash.ContainsKey(pd.Name) && (propertyHash[pd.Name]!.ToString() != pd.Converter.ConvertToString(pd.GetValue(element))))
+                        if (propertyHash.TryGetValue(pd.Name, out string? value) && (value != pd.Converter.ConvertToString(pd.GetValue(element))))
                         {
-                            diff += "Prop [ " + pd.Name + "] OLD [" + propertyHash[pd.Name] + "] NEW [" + pd.Converter.ConvertToString(pd.GetValue(element)) + "]\r\n";
+                            diff += $"Prop [{pd.Name}] OLD [{propertyHash[pd.Name]}] NEW [{pd.Converter.ConvertToString(pd.GetValue(element))}]\r\n";
                         }
                     }
                 }
@@ -762,9 +762,9 @@ namespace System.Windows.Forms.Layout
             element.Properties.SetObject(_lastKnownStateProperty, null);
         }
 
-        public static Hashtable Debug_GetCurrentPropertyState(object obj)
+        public static Dictionary<string, string?> Debug_GetCurrentPropertyState(object obj)
         {
-            Hashtable propertyHash = new Hashtable();
+            Dictionary<string, string?> propertyHash = new();
             if (PreferredSize.TraceVerbose)
             {
                 foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(obj))
