@@ -261,7 +261,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         public InheritanceAttribute GetInheritanceAttribute(IComponent component)
             => _inheritedComponents.TryGetValue(component, out InheritanceAttribute attr)
-                && attr is not null
                 ? attr
                 : InheritanceAttribute.Default;
 
