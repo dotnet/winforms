@@ -116,7 +116,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Guid guid = Guid.Empty;
             try
             {
-                return dispatch.GetIDsOfNames(&guid, names, 1, PInvoke.GetThreadLocale(), &dispid).Failed || dispid == DispatchID.UNKNOWN
+                HRESULT result = dispatch.GetIDsOfNames(&guid, names, 1, PInvoke.GetThreadLocale(), &dispid);
+                return result.Failed || dispid == DispatchID.UNKNOWN
                     ? null
                     : GetPropertyValue(component, dispid, ref succeeded);
             }

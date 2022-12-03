@@ -61,6 +61,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TestResources\VB6\SimpleControl.vb6">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="AxInterop.WMPLib">
       <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\AxInterop.WMPLib.dll</HintPath>
     </Reference>

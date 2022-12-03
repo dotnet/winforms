@@ -39,8 +39,11 @@ internal unsafe partial struct VARIANT : IDisposable
         //
         // If the VARTYPE is a VT_VECTOR, the contents are cleared as above and CoTaskMemFree is also called on
         // cabstr.pElems.
-
+        //
         // https://learn.microsoft.com/windows/win32/api/oleauto/nf-oleauto-variantclear#remarks
+        //
+        //     - VT_BSTR (SysFreeString)
+        //     - VT_DISPATCH / VT_UNKOWN (->Release(), if not VT_BYREF)
 
         fixed (void* t = &this)
         {
@@ -840,6 +843,32 @@ internal unsafe partial struct VARIANT : IDisposable
 
     private static Span<T> GetSpan<T>(Array arr)
         => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<T>(Marshal.UnsafeAddrOfPinnedArrayElement(arr, 0).ToPointer()), arr.Length);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator bool(VARIANT variant)
+        => variant.vt == VT_BOOL ? variant.data.boolVal != VARIANT_BOOL.VARIANT_FALSE : ThrowInvalidCast<bool>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator short(VARIANT variant)
+        => variant.vt == VT_I2 ? variant.data.iVal : ThrowInvalidCast<short>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator BSTR(VARIANT variant)
+        => variant.vt == VT_BSTR ? variant.data.bstrVal : ThrowInvalidCast<BSTR>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator CY(VARIANT variant)
+        => variant.vt == VT_CY ? variant.data.cyVal : ThrowInvalidCast<CY>();
+
+    public static explicit operator decimal(VARIANT variant) => variant.vt switch
+    {
+        VT_DECIMAL => variant.Anonymous.decVal.ToDecimal(),
+        VT_CY => decimal.FromOACurrency(variant.data.cyVal.int64),
+        _ => ThrowInvalidCast<decimal>(),
+    };
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static T ThrowInvalidCast<T>() => throw new InvalidCastException();
 
     internal partial struct _Anonymous_e__Union
     {
