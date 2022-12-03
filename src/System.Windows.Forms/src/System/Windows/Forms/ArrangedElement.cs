@@ -39,7 +39,7 @@ namespace System.Windows.Forms
             get { return GetChildren(); }
         }
 
-        IArrangedElement IArrangedElement.Container
+        IArrangedElement? IArrangedElement.Container
         {
             get { return GetContainer(); }
         }
@@ -147,7 +147,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected abstract IArrangedElement GetContainer();
+        protected abstract IArrangedElement? GetContainer();
 
         protected abstract ArrangedElementCollection GetChildren();
 
