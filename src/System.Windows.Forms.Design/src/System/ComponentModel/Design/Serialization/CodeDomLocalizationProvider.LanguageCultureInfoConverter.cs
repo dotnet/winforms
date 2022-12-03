@@ -8,7 +8,6 @@ namespace System.ComponentModel.Design.Serialization
 {
     public sealed partial class CodeDomLocalizationProvider
     {
-        #region LanguageCultureInfoConverter
         /// <summary>
         ///  This is a culture info converter that knows how to provide
         ///  a restricted list of cultures based on the SupportedCultures
@@ -54,7 +53,5 @@ namespace System.ComponentModel.Design.Serialization
                 return values;
             }
         }
-        #endregion
-        #endregion
     }
 }

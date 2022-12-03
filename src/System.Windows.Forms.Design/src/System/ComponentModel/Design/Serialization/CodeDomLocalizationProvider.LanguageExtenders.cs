@@ -10,9 +10,6 @@ namespace System.ComponentModel.Design.Serialization
 {
     public sealed partial class CodeDomLocalizationProvider
     {
-        #endregion
-
-        #region LanguageExtenders class
         /// <summary>
         ///  The design time language and localizable properties.
         /// </summary>
@@ -266,6 +263,5 @@ namespace System.ComponentModel.Design.Serialization
                 return (_host is not null && o == _host.RootComponent);
             }
         }
-        #endregion
     }
 }
