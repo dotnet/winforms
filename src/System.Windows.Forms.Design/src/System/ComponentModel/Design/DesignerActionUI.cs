@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -12,7 +11,15 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///  The DesignerActionUI is the designer/UI-specific implementation of the DesignerActions feature.  This class instantiates the DesignerActionService and hooks to its DesignerActionsChanged event.  Responding to this single event will enable the DesignerActionUI to perform all necessary UI-related operations. Note that the DesignerActionUI uses the BehaviorService to manage all UI interaction.  For every component containing a DesignerAction (determined by the DesignerActionsChanged event) there will be an associated  DesignerActionGlyph and DesignerActionBehavior. Finally, the DesignerActionUI is also responsible for showing and managing the Action's context menus.  Note that every DesignerAction context menu has an item that will bring up the DesignerActions option pane in the options dialog.
+    ///  The DesignerActionUI is the designer/UI-specific implementation of the DesignerActions feature.
+    ///  This class instantiates the DesignerActionService and hooks to its DesignerActionsChanged event.
+    ///  Responding to this single event will enable the DesignerActionUI to perform all necessary UI-related operations.
+    ///  Note that the DesignerActionUI uses the BehaviorService to manage all UI interaction.
+    ///  For every component containing a DesignerAction (determined by the DesignerActionsChanged event)
+    ///  there will be an associated DesignerActionGlyph and DesignerActionBehavior.
+    ///  Finally, the DesignerActionUI is also responsible for showing and managing the Action's context menus.
+    ///  Note that every DesignerAction context menu has an item that will bring up the DesignerActions
+    ///  option pane in the options dialog.
     /// </summary>
     internal partial class DesignerActionUI : IDisposable
     {
@@ -26,7 +33,7 @@ namespace System.ComponentModel.Design
         private BehaviorService _behaviorService; //this is how all of our UI is implemented (glyphs, behaviors, etc...)
         private readonly IMenuCommandService _menuCommandService;
         private DesignerActionKeyboardBehavior _dapkb;   //out keyboard behavior
-        private readonly Hashtable _componentToGlyph; //used for quick reference between components and our glyphs
+        private readonly Dictionary<object, DesignerActionGlyph> _componentToGlyph; //used for quick reference between components and our glyphs
         private Control _marshalingControl; //used to invoke events on our main gui thread
         private IComponent _lastPanelComponent;
 
@@ -101,7 +108,7 @@ namespace System.ComponentModel.Design
                 _mainParentWindow = _uiService.GetDialogOwnerWindow();
             }
 
-            _componentToGlyph = new Hashtable();
+            _componentToGlyph = new();
             _marshalingControl = new Control();
             _marshalingControl.CreateControl();
         }
@@ -180,12 +187,12 @@ namespace System.ComponentModel.Design
             if (dalColl is not null && dalColl.Count > 0)
             {
                 DesignerActionGlyph dag = null;
-                if (_componentToGlyph[comp] is null)
+                if (!_componentToGlyph.ContainsKey(comp))
                 {
                     DesignerActionBehavior dab = new DesignerActionBehavior(_serviceProvider, comp, dalColl, this);
 
                     //if comp is a component then try to find a traycontrol associated with it... this should really be in ComponentTray but there is no behaviorService for the CT
-                    if (!(comp is Control) || comp is ToolStripDropDown)
+                    if (comp is not Control or ToolStripDropDown)
                     {
                         //Here, we'll try to get the traycontrol associated with the comp and supply the glyph with an alternative bounds
                         if (_serviceProvider.GetService(typeof(ComponentTray)) is ComponentTray compTray)
@@ -206,13 +213,12 @@ namespace System.ComponentModel.Design
                     if (dag is not null)
                     {
                         //store off this relationship
-                        _componentToGlyph.Add(comp, dag);
+                        _componentToGlyph[comp] = dag;
                     }
                 }
                 else
                 {
-                    dag = _componentToGlyph[comp] as DesignerActionGlyph;
-                    if (dag is not null)
+                    if (_componentToGlyph.TryGetValue(comp, out dag))
                     {
                         if (dag.Behavior is DesignerActionBehavior behavior)
                         {
@@ -251,7 +257,7 @@ namespace System.ComponentModel.Design
             }
 
             //if something changed on a component we have actions associated with then invalidate all (repaint & reposition)
-            if (_componentToGlyph[ce.Component] is DesignerActionGlyph glyph)
+            if (_componentToGlyph.TryGetValue(ce.Component, out DesignerActionGlyph glyph))
             {
                 glyph.Invalidate();
 
@@ -478,12 +484,11 @@ namespace System.ComponentModel.Design
 
             object primarySelection = _selSvc.PrimarySelection;
             //verify that we have obtained a valid component with designer actions
-            if (primarySelection is null || !_componentToGlyph.Contains(primarySelection))
+            if (primarySelection is null || !_componentToGlyph.TryGetValue(primarySelection, out DesignerActionGlyph glyph))
             {
                 return false;
             }
 
-            DesignerActionGlyph glyph = (DesignerActionGlyph)_componentToGlyph[primarySelection];
             if (glyph is not null && glyph.Behavior is DesignerActionBehavior)
             {
                 // show the menu
@@ -520,31 +525,32 @@ namespace System.ComponentModel.Design
                 HideDesignerActionPanel();
             }
 
-            DesignerActionGlyph glyph = (DesignerActionGlyph)_componentToGlyph[relatedObject];
-            if (glyph is not null)
+            if (!_componentToGlyph.TryGetValue(relatedObject, out DesignerActionGlyph glyph))
             {
-                // Check ComponentTray first
-                if (_serviceProvider.GetService(typeof(ComponentTray)) is ComponentTray compTray && compTray.SelectionGlyphs is not null)
-                {
-                    if (compTray is not null && compTray.SelectionGlyphs.Contains(glyph))
-                    {
-                        compTray.SelectionGlyphs.Remove(glyph);
-                    }
-                }
+                return;
+            }
 
-                if (_designerActionAdorner.Glyphs.Contains(glyph))
+            // Check ComponentTray first
+            if (_serviceProvider.GetService(typeof(ComponentTray)) is ComponentTray compTray && compTray.SelectionGlyphs is not null)
+            {
+                if (compTray is not null && compTray.SelectionGlyphs.Contains(glyph))
                 {
-                    _designerActionAdorner.Glyphs.Remove(glyph);
+                    compTray.SelectionGlyphs.Remove(glyph);
                 }
+            }
 
-                _componentToGlyph.Remove(relatedObject);
+            if (_designerActionAdorner.Glyphs.Contains(glyph))
+            {
+                _designerActionAdorner.Glyphs.Remove(glyph);
+            }
 
-                // we only do this when we're in a transaction, see bug VSWHIDBEY 418709. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
-                if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.InTransaction)
-                {
-                    host.TransactionClosed += new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);
-                    _relatedGlyphTransaction = glyph;
-                }
+            _componentToGlyph.Remove(relatedObject);
+
+            // we only do this when we're in a transaction, see bug VSWHIDBEY 418709. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
+            if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.InTransaction)
+            {
+                host.TransactionClosed += new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);
+                _relatedGlyphTransaction = glyph;
             }
         }
 
@@ -615,7 +621,7 @@ namespace System.ComponentModel.Design
 
                 // if we're actually closing get the coordinate of the last message, the one causing us to close, is it within the glyph coordinate. if it is that mean that someone just clicked back from the panel, on VS, but ON THE GLYPH, that means that he actually wants to close it. The activation change is going to do that for us but we should NOT reopen right away because he clicked on the glyph... this code is here to prevent this...
                 Point point = DesignerUtils.LastCursorPoint;
-                if (_componentToGlyph[_lastPanelComponent] is DesignerActionGlyph currentGlyph)
+                if (_componentToGlyph.TryGetValue(_lastPanelComponent, out DesignerActionGlyph currentGlyph))
                 {
                     Point glyphCoord = GetGlyphLocationScreenCoord(_lastPanelComponent, currentGlyph);
                     if ((new Rectangle(glyphCoord, new Size(currentGlyph.Bounds.Width, currentGlyph.Bounds.Height))).Contains(point))
