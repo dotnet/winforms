@@ -189,8 +189,7 @@ namespace System.ComponentModel.Design
                         bool notPresent = false;
                         if (value is IComponent compValue)
                         {
-                            notPresent = !_inheritedComponents.TryGetValue(compValue, out InheritanceAttribute oldAttr)
-                                || oldAttr is null;
+                            notPresent = !_inheritedComponents.ContainsKey(compValue);
                             _inheritedComponents[compValue] = attr;
                         }
 
