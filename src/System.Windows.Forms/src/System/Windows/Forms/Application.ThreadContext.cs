@@ -385,7 +385,7 @@ namespace System.Windows.Forms
             ///  Allows you to setup a message filter for the application's message pump.  This
             ///  installs the filter on the current thread.
             /// </summary>
-            internal void AddMessageFilter(IMessageFilter f)
+            internal void AddMessageFilter(IMessageFilter? f)
             {
                 _messageFilters ??= new List<IMessageFilter>();
 
@@ -935,7 +935,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Allows the hosting environment to register a callback
             /// </summary>
-            internal void RegisterMessageLoop(MessageLoopCallback callback)
+            internal void RegisterMessageLoop(MessageLoopCallback? callback)
             {
                 _messageLoopCallback = callback;
             }
@@ -955,7 +955,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Starts a message loop for the given reason.
             /// </summary>
-            internal void RunMessageLoop(msoloop reason, ApplicationContext context)
+            internal void RunMessageLoop(msoloop reason, ApplicationContext? context)
             {
                 // Ensure that we attempt to apply theming before doing anything
                 // that might create a window.
@@ -976,7 +976,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private unsafe void RunMessageLoopInner(msoloop reason, ApplicationContext context)
+            private unsafe void RunMessageLoopInner(msoloop reason, ApplicationContext? context)
             {
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ThreadContext.PushMessageLoop {");
                 Debug.Indent();
@@ -1013,7 +1013,7 @@ namespace System.Windows.Forms
 
                     ApplicationContext = context;
 
-                    ApplicationContext.ThreadExit += new EventHandler(OnAppThreadExit);
+                    ApplicationContext!.ThreadExit += new EventHandler(OnAppThreadExit);
 
                     if (ApplicationContext.MainForm is not null)
                     {
