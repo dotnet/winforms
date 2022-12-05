@@ -21,5 +21,15 @@ internal readonly unsafe partial struct BSTR : IDisposable
         }
     }
 
+    /// <summary>
+    ///  Converts the <see cref="BSTR"/> to string and frees it.
+    /// </summary>
+    public readonly string ToStringAndFree()
+    {
+        string result = ToString();
+        Dispose();
+        return result;
+    }
+
     public bool IsNull => Value is null;
 }

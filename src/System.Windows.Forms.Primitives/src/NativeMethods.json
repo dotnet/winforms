@@ -5,6 +5,7 @@
   "comInterop": {
     "preserveSigMethods": [
       "IAutoComplete2.SetOptions",
+      "IClassFactory.CreateInstance",
       "IDispatch.Invoke",
       "IFileDialog.Show",
       "IFileDialog.GetResult",

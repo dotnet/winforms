@@ -132,7 +132,7 @@ namespace System.Windows.Forms
                             {
                                 Debug.Assert(obj is not null, "GetAmbientProperty failed");
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Object font type={obj.GetType().FullName}");
-                                Ole32.IFont ifont = (Ole32.IFont)obj;
+                                IFont.Interface ifont = (IFont.Interface)obj;
                                 prop.Value = Font.FromHfont(ifont.hFont);
                             }
                             catch (Exception e) when (!ClientUtils.IsCriticalException(e))
