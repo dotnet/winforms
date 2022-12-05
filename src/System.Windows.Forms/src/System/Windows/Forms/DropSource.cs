@@ -3,148 +3,113 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using static System.Runtime.InteropServices.ComWrappers;
+using Windows.Win32.System.SystemServices;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, IManagedWrapper<IDropSource, IDropSourceNotify>
 {
-    internal class DropSource : Ole32.IDropSource, Ole32.IDropSourceNotify, IManagedWrapper
+    private readonly ISupportOleDropSource _peer;
+    private readonly IComDataObject _dataObject;
+    private HWND _lastHwndTarget;
+    private GiveFeedbackEventArgs? _lastGiveFeedbacEventArgs;
+
+    public DropSource(ISupportOleDropSource peer, IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
     {
-        private readonly ISupportOleDropSource _peer;
-        private readonly IComDataObject _dataObject;
-        private IntPtr _lastHwndTarget;
-        private GiveFeedbackEventArgs? _lastGiveFeedbacEventArgs;
-        private static ComInterfaceTable? s_comInterfaceTable;
+        _peer = peer.OrThrowIfNull();
+        _dataObject = dataObject.OrThrowIfNull();
 
-        public DropSource(ISupportOleDropSource peer, IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
+        if (dragImage is not null)
         {
-            _peer = peer.OrThrowIfNull();
-            _dataObject = dataObject.OrThrowIfNull();
+            _lastGiveFeedbacEventArgs = new(DragDropEffects.None, useDefaultCursors: false, dragImage, cursorOffset, useDefaultDragImage);
+            DragDropHelper.SetDragImage(_dataObject, _lastGiveFeedbacEventArgs);
+        }
+    }
 
-            if (dragImage is not null)
-            {
-                _lastGiveFeedbacEventArgs = new(DragDropEffects.None, useDefaultCursors: false, dragImage, cursorOffset, useDefaultDragImage);
-                DragDropHelper.SetDragImage(_dataObject, _lastGiveFeedbacEventArgs);
-            }
+    public HRESULT QueryContinueDrag(BOOL fEscapePressed, MODIFIERKEYS_FLAGS grfKeyState)
+    {
+        DragAction action = DragAction.Continue;
+        if (fEscapePressed)
+        {
+            action = DragAction.Cancel;
+        }
+        else if (!grfKeyState.HasFlag(MODIFIERKEYS_FLAGS.MK_LBUTTON)
+                 && !grfKeyState.HasFlag(MODIFIERKEYS_FLAGS.MK_RBUTTON)
+                 && !grfKeyState.HasFlag(MODIFIERKEYS_FLAGS.MK_MBUTTON))
+        {
+            action = DragAction.Drop;
         }
 
-        public HRESULT QueryContinueDrag(BOOL fEscapePressed, User32.MK grfKeyState)
+        QueryContinueDragEventArgs qcdEvent = new((int)grfKeyState, fEscapePressed, action);
+        _peer.OnQueryContinueDrag(qcdEvent);
+
+        return qcdEvent.Action switch
         {
-            bool escapePressed = fEscapePressed != 0;
-            DragAction action = DragAction.Continue;
-            if (escapePressed)
-            {
-                action = DragAction.Cancel;
-            }
-            else if ((grfKeyState & User32.MK.LBUTTON) == 0
-                     && (grfKeyState & User32.MK.RBUTTON) == 0
-                     && (grfKeyState & User32.MK.MBUTTON) == 0)
-            {
-                action = DragAction.Drop;
-            }
+            DragAction.Drop => HRESULT.DRAGDROP_S_DROP,
+            DragAction.Cancel => HRESULT.DRAGDROP_S_CANCEL,
+            _ => HRESULT.S_OK,
+        };
+    }
 
-            QueryContinueDragEventArgs qcdevent = new QueryContinueDragEventArgs((int)grfKeyState, escapePressed, action);
-            _peer.OnQueryContinueDrag(qcdevent);
+    public HRESULT GiveFeedback(DROPEFFECT dwEffect)
+    {
+        GiveFeedbackEventArgs gfbEvent = _lastGiveFeedbacEventArgs is null
+            ? new((DragDropEffects)dwEffect, useDefaultCursors: true)
+            : new(
+                (DragDropEffects)dwEffect,
+                useDefaultCursors: false,
+                _lastGiveFeedbacEventArgs.DragImage,
+                _lastGiveFeedbacEventArgs.CursorOffset,
+                _lastGiveFeedbacEventArgs.UseDefaultDragImage);
 
-            switch (qcdevent.Action)
-            {
-                case DragAction.Drop:
-                    return HRESULT.DRAGDROP_S_DROP;
-                case DragAction.Cancel:
-                    return HRESULT.DRAGDROP_S_CANCEL;
-                default:
-                    return HRESULT.S_OK;
-            }
+        _peer.OnGiveFeedback(gfbEvent);
+
+        if (gfbEvent.DragImage is not null && !gfbEvent.Equals(_lastGiveFeedbacEventArgs))
+        {
+            _lastGiveFeedbacEventArgs = gfbEvent.Clone();
+            UpdateDragImage(_lastGiveFeedbacEventArgs, _dataObject, _lastHwndTarget);
         }
 
-        public HRESULT GiveFeedback(Ole32.DROPEFFECT dwEffect)
+        if (gfbEvent.UseDefaultCursors)
         {
-            GiveFeedbackEventArgs gfbevent = _lastGiveFeedbacEventArgs is null
-                ? new GiveFeedbackEventArgs((DragDropEffects)dwEffect, useDefaultCursors: true)
-                : new GiveFeedbackEventArgs(
-                    (DragDropEffects)dwEffect,
-                    useDefaultCursors: false,
-                    _lastGiveFeedbacEventArgs.DragImage,
-                    _lastGiveFeedbacEventArgs.CursorOffset,
-                    _lastGiveFeedbacEventArgs.UseDefaultDragImage);
-
-            _peer.OnGiveFeedback(gfbevent);
-
-            if (gfbevent.DragImage is not null && !gfbevent.Equals(_lastGiveFeedbacEventArgs))
-            {
-                _lastGiveFeedbacEventArgs = gfbevent.Clone();
-                UpdateDragImage(_lastGiveFeedbacEventArgs, _dataObject, _lastHwndTarget);
-            }
-
-            if (gfbevent.UseDefaultCursors)
-            {
-                return HRESULT.DRAGDROP_S_USEDEFAULTCURSORS;
-            }
-
-            return HRESULT.S_OK;
-
-            void UpdateDragImage(GiveFeedbackEventArgs e, IComDataObject? dataObject, IntPtr lastHwndTarget)
-            {
-                if (dataObject is null)
-                {
-                    return;
-                }
-
-                DragDropHelper.SetDragImage(_dataObject, e);
-
-                if (lastHwndTarget != IntPtr.Zero && (Cursor.Position is Point point))
-                {
-                    DragDropHelper.DragEnter(lastHwndTarget, dataObject, ref point, (Ole32.DROPEFFECT)e.Effect);
-                }
-            }
+            return HRESULT.DRAGDROP_S_USEDEFAULTCURSORS;
         }
 
-        public HRESULT DragEnterTarget(IntPtr hwndTarget)
-        {
-            _lastHwndTarget = hwndTarget;
-            return HRESULT.S_OK;
-        }
+        return HRESULT.S_OK;
 
-        public HRESULT DragLeaveTarget()
+        void UpdateDragImage(GiveFeedbackEventArgs e, IComDataObject? dataObject, HWND lastHwndTarget)
         {
-            if (_lastGiveFeedbacEventArgs?.DragImage is not null)
+            if (dataObject is null)
             {
-                DragDropHelper.DragLeave();
+                return;
             }
 
-            return HRESULT.S_OK;
-        }
+            DragDropHelper.SetDragImage(_dataObject, e);
 
-        unsafe ComInterfaceTable IManagedWrapper.GetComInterfaceTable()
-        {
-            if (s_comInterfaceTable is null)
+            if (!lastHwndTarget.IsNull && (Cursor.Position is Point point))
             {
-                IDropSource.Vtbl* dropSourceVtable = (IDropSource.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDropSource.Vtbl), sizeof(IDropSource.Vtbl));
-                IDropSourceNotify.Vtbl* dropSourceNotifyVtable = (IDropSourceNotify.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDropSourceNotify.Vtbl), sizeof(IDropSourceNotify.Vtbl));
-                WinFormsComWrappers.PopulateIUnknownVTable((IUnknown.Vtbl*)dropSourceVtable);
-                WinFormsComWrappers.PopulateIUnknownVTable((IUnknown.Vtbl*)dropSourceNotifyVtable);
-
-                WinFormsComWrappers.IDropSourceVtbl.PopulateVTable(dropSourceVtable);
-                WinFormsComWrappers.IDropSourceNotifyVtbl.PopulateVTable(dropSourceNotifyVtable);
-
-                ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(Ole32.IDropSource), sizeof(ComInterfaceEntry) * 2);
-                wrapperEntry[0].IID = *IID.Get<IDropSource>();
-                wrapperEntry[0].Vtable = (nint)(void*)dropSourceVtable;
-                wrapperEntry[1].IID = *IID.Get<IDropSourceNotify>();
-                wrapperEntry[1].Vtable = (nint)(void*)dropSourceNotifyVtable;
-
-                s_comInterfaceTable = new ComInterfaceTable()
-                {
-                    Entries = wrapperEntry,
-                    Count = 2
-                };
+                DragDropHelper.DragEnter(lastHwndTarget, dataObject, ref point, (Ole32.DROPEFFECT)e.Effect);
             }
-
-            return (ComInterfaceTable)s_comInterfaceTable;
         }
+    }
+
+    public HRESULT DragEnterTarget(HWND hwndTarget)
+    {
+        _lastHwndTarget = hwndTarget;
+        return HRESULT.S_OK;
+    }
+
+    public HRESULT DragLeaveTarget()
+    {
+        if (_lastGiveFeedbacEventArgs?.DragImage is not null)
+        {
+            DragDropHelper.DragLeave();
+        }
+
+        return HRESULT.S_OK;
     }
 }
