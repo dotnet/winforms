@@ -842,23 +842,6 @@ namespace System.Windows.Forms
             AdjustSize();
         }
 
-        private bool ShouldAutoDrawTicks()
-        {
-        if (TickStyle == TickStyle.None)
-        {
-            return true;
-        }
-
-        int size = Orientation == Orientation.Horizontal ? Size.Width : Size.Height;
-        if (size == 0)
-        {
-            return true;
-        }
-
-        uint range = (uint)(_maximum - _minimum);
-        return range <= (size / 2);
-        }
-
         /// <summary>
         ///  Check if the value of the max is greater then the taskbar size.
         ///  If so then we divide the value by size and only that many ticks to be drawn on the screen.
@@ -870,28 +853,28 @@ namespace System.Windows.Forms
                 return;
             }
 
-            int ticksDrawnFrequency = _tickFrequency;
+            int drawnTickFrequency = _tickFrequency;
             if (_autoDrawTicks)
             {
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)ticksDrawnFrequency);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)drawnTickFrequency);
                 return;
             }
 
             int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
             uint range = (uint)(_maximum - _minimum);
             int ticksDrawn = 1;
-            if (ticksDrawnFrequency != 0)
+            if (drawnTickFrequency != 0)
             {
-                ticksDrawn = (int)(range / ticksDrawnFrequency);
+                ticksDrawn = (int)(range / drawnTickFrequency);
             }
 
             if (maxTickCount != 0 && ticksDrawn > maxTickCount)
             {
-                ticksDrawnFrequency = (int)(range / maxTickCount);
+                drawnTickFrequency = (int)(range / maxTickCount);
             }
 
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
-            for (int i = _minimum + ticksDrawnFrequency; i < _maximum - ticksDrawnFrequency; i += ticksDrawnFrequency)
+            for (int i = _minimum + drawnTickFrequency; i < _maximum - drawnTickFrequency; i += drawnTickFrequency)
             {
                 LRESULT lresult = PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
                 Debug.Assert((bool)(BOOL)lresult);
@@ -1135,6 +1118,23 @@ namespace System.Windows.Forms
 
                 PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPOS, (WPARAM)(BOOL)true, (LPARAM)reflectedValue);
             }
+        }
+
+        private bool ShouldAutoDrawTicks()
+        {
+            if (TickStyle == TickStyle.None)
+            {
+                return true;
+            }
+
+            int size = Orientation == Orientation.Horizontal ? Size.Width : Size.Height;
+            if (size == 0)
+            {
+                return true;
+            }
+
+            uint range = (uint)(_maximum - _minimum);
+            return range <= (size / 2);
         }
 
         public override string ToString() => $"{base.ToString()}, Minimum: {Minimum}, Maximum: {Maximum}, Value: {_value}";
