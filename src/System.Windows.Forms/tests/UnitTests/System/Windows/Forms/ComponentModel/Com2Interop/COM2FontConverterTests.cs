@@ -143,14 +143,14 @@ public unsafe class COM2FontConverterTests : IClassFixture<ThreadExceptionFixtur
 
                 HRESULT IDispatch.Interface.GetTypeInfoCount(uint* pctinfo) => throw new NotImplementedException();
 
-                HRESULT IDispatch.Interface.GetTypeInfo(uint iTInfo, PInvoke.LCID lcid, ITypeInfo** ppTInfo) => throw new NotImplementedException();
+                HRESULT IDispatch.Interface.GetTypeInfo(uint iTInfo, uint lcid, ITypeInfo** ppTInfo) => throw new NotImplementedException();
 
-                HRESULT IDispatch.Interface.GetIDsOfNames(Guid* riid, uint cNames, PWSTR* lcid, int* rgDispId) => throw new NotImplementedException();
+                HRESULT IDispatch.Interface.GetIDsOfNames(Guid* riid, PWSTR* rgszNames, uint cNames, uint lcid, int* rgDispId) => throw new NotImplementedException();
 
                 HRESULT IDispatch.Interface.Invoke(
                     int dispIdMember,
                     Guid* riid,
-                    PInvoke.LCID lcid,
+                    uint lcid,
                     DISPATCH_FLAGS dwFlags,
                     DISPPARAMS* pDispParams,
                     VARIANT* pVarResult,

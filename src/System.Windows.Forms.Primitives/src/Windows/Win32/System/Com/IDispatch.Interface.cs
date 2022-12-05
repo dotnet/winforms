@@ -12,7 +12,10 @@ internal unsafe partial struct IDispatch : IVTable<IDispatch, IDispatch.Vtbl>
 {
     static void IVTable<IDispatch, Vtbl>.PopulateComInterfaceVTable(Vtbl* vtable)
     {
-        throw new NotImplementedException();
+        vtable->GetTypeInfoCount_4 = &GetTypeInfoCount;
+        vtable->GetTypeInfo_5 = &GetTypeInfo;
+        vtable->GetIDsOfNames_6 = &GetIDsOfNames;
+        vtable->Invoke_7 = &Invoke;
     }
 
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
@@ -20,19 +23,19 @@ internal unsafe partial struct IDispatch : IVTable<IDispatch, IDispatch.Vtbl>
         => ComWrappers.UnwrapAndInvoke<IDispatch, Interface>(@this, o => o.GetTypeInfoCount(pctinfo));
 
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-    private static HRESULT GetTypeInfo(IDispatch* @this, uint iTInfo, PInvoke.LCID lcid, ITypeInfo** ppTInfo)
+    private static HRESULT GetTypeInfo(IDispatch* @this, uint iTInfo, uint lcid, ITypeInfo** ppTInfo)
         => ComWrappers.UnwrapAndInvoke<IDispatch, Interface>(@this, o => o.GetTypeInfo(iTInfo, lcid, ppTInfo));
 
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-    private static HRESULT GetIDsOfNames(IDispatch* @this, Guid* riid, uint cNames, PWSTR* lcid, int* rgDispId)
-        => ComWrappers.UnwrapAndInvoke<IDispatch, Interface>(@this, o => o.GetIDsOfNames(riid, cNames, lcid, rgDispId));
+    private static HRESULT GetIDsOfNames(IDispatch* @this, Guid* riid, PWSTR* rgszNames, uint cNames, uint lcid, int* rgDispId)
+        => ComWrappers.UnwrapAndInvoke<IDispatch, Interface>(@this, o => o.GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId));
 
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
     private static HRESULT Invoke(
         IDispatch* @this,
         int dispIdMember,
         Guid* riid,
-        PInvoke.LCID lcid,
+        uint lcid,
         DISPATCH_FLAGS dwFlags,
         DISPPARAMS* pDispParams,
         VARIANT* pVarResult,
@@ -54,21 +57,22 @@ internal unsafe partial struct IDispatch : IVTable<IDispatch, IDispatch.Vtbl>
         [PreserveSig]
         HRESULT GetTypeInfo(
             uint iTInfo,
-            PInvoke.LCID lcid,
+            uint lcid,
             ITypeInfo** ppTInfo);
 
         [PreserveSig]
         HRESULT GetIDsOfNames(
             Guid* riid,
+            PWSTR* rgszNames,
             uint cNames,
-            PWSTR* lcid,
+            uint lcid,
             int* rgDispId);
 
         [PreserveSig]
         HRESULT Invoke(
             int dispIdMember,
             Guid* riid,
-            PInvoke.LCID lcid,
+            uint lcid,
             DISPATCH_FLAGS dwFlags,
             DISPPARAMS* pDispParams,
             VARIANT* pVarResult,

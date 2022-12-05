@@ -3930,6 +3930,11 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Gets a cached <see cref="FONTDESC"/> for a given <see cref="Font"/>. The returned
+        ///  <see cref="FONTDESC"/> must have it's <see cref="FONTDESC.lpstrName"/> populated with
+        ///  a newly pinned string before usage.
+        /// </summary>
         private static FONTDESC GetFONTDESCFromFont(Font font)
         {
             if (s_fontTable is null)
@@ -3945,7 +3950,7 @@ namespace System.Windows.Forms
             var fdesc = new FONTDESC
             {
                 cbSizeofstruct = (uint)sizeof(FONTDESC),
-                cySize = new() { int64 = (long)(font.SizeInPoints * 10000) },
+                cySize = (CY)font.SizeInPoints,
                 sWeight = (short)logfont.lfWeight,
                 sCharset = (short)logfont.lfCharSet,
                 fItalic = font.Italic,

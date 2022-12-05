@@ -69,7 +69,6 @@ DestroyCursor
 DestroyIcon
 DestroyMenu
 DestroyWindow
-DestroyWindow
 DISP_E_ARRAYISLOCKED
 DISP_E_BADINDEX
 DISP_E_BADPARAMCOUNT
