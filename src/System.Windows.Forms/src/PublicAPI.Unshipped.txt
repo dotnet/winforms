@@ -6,6 +6,7 @@ System.Windows.Forms.PrintPreviewControl.TabStopChanged -> System.EventHandler?
 override System.Windows.Forms.MaskedTextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.MaskedTextBox.OnGotFocus(System.EventArgs! e) -> void
 override System.Windows.Forms.MaskedTextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.ScrollBar.ScaleControl(System.Drawing.SizeF factor, System.Windows.Forms.BoundsSpecified specified) -> void
 override System.Windows.Forms.TextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 virtual System.Windows.Forms.AxHost.State.Dispose(bool disposing) -> void
 *REMOVED*override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!

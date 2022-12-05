@@ -3268,7 +3268,6 @@ override System.Windows.Forms.ScrollBar.GetScaledBounds(System.Drawing.Rectangle
 override System.Windows.Forms.ScrollBar.OnEnabledChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ScrollBar.OnHandleCreated(System.EventArgs! e) -> void
 override System.Windows.Forms.ScrollBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
-override System.Windows.Forms.ScrollBar.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
 override System.Windows.Forms.ScrollBar.Text.get -> string!
 override System.Windows.Forms.ScrollBar.Text.set -> void
 override System.Windows.Forms.ScrollBar.ToString() -> string!
