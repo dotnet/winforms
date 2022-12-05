@@ -57,13 +57,6 @@ internal partial class Interop
                 return new ErrorInfoWrapper(errorInfoComObject);
             }
 
-            hr = Marshal.QueryInterface(externalComObject, ref IID.GetRef<IEnumFORMATETC>(), out IntPtr enumFormatEtcComObject);
-            if (hr == S_OK)
-            {
-                Marshal.Release(externalComObject);
-                return new EnumFORMATETCWrapper(enumFormatEtcComObject);
-            }
-
             hr = Marshal.QueryInterface(externalComObject, ref IID.GetRef<IEnumVARIANT>(), out IntPtr enumVariantComObject);
             if (hr == S_OK)
             {
