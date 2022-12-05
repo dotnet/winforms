@@ -11,11 +11,9 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using Com = Windows.Win32.System.Com;
 using static Interop;
+using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
-using static System.Runtime.InteropServices.ComWrappers;
-using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms
 {
@@ -23,7 +21,7 @@ namespace System.Windows.Forms
     ///  Implements a basic data transfer mechanism.
     /// </summary>
     [ClassInterface(ClassInterfaceType.None)]
-    public partial class DataObject : IDataObject, ComTypes.IDataObject, Com.IManagedWrapper
+    public partial class DataObject : IDataObject, ComTypes.IDataObject, Com.IDataObject.Interface, Com.IManagedWrapper<Com.IDataObject>
     {
         private const string CF_DEPRECATED_FILENAME = "FileName";
         private const string CF_DEPRECATED_FILENAMEW = "FileNameW";
@@ -39,7 +37,6 @@ namespace System.Windows.Forms
             };
 
         private readonly IDataObject _innerData;
-        private static ComInterfaceTable? s_comInterfaceTable;
 
         // We use this to identify that a stream is actually a serialized object.  On read,
         // we don't know if the contents of a stream were saved "raw" or if the stream is really
@@ -1054,27 +1051,140 @@ namespace System.Windows.Forms
             _innerData.SetData(data);
         }
 
-        unsafe ComInterfaceTable Com.IManagedWrapper.GetComInterfaceTable()
+        unsafe HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium)
         {
-            if (s_comInterfaceTable is null)
+            if (pmedium is null)
             {
-                Com.IDataObject.Vtbl* vtable = (Com.IDataObject.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(Com.IDataObject.Vtbl), sizeof(Com.IDataObject.Vtbl));
-                WinFormsComWrappers.PopulateIUnknownVTable((Com.IUnknown.Vtbl*)vtable);
-
-                WinFormsComWrappers.IDataObjectVtbl.PopulateVTable(vtable);
-
-                ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IDataObject), sizeof(ComInterfaceEntry));
-                wrapperEntry[0].IID = *IID.Get<Com.IDataObject>();
-                wrapperEntry[0].Vtable = (nint)(void*)vtable;
-
-                s_comInterfaceTable = new ComInterfaceTable()
-                {
-                    Entries = wrapperEntry,
-                    Count = 1
-                };
+                return HRESULT.E_POINTER;
             }
 
-            return (ComInterfaceTable)s_comInterfaceTable;
+            try
+            {
+                ((ComTypes.IDataObject)this).GetData(ref *(FORMATETC*)pformatetcIn, out STGMEDIUM medium);
+                *pmedium = (Com.STGMEDIUM)medium;
+                return HRESULT.S_OK;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return (HRESULT)ex.HResult;
+            }
+        }
+
+        unsafe HRESULT Com.IDataObject.Interface.GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium)
+        {
+            if (pmedium is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            try
+            {
+                STGMEDIUM medium = (STGMEDIUM)(*pmedium);
+                ((ComTypes.IDataObject)this).GetDataHere(ref *(FORMATETC*)pformatetc, ref medium);
+                *pmedium = (Com.STGMEDIUM)medium;
+                return HRESULT.S_OK;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return (HRESULT)ex.HResult;
+            }
+        }
+
+        unsafe HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc)
+            => (HRESULT)((ComTypes.IDataObject)this).QueryGetData(ref *(FORMATETC*)pformatetc);
+
+        unsafe HRESULT Com.IDataObject.Interface.GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut)
+            => (HRESULT)((ComTypes.IDataObject)this).GetCanonicalFormatEtc(ref *(FORMATETC*)pformatectIn, out *(FORMATETC*)pformatetcOut);
+
+        unsafe HRESULT Com.IDataObject.Interface.SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease)
+        {
+            if (pmedium is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            try
+            {
+                STGMEDIUM medium = (STGMEDIUM)(*pmedium);
+                ((ComTypes.IDataObject)this).SetData(ref *(FORMATETC*)pformatetc, ref medium, fRelease);
+                return HRESULT.S_OK;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return (HRESULT)ex.HResult;
+            }
+        }
+
+        unsafe HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
+        {
+            if (ppenumFormatEtc is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            try
+            {
+                var comTypeFormatEtc = ((ComTypes.IDataObject)this).EnumFormatEtc((DATADIR)(int)dwDirection);
+                if (!ComHelpers.TryGetComPointer(comTypeFormatEtc, out Com.IEnumFORMATETC* formatEtcPtr))
+                {
+                    return HRESULT.E_NOINTERFACE;
+                }
+
+                *ppenumFormatEtc = formatEtcPtr;
+                return HRESULT.S_OK;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return (HRESULT)ex.HResult;
+            }
+        }
+
+        unsafe HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
+        {
+            var adviseSink = (IAdviseSink)Marshal.GetObjectForIUnknown((nint)(void*)pAdvSink);
+            return (HRESULT)((ComTypes.IDataObject)this).DAdvise(ref *(FORMATETC*)pformatetc, (ADVF)advf, adviseSink, out *(int*)pdwConnection);
+        }
+
+        HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection)
+        {
+            try
+            {
+                ((ComTypes.IDataObject)this).DUnadvise((int)dwConnection);
+                return HRESULT.S_OK;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return (HRESULT)ex.HResult;
+            }
+        }
+
+        unsafe HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)
+        {
+            if (ppenumAdvise is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *ppenumAdvise = null;
+
+            var result = (HRESULT)((ComTypes.IDataObject)this).EnumDAdvise(out var enumAdvice);
+            if (result.Failed)
+            {
+                return result;
+            }
+
+            if (!ComHelpers.TryGetComPointer(enumAdvice, out Com.IEnumSTATDATA* enumAdvicePtr))
+            {
+                return HRESULT.E_NOINTERFACE;
+            }
+
+            *ppenumAdvise = enumAdvicePtr;
+            return result;
         }
     }
 }

@@ -3,9 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Diagnostics;
 using System.Runtime.InteropServices.ComTypes;
-using static System.Runtime.InteropServices.ComWrappers;
 using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms
@@ -15,12 +14,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
-        private class FormatEnumerator : IEnumFORMATETC, Com.IManagedWrapper
+        private class FormatEnumerator : IEnumFORMATETC, Com.IEnumFORMATETC.Interface, Com.IManagedWrapper<Com.IEnumFORMATETC>
         {
             private IDataObject _parent;
             private readonly List<FORMATETC> _formats = new List<FORMATETC>();
             private int _current;
-            private static ComInterfaceTable? s_comInterfaceTable;
 
             public FormatEnumerator(IDataObject parent) : this(parent, parent.GetFormats())
             {
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
             private FormatEnumerator(FormatEnumerator source)
             {
                 _parent = source._parent;
-                _current = 0;
+                _current = source._current;
                 _formats.AddRange(source._formats);
             }
 
@@ -40,64 +38,31 @@ namespace System.Windows.Forms
 
                 _parent = parent;
 
-                if (formats is not null)
+                if (formats is null)
                 {
-                    for (int i = 0; i < formats.Length; i++)
+                    return;
+                }
+
+                for (int i = 0; i < formats.Length; i++)
+                {
+                    string format = formats[i];
+                    FORMATETC temp = new()
                     {
-                        string format = formats[i];
-                        FORMATETC temp = new FORMATETC
-                        {
-                            cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
-                            dwAspect = DVASPECT.DVASPECT_CONTENT,
-                            ptd = IntPtr.Zero,
-                            lindex = -1
-                        };
+                        cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
+                        dwAspect = DVASPECT.DVASPECT_CONTENT,
+                        ptd = 0,
+                        lindex = -1,
+                        tymed = format.Equals(DataFormats.Bitmap) ? TYMED.TYMED_GDI : TYMED.TYMED_HGLOBAL
+                    };
 
-                        if (format.Equals(DataFormats.Bitmap))
-                        {
-                            temp.tymed = TYMED.TYMED_GDI;
-                        }
-                        else if (format.Equals(DataFormats.Text)
-                                 || format.Equals(DataFormats.UnicodeText)
-                                 || format.Equals(DataFormats.StringFormat)
-                                 || format.Equals(DataFormats.Rtf)
-                                 || format.Equals(DataFormats.CommaSeparatedValue)
-                                 || format.Equals(DataFormats.FileDrop)
-                                 || format.Equals(CF_DEPRECATED_FILENAME)
-                                 || format.Equals(CF_DEPRECATED_FILENAMEW))
-                        {
-                            temp.tymed = TYMED.TYMED_HGLOBAL;
-                        }
-                        else
-                        {
-                            temp.tymed = TYMED.TYMED_HGLOBAL;
-                        }
-
-                        _formats.Add(temp);
-                    }
+                    _formats.Add(temp);
                 }
             }
 
             public int Next(int celt, FORMATETC[] rgelt, int[]? pceltFetched)
             {
                 CompModSwitches.DataObject.TraceVerbose("FormatEnumerator: Next");
-                if (_current < _formats.Count && celt > 0)
-                {
-                    FORMATETC current = _formats[_current];
-                    rgelt[0].cfFormat = current.cfFormat;
-                    rgelt[0].tymed = current.tymed;
-                    rgelt[0].dwAspect = DVASPECT.DVASPECT_CONTENT;
-                    rgelt[0].ptd = IntPtr.Zero;
-                    rgelt[0].lindex = -1;
-
-                    if (pceltFetched is not null)
-                    {
-                        pceltFetched[0] = 1;
-                    }
-
-                    _current++;
-                }
-                else
+                if (_current >= _formats.Count || celt <= 0)
                 {
                     if (pceltFetched is not null)
                     {
@@ -107,6 +72,19 @@ namespace System.Windows.Forms
                     return (int)HRESULT.S_FALSE;
                 }
 
+                FORMATETC current = _formats[_current];
+                rgelt[0].cfFormat = current.cfFormat;
+                rgelt[0].tymed = current.tymed;
+                rgelt[0].dwAspect = DVASPECT.DVASPECT_CONTENT;
+                rgelt[0].ptd = 0;
+                rgelt[0].lindex = -1;
+
+                if (pceltFetched is not null)
+                {
+                    pceltFetched[0] = 1;
+                }
+
+                _current++;
                 return (int)HRESULT.S_OK;
             }
 
@@ -135,27 +113,60 @@ namespace System.Windows.Forms
                 ppenum = new FormatEnumerator(this);
             }
 
-            unsafe ComInterfaceTable Com.IManagedWrapper.GetComInterfaceTable()
+            unsafe HRESULT Com.IEnumFORMATETC.Interface.Next(uint celt, Com.FORMATETC* rgelt, uint* pceltFetched)
             {
-                if (s_comInterfaceTable is null)
+                if (rgelt is null)
                 {
-                    Com.IEnumFORMATETC.Vtbl* vtable = (Com.IEnumFORMATETC.Vtbl*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(Com.IEnumFORMATETC.Vtbl), sizeof(Com.IEnumFORMATETC.Vtbl));
-                    Interop.WinFormsComWrappers.PopulateIUnknownVTable((Com.IUnknown.Vtbl*)vtable);
-
-                    Interop.WinFormsComWrappers.IEnumFORMATETCVtbl.PopulateVTable(vtable);
-
-                    ComInterfaceEntry* wrapperEntry = (ComInterfaceEntry*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(IEnumFORMATETC), sizeof(ComInterfaceEntry));
-                    wrapperEntry[0].IID = *IID.Get<Com.IEnumFORMATETC>();
-                    wrapperEntry[0].Vtable = (nint)(void*)vtable;
-
-                    s_comInterfaceTable = new ComInterfaceTable()
-                    {
-                        Entries = wrapperEntry,
-                        Count = 1
-                    };
+                    return HRESULT.E_POINTER;
                 }
 
-                return (ComInterfaceTable)s_comInterfaceTable;
+                FORMATETC[] elt = new FORMATETC[celt];
+                int[] celtFetched = new int[1];
+
+                // Eliminate null bang after https://github.com/dotnet/runtime/pull/68537 lands, or
+                // IEnumFORMATETC annotations would be corrected.
+                var result = ((IEnumFORMATETC)this).Next((int)celt, elt, pceltFetched is null ? null! : celtFetched);
+                for (var i = 0; i < celt; i++)
+                {
+                    rgelt[i] = elt[i];
+                }
+
+                if (pceltFetched is not null)
+                {
+                    *pceltFetched = (uint)celtFetched[0];
+                }
+
+                return (HRESULT)result;
+            }
+
+            HRESULT Com.IEnumFORMATETC.Interface.Skip(uint celt) => (HRESULT)((IEnumFORMATETC)this).Skip((int)celt);
+
+            HRESULT Com.IEnumFORMATETC.Interface.Reset() => (HRESULT)((IEnumFORMATETC)this).Reset();
+
+            unsafe HRESULT Com.IEnumFORMATETC.Interface.Clone(Com.IEnumFORMATETC** ppenum)
+            {
+                if (ppenum is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                try
+                {
+                    *ppenum = null;
+                    ((IEnumFORMATETC)this).Clone(out var cloned);
+                    if (ComHelpers.TryGetComPointer(cloned, out Com.IEnumFORMATETC* p))
+                    {
+                        *ppenum = p;
+                        return HRESULT.S_OK;
+                    }
+
+                    Debug.Fail("Why couldn't we get a COM pointer for the cloned object?");
+                    return HRESULT.E_FAIL;
+                }
+                catch (Exception ex)
+                {
+                    return ex;
+                }
             }
         }
     }
