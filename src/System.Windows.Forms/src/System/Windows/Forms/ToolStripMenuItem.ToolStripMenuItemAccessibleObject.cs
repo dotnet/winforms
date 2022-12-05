@@ -52,6 +52,43 @@ namespace System.Windows.Forms
                     UiaCore.UIA.AcceleratorKeyPropertyId => _owningToolStripMenuItem.GetShortcutText(),
                     _ => base.GetPropertyValue(propertyID)
                 };
+
+            public override string DefaultAction
+            {
+                get
+                {
+                    string? defaultAction = Owner.AccessibleDefaultActionDescription;
+                    return defaultAction
+                        ?? (_owningToolStripMenuItem.CheckOnClick ? SR.AccessibleActionCheck : base.DefaultAction);
+                }
+            }
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
+                patternId switch
+                {
+                    UiaCore.UIA.TogglePatternId => _owningToolStripMenuItem.CheckOnClick || _owningToolStripMenuItem.Checked,
+                    _ => base.IsPatternSupported(patternId)
+                };
+
+            #region Toggle Pattern
+
+            internal override void Toggle()
+            {
+                if (_owningToolStripMenuItem.CheckOnClick)
+                {
+                    _owningToolStripMenuItem.Checked = !_owningToolStripMenuItem.Checked;
+                }
+            }
+
+            internal override UiaCore.ToggleState ToggleState =>
+                _owningToolStripMenuItem.CheckState switch
+                {
+                    CheckState.Checked => UiaCore.ToggleState.On,
+                    CheckState.Unchecked => UiaCore.ToggleState.Off,
+                    _ => UiaCore.ToggleState.Indeterminate
+                };
+
+            #endregion
         }
     }
 }
