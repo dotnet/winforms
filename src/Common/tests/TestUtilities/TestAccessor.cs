@@ -46,28 +46,29 @@ namespace System
     public class TestAccessor<T> : ITestAccessor
     {
         private static readonly Type s_type = typeof(T);
-        protected readonly T _instance;
+        protected readonly T? _instance;
         private readonly DynamicWrapper _dynamicWrapper;
 
         /// <param name="instance">The type instance, can be null for statics.</param>
-        public TestAccessor(T instance)
+        public TestAccessor(T? instance)
         {
             _instance = instance;
             _dynamicWrapper = new DynamicWrapper(_instance);
         }
 
         /// <inheritdoc/>
-        public TDelegate CreateDelegate<TDelegate>(string methodName = null)
+        public TDelegate CreateDelegate<TDelegate>(string? methodName = null)
             where TDelegate : Delegate
         {
             Type type = typeof(TDelegate);
-            Type[] types = type.GetMethod("Invoke").GetParameters().Select(pi => pi.ParameterType).ToArray();
+            MethodInfo? invokeMethodInfo = type.GetMethod("Invoke");
+            Type[] types = invokeMethodInfo is null ? Array.Empty<Type>() : invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType).ToArray();
 
             // To make it easier to write a class wrapper with a number of delegates,
             // we'll take the name from the delegate itself when unspecified.
             methodName ??= type.Name;
 
-            MethodInfo methodInfo = s_type.GetMethod(
+            MethodInfo? methodInfo = s_type.GetMethod(
                 methodName,
                 BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
                 binder: null,
@@ -77,7 +78,7 @@ namespace System
             if (methodInfo is null)
                 throw new ArgumentException($"Could not find non public method {methodName}.");
 
-            return (TDelegate)methodInfo.CreateDelegate(type, methodInfo.IsStatic ? (object)null : _instance);
+            return (TDelegate)methodInfo.CreateDelegate(type, methodInfo.IsStatic ? null : _instance);
         }
 
         /// <inheritdoc/>
@@ -85,34 +86,34 @@ namespace System
 
         private class DynamicWrapper : DynamicObject
         {
-            private readonly object _instance;
+            private readonly object? _instance;
 
-            public DynamicWrapper(object instance)
+            public DynamicWrapper(object? instance)
                 => _instance = instance;
 
-            public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
+            public override bool TryInvokeMember(InvokeMemberBinder binder, object?[]? args, out object? result)
             {
                 result = null;
 
-                MethodInfo methodInfo = null;
-                Type type = s_type;
+                MethodInfo? methodInfo = null;
+                Type? type = s_type;
 
                 do
                 {
                     try
                     {
-                        methodInfo = type.GetMethod(
+                        methodInfo = type?.GetMethod(
                             binder.Name,
                             BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
                     }
                     catch (AmbiguousMatchException)
                     {
                         // More than one match for the name, specify the arguments
-                        methodInfo = type.GetMethod(
+                        methodInfo = type?.GetMethod(
                             binder.Name,
                             BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
                             binder: null,
-                            args.Select(a => a.GetType()).ToArray(),
+                            args is null ? Array.Empty<Type>() : args.Where(a => a is not null).Select(a => a!.GetType()).ToArray(),
                             modifiers: null);
                     }
 
@@ -123,7 +124,7 @@ namespace System
                     }
 
                     // Walk up the heirarchy
-                    type = type.BaseType;
+                    type = type?.BaseType;
                 }
                 while (true);
 
@@ -134,9 +135,9 @@ namespace System
                 return true;
             }
 
-            public override bool TrySetMember(SetMemberBinder binder, object value)
+            public override bool TrySetMember(SetMemberBinder binder, object? value)
             {
-                MemberInfo info = GetFieldOrPropertyInfo(binder.Name);
+                MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
                 if (info is null)
                     return false;
 
@@ -144,11 +145,11 @@ namespace System
                 return true;
             }
 
-            public override bool TryGetMember(GetMemberBinder binder, out object result)
+            public override bool TryGetMember(GetMemberBinder binder, out object? result)
             {
                 result = null;
 
-                MemberInfo info = GetFieldOrPropertyInfo(binder.Name);
+                MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
                 if (info is null)
                     return false;
 
@@ -156,17 +157,17 @@ namespace System
                 return true;
             }
 
-            private MemberInfo GetFieldOrPropertyInfo(string memberName)
+            private MemberInfo? GetFieldOrPropertyInfo(string memberName)
             {
-                Type type = s_type;
-                MemberInfo info;
+                Type? type = s_type;
+                MemberInfo? info;
 
                 do
                 {
-                    info = (MemberInfo)type.GetField(
+                    info = (MemberInfo?)type?.GetField(
                         memberName,
                         BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic)
-                        ?? type.GetProperty(
+                        ?? type?.GetProperty(
                             memberName,
                             BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -177,14 +178,14 @@ namespace System
                     }
 
                     // Walk up the type heirarchy
-                    type = type.BaseType;
+                    type = type?.BaseType;
                 }
                 while (true);
 
                 return info;
             }
 
-            private object GetValue(MemberInfo memberInfo)
+            private object? GetValue(MemberInfo memberInfo)
                 => memberInfo switch
                 {
                     FieldInfo fieldInfo => fieldInfo.GetValue(_instance),
@@ -192,7 +193,7 @@ namespace System
                     _ => throw new InvalidOperationException()
                 };
 
-            private void SetValue(MemberInfo memberInfo, object value)
+            private void SetValue(MemberInfo memberInfo, object? value)
             {
                 switch (memberInfo)
                 {

@@ -14,6 +14,11 @@ public static class CustomConverter
     /// </summary>
     public static RegistrationScope RegisterConverter(Type type, TypeConverter converter)
     {
+        if (type is null || converter is null)
+        {
+            throw new ArgumentNullException();
+        }
+
         TypeDescriptionProvider parentProvider = TypeDescriptor.GetProvider(type);
         CustomTypeDescriptionProvider newProvider = new(parentProvider, converter);
         TypeDescriptor.AddProvider(newProvider, type);
@@ -48,16 +53,16 @@ public static class CustomConverter
 
         public override ICustomTypeDescriptor GetTypeDescriptor(
             [DynamicallyAccessedMembers((DynamicallyAccessedMemberTypes)(-1))] Type objectType,
-            object instance) => new TypeConverterProvider(base.GetTypeDescriptor(objectType, instance), _converter);
+            object? instance) => new TypeConverterProvider(base.GetTypeDescriptor(objectType, instance), _converter);
 
         private class TypeConverterProvider : CustomTypeDescriptor
         {
-            private static TypeConverter _converter;
+            private TypeConverter s_converter;
 
-            public TypeConverterProvider(ICustomTypeDescriptor parent, TypeConverter converter) : base(parent)
-                => _converter = converter;
+            public TypeConverterProvider(ICustomTypeDescriptor? parent, TypeConverter converter) : base(parent)
+                => s_converter = converter;
 
-            public override TypeConverter GetConverter() => _converter;
+            public override TypeConverter GetConverter() => s_converter;
         }
     }
 }

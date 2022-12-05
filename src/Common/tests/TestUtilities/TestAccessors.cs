@@ -16,7 +16,7 @@ namespace System
         // Need to pass a null parameter when constructing a static instance
         // of TestAccessor. As this is pretty common and never changes, caching
         // the array here.
-        private static object[] s_nullObjectParam = { null };
+        private static object?[] s_nullObjectParam = { null };
 
         /// <summary>
         ///  Extension that creates a generic internals test accessor for a
@@ -38,18 +38,20 @@ namespace System
         /// </example>
         public static ITestAccessor TestAccessor(this object instanceOrType)
         {
-            if (instanceOrType is Type type)
-            {
-                return (ITestAccessor)Activator.CreateInstance(
+            ITestAccessor? testAccessor = instanceOrType is Type type
+            ? (ITestAccessor?)Activator.CreateInstance(
                     typeof(TestAccessor<>).MakeGenericType(type),
-                    s_nullObjectParam);
-            }
-            else
-            {
-                return (ITestAccessor)Activator.CreateInstance(
+                    s_nullObjectParam)
+            : (ITestAccessor?)Activator.CreateInstance(
                     typeof(TestAccessor<>).MakeGenericType(instanceOrType.GetType()),
                     instanceOrType);
+
+            if (testAccessor is null)
+            {
+                throw new ArgumentException("Cannot create TestAccessor for Nullable<T> instances with no value.");
             }
+
+            return testAccessor!;
         }
     }
 }

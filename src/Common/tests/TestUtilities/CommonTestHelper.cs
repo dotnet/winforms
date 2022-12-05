@@ -188,9 +188,9 @@ namespace System.Windows.Forms.TestUtilities
             return data;
         }
 
-        public static TheoryData<string> GetStringWithNullTheoryData()
+        public static TheoryData<string?> GetStringWithNullTheoryData()
         {
-            var data = new TheoryData<string>
+            var data = new TheoryData<string?>
             {
                 null,
                 string.Empty,
@@ -199,9 +199,9 @@ namespace System.Windows.Forms.TestUtilities
             return data;
         }
 
-        public static TheoryData<string> GetNullOrEmptyStringTheoryData()
+        public static TheoryData<string?> GetNullOrEmptyStringTheoryData()
         {
-            var data = new TheoryData<string>
+            var data = new TheoryData<string?>
             {
                 null,
                 string.Empty
@@ -209,9 +209,9 @@ namespace System.Windows.Forms.TestUtilities
             return data;
         }
 
-        public static TheoryData<string, string> GetStringNormalizedTheoryData()
+        public static TheoryData<string?, string> GetStringNormalizedTheoryData()
         {
-            var data = new TheoryData<string, string>
+            var data = new TheoryData<string?, string>
             {
                 { null, string.Empty },
                 { string.Empty, string.Empty },
@@ -372,9 +372,9 @@ namespace System.Windows.Forms.TestUtilities
             return data;
         }
 
-        public static TheoryData<Type, bool> GetConvertFromTheoryData()
+        public static TheoryData<Type?, bool> GetConvertFromTheoryData()
         {
-            var data = new TheoryData<Type, bool>
+            var data = new TheoryData<Type?, bool>
             {
                 { typeof(bool), false },
                 { typeof(InstanceDescriptor), true },
@@ -385,9 +385,9 @@ namespace System.Windows.Forms.TestUtilities
             return data;
         }
 
-        public static TheoryData<EventArgs> GetEventArgsTheoryData()
+        public static TheoryData<EventArgs?> GetEventArgsTheoryData()
         {
-            var data = new TheoryData<EventArgs>
+            var data = new TheoryData<EventArgs?>
             {
                 null,
                 new EventArgs()

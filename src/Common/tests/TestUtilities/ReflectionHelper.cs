@@ -27,7 +27,7 @@ namespace System
             }
         }
 
-        public static T InvokePublicConstructor<T>(Type type)
+        public static T? InvokePublicConstructor<T>(Type type)
         {
             var ctor = type.GetConstructor(
                 bindingAttr: BindingFlags.Public | BindingFlags.Instance,

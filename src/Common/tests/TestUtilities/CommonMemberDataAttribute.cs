@@ -20,7 +20,7 @@ namespace System.Windows.Forms.TestUtilities
             MemberType = memberType;
         }
 
-        protected override object[] ConvertDataItem(MethodInfo testMethod, object item)
+        protected override object[]? ConvertDataItem(MethodInfo testMethod, object item)
         {
             if (item is null)
             {
