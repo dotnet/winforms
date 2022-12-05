@@ -27,19 +27,7 @@ namespace System.ComponentModel.Design
             }
 
             public DesignerActionPanel CurrentPanel
-            {
-                get
-                {
-                    if (_panel is not null)
-                    {
-                        return _panel.Control as DesignerActionPanel;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
+                => _panel is not null ? _panel.Control as DesignerActionPanel : null;
 
             // we're not topmost because we can show modal editors above us.
             protected override bool TopMost
@@ -69,18 +57,18 @@ namespace System.ComponentModel.Design
             public void CheckFocusIsRight()
             {
                 // fix to get the focus to NOT stay on ContainerControl
-                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "Checking focus...");
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "Checking focus...");
                 HWND focusedControl = PInvoke.GetFocus();
                 if (focusedControl == Handle)
                 {
-                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "    putting focus on the panel...");
+                    Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "    putting focus on the panel...");
                     _panel.Focus();
                 }
 
                 focusedControl = PInvoke.GetFocus();
                 if (CurrentPanel is not null && CurrentPanel.Handle == focusedControl)
                 {
-                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "    selecting next available control on the panel...");
+                    Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "    selecting next available control on the panel...");
                     CurrentPanel.SelectNextControl(null, true, true, true, true);
                 }
             }
@@ -95,27 +83,27 @@ namespace System.ComponentModel.Design
             protected override void OnClosing(ToolStripDropDownClosingEventArgs e)
             {
                 Debug.WriteLineIf(
-                    DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
+                    DropDownVisibilityDebug.TraceVerbose,
                     $"_____________________________Begin OnClose {e.CloseReason}");
                 Debug.Indent();
                 if (e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange && _cancelClose)
                 {
                     _cancelClose = false;
                     e.Cancel = true;
-                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "cancel close prepopulated");
+                    Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "cancel close prepopulated");
                 }
 
                 // When we get closing event as a result of an activation change, pre-populate e.Cancel based on why we're exiting.
                 // - if it's a modal window that's owned by VS don't exit
                 // - if it's a window that's owned by the toolstrip dropdown don't exit
-                else if (e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange || e.CloseReason == ToolStripDropDownCloseReason.AppClicked)
+                else if (e.CloseReason is ToolStripDropDownCloseReason.AppFocusChange or ToolStripDropDownCloseReason.AppClicked)
                 {
                     HWND hwndActivating = PInvoke.GetActiveWindow();
                     if (Handle == hwndActivating && e.CloseReason == ToolStripDropDownCloseReason.AppClicked)
                     {
                         e.Cancel = false;
                         Debug.WriteLineIf(
-                            DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
+                            DropDownVisibilityDebug.TraceVerbose,
                             "[DesignerActionToolStripDropDown.OnClosing] activation hasnt changed, but we've certainly clicked somewhere else.");
                     }
                     else if (WindowOwnsWindow((HWND)Handle, hwndActivating))
@@ -123,7 +111,7 @@ namespace System.ComponentModel.Design
                         // We're being de-activated for someone owned by the panel.
                         e.Cancel = true;
                         Debug.WriteLineIf(
-                            DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
+                            DropDownVisibilityDebug.TraceVerbose,
                             "[DesignerActionToolStripDropDown.OnClosing] Cancel close - the window activating is owned by this window");
                     }
                     else if (_mainParentWindow is not null && !WindowOwnsWindow((HWND)_mainParentWindow.Handle, hwndActivating))
@@ -133,28 +121,28 @@ namespace System.ComponentModel.Design
                             // The activated windows is not a child/owned windows of the main top level windows let toolstripdropdown handle this
                             e.Cancel = false;
                             Debug.WriteLineIf(
-                                DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
+                                DropDownVisibilityDebug.TraceVerbose,
                                 "[DesignerActionToolStripDropDown.OnClosing] Call close: the activated windows is not a child/owned windows of the main top level windows ");
                         }
                         else
                         {
                             e.Cancel = true;
                             Debug.WriteLineIf(
-                                DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
+                                DropDownVisibilityDebug.TraceVerbose,
                                 "[DesignerActionToolStripDropDown.OnClosing] we're being deactivated by a foreign window, but the main window is not enabled - we should stay up");
                         }
 
                         base.OnClosing(e);
                         Debug.Unindent();
                         Debug.WriteLineIf(
-                            DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
+                            DropDownVisibilityDebug.TraceVerbose,
                             $"_____________________________End OnClose e.Cancel: {e.Cancel}");
                         return;
                     }
                     else
                     {
                         Debug.WriteLineIf(
-                            DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
+                            DropDownVisibilityDebug.TraceVerbose,
                             $"[DesignerActionToolStripDropDown.OnClosing] since the designer action panel dropdown doesnt own the activating window {hwndActivating.Value:x)}, calling close. ");
                     }
 
@@ -166,16 +154,16 @@ namespace System.ComponentModel.Design
                     // is it currently disabled (ie, the activating windows is in modal mode)
                     if (!IsWindowEnabled(parent))
                     {
-                        Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] modal window activated - cancelling close");
+                        Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] modal window activated - cancelling close");
                         // we are in a modal case
                         e.Cancel = true;
                     }
                 }
 
-                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] calling base.OnClosing with e.Cancel: " + e.Cancel.ToString());
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] calling base.OnClosing with e.Cancel: " + e.Cancel.ToString());
                 base.OnClosing(e);
                 Debug.Unindent();
-                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "_____________________________End OnClose e.Cancel: " + e.Cancel.ToString());
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "_____________________________End OnClose e.Cancel: " + e.Cancel.ToString());
             }
 
             public void SetDesignerActionPanel(DesignerActionPanel panel, Glyph relatedGlyph)
@@ -232,7 +220,7 @@ namespace System.ComponentModel.Design
 
             protected override void SetVisibleCore(bool visible)
             {
-                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.SetVisibleCore] setting dropdown visible=" + visible.ToString());
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.SetVisibleCore] setting dropdown visible=" + visible.ToString());
                 base.SetVisibleCore(visible);
                 if (visible)
                 {
@@ -247,10 +235,10 @@ namespace System.ComponentModel.Design
             private static bool WindowOwnsWindow(HWND hWndOwner, HWND hWndDescendant)
             {
                 Debug.WriteLineIf(
-                    DesignerActionUI.DropDownVisibilityDebug.TraceVerbose,
+                    DropDownVisibilityDebug.TraceVerbose,
                     $"[WindowOwnsWindow] Testing if {hWndOwner.Value.ToString("x")} is a owned by {hWndDescendant.Value.ToString("x")}... ");
 #if DEBUG
-                if (DesignerActionUI.DropDownVisibilityDebug.TraceVerbose)
+                if (DropDownVisibilityDebug.TraceVerbose)
                 {
                     Debug.WriteLine("\t\tOWNER: " + GetControlInformation(hWndOwner));
                     Debug.WriteLine("\t\tOWNEE: " + GetControlInformation(hWndDescendant));
@@ -260,7 +248,7 @@ namespace System.ComponentModel.Design
 #endif
                 if (hWndDescendant == hWndOwner)
                 {
-                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "they match, YES.");
+                    Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "they match, YES.");
                     return true;
                 }
 
@@ -269,18 +257,18 @@ namespace System.ComponentModel.Design
                     hWndDescendant = (HWND)PInvoke.GetWindowLong(hWndDescendant, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                     if (hWndDescendant == IntPtr.Zero)
                     {
-                        Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "NOPE.");
+                        Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "NOPE.");
                         return false;
                     }
 
                     if (hWndDescendant == hWndOwner)
                     {
-                        Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "YES.");
+                        Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "YES.");
                         return true;
                     }
                 }
 
-                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "NO.");
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "NO.");
                 return false;
             }
 
@@ -292,7 +280,7 @@ namespace System.ComponentModel.Design
                     return "Handle is IntPtr.Zero";
                 }
 #if DEBUG
-                if (!DesignerActionUI.DropDownVisibilityDebug.TraceVerbose)
+                if (!DropDownVisibilityDebug.TraceVerbose)
                 {
                     return string.Empty;
                 }
@@ -342,8 +330,8 @@ namespace System.ComponentModel.Design
                     HWND hwndActivating = (HWND)m.LParamInternal;
                     if (WindowOwnsWindow((HWND)Handle, hwndActivating))
                     {
-                        Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] setting cancel close true because WindowsOwnWindow");
-                        Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] checking the focus... " + GetControlInformation(PInvoke.GetFocus()));
+                        Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] setting cancel close true because WindowsOwnWindow");
+                        Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] checking the focus... " + GetControlInformation(PInvoke.GetFocus()));
                         _cancelClose = true;
                     }
                     else
