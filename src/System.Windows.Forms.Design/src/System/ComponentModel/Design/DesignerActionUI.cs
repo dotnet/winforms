@@ -47,6 +47,7 @@ namespace System.ComponentModel.Design
         private DesignerActionGlyph _relatedGlyphTransaction;
         private readonly bool _disposeActionService;
         private readonly bool _disposeActionUIService;
+        private bool _cancelClose;
 
         private delegate void ActionChangedEventHandler(object sender, DesignerActionListsChangedEventArgs e);
 #if DEBUG
@@ -432,7 +433,7 @@ namespace System.ComponentModel.Design
             DesignerActionGlyph g = null;
             if (e.ChangeType == DesignerActionListsChangedType.ActionListsAdded)
             {
-                if (!(e.RelatedObject is IComponent relatedComponent))
+                if (e.RelatedObject is not IComponent relatedComponent)
                 {
                     Debug.Fail("How can we add a DesignerAction glyphs when it's related object is not  an IComponent?");
                     return;
@@ -674,7 +675,7 @@ namespace System.ComponentModel.Design
         private Point GetGlyphLocationScreenCoord(IComponent relatedComponent, Glyph glyph)
         {
             Point glyphLocationScreenCoord = new Point(0, 0);
-            if (relatedComponent is Control && !(relatedComponent is ToolStripDropDown))
+            if (relatedComponent is Control and not ToolStripDropDown)
             {
                 glyphLocationScreenCoord = _behaviorService.AdornerWindowPointToScreen(glyph.Bounds.Location);
             }
@@ -698,7 +699,6 @@ namespace System.ComponentModel.Design
             return glyphLocationScreenCoord;
         }
 
-        bool _cancelClose;
         /// <summary>
         ///  This shows the actual chrome panel that is created by the DesignerActionBehavior object.
         /// </summary>
