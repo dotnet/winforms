@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -23,7 +22,7 @@ namespace System.ComponentModel.Design
             private bool _ctrlEnterPressed;
             SolidBrush _watermarkBrush;
             private Size _watermarkSize = Size.Empty;
-            private readonly Hashtable _fallbackFonts;
+            private readonly Dictionary<int, Font> _fallbackFonts;
             private bool _firstTimeResizeToContent = true;
 
             private readonly StringFormat _watermarkFormat;
@@ -39,7 +38,7 @@ namespace System.ComponentModel.Design
                     Alignment = StringAlignment.Center,
                     LineAlignment = StringAlignment.Center
                 };
-                _fallbackFonts = new Hashtable(2);
+                _fallbackFonts = new(2);
             }
 
             private void InitializeComponent()
@@ -289,9 +288,7 @@ namespace System.ComponentModel.Design
 
                     // Plane 0 is the default plane.
                     int planeNumber = (value[currentSurrogate] / 0x40) - (0xD800 / 0x40) + 1;
-                    Font replaceFont = _fallbackFonts[planeNumber] as Font;
-
-                    if (replaceFont is null)
+                    if (!_fallbackFonts.TryGetValue(planeNumber, out Font replaceFont))
                     {
                         using RegistryKey regkey = Registry.LocalMachine.OpenSubKey(
                             @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack\SurrogateFallback");

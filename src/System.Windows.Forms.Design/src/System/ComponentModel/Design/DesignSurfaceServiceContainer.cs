@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
-
 namespace System.ComponentModel.Design
 {
     /// <summary>
@@ -11,7 +9,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     internal sealed class DesignSurfaceServiceContainer : ServiceContainer
     {
-        private readonly Hashtable _fixedServices = new Hashtable();
+        private readonly HashSet<Type> _fixedServices = new();
 
         /// <summary>
         ///  We always add ourselves as a service.
@@ -27,7 +25,7 @@ namespace System.ComponentModel.Design
         internal void AddFixedService(Type serviceType, object serviceInstance)
         {
             AddService(serviceType, serviceInstance);
-            _fixedServices[serviceType] = serviceType;
+            _fixedServices.Add(serviceType);
         }
 
         /// <summary>
@@ -44,7 +42,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public override void RemoveService(Type serviceType, bool promote)
         {
-            if (serviceType is not null && _fixedServices.ContainsKey(serviceType))
+            if (serviceType is not null && _fixedServices.Contains(serviceType))
             {
                 throw new InvalidOperationException(string.Format(SR.DesignSurfaceServiceIsFixed, serviceType.Name));
             }
