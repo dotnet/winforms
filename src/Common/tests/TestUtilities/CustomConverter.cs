@@ -57,12 +57,12 @@ public static class CustomConverter
 
         private class TypeConverterProvider : CustomTypeDescriptor
         {
-            private TypeConverter s_converter;
+            private TypeConverter _converter;
 
             public TypeConverterProvider(ICustomTypeDescriptor? parent, TypeConverter converter) : base(parent)
-                => s_converter = converter;
+                => _converter = converter;
 
-            public override TypeConverter GetConverter() => s_converter;
+            public override TypeConverter GetConverter() => _converter;
         }
     }
 }
