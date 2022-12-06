@@ -147,10 +147,8 @@ namespace System.Windows.Forms
             get
             {
                 _autoDrawTicks = ShouldAutoDrawTicks();
-
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = PInvoke.TRACKBAR_CLASS;
-
                 switch (_tickStyle)
                 {
                     case TickStyle.None:
@@ -568,6 +566,11 @@ namespace System.Windows.Forms
                 }
 
                 _tickFrequency = value;
+                // set the recreateHandle flag to null,
+                // if the _autoDrawTicks flag does not equal what ShouldAutoDrawTicks()
+                // we set the recreateHandle to true,
+                // then we skip sending the messages and,
+                // recreateHandle will be called at the end of the method.
                 bool recreateHandle = false;
                 if (IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks())
                 {
@@ -765,6 +768,10 @@ namespace System.Windows.Forms
             base.CreateHandle();
         }
 
+        /// <summary>
+        ///  Check if the value of the max is greater then the taskbar size.
+        ///  If so then we divide the value by size and only that many ticks to be drawn on the screen.
+        /// </summary>
         private void DrawTicks()
         {
             if (_tickStyle == TickStyle.None)
@@ -870,11 +877,6 @@ namespace System.Windows.Forms
             SetTrackBarPosition();
             AdjustSize();
         }
-
-        /// <summary>
-        ///  Check if the value of the max is greater then the taskbar size.
-        ///  If so then we divide the value by size and only that many ticks to be drawn on the screen.
-        /// </summary>
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
@@ -1049,7 +1051,11 @@ namespace System.Windows.Forms
 
                 _minimum = minValue;
                 _maximum = maxValue;
-
+                // set the recreateHandle flag to null,
+                // if the _autoDrawTicks flag does not equal what ShouldAutoDrawTicks()
+                // we set the recreateHandle to true,
+                // then we skip sending the messages and,
+                // recreateHandle will be called at the end of the method,
                 bool recreateHandle = false;
                 if (_autoDrawTicks != ShouldAutoDrawTicks())
                 {
@@ -1115,6 +1121,9 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        /// This checks all the use cases that we potentially might want to keep `TBS_AUTOTICKS`.
+        /// </summary>
         private bool ShouldAutoDrawTicks()
         {
             if (TickStyle == TickStyle.None)
