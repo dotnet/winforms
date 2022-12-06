@@ -238,7 +238,7 @@ namespace System.Windows.Forms
 
             // Check for previously created binding manager
             HashKey key = GetKey(dataSource, dataMember);
-            if (_listManagers.TryGetValue(key, out WeakReference wRef) && wRef is not null)
+            if (_listManagers.TryGetValue(key, out WeakReference? wRef) && wRef is not null)
             {
                 bindingManagerBase = (BindingManagerBase?)wRef.Target;
             }
