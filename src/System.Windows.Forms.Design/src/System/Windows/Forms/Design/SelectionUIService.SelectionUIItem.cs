@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Design
             /// <summary>
             ///  paints the selection
             /// </summary>
-            public virtual void DoPaint(Graphics gr)
+            public virtual void DoPaint(Graphics graphics)
             {
                 // If we're not visible, then there's nothing to do...
                 //
@@ -133,10 +133,10 @@ namespace System.Windows.Forms.Design
                     fActive = (fActive == (_selUIsvc._selSvc.SelectionCount <= 1));
                 }
 
-                Rectangle r = new Rectangle(_outerRect.X, _outerRect.Y, GRABHANDLE_WIDTH, GRABHANDLE_HEIGHT);
+                Rectangle rect = new(_outerRect.X, _outerRect.Y, GRABHANDLE_WIDTH, GRABHANDLE_HEIGHT);
                 Rectangle inner = _innerRect;
                 Rectangle outer = _outerRect;
-                Region oldClip = gr.Clip;
+                Region oldClip = graphics.Clip;
                 Color borderColor = SystemColors.Control;
                 if (_control is not null && _control.Parent is not null)
                 {
@@ -145,60 +145,60 @@ namespace System.Windows.Forms.Design
                 }
 
                 Brush brush = new SolidBrush(borderColor);
-                gr.ExcludeClip(inner);
-                gr.FillRectangle(brush, outer);
+                graphics.ExcludeClip(inner);
+                graphics.FillRectangle(brush, outer);
                 brush.Dispose();
-                gr.Clip = oldClip;
-                ControlPaint.DrawSelectionFrame(gr, false, outer, inner, borderColor);
+                graphics.Clip = oldClip;
+                ControlPaint.DrawSelectionFrame(graphics, false, outer, inner, borderColor);
                 //if it's not locked & it is sizeable...
                 if (((GetRules() & SelectionRules.Locked) == SelectionRules.None) && (GetRules() & SelectionRules.AllSizeable) != SelectionRules.None)
                 {
                     // upper left
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, (_sizes[0] != 0));
+                    ControlPaint.DrawGrabHandle(graphics, rect, fActive, (_sizes[0] != 0));
                     // upper right
-                    r.X = inner.X + inner.Width;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[2] != 0);
+                    rect.X = inner.X + inner.Width;
+                    ControlPaint.DrawGrabHandle(graphics, rect, fActive, _sizes[2] != 0);
                     // lower right
-                    r.Y = inner.Y + inner.Height;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[7] != 0);
+                    rect.Y = inner.Y + inner.Height;
+                    ControlPaint.DrawGrabHandle(graphics, rect, fActive, _sizes[7] != 0);
                     // lower left
-                    r.X = outer.X;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[5] != 0);
+                    rect.X = outer.X;
+                    ControlPaint.DrawGrabHandle(graphics, rect, fActive, _sizes[5] != 0);
                     // lower middle
-                    r.X += (outer.Width - GRABHANDLE_WIDTH) / 2;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[6] != 0);
+                    rect.X += (outer.Width - GRABHANDLE_WIDTH) / 2;
+                    ControlPaint.DrawGrabHandle(graphics, rect, fActive, _sizes[6] != 0);
                     // upper middle
-                    r.Y = outer.Y;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[1] != 0);
+                    rect.Y = outer.Y;
+                    ControlPaint.DrawGrabHandle(graphics, rect, fActive, _sizes[1] != 0);
                     // left middle
-                    r.X = outer.X;
-                    r.Y = inner.Y + (inner.Height - GRABHANDLE_HEIGHT) / 2;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[3] != 0);
+                    rect.X = outer.X;
+                    rect.Y = inner.Y + (inner.Height - GRABHANDLE_HEIGHT) / 2;
+                    ControlPaint.DrawGrabHandle(graphics, rect, fActive, _sizes[3] != 0);
                     // right middle
-                    r.X = inner.X + inner.Width;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[4] != 0);
+                    rect.X = inner.X + inner.Width;
+                    ControlPaint.DrawGrabHandle(graphics, rect, fActive, _sizes[4] != 0);
                 }
                 else
                 {
-                    ControlPaint.DrawLockedFrame(gr, outer, fActive);
+                    ControlPaint.DrawLockedFrame(graphics, outer, fActive);
                 }
             }
 
             /// <summary>
             ///  Retrieves an appropriate cursor at the given point.  If there is no appropriate cursor here (ie, the point lies outside the selection rectangle), then this will return null.
             /// </summary>
-            public virtual Cursor GetCursorAtPoint(Point pt)
+            public virtual Cursor GetCursorAtPoint(Point point)
             {
                 Cursor cursor = null;
-                if (PointWithinSelection(pt))
+                if (PointWithinSelection(point))
                 {
                     int nOffset = -1;
                     if ((GetRules() & SelectionRules.AllSizeable) != SelectionRules.None)
                     {
-                        nOffset = GetHandleIndexOfPoint(pt);
+                        nOffset = GetHandleIndexOfPoint(point);
                     }
 
-                    if (-1 == nOffset)
+                    if (nOffset == -1)
                     {
                         if ((GetRules() & SelectionRules.Moveable) == SelectionRules.None)
                         {
@@ -232,7 +232,7 @@ namespace System.Windows.Forms.Design
                 // Which index in the array is this?
                 int nOffset = GetHandleIndexOfPoint(pt);
                 // If no index, the user has picked on the hatch
-                if (-1 == nOffset || _sizes[nOffset] == 0)
+                if (nOffset == -1 || _sizes[nOffset] == 0)
                 {
                     return ((GetRules() & SelectionRules.Moveable) == SelectionRules.None ? 0 : MOVE_X | MOVE_Y);
                 }
@@ -330,12 +330,12 @@ namespace System.Windows.Forms.Design
                 {
                     if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
                     {
-                        _region = new Region(_outerRect);
+                        _region = new(_outerRect);
                         _region.Exclude(_innerRect);
                     }
                     else
                     {
-                        _region = new Region(new Rectangle(0, 0, 0, 0));
+                        _region = new(Rectangle.Empty);
                     }
 
                     if (_handler is not null)
@@ -509,7 +509,7 @@ namespace System.Windows.Forms.Design
                 if (!_innerRect.IsEmpty)
                 {
                     _innerRect = _selUIsvc.RectangleToClient(_innerRect);
-                    Rectangle rcOuterNew = new Rectangle(_innerRect.X - GRABHANDLE_WIDTH, _innerRect.Y - GRABHANDLE_HEIGHT, _innerRect.Width + 2 * GRABHANDLE_WIDTH, _innerRect.Height + 2 * GRABHANDLE_HEIGHT);
+                    Rectangle rcOuterNew = new(_innerRect.X - GRABHANDLE_WIDTH, _innerRect.Y - GRABHANDLE_HEIGHT, _innerRect.Width + 2 * GRABHANDLE_WIDTH, _innerRect.Height + 2 * GRABHANDLE_HEIGHT);
                     if (_outerRect.IsEmpty || !_outerRect.Equals(rcOuterNew))
                     {
                         if (!_outerRect.IsEmpty)
@@ -530,7 +530,7 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-                    Rectangle rcNew = new Rectangle(0, 0, 0, 0);
+                    Rectangle rcNew = Rectangle.Empty;
                     sizeChanged = _outerRect.IsEmpty || !_outerRect.Equals(rcNew);
                     _innerRect = _outerRect = rcNew;
                 }

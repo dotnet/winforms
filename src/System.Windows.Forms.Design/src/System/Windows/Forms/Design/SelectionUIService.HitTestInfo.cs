@@ -6,7 +6,7 @@ namespace System.Windows.Forms.Design
 {
     internal sealed partial class SelectionUIService
     {
-        private struct HitTestInfo : IEquatable<HitTestInfo>
+        private readonly struct HitTestInfo : IEquatable<HitTestInfo>
         {
             public readonly int hitTest;
             public readonly SelectionUIItem selectionUIHit;
@@ -16,7 +16,6 @@ namespace System.Windows.Forms.Design
             {
                 this.hitTest = hitTest;
                 this.selectionUIHit = selectionUIHit;
-                containerSelector = false;
             }
 
             public HitTestInfo(int hitTest, SelectionUIItem selectionUIHit, bool containerSelector)
@@ -31,8 +30,7 @@ namespace System.Windows.Forms.Design
             {
                 try
                 {
-                    HitTestInfo hi = (HitTestInfo)obj;
-                    return Equals(hi);
+                    return Equals((HitTestInfo)obj);
                 }
                 catch (Exception ex)
                 {
@@ -50,10 +48,7 @@ namespace System.Windows.Forms.Design
                     && selectionUIHit == other.selectionUIHit
                     && containerSelector == other.containerSelector;
 
-            public static bool operator ==(HitTestInfo left, HitTestInfo right)
-            {
-                return left.Equals(right);
-            }
+            public static bool operator ==(HitTestInfo left, HitTestInfo right) => left.Equals(right);
 
             public static bool operator !=(HitTestInfo left, HitTestInfo right) => !left.Equals(right);
 

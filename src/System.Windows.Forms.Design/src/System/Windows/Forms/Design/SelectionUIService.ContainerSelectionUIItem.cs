@@ -17,9 +17,9 @@ namespace System.Windows.Forms.Design
             {
             }
 
-            public override Cursor GetCursorAtPoint(Point pt)
+            public override Cursor GetCursorAtPoint(Point point)
             {
-                if ((GetHitTest(pt) & CONTAINER_SELECTOR) != 0 && (GetRules() & SelectionRules.Moveable) != SelectionRules.None)
+                if ((GetHitTest(point) & CONTAINER_SELECTOR) != 0 && (GetRules() & SelectionRules.Moveable) != SelectionRules.None)
                 {
                     return Cursors.SizeAll;
                 }
@@ -29,14 +29,14 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            public override int GetHitTest(Point pt)
+            public override int GetHitTest(Point point)
             {
                 int ht = NOHIT;
                 if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
                 {
-                    Rectangle r = new Rectangle(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+                    Rectangle rect = new(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
 
-                    if (r.Contains(pt))
+                    if (rect.Contains(point))
                     {
                         ht = CONTAINER_SELECTOR;
                         if ((GetRules() & SelectionRules.Moveable) != SelectionRules.None)
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Design
                 return ht;
             }
 
-            public override void DoPaint(Graphics gr)
+            public override void DoPaint(Graphics graphics)
             {
                 // If we're not visible, then there's nothing to do...
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
@@ -57,23 +57,25 @@ namespace System.Windows.Forms.Design
                     return;
                 }
 
-                Rectangle glyphBounds = new Rectangle(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-                ControlPaint.DrawContainerGrabHandle(gr, glyphBounds);
+                Rectangle glyphBounds = new(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+                ControlPaint.DrawContainerGrabHandle(graphics, glyphBounds);
             }
 
             public override Region GetRegion()
             {
-                if (_region is null)
+                if (_region is not null)
                 {
-                    if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
-                    {
-                        Rectangle r = new Rectangle(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-                        _region = new Region(r);
-                    }
-                    else
-                    {
-                        _region = new Region(new Rectangle(0, 0, 0, 0));
-                    }
+                    return _region;
+                }
+
+                if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
+                {
+                    Rectangle rect = new(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+                    _region = new(rect);
+                }
+                else
+                {
+                    _region = new(Rectangle.Empty);
                 }
 
                 return _region;
