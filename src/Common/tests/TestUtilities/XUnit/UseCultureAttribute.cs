@@ -21,8 +21,8 @@ namespace Xunit
     {
         private readonly Lazy<CultureInfo> _culture;
         private readonly Lazy<CultureInfo> _uiCulture;
-        private CultureInfo? _originalCulture;
-        private CultureInfo? _originalUICulture;
+        private CultureInfo _originalCulture = null!;
+        private CultureInfo _originalUICulture = null!;
         private bool _updateUnmanagedUiThreadCulture;
 
         /// <summary>
@@ -92,12 +92,12 @@ namespace Xunit
         /// <param name="methodUnderTest">The method under test</param>
         public override void After(MethodInfo methodUnderTest)
         {
-            Thread.CurrentThread.CurrentCulture = _originalCulture!;
-            Thread.CurrentThread.CurrentUICulture = _originalUICulture!;
+            Thread.CurrentThread.CurrentCulture = _originalCulture;
+            Thread.CurrentThread.CurrentUICulture = _originalUICulture;
 
             if (SetUnmanagedUiThreadCulture && _updateUnmanagedUiThreadCulture)
             {
-                SetNativeUiThreadCulture(_originalUICulture!);
+                SetNativeUiThreadCulture(_originalUICulture);
             }
 
             CultureInfo.CurrentCulture.ClearCachedData();

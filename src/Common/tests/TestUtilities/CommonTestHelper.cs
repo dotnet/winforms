@@ -12,7 +12,7 @@ namespace System.Windows.Forms.TestUtilities
     {
         public static TheoryData GetEnumTypeTheoryData(Type enumType)
         {
-            var data = new TheoryData<Enum>();
+            TheoryData<Enum> data = new();
             foreach (Enum item in Enum.GetValues(enumType))
             {
                 data.Add(item);
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.TestUtilities
         public static TheoryData GetEnumTypeTheoryDataWitIdentity(Type enumType)
         {
             int counter = 0;
-            var data = new TheoryData<string, int>();
+            TheoryData<string, int> data = new();
             foreach (Enum item in Enum.GetValues(enumType))
             {
                 data.Add(item.ToString(), counter++);
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.TestUtilities
 
         public static TheoryData<Enum> GetEnumTypeTheoryDataInvalid(Type enumType)
         {
-            var data = new TheoryData<Enum>();
+            TheoryData<Enum> data = new();
             Enum[] values = Enum.GetValues(enumType).Cast<Enum>().OrderBy(p => p).Distinct().ToArray();
 
             for (int i = 0; i < values.Length - 2; i++)
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.TestUtilities
 
         public static TheoryData<Enum> GetEnumTypeTheoryDataInvalidMasked(Type enumType)
         {
-            var data = new TheoryData<Enum>();
+            TheoryData<Enum> data = new();
             IEnumerable<Enum> values = Enum.GetValues(enumType).Cast<Enum>().OrderBy(p => p);
 
             long allMasked = 0;
@@ -80,19 +80,15 @@ namespace System.Windows.Forms.TestUtilities
 
         // helper method to generate theory data for all values of a boolean
         public static TheoryData<bool> GetBoolTheoryData()
-        {
-            var data = new TheoryData<bool>
+            => new()
             {
                 true,
                 false
             };
-            return data;
-        }
 
         // helper method to generate theory data for some values of a int
         public static TheoryData<int> GetIntTheoryData()
-        {
-            var data = new TheoryData<int>
+            => new()
             {
                 int.MinValue,
                 int.MaxValue,
@@ -101,50 +97,38 @@ namespace System.Windows.Forms.TestUtilities
                 -1,
                 int.MaxValue / 2
             };
-            return data;
-        }
 
         public static TheoryData<int> GetNonNegativeIntTheoryData()
-        {
-            var data = new TheoryData<int>
+            => new()
             {
                 int.MaxValue,
                 0,
                 1,
                 int.MaxValue / 2
             };
-            return data;
-        }
 
         // helper method to generate theory data for some values of a int
         internal static TheoryData<uint> GetUIntTheoryData()
-        {
-            var data = new TheoryData<uint>
+            => new()
             {
                 int.MaxValue,
                 0,
                 1,
                 int.MaxValue / 2
             };
-            return data;
-        }
 
         // helper method to generate theory data for some values of a int
         internal static TheoryData<int> GetNIntTheoryData()
-        {
-            var data = new TheoryData<int>
+            => new()
             {
                 int.MinValue,
                 -1,
                 int.MinValue / 2
             };
-            return data;
-        }
 
         // helper method to generate theory data for some values of a int
         internal static TheoryData<float> GetFloatTheoryData()
-        {
-            var data = new TheoryData<float>
+            => new()
             {
                 float.MaxValue,
                 float.MinValue,
@@ -157,13 +141,10 @@ namespace System.Windows.Forms.TestUtilities
                 1,
                 float.MaxValue / 2
             };
-            return data;
-        }
 
         // helper method to generate theory data for some values of a int
         internal static TheoryData<float> GetUFloatTheoryData()
-        {
-            var data = new TheoryData<float>
+            => new()
             {
                 float.MaxValue,
                 float.Epsilon,
@@ -172,57 +153,42 @@ namespace System.Windows.Forms.TestUtilities
                 1,
                 float.MaxValue / 2
             };
-            return data;
-        }
 
         // helper method to generate theory data for a span of string values
         private const string reasonable = nameof(reasonable);
 
         public static TheoryData<string> GetStringTheoryData()
-        {
-            var data = new TheoryData<string>
+            => new()
             {
                 string.Empty,
                 reasonable
             };
-            return data;
-        }
 
         public static TheoryData<string?> GetStringWithNullTheoryData()
-        {
-            var data = new TheoryData<string?>
+            => new()
             {
                 null,
                 string.Empty,
                 reasonable
             };
-            return data;
-        }
 
         public static TheoryData<string?> GetNullOrEmptyStringTheoryData()
-        {
-            var data = new TheoryData<string?>
+            => new()
             {
                 null,
                 string.Empty
             };
-            return data;
-        }
 
         public static TheoryData<string?, string> GetStringNormalizedTheoryData()
-        {
-            var data = new TheoryData<string?, string>
+            => new()
             {
                 { null, string.Empty },
                 { string.Empty, string.Empty },
                 { reasonable, reasonable }
             };
-            return data;
-        }
 
         public static TheoryData<string, string, int> GetCtrlBackspaceData()
-        {
-            var data = new TheoryData<string, string, int>
+            => new()
             {
                 { "aaa", "", 0 },
                 { "---", "", 0 },
@@ -238,12 +204,9 @@ namespace System.Windows.Forms.TestUtilities
                 { "abc", "c", -1 },
                 { "a,1-b", "a,b", -1 }
             };
-            return data;
-        }
 
         public static TheoryData<string, string, int> GetCtrlBackspaceRepeatedData()
-        {
-            var data = new TheoryData<string, string, int>
+            => new()
             {
                 { "aaa", "", 2 },
                 { "---", "", 2 },
@@ -254,66 +217,49 @@ namespace System.Windows.Forms.TestUtilities
                 { "aaa --- ccc", "", 2 },
                 { "1 2 3 4 5 6 7 8 9 0", "1 ", 9 }
             };
-            return data;
-        }
 
         public static TheoryData<char> GetCharTheoryData()
-        {
-            var data = new TheoryData<char>
+            => new()
             {
                 '\0',
                 'a'
             };
-            return data;
-        }
 
         public static TheoryData<IntPtr> GetIntPtrTheoryData()
-        {
-            var data = new TheoryData<IntPtr>
+            => new()
             {
                 (IntPtr)(-1),
                 IntPtr.Zero,
                 (IntPtr)1
             };
-            return data;
-        }
 
         public static TheoryData<Guid> GetGuidTheoryData()
-        {
-            var data = new TheoryData<Guid>
+            => new()
             {
                 Guid.Empty,
                 Guid.NewGuid()
             };
-            return data;
-        }
 
         public static TheoryData<Color> GetColorTheoryData()
-        {
-            var data = new TheoryData<Color>
+            => new()
             {
                 Color.Red,
                 Color.Blue,
                 Color.Black
             };
-            return data;
-        }
 
         public static TheoryData<Color> GetColorWithEmptyTheoryData()
-        {
-            var data = new TheoryData<Color>
+            => new()
             {
                 Color.Red,
                 Color.Empty
             };
-            return data;
-        }
 
         public static TheoryData<Point> GetPointTheoryData() => GetPointTheoryData(TestIncludeType.All);
 
         public static TheoryData<Point> GetPointTheoryData(TestIncludeType includeType)
         {
-            var data = new TheoryData<Point>();
+            TheoryData<Point> data = new();
             if (!includeType.HasFlag(TestIncludeType.NoPositives))
             {
                 data.Add(new Point());
@@ -334,7 +280,7 @@ namespace System.Windows.Forms.TestUtilities
 
         public static TheoryData<Size> GetSizeTheoryData(TestIncludeType includeType)
         {
-            var data = new TheoryData<Size>();
+            TheoryData<Size> data = new();
             if (!includeType.HasFlag(TestIncludeType.NoPositives))
             {
                 data.Add(new Size());
@@ -352,29 +298,22 @@ namespace System.Windows.Forms.TestUtilities
         }
 
         public static TheoryData<Size> GetPositiveSizeTheoryData()
-        {
-            var data = new TheoryData<Size>
+            => new()
             {
                 new Size(),
                 new Size(1, 2)
             };
-            return data;
-        }
 
         public static TheoryData<Rectangle> GetRectangleTheoryData()
-        {
-            var data = new TheoryData<Rectangle>
+            => new()
             {
                 new Rectangle(),
                 new Rectangle(1, 2, 3, 4),
                 new Rectangle(-1, -2, -3, -4)
             };
-            return data;
-        }
 
         public static TheoryData<Type?, bool> GetConvertFromTheoryData()
-        {
-            var data = new TheoryData<Type?, bool>
+            => new()
             {
                 { typeof(bool), false },
                 { typeof(InstanceDescriptor), true },
@@ -382,18 +321,13 @@ namespace System.Windows.Forms.TestUtilities
                 { typeof(double), false },
                 { null, false }
             };
-            return data;
-        }
 
         public static TheoryData<EventArgs?> GetEventArgsTheoryData()
-        {
-            var data = new TheoryData<EventArgs?>
+            => new()
             {
                 null,
                 new EventArgs()
             };
-            return data;
-        }
 
         #endregion
     }
