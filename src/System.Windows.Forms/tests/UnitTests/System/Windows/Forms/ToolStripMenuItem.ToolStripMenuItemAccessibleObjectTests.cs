@@ -68,5 +68,66 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, actual);
         }
+
+        [WinFormsTheory]
+        [InlineData(true, CheckState.Checked, true)]
+        [InlineData(true, CheckState.Unchecked, true)]
+        [InlineData(true, CheckState.Indeterminate, true)]
+        [InlineData(false, CheckState.Checked, true)]
+        [InlineData(false, CheckState.Unchecked, false)]
+        [InlineData(false, CheckState.Indeterminate, true)]
+        public void ToolStripMenuItemAccessibleObject_IsTogglePatternSupported_ReturnExpected(bool checkOnClick, CheckState checkState, bool expected)
+        {
+            using ToolStripMenuItem toolStripMenuItem = new()
+            {
+                CheckOnClick = checkOnClick,
+                CheckState = checkState
+            };
+
+            object actual = toolStripMenuItem.AccessibilityObject.IsPatternSupported(UiaCore.UIA.TogglePatternId);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [WinFormsTheory]
+        [InlineData(CheckState.Checked, (int)UiaCore.ToggleState.On)]
+        [InlineData(CheckState.Unchecked, (int)UiaCore.ToggleState.Off)]
+        [InlineData(CheckState.Indeterminate, (int)UiaCore.ToggleState.Indeterminate)]
+        public void ToolStripMenuItemAccessibleObject_ToggleState_ReturnsExpected(CheckState checkState, int expectedToggleState)
+        {
+            using ToolStripMenuItem toolStripMenuItem = new()
+            {
+                CheckState = checkState
+            };
+
+            object actual = toolStripMenuItem.AccessibilityObject.ToggleState;
+
+            Assert.Equal((UiaCore.ToggleState)expectedToggleState, actual);
+        }
+
+        [WinFormsFact]
+        public void ToolStripMenuItemAccessibleObject_Toggle_Invoke()
+        {
+            using ToolStripMenuItem toolStripMenuItem = new()
+            {
+                CheckOnClick = true
+            };
+
+            int clickCounter = 0;
+
+            toolStripMenuItem.Click += (s, e) => { clickCounter++; };
+
+            Assert.Equal(UiaCore.ToggleState.Off, toolStripMenuItem.AccessibilityObject.ToggleState);
+
+            toolStripMenuItem.AccessibilityObject.Toggle();
+
+            Assert.Equal(UiaCore.ToggleState.On, toolStripMenuItem.AccessibilityObject.ToggleState);
+
+            toolStripMenuItem.AccessibilityObject.Toggle();
+
+            Assert.Equal(UiaCore.ToggleState.Off, toolStripMenuItem.AccessibilityObject.ToggleState);
+
+            Assert.Equal(0, clickCounter);
+        }
     }
 }
