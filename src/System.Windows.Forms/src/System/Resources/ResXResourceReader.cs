@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Specialized;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -31,8 +30,8 @@ namespace System.Resources
         private readonly ITypeResolutionService? _typeResolver;
         private readonly IAliasResolver _aliasResolver;
 
-        private ListDictionary? _resData;
-        private ListDictionary? _resMetadata;
+        private Dictionary<string, object>? _resData;
+        private Dictionary<string, object>? _resMetadata;
 #pragma warning disable IDE0052 // Remove unread private members - for diagnostics
         private string? _resHeaderVersion;
 #pragma warning restore IDE0052
@@ -243,8 +242,8 @@ namespace System.Resources
 
             Debug.Assert(_resData is null && _resMetadata is null);
 
-            _resData = new ListDictionary();
-            _resMetadata = new ListDictionary();
+            _resData = new();
+            _resMetadata = new();
 
             XmlTextReader? contentReader = null;
 
@@ -314,7 +313,7 @@ namespace System.Resources
         {
             _isReaderDirty = true;
             EnsureResData();
-            return _resData.GetEnumerator();
+            return ((IDictionary)_resData).GetEnumerator();
         }
 
         /// <summary>
@@ -323,7 +322,7 @@ namespace System.Resources
         public IDictionaryEnumerator GetMetadataEnumerator()
         {
             EnsureResData();
-            return _resMetadata.GetEnumerator();
+            return ((IDictionary)_resMetadata).GetEnumerator();
         }
 
         /// <summary>

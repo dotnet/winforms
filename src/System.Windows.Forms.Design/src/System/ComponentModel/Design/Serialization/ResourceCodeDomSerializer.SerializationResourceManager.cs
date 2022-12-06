@@ -18,25 +18,25 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         internal class SerializationResourceManager : ComponentResourceManager
         {
-            private static readonly object s_resourceSetSentinel = new object();
+            private static readonly Dictionary<string, object> s_resourceSetSentinel = new Dictionary<string, object>();
             private readonly IDesignerSerializationManager _manager;
             private bool _checkedLocalizationLanguage;
             private CultureInfo _localizationLanguage;
             private IResourceWriter _writer;
             private CultureInfo _readCulture;
-            private readonly Hashtable _nameTable;
-            private Hashtable _resourceSets;
-            private Hashtable _metadata;
-            private Hashtable _mergedMetadata;
+            private readonly HashSet<string> _nameTable;
+            private Dictionary<CultureInfo, Dictionary<string, object>> _resourceSets;
+            private Dictionary<string, object> _metadata;
+            private Dictionary<string, object> _mergedMetadata;
             private object _rootComponent;
-            private Hashtable _propertyFillAdded;
+            private HashSet<object> _propertyFillAdded;
             private bool _invariantCultureResourcesDirty;
             private bool _metadataResourcesDirty;
 
             public SerializationResourceManager(IDesignerSerializationManager manager)
             {
                 _manager = manager;
-                _nameTable = new Hashtable();
+                _nameTable = new();
                 // We need to know when we're done so we can push the resource file out.
                 manager.SerializationComplete += new EventHandler(OnSerializationComplete);
             }
@@ -58,22 +58,23 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (!_checkedLocalizationLanguage)
+                    if (_checkedLocalizationLanguage)
                     {
-                        // Check to see if our base component's localizable prop is true
-                        if (_manager.Context[typeof(RootContext)] is RootContext rootCtx)
-                        {
-                            object comp = rootCtx.Value;
-                            PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
-                            if (prop is not null && prop.PropertyType == typeof(CultureInfo))
-                            {
-                                _localizationLanguage = (CultureInfo)prop.GetValue(comp);
-                            }
-                        }
-
-                        _checkedLocalizationLanguage = true;
+                        return _localizationLanguage;
                     }
 
+                    // Check to see if our base component's localizable prop is true
+                    if (_manager.Context[typeof(RootContext)] is RootContext rootCtx)
+                    {
+                        object comp = rootCtx.Value;
+                        PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
+                        if (prop is not null && prop.PropertyType == typeof(CultureInfo))
+                        {
+                            _localizationLanguage = (CultureInfo)prop.GetValue(comp);
+                        }
+                    }
+
+                    _checkedLocalizationLanguage = true;
                     return _localizationLanguage;
                 }
             }
@@ -85,19 +86,13 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_readCulture is null)
+                    if (_readCulture is not null)
                     {
-                        CultureInfo locCulture = LocalizationLanguage;
-                        if (locCulture is not null)
-                        {
-                            _readCulture = locCulture;
-                        }
-                        else
-                        {
-                            _readCulture = CultureInfo.InvariantCulture;
-                        }
+                        return _readCulture;
                     }
 
+                    CultureInfo locCulture = LocalizationLanguage;
+                    _readCulture = locCulture is not null ? locCulture : CultureInfo.InvariantCulture;
                     return _readCulture;
                 }
             }
@@ -105,15 +100,8 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  Returns a hash table where we shove resource sets.
             /// </summary>
-            private Hashtable ResourceTable
-            {
-                get
-                {
-                    _resourceSets ??= new Hashtable();
-
-                    return _resourceSets;
-                }
-            }
+            private Dictionary<CultureInfo, Dictionary<string, object>> ResourceTable
+                => _resourceSets ??= new();
 
             /// <summary>
             ///  Retrieves the root component we're designing.
@@ -122,12 +110,14 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_rootComponent is null)
+                    if (_rootComponent is not null)
                     {
-                        if (_manager.Context[typeof(RootContext)] is RootContext rootCtx)
-                        {
-                            _rootComponent = rootCtx.Value;
-                        }
+                        return _rootComponent;
+                    }
+
+                    if (_manager.Context[typeof(RootContext)] is RootContext rootCtx)
+                    {
+                        _rootComponent = rootCtx.Value;
                     }
 
                     return _rootComponent;
@@ -196,26 +186,12 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public bool AddPropertyFill(object value)
             {
-                bool added = false;
-                if (_propertyFillAdded is null)
-                {
-                    _propertyFillAdded = new Hashtable();
-                }
-                else
-                {
-                    added = _propertyFillAdded.ContainsKey(value);
-                }
-
-                if (!added)
-                {
-                    _propertyFillAdded[value] = value;
-                }
-
-                return !added;
+                _propertyFillAdded ??= new();
+                return _propertyFillAdded.Add(value);
             }
 
             /// <summary>
-            ///  This method examines all the resources for the provided culture. When it finds a resource with a key in the format of  &quot;[objectName].[property name]&quot; it will apply that resources value to the corresponding property on the object.
+            ///  This method examines all the resources for the provided culture. When it finds a resource with a key in the format of  "[objectName].[property name]"; it will apply that resources value to the corresponding property on the object.
             /// </summary>
             public override void ApplyResources(object value, string objectName, CultureInfo culture)
             {
@@ -249,7 +225,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     Debug.Assert(culture.Parent != culture, "should have exited loop when culture = InvariantCulture");
                     culture = culture.Parent;
-                    Hashtable rs = GetResourceSet(culture);
+                    Dictionary<string, object> rs = GetResourceSet(culture);
                     bool contains = (rs is null) ? false : rs.ContainsKey(name);
                     if (contains)
                     {
@@ -282,11 +258,11 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            ///  Creates a resource set hashtable for the given resource reader.
+            ///  Creates a resource set dictionary for the given resource reader.
             /// </summary>
-            private Hashtable CreateResourceSet(IResourceReader reader, CultureInfo culture)
+            private Dictionary<string, object> CreateResourceSet(IResourceReader reader, CultureInfo culture)
             {
-                Hashtable result = new Hashtable();
+                Dictionary<string, object> result = new();
 
                 // We need to guard against bad or unloadable resources.  We warn the user in the task list here, but we will still load the designer.
                 try
@@ -307,18 +283,9 @@ namespace System.ComponentModel.Design.Serialization
                         message = e.GetType().Name;
                     }
 
-                    Exception se;
-
-                    if (culture == CultureInfo.InvariantCulture)
-                    {
-                        se = new SerializationException(
-
-                            string.Format(SR.SerializerResourceExceptionInvariant, message), e);
-                    }
-                    else
-                    {
-                        se = new SerializationException(string.Format(SR.SerializerResourceException, culture.ToString(), message), e);
-                    }
+                    Exception se = culture == CultureInfo.InvariantCulture
+                        ? new SerializationException(string.Format(SR.SerializerResourceExceptionInvariant, message), e)
+                        : (Exception)new SerializationException(string.Format(SR.SerializerResourceException, culture.ToString(), message), e);
 
                     _manager.ReportError(se);
                 }
@@ -333,19 +300,16 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (_mergedMetadata is null)
                 {
-                    Hashtable t = GetMetadata();
+                    Dictionary<string, object> t = GetMetadata();
                     if (t is not null)
                     {
                         // This is for backwards compatibility and also for the case when our reader/writer don't support metadata.  We must merge the original enumeration data in here or  else existing design time properties won't show up.  That would be really bad for things like Localizable.
-                        Hashtable it = GetResourceSet(CultureInfo.InvariantCulture);
+                        Dictionary<string, object> it = GetResourceSet(CultureInfo.InvariantCulture);
                         if (it is not null)
                         {
-                            foreach (DictionaryEntry de in it)
+                            foreach (KeyValuePair<string, object> de in it)
                             {
-                                if (!t.ContainsKey(de.Key))
-                                {
-                                    t.Add(de.Key, de.Value);
-                                }
+                                t.TryAdd(de.Key, de.Value);
                             }
                         }
 
@@ -353,12 +317,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (_mergedMetadata is not null)
-                {
-                    return _mergedMetadata.GetEnumerator();
-                }
-
-                return null;
+                return _mergedMetadata?.GetEnumerator();
             }
 
             /// <summary>
@@ -366,19 +325,14 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public IDictionaryEnumerator GetEnumerator(CultureInfo culture)
             {
-                Hashtable ht = GetResourceSet(culture);
-                if (ht is not null)
-                {
-                    return ht.GetEnumerator();
-                }
-
-                return null;
+                Dictionary<string, object> ht = GetResourceSet(culture);
+                return ht?.GetEnumerator();
             }
 
             /// <summary>
             ///  Loads the metadata table
             /// </summary>
-            private Hashtable GetMetadata()
+            private Dictionary<string, object> GetMetadata()
             {
                 if (_metadata is null)
                 {
@@ -392,11 +346,11 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 if (reader is ResXResourceReader resxReader)
                                 {
-                                    _metadata = new Hashtable();
+                                    _metadata = new();
                                     IDictionaryEnumerator de = resxReader.GetMetadataEnumerator();
                                     while (de.MoveNext())
                                     {
-                                        _metadata[de.Key] = de.Value;
+                                        _metadata[(string)de.Key] = de.Value;
                                     }
                                 }
                             }
@@ -426,25 +380,13 @@ namespace System.ComponentModel.Design.Serialization
             {
                 Debug.Assert(_manager is not null, "This resource manager object has been destroyed.");
                 // We fetch the read culture if someone asks for a culture-sensitive string.  If forceInvariant is set, we always use the invariant culture.
-                CultureInfo culture;
-
-                if (forceInvariant)
-                {
-                    culture = CultureInfo.InvariantCulture;
-                }
-                else
-                {
-                    culture = ReadCulture;
-                }
+                CultureInfo culture = forceInvariant ? CultureInfo.InvariantCulture : ReadCulture;
 
                 object value = null;
                 while (value is null)
                 {
-                    Hashtable rs = GetResourceSet(culture);
-                    if (rs is not null)
-                    {
-                        value = rs[resourceName];
-                    }
+                    Dictionary<string, object> rs = GetResourceSet(culture);
+                    rs?.TryGetValue(resourceName, out value);
 
                     CultureInfo lastCulture = culture;
                     culture = culture.Parent;
@@ -460,10 +402,10 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  Looks up the resource set in the resourceSets hash table, loading the set if it hasn't been loaded already. Returns null if no resource that exists for that culture.
             /// </summary>
-            private Hashtable GetResourceSet(CultureInfo culture)
+            private Dictionary<string, object> GetResourceSet(CultureInfo culture)
             {
                 Debug.Assert(culture is not null, "null parameter");
-                Hashtable rs = null;
+                Dictionary<string, object> rs = null;
                 object objRs = ResourceTable[culture];
                 if (objRs is null)
                 {
@@ -488,25 +430,18 @@ namespace System.ComponentModel.Design.Serialization
                         else
                         {
                             // Provide a sentinel so we don't repeatedly ask for the same resource.  If this is the invariant culture, always provide one.
-                            if (culture.Equals(CultureInfo.InvariantCulture))
-                            {
-                                rs = new Hashtable();
-                                ResourceTable[culture] = rs;
-                            }
-                            else
-                            {
-                                ResourceTable[culture] = s_resourceSetSentinel;
-                            }
+                            ResourceTable[culture] = culture.Equals(CultureInfo.InvariantCulture)
+                                ? new Dictionary<string, object>() : s_resourceSetSentinel;
                         }
                     }
                 }
                 else
                 {
-                    rs = objRs as Hashtable;
+                    rs = objRs as Dictionary<string, object>;
                     if (rs is null)
                     {
                         // the resourceSets hash table may contain our "this" pointer as a sentinel value
-                        Debug.Assert(objRs == s_resourceSetSentinel, "unknown object in resourceSets: " + objRs);
+                        Debug.Assert(objRs == s_resourceSetSentinel, $"unknown object in resourceSets: {objRs}");
                     }
                 }
 
@@ -568,9 +503,8 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             // Do the invariant resources first
                             Debug.Assert(!ReadCulture.Equals(CultureInfo.InvariantCulture), "invariantCultureResourcesDirty should only come into play when readCulture != CultureInfo.InvariantCulture; check that CompareWithParentValue is correct");
-                            object objRs = ResourceTable[CultureInfo.InvariantCulture];
-                            Debug.Assert(objRs is not null && objRs is Hashtable, "ResourceSet for the InvariantCulture not loaded, but it's considered dirty?");
-                            Hashtable resourceSet = (Hashtable)objRs;
+                            ResourceTable.TryGetValue(CultureInfo.InvariantCulture, out Dictionary<string, object> resourceSet);
+                            Debug.Assert(resourceSet is not null and Dictionary<string, object>, "ResourceSet for the InvariantCulture not loaded, but it's considered dirty?");
 
                             // Dump the hash table to the resource writer
                             IDictionaryEnumerator resEnum = resourceSet.GetEnumerator();
@@ -587,9 +521,9 @@ namespace System.ComponentModel.Design.Serialization
                             Debug.Assert(_metadata is not null, "No metadata, but it's dirty?");
                             if (invariantWriter is ResXResourceWriter resxWriter)
                             {
-                                foreach (DictionaryEntry de in _metadata)
+                                foreach (KeyValuePair<string, object> de in _metadata)
                                 {
-                                    resxWriter.AddMetadata((string)de.Key, de.Value);
+                                    resxWriter.AddMetadata(de.Key, de.Value);
                                 }
                             }
                             else
@@ -649,23 +583,19 @@ namespace System.ComponentModel.Design.Serialization
                         invariantWriter = service.GetResourceWriter(CultureInfo.InvariantCulture);
                     }
 
-                    Hashtable invariant = GetResourceSet(CultureInfo.InvariantCulture);
-                    Hashtable t;
-                    if (invariantWriter is null || invariantWriter is ResXResourceWriter)
+                    Dictionary<string, object> invariant = GetResourceSet(CultureInfo.InvariantCulture);
+                    Dictionary<string, object> t;
+                    if (invariantWriter is null or ResXResourceWriter)
                     {
                         t = GetMetadata();
                         if (t is null)
                         {
-                            _metadata = new Hashtable();
+                            _metadata = new();
                             t = _metadata;
                         }
 
                         // Note that when we read metadata, for backwards compatibility, we also merge in regular data from the invariant resource. We need to clear that data here, since we are going to write out metadata separately.
-                        if (invariant.ContainsKey(resourceName))
-                        {
-                            invariant.Remove(resourceName);
-                        }
-
+                        invariant.Remove(resourceName);
                         _metadataResourcesDirty = true;
                     }
                     else
@@ -720,7 +650,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        Hashtable resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
+                        Dictionary<string, object> resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
                         Debug.Assert(resourceSet is not null, "No ResourceSet for the InvariantCulture?");
                         if (shouldSerializeInvariant)
                         {
@@ -750,7 +680,7 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 // Add resource to InvariantCulture
                                 Debug.Assert(!ReadCulture.Equals(CultureInfo.InvariantCulture), "invariantCultureResourcesDirty should only come into play when readCulture != CultureInfo.InvariantCulture; check that CompareWithParentValue is correct");
-                                Hashtable resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
+                                Dictionary<string, object> resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
                                 Debug.Assert(resourceSet is not null, "No ResourceSet for the InvariantCulture?");
                                 resourceSet[resourceName] = value;
                                 _invariantCultureResourcesDirty = true;
@@ -780,7 +710,7 @@ namespace System.ComponentModel.Design.Serialization
                                     {
                                         // Add resource to InvariantCulture
                                         Debug.Assert(!ReadCulture.Equals(CultureInfo.InvariantCulture), "invariantCultureResourcesDirty should only come into play when readCulture != CultureInfo.InvariantCulture; check that CompareWithParentValue is correct");
-                                        Hashtable resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
+                                        Dictionary<string, object> resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
                                         Debug.Assert(resourceSet is not null, "No ResourceSet for the InvariantCulture?");
                                         resourceSet[resourceName] = value;
                                         _invariantCultureResourcesDirty = true;
@@ -841,9 +771,9 @@ namespace System.ComponentModel.Design.Serialization
                     else if (expression is CodeMethodReferenceExpression)
                     {
                         expressionName = ((CodeMethodReferenceExpression)expression).MethodName;
-                        if (expressionName.StartsWith("Set"))
+                        if (expressionName.StartsWith("Set", StringComparison.InvariantCulture))
                         {
-                            expressionName = expressionName.Substring(3);
+                            expressionName = expressionName[3..];
                         }
                     }
                     else
@@ -874,7 +804,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (appendCount)
                     {
-                        resourceName = nameBase + count.ToString(CultureInfo.InvariantCulture);
+                        resourceName = $"{nameBase}{count.ToString(CultureInfo.InvariantCulture)}";
                         count++;
                     }
                     else
@@ -882,7 +812,7 @@ namespace System.ComponentModel.Design.Serialization
                         appendCount = true;
                     }
 
-                    if (!_nameTable.ContainsKey(resourceName))
+                    if (!_nameTable.Contains(resourceName))
                     {
                         break;
                     }
@@ -890,7 +820,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 // Now that we have a name, write out the resource.
                 SetValue(manager, resourceName, value, forceInvariant, shouldSerializeInvariant, ensureInvariant, applyingCachedResources);
-                _nameTable[resourceName] = resourceName;
+                _nameTable.Add(resourceName);
                 return resourceName;
             }
 
