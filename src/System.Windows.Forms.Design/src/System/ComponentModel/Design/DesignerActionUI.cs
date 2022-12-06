@@ -534,17 +534,10 @@ namespace System.ComponentModel.Design
             // Check ComponentTray first
             if (_serviceProvider.GetService(typeof(ComponentTray)) is ComponentTray compTray && compTray.SelectionGlyphs is not null)
             {
-                if (compTray is not null && compTray.SelectionGlyphs.Contains(glyph))
-                {
-                    compTray.SelectionGlyphs.Remove(glyph);
-                }
+                compTray.SelectionGlyphs.Remove(glyph);
             }
 
-            if (_designerActionAdorner.Glyphs.Contains(glyph))
-            {
-                _designerActionAdorner.Glyphs.Remove(glyph);
-            }
-
+            _designerActionAdorner.Glyphs.Remove(glyph);
             _componentToGlyph.Remove(relatedObject);
 
             // we only do this when we're in a transaction, see bug VSWHIDBEY 418709. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
