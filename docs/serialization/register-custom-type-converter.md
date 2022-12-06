@@ -48,5 +48,15 @@ Note: The parent `TypeDescriptionProvider` to be passed to the constructor can b
 ### Registration/Deregistration
 Once you have `MyTypeDescriptionProvider` and `MyCustomTypeConverterDescriptor` as outlined above,
 register your custom `TypeConverter` to a object/type by calling `TypeDescriptor.AddProvider()` with parameters `MyTypeDescriptionProvider`
-and the object/type you want your custom converter to be associated with. At this point, calling `TypeDescriptor.GetConverter()` with the same object/type that was passed to `TypeDescriptor.AddProvider()` will return your custom `TypeConverter`! 
+and the object/type you want your custom converter to be associated with. 
+```c#
+TypeDescriptionProvider parentProvider = TypeDescriptor.GetProvider(type);
+MyCustomTypeConverterDescriptor newProvider = new(parentProvider, myConverter);
+TypeDescriptor.AddProvider(newProvider, type);
+```
+At this point, calling `TypeDescriptor.GetConverter()` with the same object/type that was passed to `TypeDescriptor.AddProvider()` will return your custom `TypeConverter`! 
+
 If you want this type converter to be temporarily registered to the object/type, do not forget to call `TypeDescriptor.RemoveProvider()` when finished.
+```c#
+TypeDescriptor.RemoveProvider(newProvider, type);
+```
