@@ -213,7 +213,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 // We keep track of any failures here.  If we failed to find a type this
                 // array list will contain a list of strings listing what we have tried.
-                ArrayList failures = null;
+                List<string> failures = null;
                 bool firstClass = true;
 
                 if (_documentCompileUnit.UserData[typeof(InvalidOperationException)] is not null)
@@ -248,8 +248,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (t is null)
                             {
-                                failures ??= new ArrayList();
-
+                                failures ??= new();
                                 failures.Add(string.Format(SR.CodeDomDesignerLoaderDocumentFailureTypeNotFound, typeDecl.Name, typeRef.BaseType));
                             }
                         }
@@ -311,7 +310,7 @@ namespace System.ComponentModel.Design.Serialization
                             // If we didn't find a serializer for this type, report it.
                             if (_rootSerializer is null && _typeSerializer is null)
                             {
-                                failures ??= new ArrayList();
+                                failures ??= new();
 
                                 if (foundAttribute)
                                 {
@@ -423,7 +422,9 @@ namespace System.ComponentModel.Design.Serialization
             bool lockField = false;
             int methodInsertLocation = 0;
             bool lockMethod = false;
-            IDictionary docMemberHash = new HybridDictionary(docDecl.Members.Count, caseInsensitive);
+            Dictionary<string, int> docMemberHash = new(docDecl.Members.Count, caseInsensitive
+                ? StringComparer.InvariantCultureIgnoreCase
+                : StringComparer.InvariantCulture);
             int memberCount = docDecl.Members.Count;
 
             for (int i = 0; i < memberCount; i++)
@@ -480,26 +481,13 @@ namespace System.ComponentModel.Design.Serialization
             // Now start looking through the new declaration and process it.
             // We are index driven, so if we need to add new values we put
             // them into an array list, and post process them.
-            ArrayList newElements = new ArrayList();
+            List<CodeTypeMember> newElements = new();
 
             foreach (CodeTypeMember member in newDecl.Members)
             {
-                string memberName;
-
-                if (member is CodeConstructor)
+                string memberName = member is CodeConstructor ? ".ctor" : member.Name;
+                if (docMemberHash.TryGetValue(memberName, out int slot))
                 {
-                    memberName = ".ctor";
-                }
-                else
-                {
-                    memberName = member.Name;
-                }
-
-                object existingSlot = docMemberHash[memberName];
-
-                if (existingSlot is not null)
-                {
-                    int slot = (int)existingSlot;
                     CodeTypeMember existingMember = docDecl.Members[slot];
 
                     if (existingMember == member)
@@ -1126,7 +1114,7 @@ namespace System.ComponentModel.Design.Serialization
 
             // Now hash up all of the member variable names using a case insensitive hash.
             CodeTypeDeclaration type = _documentType;
-            Hashtable memberHash = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
+            Dictionary<string, CodeTypeMember> memberHash = new(StringComparer.CurrentCultureIgnoreCase);
 
             if (type is not null)
             {
