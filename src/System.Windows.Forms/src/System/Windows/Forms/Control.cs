@@ -11360,13 +11360,13 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected HorizontalAlignment RtlTranslateHorizontal(HorizontalAlignment align)
         {
-            if (RightToLeft.Yes == RightToLeft)
+            if (RightToLeft == RightToLeft.Yes)
             {
-                if (HorizontalAlignment.Left == align)
+                if (align == HorizontalAlignment.Left)
                 {
                     return HorizontalAlignment.Right;
                 }
-                else if (HorizontalAlignment.Right == align)
+                else if (align == HorizontalAlignment.Right)
                 {
                     return HorizontalAlignment.Left;
                 }
@@ -11378,13 +11378,13 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected LeftRightAlignment RtlTranslateLeftRight(LeftRightAlignment align)
         {
-            if (RightToLeft.Yes == RightToLeft)
+            if (RightToLeft == RightToLeft.Yes)
             {
-                if (LeftRightAlignment.Left == align)
+                if (align == LeftRightAlignment.Left)
                 {
                     return LeftRightAlignment.Right;
                 }
-                else if (LeftRightAlignment.Right == align)
+                else if (align == LeftRightAlignment.Right)
                 {
                     return LeftRightAlignment.Left;
                 }
@@ -11396,7 +11396,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal ContentAlignment RtlTranslateContent(ContentAlignment align)
         {
-            if (RightToLeft.Yes == RightToLeft)
+            if (RightToLeft == RightToLeft.Yes)
             {
                 if ((align & WindowsFormsUtils.AnyTopAlign) != 0)
                 {

@@ -2338,7 +2338,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(element1 == element1);
             Assert.True(element1 == element2);
             Assert.False(element1 == element3);
-            Assert.False((HtmlElement)null == element1);
+            Assert.False(element1 == (HtmlElement)null);
             Assert.False(element1 == (HtmlElement)null);
             Assert.True((HtmlElement)null == (HtmlElement)null);
         }
@@ -2361,7 +2361,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(element1 != element1);
             Assert.False(element1 != element2);
             Assert.True(element1 != element3);
-            Assert.True((HtmlElement)null != element1);
+            Assert.True(element1 != (HtmlElement)null);
             Assert.True(element1 != (HtmlElement)null);
             Assert.False((HtmlElement)null != (HtmlElement)null);
         }

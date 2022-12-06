@@ -14,7 +14,7 @@ namespace DesignSurfaceExt
 
         public void SwitchTabOrder()
         {
-            if (false == IsTabOrderMode)
+            if (IsTabOrderMode == false)
             {
                 InvokeTabOrder();
             }

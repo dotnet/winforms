@@ -4515,7 +4515,7 @@ namespace System.Windows.Forms
 
             if (LayoutEngine is ToolStripSplitStackLayout)
             {
-                if (ToolStripGripStyle.Visible == GripStyle)
+                if (GripStyle == ToolStripGripStyle.Visible)
                 {
                     DisplayedItems.Add(Grip);
                     SetupGrip();

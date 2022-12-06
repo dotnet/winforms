@@ -183,7 +183,7 @@ namespace System.Windows.Forms
             get
             {
                 string[] fullPaths = FileNames;
-                if (fullPaths is null || 0 == fullPaths.Length)
+                if (fullPaths is null || fullPaths.Length == 0)
                 {
                     return Array.Empty<string>();
                 }

@@ -1047,7 +1047,7 @@ dotnet_diagnostic.SA1129.severity = warning
 dotnet_diagnostic.SA1130.severity = none
 
 # SA1131: Constant values should appear on the right-hand side of comparisons
-dotnet_diagnostic.SA1131.severity = none
+dotnet_diagnostic.SA1131.severity = warning
 
 # SA1132: Do not combine fields
 dotnet_diagnostic.SA1132.severity = none

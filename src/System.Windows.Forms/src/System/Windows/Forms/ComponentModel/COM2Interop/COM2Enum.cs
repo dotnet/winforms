@@ -61,7 +61,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return _values[i];
                 }
 
-                if (bestMatch == -1 && 0 == string.Compare(_names[i], value, true, CultureInfo.InvariantCulture))
+                if (bestMatch == -1 && string.Compare(_names[i], value, true, CultureInfo.InvariantCulture) == 0)
                 {
                     bestMatch = i;
                 }

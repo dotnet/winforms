@@ -869,7 +869,7 @@ namespace System.Windows.Forms
 
         private bool LinkInText(int start, int length)
         {
-            return (0 <= start && start < Text.Length && 0 < length);
+            return (start >= 0 && start < Text.Length && length > 0);
         }
 
         /// <summary>

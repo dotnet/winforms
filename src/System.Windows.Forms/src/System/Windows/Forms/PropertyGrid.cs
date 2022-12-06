@@ -603,7 +603,7 @@ namespace System.Windows.Forms
             {
                 if (value && IsHandleCreated && Visible)
                 {
-                    if (0 == _paintFrozen++)
+                    if (_paintFrozen++ == 0)
                     {
                         PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)false);
                     }
@@ -616,7 +616,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    if (0 == --_paintFrozen)
+                    if (--_paintFrozen == 0)
                     {
                         PInvoke.SendMessage(this, User32.WM.SETREDRAW, (WPARAM)(BOOL)true);
                         Invalidate(true);

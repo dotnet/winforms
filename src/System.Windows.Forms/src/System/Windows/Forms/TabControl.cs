@@ -736,7 +736,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                Debug.Assert(0 <= index && index < _tabPages.Length, "SelectedIndex returned an invalid index");
+                Debug.Assert(index >= 0 && index < _tabPages.Length, "SelectedIndex returned an invalid index");
                 return _tabPages[index];
             }
             set
@@ -998,7 +998,7 @@ namespace System.Windows.Forms
             TabPage t = GetTabPage(index);
             if (SelectedTab == t)
             {
-                if (0 <= index && index < TabPages.Count - 1)
+                if (index >= 0 && index < TabPages.Count - 1)
                 {
                     SelectedTab = GetTabPage(++index);
                 }

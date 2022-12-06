@@ -410,7 +410,7 @@ namespace System.ComponentModel.Design
             object requestedPrimary = null;
             int primaryIndex;
 
-            if (fPrimary && 1 == components.Count)
+            if (fPrimary && components.Count == 1)
             {
                 foreach (object o in components)
                 {

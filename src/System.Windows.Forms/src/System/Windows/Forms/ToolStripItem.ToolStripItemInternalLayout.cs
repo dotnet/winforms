@@ -119,7 +119,7 @@ namespace System.Windows.Forms
                 layoutOptions.TextAlign = Owner.TextAlign;
                 layoutOptions.HintTextUp = false;
                 layoutOptions.ShadowedText = !_ownerItem.Enabled;
-                layoutOptions.LayoutRTL = RightToLeft.Yes == Owner.RightToLeft;
+                layoutOptions.LayoutRTL = Owner.RightToLeft == RightToLeft.Yes;
                 layoutOptions.TextImageRelation = Owner.TextImageRelation;
                 // Set textImageInset to 0 since we don't draw 3D border for ToolStripItems.
                 layoutOptions.TextImageInset = 0;

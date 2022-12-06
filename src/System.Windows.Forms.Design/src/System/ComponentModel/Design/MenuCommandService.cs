@@ -525,7 +525,7 @@ namespace System.ComponentModel.Design
                 if (_commandGroups.TryGetValue(command.CommandID.Guid, out List<MenuCommand> commands))
                 {
                     int index = commands.IndexOf(command);
-                    if (-1 != index)
+                    if (index != -1)
                     {
                         commands.RemoveAt(index);
                         // If there are no more commands in this command group, remove the group
