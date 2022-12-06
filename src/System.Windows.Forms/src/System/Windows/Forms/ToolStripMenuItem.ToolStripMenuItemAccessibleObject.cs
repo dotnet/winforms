@@ -57,8 +57,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string? defaultAction = Owner.AccessibleDefaultActionDescription;
-                    return defaultAction
+                    return Owner.AccessibleDefaultActionDescription
                         ?? (_owningToolStripMenuItem.CheckOnClick ? SR.AccessibleActionCheck : base.DefaultAction);
                 }
             }
