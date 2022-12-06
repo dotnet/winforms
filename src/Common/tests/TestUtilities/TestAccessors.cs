@@ -39,10 +39,10 @@ namespace System
         public static ITestAccessor TestAccessor(this object instanceOrType)
         {
             ITestAccessor? testAccessor = instanceOrType is Type type
-            ? (ITestAccessor?)Activator.CreateInstance(
+                ? (ITestAccessor?)Activator.CreateInstance(
                     typeof(TestAccessor<>).MakeGenericType(type),
                     s_nullObjectParam)
-            : (ITestAccessor?)Activator.CreateInstance(
+                : (ITestAccessor?)Activator.CreateInstance(
                     typeof(TestAccessor<>).MakeGenericType(instanceOrType.GetType()),
                     instanceOrType);
 
@@ -51,7 +51,7 @@ namespace System
                 throw new ArgumentException("Cannot create TestAccessor for Nullable<T> instances with no value.");
             }
 
-            return testAccessor!;
+            return testAccessor;
         }
     }
 }

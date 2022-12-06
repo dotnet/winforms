@@ -14,10 +14,8 @@ public static class CustomConverter
     /// </summary>
     public static RegistrationScope RegisterConverter(Type type, TypeConverter converter)
     {
-        if (type is null || converter is null)
-        {
-            throw new ArgumentNullException();
-        }
+        ArgumentNullException.ThrowIfNull(type);
+        ArgumentNullException.ThrowIfNull(converter);
 
         TypeDescriptionProvider parentProvider = TypeDescriptor.GetProvider(type);
         CustomTypeDescriptionProvider newProvider = new(parentProvider, converter);
