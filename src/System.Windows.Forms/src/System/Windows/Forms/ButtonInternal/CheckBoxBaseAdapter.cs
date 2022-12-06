@@ -358,7 +358,7 @@ namespace System.Windows.Forms.ButtonInternal
             layout.CheckAlign = Control.CheckAlign;
             layout.TextOffset = false;
             layout.ShadowedText = !Control.Enabled;
-            layout.LayoutRTL = RightToLeft.Yes == Control.RightToLeft;
+            layout.LayoutRTL = Control.RightToLeft == RightToLeft.Yes;
 
             return layout;
         }

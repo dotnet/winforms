@@ -753,7 +753,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // If this is a object, get the value and attempt to create the correct value editor based on that value.
             // We don't do this if the state came from an attribute.
-            if (0 == (_refreshState & Com2PropertyDescriptorRefresh.TypeConverterAttr) && PropertyType == typeof(Com2Variant))
+            if ((_refreshState & Com2PropertyDescriptorRefresh.TypeConverterAttr) == 0 && PropertyType == typeof(Com2Variant))
             {
                 Type editorType = PropertyType;
                 object? value = GetValue(TargetObject);

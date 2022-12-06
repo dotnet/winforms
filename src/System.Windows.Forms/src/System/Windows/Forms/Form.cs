@@ -2294,7 +2294,7 @@ namespace System.Windows.Forms
                 // it won't send a WM_SHOWWINDOW the first time it's called.
                 // when WM_SHOWWINDOW gets called, we'll flip this bit to true
                 //
-                if (0 == _formState[FormStateSWCalled])
+                if (_formState[FormStateSWCalled] == 0)
                 {
                     PInvoke.SendMessage(this, User32.WM.SHOWWINDOW, (WPARAM)(BOOL)value);
                 }
@@ -3307,7 +3307,7 @@ namespace System.Windows.Forms
 
                 GC.KeepAlive(_ctlClient);
             }
-            else if (0 != _formStateEx[FormStateExUseMdiChildProc])
+            else if (_formStateEx[FormStateExUseMdiChildProc] != 0)
             {
                 m.ResultInternal = PInvoke.DefMDIChildProc(m.HWND, (uint)m.Msg, m.WParamInternal, m.LParamInternal);
             }
@@ -3520,7 +3520,7 @@ namespace System.Windows.Forms
                     // several times when a window is shown, we'll need to force the location
                     // each time for MdiChild windows that are docked so that the window will
                     // be created in the correct location and scroll bars will not be displayed.
-                    if (IsMdiChild && DockStyle.None != Dock)
+                    if (IsMdiChild && Dock != DockStyle.None)
                     {
                         break;
                     }

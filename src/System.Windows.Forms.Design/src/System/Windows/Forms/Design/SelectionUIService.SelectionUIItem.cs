@@ -198,7 +198,7 @@ namespace System.Windows.Forms.Design
                         nOffset = GetHandleIndexOfPoint(pt);
                     }
 
-                    if (-1 == nOffset)
+                    if (nOffset == -1)
                     {
                         if ((GetRules() & SelectionRules.Moveable) == SelectionRules.None)
                         {
@@ -232,7 +232,7 @@ namespace System.Windows.Forms.Design
                 // Which index in the array is this?
                 int nOffset = GetHandleIndexOfPoint(pt);
                 // If no index, the user has picked on the hatch
-                if (-1 == nOffset || _sizes[nOffset] == 0)
+                if (nOffset == -1 || _sizes[nOffset] == 0)
                 {
                     return ((GetRules() & SelectionRules.Moveable) == SelectionRules.None ? 0 : MOVE_X | MOVE_Y);
                 }

@@ -1811,7 +1811,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.True(document == document);
             Assert.False(document == newDocument);
-            Assert.False((HtmlDocument)null == document);
+            Assert.False(document == (HtmlDocument)null);
             Assert.False(document == (HtmlDocument)null);
             Assert.True((HtmlDocument)null == (HtmlDocument)null);
         }
@@ -1831,7 +1831,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.False(document != document);
             Assert.True(document != newDocument);
-            Assert.True((HtmlDocument)null != document);
+            Assert.True(document != (HtmlDocument)null);
             Assert.True(document != (HtmlDocument)null);
             Assert.False((HtmlDocument)null != (HtmlDocument)null);
         }

@@ -157,7 +157,7 @@ namespace System.Windows.Forms
                         {
                             if (!IsClosed)
                             {
-                                return (IntPtr.Zero == handle);
+                                return (handle == IntPtr.Zero);
                             }
 
                             return true;
@@ -171,7 +171,7 @@ namespace System.Windows.Forms
                     {
                         IntPtr ptr1 = handle;
                         handle = IntPtr.Zero;
-                        if (IntPtr.Zero != ptr1)
+                        if (ptr1 != IntPtr.Zero)
                         {
                             Marshal.Release(ptr1);
                         }

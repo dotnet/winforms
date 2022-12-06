@@ -377,7 +377,7 @@ namespace System.Windows.Forms
             {
                 DataGridViewColumn dataGridViewColumn = _items[i];
                 // NOTE: case-insensitive
-                if (0 == string.Compare(dataGridViewColumn.Name, columnName, true, CultureInfo.InvariantCulture))
+                if (string.Compare(dataGridViewColumn.Name, columnName, true, CultureInfo.InvariantCulture) == 0)
                 {
                     return true;
                 }
@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms
             {
                 DataGridViewColumn dataGridViewColumn = _items[i];
                 // NOTE: case-insensitive
-                if (0 == string.Compare(dataGridViewColumn.Name, columnName, true, CultureInfo.InvariantCulture))
+                if (string.Compare(dataGridViewColumn.Name, columnName, true, CultureInfo.InvariantCulture) == 0)
                 {
                     RemoveAt(i);
                     return;

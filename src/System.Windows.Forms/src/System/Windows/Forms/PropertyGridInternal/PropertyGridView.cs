@@ -1773,7 +1773,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // Check real values against string values.
                     itemTextValue = gridEntry.TypeConverter.ConvertToString(currentValue);
-                    if (value == currentValue || 0 == string.Compare(textValue, itemTextValue, true, CultureInfo.InvariantCulture))
+                    if (value == currentValue || string.Compare(textValue, itemTextValue, true, CultureInfo.InvariantCulture) == 0)
                     {
                         stringMatch = i;
                     }
@@ -2521,7 +2521,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (!equal && value is string @string && currentValue is not null)
                 {
-                    equal = 0 == string.Compare(@string, currentValue.ToString(), true, CultureInfo.CurrentCulture);
+                    equal = string.Compare(@string, currentValue.ToString(), true, CultureInfo.CurrentCulture) == 0;
                 }
 
                 if (!equal)
@@ -5097,11 +5097,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (TryGetService(out IUIService uiService))
             {
-                revert = DialogResult.Cancel == uiService.ShowDialog(ErrorDialog);
+                revert = uiService.ShowDialog(ErrorDialog) == DialogResult.Cancel;
             }
             else
             {
-                revert = DialogResult.Cancel == ShowDialog(ErrorDialog);
+                revert = ShowDialog(ErrorDialog) == DialogResult.Cancel;
             }
 
             EditTextBox.DisableMouseHook = false;
@@ -5174,11 +5174,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (TryGetService(out IUIService uiService))
             {
-                revert = DialogResult.Cancel == uiService.ShowDialog(ErrorDialog);
+                revert = uiService.ShowDialog(ErrorDialog) == DialogResult.Cancel;
             }
             else
             {
-                revert = DialogResult.Cancel == ShowDialog(ErrorDialog);
+                revert = ShowDialog(ErrorDialog) == DialogResult.Cancel;
             }
 
             EditTextBox.DisableMouseHook = false;

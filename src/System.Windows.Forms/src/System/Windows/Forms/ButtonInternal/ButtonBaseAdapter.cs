@@ -591,7 +591,7 @@ namespace System.Windows.Forms.ButtonInternal
                 TextAlign = textAlign,
                 HintTextUp = false,
                 ShadowedText = !enabled,
-                LayoutRTL = RightToLeft.Yes == rtl,
+                LayoutRTL = rtl == RightToLeft.Yes,
                 TextImageRelation = TextImageRelation.Overlay,
                 UseCompatibleTextRendering = false
             };
@@ -621,7 +621,7 @@ namespace System.Windows.Forms.ButtonInternal
                 TextAlign = Control.TextAlign,
                 HintTextUp = false,
                 ShadowedText = !Control.Enabled,
-                LayoutRTL = RightToLeft.Yes == Control.RightToLeft,
+                LayoutRTL = Control.RightToLeft == RightToLeft.Yes,
                 TextImageRelation = Control.TextImageRelation,
                 UseCompatibleTextRendering = Control.UseCompatibleTextRendering
             };

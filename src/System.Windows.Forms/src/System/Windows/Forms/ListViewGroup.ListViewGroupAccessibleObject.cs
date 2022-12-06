@@ -164,11 +164,11 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                return LIST_VIEW_GROUP_STATE_FLAGS.LVGS_FOCUSED == (LIST_VIEW_GROUP_STATE_FLAGS)(uint)PInvoke.SendMessage(
+                return (LIST_VIEW_GROUP_STATE_FLAGS)(uint)PInvoke.SendMessage(
                     _owningListView,
                     (User32.WM)PInvoke.LVM_GETGROUPSTATE,
                     (WPARAM)nativeGroupId,
-                    (LPARAM)(uint)LIST_VIEW_GROUP_STATE_FLAGS.LVGS_FOCUSED);
+                    (LPARAM)(uint)LIST_VIEW_GROUP_STATE_FLAGS.LVGS_FOCUSED) == LIST_VIEW_GROUP_STATE_FLAGS.LVGS_FOCUSED;
             }
 
             private int GetNativeGroupId()

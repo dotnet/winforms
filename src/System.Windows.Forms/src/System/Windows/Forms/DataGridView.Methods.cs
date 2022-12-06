@@ -3328,7 +3328,7 @@ namespace System.Windows.Forms
                             {
                                 if (!IsColumnOutOfBounds(oldCurrentCellX) && Columns[oldCurrentCellX].Visible)
                                 {
-                                    Debug.Assert(0 == Rows.GetFirstRow(DataGridViewElementStates.Visible));
+                                    Debug.Assert(Rows.GetFirstRow(DataGridViewElementStates.Visible) == 0);
                                     // Setting the current cell to the current column in the first row
                                     // will create the new row if the user was editing the cell.
                                     SetAndSelectCurrentCellAddress(oldCurrentCellX,
@@ -14400,7 +14400,7 @@ namespace System.Windows.Forms
                                         success = SetCurrentCellAddressCore(hti._col, rowIndex, !isShiftDown, false, true);
                                         Debug.Assert(success);
                                     }
-                                    else if (-1 != _ptCurrentCell.X)
+                                    else if (_ptCurrentCell.X != -1)
                                     {
                                         // Potentially have to give focus back to the current edited cell.
                                         bool success = SetCurrentCellAddressCore(_ptCurrentCell.X, _ptCurrentCell.Y, false /*setAnchorCellAddress*/, false /*validateCurrentCell*/, false /*throughMouseClick*/);
@@ -18711,7 +18711,7 @@ namespace System.Windows.Forms
                                         success = SetCurrentCellAddressCore(dataGridViewColumn.Index, hti._row, !selectRowRange, false, true);
                                         Debug.Assert(success);
                                     }
-                                    else if (-1 != _ptCurrentCell.Y)
+                                    else if (_ptCurrentCell.Y != -1)
                                     {
                                         // Potentially have to give focus back to the current edited cell.
                                         bool success = SetCurrentCellAddressCore(_ptCurrentCell.X, _ptCurrentCell.Y,
@@ -19322,7 +19322,7 @@ namespace System.Windows.Forms
 
         internal void OnRowUnshared(DataGridViewRow dataGridViewRow)
         {
-            if (-1 != _ptCurrentCell.X && dataGridViewRow.Index == _ptCurrentCell.Y && EditingControl is not null)
+            if (_ptCurrentCell.X != -1 && dataGridViewRow.Index == _ptCurrentCell.Y && EditingControl is not null)
             {
                 CurrentCellInternal.CacheEditingControl();
             }
@@ -19479,7 +19479,7 @@ namespace System.Windows.Forms
                 InvalidateGridFocusOnScroll(newValue - oldValue, orientation);
             }
 
-            if (ScrollOrientation.VerticalScroll == orientation)
+            if (orientation == ScrollOrientation.VerticalScroll)
             {
                 if (se.NewValue != newValue)
                 {
@@ -19615,7 +19615,7 @@ namespace System.Windows.Forms
             if (MultiSelect)
             {
                 SelectAll();
-                if (-1 != _ptCurrentCell.X)
+                if (_ptCurrentCell.X != -1)
                 {
                     // Potentially have to give focus back to the current edited cell.
                     bool success = SetCurrentCellAddressCore(_ptCurrentCell.X, _ptCurrentCell.Y,
@@ -28726,7 +28726,7 @@ namespace System.Windows.Forms
                     int rowVFIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                     Debug.Assert(rowVFIndex != -1);
                     Rows.SetRowState(rowVFIndex, DataGridViewElementStates.Frozen, false);
-                    Debug.Assert(0 == Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen));
+                    Debug.Assert(Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen) == 0);
                 }
 
                 if (SortedColumn is not null &&
