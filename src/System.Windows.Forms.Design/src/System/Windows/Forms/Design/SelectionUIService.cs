@@ -37,8 +37,8 @@ namespace System.Windows.Forms.Design
         private bool _ctrlSelect; // was the CTRL key down when the drag began
         private bool _mouseDragging; // Are we actually doing a drag?
         private ContainerSelectorActiveEventHandler _containerSelectorActive; // the event we fire when user interacts with container selector
-        private Hashtable _selectionItems;
-        private readonly Hashtable _selectionHandlers; // Component UI handlers
+        private Dictionary<object, SelectionUIItem> _selectionItems;
+        private readonly Dictionary<object, ISelectionUIHandler> _selectionHandlers; // Component UI handlers
 
         private bool _savedVisible; // we stash this when we mess with visibility ourselves.
         private bool _batchMode;
@@ -57,8 +57,8 @@ namespace System.Windows.Forms.Design
             _host = host;
             _dragHandler = null;
             _dragComponents = null;
-            _selectionItems = new Hashtable();
-            _selectionHandlers = new Hashtable();
+            _selectionItems = new();
+            _selectionHandlers = new();
             AllowDrop = true;
             // Not really any reason for this, except that it can be handy when using Spy++
             Text = "SelectionUIOverlay";
@@ -234,7 +234,7 @@ namespace System.Windows.Forms.Design
             return new HitTestInfo(SelectionUIItem.NOHIT, null);
         }
 
-        private ISelectionUIHandler GetHandler(object component) => (ISelectionUIHandler)_selectionHandlers[component];
+        private ISelectionUIHandler GetHandler(object component) => _selectionHandlers[component];
 
         /// <summary>
         ///  This method returns a well-formed name for a drag transaction based on the rules it is given.
@@ -379,13 +379,12 @@ namespace System.Windows.Forms.Design
         private void OnSelectionChanged(object sender, EventArgs e)
         {
             ICollection selection = _selSvc.GetSelectedComponents();
-            Hashtable newSelection = new Hashtable(selection.Count);
+            Dictionary<object, SelectionUIItem> newSelection = new(selection.Count);
             bool shapeChanged = false;
             foreach (object comp in selection)
             {
-                object existingItem = _selectionItems[comp];
                 bool create = true;
-                if (existingItem is not null)
+                if (_selectionItems.TryGetValue(comp, out SelectionUIItem existingItem))
                 {
                     if (existingItem is ContainerSelectionUIItem item)
                     {
@@ -787,15 +786,7 @@ namespace System.Windows.Forms.Design
                 Cursor cursor = item.GetCursorAtPoint(clientCoords);
                 if (cursor is not null)
                 {
-                    if (cursor == Cursors.Default)
-                    {
-                        Cursor = null;
-                    }
-                    else
-                    {
-                        Cursor = cursor;
-                    }
-
+                    Cursor = cursor == Cursors.Default ? null : cursor;
                     return;
                 }
             }
@@ -807,15 +798,7 @@ namespace System.Windows.Forms.Design
                     Cursor cursor = item.GetCursorAtPoint(clientCoords);
                     if (cursor is not null)
                     {
-                        if (cursor == Cursors.Default)
-                        {
-                            Cursor = null;
-                        }
-                        else
-                        {
-                            Cursor = cursor;
-                        }
-
+                        Cursor = cursor == Cursors.Default ? null : cursor;
                         return;
                     }
                 }
@@ -902,8 +885,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         void ISelectionUIService.AssignSelectionUIHandler(object component, ISelectionUIHandler handler)
         {
-            ISelectionUIHandler oldHandler = (ISelectionUIHandler)_selectionHandlers[component];
-            if (oldHandler is not null)
+            if (_selectionHandlers.TryGetValue(component, out ISelectionUIHandler oldHandler))
             {
                 // The collection editors do not dispose objects from the collection before setting a new collection. This causes items that are common to the old and new collections to come through this code path  again, causing the exception to fire. So, we check to see if the SelectionUIHandler is same, and bail out in that case.
                 if (handler == oldHandler)
@@ -928,7 +910,7 @@ namespace System.Windows.Forms.Design
 
         void ISelectionUIService.ClearSelectionUIHandler(object component, ISelectionUIHandler handler)
         {
-            ISelectionUIHandler oldHandler = (ISelectionUIHandler)_selectionHandlers[component];
+            _selectionHandlers.TryGetValue(component, out ISelectionUIHandler oldHandler);
             if (oldHandler == handler)
             {
                 _selectionHandlers[component] = null;
@@ -983,7 +965,7 @@ namespace System.Windows.Forms.Design
             }
 
             // Now within the given selection, add those items that have the same UI handler and that have the proper rule constraints.
-            ArrayList list = new ArrayList();
+            List<object> list = new();
             for (int i = 0; i < objects.Length; i++)
             {
                 if (GetHandler(objects[i]) == primaryHandler)
@@ -1162,11 +1144,10 @@ namespace System.Windows.Forms.Design
             // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
             if (selectionRules != SelectionRules.None)
             {
-                ArrayList list = new ArrayList();
+                List<object> list = new();
                 foreach (object comp in components)
                 {
-                    SelectionUIItem item = (SelectionUIItem)_selectionItems[comp];
-                    if (item is not null && !(item is ContainerSelectionUIItem))
+                    if (_selectionItems.TryGetValue(comp, out SelectionUIItem item) && item is not ContainerSelectionUIItem)
                     {
                         if ((item.GetRules() & selectionRules) == selectionRules)
                         {
@@ -1201,41 +1182,36 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Tests to determine if the given screen coordinate is over an adornment for the specified component. This will only return true if the adornment, and selection UI, is visible.
         /// </summary>
-        bool ISelectionUIService.GetAdornmentHitTest(object component, Point value) => GetHitTest(value, HITTEST_DEFAULT).hitTest != SelectionUIItem.NOHIT;
+        bool ISelectionUIService.GetAdornmentHitTest(object component, Point value)
+            => GetHitTest(value, HITTEST_DEFAULT).hitTest != SelectionUIItem.NOHIT;
 
         /// <summary>
         ///  Determines if the component is currently "container" selected. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
         /// </summary>
-        bool ISelectionUIService.GetContainerSelected(object component) => (component is not null && _selectionItems[component] is ContainerSelectionUIItem);
+        bool ISelectionUIService.GetContainerSelected(object component)
+            => (component is not null
+            && _selectionItems.TryGetValue(component, out SelectionUIItem value)
+            && value is ContainerSelectionUIItem);
 
         /// <summary>
         ///  Retrieves a set of flags that define rules for the selection.  Selection rules indicate if the given component can be moved or sized, for example.
         /// </summary>
         SelectionRules ISelectionUIService.GetSelectionRules(object component)
         {
-            SelectionUIItem sel = (SelectionUIItem)_selectionItems[component];
-            if (sel is null)
+            if (!_selectionItems.TryGetValue(component, out SelectionUIItem selection))
             {
                 Debug.Fail("The component is not currently selected.");
                 throw new InvalidOperationException();
             }
 
-            return sel.GetRules();
+            return selection.GetRules();
         }
 
         /// <summary>
         ///  Allows you to configure the style of the selection frame that a component uses.  This is useful if your component supports different modes of operation (such as an in-place editing mode and a static design mode).  Where possible, you should leave the selection style as is and use the design-time hit testing feature of the IDesigner interface to provide features at design time.  The value of style must be one of the  SelectionStyle enum values. The selection style is only valid for the duration that the component is selected.
         /// </summary>
         SelectionStyles ISelectionUIService.GetSelectionStyle(object component)
-        {
-            SelectionUIItem s = (SelectionUIItem)_selectionItems[component];
-            if (s is null)
-            {
-                return SelectionStyles.None;
-            }
-
-            return s.Style;
-        }
+            => !_selectionItems.TryGetValue(component, out SelectionUIItem item) ? SelectionStyles.None : item.Style;
 
         /// <summary>
         ///  Changes the container selection status of the given component. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
@@ -1244,8 +1220,8 @@ namespace System.Windows.Forms.Design
         {
             if (selected)
             {
-                SelectionUIItem existingItem = (SelectionUIItem)_selectionItems[component];
-                if (!(existingItem is ContainerSelectionUIItem))
+                _selectionItems.TryGetValue(component, out SelectionUIItem existingItem);
+                if (existingItem is not ContainerSelectionUIItem)
                 {
                     existingItem?.Dispose();
 
@@ -1260,8 +1236,7 @@ namespace System.Windows.Forms.Design
             }
             else
             {
-                SelectionUIItem existingItem = (SelectionUIItem)_selectionItems[component];
-                if (existingItem is null || existingItem is ContainerSelectionUIItem)
+                if (!_selectionItems.TryGetValue(component, out SelectionUIItem existingItem) || existingItem is ContainerSelectionUIItem)
                 {
                     _selectionItems.Remove(component);
                     existingItem?.Dispose();
@@ -1277,7 +1252,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         void ISelectionUIService.SetSelectionStyle(object component, SelectionStyles style)
         {
-            SelectionUIItem selUI = (SelectionUIItem)_selectionItems[component];
+            _selectionItems.TryGetValue(component, out SelectionUIItem selUI);
             if (_selSvc is not null && _selSvc.GetComponentSelected(component))
             {
                 selUI = new SelectionUIItem(this, component);
