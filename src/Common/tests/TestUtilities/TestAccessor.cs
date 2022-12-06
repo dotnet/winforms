@@ -110,12 +110,14 @@ namespace System
                     }
                     catch (AmbiguousMatchException)
                     {
-                        // More than one match for the name, specify the arguments
+                        // More than one match for the name, specify the arguments.
+                        // We currently do not have a scenario where we are trying to pass null as an argument
+                        // to an overloaded method. This will need to be updated once we have a scenario.
                         methodInfo = type?.GetMethod(
                             binder.Name,
                             BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
                             binder: null,
-                            args.Where(a => a is not null).Select(a => a!.GetType()).ToArray(),
+                            args.Select(a => a!.GetType()).ToArray(),
                             modifiers: null);
                     }
 
