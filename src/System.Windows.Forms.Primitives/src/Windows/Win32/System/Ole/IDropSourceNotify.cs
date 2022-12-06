@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using ComWrappers = Interop.WinFormsComWrappers;
 
 namespace Windows.Win32.System.Ole;
+
 internal unsafe partial struct IDropSourceNotify : IVTable<IDropSourceNotify, IDropSourceNotify.Vtbl>
 {
     static void IVTable<IDropSourceNotify, Vtbl>.PopulateComInterfaceVTable(Vtbl* vtable)

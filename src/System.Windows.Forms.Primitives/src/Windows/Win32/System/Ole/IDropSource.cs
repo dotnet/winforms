@@ -8,6 +8,7 @@ using Windows.Win32.System.SystemServices;
 using ComWrappers = Interop.WinFormsComWrappers;
 
 namespace Windows.Win32.System.Ole;
+
 internal unsafe partial struct IDropSource : IVTable<IDropSource, IDropSource.Vtbl>
 {
     static void IVTable<IDropSource, Vtbl>.PopulateComInterfaceVTable(Vtbl* vtable)
