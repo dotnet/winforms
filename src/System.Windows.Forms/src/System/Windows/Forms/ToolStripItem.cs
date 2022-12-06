@@ -12,6 +12,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.Runtime.Versioning;
 using System.Windows.Forms.Layout;
+using Windows.Win32.System.Ole;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -2262,9 +2263,8 @@ namespace System.Windows.Forms
 
             try
             {
-                Ole32.IDropSource dropSource = CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage);
-                HRESULT hr = Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out finalEffect);
-                if (!hr.Succeeded)
+                IDropSource.Interface dropSource = CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage);
+                if (Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out finalEffect).Failed)
                 {
                     return DragDropEffects.None;
                 }
@@ -2288,18 +2288,14 @@ namespace System.Windows.Forms
         ///  Else if the parent does not support reordering of items (Parent.AllowItemReorder = false) -
         ///  then call back on the ToolStripItem's OnQueryContinueDrag/OnGiveFeedback methods.
         /// </summary>
-        internal Ole32.IDropSource CreateDropSource(IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
-        {
-            if (ParentInternal is not null && ParentInternal.AllowItemReorder && ParentInternal.ItemReorderDropSource is not null)
-            {
-                return new DropSource(ParentInternal.ItemReorderDropSource, dataObject, dragImage, cursorOffset, useDefaultDragImage);
-            }
-
-            return new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);
-        }
+        internal IDropSource.Interface CreateDropSource(IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
+            => ParentInternal is not null && ParentInternal.AllowItemReorder && ParentInternal.ItemReorderDropSource is not null
+                ? new DropSource(ParentInternal.ItemReorderDropSource, dataObject, dragImage, cursorOffset, useDefaultDragImage)
+                : new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);
 
         internal void FireEvent(ToolStripItemEventType met)
             => FireEvent(EventArgs.Empty, met);
+
         internal void FireEvent(EventArgs e, ToolStripItemEventType met)
         {
             switch (met)
