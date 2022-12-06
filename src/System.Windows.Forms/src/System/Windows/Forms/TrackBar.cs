@@ -146,14 +146,12 @@ namespace System.Windows.Forms
         {
             get
             {
+                _autoDrawTicks = ShouldAutoDrawTicks();
+
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = PInvoke.TRACKBAR_CLASS;
-                if (ShouldAutoDrawTicks())
-                {
-                    _autoDrawTicks = true;
-                }
 
-                    switch (_tickStyle)
+                switch (_tickStyle)
                 {
                     case TickStyle.None:
                         cp.Style |= (int)PInvoke.TBS_NOTICKS;
@@ -189,12 +187,10 @@ namespace System.Windows.Forms
 
                 void EnableAutoTicksIfRequired()
                 {
-                    _autoDrawTicks = false;
-                    if (ShouldAutoDrawTicks())
-                     {
-                        _autoDrawTicks = true;
+                    if (_autoDrawTicks)
+                    {
                         cp.Style |= (int)PInvoke.TBS_AUTOTICKS;
-                     }
+                    }
                 }
             }
         }
@@ -769,6 +765,39 @@ namespace System.Windows.Forms
             base.CreateHandle();
         }
 
+        private void DrawTicks()
+        {
+            if (_tickStyle == TickStyle.None)
+            {
+                return;
+            }
+
+            int drawnTickFrequency = _tickFrequency;
+            if (_autoDrawTicks)
+            {
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)drawnTickFrequency);
+                return;
+            }
+
+            int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
+            uint range = (uint)(_maximum - _minimum);
+            if (range > maxTickCount && maxTickCount != 0)
+            {
+                int calculatedTickFrequency = (int)(range / maxTickCount);
+                if (calculatedTickFrequency > drawnTickFrequency)
+                {
+                    drawnTickFrequency = calculatedTickFrequency;
+                }
+            }
+
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
+            for (int i = _minimum + drawnTickFrequency; i < _maximum - drawnTickFrequency; i += drawnTickFrequency)
+            {
+                LRESULT lresult = PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
+                Debug.Assert((bool)(BOOL)lresult);
+            }
+        }
+
         /// <summary>
         ///  Called when initialization of the control is complete.
         /// </summary>
@@ -846,40 +875,6 @@ namespace System.Windows.Forms
         ///  Check if the value of the max is greater then the taskbar size.
         ///  If so then we divide the value by size and only that many ticks to be drawn on the screen.
         /// </summary>
-        private void DrawTicks()
-        {
-            if (_tickStyle == TickStyle.None)
-            {
-                return;
-            }
-
-            int drawnTickFrequency = _tickFrequency;
-            if (_autoDrawTicks)
-            {
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)drawnTickFrequency);
-                return;
-            }
-
-            int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
-            uint range = (uint)(_maximum - _minimum);
-            int ticksDrawn = 1;
-            if (drawnTickFrequency != 0)
-            {
-                ticksDrawn = (int)(range / drawnTickFrequency);
-            }
-
-            if (maxTickCount != 0 && ticksDrawn > maxTickCount)
-            {
-                drawnTickFrequency = (int)(range / maxTickCount);
-            }
-
-            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_CLEARTICS, (WPARAM)1, (LPARAM)0);
-            for (int i = _minimum + drawnTickFrequency; i < _maximum - drawnTickFrequency; i += drawnTickFrequency)
-            {
-                LRESULT lresult = PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTIC, lParam: (IntPtr)i);
-                Debug.Assert((bool)(BOOL)lresult);
-            }
-        }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRightToLeftLayoutChanged(EventArgs e)
@@ -1055,25 +1050,18 @@ namespace System.Windows.Forms
                 _minimum = minValue;
                 _maximum = maxValue;
 
-                if (IsHandleCreated)
+                bool recreateHandle = false;
+                if (_autoDrawTicks != ShouldAutoDrawTicks())
                 {
-                    bool recreateHandle = false;
-                    if (_autoDrawTicks != ShouldAutoDrawTicks())
-                    {
-                        recreateHandle = true;
-                    }
+                    recreateHandle = true;
+                }
 
-                    if (!recreateHandle)
-                    {
-                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
-                        PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
-                        DrawTicks();
-                        Invalidate();
-                    }
-                    else
-                    {
-                        RecreateHandle();
-                    }
+                if (IsHandleCreated && !recreateHandle)
+                {
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
+                    DrawTicks();
+                    Invalidate();
                 }
 
                 // When we change the range, the comctl32 trackbar's internal position can change
@@ -1089,7 +1077,14 @@ namespace System.Windows.Forms
                     _value = _maximum;
                 }
 
-                SetTrackBarPosition();
+                if (!recreateHandle)
+                {
+                    SetTrackBarPosition();
+                }
+                else
+                {
+                    RecreateHandle();
+                }
             }
         }
 
