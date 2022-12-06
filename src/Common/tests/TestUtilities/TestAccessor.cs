@@ -96,10 +96,6 @@ namespace System
                 result = null;
                 ArgumentNullException.ThrowIfNull(args);
                 ArgumentNullException.ThrowIfNull(binder);
-                if (args.Contains(null))
-                {
-                    throw new ArgumentNullException("args contains null value");
-                }
 
                 MethodInfo? methodInfo = null;
                 Type? type = s_type;
@@ -119,7 +115,7 @@ namespace System
                             binder.Name,
                             BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
                             binder: null,
-                            args.Select(a => a!.GetType()).ToArray(),
+                            args.Where(a => a is not null).Select(a => a!.GetType()).ToArray(),
                             modifiers: null);
                     }
 
