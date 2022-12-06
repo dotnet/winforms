@@ -1058,17 +1058,9 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            try
-            {
-                ((ComTypes.IDataObject)this).GetData(ref *(FORMATETC*)pformatetcIn, out STGMEDIUM medium);
-                *pmedium = (Com.STGMEDIUM)medium;
-                return HRESULT.S_OK;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return (HRESULT)ex.HResult;
-            }
+            ((ComTypes.IDataObject)this).GetData(ref *(FORMATETC*)pformatetcIn, out STGMEDIUM medium);
+            *pmedium = (Com.STGMEDIUM)medium;
+            return HRESULT.S_OK;
         }
 
         unsafe HRESULT Com.IDataObject.Interface.GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium)
@@ -1078,18 +1070,10 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            try
-            {
-                STGMEDIUM medium = (STGMEDIUM)(*pmedium);
-                ((ComTypes.IDataObject)this).GetDataHere(ref *(FORMATETC*)pformatetc, ref medium);
-                *pmedium = (Com.STGMEDIUM)medium;
-                return HRESULT.S_OK;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return (HRESULT)ex.HResult;
-            }
+            STGMEDIUM medium = (STGMEDIUM)(*pmedium);
+            ((ComTypes.IDataObject)this).GetDataHere(ref *(FORMATETC*)pformatetc, ref medium);
+            *pmedium = (Com.STGMEDIUM)medium;
+            return HRESULT.S_OK;
         }
 
         unsafe HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc)
@@ -1105,17 +1089,9 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            try
-            {
-                STGMEDIUM medium = (STGMEDIUM)(*pmedium);
-                ((ComTypes.IDataObject)this).SetData(ref *(FORMATETC*)pformatetc, ref medium, fRelease);
-                return HRESULT.S_OK;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return (HRESULT)ex.HResult;
-            }
+            STGMEDIUM medium = (STGMEDIUM)(*pmedium);
+            ((ComTypes.IDataObject)this).SetData(ref *(FORMATETC*)pformatetc, ref medium, fRelease);
+            return HRESULT.S_OK;
         }
 
         unsafe HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc)
@@ -1125,22 +1101,14 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            try
+            var comTypeFormatEtc = ((ComTypes.IDataObject)this).EnumFormatEtc((DATADIR)(int)dwDirection);
+            if (!ComHelpers.TryGetComPointer(comTypeFormatEtc, out Com.IEnumFORMATETC* formatEtcPtr))
             {
-                var comTypeFormatEtc = ((ComTypes.IDataObject)this).EnumFormatEtc((DATADIR)(int)dwDirection);
-                if (!ComHelpers.TryGetComPointer(comTypeFormatEtc, out Com.IEnumFORMATETC* formatEtcPtr))
-                {
-                    return HRESULT.E_NOINTERFACE;
-                }
+                return HRESULT.E_NOINTERFACE;
+            }
 
-                *ppenumFormatEtc = formatEtcPtr;
-                return HRESULT.S_OK;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return (HRESULT)ex.HResult;
-            }
+            *ppenumFormatEtc = formatEtcPtr;
+            return HRESULT.S_OK;
         }
 
         unsafe HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
@@ -1151,16 +1119,8 @@ namespace System.Windows.Forms
 
         HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection)
         {
-            try
-            {
-                ((ComTypes.IDataObject)this).DUnadvise((int)dwConnection);
-                return HRESULT.S_OK;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return (HRESULT)ex.HResult;
-            }
+            ((ComTypes.IDataObject)this).DUnadvise((int)dwConnection);
+            return HRESULT.S_OK;
         }
 
         unsafe HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise)

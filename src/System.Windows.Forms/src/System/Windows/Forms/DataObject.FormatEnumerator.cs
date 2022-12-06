@@ -73,11 +73,14 @@ namespace System.Windows.Forms
                 }
 
                 FORMATETC current = _formats[_current];
-                rgelt[0].cfFormat = current.cfFormat;
-                rgelt[0].tymed = current.tymed;
-                rgelt[0].dwAspect = DVASPECT.DVASPECT_CONTENT;
-                rgelt[0].ptd = 0;
-                rgelt[0].lindex = -1;
+                rgelt[0] = new()
+                {
+                    cfFormat = current.cfFormat,
+                    tymed = current.tymed,
+                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    ptd = 0,
+                    lindex = -1
+                };
 
                 if (pceltFetched is not null)
                 {
@@ -150,23 +153,16 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                try
+                *ppenum = null;
+                ((IEnumFORMATETC)this).Clone(out var cloned);
+                if (ComHelpers.TryGetComPointer(cloned, out Com.IEnumFORMATETC* p))
                 {
-                    *ppenum = null;
-                    ((IEnumFORMATETC)this).Clone(out var cloned);
-                    if (ComHelpers.TryGetComPointer(cloned, out Com.IEnumFORMATETC* p))
-                    {
-                        *ppenum = p;
-                        return HRESULT.S_OK;
-                    }
+                    *ppenum = p;
+                    return HRESULT.S_OK;
+                }
 
-                    Debug.Fail("Why couldn't we get a COM pointer for the cloned object?");
-                    return HRESULT.E_FAIL;
-                }
-                catch (Exception ex)
-                {
-                    return ex;
-                }
+                Debug.Fail("Why couldn't we get a COM pointer for the cloned object?");
+                return HRESULT.E_FAIL;
             }
         }
     }

@@ -33,8 +33,8 @@ internal unsafe partial struct STGMEDIUM
     public static explicit operator ComType.STGMEDIUM(STGMEDIUM stg) => new()
     {
         pUnkForRelease = stg.pUnkForRelease is null
-                        ? null
-                        : Marshal.GetObjectForIUnknown((nint)stg.pUnkForRelease),
+            ? null
+            : Marshal.GetObjectForIUnknown((nint)stg.pUnkForRelease),
         tymed = (ComType.TYMED)stg.tymed,
         unionmember = stg.Anonymous.hGlobal
     };

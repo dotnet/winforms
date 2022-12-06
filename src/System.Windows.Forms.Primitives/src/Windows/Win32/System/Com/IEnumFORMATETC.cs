@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using ComWrappers = Interop.WinFormsComWrappers;
 
 namespace Windows.Win32.System.Com;
+
 internal unsafe partial struct IEnumFORMATETC : IVTable<IEnumFORMATETC, IEnumFORMATETC.Vtbl>
 {
     static void IVTable<IEnumFORMATETC, Vtbl>.PopulateComInterfaceVTable(Vtbl* vtable)

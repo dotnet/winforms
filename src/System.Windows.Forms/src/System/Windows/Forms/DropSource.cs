@@ -37,9 +37,10 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
         {
             action = DragAction.Cancel;
         }
-        else if (!grfKeyState.HasFlag(MODIFIERKEYS_FLAGS.MK_LBUTTON)
-                 && !grfKeyState.HasFlag(MODIFIERKEYS_FLAGS.MK_RBUTTON)
-                 && !grfKeyState.HasFlag(MODIFIERKEYS_FLAGS.MK_MBUTTON))
+        else if (
+            !grfKeyState.HasFlag(MODIFIERKEYS_FLAGS.MK_LBUTTON)
+            && !grfKeyState.HasFlag(MODIFIERKEYS_FLAGS.MK_RBUTTON)
+            && !grfKeyState.HasFlag(MODIFIERKEYS_FLAGS.MK_MBUTTON))
         {
             action = DragAction.Drop;
         }
