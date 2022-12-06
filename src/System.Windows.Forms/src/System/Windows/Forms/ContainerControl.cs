@@ -1446,9 +1446,12 @@ namespace System.Windows.Forms
 
                 if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
                 {
-                    // The suggested rectangle comes from Windows, and it does not match with our calculations for scaling controls by AutoscaleFactor.
-                    // Hence, we cannot use AutoscaleFactor here for scaling the control properties. See the below description for more details.
-                    ScaleMinMaxSize(AutoScaleFactor.Width, AutoScaleFactor.Height, updateContainerSize: false);
+                    // AutoscaleFactor is not updated until after OnFontChanged event is raised. Hence, computing
+                    // factor based on the change in bounds of the Form, which aligns with AutoscaleFactor for both
+                    // AutoscaleMode is Font and/or Dpi. Especially after adding support for non-leaner Form size in PMv2.
+                    float xScaleFactor = (float)suggestedRectangle.Width / Width;
+                    float yScaleFactor = (float)suggestedRectangle.Height / Height;
+                    ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize: false);
                 }
 
                 // If this container is a top-level window, we would receive WM_DPICHANGED message that

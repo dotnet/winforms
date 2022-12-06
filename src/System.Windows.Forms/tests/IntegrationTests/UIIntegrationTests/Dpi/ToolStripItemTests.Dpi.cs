@@ -3,13 +3,20 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using Windows.Win32.UI.HiDpi;
 using Xunit;
+using Xunit.Abstractions;
 using static Interop;
 
-namespace System.Windows.Forms.Tests.Dpi
+namespace System.Windows.Forms.UITests.Dpi
 {
-    public class ToolStripItemDpiTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripItemDpiTests : ControlTestBase
     {
+        public ToolStripItemDpiTests(ITestOutputHelper testOutputHelper)
+            : base(testOutputHelper)
+        {
+        }
+
         [WinFormsTheory]
         [InlineData(2 * DpiHelper.LogicalDpi)]
         [InlineData(3.5 * DpiHelper.LogicalDpi)]
@@ -23,7 +30,7 @@ namespace System.Windows.Forms.Tests.Dpi
 
             // Set thread awareness context to PermonitorV2(PMv2).
             DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-
+            DpiHelper.Initialize();
             try
             {
                 int clientWidth = 800;

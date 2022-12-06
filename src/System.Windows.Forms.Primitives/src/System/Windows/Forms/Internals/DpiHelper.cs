@@ -34,7 +34,7 @@ namespace System.Windows.Forms
 
         static DpiHelper() => Initialize();
 
-        private static void Initialize()
+        internal static void Initialize()
         {
             s_interpolationMode = InterpolationMode.Invalid;
             s_perMonitorAware = GetPerMonitorAware();

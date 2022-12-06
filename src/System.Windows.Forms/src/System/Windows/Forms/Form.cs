@@ -160,7 +160,7 @@ namespace System.Windows.Forms
         // different DPI settings, we use cached values to set the size matching the DPI
         // on the Form instead of recalculating the size again. This help preventing rounding
         // error in size calculations with float DPI factor and rounding it to nearest integer.
-        private Dictionary<int, Size>? _formSizeCache;
+        internal Dictionary<int, Size>? FormSizeCache;
         private bool _clearFormSizeCache = true;
 
         /// <summary>
@@ -4268,7 +4268,7 @@ namespace System.Windows.Forms
         {
             if (_clearFormSizeCache)
             {
-                _formSizeCache?.Clear();
+                FormSizeCache?.Clear();
             }
 
             base.OnResize(e);
@@ -4303,17 +4303,17 @@ namespace System.Windows.Forms
                 // for AutoScaleMode is Font. In other modes, Windows OS will compute Form's size.
                 if (AutoScaleMode == AutoScaleMode.Font)
                 {
-                    _formSizeCache ??= new Dictionary<int, Size>();
+                    FormSizeCache ??= new Dictionary<int, Size>();
 
-                    if (!_formSizeCache.ContainsKey(e.DeviceDpiNew))
+                    if (!FormSizeCache.ContainsKey(e.DeviceDpiNew))
                     {
-                        _formSizeCache.Add(e.DeviceDpiNew, new Size(e.SuggestedRectangle.Width, e.SuggestedRectangle.Height));
+                        FormSizeCache.Add(e.DeviceDpiNew, new Size(e.SuggestedRectangle.Width, e.SuggestedRectangle.Height));
                     }
 
                     // Store size of the Form for current DPI.
-                    if (!_formSizeCache.ContainsKey(e.DeviceDpiOld))
+                    if (!FormSizeCache.ContainsKey(e.DeviceDpiOld))
                     {
-                        _formSizeCache.Add(_deviceDpi, Size);
+                        FormSizeCache.Add(e.DeviceDpiOld, Size);
                     }
 
                     // Prevent clearing Form's size cache while applying bounds from DPI change.
@@ -4396,7 +4396,7 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
 
             Size desiredSize = default;
-            if ((_formSizeCache is not null && _formSizeCache.TryGetValue(m.WParamInternal.LOWORD, out desiredSize))
+            if ((FormSizeCache is not null && FormSizeCache.TryGetValue(m.WParamInternal.LOWORD, out desiredSize))
                 || OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize))
             {
                 SIZE* size = (SIZE*)m.LParamInternal;
