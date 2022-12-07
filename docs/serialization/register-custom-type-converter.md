@@ -60,10 +60,11 @@ This a static method on [TypeDescriptor](https://learn.microsoft.com/dotnet/api/
 
 ```mermaid
 sequenceDiagram
+participant MyTypeDescriptionProvider#58;TypeDescriptionProvider
+Note right of MyTypeDescriptionProvider#58;TypeDescriptionProvider: Call TypeDescriptor.RemoveProvider() to no longer associate your custom type converter with a given class
 TypeDescriptor->>MyTypeDescriptionProvider#58;TypeDescriptionProvider: GetConverter()
 Note over TypeDescriptor,MyTypeDescriptionProvider#58;TypeDescriptionProvider: Must call TypeDescriptor.AddProvider() with a given class first
-Note right of MyTypeDescriptionProvider#58;TypeDescriptionProvider: Call TypeDescriptor.RemoveProvider() to no longer associate your custom type converter with a given class
 MyTypeDescriptionProvider#58;TypeDescriptionProvider->>MyCustomTypeDescriptor#58;CustomTypeDescriptor: GetTypeDescriptor()
-MyCustomTypeDescriptor#58;CustomTypeDescriptor->>MyCustomTypeDescriptor#58;CustomTypeDescriptor: GetConverter()
+MyCustomTypeDescriptor#58;CustomTypeDescriptor->>MyCustomTypeConverter#58;TypeConverter: GetConverter()
 
 ```
