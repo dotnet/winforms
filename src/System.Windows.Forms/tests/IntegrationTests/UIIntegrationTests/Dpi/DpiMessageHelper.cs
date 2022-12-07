@@ -4,7 +4,7 @@
 
 using static Interop;
 
-namespace System.Windows.Forms.Tests.Dpi
+namespace System.Windows.Forms.UITests.Dpi
 {
     internal static class DpiMessageHelper
     {
