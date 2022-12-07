@@ -333,7 +333,7 @@ namespace System.Windows.Forms
 
         private void ScrubWeakRefs()
         {
-            List<HashKey> cleanupList = null;
+            List<HashKey>? cleanupList = null;
             foreach (KeyValuePair<HashKey, WeakReference> de in _listManagers)
             {
                 if (de.Value.Target is null)
