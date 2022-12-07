@@ -33,7 +33,7 @@ namespace System.Windows.Forms
 #endif
 
         public ToolStripPanelCell(Control control)
-            : this(null, control)
+            : this(parent: null, control)
         {
         }
 
