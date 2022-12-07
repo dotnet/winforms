@@ -455,7 +455,7 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  Override of GetResourceSet from ResourceManager.
             /// </summary>
-            public override ResourceSet? GetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
+            public override ResourceSet GetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
             {
                 ArgumentNullException.ThrowIfNull(culture);
 
