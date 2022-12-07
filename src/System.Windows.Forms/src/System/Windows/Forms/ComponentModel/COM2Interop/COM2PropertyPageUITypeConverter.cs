@@ -61,8 +61,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 
-        public unsafe void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, IntPtr parentHandle)
+        public unsafe void ShowPropertyPage(string title, object? component, int dispid, Guid pageGuid, IntPtr parentHandle)
         {
+            if (component is null)
+            {
+                return;
+            }
+
             object[] objs = component.GetType().IsArray ? (object[])component : new object[] { component };
             IntPtr[] objAddrs = new IntPtr[objs.Length];
 
