@@ -1,62 +1,69 @@
 # Manually Registering a TypeConverter to a Class
-Typically, a type converter is bound to a class by adding the [TypeConverterAttribute](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.typeconverterattribute?view=net-7.0) to the class. 
-However, there are some scenarios where it is not possible to add the attribute to the class e.g. user may not own the class, but there is no type converter registered to that class for serialization. This document outlines how to manually register a `TypeConverter` to a class for these scenarios.
+A type converter is bound to a class by adding the [TypeConverterAttribute](https://learn.microsoft.com/dotnet/api/system.componentmodel.typeconverterattribute) to the class. However, there are some scenarios where it is not possible to add the attribute to the class. e.g. user may not own the class, but there is no type converter registered to that class for serialization. This document outlines how to manually register a [TypeConverter](https://learn.microsoft.com/dotnet/api/system.componentmodel.typeconverter) to a class for these scenarios.
 
 ## Prerequisite
-Implement your own converter for a class. Ensure that your converter inherits from [TypeConverter](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.typeconverter?view=net-7.0).
+Follow the steps to implement your own custom type converter listed [here](https://learn.microsoft.com/dotnet/api/system.componentmodel.typeconverter#notes-to-inheritors).
 
 ## Registering Your TypeConverter
 
 ### Background
-`TypeDescriptor.GetConverter()` is typically called to get the `TypeConverter` for a class. This method will run through the `TypeDescriptor`'s list of `TypeDescriptionProvider`s and get the provider associated with the type/object. It will then call `TypeDescriptionProvider.GetTypeDescriptor()` to get an `ICustomTypeDescriptor` and call `ICustomTypeDescriptor.GetConverter()` to finally grab the `TypeConverter`. 
-Thus to properly register your custom `TypeConverter`, we will need to override such method from `TypeDescriptionProvider` and implement `ICustomTypeDescriptor`.
 
-### Inheriting CustomTypeDescriptor and TypeDescriptionProvider
+A [TypeConverter](https://learn.microsoft.com/dotnet/api/system.componentmodel.typeconverter) for a given class is found via the `TypeDescriptor` static method [GetConverter()](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptor.getconverter). A custom type converter can be associated to a class by providing and registering a custom [ICustomTypeDescriptor](https://learn.microsoft.com/dotnet/api/system.componentmodel.icustomtypedescriptor). Only a single method of the `ICustomTypeDescriptor` methods is important for registering your own type converter. Thus, [CustomTypeDescriptor](https://learn.microsoft.com/dotnet/api/system.componentmodel.customtypedescriptor) is a useful existing class that can be utilized as a base class to provide a simple default implementation of `ICustomTypeDescriptor` while only the necessary method for registering your converter is overridden. [TypeDescriptor.AddProvider()](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptor.addprovider) is used to add a [TypeDescriptionProvider](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptionprovider) which will ultimately register your custom type converter to a given class. More details on this will follow.
 
-#### CustomTypeDescriptor
-The simplest way to implement `ICustomTypeDescriptor` is to inherit from `CustomTypeDescriptor`. This class already provides a simple default implementation of `ICustomTypeDescriptor` interface. All that is left to be done after inheriting `CustomTypeDescriptor` is to override `GetConverter()` to return your own `TypeConverter`.
+### Implementing CustomTypeDescriptor
+Inherit from [CustomTypeDescriptor](https://learn.microsoft.com/dotnet/api/system.componentmodel.customtypedescriptor) to get default [ICustomTypeDescriptor](https://learn.microsoft.com/dotnet/api/system.componentmodel.icustomtypedescriptor) behavior and override [GetConverter()](https://learn.microsoft.com/dotnet/api/system.componentmodel.customtypedescriptor.getconverter) to return your custom type converter. 
 ```c#
 private class MyCustomTypeConverterDescriptor : CustomTypeDescriptor
-        {
-            private static TypeConverter _myConverter;
+{
+    private TypeConverter _myConverter;
 
-            public MyCustomTypeConverterDescriptor(ICustomTypeDescriptor parent, TypeConverter converter) : base(parent)
-                => _myConverter = converter;
+    public MyCustomTypeConverterDescriptor(ICustomTypeDescriptor parent, TypeConverter converter) : base(parent)
+        => _myConverter = converter;
 
-            public override TypeConverter GetConverter() => _myConverter;
-        }
+    public override TypeConverter GetConverter() => _myConverter;
+}
 ```
+`ICustomTypeDescriptor` is accessed through [TypeDescriptionProvider.GetTypeDescriptor](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptionprovider.gettypedescriptor). `TypeDescriptionProvider` is an existing abstract class that already has default behavior. `GetTypeDescriptor()` is the only method is important for registering your new `ICustomTypeDescriptor` and thus registering your custom type converter. Have another class inherit from `TypeDescriptionProvider` to get its default behavior and override `GetTypeDescriptor()` to provide `MyCustomTypeConverterDescriptor`.
 
-#### TypeDescriptionProvider
-Your inherited class will be added to the `TypeDescriptor`'s list of providers.
-We will want to override `GetTypeDescriptor()` to return `MyCustomTypeConverterDescriptor`.
 ```c#
 public class MyTypeDescriptionProvider : TypeDescriptionProvider
-    {
-        private TypeConverter _myConverter;
+{
+    private TypeConverter _myConverter;
 
-        public MyTypeDescriptionProvider(TypeDescriptionProvider parent, TypeConverter converter) : base(parent)
-            => _myConverter = converter;
+    public MyTypeDescriptionProvider(TypeDescriptionProvider parent, TypeConverter converter) : base(parent)
+        => _myConverter = converter;
 
-        public override ICustomTypeDescriptor GetTypeDescriptor(
-            [DynamicallyAccessedMembers((DynamicallyAccessedMemberTypes)(-1))] Type objectType,
-            object instance) => new MyCustomTypeConverterDescriptor(base.GetTypeDescriptor(objectType, instance), _myConverter);
-    }
+    public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance) 
+        => new MyCustomTypeConverterDescriptor(base.GetTypeDescriptor(objectType, instance), _myConverter);
+}
 ```
-Note: The parent `TypeDescriptionProvider` to be passed to the constructor can be grabbed by calling `TypeDescriptor.GetProvider()` and passing in the object/type.
+Note: The parent `TypeDescriptionProvider` to be passed to the constructor can be grabbed by calling [TypeDescriptor.GetProvider()]() and passing in the class that is intended to be associated to your custom type converter.
 
 ### Registration/Deregistration
-Once you have `MyTypeDescriptionProvider` and `MyCustomTypeConverterDescriptor` as outlined above,
-register your custom `TypeConverter` to a object/type by calling `TypeDescriptor.AddProvider()` with parameters `MyTypeDescriptionProvider`
-and the object/type you want your custom converter to be associated with. 
+Once you have `MyTypeDescriptionProvider` and `MyCustomTypeConverterDescriptor` as outlined above, finish up registering your custom `TypeConverter` to a class by calling [TypeDescriptor.AddProvider()](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptor.addprovider) with parameters `MyTypeDescriptionProvider` and the class you want your custom converter to be associated with. 
 ```c#
 TypeDescriptionProvider parentProvider = TypeDescriptor.GetProvider(type);
 MyCustomTypeConverterDescriptor newProvider = new(parentProvider, myConverter);
 TypeDescriptor.AddProvider(newProvider, type);
 ```
-At this point, calling `TypeDescriptor.GetConverter()` with the same object/type that was passed to `TypeDescriptor.AddProvider()` will return your custom `TypeConverter`! 
+At this point, calling [TypeDescriptor.GetConverter()](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptor.getconverter) with the same class that was passed to `TypeDescriptor.AddProvider()` will return your custom type converter! 
 
-If you want this type converter to be temporarily registered to the object/type, do not forget to call `TypeDescriptor.RemoveProvider()` when finished.
+If you want this type converter to be temporarily registered to the class, do not forget to call [TypeDescriptor.RemoveProvider()](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptor.removeprovider) when finished.
 ```c#
 TypeDescriptor.RemoveProvider(newProvider, type);
+```
+
+## Additional Information
+
+### TypeDescriptor.GetConverter() Details
+This a static method on [TypeDescriptor](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptor) that will run through the its private list of [TypeDescriptionProviders](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptionprovider) and get the provider associated with the class. Once the right provider is found, it will then call [TypeDescriptionProvider.GetTypeDescriptor()](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptionprovider.gettypedescriptor) to get an [ICustomTypeDescriptor](https://learn.microsoft.com/dotnet/api/system.componentmodel.icustomtypedescriptor) and call [ICustomTypeDescriptor.GetConverter()](https://learn.microsoft.com/dotnet/api/system.componentmodel.icustomtypedescriptor.getconverter) to finally grab the class's associated [TypeConverter](https://learn.microsoft.com/dotnet/api/system.componentmodel.typeconverter). 
+
+```mermaid
+sequenceDiagram
+TypeDescriptor-->MyTypeDescriptionProvider: GetConverter()
+Note over of TypeDescriptor,MyTypeDescriptionProvider: Must call TypeDescriptor.AddProvider() with a given class first
+Note right of MyTypeDescriptionProvider: Call TypeDescriptor.RemoveProvider() when no longer want to associate your custom type converter with a given class
+MyTypeDescriptionProvider-->MyCustomTypeDescriptor: GetTypeDescriptor()
+MyCustomTypeDescriptor-->MyTypeConverter: GetConverter()
+
 ```
