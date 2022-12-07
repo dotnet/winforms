@@ -862,9 +862,9 @@ System.Windows.Forms.BindingMemberInfo.BindingPath.get -> string!
 ~System.Windows.Forms.ComboBox.SelectedItem.set -> void
 ~System.Windows.Forms.ComboBox.SelectedText.get -> string
 ~System.Windows.Forms.ComboBox.SelectedText.set -> void
-~System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string title, object component, int dispid, System.Guid pageGuid, nint parentHandle) -> void
-~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.LoadState(Microsoft.Win32.RegistryKey key) -> void
-~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey key) -> void
+System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string! title, object! component, int dispid, System.Guid pageGuid, nint parentHandle) -> void
+System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.LoadState(Microsoft.Win32.RegistryKey? key) -> void
+System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey? key) -> void
 System.Windows.Forms.Control.InvokeGotFocus(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
 System.Windows.Forms.Control.InvokeLostFocus(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
 System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
@@ -5685,7 +5685,7 @@ System.Windows.Forms.ComponentModel.Com2Interop.Com2Variant
 System.Windows.Forms.ComponentModel.Com2Interop.Com2Variant.Com2Variant() -> void
 System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService
 System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser
-System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.ComComponentNameChanged -> System.ComponentModel.Design.ComponentRenameEventHandler
+System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.ComComponentNameChanged -> System.ComponentModel.Design.ComponentRenameEventHandler?
 System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.DropDownDone() -> void
 System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.EnsurePendingChangesCommitted() -> bool
 System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.HandleF4() -> void

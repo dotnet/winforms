@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using Microsoft.Win32;
 
@@ -28,7 +26,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Occurs when the <see cref="PropertyGrid"/> control is browsing a COM object and the user renames the object.
         /// </summary>
-        event ComponentRenameEventHandler ComComponentNameChanged;
+        event ComponentRenameEventHandler? ComComponentNameChanged;
 
         /// <summary>
         ///  Commits all pending changes to the <see cref="PropertyGrid"/> control.
@@ -48,12 +46,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Loads user states from the registry into the <see cref="PropertyGrid"/> control.
         /// </summary>
         /// <param name="key">The registry key that contains the user states.</param>
-        void LoadState(RegistryKey key);
+        void LoadState(RegistryKey? key);
 
         /// <summary>
         ///  Saves user states from the <see cref="PropertyGrid"/> control to the registry.
         /// </summary>
         /// <param name="key">The registry key that contains the user states.</param>
-        void SaveState(RegistryKey key);
+        void SaveState(RegistryKey? key);
     }
 }

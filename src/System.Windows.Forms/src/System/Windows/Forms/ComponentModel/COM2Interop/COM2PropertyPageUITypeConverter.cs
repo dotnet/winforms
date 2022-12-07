@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
@@ -46,6 +47,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
 
+                Debug.Assert(instance is not null);
                 propertyPageService.ShowPropertyPage(_propertyDescriptor.Name, instance, (int)_propertyDescriptor.DISPID, _guid, hWndParent);
             }
             catch (Exception ex)
