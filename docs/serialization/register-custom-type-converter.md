@@ -58,5 +58,19 @@ TypeDescriptor.RemoveProvider(newProvider, type);
 
 ### TypeDescriptor.GetConverter() Details
 This is a static method on [`TypeDescriptor`](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptor) that will run through its private list of [`TypeDescriptionProviders`](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptionprovider) and get the provider associated with the type. Once the right provider is found, it will then call [`TypeDescriptionProvider.GetTypeDescriptor()`](https://learn.microsoft.com/dotnet/api/system.componentmodel.typedescriptionprovider.gettypedescriptor) to get an [ICustomTypeDescriptor](https://learn.microsoft.com/dotnet/api/system.componentmodel.icustomtypedescriptor) and call [`ICustomTypeDescriptor.GetConverter()`](https://learn.microsoft.com/dotnet/api/system.componentmodel.icustomtypedescriptor.getconverter) to grab the [`TypeConverter`](https://learn.microsoft.com/dotnet/api/system.componentmodel.typeconverter). 
+```mermaid
+sequenceDiagram
+title TypeDescriptor.GetConverter() Flow
 
-![TypeDescriptor.GetConverter() Flow](../images/typedescriptor-getconverter-flow.png)
+participant TypeDescriptor
+participant CustomConverterProvider#58;TypeDescriptionProvider
+participant CustomConverterDescriptor#58;CustomTypeDescriptor
+participant CustomTypeConverter#58;TypeConverter
+note right of CustomConverterProvider#58;TypeDescriptionProvider: Call TypeDescriptor.RemoveProvider() to no longer associate your custom type converter with a given type
+TypeDescriptor->>CustomConverterProvider#58;TypeDescriptionProvider: TypeDescriptor.GetConverter()
+note over TypeDescriptor,CustomConverterProvider#58;TypeDescriptionProvider: Must call TypeDescriptor.AddProvider() with a given type first
+CustomConverterProvider#58;TypeDescriptionProvider->>CustomConverterDescriptor#58;CustomTypeDescriptor: CustomConverterProvider.GetTypeDescriptor()
+note over CustomConverterProvider#58;TypeDescriptionProvider,CustomConverterDescriptor#58;CustomTypeDescriptor: Must override GetTypeDescriptor() to return CustomConverterDescriptor first
+CustomConverterDescriptor#58;CustomTypeDescriptor->>CustomTypeConverter#58;TypeConverter: CustomConverterDescriptor.GetConverter()
+note over CustomConverterDescriptor#58;CustomTypeDescriptor,CustomTypeConverter#58;TypeConverter: Must override GetConverter() to return CustomTypeConverter first
+```
