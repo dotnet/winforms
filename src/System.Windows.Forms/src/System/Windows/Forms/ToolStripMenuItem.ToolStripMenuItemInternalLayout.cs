@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 
@@ -122,9 +123,10 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                //If we don't have an image, use the CheckedImage
-                                Image image = _ownerItem.Image ?? _ownerItem.CheckedImage!;
-                                imageRect.Size = image.Size;
+                                // If we don't have an image, use the CheckedImage.
+                                Image? image = _ownerItem.Image ?? _ownerItem.CheckedImage;
+                                Debug.Assert(image is not null);
+                                imageRect.Size = image?.Size ?? menu.ImageScalingSize;
                             }
 
                             imageRect.Y = LayoutUtils.VAlign(imageRect.Size, _ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
