@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -28,20 +26,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hash table for our event list
         /// </summary>
-        private static EventHandlerList s_eventHandlers;
-        private static Font s_defaultFont;
-        private static Font s_defaultFontScaled;
-        private static string s_startupPath;
-        private static string s_executablePath;
-        private static object s_appFileVersion;
-        private static Type s_mainType;
-        private static string s_companyName;
-        private static string s_productName;
-        private static string s_productVersion;
-        private static string s_safeTopLevelCaptionSuffix;
+        private static EventHandlerList? s_eventHandlers;
+        private static Font? s_defaultFont;
+        private static Font? s_defaultFontScaled;
+        private static string? s_startupPath;
+        private static string? s_executablePath;
+        private static object? s_appFileVersion;
+        private static Type? s_mainType;
+        private static string? s_companyName;
+        private static string? s_productName;
+        private static string? s_productVersion;
+        private static string? s_safeTopLevelCaptionSuffix;
         private static bool s_comCtlSupportsVisualStylesInitialized;
         private static bool s_comCtlSupportsVisualStyles;
-        private static FormCollection s_forms;
+        private static FormCollection? s_forms;
         private static readonly object s_internalSyncObject = new();
         private static bool s_useWaitCursor;
 
@@ -81,7 +79,7 @@ namespace System.Windows.Forms
         ///  Returns True if it is OK to continue idle processing. Typically called in an Application.Idle event handler.
         /// </summary>
         internal static bool CanContinueIdle
-            => ThreadContext.FromCurrent().ComponentManager.FContinueIdle();
+            => ThreadContext.FromCurrent().ComponentManager?.FContinueIdle() ?? false;
 
         /// <summary>
         ///  Typically, you shouldn't need to use this directly - use RenderWithVisualStyles instead.
@@ -158,10 +156,10 @@ namespace System.Windows.Forms
                     {
                         // We need access to be able to read from the registry here.  We're not creating a
                         // registry key, nor are we returning information from the registry to the user.
-                        RegistryKey key = Registry.LocalMachine.OpenSubKey(CommonAppDataRegistryKeyName);
+                        RegistryKey? key = Registry.LocalMachine.OpenSubKey(CommonAppDataRegistryKeyName);
                         if (key is not null)
                         {
-                            object value = key.GetValue(EverettThreadAffinityValue);
+                            object? value = key.GetValue(EverettThreadAffinityValue);
                             key.Close();
 
                             if (value is not null && (int)value != 0)
@@ -197,7 +195,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the company name associated with the application.
         /// </summary>
-        public static string CompanyName
+        public static string? CompanyName
         {
             get
             {
@@ -206,7 +204,7 @@ namespace System.Windows.Forms
                     if (s_companyName is null)
                     {
                         // Custom attribute
-                        Assembly entryAssembly = Assembly.GetEntryAssembly();
+                        Assembly? entryAssembly = Assembly.GetEntryAssembly();
                         if (entryAssembly is not null)
                         {
                             object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
@@ -230,11 +228,11 @@ namespace System.Windows.Forms
                         // won't work with MC++ see GetAppMainType.
                         if (s_companyName is null || s_companyName.Length == 0)
                         {
-                            Type t = GetAppMainType();
+                            Type? type = GetAppMainType();
 
-                            if (t is not null)
+                            if (type is not null)
                             {
-                                string ns = t.Namespace;
+                                string? ns = type.Namespace;
 
                                 if (!string.IsNullOrEmpty(ns))
                                 {
@@ -283,7 +281,7 @@ namespace System.Windows.Forms
         internal static bool CustomThreadExceptionHandlerAttached
             => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
-        internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont;
+        internal static Font? DefaultFont => s_defaultFontScaled ?? s_defaultFont;
 
         /// <summary>
         ///  Gets the path for the executable file that started the application.
@@ -323,7 +321,7 @@ namespace System.Windows.Forms
         ///  Gets
         ///  the product name associated with this application.
         /// </summary>
-        public static string ProductName
+        public static string? ProductName
         {
             get
             {
@@ -332,7 +330,7 @@ namespace System.Windows.Forms
                     if (s_productName is null)
                     {
                         // Custom attribute
-                        Assembly entryAssembly = Assembly.GetEntryAssembly();
+                        Assembly? entryAssembly = Assembly.GetEntryAssembly();
                         if (entryAssembly is not null)
                         {
                             object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
@@ -356,11 +354,11 @@ namespace System.Windows.Forms
                         // won't work with MC++ see GetAppMainType.
                         if (s_productName is null || s_productName.Length == 0)
                         {
-                            Type t = GetAppMainType();
+                            Type? type = GetAppMainType();
 
-                            if (t is not null)
+                            if (type is not null)
                             {
-                                string ns = t.Namespace;
+                                string? ns = type.Namespace;
 
                                 if (!string.IsNullOrEmpty(ns))
                                 {
@@ -377,7 +375,7 @@ namespace System.Windows.Forms
                                 else
                                 {
                                     // last ditch... use the main type
-                                    s_productName = t.Name;
+                                    s_productName = type.Name;
                                 }
                             }
                         }
@@ -400,7 +398,7 @@ namespace System.Windows.Forms
                     if (s_productVersion is null)
                     {
                         // Custom attribute
-                        Assembly entryAssembly = Assembly.GetEntryAssembly();
+                        Assembly? entryAssembly = Assembly.GetEntryAssembly();
                         if (entryAssembly is not null)
                         {
                             object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
@@ -434,7 +432,7 @@ namespace System.Windows.Forms
 
         // Allows the hosting environment to register a callback
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static void RegisterMessageLoop(MessageLoopCallback callback)
+        public static void RegisterMessageLoop(MessageLoopCallback? callback)
             => ThreadContext.FromCurrent().RegisterMessageLoop(callback);
 
         /// <summary>
@@ -616,13 +614,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the application is about to shut down.
         /// </summary>
-        public static event EventHandler ApplicationExit
+        public static event EventHandler? ApplicationExit
         {
             add => AddEventHandler(s_eventApplicationExit, value);
             remove => RemoveEventHandler(s_eventApplicationExit, value);
         }
 
-        private static void AddEventHandler(object key, Delegate value)
+        private static void AddEventHandler(object key, Delegate? value)
         {
             lock (s_internalSyncObject)
             {
@@ -632,7 +630,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private static void RemoveEventHandler(object key, Delegate value)
+        private static void RemoveEventHandler(object key, Delegate? value)
         {
             lock (s_internalSyncObject)
             {
@@ -649,7 +647,7 @@ namespace System.Windows.Forms
         ///  Adds a message filter to monitor Windows messages as they are routed to their
         ///  destinations.
         /// </summary>
-        public static void AddMessageFilter(IMessageFilter value)
+        public static void AddMessageFilter(IMessageFilter? value)
             => ThreadContext.FromCurrent().AddMessageFilter(value);
 
         /// <summary>
@@ -676,7 +674,7 @@ namespace System.Windows.Forms
         ///  Occurs when the application has finished processing and is about to enter the
         ///  idle state.
         /// </summary>
-        public static event EventHandler Idle
+        public static event EventHandler? Idle
         {
             add
             {
@@ -687,7 +685,7 @@ namespace System.Windows.Forms
 
                     // This just ensures that the component manager is hooked up.  We
                     // need it for idle time processing.
-                    object o = current.ComponentManager;
+                    object? o = current.ComponentManager;
                 }
             }
             remove
@@ -704,7 +702,7 @@ namespace System.Windows.Forms
         ///  Occurs when the application is about to enter a modal state
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static event EventHandler EnterThreadModal
+        public static event EventHandler? EnterThreadModal
         {
             add
             {
@@ -728,7 +726,7 @@ namespace System.Windows.Forms
         ///  Occurs when the application is about to leave a modal state
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static event EventHandler LeaveThreadModal
+        public static event EventHandler? LeaveThreadModal
         {
             add
             {
@@ -751,7 +749,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when an untrapped thread exception is thrown.
         /// </summary>
-        public static event ThreadExceptionEventHandler ThreadException
+        public static event ThreadExceptionEventHandler? ThreadException
         {
             add
             {
@@ -776,7 +774,7 @@ namespace System.Windows.Forms
         ///  application is about to be shut down, this event will be raised first,
         ///  followed by an <see cref="ApplicationExit"/> event.
         /// </summary>
-        public static event EventHandler ThreadExit
+        public static event EventHandler? ThreadExit
         {
             add => AddEventHandler(s_eventThreadExit, value);
             remove => RemoveEventHandler(s_eventThreadExit, value);
@@ -819,9 +817,12 @@ namespace System.Windows.Forms
             {
                 // We couldn't grab the module handle, likely we're running from a single file package.
                 // Extract the manifest from managed resources.
-                using Stream stream = module.Assembly.GetManifestResourceStream(
+                using Stream? stream = module.Assembly.GetManifestResourceStream(
                     "System.Windows.Forms.XPThemes.manifest");
-                UseVisualStyles = ThemingScope.CreateActivationContext(stream);
+                if (stream is not null)
+                {
+                    UseVisualStyles = ThemingScope.CreateActivationContext(stream);
+                }
             }
 
             Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
@@ -847,7 +848,7 @@ namespace System.Windows.Forms
         ///  whether any of the open forms cancelled the exit call.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static void Exit(CancelEventArgs e)
+        public static void Exit(CancelEventArgs? e)
         {
             lock (s_internalSyncObject)
             {
@@ -886,7 +887,7 @@ namespace System.Windows.Forms
                         while (s_forms.Count > 0)
                         {
                             // OnFormClosed removes the form from the FormCollection
-                            s_forms[0].RaiseFormClosedOnAppExit();
+                            s_forms[0]!.RaiseFormClosedOnAppExit();
                         }
                     }
 
@@ -942,10 +943,10 @@ namespace System.Windows.Forms
             {
                 if (s_appFileVersion is null)
                 {
-                    Type t = GetAppMainType();
-                    if (t is not null && t.Assembly.Location.Length > 0)
+                    Type? type = GetAppMainType();
+                    if (type is not null && type.Assembly.Location.Length > 0)
                     {
-                        s_appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
+                        s_appFileVersion = FileVersionInfo.GetVersionInfo(type.Module.FullyQualifiedName);
                     }
                     else
                     {
@@ -960,19 +961,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the Type that contains the "Main" method.
         /// </summary>
-        private static Type GetAppMainType()
+        private static Type? GetAppMainType()
         {
             lock (s_internalSyncObject)
             {
                 if (s_mainType is null)
                 {
-                    Assembly exe = Assembly.GetEntryAssembly();
+                    Assembly? exe = Assembly.GetEntryAssembly();
 
                     // Get Main type...This doesn't work in MC++ because Main is a global function and not
                     // a class static method (it doesn't belong to a Type).
                     if (exe is not null)
                     {
-                        s_mainType = exe.EntryPoint.ReflectedType;
+                        s_mainType = exe.EntryPoint?.ReflectedType;
                     }
                 }
             }
@@ -985,7 +986,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static unsafe ThreadContext GetContextForHandle<T>(T handle) where T : IHandle<HWND>
         {
-            ThreadContext threadContext = ThreadContext.FromId(PInvoke.GetWindowThreadProcessId(handle.Handle, null));
+            ThreadContext? threadContext = ThreadContext.FromId(PInvoke.GetWindowThreadProcessId(handle.Handle, null));
             Debug.Assert(
                 threadContext is not null,
                 "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
@@ -1020,7 +1021,7 @@ namespace System.Windows.Forms
         {
             if (s_eventHandlers is not null)
             {
-                Delegate exit = s_eventHandlers[s_eventApplicationExit];
+                Delegate? exit = s_eventHandlers[s_eventApplicationExit];
                 if (exit is not null)
                 {
                     ((EventHandler)exit)(null, EventArgs.Empty);
@@ -1035,7 +1036,7 @@ namespace System.Windows.Forms
         {
             if (s_eventHandlers is not null)
             {
-                Delegate exit = s_eventHandlers[s_eventThreadExit];
+                Delegate? exit = s_eventHandlers[s_eventThreadExit];
                 if (exit is not null)
                 {
                     ((EventHandler)exit)(null, EventArgs.Empty);
