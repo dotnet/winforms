@@ -1114,13 +1114,13 @@ namespace System.ComponentModel.Design.Serialization
 
             // Now hash up all of the member variable names using a case insensitive hash.
             CodeTypeDeclaration type = _documentType;
-            Dictionary<string, CodeTypeMember> memberHash = new(StringComparer.CurrentCultureIgnoreCase);
+            HashSet<string> memberHash = new(StringComparer.CurrentCultureIgnoreCase);
 
             if (type is not null)
             {
                 foreach (CodeTypeMember member in type.Members)
                 {
-                    memberHash[member.Name] = member;
+                    memberHash.Add(member.Name);
                 }
             }
 
@@ -1145,7 +1145,7 @@ namespace System.ComponentModel.Design.Serialization
                         conflict = true;
                     }
 
-                    if (!conflict && memberHash[finalName] is not null)
+                    if (!conflict && memberHash.Contains(finalName))
                     {
                         conflict = true;
                     }
