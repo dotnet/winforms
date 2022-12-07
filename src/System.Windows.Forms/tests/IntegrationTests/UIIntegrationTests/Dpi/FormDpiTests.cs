@@ -28,7 +28,7 @@ namespace System.Windows.Forms.UITests.Dpi
             }
 
             DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-            DpiHelper.Initialize();
+            typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
             try
             {
                 using Form form = new();
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.UITests.Dpi
             }
 
             DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-            DpiHelper.Initialize();
+            typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
             try
             {
                 var minSize = new Drawing.Size(100, 100);
@@ -99,7 +99,7 @@ namespace System.Windows.Forms.UITests.Dpi
             }
 
             DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-            DpiHelper.Initialize();
+            typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
             try
             {
                 var minSize = new Drawing.Size(100, 100);
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.UITests.Dpi
             }
 
             DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-            DpiHelper.Initialize();
+            typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
             try
             {
                 using var form = new Form();
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.UITests.Dpi
             }
 
             DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-            DpiHelper.Initialize();
+            typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
             try
             {
                 using var form = new Form();
@@ -186,8 +186,9 @@ namespace System.Windows.Forms.UITests.Dpi
 
                 DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
 
-                Assert.NotNull(form.FormSizeCache);
-                Assert.Equal(2, form.FormSizeCache.Count);
+                dynamic fomrTestAccessor = form.TestAccessor().Dynamic;
+                Assert.NotNull(fomrTestAccessor._dpiFormSizes);
+                Assert.Equal(2, fomrTestAccessor._dpiFormSizes.Count);
                 form.Close();
             }
             finally
@@ -208,7 +209,7 @@ namespace System.Windows.Forms.UITests.Dpi
             }
 
             DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-            DpiHelper.Initialize();
+            typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
             try
             {
                 using var form = new Form();
@@ -216,7 +217,7 @@ namespace System.Windows.Forms.UITests.Dpi
                 form.Show();
 
                 DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
-                Assert.Null(form.FormSizeCache);
+                Assert.Null(form.TestAccessor().Dynamic._dpiFormSizes);
                 form.Close();
             }
             finally
@@ -236,14 +237,14 @@ namespace System.Windows.Forms.UITests.Dpi
             }
 
             DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
-            DpiHelper.Initialize();
+            typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
             try
             {
                 using var form = new Form();
                 form.AutoScaleMode = AutoScaleMode.Font;
                 form.Show();
 
-                Assert.Null(form.FormSizeCache);
+                Assert.Null(form.TestAccessor().Dynamic._dpiFormSizes);
                 form.Close();
             }
             finally

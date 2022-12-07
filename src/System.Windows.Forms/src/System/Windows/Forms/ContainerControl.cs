@@ -1446,9 +1446,9 @@ namespace System.Windows.Forms
 
                 if (LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi)
                 {
-                    // AutoscaleFactor is not updated until after OnFontChanged event is raised. Hence, computing
+                    // AutoscaleFactor is not updated until after the OnFontChanged event is raised. Hence, computing
                     // factor based on the change in bounds of the Form, which aligns with AutoscaleFactor for both
-                    // AutoscaleMode is Font and/or Dpi. Especially after adding support for non-leaner Form size in PMv2.
+                    // AutoscaleMode is Font and/or Dpi. Especially after adding support for non-linear Form size in PMv2.
                     float xScaleFactor = (float)suggestedRectangle.Width / Width;
                     float yScaleFactor = (float)suggestedRectangle.Height / Height;
                     ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize: false);

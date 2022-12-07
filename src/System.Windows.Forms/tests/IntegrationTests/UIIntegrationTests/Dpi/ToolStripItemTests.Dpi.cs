@@ -30,7 +30,7 @@ namespace System.Windows.Forms.UITests.Dpi
 
             // Set thread awareness context to PermonitorV2(PMv2).
             DPI_AWARENESS_CONTEXT originalAwarenessContext = PInvoke.SetThreadDpiAwarenessContextInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-            DpiHelper.Initialize();
+            typeof(DpiHelper).TestAccessor().Dynamic.Initialize();
             try
             {
                 int clientWidth = 800;
