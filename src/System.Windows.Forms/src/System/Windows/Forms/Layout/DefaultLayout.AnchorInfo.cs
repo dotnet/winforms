@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
+
 namespace System.Windows.Forms.Layout
 {
     internal partial class DefaultLayout
@@ -12,6 +14,9 @@ namespace System.Windows.Forms.Layout
             public int Top;
             public int Right;
             public int Bottom;
+
+            // Display rectangle of the parent/container used in computing child control's anchors.
+            public Rectangle DisplayRect;
         }
     }
 }

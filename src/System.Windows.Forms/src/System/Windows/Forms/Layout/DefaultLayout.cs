@@ -184,6 +184,7 @@ namespace System.Windows.Forms.Layout
             Rectangle elementBounds = element.Bounds;
             int width = elementBounds.Width;
             int height = elementBounds.Height;
+            anchorInfo.DisplayRect = displayRect;
 
             Debug.WriteLineIf(width < 0 || height < 0, $"\t\t'{element}' destination bounds resulted in negative");
 
@@ -914,6 +915,7 @@ namespace System.Windows.Forms.Layout
             int x = elementBounds.X;
             int y = elementBounds.Y;
 
+            anchorInfo.DisplayRect = displayRect;
             anchorInfo.Left = x;
             anchorInfo.Top = y;
 
@@ -1030,10 +1032,23 @@ namespace System.Windows.Forms.Layout
             // some controls don't have AnchorInfo, i.e. Panels
             if (anchorInfo is not null)
             {
-                anchorInfo.Left = (int)((float)anchorInfo.Left * factor.Width);
-                anchorInfo.Top = (int)((float)anchorInfo.Top * factor.Height);
-                anchorInfo.Right = (int)((float)anchorInfo.Right * factor.Width);
-                anchorInfo.Bottom = (int)((float)anchorInfo.Bottom * factor.Height);
+                float heightFactor = factor.Height;
+                float widthFactor = factor.Width;
+
+                if (UseAnchorLayoutV2(element))
+                {
+                    // AutoscaleFactor is not alligned with Window's SuggestedRectangle applied on top-level window/Form.
+                    // So, compute factor with respect to the change in DisplayRectangle and apply it to scale anchors.
+                    // See dotnet/winforms#8266 for more information.
+                    heightFactor = ((float)element.Container.DisplayRectangle.Height) / anchorInfo.DisplayRect.Height;
+                    widthFactor = ((float)element.Container.DisplayRectangle.Width) / anchorInfo.DisplayRect.Width;
+                    anchorInfo.DisplayRect = element.Container.DisplayRectangle;
+                }
+
+                anchorInfo.Left = (int)(anchorInfo.Left * widthFactor);
+                anchorInfo.Top = (int)(anchorInfo.Top * heightFactor);
+                anchorInfo.Right = (int)(anchorInfo.Right * widthFactor);
+                anchorInfo.Bottom = (int)(anchorInfo.Bottom * heightFactor);
 
                 SetAnchorInfo(element, anchorInfo);
             }
