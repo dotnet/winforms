@@ -296,45 +296,49 @@ namespace System.Windows.Forms
         {
             _currentlySizing = true;
             CachedBounds = bounds;
+
             try
             {
-                if (ToolStripPanelRow is not null)
+                if (ToolStripPanelRow is null)
                 {
-                    if (DraggedControl.IsCurrentlyDragging)
+                    _currentlySizing = false;
+                    return;
+                }
+
+                if (DraggedControl.IsCurrentlyDragging)
+                {
+                    if (ToolStripPanelRow.Cells[ToolStripPanelRow.Cells.Count - 1] == this)
                     {
-                        if (ToolStripPanelRow.Cells[ToolStripPanelRow.Cells.Count - 1] == this)
+                        Rectangle displayRectangle = ToolStripPanelRow.DisplayRectangle;
+                        if (ToolStripPanelRow.Orientation == Orientation.Horizontal)
                         {
-                            Rectangle displayRectangle = ToolStripPanelRow.DisplayRectangle;
-                            if (ToolStripPanelRow.Orientation == Orientation.Horizontal)
+                            int spaceToFree = bounds.Right - displayRectangle.Right;
+                            if (spaceToFree > 0 && bounds.Width > spaceToFree)
                             {
-                                int spaceToFree = bounds.Right - displayRectangle.Right;
-                                if (spaceToFree > 0 && bounds.Width > spaceToFree)
-                                {
-                                    bounds.Width -= spaceToFree;
-                                }
-                            }
-                            else
-                            {
-                                int spaceToFree = bounds.Bottom - displayRectangle.Bottom;
-                                if (spaceToFree > 0 && bounds.Height > spaceToFree)
-                                {
-                                    bounds.Height -= spaceToFree;
-                                }
+                                bounds.Width -= spaceToFree;
                             }
                         }
+                        else
+                        {
+                            int spaceToFree = bounds.Bottom - displayRectangle.Bottom;
+                            if (spaceToFree > 0 && bounds.Height > spaceToFree)
+                            {
+                                bounds.Height -= spaceToFree;
+                            }
+                        }
+                    }
 
-                        ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose($"[CELL] DRAGGING calling SetBounds {bounds}");
+                    ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose($"[CELL] DRAGGING calling SetBounds {bounds}");
+                    base.SetBoundsCore(bounds, specified);
+                    InnerElement.SetBounds(bounds, specified);
+                }
+                else
+                {
+                    if (!ToolStripPanelRow.CachedBoundsMode)
+                    {
+                        ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose($"[CELL] NOT DRAGGING calling SetBounds {bounds}");
                         base.SetBoundsCore(bounds, specified);
                         InnerElement.SetBounds(bounds, specified);
-                    }
-                    else
-                    {
-                        if (!ToolStripPanelRow.CachedBoundsMode)
-                        {
-                            ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose($"[CELL] NOT DRAGGING calling SetBounds {bounds}");
-                            base.SetBoundsCore(bounds, specified);
-                            InnerElement.SetBounds(bounds, specified);
-                        }
                     }
                 }
             }
@@ -386,17 +390,21 @@ namespace System.Windows.Forms
                     Point newloc = e.NewLocation;
                     // detect if we haven't yet performed a layout - force one so we can
                     // properly join to the row.
-                    if (ToolStripPanelRow is not null)
+                    if (ToolStripPanelRow is null)
                     {
-                        if (ToolStripPanelRow.Bounds == Rectangle.Empty)
-                        {
-                            ToolStripPanelRow.ToolStripPanel.PerformUpdate(true);
-                        }
+                        _currentlyDragging = false;
+                        e.Cancel = true;
+                        return;
+                    }
 
-                        if (_wrappedToolStrip is not null)
-                        {
-                            ToolStripPanelRow.ToolStripPanel.Join(_wrappedToolStrip, newloc);
-                        }
+                    if (ToolStripPanelRow.Bounds == Rectangle.Empty)
+                    {
+                        ToolStripPanelRow.ToolStripPanel.PerformUpdate(true);
+                    }
+
+                    if (_wrappedToolStrip is not null)
+                    {
+                        ToolStripPanelRow.ToolStripPanel.Join(_wrappedToolStrip, newloc);
                     }
                 }
                 finally
