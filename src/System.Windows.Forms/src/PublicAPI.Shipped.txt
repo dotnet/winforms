@@ -606,7 +606,7 @@ static System.Windows.Forms.Application.CurrentCulture.set -> void
 static System.Windows.Forms.Application.CurrentInputLanguage.get -> System.Windows.Forms.InputLanguage!
 static System.Windows.Forms.Application.CurrentInputLanguage.set -> void
 static System.Windows.Forms.Application.ExecutablePath.get -> string!
-static System.Windows.Forms.Application.Exit(System.ComponentModel.CancelEventArgs! e) -> void
+static System.Windows.Forms.Application.Exit(System.ComponentModel.CancelEventArgs? e) -> void
 static System.Windows.Forms.Application.LocalUserAppDataPath.get -> string!
 static System.Windows.Forms.Application.OnThreadException(System.Exception! t) -> void
 static System.Windows.Forms.Application.OpenForms.get -> System.Windows.Forms.FormCollection!

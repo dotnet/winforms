@@ -840,7 +840,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Overload of <see cref="Exit(CancelEventArgs)"/> that does not care about e.Cancel.
         /// </summary>
-        public static void Exit() => Exit(null!);
+        public static void Exit() => Exit(null);
 
         /// <summary>
         ///  Informs all message pumps that they are to terminate and then closes all
@@ -848,7 +848,7 @@ namespace System.Windows.Forms
         ///  whether any of the open forms cancelled the exit call.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static void Exit(CancelEventArgs e)
+        public static void Exit(CancelEventArgs? e)
         {
             lock (s_internalSyncObject)
             {
