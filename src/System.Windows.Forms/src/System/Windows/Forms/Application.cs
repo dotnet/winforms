@@ -228,11 +228,11 @@ namespace System.Windows.Forms
                         // won't work with MC++ see GetAppMainType.
                         if (s_companyName is null || s_companyName.Length == 0)
                         {
-                            Type? t = GetAppMainType();
+                            Type? type = GetAppMainType();
 
-                            if (t is not null)
+                            if (type is not null)
                             {
-                                string? ns = t.Namespace;
+                                string? ns = type.Namespace;
 
                                 if (!string.IsNullOrEmpty(ns))
                                 {
@@ -354,11 +354,11 @@ namespace System.Windows.Forms
                         // won't work with MC++ see GetAppMainType.
                         if (s_productName is null || s_productName.Length == 0)
                         {
-                            Type? t = GetAppMainType();
+                            Type? type = GetAppMainType();
 
-                            if (t is not null)
+                            if (type is not null)
                             {
-                                string? ns = t.Namespace;
+                                string? ns = type.Namespace;
 
                                 if (!string.IsNullOrEmpty(ns))
                                 {
@@ -375,7 +375,7 @@ namespace System.Windows.Forms
                                 else
                                 {
                                     // last ditch... use the main type
-                                    s_productName = t.Name;
+                                    s_productName = type.Name;
                                 }
                             }
                         }
@@ -943,10 +943,10 @@ namespace System.Windows.Forms
             {
                 if (s_appFileVersion is null)
                 {
-                    Type? t = GetAppMainType();
-                    if (t is not null && t.Assembly.Location.Length > 0)
+                    Type? type = GetAppMainType();
+                    if (type is not null && type.Assembly.Location.Length > 0)
                     {
-                        s_appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
+                        s_appFileVersion = FileVersionInfo.GetVersionInfo(type.Module.FullyQualifiedName);
                     }
                     else
                     {
