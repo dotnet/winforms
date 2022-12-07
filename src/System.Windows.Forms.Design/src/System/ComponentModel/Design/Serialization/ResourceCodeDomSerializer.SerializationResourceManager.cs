@@ -298,23 +298,25 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public IDictionaryEnumerator GetMetadataEnumerator()
             {
-                if (_mergedMetadata is null)
+                if (_mergedMetadata is not null)
                 {
-                    Dictionary<string, object> t = GetMetadata();
-                    if (t is not null)
-                    {
-                        // This is for backwards compatibility and also for the case when our reader/writer don't support metadata.  We must merge the original enumeration data in here or  else existing design time properties won't show up.  That would be really bad for things like Localizable.
-                        Dictionary<string, object> it = GetResourceSet(CultureInfo.InvariantCulture);
-                        if (it is not null)
-                        {
-                            foreach (KeyValuePair<string, object> de in it)
-                            {
-                                t.TryAdd(de.Key, de.Value);
-                            }
-                        }
+                    return _mergedMetadata?.GetEnumerator();
+                }
 
-                        _mergedMetadata = t;
+                Dictionary<string, object> metaData = GetMetadata();
+                if (metaData is not null)
+                {
+                    // This is for backwards compatibility and also for the case when our reader/writer don't support metadata.  We must merge the original enumeration data in here or  else existing design time properties won't show up.  That would be really bad for things like Localizable.
+                    Dictionary<string, object> resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
+                    if (resourceSet is not null)
+                    {
+                        foreach (KeyValuePair<string, object> item in resourceSet)
+                        {
+                            metaData.TryAdd(item.Key, item.Value);
+                        }
                     }
+
+                    _mergedMetadata = metaData;
                 }
 
                 return _mergedMetadata?.GetEnumerator();
@@ -334,30 +336,32 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             private Dictionary<string, object> GetMetadata()
             {
-                if (_metadata is null)
+                if (_metadata is not null)
                 {
-                    IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
-                    if (resSvc is not null)
+                    return _metadata;
+                }
+
+                IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
+                if (resSvc is not null)
+                {
+                    IResourceReader reader = resSvc.GetResourceReader(CultureInfo.InvariantCulture);
+                    if (reader is not null)
                     {
-                        IResourceReader reader = resSvc.GetResourceReader(CultureInfo.InvariantCulture);
-                        if (reader is not null)
+                        try
                         {
-                            try
+                            if (reader is ResXResourceReader resxReader)
                             {
-                                if (reader is ResXResourceReader resxReader)
+                                _metadata = new();
+                                IDictionaryEnumerator de = resxReader.GetMetadataEnumerator();
+                                while (de.MoveNext())
                                 {
-                                    _metadata = new();
-                                    IDictionaryEnumerator de = resxReader.GetMetadataEnumerator();
-                                    while (de.MoveNext())
-                                    {
-                                        _metadata[(string)de.Key] = de.Value;
-                                    }
+                                    _metadata[(string)de.Key] = de.Value;
                                 }
                             }
-                            finally
-                            {
-                                reader.Close();
-                            }
+                        }
+                        finally
+                        {
+                            reader.Close();
                         }
                     }
                 }
@@ -451,7 +455,7 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  Override of GetResourceSet from ResourceManager.
             /// </summary>
-            public override ResourceSet GetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
+            public override ResourceSet? GetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
             {
                 ArgumentNullException.ThrowIfNull(culture);
 
@@ -463,12 +467,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 while (tryParents && !lastCulture.Equals(culture));
 
-                if (createIfNotExists)
-                {
-                    return new CodeDomResourceSet();
-                }
-
-                return null;
+                return createIfNotExists ? new CodeDomResourceSet() : null;
             }
 
             /// <summary>
