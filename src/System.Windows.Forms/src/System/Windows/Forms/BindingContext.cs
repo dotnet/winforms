@@ -251,7 +251,7 @@ namespace System.Windows.Forms
             if (dataMember.Length == 0)
             {
                 // No data member specified, so create binding manager directly on the data source
-                if (dataSource is IList || dataSource is IListSource)
+                if (dataSource is IList or IListSource)
                 {
                     // IListSource so we can bind the dataGrid to a table and a dataSet
                     bindingManagerBase = new CurrencyManager(dataSource);
@@ -266,8 +266,8 @@ namespace System.Windows.Forms
             {
                 // Data member specified, so get data source's binding manager, and hook a 'related' binding manager to it
                 int lastDot = dataMember.LastIndexOf('.');
-                string dataPath = (lastDot == -1) ? string.Empty : dataMember.Substring(0, lastDot);
-                string dataField = dataMember.Substring(lastDot + 1);
+                string dataPath = (lastDot == -1) ? string.Empty : dataMember[..lastDot];
+                string dataField = dataMember[(lastDot + 1)..];
 
                 BindingManagerBase formerManager = EnsureListManager(dataSource, dataPath);
 
@@ -277,14 +277,9 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
                 }
 
-                if (typeof(IList).IsAssignableFrom(prop.PropertyType))
-                {
-                    bindingManagerBase = new RelatedCurrencyManager(formerManager, dataField);
-                }
-                else
-                {
-                    bindingManagerBase = new RelatedPropertyManager(formerManager, dataField);
-                }
+                bindingManagerBase = typeof(IList).IsAssignableFrom(prop.PropertyType)
+                    ? new RelatedCurrencyManager(formerManager, dataField)
+                    : new RelatedPropertyManager(formerManager, dataField);
             }
 
             // if wRef is null, then it is the first time we want this bindingManagerBase: so add it
