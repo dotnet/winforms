@@ -139,7 +139,15 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        Debug.Assert(_window!.AccessibilityObject.RuntimeId.Length >= 3);
+                        if (_window is null)
+                        {
+                            return new int[]
+                            {
+                                _controlItem.GetHashCode()
+                            };
+                        }
+
+                        Debug.Assert(_window.AccessibilityObject.RuntimeId.Length >= 3);
 
                         return new int[]
                         {
