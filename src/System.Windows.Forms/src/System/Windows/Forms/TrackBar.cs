@@ -566,25 +566,19 @@ namespace System.Windows.Forms
                 }
 
                 _tickFrequency = value;
-                // set the recreateHandle flag to null,
-                // if the _autoDrawTicks flag does not equal what ShouldAutoDrawTicks()
-                // we set the recreateHandle to true,
-                // then we skip sending the messages and,
-                // recreateHandle will be called at the end of the method.
-                bool recreateHandle = false;
-                if (IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks())
+                // Determine if the decision of whether the ticks drawing,
+                // is performed by the native control or the Windows Forms runtime
+                // is still valid. If it's no longer valid, we'll need to recreate the native control.
+                bool recreateHandle = ShouldRecreateHandle();
+                if (recreateHandle && IsHandleCreated)
                 {
-                    recreateHandle = true;
-                }
-
-                if (!recreateHandle && IsHandleCreated)
-                {
-                    DrawTicks();
-                    Invalidate();
+                    RecreateHandle();
                 }
                 else
                 {
-                    RecreateHandle();
+                    PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)value);
+                    DrawTicks();
+                    Invalidate();
                 }
             }
         }
@@ -786,6 +780,7 @@ namespace System.Windows.Forms
                 return;
             }
 
+            // Divide by 2 because otherwise the ticks appear as a solid line.
             int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
             uint range = (uint)(_maximum - _minimum);
             if (range > maxTickCount && maxTickCount != 0)
@@ -1051,17 +1046,10 @@ namespace System.Windows.Forms
 
                 _minimum = minValue;
                 _maximum = maxValue;
-                // set the recreateHandle flag to null,
-                // if the _autoDrawTicks flag does not equal what ShouldAutoDrawTicks()
-                // we set the recreateHandle to true,
-                // then we skip sending the messages and,
-                // recreateHandle will be called at the end of the method,
-                bool recreateHandle = false;
-                if (_autoDrawTicks != ShouldAutoDrawTicks())
-                {
-                    recreateHandle = true;
-                }
-
+                // Determine if the decision of whether the ticks drawing,
+                // is performed by the native control or the Windows Forms runtime
+                // is still valid. If it's no longer valid, we'll need to recreate the native control.
+                bool recreateHandle = ShouldRecreateHandle();
                 if (IsHandleCreated && !recreateHandle)
                 {
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
@@ -1083,13 +1071,13 @@ namespace System.Windows.Forms
                     _value = _maximum;
                 }
 
-                if (!recreateHandle)
+                if (recreateHandle)
                 {
-                    SetTrackBarPosition();
+                    RecreateHandle();
                 }
                 else
                 {
-                    RecreateHandle();
+                    SetTrackBarPosition();
                 }
             }
         }
@@ -1141,6 +1129,12 @@ namespace System.Windows.Forms
             return range <= (size / 2);
         }
 
+        /// <summary>
+        /// Determine if the decision of whether the ticks drawing,
+        /// is performed by the native control or the Windows Forms runtime
+        /// is still valid. If it's no longer valid, we'll need to recreate the native control.
+        /// </summary>
+        private bool ShouldRecreateHandle() => IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks();
         public override string ToString() => $"{base.ToString()}, Minimum: {Minimum}, Maximum: {Maximum}, Value: {_value}";
 
         protected override void WndProc(ref Message m)
