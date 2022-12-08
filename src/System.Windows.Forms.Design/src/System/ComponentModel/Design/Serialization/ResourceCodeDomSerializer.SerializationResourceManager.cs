@@ -225,7 +225,6 @@ namespace System.ComponentModel.Design.Serialization
                 Debug.Assert(culture.Parent != culture, "should have returned when culture = InvariantCulture");
                 CultureInfo parent = culture.Parent;
                 Dictionary<string, object> resourceSet = GetResourceSet(culture);
-                bool contains = (resourceSet is null) ? false : resourceSet.ContainsKey(name);
                 if (resourceSet is not null && resourceSet.TryGetValue(name, out object parentValue))
                 {
                     return !parentValue.Equals(value) || parentValue is null ? CompareValue.Different : CompareValue.Same;
