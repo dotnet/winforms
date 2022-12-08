@@ -275,13 +275,14 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            ///  This returns a dictionary enumerator for metadata on the invariant culture.  If no metadata  can be found this will return null..
+            ///  This returns a dictionary enumerator for metadata on the invariant culture.
+            ///  If no metadata can be found this will return null.
             /// </summary>
             public IDictionaryEnumerator GetMetadataEnumerator()
             {
                 if (_mergedMetadata is not null)
                 {
-                    return _mergedMetadata?.GetEnumerator();
+                    return _mergedMetadata.GetEnumerator();
                 }
 
                 Dictionary<string, object> metaData = GetMetadata();
@@ -300,7 +301,7 @@ namespace System.ComponentModel.Design.Serialization
                     _mergedMetadata = metaData;
                 }
 
-                return _mergedMetadata?.GetEnumerator();
+                return _mergedMetadata.GetEnumerator();
             }
 
             /// <summary>
@@ -390,7 +391,7 @@ namespace System.ComponentModel.Design.Serialization
             private Dictionary<string, object> GetResourceSet(CultureInfo culture)
             {
                 Debug.Assert(culture is not null, "null parameter");
-                Dictionary<string, object> rs = null;
+                Dictionary<string, object> resourceSet = null;
                 object objRs = ResourceTable[culture];
                 if (objRs is null)
                 {
@@ -403,14 +404,14 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             try
                             {
-                                rs = CreateResourceSet(reader, culture);
+                                resourceSet = CreateResourceSet(reader, culture);
                             }
                             finally
                             {
                                 reader.Close();
                             }
 
-                            ResourceTable[culture] = rs;
+                            ResourceTable[culture] = resourceSet;
                         }
                         else
                         {
@@ -422,15 +423,15 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 else
                 {
-                    rs = objRs as Dictionary<string, object>;
-                    if (rs is null)
+                    resourceSet = objRs as Dictionary<string, object>;
+                    if (resourceSet is null)
                     {
                         // the resourceSets hash table may contain our "this" pointer as a sentinel value
                         Debug.Assert(objRs == s_resourceSetSentinel, $"unknown object in resourceSets: {objRs}");
                     }
                 }
 
-                return rs;
+                return resourceSet;
             }
 
             /// <summary>
