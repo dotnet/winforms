@@ -745,17 +745,17 @@ namespace System.ComponentModel.Design.Serialization
 
                     CodeExpression expression = tree.Expression;
                     string expressionName;
-                    if (expression is CodePropertyReferenceExpression)
+                    if (expression is CodePropertyReferenceExpression codeProperty)
                     {
-                        expressionName = ((CodePropertyReferenceExpression)expression).PropertyName;
+                        expressionName = codeProperty.PropertyName;
                     }
-                    else if (expression is CodeFieldReferenceExpression)
+                    else if (expression is CodeFieldReferenceExpression codeField)
                     {
-                        expressionName = ((CodeFieldReferenceExpression)expression).FieldName;
+                        expressionName = codeField.FieldName;
                     }
-                    else if (expression is CodeMethodReferenceExpression)
+                    else if (expression is CodeMethodReferenceExpression codeMethod)
                     {
-                        expressionName = ((CodeMethodReferenceExpression)expression).MethodName;
+                        expressionName = codeMethod.MethodName;
                         if (expressionName.StartsWith("Set", StringComparison.InvariantCulture))
                         {
                             expressionName = expressionName[3..];
