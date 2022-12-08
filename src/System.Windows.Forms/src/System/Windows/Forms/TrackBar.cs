@@ -570,15 +570,18 @@ namespace System.Windows.Forms
                 // is performed by the native control or the Windows Forms runtime
                 // is still valid. If it's no longer valid, we'll need to recreate the native control.
                 bool recreateHandle = ShouldRecreateHandle();
-                if (recreateHandle && IsHandleCreated)
-                {
-                    RecreateHandle();
-                }
-                else
+                if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)value);
-                    DrawTicks();
-                    Invalidate();
+                    if (recreateHandle)
+                    {
+                        RecreateHandle();
+                    }
+                    else
+                    {
+                        DrawTicks();
+                        Invalidate();
+                    }
                 }
             }
         }
