@@ -1580,7 +1580,7 @@ namespace System.Windows.Forms
             _onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
-        internal override void ReleaseUiaProvider(nint handle)
+        internal override void ReleaseUiaProvider(HWND handle)
         {
             if (OsVersion.IsWindows8OrGreater() && IsAccessibilityObjectCreated)
             {

@@ -285,7 +285,7 @@ namespace System.Windows.Forms
             return base.ProcessKeyEventArgs(ref m);
         }
 
-        internal override void ReleaseUiaProvider(nint handle)
+        internal override void ReleaseUiaProvider(HWND handle)
         {
             if (TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
             {

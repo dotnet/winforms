@@ -177,7 +177,7 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.UseTextForAccessibility, false);
         }
 
-        internal override void ReleaseUiaProvider(IntPtr handle)
+        internal override void ReleaseUiaProvider(HWND handle)
         {
             foreach (TreeNode rootNode in Nodes)
             {

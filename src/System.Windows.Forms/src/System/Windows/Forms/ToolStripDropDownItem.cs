@@ -617,7 +617,7 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider()
         {
-            _dropDown?.ReleaseUiaProvider(IntPtr.Zero);
+            _dropDown?.ReleaseUiaProvider(HWND.Null);
             base.ReleaseUiaProvider();
         }
 

@@ -7076,7 +7076,7 @@ namespace System.Windows.Forms.Tests
             _ = toolStrip.AccessibilityObject;
             Assert.True(toolStrip.IsAccessibilityObjectCreated);
 
-            toolStrip.ReleaseUiaProvider(toolStrip.Handle);
+            toolStrip.ReleaseUiaProvider(toolStrip.HWND);
 
             Assert.Equal(1, toolStrip.Disconnects);
             Assert.True(toolStripDropDownItem1.IsAccessibleObjectCleared());
@@ -15574,7 +15574,7 @@ namespace System.Windows.Forms.Tests
 
             public int Disconnects { get; private set; }
 
-            internal new void ReleaseUiaProvider(IntPtr handle)
+            internal new void ReleaseUiaProvider(HWND handle)
             {
                 base.ReleaseUiaProvider(handle);
 

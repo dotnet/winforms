@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Tests
             EnforceAccessibleObjectCreation(columnHeader);
             _ = listView.AccessibilityObject;
 
-            listView.ReleaseUiaProvider(listView.Handle);
+            listView.ReleaseUiaProvider(listView.HWND);
 
             Assert.Null(columnHeader.TestAccessor().Dynamic._accessibilityObject);
             Assert.True(listView.IsHandleCreated);

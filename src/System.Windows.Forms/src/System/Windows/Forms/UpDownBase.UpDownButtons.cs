@@ -337,7 +337,7 @@ namespace System.Windows.Forms
             protected virtual void OnUpDown(UpDownEventArgs upevent)
                 => _upDownEventHandler?.Invoke(this, upevent);
 
-            internal override void ReleaseUiaProvider(IntPtr handle)
+            internal override void ReleaseUiaProvider(HWND handle)
             {
                 if (IsAccessibilityObjectCreated
                     && OsVersion.IsWindows8OrGreater()

@@ -79,7 +79,7 @@ namespace System.Windows.Forms
                 // you should notify UI Automation by calling the UiaReturnRawElementProvider
                 // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells
                 // UI Automation that it can safely remove all map entries that refer to the specified window.
-                UiaCore.UiaReturnRawElementProvider(Handle, wParam: 0, lParam: 0, el: null);
+                UiaCore.UiaReturnRawElementProvider(HWND, wParam: 0, lParam: 0, el: null);
             }
 
             if (OsVersion.IsWindows8OrGreater())

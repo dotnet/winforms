@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Tests
             using ListBox listBox = CreateListBoxWithItems();
             ListBoxAccessibleObject accessibleObject = InitListBoxItemsAccessibleObjects(listBox);
 
-            listBox.ReleaseUiaProvider(listBox.Handle);
+            listBox.ReleaseUiaProvider(listBox.HWND);
 
             Assert.Equal(0, accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.Count);
         }

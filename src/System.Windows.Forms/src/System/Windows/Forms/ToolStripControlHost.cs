@@ -872,7 +872,7 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider()
         {
-            _control?.ReleaseUiaProvider(IntPtr.Zero);
+            _control?.ReleaseUiaProvider(HWND.Null);
             base.ReleaseUiaProvider();
         }
 

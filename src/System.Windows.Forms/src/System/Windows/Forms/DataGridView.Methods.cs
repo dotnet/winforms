@@ -26104,7 +26104,7 @@ namespace System.Windows.Forms
             Capture = false;
         }
 
-        internal override void ReleaseUiaProvider(IntPtr handle)
+        internal override void ReleaseUiaProvider(HWND handle)
         {
             if (!IsAccessibilityObjectCreated)
             {
@@ -26129,7 +26129,7 @@ namespace System.Windows.Forms
                     column.HeaderCell.ReleaseUiaProvider();
                 }
 
-                _editingPanel?.ReleaseUiaProvider(IntPtr.Zero);
+                _editingPanel?.ReleaseUiaProvider(HWND.Null);
                 _editingPanelAccessibleObject = null;
                 _topLeftHeaderCell?.ReleaseUiaProvider();
 
