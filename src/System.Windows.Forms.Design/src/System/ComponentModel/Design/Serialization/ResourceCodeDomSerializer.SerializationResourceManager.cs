@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design.Serialization
             private CultureInfo _localizationLanguage;
             private IResourceWriter _writer;
             private CultureInfo _readCulture;
-            private readonly HashSet<string> _nameTable;
+            private readonly Dictionary<string, int> _nameTable;
             private Dictionary<CultureInfo, Dictionary<string, object>> _resourceSets;
             private Dictionary<string, object> _metadata;
             private Dictionary<string, object> _mergedMetadata;
@@ -207,54 +207,35 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            ///  This determines if the given resource name/value pair can be retrieved from a parent culture.  We don't want to write duplicate resources for each language, so we do a check of the parent culture.
+            ///  This determines if the given resource name/value pair can be retrieved from a parent culture.
+            ///  We don't want to write duplicate resources for each language, so we do a check of the parent culture.
             /// </summary>
             private CompareValue CompareWithParentValue(string name, object value)
             {
                 Debug.Assert(name is not null, "name is null");
-                // If there is no parent culture, treat that as being different from the parent's resource, which results in the "normal" code path for the caller.
-                if (ReadCulture.Equals(CultureInfo.InvariantCulture))
+                // If there is no parent culture, treat that as being different from the parent's resource.
+                // which results in the "normal" code path for the caller.
+                return ReadCulture.Equals(CultureInfo.InvariantCulture)
+                    ? CompareValue.Different
+                    : CompareWithParentValue(ReadCulture, name, value);
+            }
+
+            private CompareValue CompareWithParentValue(CultureInfo culture, string name, object value)
+            {
+                Debug.Assert(culture.Parent != culture, "should have returned when culture = InvariantCulture");
+                CultureInfo parent = culture.Parent;
+                Dictionary<string, object> resourceSet = GetResourceSet(culture);
+                bool contains = (resourceSet is null) ? false : resourceSet.ContainsKey(name);
+                if (resourceSet is not null && resourceSet.TryGetValue(name, out object parentValue))
                 {
-                    return CompareValue.Different;
+                    return !parentValue.Equals(value) || parentValue is null ? CompareValue.Different : CompareValue.Same;
+                }
+                else if (culture.Equals(CultureInfo.InvariantCulture))
+                {
+                    return CompareValue.New;
                 }
 
-                CultureInfo culture = ReadCulture;
-#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
-                for (; ; )
-#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
-                {
-                    Debug.Assert(culture.Parent != culture, "should have exited loop when culture = InvariantCulture");
-                    culture = culture.Parent;
-                    Dictionary<string, object> rs = GetResourceSet(culture);
-                    bool contains = (rs is null) ? false : rs.ContainsKey(name);
-                    if (contains)
-                    {
-                        object parentValue = rs?[name];
-                        if (parentValue == value)
-                        {
-                            return CompareValue.Same;
-                        }
-                        else if (parentValue is not null)
-                        {
-                            if (parentValue.Equals(value))
-                            {
-                                return CompareValue.Same;
-                            }
-                            else
-                            {
-                                return CompareValue.Different;
-                            }
-                        }
-                        else
-                        {
-                            return CompareValue.Different;
-                        }
-                    }
-                    else if (culture.Equals(CultureInfo.InvariantCulture))
-                    {
-                        return CompareValue.New;
-                    }
-                }
+                return CompareWithParentValue(parent, name, value);
             }
 
             /// <summary>
@@ -732,7 +713,11 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            ///  Writes the given resource value under the given name. This checks the parent resource to see if the values are the same.  If they are, the resource is not written.  If not, then the resource is written.  We always write using the resource language we read in with, so we don't stomp on the wrong resource data in the event that someone changes the language.
+            ///  Writes the given resource value under the given name.
+            ///  This checks the parent resource to see if the values are the same.
+            ///  If they are, the resource is not written. If not, then the resource is written.
+            ///  We always write using the resource language we read in with,
+            ///  so we don't stomp on the wrong resource data in the event that someone changes the language.
             /// </summary>
             public string SetValue(IDesignerSerializationManager manager, ExpressionContext tree, object value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
             {
@@ -795,31 +780,18 @@ namespace System.ComponentModel.Design.Serialization
 
                 // Now find an unused name
                 string resourceName = nameBase;
-                int count = 1;
 
-#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
-                for (; ; )
-#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
+                // Only append the number when appendCount is set or if there is already a count.
+                int count = 0;
+                if (appendCount || _nameTable.TryGetValue(nameBase, out count))
                 {
-                    if (appendCount)
-                    {
-                        resourceName = $"{nameBase}{count.ToString(CultureInfo.InvariantCulture)}";
-                        count++;
-                    }
-                    else
-                    {
-                        appendCount = true;
-                    }
-
-                    if (!_nameTable.Contains(resourceName))
-                    {
-                        break;
-                    }
+                    count++;
+                    resourceName = $"{nameBase}{count.ToString(CultureInfo.InvariantCulture)}";
                 }
 
                 // Now that we have a name, write out the resource.
                 SetValue(manager, resourceName, value, forceInvariant, shouldSerializeInvariant, ensureInvariant, applyingCachedResources);
-                _nameTable.Add(resourceName);
+                _nameTable[resourceName] = count;
                 return resourceName;
             }
 
