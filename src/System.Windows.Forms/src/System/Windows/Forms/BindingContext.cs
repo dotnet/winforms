@@ -58,9 +58,7 @@ namespace System.Windows.Forms
         IEnumerator IEnumerable.GetEnumerator()
         {
             ScrubWeakRefs();
-            return _listManagers
-                .Select(kvp => new DictionaryEntry(kvp.Key, kvp.Value))
-                .GetEnumerator();
+            return ((IDictionary)_listManagers).GetEnumerator();
         }
 
         /// <summary>
