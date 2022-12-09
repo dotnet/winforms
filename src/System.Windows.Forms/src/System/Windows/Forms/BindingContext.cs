@@ -44,12 +44,7 @@ namespace System.Windows.Forms
         void ICollection.CopyTo(Array ar, int index)
         {
             ScrubWeakRefs();
-
-            int i = index;
-            foreach (KeyValuePair<HashKey, WeakReference> kvp in _listManagers)
-            {
-                ar.SetValue(new DictionaryEntry(kvp.Key, kvp.Value), i++);
-            }
+            ((IDictionary)_listManagers).CopyTo(ar, index);
         }
 
         /// <summary>
