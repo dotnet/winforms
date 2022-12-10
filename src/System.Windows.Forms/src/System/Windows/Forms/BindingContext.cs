@@ -44,7 +44,49 @@ namespace System.Windows.Forms
         void ICollection.CopyTo(Array ar, int index)
         {
             ScrubWeakRefs();
-            ((IDictionary)_listManagers).CopyTo(ar, index);
+            if (array == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
+            }
+ 
+            if (array.Rank != 1)
+            {
+                ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_RankMultiDimNotSupported);
+            }
+ 
+            if (array.GetLowerBound(0) != 0)
+            {
+                ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_NonZeroLowerBound);
+            }
+ 
+            if ((uint)index > (uint)array.Length)
+            {
+                ThrowHelper.ThrowIndexArgumentOutOfRange_NeedNonNegNumException();
+            }
+ 
+            if (array.Length - index < Count)
+            {
+                ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_ArrayPlusOffTooSmall);
+            }
+			
+			var enumerator = _listManagers.GetEnumerator();
+			int arraPosition = 0;
+			while (enumerator.MoveNext())
+			{
+			     if (arraPosition < index)
+			     {
+			         arraPosition ++;
+			         continue;
+			     }
+			     
+			     KeyValuePair keyValuePair = enumerator.Current;
+			     if (keyValuePair.Key is not null)
+			     {
+			          DictionaryEntry entry = new DictionaryEntry(keyValuePair.Key, keyValuePair.Value);
+			          ar.SetValue(entry, arraPosition )
+			          arraPosition ++;
+			      }
+			   }
         }
 
         /// <summary>
