@@ -44,49 +44,37 @@ namespace System.Windows.Forms
         void ICollection.CopyTo(Array ar, int index)
         {
             ScrubWeakRefs();
-            if (array == null)
+
+            ArgumentNullException.ThrowIfNull(ar);
+
+            if (ar.Rank != 1)
+                throw new ArgumentException("Only single dimensional arrays are supported for the requested action.", nameof(ar));
+
+            if (ar.GetLowerBound(0) != 0)
+                throw new ArgumentException("The lower bound of target array must be zero.", nameof(ar));
+
+            ArgumentOutOfRangeException.ThrowIfGreaterThan((uint)index, (uint)ar.Length, nameof(index) );
+
+            if (ar.Length - index < _listManagers.Count)
+                throw new ArgumentException("Destination array is not long enough to copy all the items in the collection. Check array index and length.");
+
+            var enumerator = _listManagers.GetEnumerator();
+            int position = 0;
+            while (enumerator.MoveNext())
             {
-                ThrowHelper.ThrowArgumentNullException(ExceptionArgument.array);
+                if (position < index)
+                {
+                    position++;
+                    continue;
+                }
+
+                KeyValuePair<HashKey, WeakReference> kvp = enumerator.Current;
+                if (kvp.Key is not null)
+                {
+                    DictionaryEntry entry = new DictionaryEntry(kvp.Key, kvp.Value);
+                    ar.SetValue(entry, position++);
+                }
             }
- 
-            if (array.Rank != 1)
-            {
-                ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_RankMultiDimNotSupported);
-            }
- 
-            if (array.GetLowerBound(0) != 0)
-            {
-                ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_NonZeroLowerBound);
-            }
- 
-            if ((uint)index > (uint)array.Length)
-            {
-                ThrowHelper.ThrowIndexArgumentOutOfRange_NeedNonNegNumException();
-            }
- 
-            if (array.Length - index < Count)
-            {
-                ThrowHelper.ThrowArgumentException(ExceptionResource.Arg_ArrayPlusOffTooSmall);
-            }
-			
-			var enumerator = _listManagers.GetEnumerator();
-			int arraPosition = 0;
-			while (enumerator.MoveNext())
-			{
-			     if (arraPosition < index)
-			     {
-			         arraPosition ++;
-			         continue;
-			     }
-			     
-			     KeyValuePair keyValuePair = enumerator.Current;
-			     if (keyValuePair.Key is not null)
-			     {
-			          DictionaryEntry entry = new DictionaryEntry(keyValuePair.Key, keyValuePair.Value);
-			          ar.SetValue(entry, arraPosition )
-			          arraPosition ++;
-			      }
-			   }
         }
 
         /// <summary>
