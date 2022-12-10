@@ -44,37 +44,7 @@ namespace System.Windows.Forms
         void ICollection.CopyTo(Array ar, int index)
         {
             ScrubWeakRefs();
-
-            ArgumentNullException.ThrowIfNull(ar);
-
-            if (ar.Rank != 1)
-                throw new ArgumentException("Only single dimensional arrays are supported for the requested action.", nameof(ar));
-
-            if (ar.GetLowerBound(0) != 0)
-                throw new ArgumentException("The lower bound of target array must be zero.", nameof(ar));
-
-            ArgumentOutOfRangeException.ThrowIfGreaterThan((uint)index, (uint)ar.Length, nameof(index) );
-
-            if (ar.Length - index < _listManagers.Count)
-                throw new ArgumentException("Destination array is not long enough to copy all the items in the collection. Check array index and length.");
-
-            var enumerator = _listManagers.GetEnumerator();
-            int position = 0;
-            while (enumerator.MoveNext())
-            {
-                if (position < index)
-                {
-                    position++;
-                    continue;
-                }
-
-                KeyValuePair<HashKey, WeakReference> kvp = enumerator.Current;
-                if (kvp.Key is not null)
-                {
-                    DictionaryEntry entry = new DictionaryEntry(kvp.Key, kvp.Value);
-                    ar.SetValue(entry, position++);
-                }
-            }
+            _listManagers.HashTableCopyTo(ar, index);
         }
 
         /// <summary>
