@@ -50,7 +50,10 @@
                 {
                     foreach (KeyValuePair<TKey, TValue> kvp in source)
                     {
-                        objects[index++] = new KeyValuePair<TKey, TValue>(kvp.Key, kvp.Value);
+                        if (kvp.Key is not null)
+                        {
+                            objects[index++] = new DictionaryEntry(kvp.Key, kvp.Value);
+                        }
                     }
                 }
                 catch (ArrayTypeMismatchException)
