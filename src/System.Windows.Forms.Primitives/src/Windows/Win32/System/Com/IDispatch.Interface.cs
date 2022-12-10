@@ -10,7 +10,7 @@ namespace Windows.Win32.System.Com;
 
 internal unsafe partial struct IDispatch : IVTable<IDispatch, IDispatch.Vtbl>
 {
-    static void IVTable<IDispatch, Vtbl>.PopulateComInterfaceVTable(Vtbl* vtable)
+    static void IVTable<IDispatch, Vtbl>.PopulateVTable(Vtbl* vtable)
     {
         vtable->GetTypeInfoCount_4 = &GetTypeInfoCount;
         vtable->GetTypeInfo_5 = &GetTypeInfo;

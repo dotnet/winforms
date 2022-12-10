@@ -23,9 +23,9 @@ internal unsafe interface IVTable<TComInterface, TVTable> : IVTable
     private static sealed TVTable* VTable { get; set; }
 
     /// <summary>
-    ///  Populate <paramref name="vtable"/> with function pointers specific to the COM Interface.
+    ///  Populate <paramref name="vtable"/> with function pointers.
     /// </summary>
-    private protected static abstract void PopulateComInterfaceVTable(TVTable* vtable);
+    private protected static abstract void PopulateVTable(TVTable* vtable);
 
     static IUnknown.Vtbl* IVTable.GetVTable()
     {
@@ -34,7 +34,7 @@ internal unsafe interface IVTable<TComInterface, TVTable> : IVTable
             TVTable* vtable = (TVTable*)RuntimeHelpers.AllocateTypeAssociatedMemory(typeof(TVTable), sizeof(TVTable));
             Interop.WinFormsComWrappers.PopulateIUnknownVTable((IUnknown.Vtbl*)vtable);
             VTable = vtable;
-            TComInterface.PopulateComInterfaceVTable(VTable);
+            TComInterface.PopulateVTable(VTable);
         }
 
         return (IUnknown.Vtbl*)VTable;
