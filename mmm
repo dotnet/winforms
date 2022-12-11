@@ -1,0 +1,472 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text.Json;
+
+
+namespace secondlab
+{
+    public struct Student
+    {
+        public int ID;
+        public string FullName;
+        public DateTime BirthdayDate;
+        public string Institute;
+        public string Group;
+        public string Course;
+        public float AvgMark;
+        public string EducationForm;
+        public int Level;
+        public int DebtCount;
+
+        public Student(int ID,
+           string FullName,
+           DateTime BirthdayDate,
+           string Institute,
+           string Group,
+           string Course,
+           float AvgMark,
+           string EducationForm,
+           int Level,
+           int DebtCount)
+        {
+            this.ID = ID;
+            this.FullName = FullName;
+            this.BirthdayDate = BirthdayDate;
+            this.Institute = Institute;
+            this.Group = Group;
+            this.Course = Course;
+            this.AvgMark = AvgMark;
+            this.EducationForm = EducationForm;
+            this.Level = Level;
+            this.DebtCount = DebtCount;
+        }
+    }
+    class Program
+    {
+        public static List<Student> DataBase = new List<Student>();
+
+        static void Main(string[] args)
+        {
+            string path = Environment.CurrentDirectory + @"\Students.txt";
+            string[] line = File.ReadAllLines(path);
+
+            for (int i = 0; i < line.Length; i++)
+            {
+                string[] file = line[i].Split(';');
+                Student stud = new Student(int.Parse(file[0]), file[1], DateTime.ParseExact(file[2], "dd.MM.yyyy", CultureInfo.InvariantCulture),
+                    file[3], file[4], file[5], float.Parse(file[6]), file[7], int.Parse(file[8]), int.Parse(file[9]));
+                DataBase.Add(stud);
+                line = File.ReadAllLines(path);
+            }
+
+            bool exit = false;
+            while (exit != true)
+            {
+                Console.WriteLine("Основное меню");
+                Console.WriteLine("Чтобы просмотреть всю базу данных введите: t1");
+                Console.WriteLine("Чтобы найти человека по дате рождения введите: t2");
+                Console.WriteLine("Чтобы удалить человека из базы введите: t3");
+                Console.WriteLine("Чтобы отсортировать студентов по Среднему баллу введите: t4");
+                Console.WriteLine("Чтобы добавить человека в базу введите: t5");
+                Console.WriteLine("Чтобы найти человека по фамилии, имени или отчеству введите: t6");
+                Console.WriteLine("Чтобы найти студентов с максимальными или минимальными баллами введите: t7");
+                Console.WriteLine("Чтобы закончить работу программы введите: t8");
+
+                string input = Console.ReadLine();
+                switch (input)
+                {
+                    case "t1":
+                        RunDataBase();
+                        break;
+                    case "t2":
+                        FindStudentByBirthDate();
+                        break;
+                    case "t3":
+                        DeleteStudentFromBase();
+                        break;
+                    case "t4":
+                        SortStudentsByMidMark();
+                        break;
+                    case "t5":
+                        AddNewStudent();
+                        break;
+                    case "t6":
+                        FindStudentByPartOfName();
+                        break;
+                    case "t7":
+                        FindMaxAndMinPoints();
+                        break;
+                    case "t8":
+                        SaveDataBase();
+                        exit = true;
+                        break;
+                    default:
+                        Console.WriteLine($"Пункта меню {input} не существует!");
+                        break;
+                }
+            }
+
+        }
+
+        static void RunDataBase()
+        {
+            Console.Clear();
+            for (int i = 0; i < DataBase.Count; i++)
+            {
+                if (DataBase[i].ID != 0)
+                {
+                    Console.WriteLine(StudentInfo(DataBase[i]));
+                }
+            }
+            Console.WriteLine("Для продолжения нажмите любую клавишу");
+            Console.ReadLine();
+        }
+
+        /// <summary>
+        /// Возврщает информацию о студенте в формате строки
+        /// </summary>
+        /// <param name="based">
+        /// тип Student
+        /// </param>
+        /// <returns></returns>
+        static string StudentInfo(Student based)
+        {
+            return (string.Format("|{0,-2} | {1,-30} | {2,8} | {3,10} | {4, -12} | {5,1} | {6,3} | {7,8} | {8,5} | {9,2}",
+                based.ID.ToString(), based.FullName, based.BirthdayDate.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture),
+                based.Institute, based.Group, based.Course, based.AvgMark.ToString(), based.EducationForm,
+                based.Level.ToString(), based.DebtCount.ToString()));
+        }
+
+        static void FindStudentByBirthDate()
+        {
+            Console.Clear();
+            Console.Write("Введите дату рождения в формате дд.мм.гггг : ");
+            bool normDate = false;
+            DateTime Data = DateTime.Now;
+            do
+            {
+                try
+                {
+                    Data = DateTime.ParseExact(Console.ReadLine(), "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                    if (Data != null)
+                    {
+                        normDate = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Ввод был выполнен неккоректно. Повторите попытку");
+                }
+            } while (!normDate);
+
+            bool find = false;
+
+            int count = 0;
+            for (int i = 0; i < DataBase.Count; i++)
+            {
+                if (count == 0)
+                {
+                    Console.WriteLine("Результаты поиска:");
+                    count++;
+                }
+
+                if (DataBase[i].BirthdayDate == Data)
+                {
+                    Console.WriteLine(StudentInfo(DataBase[i]));
+                    find = true;
+                }
+            }
+
+            if (find == false)
+            {
+                Console.WriteLine("Пользовтаеля с такой датой рождения нет в базе данных");
+            }
+            Console.WriteLine();
+        }
+
+        private static void DeleteStudentFromBase()
+        {
+            Console.Clear();
+            int id = 0;
+            bool idExist = false;
+            Console.WriteLine("Введите Id Студента для удаления: ");
+            do
+            {
+                bool canParse = int.TryParse(Console.ReadLine(), out id);
+
+                foreach (Student item in DataBase)
+                {
+                    if (item.ID == id)
+                    {
+                        idExist = true;
+                    }
+                }
+                if (!idExist)
+                {
+                    Console.WriteLine("Нет такого Id, попробуйте снова");
+                }
+            } while (!idExist);
+
+            for (int i = 0; i < DataBase.Count; i++)
+            {
+                if (DataBase[i].ID == id)
+                {
+                    DataBase.Remove(DataBase[i]);
+                }
+            }
+            ChangeDataBase();
+            Console.WriteLine("Студент удалён");
+        }
+
+        private static void ChangeDataBase()
+        {
+            StreamWriter sw = new StreamWriter("C:/Users/Kolya/source/repos/secondlab/secondlab/bin/Debug/Students.txt");
+            for (int i = 0; i < DataBase.Count; i++)
+            {
+                sw.WriteLine(StudentInfoToBase(DataBase[i]));
+            }
+            sw.Close();
+            Console.WriteLine();
+        }
+
+        static void SaveDataBase()
+        {
+            StreamWriter sw = new StreamWriter();
+            for (int i = 0; i < DataBase.Count; i++)
+            {
+                sw.WriteLine(StudentInfoToBase(DataBase[i]));
+            }
+            sw.Close();
+            Console.WriteLine();
+        }
+
+        static string StudentInfoToBase(Student based)
+        {
+            return ((based.ID).ToString() + ";" + based.FullName + ";" + based.BirthdayDate.ToString("dd.MM.yyyy", CultureInfo.InvariantCulture) + ";" +
+                based.Institute + ";" + based.Group + ";" + based.Course + ";" + based.AvgMark.ToString() + ";" + based.EducationForm + ";" +
+                based.Level.ToString() + ";" + based.DebtCount.ToString() + "\t");
+        }
+
+        public static void SortStudentsByMidMark()
+        {
+            Console.Clear();
+            Student[] StudArr = new Student[DataBase.Count];
+
+            for (int i = 0; i < StudArr.Length; i++)
+            {
+                StudArr[i] = DataBase[i];
+            }
+
+            for (int i = 0; i < StudArr.Length; i++)
+            {
+                for (int j = 0; j < StudArr.Length - 1; j++)
+                {
+                    if (StudArr[j].AvgMark < StudArr[j + 1].AvgMark)
+                    {
+                        Student temp = StudArr[j];
+                        StudArr[j] = StudArr[j + 1];
+                        StudArr[j + 1] = temp;
+                    }
+                }
+            }
+
+            foreach (Student item in StudArr)
+            {
+                Console.WriteLine(StudentInfo(item));
+            }
+            Console.WriteLine();
+        }
+
+        public static void AddNewStudent()
+        {
+            Console.Clear();
+            Console.WriteLine("Введите информацию о студенте, которого хотели бы внести в базу:");
+            bool infoRight;
+            Student newStd;
+
+            do
+            {
+                infoRight = true;
+                Console.WriteLine("Информацию следует вводить через ';' в формате: \n" +
+                    "id;ФИО;Дата рождения;ВУЗ;Группа;Курс;Средний балл;Форма обучения;Уровень подготовки;Кол-во задолженностей(ФИО следует вводить через пробел, все остальное в одну строку без пробелов)");
+
+                //Проверки ввода:
+                string studentInfoStr = Console.ReadLine();
+                string[] studentInfo = studentInfoStr.Split(';');
+
+                int id = 0;
+                string name = "";
+                DateTime birthDate = DateTime.Now;
+                string university = "";
+                string group = "";
+                int course = 0;
+                float midMark = 0;
+                string edform = "";
+                int level = 0;
+                int debt = 0;
+                try
+                {
+                    // Айди
+                    if (!int.TryParse(studentInfo[0], out id))
+                    {
+                        Console.WriteLine("Формат id был не верен");
+                        infoRight = false;
+                    }
+
+                    // Имя
+                    name = studentInfo[1];
+
+                    // Дата рождения
+                    try
+                    {
+                        birthDate = DateTime.ParseExact(studentInfo[2], "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Формат даты был не верен");
+                        infoRight = false;
+                    }
+
+                    // ВУЗ
+                    university = studentInfo[3];
+
+                    // Группа
+                    group = studentInfo[4];
+
+                    // Курс
+                    if (!int.TryParse(studentInfo[5], out course))
+                    {
+                        if (course < 1 || course >= 6)
+                        {
+                            Console.WriteLine("Формат Курса был не верен");
+                            infoRight = false;
+                        }
+                    }
+
+                    // Средняя оценка
+                    if (!float.TryParse(studentInfo[6], out midMark))
+                    {
+                        Console.WriteLine("Формат Среднего балла был неверен");
+                        infoRight = false;
+                    }
+
+                    // Форма обучения
+                    switch (studentInfo[7])
+                    {
+                        case ("очная"):
+                            edform = studentInfo[7];
+                            break;
+                        case ("заочная"):
+                            edform = studentInfo[7];
+                            break;
+
+                        default:
+                            Console.WriteLine("Формат Формы обучения был неверен. Выберите очная/заочная форма");
+                            break;
+                    }
+
+                    // Уровень подготовки
+                    if (!int.TryParse(studentInfo[8], out level))
+                    {
+                        Console.WriteLine("Формат Уровня подготовки был неверен");
+                        infoRight = false;
+                    }
+
+                    // Количество задолженностей
+                    if (!int.TryParse(studentInfo[9], out debt))
+                    {
+                        Console.WriteLine("Формат Количества задолженностей был неверен");
+                        infoRight = false;
+                    }
+
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    Console.WriteLine("Вы ввели недостаточно значений");
+                    infoRight = false;
+                }
+                catch
+                {
+                    infoRight = false;
+                    Console.WriteLine("Формат данных был не верным");
+                }
+                newStd = new Student(id, name, birthDate, university, group, course.ToString(), midMark, edform, level, debt);
+            } while (!infoRight);
+
+            DataBase.Add(newStd);
+            Console.WriteLine("Студент добавлен в базу данных");
+            ChangeDataBase();
+        }
+
+        static void FindStudentByPartOfName()
+        {
+            Console.Clear();
+            Console.WriteLine("Введите часть фио студента(фамилию, имя или отчество)");
+            string namePart = Console.ReadLine();
+
+            bool findStd = false;
+            foreach (Student std in DataBase)
+            {
+                string[] fio = std.FullName.Split(' ');
+                foreach (string item in fio)
+                {
+                    if (namePart == item)
+                    {
+                        Console.WriteLine(StudentInfo(std));
+                        findStd = true;
+                    }
+                }
+            }
+            if (!findStd)
+            {
+                Console.WriteLine("Студенты не были найдены");
+            }
+        }
+
+        static void FindMaxAndMinPoints()
+        {
+            Console.Clear();
+            double minMark = double.MaxValue;
+            double maxMark = double.MinValue;
+            for (int i = 0; i < DataBase.Count; i++)
+            {
+                if (DataBase[i].AvgMark > maxMark)
+                {
+                    maxMark = DataBase[i].AvgMark;
+                }
+
+                if (DataBase[i].AvgMark < minMark)
+                {
+                    minMark = DataBase[i].AvgMark;
+                }
+            }
+
+            Console.WriteLine("Вот студенты с максимальным средним баллом: ");
+            foreach (Student std in DataBase)
+            {
+                if (std.AvgMark == maxMark)
+                {
+                    Console.WriteLine(StudentInfo(std));
+                }
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("Вот студенты с минимальным средним баллом: ");
+            foreach (Student std in DataBase)
+            {
+                if (std.AvgMark == minMark)
+                {
+                    Console.WriteLine(StudentInfo(std));
+                }
+            }
+            Console.WriteLine();
+
+        }
+
+        
+        
+    }
+
+}
