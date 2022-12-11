@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -58,7 +57,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return Array.Empty<Attribute>();
             }
 
-            ArrayList attrs = new ArrayList();
+            List<Attribute> attrs = new();
 
             string[] attrTypeNames = GetStringsFromPtr(pbstrs, cItems);
             object?[] varParams = GetVariantsFromPtr(pvars, cItems);
@@ -133,10 +132,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         if (fi is not null && fi.IsStatic)
                         {
                             object? fieldValue = fi.GetValue(null);
-                            if (fieldValue is Attribute)
+                            if (fieldValue is Attribute fva)
                             {
                                 // add it to the list
-                                attrs.Add(fieldValue);
+                                attrs.Add(fva);
                                 continue;
                             }
                         }
@@ -171,7 +170,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             try
                             {
                                 attr = (Attribute?)Activator.CreateInstance(t, new object[] { varParam });
-                                attrs.Add(attr);
+                                if (attr is not null) attrs.Add(attr);
                             }
                             catch
                             {
@@ -187,7 +186,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     try
                     {
                         attr = (Attribute?)Activator.CreateInstance(t);
-                        attrs.Add(attr);
+                        if (attr is not null) attrs.Add(attr);
                     }
                     catch
                     {
