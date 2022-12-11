@@ -33,7 +33,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the <see cref="Binding"/> at the specified index.
         /// </summary>
-        public Binding this[int index] =>_list[index];
+        public Binding this[int index] => (_list ??= new())[index];
 
         protected internal void Add(Binding binding)
         {
@@ -49,8 +49,8 @@ namespace System.Windows.Forms
         protected virtual void AddCore(Binding dataBinding)
         {
             ArgumentNullException.ThrowIfNull(dataBinding);
-
-            _list?.Add(dataBinding);
+            _list ??= new();
+            _list.Add(dataBinding);
         }
 
         /// <summary>
