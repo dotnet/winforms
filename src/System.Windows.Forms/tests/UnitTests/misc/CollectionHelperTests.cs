@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Xunit;
-using static Interop.User32;
 
 namespace System.Windows.Forms.misc.Tests
 {
