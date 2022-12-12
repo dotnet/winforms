@@ -81,12 +81,12 @@ namespace System.Windows.Forms
         public Cursor(Stream stream)
         {
             ArgumentNullException.ThrowIfNull(stream);
-
-            int length = checked((int)stream.Length);
-            _cursorData = new byte[length];
-            stream.Read(_cursorData, 0, length);
+            MemoryStream memoryStream = new();
+            stream.CopyTo(memoryStream);
+            memoryStream.Position = 0;
+            _cursorData = memoryStream.ToArray();
             LoadPicture(
-                new Ole32.GPStream(new MemoryStream(_cursorData)),
+                new Ole32.GPStream(memoryStream),
                 nameof(stream));
         }
 
