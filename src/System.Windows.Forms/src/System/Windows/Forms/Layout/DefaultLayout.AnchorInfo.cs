@@ -15,7 +15,11 @@ namespace System.Windows.Forms.Layout
             public int Right;
             public int Bottom;
 
-            // Display rectangle of the parent/container used in computing child control's anchors.
+            // In PermonV2 mode applications, when moved from one monitor to the other, Form/Container is scaled with scale
+            // factor computed with respect to new DPI on the monitor. However, scaling ratio between non-client and client
+            // area is not linear. This is causing few pixels variance when anchors are also scaled with same scale factor.
+            // Anchors are relative to display rectangle.Hence, making change to computing anchor scale factor with respect
+            // to change in DisplayRect instead of change in the bounds (a.k.a: scale factor computed with respect to new DPI).
             public Rectangle DisplayRect;
         }
     }
