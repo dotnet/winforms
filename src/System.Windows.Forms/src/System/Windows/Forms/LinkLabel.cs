@@ -703,7 +703,7 @@ namespace System.Windows.Forms
 
                         Rectangle visualRectangle = new Rectangle(clientRectWithPadding.X + iLeftMargin,
                                                                   clientRectWithPadding.Y,
-                                                                  textSize.Width - iRightMargin - iLeftMargin,
+                                                                  textSize.Width + iRightMargin + iLeftMargin,
                                                                   textSize.Height);
                         visualRectangle = CalcTextRenderBounds(visualRectangle /*textRect*/, clientRectWithPadding /*clientRect*/, RtlTranslateContent(TextAlign));
 
