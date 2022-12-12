@@ -599,36 +599,27 @@ namespace System.Windows.Forms
             }
         }
 
-        private static bool BitmapHasAlpha(BitmapData bmpData)
+        private static unsafe bool BitmapHasAlpha(BitmapData bmpData)
         {
-            if (bmpData.PixelFormat != PixelFormat.Format32bppArgb && bmpData.PixelFormat != PixelFormat.Format32bppRgb)
+            if (bmpData.PixelFormat is not PixelFormat.Format32bppArgb and not PixelFormat.Format32bppRgb)
             {
                 return false;
             }
 
-            bool hasAlpha = false;
-            unsafe
+            for (int i = 0; i < bmpData.Height; i++)
             {
-                for (int i = 0; i < bmpData.Height; i++)
+                int offsetRow = i * bmpData.Stride;
+                for (int j = 3; j < bmpData.Width * 4; j += 4) // *4 is safe since we know PixelFormat is ARGB
                 {
-                    int offsetRow = i * bmpData.Stride;
-                    for (int j = 3; j < bmpData.Width * 4; j += 4)
-                    { // *4 is safe since we know PixelFormat is ARGB
-                        unsafe
-                        {
-                            byte* candidate = ((byte*)bmpData.Scan0.ToPointer()) + offsetRow + j;
-                            if (*candidate != 0)
-                            {
-                                hasAlpha = true;
-                                goto Found; // gotos are not the best, but it's the best thing here...
-                            }
-                        }
+                    byte* candidate = ((byte*)bmpData.Scan0.ToPointer()) + offsetRow + j;
+                    if (*candidate != 0)
+                    {
+                        return true;
                     }
                 }
-
-            Found:
-                return hasAlpha;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -795,8 +786,8 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
             => Images is null
-            ? base.ToString()
-            : $"{base.ToString()} Images.Count: {Images.Count.ToString(CultureInfo.CurrentCulture)}, ImageSize: {ImageSize}";
+               ? base.ToString()
+               : $"{base.ToString()} Images.Count: {Images.Count.ToString(CultureInfo.CurrentCulture)}, ImageSize: {ImageSize}";
 
         HIMAGELIST IHandle<HIMAGELIST>.Handle => HIMAGELIST;
 
