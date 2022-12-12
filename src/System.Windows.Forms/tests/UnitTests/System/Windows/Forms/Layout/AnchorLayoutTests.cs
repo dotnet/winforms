@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Layout.Tests
 
                 // Unparent button and resume layout.
                 form.Controls.Remove(button);
-                form.ResumeLayout(false);
+                form.ResumeLayout(performLayout: false);
 
                 anchorInfo = DefaultLayout.GetAnchorInfo(button);
                 Assert.Null(anchorInfo);
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Layout.Tests
                 anchorInfo = DefaultLayout.GetAnchorInfo(button);
                 Assert.Null(anchorInfo);
 
-                form.ResumeLayout(false);
+                form.ResumeLayout(performLayout: false);
                 anchorInfo = DefaultLayout.GetAnchorInfo(button);
                 Assert.NotNull(anchorInfo);
             }
@@ -141,8 +141,8 @@ namespace System.Windows.Forms.Layout.Tests
             return previousSwitchValue;
         }
 
-        private static int SetAncorLayoutV2() => SetAnchorLayoutV2Switch(1);
+        private static int SetAncorLayoutV2() => SetAnchorLayoutV2Switch(value: 1);
 
-        private static int SetAncorLayoutV1() => SetAnchorLayoutV2Switch(-1);
+        private static int SetAncorLayoutV1() => SetAnchorLayoutV2Switch(value: -1);
     }
 }
