@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -15,9 +13,9 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(CollectionChanged))]
     public class BindingsCollection : BaseCollection
     {
-        private List<Binding> _list;
-        private CollectionChangeEventHandler _onCollectionChanging;
-        private CollectionChangeEventHandler _onCollectionChanged;
+        private List<Binding>? _list;
+        private CollectionChangeEventHandler? _onCollectionChanging;
+        private CollectionChangeEventHandler? _onCollectionChanged;
 
         internal BindingsCollection()
         {
@@ -33,7 +31,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the <see cref="Binding"/> at the specified index.
         /// </summary>
-        public Binding this[int index] => (_list ??= new())[index];
+        public Binding this[int index] => (_list ??= new())[index]!;
 
         protected internal void Add(Binding binding)
         {
@@ -57,7 +55,7 @@ namespace System.Windows.Forms
         ///  Occurs when the collection is about to change.
         /// </summary>
         [SRDescription(nameof(SR.collectionChangingEventDescr))]
-        public event CollectionChangeEventHandler CollectionChanging
+        public event CollectionChangeEventHandler? CollectionChanging
         {
             add => _onCollectionChanging += value;
             remove => _onCollectionChanging -= value;
@@ -67,7 +65,7 @@ namespace System.Windows.Forms
         ///  Occurs when the collection is changed.
         /// </summary>
         [SRDescription(nameof(SR.collectionChangedEventDescr))]
-        public event CollectionChangeEventHandler CollectionChanged
+        public event CollectionChangeEventHandler? CollectionChanged
         {
             add => _onCollectionChanged += value;
             remove => _onCollectionChanged -= value;
