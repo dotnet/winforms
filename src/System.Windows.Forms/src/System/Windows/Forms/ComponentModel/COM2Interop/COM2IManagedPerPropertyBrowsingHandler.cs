@@ -131,11 +131,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         // only if it's static
                         if (fi is not null && fi.IsStatic)
                         {
-                            object? fieldValue = fi.GetValue(null);
-                            if (fieldValue is Attribute fva)
+                            if (fi.GetValue(null) is Attribute attribute)
                             {
                                 // add it to the list
-                                attrs.Add(fva);
+                                attrs.Add(attribute);
                                 continue;
                             }
                         }
