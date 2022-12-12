@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
         public void ImageList_Ctor_Default()
         {
             using var list = new ImageList();
-            Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
+            Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.Null(list.Container);
             Assert.Empty(list.Images);
             Assert.Same(list.Images, list.Images);
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests
         {
             var container = new Container();
             using var list = new ImageList(container);
-            Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
+            Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.Same(container, list.Container);
             Assert.Empty(list.Images);
             Assert.Same(list.Images, list.Images);
@@ -171,15 +171,15 @@ namespace System.Windows.Forms.Tests
         {
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ImageList))[nameof(ImageList.ColorDepth)];
             using var list = new ImageList();
-            Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
-            Assert.True(property.CanResetValue(list));
-
-            list.ColorDepth = ColorDepth.Depth32Bit;
             Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.True(property.CanResetValue(list));
 
-            property.ResetValue(list);
+            list.ColorDepth = ColorDepth.Depth8Bit;
             Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
+            Assert.True(property.CanResetValue(list));
+
+            property.ResetValue(list);
+            Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.True(property.CanResetValue(list));
         }
 
@@ -188,15 +188,15 @@ namespace System.Windows.Forms.Tests
         {
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ImageList))[nameof(ImageList.ColorDepth)];
             using var list = new ImageList();
-            Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
-            Assert.True(property.ShouldSerializeValue(list));
-
-            list.ColorDepth = ColorDepth.Depth32Bit;
             Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.True(property.ShouldSerializeValue(list));
 
-            property.ResetValue(list);
+            list.ColorDepth = ColorDepth.Depth8Bit;
             Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
+            Assert.True(property.ShouldSerializeValue(list));
+
+            property.ResetValue(list);
+            Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.True(property.ShouldSerializeValue(list));
 
             // With images.
@@ -506,7 +506,7 @@ namespace System.Windows.Forms.Tests
             {
                 ImageStream = stream
             };
-            Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
+            Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.Empty(list.Images);
             Assert.Equal(new Size(16, 16), list.ImageSize);
             Assert.False(list.HandleCreated);
@@ -531,7 +531,7 @@ namespace System.Windows.Forms.Tests
             {
                 ImageStream = stream
             };
-            Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
+            Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.Empty(list.Images);
             Assert.Equal(new Size(16, 16), list.ImageSize);
             Assert.False(list.HandleCreated);
@@ -556,7 +556,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             list.ImageStream = stream;
-            Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
+            Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.Empty(list.Images);
             Assert.Equal(new Size(16, 16), list.ImageSize);
             Assert.True(list.HandleCreated);
@@ -580,7 +580,7 @@ namespace System.Windows.Forms.Tests
             {
                 ImageStream = stream
             };
-            Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
+            Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.Empty(list.Images);
             Assert.Equal(new Size(16, 16), list.ImageSize);
             Assert.False(list.HandleCreated);
@@ -604,7 +604,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             list.ImageStream = stream;
-            Assert.Equal(ColorDepth.Depth8Bit, list.ColorDepth);
+            Assert.Equal(ColorDepth.Depth32Bit, list.ColorDepth);
             Assert.Empty(list.Images);
             Assert.Equal(new Size(16, 16), list.ImageSize);
             Assert.True(list.HandleCreated);
