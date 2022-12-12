@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Layout
                 {
                     // The control neither anchored Right nor Left but anchored Top or Bottom, the control's
                     // X-coordinate should be adjusted according to the parent's width.
-                    int growOrShrink = (displayRect.Width - (anchorInfo.Left + anchorInfo.Right + bounds.Width)) / 2;
+                    int growOrShrink = (displayRect.Width - (anchorInfo.Left + anchorInfo.Right + width)) / 2;
                     anchorInfo.Left += growOrShrink;
                     anchorInfo.Right += growOrShrink;
                 }
@@ -237,7 +237,7 @@ namespace System.Windows.Forms.Layout
                 {
                     // The control neither anchored Top or Bottom but anchored Right or Left, the control's
                     // Y-coordinate is adjusted accoring to the parent's height.
-                    int growOrShrink = (displayRect.Height - (anchorInfo.Bottom + anchorInfo.Top + bounds.Height)) / 2;
+                    int growOrShrink = (displayRect.Height - (anchorInfo.Bottom + anchorInfo.Top + height)) / 2;
                     anchorInfo.Top += growOrShrink;
                     anchorInfo.Bottom += growOrShrink;
                 }
@@ -390,11 +390,7 @@ namespace System.Windows.Forms.Layout
                     continue;
                 }
 
-                if (GetAnchorInfo(element) is null)
-                {
-                    Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
-                }
-
+                Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
                 SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, measureOnly: false));
             }
         }
@@ -859,12 +855,17 @@ namespace System.Windows.Forms.Layout
             Control parent = control.Parent;
 
             // Check if control is ready for anchors calculation.
-            if (parent is null
-                // Design time scenarios suspend layout while deserializing the designer. This is an extra suspension
-                // outside of serialized source and happen only in design-time scenario. Hence, checking for
-                // LayoutSuspendCount > 1.
-                || (control.IsAncestorSiteInDesignMode && parent.LayoutSuspendCount > 1)
-                || (!control.IsAncestorSiteInDesignMode && parent.LayoutSuspendCount != 0))
+            if (parent is null)
+            {
+                return;
+            }
+
+            // Design time scenarios suspend layout while deserializing the designer. This is an extra suspension
+            // outside of serialized source and happen only in design-time scenario. Hence, checking for
+            // LayoutSuspendCount > 1.
+            bool ancestorInDesignMode = control.IsAncestorSiteInDesignMode;
+            if ((ancestorInDesignMode && parent.LayoutSuspendCount > 1)
+                || (!ancestorInDesignMode && parent.LayoutSuspendCount != 0))
             {
                 return;
             }
