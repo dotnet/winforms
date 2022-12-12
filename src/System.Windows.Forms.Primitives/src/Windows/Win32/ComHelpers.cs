@@ -5,9 +5,9 @@
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 
-namespace Windows.Win32.Foundation
+namespace Windows.Win32
 {
-    internal static unsafe class ComHelpers
+    internal static unsafe partial class ComHelpers
     {
         // Note that ComScope<T> needs to be the return value to faciliate using in a `using`.
         //
