@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests
 {
     public class EmbeddedResourceTests : IClassFixture<ThreadExceptionFixture>
     {
-        // Get System.Windows.Forms assembly to verify that it contains all the icons that the code uses.
+        // Get System.Windows.Forms assembly to verify that it contains all the resources that the code uses.
         private readonly Assembly assembly = Assembly.GetAssembly(typeof(AccessibleObject));
 
         [Theory]
