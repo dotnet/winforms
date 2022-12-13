@@ -106,9 +106,17 @@ namespace System.Windows.Forms
                 clrForeground = new COLORREF(unchecked((uint)-1)),  // Ignore
                 clrBackground = SystemColors.Window
             };
-            fixed (char* pszText = caption)
+
+            Font font = parent?.Font ?? SystemFonts.StatusFont ?? SystemFonts.DefaultFont;
+            string captionFont = $"{font.Name}, {font.Size}, , " +
+                $"{(font.Bold ? "BOLD" : "")}" +
+                $"{(font.Italic ? "ITALIC" : "")}" +
+                $"{(font.Underline ? "UNDERLINE" : "")}";
+
+            fixed (char* pszText = caption, pszFont = captionFont)
             {
                 pop.pszText = pszText;
+                pop.pszFont = pszFont;
                 ShowHTML10Help(parent, null, HelpNavigator.Topic, pop);
             }
         }
@@ -155,15 +163,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            HandleRef<HWND> handle;
-            if (parent is not null)
-            {
-                handle = new(parent);
-            }
-            else
-            {
-                handle = Control.GetHandleRef(PInvoke.GetActiveWindow());
-            }
+            HandleRef<HWND> handle = parent is not null ? (new(parent)) : Control.GetHandleRef(PInvoke.GetActiveWindow());
 
             object? htmlParam;
             if (param is string stringParam)
