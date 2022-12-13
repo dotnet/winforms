@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(CollectionChanged))]
     public class BindingsCollection : BaseCollection
     {
-        private List<Binding>? _list;
+        private List<Binding> _list = new();
         private CollectionChangeEventHandler? _onCollectionChanging;
         private CollectionChangeEventHandler? _onCollectionChanged;
 
@@ -21,17 +21,17 @@ namespace System.Windows.Forms
         {
         }
 
-        public override int Count => _list?.Count ?? 0;
+        public override int Count => _list.Count;
 
         /// <summary>
         ///  Gets the bindings in the collection as an object.
         /// </summary>
-        protected override ArrayList List => ArrayList.Adapter(_list ??= new());
+        protected override ArrayList List => ArrayList.Adapter(_list);
 
         /// <summary>
         ///  Gets the <see cref="Binding"/> at the specified index.
         /// </summary>
-        public Binding this[int index] => (_list ??= new())[index]!;
+        public Binding this[int index] => _list[index]!;
 
         protected internal void Add(Binding binding)
         {
@@ -47,7 +47,6 @@ namespace System.Windows.Forms
         protected virtual void AddCore(Binding dataBinding)
         {
             ArgumentNullException.ThrowIfNull(dataBinding);
-            _list ??= new();
             _list.Add(dataBinding);
         }
 
@@ -82,7 +81,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Clears the collection of any members.
         /// </summary>
-        protected virtual void ClearCore() => _list?.Clear();
+        protected virtual void ClearCore() => _list.Clear();
 
         /// <summary>
         ///  Raises the <see cref="CollectionChanging"/> event.
@@ -113,7 +112,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Removes the specified <see cref="Binding"/> from the collection.
         /// </summary>
-        protected virtual void RemoveCore(Binding dataBinding) => _list?.Remove(dataBinding);
+        protected virtual void RemoveCore(Binding dataBinding) => _list.Remove(dataBinding);
 
         protected internal bool ShouldSerializeMyAll() => Count > 0;
     }
