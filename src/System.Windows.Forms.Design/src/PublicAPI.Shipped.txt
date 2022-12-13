@@ -86,7 +86,7 @@
 ~override System.Drawing.Design.ToolboxItem.ToString() -> string
 ~override System.Windows.Forms.Design.AnchorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.Windows.Forms.Design.AnchorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.Windows.Forms.Design.Behavior.SnapLine.ToString() -> string
+override System.Windows.Forms.Design.Behavior.SnapLine.ToString() -> string!
 ~override System.Windows.Forms.Design.BorderSidesEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.Windows.Forms.Design.BorderSidesEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Windows.Forms.Design.ComponentDocumentDesigner.Initialize(System.ComponentModel.IComponent component) -> void
@@ -198,7 +198,7 @@
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.Create(System.Collections.IDictionary resourceList, string baseName, string generatedCodeNamespace, string resourcesNamespace, System.CodeDom.Compiler.CodeDomProvider codeProvider, bool internalClass, out string[] unmatchable) -> System.CodeDom.CodeCompileUnit
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.Create(System.Collections.IDictionary resourceList, string baseName, string generatedCodeNamespace, System.CodeDom.Compiler.CodeDomProvider codeProvider, bool internalClass, out string[] unmatchable) -> System.CodeDom.CodeCompileUnit
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.VerifyResourceName(string key, System.CodeDom.Compiler.CodeDomProvider provider) -> string
-~static System.Windows.Forms.Design.Behavior.SnapLine.ShouldSnap(System.Windows.Forms.Design.Behavior.SnapLine line1, System.Windows.Forms.Design.Behavior.SnapLine line2) -> bool
+static System.Windows.Forms.Design.Behavior.SnapLine.ShouldSnap(System.Windows.Forms.Design.Behavior.SnapLine! line1, System.Windows.Forms.Design.Behavior.SnapLine! line2) -> bool
 ~static System.Windows.Forms.Design.MaskDescriptor.IsValidMaskDescriptor(System.Windows.Forms.Design.MaskDescriptor maskDescriptor) -> bool
 ~static System.Windows.Forms.Design.MaskDescriptor.IsValidMaskDescriptor(System.Windows.Forms.Design.MaskDescriptor maskDescriptor, out string validationErrorDescription) -> bool
 ~static System.Windows.Forms.Design.ParentControlDesigner.InvokeCreateTool(System.Windows.Forms.Design.ParentControlDesigner toInvoke, System.Drawing.Design.ToolboxItem tool) -> void
@@ -520,9 +520,9 @@
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.Remove(System.Windows.Forms.Design.Behavior.Glyph value) -> void
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.this[int index].get -> System.Windows.Forms.Design.Behavior.Glyph
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.this[int index].set -> void
-~System.Windows.Forms.Design.Behavior.SnapLine.Filter.get -> string
-~System.Windows.Forms.Design.Behavior.SnapLine.SnapLine(System.Windows.Forms.Design.Behavior.SnapLineType type, int offset, string filter) -> void
-~System.Windows.Forms.Design.Behavior.SnapLine.SnapLine(System.Windows.Forms.Design.Behavior.SnapLineType type, int offset, string filter, System.Windows.Forms.Design.Behavior.SnapLinePriority priority) -> void
+System.Windows.Forms.Design.Behavior.SnapLine.Filter.get -> string?
+System.Windows.Forms.Design.Behavior.SnapLine.SnapLine(System.Windows.Forms.Design.Behavior.SnapLineType type, int offset, string? filter) -> void
+System.Windows.Forms.Design.Behavior.SnapLine.SnapLine(System.Windows.Forms.Design.Behavior.SnapLineType type, int offset, string? filter, System.Windows.Forms.Design.Behavior.SnapLinePriority priority) -> void
 ~System.Windows.Forms.Design.ComponentDocumentDesigner.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.Design.ComponentTray.ComponentTray(System.ComponentModel.Design.IDesigner mainDesigner, System.IServiceProvider serviceProvider) -> void
 ~System.Windows.Forms.Design.ComponentTray.CreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> void
