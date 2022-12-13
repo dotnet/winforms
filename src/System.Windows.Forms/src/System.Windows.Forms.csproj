@@ -68,37 +68,26 @@
 
   <!-- Embedded Resources are globbed based on their location. -->
   <ItemGroup>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\*.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\*.ico;
+                               Resources\System\Windows\Forms\Printing\*.ico;
+                               Resources\System\Windows\Forms\PropertyGrid\*.ico;
+                               Resources\System\Windows\Forms\ToolStrip\*.ico">
       <LogicalName>System.Windows.Forms.$([System.String]::Copy('%(FileName)'))</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\Printing\*.ico">
-      <LogicalName>System.Windows.Forms.$([System.String]::Copy('%(FileName)'))</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\*.ico" 
-                      Exclude="Resources\System\Windows\Forms\PropertyGrid\PropertiesTab.ico;
-                               Resources\System\Windows\Forms\PropertyGrid\EventsTab.ico">
-      <LogicalName>System.Windows.Forms.$([System.String]::Copy('%(FileName)'))</LogicalName>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\Design\*.ico">
+      <LogicalName>System.Windows.Forms.Design.$([System.String]::Copy('%(FileName)'))</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\*.cur">
       <LogicalName>System.Windows.Forms.$([System.String]::Copy('%(FileName)')).cur</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\*.ico">
-      <LogicalName>System.Windows.Forms.$([System.String]::Copy('%(FileName)'))</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 
   <!-- Embedded Resources which are unable to be globbed. -->
   <ItemGroup>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\App\Timer.ico">
-      <LogicalName>System.Windows.Forms.Timer</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\ComponentModel\OrderImages.ico">
       <LogicalName>System.Windows.Forms.ComponentModel.OrderImages</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\EventsTab.ico">
-      <LogicalName>System.Windows.Forms.Design.EventsTab</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PropertiesTab.ico">
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGridInternal\PropertiesTab.ico">
       <LogicalName>System.Windows.Forms.PropertyGridInternal.PropertiesTab</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\Server\Arrow.ico">
@@ -106,9 +95,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\PictureBox\Loading.ico">
       <LogicalName>System.Windows.Forms.PictureBox.Loading</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\Design\ComponentEditorPage.ico">
-      <LogicalName>System.Windows.Forms.Design.ComponentEditorPage</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\XPThemes.manifest">
       <LogicalName>System.Windows.Forms.XPThemes.manifest</LogicalName>
