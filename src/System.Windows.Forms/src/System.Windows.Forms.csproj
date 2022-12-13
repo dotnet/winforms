@@ -68,14 +68,8 @@
 
   <!-- Embedded Resources are globbed based on their location. -->
   <ItemGroup>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\*.ico;
-                               Resources\System\Windows\Forms\Printing\*.ico;
-                               Resources\System\Windows\Forms\PropertyGrid\*.ico;
-                               Resources\System\Windows\Forms\ToolStrip\*.ico">
-      <LogicalName>System.Windows.Forms.$([System.String]::Copy('%(FileName)'))</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\Design\*.ico">
-      <LogicalName>System.Windows.Forms.Design.$([System.String]::Copy('%(FileName)'))</LogicalName>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\**\*.ico;">
+      <LogicalName>$([System.String]::Copy('%(RelativeDir)').Replace("Resources\","").Replace("\",".").TrimEnd('.')).$([System.String]::Copy('%(FileName)'))</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\*.cur">
       <LogicalName>System.Windows.Forms.$([System.String]::Copy('%(FileName)')).cur</LogicalName>
@@ -83,18 +77,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\ComponentModel\OrderImages.ico">
-      <LogicalName>System.Windows.Forms.ComponentModel.OrderImages</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGridInternal\PropertiesTab.ico">
-      <LogicalName>System.Windows.Forms.PropertyGridInternal.PropertiesTab</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\Server\Arrow.ico">
-      <LogicalName>System.Windows.Forms.Server.Arrow</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\PictureBox\Loading.ico">
-      <LogicalName>System.Windows.Forms.PictureBox.Loading</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\XPThemes.manifest">
       <LogicalName>System.Windows.Forms.XPThemes.manifest</LogicalName>
     </EmbeddedResource>
