@@ -168,9 +168,9 @@ namespace System.Windows.Forms.Layout
                 : ComputeAnchoredBounds(element, displayRect, measureOnly);
         }
 
-        private static Rectangle ComputeAnchoredBoundsV2(IArrangedElement element, Rectangle displayRect)
+        private static Rectangle ComputeAnchoredBoundsV2(IArrangedElement element, Rectangle displayRectangle)
         {
-            if (displayRect.IsEmpty)
+            if (displayRectangle.IsEmpty)
             {
                 return element.Bounds;
             }
@@ -184,6 +184,7 @@ namespace System.Windows.Forms.Layout
             Rectangle elementBounds = element.Bounds;
             int width = elementBounds.Width;
             int height = elementBounds.Height;
+            anchorInfo.DisplayRectangle = displayRectangle;
 
             Debug.WriteLineIf(width < 0 || height < 0, $"\t\t'{element}' destination bounds resulted in negative");
 
@@ -195,7 +196,7 @@ namespace System.Windows.Forms.Layout
                 // the parent's width.
                 if (IsAnchored(anchors, AnchorStyles.Right))
                 {
-                    width = displayRect.Width - (anchorInfo.Right + anchorInfo.Left);
+                    width = displayRectangle.Width - (anchorInfo.Right + anchorInfo.Left);
                 }
             }
             else
@@ -204,13 +205,13 @@ namespace System.Windows.Forms.Layout
                 // to the parent's width.
                 if (IsAnchored(anchors, AnchorStyles.Right))
                 {
-                    anchorInfo.Left = displayRect.Width - elementBounds.Width - anchorInfo.Right;
+                    anchorInfo.Left = displayRectangle.Width - elementBounds.Width - anchorInfo.Right;
                 }
                 else
                 {
                     // The control neither anchored Right nor Left but anchored Top or Bottom, the control's
                     // X-coordinate should be adjusted according to the parent's width.
-                    int growOrShrink = (displayRect.Width - (anchorInfo.Left + anchorInfo.Right + elementBounds.Width)) / 2;
+                    int growOrShrink = (displayRectangle.Width - (anchorInfo.Left + anchorInfo.Right + elementBounds.Width)) / 2;
                     anchorInfo.Left += growOrShrink;
                     anchorInfo.Right += growOrShrink;
                 }
@@ -222,7 +223,7 @@ namespace System.Windows.Forms.Layout
                 {
                     // If anchored both Top and Bottom, the control's height should be adjusted according to
                     // the parent's height.
-                    height = displayRect.Height - (anchorInfo.Bottom + anchorInfo.Top);
+                    height = displayRectangle.Height - (anchorInfo.Bottom + anchorInfo.Top);
                 }
             }
             else
@@ -231,13 +232,13 @@ namespace System.Windows.Forms.Layout
                 // the parent's height.
                 if (IsAnchored(anchors, AnchorStyles.Bottom))
                 {
-                    anchorInfo.Top = displayRect.Height - elementBounds.Height - anchorInfo.Bottom;
+                    anchorInfo.Top = displayRectangle.Height - elementBounds.Height - anchorInfo.Bottom;
                 }
                 else
                 {
                     // The control neither anchored Top or Bottom but anchored Right or Left, the control's
                     // Y-coordinate is adjusted accoring to the parent's height.
-                    int growOrShrink = (displayRect.Height - (anchorInfo.Bottom + anchorInfo.Top + elementBounds.Height)) / 2;
+                    int growOrShrink = (displayRectangle.Height - (anchorInfo.Bottom + anchorInfo.Top + elementBounds.Height)) / 2;
                     anchorInfo.Top += growOrShrink;
                     anchorInfo.Bottom += growOrShrink;
                 }
@@ -909,16 +910,17 @@ namespace System.Windows.Forms.Layout
                 SetAnchorInfo(control, anchorInfo);
             }
 
-            Rectangle displayRect = control.Parent.DisplayRectangle;
+            Rectangle displayRectange = control.Parent.DisplayRectangle;
             Rectangle elementBounds = control.Bounds;
             int x = elementBounds.X;
             int y = elementBounds.Y;
 
+            anchorInfo.DisplayRectangle = displayRectange;
             anchorInfo.Left = x;
             anchorInfo.Top = y;
 
-            anchorInfo.Right = displayRect.Width - (x + elementBounds.Width);
-            anchorInfo.Bottom = displayRect.Height - (y + elementBounds.Height);
+            anchorInfo.Right = displayRectange.Width - (x + elementBounds.Width);
+            anchorInfo.Bottom = displayRectange.Height - (y + elementBounds.Height);
 
             // Walk through parent hierarchy and check if scaling due to DPI change is in progress.
             static bool DpiScalingInProgress(Control control, Control parent)
@@ -1030,10 +1032,24 @@ namespace System.Windows.Forms.Layout
             // some controls don't have AnchorInfo, i.e. Panels
             if (anchorInfo is not null)
             {
-                anchorInfo.Left = (int)((float)anchorInfo.Left * factor.Width);
-                anchorInfo.Top = (int)((float)anchorInfo.Top * factor.Height);
-                anchorInfo.Right = (int)((float)anchorInfo.Right * factor.Width);
-                anchorInfo.Bottom = (int)((float)anchorInfo.Bottom * factor.Height);
+                double heightFactor = factor.Height;
+                double widthFactor = factor.Width;
+
+                if (UseAnchorLayoutV2(element))
+                {
+                    // AutoScaleFactor is not alligned with Window's SuggestedRectangle applied on top-level window/Form.
+                    // So, compute factor with respect to the change in DisplayRectangle and apply it to scale anchors.
+                    // See https://github.com/dotnet/winforms/issues/8266 for more information.
+                    Rectangle displayRect = element.Container.DisplayRectangle;
+                    heightFactor = ((double)displayRect.Height) / anchorInfo.DisplayRectangle.Height;
+                    widthFactor = ((double)displayRect.Width) / anchorInfo.DisplayRectangle.Width;
+                    anchorInfo.DisplayRectangle = displayRect;
+                }
+
+                anchorInfo.Left = (int)Math.Round(anchorInfo.Left * widthFactor);
+                anchorInfo.Top = (int)Math.Round(anchorInfo.Top * heightFactor);
+                anchorInfo.Right = (int)Math.Round(anchorInfo.Right * widthFactor);
+                anchorInfo.Bottom = (int)Math.Round(anchorInfo.Bottom * heightFactor);
 
                 SetAnchorInfo(element, anchorInfo);
             }
