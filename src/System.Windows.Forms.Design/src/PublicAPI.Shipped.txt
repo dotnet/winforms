@@ -324,8 +324,8 @@
 ~System.ComponentModel.Design.InheritanceService.GetInheritanceAttribute(System.ComponentModel.IComponent component) -> System.ComponentModel.InheritanceAttribute
 ~System.ComponentModel.Design.LoadedEventArgs.Errors.get -> System.Collections.ICollection
 ~System.ComponentModel.Design.LoadedEventArgs.LoadedEventArgs(bool succeeded, System.Collections.ICollection errors) -> void
-~System.ComponentModel.Design.MenuCommandsChangedEventArgs.Command.get -> System.ComponentModel.Design.MenuCommand
-~System.ComponentModel.Design.MenuCommandsChangedEventArgs.MenuCommandsChangedEventArgs(System.ComponentModel.Design.MenuCommandsChangedType changeType, System.ComponentModel.Design.MenuCommand command) -> void
+System.ComponentModel.Design.MenuCommandsChangedEventArgs.Command.get -> System.ComponentModel.Design.MenuCommand?
+System.ComponentModel.Design.MenuCommandsChangedEventArgs.MenuCommandsChangedEventArgs(System.ComponentModel.Design.MenuCommandsChangedType changeType, System.ComponentModel.Design.MenuCommand? command) -> void
 ~System.ComponentModel.Design.MenuCommandService.FindCommand(System.ComponentModel.Design.CommandID commandID) -> System.ComponentModel.Design.MenuCommand
 ~System.ComponentModel.Design.MenuCommandService.FindCommand(System.Guid guid, int id) -> System.ComponentModel.Design.MenuCommand
 ~System.ComponentModel.Design.MenuCommandService.GetCommandList(System.Guid guid) -> System.Collections.ICollection
