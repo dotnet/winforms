@@ -323,7 +323,6 @@ namespace System.Windows.Forms
         private ControlStyles _controlStyle;
         private int _tabIndex;
         private string? _text;                       // See ControlStyles.CacheText for usage notes
-        private byte _layoutSuspendCount;
         private byte _requiredScaling;              // bits 0-4: BoundsSpecified stored in RequiredScaling property.  Bit 5: RequiredScalingEnabled property.
         private User32.TRACKMOUSEEVENT _trackMouseEvent;
         private short _updateCount;
@@ -348,15 +347,12 @@ namespace System.Windows.Forms
         // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
         private Dictionary<int, Font>? _dpiFonts;
 
-#if DEBUG
-        internal int LayoutSuspendCount
-        {
-            get { return _layoutSuspendCount; }
-        }
+        internal byte LayoutSuspendCount { get; private set; }
 
+#if DEBUG
         internal void AssertLayoutSuspendCount(int value)
         {
-            Debug.Assert(value == _layoutSuspendCount, "Suspend/Resume layout mismatch!");
+            Debug.Assert(value == LayoutSuspendCount, "Suspend/Resume layout mismatch!");
         }
 
         /*
@@ -2604,7 +2600,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines if layout is currently suspended.
         /// </summary>
-        internal bool IsLayoutSuspended => _layoutSuspendCount > 0;
+        internal bool IsLayoutSuspended => LayoutSuspendCount > 0;
 
         internal bool IsWindowObscured
         {
@@ -9025,7 +9021,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (_layoutSuspendCount > 0)
+            if (LayoutSuspendCount > 0)
             {
                 SetState(States.LayoutDeferred, true);
                 if (_cachedLayoutEventArgs is null || GetExtendedState(ExtendedStates.ClearLayoutArgs))
@@ -9043,7 +9039,7 @@ namespace System.Windows.Forms
             }
 
             // (Essentially the same as suspending layout while we layout, but we clear differently below.)
-            _layoutSuspendCount = 1;
+            LayoutSuspendCount = 1;
 
             try
             {
@@ -9057,7 +9053,7 @@ namespace System.Windows.Forms
                 // the container we just finished laying out) we set layoutSuspendCount back to zero
                 // and clear the deferred and dirty flags.
                 SetState(States.LayoutDeferred | States.LayoutIsDirty, false);
-                _layoutSuspendCount = 0;
+                LayoutSuspendCount = 0;
 
                 // LayoutEngine.Layout can return true to request that our parent resize us because
                 // we did not have enough room for our contents.  Now that we are unsuspended,
@@ -10145,28 +10141,28 @@ namespace System.Windows.Forms
 #if DEBUG
             if (CompModSwitches.LayoutSuspendResume.TraceInfo)
             {
-                Debug.WriteLine($"{GetType().Name}::ResumeLayout( preformLayout = {performLayout}, newCount = {Math.Max(0, _layoutSuspendCount - 1)})");
+                Debug.WriteLine($"{GetType().Name}::ResumeLayout( preformLayout = {performLayout}, newCount = {Math.Max(0, LayoutSuspendCount - 1)})");
             }
 #endif
 
             bool performedLayout = false;
-            if (_layoutSuspendCount > 0)
+            if (LayoutSuspendCount > 0)
             {
-                if (_layoutSuspendCount == 1)
+                if (LayoutSuspendCount == 1)
                 {
-                    _layoutSuspendCount++;
+                    LayoutSuspendCount++;
                     try
                     {
                         OnLayoutResuming(performLayout);
                     }
                     finally
                     {
-                        _layoutSuspendCount--;
+                        LayoutSuspendCount--;
                     }
                 }
 
-                _layoutSuspendCount--;
-                if (_layoutSuspendCount == 0
+                LayoutSuspendCount--;
+                if (LayoutSuspendCount == 0
                     && GetState(States.LayoutDeferred)
                     && performLayout)
                 {
@@ -10811,7 +10807,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            DefaultLayout.UpdateAnchorInfoV2(this);
+            DefaultLayout.UpdateAnchorInfoV2(this, recalculateAnchors: true);
         }
 
         /// <summary>
@@ -11503,17 +11499,17 @@ namespace System.Windows.Forms
         /// </summary>
         public void SuspendLayout()
         {
-            _layoutSuspendCount++;
-            if (_layoutSuspendCount == 1)
+            LayoutSuspendCount++;
+            if (LayoutSuspendCount == 1)
             {
                 OnLayoutSuspended();
             }
 
 #if DEBUG
-            Debug.Assert(_layoutSuspendCount > 0, "SuspendLayout: layoutSuspendCount overflowed.");
+            Debug.Assert(LayoutSuspendCount > 0, "SuspendLayout: layoutSuspendCount overflowed.");
             if (CompModSwitches.LayoutSuspendResume.TraceInfo)
             {
-                Debug.WriteLine(GetType().Name + "::SuspendLayout( newCount = " + _layoutSuspendCount + ")");
+                Debug.WriteLine($"{GetType().Name} ::SuspendLayout( newCount = {LayoutSuspendCount}");
             }
 #endif
         }
@@ -12189,7 +12185,6 @@ namespace System.Windows.Forms
             _parent?.UpdateChildZOrder(this);
 
             UpdateBounds();
-            UpdateAnchorsIfRequired();
 
             // Let any interested sites know that we've now created a handle
             OnHandleCreated(EventArgs.Empty);
