@@ -195,9 +195,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Attribute[] temp = new Attribute[attrs.Count];
-            attrs.CopyTo(temp, 0);
-            return temp;
+            return attrs.ToArray();
         }
 
         private static string[] GetStringsFromPtr(IntPtr ptr, uint cStrings)
