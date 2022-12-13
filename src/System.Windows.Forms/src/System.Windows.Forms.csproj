@@ -82,7 +82,6 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <!-- Embedded Resources which are unable to be globbed. -->
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\Windows\Forms\ComponentModel\OrderImages.ico">
       <LogicalName>System.Windows.Forms.ComponentModel.OrderImages</LogicalName>
