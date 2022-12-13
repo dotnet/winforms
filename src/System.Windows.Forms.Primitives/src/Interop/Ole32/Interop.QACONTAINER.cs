@@ -22,7 +22,7 @@ internal static partial class Interop
             public QACONTAINERFLAGS dwAmbientFlags;
             public uint colorFore;
             public uint colorBack;
-            public IFont? pFont;
+            public IFont.Interface? pFont;
             public IntPtr pUndoMgr;
             public uint dwAppearance;
             public PInvoke.LCID lcid;

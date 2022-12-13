@@ -86,7 +86,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    _connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink));
+                    _connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink), throwException: false);
                 }
                 catch
                 {

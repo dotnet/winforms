@@ -450,7 +450,7 @@ namespace System.Windows.Forms
             {
                 base.Font = value;
 
-                if (false == _integralHeight)
+                if (_integralHeight == false)
                 {
                     // Refresh the list to force the scroll bars to display
                     // when the integral height is false.

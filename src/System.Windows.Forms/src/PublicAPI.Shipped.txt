@@ -597,32 +597,32 @@ static readonly System.Resources.ResXResourceWriter.Version -> string!
 static System.Resources.ResXResourceReader.FromFileContents(string! fileContents) -> System.Resources.ResXResourceReader!
 static System.Resources.ResXResourceReader.FromFileContents(string! fileContents, System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> System.Resources.ResXResourceReader!
 static System.Resources.ResXResourceReader.FromFileContents(string! fileContents, System.Reflection.AssemblyName![]! assemblyNames) -> System.Resources.ResXResourceReader!
-~static System.Windows.Forms.Application.AddMessageFilter(System.Windows.Forms.IMessageFilter value) -> void
-~static System.Windows.Forms.Application.CommonAppDataPath.get -> string
-~static System.Windows.Forms.Application.CommonAppDataRegistry.get -> Microsoft.Win32.RegistryKey
-~static System.Windows.Forms.Application.CompanyName.get -> string
-~static System.Windows.Forms.Application.CurrentCulture.get -> System.Globalization.CultureInfo
-~static System.Windows.Forms.Application.CurrentCulture.set -> void
-~static System.Windows.Forms.Application.CurrentInputLanguage.get -> System.Windows.Forms.InputLanguage
-~static System.Windows.Forms.Application.CurrentInputLanguage.set -> void
-~static System.Windows.Forms.Application.ExecutablePath.get -> string
-~static System.Windows.Forms.Application.Exit(System.ComponentModel.CancelEventArgs e) -> void
-~static System.Windows.Forms.Application.LocalUserAppDataPath.get -> string
-~static System.Windows.Forms.Application.OnThreadException(System.Exception t) -> void
-~static System.Windows.Forms.Application.OpenForms.get -> System.Windows.Forms.FormCollection
-~static System.Windows.Forms.Application.ProductName.get -> string
-~static System.Windows.Forms.Application.ProductVersion.get -> string
-~static System.Windows.Forms.Application.RaiseIdle(System.EventArgs e) -> void
-~static System.Windows.Forms.Application.RegisterMessageLoop(System.Windows.Forms.Application.MessageLoopCallback callback) -> void
-~static System.Windows.Forms.Application.RemoveMessageFilter(System.Windows.Forms.IMessageFilter value) -> void
-~static System.Windows.Forms.Application.Run(System.Windows.Forms.ApplicationContext context) -> void
-~static System.Windows.Forms.Application.Run(System.Windows.Forms.Form mainForm) -> void
-~static System.Windows.Forms.Application.SafeTopLevelCaptionFormat.get -> string
-~static System.Windows.Forms.Application.SafeTopLevelCaptionFormat.set -> void
-~static System.Windows.Forms.Application.SetDefaultFont(System.Drawing.Font font) -> void
-~static System.Windows.Forms.Application.StartupPath.get -> string
-~static System.Windows.Forms.Application.UserAppDataPath.get -> string
-~static System.Windows.Forms.Application.UserAppDataRegistry.get -> Microsoft.Win32.RegistryKey
+static System.Windows.Forms.Application.AddMessageFilter(System.Windows.Forms.IMessageFilter? value) -> void
+static System.Windows.Forms.Application.CommonAppDataPath.get -> string!
+static System.Windows.Forms.Application.CommonAppDataRegistry.get -> Microsoft.Win32.RegistryKey!
+static System.Windows.Forms.Application.CompanyName.get -> string?
+static System.Windows.Forms.Application.CurrentCulture.get -> System.Globalization.CultureInfo!
+static System.Windows.Forms.Application.CurrentCulture.set -> void
+static System.Windows.Forms.Application.CurrentInputLanguage.get -> System.Windows.Forms.InputLanguage!
+static System.Windows.Forms.Application.CurrentInputLanguage.set -> void
+static System.Windows.Forms.Application.ExecutablePath.get -> string!
+static System.Windows.Forms.Application.Exit(System.ComponentModel.CancelEventArgs? e) -> void
+static System.Windows.Forms.Application.LocalUserAppDataPath.get -> string!
+static System.Windows.Forms.Application.OnThreadException(System.Exception! t) -> void
+static System.Windows.Forms.Application.OpenForms.get -> System.Windows.Forms.FormCollection!
+static System.Windows.Forms.Application.ProductName.get -> string?
+static System.Windows.Forms.Application.ProductVersion.get -> string!
+static System.Windows.Forms.Application.RaiseIdle(System.EventArgs! e) -> void
+static System.Windows.Forms.Application.RegisterMessageLoop(System.Windows.Forms.Application.MessageLoopCallback? callback) -> void
+static System.Windows.Forms.Application.RemoveMessageFilter(System.Windows.Forms.IMessageFilter! value) -> void
+static System.Windows.Forms.Application.Run(System.Windows.Forms.ApplicationContext! context) -> void
+static System.Windows.Forms.Application.Run(System.Windows.Forms.Form! mainForm) -> void
+static System.Windows.Forms.Application.SafeTopLevelCaptionFormat.get -> string!
+static System.Windows.Forms.Application.SafeTopLevelCaptionFormat.set -> void
+static System.Windows.Forms.Application.SetDefaultFont(System.Drawing.Font! font) -> void
+static System.Windows.Forms.Application.StartupPath.get -> string!
+static System.Windows.Forms.Application.UserAppDataPath.get -> string!
+static System.Windows.Forms.Application.UserAppDataRegistry.get -> Microsoft.Win32.RegistryKey!
 ~static System.Windows.Forms.AxHost.GetFontFromIFont(object font) -> System.Drawing.Font
 ~static System.Windows.Forms.AxHost.GetFontFromIFontDisp(object font) -> System.Drawing.Font
 ~static System.Windows.Forms.AxHost.GetIFontDispFromFont(System.Drawing.Font font) -> object
@@ -862,9 +862,9 @@ System.Windows.Forms.BindingMemberInfo.BindingPath.get -> string!
 ~System.Windows.Forms.ComboBox.SelectedItem.set -> void
 ~System.Windows.Forms.ComboBox.SelectedText.get -> string
 ~System.Windows.Forms.ComboBox.SelectedText.set -> void
-~System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string title, object component, int dispid, System.Guid pageGuid, nint parentHandle) -> void
-~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.LoadState(Microsoft.Win32.RegistryKey key) -> void
-~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey key) -> void
+System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string! title, object! component, int dispid, System.Guid pageGuid, nint parentHandle) -> void
+System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.LoadState(Microsoft.Win32.RegistryKey? key) -> void
+System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey? key) -> void
 System.Windows.Forms.Control.InvokeGotFocus(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
 System.Windows.Forms.Control.InvokeLostFocus(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
 System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control? toInvoke, System.EventArgs! e) -> void
@@ -3268,7 +3268,6 @@ override System.Windows.Forms.ScrollBar.GetScaledBounds(System.Drawing.Rectangle
 override System.Windows.Forms.ScrollBar.OnEnabledChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.ScrollBar.OnHandleCreated(System.EventArgs! e) -> void
 override System.Windows.Forms.ScrollBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
-override System.Windows.Forms.ScrollBar.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
 override System.Windows.Forms.ScrollBar.Text.get -> string!
 override System.Windows.Forms.ScrollBar.Text.set -> void
 override System.Windows.Forms.ScrollBar.ToString() -> string!
@@ -3869,16 +3868,16 @@ static readonly System.Windows.Forms.TaskDialogIcon.ShieldSuccessGreenBar -> Sys
 static readonly System.Windows.Forms.TaskDialogIcon.ShieldWarningYellowBar -> System.Windows.Forms.TaskDialogIcon!
 static readonly System.Windows.Forms.TaskDialogIcon.Warning -> System.Windows.Forms.TaskDialogIcon!
 static System.Windows.Forms.Application.AllowQuit.get -> bool
-static System.Windows.Forms.Application.ApplicationExit -> System.EventHandler
+static System.Windows.Forms.Application.ApplicationExit -> System.EventHandler?
 static System.Windows.Forms.Application.DoEvents() -> void
 static System.Windows.Forms.Application.EnableVisualStyles() -> void
-static System.Windows.Forms.Application.EnterThreadModal -> System.EventHandler
+static System.Windows.Forms.Application.EnterThreadModal -> System.EventHandler?
 static System.Windows.Forms.Application.Exit() -> void
 static System.Windows.Forms.Application.ExitThread() -> void
 static System.Windows.Forms.Application.FilterMessage(ref System.Windows.Forms.Message message) -> bool
 static System.Windows.Forms.Application.HighDpiMode.get -> System.Windows.Forms.HighDpiMode
-static System.Windows.Forms.Application.Idle -> System.EventHandler
-static System.Windows.Forms.Application.LeaveThreadModal -> System.EventHandler
+static System.Windows.Forms.Application.Idle -> System.EventHandler?
+static System.Windows.Forms.Application.LeaveThreadModal -> System.EventHandler?
 static System.Windows.Forms.Application.MessageLoop.get -> bool
 static System.Windows.Forms.Application.OleRequired() -> System.Threading.ApartmentState
 static System.Windows.Forms.Application.RenderWithVisualStyles.get -> bool
@@ -3889,8 +3888,8 @@ static System.Windows.Forms.Application.SetHighDpiMode(System.Windows.Forms.High
 static System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState state, bool force, bool disableWakeEvent) -> bool
 static System.Windows.Forms.Application.SetUnhandledExceptionMode(System.Windows.Forms.UnhandledExceptionMode mode) -> void
 static System.Windows.Forms.Application.SetUnhandledExceptionMode(System.Windows.Forms.UnhandledExceptionMode mode, bool threadScope) -> void
-static System.Windows.Forms.Application.ThreadException -> System.Threading.ThreadExceptionEventHandler
-static System.Windows.Forms.Application.ThreadExit -> System.EventHandler
+static System.Windows.Forms.Application.ThreadException -> System.Threading.ThreadExceptionEventHandler?
+static System.Windows.Forms.Application.ThreadExit -> System.EventHandler?
 static System.Windows.Forms.Application.UnregisterMessageLoop() -> void
 static System.Windows.Forms.Application.UseVisualStyles.get -> bool
 static System.Windows.Forms.Application.UseWaitCursor.get -> bool
@@ -5686,7 +5685,7 @@ System.Windows.Forms.ComponentModel.Com2Interop.Com2Variant
 System.Windows.Forms.ComponentModel.Com2Interop.Com2Variant.Com2Variant() -> void
 System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService
 System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser
-System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.ComComponentNameChanged -> System.ComponentModel.Design.ComponentRenameEventHandler
+System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.ComComponentNameChanged -> System.ComponentModel.Design.ComponentRenameEventHandler?
 System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.DropDownDone() -> void
 System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.EnsurePendingChangesCommitted() -> bool
 System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.HandleF4() -> void

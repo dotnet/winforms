@@ -29,5 +29,17 @@ namespace Windows.Win32.System.Com
                     puArgErr: null);
             }
         }
+
+        /// <summary>
+        ///  Get the specified <paramref name="dispId"/> property.
+        /// </summary>
+        internal VARIANT GetProperty(
+            uint dispId,
+            uint lcid = 0)
+        {
+            VARIANT variant = default;
+            GetProperty(dispId, &variant, lcid).ThrowOnFailure();
+            return variant;
+        }
     }
 }

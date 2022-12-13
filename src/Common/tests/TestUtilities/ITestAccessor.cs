@@ -50,7 +50,7 @@ namespace System
         ///   bool result = accessor.CreateDelegate<Func<KnownColor, bool>>("IsKnownColorSystem")(KnownColor.Window);
         ///  ]]>
         /// </example>
-        TDelegate CreateDelegate<TDelegate>(string methodName = null)
+        TDelegate CreateDelegate<TDelegate>(string? methodName = null)
             where TDelegate : Delegate;
     }
 }

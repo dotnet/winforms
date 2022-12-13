@@ -37,8 +37,7 @@ namespace System.Windows.Forms
 
             EnsureNotOwned(style);
             style.Owner = Owner;
-            _innerList.Add(style);
-            int index = _innerList.Count - 1;
+            int index = ((IList)_innerList).Add(style);
             PerformLayoutIfOwned();
             return index;
         }
@@ -107,13 +106,13 @@ namespace System.Windows.Forms
             PerformLayoutIfOwned();
         }
 
-        bool IList.Contains(object style) => (style is TableLayoutStyle tableLayoutStyle) ? _innerList.Contains(tableLayoutStyle) : false;
+        bool IList.Contains(object style) => ((IList)_innerList).Contains(style);
 
-        int IList.IndexOf(object style) => (style is TableLayoutStyle tableLayoutStyle) ? _innerList.IndexOf(tableLayoutStyle) : -1;
+        int IList.IndexOf(object style) => ((IList)_innerList).IndexOf(style);
 
-        bool IList.IsFixedSize => false;
+        bool IList.IsFixedSize => ((IList)_innerList).IsFixedSize;
 
-        bool IList.IsReadOnly => false;
+        bool IList.IsReadOnly => ((IList)_innerList).IsReadOnly;
 
         void ICollection.CopyTo(Array array, int startIndex) => ((ICollection)_innerList).CopyTo(array, startIndex);
 

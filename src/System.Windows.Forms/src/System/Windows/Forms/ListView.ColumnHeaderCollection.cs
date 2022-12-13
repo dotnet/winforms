@@ -524,7 +524,7 @@ namespace System.Windows.Forms
                 if (_owner.IsHandleCreated && _owner.View != View.Tile)
                 {
                     int retval = (int)PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_DELETECOLUMN, (WPARAM)index);
-                    if (0 == retval)
+                    if (retval == 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }

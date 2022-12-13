@@ -2574,59 +2574,32 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        public static IEnumerable<object[]> RescaleConstantsForDpi_TestData()
+        public static IEnumerable<object[]> ScaleScrollBarForDpi_WithSize_TestData()
         {
-            foreach (bool scaleScrollBarForDpiChange in new bool[] { true, false })
-            {
-                yield return new object[] { scaleScrollBarForDpiChange, 100, 200 };
-                yield return new object[] { scaleScrollBarForDpiChange, 100, 100 };
-                yield return new object[] { scaleScrollBarForDpiChange, 0, 0 };
-            }
+            yield return new object[] { true, 100, 200, ScrollOrientation.HorizontalScroll, new Size(10, 20), new Size(20, 20) };
+            yield return new object[] { true, 200, 100, ScrollOrientation.HorizontalScroll, new Size(10, 20), new Size(5, 20) };
+            yield return new object[] { true, 100, 200, ScrollOrientation.VerticalScroll, new Size(10, 20), new Size(10, 40) };
+            yield return new object[] { true, 200, 100, ScrollOrientation.VerticalScroll, new Size(10, 20), new Size(10, 10) };
+
+            yield return new object[] { false, 100, 200, ScrollOrientation.HorizontalScroll, new Size(10, 20), new Size(10, 20) };
+            yield return new object[] { false, 100, 100, ScrollOrientation.VerticalScroll, new Size(10, 20), new Size(10, 20) };
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(RescaleConstantsForDpi_TestData))]
-        public void ScrollBar_RescaleConstantsForDpi_Invoke_Nop(bool scaleScrollBarForDpiChange, int deviceDpiOld, int deviceDpiNew)
-        {
-            using var control = new SubScrollBar
-            {
-                ScaleScrollBarForDpiChange = scaleScrollBarForDpiChange
-            };
-            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            Assert.Equal(Size.Empty, control.Size);
-            Assert.False(control.IsHandleCreated);
-
-            // Call again.
-            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            Assert.Equal(Size.Empty, control.Size);
-            Assert.False(control.IsHandleCreated);
-        }
-
-        public static IEnumerable<object[]> RescaleConstantsForDpi_WithSize_TestData()
-        {
-            yield return new object[] { true, 100, 200, new Size(10, 20), new Size(20, 40) };
-            yield return new object[] { true, 200, 100, new Size(10, 20), new Size(5, 10) };
-            yield return new object[] { true, 100, 100, new Size(10, 20), new Size(10, 20) };
-
-            // Invalid DPI values. Given we do not check the input explicitly for validity and
-            // simply try to calculate factor, passing invalid values like -100, -200 are equivalent
-            // to 100, 200 (factor = newDpi/oldDpi).
-            yield return new object[] { true, 0, 0, new Size(10, 20), Size.Empty };
-
-            yield return new object[] { false, 100, 200, new Size(10, 20), new Size(10, 20) };
-            yield return new object[] { false, 100, 100, new Size(10, 20), new Size(10, 20) };
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(RescaleConstantsForDpi_WithSize_TestData))]
-        public void ScrollBar_RescaleConstantsForDpi_InvokeWithSize_Nop(bool scaleScrollBarForDpiChange, int deviceDpiOld, int deviceDpiNew, Size controlSize, Size expected)
+        [MemberData(nameof(ScaleScrollBarForDpi_WithSize_TestData))]
+        public void ScrollBar_ScaleScrollBarForDpi_InvokeWithSize_Nop(bool scaleScrollBarForDpiChange, int deviceDpiOld, int deviceDpiNew, ScrollOrientation orientation, Size controlSize, Size expected)
         {
             using var control = new SubScrollBar
             {
                 ScaleScrollBarForDpiChange = scaleScrollBarForDpiChange,
                 Size = controlSize
             };
-            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+
+            control.TestAccessor().Dynamic._scrollOrientation = orientation;
+
+            SizeF factor = new (((float)deviceDpiNew) / deviceDpiOld, ((float)deviceDpiNew) / deviceDpiOld);
+            control.ScaleControl(factor, factor, null);
+
             Assert.Equal(expected, control.Size);
             Assert.False(control.IsHandleCreated);
         }
@@ -3192,7 +3165,7 @@ namespace System.Windows.Forms.Tests
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
             public new CreateParams CreateParams => base.CreateParams;
-
+            
             public new Cursor DefaultCursor => base.DefaultCursor;
 
             public new ImeMode DefaultImeMode => base.DefaultImeMode;
@@ -3272,8 +3245,6 @@ namespace System.Windows.Forms.Tests
             public new void OnScroll(ScrollEventArgs se) => base.OnScroll(se);
 
             public new void OnValueChanged(EventArgs e) => base.OnValueChanged(e);
-
-            public new void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) => base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 

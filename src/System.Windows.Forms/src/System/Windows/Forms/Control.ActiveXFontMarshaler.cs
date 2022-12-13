@@ -4,71 +4,71 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static Interop;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class Control
 {
-    public partial class Control
+    /// <summary>
+    ///  This is a marshaler object that knows how to marshal IFont to Font and back.
+    /// </summary>
+    private unsafe class ActiveXFontMarshaler : ICustomMarshaler
     {
-        /// <summary>
-        ///  This is a marshaler object that knows how to marshal IFont to Font and back.
-        /// </summary>
-        private class ActiveXFontMarshaler : ICustomMarshaler
+        private static ActiveXFontMarshaler? s_instance;
+
+        public void CleanUpManagedData(object obj)
         {
-            private static ActiveXFontMarshaler? s_instance;
+        }
 
-            public void CleanUpManagedData(object obj)
+        public void CleanUpNativeData(IntPtr pObj) => Marshal.Release(pObj);
+
+        internal static ICustomMarshaler GetInstance(string cookie)
+        {
+            return s_instance ??= new ActiveXFontMarshaler();
+        }
+
+        public int GetNativeDataSize() => -1; // not a value type, so use -1
+
+        public nint MarshalManagedToNative(object obj)
+        {
+            Font font = (Font)obj;
+            LOGFONTW logFont = LOGFONTW.FromFont(font);
+
+            fixed (char* n = font.Name)
             {
-            }
-
-            public void CleanUpNativeData(IntPtr pObj) => Marshal.Release(pObj);
-
-            internal static ICustomMarshaler GetInstance(string cookie)
-            {
-                return s_instance ??= new ActiveXFontMarshaler();
-            }
-
-            public int GetNativeDataSize() => -1; // not a value type, so use -1
-
-            public IntPtr MarshalManagedToNative(object obj)
-            {
-                Font font = (Font)obj;
-                LOGFONTW logFont = LOGFONTW.FromFont(font);
-                var fontDesc = new Oleaut32.FONTDESC
+                FONTDESC fontDesc = new()
                 {
-                    cbSizeOfStruct = (uint)Marshal.SizeOf<Oleaut32.FONTDESC>(),
-                    lpstrName = font.Name,
-                    cySize = (long)(font.SizeInPoints * 10000),
+                    cbSizeofstruct = (uint)sizeof(FONTDESC),
+                    lpstrName = n,
+                    cySize = (CY)font.SizeInPoints,
                     sWeight = (short)logFont.lfWeight,
                     sCharset = (short)logFont.lfCharSet,
                     fItalic = font.Italic,
                     fUnderline = font.Underline,
                     fStrikethrough = font.Strikeout,
                 };
-                Guid iid = typeof(Ole32.IFont).GUID;
-                Ole32.IFont oleFont = Oleaut32.OleCreateFontIndirect(ref fontDesc, in iid);
-                IntPtr pFont = Marshal.GetIUnknownForObject(oleFont);
 
-                int hr = Marshal.QueryInterface(pFont, ref iid, out IntPtr pIFont);
+                PInvoke.OleCreateFontIndirect(
+                    in fontDesc,
+                    in IID.GetRef<IFont>(),
+                    out void* lplpvObj).ThrowOnFailure();
 
-                Marshal.Release(pFont);
-
-                ((HRESULT)hr).ThrowOnFailure();
-
-                return pIFont;
+                return (nint)lplpvObj;
             }
+        }
 
-            public object MarshalNativeToManaged(IntPtr pObj)
+        public object MarshalNativeToManaged(nint pObj)
+        {
+            IFont.Interface nativeFont = (IFont.Interface)Marshal.GetObjectForIUnknown(pObj);
+            try
             {
-                Ole32.IFont nativeFont = (Ole32.IFont)Marshal.GetObjectForIUnknown(pObj);
-                try
-                {
-                    return Font.FromHfont(nativeFont.hFont);
-                }
-                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
-                {
-                    return DefaultFont;
-                }
+                return Font.FromHfont(nativeFont.hFont);
+            }
+            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+            {
+                return DefaultFont;
             }
         }
     }

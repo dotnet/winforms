@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
@@ -13,19 +10,19 @@ namespace System.Windows.Forms
 {
     public partial class ToolStripControlHost
     {
-        /// <remarks>
+        /// <devdoc>
         ///  Our implementation of ISite:
         ///  Since the Control which is wrapped by ToolStripControlHost is a runtime instance, there is no way of knowing
         ///  whether the control is in runtime or designtime.
         ///  This implementation of ISite would be set to Control.Site when ToolStripControlHost.Site is set at DesignTime. (Refer to Site property on ToolStripControlHost)
         ///  This implementation just returns the DesignMode property to be ToolStripControlHost's DesignMode property.
         ///  Everything else is pretty much default implementation.
-        /// </remarks>
+        /// </devdoc>
         private class StubSite : ISite, IDictionaryService
         {
-            private Hashtable _dictionary;
-            readonly IComponent _comp;
-            readonly IComponent _owner;
+            private Dictionary<object, object>? _dictionary;
+            private readonly IComponent _comp;
+            private readonly IComponent _owner;
 
             public StubSite(IComponent control, IComponent host)
             {
@@ -41,57 +38,60 @@ namespace System.Windows.Forms
             /// <summary>
             ///  When implemented by a class, gets the container associated with the <see cref="ISite"/>.
             /// </summary>
-            IContainer ISite.Container => _owner.Site.Container;
+            IContainer? ISite.Container => _owner.Site?.Container;
 
             /// <summary>
             ///  When implemented by a class, determines whether the component is in design mode.
             /// </summary>
-            bool ISite.DesignMode => _owner.Site.DesignMode;
+            bool ISite.DesignMode => _owner.Site?.DesignMode ?? false;
 
             /// <summary>
             ///  When implemented by a class, gets or sets the name of
             ///  the component associated with the <see cref="ISite"/>.
             /// </summary>
-            string ISite.Name
+            string? ISite.Name
             {
-                get => _owner.Site.Name;
+                get => _owner.Site?.Name;
 
                 [RequiresUnreferencedCode(TrimmingConstants.SiteNameMessage)]
-                set => _owner.Site.Name = value;
+                set
+                {
+                    if (_owner.Site is not null)
+                    {
+                        _owner.Site.Name = value;
+                    }
+                }
             }
 
             /// <summary>
             ///  Returns the requested service.
             /// </summary>
-            object IServiceProvider.GetService(Type service)
+            object? IServiceProvider.GetService(Type service)
             {
                 ArgumentNullException.ThrowIfNull(service);
 
                 // We have to implement our own dictionary service. If we don't,
                 // the properties of the underlying component will end up being
                 // overwritten by our own properties when GetProperties is called
-                if (service == typeof(IDictionaryService))
-                {
-                    return this;
-                }
-
-                return _owner.Site?.GetService(service);
+                return service == typeof(IDictionaryService) ? this : _owner.Site?.GetService(service);
             }
 
             /// <summary>
             ///  Retrieves the key corresponding to the given value.
             /// </summary>
-            object IDictionaryService.GetKey(object value)
+            object? IDictionaryService.GetKey(object? value)
             {
-                if (_dictionary is not null)
+                if (value is null || _dictionary is null)
                 {
-                    foreach (DictionaryEntry de in _dictionary)
+                    return null;
+                }
+
+                foreach (var item in _dictionary)
+                {
+                    object o = item.Value;
+                    if (value.Equals(o))
                     {
-                        object o = de.Value;
-                        if (value is not null && value.Equals(o))
-                        {
-                            return de.Key;
-                        }
+                        return item.Key;
                     }
                 }
 
@@ -101,14 +101,11 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the value corresponding to the given key.
             /// </summary>
-            object IDictionaryService.GetValue(object key)
+            object? IDictionaryService.GetValue(object key)
             {
-                if (_dictionary is not null)
-                {
-                    return _dictionary[key];
-                }
-
-                return null;
+                object? value = null;
+                _dictionary?.TryGetValue(key, out value);
+                return value;
             }
 
             /// <summary>
@@ -116,11 +113,12 @@ namespace System.Windows.Forms
             ///  pair is stored on a per-object basis, and is a handy place to save
             ///  additional information about a component.
             /// </summary>
-            void IDictionaryService.SetValue(object key, object value)
+            void IDictionaryService.SetValue(object key, object? value)
             {
-                _dictionary ??= new Hashtable();
+                _dictionary ??= new();
+                ArgumentNullException.ThrowIfNull(key);
 
-                if (value is null)
+                if (value is not object)
                 {
                     _dictionary.Remove(key);
                 }

@@ -767,7 +767,7 @@ namespace System.Windows.Forms
         internal static bool IsMenuKey(Keys keyData)
         {
             Keys keyCode = keyData & Keys.KeyCode;
-            return (Keys.Menu == keyCode || Keys.F10 == keyCode);
+            return (keyCode == Keys.Menu || keyCode == Keys.F10);
         }
 
         public static bool IsShortcutDefined(Keys shortcut)

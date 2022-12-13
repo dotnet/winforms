@@ -320,8 +320,7 @@ namespace System.Windows.Forms
                 {
                     if (_owner._originals is not null)
                     {
-                        _owner._originals.Add(original);
-                        index = _owner._originals.Count - 1;
+                        index = ((IList)_owner._originals).Add(original);
                     }
 
                     if (_owner.HandleCreated)
@@ -338,8 +337,7 @@ namespace System.Windows.Forms
                 {
                     if (_owner._originals is not null)
                     {
-                        _owner._originals.Add(original);
-                        index = _owner._originals.Count - 1;
+                        index = ((IList)_owner._originals).Add(original);
                     }
 
                     if (_owner.HandleCreated)

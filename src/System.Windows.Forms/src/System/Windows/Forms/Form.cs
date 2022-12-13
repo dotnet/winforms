@@ -156,6 +156,12 @@ namespace System.Windows.Forms
 
         private VisualStyleRenderer? _sizeGripRenderer;
 
+        // Cache Form's size for the DPI. When Form is moved between the monitors with different DPI settings, we use
+        // cached values to set the size matching the DPI on the Form instead of recalculating the size again. This help
+        // preventing rounding error in size calculations with float DPI factor and rounding it to nearest integer.
+        private Dictionary<int, Size>? _dpiFormSizes;
+        private bool _processingDpiChanged;
+
         /// <summary>
         ///  Initializes a new instance of the <see cref="Form"/> class.
         /// </summary>
@@ -2294,7 +2300,7 @@ namespace System.Windows.Forms
                 // it won't send a WM_SHOWWINDOW the first time it's called.
                 // when WM_SHOWWINDOW gets called, we'll flip this bit to true
                 //
-                if (0 == _formState[FormStateSWCalled])
+                if (_formState[FormStateSWCalled] == 0)
                 {
                     PInvoke.SendMessage(this, User32.WM.SHOWWINDOW, (WPARAM)(BOOL)value);
                 }
@@ -3307,7 +3313,7 @@ namespace System.Windows.Forms
 
                 GC.KeepAlive(_ctlClient);
             }
-            else if (0 != _formStateEx[FormStateExUseMdiChildProc])
+            else if (_formStateEx[FormStateExUseMdiChildProc] != 0)
             {
                 m.ResultInternal = PInvoke.DefMDIChildProc(m.HWND, (uint)m.Msg, m.WParamInternal, m.LParamInternal);
             }
@@ -3520,7 +3526,7 @@ namespace System.Windows.Forms
                     // several times when a window is shown, we'll need to force the location
                     // each time for MdiChild windows that are docked so that the window will
                     // be created in the correct location and scroll bars will not be displayed.
-                    if (IsMdiChild && DockStyle.None != Dock)
+                    if (IsMdiChild && Dock != DockStyle.None)
                     {
                         break;
                     }
@@ -4259,6 +4265,11 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnResize(EventArgs e)
         {
+            if (!_processingDpiChanged)
+            {
+                _dpiFormSizes?.Clear();
+            }
+
             base.OnResize(e);
             if (_formState[FormStateRenderSizeGrip] != 0)
             {
@@ -4282,9 +4293,40 @@ namespace System.Windows.Forms
                 // call any additional handlers
                 ((DpiChangedEventHandler?)Events[EVENT_DPI_CHANGED])?.Invoke(this, e);
 
-                if (!e.Cancel)
+                if (e.Cancel)
                 {
+                    return;
+                }
+
+                try
+                {
+                    // Cache Form's size for the current and new DPI if not already done. We do this only
+                    // for AutoScaleMode is Font. In other modes, Windows OS will compute Form's size.
+                    if (AutoScaleMode == AutoScaleMode.Font)
+                    {
+                        _dpiFormSizes ??= new Dictionary<int, Size>();
+
+                        if (!_dpiFormSizes.ContainsKey(e.DeviceDpiNew))
+                        {
+                            _dpiFormSizes.Add(e.DeviceDpiNew, new Size(e.SuggestedRectangle.Width, e.SuggestedRectangle.Height));
+                        }
+
+                        // Store size of the Form for current DPI.
+                        if (!_dpiFormSizes.ContainsKey(e.DeviceDpiOld))
+                        {
+                            _dpiFormSizes.Add(e.DeviceDpiOld, Size);
+                        }
+
+                        // Prevent clearing Form's size cache while applying bounds from DPI change.
+                        // Any other events that cause Form's size change should clear the cache.
+                        _processingDpiChanged = true;
+                    }
+
                     ScaleContainerForDpi(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
+                }
+                finally
+                {
+                    _processingDpiChanged = false;
                 }
             }
         }
@@ -4358,8 +4400,9 @@ namespace System.Windows.Forms
         {
             DefWndProc(ref m);
 
-            Size desiredSize = default(Size);
-            if (OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize))
+            Size desiredSize = default;
+            if ((_dpiFormSizes is not null && _dpiFormSizes.TryGetValue(m.WParamInternal.LOWORD, out desiredSize))
+                || OnGetDpiScaledSize(_deviceDpi, m.WParamInternal.LOWORD, ref desiredSize))
             {
                 SIZE* size = (SIZE*)m.LParamInternal;
                 size->cx = desiredSize.Width;

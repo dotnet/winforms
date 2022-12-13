@@ -80,8 +80,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private static readonly IDictionary s_oleConverters = new SortedList
         {
             [GUID_COLOR] = typeof(Com2ColorConverter),
-            [typeof(Ole32.IFontDisp).GUID] = typeof(Com2FontConverter),
-            [typeof(Ole32.IFont).GUID] = typeof(Com2FontConverter),
+            [IID.GetRef<IFontDisp>()] = typeof(Com2FontConverter),
+            [IID.GetRef<IFont>()] = typeof(Com2FontConverter),
             [IID.GetRef<IPictureDisp>()] = typeof(Com2PictureConverter),
             [IID.GetRef<IPicture>()] = typeof(Com2PictureConverter)
         };
@@ -664,30 +664,29 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 component = descriptor.GetPropertyOwner(this);
             }
 
-            if (component is null || !Marshal.IsComObject(component) || component is not Oleaut32.IDispatch dispatch)
+            if (component is null || component is not IDispatch.Interface dispatch)
             {
                 return null;
             }
 
-            object[] pVarResult = new object[1];
+            VARIANT result = default;
             EXCEPINFO pExcepInfo = default;
             DISPPARAMS dispParams = default;
             Guid guid = Guid.Empty;
 
             HRESULT hr = dispatch.Invoke(
-                DISPID,
+                (int)DISPID,
                 &guid,
                 PInvoke.GetThreadLocale(),
                 DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                 &dispParams,
-                pVarResult,
+                &result,
                 &pExcepInfo,
                 null);
 
             if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
             {
-                _lastValue = pVarResult[0] is null || Convert.IsDBNull(pVarResult[0]) ? null : pVarResult[0];
-
+                _lastValue = result.ToObject();
                 return _lastValue;
             }
             else
@@ -754,7 +753,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // If this is a object, get the value and attempt to create the correct value editor based on that value.
             // We don't do this if the state came from an attribute.
-            if (0 == (_refreshState & Com2PropertyDescriptorRefresh.TypeConverterAttr) && PropertyType == typeof(Com2Variant))
+            if ((_refreshState & Com2PropertyDescriptorRefresh.TypeConverterAttr) == 0 && PropertyType == typeof(Com2Variant))
             {
                 Type editorType = PropertyType;
                 object? value = GetValue(TargetObject);

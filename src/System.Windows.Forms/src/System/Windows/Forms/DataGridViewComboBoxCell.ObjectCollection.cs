@@ -62,37 +62,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            object ICollection.SyncRoot => ((ICollection)InnerArray).SyncRoot;
 
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool ICollection.IsSynchronized => ((ICollection)InnerArray).IsSynchronized;
 
-            bool IList.IsFixedSize
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool IList.IsFixedSize => ((IList)InnerArray).IsFixedSize;
 
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            public bool IsReadOnly => ((IList)InnerArray).IsReadOnly;
 
             /// <summary>
             ///  Adds an item to the collection. For an unsorted combo box, the item is
@@ -108,8 +84,7 @@ namespace System.Windows.Forms
 
                 ArgumentNullException.ThrowIfNull(item);
 
-                InnerArray.Add(item);
-                int index = InnerArray.Count - 1;
+                int index = ((IList)InnerArray).Add(item);
 
                 bool success = false;
                 if (owner.Sorted)

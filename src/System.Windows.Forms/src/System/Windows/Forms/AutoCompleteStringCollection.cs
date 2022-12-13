@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     /// </summary>
     public class AutoCompleteStringCollection : IList
     {
-        CollectionChangeEventHandler onCollectionChanged;
+        private CollectionChangeEventHandler onCollectionChanged;
         private readonly List<string> data = new();
 
         public AutoCompleteStringCollection()
@@ -44,9 +44,9 @@ namespace System.Windows.Forms
         /// </summary>
         public int Count => data.Count;
 
-        bool IList.IsReadOnly => false;
+        bool IList.IsReadOnly => ((IList)data).IsReadOnly;
 
-        bool IList.IsFixedSize => false;
+        bool IList.IsFixedSize => ((IList)data).IsFixedSize;
 
         public event CollectionChangeEventHandler CollectionChanged
         {
@@ -62,8 +62,7 @@ namespace System.Windows.Forms
         /// </summary>
         public int Add(string value)
         {
-            data.Add(value);
-            int index = data.Count - 1;
+            int index = ((IList)data).Add(value);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, value));
             return index;
         }
@@ -121,13 +120,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets a value indicating whether the <see cref="AutoCompleteStringCollection"/> is read-only.
         /// </summary>
-        public bool IsReadOnly => false;
+        public bool IsReadOnly => ((IList)data).IsReadOnly;
 
         /// <summary>
         ///  Gets a value indicating whether access to the <see cref="AutoCompleteStringCollection"/>
         ///  is synchronized (thread-safe).
         /// </summary>
-        public bool IsSynchronized => false;
+        public bool IsSynchronized => ((IList)data).IsSynchronized;
 
         /// <summary>
         ///  Removes a specific string from the <see cref="AutoCompleteStringCollection"/> .
@@ -151,7 +150,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets an object that can be used to synchronize access to the <see cref="AutoCompleteStringCollection"/>.
         /// </summary>
-        public object SyncRoot => this;
+        public object SyncRoot => ((IList)data).SyncRoot;
 
         object IList.this[int index]
         {

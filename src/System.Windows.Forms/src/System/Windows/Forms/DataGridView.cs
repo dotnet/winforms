@@ -1704,7 +1704,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeColumnHeadersHeight()
         {
-            return ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize && DefaultColumnHeadersHeight != ColumnHeadersHeight;
+            return ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize && ColumnHeadersHeight != DefaultColumnHeadersHeight;
         }
 
         /// <summary>
@@ -1904,7 +1904,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_ptCurrentCell.Y != -1);
 
                 bool previousVisibleColumnExists = (Columns.GetPreviousColumn(Columns[_ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None) is not null);
-                bool previousVisibleRowExists = (-1 != Rows.GetPreviousRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible));
+                bool previousVisibleRowExists = (Rows.GetPreviousRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible) != -1);
 
                 return !previousVisibleColumnExists && !previousVisibleRowExists;
             }
@@ -1922,7 +1922,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_ptCurrentCell.Y != -1);
 
                 bool nextVisibleColumnExists = (Columns.GetNextColumn(Columns[_ptCurrentCell.X], DataGridViewElementStates.Visible, DataGridViewElementStates.None) is not null);
-                bool nextVisibleRowExists = (-1 != Rows.GetNextRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible));
+                bool nextVisibleRowExists = (Rows.GetNextRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible) != -1);
 
                 return !nextVisibleColumnExists && !nextVisibleRowExists;
             }
@@ -3661,7 +3661,7 @@ namespace System.Windows.Forms
         private bool ShouldSerializeRowHeadersWidth()
         {
             return (_rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || _rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing) &&
-                   DefaultRowHeadersWidth != RowHeadersWidth;
+                   RowHeadersWidth != DefaultRowHeadersWidth;
         }
 
         /// <summary>
@@ -4439,7 +4439,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                return -1 != Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                return Rows.GetFirstRow(DataGridViewElementStates.Visible) != -1;
             }
         }
 

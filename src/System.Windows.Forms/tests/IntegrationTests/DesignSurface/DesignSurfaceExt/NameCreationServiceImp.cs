@@ -48,7 +48,7 @@ namespace DesignSurfaceExt
                 i++;
             } //end_while
 
-            if (0 == count)
+            if (count == 0)
             {
                 return type.Name + "1";
             }

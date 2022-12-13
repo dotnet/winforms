@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         private static readonly Guid s_maskEdit_Clsid = new("{c932ba85-4374-101b-a56c-00aa003668dc}");
 
         // Static state for perf optimization
-        private static Dictionary<Font, Oleaut32.FONTDESC> s_fontTable;
+        private static Dictionary<Font, FONTDESC> s_fontTable;
 
         // BitVector32 masks for various internal state flags.
         private static readonly int s_ocxStateSet = BitVector32.CreateMask();
@@ -3573,7 +3573,7 @@ namespace System.Windows.Forms
 
             qaContainer.pClientSite = _oleSite;
             qaContainer.pPropertyNotifySink = _oleSite;
-            qaContainer.pFont = (Ole32.IFont)GetIFontFromFont(GetParentContainer()._parent.Font);
+            qaContainer.pFont = (IFont.Interface)GetIFontFromFont(GetParentContainer()._parent.Font);
             qaContainer.dwAppearance = 0;
             qaContainer.lcid = PInvoke.GetThreadLocale();
 
@@ -3930,29 +3930,34 @@ namespace System.Windows.Forms
             }
         }
 
-        private static Oleaut32.FONTDESC GetFONTDESCFromFont(Font font)
+        /// <summary>
+        ///  Gets a cached <see cref="FONTDESC"/> for a given <see cref="Font"/>. The returned
+        ///  <see cref="FONTDESC"/> must have it's <see cref="FONTDESC.lpstrName"/> populated with
+        ///  a newly pinned string before usage.
+        /// </summary>
+        private static FONTDESC GetFONTDESCFromFont(Font font)
         {
             if (s_fontTable is null)
             {
-                s_fontTable = new Dictionary<Font, Oleaut32.FONTDESC>();
+                s_fontTable = new Dictionary<Font, FONTDESC>();
             }
-            else if (s_fontTable.TryGetValue(font, out Oleaut32.FONTDESC cachedFDesc))
+            else if (s_fontTable.TryGetValue(font, out FONTDESC cachedFDesc))
             {
                 return cachedFDesc;
             }
 
             LOGFONTW logfont = LOGFONTW.FromFont(font);
-            var fdesc = new Oleaut32.FONTDESC
+            var fdesc = new FONTDESC
             {
-                cbSizeOfStruct = (uint)Marshal.SizeOf<Oleaut32.FONTDESC>(),
-                lpstrName = font.Name,
-                cySize = (long)(font.SizeInPoints * 10000),
+                cbSizeofstruct = (uint)sizeof(FONTDESC),
+                cySize = (CY)font.SizeInPoints,
                 sWeight = (short)logfont.lfWeight,
                 sCharset = (short)logfont.lfCharSet,
                 fItalic = font.Italic,
                 fUnderline = font.Underline,
                 fStrikethrough = font.Strikeout
             };
+
             s_fontTable[font] = fdesc;
             return fdesc;
         }
@@ -3995,14 +4000,23 @@ namespace System.Windows.Forms
 
             try
             {
-                Oleaut32.FONTDESC fontDesc = GetFONTDESCFromFont(font);
-                return Oleaut32.OleCreateFontIndirect(ref fontDesc, in IID.GetRef<IFont>());
+                FONTDESC fontDesc = GetFONTDESCFromFont(font);
+                fixed (char* n = font.Name)
+                {
+                    fontDesc.lpstrName = n;
+                    HRESULT hr = PInvoke.OleCreateFontIndirect(in fontDesc, in IID.GetRef<IFont>(), out void* lplpvObj);
+                    if (hr.Succeeded)
+                    {
+                        return Marshal.GetObjectForIUnknown((nint)lplpvObj);
+                    }
+                }
             }
             catch
             {
-                s_axHTraceSwitch.TraceVerbose($"Failed to create IFrom from font: {font}");
-                return null;
             }
+
+            s_axHTraceSwitch.TraceVerbose($"Failed to create IFrom from font: {font}");
+            return null;
         }
 
         /// <summary>
@@ -4016,7 +4030,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            Ole32.IFont oleFont = (Ole32.IFont)font;
+            IFont.Interface oleFont = (IFont.Interface)font;
             try
             {
                 Font f = Font.FromHfont(oleFont.hFont);
@@ -4047,8 +4061,13 @@ namespace System.Windows.Forms
                 throw new ArgumentException(SR.AXFontUnitNotPoint, nameof(font));
             }
 
-            Oleaut32.FONTDESC fontdesc = GetFONTDESCFromFont(font);
-            return Oleaut32.OleCreateIFontDispIndirect(ref fontdesc, in IID.GetRef<IFontDisp>());
+            fixed (char* n = font.Name)
+            {
+                FONTDESC fontdesc = GetFONTDESCFromFont(font);
+                fontdesc.lpstrName = n;
+                PInvoke.OleCreateFontIndirect(in fontdesc, in IID.GetRef<IFontDisp>(), out void* lplpvObj).ThrowOnFailure();
+                return Marshal.GetObjectForIUnknown((nint)lplpvObj);
+            }
         }
 
         /// <summary>
@@ -4062,46 +4081,55 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            if (font is Ole32.IFont ifont)
+            if (font is IFont.Interface ifont)
             {
                 return GetFontFromIFont(ifont);
             }
 
-            Ole32.IFontDisp oleFont = (Ole32.IFontDisp)font;
+            IFontDisp.Interface oleFont = (IFontDisp.Interface)font;
+            using ComScope<IDispatch> dispatch = new((IDispatch*)Marshal.GetIDispatchForObject(oleFont));
+
             FontStyle style = FontStyle.Regular;
 
             try
             {
-                if (oleFont.Bold)
+                if ((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_BOLD))
                 {
                     style |= FontStyle.Bold;
                 }
 
-                if (oleFont.Italic)
+                if ((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_ITALIC))
                 {
                     style |= FontStyle.Italic;
                 }
 
-                if (oleFont.Underline)
+                if ((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_UNDER))
                 {
                     style |= FontStyle.Underline;
                 }
 
-                if (oleFont.Strikethrough)
+                if ((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_STRIKE))
                 {
                     style |= FontStyle.Strikeout;
                 }
 
-                if (oleFont.Weight >= 700)
+                if ((short)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_WEIGHT) >= 700)
                 {
                     style |= FontStyle.Bold;
                 }
 
-                return new Font(oleFont.Name, (float)oleFont.Size / 10000, style, GraphicsUnit.Point, (byte)oleFont.Charset);
+                using BSTR name = (BSTR)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_NAME);
+
+                return new Font(
+                    name.ToString(),
+                    (float)(CY)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_SIZE),
+                    style,
+                    GraphicsUnit.Point,
+                    (byte)(short)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_CHARSET));
             }
             catch (Exception e)
             {
-                s_axHTraceSwitch.TraceVerbose($"Could not create font from: {oleFont.Name}. {e.Message}");
+                s_axHTraceSwitch.TraceVerbose($"Could not create font from IFontDisp: {e.Message}");
                 return DefaultFont;
             }
         }

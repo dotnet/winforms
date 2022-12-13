@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
+#nullable disable
+
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Globalization;
@@ -18,7 +19,7 @@ namespace System.ComponentModel.Design
     public class InheritanceService : IInheritanceService, IDisposable
     {
         private static readonly TraceSwitch s_inheritanceServiceSwitch = new TraceSwitch("InheritanceService", "InheritanceService : Debug inheritance scan.");
-        private Hashtable _inheritedComponents;
+        private Dictionary<IComponent, InheritanceAttribute> _inheritedComponents;
         // While we're adding an inherited component, we must be wary of components that the inherited component adds as a result of being sited.  These are treated as inherited as well.  To track these, we keep track of the component we're currently adding as well as it's inheritance attribute. During the add, we sync IComponentAdding events and push in the component
         private IComponent _addingComponent;
         private InheritanceAttribute _addingAttribute;
@@ -28,7 +29,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public InheritanceService()
         {
-            _inheritedComponents = new Hashtable();
+            _inheritedComponents = new();
         }
 
         /// <summary>
@@ -185,12 +186,18 @@ namespace System.ComponentModel.Design
                             attr = InheritanceAttribute.Inherited;
                         }
 
-                        bool notPresent = (_inheritedComponents[value] is null);
-                        _inheritedComponents[value] = attr;
+                        // We only get values via IComponent Keys and don't expose any other behaviors.
+                        // So only use IComponent as a key.
+                        bool notPresent = false;
+                        if (value is IComponent compValue)
+                        {
+                            notPresent = !_inheritedComponents.ContainsKey(compValue);
+                            _inheritedComponents[compValue] = attr;
+                        }
 
                         if (!ignoreMember && notPresent)
                         {
-                            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "Adding " + name + " to container.");
+                            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Adding {name} to container.");
                             try
                             {
                                 _addingComponent = (IComponent)value;
@@ -255,18 +262,15 @@ namespace System.ComponentModel.Design
         ///  Gets the inheritance attribute of the specified component.
         /// </summary>
         public InheritanceAttribute GetInheritanceAttribute(IComponent component)
-        {
-            InheritanceAttribute attr = (InheritanceAttribute)_inheritedComponents[component];
-            attr ??= InheritanceAttribute.Default;
-
-            return attr;
-        }
+            => _inheritedComponents.TryGetValue(component, out InheritanceAttribute attr)
+                ? attr
+                : InheritanceAttribute.Default;
 
         private void OnComponentAdding(object sender, ComponentEventArgs ce)
         {
             if (_addingComponent is not null && _addingComponent != ce.Component)
             {
-                Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "Adding component... " + ce.Component.ToString());
+                Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Adding component... {ce.Component.ToString()}");
                 _inheritedComponents[ce.Component] = InheritanceAttribute.InheritedReadOnly;
                 // If this component is being added to a nested container of addingComponent, it should  get the same inheritance level.
                 if (sender is INestedContainer nested && nested.Owner == _addingComponent)

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
@@ -525,7 +527,7 @@ namespace System.ComponentModel.Design
                 if (_commandGroups.TryGetValue(command.CommandID.Guid, out List<MenuCommand> commands))
                 {
                     int index = commands.IndexOf(command);
-                    if (-1 != index)
+                    if (index != -1)
                     {
                         commands.RemoveAt(index);
                         // If there are no more commands in this command group, remove the group

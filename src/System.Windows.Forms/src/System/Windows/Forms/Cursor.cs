@@ -81,12 +81,14 @@ namespace System.Windows.Forms
         public Cursor(Stream stream)
         {
             ArgumentNullException.ThrowIfNull(stream);
+            MemoryStream memoryStream = new();
+            stream.CopyTo(memoryStream);
+            _cursorData = memoryStream.ToArray();
 
-            int length = checked((int)stream.Length);
-            _cursorData = new byte[length];
-            stream.Read(_cursorData, 0, length);
+            // stream.CopyTo causes both streams to advance. So reset it for LoadPicture.
+            memoryStream.Position = 0;
             LoadPicture(
-                new Ole32.GPStream(new MemoryStream(_cursorData)),
+                new Ole32.GPStream(memoryStream),
                 nameof(stream));
         }
 

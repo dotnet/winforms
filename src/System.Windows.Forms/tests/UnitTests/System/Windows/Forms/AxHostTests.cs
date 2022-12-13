@@ -13,7 +13,6 @@ using Moq;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Xunit;
-using static Interop;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -1433,13 +1432,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AxHost_GetIFontDispFromFont_InvokeSimpleStyle_Roundtrips()
+        public unsafe void AxHost_GetIFontDispFromFont_InvokeSimpleStyle_Roundtrips()
         {
             using var font = new Font("Arial", 10);
             object disp = SubAxHost.GetIFontDispFromFont(font);
-            Ole32.IFont iFont = (Ole32.IFont)disp;
-            Assert.Equal(font.Name, iFont.Name);
-            Assert.Equal(97500, iFont.Size);
+            IFont.Interface iFont = (IFont.Interface)disp;
+            Assert.Equal(font.Name, iFont.Name.ToStringAndFree());
+            Assert.Equal(97500, iFont.Size.int64);
             Assert.False(iFont.Bold);
             Assert.False(iFont.Italic);
             Assert.False(iFont.Underline);
@@ -1448,13 +1447,14 @@ namespace System.Windows.Forms.Tests
             // Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
 
-            Ole32.IFontDisp iFontDisp = (Ole32.IFontDisp)disp;
-            Assert.Equal(font.Name, iFontDisp.Name);
-            Assert.Equal(10, iFontDisp.Size);
-            Assert.False(iFontDisp.Bold);
-            Assert.False(iFontDisp.Italic);
-            Assert.False(iFontDisp.Underline);
-            Assert.False(iFontDisp.Strikethrough);
+            IFontDisp.Interface iFontDisp = (IFontDisp.Interface)disp;
+            using ComScope<IDispatch> dispatch = new((IDispatch*)Marshal.GetIDispatchForObject(iFontDisp));
+            Assert.Equal(font.Name, ((BSTR)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_NAME)).ToStringAndFree());
+            Assert.Equal(97500, ((CY)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_SIZE)).int64);
+            Assert.False((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_BOLD));
+            Assert.False((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_ITALIC));
+            Assert.False((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_UNDER));
+            Assert.False((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_STRIKE));
             // Charset is locale specific
             // Assert.Equal(0, iFontDisp.Charset);
 
@@ -1472,14 +1472,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AxHost_GetIFontDispFromFont_InvokeComplexStyle_Roundtrips()
+        public unsafe void AxHost_GetIFontDispFromFont_InvokeComplexStyle_Roundtrips()
         {
             using var font = new Font("Arial", 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
             object disp = SubAxHost.GetIFontDispFromFont(font);
 
-            Ole32.IFont iFont = (Ole32.IFont)disp;
-            Assert.Equal(font.Name, iFont.Name);
-            Assert.Equal(97500, iFont.Size);
+            IFont.Interface iFont = (IFont.Interface)disp;
+            Assert.Equal(font.Name, iFont.Name.ToStringAndFree());
+            Assert.Equal(97500, iFont.Size.int64);
             Assert.True(iFont.Bold);
             Assert.True(iFont.Italic);
             Assert.True(iFont.Underline);
@@ -1487,14 +1487,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
 
-            Ole32.IFontDisp iFontDisp = (Ole32.IFontDisp)disp;
-            Assert.Equal(font.Name, iFontDisp.Name);
-            Assert.Equal(10, iFontDisp.Size);
-            Assert.True(iFontDisp.Bold);
-            Assert.True(iFontDisp.Italic);
-            Assert.True(iFontDisp.Underline);
-            Assert.True(iFontDisp.Strikethrough);
-            Assert.Equal(0, iFontDisp.Charset);
+            IFontDisp.Interface iFontDisp = (IFontDisp.Interface)disp;
+            using ComScope<IDispatch> dispatch = new((IDispatch*)Marshal.GetIDispatchForObject(iFontDisp));
+            Assert.Equal(font.Name, ((BSTR)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_NAME)).ToStringAndFree());
+            Assert.Equal(97500, ((CY)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_SIZE)).int64);
+            Assert.True((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_BOLD));
+            Assert.True((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_ITALIC));
+            Assert.True((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_UNDER));
+            Assert.True((bool)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_STRIKE));
+            Assert.Equal(0, (short)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_CHARSET));
 
             Font result = SubAxHost.GetFontFromIFont(iFont);
             Assert.Equal(font.Name, result.Name);
@@ -1531,9 +1532,10 @@ namespace System.Windows.Forms.Tests
         public void AxHost_GetIFontFromFont_InvokeSimpleStyle_Roundtrips()
         {
             using var font = new Font("Arial", 10);
-            Ole32.IFont iFont = (Ole32.IFont)SubAxHost.GetIFontFromFont(font);
-            Assert.Equal(font.Name, iFont.Name);
-            Assert.Equal(97500, iFont.Size);
+            IFont.Interface iFont = (IFont.Interface)SubAxHost.GetIFontFromFont(font);
+            using BSTR name = iFont.Name;
+            Assert.Equal(font.Name, name.ToString());
+            Assert.Equal(97500, iFont.Size.int64);
             Assert.False(iFont.Bold);
             Assert.False(iFont.Italic);
             Assert.False(iFont.Underline);
@@ -1553,9 +1555,10 @@ namespace System.Windows.Forms.Tests
         public void AxHost_GetIFontFromFont_InvokeComplexStyle_Roundtrips()
         {
             using var font = new Font("Arial", 10, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic | FontStyle.Strikeout, GraphicsUnit.Point, 10);
-            Ole32.IFont iFont = (Ole32.IFont)SubAxHost.GetIFontFromFont(font);
-            Assert.Equal(font.Name, iFont.Name);
-            Assert.Equal(97500, iFont.Size);
+            IFont.Interface iFont = (IFont.Interface)SubAxHost.GetIFontFromFont(font);
+            using BSTR name = iFont.Name;
+            Assert.Equal(font.Name, name.ToString());
+            Assert.Equal(97500, iFont.Size.int64);
             Assert.True(iFont.Bold);
             Assert.True(iFont.Italic);
             Assert.True(iFont.Underline);

@@ -3921,7 +3921,7 @@ namespace System.Windows.Forms
 
             // First column must be left aligned
 
-            if (-1 == idx)
+            if (idx == -1)
             {
                 throw new InvalidOperationException(SR.ListViewAddColumnFailed);
             }
@@ -4298,7 +4298,7 @@ namespace System.Windows.Forms
                         _onItemCheck = oldOnItemCheck;
                     }
 
-                    if (-1 == insertIndex)
+                    if (insertIndex == -1)
                     {
                         throw new InvalidOperationException(SR.ListViewAddItemFailed);
                     }

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -1110,7 +1112,7 @@ namespace System.Windows.Forms.Design
 
                 if (mouseDragTool is not null)
                 {
-                    Debug.Assert(0 != (de.AllowedEffect & (DragDropEffects.Move | DragDropEffects.Copy)), "DragDropEffect.Move | .Copy isn't allowed?");
+                    Debug.Assert((de.AllowedEffect & (DragDropEffects.Move | DragDropEffects.Copy)) != 0, "DragDropEffect.Move | .Copy isn't allowed?");
                     if ((de.AllowedEffect & DragDropEffects.Move) != 0)
                     {
                         de.Effect = DragDropEffects.Move;
@@ -1144,7 +1146,7 @@ namespace System.Windows.Forms.Design
         {
             if (mouseDragTool is not null)
             {
-                Debug.Assert(0 != (de.AllowedEffect & DragDropEffects.Copy), "DragDropEffect.Move isn't allowed?");
+                Debug.Assert((de.AllowedEffect & DragDropEffects.Copy) != 0, "DragDropEffect.Move isn't allowed?");
                 de.Effect = DragDropEffects.Copy;
             }
             else
