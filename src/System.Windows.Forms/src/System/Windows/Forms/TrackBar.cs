@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Primitives;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -146,6 +147,8 @@ namespace System.Windows.Forms
         {
             get
             {
+                // If the user opts out of TrackBarModernRendering
+                // then _autoDrawTicks will be set to true
                 _autoDrawTicks = ShouldAutoDrawTicks();
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = PInvoke.TRACKBAR_CLASS;
@@ -573,6 +576,8 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)value);
+                    // If user opts out of TrackBarModernRendering then recreateHandle
+                    // will always be false.
                     if (recreateHandle)
                     {
                         RecreateHandle();
@@ -777,6 +782,7 @@ namespace System.Windows.Forms
             }
 
             int drawnTickFrequency = _tickFrequency;
+            // Will be true if they opt out TrackBarModernRendering.
             if (_autoDrawTicks)
             {
                 PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)drawnTickFrequency);
@@ -1053,6 +1059,8 @@ namespace System.Windows.Forms
                 // is performed by the native control or the Windows Forms runtime
                 // is still valid. If it's no longer valid, we'll need to recreate the native control.
                 bool recreateHandle = ShouldRecreateHandle();
+                // If user opts out of TrackBarModernRendering then recreateHandle
+                // will always be false.
                 if (IsHandleCreated && !recreateHandle)
                 {
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
@@ -1074,6 +1082,8 @@ namespace System.Windows.Forms
                     _value = _maximum;
                 }
 
+                // If user opts out of TrackBarModernRendering then recreateHandle
+                // will always be false.
                 if (recreateHandle)
                 {
                     RecreateHandle();
@@ -1117,6 +1127,16 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldAutoDrawTicks()
         {
+            // If the user decides to opt out of TrackBarModernRendering for drawing ticks,
+            // by returning true autoticks will be set to true which will
+            // use the old way of rendering ticks on the trackbar.
+            // TBS_AUTOTICKS will be enabled and sending
+            // the TBM_SETTICFREQ message to set tick frequency.
+            if (!LocalAppContextSwitches.TrackBarModernRendering)
+            {
+                return true;
+            }
+
             if (TickStyle == TickStyle.None)
             {
                 return true;
@@ -1136,8 +1156,10 @@ namespace System.Windows.Forms
         /// Determine if the decision of whether the ticks drawing,
         /// is performed by the native control or the Windows Forms runtime
         /// is still valid. If it's no longer valid, we'll need to recreate the native control.
+        /// If user opts out of TrackBarModernRendering then this will always return false.
         /// </summary>
         private bool ShouldRecreateHandle() => IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks();
+
         public override string ToString() => $"{base.ToString()}, Minimum: {Minimum}, Maximum: {Maximum}, Value: {_value}";
 
         protected override void WndProc(ref Message m)
