@@ -50,6 +50,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (_parentPropertyGrid.IsHandleCreated &&
+                    // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
+                    // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
+                    _parentPropertyGrid.Created &&
                     _parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
                 {
                     UiaCore.IRawElementProviderFragment? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
