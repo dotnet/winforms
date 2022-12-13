@@ -390,13 +390,6 @@ namespace System.Windows.Forms
                     Point newloc = e.NewLocation;
                     // detect if we haven't yet performed a layout - force one so we can
                     // properly join to the row.
-                    if (ToolStripPanelRow is null)
-                    {
-                        _currentlyDragging = false;
-                        e.Cancel = true;
-                        return;
-                    }
-
                     if (ToolStripPanelRow.Bounds == Rectangle.Empty)
                     {
                         ToolStripPanelRow.ToolStripPanel.PerformUpdate(true);
