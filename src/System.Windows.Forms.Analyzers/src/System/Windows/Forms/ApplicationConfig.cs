@@ -2,9 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+namespace System.Runtime.CompilerServices
+{
+    internal static class IsExternalInit
+    {
+    }
+}
+
 namespace System.Windows.Forms.Analyzers
 {
-    internal partial class ApplicationConfig
+    internal partial record ApplicationConfig(
+        bool EnableVisualStyles,
+        string? DefaultFont,
+        HighDpiMode HighDpiMode,
+        bool UseCompatibleTextRendering)
     {
         public static class PropertyNameCSharp
         {
@@ -27,10 +38,5 @@ namespace System.Windows.Forms.Analyzers
             public const HighDpiMode DpiMode = HighDpiMode.SystemAware;
             public const bool UseCompatibleTextRendering = false;
         }
-
-        public bool EnableVisualStyles { get; set; }
-        public FontDescriptor? DefaultFont { get; set; }
-        public HighDpiMode HighDpiMode { get; set; }
-        public bool UseCompatibleTextRendering { get; set; }
     }
 }

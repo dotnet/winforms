@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Immutable;
+using System.Linq;
 using System.Windows.Forms.Analyzers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,12 +14,13 @@ namespace System.Windows.Forms.Generators
     {
         private static void Execute(
             SourceProductionContext context,
-            ImmutableArray<SyntaxNode> syntaxNodes,
+            bool hasSupportedSyntaxNode,
+            string? projectNamespace,
             OutputKind outputKind,
             ApplicationConfig? applicationConfig,
             Diagnostic? applicationConfigDiagnostics)
         {
-            if (syntaxNodes.IsEmpty)
+            if (!hasSupportedSyntaxNode)
             {
                 return;
             }
@@ -44,7 +45,7 @@ namespace System.Windows.Forms.Generators
                 return;
             }
 
-            string? code = ApplicationConfigurationInitializeBuilder.GenerateInitialize(projectNamespace: GetUserProjectNamespace(syntaxNodes[0]), applicationConfig);
+            string? code = ApplicationConfigurationInitializeBuilder.GenerateInitialize(projectNamespace, applicationConfig);
             if (code is not null)
             {
                 context.AddSource("ApplicationConfiguration.g.cs", code);
@@ -65,24 +66,25 @@ namespace System.Windows.Forms.Generators
 
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
+            var outputKindProvider = context.CompilationProvider.Select((compilation, _) => compilation.Options.OutputKind);
             var syntaxProvider = context.SyntaxProvider.CreateSyntaxProvider(
                 predicate: (syntaxNode, _) => IsSupportedSyntaxNode(syntaxNode),
-                transform: (generatorSyntaxContext, _) => generatorSyntaxContext.Node);
+                transform: (generatorSyntaxContext, _) => GetUserProjectNamespace(generatorSyntaxContext.Node));
 
             var globalConfig = ProjectFileReader.ReadApplicationConfig(context.AnalyzerConfigOptionsProvider);
 
-            var inputs = context.CompilationProvider
+            var inputs = outputKindProvider
                 .Combine(syntaxProvider.Collect())
                 .Combine(globalConfig)
                 .Select((data, cancellationToken)
-                    => (Compilation: data.Left.Left,
-                        Nodes: data.Left.Right,
+                    => (OutputKind: data.Left.Left,
+                        ProjectNamespaces: data.Left.Right,
                         ApplicationConfig: data.Right.ApplicationConfig,
                         ApplicationConfigDiagnostics: data.Right.Diagnostic));
 
             context.RegisterSourceOutput(
                 inputs,
-                (context, source) => Execute(context, source.Nodes, source.Compilation.Options.OutputKind, source.ApplicationConfig, source.ApplicationConfigDiagnostics));
+                (context, source) => Execute(context, source.ProjectNamespaces.Length > 0, source.ProjectNamespaces.Length > 0 ? source.ProjectNamespaces[0] : null, source.OutputKind, source.ApplicationConfig, source.ApplicationConfigDiagnostics));
         }
 
         public static bool IsSupportedSyntaxNode(SyntaxNode syntaxNode)

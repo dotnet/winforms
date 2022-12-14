@@ -1,10 +1,10 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms.Analyzers
 {
-    internal partial class ApplicationConfig
+    internal partial record ApplicationConfig
     {
         // Copied from https://github.com/dotnet/runtime/blob/00ee1c18715723e62484c9bc8a14f517455fc3b3/src/libraries/System.Drawing.Common/src/System/Drawing/GraphicsUnit.cs
         public enum GraphicsUnit

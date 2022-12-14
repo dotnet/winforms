@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace System.Windows.Forms.Analyzers
 {
-    internal partial class ApplicationConfig
+    internal partial record ApplicationConfig
     {
         public class FontDescriptor
         {
