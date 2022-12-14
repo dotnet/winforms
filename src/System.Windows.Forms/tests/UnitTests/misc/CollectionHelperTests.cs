@@ -69,9 +69,7 @@ namespace System.Windows.Forms.misc.Tests
         public void HashtableCopyTo_throws_when_target_is_null_object_array()
         {
             Dictionary<string, string> source = new();
-            var target = (object[])null;
-
-            Assert.Throws<ArgumentNullException>(() => source.HashtableCopyTo(target, index: 0));
+            Assert.Throws<ArgumentNullException>(() => source.HashtableCopyTo(target: null, index: 0));
         }
 
         [Fact]
