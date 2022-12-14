@@ -226,10 +226,11 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            // If the stars properly align, we will let the designer host create the component.   For this to happen, the following criteria must hold true:
+            // If the stars properly align, we will let the designer host create the component.
+            // For this to happen, the following criteria must hold true:
             // 1.  The type must be a component.
             // 2.  addToContainer is true.
-            // 3.  The type has a null ctor or an IContainer ctor.
+            // 3.  The type has a null constructor or an IContainer constructor.
             // 4.  The host is available and its container matches our container.
             // The reason for this is that if we went through activator, and if the object already specified a constructor that took an IContainer, our deserialization mechanism would equate the container to the designer host.  This is the correct thing to do, but it has the side effect of adding the component to the designer host twice -- once with a default name, and a second time with the name we provide.  This equates to a component rename, which isn't cheap,  so we don't want to do it when we load each and every component.
             if (instance is null && addToContainer && typeof(IComponent).IsAssignableFrom(type) && (argArray is null || argArray.Length == 0 || (argArray.Length == 1 && argArray[0] == Container)))
@@ -266,7 +267,8 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         if (argArray is not null)
                         {
-                            // okay, the create failed because the argArray didn't match the types of ctors that are available.  don't panic, we're tough.  we'll try to coerce the types to match the ctor.
+                            // The create failed because the argArray didn't match the types of constructors that are available.
+                            // Try to convert the types to match the constructor.
                             Type[] types = new Type[argArray.Length];
                             // first, get the types of the arguments we've got.
                             for (int index = 0; index < argArray.Length; index++)
@@ -278,15 +280,15 @@ namespace System.ComponentModel.Design.Serialization
                             }
 
                             object[] tempArgs = new object[argArray.Length];
-                            // now, walk the public ctors looking for one to  invoke here with the arguments we have.
+                            // Walk the public constructors looking for one to invoke here with the arguments we have.
                             foreach (ConstructorInfo ci in TypeDescriptor.GetReflectionType(type).GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance))
                             {
                                 ParameterInfo[] pi = ci.GetParameters();
-                                // obviously the count has to match
                                 if (pi is not null && pi.Length == types.Length)
                                 {
                                     bool match = true;
-                                    // now walk every type of argument and compare it to the corresponding argument.  if it matches up exactly or is a derived type, great. otherwise, we'll try to use IConvertible to make it into the right thing.
+                                    // Walk every type of argument we have and see if it matches up exactly or is a derived type of corresponding constructor argument.
+                                    // If not, we'll try to use IConvertible to convert it to the right type.
                                     for (int t = 0; t < types.Length; t++)
                                     {
                                         if (types[t] is null || pi[t].ParameterType.IsAssignableFrom(types[t]))
@@ -312,7 +314,7 @@ namespace System.ComponentModel.Design.Serialization
                                         break;
                                     }
 
-                                    // all of the parameters were converted or matched, so try the creation again. if that works, we're in the money.
+                                    // All of the parameters were converted or matched, so try the creation again.
                                     if (match)
                                     {
                                         instance = TypeDescriptor.CreateInstance(provider, type, null, tempArgs);
@@ -321,7 +323,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                             }
 
-                            // we still failed...rethrow the original exception.
+                            // we still failed, rethrow the original exception.
                             if (instance is null)
                             {
                                 throw;
@@ -427,19 +429,21 @@ namespace System.ComponentModel.Design.Serialization
                 if (serializer is null)
                 {
                     AttributeCollection attributes = TypeDescriptor.GetAttributes(objectType);
-                    foreach (Attribute attr in attributes)
+                    foreach (Attribute attribute in attributes)
                     {
-                        if (attr is DesignerSerializerAttribute da)
+                        if (attribute is DesignerSerializerAttribute designerAttribute)
                         {
-                            string? typeName = da.SerializerBaseTypeName;
+                            string? typeName = designerAttribute.SerializerBaseTypeName;
 
                             // This serializer must support the correct base type or we're not interested.
                             if (typeName is not null)
                             {
                                 Type? baseType = GetRuntimeType(typeName);
-                                if (baseType == serializerType && da.SerializerTypeName is not null && da.SerializerTypeName.Length > 0)
+                                if (baseType == serializerType
+                                    && designerAttribute.SerializerTypeName is not null
+                                    && designerAttribute.SerializerTypeName.Length > 0)
                                 {
-                                    Type? type = GetRuntimeType(da.SerializerTypeName);
+                                    Type? type = GetRuntimeType(designerAttribute.SerializerTypeName);
                                     if (type is not null)
                                     {
                                         serializer = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
@@ -611,7 +615,9 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  The Context property provides a user-defined storage area implemented as a stack.  This storage area is a useful way to provide communication across serializers, as serialization is a generally hierarchial process.
+        ///  The Context property provides a user-defined storage area implemented as a stack.
+        ///  This storage area is a useful way to provide communication across serializers,
+        ///  as serialization is a generally hierarchical process.
         /// </summary>
         ContextStack IDesignerSerializationManager.Context
         {
@@ -628,7 +634,8 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  The Properties property provides a set of custom properties the serialization manager may surface.  The set of properties exposed here is defined by the implementor of  IDesignerSerializationManager.
+        ///  The Properties property provides a set of custom properties the serialization manager may surface.
+        ///  The set of properties exposed here is defined by the implementer of IDesignerSerializationManager.
         /// </summary>
         PropertyDescriptorCollection IDesignerSerializationManager.Properties
         {
@@ -673,7 +680,16 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This event is raised when serialization or deserialization has been completed.  Generally, serialization code should be written to be stateless.  Should some sort of state be necessary to maintain, a serializer can listen to this event to know when that state should be cleared. An example of this is if a serializer needs to write to another file, such as a resource file.  In this case it would be inefficient to design the serializer to close the file when finished because serialization of an object graph generally requires several serializers. The resource file would be opened and closed many times. Instead, the resource file could be accessed through an object that listened to the SerializationComplete event, and that object could close the resource file at the end of serialization.
+        ///  This event is raised when serialization or deserialization has been completed.
+        ///  Generally, serialization code should be written to be stateless.
+        ///  Should some sort of state be necessary to maintain, a serializer can listen to this event
+        ///  to know when that state should be cleared.
+        ///  An example of this is if a serializer needs to write to another file, such as a resource file.
+        ///  In this case it would be inefficient to design the serializer to close the file when finished
+        ///  because serialization of an object graph generally requires several serializers.
+        ///  The resource file would be opened and closed many times.
+        ///  Instead, the resource file could be accessed through an object that listened to the SerializationComplete event,
+        ///  and that object could close the resource file at the end of serialization.
         /// </summary>
         event EventHandler IDesignerSerializationManager.SerializationComplete
         {
@@ -910,7 +926,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  A key comparer that can be passed to a hash table to use object reference identity as the key comparision.
+        ///  A key comparer that can be passed to a hash table to use object reference identity as the key comparison.
         /// </summary>
         private sealed class ReferenceComparer : IEqualityComparer<object>
         {
