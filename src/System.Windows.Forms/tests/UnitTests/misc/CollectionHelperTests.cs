@@ -15,7 +15,7 @@ namespace System.Windows.Forms.misc.Tests
             Dictionary<string, string> source = new();
             object[] target = null;
 
-            Assert.Throws<ArgumentNullException>(() => source.HashtableCopyTo(target, 0));
+            Assert.Throws<ArgumentNullException>(() => source.HashtableCopyTo(target, index: 0));
         }
 
         [Fact]
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.misc.Tests
             Dictionary<string, string> source = new();
             var target = new object[3, 3];
 
-            Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, 0));
+            Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index: 0));
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.misc.Tests
             Dictionary<string, string> source = new();
             var target = new object[3];
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => source.HashtableCopyTo(target, -2));
+            Assert.Throws<ArgumentOutOfRangeException>(() => source.HashtableCopyTo(target, index: -2));
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.misc.Tests
             Dictionary<string, string> source = new();
             var target = new object[3];
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => source.HashtableCopyTo(target, 5));
+            Assert.Throws<ArgumentOutOfRangeException>(() => source.HashtableCopyTo(target, index: 5));
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.misc.Tests
             Dictionary<string, string> source = new();
             var target = Array.CreateInstance(typeof(double), new int[] { 3 }, new int[] { 2 });
 
-            Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, 0));
+            Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index: 0));
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.misc.Tests
             };
             var target = new object[3];
 
-            Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, 2));
+            Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index: 2));
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.misc.Tests
             Dictionary<string, string> source = new();
             var target = (object[])null;
 
-            Assert.Throws<ArgumentNullException>(() => source.HashtableCopyTo(target, 0));
+            Assert.Throws<ArgumentNullException>(() => source.HashtableCopyTo(target, index: 0));
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.misc.Tests
             };
             var target = new KeyValuePair<string, string>[2];
 
-            source.HashtableCopyTo(target, 0);
+            source.HashtableCopyTo(target, index: 0);
 
             var firstTargetItem = target[0];
             Assert.Equal(typeof(KeyValuePair<string, string>), firstTargetItem.GetType());
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.misc.Tests
             };
             var target = new DictionaryEntry[2];
 
-            source.HashtableCopyTo(target, 0);
+            source.HashtableCopyTo(target, index: 0);
 
             var firstTargetItem = target[0];
             Assert.Equal(typeof(DictionaryEntry), firstTargetItem.GetType());
@@ -132,7 +132,7 @@ namespace System.Windows.Forms.misc.Tests
             };
             var target = new object[2];
 
-            source.HashtableCopyTo(target, 0);
+            source.HashtableCopyTo(target, index: 0);
 
             var firstTargetItem = (DictionaryEntry)target[0];
             Assert.Equal("key-one", (string)firstTargetItem.Key);
