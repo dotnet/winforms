@@ -44,8 +44,7 @@ namespace System.Collections.Generic
             }
             else
             {
-                object[]? objects = target as object[];
-                if (objects is null)
+                if (target is not object[] objects)
                 {
                     throw new ArgumentException(SR.Argument_IncompatibleArrayType);
                 }
