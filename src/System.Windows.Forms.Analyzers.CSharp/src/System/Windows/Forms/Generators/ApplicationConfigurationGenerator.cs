@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Linq;
 using System.Windows.Forms.Analyzers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -68,8 +67,8 @@ namespace System.Windows.Forms.Generators
         {
             var outputKindProvider = context.CompilationProvider.Select((compilation, _) => compilation.Options.OutputKind);
             var syntaxProvider = context.SyntaxProvider.CreateSyntaxProvider(
-                predicate: (syntaxNode, _) => IsSupportedSyntaxNode(syntaxNode),
-                transform: (generatorSyntaxContext, _) => GetUserProjectNamespace(generatorSyntaxContext.Node));
+                predicate: static (syntaxNode, _) => IsSupportedSyntaxNode(syntaxNode),
+                transform: static (generatorSyntaxContext, _) => GetUserProjectNamespace(generatorSyntaxContext.Node));
 
             var globalConfig = ProjectFileReader.ReadApplicationConfig(context.AnalyzerConfigOptionsProvider);
 
