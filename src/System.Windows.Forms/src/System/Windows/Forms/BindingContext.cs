@@ -334,9 +334,9 @@ namespace System.Windows.Forms
 
             if (cleanupList is not null)
             {
-                foreach (HashKey o in cleanupList)
+                foreach (HashKey key in cleanupList)
                 {
-                    _listManagers.Remove(o);
+                    _listManagers.Remove(key);
                 }
             }
         }
