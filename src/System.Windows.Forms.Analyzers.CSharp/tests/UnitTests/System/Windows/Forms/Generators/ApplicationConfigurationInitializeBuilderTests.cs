@@ -37,13 +37,12 @@ namespace System.Windows.Forms.Generators.Tests
             string expected = File.ReadAllText($@"System\Windows\Forms\Generators\MockData\{GetType().Name}.{expectedFileName}.cs");
 
             string output = ApplicationConfigurationInitializeBuilder.GenerateInitialize(ns,
-                new ApplicationConfig
-                {
-                    DefaultFont = null,
-                    EnableVisualStyles = PropertyDefaultValue.EnableVisualStyles,
-                    HighDpiMode = PropertyDefaultValue.DpiMode,
-                    UseCompatibleTextRendering = PropertyDefaultValue.UseCompatibleTextRendering
-                });
+                new ApplicationConfig(
+                    EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
+                    DefaultFont: null,
+                    HighDpiMode: PropertyDefaultValue.DpiMode,
+                    UseCompatibleTextRendering: PropertyDefaultValue.UseCompatibleTextRendering
+                ));
 
             Assert.Equal(expected, output);
         }
@@ -58,24 +57,22 @@ namespace System.Windows.Forms.Generators.Tests
                 yield return new object[]
                 {
                     culture,
-                    new ApplicationConfig
-                    {
-                        DefaultFont = null,
-                        EnableVisualStyles = false,
-                        HighDpiMode = PropertyDefaultValue.DpiMode,
-                        UseCompatibleTextRendering = PropertyDefaultValue.UseCompatibleTextRendering
-                    },
+                    new ApplicationConfig(
+                        EnableVisualStyles: false,
+                        DefaultFont: null,
+                        HighDpiMode: PropertyDefaultValue.DpiMode,
+                        UseCompatibleTextRendering: PropertyDefaultValue.UseCompatibleTextRendering
+                    ),
                     "EnableVisualStyles=false"
                 };
                 yield return new object[]
                 {
                     culture,
-                    new ApplicationConfig
-                    {
-                        DefaultFont = null,
-                        EnableVisualStyles = true,
-                        HighDpiMode = PropertyDefaultValue.DpiMode,
-                        UseCompatibleTextRendering = PropertyDefaultValue.UseCompatibleTextRendering
+                    new ApplicationConfig(
+                        EnableVisualStyles: true,
+                        DefaultFont: null,
+                        HighDpiMode: PropertyDefaultValue.DpiMode,
+                        UseCompatibleTextRendering: PropertyDefaultValue.UseCompatibleTextRendering
                     },
                     "EnableVisualStyles=true"
                 };
@@ -84,25 +81,23 @@ namespace System.Windows.Forms.Generators.Tests
                 yield return new object[]
                 {
                     culture,
-                    new ApplicationConfig
-                    {
-                        DefaultFont = null,
-                        EnableVisualStyles = PropertyDefaultValue.EnableVisualStyles,
-                        HighDpiMode = PropertyDefaultValue.DpiMode,
-                        UseCompatibleTextRendering = false
-                    },
+                    new ApplicationConfig(
+                        EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
+                        DefaultFont: null,
+                        HighDpiMode: PropertyDefaultValue.DpiMode,
+                        UseCompatibleTextRendering: false
+                    ),
                     "UseCompTextRendering=false"
                 };
                 yield return new object[]
                 {
                     culture,
-                    new ApplicationConfig
-                    {
-                        DefaultFont = null,
-                        EnableVisualStyles = PropertyDefaultValue.EnableVisualStyles,
-                        HighDpiMode = PropertyDefaultValue.DpiMode,
-                        UseCompatibleTextRendering = true
-                    },
+                    new ApplicationConfig(
+                        EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
+                        DefaultFont: null,
+                        HighDpiMode: PropertyDefaultValue.DpiMode,
+                        UseCompatibleTextRendering: true
+                    ),
                     "UseCompTextRendering=true"
                 };
 
@@ -110,48 +105,46 @@ namespace System.Windows.Forms.Generators.Tests
                 yield return new object[]
                 {
                     culture,
-                    new ApplicationConfig
-                    {
-                        DefaultFont = null,
-                        EnableVisualStyles = PropertyDefaultValue.EnableVisualStyles,
-                        HighDpiMode = PropertyDefaultValue.DpiMode,
-                        UseCompatibleTextRendering = false
-                    },
+                    new ApplicationConfig(
+                        EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
+                        DefaultFont: null,
+                        HighDpiMode: PropertyDefaultValue.DpiMode,
+                        UseCompatibleTextRendering: false
+                    ),
                     "DefaultFont=null"
                 };
                 yield return new object[]
                 {
                     culture,
-                    new ApplicationConfig
-                    {
-                        DefaultFont = new FontDescriptor(string.Empty, 12, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Millimeter),
-                        EnableVisualStyles = PropertyDefaultValue.EnableVisualStyles,
-                        HighDpiMode = PropertyDefaultValue.DpiMode,
-                        UseCompatibleTextRendering = true
-                    },
+                    new ApplicationConfig(
+                        EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
+                        DefaultFont: new FontDescriptor(string.Empty, 12, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Millimeter).ToString(),
+                        HighDpiMode: PropertyDefaultValue.DpiMode,
+                        UseCompatibleTextRendering: true
+                    ),
                     "DefaultFont=default"
                 };
                 yield return new object[]
                 {
                     culture,
-                    new ApplicationConfig
+                    new ApplicationConfig(
                     {
-                        DefaultFont = new FontDescriptor("Tahoma", 12, FontStyle.Regular, GraphicsUnit.Point),
-                        EnableVisualStyles = PropertyDefaultValue.EnableVisualStyles,
-                        HighDpiMode = PropertyDefaultValue.DpiMode,
-                        UseCompatibleTextRendering = true
-                    },
+                        EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
+                        DefaultFont: new FontDescriptor("Tahoma", 12, FontStyle.Regular, GraphicsUnit.Point).ToString(),
+                        HighDpiMode: PropertyDefaultValue.DpiMode,
+                        UseCompatibleTextRendering: true
+                    ),
                     "DefaultFont=Tahoma"
                 };
                 yield return new object[]
                 {
                     culture,
-                    new ApplicationConfig
+                    new ApplicationConfig(
                     {
-                        DefaultFont = new FontDescriptor("Microsoft Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point),
-                        EnableVisualStyles = PropertyDefaultValue.EnableVisualStyles,
-                        HighDpiMode = PropertyDefaultValue.DpiMode,
-                        UseCompatibleTextRendering = true
+                        EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
+                        DefaultFont: new FontDescriptor("Microsoft Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point).ToString(),
+                        HighDpiMode: PropertyDefaultValue.DpiMode,
+                        UseCompatibleTextRendering: true
                     },
                     "DefaultFont=SansSerif"
                 };
