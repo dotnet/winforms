@@ -8,7 +8,7 @@
         /// <summary>
         ///  Copies to arrays matching `HashTable.CopyTo`'s behavior.
         /// </summary>
-        public static void HashTableCopyTo<TKey, TValue>(this IDictionary<TKey, TValue> source, Array target, int index)
+        public static void HashtableCopyTo<TKey, TValue>(this IDictionary<TKey, TValue> source, Array target, int index)
         {
             ArgumentNullException.ThrowIfNull(target);
 

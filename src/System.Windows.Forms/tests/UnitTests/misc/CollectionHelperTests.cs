@@ -6,57 +6,57 @@ namespace System.Windows.Forms.misc.Tests
     public class CollectionHelperTests
     {
         [Fact]
-        public void HashTableCopyTo_throws_when_target_is_null()
+        public void HashtableCopyTo_throws_when_target_is_null()
         {
             var source = new Dictionary<string, string>();
             var target = (object[])null;
             var index = 0;
 
-            var ex = Assert.Throws<ArgumentNullException>(() => source.HashTableCopyTo(target, index));
+            Assert.Throws<ArgumentNullException>(() => source.HashtableCopyTo(target, index));
         }
 
         [Fact]
-        public void HashTableCopyTo_throws_when_target_rank_greather_than_one()
+        public void HashtableCopyTo_throws_when_target_rank_greather_than_one()
         {
             var source = new Dictionary<string, string>();
             var target = new object[3, 3];
             var index = 0;
 
-            var ex = Assert.Throws<ArgumentException>(() => source.HashTableCopyTo(target, index));
+            Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index));
         }
 
         [Fact]
-        public void HashTableCopyTo_throws_when_index_less_than_zero()
+        public void HashtableCopyTo_throws_when_index_less_than_zero()
         {
             var source = new Dictionary<string, string>();
             var target = new object[3];
             var index = -2;
 
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => source.HashTableCopyTo(target, index));
+            Assert.Throws<ArgumentOutOfRangeException>(() => source.HashtableCopyTo(target, index));
         }
 
         [Fact]
-        public void HashTableCopyTo_throws_when_index_greather_than_target_length()
+        public void HashtableCopyTo_throws_when_index_greather_than_target_length()
         {
             var source = new Dictionary<string, string>();
             var target = new object[3];
             var index = 5;
 
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => source.HashTableCopyTo(target, index));
+            Assert.Throws<ArgumentOutOfRangeException>(() => source.HashtableCopyTo(target, index));
         }
 
         [Fact]
-        public void HashTableCopyTo_throws_when_target_lowerbound_is_non_zero()
+        public void HashtableCopyTo_throws_when_target_lowerbound_is_non_zero()
         {
             var source = new Dictionary<string, string>();
             var target = Array.CreateInstance(typeof(double), new int[] { 3 }, new int[] { 2 });
             var index = 0;
 
-            var ex = Assert.Throws<ArgumentException>(() => source.HashTableCopyTo(target, index));
+            Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index));
         }
 
         [Fact]
-        public void HashTableCopyTo_throws_when_target_too_small()
+        public void HashtableCopyTo_throws_when_target_too_small()
         {
             var source = new Dictionary<string, string>()
             {
@@ -66,21 +66,21 @@ namespace System.Windows.Forms.misc.Tests
             var target = new object[3];
             var index = 2;
 
-            var ex = Assert.Throws<ArgumentException>(() => source.HashTableCopyTo(target, index));
+            Assert.Throws<ArgumentException>(() => source.HashtableCopyTo(target, index));
         }
 
         [Fact]
-        public void HashTableCopyTo_throws_when_target_is_null_object_array()
+        public void HashtableCopyTo_throws_when_target_is_null_object_array()
         {
             var source = new Dictionary<string, string>();
             var target = (object[])null;
             var index = 0;
 
-            var ex = Assert.Throws<ArgumentNullException>(() => source.HashTableCopyTo(target, index));
+            Assert.Throws<ArgumentNullException>(() => source.HashtableCopyTo(target, index));
         }
 
         [Fact]
-        public void HashTableCopyTo_successfully_copies_to_KeyValuePair_array()
+        public void HashtableCopyTo_successfully_copies_to_KeyValuePair_array()
         {
             var source = new Dictionary<string, string>()
             {
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.misc.Tests
             var target = new KeyValuePair<string, string>[2];
             var index = 0;
 
-            source.HashTableCopyTo(target, index);
+            source.HashtableCopyTo(target, index);
 
             var firstTargetItem = target[0];
             Assert.Equal(typeof(KeyValuePair<string, string>), firstTargetItem.GetType());
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.misc.Tests
         }
 
         [Fact]
-        public void HashTableCopyTo_successfully_copies_to_DictionaryEntry_array()
+        public void HashtableCopyTo_successfully_copies_to_DictionaryEntry_array()
         {
             var source = new Dictionary<string, string>()
             {
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.misc.Tests
             var target = new DictionaryEntry[2];
             var index = 0;
 
-            source.HashTableCopyTo(target, index);
+            source.HashtableCopyTo(target, index);
 
             var firstTargetItem = target[0];
             Assert.Equal(typeof(DictionaryEntry), firstTargetItem.GetType());
@@ -128,7 +128,7 @@ namespace System.Windows.Forms.misc.Tests
         }
 
         [Fact]
-        public void HashTableCopyTo_successfully_copies_to_Object_array()
+        public void HashtableCopyTo_successfully_copies_to_Object_array()
         {
             var source = new Dictionary<string, string>()
             {
@@ -138,7 +138,7 @@ namespace System.Windows.Forms.misc.Tests
             var target = new DictionaryEntry[2];
             var index = 0;
 
-            source.HashTableCopyTo(target, index);
+            source.HashtableCopyTo(target, index);
 
             var firstTargetItem = target[0];
             Assert.Equal(typeof(DictionaryEntry), firstTargetItem.GetType());

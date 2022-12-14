@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         void ICollection.CopyTo(Array ar, int index)
         {
             ScrubWeakRefs();
-            _listManagers.HashTableCopyTo(ar, index);
+            _listManagers.HashtableCopyTo(ar, index);
         }
 
         /// <summary>
