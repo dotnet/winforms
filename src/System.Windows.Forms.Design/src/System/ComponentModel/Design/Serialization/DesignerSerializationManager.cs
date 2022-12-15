@@ -198,7 +198,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual object CreateInstance(Type type, ICollection? arguments, string? name, bool addToContainer)
         {
-            object[]? argArray = null;
+            object?[]? argArray = null;
             if (arguments is not null && arguments.Count > 0)
             {
                 argArray = new object[arguments.Count];
@@ -261,7 +261,7 @@ namespace System.ComponentModel.Design.Serialization
                     try
                     {
                         // First, just try to create the object directly with the arguments.  generally this should work.
-                        instance = TypeDescriptor.CreateInstance(provider, type, null, argArray);
+                        instance = TypeDescriptor.CreateInstance(provider, type, argTypes: null, argArray);
                     }
                     catch (MissingMethodException)
                     {
@@ -269,29 +269,26 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             // The create failed because the argArray didn't match the types of constructors that are available.
                             // Try to convert the types to match the constructor.
-                            Type[] types = new Type[argArray.Length];
+                            Type?[] types = new Type?[argArray.Length];
                             // first, get the types of the arguments we've got.
                             for (int index = 0; index < argArray.Length; index++)
                             {
-                                if (argArray[index] is not null)
-                                {
-                                    types[index] = argArray[index].GetType();
-                                }
+                                types[index] = argArray[index]?.GetType();
                             }
 
-                            object[] tempArgs = new object[argArray.Length];
+                            object?[] tempArgs = new object?[argArray.Length];
                             // Walk the public constructors looking for one to invoke here with the arguments we have.
                             foreach (ConstructorInfo ci in TypeDescriptor.GetReflectionType(type).GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance))
                             {
-                                ParameterInfo[] pi = ci.GetParameters();
-                                if (pi is not null && pi.Length == types.Length)
+                                ParameterInfo[] parameters = ci.GetParameters();
+                                if (parameters is not null && parameters.Length == types.Length)
                                 {
                                     bool match = true;
                                     // Walk every type of argument we have and see if it matches up exactly or is a derived type of corresponding constructor argument.
                                     // If not, we'll try to use IConvertible to convert it to the right type.
                                     for (int t = 0; t < types.Length; t++)
                                     {
-                                        if (types[t] is null || pi[t].ParameterType.IsAssignableFrom(types[t]))
+                                        if (types[t] is null || parameters[t].ParameterType.IsAssignableFrom(types[t]))
                                         {
                                             tempArgs[t] = argArray[t];
                                             continue;
@@ -302,7 +299,7 @@ namespace System.ComponentModel.Design.Serialization
                                             try
                                             {
                                                 // try the IConvertible route.  If it works, we'll call it a match for this parameter and continue on.
-                                                tempArgs[t] = convertible.ToType(pi[t].ParameterType, null);
+                                                tempArgs[t] = convertible.ToType(parameters[t].ParameterType, null);
                                                 continue;
                                             }
                                             catch (InvalidCastException)
@@ -317,7 +314,7 @@ namespace System.ComponentModel.Design.Serialization
                                     // All of the parameters were converted or matched, so try the creation again.
                                     if (match)
                                     {
-                                        instance = TypeDescriptor.CreateInstance(provider, type, null, tempArgs);
+                                        instance = TypeDescriptor.CreateInstance(provider, type, argTypes: null, tempArgs);
                                         break;
                                     }
                                 }
@@ -336,7 +333,7 @@ namespace System.ComponentModel.Design.Serialization
                     StringBuilder argTypes = new StringBuilder();
                     if (argArray is not null)
                     {
-                        foreach (object o in argArray)
+                        foreach (object? o in argArray)
                         {
                             if (argTypes.Length > 0)
                             {
@@ -446,7 +443,12 @@ namespace System.ComponentModel.Design.Serialization
                                     Type? type = GetRuntimeType(designerAttribute.SerializerTypeName);
                                     if (type is not null)
                                     {
-                                        serializer = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
+                                        serializer = Activator.CreateInstance(
+                                            type,
+                                            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
+                                            binder: null,
+                                            args: null,
+                                            culture: null);
                                         break;
                                     }
                                 }
@@ -477,9 +479,9 @@ namespace System.ComponentModel.Design.Serialization
                             (IDesignerSerializationProvider?)Activator.CreateInstance(
                                 defaultSerializerType,
                                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
-                                null,
-                                null,
-                                null);
+                                binder: null,
+                                args: null,
+                                culture: null);
                         if (provider is not null)
                         {
                             ((IDesignerSerializationManager)this).AddSerializationProvider(provider);
@@ -667,7 +669,11 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  ResolveName event.  This event is raised when GetName is called, but the name is not found in the serialization manager's name table.  It provides a  way for a serializer to demand-create an object so the serializer does not have to order object creation by dependency.  This delegate is cleared immediately after serialization or deserialization is complete.
+        ///  ResolveName event.
+        ///  This event is raised when GetName is called, but the name is not found in the serialization manager's name table.
+        ///  It provides a way for a serializer to demand-create an object so the serializer does not have to order
+        ///  object creation by dependency.
+        ///  This delegate is cleared immediately after serialization or deserialization is complete.
         /// </summary>
         event ResolveNameEventHandler IDesignerSerializationManager.ResolveName
         {
@@ -717,7 +723,9 @@ namespace System.ComponentModel.Design.Serialization
         object IDesignerSerializationManager.CreateInstance(Type type, ICollection arguments, string? name, bool addToContainer)
         {
             CheckSession();
-            // If we were given a name verify that the name doesn't already exist.  We do not verify uniqueness in our parent container here because CreateInstance may modify the name for us.  If it didn't, the container itself will throw, so we're covered.
+            // If we were given a name verify that the name doesn't already exist.
+            // We do not verify uniqueness in our parent container here because CreateInstance may modify the name for us.
+            // If it didn't, the container itself will throw, so we're covered.
             if (name is not null)
             {
                 if (instancesByName is not null && instancesByName.ContainsKey(name))
@@ -731,7 +739,18 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             object instance = CreateInstance(type, arguments, name, addToContainer);
-            // If we have a name save it into our own nametable.  We do this even for objects that were added to the container, because containers reserve the right to change the name in case of collision. Changing the name is fine, but it would be very difficult to map that to the rest of the serializers.  Instead, we keep the old name in our local nametable so a serializer can ask for an object by the old name.  Because the old nametable is searched first, the old name is preserved.  Note that this technique is ONLY valid if RecycleInstances is false.  If it is true, we cannot store in the old nametable because it would be possible to fetch the wrong value from the container. Consider a request for "button1' that results in the creation of an object in the container called "button2" due to a collision.  If a request later came in for "button2", the wrong object would be returned because RecycleInstances checks the container first.  So, it is only safe to store the local value if RecycleInstances is false. When RecycleInstances is true if there was a collision the object would have been returned, so there is no need to store locally.
+            // If we have a name save it into our own nametable.
+            // We do this even for objects that were added to the container,
+            // because containers reserve the right to change the name in case of collision.
+            // Changing the name is fine, but it would be very difficult to map that to the rest of the serializers.
+            // Instead, we keep the old name in our local nametable so a serializer can ask for an object by the old name.
+            // Because the old nametable is searched first, the old name is preserved.
+            // Note that this technique is ONLY valid if RecycleInstances is false.
+            // If it is true, we cannot store in the old nametable because it would be possible to fetch the wrong value
+            // from the container.
+            // Consider a request for "button1' that results in the creation of an object in the container called "button2" due to a collision.
+            // If a request later came in for "button2", the wrong object would be returned because RecycleInstances checks the container first.
+            // So, it is only safe to store the local value if RecycleInstances is false. When RecycleInstances is true if there was a collision the object would have been returned, so there is no need to store locally.
             if (name is not null // If we were given a name
                 && (!(instance is IComponent) // And it's not an icomponent
                     || !RecycleInstances))
@@ -854,7 +873,10 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Reports a non-fatal error in serialization.  The serialization manager may implement a logging scheme to alert the caller to all non-fatal errors at once.  If it doesn't, it should immediately throw in this method, which should abort serialization.   Serialization may continue after calling this function.
+        ///  Reports a non-fatal error in serialization.
+        ///  The serialization manager may implement a logging scheme to alert the caller to all non-fatal errors at once.
+        ///  If it doesn't, it should immediately throw in this method, which should abort serialization.
+        ///  Serialization may continue after calling this function.
         /// </summary>
         void IDesignerSerializationManager.ReportError(object errorInformation)
         {
@@ -871,7 +893,11 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Provides a way to set the name of an existing object. This is useful when it is necessary to create an  instance of an object without going through CreateInstance. An exception will be thrown if you try to rename an existing object or if you try to give a new object a name that is already taken.
+        ///  Provides a way to set the name of an existing object.
+        ///  This is useful when it is necessary to create an
+        ///  instance of an object without going through CreateInstance.
+        ///  An exception will be thrown if you try to rename an existing object
+        ///  or if you try to give a new object a name that is already taken.
         /// </summary>
         void IDesignerSerializationManager.SetName(object instance, string name)
         {
