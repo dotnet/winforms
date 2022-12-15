@@ -128,7 +128,6 @@ namespace System.Windows.Forms.Generators.Tests
                 {
                     culture,
                     new ApplicationConfig(
-                    {
                         EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
                         DefaultFont: new FontDescriptor("Tahoma", 12, FontStyle.Regular, GraphicsUnit.Point).ToString(),
                         HighDpiMode: PropertyDefaultValue.DpiMode,
