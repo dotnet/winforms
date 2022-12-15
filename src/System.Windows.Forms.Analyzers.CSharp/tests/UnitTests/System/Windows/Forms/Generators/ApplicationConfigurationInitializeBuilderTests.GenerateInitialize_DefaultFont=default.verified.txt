@@ -17,7 +17,7 @@ internal static partial class ApplicationConfiguration
     ///  global::System.Windows.Forms.Application.EnableVisualStyles();
     ///  global::System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(true);
     ///  global::System.Windows.Forms.Application.SetHighDpiMode(HighDpiMode.SystemAware);
-    ///  global::System.Windows.Forms.Application.SetDefaultFont(new Font(Control.DefaultFont.FontFamily, 12f, (FontStyle)3, (GraphicsUnit)6));
+    ///  global::System.Windows.Forms.Application.SetDefaultFont(new global::System.Drawing.Font(global::System.Windows.Forms.Control.DefaultFont.FontFamily, 12f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)6));
     /// </code>
     /// </summary>
     public static void Initialize()
@@ -25,6 +25,6 @@ internal static partial class ApplicationConfiguration
         global::System.Windows.Forms.Application.EnableVisualStyles();
         global::System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(true);
         global::System.Windows.Forms.Application.SetHighDpiMode(HighDpiMode.SystemAware);
-        global::System.Windows.Forms.Application.SetDefaultFont(new Font(Control.DefaultFont.FontFamily, 12f, (FontStyle)3, (GraphicsUnit)6));
+        global::System.Windows.Forms.Application.SetDefaultFont(new global::System.Drawing.Font(global::System.Windows.Forms.Control.DefaultFont.FontFamily, 12f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)6));
     }
 }

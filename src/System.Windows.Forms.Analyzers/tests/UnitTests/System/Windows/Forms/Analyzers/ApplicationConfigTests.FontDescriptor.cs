@@ -32,14 +32,14 @@ namespace System.Windows.Forms.Analyzers.Tests
             }
 
             [Theory]
-            [InlineData("", "new Font(Control.DefaultFont.FontFamily, 10f, (FontStyle)3, (GraphicsUnit)3)")]
-            [InlineData(" ", "new Font(Control.DefaultFont.FontFamily, 10f, (FontStyle)3, (GraphicsUnit)3)")]
-            [InlineData("\t", "new Font(Control.DefaultFont.FontFamily, 10f, (FontStyle)3, (GraphicsUnit)3)")]
-            [InlineData("fontName", "new Font(new FontFamily(\"fontName\"), 10f, (FontStyle)3, (GraphicsUnit)3)")]
-            [InlineData("\"fontName\"", "new Font(new FontFamily(\"fontName\"), 10f, (FontStyle)3, (GraphicsUnit)3)")]
-            [InlineData("Name with \tspaces", "new Font(new FontFamily(\"Name with spaces\"), 10f, (FontStyle)3, (GraphicsUnit)3)")]
-            [InlineData("Name with 'quotes'", "new Font(new FontFamily(\"Name with quotes\"), 10f, (FontStyle)3, (GraphicsUnit)3)")]
-            [InlineData("Name with \r\n lines", "new Font(new FontFamily(\"Name with  lines\"), 10f, (FontStyle)3, (GraphicsUnit)3)")]
+            [InlineData("", "new global::System.Drawing.Font(global::System.Windows.Forms.Control.DefaultFont.FontFamily, 10f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)")]
+            [InlineData(" ", "new global::System.Drawing.Font(global::System.Windows.Forms.Control.DefaultFont.FontFamily, 10f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)")]
+            [InlineData("\t", "new global::System.Drawing.Font(global::System.Windows.Forms.Control.DefaultFont.FontFamily, 10f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)")]
+            [InlineData("fontName", "new global::System.Drawing.Font(new global::System.Drawing.FontFamily(\"fontName\"), 10f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)")]
+            [InlineData("\"fontName\"", "new global::System.Drawing.Font(new global::System.Drawing.FontFamily(\"fontName\"), 10f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)")]
+            [InlineData("Name with \tspaces", "new global::System.Drawing.Font(new global::System.Drawing.FontFamily(\"Name with spaces\"), 10f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)")]
+            [InlineData("Name with 'quotes'", "new global::System.Drawing.Font(new global::System.Drawing.FontFamily(\"Name with quotes\"), 10f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)")]
+            [InlineData("Name with \r\n lines", "new global::System.Drawing.Font(new global::System.Drawing.FontFamily(\"Name with  lines\"), 10f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)")]
             public void FontDescriptor_ToString(string fontName, string expected)
             {
                 FontDescriptor descriptor = new(fontName, 10f, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
