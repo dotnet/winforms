@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Generators.Tests
                         DefaultFont: null,
                         HighDpiMode: PropertyDefaultValue.DpiMode,
                         UseCompatibleTextRendering: PropertyDefaultValue.UseCompatibleTextRendering
-                    },
+                    ),
                     "EnableVisualStyles=true"
                 };
 
@@ -140,12 +140,11 @@ namespace System.Windows.Forms.Generators.Tests
                 {
                     culture,
                     new ApplicationConfig(
-                    {
                         EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
                         DefaultFont: new FontDescriptor("Microsoft Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point).ToString(),
                         HighDpiMode: PropertyDefaultValue.DpiMode,
                         UseCompatibleTextRendering: true
-                    },
+                    ),
                     "DefaultFont=SansSerif"
                 };
             }
