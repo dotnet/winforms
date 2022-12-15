@@ -459,9 +459,9 @@ System.ComponentModel.Design.MenuCommandsChangedEventArgs.MenuCommandsChangedEve
 ~System.Drawing.Design.ToolboxItemCollection.this[int index].get -> System.Drawing.Design.ToolboxItem
 ~System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItem[] value) -> void
 ~System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItemCollection value) -> void
-~System.Resources.Tools.ITargetAwareCodeDomProvider.SupportsProperty(System.Type type, string propertyName, bool isWritable) -> bool
-~System.Runtime.InteropServices.UCOMITypeLib.GetDocumentation(int index, out string strName, out string strDocString, out int dwHelpContext, out string strHelpFile) -> void
-~System.Runtime.InteropServices.UCOMITypeLib.IsName(string szNameBuf, int lHashVal) -> bool
+System.Resources.Tools.ITargetAwareCodeDomProvider.SupportsProperty(System.Type! type, string! propertyName, bool isWritable) -> bool
+System.Runtime.InteropServices.UCOMITypeLib.GetDocumentation(int index, out string! strName, out string! strDocString, out int dwHelpContext, out string! strHelpFile) -> void
+System.Runtime.InteropServices.UCOMITypeLib.IsName(string! szNameBuf, int lHashVal) -> bool
 ~System.Windows.Forms.Design.AxImporter.AxImporter(System.Windows.Forms.Design.AxImporter.Options options) -> void
 ~System.Windows.Forms.Design.AxImporter.IReferenceResolver.ResolveActiveXReference(System.Runtime.InteropServices.UCOMITypeLib typeLib) -> string
 ~System.Windows.Forms.Design.AxImporter.IReferenceResolver.ResolveComReference(System.Reflection.AssemblyName name) -> string
