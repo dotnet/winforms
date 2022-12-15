@@ -30,10 +30,10 @@ namespace System.Windows.Forms.Analyzers
                 string name = Regex.Replace(Name, @"[^\w\d ]", string.Empty);
 
                 string fontFamily = string.IsNullOrWhiteSpace(name)
-                    ? "Control.DefaultFont.FontFamily"
-                    : $"new FontFamily(\"{name}\")";
+                    ? "global::System.Windows.Forms.Control.DefaultFont.FontFamily"
+                    : $"new global::System.Drawing.FontFamily(\"{name}\")";
 
-                return $"new Font({fontFamily}, {Size.ToString(CultureInfo.InvariantCulture)}f, (FontStyle){(int)Style}, (GraphicsUnit){(int)Unit})";
+                return $"new global::System.Drawing.Font({fontFamily}, {Size.ToString(CultureInfo.InvariantCulture)}f, (global::System.Drawing.FontStyle){(int)Style}, (global::System.Drawing.GraphicsUnit){(int)Unit})";
             }
         }
     }
