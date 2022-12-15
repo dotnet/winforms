@@ -86,9 +86,8 @@ namespace System.Windows.Forms.misc.Tests
 
             var firstTargetItem = target[0];
             Assert.Equal(typeof(KeyValuePair<string, string>), firstTargetItem.GetType());
-            var firstSourceItem = source[0];
-            Assert.Equal(firstSourceItem.Key, firstTargetItem.Key);
-            Assert.Equal(firstSourceItem.Value, firstTargetItem.Value);
+            Assert.Equal("key-one", firstTargetItem.Key);
+            Assert.Equal("value-one", firstTargetItem.Value);
 
             var secondTargetItem = target[1];
             Assert.Equal(typeof(KeyValuePair<string, string>), secondTargetItem.GetType());
