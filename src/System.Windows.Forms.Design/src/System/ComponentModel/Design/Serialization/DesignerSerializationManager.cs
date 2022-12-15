@@ -201,7 +201,7 @@ namespace System.ComponentModel.Design.Serialization
             object?[]? argArray = null;
             if (arguments is not null && arguments.Count > 0)
             {
-                argArray = new object[arguments.Count];
+                argArray = new object?[arguments.Count];
                 arguments.CopyTo(argArray, 0);
             }
 
@@ -561,7 +561,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Event that is raised when a name needs to be resolved to an object instance..
+        ///  Event that is raised when a name needs to be resolved to an object instance.
         /// </summary>
         protected virtual void OnResolveName(ResolveNameEventArgs e)
         {
@@ -606,7 +606,8 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This method takes a property that is owned by the given owner, and it wraps them in new property that is owned by the serialization manager.
+        ///  This method takes a property that is owned by the given owner,
+        ///  and it wraps them in new property that is owned by the serialization manager.
         /// </summary>
         private static PropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
         {
