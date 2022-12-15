@@ -90,8 +90,8 @@
     <DotNetAnalyzersDocumentationAnalyzersVersion>1.0.0-beta.59</DotNetAnalyzersDocumentationAnalyzersVersion>
     <MicrosoftCodeAnalysisAnalyzersVersion>3.3.2</MicrosoftCodeAnalysisAnalyzersVersion>
     <MicrosoftCodeAnalysisCSharpPackageVersion>4.2.0</MicrosoftCodeAnalysisCSharpPackageVersion>
-    <MicrosoftCodeAnalysisCSharpWorkspacesVersion>4.0.0-2.final</MicrosoftCodeAnalysisCSharpWorkspacesVersion>
-    <MicrosoftCodeAnalysisVisualBasicWorkspacesVersion>4.0.0-2.final</MicrosoftCodeAnalysisVisualBasicWorkspacesVersion>
+    <MicrosoftCodeAnalysisCSharpVersion>4.0.0-2.final</MicrosoftCodeAnalysisCSharpVersion>
+    <MicrosoftCodeAnalysisVisualBasicVersion>4.0.0-2.final</MicrosoftCodeAnalysisVisualBasicVersion>
     <MicrosoftCodeAnalysisPackagesVersion>1.1.2-beta1.22531.1</MicrosoftCodeAnalysisPackagesVersion>
     <MicrosoftCodeAnalysisPublicApiAnalyzersVersion>3.3.0-beta1.final</MicrosoftCodeAnalysisPublicApiAnalyzersVersion>
     <MicrosoftCodeAnalysisNetAnalyzersVersion>7.0.0-preview1.22501.1</MicrosoftCodeAnalysisNetAnalyzersVersion>
