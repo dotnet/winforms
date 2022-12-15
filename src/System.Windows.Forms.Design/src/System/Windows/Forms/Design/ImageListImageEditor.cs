@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design
         // Derived classes can implement a different list of supported image types.
         protected override Type[] GetImageExtenders() => s_imageExtenders;
 
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
             if (provider is null)
             {
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Determines if this editor supports the painting of a representation of an object's value.
         /// </summary>
-        public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
+        public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;
 
         private static ImageListImage LoadImageFromStream(Stream stream, bool imageIsIcon)
         {

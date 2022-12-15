@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
@@ -20,13 +17,13 @@ namespace System.Drawing.Design
     public class ImageEditor : UITypeEditor
     {
         private static readonly Type[] s_imageExtenders = new Type[] { typeof(BitmapEditor), typeof(MetafileEditor) };
-        private FileDialog _fileDialog;
+        private FileDialog? _fileDialog;
 
         // Accessor needed into the static field so that derived classes
         // can implement a different list of supported image types.
         protected virtual Type[] GetImageExtenders() => s_imageExtenders;
 
-        protected static string CreateExtensionsString(string[] extensions, string sep)
+        protected static string? CreateExtensionsString(string[] extensions, string sep)
         {
             if (extensions is null || extensions.Length == 0)
             {
@@ -59,14 +56,14 @@ namespace System.Drawing.Design
 
             string[] extenders = e.GetExtensions();
             string description = e.GetFileDialogDescription();
-            string extensions = CreateExtensionsString(extenders, ",");
-            string extensionsWithSemicolons = CreateExtensionsString(extenders, ";");
+            string? extensions = CreateExtensionsString(extenders, ",");
+            string? extensionsWithSemicolons = CreateExtensionsString(extenders, ";");
             return $"{description}({extensions})|{extensionsWithSemicolons}";
         }
 
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+            if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
             {
                 return value;
             }
@@ -83,17 +80,19 @@ namespace System.Drawing.Design
                         continue;
                     }
 
-                    ImageEditor e = (ImageEditor)Activator.CreateInstance(
+                    Type myClass = GetType();
+                    ImageEditor? editor = (ImageEditor?)Activator.CreateInstance(
                         extender,
                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
-                        null,
-                        null,
-                        null);
-
-                    Type myClass = GetType();
-                    if (!myClass.Equals(e.GetType()) && e is not null && myClass.IsInstanceOfType(e))
+                        binder: null,
+                        args: null,
+                        culture: null);
+                    if (editor is not null
+                        && editor.GetType() is Type editorClass
+                        && !myClass.Equals(editorClass)
+                        && myClass.IsInstanceOfType(editor))
                     {
-                        filter += $"|{CreateFilterEntry(e)}";
+                        filter += $"|{CreateFilterEntry(editor)}";
                     }
                 }
 
@@ -121,13 +120,13 @@ namespace System.Drawing.Design
         }
 
         /// <inheritdoc />
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 
         protected virtual string GetFileDialogDescription() => SR.imageFileDescription;
 
         protected virtual string[] GetExtensions()
         {
-            ArrayList list = new ArrayList();
+            List<string> list = new();
             foreach (Type extender in GetImageExtenders())
             {
                 // Skip invalid extenders.
@@ -136,16 +135,16 @@ namespace System.Drawing.Design
                     continue;
                 }
 
-                ImageEditor e = (ImageEditor)Activator.CreateInstance(
+                ImageEditor? editor = (ImageEditor?)Activator.CreateInstance(
                     extender,
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
-                    null,
-                    null,
-                    null);
+                    binder: null,
+                    args: null,
+                    culture: null);
 
-                if (e.GetType() != typeof(ImageEditor))
+                if (editor is not null && editor.GetType() != typeof(ImageEditor))
                 {
-                    string[] extensions = e.GetExtensions();
+                    string[] extensions = editor.GetExtensions();
                     if (extensions is not null)
                     {
                         list.AddRange(extensions);
@@ -153,11 +152,11 @@ namespace System.Drawing.Design
                 }
             }
 
-            return (string[])list.ToArray(typeof(string));
+            return list.ToArray();
         }
 
         /// <inheritdoc />
-        public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
+        public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;
 
         protected virtual Image LoadFromStream(Stream stream)
         {
