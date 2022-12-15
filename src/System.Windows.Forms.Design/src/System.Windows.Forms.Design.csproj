@@ -76,13 +76,13 @@
   <!-- Embedded Resources are globbed based on their location. -->
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\ComponentModel\Design\*.ico">
-      <LogicalName>System.ComponentModel.Design.$([System.String]::Copy('%(FileName)'))</LogicalName>
+      <LogicalName>System.ComponentModel.Design.%(FileName)</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\*.ico">
-      <LogicalName>System.Windows.Forms.Design.Behavior.$([System.String]::Copy('%(FileName)'))</LogicalName>
+      <LogicalName>System.Windows.Forms.Design.Behavior.%(FileName)</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\WinForms\Design\*.ico">
-      <LogicalName>System.Windows.Forms.Design.$([System.String]::Copy('%(FileName)'))</LogicalName>
+      <LogicalName>System.Windows.Forms.Design.%(FileName)</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   
