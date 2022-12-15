@@ -12145,7 +12145,7 @@ namespace System.Windows.Forms
         private unsafe void WmHelp(ref Message m)
         {
             // if there's currently a message box open - grab the help info from it.
-            HelpInfo hpi = MessageBox.HelpInfo;
+            HelpInfo? hpi = MessageBox.HelpInfo;
             if (hpi is not null)
             {
                 switch (hpi.Option)
