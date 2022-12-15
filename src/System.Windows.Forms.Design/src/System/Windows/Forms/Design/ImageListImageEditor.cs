@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -19,7 +17,7 @@ namespace System.Windows.Forms.Design
     {
         // Metafile types are not supported in the ImageListImageEditor and should not be displayed as an option.
         internal static Type[] s_imageExtenders = new Type[] { typeof(BitmapEditor) };
-        private OpenFileDialog _fileDialog;
+        private OpenFileDialog? _fileDialog;
 
         // Derived classes can implement a different list of supported image types.
         protected override Type[] GetImageExtenders() => s_imageExtenders;
@@ -32,7 +30,7 @@ namespace System.Windows.Forms.Design
             }
 
             var images = new ArrayList();
-            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+            if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
             {
                 return images;
             }
@@ -47,17 +45,18 @@ namespace System.Windows.Forms.Design
                 string filter = CreateFilterEntry(this);
                 foreach (Type extender in GetImageExtenders())
                 {
-                    var myClass = GetType();
-                    var editor = (ImageEditor)Activator.CreateInstance(
+                    Type myClass = GetType();
+                    var editor = (ImageEditor?)Activator.CreateInstance(
                         extender,
                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
                         binder: null,
                         args: null,
                         culture: null);
 
-                    var editorClass = editor.GetType();
-
-                    if (!myClass.Equals(editorClass) && editor is not null && myClass.IsInstanceOfType(editor))
+                    if (editor is not null
+                        && editor.GetType() is Type editorClass
+                        && !myClass.Equals(editorClass)
+                        && myClass.IsInstanceOfType(editor))
                     {
                         filter += $"|{CreateFilterEntry(editor)}";
                     }
