@@ -69,10 +69,10 @@
   <!-- Embedded Resources are globbed based on their location. -->
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\Windows\Forms\**\*.ico;">
-      <LogicalName>$([System.String]::Copy('%(RelativeDir)').Replace("Resources\","").Replace("\",".").TrimEnd('.')).$([System.String]::Copy('%(FileName)'))</LogicalName>
+      <LogicalName>$([System.String]::Copy('%(RelativeDir)').Replace("Resources\","").Replace("\",".").TrimEnd('.')).%(FileName)</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\*.cur">
-      <LogicalName>System.Windows.Forms.$([System.String]::Copy('%(FileName)')).cur</LogicalName>
+      <LogicalName>System.Windows.Forms.%(FileName).cur</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 
