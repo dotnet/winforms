@@ -96,5 +96,63 @@ namespace System.Windows.Forms.UITests
                     return tabControl;
                 });
         }
+
+        [WinFormsFact]
+        public async Task TabControl_ControlsDoNotReorderWhenSelectedIndexChanges()
+        {
+            await RunSingleControlTestAsync(
+                testDriverAsync: async (form, tabControl) =>
+                {
+                    var originalPages = tabControl.TabPages.Cast<TabPage>().ToArray();
+
+                    tabControl.SelectedIndex--;
+                    await Task.Yield();
+
+                    // The changes we made to SelectedIndex will result in a WM_WINDOWPOSCHANGED message which will 
+                    // fire TabPage.WmWindowPosChanged, which will call TabControl.UpdateChildControlIndex.
+
+                    // This test ensures that the latter method short-circuits and does not call Controls.SetChildIndex
+                    // which would inappropriately reorder the Controls collection, resulting in TabPages and Controls
+                    // becoming out of sync.
+
+                    for (int i = 0; i < originalPages.Length; i++)
+                    {
+                        Assert.Equal(tabControl.Controls[i], tabControl.TabPages[i]);
+                    }
+
+                    // The following test proves that it *matters* that the Controls and TabPages collection remain in sync.
+
+                    // Remove the first page by position:
+                    tabControl.TabPages.RemoveAt(0);
+
+                    // We should be left with pages[1] and pages[2]. This will not be the case if the Controls and TabPages
+                    // collections are out of sync.
+                    Assert.Equal(originalPages[1], tabControl.TabPages[0]);
+                    Assert.Equal(originalPages[2], tabControl.TabPages[1]);
+                },
+                createControl: () =>
+                {
+                    SubclassedTabControl tabControl = new()
+                    {
+                        Location = new Point(0, 0)
+                    };
+
+                    TabPage tabPage1 = new() { Text = "Page 1" };
+                    TabPage tabPage2 = new() { Text = "Page 2" };
+                    TabPage tabPage3 = new() { Text = "Page 3" };
+
+                    tabControl.TabPages.Add(tabPage1);
+                    tabControl.TabPages.Add(tabPage2);
+                    tabControl.TabPages.Add(tabPage3);
+
+                    // Start with the Selected Page at the end:
+                    tabControl.SelectedIndex = tabControl.TabPages.Count - 1;
+
+                    return tabControl;
+                });
+        }
+
+        // Bug #7837 occured only when TabControl was subclassed.
+        class SubclassedTabControl : TabControl { }
     }
 }
