@@ -270,7 +270,7 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                object proxy = _host.GetParentContainer().GetProxyForControl(_host);
+                object? proxy = _host.GetParentContainer().GetProxyForControl(_host);
                 if (proxy is null)
                 {
                     return HRESULT.E_NOTIMPL;

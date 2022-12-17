@@ -8,6 +8,15 @@ internal partial class Interop
 {
     internal static partial class Oleaut32
     {
+        // It appears that WFC originally defined this interface under this GUID. Interestingly it appears to
+        // have been defined as IDispatch there. There is no reference to this guid in Windows sources outside of
+        // code that was copied from Windows Forms in the first place. It appears that this was inspired by
+        // IExtender in VB for their Extender Control, which used the same IExtender interface name with similar
+        // properties, but under a completely different GUID and DISPIDs.
+        //
+        // There don't seem to be any references to this interface on the web. No references were found for this
+        // interfac in OLE specfications from the mid 90s. Looks to be purely our own projection and it might be
+        // unused in the wild.
         [ComImport]
         [Guid("39088D7E-B71E-11D1-8F39-00C04FD946D0")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -31,11 +40,11 @@ internal partial class Interop
 
             string Name { get; }
 
-            object Parent { [return: MarshalAs(UnmanagedType.Interface)] get; }
+            object? Parent { [return: MarshalAs(UnmanagedType.Interface)] get; }
 
             IntPtr Hwnd { get; }
 
-            object Container { [return: MarshalAs(UnmanagedType.Interface)] get; }
+            object? Container { [return: MarshalAs(UnmanagedType.Interface)] get; }
 
             void Move(
                 [MarshalAs(UnmanagedType.Interface)] object left,

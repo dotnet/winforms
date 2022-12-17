@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -14,217 +12,300 @@ using static Interop;
 using static Interop.Ole32;
 using Com = Windows.Win32.System.Com;
 using Ole = Windows.Win32.System.Ole;
+using System.Diagnostics.CodeAnalysis;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public abstract partial class AxHost
 {
-    public abstract partial class AxHost
+    internal class AxContainer : Ole.IOleContainer.Interface, IOleInPlaceFrame, IReflect
     {
-        internal class AxContainer : Ole.IOleContainer.Interface, IOleInPlaceFrame, IReflect
+        internal ContainerControl _parent;
+
+        // The associated container may be null, in which case all this container does is
+        // forward [de]activation messages to the requisite container.
+        private IContainer? _associatedContainer;
+
+        private AxHost? _siteUIActive;
+        private AxHost? _siteActive;
+        private bool _formAlreadyCreated;
+        private readonly HashSet<AxHost> _containerCache = new();
+        private int _lockCount;
+        private HashSet<Control>? _components;
+        private Dictionary<Control, Oleaut32.IExtender>? _proxyCache;
+        private AxHost? _controlInEditMode;
+
+        internal AxContainer(ContainerControl parent)
         {
-            internal ContainerControl _parent;
-
-            // The associated container may be null, in which case all this container does is
-            // forward [de]activation messages to the requisite container.
-            private IContainer _associatedContainer;
-
-            private AxHost _siteUIActive;
-            private AxHost _siteActive;
-            private bool _formAlreadyCreated;
-            private readonly HashSet<Control> _containerCache = new();
-            private int _lockCount;
-            private HashSet<Control> _components;  // Control -> any
-            private Dictionary<Control, Oleaut32.IExtender> _proxyCache;
-            private AxHost _controlInEditMode;
-
-            internal AxContainer(ContainerControl parent)
+            s_axHTraceSwitch.TraceVerbose($"in constructor.  Parent created : {parent.Created}");
+            _parent = parent;
+            if (parent.Created)
             {
-                s_axHTraceSwitch.TraceVerbose($"in constructor.  Parent created : {parent.Created}");
-                _parent = parent;
-                if (parent.Created)
+                FormCreated();
+            }
+        }
+
+        // IReflect methods:
+
+        MethodInfo? IReflect.GetMethod(
+            string name,
+            BindingFlags bindingAttr,
+            Binder? binder,
+            Type[] types,
+            ParameterModifier[]? modifiers) => null;
+
+        MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr) => null;
+
+        MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr) => Array.Empty<MethodInfo>();
+
+        FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr) => null;
+
+        FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr) => Array.Empty<FieldInfo>();
+
+        PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr) => null;
+
+        PropertyInfo? IReflect.GetProperty(
+            string name,
+            BindingFlags bindingAttr,
+            Binder? binder,
+            Type? returnType,
+            Type[] types,
+            ParameterModifier[]? modifiers) => null;
+
+        PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr) => Array.Empty<PropertyInfo>();
+
+        MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr) => Array.Empty<MemberInfo>();
+
+        MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr) => Array.Empty<MemberInfo>();
+
+        object? IReflect.InvokeMember(
+            string name,
+            BindingFlags invokeAttr,
+            Binder? binder,
+            object? target,
+            object?[]? args,
+            ParameterModifier[]? modifiers,
+            CultureInfo? culture,
+            string[]? namedParameters)
+        {
+            foreach (AxHost control in _containerCache)
+            {
+                if (GetNameForControl(control).Equals(name))
                 {
-                    FormCreated();
+                    return GetProxyForControl(control);
                 }
             }
 
-            // IReflect methods:
+            throw s_unknownErrorException;
+        }
 
-            MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
+        // We returned null here historically, the interface is now annotated as not returning null.
+        // Risky to change.
+        Type IReflect.UnderlyingSystemType => null!;
+
+        internal Oleaut32.IExtender? GetProxyForControl(Control control)
+        {
+            Oleaut32.IExtender? extender = null;
+            if (_proxyCache is null)
             {
-                return null;
+                _proxyCache = new();
+            }
+            else
+            {
+                _proxyCache.TryGetValue(control, out extender);
             }
 
-            MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
+            if (extender is null)
             {
-                return null;
-            }
-
-            MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
-            {
-                return Array.Empty<MethodInfo>();
-            }
-
-            FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
-            {
-                return null;
-            }
-
-            FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
-            {
-                return Array.Empty<FieldInfo>();
-            }
-
-            PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
-            {
-                return null;
-            }
-
-            PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
-            {
-                return null;
-            }
-
-            PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
-            {
-                return Array.Empty<PropertyInfo>();
-            }
-
-            MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
-            {
-                return Array.Empty<MemberInfo>();
-            }
-
-            MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
-            {
-                return Array.Empty<MemberInfo>();
-            }
-
-            object IReflect.InvokeMember(
-                string name,
-                BindingFlags invokeAttr,
-                Binder binder,
-                object target,
-                object[] args,
-                ParameterModifier[] modifiers,
-                CultureInfo culture,
-                string[] namedParameters)
-            {
-                foreach (Control ctl in _containerCache)
+                if (control != _parent && !GetComponents().Contains(control))
                 {
-                    string ctlName = GetNameForControl(ctl);
-                    if (ctlName.Equals(name))
+                    s_axHTraceSwitch.TraceVerbose("!parent || !belongs NYI");
+                    AxContainer? container = FindContainerForControl(control);
+                    if (container is not null)
                     {
-                        return GetProxyForControl(ctl);
+                        extender = new ExtenderProxy(control, container);
                     }
-                }
-
-                throw s_unknownErrorException;
-            }
-
-            Type IReflect.UnderlyingSystemType
-            {
-                get
-                {
-                    return null;
-                }
-            }
-
-            internal Oleaut32.IExtender GetProxyForControl(Control ctl)
-            {
-                Oleaut32.IExtender rval = null;
-                if (_proxyCache is null)
-                {
-                    _proxyCache = new();
+                    else
+                    {
+                        s_axHTraceSwitch.TraceVerbose("unable to find proxy, returning null");
+                        return null;
+                    }
                 }
                 else
                 {
-                    _proxyCache.TryGetValue(ctl, out rval);
+                    extender = new ExtenderProxy(control, this);
                 }
 
-                if (rval is null)
-                {
-                    if (ctl != _parent && !GetControlBelongs(ctl))
-                    {
-                        s_axHTraceSwitch.TraceVerbose("!parent || !belongs NYI");
-                        AxContainer c = FindContainerForControl(ctl);
-                        if (c is not null)
-                        {
-                            rval = new ExtenderProxy(ctl, c);
-                        }
-                        else
-                        {
-                            s_axHTraceSwitch.TraceVerbose("unable to find proxy, returning null");
-                            return null;
-                        }
-                    }
-                    else
-                    {
-                        rval = new ExtenderProxy(ctl, this);
-                    }
+                _proxyCache.Add(control, extender);
+            }
 
-                    _proxyCache.Add(ctl, rval);
+            s_axHTraceSwitch.TraceVerbose($"found proxy {extender}");
+            return extender;
+        }
+
+        internal static string GetNameForControl(Control control)
+        {
+            string? name = control.Site is { } site ? site.Name : control.Name;
+            return name ?? string.Empty;
+        }
+
+        internal void AddControl(AxHost control)
+        {
+            lock (this)
+            {
+                if (_containerCache.Contains(control))
+                {
+                    throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(control)), nameof(control));
                 }
 
-                s_axHTraceSwitch.TraceVerbose($"found proxy {rval}");
-                return rval;
-            }
+                _containerCache.Add(control);
 
-            internal static string GetNameForControl(Control ctl)
-            {
-                string name = (ctl.Site is not null) ? ctl.Site.Name : ctl.Name;
-                return name ?? "";
-            }
-
-            internal void AddControl(Control ctl)
-            {
-                lock (this)
+                if (_associatedContainer is null)
                 {
-                    if (_containerCache.Contains(ctl))
+                    if (control.Site is { } site)
                     {
-                        throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), nameof(ctl));
-                    }
-
-                    _containerCache.Add(ctl);
-
-                    if (_associatedContainer is null)
-                    {
-                        ISite site = ctl.Site;
-                        if (site is not null)
+                        _associatedContainer = site.Container;
+                        if (site.TryGetService(out IComponentChangeService? changeService))
                         {
-                            _associatedContainer = site.Container;
-                            IComponentChangeService ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                            if (ccs is not null)
+                            changeService.ComponentRemoved += OnComponentRemoved;
+                        }
+                    }
+                }
+                else
+                {
+#if DEBUG
+                    if (control.Site is { } site && _associatedContainer != site.Container)
+                    {
+                        s_axHTraceSwitch.TraceVerbose("mismatch between assoc container & added control");
+                    }
+#endif
+                }
+            }
+        }
+
+        internal void RemoveControl(AxHost control)
+        {
+            lock (this)
+            {
+                _containerCache.Remove(control);
+            }
+        }
+
+        internal Com.IEnumUnknown.Interface EnumControls(Control control, OLECONTF dwOleContF, GC_WCH dwWhich)
+        {
+            GetComponents();
+            _lockCount++;
+
+            Control? additionalControl = control;
+
+            try
+            {
+                // Results are IUnknown
+                List<object>? results = null;
+
+                bool selected = dwWhich.HasFlag(GC_WCH.FSELECTED);
+                bool reverse = dwWhich.HasFlag(GC_WCH.FREVERSEDIR);
+
+                // Note that Visual Basic actually ignores the next/prev flags. We will not.
+                bool onlyNext = dwWhich.HasFlag(GC_WCH.FONLYNEXT);
+                bool onlyPrevious = dwWhich.HasFlag(GC_WCH.FONLYPREV);
+
+                dwWhich &= ~(GC_WCH.FSELECTED | GC_WCH.FREVERSEDIR | GC_WCH.FONLYNEXT | GC_WCH.FONLYPREV);
+                if (onlyNext && onlyPrevious)
+                {
+                    Debug.Fail("onlyNext && onlyPrevious are both set");
+                    throw s_invalidArgumentException;
+                }
+
+                if (dwWhich is GC_WCH.CONTAINER or GC_WCH.CONTAINED && (onlyNext || onlyPrevious))
+                {
+                    Debug.Fail("GC_WCH_FONLYNEXT or FONLYPREV used with CONTAINER or CONTAINED");
+                    throw s_invalidArgumentException;
+                }
+
+                int first = 0;
+                int last = -1; // meaning all
+                Control[] controls = Array.Empty<Control>();
+                switch (dwWhich)
+                {
+                    default:
+                        Debug.Fail("Bad GC_WCH");
+                        throw s_invalidArgumentException;
+                    case GC_WCH.CONTAINED:
+                        controls = control.GetChildControlsInTabOrder(handleCreatedOnly: false);
+                        additionalControl = null;
+                        break;
+                    case GC_WCH.SIBLING:
+                        if (control.ParentInternal is { } parent)
+                        {
+                            controls = parent.GetChildControlsInTabOrder(handleCreatedOnly: false);
+                            if (onlyPrevious)
                             {
-                                ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                                last = control.TabIndex;
+                            }
+                            else if (onlyNext)
+                            {
+                                first = control.TabIndex + 1;
                             }
                         }
-                    }
-                    else
-                    {
-#if DEBUG
-                        ISite site = ctl.Site;
-                        if (site is not null && _associatedContainer != site.Container)
+
+                        additionalControl = null;
+                        break;
+                    case GC_WCH.CONTAINER:
+                        results = new();
+                        additionalControl = null;
+                        MaybeAdd(results, control, selected, dwOleContF, allowContainingControls: false);
+
+                        while (control is not null)
                         {
-                            s_axHTraceSwitch.TraceVerbose("mismatch between assoc container & added control");
+                            if (FindContainerForControl(control) is { } container)
+                            {
+                                MaybeAdd(results, container._parent, selected, dwOleContF, allowContainingControls: true);
+                                control = container._parent;
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
-#endif
+
+                        break;
+                    case GC_WCH.ALL:
+                        controls = GetComponents().ToArray();
+                        additionalControl = _parent;
+                        break;
+                }
+
+                if (results is null)
+                {
+                    results = new();
+                    if (last == -1 && controls is not null)
+                    {
+                        last = controls.Length;
+                    }
+
+                    if (additionalControl is not null)
+                    {
+                        MaybeAdd(results, additionalControl, selected, dwOleContF, allowContainingControls: false);
+                    }
+
+                    if (controls is not null)
+                    {
+                        for (int i = first; i < last; i++)
+                        {
+                            MaybeAdd(results, controls[i], selected, dwOleContF, allowContainingControls: false);
+                        }
                     }
                 }
-            }
 
-            internal void RemoveControl(Control ctl)
-            {
-                lock (this)
+                if (reverse)
                 {
-                    _containerCache.Remove(ctl);
+                    results.Reverse();
                 }
-            }
 
-            private void LockComponents()
-            {
-                _lockCount++;
+                return new EnumUnknown(results.ToArray());
             }
-
-            private void UnlockComponents()
+            finally
             {
                 _lockCount--;
                 if (_lockCount == 0)
@@ -232,1069 +313,927 @@ namespace System.Windows.Forms
                     _components = null;
                 }
             }
+        }
 
-            internal Com.IEnumUnknown.Interface EnumControls(Control ctl, OLECONTF dwOleContF, GC_WCH dwWhich)
+        private void MaybeAdd(List<object> controls, Control control, bool selected, OLECONTF flags, bool allowContainingControls)
+        {
+            if (!allowContainingControls && control != _parent && !GetComponents().Contains(control))
             {
-                GetComponents();
-
-                LockComponents();
-                try
-                {
-                    List<object> activeXControlList = null;
-                    bool selected = (dwWhich & GC_WCH.FSELECTED) != 0;
-                    bool reverse = (dwWhich & GC_WCH.FREVERSEDIR) != 0;
-                    // Note that visual basic actually ignores the next/prev flags... we will not
-                    bool onlyNext = (dwWhich & GC_WCH.FONLYNEXT) != 0;
-                    bool onlyPrev = (dwWhich & GC_WCH.FONLYPREV) != 0;
-                    dwWhich &= ~(GC_WCH.FSELECTED | GC_WCH.FREVERSEDIR |
-                                          GC_WCH.FONLYNEXT | GC_WCH.FONLYPREV);
-                    if (onlyNext && onlyPrev)
-                    {
-                        Debug.Fail("onlyNext && onlyPrev are both set!");
-                        throw s_invalidArgumentException;
-                    }
-
-                    if (dwWhich == GC_WCH.CONTAINER || dwWhich == GC_WCH.CONTAINED)
-                    {
-                        if (onlyNext || onlyPrev)
-                        {
-                            Debug.Fail("GC_WCH_FONLYNEXT or FONLYPREV used with CONTAINER or CONTAINED");
-                            throw s_invalidArgumentException;
-                        }
-                    }
-
-                    int first = 0;
-                    int last = -1; // meaning all
-                    Control[] ctls = null;
-                    switch (dwWhich)
-                    {
-                        default:
-                            Debug.Fail("Bad GC_WCH");
-                            throw s_invalidArgumentException;
-                        case GC_WCH.CONTAINED:
-                            ctls = ctl.GetChildControlsInTabOrder(false);
-                            ctl = null;
-                            break;
-                        case GC_WCH.SIBLING:
-                            Control p = ctl.ParentInternal;
-                            if (p is not null)
-                            {
-                                ctls = p.GetChildControlsInTabOrder(false);
-                                if (onlyPrev)
-                                {
-                                    last = ctl.TabIndex;
-                                }
-                                else if (onlyNext)
-                                {
-                                    first = ctl.TabIndex + 1;
-                                }
-                            }
-                            else
-                            {
-                                ctls = Array.Empty<Control>();
-                            }
-
-                            ctl = null;
-                            break;
-                        case GC_WCH.CONTAINER:
-                            activeXControlList = new();
-                            MaybeAdd(activeXControlList, ctl, selected, dwOleContF, false);
-                            while (ctl is not null)
-                            {
-                                AxContainer cont = FindContainerForControl(ctl);
-                                if (cont is not null)
-                                {
-                                    MaybeAdd(activeXControlList, cont._parent, selected, dwOleContF, true);
-                                    ctl = cont._parent;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-
-                            break;
-                        case GC_WCH.ALL:
-                            HashSet<Control> htbl = GetComponents();
-                            ctls = htbl.ToArray();
-                            ctl = _parent;
-                            break;
-                    }
-
-                    if (activeXControlList is null)
-                    {
-                        activeXControlList = new();
-                        if (last == -1 && ctls is not null)
-                        {
-                            last = ctls.Length;
-                        }
-
-                        if (ctl is not null)
-                        {
-                            MaybeAdd(activeXControlList, ctl, selected, dwOleContF, false);
-                        }
-
-                        for (int i = first; i < last; i++)
-                        {
-                            MaybeAdd(activeXControlList, ctls[i], selected, dwOleContF, false);
-                        }
-                    }
-
-                    object[] rval = activeXControlList.ToArray();
-                    if (reverse)
-                    {
-                        for (int i = 0, j = rval.Length - 1; i < j; i++, j--)
-                        {
-                            object temp = rval[i];
-                            rval[i] = rval[j];
-                            rval[j] = temp;
-                        }
-                    }
-
-                    return new EnumUnknown(rval);
-                }
-                finally
-                {
-                    UnlockComponents();
-                }
+                return;
             }
 
-            private void MaybeAdd(List<object> list, Control ctl, bool selected, OLECONTF dwOleContF, bool ignoreBelong)
+            if (selected)
             {
-                if (!ignoreBelong && ctl != _parent && !GetControlBelongs(ctl))
+                if (control.Site is not { } site
+                    || !site.TryGetService(out ISelectionService? selectionService)
+                    || !selectionService.GetComponentSelected(this))
                 {
                     return;
                 }
+            }
 
-                if (selected)
+            if (control is AxHost hostControl && flags.HasFlag(OLECONTF.EMBEDDINGS))
+            {
+                controls.Add(hostControl.GetOcx());
+            }
+            else if (flags.HasFlag(OLECONTF.OTHERS))
+            {
+                if (GetProxyForControl(control) is { } proxy)
                 {
-                    ISelectionService iss = GetSelectionService(ctl);
-                    if (iss is null || !iss.GetComponentSelected(this))
+                    controls.Add(proxy);
+                }
+            }
+        }
+
+        [MemberNotNull(nameof(_components))]
+        private void FillComponentsTable(IContainer? container)
+        {
+            if (container?.Components is { } components)
+            {
+                _components = new();
+                foreach (IComponent component in components)
+                {
+                    if (component is Control control && component != _parent && component.Site is not null)
                     {
-                        return;
+                        _components.Add(control);
                     }
                 }
 
-                if (ctl is AxHost hostctl && (dwOleContF & OLECONTF.EMBEDDINGS) != 0)
-                {
-                    list.Add(hostctl.GetOcx());
-                }
-                else if ((dwOleContF & OLECONTF.OTHERS) != 0)
-                {
-                    object item = GetProxyForControl(ctl);
-                    if (item is not null)
-                    {
-                        list.Add(item);
-                    }
-                }
+                return;
             }
 
-            private void FillComponentsTable(IContainer container)
+            Debug.Assert(_parent.Site is null, "Parent is sited but we could not find IContainer");
+            s_axHTraceSwitch.TraceVerbose("Did not find a container in FillComponentsTable");
+
+            if (_containerCache.Count > 0)
             {
-                if (container is not null)
+                if (_components is null)
                 {
-                    ComponentCollection comps = container.Components;
-                    if (comps is not null)
-                    {
-                        _components = new();
-                        foreach (IComponent comp in comps)
-                        {
-                            if (comp is Control control && comp != _parent && comp.Site is not null)
-                            {
-                                _components.Add(control);
-                            }
-                        }
-
-                        return;
-                    }
-                }
-
-                Debug.Assert(_parent.Site is null, "Parent is sited but we could not find IContainer!!!");
-                s_axHTraceSwitch.TraceVerbose("Did not find a container in FillComponentsTable!!!");
-
-                bool checkHashTable = true;
-                Control[] ctls = _containerCache.ToArray();
-                if (ctls is not null)
-                {
-                    if (ctls.Length > 0 && _components is null)
-                    {
-                        _components = new();
-                        checkHashTable = false;
-                    }
-
-                    for (int i = 0; i < ctls.Length; i++)
-                    {
-                        if (checkHashTable)
-                        {
-                            _components.Add(ctls[i]);
-                        }
-                    }
-                }
-
-                GetAllChildren(_parent);
-            }
-
-            private void GetAllChildren(Control ctl)
-            {
-                if (ctl is null)
-                {
-                    return;
-                }
-
-                _components ??= new();
-
-                if (ctl != _parent)
-                {
-                    _components.Add(ctl);
-                }
-
-                foreach (Control c in ctl.Controls)
-                {
-                    GetAllChildren(c);
-                }
-            }
-
-            private HashSet<Control> GetComponents()
-            {
-                return GetComponents(GetParentsContainer());
-            }
-
-            private HashSet<Control> GetComponents(IContainer cont)
-            {
-                if (_lockCount == 0)
-                {
-                    FillComponentsTable(cont);
-                }
-
-                return _components;
-            }
-
-            private bool GetControlBelongs(Control ctl)
-            {
-                HashSet<Control> comps = GetComponents();
-                return comps.Contains(ctl);
-            }
-
-            private IContainer GetParentIsDesigned()
-            {
-                ISite site = _parent.Site;
-                if (site is not null && site.DesignMode)
-                {
-                    return site.Container;
-                }
-
-                return null;
-            }
-
-            private IContainer GetParentsContainer()
-            {
-                IContainer rval = GetParentIsDesigned();
-                Debug.Assert(rval is null || _associatedContainer is null || (rval == _associatedContainer),
-                             "mismatch between getIPD & aContainer");
-                return rval ?? _associatedContainer;
-            }
-
-            private bool RegisterControl(AxHost ctl)
-            {
-                ISite site = ctl.Site;
-                if (site is not null)
-                {
-                    IContainer cont = site.Container;
-                    if (cont is not null)
-                    {
-                        if (_associatedContainer is not null)
-                        {
-                            return cont == _associatedContainer;
-                        }
-                        else
-                        {
-                            _associatedContainer = cont;
-                            IComponentChangeService ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                            if (ccs is not null)
-                            {
-                                ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                            }
-
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            }
-
-            private void OnComponentRemoved(object sender, ComponentEventArgs e)
-            {
-                if (sender == _associatedContainer && e.Component is Control c)
-                {
-                    RemoveControl(c);
-                }
-            }
-
-            internal static AxContainer FindContainerForControl(Control ctl)
-            {
-                if (ctl is AxHost axctl)
-                {
-                    if (axctl._container is not null)
-                    {
-                        return axctl._container;
-                    }
-
-                    ContainerControl f = axctl.ContainingControl;
-                    if (f is not null)
-                    {
-                        AxContainer container = f.CreateAxContainer();
-                        if (container.RegisterControl(axctl))
-                        {
-                            container.AddControl(axctl);
-                            return container;
-                        }
-                    }
-                }
-
-                return null;
-            }
-
-            internal void OnInPlaceDeactivate(AxHost site)
-            {
-                if (_siteActive == site)
-                {
-                    _siteActive = null;
-                    if (site.GetSiteOwnsDeactivation())
-                    {
-                        _parent.ActiveControl = null;
-                    }
-                    else
-                    {
-                        // we need to tell the form to switch activation to the next thingie...
-                        Debug.Fail("what pathological control is calling inplacedeactivate by itself?");
-                    }
-                }
-            }
-
-            internal void OnUIDeactivate(AxHost site)
-            {
-                Debug.Assert(_siteUIActive is null || _siteUIActive == site, "deactivating when not active...");
-
-                _siteUIActive = null;
-                site.RemoveSelectionHandler();
-                site.SetSelectionStyle(1);
-                site._editMode = EDITM_NONE;
-            }
-
-            internal void OnUIActivate(AxHost site)
-            {
-                // The ShDocVw control repeatedly calls OnUIActivate() with the same
-                // site. This causes the assert below to fire.
-                //
-                if (_siteUIActive == site)
-                {
-                    return;
-                }
-
-                if (_siteUIActive is not null && _siteUIActive != site)
-                {
-                    AxHost tempSite = _siteUIActive;
-                    bool ownDisposing = tempSite.GetAxState(s_ownDisposing);
-                    try
-                    {
-                        tempSite.SetAxState(s_ownDisposing, true);
-                        tempSite.GetInPlaceObject().UIDeactivate();
-                    }
-                    finally
-                    {
-                        tempSite.SetAxState(s_ownDisposing, ownDisposing);
-                    }
-                }
-
-                site.AddSelectionHandler();
-                Debug.Assert(_siteUIActive is null, "Object did not call OnUIDeactivate");
-                s_axHTraceSwitch.TraceVerbose($"active Object is now {site}");
-                _siteUIActive = site;
-                ContainerControl f = site.ContainingControl;
-                if (f is not null)
-                {
-                    f.ActiveControl = site;
-                }
-            }
-
-            private List<AxHost> GetAxControls()
-            {
-                List<AxHost> controls = new();
-                HashSet<Control> components = GetComponents();
-                foreach (Control ctl in components)
-                {
-                    if (ctl is AxHost hostctl)
-                    {
-                        controls.Add(hostctl);
-                    }
-                }
-
-                return controls;
-            }
-
-            private List<object> GetAxControlsOcx()
-            {
-                List<object> controls = new();
-                HashSet<Control> components = GetComponents();
-                foreach (Control ctl in components)
-                {
-                    if (ctl is AxHost hostctl)
-                    {
-                        controls.Add(hostctl.GetOcx());
-                    }
-                }
-
-                return controls;
-            }
-
-            internal void ControlCreated(AxHost invoker)
-            {
-                s_axHTraceSwitch.TraceVerbose($"in controlCreated for {invoker} fAC: {_formAlreadyCreated}");
-                if (_formAlreadyCreated)
-                {
-                    if (invoker.IsUserMode() && invoker.AwaitingDefreezing())
-                    {
-                        invoker.Freeze(false);
-                    }
+                    _components = new();
                 }
                 else
                 {
-                    // the form will be created in the future
-                    _parent.CreateAxContainer();
-                }
-            }
-
-            internal void FormCreated()
-            {
-                if (_formAlreadyCreated)
-                {
-                    return;
-                }
-
-                _formAlreadyCreated = true;
-                List<AxHost> axControls = GetAxControls();
-                foreach (AxHost control in axControls)
-                {
-                    if (control.GetOcState() >= OC_RUNNING && control.IsUserMode() && control.AwaitingDefreezing())
+                    foreach (AxHost control in _containerCache)
                     {
-                        control.Freeze(false);
+                        _components.Add(control);
                     }
                 }
             }
 
-            unsafe HRESULT Ole.IParseDisplayName.Interface.ParseDisplayName(Com.IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, Com.IMoniker** ppmkOut)
-                => ((Ole.IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
+            GetAllChildren(_parent);
+            Debug.Assert(_components is not null);
 
-            // IOleContainer methods:
-            unsafe HRESULT Ole.IOleContainer.Interface.ParseDisplayName(Com.IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, Com.IMoniker** ppmkOut)
+            [MemberNotNull(nameof(_components))]
+            void GetAllChildren(Control control)
             {
-                s_axHTraceSwitch.TraceVerbose("in ParseDisplayName");
-                if (ppmkOut is not null)
+                _components ??= new();
+
+                if (control != _parent)
                 {
-                    *ppmkOut = null;
+                    _components.Add(control);
                 }
 
-                return HRESULT.E_NOTIMPL;
+                foreach (Control child in control.Controls)
+                {
+                    GetAllChildren(child);
+                }
+            }
+        }
+
+        private HashSet<Control> GetComponents()
+        {
+            if (_lockCount == 0)
+            {
+                FillComponentsTable(GetParentsContainer());
             }
 
-            unsafe HRESULT Ole.IOleContainer.Interface.EnumObjects(Ole.OLECONTF grfFlags, Com.IEnumUnknown** ppenum)
+            Debug.Assert(_components is not null);
+
+            return _components!;
+        }
+
+        private IContainer? GetParentIsDesigned()
+            => _parent.Site is { } site && site.DesignMode ? site.Container : null;
+
+        private IContainer? GetParentsContainer()
+        {
+            IContainer? container = GetParentIsDesigned();
+            Debug.Assert(
+                container is null || _associatedContainer is null || (container == _associatedContainer),
+                "mismatch between getIPD & aContainer");
+            return container ?? _associatedContainer;
+        }
+
+        private bool RegisterControl(AxHost control)
+        {
+            if (control.Site is { } site && site.Container is { } container)
             {
-                if (ppenum is null)
+                if (_associatedContainer is not null)
                 {
-                    return HRESULT.E_POINTER;
+                    return container == _associatedContainer;
+                }
+                else
+                {
+                    _associatedContainer = container;
+                    if (site.TryGetService(out IComponentChangeService? changeService))
+                    {
+                        changeService.ComponentRemoved += OnComponentRemoved;
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void OnComponentRemoved(object? sender, ComponentEventArgs e)
+        {
+            if (sender == _associatedContainer && e.Component is AxHost control)
+            {
+                RemoveControl(control);
+            }
+        }
+
+        internal static AxContainer? FindContainerForControl(Control control)
+        {
+            if (control is AxHost axHost)
+            {
+                if (axHost._container is { } existing)
+                {
+                    return existing;
                 }
 
-                s_axHTraceSwitch.TraceVerbose("in EnumObjects");
-                bool result = true;
-                if ((grfFlags & Ole.OLECONTF.OLECONTF_EMBEDDINGS) != 0)
+                if (axHost.ContainingControl?.CreateAxContainer() is { } container)
                 {
-                    Debug.Assert(_parent is not null, "gotta have it...");
-                    List<object> list = GetAxControlsOcx();
-                    if (list.Count > 0)
+                    if (container.RegisterControl(axHost))
                     {
-                        object[] temp = list.ToArray();
-                        result = ComHelpers.TryGetComPointer(new EnumUnknown(temp), out *ppenum);
-                        Debug.Assert(result);
-                        return HRESULT.S_OK;
+                        container.AddControl(axHost);
+                        return container;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        internal void OnInPlaceDeactivate(AxHost site)
+        {
+            if (_siteActive == site)
+            {
+                _siteActive = null;
+                if (site.GetSiteOwnsDeactivation())
+                {
+                    _parent.ActiveControl = null;
+                }
+                else
+                {
+                    // We need to tell the form to switch activation to the next item
+                    Debug.Fail("Control is calling OnInPlaceDeactivate by itself");
+                }
+            }
+        }
+
+        internal void OnUIDeactivate(AxHost site)
+        {
+            Debug.Assert(_siteUIActive is null || _siteUIActive == site, "Deactivating when not active");
+
+            _siteUIActive = null;
+            site.RemoveSelectionHandler();
+            site.SetSelectionStyle(1);
+            site._editMode = EDITM_NONE;
+        }
+
+        internal void OnUIActivate(AxHost site)
+        {
+            if (_siteUIActive == site)
+            {
+                return;
+            }
+
+            if (_siteUIActive is not null && _siteUIActive != site)
+            {
+                AxHost tempSite = _siteUIActive;
+                bool ownDisposing = tempSite.GetAxState(s_ownDisposing);
+                try
+                {
+                    tempSite.SetAxState(s_ownDisposing, true);
+                    tempSite.GetInPlaceObject().UIDeactivate();
+                }
+                finally
+                {
+                    tempSite.SetAxState(s_ownDisposing, ownDisposing);
+                }
+            }
+
+            site.AddSelectionHandler();
+
+            // The ShDocVw control repeatedly calls OnUIActivate() with the same site.
+            // This causes the assert below to fire.
+            Debug.Assert(_siteUIActive is null, "Object did not call OnUIDeactivate");
+            s_axHTraceSwitch.TraceVerbose($"active Object is now {site}");
+            _siteUIActive = site;
+            if (site.ContainingControl is { } container)
+            {
+                container.ActiveControl = site;
+            }
+        }
+
+        internal void ControlCreated(AxHost invoker)
+        {
+            s_axHTraceSwitch.TraceVerbose($"in controlCreated for {invoker} fAC: {_formAlreadyCreated}");
+            if (_formAlreadyCreated)
+            {
+                if (invoker.IsUserMode() && invoker.AwaitingDefreezing())
+                {
+                    invoker.FreezeEvents(false);
+                }
+            }
+            else
+            {
+                // The form will be created in the future.
+                _parent.CreateAxContainer();
+            }
+        }
+
+        internal void FormCreated()
+        {
+            if (_formAlreadyCreated)
+            {
+                return;
+            }
+
+            _formAlreadyCreated = true;
+
+            List<AxHost> hostControls = new();
+            foreach (Control control in GetComponents())
+            {
+                if (control is AxHost hostControl)
+                {
+                    hostControls.Add(hostControl);
+                }
+            }
+
+            foreach (AxHost hostControl in hostControls)
+            {
+                if (hostControl.GetOcState() >= OC_RUNNING && hostControl.IsUserMode() && hostControl.AwaitingDefreezing())
+                {
+                    hostControl.FreezeEvents(freeze: false);
+                }
+            }
+        }
+
+        unsafe HRESULT Ole.IParseDisplayName.Interface.ParseDisplayName(
+            Com.IBindCtx* pbc,
+            PWSTR pszDisplayName,
+            uint* pchEaten,
+            Com.IMoniker** ppmkOut)
+            => ((Ole.IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
+
+        // IOleContainer methods:
+        unsafe HRESULT Ole.IOleContainer.Interface.ParseDisplayName(
+            Com.IBindCtx* pbc,
+            PWSTR pszDisplayName,
+            uint* pchEaten,
+            Com.IMoniker** ppmkOut)
+        {
+            s_axHTraceSwitch.TraceVerbose("in ParseDisplayName");
+            if (ppmkOut is not null)
+            {
+                *ppmkOut = null;
+            }
+
+            return HRESULT.E_NOTIMPL;
+        }
+
+        unsafe HRESULT Ole.IOleContainer.Interface.EnumObjects(Ole.OLECONTF grfFlags, Com.IEnumUnknown** ppenum)
+        {
+            if (ppenum is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            s_axHTraceSwitch.TraceVerbose("in EnumObjects");
+
+            if ((grfFlags & Ole.OLECONTF.OLECONTF_EMBEDDINGS) != 0)
+            {
+                Debug.Assert(_parent is not null);
+
+                List<object> oleControls = new();
+                foreach (Control control in GetComponents())
+                {
+                    if (control is AxHost hostControl)
+                    {
+                        oleControls.Add(hostControl.GetOcx());
                     }
                 }
 
-                result = ComHelpers.TryGetComPointer(new EnumUnknown(null), out *ppenum);
-                Debug.Assert(result);
-                return HRESULT.S_OK;
-            }
-
-            HRESULT Ole.IOleContainer.Interface.LockContainer(BOOL fLock)
-            {
-                s_axHTraceSwitch.TraceVerbose("in LockContainer");
-                return HRESULT.E_NOTIMPL;
-            }
-
-            // IOleInPlaceFrame methods:
-            unsafe HRESULT IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
-            {
-                if (phwnd is null)
+                if (oleControls.Count > 0)
                 {
-                    return HRESULT.E_POINTER;
+                    ComHelpers.GetComPointer(new EnumUnknown(oleControls.ToArray()), out *ppenum);
+                    return HRESULT.S_OK;
+                }
+            }
+
+            ComHelpers.GetComPointer(new EnumUnknown(null), out *ppenum);
+            return HRESULT.S_OK;
+        }
+
+        HRESULT Ole.IOleContainer.Interface.LockContainer(BOOL fLock)
+        {
+            s_axHTraceSwitch.TraceVerbose("in LockContainer");
+            return HRESULT.E_NOTIMPL;
+        }
+
+        // IOleInPlaceFrame methods:
+        unsafe HRESULT IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
+        {
+            if (phwnd is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            s_axHTraceSwitch.TraceVerbose("in GetWindow");
+            *phwnd = _parent.Handle;
+            return HRESULT.S_OK;
+        }
+
+        HRESULT IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
+        {
+            s_axHTraceSwitch.TraceVerbose("in ContextSensitiveHelp");
+            return HRESULT.S_OK;
+        }
+
+        unsafe HRESULT IOleInPlaceFrame.GetBorder(RECT* lprectBorder)
+        {
+            s_axHTraceSwitch.TraceVerbose("in GetBorder");
+            return HRESULT.E_NOTIMPL;
+        }
+
+        unsafe HRESULT IOleInPlaceFrame.RequestBorderSpace(RECT* pborderwidths)
+        {
+            s_axHTraceSwitch.TraceVerbose("in RequestBorderSpace");
+            return HRESULT.E_NOTIMPL;
+        }
+
+        unsafe HRESULT IOleInPlaceFrame.SetBorderSpace(RECT* pborderwidths)
+        {
+            s_axHTraceSwitch.TraceVerbose("in SetBorderSpace");
+            return HRESULT.E_NOTIMPL;
+        }
+
+        internal void OnExitEditMode(AxHost ctl)
+        {
+            Debug.Assert(_controlInEditMode is null || _controlInEditMode == ctl, "who is exiting edit mode?");
+            if (_controlInEditMode is null || _controlInEditMode != ctl)
+            {
+                return;
+            }
+
+            _controlInEditMode = null;
+        }
+
+        unsafe HRESULT IOleInPlaceFrame.SetActiveObject(Ole.IOleInPlaceActiveObject.Interface? pActiveObject, string? pszObjName)
+        {
+            s_axHTraceSwitch.TraceVerbose($"in SetActiveObject {pszObjName ?? "<null>"}");
+            if (_siteUIActive is { } activeHost && activeHost._iOleInPlaceActiveObjectExternal != pActiveObject)
+            {
+                if (activeHost._iOleInPlaceActiveObjectExternal is not null)
+                {
+                    Marshal.ReleaseComObject(activeHost._iOleInPlaceActiveObjectExternal);
                 }
 
-                s_axHTraceSwitch.TraceVerbose("in GetWindow");
-                *phwnd = _parent.Handle;
-                return HRESULT.S_OK;
+                activeHost._iOleInPlaceActiveObjectExternal = pActiveObject;
             }
 
-            HRESULT IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
+            if (pActiveObject is null)
             {
-                s_axHTraceSwitch.TraceVerbose("in ContextSensitiveHelp");
-                return HRESULT.S_OK;
-            }
-
-            unsafe HRESULT IOleInPlaceFrame.GetBorder(RECT* lprectBorder)
-            {
-                s_axHTraceSwitch.TraceVerbose("in GetBorder");
-                return HRESULT.E_NOTIMPL;
-            }
-
-            unsafe HRESULT IOleInPlaceFrame.RequestBorderSpace(RECT* pborderwidths)
-            {
-                s_axHTraceSwitch.TraceVerbose("in RequestBorderSpace");
-                return HRESULT.E_NOTIMPL;
-            }
-
-            unsafe HRESULT IOleInPlaceFrame.SetBorderSpace(RECT* pborderwidths)
-            {
-                s_axHTraceSwitch.TraceVerbose("in SetBorderSpace");
-                return HRESULT.E_NOTIMPL;
-            }
-
-            internal void OnExitEditMode(AxHost ctl)
-            {
-                Debug.Assert(_controlInEditMode is null || _controlInEditMode == ctl, "who is exiting edit mode?");
-                if (_controlInEditMode is null || _controlInEditMode != ctl)
+                if (_controlInEditMode is not null)
                 {
-                    return;
+                    _controlInEditMode._editMode = EDITM_NONE;
+                    _controlInEditMode = null;
                 }
 
+                return HRESULT.S_OK;
+            }
+
+            if (pActiveObject is not Ole.IOleObject.Interface oleObject)
+            {
+                return HRESULT.S_OK;
+            }
+
+            AxHost? host = null;
+            Ole.IOleClientSite* clientSite;
+            HRESULT hr = oleObject.GetClientSite(&clientSite);
+            Debug.Assert(hr.Succeeded);
+
+            var clientSiteObject = (Ole.IOleClientSite.Interface)Marshal.GetObjectForIUnknown((nint)clientSite);
+            if (clientSiteObject is OleInterfaces interfaces)
+            {
+                host = interfaces.GetAxHost();
+            }
+
+            if (_controlInEditMode is not null)
+            {
+                Debug.Fail($"control {_controlInEditMode} did not reset its edit mode to null");
+                _controlInEditMode.SetSelectionStyle(1);
+                _controlInEditMode._editMode = EDITM_NONE;
+            }
+
+            if (host is null)
+            {
+                s_axHTraceSwitch.TraceVerbose("control w/o a valid site called setactiveobject");
                 _controlInEditMode = null;
             }
-
-            unsafe HRESULT IOleInPlaceFrame.SetActiveObject(Ole.IOleInPlaceActiveObject.Interface pActiveObject, string pszObjName)
+            else
             {
-                s_axHTraceSwitch.TraceVerbose($"in SetActiveObject {pszObjName ?? "<null>"}");
-                if (_siteUIActive is not null)
+                s_axHTraceSwitch.TraceVerbose($"resolved to {host}");
+                if (!host.IsUserMode())
                 {
-                    if (_siteUIActive._iOleInPlaceActiveObjectExternal != pActiveObject)
-                    {
-                        if (_siteUIActive._iOleInPlaceActiveObjectExternal is not null)
-                        {
-                            Marshal.ReleaseComObject(_siteUIActive._iOleInPlaceActiveObjectExternal);
-                        }
-
-                        _siteUIActive._iOleInPlaceActiveObjectExternal = pActiveObject;
-                    }
+                    _controlInEditMode = host;
+                    host._editMode = EDITM_OBJECT;
+                    host.AddSelectionHandler();
+                    host.SetSelectionStyle(2);
                 }
+            }
 
-                if (pActiveObject is null)
-                {
-                    if (_controlInEditMode is not null)
-                    {
-                        _controlInEditMode._editMode = EDITM_NONE;
-                        _controlInEditMode = null;
-                    }
+            return HRESULT.S_OK;
+        }
 
-                    return HRESULT.S_OK;
-                }
+        unsafe HRESULT IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths)
+        {
+            s_axHTraceSwitch.TraceVerbose("in InsertMenus");
+            return HRESULT.S_OK;
+        }
 
-                AxHost ctl = null;
-                if (pActiveObject is Ole.IOleObject.Interface oleObject)
-                {
-                    Ole.IOleClientSite* clientSite;
-                    HRESULT hr = oleObject.GetClientSite(&clientSite);
-                    Debug.Assert(hr.Succeeded);
+        HRESULT IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
+        {
+            s_axHTraceSwitch.TraceVerbose("in SetMenu");
+            return HRESULT.E_NOTIMPL;
+        }
 
-                    var clientSiteObject = (Ole.IOleClientSite.Interface)Marshal.GetObjectForIUnknown((nint)clientSite);
-                    if (clientSiteObject is OleInterfaces interfaces)
-                    {
-                        ctl = interfaces.GetAxHost();
-                    }
+        HRESULT IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
+        {
+            s_axHTraceSwitch.TraceVerbose("in RemoveMenus");
+            return HRESULT.E_NOTIMPL;
+        }
 
-                    if (_controlInEditMode is not null)
-                    {
-                        Debug.Fail($"control {_controlInEditMode} did not reset its edit mode to null");
-                        _controlInEditMode.SetSelectionStyle(1);
-                        _controlInEditMode._editMode = EDITM_NONE;
-                    }
+        HRESULT IOleInPlaceFrame.SetStatusText(string pszStatusText)
+        {
+            s_axHTraceSwitch.TraceVerbose("in SetStatusText");
+            return HRESULT.E_NOTIMPL;
+        }
 
-                    if (ctl is null)
-                    {
-                        s_axHTraceSwitch.TraceVerbose("control w/o a valid site called setactiveobject");
-                        _controlInEditMode = null;
-                    }
-                    else
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"resolved to {ctl}");
-                        if (!ctl.IsUserMode())
-                        {
-                            _controlInEditMode = ctl;
-                            ctl._editMode = EDITM_OBJECT;
-                            ctl.AddSelectionHandler();
-                            ctl.SetSelectionStyle(2);
-                        }
-                    }
-                }
+        HRESULT IOleInPlaceFrame.EnableModeless(BOOL fEnable)
+        {
+            s_axHTraceSwitch.TraceVerbose("in EnableModeless");
+            return HRESULT.E_NOTIMPL;
+        }
 
+        unsafe HRESULT IOleInPlaceFrame.TranslateAccelerator(MSG* lpmsg, ushort wID)
+        {
+            s_axHTraceSwitch.TraceVerbose("in IOleInPlaceFrame.TranslateAccelerator");
+            return HRESULT.S_FALSE;
+        }
+
+        private class ExtenderProxy :
+            Oleaut32.IExtender,
+            IVBGetControl,
+            IGetVBAObject,
+            IGetOleObject,
+            IReflect
+        {
+            private readonly WeakReference<Control> _principal;
+            private readonly WeakReference<AxContainer> _container;
+
+            internal ExtenderProxy(Control principal, AxContainer container)
+            {
+                _principal = new(principal);
+                _container = new(container);
+            }
+
+            private Control? GetPrincipal()
+            {
+                _principal.TryGetTarget(out Control? target);
+                return target;
+            }
+
+            private AxContainer? GetContainer()
+            {
+                _container.TryGetTarget(out AxContainer? container);
+                return container;
+            }
+
+            HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out Com.IEnumUnknown.Interface ppenum)
+            {
+                s_axHTraceSwitch.TraceVerbose("in EnumControls for proxy");
+                ppenum = GetContainer() is { } container && GetPrincipal() is { } principal
+                    ? container.EnumControls(principal, dwOleContF, dwWhich)
+                    : new EnumUnknown(null);
                 return HRESULT.S_OK;
             }
 
-            unsafe HRESULT IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths)
+            unsafe HRESULT IGetOleObject.GetOleObject(Guid* riid, out object? ppvObj)
             {
-                s_axHTraceSwitch.TraceVerbose("in InsertMenus");
+                s_axHTraceSwitch.TraceVerbose("in GetOleObject for proxy");
+                ppvObj = null;
+                if (riid is null || !riid->Equals(s_ioleobject_Guid))
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
+                if (GetPrincipal() is AxHost hostControl)
+                {
+                    ppvObj = hostControl.GetOcx();
+                    return HRESULT.S_OK;
+                }
+
+                return HRESULT.E_FAIL;
+            }
+
+            unsafe HRESULT IGetVBAObject.GetObject(Guid* riid, IVBFormat?[] rval, uint dwReserved)
+            {
+                s_axHTraceSwitch.TraceVerbose("in GetObject for proxy");
+                if (rval is null || riid is null || rval.Length == 0)
+                {
+                    return HRESULT.E_INVALIDARG;
+                }
+
+                if (!riid->Equals(s_ivbformat_Guid))
+                {
+                    rval[0] = null;
+                    return HRESULT.E_NOINTERFACE;
+                }
+
+                rval[0] = new VBFormat();
                 return HRESULT.S_OK;
             }
 
-            HRESULT IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
+            public int Align
             {
-                s_axHTraceSwitch.TraceVerbose("in SetMenu");
-                return HRESULT.E_NOTIMPL;
+                get
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in getAlign for proxy for {GetPrincipal()}");
+                    int result = (int)(GetPrincipal()?.Dock ?? NativeMethods.ActiveX.ALIGN_NO_CHANGE);
+                    if (result is < NativeMethods.ActiveX.ALIGN_MIN or > NativeMethods.ActiveX.ALIGN_MAX)
+                    {
+                        result = NativeMethods.ActiveX.ALIGN_NO_CHANGE;
+                    }
+
+                    return result;
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setAlign for proxy for {GetPrincipal()} {value}");
+                    if (GetPrincipal() is { } control)
+                    {
+                        control.Dock = (DockStyle)value;
+                    }
+                }
             }
 
-            HRESULT IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
+            public uint BackColor
             {
-                s_axHTraceSwitch.TraceVerbose("in RemoveMenus");
-                return HRESULT.E_NOTIMPL;
+                get
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in getBackColor for proxy for {GetPrincipal()}");
+                    return GetOleColorFromColor(GetPrincipal()?.BackColor ?? default);
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setBackColor for proxy for {GetPrincipal()} {value}");
+                    if (GetPrincipal() is { } control)
+                    {
+                        control.BackColor = GetColorFromOleColor(value);
+                    }
+                }
             }
 
-            HRESULT IOleInPlaceFrame.SetStatusText(string pszStatusText)
+            public BOOL Enabled
             {
-                s_axHTraceSwitch.TraceVerbose("in SetStatusText");
-                return HRESULT.E_NOTIMPL;
+                get
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in getEnabled for proxy for {GetPrincipal()}");
+                    return GetPrincipal()?.Enabled ?? BOOL.FALSE;
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setEnabled for proxy for {GetPrincipal()} {value}");
+                    if (GetPrincipal() is { } control)
+                    {
+                        control.Enabled = value;
+                    }
+                }
             }
 
-            HRESULT IOleInPlaceFrame.EnableModeless(BOOL fEnable)
+            public uint ForeColor
             {
-                s_axHTraceSwitch.TraceVerbose("in EnableModeless");
-                return HRESULT.E_NOTIMPL;
+                get
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in getForeColor for proxy for {GetPrincipal()}");
+                    return GetOleColorFromColor(GetPrincipal()?.ForeColor ?? default);
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setForeColor for proxy for {GetPrincipal()} {value}");
+                    if (GetPrincipal() is { } control)
+                    {
+                        control.ForeColor = GetColorFromOleColor(value);
+                    }
+                }
             }
 
-            unsafe HRESULT IOleInPlaceFrame.TranslateAccelerator(MSG* lpmsg, ushort wID)
+            public int Height
             {
-                s_axHTraceSwitch.TraceVerbose("in IOleInPlaceFrame.TranslateAccelerator");
-                return HRESULT.S_FALSE;
+                get
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in getHeight for proxy for {GetPrincipal()}");
+                    return Pixel2Twip(GetPrincipal()?.Height ?? 0, xDirection: false);
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setHeight for proxy for {GetPrincipal()} {Twip2Pixel(value, false)}");
+                    if (GetPrincipal() is { } control)
+                    {
+                        control.Height = Twip2Pixel(value, xDirection: false);
+                    }
+                }
             }
 
-            // EXPOSED
-
-            private class ExtenderProxy :
-                Oleaut32.IExtender,
-                IVBGetControl,
-                IGetVBAObject,
-                IGetOleObject,
-                IReflect
+            public int Left
             {
-                private readonly WeakReference _pRef;
-                private readonly WeakReference _pContainer;
-
-                internal ExtenderProxy(Control principal, AxContainer container)
+                get
                 {
-                    _pRef = new WeakReference(principal);
-                    _pContainer = new WeakReference(container);
+                    s_axHTraceSwitch.TraceVerbose($"in getLeft for proxy for {GetPrincipal()}");
+                    return Pixel2Twip(GetPrincipal()?.Left ?? 0, xDirection: true);
                 }
-
-                private Control GetP() => (Control)_pRef.Target;
-
-                private AxContainer GetC() => (AxContainer)_pContainer.Target;
-
-                HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out Com.IEnumUnknown.Interface ppenum)
+                set
                 {
-                    s_axHTraceSwitch.TraceVerbose("in EnumControls for proxy");
-                    ppenum = GetC().EnumControls(GetP(), dwOleContF, dwWhich);
-                    return HRESULT.S_OK;
-                }
-
-                unsafe HRESULT IGetOleObject.GetOleObject(Guid* riid, out object ppvObj)
-                {
-                    s_axHTraceSwitch.TraceVerbose("in GetOleObject for proxy");
-                    ppvObj = null;
-                    if (riid is null || !riid->Equals(s_ioleobject_Guid))
+                    s_axHTraceSwitch.TraceVerbose($"in setLeft for proxy for {GetPrincipal()} {Twip2Pixel(value, true)}");
+                    if (GetPrincipal() is { } control)
                     {
-                        return HRESULT.E_INVALIDARG;
-                    }
-
-                    if (GetP() is AxHost ctl)
-                    {
-                        ppvObj = ctl.GetOcx();
-                        return HRESULT.S_OK;
-                    }
-
-                    return HRESULT.E_FAIL;
-                }
-
-                unsafe HRESULT IGetVBAObject.GetObject(Guid* riid, IVBFormat[] rval, uint dwReserved)
-                {
-                    s_axHTraceSwitch.TraceVerbose("in GetObject for proxy");
-                    if (rval is null || riid is null)
-                    {
-                        return HRESULT.E_INVALIDARG;
-                    }
-
-                    if (!riid->Equals(s_ivbformat_Guid))
-                    {
-                        rval[0] = null;
-                        return HRESULT.E_NOINTERFACE;
-                    }
-
-                    rval[0] = new VBFormat();
-                    return HRESULT.S_OK;
-                }
-
-                public int Align
-                {
-                    get
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in getAlign for proxy for {GetP()}");
-                        int rval = (int)(GetP()).Dock;
-                        if (rval < NativeMethods.ActiveX.ALIGN_MIN || rval > NativeMethods.ActiveX.ALIGN_MAX)
-                        {
-                            rval = NativeMethods.ActiveX.ALIGN_NO_CHANGE;
-                        }
-
-                        return rval;
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setAlign for proxy for {GetP()} {value}");
-                        GetP().Dock = (DockStyle)value;
+                        control.Left = Twip2Pixel(value, xDirection: true);
                     }
                 }
+            }
 
-                public uint BackColor
+            public object? Parent
+            {
+                get
                 {
-                    get
+                    s_axHTraceSwitch.TraceVerbose($"in getParent for proxy for {GetPrincipal()}");
+                    return GetContainer() is { } container ? container.GetProxyForControl(container._parent) : null;
+                }
+            }
+
+            public short TabIndex
+            {
+                get
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in getTabIndex for proxy for {GetPrincipal()}");
+                    return (short)(GetPrincipal()?.TabIndex ?? 0);
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setTabIndex for proxy for {GetPrincipal()} {value}");
+                    if (GetPrincipal() is { } control)
                     {
-                        s_axHTraceSwitch.TraceVerbose($"in getBackColor for proxy for {GetP()}");
-                        return GetOleColorFromColor(GetP().BackColor);
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setBackColor for proxy for {GetP()} {value}");
-                        GetP().BackColor = GetColorFromOleColor(value);
+                        control.TabIndex = value;
                     }
                 }
+            }
 
-                public BOOL Enabled
+            public BOOL TabStop
+            {
+                get
                 {
-                    get
+                    s_axHTraceSwitch.TraceVerbose($"in getTabStop for proxy for {GetPrincipal()}");
+                    return GetPrincipal()?.TabStop ?? BOOL.FALSE;
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setTabStop for proxy for {GetPrincipal()} {value}");
+                    if (GetPrincipal() is { } control)
                     {
-                        s_axHTraceSwitch.TraceVerbose($"in getEnabled for proxy for {GetP()}");
-                        return GetP().Enabled;
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setEnabled for proxy for {GetP()} {value}");
-                        GetP().Enabled = value;
+                        control.TabStop = value;
                     }
                 }
+            }
 
-                public uint ForeColor
+            public int Top
+            {
+                get
                 {
-                    get
+                    s_axHTraceSwitch.TraceVerbose($"in getTop for proxy for {GetPrincipal()}");
+                    return Pixel2Twip(GetPrincipal()?.Top ?? 0, xDirection: false);
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setTop for proxy for {GetPrincipal()} {Twip2Pixel(value, false)}");
+                    if (GetPrincipal() is { } control)
                     {
-                        s_axHTraceSwitch.TraceVerbose($"in getForeColor for proxy for {GetP()}");
-                        return GetOleColorFromColor(GetP().ForeColor);
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setForeColor for proxy for {GetP()} {value}");
-                        GetP().ForeColor = GetColorFromOleColor(value);
+                        control.Top = Twip2Pixel(value, xDirection: false);
                     }
                 }
+            }
 
-                public int Height
+            public BOOL Visible
+            {
+                get
                 {
-                    get
+                    s_axHTraceSwitch.TraceVerbose($"in getVisible for proxy for {GetPrincipal()}");
+                    return GetPrincipal()?.Visible ?? false;
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setVisible for proxy for {GetPrincipal()} {value}");
+                    if (GetPrincipal() is { } control)
                     {
-                        s_axHTraceSwitch.TraceVerbose($"in getHeight for proxy for {GetP()}");
-                        return Pixel2Twip(GetP().Height, xDirection: false);
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setHeight for proxy for {GetP()} {Twip2Pixel(value, false)}");
-                        GetP().Height = Twip2Pixel(value, xDirection: false);
+                        control.Visible = value;
                     }
                 }
+            }
 
-                public int Left
+            public int Width
+            {
+                get
                 {
-                    get
+                    s_axHTraceSwitch.TraceVerbose($"in getWidth for proxy for {GetPrincipal()}");
+                    return Pixel2Twip(GetPrincipal()?.Width ?? 0, xDirection: true);
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setWidth for proxy for {GetPrincipal()} {Twip2Pixel(value, true)}");
+                    if (GetPrincipal() is { } control)
                     {
-                        s_axHTraceSwitch.TraceVerbose($"in getLeft for proxy for {GetP()}");
-                        return Pixel2Twip(GetP().Left, xDirection: true);
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setLeft for proxy for {GetP()} {Twip2Pixel(value, true)}");
-                        GetP().Left = Twip2Pixel(value, xDirection: true);
+                        control.Width = Twip2Pixel(value, xDirection: true);
                     }
                 }
+            }
 
-                public object Parent
+            public string Name
+            {
+                get
                 {
-                    get
+                    s_axHTraceSwitch.TraceVerbose($"in getName for proxy for {GetPrincipal()}");
+                    return GetPrincipal() is { } control ? GetNameForControl(control) : string.Empty;
+                }
+            }
+
+            public IntPtr Hwnd
+            {
+                get
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in getHwnd for proxy for {GetPrincipal()}");
+                    return GetPrincipal()?.Handle ?? default;
+                }
+            }
+
+            public object? Container => GetContainer();
+
+            public string Text
+            {
+                get
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in getText for proxy for {GetPrincipal()}");
+                    return GetPrincipal()?.Text ?? string.Empty;
+                }
+                set
+                {
+                    s_axHTraceSwitch.TraceVerbose($"in setText for proxy for {GetPrincipal()}");
+                    if (GetPrincipal() is { } control)
                     {
-                        s_axHTraceSwitch.TraceVerbose($"in getParent for proxy for {GetP()}");
-                        return GetC().GetProxyForControl(GetC()._parent);
+                        control.Text = value;
                     }
                 }
+            }
 
-                public short TabIndex
+            public void Move(object left, object top, object width, object height)
+            {
+            }
+
+            // IReflect methods:
+
+            MethodInfo? IReflect.GetMethod(
+                string name,
+                BindingFlags bindingAttr,
+                Binder? binder,
+                Type[] types,
+                ParameterModifier[]? modifiers) => null;
+
+            MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr) => null;
+            MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr) => new[] { GetType().GetMethod("Move")! };
+
+            FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr) => null;
+            FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr) => Array.Empty<FieldInfo>();
+
+            PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
+            {
+                PropertyInfo? property = GetPrincipal()?.GetType().GetProperty(name, bindingAttr);
+                property ??= GetType().GetProperty(name, bindingAttr);
+                return property;
+            }
+
+            PropertyInfo? IReflect.GetProperty(
+                string name,
+                BindingFlags bindingAttr,
+                Binder? binder,
+                Type? returnType,
+                Type[] types,
+                ParameterModifier[]? modifiers)
+            {
+                PropertyInfo? property = GetPrincipal()?.GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
+                property ??= GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
+                return property;
+            }
+
+            PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
+            {
+                PropertyInfo[] extenderProperties = GetType().GetProperties(bindingAttr);
+                PropertyInfo[]? controlProperties = GetPrincipal()?.GetType().GetProperties(bindingAttr);
+
+                if (extenderProperties is null)
                 {
-                    get
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in getTabIndex for proxy for {GetP()}");
-                        return (short)GetP().TabIndex;
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setTabIndex for proxy for {GetP()} {value}");
-                        GetP().TabIndex = value;
-                    }
+                    return controlProperties ?? Array.Empty<PropertyInfo>();
                 }
-
-                public BOOL TabStop
+                else if (controlProperties is null)
                 {
-                    get
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in getTabStop for proxy for {GetP()}");
-                        return GetP().TabStop;
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setTabStop for proxy for {GetP()} {value}");
-                        GetP().TabStop = value;
-                    }
+                    return extenderProperties ?? Array.Empty<PropertyInfo>();
                 }
-
-                public int Top
+                else
                 {
-                    get
+                    int i = 0;
+                    PropertyInfo[] properties = new PropertyInfo[extenderProperties.Length + controlProperties.Length];
+
+                    foreach (PropertyInfo property in extenderProperties)
                     {
-                        s_axHTraceSwitch.TraceVerbose($"in getTop for proxy for {GetP()}");
-                        return Pixel2Twip(GetP().Top, xDirection: false);
+                        properties[i++] = property;
                     }
-                    set
+
+                    foreach (PropertyInfo property in controlProperties)
                     {
-                        s_axHTraceSwitch.TraceVerbose($"in setTop for proxy for {GetP()} {Twip2Pixel(value, false)}");
-                        GetP().Top = Twip2Pixel(value, xDirection: false);
+                        properties[i++] = property;
                     }
+
+                    return properties;
                 }
+            }
 
-                public BOOL Visible
+            MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
+            {
+                MemberInfo[]? member = GetPrincipal()?.GetType().GetMember(name, bindingAttr);
+                member ??= GetType().GetMember(name, bindingAttr);
+                return member;
+            }
+
+            MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
+            {
+                MemberInfo[] extenderMembers = GetType().GetMembers(bindingAttr);
+                MemberInfo[]? controlMembers = GetPrincipal()?.GetType().GetMembers(bindingAttr);
+
+                if (extenderMembers is null)
                 {
-                    get
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in getVisible for proxy for {GetP()}");
-                        return GetP().Visible;
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setVisible for proxy for {GetP()} {value}");
-                        GetP().Visible = value;
-                    }
+                    return controlMembers ?? Array.Empty<MemberInfo>();
                 }
-
-                public int Width
+                else if (controlMembers is null)
                 {
-                    get
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in getWidth for proxy for {GetP()}");
-                        return Pixel2Twip(GetP().Width, xDirection: true);
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setWidth for proxy for {GetP()} {Twip2Pixel(value, true)}");
-                        GetP().Width = Twip2Pixel(value, xDirection: true);
-                    }
+                    return extenderMembers ?? Array.Empty<MemberInfo>();
                 }
-
-                public string Name
+                else
                 {
-                    get
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in getName for proxy for {GetP()}");
-                        return GetNameForControl(GetP());
-                    }
+                    MemberInfo[] members = new MemberInfo[extenderMembers.Length + controlMembers.Length];
+                    Array.Copy(extenderMembers, 0, members, 0, extenderMembers.Length);
+                    Array.Copy(controlMembers, 0, members, extenderMembers.Length, controlMembers.Length);
+                    return members;
                 }
+            }
 
-                public IntPtr Hwnd
+            object? IReflect.InvokeMember(
+                string name,
+                BindingFlags invokeAttr,
+                Binder? binder,
+                object? target,
+                object?[]? args,
+                ParameterModifier[]? modifiers,
+                CultureInfo? culture,
+                string[]? namedParameters)
+            {
+                try
                 {
-                    get
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in getHwnd for proxy for {GetP()}");
-                        return GetP().Handle;
-                    }
+                    return GetType().InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
                 }
-
-                public object Container => GetC();
-
-                public string Text
+                catch (MissingMethodException)
                 {
-                    get
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in getText for proxy for {GetP()}");
-                        return GetP().Text;
-                    }
-                    set
-                    {
-                        s_axHTraceSwitch.TraceVerbose($"in setText for proxy for {GetP()}");
-                        GetP().Text = value;
-                    }
+                    return GetPrincipal()?.GetType().InvokeMember(name, invokeAttr, binder, GetPrincipal(), args, modifiers, culture, namedParameters);
                 }
+            }
 
-                public void Move(object left, object top, object width, object height)
+            Type IReflect.UnderlyingSystemType
+            {
+                get
                 {
-                }
-
-                // IReflect methods:
-
-                MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
-                {
-                    return null;
-                }
-
-                MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
-                {
-                    return null;
-                }
-
-                MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
-                {
-                    return new MethodInfo[] { GetType().GetMethod("Move") };
-                }
-
-                FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
-                {
-                    return null;
-                }
-
-                FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
-                {
-                    return Array.Empty<FieldInfo>();
-                }
-
-                PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
-                {
-                    PropertyInfo prop = GetP().GetType().GetProperty(name, bindingAttr);
-                    prop ??= GetType().GetProperty(name, bindingAttr);
-
-                    return prop;
-                }
-
-                PropertyInfo IReflect.GetProperty(
-                    string name,
-                    BindingFlags bindingAttr,
-                    Binder binder,
-                    Type returnType,
-                    Type[] types,
-                    ParameterModifier[] modifiers)
-                {
-                    PropertyInfo prop = GetP().GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-                    prop ??= GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-
-                    return prop;
-                }
-
-                PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
-                {
-                    PropertyInfo[] extenderProps = GetType().GetProperties(bindingAttr);
-                    PropertyInfo[] ctlProps = GetP().GetType().GetProperties(bindingAttr);
-
-                    if (extenderProps is null)
-                    {
-                        return ctlProps;
-                    }
-                    else if (ctlProps is null)
-                    {
-                        return extenderProps;
-                    }
-                    else
-                    {
-                        int iProp = 0;
-                        PropertyInfo[] props = new PropertyInfo[extenderProps.Length + ctlProps.Length];
-
-                        foreach (PropertyInfo prop in extenderProps)
-                        {
-                            props[iProp++] = prop;
-                        }
-
-                        foreach (PropertyInfo prop in ctlProps)
-                        {
-                            props[iProp++] = prop;
-                        }
-
-                        return props;
-                    }
-                }
-
-                MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
-                {
-                    MemberInfo[] memb = GetP().GetType().GetMember(name, bindingAttr);
-                    memb ??= GetType().GetMember(name, bindingAttr);
-
-                    return memb;
-                }
-
-                MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
-                {
-                    MemberInfo[] extenderMembs = GetType().GetMembers(bindingAttr);
-                    MemberInfo[] ctlMembs = GetP().GetType().GetMembers(bindingAttr);
-
-                    if (extenderMembs is null)
-                    {
-                        return ctlMembs;
-                    }
-                    else if (ctlMembs is null)
-                    {
-                        return extenderMembs;
-                    }
-                    else
-                    {
-                        MemberInfo[] membs = new MemberInfo[extenderMembs.Length + ctlMembs.Length];
-
-                        Array.Copy(extenderMembs, 0, membs, 0, extenderMembs.Length);
-                        Array.Copy(ctlMembs, 0, membs, extenderMembs.Length, ctlMembs.Length);
-
-                        return membs;
-                    }
-                }
-
-                object IReflect.InvokeMember(
-                    string name,
-                    BindingFlags invokeAttr,
-                    Binder binder,
-                    object target,
-                    object[] args,
-                    ParameterModifier[] modifiers,
-                    CultureInfo culture,
-                    string[] namedParameters)
-                {
-                    try
-                    {
-                        return GetType().InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
-                    }
-                    catch (MissingMethodException)
-                    {
-                        return GetP().GetType().InvokeMember(name, invokeAttr, binder, GetP(), args, modifiers, culture, namedParameters);
-                    }
-                }
-
-                Type IReflect.UnderlyingSystemType
-                {
-                    get
-                    {
-                        s_axHTraceSwitch.TraceVerbose("In UnderlyingSystemType");
-                        return null;
-                    }
+                    s_axHTraceSwitch.TraceVerbose("In UnderlyingSystemType");
+                    return null!;
                 }
             }
         }
