@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Tests
         {
             using ToolStrip toolStrip = CreateToolStripWithOverflow(5);
 
-            toolStrip.OverflowButton.DropDown.CreateControl(fIgnoreVisible: true);
+            toolStrip.OverflowButton.DropDown.CreateControl(ignoreVisible: true);
 
             AccessibleObject accessibleObject = toolStrip.OverflowButton.DropDown.AccessibilityObject;
             AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.Tests
 
             toolStrip.PerformLayout();
 
-            toolStrip.OverflowButton.DropDown.CreateControl(fIgnoreVisible: true);
+            toolStrip.OverflowButton.DropDown.CreateControl(ignoreVisible: true);
 
             AccessibleObject accessibleObject = toolStrip.OverflowButton.DropDown.AccessibilityObject;
             AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Tests
         {
             using ToolStrip toolStrip = CreateToolStripWithOverflow(5);
 
-            toolStrip.OverflowButton.DropDown.CreateControl(fIgnoreVisible: true);
+            toolStrip.OverflowButton.DropDown.CreateControl(ignoreVisible: true);
 
             AccessibleObject accessibleObject = toolStrip.OverflowButton.DropDown.AccessibilityObject;
             AccessibleObject expected = toolStrip.Items[4].AccessibilityObject;
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Tests
 
             toolStrip.PerformLayout();
 
-            toolStrip.OverflowButton.DropDown.CreateControl(fIgnoreVisible: true);
+            toolStrip.OverflowButton.DropDown.CreateControl(ignoreVisible: true);
 
             AccessibleObject accessibleObject = toolStrip.OverflowButton.DropDown.AccessibilityObject;
             AccessibleObject expected = toolStrip.Items[4].AccessibilityObject;
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.Tests
             using ToolStripButton toolStripItem = new();
             using ToolStripOverflow toolStripOverflow = new(toolStripItem);
 
-            toolStripOverflow.CreateControl(fIgnoreVisible: true);
+            toolStripOverflow.CreateControl(ignoreVisible: true);
 
             AccessibleObject accessibleObject = toolStripOverflow.AccessibilityObject;
 
