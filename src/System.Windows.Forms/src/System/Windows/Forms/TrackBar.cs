@@ -776,19 +776,13 @@ namespace System.Windows.Forms
         /// </summary>
         private void DrawTicks()
         {
-            if (_tickStyle == TickStyle.None)
+            // Will be true if they opt out TrackBarModernRendering.
+            if (_tickStyle == TickStyle.None || _autoDrawTicks)
             {
                 return;
             }
 
             int drawnTickFrequency = _tickFrequency;
-            // Will be true if they opt out TrackBarModernRendering.
-            if (_autoDrawTicks)
-            {
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)drawnTickFrequency);
-                return;
-            }
-
             // Divide by 2 because otherwise the ticks appear as a solid line.
             int maxTickCount = (Orientation == Orientation.Horizontal ? Size.Width : Size.Height) / 2;
             uint range = (uint)(_maximum - _minimum);
@@ -1065,7 +1059,11 @@ namespace System.Windows.Forms
                 {
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
                     PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
-                    DrawTicks();
+                    if (!_autoDrawTicks)
+                    {
+                        DrawTicks();
+                    }
+
                     Invalidate();
                 }
 
