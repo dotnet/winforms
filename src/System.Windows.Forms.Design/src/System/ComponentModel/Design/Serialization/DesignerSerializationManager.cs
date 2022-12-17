@@ -278,10 +278,10 @@ namespace System.ComponentModel.Design.Serialization
 
                             object?[] tempArgs = new object?[argArray.Length];
                             // Walk the public constructors looking for one to invoke here with the arguments we have.
-                            foreach (ConstructorInfo ci in TypeDescriptor.GetReflectionType(type).GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance))
+                            foreach (ConstructorInfo info in TypeDescriptor.GetReflectionType(type).GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance))
                             {
-                                ParameterInfo[] parameters = ci.GetParameters();
-                                if (parameters is not null && parameters.Length == types.Length)
+                                ParameterInfo[] parameters = info.GetParameters();
+                                if (parameters.Length == types.Length)
                                 {
                                     bool match = true;
                                     // Walk every type of argument we have and see if it matches up exactly or is a derived type of corresponding constructor argument.
