@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -22,19 +20,19 @@ namespace System.Windows.Forms.Design
     [ToolboxItem(false)]
     internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     {
-        private IDesignerHost host;
-        private Control ctlHover;
-        private ArrayList tabControls;
-        private Rectangle[] tabGlyphs;
-        private ArrayList tabComplete;
-        private Hashtable tabNext;
+        private IDesignerHost? host;
+        private Control? ctlHover;
+        private List<Control>? tabControls;
+        private Rectangle[]? tabGlyphs;
+        private HashSet<Control>? tabComplete;
+        private Dictionary<Control, int>? tabNext;
         private readonly Font tabFont;
         private readonly StringBuilder drawString;
         private readonly Brush highlightTextBrush;
         private readonly Pen highlightPen;
         private readonly int selSize;
-        private readonly Hashtable tabProperties;
-        private Region region;
+        private readonly Dictionary<Control, PropertyDescriptor> tabProperties;
+        private Region? region;
         private readonly MenuCommand[] commands;
         private readonly MenuCommand[] newCommands;
         private readonly string decimalSep;
@@ -48,57 +46,35 @@ namespace System.Windows.Forms.Design
             this.host = host;
 
             // Determine a font for us to use.
-            //
-            IUIService uisvc = (IUIService)host.GetService(typeof(IUIService));
-            if (uisvc is not null)
-            {
-                tabFont = (Font)uisvc.Styles["DialogFont"];
-            }
-            else
-            {
-                tabFont = DefaultFont;
-            }
-
+            IUIService? uisvc = (IUIService?)host.GetService(typeof(IUIService));
+            tabFont = uisvc is not null && uisvc.Styles["DialogFont"] is Font dialogFont ? dialogFont : DefaultFont;
             tabFont = new Font(tabFont, FontStyle.Bold);
 
             // And compute the proper highlight dimensions.
-            //
             selSize = DesignerUtils.GetAdornmentDimensions(AdornmentType.GrabHandle).Width;
 
             // Colors and brushes...
-            //
             drawString = new StringBuilder(12);
             highlightTextBrush = new SolidBrush(SystemColors.HighlightText);
             highlightPen = new Pen(SystemColors.Highlight);
 
             // The decimal separator
-            //
-            NumberFormatInfo formatInfo = (NumberFormatInfo)CultureInfo.CurrentCulture.GetFormat(typeof(NumberFormatInfo));
-            if (formatInfo is not null)
-            {
-                decimalSep = formatInfo.NumberDecimalSeparator;
-            }
-            else
-            {
-                decimalSep = ".";
-            }
+            NumberFormatInfo? formatInfo = (NumberFormatInfo?)CultureInfo.CurrentCulture.GetFormat(typeof(NumberFormatInfo));
+            decimalSep = formatInfo is not null ? formatInfo.NumberDecimalSeparator : ".";
 
-            tabProperties = new Hashtable();
+            tabProperties = new();
 
             // Set up a NULL brush so we never try to invalidate the control.  This is
             // more efficient for what we're doing
-            //
             SetStyle(ControlStyles.Opaque, true);
 
             // We're an overlay on top of the form
-            //
-            IOverlayService os = (IOverlayService)host.GetService(typeof(IOverlayService));
+            IOverlayService? os = (IOverlayService?)host.GetService(typeof(IOverlayService));
             Debug.Assert(os is not null, "No overlay service -- tab order UI cannot be shown");
             os?.PushOverlay(this);
 
             // Push a help keyword so the help system knows we're in place.
-            //
-            IHelpService hs = (IHelpService)host.GetService(typeof(IHelpService));
+            IHelpService? hs = (IHelpService?)host.GetService(typeof(IHelpService));
             hs?.AddContextAttribute("Keyword", "TabOrderView", HelpKeywordType.FilterKeyword);
 
             commands = new MenuCommand[]
@@ -134,7 +110,7 @@ namespace System.Windows.Forms.Design
                                 MenuCommands.KeyTabOrderSelect),
             };
 
-            IMenuCommandService mcs = (IMenuCommandService)host.GetService(typeof(IMenuCommandService));
+            IMenuCommandService? mcs = (IMenuCommandService?)host.GetService(typeof(IMenuCommandService));
             if (mcs is not null)
             {
                 foreach (MenuCommand mc in newCommands)
@@ -145,14 +121,12 @@ namespace System.Windows.Forms.Design
 
             // We also override keyboard, menu and mouse handlers.  Our override relies on the
             // above array of menu commands, so this must come after we initialize the array.
-            //
-            IEventHandlerService ehs = (IEventHandlerService)host.GetService(typeof(IEventHandlerService));
+            IEventHandlerService? ehs = (IEventHandlerService?)host.GetService(typeof(IEventHandlerService));
             ehs?.PushHandler(this);
 
             // We sync add, remove and change events so we remain in sync with any nastiness that the
             // form may pull on us.
-            //
-            IComponentChangeService cs = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
+            IComponentChangeService? cs = (IComponentChangeService?)host.GetService(typeof(IComponentChangeService));
             if (cs is not null)
             {
                 cs.ComponentAdded += new ComponentEventHandler(OnComponentAddRemove);
@@ -176,13 +150,13 @@ namespace System.Windows.Forms.Design
 
                 if (host is not null)
                 {
-                    IOverlayService os = (IOverlayService)host.GetService(typeof(IOverlayService));
+                    IOverlayService? os = (IOverlayService?)host.GetService(typeof(IOverlayService));
                     os?.RemoveOverlay(this);
 
-                    IEventHandlerService ehs = (IEventHandlerService)host.GetService(typeof(IEventHandlerService));
+                    IEventHandlerService? ehs = (IEventHandlerService?)host.GetService(typeof(IEventHandlerService));
                     ehs?.PopHandler(this);
 
-                    IMenuCommandService mcs = (IMenuCommandService)host.GetService(typeof(IMenuCommandService));
+                    IMenuCommandService? mcs = (IMenuCommandService?)host.GetService(typeof(IMenuCommandService));
                     if (mcs is not null)
                     {
                         foreach (MenuCommand mc in newCommands)
@@ -193,8 +167,7 @@ namespace System.Windows.Forms.Design
 
                     // We sync add, remove and change events so we remain in sync with any nastiness that the
                     // form may pull on us.
-                    //
-                    IComponentChangeService cs = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
+                    IComponentChangeService? cs = (IComponentChangeService?)host.GetService(typeof(IComponentChangeService));
                     if (cs is not null)
                     {
                         cs.ComponentAdded -= new ComponentEventHandler(OnComponentAddRemove);
@@ -202,7 +175,7 @@ namespace System.Windows.Forms.Design
                         cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                     }
 
-                    IHelpService hs = (IHelpService)host.GetService(typeof(IHelpService));
+                    IHelpService? hs = (IHelpService?)host.GetService(typeof(IHelpService));
                     hs?.RemoveContextAttribute("Keyword", "TabOrderView");
 
                     host = null;
@@ -217,16 +190,9 @@ namespace System.Windows.Forms.Design
         ///  computes control region rects if fRegion is true (both require that we essentially
         ///  "draw" the tabs)
         /// </summary>
-        private void DrawTabs(IList tabs, Graphics gr, bool fRegion)
+        private void DrawTabs(List<Control> tabs, Graphics gr, bool fRegion)
         {
-            IEnumerator e = tabs.GetEnumerator();
-            int iCtl = 0;
-            Control ctl;
-            Control parent;
-            string str;
-
             Font font = tabFont;
-
             if (fRegion)
             {
                 region = new Region(new Rectangle(0, 0, 0, 0));
@@ -245,31 +211,36 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-                    Control p = ctlHover.Parent;
-                    Color backColor;
-                    backColor = p.BackColor;
-
-                    Region clip = gr.Clip;
-                    gr.ExcludeClip(ctlInner);
-                    using (SolidBrush brush = new SolidBrush(backColor))
+                    if (ctlHover.Parent is Control hoverParent)
                     {
-                        gr.FillRectangle(brush, ctlOuter);
-                    }
+                        Color backColor;
+                        backColor = hoverParent.BackColor;
 
-                    ControlPaint.DrawSelectionFrame(gr, false, ctlOuter, ctlInner, backColor);
-                    gr.Clip = clip;
+                        Region clip = gr.Clip;
+                        gr.ExcludeClip(ctlInner);
+                        using (SolidBrush brush = new SolidBrush(backColor))
+                        {
+                            gr.FillRectangle(brush, ctlOuter);
+                        }
+
+                        ControlPaint.DrawSelectionFrame(gr, false, ctlOuter, ctlInner, backColor);
+                        gr.Clip = clip;
+                    }
                 }
             }
 
+            int iCtl = 0;
+            string str;
             Rectangle rc;
-            while (e.MoveNext())
+            Control? parent;
+            foreach (Control ctl in tabs)
             {
-                ctl = (Control)e.Current;
                 rc = GetConvertedBounds(ctl);
 
                 drawString.Length = 0;
 
                 parent = GetSitedParent(ctl);
+                Debug.Assert(host is not null, "host is set in the contructor should not be null");
                 Control baseControl = (Control)host.RootComponent;
 
                 while (parent != baseControl && parent is not null)
@@ -283,7 +254,7 @@ namespace System.Windows.Forms.Design
                 drawString.Append(ctl.TabIndex.ToString(CultureInfo.CurrentCulture));
                 drawString.Append(' ');
 
-                if (((PropertyDescriptor)tabProperties[ctl]).IsReadOnly)
+                if (tabProperties[ctl].IsReadOnly)
                 {
                     drawString.Append(SR.WindowsFormsTabOrderReadOnly);
                     drawString.Append(' ');
@@ -294,6 +265,7 @@ namespace System.Windows.Forms.Design
                 rc.Width = sz.Width + 2;
                 rc.Height = sz.Height + 2;
 
+                Debug.Assert(tabGlyphs is not null, "tabGlyps should not be null here.");
                 tabGlyphs[iCtl++] = rc;
 
                 Brush brush;
@@ -301,11 +273,11 @@ namespace System.Windows.Forms.Design
                 Color textColor;
                 if (fRegion)
                 {
-                    region.Union(rc);
+                    region?.Union(rc);
                 }
                 else
                 {
-                    if (tabComplete.IndexOf(ctl) != -1)
+                    if (tabComplete is not null && !tabComplete.Contains(ctl))
                     {
                         brush = highlightTextBrush;
                         pen = highlightPen;
@@ -329,9 +301,10 @@ namespace System.Windows.Forms.Design
 
             if (fRegion)
             {
-                ctl = (Control)host.RootComponent;
-                rc = GetConvertedBounds(ctl);
-                region.Intersect(rc);
+                Debug.Assert(host is not null, "host is set in the contructor should not be null");
+                Control rootControl = (Control)host.RootComponent;
+                rc = GetConvertedBounds(rootControl);
+                region?.Intersect(rc);
                 Region = region;
             }
         }
@@ -340,29 +313,30 @@ namespace System.Windows.Forms.Design
         ///  returns a control in the given tab vector that is at the given point, in
         ///  screen coords.
         /// </summary>
-        private Control GetControlAtPoint(IList tabs, int x, int y)
+        private Control? GetControlAtPoint(List<Control> tabs, int x, int y)
         {
             IEnumerator e = tabs.GetEnumerator();
             Rectangle rc;
-            Control ctlFound = null;
-            Control ctl;
-            Control parent;
+            Control? ctlFound = null;
+            Control? parent;
 
-            while (e.MoveNext())
+            foreach (Control control in tabs)
             {
-                ctl = (Control)e.Current;
-                parent = GetSitedParent(ctl);
-                rc = ctl.Bounds;
-                rc = parent.RectangleToScreen(rc);
+                parent = GetSitedParent(control);
+                if (parent is null)
+                {
+                    continue;
+                }
 
-                // We do not break if we find it here.  The vector is already setup
+                rc = parent.RectangleToScreen(control.Bounds);
+
+                // We do not break if we find it here. The vector is already setup
                 // to have all controls in the current tabbing order, and child controls
-                // are always after their parents.  If we broke, we wouldn't necessarily
+                // are always after their parents. If we broke, we wouldn't necessarily
                 // find the appropriate child.
-                //
                 if (rc.Contains(x, y))
                 {
-                    ctlFound = ctl;
+                    ctlFound = control;
                 }
             }
 
@@ -371,19 +345,23 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  returns a rectangle in our own client space that represents the bounds
-        ///  if the given control
+        ///  of the given control.
         /// </summary>
-        private Rectangle GetConvertedBounds(Control ctl)
+        private Rectangle GetConvertedBounds(Control? control)
         {
-            Control parent = ctl.Parent;
-            Rectangle rc = ctl.Bounds;
+            if (control is null || control.Parent is not Control parent)
+            {
+                return Rectangle.Empty;
+            }
+
+            Rectangle rc = control.Bounds;
             rc = parent.RectangleToScreen(rc);
             rc = RectangleToClient(rc);
             return rc;
         }
 
         /// <summary>
-        ///  returns the maximum valid control count for the given control.  This
+        ///  returns the maximum valid control count for the given control. This
         ///  may be less than Control.getControlCount() because of invisible controls
         ///  and our own control
         /// </summary>
@@ -407,22 +385,21 @@ namespace System.Windows.Forms.Design
         ///  by the tab order UI.  We only want parents that are
         ///  sited by the designer host.
         /// </summary>
-        private Control GetSitedParent(Control child)
+        private Control? GetSitedParent(Control child)
         {
-            Control parent = child.Parent;
+            Control? parent = child.Parent;
 
             while (parent is not null)
             {
-                ISite site = parent.Site;
-                IContainer container = null;
-
+                ISite? site = parent.Site;
+                IContainer? container = null;
                 if (site is not null)
                 {
                     container = site.Container;
                 }
 
-                container = DesignerUtils.CheckForNestedContainer(container); // ...necessary to support SplitterPanel components
-
+                // Necessary to support SplitterPanel components.
+                container = DesignerUtils.CheckForNestedContainer(container);
                 if (site is not null && container == host)
                 {
                     break;
@@ -437,8 +414,13 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  recursively fills the given tab vector with a control list
         /// </summary>
-        private void GetTabbing(Control ctl, IList tabs)
+        private void GetTabbing(Control control, IList tabs)
         {
+            if (control is null)
+            {
+                return;
+            }
+
             Control ctlTab;
 
             // Now actually count the controls.  We add them to the list in reverse
@@ -446,11 +428,10 @@ namespace System.Windows.Forms.Design
             // needs to be in reverse z-order.  When done, we want this list to be
             // in z-order from back-most to top-most, and from parent-most to
             // child-most.
-            //
-            int cnt = ctl.Controls.Count;
-            for (int i = cnt - 1; i >= 0; i--)
+            int count = control.Controls.Count;
+            for (int i = count - 1; i >= 0; i--)
             {
-                ctlTab = ctl.Controls[i];
+                ctlTab = control.Controls[i];
 
                 if (GetSitedParent(ctlTab) is not null && GetTabbable(ctlTab))
                 {
@@ -469,19 +450,18 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private bool GetTabbable(Control control)
         {
-            for (Control c = control; c is not null; c = c.Parent)
+            for (Control? c = control; c is not null; c = c.Parent)
             {
                 if (!c.Visible)
                     return false;
             }
 
-            ISite site = control.Site;
-            if (site is null || site.Container != host)
+            if (control.Site is not ISite site || site.Container != host)
             {
                 return false;
             }
 
-            PropertyDescriptor prop = TypeDescriptor.GetProperties(control)["TabIndex"];
+            PropertyDescriptor? prop = TypeDescriptor.GetProperties(control)["TabIndex"];
 
             if (prop is null || !prop.IsBrowsable)
             {
@@ -496,14 +476,12 @@ namespace System.Windows.Forms.Design
         ///  Called in response to a component add or remove event.  Here we re-acquire our
         ///  set of tabs.
         /// </summary>
-        private void OnComponentAddRemove(object sender, ComponentEventArgs ce)
+        private void OnComponentAddRemove(object? sender, ComponentEventArgs ce)
         {
             ctlHover = null;
             tabControls = null;
             tabGlyphs = null;
-
             tabComplete?.Clear();
-
             tabNext?.Clear();
 
             if (region is not null)
@@ -519,7 +497,7 @@ namespace System.Windows.Forms.Design
         ///  Called in response to a component change event.  Here we update our
         ///  tab order and redraw.
         /// </summary>
-        private void OnComponentChanged(object sender, ComponentChangedEventArgs ce)
+        private void OnComponentChanged(object? sender, ComponentChangedEventArgs ce)
         {
             tabControls = null;
             tabGlyphs = null;
@@ -535,13 +513,13 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Closes the tab order UI.
         /// </summary>
-        private void OnKeyCancel(object sender, EventArgs e)
+        private void OnKeyCancel(object? sender, EventArgs e)
         {
-            IMenuCommandService mcs = (IMenuCommandService)host.GetService(typeof(IMenuCommandService));
+            IMenuCommandService? mcs = (IMenuCommandService?)host?.GetService(typeof(IMenuCommandService));
             Debug.Assert(mcs is not null, "No menu command service, can't get out of tab order UI");
             if (mcs is not null)
             {
-                MenuCommand mc = mcs.FindCommand(StandardCommands.TabOrder);
+                MenuCommand? mc = mcs.FindCommand(StandardCommands.TabOrder);
                 Debug.Assert(mc is not null, "No tab order menu command, can't get out of tab order UI");
                 mc?.Invoke();
             }
@@ -550,7 +528,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Sets the current tab order selection.
         /// </summary>
-        private void OnKeyDefault(object sender, EventArgs e)
+        private void OnKeyDefault(object? sender, EventArgs e)
         {
             if (ctlHover is not null)
             {
@@ -562,7 +540,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Selects the next component in the tab order.
         /// </summary>
-        private void OnKeyNext(object sender, EventArgs e)
+        private void OnKeyNext(object? sender, EventArgs e)
         {
             RotateControls(true);
         }
@@ -570,7 +548,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Selects the previous component in the tab order.
         /// </summary>
-        private void OnKeyPrevious(object sender, EventArgs e)
+        private void OnKeyPrevious(object? sender, EventArgs e)
         {
             RotateControls(false);
         }
@@ -626,7 +604,7 @@ namespace System.Windows.Forms.Design
         {
             if (tabControls is not null)
             {
-                Control ctl = GetControlAtPoint(tabControls, x, y);
+                Control? ctl = GetControlAtPoint(tabControls, x, y);
                 SetNewHover(ctl);
             }
         }
@@ -640,9 +618,9 @@ namespace System.Windows.Forms.Design
         {
             base.OnMouseMove(e);
 
-            if (tabGlyphs is not null)
+            if (tabGlyphs is not null && tabControls is not null)
             {
-                Control ctl = null;
+                Control? ctl = null;
 
                 for (int i = 0; i < tabGlyphs.Length; i++)
                 {
@@ -650,7 +628,7 @@ namespace System.Windows.Forms.Design
                     {
                         // Do not break if we find it -- we must
                         // work for nested children too.
-                        ctl = (Control)tabControls[i];
+                        ctl = tabControls[i];
                     }
                 }
 
@@ -669,25 +647,14 @@ namespace System.Windows.Forms.Design
         }
 
         private void SetAppropriateCursor()
-        {
-            if (ctlHover is not null)
-            {
-                Cursor.Current = Cursors.Cross;
-            }
-            else
-            {
-                Cursor.Current = Cursors.Default;
-            }
-        }
+            => Cursor.Current = ctlHover is not null ? Cursors.Cross : Cursors.Default;
 
         /// <summary>
         ///  This is called when the cursor for the given component should be updated.
         ///  The mouse is always over the given component's view when this is called.
         /// </summary>
         public virtual void OnSetCursor(IComponent component)
-        {
-            SetAppropriateCursor();
-        }
+            => SetAppropriateCursor();
 
         /// <summary>
         ///  Paints the tab control.
@@ -698,13 +665,14 @@ namespace System.Windows.Forms.Design
 
             if (tabControls is null)
             {
-                tabControls = new ArrayList();
+                tabControls = new();
+                Debug.Assert(host is not null, "host is set in the contructor should not be null");
                 GetTabbing((Control)host.RootComponent, tabControls);
                 tabGlyphs = new Rectangle[tabControls.Count];
             }
 
-            tabComplete ??= new ArrayList();
-            tabNext ??= new Hashtable();
+            tabComplete ??= new();
+            tabNext ??= new();
 
             if (region is null)
             {
@@ -723,7 +691,7 @@ namespace System.Windows.Forms.Design
         {
             for (int i = 0; i < commands.Length; i++)
             {
-                if (commands[i].CommandID.Equals(cmd.CommandID))
+                if (Equals(commands[i].CommandID, cmd.CommandID))
                 {
                     commands[i].Invoke();
                     return true;
@@ -742,7 +710,7 @@ namespace System.Windows.Forms.Design
         {
             for (int i = 0; i < commands.Length; i++)
             {
-                if (commands[i].CommandID.Equals(cmd.CommandID))
+                if (Equals(commands[i].CommandID, cmd.CommandID))
                 {
                     cmd.Enabled = commands[i].Enabled;
                     return true;
@@ -753,8 +721,7 @@ namespace System.Windows.Forms.Design
             // get commands that the designer implements, so we don't
             // have to pick and choose which ones to get rid of.  We
             // keep a select view and disable the rest.
-            //
-            if (!cmd.CommandID.Equals(StandardCommands.TabOrder))
+            if (!Equals(cmd.CommandID, StandardCommands.TabOrder))
             {
                 cmd.Enabled = false;
                 return true;
@@ -769,7 +736,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void RotateControls(bool forward)
         {
-            Control ctl = ctlHover;
+            Control? ctl = ctlHover;
+            Debug.Assert(host is not null, "host is set in the contructor should not be null");
             Control form = (Control)host.RootComponent;
 
             ctl ??= form;
@@ -786,7 +754,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Establishes a new hover control.
         /// </summary>
-        private void SetNewHover(Control ctl)
+        private void SetNewHover(Control? ctl)
         {
             if (ctlHover != ctl)
             {
@@ -826,72 +794,72 @@ namespace System.Windows.Forms.Design
         // Standard 'catch all - rethrow critical' exception pattern
         private void SetNextTabIndex(Control ctl)
         {
-            if (tabControls is not null)
+            if (tabControls is null || tabComplete is null || tabNext is null)
             {
-                int index, max;
-                Control parent = GetSitedParent(ctl);
-                object nextIndex = tabNext[parent];
+                return;
+            }
 
-                if (tabComplete.IndexOf(ctl) == -1)
-                    tabComplete.Add(ctl);
+            int max, index = 0;
+            Control? parent = GetSitedParent(ctl);
+            tabComplete.Add(ctl);
+            if (parent is not null)
+            {
+                tabNext.TryGetValue(parent, out index);
+            }
 
-                if (nextIndex is not null)
-                    index = (int)nextIndex;
-                else
-                    index = 0;
-
-                try
+            try
+            {
+                if (!tabProperties.TryGetValue(ctl, out PropertyDescriptor? prop))
                 {
-                    PropertyDescriptor prop = (PropertyDescriptor)tabProperties[ctl];
-                    if (prop is not null)
+                    return;
+                }
+
+                int newIndex = index + 1;
+
+                if (prop.IsReadOnly && prop.GetValue(ctl) is int propValue)
+                {
+                    newIndex = propValue + 1;
+                }
+
+                max = parent is not null ? GetMaxControlCount(parent) : 0;
+
+                if (newIndex >= max)
+                {
+                    newIndex = 0;
+                }
+
+                if (parent is not null)
+                {
+                    tabNext[parent] = newIndex;
+                }
+
+                if (tabComplete.Count == tabControls.Count)
+                    tabComplete.Clear();
+
+                // Now set the property
+                if (!prop.IsReadOnly)
+                {
+                    try
                     {
-                        int newIndex = index + 1;
-
-                        if (prop.IsReadOnly)
-                        {
-                            newIndex = (int)prop.GetValue(ctl) + 1;
-                        }
-
-                        max = GetMaxControlCount(parent);
-
-                        if (newIndex >= max)
-                        {
-                            newIndex = 0;
-                        }
-
-                        tabNext[parent] = newIndex;
-
-                        if (tabComplete.Count == tabControls.Count)
-                            tabComplete.Clear();
-
-                        // Now set the property
-                        //
-                        if (!prop.IsReadOnly)
-                        {
-                            try
-                            {
-                                prop.SetValue(ctl, index);
-                            }
-                            catch (Exception)
-                            {
-                            }
-                        }
-                        else
-                        {
-                            // If the property is read only, we still count it
-                            // so that other properties can "flow" around it.
-                            // Therefore, we need a paint.
-                            //
-                            Invalidate();
-                        }
+                        prop.SetValue(ctl, index);
+                    }
+                    catch (Exception)
+                    {
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
+                    // If the property is read only, we still count it
+                    // so that other properties can "flow" around it.
+                    // Therefore, we need a paint.
+                    Invalidate();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ClientUtils.IsCriticalException(ex))
+                {
+                    throw;
                 }
             }
         }
