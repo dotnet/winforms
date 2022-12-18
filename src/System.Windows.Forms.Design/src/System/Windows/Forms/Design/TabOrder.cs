@@ -758,21 +758,13 @@ namespace System.Windows.Forms.Design
         {
             if (ctlHover != ctl)
             {
-                if (ctlHover is not null)
-                {
-                    if (region is not null)
-                    {
-                        region.Dispose();
-                        region = null;
-                    }
-
-                    Rectangle rc = GetConvertedBounds(ctlHover);
-                    rc.Inflate(selSize, selSize);
-                    Invalidate(rc);
-                }
-
+                InvalidateHoverRegion();
                 ctlHover = ctl;
+                InvalidateHoverRegion();
+            }
 
+            void InvalidateHoverRegion()
+            {
                 if (ctlHover is not null)
                 {
                     if (region is not null)
