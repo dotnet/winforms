@@ -277,7 +277,7 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-                    if (tabComplete is not null && !tabComplete.Contains(ctl))
+                    if (tabComplete is not null && tabComplete.Contains(ctl))
                     {
                         brush = highlightTextBrush;
                         pen = highlightPen;
