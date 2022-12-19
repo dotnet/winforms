@@ -319,12 +319,12 @@ namespace System.ComponentModel.Design.Serialization
                                     }
                                 }
                             }
+                        }
 
-                            // we still failed, rethrow the original exception.
-                            if (instance is null)
-                            {
-                                throw;
-                            }
+                        // we still failed, rethrow the original exception.
+                        if (instance is null)
+                        {
+                            throw;
                         }
                     }
                 }
@@ -721,7 +721,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  Creates an instance of the given type and adds it to a collection of named instances.
         ///  Objects that implement IComponent will be added to the design time container if addToContainer is true.
         /// </summary>
-        object IDesignerSerializationManager.CreateInstance(Type type, ICollection arguments, string? name, bool addToContainer)
+        object IDesignerSerializationManager.CreateInstance(Type type, ICollection? arguments, string? name, bool addToContainer)
         {
             CheckSession();
             // If we were given a name verify that the name doesn't already exist.
