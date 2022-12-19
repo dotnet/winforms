@@ -15,7 +15,7 @@ internal partial class Interop
         // properties, but under a completely different GUID and DISPIDs.
         //
         // There don't seem to be any references to this interface on the web. No references were found for this
-        // interfac in OLE specfications from the mid 90s. Looks to be purely our own projection and it might be
+        // interface in OLE specifications from the mid 90s. Looks to be purely our own projection and it might be
         // unused in the wild.
         [ComImport]
         [Guid("39088D7E-B71E-11D1-8F39-00C04FD946D0")]
