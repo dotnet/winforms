@@ -11787,16 +11787,13 @@ namespace System.Windows.Forms
         ///  reflect its index.
         /// </summary>
         private void UpdateChildControlIndex(Control control)
-        {
-            // Don't reorder the child control array for tab controls. Implemented as a special case
-            // in order to keep the method private.
-            if (typeof(TabControl).IsAssignableFrom(GetType()))
-            {
-                return;
-            }
-
-            // The following check is to mitigate a potentially disruptive effect of bug fix #7837 / PR 7911
-            if (GetType() == typeof(Control))
+        {            
+            if (// Don't reorder the child control array for tab controls. Implemented as a special case
+                // in order to keep the method private.
+                this is TabControl ||
+                // Also short-circuit when the Control class is instantiated directly. This is to provide
+                // consistency with the behavior prior to bug fix https://github.com/dotnet/winforms/issues/7837
+                GetType() == typeof(Control))
             {
                 return;
             }

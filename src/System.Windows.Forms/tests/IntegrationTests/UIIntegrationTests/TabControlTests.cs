@@ -100,6 +100,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task TabControl_ControlsDoNotReorderWhenSelectedIndexChanges()
         {
+            // Validates the following bug fix: https://github.com/dotnet/winforms/issues/7837
             await RunSingleControlTestAsync(
                 testDriverAsync: async (form, tabControl) =>
                 {
@@ -152,7 +153,7 @@ namespace System.Windows.Forms.UITests
                 });
         }
 
-        // Bug #7837 occured only when TabControl was subclassed.
+        // Bug https://github.com/dotnet/winforms/issues/7837 occured only when TabControl was subclassed.
         class SubclassedTabControl : TabControl { }
     }
 }
