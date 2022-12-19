@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
     [ToolboxItem(false)]
     internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     {
-        private IDesignerHost? host;
+        private IDesignerHost host;
         private Control? ctlHover;
         private List<Control>? tabControls;
         private Rectangle[]? tabGlyphs;
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.Design
                     IHelpService? hs = (IHelpService?)host.GetService(typeof(IHelpService));
                     hs?.RemoveContextAttribute("Keyword", "TabOrderView");
 
-                    host = null;
+                    host = null!;
                 }
             }
 
@@ -186,11 +186,11 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  this function does double duty:  it draws the tabs if fRegion is false, or it
+        ///  This function does double duty: it draws the tabs if fRegion is false, or it
         ///  computes control region rects if fRegion is true (both require that we essentially
         ///  "draw" the tabs)
         /// </summary>
-        private void DrawTabs(List<Control> tabs, Graphics gr, bool fRegion)
+        private void DrawTabs(List<Control> tabs, Graphics graphics, bool fRegion)
         {
             Font font = tabFont;
             if (fRegion)
@@ -213,34 +213,28 @@ namespace System.Windows.Forms.Design
                 {
                     if (ctlHover.Parent is Control hoverParent)
                     {
-                        Color backColor;
-                        backColor = hoverParent.BackColor;
-
-                        Region clip = gr.Clip;
-                        gr.ExcludeClip(ctlInner);
+                        Color backColor = hoverParent.BackColor;
+                        Region clip = graphics.Clip;
+                        graphics.ExcludeClip(ctlInner);
                         using (SolidBrush brush = new SolidBrush(backColor))
                         {
-                            gr.FillRectangle(brush, ctlOuter);
+                            graphics.FillRectangle(brush, ctlOuter);
                         }
 
-                        ControlPaint.DrawSelectionFrame(gr, false, ctlOuter, ctlInner, backColor);
-                        gr.Clip = clip;
+                        ControlPaint.DrawSelectionFrame(graphics, active: false, ctlOuter, ctlInner, backColor);
+                        graphics.Clip = clip;
                     }
                 }
             }
 
             int iCtl = 0;
-            string str;
-            Rectangle rc;
-            Control? parent;
-            foreach (Control ctl in tabs)
+            foreach (Control control in tabs)
             {
-                rc = GetConvertedBounds(ctl);
+                Rectangle convertedRectangle = GetConvertedBounds(control);
 
                 drawString.Length = 0;
 
-                parent = GetSitedParent(ctl);
-                Debug.Assert(host is not null, "host is set in the contructor should not be null");
+                Control? parent = GetSitedParent(control);
                 Control baseControl = (Control)host.RootComponent;
 
                 while (parent != baseControl && parent is not null)
@@ -251,33 +245,33 @@ namespace System.Windows.Forms.Design
                 }
 
                 drawString.Insert(0, ' ');
-                drawString.Append(ctl.TabIndex.ToString(CultureInfo.CurrentCulture));
+                drawString.Append(control.TabIndex.ToString(CultureInfo.CurrentCulture));
                 drawString.Append(' ');
 
-                if (tabProperties[ctl].IsReadOnly)
+                if (tabProperties[control].IsReadOnly)
                 {
                     drawString.Append(SR.WindowsFormsTabOrderReadOnly);
                     drawString.Append(' ');
                 }
 
-                str = drawString.ToString();
-                var sz = Size.Ceiling(gr.MeasureString(str, font));
-                rc.Width = sz.Width + 2;
-                rc.Height = sz.Height + 2;
+                string str = drawString.ToString();
+                var sz = Size.Ceiling(graphics.MeasureString(str, font));
+                convertedRectangle.Width = sz.Width + 2;
+                convertedRectangle.Height = sz.Height + 2;
 
                 Debug.Assert(tabGlyphs is not null, "tabGlyps should not be null here.");
-                tabGlyphs[iCtl++] = rc;
+                tabGlyphs[iCtl++] = convertedRectangle;
 
                 Brush brush;
                 Pen pen;
                 Color textColor;
                 if (fRegion)
                 {
-                    region?.Union(rc);
+                    region?.Union(convertedRectangle);
                 }
                 else
                 {
-                    if (tabComplete is not null && !tabComplete.Contains(ctl))
+                    if (tabComplete is not null && !tabComplete.Contains(control))
                     {
                         brush = highlightTextBrush;
                         pen = highlightPen;
@@ -290,21 +284,19 @@ namespace System.Windows.Forms.Design
                         textColor = SystemColors.HighlightText;
                     }
 
-                    gr.FillRectangle(brush, rc);
-                    gr.DrawRectangle(pen, rc.X, rc.Y, rc.Width - 1, rc.Height - 1);
+                    graphics.FillRectangle(brush, convertedRectangle);
+                    graphics.DrawRectangle(pen, convertedRectangle.X, convertedRectangle.Y, convertedRectangle.Width - 1, convertedRectangle.Height - 1);
 
                     Brush foreBrush = new SolidBrush(textColor);
-                    gr.DrawString(str, font, foreBrush, rc.X + 1, rc.Y + 1);
+                    graphics.DrawString(str, font, foreBrush, convertedRectangle.X + 1, convertedRectangle.Y + 1);
                     foreBrush.Dispose();
                 }
             }
 
             if (fRegion)
             {
-                Debug.Assert(host is not null, "host is set in the contructor should not be null");
                 Control rootControl = (Control)host.RootComponent;
-                rc = GetConvertedBounds(rootControl);
-                region?.Intersect(rc);
+                region?.Intersect(GetConvertedBounds(rootControl));
                 Region = region;
             }
         }
@@ -316,7 +308,7 @@ namespace System.Windows.Forms.Design
         private Control? GetControlAtPoint(List<Control> tabs, int x, int y)
         {
             IEnumerator e = tabs.GetEnumerator();
-            Rectangle rc;
+            Rectangle screenRectangle;
             Control? ctlFound = null;
             Control? parent;
 
@@ -328,13 +320,13 @@ namespace System.Windows.Forms.Design
                     continue;
                 }
 
-                rc = parent.RectangleToScreen(control.Bounds);
+                screenRectangle = parent.RectangleToScreen(control.Bounds);
 
                 // We do not break if we find it here. The vector is already setup
                 // to have all controls in the current tabbing order, and child controls
                 // are always after their parents. If we broke, we wouldn't necessarily
                 // find the appropriate child.
-                if (rc.Contains(x, y))
+                if (screenRectangle.Contains(x, y))
                 {
                     ctlFound = control;
                 }
@@ -354,10 +346,10 @@ namespace System.Windows.Forms.Design
                 return Rectangle.Empty;
             }
 
-            Rectangle rc = control.Bounds;
-            rc = parent.RectangleToScreen(rc);
-            rc = RectangleToClient(rc);
-            return rc;
+            Rectangle convertedBounds = control.Bounds;
+            convertedBounds = parent.RectangleToScreen(convertedBounds);
+            convertedBounds = RectangleToClient(convertedBounds);
+            return convertedBounds;
         }
 
         /// <summary>
@@ -515,7 +507,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnKeyCancel(object? sender, EventArgs e)
         {
-            IMenuCommandService? mcs = (IMenuCommandService?)host?.GetService(typeof(IMenuCommandService));
+            IMenuCommandService? mcs = (IMenuCommandService?)host.GetService(typeof(IMenuCommandService));
             Debug.Assert(mcs is not null, "No menu command service, can't get out of tab order UI");
             if (mcs is not null)
             {
@@ -666,7 +658,6 @@ namespace System.Windows.Forms.Design
             if (tabControls is null)
             {
                 tabControls = new();
-                Debug.Assert(host is not null, "host is set in the contructor should not be null");
                 GetTabbing((Control)host.RootComponent, tabControls);
                 tabGlyphs = new Rectangle[tabControls.Count];
             }
@@ -736,19 +727,16 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void RotateControls(bool forward)
         {
-            Control? ctl = ctlHover;
-            Debug.Assert(host is not null, "host is set in the contructor should not be null");
+            Control? control = ctlHover;
             Control form = (Control)host.RootComponent;
-
-            ctl ??= form;
-
-            while ((ctl = form.GetNextControl(ctl, forward)) is not null)
+            control ??= form;
+            while ((control = form.GetNextControl(control, forward)) is not null)
             {
-                if (GetTabbable(ctl))
+                if (GetTabbable(control))
                     break;
             }
 
-            SetNewHover(ctl);
+            SetNewHover(control);
         }
 
         /// <summary>
