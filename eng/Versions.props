@@ -54,9 +54,9 @@
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>8.0.0-beta.22615.3</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetRemoteExecutorVersion>8.0.0-beta.22615.3</MicrosoftDotNetRemoteExecutorVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>8.0.0-beta.22615.3</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>8.0.0-beta.22616.1</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetRemoteExecutorVersion>8.0.0-beta.22616.1</MicrosoftDotNetRemoteExecutorVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>8.0.0-beta.22616.1</MicrosoftDotNetXUnitExtensionsPackageVersion>
     <MicrosoftNETTestSdkVersion>17.4.0-preview-20220707-01</MicrosoftNETTestSdkVersion>
   </PropertyGroup>
   <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
