@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Globalization;
+
 namespace System.Windows.Forms.Tests;
 
 public class KeysConverterTests
@@ -21,18 +23,46 @@ public class KeysConverterTests
     }
 
     [Theory]
-    [InlineData(Keys.None, "None")]
+    [InlineData("fr-FR", "(aucun)", Keys.None)]
+    [InlineData("nb-NO", "None", Keys.None)]
+    [InlineData("de-DE", "Beenden", Keys.End)]
+    public void ConvertFrom_ShouldConvertKeys_Localization(string cultureName, string localizedKeyName, Keys expectedKey)
+    {
+        CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
+
+        KeysConverter converter = new();
+        var result = (Keys?)converter.ConvertFrom(null, culture, localizedKeyName);
+
+        Assert.Equal(expectedKey, result);
+    }
+
+    [Theory]
+    [InlineData(Keys.None, "(none)")]
     [InlineData(Keys.S, "S")]
     [InlineData(Keys.Control | Keys.C, "Ctrl+C")]
     [InlineData(Keys.Control | Keys.Add, "Ctrl+Add")]
     [InlineData(Keys.Control | Keys.Alt | Keys.D, "Ctrl+Alt+D")]
     [InlineData(Keys.Control | Keys.Alt | Keys.Shift | Keys.A, "Ctrl+Alt+Shift+A")]
     [InlineData(Keys.Control | Keys.Alt | Keys.Shift | Keys.F1, "Ctrl+Alt+Shift+F1")]
+    [InlineData(Keys.F2 | Keys.Shift | Keys.Alt | Keys.Control, "Ctrl+Alt+Shift+F2")]
     public void ConvertToString_ShouldConvertKeys(Keys keys, string expectedResult)
     {
         KeysConverter converter = new();
-        var result = converter.ConvertToString(keys);
+        var result = converter.ConvertToString(null, CultureInfo.InvariantCulture, keys);
         Assert.Equal(expectedResult, result);
+    }
+
+    [Theory]
+    [InlineData("fr-FR", Keys.None, "(aucun)")]
+    [InlineData("de-DE", Keys.End, "Beenden")]
+    public void ConvertToString_ShouldConvertKeys_Localization(string cultureName, Keys key, string expectedLocalizedKeyName)
+    {
+        CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
+
+        KeysConverter converter = new();
+        string result = converter.ConvertToString(null, culture, key);
+
+        Assert.Equal(expectedLocalizedKeyName, result);
     }
 
     public static IEnumerable<object[]> ConvertToEnumArray_ShouldConvertKeys_TestData()

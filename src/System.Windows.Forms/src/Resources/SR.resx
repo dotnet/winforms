@@ -6963,4 +6963,7 @@ Stack trace where the illegal operation occurred was:
   <data name="FailedToLoadCursor" xml:space="preserve">
     <value>Failed to load cursor. Error '{1}'.</value>
   </data>
+  <data name="ResourceValueNotFound" xml:space="preserve">
+    <value>The resource value '{0}' was not found.</value>
+  </data>
 </root>
