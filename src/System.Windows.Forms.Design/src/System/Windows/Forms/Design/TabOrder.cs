@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public TabOrder(IDesignerHost host)
         {
-            this._host = host;
+            _host = host;
 
             // Determine a font for us to use.
             IUIService? uisvc = (IUIService?)host.GetService(typeof(IUIService));
