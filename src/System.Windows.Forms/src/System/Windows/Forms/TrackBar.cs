@@ -869,6 +869,7 @@ namespace System.Windows.Forms
             Debug.Assert(_autoDrawTicks == ShouldAutoDrawTicks());
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
+            PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
             DrawTicks();
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
             PInvoke.SendMessage(this, (User32.WM)PInvoke.TBM_SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
