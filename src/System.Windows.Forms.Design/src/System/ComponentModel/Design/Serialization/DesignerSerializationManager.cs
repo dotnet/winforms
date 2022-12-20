@@ -330,32 +330,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 catch (MissingMethodException)
                 {
-                    StringBuilder argTypes = new StringBuilder();
-                    if (argArray is not null)
-                    {
-                        foreach (object? o in argArray)
-                        {
-                            if (argTypes.Length > 0)
-                            {
-                                argTypes.Append(", ");
-                            }
-
-                            if (o is not null)
-                            {
-                                argTypes.Append(o.GetType().Name);
-                            }
-                            else
-                            {
-                                argTypes.Append("null");
-                            }
-                        }
-                    }
-
-                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()))
-                    {
-                        HelpLink = SR.SerializationManagerNoMatchingCtor
-                    };
-                    throw ex;
+                    throw GetSerializationException();
                 }
 
                 // Now, if we needed to add this to the container, do so .
@@ -382,7 +357,37 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            return instance;
+            return instance is null ? throw GetSerializationException() : instance;
+
+            SerializationException GetSerializationException()
+            {
+                StringBuilder argTypes = new StringBuilder();
+                if (argArray is not null)
+                {
+                    foreach (object? o in argArray)
+                    {
+                        if (argTypes.Length > 0)
+                        {
+                            argTypes.Append(", ");
+                        }
+
+                        if (o is not null)
+                        {
+                            argTypes.Append(o.GetType().Name);
+                        }
+                        else
+                        {
+                            argTypes.Append("null");
+                        }
+                    }
+                }
+
+                SerializationException ex = new(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()))
+                {
+                    HelpLink = SR.SerializationManagerNoMatchingCtor
+                };
+                return ex;
+            }
         }
 
         /// <summary>
@@ -766,7 +771,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            return instance;
+            return instance!;
         }
 
         /// <summary>
