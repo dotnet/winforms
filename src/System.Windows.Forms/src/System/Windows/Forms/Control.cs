@@ -3867,12 +3867,7 @@ namespace System.Windows.Forms
                 }
 
                 // We are only visible if our parent is visible
-                if (ParentInternal is null)
-                {
-                    return true;
-                }
-
-                return ParentInternal.Visible;
+                return ParentInternal is null ? true : ParentInternal.Visible;
             }
             set => SetVisibleCore(value);
         }
@@ -5028,76 +5023,65 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Forces the creation of the control. This includes the creation of the handle,
+        ///  Forces the creation of the control if it is visible. This includes the creation of the handle,
         ///  and any child controls.
-        /// <param name="fIgnoreVisible">
-        ///  Determines whether we should create the handle after checking the Visible
-        ///  property of the control or not.
-        /// </param>
         /// </summary>
-        internal void CreateControl(bool fIgnoreVisible)
+        /// <param name="ignoreVisible">
+        ///  When <see langword="true"/> create even if the control is not visible.
+        /// </param>
+        internal void CreateControl(bool ignoreVisible)
         {
-            bool ready = !GetState(States.Created);
-
-            // PERF: Only "create" the control if it is
-            //     : visible. This has the effect of delayed handle creation of
-            //     : hidden controls.
-            ready = ready && Visible;
-
-            if (ready || fIgnoreVisible)
+            // Unless specified otherwise, only "create" the control if it is visible for performance. This has the
+            // effect of delayed handle creation of hidden controls.
+            if (!ignoreVisible && !GetState(States.Created) && !Visible)
             {
-                SetState(States.Created, true);
-                bool createdOK = false;
-                try
-                {
-                    if (!IsHandleCreated)
-                    {
-                        CreateHandle();
-                    }
-
-                    // must snapshot this array because
-                    // z-order updates from Windows may rearrange it!
-                    ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
-
-                    if (controlsCollection is not null)
-                    {
-                        Control[] controlSnapshot = new Control[controlsCollection.Count];
-                        controlsCollection.CopyTo(controlSnapshot, 0);
-
-                        foreach (Control ctl in controlSnapshot)
-                        {
-                            if (ctl.IsHandleCreated)
-                            {
-                                ctl.SetParentHandle(HWND);
-                            }
-
-                            ctl.CreateControl(fIgnoreVisible);
-                        }
-                    }
-
-                    createdOK = true;
-                }
-                finally
-                {
-                    if (!createdOK)
-                    {
-                        SetState(States.Created, false);
-                    }
-                }
-
-                OnCreateControl();
+                return;
             }
+
+            SetState(States.Created, true);
+            bool createdOK = false;
+            try
+            {
+                if (!IsHandleCreated)
+                {
+                    CreateHandle();
+                }
+
+                if (Properties.GetObject(s_controlsCollectionProperty) is ControlCollection controlsCollection)
+                {
+                    // Snapshot this array because z-order updates from Windows may rearrange it.
+                    Control[] controlSnapshot = new Control[controlsCollection.Count];
+                    controlsCollection.CopyTo(controlSnapshot, 0);
+
+                    foreach (Control control in controlSnapshot)
+                    {
+                        if (control.IsHandleCreated)
+                        {
+                            control.SetParentHandle(HWND);
+                        }
+
+                        control.CreateControl(ignoreVisible);
+                    }
+                }
+
+                createdOK = true;
+            }
+            finally
+            {
+                if (!createdOK)
+                {
+                    SetState(States.Created, false);
+                }
+            }
+
+            OnCreateControl();
         }
 
         /// <summary>
-        ///  Sends the message to the default window proc.
+        ///  Sends the specified message to the default window procedure.
         /// </summary>
-        /// <remarks>Primarily here for Form to override.</remarks>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void DefWndProc(ref Message m)
-        {
-            _window.DefWndProc(ref m);
-        }
+        protected virtual void DefWndProc(ref Message m) => _window.DefWndProc(ref m);
 
         /// <summary>
         ///  Destroys the handle associated with this control. Inheriting classes should
