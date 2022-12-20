@@ -763,15 +763,11 @@ namespace System.ComponentModel.Design.Serialization
             { // Or it is an icomponent but recycle instances is turned off
                 instancesByName ??= new();
                 namesByInstance ??= new(new ReferenceComparer());
-
-                if (name is not null && instance is not null)
-                {
-                    instancesByName[name] = instance;
-                    namesByInstance[instance] = name;
-                }
+                instancesByName[name] = instance;
+                namesByInstance[instance] = name;
             }
 
-            return instance!;
+            return instance;
         }
 
         /// <summary>
