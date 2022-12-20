@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -745,6 +746,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             object instance = CreateInstance(type, arguments, name, addToContainer);
+            Debug.Assert(instance is not null, "instance should not be null here");
             // If we have a name save it into our own nametable.
             // We do this even for objects that were added to the container,
             // because containers reserve the right to change the name in case of collision.
