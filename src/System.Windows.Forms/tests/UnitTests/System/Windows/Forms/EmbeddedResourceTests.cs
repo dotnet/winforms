@@ -13,224 +13,253 @@ namespace System.Windows.Forms.Tests
         // Get System.Windows.Forms assembly to verify that it contains all the resources that the code uses.
         private readonly Assembly assembly = Assembly.GetAssembly(typeof(AccessibleObject));
 
+        private static string s_expectedIconNames = """
+            System.Windows.Forms.ActiveDocumentHost
+            System.Windows.Forms.alignment
+            System.Windows.Forms.alignToGrid
+            System.Windows.Forms.Animation
+            System.Windows.Forms.Arrow
+            System.Windows.Forms.BindingNavigator
+            System.Windows.Forms.BindingNavigator.AddNew
+            System.Windows.Forms.BindingNavigator.Delete
+            System.Windows.Forms.BindingNavigator.MoveFirst
+            System.Windows.Forms.BindingNavigator.MoveLast
+            System.Windows.Forms.BindingNavigator.MoveNext
+            System.Windows.Forms.BindingNavigator.MovePrevious
+            System.Windows.Forms.BindingSource
+            System.Windows.Forms.blank
+            System.Windows.Forms.bringToFront
+            System.Windows.Forms.Button
+            System.Windows.Forms.CheckBox
+            System.Windows.Forms.Checked
+            System.Windows.Forms.CheckedListBox
+            System.Windows.Forms.ColorDialog
+            System.Windows.Forms.ComboBox
+            System.Windows.Forms.ComponentModel.OrderImages
+            System.Windows.Forms.ContextMenu
+            System.Windows.Forms.ContextMenuStrip
+            System.Windows.Forms.copy
+            System.Windows.Forms.cut
+            System.Windows.Forms.DataConnector
+            System.Windows.Forms.DataGrid
+            System.Windows.Forms.DataGridCaption.backarrow
+            System.Windows.Forms.DataGridCaption.backarrow_bidi
+            System.Windows.Forms.DataGridCaption.Details
+            System.Windows.Forms.DataGridCaption.down
+            System.Windows.Forms.DataGridCaption.right
+            System.Windows.Forms.DataGridCaption.up
+            System.Windows.Forms.DataGridParentRows.LeftArrow
+            System.Windows.Forms.DataGridParentRows.RightArrow
+            System.Windows.Forms.DataGridRow.error
+            System.Windows.Forms.DataGridRow.left
+            System.Windows.Forms.DataGridRow.pencil
+            System.Windows.Forms.DataGridRow.right
+            System.Windows.Forms.DataGridRow.star
+            System.Windows.Forms.DataGridView
+            System.Windows.Forms.DataGridViewButtonColumn
+            System.Windows.Forms.DataGridViewCheckBoxColumn
+            System.Windows.Forms.DataGridViewComboBoxColumn
+            System.Windows.Forms.DataGridViewImageColumn
+            System.Windows.Forms.DataGridViewLinkColumn
+            System.Windows.Forms.DataGridViewRow.error
+            System.Windows.Forms.DataGridViewRow.left
+            System.Windows.Forms.DataGridViewRow.leftstar
+            System.Windows.Forms.DataGridViewRow.pencil_ltr
+            System.Windows.Forms.DataGridViewRow.pencil_rtl
+            System.Windows.Forms.DataGridViewRow.right
+            System.Windows.Forms.DataGridViewRow.rightstar
+            System.Windows.Forms.DataGridViewRow.star
+            System.Windows.Forms.DataGridViewTextBoxColumn
+            System.Windows.Forms.DataNavigator
+            System.Windows.Forms.DataNavigator.AddNew
+            System.Windows.Forms.DataNavigator.Delete
+            System.Windows.Forms.DataNavigator.MoveFirst
+            System.Windows.Forms.DataNavigator.MoveLast
+            System.Windows.Forms.DataNavigator.MoveNext
+            System.Windows.Forms.DataNavigator.MovePrevious
+            System.Windows.Forms.DateTimePicker
+            System.Windows.Forms.DefaultControl
+            System.Windows.Forms.delete
+            System.Windows.Forms.Design.ComponentEditorPage
+            System.Windows.Forms.Design.EventsTab
+            System.Windows.Forms.displaystyle
+            System.Windows.Forms.DomainUpDown
+            System.Windows.Forms.dotdotdot
+            System.Windows.Forms.down
+            System.Windows.Forms.Edit
+            System.Windows.Forms.editdropdownlist
+            System.Windows.Forms.Error
+            System.Windows.Forms.ErrorControl
+            System.Windows.Forms.ErrorProvider
+            System.Windows.Forms.FlowLayoutPanel
+            System.Windows.Forms.FolderBrowserDialog
+            System.Windows.Forms.FontDialog
+            System.Windows.Forms.Form
+            System.Windows.Forms.Grid
+            System.Windows.Forms.GroupBox
+            System.Windows.Forms.help
+            System.Windows.Forms.HelpProvider
+            System.Windows.Forms.HScrollBar
+            System.Windows.Forms.HTMLControl
+            System.Windows.Forms.IconInError
+            System.Windows.Forms.image
+            System.Windows.Forms.ImageInError
+            System.Windows.Forms.ImageList
+            System.Windows.Forms.IndeterminateChecked
+            System.Windows.Forms.Label
+            System.Windows.Forms.LinkLabel
+            System.Windows.Forms.ListBox
+            System.Windows.Forms.ListView
+            System.Windows.Forms.lockControls
+            System.Windows.Forms.MainMenu
+            System.Windows.Forms.MaskedTextBox
+            System.Windows.Forms.MenuStrip
+            System.Windows.Forms.MonthCalendar
+            System.Windows.Forms.MultiplexPanel
+            System.Windows.Forms.new
+            System.Windows.Forms.NotifyIcon
+            System.Windows.Forms.NumericUpDown
+            System.Windows.Forms.open
+            System.Windows.Forms.OpenFileDialog
+            System.Windows.Forms.overflowButton
+            System.Windows.Forms.PageSetupDialog
+            System.Windows.Forms.Panel
+            System.Windows.Forms.paste
+            System.Windows.Forms.PBAlpha
+            System.Windows.Forms.PBCategory
+            System.Windows.Forms.PBEvent
+            System.Windows.Forms.PBPPage
+            System.Windows.Forms.PBProp
+            System.Windows.Forms.PictureBox
+            System.Windows.Forms.PictureBox.Loading
+            System.Windows.Forms.print
+            System.Windows.Forms.PrintDialog
+            System.Windows.Forms.printPreview
+            System.Windows.Forms.PrintPreviewControl
+            System.Windows.Forms.PrintPreviewDialog
+            System.Windows.Forms.PrintPreviewStrip
+            System.Windows.Forms.ProgressBar
+            System.Windows.Forms.properties
+            System.Windows.Forms.PropertyGrid
+            System.Windows.Forms.PropertyGridInternal.PropertiesTab
+            System.Windows.Forms.RadioButton
+            System.Windows.Forms.Rebar
+            System.Windows.Forms.RichEdit
+            System.Windows.Forms.RichTextBox
+            System.Windows.Forms.save
+            System.Windows.Forms.SaveFileDialog
+            System.Windows.Forms.ScrollButtonDown
+            System.Windows.Forms.ScrollButtonUp
+            System.Windows.Forms.sendToBack
+            System.Windows.Forms.Server.Arrow
+            System.Windows.Forms.SplitContainer
+            System.Windows.Forms.Splitter
+            System.Windows.Forms.SplitterPanel
+            System.Windows.Forms.StatusStrip
+            System.Windows.Forms.StatusStripPanel
+            System.Windows.Forms.TabControl
+            System.Windows.Forms.TableLayoutPanel
+            System.Windows.Forms.TabPage
+            System.Windows.Forms.TabStrip
+            System.Windows.Forms.TextBox
+            System.Windows.Forms.Timer
+            System.Windows.Forms.ToolBar
+            System.Windows.Forms.ToolBarGrip
+            System.Windows.Forms.ToolStrip
+            System.Windows.Forms.ToolStripButton
+            System.Windows.Forms.ToolStripComboBox
+            System.Windows.Forms.ToolStripContainer
+            System.Windows.Forms.ToolStripContainer_BottomToolStripPanel
+            System.Windows.Forms.ToolStripContainer_LeftToolStripPanel
+            System.Windows.Forms.ToolStripContainer_RightToolStripPanel
+            System.Windows.Forms.ToolStripContainer_TopToolStripPanel
+            System.Windows.Forms.ToolStripContentPanel
+            System.Windows.Forms.ToolStripDropDown
+            System.Windows.Forms.ToolStripDropDownButton
+            System.Windows.Forms.ToolStripDropDownMenu
+            System.Windows.Forms.ToolStripLabel
+            System.Windows.Forms.ToolStripMenuItem
+            System.Windows.Forms.ToolStripPanel_standalone
+            System.Windows.Forms.ToolStripProgressBar
+            System.Windows.Forms.ToolStripSeparator
+            System.Windows.Forms.ToolStripSplitButton
+            System.Windows.Forms.ToolStripStatusLabel
+            System.Windows.Forms.ToolStripTextBox
+            System.Windows.Forms.ToolTip
+            System.Windows.Forms.TrackBar
+            System.Windows.Forms.TrayIcon
+            System.Windows.Forms.TreeView
+            System.Windows.Forms.up
+            System.Windows.Forms.UserControl
+            System.Windows.Forms.viewcode
+            System.Windows.Forms.VScrollBar
+            System.Windows.Forms.WebBrowser
+            System.Windows.Forms.wfc
+            """;
+
+        public static TheoryData ExpectedIconNames()
+            => s_expectedIconNames.Split(Environment.NewLine).ToTheoryData();
+
         [Theory]
-        [InlineData("ActiveDocumentHost")]
-        [InlineData("alignment")]
-        [InlineData("alignToGrid")]
-        [InlineData("Animation")]
-        [InlineData("Arrow")]
-        [InlineData("BindingNavigator")]
-        [InlineData("BindingNavigator.AddNew")]
-        [InlineData("BindingNavigator.Delete")]
-        [InlineData("BindingNavigator.MoveFirst")]
-        [InlineData("BindingNavigator.MoveLast")]
-        [InlineData("BindingNavigator.MoveNext")]
-        [InlineData("BindingNavigator.MovePrevious")]
-        [InlineData("BindingSource")]
-        [InlineData("blank")]
-        [InlineData("bringToFront")]
-        [InlineData("Button")]
-        [InlineData("CheckBox")]
-        [InlineData("Checked")]
-        [InlineData("CheckedListBox")]
-        [InlineData("ColorDialog")]
-        [InlineData("ComboBox")]
-        [InlineData("ComponentModel.OrderImages")]
-        [InlineData("ContextMenu")]
-        [InlineData("ContextMenuStrip")]
-        [InlineData("copy")]
-        [InlineData("cut")]
-        [InlineData("DataConnector")]
-        [InlineData("DataGrid")]
-        [InlineData("DataGridCaption.backarrow")]
-        [InlineData("DataGridCaption.backarrow_bidi")]
-        [InlineData("DataGridCaption.Details")]
-        [InlineData("DataGridCaption.down")]
-        [InlineData("DataGridCaption.right")]
-        [InlineData("DataGridCaption.up")]
-        [InlineData("DataGridParentRows.LeftArrow")]
-        [InlineData("DataGridParentRows.RightArrow")]
-        [InlineData("DataGridRow.error")]
-        [InlineData("DataGridRow.left")]
-        [InlineData("DataGridRow.pencil")]
-        [InlineData("DataGridRow.right")]
-        [InlineData("DataGridRow.star")]
-        [InlineData("DataGridView")]
-        [InlineData("DataGridViewButtonColumn")]
-        [InlineData("DataGridViewCheckBoxColumn")]
-        [InlineData("DataGridViewComboBoxColumn")]
-        [InlineData("DataGridViewImageColumn")]
-        [InlineData("DataGridViewLinkColumn")]
-        [InlineData("DataGridViewRow.error")]
-        [InlineData("DataGridViewRow.left")]
-        [InlineData("DataGridViewRow.leftstar")]
-        [InlineData("DataGridViewRow.pencil_ltr")]
-        [InlineData("DataGridViewRow.pencil_rtl")]
-        [InlineData("DataGridViewRow.right")]
-        [InlineData("DataGridViewRow.rightstar")]
-        [InlineData("DataGridViewRow.star")]
-        [InlineData("DataGridViewTextBoxColumn")]
-        [InlineData("DataNavigator")]
-        [InlineData("DataNavigator.AddNew")]
-        [InlineData("DataNavigator.Delete")]
-        [InlineData("DataNavigator.MoveFirst")]
-        [InlineData("DataNavigator.MoveLast")]
-        [InlineData("DataNavigator.MoveNext")]
-        [InlineData("DataNavigator.MovePrevious")]
-        [InlineData("DateTimePicker")]
-        [InlineData("DefaultControl")]
-        [InlineData("delete")]
-        [InlineData("Design.ComponentEditorPage")]
-        [InlineData("Design.EventsTab")]
-        [InlineData("displaystyle")]
-        [InlineData("DomainUpDown")]
-        [InlineData("dotdotdot")]
-        [InlineData("down")]
-        [InlineData("Edit")]
-        [InlineData("editdropdownlist")]
-        [InlineData("Error")]
-        [InlineData("ErrorControl")]
-        [InlineData("ErrorProvider")]
-        [InlineData("FlowLayoutPanel")]
-        [InlineData("FolderBrowserDialog")]
-        [InlineData("FontDialog")]
-        [InlineData("Form")]
-        [InlineData("Grid")]
-        [InlineData("GroupBox")]
-        [InlineData("help")]
-        [InlineData("HelpProvider")]
-        [InlineData("HScrollBar")]
-        [InlineData("HTMLControl")]
-        [InlineData("IconInError")]
-        [InlineData("image")]
-        [InlineData("ImageInError")]
-        [InlineData("ImageList")]
-        [InlineData("IndeterminateChecked")]
-        [InlineData("Label")]
-        [InlineData("LinkLabel")]
-        [InlineData("ListBox")]
-        [InlineData("ListView")]
-        [InlineData("lockControls")]
-        [InlineData("MainMenu")]
-        [InlineData("MaskedTextBox")]
-        [InlineData("MenuStrip")]
-        [InlineData("MonthCalendar")]
-        [InlineData("MultiplexPanel")]
-        [InlineData("new")]
-        [InlineData("NotifyIcon")]
-        [InlineData("NumericUpDown")]
-        [InlineData("open")]
-        [InlineData("OpenFileDialog")]
-        [InlineData("overflowButton")]
-        [InlineData("PageSetupDialog")]
-        [InlineData("Panel")]
-        [InlineData("paste")]
-        [InlineData("PBAlpha")]
-        [InlineData("PBCategory")]
-        [InlineData("PBEvent")]
-        [InlineData("PBPPage")]
-        [InlineData("PBProp")]
-        [InlineData("PictureBox")]
-        [InlineData("PictureBox.Loading")]
-        [InlineData("print")]
-        [InlineData("PrintDialog")]
-        [InlineData("printPreview")]
-        [InlineData("PrintPreviewControl")]
-        [InlineData("PrintPreviewDialog")]
-        [InlineData("PrintPreviewStrip")]
-        [InlineData("ProgressBar")]
-        [InlineData("properties")]
-        [InlineData("PropertyGrid")]
-        [InlineData("PropertyGridInternal.PropertiesTab")]
-        [InlineData("RadioButton")]
-        [InlineData("Rebar")]
-        [InlineData("RichEdit")]
-        [InlineData("RichTextBox")]
-        [InlineData("save")]
-        [InlineData("SaveFileDialog")]
-        [InlineData("ScrollButtonDown")]
-        [InlineData("ScrollButtonUp")]
-        [InlineData("sendToBack")]
-        [InlineData("Server.Arrow")]
-        [InlineData("SplitContainer")]
-        [InlineData("Splitter")]
-        [InlineData("SplitterPanel")]
-        [InlineData("StatusStrip")]
-        [InlineData("StatusStripPanel")]
-        [InlineData("TabControl")]
-        [InlineData("TableLayoutPanel")]
-        [InlineData("TabPage")]
-        [InlineData("TabStrip")]
-        [InlineData("TextBox")]
-        [InlineData("Timer")]
-        [InlineData("ToolBar")]
-        [InlineData("ToolBarGrip")]
-        [InlineData("ToolStrip")]
-        [InlineData("ToolStripButton")]
-        [InlineData("ToolStripComboBox")]
-        [InlineData("ToolStripContainer")]
-        [InlineData("ToolStripContainer_BottomToolStripPanel")]
-        [InlineData("ToolStripContainer_LeftToolStripPanel")]
-        [InlineData("ToolStripContainer_RightToolStripPanel")]
-        [InlineData("ToolStripContainer_TopToolStripPanel")]
-        [InlineData("ToolStripContentPanel")]
-        [InlineData("ToolStripDropDown")]
-        [InlineData("ToolStripDropDownButton")]
-        [InlineData("ToolStripDropDownMenu")]
-        [InlineData("ToolStripLabel")]
-        [InlineData("ToolStripMenuItem")]
-        [InlineData("ToolStripPanel_standalone")]
-        [InlineData("ToolStripProgressBar")]
-        [InlineData("ToolStripSeparator")]
-        [InlineData("ToolStripSplitButton")]
-        [InlineData("ToolStripStatusLabel")]
-        [InlineData("ToolStripTextBox")]
-        [InlineData("ToolTip")]
-        [InlineData("TrackBar")]
-        [InlineData("TrayIcon")]
-        [InlineData("TreeView")]
-        [InlineData("up")]
-        [InlineData("UserControl")]
-        [InlineData("viewcode")]
-        [InlineData("VScrollBar")]
-        [InlineData("WebBrowser")]
-        [InlineData("wfc")]
+        [MemberData(nameof(ExpectedIconNames))]
         public void EmbeddedResource_ResourcesExist_Icon(string resourceName)
         {
-            using Stream stream = assembly.GetManifestResourceStream($"System.Windows.Forms.{resourceName}");
+            using Stream stream = assembly.GetManifestResourceStream(resourceName);
             Assert.NotNull(stream);
+
             using Icon icon = new(stream);
             Assert.NotNull(icon);
         }
 
+        private static string s_expectedCursorNames = """
+            System.Windows.Forms.east.cur
+            System.Windows.Forms.hsplit.cur
+            System.Windows.Forms.ne.cur
+            System.Windows.Forms.nomove2d.cur
+            System.Windows.Forms.nomoveh.cur
+            System.Windows.Forms.nomovev.cur
+            System.Windows.Forms.north.cur
+            System.Windows.Forms.nw.cur
+            System.Windows.Forms.se.cur
+            System.Windows.Forms.south.cur
+            System.Windows.Forms.sw.cur
+            System.Windows.Forms.vsplit.cur
+            System.Windows.Forms.west.cur
+            """;
+
+        public static TheoryData ExpectedCursorNames()
+             => (TheoryData)s_expectedCursorNames.Split(Environment.NewLine).ToTheoryData();
+
         [Theory]
-        [InlineData("east.cur")]
-        [InlineData("hsplit.cur")]
-        [InlineData("ne.cur")]
-        [InlineData("nomove2d.cur")]
-        [InlineData("nomoveh.cur")]
-        [InlineData("nomovev.cur")]
-        [InlineData("north.cur")]
-        [InlineData("nw.cur")]
-        [InlineData("se.cur")]
-        [InlineData("south.cur")]
-        [InlineData("sw.cur")]
-        [InlineData("vsplit.cur")]
-        [InlineData("west.cur")]
+        [MemberData(nameof(ExpectedCursorNames))]
         public void EmbeddedResource_ResourcesExist_Cursor(string resourceName)
         {
-            using Stream stream = assembly.GetManifestResourceStream($"System.Windows.Forms.{resourceName}");
+            using Stream stream = assembly.GetManifestResourceStream(resourceName);
             Assert.NotNull(stream);
+
             using Cursor cursor = new(stream);
             Assert.NotNull(cursor);
         }
 
-        [Theory]
-        [InlineData("System.Windows.Forms.XPThemes.manifest")]
-        public void EmbeddedResource_ResourcesExist_Manifest(string resourceName)
+        private const string expectedResourceNames = """
+            ILLink.Substitutions.xml
+            System.SR.resources
+            System.Windows.Forms.MdiWindowDialog.resources
+            System.Windows.Forms.PrintPreviewDialog.resources
+            System.Windows.Forms.XPThemes.manifest
+            """;
+
+        [Fact]
+        public void EmbeddedResource_VerifyList()
         {
-            using Stream stream = assembly.GetManifestResourceStream(resourceName);
-            Assert.NotNull(stream);
+            string[] actual = assembly.GetManifestResourceNames();
+            Array.Sort(actual, StringComparer.Ordinal);
+
+            string allNames = $"{s_expectedIconNames}{Environment.NewLine}{s_expectedCursorNames}{Environment.NewLine}{expectedResourceNames}";
+            string[] expected = allNames.Split(Environment.NewLine);
+            Array.Sort(expected, StringComparer.Ordinal);
+
+            AssertExtensions.Equal(expected, actual);
         }
     }
 }
