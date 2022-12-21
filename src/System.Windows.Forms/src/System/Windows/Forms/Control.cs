@@ -11698,7 +11698,9 @@ namespace System.Windows.Forms
         {
             // Don't reorder the child control array for tab controls. Implemented as a special case
             // in order to keep the method private.
-            if (GetType().IsAssignableFrom(typeof(TabControl)))
+            // Also short-circuit when the Control class is instantiated directly. This is to provide
+            // consistency with the behavior prior to bug fix https://github.com/dotnet/winforms/issues/7837
+            if (this is TabControl || GetType() == typeof(Control))
             {
                 return;
             }
