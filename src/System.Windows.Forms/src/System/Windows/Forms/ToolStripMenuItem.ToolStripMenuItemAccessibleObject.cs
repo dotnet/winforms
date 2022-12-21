@@ -50,8 +50,70 @@ namespace System.Windows.Forms
                 propertyID switch
                 {
                     UiaCore.UIA.AcceleratorKeyPropertyId => _owningToolStripMenuItem.GetShortcutText(),
+                    UiaCore.UIA.PositionInSetPropertyId => GetPositionInSet(),
+                    UiaCore.UIA.SizeOfSetPropertyId => GetSizeOfSet(),
                     _ => base.GetPropertyValue(propertyID)
                 };
+
+            /// <summary>
+            /// Gets <see cref="UiaCore.UIA.PositionInSetPropertyId"/> property value.
+            /// </summary>
+            private int? GetPositionInSet()
+            {
+                ToolStripItemCollection? displayedItems = _owningToolStripMenuItem.ParentInternal?.DisplayedItems;
+
+                if (displayedItems is null)
+                {
+                    return null;
+                }
+
+                int index = displayedItems.IndexOf(_owningToolStripMenuItem);
+
+                if (index < 0)
+                {
+                    return null;
+                }
+
+                foreach (ToolStripItem item in displayedItems)
+                {
+                    if (item == _owningToolStripMenuItem)
+                    {
+                        break;
+                    }
+
+                    if (item is ToolStripSeparator)
+                    {
+                        index--;
+                    }
+                }
+
+                return index + 1; // UIA_PositionInSet is 1-based
+            }
+
+            /// <summary>
+            /// Gets <see cref="UiaCore.UIA.SizeOfSetPropertyId"/> property value.
+            /// </summary>
+            private int? GetSizeOfSet()
+            {
+                ToolStripItemCollection? displayedItems = _owningToolStripMenuItem.ParentInternal?.DisplayedItems;
+
+                if (displayedItems is null)
+                {
+                    return null;
+                }
+
+                int sizeOfSet = displayedItems.Count;
+
+                foreach (ToolStripItem item in displayedItems)
+                {
+                    if (item is ToolStripSeparator)
+                    {
+                        sizeOfSet--;
+                    }
+                }
+
+                return sizeOfSet;
+            }
 
             public override string DefaultAction
             {
