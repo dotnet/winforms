@@ -307,7 +307,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private Control? GetControlAtPoint(List<Control> tabs, int x, int y)
         {
-            IEnumerator e = tabs.GetEnumerator();
             Rectangle screenRectangle;
             Control? ctlFound = null;
             Control? parent;
