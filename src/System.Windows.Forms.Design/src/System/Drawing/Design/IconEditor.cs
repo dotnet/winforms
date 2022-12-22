@@ -21,7 +21,7 @@ namespace System.Drawing.Design
         private static readonly Type[] s_imageExtenders = Array.Empty<Type>();
         private FileDialog? _fileDialog;
 
-        protected static string? CreateExtensionsString(string?[]? extensions, string sep)
+        protected static string? CreateExtensionsString(string[] extensions, string sep)
         {
             const string StarDot = "*.";
 
@@ -33,10 +33,13 @@ namespace System.Drawing.Design
             string text = string.Empty;
             for (int i = 0; i < extensions.Length; i++)
             {
-                text = text + StarDot + extensions[i];
-                if (i < extensions.Length - 1)
+                if (!string.IsNullOrWhiteSpace(extensions[i]))
                 {
-                    text += sep;
+                    text = text + StarDot + extensions[i];
+                    if (i < extensions.Length - 1)
+                    {
+                        text += sep;
+                    }
                 }
             }
 
