@@ -12,12 +12,12 @@ namespace System.Drawing.Design
     /// </summary>
     public class ToolboxComponentsCreatedEventArgs : EventArgs
     {
-        private readonly IComponent[] _components;
+        private readonly IComponent[]? _components;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="ToolboxComponentsCreatedEventArgs"/>
         /// </summary>
-        public ToolboxComponentsCreatedEventArgs(IComponent[] components)
+        public ToolboxComponentsCreatedEventArgs(IComponent[]? components)
         {
             _components = components;
         }
@@ -25,6 +25,6 @@ namespace System.Drawing.Design
         /// <summary>
         ///  An array storing the toolbox components.
         /// </summary>
-        public IComponent[] Components => (IComponent[])_components.Clone();
+        public IComponent[]? Components => (IComponent[]?)_components?.Clone();
     }
 }

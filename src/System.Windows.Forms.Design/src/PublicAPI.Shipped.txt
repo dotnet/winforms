@@ -317,7 +317,7 @@ System.ComponentModel.Design.DesignerCommandSet.Verbs.get -> System.ComponentMod
 ~System.ComponentModel.Design.DesignSurfaceManager.ServiceContainer.get -> System.ComponentModel.Design.ServiceContainer
 ~System.ComponentModel.Design.EventBindingService.EventBindingService(System.IServiceProvider provider) -> void
 ~System.ComponentModel.Design.EventBindingService.GetService(System.Type serviceType) -> object
-System.ComponentModel.Design.ExceptionCollection.ExceptionCollection(System.Collections.ArrayList! exceptions) -> void
+System.ComponentModel.Design.ExceptionCollection.ExceptionCollection(System.Collections.ArrayList? exceptions) -> void
 System.ComponentModel.Design.ExceptionCollection.Exceptions.get -> System.Collections.ArrayList?
 System.ComponentModel.Design.IMultitargetHelperService.GetAssemblyQualifiedName(System.Type! type) -> string!
 ~System.ComponentModel.Design.InheritanceService.AddInheritedComponents(System.ComponentModel.IComponent component, System.ComponentModel.IContainer container) -> void
@@ -424,8 +424,8 @@ System.Drawing.Design.IToolboxItemProvider.Items.get -> System.Drawing.Design.To
 ~System.Drawing.Design.IToolboxService.SetSelectedToolboxItem(System.Drawing.Design.ToolboxItem toolboxItem) -> void
 ~System.Drawing.Design.IToolboxUser.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~System.Drawing.Design.IToolboxUser.ToolPicked(System.Drawing.Design.ToolboxItem tool) -> void
-System.Drawing.Design.ToolboxComponentsCreatedEventArgs.Components.get -> System.ComponentModel.IComponent![]!
-System.Drawing.Design.ToolboxComponentsCreatedEventArgs.ToolboxComponentsCreatedEventArgs(System.ComponentModel.IComponent![]! components) -> void
+System.Drawing.Design.ToolboxComponentsCreatedEventArgs.Components.get -> System.ComponentModel.IComponent![]?
+System.Drawing.Design.ToolboxComponentsCreatedEventArgs.ToolboxComponentsCreatedEventArgs(System.ComponentModel.IComponent![]? components) -> void
 ~System.Drawing.Design.ToolboxComponentsCreatingEventArgs.DesignerHost.get -> System.ComponentModel.Design.IDesignerHost
 ~System.Drawing.Design.ToolboxComponentsCreatingEventArgs.ToolboxComponentsCreatingEventArgs(System.ComponentModel.Design.IDesignerHost host) -> void
 ~System.Drawing.Design.ToolboxItem.AssemblyName.get -> System.Reflection.AssemblyName

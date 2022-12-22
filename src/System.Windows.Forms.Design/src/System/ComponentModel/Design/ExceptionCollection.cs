@@ -9,14 +9,14 @@ namespace System.ComponentModel.Design
 {
     public sealed class ExceptionCollection : Exception
     {
-        private readonly ArrayList _exceptions;
+        private readonly ArrayList? _exceptions;
 
-        public ExceptionCollection(ArrayList exceptions)
+        public ExceptionCollection(ArrayList? exceptions)
         {
             _exceptions = exceptions;
         }
 
-        public ArrayList? Exceptions => (ArrayList)_exceptions.Clone();
+        public ArrayList? Exceptions => (ArrayList?)_exceptions?.Clone();
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
