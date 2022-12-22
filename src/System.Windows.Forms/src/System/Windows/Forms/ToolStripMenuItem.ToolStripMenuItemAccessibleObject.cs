@@ -56,7 +56,7 @@ namespace System.Windows.Forms
                 };
 
             /// <summary>
-            /// Gets <see cref="UiaCore.UIA.PositionInSetPropertyId"/> property value.
+            ///  Gets <see cref="UiaCore.UIA.PositionInSetPropertyId"/> property value.
             /// </summary>
             private int? GetPositionInSet()
             {
