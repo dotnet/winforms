@@ -91,7 +91,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Gets <see cref="UiaCore.UIA.SizeOfSetPropertyId"/> property value.
+            ///  Gets <see cref="UiaCore.UIA.SizeOfSetPropertyId"/> property value.
             /// </summary>
             private int? GetSizeOfSet()
             {
