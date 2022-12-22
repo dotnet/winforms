@@ -806,28 +806,28 @@ System.Windows.Forms.BindingMemberInfo.BindingField.get -> string!
 System.Windows.Forms.BindingMemberInfo.BindingMember.get -> string!
 System.Windows.Forms.BindingMemberInfo.BindingMemberInfo(string? dataMember) -> void
 System.Windows.Forms.BindingMemberInfo.BindingPath.get -> string!
-~System.Windows.Forms.BindingNavigator.AddNewItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.AddNewItem.set -> void
-~System.Windows.Forms.BindingNavigator.BindingNavigator(System.ComponentModel.IContainer container) -> void
-~System.Windows.Forms.BindingNavigator.BindingNavigator(System.Windows.Forms.BindingSource bindingSource) -> void
-~System.Windows.Forms.BindingNavigator.BindingSource.get -> System.Windows.Forms.BindingSource
-~System.Windows.Forms.BindingNavigator.BindingSource.set -> void
-~System.Windows.Forms.BindingNavigator.CountItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.CountItem.set -> void
-~System.Windows.Forms.BindingNavigator.CountItemFormat.get -> string
-~System.Windows.Forms.BindingNavigator.CountItemFormat.set -> void
-~System.Windows.Forms.BindingNavigator.DeleteItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.DeleteItem.set -> void
-~System.Windows.Forms.BindingNavigator.MoveFirstItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.MoveFirstItem.set -> void
-~System.Windows.Forms.BindingNavigator.MoveLastItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.MoveLastItem.set -> void
-~System.Windows.Forms.BindingNavigator.MoveNextItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.MoveNextItem.set -> void
-~System.Windows.Forms.BindingNavigator.MovePreviousItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.MovePreviousItem.set -> void
-~System.Windows.Forms.BindingNavigator.PositionItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.PositionItem.set -> void
+System.Windows.Forms.BindingNavigator.AddNewItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.AddNewItem.set -> void
+System.Windows.Forms.BindingNavigator.BindingNavigator(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.BindingNavigator.BindingNavigator(System.Windows.Forms.BindingSource? bindingSource) -> void
+System.Windows.Forms.BindingNavigator.BindingSource.get -> System.Windows.Forms.BindingSource?
+System.Windows.Forms.BindingNavigator.BindingSource.set -> void
+System.Windows.Forms.BindingNavigator.CountItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.CountItem.set -> void
+System.Windows.Forms.BindingNavigator.CountItemFormat.get -> string!
+System.Windows.Forms.BindingNavigator.CountItemFormat.set -> void
+System.Windows.Forms.BindingNavigator.DeleteItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.DeleteItem.set -> void
+System.Windows.Forms.BindingNavigator.MoveFirstItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.MoveFirstItem.set -> void
+System.Windows.Forms.BindingNavigator.MoveLastItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.MoveLastItem.set -> void
+System.Windows.Forms.BindingNavigator.MoveNextItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.MoveNextItem.set -> void
+System.Windows.Forms.BindingNavigator.MovePreviousItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.MovePreviousItem.set -> void
+System.Windows.Forms.BindingNavigator.PositionItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.PositionItem.set -> void
 ~System.Windows.Forms.BindingsCollection.this[int index].get -> System.Windows.Forms.Binding
 ~System.Windows.Forms.BindingSource.BindingSource(object dataSource, string dataMember) -> void
 ~System.Windows.Forms.BindingSource.BindingSource(System.ComponentModel.IContainer container) -> void
@@ -5302,7 +5302,7 @@ System.Windows.Forms.BindingNavigator.BeginInit() -> void
 System.Windows.Forms.BindingNavigator.BindingNavigator() -> void
 System.Windows.Forms.BindingNavigator.BindingNavigator(bool addStandardItems) -> void
 System.Windows.Forms.BindingNavigator.EndInit() -> void
-System.Windows.Forms.BindingNavigator.RefreshItems -> System.EventHandler
+System.Windows.Forms.BindingNavigator.RefreshItems -> System.EventHandler?
 System.Windows.Forms.BindingNavigator.Validate() -> bool
 System.Windows.Forms.BindingsCollection
 System.Windows.Forms.BindingsCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler
