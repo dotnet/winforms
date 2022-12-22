@@ -17,13 +17,13 @@ namespace System.Windows.Forms
             {
                 private readonly ControlItem _controlItem;
                 private readonly ErrorWindow? _window;
-                private readonly Control? _control;
+                private readonly Control _control;
                 private readonly ErrorProvider _provider;
 
                 public ControlItemAccessibleObject(
                     ControlItem controlItem,
                     ErrorWindow? window,
-                    Control? control,
+                    Control control,
                     ErrorProvider provider)
                 {
                     _controlItem = controlItem;
@@ -33,8 +33,8 @@ namespace System.Windows.Forms
                 }
 
                 public override Rectangle Bounds
-                    => _control is not null && _control.IsHandleCreated
-                        ? _control.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size))
+                    => _control.ParentInternal is not null && _control.ParentInternal.IsHandleCreated
+                        ? _control.ParentInternal.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size))
                         : Rectangle.Empty;
 
                 private int ControlItemsCount => _window?.ControlItems.Count ?? 0;

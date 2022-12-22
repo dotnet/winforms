@@ -39,14 +39,16 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ControlItemAccessibleObjectTests_Bounds_ReturnsNoEmptyRectangle_IfControlIsCreated()
+        public void ControlItemAccessibleObjectTests_Bounds_ReturnsNoEmptyRectangle_IfParentControlIsCreated()
         {
+            using Control parentControl = new();
             using Control control = new();
+            parentControl.Controls.Add(control);
             using ErrorProvider provider = new();
             ErrorWindow window = new(provider, control);
             ControlItem item = new(provider, control, (IntPtr)100);
             window.Add(item);
-            control.CreateControl();
+            parentControl.CreateControl();
 
             Type type = typeof(ControlItem)
                 .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);

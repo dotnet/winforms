@@ -71,7 +71,7 @@ namespace System.Windows.Forms
             /// </summary>
             private AccessibleObject CreateAccessibilityInstance()
             {
-                return new ControlItemAccessibleObject(this, _window, _control.ParentInternal, _provider);
+                return new ControlItemAccessibleObject(this, _window, _control, _provider);
             }
 
             public void Dispose()
