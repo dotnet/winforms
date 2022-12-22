@@ -33,13 +33,15 @@ namespace System.Drawing.Design
             string text = string.Empty;
             for (int i = 0; i < extensions.Length; i++)
             {
-                if (!string.IsNullOrWhiteSpace(extensions[i]))
+                if (string.IsNullOrWhiteSpace(extensions[i]))
                 {
-                    text = text + StarDot + extensions[i];
-                    if (i < extensions.Length - 1)
-                    {
-                        text += sep;
-                    }
+                    continue;
+                }
+
+                text = text + StarDot + extensions[i];
+                if (i < extensions.Length - 1)
+                {
+                    text += sep;
                 }
             }
 
