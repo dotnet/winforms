@@ -145,7 +145,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override IEnumerator GetEnumerator() { return new ToolStripPanelCellToControlEnumerator((IEnumerable<ToolStripPanelCell>)InnerList); }
+            public override IEnumerator GetEnumerator() { return new ToolStripPanelCellToControlEnumerator(InnerList.GetEnumerator()); }
 
             private Control GetControl(int index)
             {
