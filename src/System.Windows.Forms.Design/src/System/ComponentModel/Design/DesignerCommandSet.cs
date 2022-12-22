@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.ComponentModel.Design
@@ -13,10 +11,10 @@ namespace System.ComponentModel.Design
         private protected const string VerbsCommand = "Verbs";
         private protected const string ActionListsCommand = "ActionLists";
 
-        public virtual ICollection GetCommands(string name) => null;
+        public virtual ICollection? GetCommands(string name) => null;
 
-        public DesignerVerbCollection Verbs => (DesignerVerbCollection)GetCommands(VerbsCommand);
+        public DesignerVerbCollection? Verbs => (DesignerVerbCollection?)GetCommands(VerbsCommand);
 
-        public DesignerActionListCollection ActionLists => (DesignerActionListCollection)GetCommands(ActionListsCommand);
+        public DesignerActionListCollection? ActionLists => (DesignerActionListCollection?)GetCommands(ActionListsCommand);
     }
 }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
@@ -17,9 +15,9 @@ namespace System.ComponentModel.Design
     /// </summary>
     public abstract partial class DesignerActionItem
     {
-        private IDictionary _properties;
+        private IDictionary? _properties;
 
-        public DesignerActionItem(string displayName, string category, string description)
+        public DesignerActionItem(string? displayName, string? category, string? description)
         {
             DisplayName = displayName is null ? null : SanitizeNameRegex().Replace(displayName, "");
             Category = category;
@@ -31,11 +29,11 @@ namespace System.ComponentModel.Design
 
         public bool AllowAssociate { get; set; }
 
-        public virtual string Category { get; }
+        public virtual string? Category { get; }
 
-        public virtual string Description { get; }
+        public virtual string? Description { get; }
 
-        public virtual string DisplayName { get; }
+        public virtual string? DisplayName { get; }
 
         public IDictionary Properties => _properties ??= new HybridDictionary();
 

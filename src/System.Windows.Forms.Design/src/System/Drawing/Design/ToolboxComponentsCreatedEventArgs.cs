@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Drawing.Design
@@ -27,6 +25,6 @@ namespace System.Drawing.Design
         /// <summary>
         ///  An array storing the toolbox components.
         /// </summary>
-        public IComponent[] Components => (IComponent[])_components?.Clone();
+        public IComponent[] Components => (IComponent[])_components.Clone();
     }
 }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.ComponentModel.Design
 {
     /// <summary>
@@ -19,6 +17,6 @@ namespace System.ComponentModel.Design
             _provider = provider;
         }
 
-        public override object GetService(Type serviceClass) => _provider.GetService(serviceClass);
+        public override object? GetService(Type serviceClass) => _provider.GetService(serviceClass);
     }
 }
