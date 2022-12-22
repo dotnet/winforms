@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -22,22 +20,22 @@ namespace System.Windows.Forms.Design
     [ToolboxItem(false)]
     internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     {
-        private IDesignerHost host;
-        private Control ctlHover;
-        private ArrayList tabControls;
-        private Rectangle[] tabGlyphs;
-        private ArrayList tabComplete;
-        private Hashtable tabNext;
-        private readonly Font tabFont;
-        private readonly StringBuilder drawString;
-        private readonly Brush highlightTextBrush;
-        private readonly Pen highlightPen;
-        private readonly int selSize;
-        private readonly Hashtable tabProperties;
-        private Region region;
-        private readonly MenuCommand[] commands;
-        private readonly MenuCommand[] newCommands;
-        private readonly string decimalSep;
+        private IDesignerHost _host;
+        private Control? _ctlHover;
+        private List<Control>? _tabControls;
+        private Rectangle[]? _tabGlyphs;
+        private HashSet<Control>? _tabComplete;
+        private Dictionary<Control, int>? _tabNext;
+        private readonly Font _tabFont;
+        private readonly StringBuilder _drawString;
+        private readonly Brush _highlightTextBrush;
+        private readonly Pen _highlightPen;
+        private readonly int _selSize;
+        private readonly Dictionary<Control, PropertyDescriptor> _tabProperties;
+        private Region? _region;
+        private readonly MenuCommand[] _commands;
+        private readonly MenuCommand[] _newCommands;
+        private readonly string _decimalSep;
 
         /// <summary>
         ///  Creates a new tab order control that displays the tab order
@@ -45,63 +43,41 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public TabOrder(IDesignerHost host)
         {
-            this.host = host;
+            _host = host;
 
             // Determine a font for us to use.
-            //
-            IUIService uisvc = (IUIService)host.GetService(typeof(IUIService));
-            if (uisvc is not null)
-            {
-                tabFont = (Font)uisvc.Styles["DialogFont"];
-            }
-            else
-            {
-                tabFont = DefaultFont;
-            }
-
-            tabFont = new Font(tabFont, FontStyle.Bold);
+            IUIService? uisvc = (IUIService?)host.GetService(typeof(IUIService));
+            _tabFont = uisvc is not null && uisvc.Styles["DialogFont"] is Font dialogFont ? dialogFont : DefaultFont;
+            _tabFont = new Font(_tabFont, FontStyle.Bold);
 
             // And compute the proper highlight dimensions.
-            //
-            selSize = DesignerUtils.GetAdornmentDimensions(AdornmentType.GrabHandle).Width;
+            _selSize = DesignerUtils.GetAdornmentDimensions(AdornmentType.GrabHandle).Width;
 
             // Colors and brushes...
-            //
-            drawString = new StringBuilder(12);
-            highlightTextBrush = new SolidBrush(SystemColors.HighlightText);
-            highlightPen = new Pen(SystemColors.Highlight);
+            _drawString = new StringBuilder(12);
+            _highlightTextBrush = new SolidBrush(SystemColors.HighlightText);
+            _highlightPen = new Pen(SystemColors.Highlight);
 
             // The decimal separator
-            //
-            NumberFormatInfo formatInfo = (NumberFormatInfo)CultureInfo.CurrentCulture.GetFormat(typeof(NumberFormatInfo));
-            if (formatInfo is not null)
-            {
-                decimalSep = formatInfo.NumberDecimalSeparator;
-            }
-            else
-            {
-                decimalSep = ".";
-            }
+            NumberFormatInfo? formatInfo = (NumberFormatInfo?)CultureInfo.CurrentCulture.GetFormat(typeof(NumberFormatInfo));
+            _decimalSep = formatInfo is not null ? formatInfo.NumberDecimalSeparator : ".";
 
-            tabProperties = new Hashtable();
+            _tabProperties = new();
 
             // Set up a NULL brush so we never try to invalidate the control.  This is
             // more efficient for what we're doing
-            //
             SetStyle(ControlStyles.Opaque, true);
 
             // We're an overlay on top of the form
-            //
-            IOverlayService os = (IOverlayService)host.GetService(typeof(IOverlayService));
+            IOverlayService? os = (IOverlayService?)host.GetService(typeof(IOverlayService));
             Debug.Assert(os is not null, "No overlay service -- tab order UI cannot be shown");
             os?.PushOverlay(this);
 
             // Push a help keyword so the help system knows we're in place.
-            //
-            IHelpService hs = (IHelpService)host.GetService(typeof(IHelpService));
+            IHelpService? hs = (IHelpService?)host.GetService(typeof(IHelpService));
             hs?.AddContextAttribute("Keyword", "TabOrderView", HelpKeywordType.FilterKeyword);
 
-            commands = new MenuCommand[]
+            _commands = new MenuCommand[]
             {
                 new MenuCommand(new EventHandler(OnKeyCancel),
                                 MenuCommands.KeyCancel),
@@ -128,16 +104,16 @@ namespace System.Windows.Forms.Design
                                 MenuCommands.KeySelectPrevious),
             };
 
-            newCommands = new MenuCommand[]
+            _newCommands = new MenuCommand[]
             {
                 new MenuCommand(new EventHandler(OnKeyDefault),
                                 MenuCommands.KeyTabOrderSelect),
             };
 
-            IMenuCommandService mcs = (IMenuCommandService)host.GetService(typeof(IMenuCommandService));
+            IMenuCommandService? mcs = (IMenuCommandService?)host.GetService(typeof(IMenuCommandService));
             if (mcs is not null)
             {
-                foreach (MenuCommand mc in newCommands)
+                foreach (MenuCommand mc in _newCommands)
                 {
                     mcs.AddCommand(mc);
                 }
@@ -145,14 +121,12 @@ namespace System.Windows.Forms.Design
 
             // We also override keyboard, menu and mouse handlers.  Our override relies on the
             // above array of menu commands, so this must come after we initialize the array.
-            //
-            IEventHandlerService ehs = (IEventHandlerService)host.GetService(typeof(IEventHandlerService));
+            IEventHandlerService? ehs = (IEventHandlerService?)host.GetService(typeof(IEventHandlerService));
             ehs?.PushHandler(this);
 
             // We sync add, remove and change events so we remain in sync with any nastiness that the
             // form may pull on us.
-            //
-            IComponentChangeService cs = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
+            IComponentChangeService? cs = (IComponentChangeService?)host.GetService(typeof(IComponentChangeService));
             if (cs is not null)
             {
                 cs.ComponentAdded += new ComponentEventHandler(OnComponentAddRemove);
@@ -168,24 +142,24 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (region is not null)
+                if (_region is not null)
                 {
-                    region.Dispose();
-                    region = null;
+                    _region.Dispose();
+                    _region = null;
                 }
 
-                if (host is not null)
+                if (_host is not null)
                 {
-                    IOverlayService os = (IOverlayService)host.GetService(typeof(IOverlayService));
+                    IOverlayService? os = (IOverlayService?)_host.GetService(typeof(IOverlayService));
                     os?.RemoveOverlay(this);
 
-                    IEventHandlerService ehs = (IEventHandlerService)host.GetService(typeof(IEventHandlerService));
+                    IEventHandlerService? ehs = (IEventHandlerService?)_host.GetService(typeof(IEventHandlerService));
                     ehs?.PopHandler(this);
 
-                    IMenuCommandService mcs = (IMenuCommandService)host.GetService(typeof(IMenuCommandService));
+                    IMenuCommandService? mcs = (IMenuCommandService?)_host.GetService(typeof(IMenuCommandService));
                     if (mcs is not null)
                     {
-                        foreach (MenuCommand mc in newCommands)
+                        foreach (MenuCommand mc in _newCommands)
                         {
                             mcs.RemoveCommand(mc);
                         }
@@ -193,8 +167,7 @@ namespace System.Windows.Forms.Design
 
                     // We sync add, remove and change events so we remain in sync with any nastiness that the
                     // form may pull on us.
-                    //
-                    IComponentChangeService cs = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
+                    IComponentChangeService? cs = (IComponentChangeService?)_host.GetService(typeof(IComponentChangeService));
                     if (cs is not null)
                     {
                         cs.ComponentAdded -= new ComponentEventHandler(OnComponentAddRemove);
@@ -202,10 +175,10 @@ namespace System.Windows.Forms.Design
                         cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                     }
 
-                    IHelpService hs = (IHelpService)host.GetService(typeof(IHelpService));
+                    IHelpService? hs = (IHelpService?)_host.GetService(typeof(IHelpService));
                     hs?.RemoveContextAttribute("Keyword", "TabOrderView");
 
-                    host = null;
+                    _host = null!;
                 }
             }
 
@@ -213,102 +186,95 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  this function does double duty:  it draws the tabs if fRegion is false, or it
+        ///  This function does double duty: it draws the tabs if fRegion is false, or it
         ///  computes control region rects if fRegion is true (both require that we essentially
         ///  "draw" the tabs)
         /// </summary>
-        private void DrawTabs(IList tabs, Graphics gr, bool fRegion)
+        private void DrawTabs(List<Control> tabs, Graphics graphics, bool fRegion)
         {
-            IEnumerator e = tabs.GetEnumerator();
-            int iCtl = 0;
-            Control ctl;
-            Control parent;
-            string str;
-
-            Font font = tabFont;
-
+            Font font = _tabFont;
             if (fRegion)
             {
-                region = new Region(new Rectangle(0, 0, 0, 0));
+                _region = new Region(new Rectangle(0, 0, 0, 0));
             }
 
-            if (ctlHover is not null)
+            if (_ctlHover is not null)
             {
-                Rectangle ctlInner = GetConvertedBounds(ctlHover);
+                Rectangle ctlInner = GetConvertedBounds(_ctlHover);
                 Rectangle ctlOuter = ctlInner;
-                ctlOuter.Inflate(selSize, selSize);
+                ctlOuter.Inflate(_selSize, _selSize);
 
                 if (fRegion)
                 {
-                    region = new Region(ctlOuter);
-                    region.Exclude(ctlInner);
+                    _region = new Region(ctlOuter);
+                    _region.Exclude(ctlInner);
                 }
                 else
                 {
-                    Control p = ctlHover.Parent;
-                    Color backColor;
-                    backColor = p.BackColor;
-
-                    Region clip = gr.Clip;
-                    gr.ExcludeClip(ctlInner);
-                    using (SolidBrush brush = new SolidBrush(backColor))
+                    if (_ctlHover.Parent is Control hoverParent)
                     {
-                        gr.FillRectangle(brush, ctlOuter);
-                    }
+                        Color backColor = hoverParent.BackColor;
+                        Region clip = graphics.Clip;
+                        graphics.ExcludeClip(ctlInner);
+                        using (SolidBrush brush = new SolidBrush(backColor))
+                        {
+                            graphics.FillRectangle(brush, ctlOuter);
+                        }
 
-                    ControlPaint.DrawSelectionFrame(gr, false, ctlOuter, ctlInner, backColor);
-                    gr.Clip = clip;
+                        ControlPaint.DrawSelectionFrame(graphics, active: false, ctlOuter, ctlInner, backColor);
+                        graphics.Clip = clip;
+                    }
                 }
             }
 
-            Rectangle rc;
-            while (e.MoveNext())
+            int iCtl = 0;
+            foreach (Control control in tabs)
             {
-                ctl = (Control)e.Current;
-                rc = GetConvertedBounds(ctl);
+                Rectangle convertedRectangle = GetConvertedBounds(control);
 
-                drawString.Length = 0;
+                _drawString.Length = 0;
 
-                parent = GetSitedParent(ctl);
-                Control baseControl = (Control)host.RootComponent;
+                Control? parent = GetSitedParent(control);
+                Control baseControl = (Control)_host.RootComponent;
 
                 while (parent != baseControl && parent is not null)
                 {
-                    drawString.Insert(0, decimalSep);
-                    drawString.Insert(0, parent.TabIndex.ToString(CultureInfo.CurrentCulture));
+                    _drawString.Insert(0, _decimalSep);
+                    _drawString.Insert(0, parent.TabIndex.ToString(CultureInfo.CurrentCulture));
                     parent = GetSitedParent(parent);
                 }
 
-                drawString.Insert(0, ' ');
-                drawString.Append(ctl.TabIndex.ToString(CultureInfo.CurrentCulture));
-                drawString.Append(' ');
+                _drawString.Insert(0, ' ');
+                _drawString.Append(control.TabIndex.ToString(CultureInfo.CurrentCulture));
+                _drawString.Append(' ');
 
-                if (((PropertyDescriptor)tabProperties[ctl]).IsReadOnly)
+                if (_tabProperties[control].IsReadOnly)
                 {
-                    drawString.Append(SR.WindowsFormsTabOrderReadOnly);
-                    drawString.Append(' ');
+                    _drawString.Append(SR.WindowsFormsTabOrderReadOnly);
+                    _drawString.Append(' ');
                 }
 
-                str = drawString.ToString();
-                var sz = Size.Ceiling(gr.MeasureString(str, font));
-                rc.Width = sz.Width + 2;
-                rc.Height = sz.Height + 2;
+                string str = _drawString.ToString();
+                var sz = Size.Ceiling(graphics.MeasureString(str, font));
+                convertedRectangle.Width = sz.Width + 2;
+                convertedRectangle.Height = sz.Height + 2;
 
-                tabGlyphs[iCtl++] = rc;
+                Debug.Assert(_tabGlyphs is not null, "tabGlyps should not be null here.");
+                _tabGlyphs[iCtl++] = convertedRectangle;
 
                 Brush brush;
                 Pen pen;
                 Color textColor;
                 if (fRegion)
                 {
-                    region.Union(rc);
+                    _region?.Union(convertedRectangle);
                 }
                 else
                 {
-                    if (tabComplete.IndexOf(ctl) != -1)
+                    if (_tabComplete is not null && !_tabComplete.Contains(control))
                     {
-                        brush = highlightTextBrush;
-                        pen = highlightPen;
+                        brush = _highlightTextBrush;
+                        pen = _highlightPen;
                         textColor = SystemColors.Highlight;
                     }
                     else
@@ -318,21 +284,20 @@ namespace System.Windows.Forms.Design
                         textColor = SystemColors.HighlightText;
                     }
 
-                    gr.FillRectangle(brush, rc);
-                    gr.DrawRectangle(pen, rc.X, rc.Y, rc.Width - 1, rc.Height - 1);
+                    graphics.FillRectangle(brush, convertedRectangle);
+                    graphics.DrawRectangle(pen, convertedRectangle.X, convertedRectangle.Y, convertedRectangle.Width - 1, convertedRectangle.Height - 1);
 
                     Brush foreBrush = new SolidBrush(textColor);
-                    gr.DrawString(str, font, foreBrush, rc.X + 1, rc.Y + 1);
+                    graphics.DrawString(str, font, foreBrush, convertedRectangle.X + 1, convertedRectangle.Y + 1);
                     foreBrush.Dispose();
                 }
             }
 
             if (fRegion)
             {
-                ctl = (Control)host.RootComponent;
-                rc = GetConvertedBounds(ctl);
-                region.Intersect(rc);
-                Region = region;
+                Control rootControl = (Control)_host.RootComponent;
+                _region?.Intersect(GetConvertedBounds(rootControl));
+                Region = _region;
             }
         }
 
@@ -340,29 +305,29 @@ namespace System.Windows.Forms.Design
         ///  returns a control in the given tab vector that is at the given point, in
         ///  screen coords.
         /// </summary>
-        private Control GetControlAtPoint(IList tabs, int x, int y)
+        private Control? GetControlAtPoint(List<Control> tabs, int x, int y)
         {
-            IEnumerator e = tabs.GetEnumerator();
-            Rectangle rc;
-            Control ctlFound = null;
-            Control ctl;
-            Control parent;
+            Rectangle screenRectangle;
+            Control? ctlFound = null;
+            Control? parent;
 
-            while (e.MoveNext())
+            foreach (Control control in tabs)
             {
-                ctl = (Control)e.Current;
-                parent = GetSitedParent(ctl);
-                rc = ctl.Bounds;
-                rc = parent.RectangleToScreen(rc);
-
-                // We do not break if we find it here.  The vector is already setup
-                // to have all controls in the current tabbing order, and child controls
-                // are always after their parents.  If we broke, we wouldn't necessarily
-                // find the appropriate child.
-                //
-                if (rc.Contains(x, y))
+                parent = GetSitedParent(control);
+                if (parent is null)
                 {
-                    ctlFound = ctl;
+                    continue;
+                }
+
+                screenRectangle = parent.RectangleToScreen(control.Bounds);
+
+                // We do not break if we find it here. The vector is already setup
+                // to have all controls in the current tabbing order, and child controls
+                // are always after their parents. If we broke, we wouldn't necessarily
+                // find the appropriate child.
+                if (screenRectangle.Contains(x, y))
+                {
+                    ctlFound = control;
                 }
             }
 
@@ -371,19 +336,23 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  returns a rectangle in our own client space that represents the bounds
-        ///  if the given control
+        ///  of the given control.
         /// </summary>
-        private Rectangle GetConvertedBounds(Control ctl)
+        private Rectangle GetConvertedBounds(Control? control)
         {
-            Control parent = ctl.Parent;
-            Rectangle rc = ctl.Bounds;
-            rc = parent.RectangleToScreen(rc);
-            rc = RectangleToClient(rc);
-            return rc;
+            if (control is null || control.Parent is not Control parent)
+            {
+                return Rectangle.Empty;
+            }
+
+            Rectangle convertedBounds = control.Bounds;
+            convertedBounds = parent.RectangleToScreen(convertedBounds);
+            convertedBounds = RectangleToClient(convertedBounds);
+            return convertedBounds;
         }
 
         /// <summary>
-        ///  returns the maximum valid control count for the given control.  This
+        ///  returns the maximum valid control count for the given control. This
         ///  may be less than Control.getControlCount() because of invisible controls
         ///  and our own control
         /// </summary>
@@ -407,23 +376,22 @@ namespace System.Windows.Forms.Design
         ///  by the tab order UI.  We only want parents that are
         ///  sited by the designer host.
         /// </summary>
-        private Control GetSitedParent(Control child)
+        private Control? GetSitedParent(Control child)
         {
-            Control parent = child.Parent;
+            Control? parent = child.Parent;
 
             while (parent is not null)
             {
-                ISite site = parent.Site;
-                IContainer container = null;
-
+                ISite? site = parent.Site;
+                IContainer? container = null;
                 if (site is not null)
                 {
                     container = site.Container;
                 }
 
-                container = DesignerUtils.CheckForNestedContainer(container); // ...necessary to support SplitterPanel components
-
-                if (site is not null && container == host)
+                // Necessary to support SplitterPanel components.
+                container = DesignerUtils.CheckForNestedContainer(container);
+                if (site is not null && container == _host)
                 {
                     break;
                 }
@@ -437,8 +405,13 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  recursively fills the given tab vector with a control list
         /// </summary>
-        private void GetTabbing(Control ctl, IList tabs)
+        private void GetTabbing(Control control, IList tabs)
         {
+            if (control is null)
+            {
+                return;
+            }
+
             Control ctlTab;
 
             // Now actually count the controls.  We add them to the list in reverse
@@ -446,11 +419,10 @@ namespace System.Windows.Forms.Design
             // needs to be in reverse z-order.  When done, we want this list to be
             // in z-order from back-most to top-most, and from parent-most to
             // child-most.
-            //
-            int cnt = ctl.Controls.Count;
-            for (int i = cnt - 1; i >= 0; i--)
+            int count = control.Controls.Count;
+            for (int i = count - 1; i >= 0; i--)
             {
-                ctlTab = ctl.Controls[i];
+                ctlTab = control.Controls[i];
 
                 if (GetSitedParent(ctlTab) is not null && GetTabbable(ctlTab))
                 {
@@ -469,26 +441,25 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private bool GetTabbable(Control control)
         {
-            for (Control c = control; c is not null; c = c.Parent)
+            for (Control? c = control; c is not null; c = c.Parent)
             {
                 if (!c.Visible)
                     return false;
             }
 
-            ISite site = control.Site;
-            if (site is null || site.Container != host)
+            if (control.Site is not ISite site || site.Container != _host)
             {
                 return false;
             }
 
-            PropertyDescriptor prop = TypeDescriptor.GetProperties(control)["TabIndex"];
+            PropertyDescriptor? prop = TypeDescriptor.GetProperties(control)["TabIndex"];
 
             if (prop is null || !prop.IsBrowsable)
             {
                 return false;
             }
 
-            tabProperties[control] = prop;
+            _tabProperties[control] = prop;
             return true;
         }
 
@@ -496,20 +467,18 @@ namespace System.Windows.Forms.Design
         ///  Called in response to a component add or remove event.  Here we re-acquire our
         ///  set of tabs.
         /// </summary>
-        private void OnComponentAddRemove(object sender, ComponentEventArgs ce)
+        private void OnComponentAddRemove(object? sender, ComponentEventArgs ce)
         {
-            ctlHover = null;
-            tabControls = null;
-            tabGlyphs = null;
+            _ctlHover = null;
+            _tabControls = null;
+            _tabGlyphs = null;
+            _tabComplete?.Clear();
+            _tabNext?.Clear();
 
-            tabComplete?.Clear();
-
-            tabNext?.Clear();
-
-            if (region is not null)
+            if (_region is not null)
             {
-                region.Dispose();
-                region = null;
+                _region.Dispose();
+                _region = null;
             }
 
             Invalidate();
@@ -519,14 +488,14 @@ namespace System.Windows.Forms.Design
         ///  Called in response to a component change event.  Here we update our
         ///  tab order and redraw.
         /// </summary>
-        private void OnComponentChanged(object sender, ComponentChangedEventArgs ce)
+        private void OnComponentChanged(object? sender, ComponentChangedEventArgs ce)
         {
-            tabControls = null;
-            tabGlyphs = null;
-            if (region is not null)
+            _tabControls = null;
+            _tabGlyphs = null;
+            if (_region is not null)
             {
-                region.Dispose();
-                region = null;
+                _region.Dispose();
+                _region = null;
             }
 
             Invalidate();
@@ -535,13 +504,13 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Closes the tab order UI.
         /// </summary>
-        private void OnKeyCancel(object sender, EventArgs e)
+        private void OnKeyCancel(object? sender, EventArgs e)
         {
-            IMenuCommandService mcs = (IMenuCommandService)host.GetService(typeof(IMenuCommandService));
+            IMenuCommandService? mcs = (IMenuCommandService?)_host.GetService(typeof(IMenuCommandService));
             Debug.Assert(mcs is not null, "No menu command service, can't get out of tab order UI");
             if (mcs is not null)
             {
-                MenuCommand mc = mcs.FindCommand(StandardCommands.TabOrder);
+                MenuCommand? mc = mcs.FindCommand(StandardCommands.TabOrder);
                 Debug.Assert(mc is not null, "No tab order menu command, can't get out of tab order UI");
                 mc?.Invoke();
             }
@@ -550,11 +519,11 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Sets the current tab order selection.
         /// </summary>
-        private void OnKeyDefault(object sender, EventArgs e)
+        private void OnKeyDefault(object? sender, EventArgs e)
         {
-            if (ctlHover is not null)
+            if (_ctlHover is not null)
             {
-                SetNextTabIndex(ctlHover);
+                SetNextTabIndex(_ctlHover);
                 RotateControls(true);
             }
         }
@@ -562,7 +531,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Selects the next component in the tab order.
         /// </summary>
-        private void OnKeyNext(object sender, EventArgs e)
+        private void OnKeyNext(object? sender, EventArgs e)
         {
             RotateControls(true);
         }
@@ -570,7 +539,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Selects the previous component in the tab order.
         /// </summary>
-        private void OnKeyPrevious(object sender, EventArgs e)
+        private void OnKeyPrevious(object? sender, EventArgs e)
         {
             RotateControls(false);
         }
@@ -591,9 +560,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public virtual void OnMouseDown(IComponent component, MouseButtons button, int x, int y)
         {
-            if (ctlHover is not null)
+            if (_ctlHover is not null)
             {
-                SetNextTabIndex(ctlHover);
+                SetNextTabIndex(_ctlHover);
             }
         }
 
@@ -605,9 +574,9 @@ namespace System.Windows.Forms.Design
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            if (ctlHover is not null)
+            if (_ctlHover is not null)
             {
-                SetNextTabIndex(ctlHover);
+                SetNextTabIndex(_ctlHover);
             }
         }
 
@@ -624,9 +593,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public virtual void OnMouseMove(IComponent component, int x, int y)
         {
-            if (tabControls is not null)
+            if (_tabControls is not null)
             {
-                Control ctl = GetControlAtPoint(tabControls, x, y);
+                Control? ctl = GetControlAtPoint(_tabControls, x, y);
                 SetNewHover(ctl);
             }
         }
@@ -640,17 +609,17 @@ namespace System.Windows.Forms.Design
         {
             base.OnMouseMove(e);
 
-            if (tabGlyphs is not null)
+            if (_tabGlyphs is not null && _tabControls is not null)
             {
-                Control ctl = null;
+                Control? ctl = null;
 
-                for (int i = 0; i < tabGlyphs.Length; i++)
+                for (int i = 0; i < _tabGlyphs.Length; i++)
                 {
-                    if (tabGlyphs[i].Contains(e.X, e.Y))
+                    if (_tabGlyphs[i].Contains(e.X, e.Y))
                     {
                         // Do not break if we find it -- we must
                         // work for nested children too.
-                        ctl = (Control)tabControls[i];
+                        ctl = _tabControls[i];
                     }
                 }
 
@@ -669,25 +638,14 @@ namespace System.Windows.Forms.Design
         }
 
         private void SetAppropriateCursor()
-        {
-            if (ctlHover is not null)
-            {
-                Cursor.Current = Cursors.Cross;
-            }
-            else
-            {
-                Cursor.Current = Cursors.Default;
-            }
-        }
+            => Cursor.Current = _ctlHover is not null ? Cursors.Cross : Cursors.Default;
 
         /// <summary>
         ///  This is called when the cursor for the given component should be updated.
         ///  The mouse is always over the given component's view when this is called.
         /// </summary>
         public virtual void OnSetCursor(IComponent component)
-        {
-            SetAppropriateCursor();
-        }
+            => SetAppropriateCursor();
 
         /// <summary>
         ///  Paints the tab control.
@@ -696,22 +654,22 @@ namespace System.Windows.Forms.Design
         {
             base.OnPaint(e);
 
-            if (tabControls is null)
+            if (_tabControls is null)
             {
-                tabControls = new ArrayList();
-                GetTabbing((Control)host.RootComponent, tabControls);
-                tabGlyphs = new Rectangle[tabControls.Count];
+                _tabControls = new();
+                GetTabbing((Control)_host.RootComponent, _tabControls);
+                _tabGlyphs = new Rectangle[_tabControls.Count];
             }
 
-            tabComplete ??= new ArrayList();
-            tabNext ??= new Hashtable();
+            _tabComplete ??= new();
+            _tabNext ??= new();
 
-            if (region is null)
+            if (_region is null)
             {
-                DrawTabs(tabControls, e.Graphics, true);
+                DrawTabs(_tabControls, e.Graphics, true);
             }
 
-            DrawTabs(tabControls, e.Graphics, false);
+            DrawTabs(_tabControls, e.Graphics, false);
         }
 
         /// <summary>
@@ -721,11 +679,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public bool OverrideInvoke(MenuCommand cmd)
         {
-            for (int i = 0; i < commands.Length; i++)
+            for (int i = 0; i < _commands.Length; i++)
             {
-                if (commands[i].CommandID.Equals(cmd.CommandID))
+                if (Equals(_commands[i].CommandID, cmd.CommandID))
                 {
-                    commands[i].Invoke();
+                    _commands[i].Invoke();
                     return true;
                 }
             }
@@ -740,11 +698,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public bool OverrideStatus(MenuCommand cmd)
         {
-            for (int i = 0; i < commands.Length; i++)
+            for (int i = 0; i < _commands.Length; i++)
             {
-                if (commands[i].CommandID.Equals(cmd.CommandID))
+                if (Equals(_commands[i].CommandID, cmd.CommandID))
                 {
-                    cmd.Enabled = commands[i].Enabled;
+                    cmd.Enabled = _commands[i].Enabled;
                     return true;
                 }
             }
@@ -753,8 +711,7 @@ namespace System.Windows.Forms.Design
             // get commands that the designer implements, so we don't
             // have to pick and choose which ones to get rid of.  We
             // keep a select view and disable the rest.
-            //
-            if (!cmd.CommandID.Equals(StandardCommands.TabOrder))
+            if (!Equals(cmd.CommandID, StandardCommands.TabOrder))
             {
                 cmd.Enabled = false;
                 return true;
@@ -769,52 +726,42 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void RotateControls(bool forward)
         {
-            Control ctl = ctlHover;
-            Control form = (Control)host.RootComponent;
-
-            ctl ??= form;
-
-            while ((ctl = form.GetNextControl(ctl, forward)) is not null)
+            Control? control = _ctlHover;
+            Control form = (Control)_host.RootComponent;
+            control ??= form;
+            while ((control = form.GetNextControl(control, forward)) is not null)
             {
-                if (GetTabbable(ctl))
+                if (GetTabbable(control))
                     break;
             }
 
-            SetNewHover(ctl);
+            SetNewHover(control);
         }
 
         /// <summary>
         ///  Establishes a new hover control.
         /// </summary>
-        private void SetNewHover(Control ctl)
+        private void SetNewHover(Control? ctl)
         {
-            if (ctlHover != ctl)
+            if (_ctlHover != ctl)
             {
-                if (ctlHover is not null)
+                InvalidateHoverRegion();
+                _ctlHover = ctl;
+                InvalidateHoverRegion();
+            }
+
+            void InvalidateHoverRegion()
+            {
+                if (_ctlHover is not null)
                 {
-                    if (region is not null)
+                    if (_region is not null)
                     {
-                        region.Dispose();
-                        region = null;
+                        _region.Dispose();
+                        _region = null;
                     }
 
-                    Rectangle rc = GetConvertedBounds(ctlHover);
-                    rc.Inflate(selSize, selSize);
-                    Invalidate(rc);
-                }
-
-                ctlHover = ctl;
-
-                if (ctlHover is not null)
-                {
-                    if (region is not null)
-                    {
-                        region.Dispose();
-                        region = null;
-                    }
-
-                    Rectangle rc = GetConvertedBounds(ctlHover);
-                    rc.Inflate(selSize, selSize);
+                    Rectangle rc = GetConvertedBounds(_ctlHover);
+                    rc.Inflate(_selSize, _selSize);
                     Invalidate(rc);
                 }
             }
@@ -826,72 +773,72 @@ namespace System.Windows.Forms.Design
         // Standard 'catch all - rethrow critical' exception pattern
         private void SetNextTabIndex(Control ctl)
         {
-            if (tabControls is not null)
+            if (_tabControls is null || _tabComplete is null || _tabNext is null)
             {
-                int index, max;
-                Control parent = GetSitedParent(ctl);
-                object nextIndex = tabNext[parent];
+                return;
+            }
 
-                if (tabComplete.IndexOf(ctl) == -1)
-                    tabComplete.Add(ctl);
+            int max, index = 0;
+            Control? parent = GetSitedParent(ctl);
+            _tabComplete.Add(ctl);
+            if (parent is not null)
+            {
+                _tabNext.TryGetValue(parent, out index);
+            }
 
-                if (nextIndex is not null)
-                    index = (int)nextIndex;
-                else
-                    index = 0;
-
-                try
+            try
+            {
+                if (!_tabProperties.TryGetValue(ctl, out PropertyDescriptor? prop))
                 {
-                    PropertyDescriptor prop = (PropertyDescriptor)tabProperties[ctl];
-                    if (prop is not null)
+                    return;
+                }
+
+                int newIndex = index + 1;
+
+                if (prop.IsReadOnly && prop.GetValue(ctl) is int propValue)
+                {
+                    newIndex = propValue + 1;
+                }
+
+                max = parent is not null ? GetMaxControlCount(parent) : 0;
+
+                if (newIndex >= max)
+                {
+                    newIndex = 0;
+                }
+
+                if (parent is not null)
+                {
+                    _tabNext[parent] = newIndex;
+                }
+
+                if (_tabComplete.Count == _tabControls.Count)
+                    _tabComplete.Clear();
+
+                // Now set the property
+                if (!prop.IsReadOnly)
+                {
+                    try
                     {
-                        int newIndex = index + 1;
-
-                        if (prop.IsReadOnly)
-                        {
-                            newIndex = (int)prop.GetValue(ctl) + 1;
-                        }
-
-                        max = GetMaxControlCount(parent);
-
-                        if (newIndex >= max)
-                        {
-                            newIndex = 0;
-                        }
-
-                        tabNext[parent] = newIndex;
-
-                        if (tabComplete.Count == tabControls.Count)
-                            tabComplete.Clear();
-
-                        // Now set the property
-                        //
-                        if (!prop.IsReadOnly)
-                        {
-                            try
-                            {
-                                prop.SetValue(ctl, index);
-                            }
-                            catch (Exception)
-                            {
-                            }
-                        }
-                        else
-                        {
-                            // If the property is read only, we still count it
-                            // so that other properties can "flow" around it.
-                            // Therefore, we need a paint.
-                            //
-                            Invalidate();
-                        }
+                        prop.SetValue(ctl, index);
+                    }
+                    catch (Exception)
+                    {
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
+                    // If the property is read only, we still count it
+                    // so that other properties can "flow" around it.
+                    // Therefore, we need a paint.
+                    Invalidate();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ClientUtils.IsCriticalException(ex))
+                {
+                    throw;
                 }
             }
         }
