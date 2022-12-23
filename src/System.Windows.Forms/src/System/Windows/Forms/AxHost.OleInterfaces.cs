@@ -287,7 +287,7 @@ namespace System.Windows.Forms
                     return HRESULT.E_INVALIDARG;
                 }
 
-                HRESULT hr = SetupLogPixels(false);
+                HRESULT hr = SetupLogPixels(force: false);
                 if (hr < 0)
                 {
                     return hr;
@@ -527,7 +527,7 @@ namespace System.Windows.Forms
                 *lprcClipRect = WebBrowserHelper.GetClipRect();
                 if (lpFrameInfo is not null)
                 {
-                    lpFrameInfo->cb = (uint)Marshal.SizeOf<OLEINPLACEFRAMEINFO>();
+                    lpFrameInfo->cb = (uint)sizeof(OLEINPLACEFRAMEINFO);
                     lpFrameInfo->fMDIApp = false;
                     lpFrameInfo->hAccel = IntPtr.Zero;
                     lpFrameInfo->cAccelEntries = 0;

@@ -5,6 +5,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -14,16 +15,15 @@ namespace System.Windows.Forms
         private unsafe partial class ActiveXImpl
         {
             /// <summary>
-            ///  Helper class. Calls IConnectionPoint.Advise to hook up a native COM event sink
-            ///  to a manage .NET event interface.
-            ///  The events are exposed to COM by the CLR-supplied COM-callable Wrapper (CCW).
+            ///  Helper class. Calls IConnectionPoint.Advise to hook up a native COM event sink to a managed .NET event
+            ///  interface. The events are exposed to COM by the CLR-supplied COM-callable Wrapper (CCW).
             /// </summary>
-            internal static class AdviseHelper
+            internal static unsafe class AdviseHelper
             {
                 /// <summary>
                 ///  Get the COM connection point container from the CLR's CCW and advise for the given event id.
                 /// </summary>
-                public static bool AdviseConnectionPoint(object connectionPoint, object sink, Type eventInterface, out uint pdwCookie)
+                public static bool AdviseConnectionPoint(object connectionPoint, IUnknown* sink, Type eventInterface, out uint pdwCookie)
                 {
                     // Note that we cannot simply cast the connectionPoint object to
                     // System.Runtime.InteropServices.ComTypes.IConnectionPointContainer because the .NET
@@ -42,7 +42,7 @@ namespace System.Windows.Forms
                 /// <summary>
                 ///  Find the COM connection point and call Advise for the given event id.
                 /// </summary>
-                internal static bool AdviseConnectionPoint(ComConnectionPointContainer cpc, object sink, Type eventInterface, out uint pdwCookie)
+                internal static bool AdviseConnectionPoint(ComConnectionPointContainer cpc, IUnknown* sink, Type eventInterface, out uint pdwCookie)
                 {
                     // Note that we cannot simply cast the returned IConnectionPoint to
                     // System.Runtime.InteropServices.ComTypes.IConnectionPoint because the .NET
@@ -52,12 +52,9 @@ namespace System.Windows.Forms
                     // It is critical to call Dispose to ensure that the IUnknown is released.
                     using (ComConnectionPoint cp = cpc.FindConnectionPoint(eventInterface))
                     {
-                        using (SafeIUnknown punkEventsSink = new SafeIUnknown(sink, true))
-                        {
-                            // Finally...we can call IConnectionPoint.Advise to hook up a native COM event sink
-                            // to a managed .NET event interface.
-                            return cp.Advise(punkEventsSink.DangerousGetHandle(), out pdwCookie);
-                        }
+                        // Finally...we can call IConnectionPoint.Advise to hook up a native COM event sink
+                        // to a managed .NET event interface.
+                        return cp.Advise((nint)sink, out pdwCookie);
                     }
                 }
 
@@ -66,14 +63,6 @@ namespace System.Windows.Forms
                 /// </summary>
                 internal class SafeIUnknown : SafeHandle
                 {
-                    /// <summary>
-                    ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
-                    /// </summary>
-                    public SafeIUnknown(object obj, bool addRefIntPtr)
-                        : this(obj, addRefIntPtr, Guid.Empty)
-                    {
-                    }
-
                     /// <summary>
                     ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
                     ///  If an iid is supplied, QI for the interface and wrap that unknown instead.
@@ -96,9 +85,9 @@ namespace System.Windows.Forms
                             // We are responsible for releasing the IUnknown ourselves.
                             IntPtr unknown;
 
-                            if (obj is IntPtr)
+                            if (obj is IntPtr ptr)
                             {
-                                unknown = (IntPtr)obj;
+                                unknown = ptr;
 
                                 // The incoming IntPtr may already be reference counted or not, depending on
                                 // where it came from. The caller needs to tell us whether to add-ref or not.
@@ -151,18 +140,7 @@ namespace System.Windows.Forms
                     /// <summary>
                     ///  Return whether the handle is invalid.
                     /// </summary>
-                    public sealed override bool IsInvalid
-                    {
-                        get
-                        {
-                            if (!IsClosed)
-                            {
-                                return (handle == IntPtr.Zero);
-                            }
-
-                            return true;
-                        }
-                    }
+                    public sealed override bool IsInvalid => IsClosed || handle == IntPtr.Zero;
 
                     /// <summary>
                     ///  Release the IUnknown.
@@ -182,7 +160,7 @@ namespace System.Windows.Forms
                     /// <summary>
                     ///  Helper function to load a COM v-table from a com object pointer.
                     /// </summary>
-                    protected V LoadVtable<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]V>()
+                    protected V LoadVtable<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] V>()
                         where V : struct
                     {
                         IntPtr vtblptr = Marshal.ReadIntPtr(handle, 0);
@@ -194,8 +172,7 @@ namespace System.Windows.Forms
                 ///  Helper class to access IConnectionPointContainer from a .NET COM-callable wrapper.
                 ///  The IConnectionPointContainer COM pointer is wrapped in a SafeHandle.
                 /// </summary>
-                internal sealed class ComConnectionPointContainer
-                    : SafeIUnknown
+                internal sealed class ComConnectionPointContainer : SafeIUnknown
                 {
                     public ComConnectionPointContainer(object obj, bool addRefIntPtr)
                         : base(obj, addRefIntPtr, typeof(Ole32.IConnectionPointContainer).GUID)
