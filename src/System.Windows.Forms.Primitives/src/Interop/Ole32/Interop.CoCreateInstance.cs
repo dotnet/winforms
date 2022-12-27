@@ -15,13 +15,5 @@ internal partial class Interop
             CLSCTX dwClsContext,
             in Guid riid,
             [MarshalAs(UnmanagedType.Interface)] out object ppv);
-
-        [DllImport(Libraries.Ole32, ExactSpelling = true)]
-        public static extern HRESULT CoCreateInstance(
-            in Guid rclsid,
-            IntPtr punkOuter,
-            CLSCTX dwClsContext,
-            in Guid riid,
-            out IntPtr ppv);
     }
 }

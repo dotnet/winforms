@@ -113,7 +113,11 @@ namespace System.Windows.Forms
 
         private static readonly int s_checkedIppb = BitVector32.CreateMask(s_refreshProperties);
         private static readonly int s_checkedCP = BitVector32.CreateMask(s_checkedIppb);
+
+        /// <summary>True if a window needs created when <see cref="CreateHandle"/> is called.</summary>
         private static readonly int s_fNeedOwnWindow = BitVector32.CreateMask(s_checkedCP);
+
+        /// <summary>True if the OCX is design time only and we're in user mode.</summary>
         private static readonly int s_fOwnWindow = BitVector32.CreateMask(s_fNeedOwnWindow);
 
         private static readonly int s_fSimpleFrame = BitVector32.CreateMask(s_fOwnWindow);
@@ -1106,38 +1110,35 @@ namespace System.Windows.Forms
             }
 
             TransitionUpTo(OC_RUNNING);
-            if (!_axState[s_fOwnWindow])
+            if (_axState[s_fOwnWindow])
             {
-                if (_axState[s_fNeedOwnWindow])
-                {
-                    Debug.Assert(!Visible, "if we were visible we would not be needing a fake window...");
-                    _axState[s_fNeedOwnWindow] = false;
-                    _axState[s_fFakingWindow] = true;
-                    base.CreateHandle();
+                // Design time only OCX and we're not in design mode. We shouldn't be visible.
+                SetState(States.Visible, false);
+                base.CreateHandle();
+            }
+            else if (_axState[s_fNeedOwnWindow])
+            {
+                Debug.Assert(!Visible, "If we were visible we would not be need a fake window.");
+                _axState[s_fNeedOwnWindow] = false;
+                _axState[s_fFakingWindow] = true;
+                base.CreateHandle();
 
-                    // Note that we do not need to attach the handle because the work usually done in there
-                    // will be done in Control's wndProc on WM_CREATE.
-                }
-                else
-                {
-                    TransitionUpTo(OC_INPLACE);
-
-                    // It is possible that we were hidden while in place activating, in which case we don't
-                    // really have a handle now because the act of hiding could have destroyed it. Just call ourselves
-                    // again recursively, and if we don't have a handle, we will just take the "axState[fNeedOwnWindow]"
-                    // path above.
-                    if (_axState[s_fNeedOwnWindow])
-                    {
-                        Debug.Assert(!IsHandleCreated, "if we need a fake window, we can't have a real one");
-                        CreateHandle();
-                        return;
-                    }
-                }
+                // Note that we do not need to attach the handle because the work usually done in there
+                // will be done in Control's wndProc on WM_CREATE.
             }
             else
             {
-                SetState(States.Visible, false);
-                base.CreateHandle();
+                TransitionUpTo(OC_INPLACE);
+
+                // It is possible that we were hidden while in place activating, in which case we don't really have a
+                // handle now because the act of hiding could have destroyed it. Just call ourselves again recursively,
+                // and if we don't have a handle, we will just take the "axState[fNeedOwnWindow]" path above.
+                if (_axState[s_fNeedOwnWindow])
+                {
+                    Debug.Assert(!IsHandleCreated, "if we need a fake window, we can't have a real one");
+                    CreateHandle();
+                    return;
+                }
             }
 
             GetParentContainer().ControlCreated(this);
@@ -1365,12 +1366,9 @@ namespace System.Windows.Forms
             {
                 base.DestroyHandle();
             }
-            else
+            else if (IsHandleCreated)
             {
-                if (IsHandleCreated)
-                {
-                    TransitionDownTo(OC_RUNNING);
-                }
+                TransitionDownTo(OC_RUNNING);
             }
         }
 
@@ -1724,12 +1722,11 @@ namespace System.Windows.Forms
             {
                 s_axHTraceSwitch.TraceVerbose("Naughty control inplace deactivated on a hide verb...");
                 Debug.Assert(!IsHandleCreated, "if we are inplace deactivated we should not have a window.");
-                // all we do here is set a flag saying that we need the window to be created if
-                // create handle is ever called...
+
+                // Set a flag saying that we need the window to be created if create handle is ever called.
                 _axState[s_fNeedOwnWindow] = true;
 
-                // also, set the state to our "pretend oc_inplace state"
-                //
+                // Set the state to our "pretend oc_inplace state".
                 SetOcState(OC_INPLACE);
             }
         }
@@ -3701,7 +3698,10 @@ namespace System.Windows.Forms
 
         private void ParseMiscBits(Ole32.OLEMISC bits)
         {
+            // Does this control only have a design-time UI?
             _axState[s_fOwnWindow] = ((bits & Ole32.OLEMISC.INVISIBLEATRUNTIME) != 0) && IsUserMode();
+
+            // Requires ISimpleFrameSite?
             _axState[s_fSimpleFrame] = ((bits & Ole32.OLEMISC.SIMPLEFRAME) != 0);
         }
 
