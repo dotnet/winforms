@@ -1178,9 +1178,9 @@ System.Windows.Forms.HelpProvider.Tag.set -> void
 ~System.Windows.Forms.HtmlElementEventArgs.EventType.get -> string
 ~System.Windows.Forms.HtmlElementEventArgs.FromElement.get -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlElementEventArgs.ToElement.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlHistory.DomHistory.get -> object
-~System.Windows.Forms.HtmlHistory.Go(string urlString) -> void
-~System.Windows.Forms.HtmlHistory.Go(System.Uri url) -> void
+System.Windows.Forms.HtmlHistory.DomHistory.get -> object!
+System.Windows.Forms.HtmlHistory.Go(string! urlString) -> void
+System.Windows.Forms.HtmlHistory.Go(System.Uri! url) -> void
 ~System.Windows.Forms.HtmlWindow.Alert(string message) -> void
 ~System.Windows.Forms.HtmlWindow.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
 ~System.Windows.Forms.HtmlWindow.Confirm(string message) -> bool
