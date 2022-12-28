@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Design;
 
@@ -20,10 +18,10 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionHelpProvider))]
     public class HelpProvider : Component, IExtenderProvider
     {
-        private readonly Dictionary<Control, string> _helpStrings = new();
+        private readonly Dictionary<Control, string?> _helpStrings = new();
         private readonly Dictionary<Control, bool> _showHelp = new();
         private readonly List<Control> _boundControls = new();
-        private readonly Dictionary<Control, string> _keywords = new();
+        private readonly Dictionary<Control, string?> _keywords = new();
         private readonly Dictionary<Control, HelpNavigator> _navigators = new();
 
         /// <summary>
@@ -41,7 +39,7 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [Editor("System.Windows.Forms.Design.HelpNamespaceEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         [SRDescription(nameof(SR.HelpProviderHelpNamespaceDescr))]
-        public virtual string HelpNamespace { get; set; }
+        public virtual string? HelpNamespace { get; set; }
 
         [SRCategory(nameof(SR.CatData))]
         [Localizable(false)]
@@ -49,13 +47,13 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         ///  Determines if the help provider can offer it's extender properties to the specified target
         ///  object.
         /// </summary>
-        public virtual bool CanExtend(object target) => target is Control;
+        public virtual bool CanExtend(object? target) => target is Control;
 
         /// <summary>
         ///  Retrieves the Help Keyword displayed when the user invokes Help for the specified control.
@@ -63,10 +61,10 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [Localizable(true)]
         [SRDescription(nameof(SR.HelpProviderHelpKeywordDescr))]
-        public virtual string GetHelpKeyword(Control ctl)
+        public virtual string? GetHelpKeyword(Control ctl)
         {
             ArgumentNullException.ThrowIfNull(ctl);
-            return _keywords.TryGetValue(ctl, out string value) ? value : null;
+            return _keywords.TryGetValue(ctl, out string? value) ? value : null;
         }
 
         /// <summary>
@@ -87,10 +85,10 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [Localizable(true)]
         [SRDescription(nameof(SR.HelpProviderHelpStringDescr))]
-        public virtual string GetHelpString(Control ctl)
+        public virtual string? GetHelpString(Control ctl)
         {
             ArgumentNullException.ThrowIfNull(ctl);
-            return _helpStrings.TryGetValue(ctl, out string value) ? value : null;
+            return _helpStrings.TryGetValue(ctl, out string? value) ? value : null;
         }
 
         /// <summary>
@@ -107,11 +105,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the help event for any bound controls.
         /// </summary>
-        private void OnControlHelp(object sender, HelpEventArgs hevent)
+        private void OnControlHelp(object? sender, HelpEventArgs hevent)
         {
-            Control ctl = (Control)sender;
-            string helpString = GetHelpString(ctl);
-            string keyword = GetHelpKeyword(ctl);
+            if (sender is not Control ctl)
+            {
+                return;
+            }
+
+            string? helpString = GetHelpString(ctl);
+            string? keyword = GetHelpKeyword(ctl);
             HelpNavigator navigator = GetHelpNavigator(ctl);
 
             if (!GetShowHelp(ctl) || hevent is null)
@@ -156,9 +158,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the help event for any bound controls.
         /// </summary>
-        private void OnQueryAccessibilityHelp(object sender, QueryAccessibilityHelpEventArgs e)
+        private void OnQueryAccessibilityHelp(object? sender, QueryAccessibilityHelpEventArgs e)
         {
-            Control ctl = (Control)sender;
+            if (sender is not Control ctl)
+            {
+                return;
+            }
+
             e.HelpString = GetHelpString(ctl);
             e.HelpKeyword = GetHelpKeyword(ctl);
             e.HelpNamespace = HelpNamespace;
@@ -167,7 +173,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies a Help string associated with a control.
         /// </summary>
-        public virtual void SetHelpString(Control ctl, string helpString)
+        public virtual void SetHelpString(Control ctl, string? helpString)
         {
             ArgumentNullException.ThrowIfNull(ctl);
 
@@ -183,7 +189,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the Help keyword to display when the user invokes Help for a control.
         /// </summary>
-        public virtual void SetHelpKeyword(Control ctl, string keyword)
+        public virtual void SetHelpKeyword(Control ctl, string? keyword)
         {
             ArgumentNullException.ThrowIfNull(ctl);
 
