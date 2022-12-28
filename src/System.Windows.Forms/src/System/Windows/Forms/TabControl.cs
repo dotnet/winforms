@@ -6,7 +6,6 @@
 
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -70,8 +69,7 @@ namespace System.Windows.Forms
         private readonly User32.WM _tabBaseReLayoutMessage = User32.RegisterWindowMessageW(Application.WindowMessagesVersion + TabBaseReLayoutMessageName);
 
         // State
-        private TabPage[] _tabPages;
-        private int _tabPageCount;
+        private List<TabPage> _tabPages;
         private int _lastSelection;
         private short _windowId;
 
@@ -731,12 +729,11 @@ namespace System.Windows.Forms
             get
             {
                 int index = SelectedIndex;
-                if (index == -1 || _tabPages is null)
+                if (index == -1 || _tabPages is null || index > _tabPages.Count - 1)
                 {
                     return null;
                 }
 
-                Debug.Assert(index >= 0 && index < _tabPages.Length, "SelectedIndex returned an invalid index");
                 return _tabPages[index];
             }
             set
@@ -807,7 +804,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.TabBaseTabCountDescr))]
         public int TabCount
         {
-            get { return _tabPageCount; }
+            get { return _tabPages?.Count ?? 0; }
         }
 
         /// <summary>
@@ -936,7 +933,7 @@ namespace System.Windows.Forms
 
         private int AddNativeTabPage(TabPage tabPage)
         {
-            int index = SendMessage(PInvoke.TCM_INSERTITEMW, _tabPageCount + 1, tabPage);
+            int index = SendMessage(PInvoke.TCM_INSERTITEMW, (_tabPages?.Count ?? 0) + 1, tabPage);
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
             return index;
         }
@@ -1058,7 +1055,7 @@ namespace System.Windows.Forms
         {
             if (_tabPages is not null)
             {
-                for (int i = 0; i < _tabPageCount; i++)
+                for (int i = 0; i < _tabPages.Count; i++)
                 {
                     if (_tabPages[i].Equals(tabPage))
                     {
@@ -1072,12 +1069,12 @@ namespace System.Windows.Forms
 
         public Control GetControl(int index)
         {
-            return (Control)GetTabPage(index);
+            return GetTabPage(index);
         }
 
         internal TabPage GetTabPage(int index)
         {
-            if (index < 0 || index >= _tabPageCount)
+            if (index < 0 || index >= (_tabPages?.Count ?? 0))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1090,13 +1087,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual object[] GetItems()
         {
-            TabPage[] result = new TabPage[_tabPageCount];
-            if (_tabPageCount > 0)
+            if (_tabPages is not null && _tabPages.Count > 0)
             {
-                Array.Copy(_tabPages, 0, result, 0, _tabPageCount);
+                return _tabPages.ToArray();
             }
 
-            return result;
+            return Array.Empty<TabPage>();
         }
 
         /// <summary>
@@ -1104,10 +1100,14 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual object[] GetItems(Type baseType)
         {
-            object[] result = (object[])Array.CreateInstance(baseType, _tabPageCount);
-            if (_tabPageCount > 0)
+            int tabPageCount = _tabPages?.Count ?? 0;
+            object[] result = (object[])Array.CreateInstance(baseType, tabPageCount);
+            if (tabPageCount > 0)
             {
-                Array.Copy(_tabPages, 0, result, 0, _tabPageCount);
+                for (int i = 0; i < tabPageCount; i++)
+                {
+                    result[i] = _tabPages[i];
+                }
             }
 
             return result;
@@ -1123,7 +1123,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle GetTabRect(int index)
         {
-            if (index < 0 || (index >= _tabPageCount && !GetState(State.GetTabRectfromItemSize)))
+            if (index < 0 || (index >= (_tabPages?.Count ?? 0) && !GetState(State.GetTabRectfromItemSize)))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1164,24 +1164,10 @@ namespace System.Windows.Forms
 
         internal void Insert(int index, TabPage tabPage)
         {
-            if (_tabPages is null)
-            {
-                _tabPages = new TabPage[4];
-            }
-            else if (_tabPages.Length == _tabPageCount)
-            {
-                TabPage[] newTabPages = new TabPage[_tabPageCount * 2];
-                Array.Copy(_tabPages, 0, newTabPages, 0, _tabPageCount);
-                _tabPages = newTabPages;
-            }
+            _tabPages ??= new List<TabPage>(4);
 
-            if (index < _tabPageCount)
-            {
-                Array.Copy(_tabPages, index, _tabPages, index + 1, _tabPageCount - index);
-            }
+            _tabPages.Insert(index, tabPage);
 
-            _tabPages[index] = tabPage;
-            _tabPageCount++;
             _cachedDisplayRect = Rectangle.Empty;
             ApplyItemSize();
             if (Appearance == TabAppearance.FlatButtons)
@@ -1195,7 +1181,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void InsertItem(int index, TabPage tabPage)
         {
-            if (index < 0 || index > _tabPageCount)
+            if (index < 0 || index > (_tabPages?.Count ?? 0))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1589,8 +1575,7 @@ namespace System.Windows.Forms
                 PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_DELETEALLITEMS);
             }
 
-            this._tabPages = null;
-            _tabPageCount = 0;
+            _tabPages = null;
 
             base.RecreateHandleCore();
 
@@ -1625,23 +1610,21 @@ namespace System.Windows.Forms
             }
 
             _tabPages = null;
-            _tabPageCount = 0;
         }
 
         private void RemoveTabPage(int index)
         {
-            if (index < 0 || index >= _tabPageCount)
+            if (index < 0 || index >= (_tabPages?.Count ?? 0))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            _tabPageCount--;
-            if (index < _tabPageCount)
+            if (index < _tabPages.Count)
             {
-                Array.Copy(_tabPages, index + 1, _tabPages, index, _tabPageCount - index);
+                _tabPages[index] = null;
+                _tabPages.RemoveAt(index);
             }
 
-            _tabPages[_tabPageCount] = null;
             if (IsHandleCreated)
             {
                 PInvoke.SendMessage(this, (User32.WM)PInvoke.TCM_DELETEITEM, (WPARAM)index);
@@ -1687,7 +1670,7 @@ namespace System.Windows.Forms
 
         private void SetTabPage(int index, TabPage value)
         {
-            if (index < 0 || index >= _tabPageCount)
+            if (index < 0 || index >= (_tabPages?.Count ?? 0))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
