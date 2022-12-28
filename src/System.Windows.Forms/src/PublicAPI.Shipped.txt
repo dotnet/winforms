@@ -300,7 +300,7 @@ override System.Windows.Forms.BindingMemberInfo.Equals(object? otherObject) -> b
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.PaintBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.ToString() -> string
 override System.Windows.Forms.ErrorProvider.Site.set -> void
-~override System.Windows.Forms.HelpProvider.ToString() -> string
+override System.Windows.Forms.HelpProvider.ToString() -> string!
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlWindow.Equals(object obj) -> bool
@@ -1107,8 +1107,8 @@ System.Windows.Forms.ErrorProvider.SetIconAlignment(System.Windows.Forms.Control
 System.Windows.Forms.ErrorProvider.SetIconPadding(System.Windows.Forms.Control! control, int padding) -> void
 System.Windows.Forms.ErrorProvider.Tag.get -> object?
 System.Windows.Forms.ErrorProvider.Tag.set -> void
-~System.Windows.Forms.HelpProvider.Tag.get -> object
-~System.Windows.Forms.HelpProvider.Tag.set -> void
+System.Windows.Forms.HelpProvider.Tag.get -> object?
+System.Windows.Forms.HelpProvider.Tag.set -> void
 ~System.Windows.Forms.HtmlDocument.ActiveElement.get -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlDocument.All.get -> System.Windows.Forms.HtmlElementCollection
 ~System.Windows.Forms.HtmlDocument.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
@@ -2010,18 +2010,18 @@ virtual System.Windows.Forms.Control.OnVisibleChanged(System.EventArgs! e) -> vo
 ~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
 virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.HelpProvider.CanExtend(object target) -> bool
-~virtual System.Windows.Forms.HelpProvider.GetHelpKeyword(System.Windows.Forms.Control ctl) -> string
-~virtual System.Windows.Forms.HelpProvider.GetHelpNavigator(System.Windows.Forms.Control ctl) -> System.Windows.Forms.HelpNavigator
-~virtual System.Windows.Forms.HelpProvider.GetHelpString(System.Windows.Forms.Control ctl) -> string
-~virtual System.Windows.Forms.HelpProvider.GetShowHelp(System.Windows.Forms.Control ctl) -> bool
-~virtual System.Windows.Forms.HelpProvider.HelpNamespace.get -> string
-~virtual System.Windows.Forms.HelpProvider.HelpNamespace.set -> void
-~virtual System.Windows.Forms.HelpProvider.ResetShowHelp(System.Windows.Forms.Control ctl) -> void
-~virtual System.Windows.Forms.HelpProvider.SetHelpKeyword(System.Windows.Forms.Control ctl, string keyword) -> void
-~virtual System.Windows.Forms.HelpProvider.SetHelpNavigator(System.Windows.Forms.Control ctl, System.Windows.Forms.HelpNavigator navigator) -> void
-~virtual System.Windows.Forms.HelpProvider.SetHelpString(System.Windows.Forms.Control ctl, string helpString) -> void
-~virtual System.Windows.Forms.HelpProvider.SetShowHelp(System.Windows.Forms.Control ctl, bool value) -> void
+virtual System.Windows.Forms.HelpProvider.CanExtend(object? target) -> bool
+virtual System.Windows.Forms.HelpProvider.GetHelpKeyword(System.Windows.Forms.Control! ctl) -> string?
+virtual System.Windows.Forms.HelpProvider.GetHelpNavigator(System.Windows.Forms.Control! ctl) -> System.Windows.Forms.HelpNavigator
+virtual System.Windows.Forms.HelpProvider.GetHelpString(System.Windows.Forms.Control! ctl) -> string?
+virtual System.Windows.Forms.HelpProvider.GetShowHelp(System.Windows.Forms.Control! ctl) -> bool
+virtual System.Windows.Forms.HelpProvider.HelpNamespace.get -> string?
+virtual System.Windows.Forms.HelpProvider.HelpNamespace.set -> void
+virtual System.Windows.Forms.HelpProvider.ResetShowHelp(System.Windows.Forms.Control! ctl) -> void
+virtual System.Windows.Forms.HelpProvider.SetHelpKeyword(System.Windows.Forms.Control! ctl, string? keyword) -> void
+virtual System.Windows.Forms.HelpProvider.SetHelpNavigator(System.Windows.Forms.Control! ctl, System.Windows.Forms.HelpNavigator navigator) -> void
+virtual System.Windows.Forms.HelpProvider.SetHelpString(System.Windows.Forms.Control! ctl, string? helpString) -> void
+virtual System.Windows.Forms.HelpProvider.SetShowHelp(System.Windows.Forms.Control! ctl, bool value) -> void
 virtual System.Windows.Forms.LinkLabel.LinkCollection.ContainsKey(string? key) -> bool
 virtual System.Windows.Forms.LinkLabel.LinkCollection.IndexOfKey(string? key) -> int
 virtual System.Windows.Forms.LinkLabel.LinkCollection.RemoveByKey(string? key) -> void
