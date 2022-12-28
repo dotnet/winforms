@@ -113,6 +113,8 @@ namespace System.Windows.Forms
                     UiaCore.UIA.IsEnabledPropertyId => _ownerItem.Enabled,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => _ownerItem.CanSelect,
                     UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds),
+                    UiaCore.UIA.IsControlElementPropertyId => true,
+                    UiaCore.UIA.IsContentElementPropertyId => true,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

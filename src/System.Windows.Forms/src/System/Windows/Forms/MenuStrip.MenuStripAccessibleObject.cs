@@ -26,6 +26,14 @@ namespace System.Windows.Forms
                     return AccessibleRole.MenuBar;
                 }
             }
+
+            internal override object? GetPropertyValue(Interop.UiaCore.UIA propertyID) =>
+                propertyID switch
+                {
+                    Interop.UiaCore.UIA.IsControlElementPropertyId => true,
+                    Interop.UiaCore.UIA.IsContentElementPropertyId => false,
+                    _ => base.GetPropertyValue(propertyID)
+                };
         }
     }
 }
