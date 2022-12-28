@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public BindingNavigator()
-            : this(false)
+            : this(addStandardItems: false)
         {
         }
 
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         ///  Creates a BindingNavigator strip containing standard items, bound to the specified BindingSource.
         /// </summary>
         public BindingNavigator(BindingSource? bindingSource)
-            : this(true)
+            : this(addStandardItems: true)
         {
             BindingSource = bindingSource;
         }
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public BindingNavigator(IContainer container)
-            : this(false)
+            : this(addStandardItems: false)
         {
             ArgumentNullException.ThrowIfNull(container);
 
