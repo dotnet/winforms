@@ -235,7 +235,7 @@ namespace System.Windows.Forms
 
         private TableLayoutSettings TableLayoutSettings
         {
-            get { return (TableLayoutSettings)LayoutSettings; }
+            get { return (TableLayoutSettings)LayoutSettings!; }
         }
 
         protected override AccessibleObject CreateAccessibilityInstance()

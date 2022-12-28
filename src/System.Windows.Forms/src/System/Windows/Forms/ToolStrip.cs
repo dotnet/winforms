@@ -1176,14 +1176,14 @@ namespace System.Windows.Forms
                 return GetToolStripState(STATE_DISPOSINGITEMS);
             }
         }
-#nullable disable
+
         /// <summary>
         ///  The OnDrag[blah] methods that will be called if AllowItemReorder is true.
         ///
         ///  This allows us to have methods that handle drag/drop of the ToolStrip items
         ///  without calling back on the user's code
         /// </summary>
-        internal IDropTarget ItemReorderDropTarget { get; set; }
+        internal IDropTarget? ItemReorderDropTarget { get; set; }
 
         /// <summary>
         ///  The OnQueryContinueDrag and OnGiveFeedback methods that will be called if
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms
         ///  This allows us to have methods that handle drag/drop of the ToolStrip items
         ///  without calling back on the user's code
         /// </summary>
-        internal ISupportOleDropSource ItemReorderDropSource { get; set; }
+        internal ISupportOleDropSource? ItemReorderDropSource { get; set; }
 
         internal bool IsInDesignMode
         {
@@ -1207,7 +1207,7 @@ namespace System.Windows.Forms
             get { return GetToolStripState(STATE_LASTMOUSEDOWNEDITEMCAPTURE); }
         }
 
-        internal ToolStripItem LastMouseDownedItem
+        internal ToolStripItem? LastMouseDownedItem
         {
             get
             {
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public LayoutSettings LayoutSettings { get; set; }
+        public LayoutSettings? LayoutSettings { get; set; }
 
         /// <summary>
         ///  Specifies whether we're horizontal or vertical
@@ -1320,7 +1320,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripLayoutCompleteDescr))]
-        public event EventHandler LayoutCompleted
+        public event EventHandler? LayoutCompleted
         {
             add => Events.AddHandler(s_eventLayoutCompleted, value);
             remove => Events.RemoveHandler(s_eventLayoutCompleted, value);
@@ -1330,7 +1330,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripLayoutStyleChangedDescr))]
-        public event EventHandler LayoutStyleChanged
+        public event EventHandler? LayoutStyleChanged
         {
             add => Events.AddHandler(s_eventLayoutStyleChanged, value);
             remove => Events.RemoveHandler(s_eventLayoutStyleChanged, value);
@@ -1340,7 +1340,6 @@ namespace System.Windows.Forms
         {
             get
             {
-                //
                 return _layoutEngine;
             }
         }
@@ -1429,9 +1428,6 @@ namespace System.Windows.Forms
             }
         }
 
-        //
-        //
-
         internal ToolStripItemCollection OverflowItems
         {
             get
@@ -1447,7 +1443,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripPaintGripDescr))]
-        public event PaintEventHandler PaintGrip
+        public event PaintEventHandler? PaintGrip
         {
             add => Events.AddHandler(s_eventPaintGrip, value);
             remove => Events.RemoveHandler(s_eventPaintGrip, value);
@@ -1474,16 +1470,16 @@ namespace System.Windows.Forms
         }
 
         // fetches the Cell associated with this toolstrip.
-        ToolStripPanelCell ISupportToolStripPanel.ToolStripPanelCell
+        ToolStripPanelCell? ISupportToolStripPanel.ToolStripPanelCell
         {
             get
             {
-                ToolStripPanelCell toolStripPanelCell = null;
+                ToolStripPanelCell? toolStripPanelCell = null;
                 if (!IsDropDown && !IsDisposed)
                 {
                     if (Properties.ContainsObject(ToolStrip.s_propToolStripPanelCell))
                     {
-                        toolStripPanelCell = (ToolStripPanelCell)Properties.GetObject(ToolStrip.s_propToolStripPanelCell);
+                        toolStripPanelCell = (ToolStripPanelCell?)Properties.GetObject(ToolStrip.s_propToolStripPanelCell);
                     }
                     else
                     {
@@ -1496,7 +1492,7 @@ namespace System.Windows.Forms
             }
         }
 
-        ToolStripPanelRow ISupportToolStripPanel.ToolStripPanelRow
+        ToolStripPanelRow? ISupportToolStripPanel.ToolStripPanelRow
         {
             get
             {
@@ -1577,6 +1573,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         public ToolStripRenderer Renderer
         {
             get
@@ -1584,8 +1581,8 @@ namespace System.Windows.Forms
                 if (IsDropDown)
                 {
                     // PERF: since this is called a lot we don't want to make it virtual
-                    ToolStripDropDown dropDown = this as ToolStripDropDown;
-                    if (dropDown is ToolStripOverflow || dropDown.IsAutoGenerated)
+                    ToolStripDropDown? dropDown = this as ToolStripDropDown;
+                    if (dropDown is ToolStripOverflow || (dropDown is not null && dropDown.IsAutoGenerated))
                     {
                         if (dropDown.OwnerToolStrip is not null)
                         {
@@ -1608,7 +1605,7 @@ namespace System.Windows.Forms
                     Renderer = ToolStripManager.CreateRenderer(RenderMode);
                 }
 
-                return _renderer;
+                return _renderer!;
             }
             set
             {
@@ -1624,7 +1621,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public event EventHandler RendererChanged
+        public event EventHandler? RendererChanged
         {
             add => Events.AddHandler(s_eventRendererChanged, value);
             remove => Events.RemoveHandler(s_eventRendererChanged, value);
@@ -1764,7 +1761,7 @@ namespace System.Windows.Forms
             get => base.TabStop;
             set => base.TabStop = value;
         }
-
+#nullable disable
         /// <summary> this is the ToolTip used for the individual items
         ///  it only works if ShowItemToolTips = true
         /// </summary>

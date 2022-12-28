@@ -427,7 +427,7 @@ override System.Windows.Forms.ToolStrip.Cursor.get -> System.Windows.Forms.Curso
 override System.Windows.Forms.ToolStrip.Cursor.set -> void
 override System.Windows.Forms.ToolStrip.Font.get -> System.Drawing.Font!
 override System.Windows.Forms.ToolStrip.Font.set -> void
-~override System.Windows.Forms.ToolStrip.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
+override System.Windows.Forms.ToolStrip.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine!
 ~override System.Windows.Forms.ToolStrip.OnDockChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStrip.OnEnabledChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStrip.OnFontChanged(System.EventArgs e) -> void
@@ -1399,11 +1399,11 @@ System.Windows.Forms.ToolStrip.Controls.get -> System.Windows.Forms.Control.Cont
 System.Windows.Forms.ToolStrip.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties!
 System.Windows.Forms.ToolStrip.ImageList.get -> System.Windows.Forms.ImageList?
 System.Windows.Forms.ToolStrip.ImageList.set -> void
-~System.Windows.Forms.ToolStrip.LayoutSettings.get -> System.Windows.Forms.LayoutSettings
-~System.Windows.Forms.ToolStrip.LayoutSettings.set -> void
-~System.Windows.Forms.ToolStrip.OverflowButton.get -> System.Windows.Forms.ToolStripOverflowButton
-~System.Windows.Forms.ToolStrip.Renderer.get -> System.Windows.Forms.ToolStripRenderer
-~System.Windows.Forms.ToolStrip.Renderer.set -> void
+System.Windows.Forms.ToolStrip.LayoutSettings.get -> System.Windows.Forms.LayoutSettings?
+System.Windows.Forms.ToolStrip.LayoutSettings.set -> void
+System.Windows.Forms.ToolStrip.OverflowButton.get -> System.Windows.Forms.ToolStripOverflowButton!
+System.Windows.Forms.ToolStrip.Renderer.get -> System.Windows.Forms.ToolStripRenderer!
+System.Windows.Forms.ToolStrip.Renderer.set -> void
 ~System.Windows.Forms.ToolStrip.SetItemLocation(System.Windows.Forms.ToolStripItem item, System.Drawing.Point location) -> void
 System.Windows.Forms.ToolStrip.ToolStrip(params System.Windows.Forms.ToolStripItem![]! items) -> void
 ~System.Windows.Forms.ToolStrip.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
@@ -10930,13 +10930,13 @@ System.Windows.Forms.ToolStrip.IsDropDown.get -> bool
 System.Windows.Forms.ToolStrip.ItemAdded -> System.Windows.Forms.ToolStripItemEventHandler?
 System.Windows.Forms.ToolStrip.ItemClicked -> System.Windows.Forms.ToolStripItemClickedEventHandler?
 System.Windows.Forms.ToolStrip.ItemRemoved -> System.Windows.Forms.ToolStripItemEventHandler?
-System.Windows.Forms.ToolStrip.LayoutCompleted -> System.EventHandler
+System.Windows.Forms.ToolStrip.LayoutCompleted -> System.EventHandler?
 System.Windows.Forms.ToolStrip.LayoutStyle.get -> System.Windows.Forms.ToolStripLayoutStyle
 System.Windows.Forms.ToolStrip.LayoutStyle.set -> void
-System.Windows.Forms.ToolStrip.LayoutStyleChanged -> System.EventHandler
+System.Windows.Forms.ToolStrip.LayoutStyleChanged -> System.EventHandler?
 System.Windows.Forms.ToolStrip.Orientation.get -> System.Windows.Forms.Orientation
-System.Windows.Forms.ToolStrip.PaintGrip -> System.Windows.Forms.PaintEventHandler
-System.Windows.Forms.ToolStrip.RendererChanged -> System.EventHandler
+System.Windows.Forms.ToolStrip.PaintGrip -> System.Windows.Forms.PaintEventHandler?
+System.Windows.Forms.ToolStrip.RendererChanged -> System.EventHandler?
 System.Windows.Forms.ToolStrip.RenderMode.get -> System.Windows.Forms.ToolStripRenderMode
 System.Windows.Forms.ToolStrip.RenderMode.set -> void
 System.Windows.Forms.ToolStrip.ResetMinimumSize() -> void
