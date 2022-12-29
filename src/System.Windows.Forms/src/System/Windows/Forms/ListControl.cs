@@ -532,7 +532,15 @@ namespace System.Windows.Forms
 
             try
             {
-                return (string)Formatter.FormatObject(filteredItem, typeof(string), DisplayMemberConverter, _stringTypeConverter, _formatString, _formatInfo, null, DBNull.Value);
+                return (string?)Formatter.FormatObject(
+                    filteredItem,
+                    typeof(string),
+                    DisplayMemberConverter,
+                    _stringTypeConverter,
+                    _formatString,
+                    _formatInfo,
+                    formattedNullValue: null,
+                    DBNull.Value);
             }
             catch (Exception exception) when (!ClientUtils.IsCriticalException(exception))
             {
