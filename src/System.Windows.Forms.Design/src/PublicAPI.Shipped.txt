@@ -269,9 +269,9 @@ System.ComponentModel.Design.DesignerActionItemCollection.this[int index].set ->
 ~System.ComponentModel.Design.DesignerActionMethodItem.DesignerActionMethodItem(System.ComponentModel.Design.DesignerActionList actionList, string memberName, string displayName, string category, string description, bool includeAsDesignerVerb) -> void
 ~System.ComponentModel.Design.DesignerActionMethodItem.RelatedComponent.get -> System.ComponentModel.IComponent
 ~System.ComponentModel.Design.DesignerActionMethodItem.RelatedComponent.set -> void
-System.ComponentModel.Design.DesignerActionPropertyItem.DesignerActionPropertyItem(string! memberName, string! displayName) -> void
-System.ComponentModel.Design.DesignerActionPropertyItem.DesignerActionPropertyItem(string! memberName, string! displayName, string? category) -> void
-System.ComponentModel.Design.DesignerActionPropertyItem.DesignerActionPropertyItem(string! memberName, string! displayName, string? category, string? description) -> void
+System.ComponentModel.Design.DesignerActionPropertyItem.DesignerActionPropertyItem(string! memberName, string? displayName) -> void
+System.ComponentModel.Design.DesignerActionPropertyItem.DesignerActionPropertyItem(string! memberName, string? displayName, string? category) -> void
+System.ComponentModel.Design.DesignerActionPropertyItem.DesignerActionPropertyItem(string! memberName, string? displayName, string? category, string? description) -> void
 System.ComponentModel.Design.DesignerActionPropertyItem.MemberName.get -> string!
 System.ComponentModel.Design.DesignerActionPropertyItem.RelatedComponent.get -> System.ComponentModel.IComponent?
 System.ComponentModel.Design.DesignerActionPropertyItem.RelatedComponent.set -> void
@@ -283,7 +283,7 @@ System.ComponentModel.Design.DesignerActionPropertyItem.RelatedComponent.set -> 
 ~System.ComponentModel.Design.DesignerActionService.Remove(System.ComponentModel.Design.DesignerActionList actionList) -> void
 ~System.ComponentModel.Design.DesignerActionService.Remove(System.ComponentModel.IComponent comp) -> void
 ~System.ComponentModel.Design.DesignerActionService.Remove(System.ComponentModel.IComponent comp, System.ComponentModel.Design.DesignerActionList actionList) -> void
-System.ComponentModel.Design.DesignerActionTextItem.DesignerActionTextItem(string? displayName, string! category) -> void
+System.ComponentModel.Design.DesignerActionTextItem.DesignerActionTextItem(string? displayName, string? category) -> void
 ~System.ComponentModel.Design.DesignerActionUIService.HideUI(System.ComponentModel.IComponent component) -> void
 ~System.ComponentModel.Design.DesignerActionUIService.Refresh(System.ComponentModel.IComponent component) -> void
 ~System.ComponentModel.Design.DesignerActionUIService.ShouldAutoShow(System.ComponentModel.IComponent component) -> bool
