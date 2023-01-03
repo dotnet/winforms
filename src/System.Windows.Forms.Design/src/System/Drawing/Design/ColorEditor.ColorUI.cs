@@ -14,7 +14,7 @@ namespace System.Drawing.Design
         /// <summary>
         ///  Editor UI for the color editor.
         /// </summary>
-        private sealed class ColorUI : Control
+        private sealed partial class ColorUI : Control
         {
             private readonly ColorEditor editor;
             private IWindowsFormsEditorService? edSvc;
@@ -380,34 +380,6 @@ namespace System.Drawing.Design
                     }
 
                     tabControl.SelectedTab = selectedTab;
-                }
-            }
-
-            private sealed class ColorEditorListBox : ListBox
-            {
-                protected override bool IsInputKey(Keys keyData)
-                {
-                    return keyData switch
-                    {
-                        Keys.Return => true,
-                        _ => base.IsInputKey(keyData),
-                    };
-                }
-            }
-
-            private sealed class ColorEditorTabControl : TabControl
-            {
-                public ColorEditorTabControl() : base()
-                {
-                }
-
-                protected override void OnGotFocus(EventArgs e)
-                {
-                    TabPage selectedTab = SelectedTab;
-                    if (selectedTab is not null && selectedTab.Controls.Count > 0)
-                    {
-                        selectedTab.Controls[0].Focus();
-                    }
                 }
             }
         }
