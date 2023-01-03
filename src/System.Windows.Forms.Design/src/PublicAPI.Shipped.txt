@@ -339,8 +339,8 @@ System.ComponentModel.Design.MenuCommandsChangedEventArgs.MenuCommandsChangedEve
 ~System.ComponentModel.Design.ObjectSelectorEditor.Selector.Selector(System.ComponentModel.Design.ObjectSelectorEditor editor) -> void
 ~System.ComponentModel.Design.ObjectSelectorEditor.Selector.SetSelection(object value, System.Windows.Forms.TreeNodeCollection nodes) -> bool
 ~System.ComponentModel.Design.ObjectSelectorEditor.Selector.Start(System.Windows.Forms.Design.IWindowsFormsEditorService edSvc, object value) -> void
-System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode.SelectorNode(string! label, object! value) -> void
-System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode.value -> object!
+System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode.SelectorNode(string! label, object? value) -> void
+System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode.value -> object?
 System.ComponentModel.Design.ProjectTargetFrameworkAttribute.ProjectTargetFrameworkAttribute(string! targetFrameworkMoniker) -> void
 System.ComponentModel.Design.ProjectTargetFrameworkAttribute.TargetFrameworkMoniker.get -> string!
 ~System.ComponentModel.Design.Serialization.BasicDesignerLoader.GetService(System.Type serviceType) -> object
