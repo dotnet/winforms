@@ -9,14 +9,19 @@ namespace System.ComponentModel.Design
 {
     public sealed class ExceptionCollection : Exception
     {
-        private readonly ArrayList? _exceptions;
+        private readonly List<Exception>? _exceptions;
 
         public ExceptionCollection(ArrayList? exceptions)
+        {
+            _exceptions = exceptions?.Cast<Exception>().ToList();
+        }
+
+        internal ExceptionCollection(List<Exception>? exceptions)
         {
             _exceptions = exceptions;
         }
 
-        public ArrayList? Exceptions => (ArrayList?)_exceptions?.Clone();
+        public ArrayList? Exceptions => _exceptions is null ? null : new ArrayList(_exceptions);
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
