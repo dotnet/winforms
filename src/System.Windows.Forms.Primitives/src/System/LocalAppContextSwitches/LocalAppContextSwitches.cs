@@ -15,15 +15,11 @@ namespace System.Windows.Forms.Primitives
         // for more details on how to enable these switches in the application.
         private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
         internal const string AnchorLayoutV2SwitchName = "System.Windows.Forms.AnchorLayoutV2";
+        internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
 
-        private static int s_scaleTopLevelFormMinMaxSizeForDpi;
         private static int s_AnchorLayoutV2;
-
-        public static bool ScaleTopLevelFormMinMaxSizeForDpi
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => GetCachedSwitchValue(ScaleTopLevelFormMinMaxSizeForDpiSwitchName, ref s_scaleTopLevelFormMinMaxSizeForDpi);
-        }
+        private static int s_scaleTopLevelFormMinMaxSizeForDpi;
+        private static int s_trackBarModernRendering;
 
         /// <summary>
         ///  Indicates whether AnchorLayoutV2 feature is enabled.
@@ -37,16 +33,6 @@ namespace System.Windows.Forms.Primitives
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => GetCachedSwitchValue(AnchorLayoutV2SwitchName, ref s_AnchorLayoutV2);
-        }
-
-        private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
-
-        private static readonly bool s_isNetCoreApp = (s_targetFrameworkName?.Identifier) == ".NETCoreApp";
-
-        private static FrameworkName? GetTargetFrameworkName()
-        {
-            string? targetFrameworkName = AppContext.TargetFrameworkName;
-            return targetFrameworkName is null ? null : new FrameworkName(targetFrameworkName);
         }
 
         private static bool GetCachedSwitchValue(string switchName, ref int cachedSwitchValue)
@@ -107,8 +93,35 @@ namespace System.Windows.Forms.Primitives
                     }
                 }
 
+                if (switchName == TrackBarModernRenderingSwitchName)
+                {
+                    return true;
+                }
+
                 return false;
             }
+        }
+
+        private static FrameworkName? GetTargetFrameworkName()
+        {
+            string? targetFrameworkName = AppContext.TargetFrameworkName;
+            return targetFrameworkName is null ? null : new FrameworkName(targetFrameworkName);
+        }
+
+        public static bool ScaleTopLevelFormMinMaxSizeForDpi
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => GetCachedSwitchValue(ScaleTopLevelFormMinMaxSizeForDpiSwitchName, ref s_scaleTopLevelFormMinMaxSizeForDpi);
+        }
+
+        private static readonly bool s_isNetCoreApp = (s_targetFrameworkName?.Identifier) == ".NETCoreApp";
+
+        private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
+
+        public static bool TrackBarModernRendering
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => GetCachedSwitchValue(TrackBarModernRenderingSwitchName, ref s_trackBarModernRendering);
         }
     }
 }

@@ -33,5 +33,23 @@ namespace System
         {
             Assert.False((bool)accessibleObject.GetPropertyValue(propertyId));
         }
+
+        public static void Equal<T>(T[] expected, T[] actual)
+        {
+            if (expected is null)
+            {
+                Assert.Null(actual);
+                return;
+            }
+
+            Assert.NotNull(actual);
+
+            Assert.Equal(expected.Length, actual.Length);
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                Assert.Equal(expected[i], actual[i]);
+            }
+        }
     }
 }

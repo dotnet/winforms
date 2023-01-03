@@ -16,7 +16,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetOleObject(
                 Guid* riid,
-                [MarshalAs(UnmanagedType.Interface)] out object ppvObj);
+                [MarshalAs(UnmanagedType.Interface)] out object? ppvObj);
         }
     }
 }

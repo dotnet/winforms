@@ -300,7 +300,7 @@ override System.Windows.Forms.BindingMemberInfo.Equals(object? otherObject) -> b
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.PaintBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.ToString() -> string
 override System.Windows.Forms.ErrorProvider.Site.set -> void
-~override System.Windows.Forms.HelpProvider.ToString() -> string
+override System.Windows.Forms.HelpProvider.ToString() -> string!
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlWindow.Equals(object obj) -> bool
@@ -660,27 +660,27 @@ static System.Windows.Forms.Help.ShowPopup(System.Windows.Forms.Control? parent,
 ~static System.Windows.Forms.ListBindingHelper.GetListItemType(object dataSource, string dataMember) -> System.Type
 ~static System.Windows.Forms.ListBindingHelper.GetListItemType(object list) -> System.Type
 ~static System.Windows.Forms.ListBindingHelper.GetListName(object list, System.ComponentModel.PropertyDescriptor[] listAccessors) -> string
-~static System.Windows.Forms.MessageBox.Show(string text) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(string text, string caption) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(string text, string caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, bool displayHelpButton) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, string keyword) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator, object param) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, string keyword) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator, object param) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text, string? caption) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, bool displayHelpButton) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string! helpFilePath) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string! helpFilePath, string! keyword) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string! helpFilePath, System.Windows.Forms.HelpNavigator navigator) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string! helpFilePath, System.Windows.Forms.HelpNavigator navigator, object? param) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? owner, string? text) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? owner, string? text, string? caption) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? owner, string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? owner, string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? owner, string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? owner, string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? owner, string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string! helpFilePath) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? owner, string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string! helpFilePath, string! keyword) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? owner, string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string! helpFilePath, System.Windows.Forms.HelpNavigator navigator) -> System.Windows.Forms.DialogResult
+static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window? owner, string? text, string? caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string! helpFilePath, System.Windows.Forms.HelpNavigator navigator, object? param) -> System.Windows.Forms.DialogResult
 ~static System.Windows.Forms.ToolStrip.SetItemParent(System.Windows.Forms.ToolStripItem item, System.Windows.Forms.ToolStrip parent) -> void
 ~static System.Windows.Forms.ToolStripManager.FindToolStrip(string toolStripName) -> System.Windows.Forms.ToolStrip
 ~static System.Windows.Forms.ToolStripManager.LoadSettings(System.Windows.Forms.Form targetForm) -> void
@@ -806,28 +806,28 @@ System.Windows.Forms.BindingMemberInfo.BindingField.get -> string!
 System.Windows.Forms.BindingMemberInfo.BindingMember.get -> string!
 System.Windows.Forms.BindingMemberInfo.BindingMemberInfo(string? dataMember) -> void
 System.Windows.Forms.BindingMemberInfo.BindingPath.get -> string!
-~System.Windows.Forms.BindingNavigator.AddNewItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.AddNewItem.set -> void
-~System.Windows.Forms.BindingNavigator.BindingNavigator(System.ComponentModel.IContainer container) -> void
-~System.Windows.Forms.BindingNavigator.BindingNavigator(System.Windows.Forms.BindingSource bindingSource) -> void
-~System.Windows.Forms.BindingNavigator.BindingSource.get -> System.Windows.Forms.BindingSource
-~System.Windows.Forms.BindingNavigator.BindingSource.set -> void
-~System.Windows.Forms.BindingNavigator.CountItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.CountItem.set -> void
-~System.Windows.Forms.BindingNavigator.CountItemFormat.get -> string
-~System.Windows.Forms.BindingNavigator.CountItemFormat.set -> void
-~System.Windows.Forms.BindingNavigator.DeleteItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.DeleteItem.set -> void
-~System.Windows.Forms.BindingNavigator.MoveFirstItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.MoveFirstItem.set -> void
-~System.Windows.Forms.BindingNavigator.MoveLastItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.MoveLastItem.set -> void
-~System.Windows.Forms.BindingNavigator.MoveNextItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.MoveNextItem.set -> void
-~System.Windows.Forms.BindingNavigator.MovePreviousItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.MovePreviousItem.set -> void
-~System.Windows.Forms.BindingNavigator.PositionItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.BindingNavigator.PositionItem.set -> void
+System.Windows.Forms.BindingNavigator.AddNewItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.AddNewItem.set -> void
+System.Windows.Forms.BindingNavigator.BindingNavigator(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.BindingNavigator.BindingNavigator(System.Windows.Forms.BindingSource? bindingSource) -> void
+System.Windows.Forms.BindingNavigator.BindingSource.get -> System.Windows.Forms.BindingSource?
+System.Windows.Forms.BindingNavigator.BindingSource.set -> void
+System.Windows.Forms.BindingNavigator.CountItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.CountItem.set -> void
+System.Windows.Forms.BindingNavigator.CountItemFormat.get -> string!
+System.Windows.Forms.BindingNavigator.CountItemFormat.set -> void
+System.Windows.Forms.BindingNavigator.DeleteItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.DeleteItem.set -> void
+System.Windows.Forms.BindingNavigator.MoveFirstItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.MoveFirstItem.set -> void
+System.Windows.Forms.BindingNavigator.MoveLastItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.MoveLastItem.set -> void
+System.Windows.Forms.BindingNavigator.MoveNextItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.MoveNextItem.set -> void
+System.Windows.Forms.BindingNavigator.MovePreviousItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.MovePreviousItem.set -> void
+System.Windows.Forms.BindingNavigator.PositionItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.BindingNavigator.PositionItem.set -> void
 ~System.Windows.Forms.BindingsCollection.this[int index].get -> System.Windows.Forms.Binding
 ~System.Windows.Forms.BindingSource.BindingSource(object dataSource, string dataMember) -> void
 ~System.Windows.Forms.BindingSource.BindingSource(System.ComponentModel.IContainer container) -> void
@@ -1107,8 +1107,8 @@ System.Windows.Forms.ErrorProvider.SetIconAlignment(System.Windows.Forms.Control
 System.Windows.Forms.ErrorProvider.SetIconPadding(System.Windows.Forms.Control! control, int padding) -> void
 System.Windows.Forms.ErrorProvider.Tag.get -> object?
 System.Windows.Forms.ErrorProvider.Tag.set -> void
-~System.Windows.Forms.HelpProvider.Tag.get -> object
-~System.Windows.Forms.HelpProvider.Tag.set -> void
+System.Windows.Forms.HelpProvider.Tag.get -> object?
+System.Windows.Forms.HelpProvider.Tag.set -> void
 ~System.Windows.Forms.HtmlDocument.ActiveElement.get -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlDocument.All.get -> System.Windows.Forms.HtmlElementCollection
 ~System.Windows.Forms.HtmlDocument.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
@@ -1178,9 +1178,9 @@ System.Windows.Forms.ErrorProvider.Tag.set -> void
 ~System.Windows.Forms.HtmlElementEventArgs.EventType.get -> string
 ~System.Windows.Forms.HtmlElementEventArgs.FromElement.get -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlElementEventArgs.ToElement.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlHistory.DomHistory.get -> object
-~System.Windows.Forms.HtmlHistory.Go(string urlString) -> void
-~System.Windows.Forms.HtmlHistory.Go(System.Uri url) -> void
+System.Windows.Forms.HtmlHistory.DomHistory.get -> object!
+System.Windows.Forms.HtmlHistory.Go(string! urlString) -> void
+System.Windows.Forms.HtmlHistory.Go(System.Uri! url) -> void
 ~System.Windows.Forms.HtmlWindow.Alert(string message) -> void
 ~System.Windows.Forms.HtmlWindow.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
 ~System.Windows.Forms.HtmlWindow.Confirm(string message) -> bool
@@ -2010,18 +2010,18 @@ virtual System.Windows.Forms.Control.OnVisibleChanged(System.EventArgs! e) -> vo
 ~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
 virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.HelpProvider.CanExtend(object target) -> bool
-~virtual System.Windows.Forms.HelpProvider.GetHelpKeyword(System.Windows.Forms.Control ctl) -> string
-~virtual System.Windows.Forms.HelpProvider.GetHelpNavigator(System.Windows.Forms.Control ctl) -> System.Windows.Forms.HelpNavigator
-~virtual System.Windows.Forms.HelpProvider.GetHelpString(System.Windows.Forms.Control ctl) -> string
-~virtual System.Windows.Forms.HelpProvider.GetShowHelp(System.Windows.Forms.Control ctl) -> bool
-~virtual System.Windows.Forms.HelpProvider.HelpNamespace.get -> string
-~virtual System.Windows.Forms.HelpProvider.HelpNamespace.set -> void
-~virtual System.Windows.Forms.HelpProvider.ResetShowHelp(System.Windows.Forms.Control ctl) -> void
-~virtual System.Windows.Forms.HelpProvider.SetHelpKeyword(System.Windows.Forms.Control ctl, string keyword) -> void
-~virtual System.Windows.Forms.HelpProvider.SetHelpNavigator(System.Windows.Forms.Control ctl, System.Windows.Forms.HelpNavigator navigator) -> void
-~virtual System.Windows.Forms.HelpProvider.SetHelpString(System.Windows.Forms.Control ctl, string helpString) -> void
-~virtual System.Windows.Forms.HelpProvider.SetShowHelp(System.Windows.Forms.Control ctl, bool value) -> void
+virtual System.Windows.Forms.HelpProvider.CanExtend(object? target) -> bool
+virtual System.Windows.Forms.HelpProvider.GetHelpKeyword(System.Windows.Forms.Control! ctl) -> string?
+virtual System.Windows.Forms.HelpProvider.GetHelpNavigator(System.Windows.Forms.Control! ctl) -> System.Windows.Forms.HelpNavigator
+virtual System.Windows.Forms.HelpProvider.GetHelpString(System.Windows.Forms.Control! ctl) -> string?
+virtual System.Windows.Forms.HelpProvider.GetShowHelp(System.Windows.Forms.Control! ctl) -> bool
+virtual System.Windows.Forms.HelpProvider.HelpNamespace.get -> string?
+virtual System.Windows.Forms.HelpProvider.HelpNamespace.set -> void
+virtual System.Windows.Forms.HelpProvider.ResetShowHelp(System.Windows.Forms.Control! ctl) -> void
+virtual System.Windows.Forms.HelpProvider.SetHelpKeyword(System.Windows.Forms.Control! ctl, string? keyword) -> void
+virtual System.Windows.Forms.HelpProvider.SetHelpNavigator(System.Windows.Forms.Control! ctl, System.Windows.Forms.HelpNavigator navigator) -> void
+virtual System.Windows.Forms.HelpProvider.SetHelpString(System.Windows.Forms.Control! ctl, string? helpString) -> void
+virtual System.Windows.Forms.HelpProvider.SetShowHelp(System.Windows.Forms.Control! ctl, bool value) -> void
 virtual System.Windows.Forms.LinkLabel.LinkCollection.ContainsKey(string? key) -> bool
 virtual System.Windows.Forms.LinkLabel.LinkCollection.IndexOfKey(string? key) -> int
 virtual System.Windows.Forms.LinkLabel.LinkCollection.RemoveByKey(string? key) -> void
@@ -5302,7 +5302,7 @@ System.Windows.Forms.BindingNavigator.BeginInit() -> void
 System.Windows.Forms.BindingNavigator.BindingNavigator() -> void
 System.Windows.Forms.BindingNavigator.BindingNavigator(bool addStandardItems) -> void
 System.Windows.Forms.BindingNavigator.EndInit() -> void
-System.Windows.Forms.BindingNavigator.RefreshItems -> System.EventHandler
+System.Windows.Forms.BindingNavigator.RefreshItems -> System.EventHandler?
 System.Windows.Forms.BindingNavigator.Validate() -> bool
 System.Windows.Forms.BindingsCollection
 System.Windows.Forms.BindingsCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler

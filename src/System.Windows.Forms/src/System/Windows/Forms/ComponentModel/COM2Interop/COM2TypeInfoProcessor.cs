@@ -486,10 +486,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private static unsafe PropertyInfo ProcessDataCore(
             Oleaut32.ITypeInfo typeInfo,
-            IDictionary<string, PropertyInfo> propertyInfo,
+            IDictionary<string, PropertyInfo> properties,
             Ole32.DispatchID dispid,
-            Ole32.DispatchID nameDispID,
-            in TYPEDESC typeDesc,
+            Ole32.DispatchID nameDispid,
+            TYPEDESC typeDescription,
             VARFLAGS flags)
         {
             // Get the name and the helpstring.
@@ -501,31 +501,31 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 throw new COMException(string.Format(SR.TYPEINFOPROCESSORGetDocumentationFailed, dispid, hr, ComNativeDescriptor.GetClassName(typeInfo)), (int)hr);
             }
 
-            string name = nameBstr.AsSpan().ToString();
-            if (string.IsNullOrEmpty(name))
+            if (nameBstr.Length == 0)
             {
                 Debug.Fail($"ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{dispid:X} but returned SUCCEEDED(hr),  Component={ComNativeDescriptor.GetClassName(typeInfo)}");
                 return null;
             }
 
+            string name = nameBstr.ToString();
+
             // Now we can create our struct. Make sure we don't already have one.
-            if (!propertyInfo.TryGetValue(name, out PropertyInfo? info))
+            if (!properties.TryGetValue(name, out PropertyInfo? info))
             {
                 info = new()
                 {
-                    Index = propertyInfo.Count,
+                    Index = properties.Count,
                     Name = name,
                     DispId = dispid
                 };
 
-                propertyInfo.Add(name, info);
+                properties.Add(name, info);
                 info.Attributes.Add(new DispIdAttribute((int)info.DispId));
             }
 
-            var helpString = helpStringBstr.AsSpan();
-            if (!helpString.IsEmpty)
+            if (helpStringBstr.Length > 0)
             {
-                info.Attributes.Add(new DescriptionAttribute(helpString.ToString()));
+                info.Attributes.Add(new DescriptionAttribute(helpStringBstr.ToString()));
             }
 
             // Figure out the value type.
@@ -534,7 +534,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 object[] pTypeData = new object[1];
                 try
                 {
-                    info.ValueType = GetValueTypeFromTypeDesc(in typeDesc, typeInfo, pTypeData);
+                    info.ValueType = GetValueTypeFromTypeDesc(in typeDescription, typeInfo, pTypeData);
                 }
                 catch (Exception ex)
                 {
@@ -560,33 +560,32 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // Check the flags.
-            if ((flags & VARFLAG_FREADONLY) != 0)
+            if (flags.HasFlag(VARFLAG_FREADONLY))
             {
                 info.ReadOnly = PropertyInfo.ReadOnlyTrue;
             }
 
-            if ((flags & VARFLAG_FHIDDEN) != 0 ||
-                (flags & VARFLAG_FNONBROWSABLE) != 0 ||
-                info.Name[0] == '_' ||
-                dispid == Ole32.DispatchID.HWND)
+            if (flags.HasFlag(VARFLAG_FHIDDEN)
+                || flags.HasFlag(VARFLAG_FNONBROWSABLE)
+                || info.Name[0] == '_'
+                || dispid == Ole32.DispatchID.HWND)
             {
                 info.Attributes.Add(new BrowsableAttribute(false));
                 info.NonBrowsable = true;
             }
 
-            if ((flags & VARFLAG_FUIDEFAULT) != 0)
+            if (flags.HasFlag(VARFLAG_FUIDEFAULT))
             {
                 info.IsDefault = true;
             }
 
-            if ((flags & VARFLAG_FBINDABLE) != 0 &&
-                (flags & VARFLAG_FDISPLAYBIND) != 0)
+            if (flags.HasFlag(VARFLAG_FBINDABLE) && flags.HasFlag(VARFLAG_FDISPLAYBIND))
             {
                 info.Attributes.Add(new BindableAttribute(true));
             }
 
             // Lastly, if it's DISPID_Name, add the ParenthesizeNameAttribute.
-            if (dispid == nameDispID)
+            if (dispid == nameDispid)
             {
                 info.Attributes.Add(new ParenthesizePropertyNameAttribute(true));
 
@@ -599,28 +598,28 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private static unsafe void ProcessFunctions(
             Oleaut32.ITypeInfo typeInfo,
-            IDictionary<string, PropertyInfo> propertyInfo,
+            IDictionary<string, PropertyInfo> properties,
             Ole32.DispatchID dispidToGet,
             Ole32.DispatchID nameDispID,
             ref bool addAboutBox)
         {
-            TYPEATTR* pTypeAttr = null;
-            HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
-            if (!hr.Succeeded || pTypeAttr is null)
+            TYPEATTR* typeAttributes = null;
+            HRESULT hr = typeInfo.GetTypeAttr(&typeAttributes);
+            if (!hr.Succeeded || typeAttributes is null)
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
 
             try
             {
-                bool isPropGet;
-                PropertyInfo? info;
+                bool isPropertyGetter;
+                PropertyInfo? propertyInfo;
 
-                for (uint i = 0; i < pTypeAttr->cFuncs; i++)
+                for (uint i = 0; i < typeAttributes->cFuncs; i++)
                 {
-                    FUNCDESC* pFuncDesc = null;
-                    hr = typeInfo.GetFuncDesc(i, &pFuncDesc);
-                    if (!hr.Succeeded || pFuncDesc is null)
+                    FUNCDESC* functionDescription = null;
+                    hr = typeInfo.GetFuncDesc(i, &functionDescription);
+                    if (!hr.Succeeded || functionDescription is null)
                     {
                         DbgTypeInfoProcessorSwitch.TraceVerbose(
                             $"ProcessTypeInfoEnum: ignoring function item 0x{i:X} because Oleaut32.ITypeInfo::GetFuncDesc returned hr=0x{hr:X} or NULL");
@@ -629,10 +628,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        if (pFuncDesc->invkind == INVOKEKIND.INVOKE_FUNC ||
-                            (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && pFuncDesc->memid != (int)dispidToGet))
+                        if (functionDescription->invkind == INVOKEKIND.INVOKE_FUNC
+                            || (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && functionDescription->memid != (int)dispidToGet))
                         {
-                            if (pFuncDesc->memid == (int)Ole32.DispatchID.ABOUTBOX)
+                            if (functionDescription->memid == (int)Ole32.DispatchID.ABOUTBOX)
                             {
                                 addAboutBox = true;
                             }
@@ -640,48 +639,54 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             continue;
                         }
 
-                        TYPEDESC typeDesc;
+                        TYPEDESC typeDescription;
 
                         // Is this a get or a put?
-                        isPropGet = (pFuncDesc->invkind == INVOKEKIND.INVOKE_PROPERTYGET);
+                        isPropertyGetter = functionDescription->invkind == INVOKEKIND.INVOKE_PROPERTYGET;
 
-                        if (isPropGet)
+                        if (isPropertyGetter)
                         {
-                            if (pFuncDesc->cParams != 0)
+                            if (functionDescription->cParams != 0)
                             {
                                 continue;
                             }
 
-                            typeDesc = pFuncDesc->elemdescFunc.tdesc;
+                            typeDescription = functionDescription->elemdescFunc.tdesc;
                         }
                         else
                         {
-                            Debug.Assert(pFuncDesc->lprgelemdescParam is not null, "ELEMDESC param is null!");
-                            if (pFuncDesc->lprgelemdescParam is null || pFuncDesc->cParams != 1)
+                            Debug.Assert(functionDescription->lprgelemdescParam is not null, "ELEMDESC param is null!");
+                            if (functionDescription->lprgelemdescParam is null || functionDescription->cParams != 1)
                             {
                                 continue;
                             }
 
-                            typeDesc = pFuncDesc->lprgelemdescParam->tdesc;
+                            typeDescription = functionDescription->lprgelemdescParam->tdesc;
                         }
 
-                        info = ProcessDataCore(typeInfo, propertyInfo, (Ole32.DispatchID)pFuncDesc->memid, nameDispID, in typeDesc, (VARFLAGS)pFuncDesc->wFuncFlags);
+                        propertyInfo = ProcessDataCore(
+                            typeInfo,
+                            properties,
+                            (Ole32.DispatchID)functionDescription->memid,
+                            nameDispID,
+                            typeDescription,
+                            (VARFLAGS)functionDescription->wFuncFlags);
 
-                        // Ff we got a set method, it's not readonly.
-                        if (info is not null && !isPropGet)
+                        // If we got a set method, it's not readonly.
+                        if (propertyInfo is not null && !isPropertyGetter)
                         {
-                            info.ReadOnly = PropertyInfo.ReadOnlyFalse;
+                            propertyInfo.ReadOnly = PropertyInfo.ReadOnlyFalse;
                         }
                     }
                     finally
                     {
-                        typeInfo.ReleaseFuncDesc(pFuncDesc);
+                        typeInfo.ReleaseFuncDesc(functionDescription);
                     }
                 }
             }
             finally
             {
-                typeInfo.ReleaseTypeAttr(pTypeAttr);
+                typeInfo.ReleaseTypeAttr(typeAttributes);
             }
         }
 
@@ -894,7 +899,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             propertyInfo,
                             (Ole32.DispatchID)pVarDesc->memid,
                             nameDispID,
-                            in pVarDesc->elemdescVar.tdesc,
+                            pVarDesc->elemdescVar.tdesc,
                             pVarDesc->wVarFlags);
 
                         if (pi.ReadOnly != PropertyInfo.ReadOnlyTrue)

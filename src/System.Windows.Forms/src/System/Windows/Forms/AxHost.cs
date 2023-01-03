@@ -113,7 +113,11 @@ namespace System.Windows.Forms
 
         private static readonly int s_checkedIppb = BitVector32.CreateMask(s_refreshProperties);
         private static readonly int s_checkedCP = BitVector32.CreateMask(s_checkedIppb);
+
+        /// <summary>True if a window needs created when <see cref="CreateHandle"/> is called.</summary>
         private static readonly int s_fNeedOwnWindow = BitVector32.CreateMask(s_checkedCP);
+
+        /// <summary>True if the OCX is design time only and we're in user mode.</summary>
         private static readonly int s_fOwnWindow = BitVector32.CreateMask(s_fNeedOwnWindow);
 
         private static readonly int s_fSimpleFrame = BitVector32.CreateMask(s_fOwnWindow);
@@ -1106,38 +1110,35 @@ namespace System.Windows.Forms
             }
 
             TransitionUpTo(OC_RUNNING);
-            if (!_axState[s_fOwnWindow])
+            if (_axState[s_fOwnWindow])
             {
-                if (_axState[s_fNeedOwnWindow])
-                {
-                    Debug.Assert(!Visible, "if we were visible we would not be needing a fake window...");
-                    _axState[s_fNeedOwnWindow] = false;
-                    _axState[s_fFakingWindow] = true;
-                    base.CreateHandle();
+                // Design time only OCX and we're not in design mode. We shouldn't be visible.
+                SetState(States.Visible, false);
+                base.CreateHandle();
+            }
+            else if (_axState[s_fNeedOwnWindow])
+            {
+                Debug.Assert(!Visible, "If we were visible we would not be need a fake window.");
+                _axState[s_fNeedOwnWindow] = false;
+                _axState[s_fFakingWindow] = true;
+                base.CreateHandle();
 
-                    // Note that we do not need to attach the handle because the work usually done in there
-                    // will be done in Control's wndProc on WM_CREATE.
-                }
-                else
-                {
-                    TransitionUpTo(OC_INPLACE);
-
-                    // It is possible that we were hidden while in place activating, in which case we don't
-                    // really have a handle now because the act of hiding could have destroyed it. Just call ourselves
-                    // again recursively, and if we don't have a handle, we will just take the "axState[fNeedOwnWindow]"
-                    // path above.
-                    if (_axState[s_fNeedOwnWindow])
-                    {
-                        Debug.Assert(!IsHandleCreated, "if we need a fake window, we can't have a real one");
-                        CreateHandle();
-                        return;
-                    }
-                }
+                // Note that we do not need to attach the handle because the work usually done in there
+                // will be done in Control's wndProc on WM_CREATE.
             }
             else
             {
-                SetState(States.Visible, false);
-                base.CreateHandle();
+                TransitionUpTo(OC_INPLACE);
+
+                // It is possible that we were hidden while in place activating, in which case we don't really have a
+                // handle now because the act of hiding could have destroyed it. Just call ourselves again recursively,
+                // and if we don't have a handle, we will just take the "axState[fNeedOwnWindow]" path above.
+                if (_axState[s_fNeedOwnWindow])
+                {
+                    Debug.Assert(!IsHandleCreated, "if we need a fake window, we can't have a real one");
+                    CreateHandle();
+                    return;
+                }
             }
 
             GetParentContainer().ControlCreated(this);
@@ -1365,12 +1366,9 @@ namespace System.Windows.Forms
             {
                 base.DestroyHandle();
             }
-            else
+            else if (IsHandleCreated)
             {
-                if (IsHandleCreated)
-                {
-                    TransitionDownTo(OC_RUNNING);
-                }
+                TransitionDownTo(OC_RUNNING);
             }
         }
 
@@ -1628,67 +1626,65 @@ namespace System.Windows.Forms
 
         protected override void SetVisibleCore(bool value)
         {
-            if (GetState(States.Visible) != value)
+            if (GetState(States.Visible) == value)
             {
-                bool oldVisible = Visible;
-                if ((IsHandleCreated || value) && ParentInternal is not null && ParentInternal.Created)
-                {
-                    if (!_axState[s_fOwnWindow])
-                    {
-                        TransitionUpTo(OC_RUNNING);
-                        if (value)
-                        {
-                            if (_axState[s_fFakingWindow])
-                            {
-                                // first we need to destroy the fake window...
-                                DestroyFakeWindow();
-                            }
+                return;
+            }
 
-                            // We want to avoid using SHOW since that may uiactivate us, and we don't
-                            // want that...
-                            if (!IsHandleCreated)
-                            {
-                                // So, if we don't have a handle, we just try to create it and hope that this will make
-                                // us appear...
-                                try
-                                {
-                                    SetExtent(Width, Height);
-                                    InPlaceActivate();
-                                    CreateControl(true);
-                                }
-                                catch
-                                {
-                                    s_axHTraceSwitch.TraceVerbose("Could not make ctl visible by using INPLACE. Will try SHOW");
-                                    MakeVisibleWithShow();
-                                }
-                            }
-                            else
-                            {
-                                // if, otoh, we had a handle to begin with, we need to use show since INPLACE is just
-                                // a noop...
-                                MakeVisibleWithShow();
-                            }
-                        }
-                        else
+            bool oldVisible = Visible;
+            if ((IsHandleCreated || value) && ParentInternal is not null && ParentInternal.Created && !_axState[s_fOwnWindow])
+            {
+                TransitionUpTo(OC_RUNNING);
+                if (value)
+                {
+                    if (_axState[s_fFakingWindow])
+                    {
+                        // First we need to destroy the fake window.
+                        DestroyFakeWindow();
+                    }
+
+                    // We want to avoid using SHOW since that may uiactivate us, and we don't want that.
+                    if (!IsHandleCreated)
+                    {
+                        // So, if we don't have a handle, we just try to create it and hope that this will make
+                        // us appear...
+                        try
                         {
-                            Debug.Assert(!_axState[s_fFakingWindow], "if we were visible, we could not have had a fake window...");
-                            HideAxControl();
+                            SetExtent(Width, Height);
+                            InPlaceActivate();
+                            CreateControl(true);
+                        }
+                        catch
+                        {
+                            s_axHTraceSwitch.TraceVerbose("Could not make ctl visible by using INPLACE. Will try SHOW");
+                            MakeVisibleWithShow();
                         }
                     }
-                }
-
-                if (!value)
-                {
-                    _axState[s_fNeedOwnWindow] = false;
-                }
-
-                if (!_axState[s_fOwnWindow])
-                {
-                    SetState(States.Visible, value);
-                    if (Visible != oldVisible)
+                    else
                     {
-                        OnVisibleChanged(EventArgs.Empty);
+                        // if, otoh, we had a handle to begin with, we need to use show since INPLACE is just
+                        // a noop...
+                        MakeVisibleWithShow();
                     }
+                }
+                else
+                {
+                    Debug.Assert(!_axState[s_fFakingWindow], "if we were visible, we could not have had a fake window...");
+                    HideAxControl();
+                }
+            }
+
+            if (!value)
+            {
+                _axState[s_fNeedOwnWindow] = false;
+            }
+
+            if (!_axState[s_fOwnWindow])
+            {
+                SetState(States.Visible, value);
+                if (Visible != oldVisible)
+                {
+                    OnVisibleChanged(EventArgs.Empty);
                 }
             }
         }
@@ -1708,7 +1704,7 @@ namespace System.Windows.Forms
             }
 
             EnsureWindowPresent();
-            CreateControl(true);
+            CreateControl(ignoreVisible: true);
             if (f is not null && f.ActiveControl != ctl)
             {
                 f.ActiveControl = ctl;
@@ -1726,12 +1722,11 @@ namespace System.Windows.Forms
             {
                 s_axHTraceSwitch.TraceVerbose("Naughty control inplace deactivated on a hide verb...");
                 Debug.Assert(!IsHandleCreated, "if we are inplace deactivated we should not have a window.");
-                // all we do here is set a flag saying that we need the window to be created if
-                // create handle is ever called...
+
+                // Set a flag saying that we need the window to be created if create handle is ever called.
                 _axState[s_fNeedOwnWindow] = true;
 
-                // also, set the state to our "pretend oc_inplace state"
-                //
+                // Set the state to our "pretend oc_inplace state".
                 SetOcState(OC_INPLACE);
             }
         }
@@ -1781,75 +1776,72 @@ namespace System.Windows.Forms
         {
             s_controlKeyboardRouting.TraceVerbose($"AxHost.PreProcessMessage {msg}");
 
-            if (IsUserMode())
+            if (!IsUserMode())
             {
-                if (_axState[s_siteProcessedInputKey])
-                {
-                    // In this case, the control called the us back through the IControlSite
-                    // and giving us a chance to see if we want to process it. We in turn
-                    // call the base implementation which normally would call the control's
-                    // IsInputKey() or IsInputChar(). So, we short-circuit those to return false
-                    // and only return true, if the container-chain wanted to process the keystroke
-                    // (e.g. tab, accelerators etc.)
-                    return base.PreProcessMessage(ref msg);
-                }
-
-                MSG win32Message = msg;
-                _axState[s_siteProcessedInputKey] = false;
-                try
-                {
-                    IOleInPlaceActiveObject.Interface activeObj = GetInPlaceActiveObject();
-                    if (activeObj is not null)
-                    {
-                        HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
-                        msg.MsgInternal = (User32.WM)win32Message.message;
-                        msg.WParamInternal = win32Message.wParam;
-                        msg.LParamInternal = win32Message.lParam;
-                        msg.HWnd = win32Message.hwnd;
-
-                        if (hr == HRESULT.S_OK)
-                        {
-                            s_controlKeyboardRouting.TraceVerbose(
-                                $"\t Message translated by control to {msg}");
-                            return true;
-                        }
-                        else if (hr == HRESULT.S_FALSE)
-                        {
-                            bool ret = false;
-
-                            _ignoreDialogKeys = true;
-                            try
-                            {
-                                ret = base.PreProcessMessage(ref msg);
-                            }
-                            finally
-                            {
-                                _ignoreDialogKeys = false;
-                            }
-
-                            return ret;
-                        }
-                        else if (_axState[s_siteProcessedInputKey])
-                        {
-                            s_controlKeyboardRouting.TraceVerbose(
-                                $"\t Message processed by site. Calling base.PreProcessMessage() {msg}");
-                            return base.PreProcessMessage(ref msg);
-                        }
-                        else
-                        {
-                            s_controlKeyboardRouting.TraceVerbose(
-                                $"\t Message not processed by site. Returning false. {msg}");
-                            return false;
-                        }
-                    }
-                }
-                finally
-                {
-                    _axState[s_siteProcessedInputKey] = false;
-                }
+                return false;
             }
 
-            return false;
+            if (_axState[s_siteProcessedInputKey])
+            {
+                // In this case, the control called the us back through the IControlSite
+                // and giving us a chance to see if we want to process it. We in turn
+                // call the base implementation which normally would call the control's
+                // IsInputKey() or IsInputChar(). So, we short-circuit those to return false
+                // and only return true, if the container-chain wanted to process the keystroke
+                // (e.g. tab, accelerators etc.)
+                return base.PreProcessMessage(ref msg);
+            }
+
+            MSG win32Message = msg;
+            _axState[s_siteProcessedInputKey] = false;
+            try
+            {
+                IOleInPlaceActiveObject.Interface activeObj = GetInPlaceActiveObject();
+                if (activeObj is null)
+                {
+                    return false;
+                }
+
+                HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
+                msg.MsgInternal = (User32.WM)win32Message.message;
+                msg.WParamInternal = win32Message.wParam;
+                msg.LParamInternal = win32Message.lParam;
+                msg.HWnd = win32Message.hwnd;
+
+                if (hr == HRESULT.S_OK)
+                {
+                    s_controlKeyboardRouting.TraceVerbose($"\t Message translated by control to {msg}");
+                    return true;
+                }
+                else if (hr == HRESULT.S_FALSE)
+                {
+                    _ignoreDialogKeys = true;
+                    try
+                    {
+                        return base.PreProcessMessage(ref msg);
+                    }
+                    finally
+                    {
+                        _ignoreDialogKeys = false;
+                    }
+                }
+                else if (_axState[s_siteProcessedInputKey])
+                {
+                    s_controlKeyboardRouting.TraceVerbose(
+                        $"\t Message processed by site. Calling base.PreProcessMessage() {msg}");
+                    return base.PreProcessMessage(ref msg);
+                }
+                else
+                {
+                    s_controlKeyboardRouting.TraceVerbose(
+                        $"\t Message not processed by site. Returning false. {msg}");
+                    return false;
+                }
+            }
+            finally
+            {
+                _axState[s_siteProcessedInputKey] = false;
+            }
         }
 
         /// <summary>
@@ -1945,7 +1937,6 @@ namespace System.Windows.Forms
 
                 return _ocxState;
             }
-
             set
             {
                 _axState[s_ocxStateSet] = true;
@@ -1997,64 +1988,61 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                try
+                PropertyBagStream propBag = null;
+
+                if (_iPersistPropBag is not null)
                 {
-                    PropertyBagStream propBag = null;
-
-                    if (_iPersistPropBag is not null)
-                    {
-                        propBag = new PropertyBagStream();
-                        using var propertyBag = ComHelpers.GetComScope<IPropertyBag>(propBag, out bool result);
-                        Debug.Assert(result);
-                        _iPersistPropBag.Save(propertyBag, fClearDirty: true, fSaveAllProperties: true);
-                    }
-
-                    MemoryStream ms = null;
-                    switch (_storageType)
-                    {
-                        case STG_STREAM:
-                        case STG_STREAMINIT:
-                            ms = new MemoryStream();
-                            using (var stream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(ms), out bool result))
-                            {
-                                Debug.Assert(result);
-                                if (_storageType == STG_STREAM)
-                                {
-                                    _iPersistStream.Save(stream, true);
-                                }
-                                else
-                                {
-                                    _iPersistStreamInit.Save(stream, true);
-                                }
-                            }
-
-                            break;
-                        case STG_STORAGE:
-                            Debug.Assert(oldOcxState is not null, "we got to have an old state which holds out scribble storage...");
-                            if (oldOcxState is not null)
-                            {
-                                return oldOcxState.RefreshStorage(_iPersistStorage);
-                            }
-
-                            return null;
-                        default:
-                            Debug.Fail("unknown storage type.");
-                            return null;
-                    }
-
-                    if (ms is not null)
-                    {
-                        return new State(ms, _storageType, this, propBag);
-                    }
-                    else if (propBag is not null)
-                    {
-                        return new State(propBag);
-                    }
+                    propBag = new PropertyBagStream();
+                    using var propertyBag = ComHelpers.GetComScope<IPropertyBag>(propBag, out bool result);
+                    Debug.Assert(result);
+                    _iPersistPropBag.Save(propertyBag, fClearDirty: true, fSaveAllProperties: true);
                 }
-                catch (Exception e)
+
+                MemoryStream ms = null;
+                switch (_storageType)
                 {
-                    s_axHTraceSwitch.TraceVerbose($"Could not create new OCX State: {e}");
+                    case STG_STREAM:
+                    case STG_STREAMINIT:
+                        ms = new MemoryStream();
+                        using (var stream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(ms), out bool result))
+                        {
+                            Debug.Assert(result);
+                            if (_storageType == STG_STREAM)
+                            {
+                                _iPersistStream.Save(stream, true);
+                            }
+                            else
+                            {
+                                _iPersistStreamInit.Save(stream, true);
+                            }
+                        }
+
+                        break;
+                    case STG_STORAGE:
+                        Debug.Assert(oldOcxState is not null, "we got to have an old state which holds out scribble storage...");
+                        if (oldOcxState is not null)
+                        {
+                            return oldOcxState.RefreshStorage(_iPersistStorage);
+                        }
+
+                        return null;
+                    default:
+                        Debug.Fail("unknown storage type.");
+                        return null;
                 }
+
+                if (ms is not null)
+                {
+                    return new State(ms, _storageType, this, propBag);
+                }
+                else if (propBag is not null)
+                {
+                    return new State(propBag);
+                }
+            }
+            catch (Exception e)
+            {
+                s_axHTraceSwitch.TraceVerbose($"Could not create new OCX State: {e}");
             }
             finally
             {
@@ -2065,35 +2053,36 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns this control's logically containing form.
-        ///  At design time this is always the form being designed.
-        ///  At runtime it is either the form set with setContainingForm or,
-        ///  by default, the parent form.
-        ///  Sets the form which is the logical container of this control.
-        ///  By default, the parent form performs that function.  It is
-        ///  however possible for another form higher in the parent chain
-        ///  to serve in that role.  The logical container of this
-        ///  control determines the set of logical sibling control.
-        ///  In general this property exists only to enable some specific
-        ///  behaviours of ActiveX controls and should in general not be set
-        ///  by the user.
+        ///  Gets or sets the control logically containing the ActiveX control.
         /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   The <see cref="ContainingControl"/> property value can be different from the <see cref="Control.Parent"/>
+        ///   property. The <see cref="ContainingControl"/> represented by this property is the ActiveX control's
+        ///   logical container. For example, if an ActiveX control is hosted in a <see cref="GroupBox"/> control, and
+        ///   the <see cref="GroupBox"/> is contained on a <see cref="Form"/>, then the <see cref="ContainingControl"/>
+        ///   property value of the ActiveX control is the <see cref="Form"/>, and the <see cref="Control.Parent"/>
+        ///   property value is the <see cref="GroupBox"/> control.
+        ///  </para>
+        /// </remarks>
+        /// <devdoc>
+        ///  <para>
+        ///   At design time this is always the form being designed. At design time the default is the first
+        ///   <see cref="ContainerControl"/> in the parent hierarchy.
+        ///  </para>
+        ///  <para>
+        ///   The logical container of this control determines the set of logical sibling controls. In general this
+        ///   property exists only to enable some specific behaviours of ActiveX controls and should not be set by
+        ///   the user.
+        ///  </para>
+        /// </devdoc>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ContainerControl ContainingControl
         {
-            get
-            {
-                _containingControl ??= FindContainerControlInternal();
-
-                return _containingControl;
-            }
-
-            set
-            {
-                _containingControl = value;
-            }
+            get => _containingControl ??= FindContainerControlInternal();
+            set => _containingControl = value;
         }
 
         /// <summary>
@@ -2102,55 +2091,42 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeText()
         {
-            bool ret = false;
             try
             {
-                ret = (Text.Length != 0);
+                return Text.Length != 0;
             }
             catch (COMException)
             {
             }
 
-            return ret;
+            return false;
         }
 
         /// <summary>
         ///  Determines whether to persist the ContainingControl property.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private bool ShouldSerializeContainingControl()
-        {
-            return ContainingControl != ParentInternal;
-        }
+        private bool ShouldSerializeContainingControl() => ContainingControl != ParentInternal;
 
         private ContainerControl FindContainerControlInternal()
         {
-            if (Site is not null)
+            if (Site.TryGetService(out IDesignerHost host) && host.RootComponent is ContainerControl rootControl)
             {
-                IDesignerHost host = (IDesignerHost)Site.GetService(typeof(IDesignerHost));
-                if (host is not null)
-                {
-                    if (host.RootComponent is ContainerControl rootControl)
-                    {
-                        return rootControl;
-                    }
-                }
+                return rootControl;
             }
 
-            ContainerControl cc = null;
             Control control = this;
             while (control is not null)
             {
-                if (control is ContainerControl tempCC)
+                if (control is ContainerControl containerControl)
                 {
-                    cc = tempCC;
-                    break;
+                    return containerControl;
                 }
 
                 control = control.ParentInternal;
             }
 
-            return cc;
+            return null;
         }
 
         private bool IsDirty()
@@ -2302,15 +2278,12 @@ namespace System.Windows.Forms
             GetOleObject().DoVerb(verb, lpmsg: null, pClientSite, -1, parent is null ? HWND.Null : parent.HWND, &posRect);
         }
 
-        private bool AwaitingDefreezing()
-        {
-            return _freezeCount > 0;
-        }
+        private bool AwaitingDefreezing() => _freezeCount > 0;
 
-        private void Freeze(bool v)
+        private void FreezeEvents(bool freeze)
         {
-            s_axHTraceSwitch.TraceVerbose($"freezing {v}");
-            if (v)
+            s_axHTraceSwitch.TraceVerbose($"freezing {freeze}");
+            if (freeze)
             {
                 GetOleControl().FreezeEvents(true);
                 _freezeCount++;
@@ -2924,7 +2897,7 @@ namespace System.Windows.Forms
 
         private void DepersistControl()
         {
-            Freeze(true);
+            FreezeEvents(true);
 
             if (_ocxState is null)
             {
@@ -3725,7 +3698,10 @@ namespace System.Windows.Forms
 
         private void ParseMiscBits(Ole32.OLEMISC bits)
         {
+            // Does this control only have a design-time UI?
             _axState[s_fOwnWindow] = ((bits & Ole32.OLEMISC.INVISIBLEATRUNTIME) != 0) && IsUserMode();
+
+            // Requires ISimpleFrameSite?
             _axState[s_fSimpleFrame] = ((bits & Ole32.OLEMISC.SIMPLEFRAME) != 0);
         }
 

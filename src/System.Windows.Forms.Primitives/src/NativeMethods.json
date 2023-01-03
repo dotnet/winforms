@@ -13,6 +13,7 @@
       "IFileOpenDialog.Show",
       "IGlobalInterfaceTable.GetInterfaceFromGlobal",
       "IGlobalInterfaceTable.RevokeInterfaceFromGlobal",
+      "IPropertyBag.Read",
       "IStorage.CreateStream",
       "IStorage.OpenStream",
       "IUnknown.QueryInterface"

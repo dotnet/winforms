@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
@@ -38,14 +36,14 @@ namespace System.Windows.Forms.Design.Behavior
         ///  SnapLine constructor that takes the type and offset of SnapLine.
         /// </summary>
         public SnapLine(SnapLineType type, int offset)
-            : this(type, offset, null, SnapLinePriority.Low)
+            : this(type, offset, filter: null, SnapLinePriority.Low)
         {
         }
 
         /// <summary>
         ///  SnapLine constructor that takes the type, offset and filter of SnapLine.
         /// </summary>
-        public SnapLine(SnapLineType type, int offset, string filter)
+        public SnapLine(SnapLineType type, int offset, string? filter)
             : this(type, offset, filter, SnapLinePriority.Low)
         {
         }
@@ -54,14 +52,14 @@ namespace System.Windows.Forms.Design.Behavior
         ///  SnapLine constructor that takes the type, offset, and priority of SnapLine.
         /// </summary>
         public SnapLine(SnapLineType type, int offset, SnapLinePriority priority)
-            : this(type, offset, null, priority)
+            : this(type, offset, filter: null, priority)
         {
         }
 
         /// <summary>
         ///  SnapLine constructor that takes the type, offset, filter, and priority of the SnapLine.
         /// </summary>
-        public SnapLine(SnapLineType type, int offset, string filter, SnapLinePriority priority)
+        public SnapLine(SnapLineType type, int offset, string? filter, SnapLinePriority priority)
         {
             SnapLineType = type;
             Offset = offset;
@@ -74,7 +72,7 @@ namespace System.Windows.Forms.Design.Behavior
         ///  Setting this filter will allow only those SnapLines with similar filters to align
         ///  to one another.
         /// </summary>
-        public string Filter { get; }
+        public string? Filter { get; }
 
         /// <summary>
         ///  Returns true if the SnapLine is of a horizontal type.

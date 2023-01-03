@@ -5,23 +5,99 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
 using static Interop;
-using IAdviseSink = System.Runtime.InteropServices.ComTypes.IAdviseSink;
 
 namespace System.Windows.Forms
 {
     public partial class Control
     {
+        // Helper methods for retrieving ActiveX properties.
+        // We abstract these through another method so we do not force JIT the ActiveX codebase.
+
+        private Color ActiveXAmbientBackColor
+        {
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            get => ActiveXInstance.AmbientBackColor;
+        }
+
+        private Color ActiveXAmbientForeColor
+        {
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            get => ActiveXInstance.AmbientForeColor;
+        }
+
+        private Font? ActiveXAmbientFont
+        {
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            get => ActiveXInstance.AmbientFont;
+        }
+
+        private bool ActiveXEventsFrozen
+        {
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            get => ActiveXInstance.EventsFrozen;
+        }
+
+        private IntPtr ActiveXHWNDParent
+        {
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            get => ActiveXInstance.HWNDParent;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private Region ActiveXMergeRegion(Region region) => ActiveXInstance.MergeRegion(region);
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void ActiveXOnFocus(bool focus) => ActiveXInstance.OnFocus(focus);
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void ActiveXViewChanged() => ActiveXInstance.ViewChangedInternal();
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void ActiveXUpdateBounds(ref int x, ref int y, ref int width, ref int height, SET_WINDOW_POS_FLAGS flags)
+            => ActiveXInstance.UpdateBounds(ref x, ref y, ref width, ref height, flags);
+
         /// <summary>
-        ///  This class holds all of the state data for an ActiveX control and
-        ///  supplies the implementation for many of the non-trivial methods.
+        ///  Retrieves the ActiveX control implementation for this control.
+        ///  This will demand create the implementation if it does not already exist.
+        /// </summary>
+        private ActiveXImpl ActiveXInstance
+        {
+            get
+            {
+                ActiveXImpl? activeXImpl = (ActiveXImpl?)Properties.GetObject(s_activeXImplProperty);
+                if (activeXImpl is null)
+                {
+                    // Don't allow top level objects to be hosted as activeX controls.
+                    if (GetState(States.TopLevel))
+                    {
+                        throw new NotSupportedException(SR.AXTopLevelSource);
+                    }
+
+                    activeXImpl = new ActiveXImpl(this);
+
+                    // PERF: IsActiveX is called quite a bit - checked everywhere from sizing to event raising. Using a
+                    // state bit to track PropActiveXImpl instead of fetching from the property store.
+                    SetExtendedState(ExtendedStates.IsActiveX, true);
+                    Properties.SetObject(s_activeXImplProperty, activeXImpl);
+                }
+
+                return activeXImpl;
+            }
+        }
+
+        /// <summary>
+        ///  This class holds all of the state data for an ActiveX control and supplies the implementation for many of
+        ///  the non-trivial methods.
         /// </summary>
         private unsafe partial class ActiveXImpl : MarshalByRefObject, IWindowTarget
         {
@@ -48,8 +124,8 @@ namespace System.Windows.Forms
             private IOleClientSite.Interface? _clientSite;
             private Ole32.IOleInPlaceUIWindow? _inPlaceUiWindow;
             private Ole32.IOleInPlaceFrame? _inPlaceFrame;
-            private readonly List<IAdviseSink> _adviseList;
-            private IAdviseSink? _viewAdviseSink;
+            private readonly ComPointerList<IAdviseSink> _adviseList = new();
+            private IAdviseSink* _viewAdviseSink;
             private BitVector32 _activeXState;
             private readonly AmbientProperty[] _ambientProperties;
             private HACCEL _accelTable;
@@ -68,7 +144,6 @@ namespace System.Windows.Forms
                 _controlWindowTarget = control.WindowTarget;
                 control.WindowTarget = this;
 
-                _adviseList = new List<IAdviseSink>();
                 _activeXState = default(BitVector32);
                 _ambientProperties = new AmbientProperty[]
                 {
@@ -208,7 +283,7 @@ namespace System.Windows.Forms
                 {
                     if (s_logPixels.IsEmpty)
                     {
-                        s_logPixels = default(Point);
+                        s_logPixels = default;
                         using var dc = User32.GetDcScope.ScreenDC;
                         s_logPixels.X = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
                         s_logPixels.Y = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
@@ -221,9 +296,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::Advise
             /// </summary>
-            internal unsafe uint Advise(global::Windows.Win32.System.Com.IAdviseSink* pAdvSink)
+            internal unsafe uint Advise(IAdviseSink* pAdvSink)
             {
-                _adviseList.Add((IAdviseSink)Marshal.GetObjectForIUnknown((nint)pAdvSink));
+                _adviseList.Add(pAdvSink);
                 return (uint)_adviseList.Count;
             }
 
@@ -237,9 +312,8 @@ namespace System.Windows.Forms
                     InPlaceDeactivate();
                 }
 
-                if ((dwSaveOption == OLECLOSE.OLECLOSE_SAVEIFDIRTY ||
-                     dwSaveOption == OLECLOSE.OLECLOSE_PROMPTSAVE) &&
-                    _activeXState[s_isDirty])
+                if ((dwSaveOption == OLECLOSE.OLECLOSE_SAVEIFDIRTY || dwSaveOption == OLECLOSE.OLECLOSE_PROMPTSAVE)
+                    && _activeXState[s_isDirty])
                 {
                     _clientSite?.SaveObject();
                     SendOnSave();
@@ -343,24 +417,24 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::Draw.
             /// </summary>
-            internal unsafe HRESULT Draw(
-                Ole32.DVASPECT dwDrawAspect,
+            internal HRESULT Draw(
+                DVASPECT dwDrawAspect,
                 int lindex,
-                IntPtr pvAspect,
-                Ole32.DVTARGETDEVICE* ptd,
-                IntPtr hdcTargetDev,
-                IntPtr hdcDraw,
+                void* pvAspect,
+                DVTARGETDEVICE* ptd,
+                HDC hdcTargetDev,
+                HDC hdcDraw,
                 RECT* prcBounds,
                 RECT* lprcWBounds,
-                IntPtr pfnContinue,
-                uint dwContinue)
+                nint pfnContinue,
+                nuint dwContinue)
             {
-                // support the aspects required for multi-pass drawing
+                // Support the aspects required for multi-pass drawing.
                 switch (dwDrawAspect)
                 {
-                    case Ole32.DVASPECT.CONTENT:
-                    case Ole32.DVASPECT.OPAQUE:
-                    case Ole32.DVASPECT.TRANSPARENT:
+                    case DVASPECT.DVASPECT_CONTENT:
+                    case DVASPECT.DVASPECT_OPAQUE:
+                    case DVASPECT.DVASPECT_TRANSPARENT:
                         break;
                     default:
                         return HRESULT.DV_E_DVASPECT;
@@ -370,8 +444,7 @@ namespace System.Windows.Forms
                 // supported on classic metafiles.  We throw VIEW_E_DRAW in the hope that
                 // the caller figures it out and sends us a different DC.
 
-                HDC hdc = (HDC)hdcDraw;
-                OBJ_TYPE hdcType = (OBJ_TYPE)PInvoke.GetObjectType(hdc);
+                OBJ_TYPE hdcType = (OBJ_TYPE)PInvoke.GetObjectType(hdcDraw);
                 if (hdcType == OBJ_TYPE.OBJ_METADC)
                 {
                     return HRESULT.VIEW_E_DRAW;
@@ -398,13 +471,13 @@ namespace System.Windows.Forms
                     // system. This puts us in the most similar coordinates as we currently use.
                     Point p1 = new(rc.left, rc.top);
                     Point p2 = new(rc.right - rc.left, rc.bottom - rc.top);
-                    PInvoke.LPtoDP(hdc, new Point[] { p1, p2 }.AsSpan());
+                    PInvoke.LPtoDP(hdcDraw, new Point[] { p1, p2 }.AsSpan());
 
-                    iMode = (HDC_MAP_MODE)PInvoke.SetMapMode(hdc, HDC_MAP_MODE.MM_ANISOTROPIC);
-                    PInvoke.SetWindowOrgEx(hdc, 0, 0, &pW);
-                    PInvoke.SetWindowExtEx(hdc, _control.Width, _control.Height, (SIZE*)&sWindowExt);
-                    PInvoke.SetViewportOrgEx(hdc, p1.X, p1.Y, &pVp);
-                    PInvoke.SetViewportExtEx(hdc, p2.X, p2.Y, (SIZE*)&sViewportExt);
+                    iMode = (HDC_MAP_MODE)PInvoke.SetMapMode(hdcDraw, HDC_MAP_MODE.MM_ANISOTROPIC);
+                    PInvoke.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
+                    PInvoke.SetWindowExtEx(hdcDraw, _control.Width, _control.Height, (SIZE*)&sWindowExt);
+                    PInvoke.SetViewportOrgEx(hdcDraw, p1.X, p1.Y, &pVp);
+                    PInvoke.SetViewportExtEx(hdcDraw, p2.X, p2.Y, (SIZE*)&sViewportExt);
                 }
 
                 // Now do the actual drawing.  We must ask all of our children to draw as well.
@@ -413,11 +486,11 @@ namespace System.Windows.Forms
                     nint flags = (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
                     if (hdcType != OBJ_TYPE.OBJ_ENHMETADC)
                     {
-                        PInvoke.SendMessage(_control, User32.WM.PRINT, (WPARAM)hdc, (LPARAM)flags);
+                        PInvoke.SendMessage(_control, User32.WM.PRINT, (WPARAM)hdcDraw, (LPARAM)flags);
                     }
                     else
                     {
-                        _control.PrintToMetaFile(hdc, flags);
+                        _control.PrintToMetaFile(hdcDraw, flags);
                     }
                 }
                 finally
@@ -425,11 +498,11 @@ namespace System.Windows.Forms
                     // And clean up the DC
                     if (prcBounds is not null)
                     {
-                        PInvoke.SetWindowOrgEx(hdc, pW.X, pW.Y, lppt: null);
-                        PInvoke.SetWindowExtEx(hdc, sWindowExt.Width, sWindowExt.Height, lpsz: null);
-                        PInvoke.SetViewportOrgEx(hdc, pVp.X, pVp.Y, lppt: null);
-                        PInvoke.SetViewportExtEx(hdc, sViewportExt.Width, sViewportExt.Height, lpsz: null);
-                        PInvoke.SetMapMode(hdc, iMode);
+                        PInvoke.SetWindowOrgEx(hdcDraw, pW.X, pW.Y, lppt: null);
+                        PInvoke.SetWindowExtEx(hdcDraw, sWindowExt.Width, sWindowExt.Height, lpsz: null);
+                        PInvoke.SetViewportOrgEx(hdcDraw, pVp.X, pVp.Y, lppt: null);
+                        PInvoke.SetViewportExtEx(hdcDraw, sViewportExt.Width, sViewportExt.Height, lpsz: null);
+                        PInvoke.SetMapMode(hdcDraw, iMode);
                     }
                 }
 
@@ -506,11 +579,11 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::GetAdvise.
             /// </summary>
-            internal unsafe HRESULT GetAdvise(Ole32.DVASPECT* pAspects, Ole32.ADVF* pAdvf, IAdviseSink?[] ppAdvSink)
+            internal unsafe HRESULT GetAdvise(DVASPECT* pAspects, ADVF* pAdvf, IAdviseSink** ppAdvSink)
             {
                 if (pAspects is not null)
                 {
-                    *pAspects = Ole32.DVASPECT.CONTENT;
+                    *pAspects = DVASPECT.DVASPECT_CONTENT;
                 }
 
                 if (pAdvf is not null)
@@ -519,18 +592,18 @@ namespace System.Windows.Forms
 
                     if (_activeXState[s_viewAdviseOnlyOnce])
                     {
-                        *pAdvf |= Ole32.ADVF.ONLYONCE;
+                        *pAdvf |= ADVF.ADVF_ONLYONCE;
                     }
 
                     if (_activeXState[s_viewAdvisePrimeFirst])
                     {
-                        *pAdvf |= Ole32.ADVF.PRIMEFIRST;
+                        *pAdvf |= ADVF.ADVF_PRIMEFIRST;
                     }
                 }
 
                 if (ppAdvSink is not null)
                 {
-                    ppAdvSink[0] = _viewAdviseSink;
+                    *ppAdvSink = _viewAdviseSink;
                 }
 
                 return HRESULT.S_OK;
@@ -543,39 +616,42 @@ namespace System.Windows.Forms
             private bool GetAmbientProperty(Ole32.DispatchID dispid, out object? obj)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAmbientProperty");
-                Debug.Indent();
-
-                if (_clientSite is Oleaut32.IDispatch disp)
-                {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
-
-                    DISPPARAMS dispParams = default;
-                    object[] pvt = new object[1];
-                    Guid g = Guid.Empty;
-                    HRESULT hr = disp.Invoke(
-                        dispid,
-                        &g,
-                        PInvoke.LCID.USER_DEFAULT,
-                        DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
-                        &dispParams,
-                        pvt,
-                        null,
-                        null);
-
-                    if (hr.Succeeded)
-                    {
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"IDispatch::Invoke succeeded. VT={pvt[0].GetType().FullName}");
-                        obj = pvt[0];
-                        Debug.Unindent();
-                        return true;
-                    }
-
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"IDispatch::Invoke failed. HR: 0x{hr:X}");
-                }
-
-                Debug.Unindent();
 
                 obj = null;
+
+                if (_clientSite is not Oleaut32.IDispatch disp)
+                {
+                    return false;
+                }
+
+                Debug.Indent();
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
+
+                DISPPARAMS dispParams = default;
+                object[] pvt = new object[1];
+                Guid g = Guid.Empty;
+                HRESULT hr = disp.Invoke(
+                    dispid,
+                    &g,
+                    PInvoke.LCID.USER_DEFAULT,
+                    DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
+                    &dispParams,
+                    pvt,
+                    null,
+                    null);
+
+                if (hr.Succeeded)
+                {
+                    Debug.WriteLineIf(
+                        CompModSwitches.ActiveX.TraceInfo,
+                        $"IDispatch::Invoke succeeded. VT={pvt[0].GetType().FullName}");
+                    obj = pvt[0];
+                    Debug.Unindent();
+                    return true;
+                }
+
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"IDispatch::Invoke failed. HR: 0x{hr:X}");
+                Debug.Unindent();
 
                 return false;
             }
@@ -673,20 +749,17 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::GetExtent.
             /// </summary>
-            internal unsafe void GetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
+            internal unsafe void GetExtent(DVASPECT dwDrawAspect, Size* pSizel)
             {
-                if ((dwDrawAspect & Ole32.DVASPECT.CONTENT) != 0)
-                {
-                    Size size = _control.Size;
-
-                    Point pt = PixelToHiMetric(size.Width, size.Height);
-                    pSizel->Width = pt.X;
-                    pSizel->Height = pt.Y;
-                }
-                else
+                if (!dwDrawAspect.HasFlag(DVASPECT.DVASPECT_CONTENT))
                 {
                     ThrowHr(HRESULT.DV_E_DVASPECT);
                 }
+
+                Size size = _control.Size;
+                Point pt = PixelToHiMetric(size.Width, size.Height);
+                pSizel->Width = pt.X;
+                pSizel->Height = pt.Y;
             }
 
             /// <summary>
@@ -1012,19 +1085,22 @@ namespace System.Windows.Forms
             {
                 // We do everything through property bags because we support full fidelity
                 // in them.  So, load through that method.
-                PropertyBagStream bag = new PropertyBagStream();
+                PropertyBagStream bag = new();
                 bag.Read(stream);
-                Load(bag, null);
+                ComHelpers.GetComPointer(bag, out IPropertyBag* iPropertyBag);
+                Load(iPropertyBag, pErrorLog: null);
             }
 
             /// <summary>
             ///  Implements IPersistPropertyBag::Load
             /// </summary>
-            internal unsafe void Load(IPropertyBag.Interface pPropBag, IErrorLog* pErrorLog)
+            internal unsafe void Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                     _control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
+
+                using ComScope<IPropertyBag> scope = new(pPropBag);
 
                 for (int i = 0; i < props.Count; i++)
                 {
@@ -1038,7 +1114,7 @@ namespace System.Windows.Forms
                         {
                             fixed (char* pszPropName = props[i].Name)
                             {
-                                hr = pPropBag.Read(pszPropName, &variant, pErrorLog);
+                                hr = pPropBag->Read(pszPropName, &variant, pErrorLog);
                             }
 
                             obj = variant.ToObject();
@@ -1126,11 +1202,6 @@ namespace System.Windows.Forms
                             throw;
                         }
                     }
-                }
-
-                if (Marshal.IsComObject(pPropBag))
-                {
-                    Marshal.ReleaseComObject(pPropBag);
                 }
             }
 
@@ -1300,7 +1371,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Our implementation of IQuickActivate::QuickActivate
             /// </summary>
-            internal unsafe HRESULT QuickActivate(Ole32.QACONTAINER pQaContainer, Ole32.QACONTROL* pQaControl)
+            internal unsafe HRESULT QuickActivate(QACONTAINER* pQaContainer, QACONTROL* pQaControl)
             {
                 if (pQaControl is null)
                 {
@@ -1309,19 +1380,19 @@ namespace System.Windows.Forms
 
                 // Hookup our ambient colors
                 AmbientProperty prop = LookupAmbient(Ole32.DispatchID.AMBIENT_BACKCOLOR);
-                prop.Value = ColorTranslator.FromOle(unchecked((int)pQaContainer.colorBack));
+                prop.Value = ColorTranslator.FromOle((int)pQaContainer->colorBack);
 
                 prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FORECOLOR);
-                prop.Value = ColorTranslator.FromOle(unchecked((int)pQaContainer.colorFore));
+                prop.Value = ColorTranslator.FromOle((int)pQaContainer->colorFore);
 
                 // And our ambient font
-                if (pQaContainer.pFont is not null)
+                if (pQaContainer->pFont is not null)
                 {
                     prop = LookupAmbient(Ole32.DispatchID.AMBIENT_FONT);
 
                     try
                     {
-                        prop.Value = Font.FromHfont(pQaContainer.pFont.hFont);
+                        prop.Value = Font.FromHfont(pQaContainer->pFont->hFont);
                     }
                     catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                     {
@@ -1333,20 +1404,18 @@ namespace System.Windows.Forms
                 // Now use the rest of the goo that we got passed in.
                 pQaControl->cbSize = (uint)sizeof(Ole32.QACONTROL);
 
-                if (pQaContainer.pClientSite is not null)
+                if (pQaContainer->pClientSite is not null)
                 {
-                    using var clientSite = ComHelpers.GetComScope<IOleClientSite>(pQaContainer.pClientSite, out bool result);
-                    Debug.Assert(result);
-                    SetClientSite(clientSite);
+                    SetClientSite(pQaContainer->pClientSite);
                 }
 
-                if (pQaContainer.pAdviseSink is not null)
+                if (pQaContainer->pAdviseSink is not null)
                 {
-                    SetAdvise(Ole32.DVASPECT.CONTENT, 0, pQaContainer.pAdviseSink);
+                    SetAdvise(DVASPECT.DVASPECT_CONTENT, 0, (IAdviseSink*)pQaContainer->pAdviseSink);
                 }
 
                 ((IOleObject.Interface)_control).GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC status);
-                pQaControl->dwMiscStatus = (Ole32.OLEMISC)status;
+                pQaControl->dwMiscStatus = status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
                 // VB6 expects the control to do this during IQuickActivate, otherwise it will not hook events at runtime.
@@ -1357,7 +1426,7 @@ namespace System.Windows.Forms
                 // Note that the AdviseHelper handles some non-standard COM interop that is required in order to access
                 // the events on the CLR-supplied CCW (COM-callable Wrapper.
 
-                if ((pQaContainer.pUnkEventSink is not null) && (_control is UserControl))
+                if ((pQaContainer->pUnkEventSink is not null) && (_control is UserControl))
                 {
                     // Check if this control exposes events to COM.
                     Type? eventInterface = GetDefaultEventsInterface(_control.GetType());
@@ -1368,7 +1437,7 @@ namespace System.Windows.Forms
                         {
                             // For the default source interface, call IConnectionPoint.Advise with the supplied event sink.
                             // This is easier said than done. See notes in AdviseHelper.AdviseConnectionPoint.
-                            AdviseHelper.AdviseConnectionPoint(_control, pQaContainer.pUnkEventSink, eventInterface, out pQaControl->dwEventCookie);
+                            AdviseHelper.AdviseConnectionPoint(_control, pQaContainer->pUnkEventSink, eventInterface, out pQaControl->dwEventCookie);
                         }
                         catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                         {
@@ -1376,14 +1445,14 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (pQaContainer.pPropertyNotifySink is not null && Marshal.IsComObject(pQaContainer.pPropertyNotifySink))
+                if (pQaContainer->pPropertyNotifySink is not null)
                 {
-                    Marshal.ReleaseComObject(pQaContainer.pPropertyNotifySink);
+                    pQaContainer->pPropertyNotifySink->Release();
                 }
 
-                if (pQaContainer.pUnkEventSink is not null && Marshal.IsComObject(pQaContainer.pUnkEventSink))
+                if (pQaContainer->pUnkEventSink is not null)
                 {
-                    Marshal.ReleaseComObject(pQaContainer.pUnkEventSink);
+                    pQaContainer->pUnkEventSink->Release();
                 }
 
                 return HRESULT.S_OK;
@@ -1439,19 +1508,22 @@ namespace System.Windows.Forms
             {
                 // We do everything through property bags because we support full fidelity in them.
                 // So, save through that method.
-                PropertyBagStream bag = new PropertyBagStream();
-                Save(bag, fClearDirty, false);
+                PropertyBagStream bag = new();
+                ComHelpers.GetComPointer(bag, out IPropertyBag* iPropertyBag);
+                Save(iPropertyBag, fClearDirty, fSaveAllProperties: false);
                 bag.Write(stream);
             }
 
             /// <summary>
             ///  Implements IPersistPropertyBag::Save
             /// </summary>
-            internal void Save(IPropertyBag.Interface pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+            internal void Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                     _control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
+
+                using ComScope<IPropertyBag> scope = new(pPropBag);
 
                 for (int i = 0; i < props.Count; i++)
                 {
@@ -1489,13 +1561,8 @@ namespace System.Windows.Forms
                     Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
                     fixed (char* pszPropName = props[i].Name)
                     {
-                        pPropBag.Write(pszPropName, &variant);
+                        pPropBag->Write(pszPropName, &variant);
                     }
-                }
-
-                if (Marshal.IsComObject(pPropBag))
-                {
-                    Marshal.ReleaseComObject(pPropBag);
                 }
 
                 if (fClearDirty)
@@ -1505,38 +1572,37 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Fires the OnSave event to all of our IAdviseSink
-            ///  listeners.  Used for ActiveXSourcing.
+            ///  Fires the OnSave event to all of our IAdviseSink listeners. Used for ActiveXSourcing.
             /// </summary>
             private void SendOnSave()
             {
                 int cnt = _adviseList.Count;
                 for (int i = 0; i < cnt; i++)
                 {
-                    IAdviseSink s = _adviseList[i];
+                    IAdviseSink* s = _adviseList[i];
                     Debug.Assert(s is not null, "NULL in our advise list");
-                    s.OnSave();
+                    s->OnSave();
                 }
             }
 
             /// <summary>
             ///  Implements IViewObject2::SetAdvise.
             /// </summary>
-            internal HRESULT SetAdvise(Ole32.DVASPECT aspects, Ole32.ADVF advf, IAdviseSink pAdvSink)
+            internal HRESULT SetAdvise(DVASPECT aspects, ADVF advf, IAdviseSink* pAdvSink)
             {
-                // if it's not a content aspect, we don't support it.
-                if ((aspects & Ole32.DVASPECT.CONTENT) == 0)
+                // If it's not a content aspect, we don't support it.
+                if (!aspects.HasFlag(DVASPECT.DVASPECT_CONTENT))
                 {
                     return HRESULT.DV_E_DVASPECT;
                 }
 
                 // Set up some flags to return from GetAdvise.
-                _activeXState[s_viewAdvisePrimeFirst] = (advf & Ole32.ADVF.PRIMEFIRST) != 0;
-                _activeXState[s_viewAdviseOnlyOnce] = (advf & Ole32.ADVF.ONLYONCE) != 0;
+                _activeXState[s_viewAdvisePrimeFirst] = advf.HasFlag(ADVF.ADVF_PRIMEFIRST);
+                _activeXState[s_viewAdviseOnlyOnce] = advf.HasFlag(ADVF.ADVF_ONLYONCE);
 
-                if (_viewAdviseSink is not null && Marshal.IsComObject(_viewAdviseSink))
+                if (_viewAdviseSink is not null)
                 {
-                    Marshal.ReleaseComObject(_viewAdviseSink);
+                    _viewAdviseSink->Release();
                 }
 
                 _viewAdviseSink = pAdvSink;
@@ -1598,75 +1664,70 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::SetExtent
             /// </summary>
-            internal unsafe void SetExtent(Ole32.DVASPECT dwDrawAspect, Size* pSizel)
+            internal unsafe void SetExtent(DVASPECT dwDrawAspect, Size* pSizel)
             {
-                if ((dwDrawAspect & Ole32.DVASPECT.CONTENT) != 0)
+                if (!dwDrawAspect.HasFlag(DVASPECT.DVASPECT_CONTENT))
                 {
-                    if (_activeXState[s_changingExtents])
+                    // We don't support any other aspects
+                    ThrowHr(HRESULT.DV_E_DVASPECT);
+                }
+
+                if (_activeXState[s_changingExtents])
+                {
+                    return;
+                }
+
+                _activeXState[s_changingExtents] = true;
+
+                try
+                {
+                    Size size = new Size(HiMetricToPixel(pSizel->Width, pSizel->Height));
+                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"SetExtent : new size:{size.ToString()}");
+
+                    // If we're in place active, let the in place site set our bounds.
+                    // Otherwise, just set it on our control directly.
+                    if (_activeXState[s_inPlaceActive] && _clientSite is Ole32.IOleInPlaceSite ioleClientSite)
+                    {
+                        Rectangle bounds = _control.Bounds;
+                        bounds.Location = new Point(bounds.X, bounds.Y);
+                        Size adjusted = new Size(size.Width, size.Height);
+                        bounds.Width = adjusted.Width;
+                        bounds.Height = adjusted.Height;
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Announcing to in place site that our rect has changed.");
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"            Announcing rect = {bounds}");
+                        Debug.Assert(_clientSite is not null, "How can we setextent before we are sited??");
+
+                        RECT posRect = bounds;
+                        ioleClientSite.OnPosRectChange(&posRect);
+                    }
+
+                    _control.Size = size;
+
+                    // Check to see if the control overwrote our size with its own values.
+                    if (_control.Size.Equals(size))
                     {
                         return;
                     }
 
-                    _activeXState[s_changingExtents] = true;
+                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Control has changed size. Setting dirty bit");
+                    _activeXState[s_isDirty] = true;
 
-                    try
+                    // If we're not inplace active, then announce that the view changed.
+                    if (!_activeXState[s_inPlaceActive])
                     {
-                        Size size = new Size(HiMetricToPixel(pSizel->Width, pSizel->Height));
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : new size:" + size.ToString());
-
-                        // If we're in place active, let the in place site set our bounds.
-                        // Otherwise, just set it on our control directly.
-                        if (_activeXState[s_inPlaceActive])
-                        {
-                            if (_clientSite is Ole32.IOleInPlaceSite ioleClientSite)
-                            {
-                                Rectangle bounds = _control.Bounds;
-                                bounds.Location = new Point(bounds.X, bounds.Y);
-                                Size adjusted = new Size(size.Width, size.Height);
-                                bounds.Width = adjusted.Width;
-                                bounds.Height = adjusted.Height;
-                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Announcing to in place site that our rect has changed.");
-                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "            Announcing rect = " + bounds);
-                                Debug.Assert(_clientSite is not null, "How can we setextent before we are sited??");
-
-                                RECT posRect = bounds;
-                                ioleClientSite.OnPosRectChange(&posRect);
-                            }
-                        }
-
-                        _control.Size = size;
-
-                        // Check to see if the control overwrote our size with
-                        // its own values.
-                        if (!_control.Size.Equals(size))
-                        {
-                            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Control has changed size.  Setting dirty bit");
-                            _activeXState[s_isDirty] = true;
-
-                            // If we're not inplace active, then announce that the view changed.
-                            if (!_activeXState[s_inPlaceActive])
-                            {
-                                ViewChanged();
-                            }
-
-                            // We need to call RequestNewObjectLayout
-                            // here so we visually display our new extents.
-                            if (!_activeXState[s_inPlaceActive] && _clientSite is not null)
-                            {
-                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Requesting new Object layout.");
-                                _clientSite.RequestNewObjectLayout();
-                            }
-                        }
+                        ViewChanged();
                     }
-                    finally
+
+                    // We need to call RequestNewObjectLayout here so we visually display our new extents.
+                    if (!_activeXState[s_inPlaceActive] && _clientSite is not null)
                     {
-                        _activeXState[s_changingExtents] = false;
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Requesting new Object layout.");
+                        _clientSite.RequestNewObjectLayout();
                     }
                 }
-                else
+                finally
                 {
-                    // We don't support any other aspects
-                    ThrowHr(HRESULT.DV_E_DVASPECT);
+                    _activeXState[s_changingExtents] = false;
                 }
             }
 
@@ -1695,15 +1756,15 @@ namespace System.Windows.Forms
                     Debug.WriteLine("SetObjectRects:");
                     Debug.Indent();
 
-                    Debug.WriteLine("PosLeft:    " + lprcPosRect->left.ToString(CultureInfo.InvariantCulture));
-                    Debug.WriteLine("PosTop:     " + lprcPosRect->top.ToString(CultureInfo.InvariantCulture));
-                    Debug.WriteLine("PosRight:   " + lprcPosRect->right.ToString(CultureInfo.InvariantCulture));
-                    Debug.WriteLine("PosBottom:  " + lprcPosRect->bottom.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine($"PosLeft:    {lprcPosRect->left}");
+                    Debug.WriteLine($"PosTop:     {lprcPosRect->top}");
+                    Debug.WriteLine($"PosRight:   {lprcPosRect->right}");
+                    Debug.WriteLine($"PosBottom:  {lprcPosRect->bottom}");
 
-                    Debug.WriteLine("ClipLeft:   " + lprcClipRect->left.ToString(CultureInfo.InvariantCulture));
-                    Debug.WriteLine("ClipTop:    " + lprcClipRect->top.ToString(CultureInfo.InvariantCulture));
-                    Debug.WriteLine("ClipRight:  " + lprcClipRect->right.ToString(CultureInfo.InvariantCulture));
-                    Debug.WriteLine("ClipBottom: " + lprcClipRect->bottom.ToString(CultureInfo.InvariantCulture));
+                    Debug.WriteLine($"ClipLeft:   {lprcClipRect->left}");
+                    Debug.WriteLine($"ClipTop:    {lprcClipRect->top}");
+                    Debug.WriteLine($"ClipRight:  {lprcClipRect->right}");
+                    Debug.WriteLine($"ClipBottom: {lprcClipRect->bottom}");
 
                     Debug.Unindent();
                 }
@@ -1711,7 +1772,7 @@ namespace System.Windows.Forms
 
                 Rectangle posRect = Rectangle.FromLTRB(lprcPosRect->left, lprcPosRect->top, lprcPosRect->right, lprcPosRect->bottom);
 
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Set control bounds: " + posRect.ToString());
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Set control bounds: {posRect}");
 
                 // ActiveX expects to be notified when a control's bounds change, and also
                 // intends to notify us through SetObjectRects when we report that the
@@ -1723,7 +1784,7 @@ namespace System.Windows.Forms
                 // this returns from the container and comes back to our OnPosRectChange
                 // implementation, these new bounds will be handed back to the control
                 // for the actual window change.
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Old Control Bounds: " + _control.Bounds);
+                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Old Control Bounds: {_control.Bounds}");
                 if (_activeXState[s_adjustingRect])
                 {
                     _adjustRect->left = posRect.X;
@@ -1758,18 +1819,9 @@ namespace System.Windows.Forms
                 {
                     // The container wants us to clip, so figure out if we really need to.
                     Rectangle clipRect = *lprcClipRect;
-                    Rectangle intersect;
 
-                    // Trident always sends an empty ClipRect... and so, we check for that and not do an
-                    // intersect in that case.
-                    if (!clipRect.IsEmpty)
-                    {
-                        intersect = Rectangle.Intersect(posRect, clipRect);
-                    }
-                    else
-                    {
-                        intersect = posRect;
-                    }
+                    // Trident always sends an empty ClipRect, don't do an intersect in that case.
+                    Rectangle intersect = !clipRect.IsEmpty ? Rectangle.Intersect(posRect, clipRect) : posRect;
 
                     if (!intersect.Equals(posRect))
                     {
@@ -1799,8 +1851,7 @@ namespace System.Windows.Forms
                     _control.SetRegion(_control.Region);
                 }
 
-                // Yuck.  Forms^3 uses transparent overlay windows that appear to cause
-                // painting artifacts.  Flicker like a banshee.
+                // Forms^3 uses transparent overlay windows that appear to cause painting artifacts.
                 _control.Invalidate();
 
                 return HRESULT.S_OK;
@@ -1809,10 +1860,8 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Throws the given hresult. This is used by ActiveX sourcing.
             /// </summary>
-            internal static void ThrowHr(HRESULT hr)
-            {
-                throw new ExternalException(SR.ExternalException, (int)hr);
-            }
+            [DoesNotReturn]
+            internal static void ThrowHr(HRESULT hr) => throw new ExternalException(SR.ExternalException, (int)hr);
 
             /// <summary>
             ///  Handles IOleControl::TranslateAccelerator
@@ -1889,7 +1938,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // SITE processing.  We're not interested in the message, but the site may be.
+                // SITE processing. We're not interested in the message, but the site may be.
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource: Control did not process accelerator, handing to site");
                 if (_clientSite is Ole32.IOleControlSite ioleClientSite)
                 {
@@ -1953,13 +2002,9 @@ namespace System.Windows.Forms
                     return HRESULT.OLE_E_NOCONNECTION;
                 }
 
-                IAdviseSink sink = _adviseList[(int)dwConnection - 1];
+                IAdviseSink* sink = _adviseList[(int)dwConnection - 1];
                 _adviseList.RemoveAt((int)dwConnection - 1);
-                if (Marshal.IsComObject(sink))
-                {
-                    Marshal.ReleaseComObject(sink);
-                }
-
+                sink->Release();
                 return HRESULT.S_OK;
             }
 
@@ -1968,60 +2013,61 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe void UpdateBounds(ref int x, ref int y, ref int width, ref int height, SET_WINDOW_POS_FLAGS flags)
             {
-                if (!_activeXState[s_adjustingRect] && _activeXState[s_inPlaceVisible])
+                if (_activeXState[s_adjustingRect]
+                    || !_activeXState[s_inPlaceVisible]
+                    || _clientSite is not Ole32.IOleInPlaceSite ioleClientSite)
                 {
-                    if (_clientSite is Ole32.IOleInPlaceSite ioleClientSite)
-                    {
-                        var rc = default(RECT);
-                        if (flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOMOVE))
-                        {
-                            rc.left = _control.Left;
-                            rc.top = _control.Top;
-                        }
-                        else
-                        {
-                            rc.left = x;
-                            rc.top = y;
-                        }
+                    return;
+                }
 
-                        if (flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOSIZE))
-                        {
-                            rc.right = rc.left + _control.Width;
-                            rc.bottom = rc.top + _control.Height;
-                        }
-                        else
-                        {
-                            rc.right = rc.left + width;
-                            rc.bottom = rc.top + height;
-                        }
+                var rc = default(RECT);
+                if (flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOMOVE))
+                {
+                    rc.left = _control.Left;
+                    rc.top = _control.Top;
+                }
+                else
+                {
+                    rc.left = x;
+                    rc.top = y;
+                }
 
-                        // This member variable may be modified by SetObjectRects by the container.
-                        _adjustRect = &rc;
-                        _activeXState[s_adjustingRect] = true;
+                if (flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOSIZE))
+                {
+                    rc.right = rc.left + _control.Width;
+                    rc.bottom = rc.top + _control.Height;
+                }
+                else
+                {
+                    rc.right = rc.left + width;
+                    rc.bottom = rc.top + height;
+                }
 
-                        try
-                        {
-                            ioleClientSite.OnPosRectChange(&rc);
-                        }
-                        finally
-                        {
-                            _adjustRect = null;
-                            _activeXState[s_adjustingRect] = false;
-                        }
+                // This member variable may be modified by SetObjectRects by the container.
+                _adjustRect = &rc;
+                _activeXState[s_adjustingRect] = true;
 
-                        // On output, the new bounds will be reflected in  rc
-                        if (!flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOMOVE))
-                        {
-                            x = rc.left;
-                            y = rc.top;
-                        }
+                try
+                {
+                    ioleClientSite.OnPosRectChange(&rc);
+                }
+                finally
+                {
+                    _adjustRect = null;
+                    _activeXState[s_adjustingRect] = false;
+                }
 
-                        if (!flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOSIZE))
-                        {
-                            width = rc.right - rc.left;
-                            height = rc.bottom - rc.top;
-                        }
-                    }
+                // On output, the new bounds will be reflected in  rc
+                if (!flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOMOVE))
+                {
+                    x = rc.left;
+                    y = rc.top;
+                }
+
+                if (!flags.HasFlag(SET_WINDOW_POS_FLAGS.SWP_NOSIZE))
+                {
+                    width = rc.right - rc.left;
+                    height = rc.bottom - rc.top;
                 }
             }
 
@@ -2051,34 +2097,30 @@ namespace System.Windows.Forms
             /// </summary>
             private void ViewChanged()
             {
-                // send the view change notification to anybody listening.
+                // Send the view change notification to anybody listening.
                 //
-                // Note: Word2000 won't resize components correctly if an OnViewChange notification
-                //       is sent while the component is persisting it's state.  The !m_fSaving check
-                //       is to make sure we don't call OnViewChange in this case.
-                if (_viewAdviseSink is not null && !_activeXState[s_saving])
+                // Note: Word2000 won't resize components correctly if an OnViewChange notification is sent while the
+                // component is persisting it's state. The !s_saving check is to make sure we don't call OnViewChange
+                // in this case.
+
+                if (_viewAdviseSink is null || _activeXState[s_saving])
                 {
-                    _viewAdviseSink.OnViewChange((int)Ole32.DVASPECT.CONTENT, -1);
+                    return;
+                }
 
-                    if (_activeXState[s_viewAdviseOnlyOnce])
-                    {
-                        if (Marshal.IsComObject(_viewAdviseSink))
-                        {
-                            Marshal.ReleaseComObject(_viewAdviseSink);
-                        }
+                _viewAdviseSink->OnViewChange((int)DVASPECT.DVASPECT_CONTENT, -1);
 
-                        _viewAdviseSink = null;
-                    }
+                if (_activeXState[s_viewAdviseOnlyOnce])
+                {
+                    _viewAdviseSink->Release();
+                    _viewAdviseSink = null;
                 }
             }
 
             /// <summary>
             ///  Called when the window handle of the control has changed.
             /// </summary>
-            void IWindowTarget.OnHandleChange(IntPtr newHandle)
-            {
-                _controlWindowTarget.OnHandleChange(newHandle);
-            }
+            void IWindowTarget.OnHandleChange(IntPtr newHandle) => _controlWindowTarget.OnHandleChange(newHandle);
 
             /// <summary>
             ///  Called to do control-specific processing for this window.

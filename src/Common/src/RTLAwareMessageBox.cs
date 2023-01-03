@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -16,8 +14,14 @@ namespace System.Windows.Forms
         ///  Displays a message box with specified text, caption, and style.
         ///  Makes the dialog RTL if the resources for this dll have been localized to a RTL language.
         /// </summary>
-        public static DialogResult Show(IWin32Window owner, string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
-                                        MessageBoxDefaultButton defaultButton, MessageBoxOptions options)
+        public static DialogResult Show(
+            IWin32Window? owner,
+            string text,
+            string caption,
+            MessageBoxButtons buttons,
+            MessageBoxIcon icon,
+            MessageBoxDefaultButton defaultButton,
+            MessageBoxOptions options)
         {
             if (RTLAwareMessageBox.IsRTLResources)
             {

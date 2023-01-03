@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Tests
                 return;
             }
 
-            dropDownMenu.CreateControl(fIgnoreVisible: true);
+            dropDownMenu.CreateControl(ignoreVisible: true);
 
             AccessibleObject upScrollButtonAccessibleObject = dropDownMenu.UpScrollButton.AccessibilityObject;
             AccessibleObject itemAccessibleObject1 = dropDownMenu.Items[0].AccessibilityObject;
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Tests
                 return;
             }
 
-            dropDownMenu.CreateControl(fIgnoreVisible: true);
+            dropDownMenu.CreateControl(ignoreVisible: true);
 
             AccessibleObject itemAccessibleObject1 = dropDownMenu.Items[0].AccessibilityObject;
             AccessibleObject itemAccessibleObject2 = dropDownMenu.Items[1].AccessibilityObject;

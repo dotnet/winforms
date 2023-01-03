@@ -347,6 +347,7 @@ IPersistStorage
 IPersistStreamInit
 IPicture
 IPictureDisp
+IQuickActivate
 IRecordInfo
 IsAccelerator
 IsAppThemed
@@ -362,8 +363,10 @@ IsWindow
 IsWindowEnabled
 IsWindowUnicode
 IsWindowVisible
-IUnknown
 IsZoomed
+IUnknown
+IViewObject
+IViewObject2
 KillTimer
 LineTo
 LIST_ITEM_FLAGS
