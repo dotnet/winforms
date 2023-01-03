@@ -129,18 +129,23 @@ namespace System.Drawing.Design
                 for (int i = 0; i < props.Length; i++)
                 {
                     PropertyInfo prop = props[i];
-                    if (prop.PropertyType == typeof(Color))
+                    if (prop.PropertyType != typeof(Color))
                     {
-                        MethodInfo? method = prop.GetGetMethod();
-                        if (method is not null && (method.Attributes & attrs) == attrs)
-                        {
-                            object?[]? tempIndex = null;
-                            if (prop.GetValue(null, tempIndex) is Color outColor)
-                            {
-                                colorList.Add(outColor);
-                            }
-                        }
+                        continue;
                     }
+
+                    MethodInfo? method = prop.GetGetMethod();
+                    if (method is null || (method.Attributes & attrs) != attrs)
+                    {
+                        continue;
+                    }
+
+                    if (prop.GetValue(obj: null, index: null) is not Color outColor)
+                    {
+                        continue;
+                    }
+
+                    colorList.Add(outColor);
                 }
 
                 return colorList.ToArray();
@@ -245,31 +250,33 @@ namespace System.Drawing.Design
 
             private void OnListDrawItem(object? sender, DrawItemEventArgs die)
             {
-                if (sender is ListBox lb)
+                if (sender is not ListBox lb)
                 {
-                    Color value = (Color)lb.Items[die.Index];
-                    Font font = Font;
-
-                    if (lb == lbCommon && !commonHeightSet)
-                    {
-                        lb.ItemHeight = lb.Font.Height;
-                        commonHeightSet = true;
-                    }
-                    else if (lb == lbSystem && !systemHeightSet)
-                    {
-                        lb.ItemHeight = lb.Font.Height;
-                        systemHeightSet = true;
-                    }
-
-                    Graphics graphics = die.Graphics;
-                    die.DrawBackground();
-
-                    editor.PaintValue(value, graphics, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22, die.Bounds.Height - 4));
-                    graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22 - 1, die.Bounds.Height - 4 - 1));
-                    Brush foreBrush = new SolidBrush(die.ForeColor);
-                    graphics.DrawString(value.Name, font, foreBrush, die.Bounds.X + 26, die.Bounds.Y);
-                    foreBrush.Dispose();
+                    return;
                 }
+
+                Color value = (Color)lb.Items[die.Index];
+                Font font = Font;
+
+                if (lb == lbCommon && !commonHeightSet)
+                {
+                    lb.ItemHeight = lb.Font.Height;
+                    commonHeightSet = true;
+                }
+                else if (lb == lbSystem && !systemHeightSet)
+                {
+                    lb.ItemHeight = lb.Font.Height;
+                    systemHeightSet = true;
+                }
+
+                Graphics graphics = die.Graphics;
+                die.DrawBackground();
+
+                editor.PaintValue(value, graphics, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22, die.Bounds.Height - 4));
+                graphics.DrawRectangle(SystemPens.WindowText, new Rectangle(die.Bounds.X + 2, die.Bounds.Y + 2, 22 - 1, die.Bounds.Height - 4 - 1));
+                Brush foreBrush = new SolidBrush(die.ForeColor);
+                graphics.DrawString(value.Name, font, foreBrush, die.Bounds.X + 26, die.Bounds.Y);
+                foreBrush.Dispose();
             }
 
             private void OnListKeyDown(object? sender, KeyEventArgs ke)
@@ -282,8 +289,11 @@ namespace System.Drawing.Design
 
             private void OnPalettePick(object? sender, EventArgs e)
             {
-                ColorPalette? p = (ColorPalette?)sender;
-                value = p is null ? null : GetBestColor(p.SelectedColor);
+                if (sender is ColorPalette palette)
+                {
+                    value = GetBestColor(palette.SelectedColor);
+                }
+
                 edSvc?.CloseDropDown();
             }
 
