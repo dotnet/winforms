@@ -439,9 +439,9 @@ namespace System.Windows.Forms
                 MethodInfo? methodInfo = targetType.GetMethod(
                     "Parse",
                     BindingFlags.Public | BindingFlags.Static,
-                    null,
+                    binder: null,
                     new Type[] { stringType, typeof(NumberStyles), typeof(IFormatProvider) },
-                    null);
+                    modifiers: null);
                 if (methodInfo is not null)
                 {
                     return methodInfo.Invoke(obj: null, new object?[] { (string?)value, NumberStyles.Any, formatInfo });
@@ -450,9 +450,9 @@ namespace System.Windows.Forms
                 methodInfo = targetType.GetMethod(
                     "Parse",
                     BindingFlags.Public | BindingFlags.Static,
-                    null,
+                    binder: null,
                     new Type[] { stringType, typeof(IFormatProvider) },
-                    null);
+                    modifiers: null);
                 if (methodInfo is not null)
                 {
                     return methodInfo.Invoke(obj: null, new object?[] { (string?)value, formatInfo });
