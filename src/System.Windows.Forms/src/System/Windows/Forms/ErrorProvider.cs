@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -509,11 +508,9 @@ namespace System.Windows.Forms
                 controlError[dataBinding.Control] = outputError;
             }
 
-            IEnumerator enumerator = controlError.GetEnumerator();
-            while (enumerator.MoveNext())
+            foreach (KeyValuePair<Control, string> entry in controlError)
             {
-                DictionaryEntry entry = (DictionaryEntry)enumerator.Current;
-                SetError((Control)entry.Key, (string)entry.Value);
+                SetError(entry.Key, entry.Value);
             }
         }
 
