@@ -436,37 +436,37 @@ namespace System.Windows.Forms
         {
             try
             {
-                MethodInfo? mi = targetType.GetMethod(
+                MethodInfo? methodInfo = targetType.GetMethod(
                     "Parse",
                     BindingFlags.Public | BindingFlags.Static,
                     null,
                     new Type[] { stringType, typeof(NumberStyles), typeof(IFormatProvider) },
                     null);
-                if (mi is not null)
+                if (methodInfo is not null)
                 {
-                    return mi.Invoke(obj: null, new object?[] { (string?)value, NumberStyles.Any, formatInfo });
+                    return methodInfo.Invoke(obj: null, new object?[] { (string?)value, NumberStyles.Any, formatInfo });
                 }
 
-                mi = targetType.GetMethod(
+                methodInfo = targetType.GetMethod(
                     "Parse",
                     BindingFlags.Public | BindingFlags.Static,
                     null,
                     new Type[] { stringType, typeof(IFormatProvider) },
                     null);
-                if (mi is not null)
+                if (methodInfo is not null)
                 {
-                    return mi.Invoke(obj: null, new object?[] { (string?)value, formatInfo });
+                    return methodInfo.Invoke(obj: null, new object?[] { (string?)value, formatInfo });
                 }
 
-                mi = targetType.GetMethod(
+                methodInfo = targetType.GetMethod(
                     "Parse",
                     BindingFlags.Public | BindingFlags.Static,
                     null,
                     new Type[] { stringType },
                     null);
-                if (mi is not null)
+                if (methodInfo is not null)
                 {
-                    return mi.Invoke(obj: null, new object?[] { (string?)value });
+                    return methodInfo.Invoke(obj: null, new object?[] { (string?)value });
                 }
 
                 return parseMethodNotFound;
