@@ -1602,10 +1602,12 @@ namespace System.Windows.Forms
                 SetToolStripState(STATE_USEDEFAULTRENDERER, false);
                 if (_renderer is null)
                 {
-                    Renderer = ToolStripManager.CreateRenderer(RenderMode);
+                    _renderer = ToolStripManager.CreateRenderer(RenderMode);
+                    _currentRendererType = _renderer.GetType();
+                    OnRendererChanged(EventArgs.Empty);
                 }
 
-                return _renderer!;
+                return _renderer;
             }
             set
             {
