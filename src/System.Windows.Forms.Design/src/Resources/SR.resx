@@ -1314,4 +1314,7 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="StringPropertyTruncatedComment" xml:space="preserve">
     <value> {0} [rest of string was truncated]";</value>
   </data>
+  <data name="ExceptionCollectionInvalidArgument" xml:space="preserve">
+    <value>Argument must only contain objects of type Exception.</value>
+  </data>
 </root>

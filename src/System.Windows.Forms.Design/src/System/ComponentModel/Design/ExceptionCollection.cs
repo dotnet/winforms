@@ -13,6 +13,16 @@ namespace System.ComponentModel.Design
 
         public ExceptionCollection(ArrayList? exceptions)
         {
+            if (exceptions is null)
+            {
+                return;
+            }
+
+            if (exceptions.ToArray().Any(e => e is not Exception))
+            {
+                throw new ArgumentException(SR.ExceptionCollectionInvalidArgument, nameof(exceptions));
+            }
+
             _exceptions = exceptions?.Cast<Exception>().ToList();
         }
 
