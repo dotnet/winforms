@@ -455,9 +455,16 @@ namespace System.Windows.Forms
             // (limitation of windows control)
 
             Debug.Assert(cf.nSizeMin <= cf.nSizeMax, "min and max font sizes are the wrong way around");
-            if (!Comdlg32.ChooseFontW(ref cf))
+
+            // The native font dialog does not currently support PermonitorV2 mode. We are setting DpiAwareness
+            // to SystemAware as a workaround. This action has no effect when the application is not running in PermonitorV2 mode.
+            // https://microsoft.visualstudio.com/OS/_workitems/edit/42835582
+            using (DpiHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
-                return false;
+                if (!Comdlg32.ChooseFontW(ref cf))
+                {
+                    return false;
+                }
             }
 
             if (!logFont.FaceName.IsEmpty)
