@@ -457,14 +457,14 @@ namespace System.Windows.Forms
             return base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, PreferredHeight);
         }
 
-        internal override void ReleaseUiaProvider(IntPtr handle)
+        internal override void ReleaseUiaProvider(HWND handle)
         {
             // UpDownEdit as TextBox is a control, that should disconnect its accessible object itself,
             // but if it supports Uia providers. If no, force disconnecting for UpDownEdit accessible object
             // as a part of UIA tree of Domain/NumericUpDown controls.
             if (!_upDownEdit.SupportsUiaProviders)
             {
-                _upDownEdit.ReleaseUiaProvider(_upDownEdit.HandleInternal);
+                _upDownEdit.ReleaseUiaProvider(_upDownEdit.HWNDInternal);
             }
 
             base.ReleaseUiaProvider(handle);

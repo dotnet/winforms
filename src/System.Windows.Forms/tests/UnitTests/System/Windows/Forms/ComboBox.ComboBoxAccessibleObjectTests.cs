@@ -418,7 +418,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(comboBox.Items.Count, accessibleObject.ItemAccessibleObjects.Count);
 
-            comboBox.ReleaseUiaProvider(comboBox.Handle);
+            comboBox.ReleaseUiaProvider(comboBox.HWND);
 
             Assert.Equal(0, accessibleObject.ItemAccessibleObjects.Count);
             Assert.True(comboBox.IsHandleCreated);

@@ -2549,7 +2549,7 @@ namespace System.Windows.Forms
 
         internal override void ReleaseUiaProvider()
         {
-            EditingComboBox?.ReleaseUiaProvider(IntPtr.Zero);
+            EditingComboBox?.ReleaseUiaProvider(HWND.Null);
 
             base.ReleaseUiaProvider();
         }

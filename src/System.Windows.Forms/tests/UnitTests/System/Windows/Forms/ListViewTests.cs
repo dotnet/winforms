@@ -5745,7 +5745,7 @@ namespace System.Windows.Forms.Tests
             using ListView listView = new();
             _ = listView.AccessibilityObject;
 
-            listView.ReleaseUiaProvider(listView.Handle);
+            listView.ReleaseUiaProvider(listView.HWND);
 
             Assert.Null(listView.TestAccessor().Dynamic._defaultGroup);
             Assert.True(listView.IsHandleCreated);

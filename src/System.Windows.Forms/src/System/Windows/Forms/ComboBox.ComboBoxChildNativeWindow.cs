@@ -61,7 +61,7 @@ namespace System.Windows.Forms
                         {
                             if (Handle != IntPtr.Zero)
                             {
-                                UiaCore.UiaReturnRawElementProvider(Handle, wParam: 0, lParam: 0, el: null);
+                                UiaCore.UiaReturnRawElementProvider(HWND, wParam: 0, lParam: 0, el: null);
                             }
 
                             if (OsVersion.IsWindows8OrGreater())

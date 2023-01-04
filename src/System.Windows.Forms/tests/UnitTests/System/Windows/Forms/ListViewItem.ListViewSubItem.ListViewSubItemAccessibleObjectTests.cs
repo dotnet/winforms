@@ -1061,7 +1061,7 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(listViewItem);
             EnforceAccessibleObjectCreation(listViewItem);
 
-            listView.ReleaseUiaProvider(listView.Handle);
+            listView.ReleaseUiaProvider(listView.HWND);
 
             Assert.Null(listViewSubItem.TestAccessor().Dynamic._accessibilityObject);
             Assert.True(listView.IsHandleCreated);

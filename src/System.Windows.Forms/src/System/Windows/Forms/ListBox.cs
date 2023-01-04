@@ -2083,7 +2083,7 @@ namespace System.Windows.Forms
             Items.SetItemInternal(index, Items[index]);
         }
 
-        internal override void ReleaseUiaProvider(IntPtr handle)
+        internal override void ReleaseUiaProvider(HWND handle)
         {
             ClearListItemAccessibleObjects();
             base.ReleaseUiaProvider(handle);

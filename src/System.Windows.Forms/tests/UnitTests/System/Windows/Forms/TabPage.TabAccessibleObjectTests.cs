@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Tests
             using TabPage tabPage = new();
             EnforceTabAccessibilityObjectCreation(tabPage);
 
-            tabPage.ReleaseUiaProvider(tabPage.Handle);
+            tabPage.ReleaseUiaProvider(tabPage.HWND);
 
             Assert.Null(tabPage.TestAccessor().Dynamic._tabAccessibilityObject);
             Assert.True(tabPage.IsHandleCreated);

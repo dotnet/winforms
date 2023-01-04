@@ -342,7 +342,7 @@ namespace System.Windows.Forms
                 _owner.Controls.Remove(value);
                 if (value.IsHandleCreated)
                 {
-                    value.ReleaseUiaProvider(value.HandleInternal);
+                    value.ReleaseUiaProvider(value.HWNDInternal);
                 }
             }
 

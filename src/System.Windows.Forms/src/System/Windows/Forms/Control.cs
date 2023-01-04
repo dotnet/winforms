@@ -2454,6 +2454,8 @@ namespace System.Windows.Forms
 
         internal IntPtr HandleInternal => _window.Handle;
 
+        internal HWND HWNDInternal => _window.HWND;
+
         /// <summary>
         ///  True if this control has child controls in its collection.  This
         ///  is more efficient than checking for Controls.Count > 0, but has the
@@ -9967,9 +9969,9 @@ namespace System.Windows.Forms
         ///  Releases UI Automation provider for specified window.
         /// </summary>
         /// <param name="handle">The window handle.</param>
-        internal virtual void ReleaseUiaProvider(IntPtr handle)
+        internal virtual void ReleaseUiaProvider(HWND handle)
         {
-            if (handle != IntPtr.Zero)
+            if (!handle.IsNull)
             {
                 // When a window that previously returned providers has been destroyed,
                 // you should notify UI Automation by calling the UiaReturnRawElementProvider
@@ -12114,7 +12116,7 @@ namespace System.Windows.Forms
 
             if (SupportsUiaProviders)
             {
-                ReleaseUiaProvider(HandleInternal);
+                ReleaseUiaProvider(HWNDInternal);
             }
 
             OnHandleDestroyed(EventArgs.Empty);
@@ -13640,7 +13642,6 @@ namespace System.Windows.Forms
         HWND IHandle<HWND>.Handle => HWND;
 
         internal HWND HWND => (HWND)Handle;
-        internal HWND HWNDInternal => (HWND)HandleInternal;
 
         internal virtual bool AllowsChildrenToShowToolTips() => true;
     }

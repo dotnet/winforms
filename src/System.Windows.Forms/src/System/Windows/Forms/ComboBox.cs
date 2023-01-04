@@ -3228,7 +3228,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override void ReleaseUiaProvider(IntPtr handle)
+        internal override void ReleaseUiaProvider(HWND handle)
         {
             if (!IsAccessibilityObjectCreated)
             {

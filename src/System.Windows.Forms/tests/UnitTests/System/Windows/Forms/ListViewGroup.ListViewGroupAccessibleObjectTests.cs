@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1353,7 +1353,7 @@ namespace System.Windows.Forms.Tests
             EnforceAccessibleObjectCreation(group);
             EnforceAccessibleObjectCreation(listView.DefaultGroup);
 
-            listView.ReleaseUiaProvider(listView.Handle);
+            listView.ReleaseUiaProvider(listView.HWND);
 
             Assert.Null(group.TestAccessor().Dynamic._accessibilityObject);
             Assert.Null(listView.DefaultGroup.TestAccessor().Dynamic._accessibilityObject);

@@ -501,7 +501,7 @@ namespace System.Windows.Forms.Tests
             secondLevelNode.Nodes.Add(thirdLevelNode);
             control.CreateControl();
 
-            control.ReleaseUiaProvider(control.Handle);
+            control.ReleaseUiaProvider(control.HWND);
 
             Assert.True(firstLevelNode.IsAccessibilityObjectDisconnected);
             Assert.True(secondLevelNode.IsAccessibilityObjectDisconnected);
