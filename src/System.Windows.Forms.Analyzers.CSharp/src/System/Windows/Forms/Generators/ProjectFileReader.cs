@@ -28,13 +28,7 @@ namespace System.Windows.Forms.Generators
                         return ((ApplicationConfig?)null, diagnostic);
                     }
 
-                    ApplicationConfig projectConfig = new()
-                    {
-                        EnableVisualStyles = enableVisualStyles,
-                        DefaultFont = font,
-                        HighDpiMode = highDpiMode,
-                        UseCompatibleTextRendering = useCompatibleTextRendering
-                    };
+                    ApplicationConfig projectConfig = new(enableVisualStyles, font?.ToString(), highDpiMode, useCompatibleTextRendering);
                     return (projectConfig, null);
                 });
 
