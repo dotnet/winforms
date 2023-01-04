@@ -22,7 +22,9 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(Ctor_ArrayList_TestData))]
         public void ExceptionCollection_Ctor_ArrayList(ArrayList exceptions)
         {
+#pragma warning disable WFDEV004 // Type or member is obsolete
             var collection = new ExceptionCollection(exceptions);
+#pragma warning restore WFDEV004 // Type or member is obsolete
             if (exceptions is null)
             {
                 Assert.Null(collection.Exceptions);
@@ -42,7 +44,9 @@ namespace System.ComponentModel.Design.Tests
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
+#pragma warning disable WFDEV004 // Type or member is obsolete
                 var collection = new ExceptionCollection(new ArrayList());
+#pragma warning restore WFDEV004 // Type or member is obsolete
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, collection));
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
@@ -52,7 +56,9 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void ExceptionCollection_GetObjectData_ThrowsPlatformNotSupportedException()
         {
+#pragma warning disable WFDEV004 // Type or member is obsolete
             var collection = new ExceptionCollection(new ArrayList());
+#pragma warning restore WFDEV004 // Type or member is obsolete
             Assert.Throws<PlatformNotSupportedException>(() => collection.GetObjectData(null, new StreamingContext()));
         }
     }

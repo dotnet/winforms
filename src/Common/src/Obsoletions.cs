@@ -22,6 +22,6 @@ internal static class Obsoletions
 #pragma warning restore WFDEV003 // Type or member is obsolete
     internal const string DomainItemAccessibleObjectDiagnosticId = "WFDEV003";
 
-    internal const string ExceptionCollectionMessage = $"ExceptionCollection has been deprecated. Use {nameof(AggregateException)} instead.";
+    internal const string ExceptionCollectionMessage = $"Use {nameof(AggregateException)} instead.";
     internal const string ExceptionCollectionDiagnosticId = "WFDEV004";
 }
