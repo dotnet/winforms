@@ -473,7 +473,7 @@ namespace System.Windows.Forms
             }
             catch (TargetInvocationException ex)
             {
-                throw new FormatException(ex.InnerException!.Message, ex.InnerException);
+                throw new FormatException(ex.InnerException?.Message, ex.InnerException);
             }
         }
 
