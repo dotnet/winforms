@@ -28,6 +28,26 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void MenuStripAccessibleObject_GetPropertyValue_IsControlElement_ReturnsExpected()
+        {
+            using MenuStrip menuStrip = new();
+
+            AccessibleObject accessibleObject = menuStrip.AccessibilityObject;
+
+            Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsControlElementPropertyId));
+        }
+
+        [WinFormsFact]
+        public void MenuStripAccessibleObject_GetPropertyValue_IsContentElement_ReturnsExpected()
+        {
+            using MenuStrip menuStrip = new();
+
+            AccessibleObject accessibleObject = menuStrip.AccessibilityObject;
+
+            Assert.False((bool)accessibleObject.GetPropertyValue(UIA.IsContentElementPropertyId));
+        }
+
+        [WinFormsFact]
         public void MenuStripAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
         {
             using var menuStrip = new MenuStrip();
