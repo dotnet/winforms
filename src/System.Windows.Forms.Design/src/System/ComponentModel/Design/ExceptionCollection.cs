@@ -9,6 +9,11 @@ using System.Runtime.Serialization;
 
 namespace System.ComponentModel.Design
 {
+    [Obsolete(
+            Obsoletions.ExceptionCollectionMessage,
+            error: false,
+            DiagnosticId = Obsoletions.ExceptionCollectionDiagnosticId,
+            UrlFormat = Obsoletions.SharedUrlFormat)]
     public sealed class ExceptionCollection : Exception
     {
         private readonly ArrayList _exceptions;
