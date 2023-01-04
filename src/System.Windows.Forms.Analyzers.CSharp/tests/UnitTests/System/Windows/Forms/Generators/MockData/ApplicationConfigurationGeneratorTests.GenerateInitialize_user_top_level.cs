@@ -25,6 +25,6 @@ internal static partial class ApplicationConfiguration
         global::System.Windows.Forms.Application.EnableVisualStyles();
         global::System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(true);
         global::System.Windows.Forms.Application.{|CS0117:SetHighDpiMode|}({|CS0103:HighDpiMode|}.DpiUnawareGdiScaled);
-        global::System.Windows.Forms.Application.{|CS0117:SetDefaultFont|}(new Font(new FontFamily("Microsoft Sans Serif"), 8.25f, (FontStyle)0, (GraphicsUnit)2));
+        global::System.Windows.Forms.Application.{|CS0117:SetDefaultFont|}(new global::System.Drawing.Font(new global::System.Drawing.FontFamily("Microsoft Sans Serif"), 8.25f, (global::System.Drawing.FontStyle)0, (global::System.Drawing.GraphicsUnit)2));
     }
 }

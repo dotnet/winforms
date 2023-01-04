@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Analyzers.Tests
                 FontDescriptor descriptor = new("Microsoft Sans Serif", 8.25f, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
 
                 _output.WriteLine(descriptor.ToString());
-                Assert.Equal("new Font(new FontFamily(\"Microsoft Sans Serif\"), 8.25f, (FontStyle)3, (GraphicsUnit)3)", descriptor.ToString());
+                Assert.Equal("new global::System.Drawing.Font(new global::System.Drawing.FontFamily(\"Microsoft Sans Serif\"), 8.25f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)", descriptor.ToString());
             }
         }
     }
