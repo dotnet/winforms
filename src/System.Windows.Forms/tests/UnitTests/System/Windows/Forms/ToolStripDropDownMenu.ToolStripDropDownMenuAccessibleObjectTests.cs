@@ -256,5 +256,73 @@ namespace System.Windows.Forms.Tests
             parentItem1.ParentInternal = null;
             parentItem2.ParentInternal = null;
         }
+
+        [WinFormsFact]
+        public void ToolStripDropDownMenuAccessible_GetPropertyValue_IsControlElement_ReturnsExpected_InToolStripMenuItem()
+        {
+            using ToolStripMenuItem menuItem = new();
+
+            ToolStripDropDown dropDown = menuItem.DropDown;
+
+            ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)dropDown.AccessibilityObject;
+
+            Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsControlElementPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripDropDownMenuAccessible_GetPropertyValue_IsControlElement_ReturnsExpected_InToolStripDropDownButton()
+        {
+            using ToolStripDropDownButton dropDownButton = new();
+
+            ToolStripDropDown dropDown = dropDownButton.DropDown;
+
+            ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)dropDown.AccessibilityObject;
+
+            Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsControlElementPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripDropDownMenuAccessible_GetPropertyValue_IsControlElement_ReturnsExpected_InContextMenuStrip()
+        {
+            using ContextMenuStrip contextMenu = new();
+
+            ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)contextMenu.AccessibilityObject;
+
+            Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsControlElementPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripDropDownMenuAccessible_GetPropertyValue_IsContentElement_ReturnsExpected_InToolStripMenuItem()
+        {
+            using ToolStripMenuItem menuItem = new();
+
+            ToolStripDropDown dropDown = menuItem.DropDown;
+
+            ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)dropDown.AccessibilityObject;
+
+            Assert.False((bool)accessibleObject.GetPropertyValue(UIA.IsContentElementPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripDropDownMenuAccessible_GetPropertyValue_IsContentElement_ReturnsExpected_InToolStripDropDownButton()
+        {
+            using ToolStripDropDownButton dropDownButton = new();
+
+            ToolStripDropDown dropDown = dropDownButton.DropDown;
+
+            ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)dropDown.AccessibilityObject;
+
+            Assert.False((bool)accessibleObject.GetPropertyValue(UIA.IsContentElementPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripDropDownMenuAccessible_GetPropertyValue_IsContentElement_ReturnsExpected_InContextMenuStrip()
+        {
+            using ContextMenuStrip contextMenu = new();
+
+            ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)contextMenu.AccessibilityObject;
+
+            Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsContentElementPropertyId));
+        }
     }
 }

@@ -176,6 +176,26 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ToolStripItemAccessibleObject_GetPropertyValue_IsControlElement_ReturnsExpected()
+        {
+            using ToolStripItem toolStripItem = new SubToolStripItem();
+
+            AccessibleObject accessibleObject = toolStripItem.AccessibilityObject;
+
+            Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsControlElementPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_GetPropertyValue_IsContentElement_ReturnsExpected()
+        {
+            using ToolStripItem toolStripItem = new SubToolStripItem();
+
+            AccessibleObject accessibleObject = toolStripItem.AccessibilityObject;
+
+            Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsContentElementPropertyId));
+        }
+
+        [WinFormsFact]
         public void ToolStripItemAccessibleObject_FragmentNavigate_Parent_ReturnsExpected()
         {
             using ToolStrip toolStrip = new();
