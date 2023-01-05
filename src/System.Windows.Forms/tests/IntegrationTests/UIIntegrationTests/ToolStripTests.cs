@@ -73,8 +73,8 @@ namespace System.Windows.Forms.UITests
             menu1.DropDownItems.Add(menu1Item1);
 
             using ToolStripMenuItem hiddenMenu = new("hiddenMenu");
-            using ToolStripMenuItem menu2Item1 = new("Item1");
-            hiddenMenu.DropDownItems.Add(menu2Item1);
+            using ToolStripMenuItem hiddenMenuItem1 = new("hiddenMenuItem1");
+            hiddenMenu.DropDownItems.Add(hiddenMenuItem1);
             hiddenMenu.DropDownClosed += (object? sender, EventArgs e) => { hiddenMenu.Visible = false; };
 
             using MenuStrip menuStrip = new();
