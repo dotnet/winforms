@@ -61,5 +61,31 @@ namespace System.Windows.Forms.UITests
                 Assert.Single(sharedImageList.Images);
             }
         }
+
+        // Regression test for https://github.com/dotnet/winforms/issues/7884
+        [WinFormsFact]
+        public void ToolStrip_Hiding_ToolStripMenuItem_OnDropDownClosed_ShouldNotThrow()
+        {
+            using Form form = new();
+
+            using ToolStripMenuItem menu1 = new("Menu1");
+            using ToolStripMenuItem menu1Item1 = new("Item1");
+            menu1.DropDownItems.Add(menu1Item1);
+
+            using ToolStripMenuItem hiddenMenu = new("hiddenMenu");
+            using ToolStripMenuItem hiddenMenuItem1 = new("hiddenMenuItem1");
+            hiddenMenu.DropDownItems.Add(hiddenMenuItem1);
+            hiddenMenu.DropDownClosed += (object? sender, EventArgs e) => { hiddenMenu.Visible = false; };
+
+            using MenuStrip menuStrip = new();
+            menuStrip.Items.Add(menu1);
+            menuStrip.Items.Add(hiddenMenu);
+
+            form.Controls.Add(menuStrip);
+            form.MainMenuStrip = menuStrip;
+            form.Show();
+            hiddenMenu.ShowDropDown();
+            menu1.Select();
+        }
     }
 }
