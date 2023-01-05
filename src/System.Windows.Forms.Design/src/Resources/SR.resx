@@ -1315,6 +1315,6 @@ Press Ctrl+Enter to accept Text.</value>
     <value> {0} [rest of string was truncated]";</value>
   </data>
   <data name="ExceptionCollectionInvalidArgument" xml:space="preserve">
-    <value>Argument must only contain objects of type Exception.</value>
+    <value>Argument must only contain objects of type '{0}'.</value>
   </data>
 </root>
