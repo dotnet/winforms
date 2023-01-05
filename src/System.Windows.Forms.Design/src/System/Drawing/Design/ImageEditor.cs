@@ -23,7 +23,7 @@ namespace System.Drawing.Design
         // can implement a different list of supported image types.
         protected virtual Type[] GetImageExtenders() => s_imageExtenders;
 
-        protected static string? CreateExtensionsString(string[] extensions, string sep)
+        protected static string? CreateExtensionsString(string?[]? extensions, string sep)
         {
             if (extensions is null || extensions.Length == 0)
             {

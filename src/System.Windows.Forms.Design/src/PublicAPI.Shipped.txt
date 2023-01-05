@@ -189,7 +189,7 @@ override System.Windows.Forms.Design.ImageListImageEditor.PaintValue(System.Draw
 ~static readonly System.Windows.Forms.Design.MenuCommands.TraySelectionMenu -> System.ComponentModel.Design.CommandID
 ~static System.ComponentModel.Design.ObjectSelectorEditor.ApplyTreeViewThemeStyles(System.Windows.Forms.TreeView treeView) -> void
 static System.Drawing.Design.BitmapEditor.BitmapExtensions -> System.Collections.Generic.List<string!>!
-static System.Drawing.Design.IconEditor.CreateExtensionsString(string![]! extensions, string! sep) -> string?
+static System.Drawing.Design.IconEditor.CreateExtensionsString(string?[]? extensions, string! sep) -> string?
 static System.Drawing.Design.IconEditor.CreateFilterEntry(System.Drawing.Design.IconEditor! editor) -> string!
 static System.Drawing.Design.ImageEditor.CreateExtensionsString(string![]! extensions, string! sep) -> string?
 static System.Drawing.Design.ImageEditor.CreateFilterEntry(System.Drawing.Design.ImageEditor! e) -> string!

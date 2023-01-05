@@ -21,7 +21,7 @@ namespace System.Drawing.Design
         private static readonly Type[] s_imageExtenders = Array.Empty<Type>();
         private FileDialog? _fileDialog;
 
-        protected static string? CreateExtensionsString(string[] extensions, string sep)
+        protected static string? CreateExtensionsString(string?[]? extensions, string sep)
         {
             const string StarDot = "*.";
 
