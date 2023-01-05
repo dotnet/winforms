@@ -1026,8 +1026,8 @@
         <note />
       </trans-unit>
       <trans-unit id="ExceptionCollectionInvalidArgument">
-        <source>Argument must only contain objects of type Exception.</source>
-        <target state="new">Argument must only contain objects of type Exception.</target>
+        <source>Argument must only contain objects of type '{0}'.</source>
+        <target state="new">Argument must only contain objects of type '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
