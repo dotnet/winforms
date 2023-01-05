@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Windows.Forms;
 
 namespace System.ComponentModel.Design
@@ -12,12 +10,12 @@ namespace System.ComponentModel.Design
     {
         public class SelectorNode : TreeNode
         {
-            public object value;
+            public object? value;
 
             /// <summary>
             ///  Sets label and value to given.
             /// </summary>
-            public SelectorNode(string label, object value) : base(label)
+            public SelectorNode(string label, object? value) : base(label)
             {
                 this.value = value;
             }

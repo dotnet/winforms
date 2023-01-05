@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms.Design
@@ -23,7 +21,7 @@ namespace System.Windows.Forms.Design
                     InnerHashtable[key] = new ContextMenuStripGroup(key);
                 }
 
-                return InnerHashtable[key] as ContextMenuStripGroup;
+                return (ContextMenuStripGroup)InnerHashtable[key]!;
             }
         }
 
@@ -32,9 +30,9 @@ namespace System.Windows.Forms.Design
             return InnerHashtable.ContainsKey(key);
         }
 
-        protected override void OnInsert(object key, object value)
+        protected override void OnInsert(object key, object? value)
         {
-            if (!(value is ContextMenuStripGroup))
+            if (value is not ContextMenuStripGroup)
             {
                 throw new NotSupportedException();
             }
@@ -42,9 +40,9 @@ namespace System.Windows.Forms.Design
             base.OnInsert(key, value);
         }
 
-        protected override void OnSet(object key, object oldValue, object newValue)
+        protected override void OnSet(object key, object? oldValue, object? newValue)
         {
-            if (!(newValue is ContextMenuStripGroup))
+            if (newValue is not ContextMenuStripGroup)
             {
                 throw new NotSupportedException();
             }

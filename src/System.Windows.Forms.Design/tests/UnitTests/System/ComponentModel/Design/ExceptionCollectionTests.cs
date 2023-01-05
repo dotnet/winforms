@@ -15,7 +15,7 @@ namespace System.ComponentModel.Design.Tests
         {
             yield return new object[] { null };
             yield return new object[] { new ArrayList() };
-            yield return new object[] { new ArrayList { 1, 2, 3 } };
+            yield return new object[] { new ArrayList { new Exception(), new Exception(), new Exception()} };
         }
 
         [Theory]
@@ -34,6 +34,13 @@ namespace System.ComponentModel.Design.Tests
                 Assert.Equal(collection.Exceptions, collection.Exceptions);
                 Assert.NotSame(collection.Exceptions, collection.Exceptions);
             }
+        }
+
+        [Fact]
+        public void ExceptionCollection_Ctor_ArguementException()
+        {
+            var exceptions = new ArrayList { 1, 2, 3 };
+            Assert.Throws<ArgumentException>(() => new ExceptionCollection(exceptions));
         }
 
         [Fact]

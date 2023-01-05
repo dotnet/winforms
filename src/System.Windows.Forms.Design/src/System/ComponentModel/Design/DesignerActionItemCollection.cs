@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.ComponentModel.Design
@@ -12,7 +10,7 @@ namespace System.ComponentModel.Design
     {
         public DesignerActionItem this[int index]
         {
-            get => (DesignerActionItem)(List[index]);
+            get => (DesignerActionItem)List[index]!;
             set => List[index] = value;
         }
 

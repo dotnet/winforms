@@ -17,7 +17,7 @@ namespace System.ComponentModel.Design
 
             public CDDesignerCommandSet(ComponentDesigner componentDesigner) => _componentDesigner = componentDesigner;
 
-            public override ICollection GetCommands(string name) => name switch
+            public override ICollection? GetCommands(string name) => name switch
             {
                 VerbsCommand => _componentDesigner.Verbs,
                 ActionListsCommand => _componentDesigner.ActionLists,

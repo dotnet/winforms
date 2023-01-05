@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Runtime.Serialization;
 
@@ -11,14 +9,29 @@ namespace System.ComponentModel.Design
 {
     public sealed class ExceptionCollection : Exception
     {
-        private readonly ArrayList _exceptions;
+        private readonly List<Exception>? _exceptions;
 
-        public ExceptionCollection(ArrayList exceptions)
+        public ExceptionCollection(ArrayList? exceptions)
+        {
+            if (exceptions is null)
+            {
+                return;
+            }
+
+            if (exceptions.ToArray().Any(e => e is not Exception))
+            {
+                throw new ArgumentException(SR.ExceptionCollectionInvalidArgument, nameof(exceptions));
+            }
+
+            _exceptions = exceptions?.Cast<Exception>().ToList();
+        }
+
+        internal ExceptionCollection(List<Exception>? exceptions)
         {
             _exceptions = exceptions;
         }
 
-        public ArrayList Exceptions => (ArrayList)_exceptions?.Clone();
+        public ArrayList? Exceptions => _exceptions is null ? null : new ArrayList(_exceptions);
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
