@@ -296,5 +296,12 @@ namespace System.Windows.Forms.UITests
         internal struct VoidResult
         {
         }
+
+        internal static Point GetCenter(Rectangle cell)
+        {
+            return new Point(GetMiddle(cell.Right, cell.Left), GetMiddle(cell.Top, cell.Bottom));
+
+            static int GetMiddle(int a, int b) => (a + b) / 2;
+        }
     }
 }

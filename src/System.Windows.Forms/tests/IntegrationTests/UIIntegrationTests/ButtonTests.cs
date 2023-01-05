@@ -385,13 +385,6 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        private static Point GetCenter(Rectangle rect)
-        {
-            int x = rect.Left + ((rect.Right - rect.Left) / 2);
-            int y = rect.Top + ((rect.Bottom - rect.Top) / 2);
-            return new Point(x, y);
-        }
-
         private async Task RunTestAsync(Func<Form, Button, Task> runTest)
         {
             await RunSingleControlTestAsync(

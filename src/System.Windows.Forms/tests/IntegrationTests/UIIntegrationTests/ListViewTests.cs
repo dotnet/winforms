@@ -561,13 +561,6 @@ namespace System.Windows.Forms.UITests
             listView.Items.Add(listViewItem);
         }
 
-        public static Point GetCenter(Rectangle rect)
-        {
-            int x = rect.Left + ((rect.Right - rect.Left) / 2);
-            int y = rect.Top + ((rect.Bottom - rect.Top) / 2);
-            return new Point(x, y);
-        }
-
         private async Task RunTestAsync(Func<Form, ListView, Task> runTest)
         {
             await RunSingleControlTestAsync(
