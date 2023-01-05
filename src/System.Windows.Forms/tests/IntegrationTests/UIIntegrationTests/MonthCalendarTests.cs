@@ -144,7 +144,7 @@ namespace System.Windows.Forms.UITests
                 var rect = GetCalendarGridRect(calendar, (MCGRIDINFO_PART)action);
 
                 // Move the mouse to the center of the 'Next' or 'Prev' buttons
-                var centerOfRect = new Point(rect.Left, rect.Top) + new Size(rect.Width / 2, rect.Height / 2);
+                var centerOfRect = GetCenter(rect);
                 var centerOnScreen = calendar.PointToScreen(centerOfRect);
                 await MoveMouseAsync(form, centerOnScreen);
 
