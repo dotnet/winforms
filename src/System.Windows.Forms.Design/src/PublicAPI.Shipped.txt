@@ -191,7 +191,7 @@ override System.Windows.Forms.Design.ImageListImageEditor.PaintValue(System.Draw
 static System.Drawing.Design.BitmapEditor.BitmapExtensions -> System.Collections.Generic.List<string!>!
 static System.Drawing.Design.IconEditor.CreateExtensionsString(string?[]? extensions, string! sep) -> string?
 static System.Drawing.Design.IconEditor.CreateFilterEntry(System.Drawing.Design.IconEditor! editor) -> string!
-static System.Drawing.Design.ImageEditor.CreateExtensionsString(string![]! extensions, string! sep) -> string?
+static System.Drawing.Design.ImageEditor.CreateExtensionsString(string?[]? extensions, string! sep) -> string?
 static System.Drawing.Design.ImageEditor.CreateFilterEntry(System.Drawing.Design.ImageEditor! e) -> string!
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.Create(string resxFile, string baseName, string generatedCodeNamespace, string resourcesNamespace, System.CodeDom.Compiler.CodeDomProvider codeProvider, bool internalClass, out string[] unmatchable) -> System.CodeDom.CodeCompileUnit
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.Create(string resxFile, string baseName, string generatedCodeNamespace, System.CodeDom.Compiler.CodeDomProvider codeProvider, bool internalClass, out string[] unmatchable) -> System.CodeDom.CodeCompileUnit
