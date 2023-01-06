@@ -10,11 +10,9 @@ using System.Diagnostics;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Microsoft.Win32;
-using static Interop;
+using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Design
 {
@@ -61,64 +59,72 @@ namespace System.Windows.Forms.Design
 
             private void LoadVersionInfo()
             {
-                string controlKey = "CLSID\\" + clsid;
-                RegistryKey key = Registry.ClassesRoot.OpenSubKey(controlKey);
+                string controlKey = $"CLSID\\{clsid}";
+                using RegistryKey key = Registry.ClassesRoot.OpenSubKey(controlKey);
 
-                //fail later -- not for tooltip info...
+                // Fail later- not for tooltip info.
                 if (key is not null)
                 {
-                    RegistryKey verKey = key.OpenSubKey("Version");
+                    using RegistryKey verKey = key.OpenSubKey("Version");
                     if (verKey is not null)
                     {
                         version = (string)verKey.GetValue("");
-                        verKey.Close();
                     }
-
-                    key.Close();
                 }
             }
 
             /// <summary>
-            /// <para>Creates an instance of the ActiveX control. Calls VS7 project system
-            /// to generate the wrappers if they are needed..</para>
+            ///  Creates an instance of the ActiveX control.
+            ///  Calls VS7 project system to generate the wrappers if they are needed.
             /// </summary>
             protected override IComponent[] CreateComponentsCore(IDesignerHost host)
             {
-                Debug.Assert(host is not null, "Designer host is null!!!");
+                Debug.Assert(host is not null, "Designer host is null");
 
                 // Get the DTE References object
-                //
                 object references = GetReferences(host);
                 if (references is not null)
                 {
                     try
                     {
-                        TYPELIBATTR tlibAttr = GetTypeLibAttr();
+                        TLIBATTR tlibAttr = GetTypeLibAttr();
 
                         object[] args = new object[5];
-                        args[0] = "{" + tlibAttr.guid.ToString() + "}";
+                        args[0] = $"{{{tlibAttr.guid}}}";
                         args[1] = (int)tlibAttr.wMajorVerNum;
                         args[2] = (int)tlibAttr.wMinorVerNum;
                         args[3] = tlibAttr.lcid;
 
                         args[4] = "";
-                        object tlbRef = references.GetType().InvokeMember("AddActiveX", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, references, args, CultureInfo.InvariantCulture);
-                        Debug.Assert(tlbRef is not null, "Null reference returned by AddActiveX (tlbimp) by the project system for: " + clsid);
+                        object tlbRef = references.GetType().InvokeMember(
+                            "AddActiveX",
+                            BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance,
+                            null,
+                            references,
+                            args,
+                            CultureInfo.InvariantCulture);
+                        Debug.Assert(tlbRef is not null, $"Null reference returned by AddActiveX (tlbimp) by the project system for: {clsid}");
 
                         args[4] = "aximp";
-                        object axRef = references.GetType().InvokeMember("AddActiveX", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, references, args, CultureInfo.InvariantCulture);
-                        Debug.Assert(axRef is not null, "Null reference returned by AddActiveX (aximp) by the project system for: " + clsid);
+                        object axRef = references.GetType().InvokeMember(
+                            "AddActiveX",
+                            BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance,
+                            null,
+                            references,
+                            args,
+                            CultureInfo.InvariantCulture);
+                        Debug.Assert(axRef is not null, $"Null reference returned by AddActiveX (aximp) by the project system for: {clsid}");
 
                         axctlType = GetAxTypeFromReference(axRef, host);
                     }
                     catch (TargetInvocationException tie)
                     {
-                        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Generating Ax References failed: " + tie.InnerException);
+                        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Generating Ax References failed: {tie.InnerException}");
                         throw tie.InnerException;
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Generating Ax References failed: " + e);
+                        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Generating Ax References failed: {e}");
                         throw;
                     }
                 }
@@ -128,8 +134,14 @@ namespace System.Windows.Forms.Design
                     IUIService uiSvc = (IUIService)host.GetService(typeof(IUIService));
                     if (uiSvc is null)
                     {
-                        RTLAwareMessageBox.Show(null, SR.AxImportFailed, null, MessageBoxButtons.OK, MessageBoxIcon.Error,
-                                        MessageBoxDefaultButton.Button1, 0);
+                        RTLAwareMessageBox.Show(
+                            null,
+                            SR.AxImportFailed,
+                            null,
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error,
+                            MessageBoxDefaultButton.Button1,
+                            0);
                     }
                     else
                     {
@@ -146,7 +158,7 @@ namespace System.Windows.Forms.Design
                 }
                 catch (Exception e)
                 {
-                    Debug.Fail("Could not create type: " + e);
+                    Debug.Fail($"Could not create type: {e}");
                     throw;
                 }
 
@@ -260,12 +272,12 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// <para>Gets the TypeLibAttr corresponding to the TLB containing our ActiveX control.</para>
+            ///  Gets the TypeLibAttr corresponding to the TLB containing our ActiveX control.
             /// </summary>
-            private TYPELIBATTR GetTypeLibAttr()
+            private unsafe TLIBATTR GetTypeLibAttr()
             {
-                string controlKey = "CLSID\\" + clsid;
-                RegistryKey key = Registry.ClassesRoot.OpenSubKey(controlKey);
+                string controlKey = $"CLSID\\{clsid}";
+                using RegistryKey key = Registry.ClassesRoot.OpenSubKey(controlKey);
                 if (key is null)
                 {
                     if (AxToolSwitch.TraceVerbose)
@@ -274,19 +286,16 @@ namespace System.Windows.Forms.Design
                 }
 
                 // Load the typelib into memory.
-                //
-                ITypeLib pTLB = null;
+                ITypeLib* pTLB = null;
 
                 // Open the key for the TypeLib
-                //
-                RegistryKey tlbKey = key.OpenSubKey("TypeLib");
+                using RegistryKey tlbKey = key.OpenSubKey("TypeLib");
 
                 if (tlbKey is not null)
                 {
                     // Get the major and minor version numbers.
-                    //
-                    RegistryKey verKey = key.OpenSubKey("Version");
-                    Debug.Assert(verKey is not null, "No version registry key found for: " + controlKey);
+                    using RegistryKey verKey = key.OpenSubKey("Version");
+                    Debug.Assert(verKey is not null, $"No version registry key found for: {controlKey}");
 
                     string ver = (string)verKey.GetValue("");
                     int dot = ver.IndexOf('.');
@@ -305,72 +314,57 @@ namespace System.Windows.Forms.Design
                         minorVer = short.Parse(ver.AsSpan(dot + 1, ver.Length - dot - 1), CultureInfo.InvariantCulture);
                     }
 
-                    Debug.Assert(majorVer > 0 && minorVer >= 0, "No Major version number found for: " + controlKey);
+                    Debug.Assert(majorVer > 0 && minorVer >= 0, $"No Major version number found for: {controlKey}");
                     verKey.Close();
 
                     object o = tlbKey.GetValue("");
 
                     // Try to get the TypeLib's Guid.
-                    //
                     var tlbGuid = new Guid((string)o);
-                    Debug.Assert(!tlbGuid.Equals(Guid.Empty), "No valid Guid found for: " + controlKey);
+                    Debug.Assert(!tlbGuid.Equals(Guid.Empty), $"No valid Guid found for: {controlKey}");
                     tlbKey.Close();
 
-                    try
-                    {
-                        pTLB = Oleaut32.LoadRegTypeLib(ref tlbGuid, majorVer, minorVer, Application.CurrentCulture.LCID);
-                    }
-                    catch (Exception e)
-                    {
-                        if (ClientUtils.IsCriticalException(e))
-                        {
-                            throw;
-                        }
-                    }
+                    HRESULT hr = PInvoke.LoadRegTypeLib(
+                        tlbGuid,
+                        (ushort)majorVer,
+                        (ushort)minorVer,
+                        (uint)Application.CurrentCulture.LCID,
+                        &pTLB);
                 }
 
                 // Try to load the TLB directly from the InprocServer32.
-                //
                 // If that fails, try to load the TLB based on the TypeLib guid key.
-                //
                 if (pTLB is null)
                 {
-                    RegistryKey inprocServerKey = key.OpenSubKey("InprocServer32");
+                    using RegistryKey inprocServerKey = key.OpenSubKey("InprocServer32");
                     if (inprocServerKey is not null)
                     {
-                        string inprocServer = (string)inprocServerKey.GetValue("");
-                        Debug.Assert(inprocServer is not null, "No valid InprocServer32 found for: " + controlKey);
-                        inprocServerKey.Close();
-
-                        pTLB = Oleaut32.LoadTypeLib(inprocServer);
+                        string inprocServer = (string)inprocServerKey.GetValue(string.Empty);
+                        Debug.Assert(inprocServer is not null, $"No valid InprocServer32 found for: {controlKey}");
+                        HRESULT hr = PInvoke.LoadTypeLib(inprocServer, &pTLB);
                     }
                 }
-
-                key.Close();
 
                 if (pTLB is not null)
                 {
                     try
                     {
-                        nint pTlibAttr = -1;
-                        pTLB.GetLibAttr(out pTlibAttr);
-                        if (pTlibAttr == -1)
+                        if (pTLB->GetLibAttr(out TLIBATTR* pTlibAttr).Failed)
                         {
                             throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
                         }
                         else
                         {
                             // Marshal the returned int as a TLibAttr structure
-                            //
-                            TYPELIBATTR typeLibraryAttributes = (TYPELIBATTR)Marshal.PtrToStructure(pTlibAttr, typeof(TYPELIBATTR));
-                            pTLB.ReleaseTLibAttr(pTlibAttr);
+                            TLIBATTR typeLibraryAttributes = *pTlibAttr;
+                            pTLB->ReleaseTLibAttr(pTlibAttr);
 
                             return typeLibraryAttributes;
                         }
                     }
                     finally
                     {
-                        Marshal.ReleaseComObject(pTLB);
+                        pTLB->Release();
                     }
                 }
                 else

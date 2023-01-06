@@ -3,30 +3,23 @@
 // See the LICENSE file in the project root for more information.
 
 using Windows.Win32.System.Ole;
-using System.Diagnostics;
 
-namespace Windows.Win32
+namespace Windows.Win32;
+
+internal static partial class PInvoke
 {
-    internal static partial class PInvoke
+    public static unsafe HRESULT RegisterDragDrop<T>(T hwnd, IDropTarget.Interface pDropTarget)
+        where T : IHandle<HWND>
     {
-        public static unsafe HRESULT RegisterDragDrop<T>(T hwnd, IDropTarget.Interface pDropTarget)
-            where T : IHandle<HWND>
+        using var dropTarget = ComHelpers.TryGetComScope<IDropTarget>(pDropTarget, out HRESULT hr);
+        if (hr.Failed)
         {
-            if (!ComHelpers.TryGetComPointer(pDropTarget, out IDropTarget* dropTarget))
-            {
-                return HRESULT.E_NOINTERFACE;
-            }
-
-            // RegisterDragDrop calls AddRef()
-            HRESULT result = RegisterDragDrop(hwnd.Handle, dropTarget);
-            if (result.Succeeded)
-            {
-                uint count = dropTarget->Release();
-                Debug.Assert(count > 0);
-            }
-
-            GC.KeepAlive(hwnd.Wrapper);
-            return result;
+            return hr;
         }
+
+        // RegisterDragDrop calls AddRef()
+        hr = RegisterDragDrop(hwnd.Handle, dropTarget);
+        GC.KeepAlive(hwnd.Wrapper);
+        return hr;
     }
 }

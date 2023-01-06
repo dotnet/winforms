@@ -3,7 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
-using static Interop;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests
 {
@@ -18,10 +19,11 @@ namespace System.Windows.Forms.Tests
             Type type = Type.GetTypeFromCLSID(CLSID_WebBrowser);
             object source = Activator.CreateInstance(type);
             var sink = new CustomPropertyNotifySink();
-            Type eventType = typeof(Ole32.IPropertyNotifySink);
+            Type eventType = typeof(IPropertyNotifySink.Interface);
 
             // Just verify that creation succeeded.
             var cookie = new AxHost.ConnectionPointCookie(source, sink, eventType);
+            cookie.Disconnect();
         }
 
         public static IEnumerable<object[]> Ctor_InvalidSource_TestData()
@@ -49,13 +51,13 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(typeof(int))]
         [InlineData(typeof(IComparable))]
-        [InlineData(typeof(Ole32.IConnectionPoint))]
-        [InlineData(typeof(Ole32.IConnectionPointContainer))]
-        public void ConnectionPointCookie_Ctor_InvalidEventInterface_ThrowsArgumentException(Type eventInterface)
+        [InlineData(typeof(IConnectionPoint.Interface))]
+        [InlineData(typeof(IConnectionPointContainer.Interface))]
+        public void ConnectionPointCookie_Ctor_NullSink_ThrowsInvalidCastException(Type eventInterface)
         {
             Type type = Type.GetTypeFromCLSID(CLSID_WebBrowser);
             object source = Activator.CreateInstance(type);
-            Assert.Throws<ArgumentException>(() => new AxHost.ConnectionPointCookie(source, null, eventInterface));
+            Assert.Throws<InvalidCastException>(() => new AxHost.ConnectionPointCookie(source, null, eventInterface));
         }
 
         public static IEnumerable<object[]> Ctor_InvalidSink_TestData()
@@ -70,7 +72,7 @@ namespace System.Windows.Forms.Tests
         {
             Type type = Type.GetTypeFromCLSID(CLSID_WebBrowser);
             object source = Activator.CreateInstance(type);
-            Type eventInterface = typeof(Ole32.IPropertyNotifySink);
+            Type eventInterface = typeof(IPropertyNotifySink.Interface);
             Assert.Throws<InvalidCastException>(() => new AxHost.ConnectionPointCookie(source, sink, eventInterface));
         }
 
@@ -80,7 +82,7 @@ namespace System.Windows.Forms.Tests
             Type type = Type.GetTypeFromCLSID(CLSID_WebBrowser);
             object source = Activator.CreateInstance(type);
             var sink = new CustomPropertyNotifySink();
-            Type eventType = typeof(Ole32.IPropertyNotifySink);
+            Type eventType = typeof(IPropertyNotifySink.Interface);
             var cookie = new AxHost.ConnectionPointCookie(source, sink, eventType);
             cookie.Disconnect();
 
@@ -88,11 +90,11 @@ namespace System.Windows.Forms.Tests
             cookie.Disconnect();
         }
 
-        private class CustomPropertyNotifySink : Ole32.IPropertyNotifySink
+        private class CustomPropertyNotifySink : IPropertyNotifySink.Interface
         {
-            public HRESULT OnChanged(Ole32.DispatchID dispID) => throw new NotImplementedException();
+            public HRESULT OnChanged(int dispID) => throw new NotImplementedException();
 
-            public HRESULT OnRequestEdit(Ole32.DispatchID dispID) => throw new NotImplementedException();
+            public HRESULT OnRequestEdit(int dispID) => throw new NotImplementedException();
         }
     }
 }

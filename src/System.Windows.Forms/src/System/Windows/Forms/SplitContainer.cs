@@ -236,7 +236,7 @@ namespace System.Windows.Forms
         /// </summary>
         [DefaultValue(BorderStyle.None)]
         [SRCategory(nameof(SR.CatAppearance))]
-        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [DispId(PInvoke.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.SplitterBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
@@ -824,7 +824,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
-        [DispId((int)Ole32.DispatchID.TABSTOP)]
+        [DispId(PInvoke.DISPID_TABSTOP)]
         [SRDescription(nameof(SR.ControlTabStopDescr))]
         public new bool TabStop
         {

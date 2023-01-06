@@ -29,13 +29,16 @@ namespace Windows.Win32.Foundation
     ///  <see cref="IUnknown.Interface"/> or some other interface tag to enforce that this is being used around
     ///  a struct that is actually a COM wrapper.
     /// </typeparam>
-    internal readonly unsafe ref struct ComScope<T> where T : unmanaged
+    internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IComIID
     {
         // Keeping internal as nint allows us to use Unsafe methods to get significantly better generated code.
         private readonly nint _value;
         public T* Value => (T*)_value;
+        public IUnknown* AsUnknown => (IUnknown*)_value;
 
         public ComScope(T* value) => _value = (nint)value;
+
+        // Can't add an operator for IUnknown* as we have ComScope<IUnknown>.
 
         public static implicit operator T*(in ComScope<T> scope) => (T*)scope._value;
 
@@ -50,6 +53,34 @@ namespace Windows.Win32.Foundation
         public static implicit operator void**(in ComScope<T> scope) => (void**)Unsafe.AsPointer(ref Unsafe.AsRef(scope._value));
 
         public bool IsNull => _value == 0;
+
+        public ComScope<TTo> TryQuery<TTo>(out HRESULT hr) where TTo : unmanaged, IComIID
+        {
+            ComScope<TTo> scope = new(null);
+            hr = ((IUnknown*)Value)->QueryInterface(IID.Get<TTo>(), scope);
+            return scope;
+        }
+
+        /// <summary>
+        ///  Attempt to create a <see cref="ComScope{T}"/> from the given COM interface.
+        /// </summary>
+        public static ComScope<T> TryQueryFrom<TFrom>(TFrom* from, out HRESULT hr) where TFrom : unmanaged, IComIID
+        {
+            ComScope<T> scope = new(null);
+            hr = from is null ? HRESULT.E_POINTER : ((IUnknown*)from)->QueryInterface(IID.Get<T>(), scope);
+            return scope;
+        }
+
+        /// <summary>
+        ///  Create a <see cref="ComScope{T}"/> from the given COM interface. Throws on failure.
+        /// </summary>
+        public static ComScope<T> QueryFrom<TFrom>(TFrom* from) where TFrom : unmanaged, IComIID
+        {
+            ComScope<T> scope = new(null);
+            HRESULT.E_POINTER.ThrowOnFailure();
+            ((IUnknown*)from)->QueryInterface(IID.Get<T>(), scope).ThrowOnFailure();
+            return scope;
+        }
 
         public void Dispose()
         {

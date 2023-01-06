@@ -405,8 +405,7 @@ namespace System.Windows.Forms
                 using ComScope<IPersistStream> persist = new(null);
                 picture.Value->QueryInterface(IID.Get<IPersistStream>(), persist).ThrowOnFailure();
 
-                using var pStream = ComHelpers.GetComScope<IStream>(stream, out bool result);
-                Debug.Assert(result);
+                using var pStream = ComHelpers.GetComScope<IStream>(stream);
                 persist.Value->Load(pStream);
 
                 if (picture.Value->Type == (short)PICTYPE.PICTYPE_ICON)

@@ -2,68 +2,66 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
-using static Interop;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public abstract partial class AxHost
 {
-    public abstract partial class AxHost
+    private unsafe class VBFormat : IVBFormat.Interface, IManagedWrapper<IVBFormat>
     {
-        private class VBFormat : Ole32.IVBFormat
+        HRESULT IVBFormat.Interface.Format(
+            VARIANT* vData,
+            BSTR bstrFormat,
+            void* lpBuffer,
+            ushort cb,
+            int lcid,
+            short sFirstDayOfWeek,
+            ushort sFirstWeekOfYear,
+            ushort* rcb)
         {
-            unsafe HRESULT Ole32.IVBFormat.Format(
-                IntPtr vData,
-                IntPtr bstrFormat,
-                IntPtr lpBuffer,
-                ushort cb,
-                int lcid,
-                Ole32.VarFormatFirstDayOfWeek sFirstDayOfWeek,
-                Ole32.VarFormatFirstWeekOfYear sFirstWeekOfYear,
-                ushort* rcb)
+            s_axHTraceSwitch.TraceVerbose("in Format");
+            if (rcb is null)
             {
-                s_axHTraceSwitch.TraceVerbose("in Format");
-                if (rcb is null)
-                {
-                    return HRESULT.E_INVALIDARG;
-                }
-
-                *rcb = 0;
-                if (lpBuffer == IntPtr.Zero || cb < 2)
-                {
-                    return HRESULT.E_INVALIDARG;
-                }
-
-                IntPtr pbstr = IntPtr.Zero;
-                HRESULT hr = Oleaut32.VarFormat(
-                    vData,
-                    bstrFormat,
-                    sFirstDayOfWeek,
-                    sFirstWeekOfYear,
-                    Oleaut32.VarFormatOptions.FORMAT_NOSUBSTITUTE,
-                    ref pbstr);
-                try
-                {
-                    ushort i = 0;
-                    if (pbstr != IntPtr.Zero)
-                    {
-                        short ch = 0;
-                        cb--;
-                        for (; i < cb && (ch = Marshal.ReadInt16(pbstr, i * 2)) != 0; i++)
-                        {
-                            Marshal.WriteInt16(lpBuffer, i * 2, ch);
-                        }
-                    }
-
-                    Marshal.WriteInt16(lpBuffer, i * 2, (short)0);
-                    *rcb = i;
-                }
-                finally
-                {
-                    Oleaut32.SysFreeString(pbstr);
-                }
-
-                return HRESULT.S_OK;
+                return HRESULT.E_INVALIDARG;
             }
+
+            *rcb = 0;
+            if (lpBuffer == null || cb < sizeof(char))
+            {
+                return HRESULT.E_INVALIDARG;
+            }
+
+            using BSTR pbstr = default;
+
+            const int VAR_FORMAT_NOSUBSTITUTE = 0x00000020;
+            HRESULT hr = PInvoke.VarFormat(
+                vData,
+                bstrFormat.Value,
+                (VARFORMAT_FIRST_DAY)sFirstDayOfWeek,
+                (VARFORMAT_FIRST_WEEK)sFirstWeekOfYear,
+                VAR_FORMAT_NOSUBSTITUTE,
+                &pbstr);
+
+            if (hr.Failed)
+            {
+                return hr;
+            }
+
+            Span<char> buffer = new(lpBuffer, cb / sizeof(char));
+            ReadOnlySpan<char> format = pbstr.AsSpan();
+            if (format.Length >= buffer.Length)
+            {
+                // Only want to copy what will fit and leave room for a null terminator.
+                format = format[..(buffer.Length - 1)];
+            }
+
+            format.CopyTo(buffer);
+            buffer[format.Length] = '\0';
+            *rcb = (ushort)(format.Length * sizeof(char));
+
+            return HRESULT.S_OK;
         }
     }
 }

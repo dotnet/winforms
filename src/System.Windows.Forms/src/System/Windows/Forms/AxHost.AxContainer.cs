@@ -5,20 +5,21 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Globalization;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using static Interop;
-using static Interop.Ole32;
-using Com = Windows.Win32.System.Com;
-using Ole = Windows.Win32.System.Ole;
 using System.Diagnostics.CodeAnalysis;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms;
 
 public abstract partial class AxHost
 {
-    internal partial class AxContainer : Ole.IOleContainer.Interface, IOleInPlaceFrame, IReflect
+    internal unsafe partial class AxContainer :
+        StandardDispatch,
+        IOleContainer.Interface,
+        IOleInPlaceFrame.Interface,
+        IOleInPlaceUIWindow.Interface,
+        IOleWindow.Interface,
+        IManagedWrapper<IOleContainer, IOleInPlaceFrame, IOleInPlaceUIWindow, IOleWindow, IDispatch, IDispatchEx>
     {
         internal ContainerControl _parent;
 
@@ -32,7 +33,7 @@ public abstract partial class AxHost
         private readonly HashSet<AxHost> _containerCache = new();
         private int _lockCount;
         private HashSet<Control>? _components;
-        private Dictionary<Control, Oleaut32.IExtender>? _proxyCache;
+        private Dictionary<Control, ExtenderProxy>? _extenderCache;
         private AxHost? _controlInEditMode;
 
         internal AxContainer(ContainerControl parent)
@@ -45,74 +46,51 @@ public abstract partial class AxHost
             }
         }
 
-        // IReflect methods:
-
-        MethodInfo? IReflect.GetMethod(
-            string name,
-            BindingFlags bindingAttr,
-            Binder? binder,
-            Type[] types,
-            ParameterModifier[]? modifiers) => null;
-
-        MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr) => null;
-
-        MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr) => Array.Empty<MethodInfo>();
-
-        FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr) => null;
-
-        FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr) => Array.Empty<FieldInfo>();
-
-        PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr) => null;
-
-        PropertyInfo? IReflect.GetProperty(
-            string name,
-            BindingFlags bindingAttr,
-            Binder? binder,
-            Type? returnType,
-            Type[] types,
-            ParameterModifier[]? modifiers) => null;
-
-        PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr) => Array.Empty<PropertyInfo>();
-
-        MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr) => Array.Empty<MemberInfo>();
-
-        MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr) => Array.Empty<MemberInfo>();
-
-        object? IReflect.InvokeMember(
-            string name,
-            BindingFlags invokeAttr,
-            Binder? binder,
-            object? target,
-            object?[]? args,
-            ParameterModifier[]? modifiers,
-            CultureInfo? culture,
-            string[]? namedParameters)
+        protected override unsafe HRESULT Invoke(
+            int dispId,
+            uint lcid,
+            DISPATCH_FLAGS flags,
+            DISPPARAMS* parameters,
+            VARIANT* result,
+            EXCEPINFO* exceptionInfo,
+            uint* argumentError)
         {
+            // This was provided via IReflect. No members were actually exposed via IReflect, so the only way this could
+            // ever come in was as a [DISPID] string. Not clear if this was accidental or intentional.
+
+            string name = $"[DISPID={dispId}]";
             foreach (AxHost control in _containerCache)
             {
                 if (GetNameForControl(control).Equals(name))
                 {
-                    return GetProxyForControl(control);
+                    IExtender.Interface? extender = GetExtenderProxyForControl(control);
+                    if (extender is null)
+                    {
+                        Debug.WriteLine($"No proxy for {name}, returning null");
+                        result = default;
+                    }
+                    else
+                    {
+                        *result = (VARIANT)ComHelpers.GetComPointer<IUnknown>(extender);
+                    }
+
+                    return HRESULT.S_OK;
                 }
             }
 
-            throw s_unknownErrorException;
+            return HRESULT.DISP_E_MEMBERNOTFOUND;
         }
 
-        // We returned null here historically, the interface is now annotated as not returning null.
-        // Risky to change.
-        Type IReflect.UnderlyingSystemType => null!;
-
-        internal Oleaut32.IExtender? GetProxyForControl(Control control)
+        internal ExtenderProxy? GetExtenderProxyForControl(Control control)
         {
-            Oleaut32.IExtender? extender = null;
-            if (_proxyCache is null)
+            ExtenderProxy? extender = null;
+            if (_extenderCache is null)
             {
-                _proxyCache = new();
+                _extenderCache = new();
             }
             else
             {
-                _proxyCache.TryGetValue(control, out extender);
+                _extenderCache.TryGetValue(control, out extender);
             }
 
             if (extender is null)
@@ -136,7 +114,7 @@ public abstract partial class AxHost
                     extender = new ExtenderProxy(control, this);
                 }
 
-                _proxyCache.Add(control, extender);
+                _extenderCache.Add(control, extender);
             }
 
             s_axHTraceSwitch.TraceVerbose($"found proxy {extender}");
@@ -191,7 +169,7 @@ public abstract partial class AxHost
             }
         }
 
-        internal Com.IEnumUnknown.Interface EnumControls(Control control, OLECONTF dwOleContF, GC_WCH dwWhich)
+        internal IEnumUnknown.Interface EnumControls(Control control, OLECONTF dwOleContF, ENUM_CONTROLS_WHICH_FLAGS dwWhich)
         {
             GetComponents();
             _lockCount++;
@@ -203,21 +181,25 @@ public abstract partial class AxHost
                 // Results are IUnknown
                 List<object>? results = null;
 
-                bool selected = dwWhich.HasFlag(GC_WCH.FSELECTED);
-                bool reverse = dwWhich.HasFlag(GC_WCH.FREVERSEDIR);
+                bool selected = dwWhich.HasFlag(ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_FSELECTED);
+                bool reverse = dwWhich.HasFlag(ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_FREVERSEDIR);
 
                 // Note that Visual Basic actually ignores the next/prev flags. We will not.
-                bool onlyNext = dwWhich.HasFlag(GC_WCH.FONLYNEXT);
-                bool onlyPrevious = dwWhich.HasFlag(GC_WCH.FONLYPREV);
+                bool onlyNext = dwWhich.HasFlag(ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_FONLYAFTER);
+                bool onlyPrevious = dwWhich.HasFlag(ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_FONLYBEFORE);
 
-                dwWhich &= ~(GC_WCH.FSELECTED | GC_WCH.FREVERSEDIR | GC_WCH.FONLYNEXT | GC_WCH.FONLYPREV);
+                dwWhich &= ~(ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_FSELECTED
+                    | ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_FREVERSEDIR
+                    | ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_FONLYAFTER
+                    | ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_FONLYBEFORE);
+
                 if (onlyNext && onlyPrevious)
                 {
                     Debug.Fail("onlyNext && onlyPrevious are both set");
                     throw s_invalidArgumentException;
                 }
 
-                if (dwWhich is GC_WCH.CONTAINER or GC_WCH.CONTAINED && (onlyNext || onlyPrevious))
+                if (dwWhich is ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_CONTAINER or ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_CONTAINED && (onlyNext || onlyPrevious))
                 {
                     Debug.Fail("GC_WCH_FONLYNEXT or FONLYPREV used with CONTAINER or CONTAINED");
                     throw s_invalidArgumentException;
@@ -231,11 +213,11 @@ public abstract partial class AxHost
                     default:
                         Debug.Fail("Bad GC_WCH");
                         throw s_invalidArgumentException;
-                    case GC_WCH.CONTAINED:
+                    case ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_CONTAINED:
                         controls = control.GetChildControlsInTabOrder(handleCreatedOnly: false);
                         additionalControl = null;
                         break;
-                    case GC_WCH.SIBLING:
+                    case ENUM_CONTROLS_WHICH_FLAGS.GCW_WCH_SIBLING:
                         if (control.ParentInternal is { } parent)
                         {
                             controls = parent.GetChildControlsInTabOrder(handleCreatedOnly: false);
@@ -251,7 +233,7 @@ public abstract partial class AxHost
 
                         additionalControl = null;
                         break;
-                    case GC_WCH.CONTAINER:
+                    case ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_CONTAINER:
                         results = new();
                         additionalControl = null;
                         MaybeAdd(results, control, selected, dwOleContF, allowContainingControls: false);
@@ -270,7 +252,7 @@ public abstract partial class AxHost
                         }
 
                         break;
-                    case GC_WCH.ALL:
+                    case ENUM_CONTROLS_WHICH_FLAGS.GC_WCH_ALL:
                         controls = GetComponents().ToArray();
                         additionalControl = _parent;
                         break;
@@ -332,13 +314,13 @@ public abstract partial class AxHost
                 }
             }
 
-            if (control is AxHost hostControl && flags.HasFlag(OLECONTF.EMBEDDINGS))
+            if (control is AxHost hostControl && flags.HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
             {
                 controls.Add(hostControl.GetOcx());
             }
-            else if (flags.HasFlag(OLECONTF.OTHERS))
+            else if (flags.HasFlag(OLECONTF.OLECONTF_OTHERS))
             {
-                if (GetProxyForControl(control) is { } proxy)
+                if (GetExtenderProxyForControl(control) is { } proxy)
                 {
                     controls.Add(proxy);
                 }
@@ -583,19 +565,19 @@ public abstract partial class AxHost
             }
         }
 
-        unsafe HRESULT Ole.IParseDisplayName.Interface.ParseDisplayName(
-            Com.IBindCtx* pbc,
+        HRESULT IParseDisplayName.Interface.ParseDisplayName(
+            IBindCtx* pbc,
             PWSTR pszDisplayName,
             uint* pchEaten,
-            Com.IMoniker** ppmkOut)
-            => ((Ole.IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
+            IMoniker** ppmkOut)
+            => ((IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
 
         // IOleContainer methods:
-        unsafe HRESULT Ole.IOleContainer.Interface.ParseDisplayName(
-            Com.IBindCtx* pbc,
+        HRESULT IOleContainer.Interface.ParseDisplayName(
+            IBindCtx* pbc,
             PWSTR pszDisplayName,
             uint* pchEaten,
-            Com.IMoniker** ppmkOut)
+            IMoniker** ppmkOut)
         {
             s_axHTraceSwitch.TraceVerbose("in ParseDisplayName");
             if (ppmkOut is not null)
@@ -606,7 +588,7 @@ public abstract partial class AxHost
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT Ole.IOleContainer.Interface.EnumObjects(Ole.OLECONTF grfFlags, Com.IEnumUnknown** ppenum)
+        HRESULT IOleContainer.Interface.EnumObjects(OLECONTF grfFlags, IEnumUnknown** ppenum)
         {
             if (ppenum is null)
             {
@@ -615,7 +597,7 @@ public abstract partial class AxHost
 
             s_axHTraceSwitch.TraceVerbose("in EnumObjects");
 
-            if ((grfFlags & Ole.OLECONTF.OLECONTF_EMBEDDINGS) != 0)
+            if (grfFlags.HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
             {
                 Debug.Assert(_parent is not null);
 
@@ -630,23 +612,23 @@ public abstract partial class AxHost
 
                 if (oleControls.Count > 0)
                 {
-                    ComHelpers.GetComPointer(new EnumUnknown(oleControls.ToArray()), out *ppenum);
+                    *ppenum = ComHelpers.GetComPointer<IEnumUnknown>(new EnumUnknown(oleControls.ToArray()));
                     return HRESULT.S_OK;
                 }
             }
 
-            ComHelpers.GetComPointer(new EnumUnknown(null), out *ppenum);
+            *ppenum = ComHelpers.GetComPointer<IEnumUnknown>(new EnumUnknown(null));
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole.IOleContainer.Interface.LockContainer(BOOL fLock)
+        HRESULT IOleContainer.Interface.LockContainer(BOOL fLock)
         {
             s_axHTraceSwitch.TraceVerbose("in LockContainer");
             return HRESULT.E_NOTIMPL;
         }
 
         // IOleInPlaceFrame methods:
-        unsafe HRESULT IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
+        HRESULT IOleInPlaceFrame.Interface.GetWindow(HWND* phwnd)
         {
             if (phwnd is null)
             {
@@ -654,29 +636,29 @@ public abstract partial class AxHost
             }
 
             s_axHTraceSwitch.TraceVerbose("in GetWindow");
-            *phwnd = _parent.Handle;
+            *phwnd = _parent.HWND;
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
+        HRESULT IOleInPlaceFrame.Interface.ContextSensitiveHelp(BOOL fEnterMode)
         {
             s_axHTraceSwitch.TraceVerbose("in ContextSensitiveHelp");
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT IOleInPlaceFrame.GetBorder(RECT* lprectBorder)
+        HRESULT IOleInPlaceFrame.Interface.GetBorder(RECT* lprectBorder)
         {
             s_axHTraceSwitch.TraceVerbose("in GetBorder");
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT IOleInPlaceFrame.RequestBorderSpace(RECT* pborderwidths)
+        HRESULT IOleInPlaceFrame.Interface.RequestBorderSpace(RECT* pborderwidths)
         {
             s_axHTraceSwitch.TraceVerbose("in RequestBorderSpace");
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT IOleInPlaceFrame.SetBorderSpace(RECT* pborderwidths)
+        HRESULT IOleInPlaceFrame.Interface.SetBorderSpace(RECT* pborderwidths)
         {
             s_axHTraceSwitch.TraceVerbose("in SetBorderSpace");
             return HRESULT.E_NOTIMPL;
@@ -693,17 +675,15 @@ public abstract partial class AxHost
             _controlInEditMode = null;
         }
 
-        unsafe HRESULT IOleInPlaceFrame.SetActiveObject(Ole.IOleInPlaceActiveObject.Interface? pActiveObject, string? pszObjName)
+        HRESULT IOleInPlaceFrame.Interface.SetActiveObject(IOleInPlaceActiveObject* pActiveObject, PCWSTR pszObjName)
         {
-            s_axHTraceSwitch.TraceVerbose($"in SetActiveObject {pszObjName ?? "<null>"}");
-            if (_siteUIActive is { } activeHost && activeHost._iOleInPlaceActiveObjectExternal != pActiveObject)
+            s_axHTraceSwitch.TraceVerbose($"in SetActiveObject {pszObjName.ToString() ?? "<null>"}");
+            if (_siteUIActive is { } activeHost
+                && activeHost._iOleInPlaceActiveObjectExternal is { } existing
+                && existing.OriginalHandle != pActiveObject)
             {
-                if (activeHost._iOleInPlaceActiveObjectExternal is not null)
-                {
-                    Marshal.ReleaseComObject(activeHost._iOleInPlaceActiveObjectExternal);
-                }
-
-                activeHost._iOleInPlaceActiveObjectExternal = pActiveObject;
+                existing.Dispose();
+                activeHost._iOleInPlaceActiveObjectExternal = new(pActiveObject, takeOwnership: true);
             }
 
             if (pActiveObject is null)
@@ -717,18 +697,18 @@ public abstract partial class AxHost
                 return HRESULT.S_OK;
             }
 
-            if (pActiveObject is not Ole.IOleObject.Interface oleObject)
+            using var oleObject = ComScope<IOleObject>.TryQueryFrom(pActiveObject, out HRESULT hr);
+            if (hr.Failed)
             {
                 return HRESULT.S_OK;
             }
 
             AxHost? host = null;
-            Ole.IOleClientSite* clientSite;
-            HRESULT hr = oleObject.GetClientSite(&clientSite);
+            using ComScope<IOleClientSite> clientSite = new(null);
+            hr = oleObject.Value->GetClientSite(clientSite);
             Debug.Assert(hr.Succeeded);
 
-            var clientSiteObject = (Ole.IOleClientSite.Interface)Marshal.GetObjectForIUnknown((nint)clientSite);
-            if (clientSiteObject is OleInterfaces interfaces)
+            if (ComHelpers.TryGetManagedInterface(clientSite.AsUnknown, takeOwnership: false, out OleInterfaces? interfaces))
             {
                 host = interfaces.GetAxHost();
             }
@@ -760,40 +740,79 @@ public abstract partial class AxHost
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths)
+        unsafe HRESULT IOleInPlaceFrame.Interface.InsertMenus(HMENU hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths)
         {
             s_axHTraceSwitch.TraceVerbose("in InsertMenus");
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
+        HRESULT IOleInPlaceFrame.Interface.SetMenu(HMENU hmenuShared, nint holemenu, HWND hwndActiveObject)
         {
             s_axHTraceSwitch.TraceVerbose("in SetMenu");
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
+        HRESULT IOleInPlaceFrame.Interface.RemoveMenus(HMENU hmenuShared)
         {
             s_axHTraceSwitch.TraceVerbose("in RemoveMenus");
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT IOleInPlaceFrame.SetStatusText(string pszStatusText)
+        HRESULT IOleInPlaceFrame.Interface.SetStatusText(PCWSTR pszStatusText)
         {
             s_axHTraceSwitch.TraceVerbose("in SetStatusText");
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT IOleInPlaceFrame.EnableModeless(BOOL fEnable)
+        HRESULT IOleInPlaceFrame.Interface.EnableModeless(BOOL fEnable)
         {
             s_axHTraceSwitch.TraceVerbose("in EnableModeless");
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT IOleInPlaceFrame.TranslateAccelerator(MSG* lpmsg, ushort wID)
+        HRESULT IOleInPlaceFrame.Interface.TranslateAccelerator(MSG* lpmsg, ushort wID)
         {
             s_axHTraceSwitch.TraceVerbose("in IOleInPlaceFrame.TranslateAccelerator");
             return HRESULT.S_FALSE;
+        }
+
+        HRESULT IOleInPlaceUIWindow.Interface.GetWindow(HWND* phwnd)
+            => ((IOleInPlaceFrame.Interface)this).GetWindow(phwnd);
+
+        HRESULT IOleInPlaceUIWindow.Interface.ContextSensitiveHelp(BOOL fEnterMode)
+            => ((IOleInPlaceFrame.Interface)this).ContextSensitiveHelp(fEnterMode);
+
+        HRESULT IOleInPlaceUIWindow.Interface.GetBorder(RECT* lprectBorder)
+            => ((IOleInPlaceFrame.Interface)this).GetBorder(lprectBorder);
+
+        HRESULT IOleInPlaceUIWindow.Interface.RequestBorderSpace(RECT* pborderwidths)
+            => ((IOleInPlaceFrame.Interface)this).RequestBorderSpace(pborderwidths);
+
+        HRESULT IOleInPlaceUIWindow.Interface.SetBorderSpace(RECT* pborderwidths)
+            => ((IOleInPlaceFrame.Interface)this).SetBorderSpace(pborderwidths);
+
+        HRESULT IOleInPlaceUIWindow.Interface.SetActiveObject(IOleInPlaceActiveObject* pActiveObject, PCWSTR pszObjName)
+            => ((IOleInPlaceFrame.Interface)this).SetActiveObject(pActiveObject, pszObjName);
+
+        HRESULT IOleWindow.Interface.GetWindow(HWND* phwnd)
+            => ((IOleInPlaceFrame.Interface)this).GetWindow(phwnd);
+
+        HRESULT IOleWindow.Interface.ContextSensitiveHelp(BOOL fEnterMode)
+            => ((IOleInPlaceFrame.Interface)this).ContextSensitiveHelp(fEnterMode);
+
+        protected override void Dispose(bool disposing)
+        {
+            if (_extenderCache is { } cache)
+            {
+                foreach (var extender in cache.Values)
+                {
+                    extender.Dispose();
+                }
+
+                cache.Clear();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

@@ -110,8 +110,8 @@ namespace Windows.Win32
 
             public static unsafe BOOL Write<T>(T himl, IStream.Interface pstm) where T : IHandle<HIMAGELIST>
             {
-                using var stream = ComHelpers.GetComScope<IStream>(pstm, out bool succeeded);
-                Debug.Assert(succeeded);
+                using var stream = ComHelpers.TryGetComScope<IStream>(pstm, out HRESULT hr);
+                Debug.Assert(hr.Succeeded);
                 BOOL result = ImageList_Write(himl.Handle, stream);
                 GC.KeepAlive(himl.Wrapper);
                 return result;
@@ -122,8 +122,8 @@ namespace Windows.Win32
                 IMAGE_LIST_WRITE_STREAM_FLAGS dwFlags,
                 IStream.Interface pstm) where T : IHandle<HIMAGELIST>
             {
-                using var stream = ComHelpers.GetComScope<IStream>(pstm, out bool succeeded);
-                Debug.Assert(succeeded);
+                using var stream = ComHelpers.TryGetComScope<IStream>(pstm, out HRESULT hr);
+                Debug.Assert(hr.Succeeded);
                 HRESULT result = ImageList_WriteEx(himl.Handle, dwFlags, stream);
                 GC.KeepAlive(himl.Wrapper);
                 return result;

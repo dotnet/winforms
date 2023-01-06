@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using Accessibility;
 using Windows.Win32.System.Ole;
+using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -24,7 +25,7 @@ namespace System.Windows.Forms
         IReflect,
         IAccessible,
         UiaCore.IAccessibleEx,
-        Ole32.IServiceProvider,
+        ComIServiceProvider.Interface,
         UiaCore.IRawElementProviderSimple,
         UiaCore.IRawElementProviderFragment,
         UiaCore.IRawElementProviderFragmentRoot,
@@ -709,7 +710,7 @@ namespace System.Windows.Forms
         {
         }
 
-        unsafe HRESULT Ole32.IServiceProvider.QueryService(Guid* service, Guid* riid, IntPtr* ppvObject)
+        unsafe HRESULT ComIServiceProvider.Interface.QueryService(Guid* service, Guid* riid, void** ppvObject)
         {
             if (service is null || riid is null)
             {
@@ -728,7 +729,7 @@ namespace System.Windows.Forms
                 {
                     // We want to return the internal, secure, object, which we don't have access here
                     // Return non-null, which will be interpreted in internal method, to mean returning casted object to IAccessibleEx
-                    *ppvObject = Marshal.GetComInterfaceForObject(this, typeof(UiaCore.IAccessibleEx));
+                    *ppvObject = (void*)Marshal.GetComInterfaceForObject(this, typeof(UiaCore.IAccessibleEx));
                     return HRESULT.S_OK;
                 }
             }

@@ -33,8 +33,8 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(Name))]
     [DefaultEvent(nameof(Enter))]
-    [Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]
-    public partial class WebBrowserBase : Control
+    [Designer($"System.Windows.Forms.Design.AxDesigner, {AssemblyRef.SystemDesign}")]
+    public unsafe partial class WebBrowserBase : Control
     {
         private WebBrowserHelper.AXState axState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXState axReloadingState = WebBrowserHelper.AXState.Passive;
@@ -45,7 +45,7 @@ namespace System.Windows.Forms
         private ContainerControl containingControl;
         private HWND hwndFocus;
         private EventHandler selectionChangeHandler;
-        private Guid clsid;
+        private readonly Guid clsid;
         // Pointers to the ActiveX object: Interface pointers are cached for perf.
         private IOleObject.Interface axOleObject;
         private IOleInPlaceObject.Interface axOleInPlaceObject;
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         // Internal fields:
         //
         internal WebBrowserContainer container;
-        internal object activeXInstance;
+        internal object _activeXInstance;
 
         /// <summary>
         ///  Creates a new instance of a WinForms control which wraps an ActiveX control
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return activeXInstance;
+                return _activeXInstance;
             }
         }
 
@@ -559,7 +559,7 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            AmbientChanged(Ole32.DispatchID.AMBIENT_FONT);
+            AmbientChanged(PInvoke.DISPID_AMBIENT_FONT);
         }
 
         //
@@ -569,7 +569,7 @@ namespace System.Windows.Forms
         protected override void OnForeColorChanged(EventArgs e)
         {
             base.OnForeColorChanged(e);
-            AmbientChanged(Ole32.DispatchID.AMBIENT_FORECOLOR);
+            AmbientChanged(PInvoke.DISPID_AMBIENT_FORECOLOR);
         }
 
         //
@@ -579,7 +579,7 @@ namespace System.Windows.Forms
         protected override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
-            AmbientChanged(Ole32.DispatchID.AMBIENT_BACKCOLOR);
+            AmbientChanged(PInvoke.DISPID_AMBIENT_BACKCOLOR);
         }
 
         //
@@ -628,43 +628,45 @@ namespace System.Windows.Forms
 
         internal void TransitionUpTo(WebBrowserHelper.AXState state)
         {
-            if (!GetAXHostState(WebBrowserHelper.inTransition))
+            if (GetAXHostState(WebBrowserHelper.inTransition))
             {
-                SetAXHostState(WebBrowserHelper.inTransition, true);
+                return;
+            }
 
-                try
+            SetAXHostState(WebBrowserHelper.inTransition, true);
+
+            try
+            {
+                while (state > ActiveXState)
                 {
-                    while (state > ActiveXState)
+                    switch (ActiveXState)
                     {
-                        switch (ActiveXState)
-                        {
-                            case WebBrowserHelper.AXState.Passive:
-                                TransitionFromPassiveToLoaded();
-                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Loaded, "Failed transition");
-                                break;
-                            case WebBrowserHelper.AXState.Loaded:
-                                TransitionFromLoadedToRunning();
-                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Running, "Failed transition");
-                                break;
-                            case WebBrowserHelper.AXState.Running:
-                                TransitionFromRunningToInPlaceActive();
-                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Failed transition");
-                                break;
-                            case WebBrowserHelper.AXState.InPlaceActive:
-                                TransitionFromInPlaceActiveToUIActive();
-                                Debug.Assert(ActiveXState == WebBrowserHelper.AXState.UIActive, "Failed transition");
-                                break;
-                            default:
-                                Debug.Fail("bad state");
-                                ActiveXState++; // To exit the loop
-                                break;
-                        }
+                        case WebBrowserHelper.AXState.Passive:
+                            TransitionFromPassiveToLoaded();
+                            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Loaded, "Failed transition");
+                            break;
+                        case WebBrowserHelper.AXState.Loaded:
+                            TransitionFromLoadedToRunning();
+                            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Running, "Failed transition");
+                            break;
+                        case WebBrowserHelper.AXState.Running:
+                            TransitionFromRunningToInPlaceActive();
+                            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.InPlaceActive, "Failed transition");
+                            break;
+                        case WebBrowserHelper.AXState.InPlaceActive:
+                            TransitionFromInPlaceActiveToUIActive();
+                            Debug.Assert(ActiveXState == WebBrowserHelper.AXState.UIActive, "Failed transition");
+                            break;
+                        default:
+                            Debug.Fail("bad state");
+                            ActiveXState++; // To exit the loop
+                            break;
                     }
                 }
-                finally
-                {
-                    SetAXHostState(WebBrowserHelper.inTransition, false);
-                }
+            }
+            finally
+            {
+                SetAXHostState(WebBrowserHelper.inTransition, false);
             }
         }
 
@@ -710,11 +712,10 @@ namespace System.Windows.Forms
             }
         }
 
-        internal unsafe bool DoVerb(Ole32.OLEIVERB verb)
+        internal unsafe bool DoVerb(OLEIVERB verb)
         {
             RECT posRect = Bounds;
-            using var clientSite = ComHelpers.GetComScope<IOleClientSite>(ActiveXSite, out bool result);
-            Debug.Assert(result);
+            using var clientSite = ComHelpers.GetComScope<IOleClientSite>(ActiveXSite);
             HRESULT hr = axOleObject.DoVerb((int)verb, null, clientSite, 0, HWND, &posRect);
             Debug.Assert(hr.Succeeded, $"DoVerb call failed for verb 0x{verb}");
             return hr.Succeeded;
@@ -885,16 +886,20 @@ namespace System.Windows.Forms
             if (ActiveXState == WebBrowserHelper.AXState.Passive)
             {
                 // First, create the ActiveX control
-                Debug.Assert(activeXInstance is null, "activeXInstance must be null");
-                HRESULT hr = Ole32.CoCreateInstance(
+                Debug.Assert(_activeXInstance is null, "activeXInstance must be null");
+
+                HRESULT hr = PInvoke.CoCreateInstance(
                     in clsid,
-                    IntPtr.Zero,
-                    Ole32.CLSCTX.INPROC_SERVER,
-                    in NativeMethods.ActiveX.IID_IUnknown,
-                    out activeXInstance);
+                    null,
+                    CLSCTX.CLSCTX_INPROC_SERVER,
+                    IID.GetRef<IUnknown>(),
+                    out void* unknown);
+
                 hr.ThrowOnFailure();
 
-                Debug.Assert(activeXInstance is not null, "w/o an exception being thrown we must have an object...");
+                _activeXInstance = Marshal.GetObjectForIUnknown((nint)unknown);
+
+                Debug.Assert(_activeXInstance is not null, "w/o an exception being thrown we must have an object...");
 
                 // We are now loaded.
                 ActiveXState = WebBrowserHelper.AXState.Loaded;
@@ -909,22 +914,18 @@ namespace System.Windows.Forms
             Debug.Assert(ActiveXState == WebBrowserHelper.AXState.Loaded, "Wrong start state to transition from");
             if (ActiveXState == WebBrowserHelper.AXState.Loaded)
             {
-                //
-                // Need to make sure that we don't handle any PropertyChanged
-                // notifications at this point.
+                // Need to make sure that we don't handle any PropertyChanged notifications at this point.
                 NoComponentChangeEvents++;
                 try
                 {
-                    //
                     // Release the activeXInstance
-                    if (activeXInstance is not null)
+                    if (_activeXInstance is not null)
                     {
-                        //
                         // Lets first get the cached interface pointers of activeXInstance released.
                         DetachInterfacesInternal();
 
-                        Marshal.FinalReleaseComObject(activeXInstance);
-                        activeXInstance = null;
+                        Marshal.FinalReleaseComObject(_activeXInstance);
+                        _activeXInstance = null;
                     }
                 }
                 finally
@@ -932,8 +933,7 @@ namespace System.Windows.Forms
                     NoComponentChangeEvents--;
                 }
 
-                //
-                // We are now Passive!
+                // We are now Passive.
                 ActiveXState = WebBrowserHelper.AXState.Passive;
             }
         }
@@ -947,24 +947,18 @@ namespace System.Windows.Forms
                 HRESULT hr = axOleObject.GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC bits);
                 if (hr.Succeeded && bits.HasFlag(OLEMISC.OLEMISC_SETCLIENTSITEFIRST))
                 {
-                    //
                     // Simply setting the site to the ActiveX control should activate it.
                     // And this will take us to the Running state.
-                    using var clientSite = ComHelpers.GetComScope<IOleClientSite>(ActiveXSite, out bool result);
-                    Debug.Assert(result);
-                    axOleObject.SetClientSite(clientSite);
+                    axOleObject.SetClientSite(ComHelpers.GetComPointer<IOleClientSite>(ActiveXSite));
                 }
 
-                //
-                // We start receiving events now (but we do this only if we are not
-                // in DesignMode).
+                // We start receiving events now (but we do this only if we are not in DesignMode).
                 if (!DesignMode)
                 {
                     StartEvents();
                 }
 
-                //
-                // We are now Running!
+                // We are now Running.
                 ActiveXState = WebBrowserHelper.AXState.Running;
             }
         }
@@ -998,7 +992,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    DoVerb(Ole32.OLEIVERB.INPLACEACTIVATE);
+                    DoVerb(OLEIVERB.OLEIVERB_INPLACEACTIVATE);
                 }
                 catch (Exception t)
                 {
@@ -1044,7 +1038,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    DoVerb(Ole32.OLEIVERB.UIACTIVATE);
+                    DoVerb(OLEIVERB.OLEIVERB_UIACTIVATE);
                 }
                 catch (Exception t)
                 {
@@ -1082,15 +1076,15 @@ namespace System.Windows.Forms
 
         private void AttachInterfacesInternal()
         {
-            Debug.Assert(activeXInstance is not null, "The native control is null");
-            axOleObject = (IOleObject.Interface)activeXInstance;
-            axOleInPlaceObject = (IOleInPlaceObject.Interface)activeXInstance;
-            axOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)activeXInstance;
-            axOleControl = (IOleControl.Interface)activeXInstance;
+            Debug.Assert(_activeXInstance is not null, "The native control is null");
+            axOleObject = (IOleObject.Interface)_activeXInstance;
+            axOleInPlaceObject = (IOleInPlaceObject.Interface)_activeXInstance;
+            axOleInPlaceActiveObject = (IOleInPlaceActiveObject.Interface)_activeXInstance;
+            axOleControl = (IOleControl.Interface)_activeXInstance;
 
             // Give the inheriting classes a chance to cast the ActiveX object to the
             // appropriate interfaces.
-            AttachInterfaces(activeXInstance);
+            AttachInterfaces(_activeXInstance);
         }
 
         private void DetachInterfacesInternal()
@@ -1189,18 +1183,24 @@ namespace System.Windows.Forms
 
         private unsafe void HiMetric2Pixel(ref Size sz)
         {
-            var phm = new Point(sz.Width, sz.Height);
-            var pcont = default(PointF);
-            ((Ole32.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.HIMETRICTOCONTAINER);
+            Point phm = new(sz.Width, sz.Height);
+            PointF pcont = default;
+            ((IOleControlSite.Interface)ActiveXSite).TransformCoords(
+                (POINTL*)&phm,
+                &pcont,
+                XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_HIMETRICTOCONTAINER);
             sz.Width = (int)pcont.X;
             sz.Height = (int)pcont.Y;
         }
 
         private unsafe void Pixel2hiMetric(ref Size sz)
         {
-            var phm = default(Point);
-            var pcont = new PointF(sz.Width, sz.Height);
-            ((Ole32.IOleControlSite)ActiveXSite).TransformCoords(&phm, &pcont, Ole32.XFORMCOORDS.SIZE | Ole32.XFORMCOORDS.CONTAINERTOHIMETRIC);
+            Point phm = default;
+            PointF pcont = new(sz.Width, sz.Height);
+            ((IOleControlSite.Interface)ActiveXSite).TransformCoords(
+                (POINTL*)&phm,
+                &pcont,
+                XFORMCOORDS.XFORMCOORDS_SIZE | XFORMCOORDS.XFORMCOORDS_CONTAINERTOHIMETRIC);
             sz.Width = phm.X;
             sz.Height = phm.Y;
         }
@@ -1254,12 +1254,12 @@ namespace System.Windows.Forms
             return cc;
         }
 
-        private void AmbientChanged(Ole32.DispatchID dispid)
+        private void AmbientChanged(int dispid)
         {
-            if (activeXInstance is not null)
+            if (_activeXInstance is not null)
             {
                 Invalidate();
-                HRESULT result = axOleControl.OnAmbientPropertyChange((int)dispid);
+                HRESULT result = axOleControl.OnAmbientPropertyChange(dispid);
                 if (result.Failed)
                 {
                     Debug.Fail(result.ToString());

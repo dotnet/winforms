@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Globalization;
-using System.Reflection;
-using static Interop;
-using static Interop.Ole32;
-using Com = Windows.Win32.System.Com;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms;
 
@@ -14,25 +11,34 @@ public abstract partial class AxHost
 {
     internal partial class AxContainer
     {
-        private class ExtenderProxy :
-            Oleaut32.IExtender,
-            IVBGetControl,
-            IGetVBAObject,
-            IGetOleObject,
-            IReflect
+        /// <summary>
+        ///  Provides an <see cref="IDispatch"/> and <see cref="IDispatchEx"/> view of <see cref="Control"/>
+        ///  with added properties.
+        /// </summary>
+        internal unsafe class ExtenderProxy :
+            StandardDispatch,
+            IExtender.Interface,
+            IVBGetControl.Interface,
+            IGetVBAObject.Interface,
+            IGetOleObject.Interface,
+            IManagedWrapper<IDispatch, IDispatchEx, IExtender, IVBGetControl, IGetVBAObject, IGetOleObject>
         {
-            private readonly WeakReference<Control> _principal;
+            private readonly WeakReference<Control> _control;
             private readonly WeakReference<AxContainer> _container;
+            private readonly ClassPropertyDispatchAdapter _dispatchAdapter;
 
-            internal ExtenderProxy(Control principal, AxContainer container)
+            internal ExtenderProxy(Control control, AxContainer container)
             {
-                _principal = new(principal);
+                _control = new(control);
+
+                // We want the proxy to override anything we find in the control.
+                _dispatchAdapter = new(control, priorAdapter: new(this));
                 _container = new(container);
             }
 
-            private Control? GetPrincipal()
+            private Control? GetControl()
             {
-                _principal.TryGetTarget(out Control? target);
+                _control.TryGetTarget(out Control? target);
                 return target;
             }
 
@@ -42,48 +48,62 @@ public abstract partial class AxHost
                 return container;
             }
 
-            HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out Com.IEnumUnknown.Interface ppenum)
+            HRESULT IVBGetControl.Interface.EnumControls(
+                OLECONTF dwOleContF,
+                ENUM_CONTROLS_WHICH_FLAGS dwWhich,
+                IEnumUnknown** ppenum)
             {
                 s_axHTraceSwitch.TraceVerbose("in EnumControls for proxy");
-                ppenum = GetContainer() is { } container && GetPrincipal() is { } principal
-                    ? container.EnumControls(principal, dwOleContF, dwWhich)
+                if (ppenum is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                IEnumUnknown.Interface enumUnknown = GetContainer() is { } container && GetControl() is { } control
+                    ? container.EnumControls(control, dwOleContF, dwWhich)
                     : new EnumUnknown(null);
+                *ppenum = ComHelpers.GetComPointer<IEnumUnknown>(enumUnknown);
                 return HRESULT.S_OK;
             }
 
-            unsafe HRESULT IGetOleObject.GetOleObject(Guid* riid, out object? ppvObj)
+            HRESULT IGetOleObject.Interface.GetOleObject(Guid* riid, void** ppvObj)
             {
                 s_axHTraceSwitch.TraceVerbose("in GetOleObject for proxy");
-                ppvObj = null;
+                if (ppvObj is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *ppvObj = null;
                 if (riid is null || !riid->Equals(s_ioleobject_Guid))
                 {
                     return HRESULT.E_INVALIDARG;
                 }
 
-                if (GetPrincipal() is AxHost hostControl)
+                if (GetControl() is AxHost hostControl)
                 {
-                    ppvObj = hostControl.GetOcx();
+                    *ppvObj = ComHelpers.GetComPointer<IUnknown>(hostControl.GetOcx());
                     return HRESULT.S_OK;
                 }
 
                 return HRESULT.E_FAIL;
             }
 
-            unsafe HRESULT IGetVBAObject.GetObject(Guid* riid, IVBFormat?[] rval, uint dwReserved)
+            HRESULT IGetVBAObject.Interface.GetObject(Guid* riid, void** ppvObj, uint dwReserved)
             {
                 s_axHTraceSwitch.TraceVerbose("in GetObject for proxy");
-                if (rval is null || riid is null || rval.Length == 0)
+                if (ppvObj is null || riid is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
 
                 if (!riid->Equals(s_ivbformat_Guid))
                 {
-                    rval[0] = null;
+                    *ppvObj = null;
                     return HRESULT.E_NOINTERFACE;
                 }
 
-                rval[0] = new VBFormat();
+                *ppvObj = ComHelpers.GetComPointer<IVBFormat>(new VBFormat());
                 return HRESULT.S_OK;
             }
 
@@ -91,8 +111,8 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getAlign for proxy for {GetPrincipal()}");
-                    int result = (int)(GetPrincipal()?.Dock ?? NativeMethods.ActiveX.ALIGN_NO_CHANGE);
+                    s_axHTraceSwitch.TraceVerbose($"in getAlign for proxy for {GetControl()}");
+                    int result = (int)(GetControl()?.Dock ?? NativeMethods.ActiveX.ALIGN_NO_CHANGE);
                     if (result is < NativeMethods.ActiveX.ALIGN_MIN or > NativeMethods.ActiveX.ALIGN_MAX)
                     {
                         result = NativeMethods.ActiveX.ALIGN_NO_CHANGE;
@@ -102,8 +122,8 @@ public abstract partial class AxHost
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setAlign for proxy for {GetPrincipal()} {value}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setAlign for proxy for {GetControl()} {value}");
+                    if (GetControl() is { } control)
                     {
                         control.Dock = (DockStyle)value;
                     }
@@ -114,13 +134,13 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getBackColor for proxy for {GetPrincipal()}");
-                    return GetOleColorFromColor(GetPrincipal()?.BackColor ?? default);
+                    s_axHTraceSwitch.TraceVerbose($"in getBackColor for proxy for {GetControl()}");
+                    return GetOleColorFromColor(GetControl()?.BackColor ?? default);
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setBackColor for proxy for {GetPrincipal()} {value}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setBackColor for proxy for {GetControl()} {value}");
+                    if (GetControl() is { } control)
                     {
                         control.BackColor = GetColorFromOleColor(value);
                     }
@@ -131,13 +151,13 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getEnabled for proxy for {GetPrincipal()}");
-                    return GetPrincipal()?.Enabled ?? BOOL.FALSE;
+                    s_axHTraceSwitch.TraceVerbose($"in getEnabled for proxy for {GetControl()}");
+                    return GetControl()?.Enabled ?? BOOL.FALSE;
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setEnabled for proxy for {GetPrincipal()} {value}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setEnabled for proxy for {GetControl()} {value}");
+                    if (GetControl() is { } control)
                     {
                         control.Enabled = value;
                     }
@@ -148,13 +168,13 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getForeColor for proxy for {GetPrincipal()}");
-                    return GetOleColorFromColor(GetPrincipal()?.ForeColor ?? default);
+                    s_axHTraceSwitch.TraceVerbose($"in getForeColor for proxy for {GetControl()}");
+                    return GetOleColorFromColor(GetControl()?.ForeColor ?? default);
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setForeColor for proxy for {GetPrincipal()} {value}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setForeColor for proxy for {GetControl()} {value}");
+                    if (GetControl() is { } control)
                     {
                         control.ForeColor = GetColorFromOleColor(value);
                     }
@@ -165,13 +185,13 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getHeight for proxy for {GetPrincipal()}");
-                    return Pixel2Twip(GetPrincipal()?.Height ?? 0, xDirection: false);
+                    s_axHTraceSwitch.TraceVerbose($"in getHeight for proxy for {GetControl()}");
+                    return Pixel2Twip(GetControl()?.Height ?? 0, xDirection: false);
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setHeight for proxy for {GetPrincipal()} {Twip2Pixel(value, false)}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setHeight for proxy for {GetControl()} {Twip2Pixel(value, false)}");
+                    if (GetControl() is { } control)
                     {
                         control.Height = Twip2Pixel(value, xDirection: false);
                     }
@@ -182,25 +202,29 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getLeft for proxy for {GetPrincipal()}");
-                    return Pixel2Twip(GetPrincipal()?.Left ?? 0, xDirection: true);
+                    s_axHTraceSwitch.TraceVerbose($"in getLeft for proxy for {GetControl()}");
+                    return Pixel2Twip(GetControl()?.Left ?? 0, xDirection: true);
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setLeft for proxy for {GetPrincipal()} {Twip2Pixel(value, true)}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setLeft for proxy for {GetControl()} {Twip2Pixel(value, true)}");
+                    if (GetControl() is { } control)
                     {
                         control.Left = Twip2Pixel(value, xDirection: true);
                     }
                 }
             }
 
-            public object? Parent
+            public IUnknown* Parent
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getParent for proxy for {GetPrincipal()}");
-                    return GetContainer() is { } container ? container.GetProxyForControl(container._parent) : null;
+                    s_axHTraceSwitch.TraceVerbose($"in getParent for proxy for {GetControl()}");
+                    IExtender.Interface? extender = GetContainer() is { } container
+                        ? container.GetExtenderProxyForControl(container._parent)
+                        : null;
+
+                    return extender is null ? null : ComHelpers.GetComPointer<IUnknown>(extender);
                 }
             }
 
@@ -208,13 +232,13 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getTabIndex for proxy for {GetPrincipal()}");
-                    return (short)(GetPrincipal()?.TabIndex ?? 0);
+                    s_axHTraceSwitch.TraceVerbose($"in getTabIndex for proxy for {GetControl()}");
+                    return (short)(GetControl()?.TabIndex ?? 0);
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setTabIndex for proxy for {GetPrincipal()} {value}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setTabIndex for proxy for {GetControl()} {value}");
+                    if (GetControl() is { } control)
                     {
                         control.TabIndex = value;
                     }
@@ -225,13 +249,13 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getTabStop for proxy for {GetPrincipal()}");
-                    return GetPrincipal()?.TabStop ?? BOOL.FALSE;
+                    s_axHTraceSwitch.TraceVerbose($"in getTabStop for proxy for {GetControl()}");
+                    return GetControl()?.TabStop ?? BOOL.FALSE;
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setTabStop for proxy for {GetPrincipal()} {value}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setTabStop for proxy for {GetControl()} {value}");
+                    if (GetControl() is { } control)
                     {
                         control.TabStop = value;
                     }
@@ -242,13 +266,13 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getTop for proxy for {GetPrincipal()}");
-                    return Pixel2Twip(GetPrincipal()?.Top ?? 0, xDirection: false);
+                    s_axHTraceSwitch.TraceVerbose($"in getTop for proxy for {GetControl()}");
+                    return Pixel2Twip(GetControl()?.Top ?? 0, xDirection: false);
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setTop for proxy for {GetPrincipal()} {Twip2Pixel(value, false)}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setTop for proxy for {GetControl()} {Twip2Pixel(value, false)}");
+                    if (GetControl() is { } control)
                     {
                         control.Top = Twip2Pixel(value, xDirection: false);
                     }
@@ -259,13 +283,13 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getVisible for proxy for {GetPrincipal()}");
-                    return GetPrincipal()?.Visible ?? false;
+                    s_axHTraceSwitch.TraceVerbose($"in getVisible for proxy for {GetControl()}");
+                    return GetControl()?.Visible ?? false;
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setVisible for proxy for {GetPrincipal()} {value}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setVisible for proxy for {GetControl()} {value}");
+                    if (GetControl() is { } control)
                     {
                         control.Visible = value;
                     }
@@ -276,183 +300,128 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getWidth for proxy for {GetPrincipal()}");
-                    return Pixel2Twip(GetPrincipal()?.Width ?? 0, xDirection: true);
+                    s_axHTraceSwitch.TraceVerbose($"in getWidth for proxy for {GetControl()}");
+                    return Pixel2Twip(GetControl()?.Width ?? 0, xDirection: true);
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setWidth for proxy for {GetPrincipal()} {Twip2Pixel(value, true)}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setWidth for proxy for {GetControl()} {Twip2Pixel(value, true)}");
+                    if (GetControl() is { } control)
                     {
                         control.Width = Twip2Pixel(value, xDirection: true);
                     }
                 }
             }
 
-            public string Name
+            public BSTR Name
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getName for proxy for {GetPrincipal()}");
-                    return GetPrincipal() is { } control ? GetNameForControl(control) : string.Empty;
+                    s_axHTraceSwitch.TraceVerbose($"in getName for proxy for {GetControl()}");
+                    return new(GetControl() is { } control ? GetNameForControl(control) : string.Empty);
                 }
             }
 
-            public IntPtr Hwnd
+            public HWND Hwnd
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getHwnd for proxy for {GetPrincipal()}");
-                    return GetPrincipal()?.Handle ?? default;
+                    s_axHTraceSwitch.TraceVerbose($"in getHwnd for proxy for {GetControl()}");
+                    return GetControl()?.HWND ?? HWND.Null;
                 }
             }
 
-            public object? Container => GetContainer();
+            public IUnknown* Container
+            {
+                get
+                {
+                    AxContainer? container = GetContainer();
+                    return container is null ? null : ComHelpers.GetComPointer<IUnknown>(container);
+                }
+            }
 
             public string Text
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getText for proxy for {GetPrincipal()}");
-                    return GetPrincipal()?.Text ?? string.Empty;
+                    s_axHTraceSwitch.TraceVerbose($"in getText for proxy for {GetControl()}");
+                    return GetControl()?.Text ?? string.Empty;
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setText for proxy for {GetPrincipal()}");
-                    if (GetPrincipal() is { } control)
+                    s_axHTraceSwitch.TraceVerbose($"in setText for proxy for {GetControl()}");
+                    if (GetControl() is { } control)
                     {
                         control.Text = value;
                     }
                 }
             }
 
-            public void Move(object left, object top, object width, object height)
+            public void Move(void* left, void* top, void* width, void* height)
             {
             }
 
-            // IReflect methods:
+            // Dispatch support used to be provided via IReflect. The following mostly replicates the legacy behavior
+            // with the small exception of leaving out exposing "Move", which didn't do anything anyway. If it is found
+            // to be necessary, it can be hacked in again.
+            //
+            // Note that the old code returned all members through IReflect.GetMembers, but that is never called by
+            // the IReflect CCW dispatch projection.
 
-            MethodInfo? IReflect.GetMethod(
-                string name,
-                BindingFlags bindingAttr,
-                Binder? binder,
-                Type[] types,
-                ParameterModifier[]? modifiers) => null;
-
-            MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr) => null;
-            MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr) => new[] { GetType().GetMethod("Move")! };
-
-            FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr) => null;
-            FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr) => Array.Empty<FieldInfo>();
-
-            PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
+            protected override HRESULT GetDispID(BSTR bstrName, uint grfdex, int* pid)
             {
-                PropertyInfo? property = GetPrincipal()?.GetType().GetProperty(name, bindingAttr);
-                property ??= GetType().GetProperty(name, bindingAttr);
-                return property;
+                if (_dispatchAdapter.TryGetDispID(bstrName.ToString(), out int dispid))
+                {
+                    *pid = dispid;
+                    return HRESULT.S_OK;
+                }
+
+                *pid = PInvoke.DISPID_UNKNOWN;
+                return HRESULT.DISP_E_UNKNOWNNAME;
             }
 
-            PropertyInfo? IReflect.GetProperty(
-                string name,
-                BindingFlags bindingAttr,
-                Binder? binder,
-                Type? returnType,
-                Type[] types,
-                ParameterModifier[]? modifiers)
+            protected override HRESULT GetMemberName(int id, BSTR* pbstrName)
             {
-                PropertyInfo? property = GetPrincipal()?.GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-                property ??= GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-                return property;
+                if (_dispatchAdapter.TryGetMemberName(id, out string? name))
+                {
+                    *pbstrName = new(name);
+                    return HRESULT.S_OK;
+                }
+
+                *pbstrName = default;
+                return HRESULT.DISP_E_UNKNOWNNAME;
             }
 
-            PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
+            protected override HRESULT GetNextDispID(uint grfdex, int id, int* pid)
             {
-                PropertyInfo[] extenderProperties = GetType().GetProperties(bindingAttr);
-                PropertyInfo[]? controlProperties = GetPrincipal()?.GetType().GetProperties(bindingAttr);
-
-                if (extenderProperties is null)
+                if (_dispatchAdapter.TryGetNextDispId(id, out int dispId))
                 {
-                    return controlProperties ?? Array.Empty<PropertyInfo>();
+                    *pid = dispId;
+                    return HRESULT.S_OK;
                 }
-                else if (controlProperties is null)
-                {
-                    return extenderProperties ?? Array.Empty<PropertyInfo>();
-                }
-                else
-                {
-                    int i = 0;
-                    PropertyInfo[] properties = new PropertyInfo[extenderProperties.Length + controlProperties.Length];
 
-                    foreach (PropertyInfo property in extenderProperties)
-                    {
-                        properties[i++] = property;
-                    }
-
-                    foreach (PropertyInfo property in controlProperties)
-                    {
-                        properties[i++] = property;
-                    }
-
-                    return properties;
-                }
+                *pid = PInvoke.DISPID_UNKNOWN;
+                return HRESULT.S_FALSE;
             }
 
-            MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
-            {
-                MemberInfo[]? member = GetPrincipal()?.GetType().GetMember(name, bindingAttr);
-                member ??= GetType().GetMember(name, bindingAttr);
-                return member;
-            }
+            protected override HRESULT Invoke(
+                int dispId,
+                uint lcid,
+                DISPATCH_FLAGS flags,
+                DISPPARAMS* parameters,
+                VARIANT* result,
+                EXCEPINFO* exceptionInfo,
+                uint* argumentError) => _dispatchAdapter.Invoke(dispId, lcid, flags, parameters, result);
 
-            MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
+            protected override HRESULT GetMemberProperties(int dispId, out FDEX_PROP_FLAGS properties)
             {
-                MemberInfo[] extenderMembers = GetType().GetMembers(bindingAttr);
-                MemberInfo[]? controlMembers = GetPrincipal()?.GetType().GetMembers(bindingAttr);
+                if (_dispatchAdapter.TryGetMemberProperties(dispId, out properties))
+                {
+                    return HRESULT.S_OK;
+                }
 
-                if (extenderMembers is null)
-                {
-                    return controlMembers ?? Array.Empty<MemberInfo>();
-                }
-                else if (controlMembers is null)
-                {
-                    return extenderMembers ?? Array.Empty<MemberInfo>();
-                }
-                else
-                {
-                    MemberInfo[] members = new MemberInfo[extenderMembers.Length + controlMembers.Length];
-                    Array.Copy(extenderMembers, 0, members, 0, extenderMembers.Length);
-                    Array.Copy(controlMembers, 0, members, extenderMembers.Length, controlMembers.Length);
-                    return members;
-                }
-            }
-
-            object? IReflect.InvokeMember(
-                string name,
-                BindingFlags invokeAttr,
-                Binder? binder,
-                object? target,
-                object?[]? args,
-                ParameterModifier[]? modifiers,
-                CultureInfo? culture,
-                string[]? namedParameters)
-            {
-                try
-                {
-                    return GetType().InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
-                }
-                catch (MissingMethodException)
-                {
-                    return GetPrincipal()?.GetType().InvokeMember(name, invokeAttr, binder, GetPrincipal(), args, modifiers, culture, namedParameters);
-                }
-            }
-
-            Type IReflect.UnderlyingSystemType
-            {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose("In UnderlyingSystemType");
-                    return null!;
-                }
+                properties = default;
+                return HRESULT.DISP_E_UNKNOWNNAME;
             }
         }
     }

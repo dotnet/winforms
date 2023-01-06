@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -17,7 +16,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(BorderStyle))]
     [DefaultEvent(nameof(Paint))]
     [Docking(DockingBehavior.Ask)]
-    [Designer("System.Windows.Forms.Design.PanelDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.PanelDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionPanel))]
     public partial class Panel : ScrollableControl
     {
@@ -96,7 +95,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(BorderStyle.None)]
-        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [DispId(PInvoke.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.PanelBorderStyleDescr))]
         public BorderStyle BorderStyle
         {

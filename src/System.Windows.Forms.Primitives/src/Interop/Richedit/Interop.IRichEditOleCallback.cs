@@ -5,6 +5,7 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Ole;
 
 internal partial class Interop
 {
@@ -43,7 +44,7 @@ internal partial class Interop
             HRESULT GetDragDropEffect(
                 BOOL fDrag,
                 User32.MK grfKeyState,
-                Ole32.DROPEFFECT* pdwEffect);
+                DROPEFFECT* pdwEffect);
 
             [PreserveSig]
             HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref CHARRANGE lpchrg, out IntPtr hmenu);

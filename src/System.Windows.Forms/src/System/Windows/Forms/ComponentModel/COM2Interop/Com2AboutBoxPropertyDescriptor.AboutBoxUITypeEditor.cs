@@ -9,40 +9,39 @@ using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using static Interop;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+internal partial class Com2AboutBoxPropertyDescriptor
 {
-    internal partial class Com2AboutBoxPropertyDescriptor
+    public class AboutBoxUITypeEditor : UITypeEditor
     {
-        public class AboutBoxUITypeEditor : UITypeEditor
+        public override unsafe object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            public override unsafe object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+            ArgumentNullException.ThrowIfNull(context);
+            object? component = context.Instance;
+
+            if (component is not null
+                && Marshal.IsComObject(component)
+                && component is Oleaut32.IDispatch pDisp)
             {
-                ArgumentNullException.ThrowIfNull(context);
-                object? component = context.Instance;
-
-                if (component is not null
-                    && Marshal.IsComObject(component)
-                    && component is Oleaut32.IDispatch pDisp)
-                {
-                    EXCEPINFO pExcepInfo = default(EXCEPINFO);
-                    DISPPARAMS dispParams = default(DISPPARAMS);
-                    Guid g = Guid.Empty;
-                    HRESULT hr = pDisp.Invoke(
-                        Ole32.DispatchID.ABOUTBOX,
-                        &g,
-                        PInvoke.GetThreadLocale(),
-                        DISPATCH_FLAGS.DISPATCH_METHOD,
-                        &dispParams,
-                        null,
-                        &pExcepInfo,
-                        null);
-                    Debug.Assert(hr.Succeeded, "Failed to launch about box.");
-                }
-
-                return value;
+                EXCEPINFO pExcepInfo = default;
+                DISPPARAMS dispParams = default;
+                Guid g = Guid.Empty;
+                HRESULT hr = pDisp.Invoke(
+                    PInvoke.DISPID_ABOUTBOX,
+                    &g,
+                    PInvoke.GetThreadLocale(),
+                    DISPATCH_FLAGS.DISPATCH_METHOD,
+                    &dispParams,
+                    null,
+                    &pExcepInfo,
+                    null);
+                Debug.Assert(hr.Succeeded, "Failed to launch about box.");
             }
 
-            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
+            return value;
         }
+
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
     }
 }

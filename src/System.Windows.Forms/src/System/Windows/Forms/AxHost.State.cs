@@ -182,8 +182,8 @@ namespace System.Windows.Forms
                     PInvoke.GlobalFree(hglobal);
                 }
 
-                _lockBytes = new(lockBytes);
-                _storage = new(storage);
+                _lockBytes = new(lockBytes, takeOwnership: true);
+                _storage = new(storage, takeOwnership: true);
             }
 
             internal IPropertyBag.Interface? GetPropBag() => _propertyBag;

@@ -9,7 +9,6 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -287,7 +286,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(BorderStyle.Fixed3D)]
-        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [DispId(PInvoke.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.TextBoxBorderDescr))]
         public BorderStyle BorderStyle
         {

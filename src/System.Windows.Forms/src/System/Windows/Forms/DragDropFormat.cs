@@ -4,6 +4,7 @@
 
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.System.Ole;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -50,14 +51,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Copies a given storage medium.
+        ///  Copies a given storage medium.
         /// </summary>
         /// <returns>
         ///  A copy of <paramref name="mediumSource"/>.
         /// </returns>
         private static STGMEDIUM CopyData(short format, STGMEDIUM mediumSource)
         {
-            STGMEDIUM mediumDestination = default(STGMEDIUM);
+            STGMEDIUM mediumDestination = default;
 
             try
             {
@@ -69,10 +70,11 @@ namespace System.Windows.Forms
                     case TYMED.TYMED_GDI:
                     case TYMED.TYMED_MFPICT:
 
-                        mediumDestination.unionmember = Ole32.OleDuplicateData(
-                            mediumSource.unionmember,
-                            format,
-                            PInvoke.GMEM.MOVEABLE | PInvoke.GMEM.DDESHARE | PInvoke.GMEM.ZEROINIT);
+                        mediumDestination.unionmember = PInvoke.OleDuplicateData(
+                            (HANDLE)mediumSource.unionmember,
+                            (CLIPBOARD_FORMAT)format,
+                            // Note that GMEM_DDESHARE is ignored
+                            GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT);
 
                         if (mediumDestination.unionmember == IntPtr.Zero)
                         {

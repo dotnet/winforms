@@ -5,35 +5,34 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms.Design;
-using static Interop;
+using Windows.Win32.System.Ole;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public abstract partial class AxHost
 {
-    public abstract partial class AxHost
+    public class AxComponentEditor : WindowsFormsComponentEditor
     {
-        public class AxComponentEditor : WindowsFormsComponentEditor
-        {
 #pragma warning disable CA1725 // Parameter names should match base declaration - "obj" and "parent" is how this is documented
-            public override bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
+        public override bool EditComponent(ITypeDescriptorContext? context, object obj, IWin32Window? parent)
 #pragma warning restore CA1725
+        {
+            if (obj is AxHost host)
             {
-                if (obj is AxHost host)
+                try
                 {
-                    try
-                    {
-                        s_axHTraceSwitch.TraceVerbose("in AxComponentEditor.EditComponent");
-                        ((Ole32.IOleControlSite)host._oleSite).ShowPropertyFrame();
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.Fail(ex.ToString());
-                        throw;
-                    }
+                    s_axHTraceSwitch.TraceVerbose("in AxComponentEditor.EditComponent");
+                    ((IOleControlSite.Interface)host._oleSite).ShowPropertyFrame();
+                    return true;
                 }
-
-                return false;
+                catch (Exception ex)
+                {
+                    Debug.Fail(ex.ToString());
+                    throw;
+                }
             }
+
+            return false;
         }
     }
 }

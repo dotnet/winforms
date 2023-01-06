@@ -95,5 +95,35 @@ internal partial class Interop
                 return ex;
             }
         }
+
+        /// <summary>
+        ///  For the given <paramref name="this"/> pointer unwrap the associated managed object and use it to
+        ///  invoke <paramref name="action"/>.
+        /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   Handles exceptions and converts to <see cref="HRESULT"/>.
+        ///  </para>
+        /// </remarks>
+        internal static HRESULT UnwrapAndInvoke<TThis, TInterface>(TThis* @this, Action<TInterface> action)
+            where TThis : unmanaged
+            where TInterface : class
+        {
+            try
+            {
+                TInterface? @object = ComInterfaceDispatch.GetInstance<TInterface>((ComInterfaceDispatch*)@this);
+                if (@object is null)
+                {
+                    return HRESULT.COR_E_OBJECTDISPOSED;
+                }
+
+                action(@object);
+                return HRESULT.S_OK;
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+        }
     }
 }

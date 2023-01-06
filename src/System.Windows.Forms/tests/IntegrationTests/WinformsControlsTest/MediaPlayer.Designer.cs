@@ -21,6 +21,8 @@ namespace WinformsControlsTest
             {
                 components.Dispose();
             }
+
+            axWindowsMediaPlayer1.Dispose();
             base.Dispose(disposing);
         }
 

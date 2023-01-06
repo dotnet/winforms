@@ -11,11 +11,11 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
         [Fact]
         public void AgileComPointer_CheckRefCounts()
         {
-            ComHelpers.GetComPointer(new GlobalInterfaceTableTests.MyStream(), out IStream* stream);
+            IStream* stream = ComHelpers.GetComPointer<IStream>(new GlobalInterfaceTableTests.MyStream());
 
             uint count;
 
-            using (var agileStream = new AgileComPointer<IStream>(stream))
+            using (var agileStream = new AgileComPointer<IStream>(stream, takeOwnership: true))
             {
                 count = stream->AddRef();
                 Assert.Equal(2u, count);

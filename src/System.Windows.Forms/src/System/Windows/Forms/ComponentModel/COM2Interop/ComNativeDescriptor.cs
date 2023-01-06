@@ -7,9 +7,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
-using static Interop;
-using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -53,23 +52,24 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         internal static unsafe string GetClassName(object component)
         {
             // Check IVsPerPropertyBrowsing for a name.
-            if (component is VSSDK.IVsPerPropertyBrowsing browsing)
+            if (component is IVsPerPropertyBrowsing.Interface browsing)
             {
-                string? name = null;
-                if (browsing.GetClassName(ref name).Succeeded && name is not null)
+                using BSTR name = default;
+                if (browsing.GetClassName(&name).Succeeded && !name.IsNull)
                 {
-                    return name;
+                    return name.ToString();
                 }
             }
 
-            if (Com2TypeInfoProcessor.FindTypeInfo(component, preferIProvideClassInfo: true) is not Oleaut32.ITypeInfo typeInfo)
+            using ComScope<ITypeInfo> typeInfo = new(Com2TypeInfoProcessor.FindTypeInfo(component, preferIProvideClassInfo: true));
+            if (typeInfo.IsNull)
             {
                 return string.Empty;
             }
 
             using BSTR nameBstr = default;
-            typeInfo.GetDocumentation(
-                DispatchID.MEMBERID_NIL,
+            typeInfo.Value->GetDocumentation(
+                PInvoke.MEMBERID_NIL,
                 &nameBstr,
                 pBstrDocString: null,
                 pdwHelpContext: null,
@@ -84,13 +84,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal static string GetName(object component)
         {
-            if (component is not Oleaut32.IDispatch)
+            if (component is not IDispatch.Interface dispatch)
             {
                 return string.Empty;
             }
 
-            DispatchID dispid = Com2TypeInfoProcessor.GetNameDispId((Oleaut32.IDispatch)component);
-            if (dispid != DispatchID.UNKNOWN)
+            int dispid = Com2TypeInfoProcessor.GetNameDispId(dispatch);
+            if (dispid != PInvoke.DISPID_UNKNOWN)
             {
                 bool success = false;
                 object? value = GetPropertyValue(component, dispid, ref success);
@@ -106,20 +106,22 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal static unsafe object? GetPropertyValue(object component, string propertyName, ref bool succeeded)
         {
-            if (component is not Oleaut32.IDispatch dispatch)
+            if (component is not IDispatch.Interface dispatch)
             {
                 return null;
             }
 
-            string[] names = new string[] { propertyName };
-            DispatchID dispid = DispatchID.UNKNOWN;
+            int dispid = PInvoke.DISPID_UNKNOWN;
             Guid guid = Guid.Empty;
             try
             {
-                HRESULT result = dispatch.GetIDsOfNames(&guid, names, 1, PInvoke.GetThreadLocale(), &dispid);
-                return result.Failed || dispid == DispatchID.UNKNOWN
-                    ? null
-                    : GetPropertyValue(component, dispid, ref succeeded);
+                fixed (char* n = propertyName)
+                {
+                    HRESULT result = dispatch.GetIDsOfNames(&guid, (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &dispid);
+                    return result.Failed || dispid == PInvoke.DISPID_UNKNOWN
+                        ? null
+                        : GetPropertyValue(component, dispid, ref succeeded);
+                }
             }
             catch
             {
@@ -127,18 +129,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal static object? GetPropertyValue(object component, DispatchID dispid, ref bool succeeded)
+        internal static object? GetPropertyValue(object component, int dispid, ref bool succeeded)
         {
-            if (component is not Oleaut32.IDispatch)
+            if (component is not IDispatch.Interface dispatch)
             {
                 return null;
             }
 
-            object[] pVarResult = new object[1];
-            if (GetPropertyValue(component, dispid, pVarResult) == HRESULT.S_OK)
+            if (GetPropertyValue(component, dispid, out object? pVarResult) == HRESULT.S_OK)
             {
                 succeeded = true;
-                return pVarResult[0];
+                return pVarResult;
             }
             else
             {
@@ -147,9 +148,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal static unsafe HRESULT GetPropertyValue(object component, DispatchID dispid, object[] retval)
+        internal static unsafe HRESULT GetPropertyValue(object component, int dispid, out object? retval)
         {
-            if (component is not Oleaut32.IDispatch dispatch)
+            retval = null;
+
+            if (component is not IDispatch.Interface dispatch)
             {
                 return HRESULT.E_NOINTERFACE;
             }
@@ -159,6 +162,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Guid guid = Guid.Empty;
                 EXCEPINFO pExcepInfo = default;
                 DISPPARAMS dispParams = default;
+                VARIANT result;
                 try
                 {
                     HRESULT hr = dispatch.Invoke(
@@ -167,10 +171,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         PInvoke.GetThreadLocale(),
                         DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
                         &dispParams,
-                        retval,
+                        &result,
                         &pExcepInfo,
                         null);
 
+                    retval = Marshal.GetObjectForNativeVariant((nint)(void*)&result);
                     return hr == HRESULT.DISP_E_EXCEPTION ? (HRESULT)pExcepInfo.scode : hr;
                 }
                 catch (ExternalException ex)
@@ -189,10 +194,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Checks if the given dispid matches the dispid that the Object would like to specify
         ///  as its identification property (Name, ID, etc).
         /// </summary>
-        internal static bool IsNameDispId(object obj, DispatchID dispid)
+        internal static bool IsNameDispId(object obj, int dispid)
             => obj is not null
                 && obj.GetType().IsCOMObject
-                && dispid == Com2TypeInfoProcessor.GetNameDispId((Oleaut32.IDispatch)obj);
+                && dispid == Com2TypeInfoProcessor.GetNameDispId((IDispatch.Interface)obj);
 
         /// <summary>
         ///  Checks all our property manages to see if any have become invalid.
@@ -280,9 +285,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             List<Attribute> attributes = new();
 
-            if (component is VSSDK.IVSMDPerPropertyBrowsing browsing)
+            if (component is IVSMDPerPropertyBrowsing.Interface browsing)
             {
-                attributes.AddRange(Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes(browsing, DispatchID.MEMBERID_NIL));
+                attributes.AddRange(Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes(browsing, PInvoke.MEMBERID_NIL));
             }
 
             if (Com2ComponentEditor.NeedsComponentEditor(component))

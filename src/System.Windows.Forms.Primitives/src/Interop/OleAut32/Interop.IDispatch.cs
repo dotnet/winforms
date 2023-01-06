@@ -30,11 +30,11 @@ internal partial class Interop
                 [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)] string[] rgszNames,
                 uint cNames,
                 PInvoke.LCID lcid,
-                Ole32.DispatchID* rgDispId);
+                int* rgDispId);
 
             [PreserveSig]
             HRESULT Invoke(
-                Ole32.DispatchID dispIdMember,
+                int dispIdMember,
                 Guid* riid,
                 PInvoke.LCID lcid,
                 DISPATCH_FLAGS dwFlags,

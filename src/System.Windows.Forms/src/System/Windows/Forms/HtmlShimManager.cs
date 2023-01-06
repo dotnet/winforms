@@ -19,29 +19,30 @@ namespace System.Windows.Forms
     {
         private Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim> htmlWindowShims;
         private Dictionary<HtmlElement, HtmlElement.HtmlElementShim> htmlElementShims;
-        private Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim> htmlDocumentShims;
+        private Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim> _htmlDocumentShims;
 
         internal HtmlShimManager()
         {
         }
 
-        /// <summary> AddDocumentShim - adds a HtmlDocumentShim to list of shims to manage
+        /// <summary>
+        ///  Adds a <see cref="HtmlDocument.HtmlDocumentShim"/> to list of shims to manage.
         ///  Can create a WindowShim as a side effect so it knows when to self prune from the list.
         /// </summary>
         public void AddDocumentShim(HtmlDocument doc)
         {
             HtmlDocument.HtmlDocumentShim shim = null;
 
-            if (htmlDocumentShims is null)
+            if (_htmlDocumentShims is null)
             {
-                htmlDocumentShims = new Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim>();
+                _htmlDocumentShims = new Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim>();
                 shim = new HtmlDocument.HtmlDocumentShim(doc);
-                htmlDocumentShims[doc] = shim;
+                _htmlDocumentShims[doc] = shim;
             }
-            else if (!htmlDocumentShims.ContainsKey(doc))
+            else if (!_htmlDocumentShims.ContainsKey(doc))
             {
                 shim = new HtmlDocument.HtmlDocumentShim(doc);
-                htmlDocumentShims[doc] = shim;
+                _htmlDocumentShims[doc] = shim;
             }
 
             if (shim is not null)
@@ -50,9 +51,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary> AddWindowShim - adds a HtmlWindowShim to list of shims to manage
+        /// <summary>
+        ///  Adds a <see cref="HtmlWindow.HtmlWindowShim"/> to list of shims to manage.
         /// </summary>
-
         public void AddWindowShim(HtmlWindow window)
         {
             HtmlWindow.HtmlWindowShim shim = null;
@@ -102,12 +103,12 @@ namespace System.Windows.Forms
 
         internal HtmlDocument.HtmlDocumentShim GetDocumentShim(HtmlDocument document)
         {
-            if (htmlDocumentShims is null)
+            if (_htmlDocumentShims is null)
             {
                 return null;
             }
 
-            if (htmlDocumentShims.TryGetValue(document, out HtmlDocument.HtmlDocumentShim value))
+            if (_htmlDocumentShims.TryGetValue(document, out HtmlDocument.HtmlDocumentShim value))
             {
                 return value;
             }
@@ -148,16 +149,13 @@ namespace System.Windows.Forms
         private void OnShimAdded(HtmlShim addedShim)
         {
             Debug.Assert(addedShim is not null, "Why are we calling this with a null shim?");
-            if (addedShim is not null)
+            if (addedShim is not null and not HtmlWindow.HtmlWindowShim)
             {
-                if (!(addedShim is HtmlWindow.HtmlWindowShim))
-                {
-                    // we need to add a window shim here for documents and elements
-                    // so we can sync Window.Unload.  The window shim itself will trap
-                    // the unload event and call back on us on OnWindowUnloaded.  When
-                    // that happens we know we can free all our ptrs to COM.
-                    AddWindowShim(new HtmlWindow(this, addedShim.AssociatedWindow));
-                }
+                // We need to add a window shim here for documents and elements
+                // so we can sync Window.Unload. The window shim itself will trap
+                // the unload event and call back on us on OnWindowUnloaded.  When
+                // that happens we know we can free all our ptrs to COM.
+                AddWindowShim(new HtmlWindow(this, addedShim.AssociatedWindow));
             }
         }
 
@@ -173,16 +171,16 @@ namespace System.Windows.Forms
                 //
                 // prune documents
                 //
-                if (htmlDocumentShims is not null)
+                if (_htmlDocumentShims is not null)
                 {
-                    HtmlDocument.HtmlDocumentShim[] shims = new HtmlDocument.HtmlDocumentShim[htmlDocumentShims.Count];
-                    htmlDocumentShims.Values.CopyTo(shims, 0);
+                    HtmlDocument.HtmlDocumentShim[] shims = new HtmlDocument.HtmlDocumentShim[_htmlDocumentShims.Count];
+                    _htmlDocumentShims.Values.CopyTo(shims, 0);
 
                     foreach (HtmlDocument.HtmlDocumentShim shim in shims)
                     {
                         if (shim.AssociatedWindow == unloadedWindow.NativeHtmlWindow)
                         {
-                            htmlDocumentShims.Remove(shim.Document);
+                            _htmlDocumentShims.Remove(shim.Document);
                             shim.Dispose();
                         }
                     }
@@ -237,9 +235,9 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (htmlDocumentShims is not null)
+                if (_htmlDocumentShims is not null)
                 {
-                    foreach (HtmlDocument.HtmlDocumentShim shim in htmlDocumentShims.Values)
+                    foreach (HtmlDocument.HtmlDocumentShim shim in _htmlDocumentShims.Values)
                     {
                         shim.Dispose();
                     }
@@ -254,7 +252,7 @@ namespace System.Windows.Forms
                 }
 
                 htmlWindowShims = null;
-                htmlDocumentShims = null;
+                _htmlDocumentShims = null;
                 htmlWindowShims = null;
             }
         }

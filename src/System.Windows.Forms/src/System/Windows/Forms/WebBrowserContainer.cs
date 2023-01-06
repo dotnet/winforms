@@ -8,11 +8,10 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using static Interop;
 
 namespace System.Windows.Forms
 {
-    internal class WebBrowserContainer : IOleContainer.Interface, Ole32.IOleInPlaceFrame
+    internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlaceFrame.Interface, IOleInPlaceUIWindow.Interface, IOleWindow.Interface
     {
         private readonly WebBrowserBase parent;
         private IContainer? assocContainer;  // associated IContainer...
@@ -22,18 +21,18 @@ namespace System.Windows.Forms
         private WebBrowserBase? siteActive;
         private readonly HashSet<Control> containerCache = new();
         private HashSet<Control>? components;
-        private WebBrowserBase? ctlInEditMode;
+        private WebBrowserBase? _controlInEditMode;
 
         internal WebBrowserContainer(WebBrowserBase parent)
         {
             this.parent = parent;
         }
 
-        unsafe HRESULT IParseDisplayName.Interface.ParseDisplayName(IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, IMoniker** ppmkOut)
-           => ((IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
+        HRESULT IParseDisplayName.Interface.ParseDisplayName(IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, IMoniker** ppmkOut)
+            => ((IOleContainer.Interface)this).ParseDisplayName(pbc, pszDisplayName, pchEaten, ppmkOut);
 
         // IOleContainer methods:
-        unsafe HRESULT IOleContainer.Interface.ParseDisplayName(IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, IMoniker** ppmkOut)
+        HRESULT IOleContainer.Interface.ParseDisplayName(IBindCtx* pbc, PWSTR pszDisplayName, uint* pchEaten, IMoniker** ppmkOut)
         {
             if (ppmkOut is not null)
             {
@@ -43,149 +42,120 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT IOleContainer.Interface.EnumObjects(OLECONTF grfFlags, IEnumUnknown** ppenum)
+        HRESULT IOleContainer.Interface.EnumObjects(OLECONTF grfFlags, IEnumUnknown** ppenum)
         {
             if (ppenum is null)
             {
                 return HRESULT.E_POINTER;
             }
 
-            if ((grfFlags & OLECONTF.OLECONTF_EMBEDDINGS) != 0)
+            if (grfFlags.HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
             {
-                Debug.Assert(parent is not null, "gotta have it...");
+                Debug.Assert(parent is not null);
                 List<object> list = new();
                 ListAXControls(list, true);
                 if (list.Count > 0)
                 {
                     object[] temp = new object[list.Count];
                     list.CopyTo(temp, 0);
-                    bool hr = ComHelpers.TryGetComPointer(new AxHost.EnumUnknown(temp), out *ppenum);
-                    Debug.Assert(hr);
+                    *ppenum = ComHelpers.GetComPointer<IEnumUnknown>(new AxHost.EnumUnknown(temp));
                     return HRESULT.S_OK;
                 }
             }
 
-            bool result = ComHelpers.TryGetComPointer(new AxHost.EnumUnknown(null), out *ppenum);
-            Debug.Assert(result);
+            *ppenum = ComHelpers.GetComPointer<IEnumUnknown>(new AxHost.EnumUnknown(null));
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleContainer.Interface.LockContainer(BOOL fLock)
-        {
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleContainer.Interface.LockContainer(BOOL fLock) => HRESULT.E_NOTIMPL;
 
         // IOleInPlaceFrame methods:
-        unsafe HRESULT Ole32.IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
+        HRESULT IOleInPlaceFrame.Interface.GetWindow(HWND* phwnd)
         {
             if (phwnd is null)
             {
                 return HRESULT.E_POINTER;
             }
 
-            *phwnd = parent.Handle;
+            *phwnd = parent.HWND;
             return HRESULT.S_OK;
         }
 
-        HRESULT Ole32.IOleInPlaceFrame.ContextSensitiveHelp(BOOL fEnterMode)
-        {
-            return HRESULT.S_OK;
-        }
+        HRESULT IOleInPlaceFrame.Interface.ContextSensitiveHelp(BOOL fEnterMode) => HRESULT.S_OK;
 
-        unsafe HRESULT Ole32.IOleInPlaceFrame.GetBorder(RECT* lprectBorder)
-        {
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.GetBorder(RECT* lprectBorder) => HRESULT.E_NOTIMPL;
 
-        unsafe HRESULT Ole32.IOleInPlaceFrame.RequestBorderSpace(RECT* pborderwidths)
-        {
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.RequestBorderSpace(RECT* pborderwidths) => HRESULT.E_NOTIMPL;
 
-        unsafe HRESULT Ole32.IOleInPlaceFrame.SetBorderSpace(RECT* pborderwidths)
-        {
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.SetBorderSpace(RECT* pborderwidths) => HRESULT.E_NOTIMPL;
 
-        unsafe HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(IOleInPlaceActiveObject.Interface? pActiveObject, string? pszObjName)
+        HRESULT IOleInPlaceFrame.Interface.SetActiveObject(IOleInPlaceActiveObject* pActiveObject, PCWSTR pszObjName)
         {
             if (pActiveObject is null)
             {
-                if (ctlInEditMode is not null)
+                if (_controlInEditMode is not null)
                 {
-                    ctlInEditMode.SetEditMode(WebBrowserHelper.AXEditMode.None);
-                    ctlInEditMode = null;
+                    _controlInEditMode.SetEditMode(WebBrowserHelper.AXEditMode.None);
+                    _controlInEditMode = null;
                 }
 
                 return HRESULT.S_OK;
             }
 
-            WebBrowserBase? ctl = null;
-            if (pActiveObject is IOleObject.Interface oleObject)
+            WebBrowserBase? control = null;
+
+            using var oleObject = ComScope<IOleObject>.TryQueryFrom(pActiveObject, out HRESULT hr);
+            if (hr.Failed)
             {
-                IOleClientSite* clientSite;
-                oleObject.GetClientSite(&clientSite);
-                var clientSiteObject = Marshal.GetObjectForIUnknown((nint)clientSite);
-                if (clientSiteObject is WebBrowserSiteBase webBrowserSiteBase)
-                {
-                    ctl = webBrowserSiteBase.Host;
-                }
+                return HRESULT.S_OK;
+            }
 
-                if (ctlInEditMode is not null)
-                {
-                    Debug.Fail("control " + ctlInEditMode.ToString() + " did not reset its edit mode to null");
-                    ctlInEditMode.SetSelectionStyle(WebBrowserHelper.SelectionStyle.Selected);
-                    ctlInEditMode.SetEditMode(WebBrowserHelper.AXEditMode.None);
-                }
+            IOleClientSite* clientSite;
+            oleObject.Value->GetClientSite(&clientSite);
+            var clientSiteObject = Marshal.GetObjectForIUnknown((nint)clientSite);
+            if (clientSiteObject is WebBrowserSiteBase webBrowserSiteBase)
+            {
+                control = webBrowserSiteBase.Host;
+            }
 
-                if (ctl is null)
+            if (_controlInEditMode is not null)
+            {
+                Debug.Fail($"Control {_controlInEditMode} did not reset its edit mode to null.");
+                _controlInEditMode.SetSelectionStyle(WebBrowserHelper.SelectionStyle.Selected);
+                _controlInEditMode.SetEditMode(WebBrowserHelper.AXEditMode.None);
+            }
+
+            if (control is null)
+            {
+                _controlInEditMode = null;
+            }
+            else
+            {
+                if (!control.IsUserMode)
                 {
-                    ctlInEditMode = null;
-                }
-                else
-                {
-                    if (!ctl.IsUserMode)
-                    {
-                        ctlInEditMode = ctl;
-                        ctl.SetEditMode(WebBrowserHelper.AXEditMode.Object);
-                        ctl.AddSelectionHandler();
-                        ctl.SetSelectionStyle(WebBrowserHelper.SelectionStyle.Active);
-                    }
+                    _controlInEditMode = control;
+                    control.SetEditMode(WebBrowserHelper.AXEditMode.Object);
+                    control.AddSelectionHandler();
+                    control.SetSelectionStyle(WebBrowserHelper.SelectionStyle.Active);
                 }
             }
 
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT Ole32.IOleInPlaceFrame.InsertMenus(IntPtr hmenuShared, Ole32.OLEMENUGROUPWIDTHS* lpMenuWidths)
-        {
-            return HRESULT.S_OK;
-        }
+        HRESULT IOleInPlaceFrame.Interface.InsertMenus(HMENU hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths)
+            => HRESULT.S_OK;
 
-        HRESULT Ole32.IOleInPlaceFrame.SetMenu(IntPtr hmenuShared, IntPtr holemenu, IntPtr hwndActiveObject)
-        {
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.SetMenu(HMENU hmenuShared, nint holemenu, HWND hwndActiveObject)
+            => HRESULT.E_NOTIMPL;
 
-        HRESULT Ole32.IOleInPlaceFrame.RemoveMenus(IntPtr hmenuShared)
-        {
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.RemoveMenus(HMENU hmenuShared) => HRESULT.E_NOTIMPL;
 
-        HRESULT Ole32.IOleInPlaceFrame.SetStatusText(string pszStatusText)
-        {
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.SetStatusText(PCWSTR pszStatusText) => HRESULT.E_NOTIMPL;
 
-        HRESULT Ole32.IOleInPlaceFrame.EnableModeless(BOOL fEnable)
-        {
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.EnableModeless(BOOL fEnable) => HRESULT.E_NOTIMPL;
 
-        unsafe HRESULT Ole32.IOleInPlaceFrame.TranslateAccelerator(MSG* lpmsg, ushort wID)
-        {
-            return HRESULT.S_FALSE;
-        }
+        HRESULT IOleInPlaceFrame.Interface.TranslateAccelerator(MSG* lpmsg, ushort wID) => HRESULT.S_FALSE;
 
         //
         // Private helper methods:
@@ -204,7 +174,7 @@ namespace System.Windows.Forms
                 {
                     if (fuseOcx)
                     {
-                        object ax = webBrowserBase.activeXInstance;
+                        object ax = webBrowserBase._activeXInstance;
                         if (ax is not null)
                         {
                             list.Add(ax);
@@ -447,11 +417,35 @@ namespace System.Windows.Forms
 
         internal void OnExitEditMode(WebBrowserBase ctl)
         {
-            Debug.Assert(ctlInEditMode is null || ctlInEditMode == ctl, "who is exiting edit mode?");
-            if (ctlInEditMode == ctl)
+            Debug.Assert(_controlInEditMode is null || _controlInEditMode == ctl, "who is exiting edit mode?");
+            if (_controlInEditMode == ctl)
             {
-                ctlInEditMode = null;
+                _controlInEditMode = null;
             }
         }
+
+        HRESULT IOleInPlaceUIWindow.Interface.GetWindow(HWND* phwnd)
+            => ((IOleInPlaceFrame.Interface)this).GetWindow(phwnd);
+
+        HRESULT IOleInPlaceUIWindow.Interface.ContextSensitiveHelp(BOOL fEnterMode)
+            => ((IOleInPlaceFrame.Interface)this).ContextSensitiveHelp(fEnterMode);
+
+        HRESULT IOleInPlaceUIWindow.Interface.GetBorder(RECT* lprectBorder)
+            => ((IOleInPlaceFrame.Interface)this).GetBorder(lprectBorder);
+
+        HRESULT IOleInPlaceUIWindow.Interface.RequestBorderSpace(RECT* pborderwidths)
+            => ((IOleInPlaceFrame.Interface)this).RequestBorderSpace(pborderwidths);
+
+        HRESULT IOleInPlaceUIWindow.Interface.SetBorderSpace(RECT* pborderwidths)
+            => ((IOleInPlaceFrame.Interface)this).SetBorderSpace(pborderwidths);
+
+        HRESULT IOleInPlaceUIWindow.Interface.SetActiveObject(IOleInPlaceActiveObject* pActiveObject, PCWSTR pszObjName)
+            => ((IOleInPlaceFrame.Interface)this).SetActiveObject(pActiveObject, pszObjName);
+
+        HRESULT IOleWindow.Interface.GetWindow(HWND* phwnd)
+            => ((IOleInPlaceFrame.Interface)this).GetWindow(phwnd);
+
+        HRESULT IOleWindow.Interface.ContextSensitiveHelp(BOOL fEnterMode)
+            => ((IOleInPlaceFrame.Interface)this).ContextSensitiveHelp(fEnterMode);
     }
 }

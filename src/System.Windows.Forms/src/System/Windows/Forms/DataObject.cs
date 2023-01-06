@@ -1102,13 +1102,8 @@ namespace System.Windows.Forms
             }
 
             var comTypeFormatEtc = ((ComTypes.IDataObject)this).EnumFormatEtc((DATADIR)(int)dwDirection);
-            if (!ComHelpers.TryGetComPointer(comTypeFormatEtc, out Com.IEnumFORMATETC* formatEtcPtr))
-            {
-                return HRESULT.E_NOINTERFACE;
-            }
-
-            *ppenumFormatEtc = formatEtcPtr;
-            return HRESULT.S_OK;
+            *ppenumFormatEtc = ComHelpers.TryGetComPointer<Com.IEnumFORMATETC>(comTypeFormatEtc, out HRESULT hr);
+            return hr.Succeeded ? HRESULT.S_OK : HRESULT.E_NOINTERFACE;
         }
 
         unsafe HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection)
@@ -1132,19 +1127,14 @@ namespace System.Windows.Forms
 
             *ppenumAdvise = null;
 
-            var result = (HRESULT)((ComTypes.IDataObject)this).EnumDAdvise(out var enumAdvice);
-            if (result.Failed)
+            HRESULT hr = (HRESULT)((ComTypes.IDataObject)this).EnumDAdvise(out var enumAdvice);
+            if (hr.Failed)
             {
-                return result;
+                return hr;
             }
 
-            if (!ComHelpers.TryGetComPointer(enumAdvice, out Com.IEnumSTATDATA* enumAdvicePtr))
-            {
-                return HRESULT.E_NOINTERFACE;
-            }
-
-            *ppenumAdvise = enumAdvicePtr;
-            return result;
+            *ppenumAdvise = ComHelpers.TryGetComPointer<Com.IEnumSTATDATA>(enumAdvice, out hr);
+            return hr.Succeeded ? hr : HRESULT.E_NOINTERFACE;
         }
     }
 }

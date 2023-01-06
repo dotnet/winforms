@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Buffers;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 
@@ -15,7 +14,7 @@ internal static partial class Interop
         {
             private readonly Stream _dataStream;
 
-            // to support seeking ahead of the stream length...
+            // To support seeking ahead of the stream length
             private long _virtualPosition = -1;
 
             internal GPStream(Stream stream)
@@ -46,11 +45,8 @@ internal static partial class Interop
                 }
 
                 // The cloned object should have the same current "position"
-                bool result = ComHelpers.TryGetComPointer(
-                    new GPStream(_dataStream) { _virtualPosition = _virtualPosition },
-                    out IStream* pStream);
-                Debug.Assert(result);
-                *ppstm = pStream;
+                *ppstm = ComHelpers.GetComPointer<IStream>(
+                    new GPStream(_dataStream) { _virtualPosition = _virtualPosition });
                 return HRESULT.S_OK;
             }
 
@@ -197,7 +193,7 @@ internal static partial class Interop
                 *pstatstg = new STATSTG
                 {
                     cbSize = (ulong)_dataStream.Length,
-                    type = (uint)STGTY.STREAM,
+                    type = (uint)STGTY.STGTY_STREAM,
 
                     // Default read/write access is READ, which == 0
                     grfMode = _dataStream.CanWrite
@@ -207,7 +203,7 @@ internal static partial class Interop
                         : STGM.STGM_READ
                 };
 
-                if (grfStatFlag == Windows.Win32.System.Com.STATFLAG.STATFLAG_DEFAULT)
+                if (grfStatFlag == STATFLAG.STATFLAG_DEFAULT)
                 {
                     // Caller wants a name
                     pstatstg->pwcsName = (char*)Marshal.StringToCoTaskMemUni(_dataStream is FileStream fs ? fs.Name : _dataStream.ToString());

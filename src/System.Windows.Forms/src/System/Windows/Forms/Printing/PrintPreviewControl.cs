@@ -276,7 +276,7 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [DispId((int)Ole32.DispatchID.TABSTOP)]
+        [DispId(PInvoke.DISPID_TABSTOP)]
         public new bool TabStop
         {
             get => base.TabStop;

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 
@@ -44,19 +43,17 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Bind(IHandle<HWND> edit, AUTOCOMPLETEOPTIONS options)
         {
-            if (_autoComplete2 is null)
+            if (_autoComplete2 is null || _autoComplete2->SetOptions((uint)options).Failed)
             {
                 return false;
             }
 
-            if (_autoComplete2->SetOptions((uint)options).Failed)
-            {
-                return false;
-            }
+            _autoComplete2->Init(
+                edit.Handle,
+                (IUnknown*)ComHelpers.GetComPointer<IEnumString>(this),
+                (PCWSTR)null,
+                (PCWSTR)null);
 
-            bool result = ComHelpers.TryGetComPointer(this, out IEnumString* pEnumString);
-            Debug.Assert(result);
-            _autoComplete2->Init(edit.Handle, (IUnknown*)pEnumString, (PCWSTR)null, (PCWSTR)null);
             GC.KeepAlive(edit.Wrapper);
             return true;
         }
@@ -85,10 +82,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            bool result = ComHelpers.TryGetComPointer(
-                new StringSource(strings) { current = current },
-                out *ppenum);
-            Debug.Assert(result);
+            *ppenum = ComHelpers.GetComPointer<IEnumString>(new StringSource(strings) { current = current });
             return HRESULT.S_OK;
         }
 

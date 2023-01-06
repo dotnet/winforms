@@ -1757,7 +1757,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
-        [DispId((int)Ole32.DispatchID.TABSTOP)]
+        [DispId(PInvoke.DISPID_TABSTOP)]
         [SRDescription(nameof(SR.ControlTabStopDescr))]
         public new bool TabStop
         {

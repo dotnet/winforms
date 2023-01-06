@@ -2,66 +2,63 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static Interop;
+namespace System.Windows.Forms;
 
-namespace System.Windows.Forms
+public partial class Control
 {
-    public partial class Control
+    /// <summary>
+    ///  Contains a single ambient property, including DISPID, name and value.
+    /// </summary>
+    private class AmbientProperty
     {
+        private object? _value;
+
         /// <summary>
-        ///  Contains a single ambient property, including DISPID, name and value.
+        ///  Creates a new, empty ambient property.
         /// </summary>
-        private class AmbientProperty
+        internal AmbientProperty(string name, int dispID)
         {
-            private object? _value;
+            Name = name;
+            DispID = dispID;
+            _value = null;
+            Empty = true;
+        }
 
-            /// <summary>
-            ///  Creates a new, empty ambient property.
-            /// </summary>
-            internal AmbientProperty(string name, Ole32.DispatchID dispID)
+        /// <summary>
+        ///  The windows forms property name.
+        /// </summary>
+        internal string Name { get; }
+
+        /// <summary>
+        ///  The DispID for the property.
+        /// </summary>
+        internal int DispID { get; }
+
+        /// <summary>
+        ///  Returns true if this property has not been set.
+        /// </summary>
+        internal bool Empty { get; private set; }
+
+        /// <summary>
+        ///  The current value of the property.
+        /// </summary>
+        internal object? Value
+        {
+            get => _value;
+            set
             {
-                Name = name;
-                DispID = dispID;
-                _value = null;
-                Empty = true;
+                _value = value;
+                Empty = false;
             }
+        }
 
-            /// <summary>
-            ///  The windows forms property name.
-            /// </summary>
-            internal string Name { get; }
-
-            /// <summary>
-            ///  The DispID for the property.
-            /// </summary>
-            internal Ole32.DispatchID DispID { get; }
-
-            /// <summary>
-            ///  Returns true if this property has not been set.
-            /// </summary>
-            internal bool Empty { get; private set; }
-
-            /// <summary>
-            ///  The current value of the property.
-            /// </summary>
-            internal object? Value
-            {
-                get => _value;
-                set
-                {
-                    _value = value;
-                    Empty = false;
-                }
-            }
-
-            /// <summary>
-            ///  Resets the property.
-            /// </summary>
-            internal void ResetValue()
-            {
-                Empty = true;
-                _value = null;
-            }
+        /// <summary>
+        ///  Resets the property.
+        /// </summary>
+        internal void ResetValue()
+        {
+            Empty = true;
+            _value = null;
         }
     }
 }

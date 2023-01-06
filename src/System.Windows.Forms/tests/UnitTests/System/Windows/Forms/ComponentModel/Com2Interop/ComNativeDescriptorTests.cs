@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Tests.TestResources;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using WMPLib;
 using Xunit;
@@ -75,8 +76,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
             HRESULT hr = Ole32.CoCreateInstance(
                 in guid,
                 IntPtr.Zero,
-                Ole32.CLSCTX.INPROC_SERVER,
-                in NativeMethods.ActiveX.IID_IUnknown,
+                CLSCTX.CLSCTX_INPROC_SERVER,
+                in IID.GetRef<IUnknown>(),
                 out object mediaPlayer);
 
             Assert.Equal(HRESULT.S_OK, hr);

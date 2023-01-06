@@ -11,7 +11,6 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ComponentModel.Com2Interop;
 using Windows.Win32.System.Ole;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -47,7 +46,7 @@ namespace System.Windows.Forms
                     // If it does, then it needs to be Browsable(true).
                     if (!IsBrowsable && !IsReadOnly)
                     {
-                        Guid g = GetPropertyPage((Ole32.DispatchID)_dispid.Value);
+                        Guid g = GetPropertyPage(_dispid.Value);
                         if (!Guid.Empty.Equals(g))
                         {
                             s_axPropTraceSwitch.TraceVerbose($"Making property: {Name} browsable because we found an property page.");
@@ -56,7 +55,7 @@ namespace System.Windows.Forms
                     }
 
                     // Use the CategoryAttribute provided by the OCX.
-                    CategoryAttribute cat = owner.GetCategoryForDispid((Ole32.DispatchID)_dispid.Value);
+                    CategoryAttribute cat = owner.GetCategoryForDispid(_dispid.Value);
                     if (cat is not null)
                     {
                         AddAttribute(cat);
@@ -93,10 +92,10 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal Ole32.DispatchID Dispid
+            internal int Dispid
                 => _baseDescriptor.TryGetAttribute(out DispIdAttribute dispid)
-                    ? (Ole32.DispatchID)dispid.Value
-                    : Ole32.DispatchID.UNKNOWN;
+                    ? dispid.Value
+                    : PInvoke.DISPID_UNKNOWN;
 
             public override bool IsReadOnly => _baseDescriptor.IsReadOnly;
 
@@ -121,15 +120,12 @@ namespace System.Windows.Forms
 
                 if (_dispid is not null)
                 {
-                    UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)_dispid.Value);
+                    UpdateTypeConverterAndTypeEditorInternal(false, _dispid.Value);
                 }
 
-                if (editorBaseType.Equals(typeof(UITypeEditor)) && _editor is not null)
-                {
-                    return _editor;
-                }
-
-                return base.GetEditor(editorBaseType);
+                return editorBaseType.Equals(typeof(UITypeEditor)) && _editor is not null
+                    ? _editor
+                    : base.GetEditor(editorBaseType);
             }
 
             private bool GetFlag(int flagValue)
@@ -137,7 +133,7 @@ namespace System.Windows.Forms
                 return ((_flags & flagValue) == flagValue);
             }
 
-            private unsafe Guid GetPropertyPage(Ole32.DispatchID dispid)
+            private unsafe Guid GetPropertyPage(int dispid)
             {
                 try
                 {
@@ -148,7 +144,7 @@ namespace System.Windows.Forms
                     }
 
                     Guid rval = Guid.Empty;
-                    if (ippb.MapPropertyToPage((int)dispid, &rval).Succeeded)
+                    if (ippb.MapPropertyToPage(dispid, &rval).Succeeded)
                     {
                         return rval;
                     }
@@ -250,7 +246,7 @@ namespace System.Windows.Forms
                 OnValueChanged(component);
                 if (_owner == component)
                 {
-                    _owner.SetAxState(AxHost.s_valueChanged, true);
+                    _owner.SetAxState(s_valueChanged, true);
                 }
             }
 
@@ -292,7 +288,7 @@ namespace System.Windows.Forms
             ///  This simply sets flags so this will happen, it doesn't actually to the update...
             ///  we wait and do that on-demand for perf.
             /// </summary>
-            internal unsafe void UpdateTypeConverterAndTypeEditorInternal(bool force, Ole32.DispatchID dispid)
+            internal unsafe void UpdateTypeConverterAndTypeEditorInternal(bool force, int dispid)
             {
                 // Check to see if we're being forced here or if the work really needs to be done.
                 if ((GetFlag(FlagUpdatedEditorAndConverter) && !force) || _owner.GetOcx() is null)
@@ -313,7 +309,7 @@ namespace System.Windows.Forms
                         HRESULT hr = HRESULT.S_OK;
                         try
                         {
-                            hr = ppb.GetPredefinedStrings((int)dispid, &caStrings, &caCookies);
+                            hr = ppb.GetPredefinedStrings(dispid, &caStrings, &caCookies);
                         }
                         catch (ExternalException ex)
                         {

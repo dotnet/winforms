@@ -224,7 +224,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(BorderStyle.Fixed3D)]
-        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [DispId(PInvoke.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.ListBoxBorderDescr))]
         public BorderStyle BorderStyle
         {

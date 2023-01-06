@@ -12,8 +12,8 @@ namespace System.Windows.Forms.Primitives.Tests.Windows.Win32
         [Fact]
         public void GlobalInterfaceTable_CheckRefCounts()
         {
-            using var stream = ComHelpers.GetComScope<IStream>(new MyStream(), out bool success);
-            Assert.True(success);
+            using var stream = ComHelpers.TryGetComScope<IStream>(new MyStream(), out HRESULT hr);
+            Assert.True(hr.Succeeded);
 
             uint count = stream.Value->AddRef();
             Assert.Equal(2u, count);

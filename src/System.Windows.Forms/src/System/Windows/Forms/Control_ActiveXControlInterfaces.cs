@@ -71,7 +71,7 @@ public unsafe partial class Control :
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:OnAmbientPropertyChange. Dispid: {dispID}");
         Debug.Indent();
-        ActiveXInstance.OnAmbientPropertyChange((Interop.Ole32.DispatchID)dispID);
+        ActiveXInstance.OnAmbientPropertyChange(dispID);
         Debug.Unindent();
         return HRESULT.S_OK;
     }
@@ -190,14 +190,7 @@ public unsafe partial class Control :
         }
 
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClientSite");
-        var clientSite = ActiveXInstance.GetClientSite();
-        *ppClientSite = null;
-        if (clientSite is not null)
-        {
-            bool result = ComHelpers.TryGetComPointer(clientSite, out *ppClientSite);
-            Debug.Assert(result);
-        }
-
+        *ppClientSite = ActiveXInstance.GetClientSite().Value;
         return HRESULT.S_OK;
     }
 
@@ -280,7 +273,7 @@ public unsafe partial class Control :
         Debug.Indent();
         try
         {
-            return ActiveXInstance.DoVerb((Interop.Ole32.OLEIVERB)iVerb, lpmsg, pActiveSite, lindex, hwndParent, lprcPosRect);
+            return ActiveXInstance.DoVerb((OLEIVERB)iVerb, lpmsg, pActiveSite, lindex, hwndParent, lprcPosRect);
         }
         finally
         {
@@ -297,10 +290,8 @@ public unsafe partial class Control :
         }
 
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumVerbs");
-        HRESULT hr = ActiveXImpl.EnumVerbs(out Interop.Ole32.IEnumOLEVERB oleVerb);
-        bool result = ComHelpers.TryGetComPointer(oleVerb, out *ppEnumOleVerb);
-        Debug.Assert(result);
-        return hr;
+        *ppEnumOleVerb = ActiveXImpl.EnumVerbs();
+        return HRESULT.S_OK;
     }
 
     HRESULT IOleObject.Interface.Update()

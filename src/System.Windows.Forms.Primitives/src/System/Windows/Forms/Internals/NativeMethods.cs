@@ -98,8 +98,6 @@ namespace System.Windows.Forms
             public const int ALIGN_LEFT = 0x3;
             public const int ALIGN_RIGHT = 0x4;
             public const int ALIGN_MAX = 0x4;
-
-            public static Guid IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
         }
 
         /// <summary>

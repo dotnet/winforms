@@ -5,6 +5,7 @@
 using System.Diagnostics;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Ole;
 using static Interop;
 using static Interop.Richedit;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -225,7 +226,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
+            public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, DROPEFFECT* pdwEffect)
             {
                 if (pdwEffect is null)
                 {
@@ -302,11 +303,11 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    *pdwEffect = (Ole32.DROPEFFECT)lastEffect;
+                    *pdwEffect = (DROPEFFECT)lastEffect;
                 }
                 else
                 {
-                    *pdwEffect = Ole32.DROPEFFECT.NONE;
+                    *pdwEffect = DROPEFFECT.DROPEFFECT_NONE;
                 }
 
                 return HRESULT.S_OK;

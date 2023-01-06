@@ -15,9 +15,13 @@ namespace Windows.Win32.System.Com;
 
 internal unsafe partial struct VARIANT : IDisposable
 {
-    public VARENUM Type => (Anonymous.Anonymous.vt & VT_TYPEMASK);
+    public static VARIANT Empty { get; }
 
-    public bool Byref => (Anonymous.Anonymous.vt & VT_BYREF) != 0;
+    public bool IsEmpty => vt == VT_EMPTY && data.llVal == 0;
+
+    public VARENUM Type => vt & VT_TYPEMASK;
+
+    public bool Byref => vt.HasFlag(VT_BYREF);
 
     [UnscopedRef]
     public ref VARENUM vt => ref Anonymous.Anonymous.vt;
@@ -866,6 +870,14 @@ internal unsafe partial struct VARIANT : IDisposable
         VT_CY => decimal.FromOACurrency(variant.data.cyVal.int64),
         _ => ThrowInvalidCast<decimal>(),
     };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(IUnknown* unknown)
+        => new VARIANT()
+        {
+            vt = VARENUM.VT_UNKNOWN,
+            data = new() { punkVal = unknown }
+        };
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static T ThrowInvalidCast<T>() => throw new InvalidCastException();
