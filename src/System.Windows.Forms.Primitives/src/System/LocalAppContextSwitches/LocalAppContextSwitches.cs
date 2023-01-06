@@ -21,6 +21,9 @@ namespace System.Windows.Forms.Primitives
         private static int s_scaleTopLevelFormMinMaxSizeForDpi;
         private static int s_trackBarModernRendering;
 
+        private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
+        private static readonly bool s_isNetCoreApp = (s_targetFrameworkName?.Identifier) == ".NETCoreApp";
+
         /// <summary>
         ///  Indicates whether AnchorLayoutV2 feature is enabled.
         /// </summary>
@@ -113,10 +116,6 @@ namespace System.Windows.Forms.Primitives
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => GetCachedSwitchValue(ScaleTopLevelFormMinMaxSizeForDpiSwitchName, ref s_scaleTopLevelFormMinMaxSizeForDpi);
         }
-
-        private static readonly bool s_isNetCoreApp = (s_targetFrameworkName?.Identifier) == ".NETCoreApp";
-
-        private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
 
         public static bool TrackBarModernRendering
         {
