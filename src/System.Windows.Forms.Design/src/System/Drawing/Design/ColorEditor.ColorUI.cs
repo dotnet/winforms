@@ -352,7 +352,7 @@ namespace System.Drawing.Design
                 return base.ProcessDialogKey(keyData);
             }
 
-            public void Start(IWindowsFormsEditorService edSvc, object value)
+            public void Start(IWindowsFormsEditorService edSvc, object? value)
             {
                 this.edSvc = edSvc;
                 this.value = value;

@@ -56,13 +56,13 @@ override System.ComponentModel.Design.ExceptionCollection.GetObjectData(System.R
 ~override System.ComponentModel.Design.Serialization.CodeDomSerializerException.GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~override System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
 ~override System.ComponentModel.Design.UndoEngine.UndoUnit.ToString() -> string
-~override System.Drawing.Design.BitmapEditor.GetExtensions() -> string[]
-~override System.Drawing.Design.BitmapEditor.GetFileDialogDescription() -> string
-~override System.Drawing.Design.BitmapEditor.LoadFromStream(System.IO.Stream stream) -> System.Drawing.Image
-~override System.Drawing.Design.ColorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Drawing.Design.ColorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.Drawing.Design.ColorEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Drawing.Design.ColorEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
+override System.Drawing.Design.BitmapEditor.GetExtensions() -> string![]!
+override System.Drawing.Design.BitmapEditor.GetFileDialogDescription() -> string!
+override System.Drawing.Design.BitmapEditor.LoadFromStream(System.IO.Stream! stream) -> System.Drawing.Image!
+override System.Drawing.Design.ColorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Drawing.Design.ColorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.ColorEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Drawing.Design.ColorEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs! e) -> void
 ~override System.Drawing.Design.ContentAlignmentEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.Drawing.Design.ContentAlignmentEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Drawing.Design.CursorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
@@ -71,17 +71,17 @@ override System.ComponentModel.Design.ExceptionCollection.GetObjectData(System.R
 ~override System.Drawing.Design.FontEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Drawing.Design.FontNameEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
 ~override System.Drawing.Design.FontNameEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
-~override System.Drawing.Design.IconEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Drawing.Design.IconEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.Drawing.Design.IconEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Drawing.Design.IconEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
-~override System.Drawing.Design.ImageEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Drawing.Design.ImageEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.Drawing.Design.ImageEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Drawing.Design.ImageEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
-~override System.Drawing.Design.MetafileEditor.GetExtensions() -> string[]
-~override System.Drawing.Design.MetafileEditor.GetFileDialogDescription() -> string
-~override System.Drawing.Design.MetafileEditor.LoadFromStream(System.IO.Stream stream) -> System.Drawing.Image
+override System.Drawing.Design.IconEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Drawing.Design.IconEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.IconEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Drawing.Design.IconEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs! e) -> void
+override System.Drawing.Design.ImageEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Drawing.Design.ImageEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.ImageEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Drawing.Design.ImageEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs! e) -> void
+override System.Drawing.Design.MetafileEditor.GetExtensions() -> string![]!
+override System.Drawing.Design.MetafileEditor.GetFileDialogDescription() -> string!
+override System.Drawing.Design.MetafileEditor.LoadFromStream(System.IO.Stream! stream) -> System.Drawing.Image!
 ~override System.Drawing.Design.ToolboxItem.Equals(object obj) -> bool
 ~override System.Drawing.Design.ToolboxItem.ToString() -> string
 ~override System.Windows.Forms.Design.AnchorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
@@ -130,11 +130,11 @@ override System.Windows.Forms.Design.Behavior.SnapLine.ToString() -> string!
 ~override System.Windows.Forms.Design.FolderNameEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Windows.Forms.Design.ImageListCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object codeObject) -> object
 ~override System.Windows.Forms.Design.ImageListCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
-~override System.Windows.Forms.Design.ImageListImageEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Windows.Forms.Design.ImageListImageEditor.GetFileDialogDescription() -> string
-~override System.Windows.Forms.Design.ImageListImageEditor.GetImageExtenders() -> System.Type[]
-~override System.Windows.Forms.Design.ImageListImageEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.Design.ImageListImageEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
+override System.Windows.Forms.Design.ImageListImageEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Windows.Forms.Design.ImageListImageEditor.GetFileDialogDescription() -> string!
+override System.Windows.Forms.Design.ImageListImageEditor.GetImageExtenders() -> System.Type![]!
+override System.Windows.Forms.Design.ImageListImageEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.Design.ImageListImageEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs! e) -> void
 ~override System.Windows.Forms.Design.MaskDescriptor.Equals(object maskDescriptor) -> bool
 ~override System.Windows.Forms.Design.MaskDescriptor.ToString() -> string
 ~override System.Windows.Forms.Design.ParentControlDesigner.GetControlGlyph(System.Windows.Forms.Design.Behavior.GlyphSelectionType selectionType) -> System.Windows.Forms.Design.Behavior.ControlBodyGlyph
@@ -188,11 +188,11 @@ override System.Windows.Forms.Design.Behavior.SnapLine.ToString() -> string!
 ~static readonly System.Windows.Forms.Design.MenuCommands.SetStatusText -> System.ComponentModel.Design.CommandID
 ~static readonly System.Windows.Forms.Design.MenuCommands.TraySelectionMenu -> System.ComponentModel.Design.CommandID
 ~static System.ComponentModel.Design.ObjectSelectorEditor.ApplyTreeViewThemeStyles(System.Windows.Forms.TreeView treeView) -> void
-~static System.Drawing.Design.BitmapEditor.BitmapExtensions -> System.Collections.Generic.List<string>
-~static System.Drawing.Design.IconEditor.CreateExtensionsString(string[] extensions, string sep) -> string
-~static System.Drawing.Design.IconEditor.CreateFilterEntry(System.Drawing.Design.IconEditor editor) -> string
-~static System.Drawing.Design.ImageEditor.CreateExtensionsString(string[] extensions, string sep) -> string
-~static System.Drawing.Design.ImageEditor.CreateFilterEntry(System.Drawing.Design.ImageEditor e) -> string
+static System.Drawing.Design.BitmapEditor.BitmapExtensions -> System.Collections.Generic.List<string!>!
+static System.Drawing.Design.IconEditor.CreateExtensionsString(string?[]? extensions, string! sep) -> string?
+static System.Drawing.Design.IconEditor.CreateFilterEntry(System.Drawing.Design.IconEditor! editor) -> string!
+static System.Drawing.Design.ImageEditor.CreateExtensionsString(string?[]? extensions, string! sep) -> string?
+static System.Drawing.Design.ImageEditor.CreateFilterEntry(System.Drawing.Design.ImageEditor! e) -> string!
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.Create(string resxFile, string baseName, string generatedCodeNamespace, string resourcesNamespace, System.CodeDom.Compiler.CodeDomProvider codeProvider, bool internalClass, out string[] unmatchable) -> System.CodeDom.CodeCompileUnit
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.Create(string resxFile, string baseName, string generatedCodeNamespace, System.CodeDom.Compiler.CodeDomProvider codeProvider, bool internalClass, out string[] unmatchable) -> System.CodeDom.CodeCompileUnit
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.Create(System.Collections.IDictionary resourceList, string baseName, string generatedCodeNamespace, string resourcesNamespace, System.CodeDom.Compiler.CodeDomProvider codeProvider, bool internalClass, out string[] unmatchable) -> System.CodeDom.CodeCompileUnit
@@ -656,13 +656,13 @@ virtual System.ComponentModel.Design.DesignerCommandSet.GetCommands(string! name
 ~virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentRemoved(System.ComponentModel.Design.ComponentEventArgs e) -> void
 ~virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentRemoving(System.ComponentModel.Design.ComponentEventArgs e) -> void
 ~virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentRename(System.ComponentModel.Design.ComponentRenameEventArgs e) -> void
-~virtual System.Drawing.Design.IconEditor.GetExtensions() -> string[]
-~virtual System.Drawing.Design.IconEditor.GetFileDialogDescription() -> string
-~virtual System.Drawing.Design.IconEditor.LoadFromStream(System.IO.Stream stream) -> System.Drawing.Icon
-~virtual System.Drawing.Design.ImageEditor.GetExtensions() -> string[]
-~virtual System.Drawing.Design.ImageEditor.GetFileDialogDescription() -> string
-~virtual System.Drawing.Design.ImageEditor.GetImageExtenders() -> System.Type[]
-~virtual System.Drawing.Design.ImageEditor.LoadFromStream(System.IO.Stream stream) -> System.Drawing.Image
+virtual System.Drawing.Design.IconEditor.GetExtensions() -> string![]!
+virtual System.Drawing.Design.IconEditor.GetFileDialogDescription() -> string!
+virtual System.Drawing.Design.IconEditor.LoadFromStream(System.IO.Stream! stream) -> System.Drawing.Icon!
+virtual System.Drawing.Design.ImageEditor.GetExtensions() -> string![]!
+virtual System.Drawing.Design.ImageEditor.GetFileDialogDescription() -> string!
+virtual System.Drawing.Design.ImageEditor.GetImageExtenders() -> System.Type![]!
+virtual System.Drawing.Design.ImageEditor.LoadFromStream(System.IO.Stream! stream) -> System.Drawing.Image!
 ~virtual System.Drawing.Design.ToolboxItem.ComponentType.get -> string
 ~virtual System.Drawing.Design.ToolboxItem.CreateComponentsCore(System.ComponentModel.Design.IDesignerHost host) -> System.ComponentModel.IComponent[]
 ~virtual System.Drawing.Design.ToolboxItem.CreateComponentsCore(System.ComponentModel.Design.IDesignerHost host, System.Collections.IDictionary defaultValues) -> System.ComponentModel.IComponent[]

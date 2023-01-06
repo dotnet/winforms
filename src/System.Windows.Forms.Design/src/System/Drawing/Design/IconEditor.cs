@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -21,9 +19,9 @@ namespace System.Drawing.Design
     {
         private static readonly List<string> s_iconExtensions = new List<string>() { "ico" };
         private static readonly Type[] s_imageExtenders = Array.Empty<Type>();
-        private FileDialog _fileDialog;
+        private FileDialog? _fileDialog;
 
-        protected static string CreateExtensionsString(string[] extensions, string sep)
+        protected static string? CreateExtensionsString(string?[]? extensions, string sep)
         {
             const string StarDot = "*.";
 
@@ -35,6 +33,11 @@ namespace System.Drawing.Design
             string text = string.Empty;
             for (int i = 0; i < extensions.Length; i++)
             {
+                if (string.IsNullOrWhiteSpace(extensions[i]))
+                {
+                    continue;
+                }
+
                 text = text + StarDot + extensions[i];
                 if (i < extensions.Length - 1)
                 {
@@ -48,12 +51,12 @@ namespace System.Drawing.Design
         protected static string CreateFilterEntry(IconEditor editor)
         {
             string description = editor.GetFileDialogDescription();
-            string extensions = CreateExtensionsString(editor.GetExtensions(), ",");
-            string extensionsWithSemicolons = CreateExtensionsString(editor.GetExtensions(), ";");
+            string? extensions = CreateExtensionsString(editor.GetExtensions(), ",");
+            string? extensionsWithSemicolons = CreateExtensionsString(editor.GetExtensions(), ";");
             return $"{description}({extensions})|{extensionsWithSemicolons}";
         }
 
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
             // Even though we don't use the editor service this is historically what we did.
             if (!provider.TryGetService(out IWindowsFormsEditorService _))
@@ -95,7 +98,7 @@ namespace System.Drawing.Design
         /// Retrieves the editing style of the Edit method.  If the method
         /// is not supported, this will return None.
         /// </summary>
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
             => UITypeEditorEditStyle.Modal;
 
         protected virtual string GetFileDialogDescription() => SR.iconFileDescription;
@@ -103,7 +106,7 @@ namespace System.Drawing.Design
         protected virtual string[] GetExtensions() => s_iconExtensions.ToArray();
 
         /// <inheritdoc />
-        public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
+        public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;
 
         protected virtual Icon LoadFromStream(Stream stream) => new(stream);
 
