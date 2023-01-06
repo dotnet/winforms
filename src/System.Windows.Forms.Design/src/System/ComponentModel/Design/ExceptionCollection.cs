@@ -20,7 +20,7 @@ namespace System.ComponentModel.Design
 
             if (exceptions.ToArray().Any(e => e is not Exception))
             {
-                throw new ArgumentException(SR.ExceptionCollectionInvalidArgument, nameof(exceptions));
+                throw new ArgumentException(string.Format(SR.ExceptionCollectionInvalidArgument, nameof(Exception)), nameof(exceptions));
             }
 
             _exceptions = exceptions?.Cast<Exception>().ToList();
