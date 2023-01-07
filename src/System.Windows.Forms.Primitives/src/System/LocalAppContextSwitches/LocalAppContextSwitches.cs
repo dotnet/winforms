@@ -31,9 +31,6 @@ namespace System.Windows.Forms.Primitives
                 s_targetFrameworkName ??= AppContext.TargetFrameworkName is { } name ? new(name) : null;
                 return s_targetFrameworkName;
             }
-
-            // Used in tests.
-            private set => s_targetFrameworkName = value;
         }
 
         /// <summary>
