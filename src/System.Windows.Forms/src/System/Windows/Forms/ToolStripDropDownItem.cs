@@ -512,6 +512,11 @@ namespace System.Windows.Forms
                 {
                     DropDown.OwnerItem = null;
                 }
+
+                if (IsParentAccessibilityObjectCreated && AccessibilityObject is ToolStripItemAccessibleObject accessibleObject)
+                {
+                    accessibleObject.RaiseFocusChanged();
+                }
             }
         }
 
