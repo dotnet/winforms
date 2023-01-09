@@ -917,7 +917,26 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void WndProc(ref Message m)
         {
+            switch (m.MsgInternal)
+            {
+                case User32.WM.DPICHANGED_BEFOREPARENT:
+                    WmDpiChangedBeforeParent(ref m);
+                    m.ResultInternal = (LRESULT)0;
+                    break;
+
+                case User32.WM.DPICHANGED_AFTERPARENT:
+                    WmDpiChangedAfterParent(ref m);
+                    m.ResultInternal = (LRESULT)0;
+                    break;
+            }
+
             DefWndProc(ref m);
         }
+
+        protected virtual void WmDpiChangedAfterParent(ref Message m)
+        { }
+
+        protected virtual void WmDpiChangedBeforeParent(ref Message m)
+        { }
     }
 }

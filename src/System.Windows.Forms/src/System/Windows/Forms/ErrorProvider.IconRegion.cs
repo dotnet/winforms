@@ -17,12 +17,9 @@ namespace System.Windows.Forms
             private Region? _region;
             private readonly Icon _icon;
 
-            /// <summary>
-            ///  Constructor that takes an Icon and extracts its 16x16 version.
-            /// </summary>
             public IconRegion(Icon icon)
             {
-                _icon = new Icon(icon, 16, 16);
+                _icon = icon;
             }
 
             /// <summary>
@@ -92,7 +89,6 @@ namespace System.Windows.Forms
             {
                 _region?.Dispose();
                 _region = null;
-                _icon.Dispose();
             }
         }
     }
