@@ -76,14 +76,12 @@ namespace System.Windows.Forms
 
         void IList.Remove(object style)
         {
-            if (style is null)
+            if (style is not TableLayoutStyle tableLayoutStyle || !_innerList.Remove(tableLayoutStyle))
             {
                 return;
             }
 
-            TableLayoutStyle tableLayoutStyle = (TableLayoutStyle)style;
             tableLayoutStyle.Owner = null;
-            _innerList.Remove(tableLayoutStyle);
             PerformLayoutIfOwned();
         }
 
