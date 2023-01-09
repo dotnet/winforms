@@ -249,27 +249,27 @@
       </trans-unit>
       <trans-unit id="Arg_ArrayPlusOffTooSmall">
         <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
-        <target state="new">Destination array is not long enough to copy all the items in the collection. Check array index and length.</target>
+        <target state="translated">A matriz de destino não é longa o suficiente para copiar todos os itens da coleção. Verifique o índice e o tamanho da matriz.</target>
         <note />
       </trans-unit>
       <trans-unit id="Arg_NonZeroLowerBound">
         <source>The lower bound of target array must be zero.</source>
-        <target state="new">The lower bound of target array must be zero.</target>
+        <target state="translated">O limite inferior da matriz de destino deve ser zero.</target>
         <note />
       </trans-unit>
       <trans-unit id="Arg_RankMultiDimNotSupported">
         <source>Only single dimensional arrays are supported for the requested action.</source>
-        <target state="new">Only single dimensional arrays are supported for the requested action.</target>
+        <target state="translated">A ação solicitada oferece suporte somente a matrizes unidimensionais.</target>
         <note />
       </trans-unit>
       <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
         <source>Non-negative number required.</source>
-        <target state="new">Non-negative number required.</target>
+        <target state="translated">É necessário um número não negativo.</target>
         <note />
       </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
-        <target state="new">Target array type is not compatible with the type of items in the collection.</target>
+        <target state="translated">O tipo da matriz de destino não é compatível com o tipo dos itens na coleção.</target>
         <note />
       </trans-unit>
       <trans-unit id="AutoCompleteFailure">

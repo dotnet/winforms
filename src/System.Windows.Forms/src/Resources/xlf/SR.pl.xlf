@@ -249,27 +249,27 @@
       </trans-unit>
       <trans-unit id="Arg_ArrayPlusOffTooSmall">
         <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
-        <target state="new">Destination array is not long enough to copy all the items in the collection. Check array index and length.</target>
+        <target state="translated">Tablica docelowa ma zbyt małą długość, aby móc skopiować wszystkie elementy kolekcji. Sprawdź indeks tablicy i jej długość.</target>
         <note />
       </trans-unit>
       <trans-unit id="Arg_NonZeroLowerBound">
         <source>The lower bound of target array must be zero.</source>
-        <target state="new">The lower bound of target array must be zero.</target>
+        <target state="translated">Dolna granica tablicy docelowej musi mieć wartość zero.</target>
         <note />
       </trans-unit>
       <trans-unit id="Arg_RankMultiDimNotSupported">
         <source>Only single dimensional arrays are supported for the requested action.</source>
-        <target state="new">Only single dimensional arrays are supported for the requested action.</target>
+        <target state="translated">Dla żądanej akcji są obsługiwane tylko tablice jednowymiarowe.</target>
         <note />
       </trans-unit>
       <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
         <source>Non-negative number required.</source>
-        <target state="new">Non-negative number required.</target>
+        <target state="translated">Wymagana jest liczba nieujemna.</target>
         <note />
       </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
-        <target state="new">Target array type is not compatible with the type of items in the collection.</target>
+        <target state="translated">Typ tablicy docelowej nie jest zgodny z typem elementów w kolekcji.</target>
         <note />
       </trans-unit>
       <trans-unit id="AutoCompleteFailure">

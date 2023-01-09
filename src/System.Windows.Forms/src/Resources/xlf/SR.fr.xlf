@@ -249,27 +249,27 @@
       </trans-unit>
       <trans-unit id="Arg_ArrayPlusOffTooSmall">
         <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
-        <target state="new">Destination array is not long enough to copy all the items in the collection. Check array index and length.</target>
+        <target state="translated">La taille du tableau de destination ne permet pas de copier tous les éléments de la collection. Vérifiez l'index et la longueur du tableau.</target>
         <note />
       </trans-unit>
       <trans-unit id="Arg_NonZeroLowerBound">
         <source>The lower bound of target array must be zero.</source>
-        <target state="new">The lower bound of target array must be zero.</target>
+        <target state="translated">La limite inférieure du tableau cible doit être égale à zéro.</target>
         <note />
       </trans-unit>
       <trans-unit id="Arg_RankMultiDimNotSupported">
         <source>Only single dimensional arrays are supported for the requested action.</source>
-        <target state="new">Only single dimensional arrays are supported for the requested action.</target>
+        <target state="translated">Seuls les tableaux unidimensionnels sont pris en charge pour l'action demandée.</target>
         <note />
       </trans-unit>
       <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
         <source>Non-negative number required.</source>
-        <target state="new">Non-negative number required.</target>
+        <target state="translated">Nombre non négatif obligatoire.</target>
         <note />
       </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
-        <target state="new">Target array type is not compatible with the type of items in the collection.</target>
+        <target state="translated">Le type de tableau cible n'est pas compatible avec le type des éléments de la collection.</target>
         <note />
       </trans-unit>
       <trans-unit id="AutoCompleteFailure">

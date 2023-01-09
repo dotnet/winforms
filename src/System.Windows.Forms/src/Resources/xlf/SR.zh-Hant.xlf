@@ -249,27 +249,27 @@
       </trans-unit>
       <trans-unit id="Arg_ArrayPlusOffTooSmall">
         <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
-        <target state="new">Destination array is not long enough to copy all the items in the collection. Check array index and length.</target>
+        <target state="translated">目的地陣列的長度不足以複製集合中的所有項目。請檢查陣列索引以及長度。</target>
         <note />
       </trans-unit>
       <trans-unit id="Arg_NonZeroLowerBound">
         <source>The lower bound of target array must be zero.</source>
-        <target state="new">The lower bound of target array must be zero.</target>
+        <target state="translated">目標陣列的下限必須為零。</target>
         <note />
       </trans-unit>
       <trans-unit id="Arg_RankMultiDimNotSupported">
         <source>Only single dimensional arrays are supported for the requested action.</source>
-        <target state="new">Only single dimensional arrays are supported for the requested action.</target>
+        <target state="translated">所要求的動作只支援一維陣列。</target>
         <note />
       </trans-unit>
       <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
         <source>Non-negative number required.</source>
-        <target state="new">Non-negative number required.</target>
+        <target state="translated">需要非負數。</target>
         <note />
       </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
-        <target state="new">Target array type is not compatible with the type of items in the collection.</target>
+        <target state="translated">目標陣列類型與集合中項目的類型不相容。</target>
         <note />
       </trans-unit>
       <trans-unit id="AutoCompleteFailure">
