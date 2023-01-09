@@ -124,16 +124,16 @@ namespace System.Windows.Forms
             // GetKeyboardLayoutName does what we want, but only for the current input
             // language; setting and resetting the current input language would generate
             // spurious InputLanguageChanged events.
-            //
+
             // According to the GetKeyboardLayout API function docs low word of HKL
             // contains input language but same keyboard can be installed more than once
             // under different languages in Windows and it would give us wrong results
             // in cases where for example French keyboard is installed under US input
             // language etc.
-            //
+            int language = PARAM.LOWORD(hkl);
+
             // High word of HKL contains a device handle to the physical layout of
             // the keyboard but exact format of this handle is not documented.
-            //
             // For older keyboard layouts device handle seems contain keyboard layout
             // language which we can use as KLID without any issues.
             int device = PARAM.HIWORD(hkl);
@@ -171,15 +171,17 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
-            // Fallback to input language if keyboard language is not available
-            if (device == 0)
+            else
             {
-                device = PARAM.LOWORD(hkl);
+                // Keyboard layout language overrides input language if available
+                if (device != 0)
+                {
+                    language = device;
+                }
             }
 
             // Pad with zeros to its left to produce arbitrary length KLID string
-            return device.ToString("x8");
+            return language.ToString("x8");
         }
 
         /// <summary>
