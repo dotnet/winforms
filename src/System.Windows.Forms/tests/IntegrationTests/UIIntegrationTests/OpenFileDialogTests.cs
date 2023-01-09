@@ -32,28 +32,5 @@ namespace System.Windows.Forms.UITests
             dialog.InitialDirectory = Path.GetTempPath();
             Assert.Equal(DialogResult.Cancel, dialog.ShowDialog(dialogOwnerForm));
         }
-
-        [WinFormsFact]
-        public void OpenFileDialogTests_Open()
-        {
-            using Form form = new Form();
-            using OpenFileDialog dialog = new();
-            using Button button = new()
-            {
-                Text = "Test"
-            };
-            button.Click += (object? sender, EventArgs e) =>
-            {
-                dialog.Multiselect = true;
-                if (dialog.ShowDialog(form) == DialogResult.OK)
-                {
-                    var filePath = dialog.FileName;
-                }
-            };
-
-            form.Controls.Add(button);
-            form.Show();
-            button.PerformClick();
-        }
     }
 }

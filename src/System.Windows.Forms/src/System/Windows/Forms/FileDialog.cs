@@ -459,7 +459,6 @@ namespace System.Windows.Forms
         /// </summary>
         private static string[] GetMultiselectFiles(ReadOnlySpan<char> fileBuffer)
         {
-            Debug.WriteLine($"fileBuffer: {fileBuffer}");
             var directory = fileBuffer.SliceAtFirstNull();
             var fileNames = fileBuffer[directory.Length..];
             if (fileNames.Length == 0)
