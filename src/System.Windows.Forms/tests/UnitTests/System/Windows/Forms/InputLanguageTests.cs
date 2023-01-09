@@ -113,10 +113,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetKeyboardLayoutNameForHKL_TestData()
         {
-            yield return new object[] { (unchecked((nint)0x0000000004090409)), "00000409" }; // US
-            yield return new object[] { (unchecked((nint)0x00000000040c0409)), "0000040c" }; // French
-            yield return new object[] { (unchecked((nint)0xfffffffff0200409)), "00011009" }; // Canadian Multilingual Standard
-            yield return new object[] { (unchecked((nint)0xfffffffff0b42400)), "000c0c00" }; // Gothic
+            yield return new object[] { unchecked((nint)0x0000000004090409), "00000409" }; // US
+            yield return new object[] { unchecked((nint)0x00000000040c0409), "0000040c" }; // French
+            yield return new object[] { unchecked((nint)0xfffffffff0200409), "00011009" }; // Canadian Multilingual Standard
+            yield return new object[] { unchecked((nint)0xfffffffff0b42400), "000c0c00" }; // Gothic
         }
 
         [Theory]
