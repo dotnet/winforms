@@ -107,8 +107,8 @@ namespace System.Windows.Forms
                 clrBackground = SystemColors.Window
             };
 
-            Font font = parent?.Font ?? SystemFonts.StatusFont ?? SystemFonts.DefaultFont;
-            string captionFont = $"{font.Name}, {font.Size}, , " +
+            Font font = SystemFonts.StatusFont ?? SystemFonts.DefaultFont;
+            string captionFont = $"{font.Name}, {font.SizeInPoints}, , " +
                 $"{(font.Bold ? "BOLD" : "")}" +
                 $"{(font.Italic ? "ITALIC" : "")}" +
                 $"{(font.Underline ? "UNDERLINE" : "")}";
