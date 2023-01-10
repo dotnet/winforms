@@ -1027,7 +1027,7 @@
       </trans-unit>
       <trans-unit id="ExceptionCollectionInvalidArgument">
         <source>Argument must only contain objects of type '{0}'.</source>
-        <target state="new">Argument must only contain objects of type '{0}'.</target>
+        <target state="translated">引数には、'{0}' 型のオブジェクトのみを含める必要があります。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">

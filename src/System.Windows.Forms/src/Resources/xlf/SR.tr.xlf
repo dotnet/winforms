@@ -249,27 +249,27 @@
       </trans-unit>
       <trans-unit id="Arg_ArrayPlusOffTooSmall">
         <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
-        <target state="new">Destination array is not long enough to copy all the items in the collection. Check array index and length.</target>
+        <target state="translated">Hedef dizi, koleksiyondaki tüm öğeleri kopyalamak için yeterince uzun değil. Dizi dizinini ve uzunluğunu denetleyin.</target>
         <note />
       </trans-unit>
       <trans-unit id="Arg_NonZeroLowerBound">
         <source>The lower bound of target array must be zero.</source>
-        <target state="new">The lower bound of target array must be zero.</target>
+        <target state="translated">Hedef dizinin alt sınırı sıfır olmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="Arg_RankMultiDimNotSupported">
         <source>Only single dimensional arrays are supported for the requested action.</source>
-        <target state="new">Only single dimensional arrays are supported for the requested action.</target>
+        <target state="translated">Yalnızca tek boyutlu diziler, istenen eylem için destekleniyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
         <source>Non-negative number required.</source>
-        <target state="new">Non-negative number required.</target>
+        <target state="translated">Negatif olmayan sayı gerekiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
-        <target state="new">Target array type is not compatible with the type of items in the collection.</target>
+        <target state="translated">Hedef dizi türü, koleksiyondaki öğelerin türüyle uyumlu değil.</target>
         <note />
       </trans-unit>
       <trans-unit id="AutoCompleteFailure">

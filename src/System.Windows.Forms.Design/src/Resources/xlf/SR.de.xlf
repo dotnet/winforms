@@ -1027,7 +1027,7 @@
       </trans-unit>
       <trans-unit id="ExceptionCollectionInvalidArgument">
         <source>Argument must only contain objects of type '{0}'.</source>
-        <target state="new">Argument must only contain objects of type '{0}'.</target>
+        <target state="translated">Das Argument darf nur Objekte vom Typ "{0}" enthalten.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
