@@ -262,7 +262,7 @@ namespace System.Windows.Forms
         ///  - Converts formatted representations of 'null' into DBNull
         ///  - Performs some special-case conversions (eg. CheckState to Boolean)
         ///  - Uses TypeConverters or IConvertible where appropriate
-        ///  - Throws a FormatException is no suitable conversion can be found
+        ///  - Throws a FormatException if no suitable conversion can be found
         /// </summary>
         private static object? ParseObjectInternal(
             object? value,
