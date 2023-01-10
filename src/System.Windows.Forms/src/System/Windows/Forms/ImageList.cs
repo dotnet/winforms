@@ -19,11 +19,11 @@ namespace System.Windows.Forms
     ///  Toolbar. You can add either bitmaps or Icons to the ImageList, and the
     ///  other controls will be able to use the Images as they desire.
     /// </summary>
-    [Designer("System.Windows.Forms.Design.ImageListDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.ImageListDesigner, {AssemblyRef.SystemDesign}")]
     [ToolboxItemFilter("System.Windows.Forms")]
     [DefaultProperty(nameof(Images))]
     [TypeConverter(typeof(ImageListConverter))]
-    [DesignerSerializer("System.Windows.Forms.Design.ImageListCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
+    [DesignerSerializer($"System.Windows.Forms.Design.ImageListCodeDomSerializer, {AssemblyRef.SystemDesign}", "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionImageList))]
     public sealed partial class ImageList : Component, IHandle, IHandle<HIMAGELIST>
     {
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
 
         private NativeImageList? _nativeImageList;
 
-        private ColorDepth _colorDepth = ColorDepth.Depth8Bit;
+        private ColorDepth _colorDepth = ColorDepth.Depth32Bit;
         private Size _imageSize = s_defaultImageSize;
 
         private ImageCollection? _imageCollection;
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeColorDepth() => Images.Count == 0;
 
-        private void ResetColorDepth() => ColorDepth = ColorDepth.Depth8Bit;
+        private void ResetColorDepth() => ColorDepth = ColorDepth.Depth32Bit;
 
         /// <summary>
         ///  The handle of the ImageList object. This corresponds to a win32
@@ -599,36 +599,27 @@ namespace System.Windows.Forms
             }
         }
 
-        private static bool BitmapHasAlpha(BitmapData bmpData)
+        private static unsafe bool BitmapHasAlpha(BitmapData bmpData)
         {
-            if (bmpData.PixelFormat != PixelFormat.Format32bppArgb && bmpData.PixelFormat != PixelFormat.Format32bppRgb)
+            if (bmpData.PixelFormat is not PixelFormat.Format32bppArgb and not PixelFormat.Format32bppRgb)
             {
                 return false;
             }
 
-            bool hasAlpha = false;
-            unsafe
+            for (int i = 0; i < bmpData.Height; i++)
             {
-                for (int i = 0; i < bmpData.Height; i++)
+                int offsetRow = i * bmpData.Stride;
+                for (int j = 3; j < bmpData.Width * 4; j += 4) // *4 is safe since we know PixelFormat is ARGB
                 {
-                    int offsetRow = i * bmpData.Stride;
-                    for (int j = 3; j < bmpData.Width * 4; j += 4)
-                    { // *4 is safe since we know PixelFormat is ARGB
-                        unsafe
-                        {
-                            byte* candidate = ((byte*)bmpData.Scan0.ToPointer()) + offsetRow + j;
-                            if (*candidate != 0)
-                            {
-                                hasAlpha = true;
-                                goto Found; // gotos are not the best, but it's the best thing here...
-                            }
-                        }
+                    byte* candidate = ((byte*)bmpData.Scan0.ToPointer()) + offsetRow + j;
+                    if (*candidate != 0)
+                    {
+                        return true;
                     }
                 }
-
-            Found:
-                return hasAlpha;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -794,15 +785,9 @@ namespace System.Windows.Forms
         ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
-        {
-            string s = base.ToString();
-            if (Images is not null)
-            {
-                return s + " Images.Count: " + Images.Count.ToString(CultureInfo.CurrentCulture) + ", ImageSize: " + ImageSize.ToString();
-            }
-
-            return s;
-        }
+            => Images is null
+               ? base.ToString()
+               : $"{base.ToString()} Images.Count: {Images.Count.ToString(CultureInfo.CurrentCulture)}, ImageSize: {ImageSize}";
 
         HIMAGELIST IHandle<HIMAGELIST>.Handle => HIMAGELIST;
 
