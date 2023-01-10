@@ -82,6 +82,12 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(stream);
             MemoryStream memoryStream = new();
+            // reset stream position to start, there are no gaurantees it is at the start.
+            if (stream.CanSeek)
+            {
+                stream.Position = 0;
+            }
+
             stream.CopyTo(memoryStream);
             _cursorData = memoryStream.ToArray();
 
