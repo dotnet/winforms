@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -17,14 +15,14 @@ namespace System.Windows.Forms.PropertyGridInternal
     /// </summary>
     internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
     {
-        private string _valueClassName;
-        private GridEntry _defaultEntry;
+        private string? _valueClassName;
+        private GridEntry? _defaultEntry;
         private IDesignerHost _host;
         private IServiceProvider _baseProvider;
         private PropertyTab _ownerTab;
         private PropertyGridView _ownerGridView;
-        private AttributeCollection _browsableAttributes;
-        private IComponentChangeService _changeService;
+        private AttributeCollection? _browsableAttributes;
+        private IComponentChangeService? _changeService;
         protected bool _forceReadOnlyChecked;
 
         internal SingleSelectRootGridEntry(
@@ -103,12 +101,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected override IComponentChangeService ComponentChangeService
+        protected override IComponentChangeService? ComponentChangeService
             => _changeService ?? this.GetService<IComponentChangeService>();
 
         public override PropertyTab OwnerTab => _ownerTab;
 
-        internal sealed override GridEntry DefaultChild
+        internal sealed override GridEntry? DefaultChild
         {
             get => _defaultEntry;
             set => _defaultEntry = value;
@@ -126,7 +124,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!_forceReadOnlyChecked)
                 {
-                    if ((TypeDescriptorHelper.TryGetAttribute(Target, out ReadOnlyAttribute readOnlyAttribute)
+                    if ((TypeDescriptorHelper.TryGetAttribute(Target, out ReadOnlyAttribute? readOnlyAttribute)
                         && !readOnlyAttribute.IsDefaultAttribute())
                         || TypeDescriptor.GetAttributes(Target).Contains(InheritanceAttribute.InheritedReadOnly))
                     {
@@ -148,11 +146,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override GridItemType GridItemType => GridItemType.Root;
 
-        public override string HelpKeyword
+        public override string? HelpKeyword
         {
             get
             {
-                if (TypeDescriptorHelper.TryGetAttribute(Target, out HelpKeywordAttribute helpAttribute)
+                if (TypeDescriptorHelper.TryGetAttribute(Target, out HelpKeywordAttribute? helpAttribute)
                     && !helpAttribute.IsDefaultAttribute())
                 {
                     return helpAttribute.HelpKeyword;
@@ -162,7 +160,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public override string PropertyLabel
+        public override string? PropertyLabel
         {
             get
             {
@@ -196,19 +194,19 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void Dispose(bool disposing)
         {
-            _host = null;
-            _baseProvider = null;
-            _ownerTab = null;
-            _ownerGridView = null;
+            _host = null!;
+            _baseProvider = null!;
+            _ownerTab = null!;
+            _ownerGridView = null!;
             _changeService = null;
 
-            Target = null;
+            Target = null!;
             _valueClassName = null;
             _defaultEntry = null;
             base.Dispose(disposing);
         }
 
-        public override object GetService(Type serviceType)
+        public override object? GetService(Type serviceType)
             => _host?.GetService(serviceType) ?? _baseProvider?.GetService(serviceType);
 
         public void ResetBrowsableAttributes() => _browsableAttributes = new(BrowsableAttribute.Yes);
