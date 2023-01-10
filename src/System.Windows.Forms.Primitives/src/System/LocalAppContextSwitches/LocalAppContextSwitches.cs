@@ -16,10 +16,27 @@ namespace System.Windows.Forms.Primitives
         private const string ScaleTopLevelFormMinMaxSizeForDpiSwitchName = "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi";
         internal const string AnchorLayoutV2SwitchName = "System.Windows.Forms.AnchorLayoutV2";
         internal const string TrackBarModernRenderingSwitchName = "System.Windows.Forms.TrackBarModernRendering";
-
         private static int s_AnchorLayoutV2;
         private static int s_scaleTopLevelFormMinMaxSizeForDpi;
         private static int s_trackBarModernRendering;
+        private static FrameworkName? s_targetFrameworkName;
+
+        /// <summary>
+        ///  The <see cref="TargetFrameworkAttribute"/> value for the entry assembly, if any.
+        /// </summary>
+        public static FrameworkName? TargetFrameworkName
+        {
+            get
+            {
+                s_targetFrameworkName ??= AppContext.TargetFrameworkName is { } name ? new(name) : null;
+                return s_targetFrameworkName;
+            }
+        }
+
+        /// <summary>
+        ///  Returns <see langword="true"/> if the <see cref="TargetFrameworkAttribute"/> value for the entry assembly specifies .NET Core.
+        /// </summary>
+        public static bool IsNetCoreApp => string.Equals(TargetFrameworkName?.Identifier, ".NETCoreApp");
 
         /// <summary>
         ///  Indicates whether AnchorLayoutV2 feature is enabled.
@@ -70,7 +87,7 @@ namespace System.Windows.Forms.Primitives
 
             static bool GetSwitchDefaultValue(string switchName)
             {
-                if (!s_isNetCoreApp)
+                if (!IsNetCoreApp)
                 {
                     return false;
                 }
@@ -79,7 +96,7 @@ namespace System.Windows.Forms.Primitives
                 // limited to Windows 10 and above versions.
                 if (OsVersion.IsWindows10_1703OrGreater())
                 {
-                    if (s_targetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
+                    if (TargetFrameworkName!.Version.CompareTo(new Version("8.0")) >= 0)
                     {
                         if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
                         {
@@ -90,22 +107,16 @@ namespace System.Windows.Forms.Primitives
                         {
                             return true;
                         }
-                    }
-                }
 
-                if (switchName == TrackBarModernRenderingSwitchName)
-                {
-                    return true;
+                        if (switchName == TrackBarModernRenderingSwitchName)
+                        {
+                            return true;
+                        }
+                    }
                 }
 
                 return false;
             }
-        }
-
-        private static FrameworkName? GetTargetFrameworkName()
-        {
-            string? targetFrameworkName = AppContext.TargetFrameworkName;
-            return targetFrameworkName is null ? null : new FrameworkName(targetFrameworkName);
         }
 
         public static bool ScaleTopLevelFormMinMaxSizeForDpi
@@ -113,10 +124,6 @@ namespace System.Windows.Forms.Primitives
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => GetCachedSwitchValue(ScaleTopLevelFormMinMaxSizeForDpiSwitchName, ref s_scaleTopLevelFormMinMaxSizeForDpi);
         }
-
-        private static readonly bool s_isNetCoreApp = (s_targetFrameworkName?.Identifier) == ".NETCoreApp";
-
-        private static readonly FrameworkName? s_targetFrameworkName = GetTargetFrameworkName();
 
         public static bool TrackBarModernRendering
         {
