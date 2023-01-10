@@ -5235,7 +5235,6 @@ namespace System.Windows.Forms
 
             HWND activeHwnd = PInvoke.GetActiveWindow();
             HandleRef<HWND> ownerHwnd = owner is null ? GetHandleRef(activeHwnd) : GetSafeHandle(owner);
-            Properties.SetObject(PropDialogOwner, owner);
             Form? oldOwner = OwnerInternal;
             if (owner is Form ownerForm && owner != oldOwner)
             {
