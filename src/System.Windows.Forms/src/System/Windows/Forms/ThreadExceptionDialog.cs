@@ -307,7 +307,7 @@ namespace System.Windows.Forms
             _helpButton.FlatStyle = FlatStyle.Standard;
             _helpButton.DialogResult = DialogResult.Yes;
 
-            _detailsButton.Text = "&Подробности";
+            _detailsButton.Text = SR.ExDlgShowDetails;
             _detailsButton.FlatStyle = FlatStyle.Standard;
             _detailsButton.Click += new EventHandler(DetailsClick);
 
