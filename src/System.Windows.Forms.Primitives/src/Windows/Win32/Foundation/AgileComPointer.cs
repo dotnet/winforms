@@ -10,38 +10,101 @@ namespace Windows.Win32.Foundation
     /// <summary>
     ///  Finalizable wrapper for COM pointers that gives agile access to the specified interface.
     /// </summary>
-    internal sealed unsafe class AgileComPointer<TInterface> : IDisposable
+    /// <remarks>
+    ///  <para>
+    ///   This class should be used to hold all COM pointers that are stored as fields to ensure that they are
+    ///   safely finalized when needed. Finalization should be avoided whenever possible for performance and timely
+    ///   resource release (that is, this class should be disposed).
+    ///  </para>
+    /// </remarks>
+    internal unsafe class AgileComPointer<TInterface> : DisposalTracking.Tracker, IDisposable
         where TInterface : unmanaged, IComIID
     {
-        private readonly uint _cookie;
+        private uint _cookie;
+        public TInterface* OriginalHandle { get; }
 
-        public AgileComPointer(TInterface* @interface)
+        public AgileComPointer(TInterface* @interface, bool takeOwnership)
         {
             _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
+            OriginalHandle = @interface;
 
-            // We let the GlobalInterfaceTable maintain the ref count here
-            uint count = ((IUnknown*)@interface)->Release();
-            Debug.Assert(count == 1);
+            if (takeOwnership)
+            {
+                // The GIT will add a ref to the given interface, release to effectively give ownership to the GIT.
+                uint count = ((IUnknown*)@interface)->Release();
+                Debug.Assert(count >= 0);
+            }
         }
 
+        /// <summary>
+        ///  Gets the default interface. Throws if failed.
+        /// </summary>
         public ComScope<TInterface> GetInterface()
         {
             var scope = GlobalInterfaceTable.GetInterface<TInterface>(_cookie, out HRESULT hr);
-            Debug.Assert(hr.Succeeded);
+            hr.ThrowOnFailure();
+            return scope;
+        }
+
+        /// <summary>
+        ///  Gets the specified interface. Throws if failed.
+        /// </summary>
+        public ComScope<TAsInterface> GetInterface<TAsInterface>()
+            where TAsInterface : unmanaged, IComIID
+        {
+            var scope = TryGetInterface<TAsInterface>(out HRESULT hr);
+            hr.ThrowOnFailure();
+            return scope;
+        }
+
+        /// <summary>
+        ///  Tries to get the default interface.
+        /// </summary>
+        public ComScope<TInterface> TryGetInterface()
+            => GlobalInterfaceTable.GetInterface<TInterface>(_cookie, out _);
+
+        /// <summary>
+        ///  Tries to get the default interface.
+        /// </summary>
+        public ComScope<TInterface> TryGetInterface(out HRESULT hr)
+            => GlobalInterfaceTable.GetInterface<TInterface>(_cookie, out hr);
+
+        /// <summary>
+        ///  Tries to get the specified interface.
+        /// </summary>
+        public ComScope<TAsInterface> TryGetInterface<TAsInterface>(out HRESULT hr)
+            where TAsInterface : unmanaged, IComIID
+        {
+            var scope = GlobalInterfaceTable.GetInterface<TAsInterface>(_cookie, out hr);
             return scope;
         }
 
         ~AgileComPointer()
         {
-            Debug.Fail("Did not dispose AgileComPointer");
-            Dispose();
+            Dispose(disposing: false);
         }
 
         public void Dispose()
         {
-            HRESULT hr = GlobalInterfaceTable.RevokeInterface(_cookie);
-            Debug.Assert(hr.Succeeded);
+            Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_cookie == 0)
+            {
+                return;
+            }
+
+            HRESULT hr = GlobalInterfaceTable.RevokeInterface(_cookie);
+            _cookie = 0;
+
+            if (disposing)
+            {
+                // Don't assert from the finalizer thread.
+                Debug.Assert(hr.Succeeded);
+            }
         }
     }
 }

@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 internal static partial class Interop
@@ -20,7 +21,7 @@ internal static partial class Interop
                 IntPtr hwndTarget,
                 IComDataObject pDataObj,
                 ref Point ppt,
-                Ole32.DROPEFFECT dwEffect);
+                DROPEFFECT dwEffect);
 
             [PreserveSig]
             HRESULT DragLeave();
@@ -28,13 +29,13 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT DragOver(
                 ref Point ppt,
-                Ole32.DROPEFFECT dwEffect);
+                DROPEFFECT dwEffect);
 
             [PreserveSig]
             HRESULT Drop(
                 IComDataObject pDataObj,
                 ref Point ppt,
-                Ole32.DROPEFFECT dwEffect);
+                DROPEFFECT dwEffect);
 
             [PreserveSig]
             HRESULT Show(

@@ -39,11 +39,7 @@ namespace System.Windows.Forms
             }
 
             OnBeforeVistaDialog(dialog);
-            bool success = ComHelpers.TryGetComPointer(
-                new VistaDialogEvents(this),
-                out IFileDialogEvents* events);
-
-            Debug.Assert(success);
+            IFileDialogEvents* events = ComHelpers.GetComPointer<IFileDialogEvents>(new VistaDialogEvents(this));
 
             dialog->Advise(events, out uint eventCookie);
             try

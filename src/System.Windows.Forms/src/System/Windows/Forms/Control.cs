@@ -899,7 +899,7 @@ namespace System.Windows.Forms
         ///  will always return a non-null value.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
-        [DispId((int)Ole32.DispatchID.BACKCOLOR)]
+        [DispId(PInvoke.DISPID_BACKCOLOR)]
         [SRDescription(nameof(SR.ControlBackColorDescr))]
         public virtual Color BackColor
         {
@@ -2002,7 +2002,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [Localizable(true)]
-        [DispId((int)Ole32.DispatchID.ENABLED)]
+        [DispId(PInvoke.DISPID_ENABLED)]
         [SRDescription(nameof(SR.ControlEnabledDescr))]
         public bool Enabled
         {
@@ -2066,7 +2066,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [Localizable(true)]
-        [DispId((int)Ole32.DispatchID.FONT)]
+        [DispId(PInvoke.DISPID_FONT)]
         [AmbientValue(null)]
         [SRDescription(nameof(SR.ControlFontDescr))]
         [AllowNull]
@@ -2286,7 +2286,7 @@ namespace System.Windows.Forms
         ///  The foreground color of the control.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
-        [DispId((int)Ole32.DispatchID.FORECOLOR)]
+        [DispId(PInvoke.DISPID_FORECOLOR)]
         [SRDescription(nameof(SR.ControlForeColorDescr))]
         public virtual Color ForeColor
         {
@@ -2432,7 +2432,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [DispId((int)Ole32.DispatchID.HWND)]
+        [DispId(PInvoke.DISPID_HWND)]
         [SRDescription(nameof(SR.ControlHandleDescr))]
         public IntPtr Handle
         {
@@ -2985,7 +2985,9 @@ namespace System.Windows.Forms
                     value.Controls.Add(this);
                 }
                 else
+                {
                     _parent?.Controls.Remove(this);
+                }
             }
         }
 
@@ -3430,7 +3432,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
-        [DispId((int)Ole32.DispatchID.TABSTOP)]
+        [DispId(PInvoke.DISPID_TABSTOP)]
         [SRDescription(nameof(SR.ControlTabStopDescr))]
         public bool TabStop
         {
@@ -3489,7 +3491,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         [Localizable(true)]
         [Bindable(true)]
-        [DispId((int)Ole32.DispatchID.TEXT)]
+        [DispId(PInvoke.DISPID_TEXT)]
         [SRDescription(nameof(SR.ControlTextDescr))]
         [AllowNull]
         public virtual string Text
@@ -5102,6 +5104,7 @@ namespace System.Windows.Forms
                 try
                 {
                     DisposeAxControls();
+                    ((ActiveXImpl?)Properties.GetObject(s_activeXImplProperty))?.Dispose();
 
                     ResetBindings();
 
@@ -5230,12 +5233,12 @@ namespace System.Windows.Forms
                 dataObject = iwdata;
             }
 
-            Ole32.DROPEFFECT finalEffect;
+            DROPEFFECT finalEffect;
 
             try
             {
                 IDropSource.Interface dropSource = new DropSource(this, dataObject, dragImage, cursorOffset, useDefaultDragImage);
-                if (Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out finalEffect).Failed)
+                if (Ole32.DoDragDrop(dataObject, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
                 {
                     return DragDropEffects.None;
                 }
@@ -6018,7 +6021,7 @@ namespace System.Windows.Forms
                     if (parent is null)
                     {
                         throw new InvalidOperationException(
-                            string.Format(SR.ParentPropertyNotSetInGetNextControl, nameof(Control.Parent), ctl));
+                            string.Format(SR.ParentPropertyNotSetInGetNextControl, nameof(Parent), ctl));
                     }
 
                     ControlCollection? siblings = GetControlCollection(parent);
@@ -6027,7 +6030,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(
                             string.Format(SR.ControlsPropertyNotSetInGetNextControl,
-                                nameof(Control.Controls), parent));
+                                nameof(Controls), parent));
                     }
 
                     int siblingCount = siblings.Count;

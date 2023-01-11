@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 
 internal static partial class Interop
 {
@@ -168,7 +169,7 @@ internal static partial class Interop
             ///
             ///  Note: inplace objects should not call this method with <paramref name="uStateID" />
             ///  of <see cref="msocstate.Modal"/> when entering modal state. Such objects should call
-            ///  <see cref="Ole32.IOleInPlaceFrame.EnableModeless"/> instead.
+            ///  <see cref="IOleInPlaceFrame.EnableModeless(BOOL)"/> instead.
             /// </remarks>
             /// <param name="dwReserved">Reserved for future use. Should be zero.</param>
             /// <param name="cpicmExclude">Count of items in <paramref name="rgpicmExclude"/>.</param>

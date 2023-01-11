@@ -79,10 +79,7 @@ namespace System.Windows.Forms
                     {
                         IPersistStreamInit.Interface psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                         Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
-                        using var pStream = ComHelpers.GetComScope<IStream>(
-                            new Ole32.GPStream(_parent.documentStreamToSetOnLoad),
-                            out bool result);
-                        Debug.Assert(result);
+                        using var pStream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(_parent.documentStreamToSetOnLoad));
                         psi.Load(pStream);
                         htmlDocument.Encoding = "unicode";
                     }

@@ -4,9 +4,9 @@
 
 using System.Collections;
 using System.Diagnostics;
+using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
-using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -43,11 +43,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         // The interfaces we recognize for extended browsing.
         private static readonly Type[] s_extendedInterfaces = new Type[]
         {
-            typeof(VSSDK.ICategorizeProperties),
-            typeof(VSSDK.IProvidePropertyBuilder),
+            typeof(ICategorizeProperties.Interface),
+            typeof(IProvidePropertyBuilder.Interface),
             typeof(IPerPropertyBrowsing.Interface),
-            typeof(VSSDK.IVsPerPropertyBrowsing),
-            typeof(VSSDK.IVSMDPerPropertyBrowsing)
+            typeof(IVsPerPropertyBrowsing.Interface),
+            typeof(IVSMDPerPropertyBrowsing.Interface)
         };
 
         // The handler classes corresponding to the extended interfaces above.
@@ -276,12 +276,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private unsafe (ushort FunctionCount, ushort VariableCount, ushort MajorVersion, ushort MinorVersion)[] GetTypeInfoVersions(object comObject)
         {
-            Oleaut32.ITypeInfo[] pTypeInfos = Com2TypeInfoProcessor.FindTypeInfos(comObject, preferIProvideClassInfo: false);
+            ITypeInfo*[] pTypeInfos = Com2TypeInfoProcessor.FindTypeInfos(comObject, preferIProvideClassInfo: false);
             var versions = new (ushort, ushort, ushort, ushort)[pTypeInfos.Length];
             for (int i = 0; i < pTypeInfos.Length; i++)
             {
                 TYPEATTR* pTypeAttr = null;
-                HRESULT hr = pTypeInfos[i].GetTypeAttr(&pTypeAttr);
+                HRESULT hr = pTypeInfos[i]->GetTypeAttr(&pTypeAttr);
                 if (!hr.Succeeded || pTypeAttr is null)
                 {
                     versions[i] = (0, 0, 0, 0);
@@ -289,8 +289,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 else
                 {
                     versions[i] = (pTypeAttr->cFuncs, pTypeAttr->cVars, pTypeAttr->wMajorVerNum, pTypeAttr->wMinorVerNum);
-                    pTypeInfos[i].ReleaseTypeAttr(pTypeAttr);
+                    pTypeInfos[i]->ReleaseTypeAttr(pTypeAttr);
                 }
+
+                pTypeInfos[i]->Release();
             }
 
             return versions;

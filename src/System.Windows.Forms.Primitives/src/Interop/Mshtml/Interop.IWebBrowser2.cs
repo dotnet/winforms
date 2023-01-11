@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 
 internal partial class Interop
 {
@@ -141,14 +142,14 @@ internal partial class Interop
                 ref object headers);
 
             [DispId(501)]
-            Ole32.OLECMDF QueryStatusWB(
-                Ole32.OLECMDID cmdID);
+            OLECMDF QueryStatusWB(
+                OLECMDID cmdID);
 
             [DispId(502)]
             [PreserveSig]
             HRESULT ExecWB(
-                Ole32.OLECMDID cmdID,
-                Ole32.OLECMDEXECOPT cmdexecopt,
+                OLECMDID cmdID,
+                OLECMDEXECOPT cmdexecopt,
                 IntPtr pvaIn,
                 IntPtr pvaOut);
 
@@ -159,7 +160,7 @@ internal partial class Interop
                 ref object pvarSize);
 
             [DispId(-525)]
-            Ole32.READYSTATE ReadyState { get; }
+            READYSTATE ReadyState { get; }
 
             [DispId(550)]
             bool Offline { get; set; }

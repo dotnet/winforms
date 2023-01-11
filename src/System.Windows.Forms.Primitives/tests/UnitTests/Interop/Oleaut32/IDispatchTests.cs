@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.False(picture.IsNull);
 
             using VARIANT varResult = default;
-            HRESULT hr = ((IDispatch*)picture.Value)->GetProperty(
+            HRESULT hr = ((IDispatch*)picture.Value)->TryGetProperty(
                 PInvoke.DISPID_PICT_WIDTH,
                 &varResult,
                 PInvoke.GetThreadLocale());

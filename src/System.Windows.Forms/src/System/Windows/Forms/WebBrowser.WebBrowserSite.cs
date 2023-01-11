@@ -100,9 +100,9 @@ namespace System.Windows.Forms
             HRESULT IDocHostUIHandler.ShowUI(
                 uint dwID,
                 IOleInPlaceActiveObject.Interface activeObject,
-                Ole32.IOleCommandTarget commandTarget,
-                Ole32.IOleInPlaceFrame frame,
-                Ole32.IOleInPlaceUIWindow doc)
+                IOleCommandTarget.Interface commandTarget,
+                IOleInPlaceFrame.Interface frame,
+                IOleInPlaceUIWindow.Interface doc)
             {
                 return HRESULT.S_FALSE;
             }
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            unsafe HRESULT IDocHostUIHandler.ResizeBorder(RECT* rect, Ole32.IOleInPlaceUIWindow doc, BOOL fFrameWindow)
+            unsafe HRESULT IDocHostUIHandler.ResizeBorder(RECT* rect, IOleInPlaceUIWindow.Interface doc, BOOL fFrameWindow)
             {
                 return HRESULT.E_NOTIMPL;
             }
@@ -190,12 +190,9 @@ namespace System.Windows.Forms
                 return HRESULT.S_FALSE;
             }
 
-            //
-            // Internal methods
-            //
-            internal override void OnPropertyChanged(Ole32.DispatchID dispid)
+            internal override void OnPropertyChanged(int dispid)
             {
-                if (dispid != Ole32.DispatchID.READYSTATE)
+                if (dispid != PInvoke.DISPID_READYSTATE)
                 {
                     base.OnPropertyChanged(dispid);
                 }

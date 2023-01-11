@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit;
 using Xunit.Abstractions;
@@ -616,7 +617,7 @@ public class DragDropTests : ControlTestBase
         HRESULT hr = Ole32.CoCreateInstance(
             in CLSID_CUIAutomation,
             IntPtr.Zero,
-            Ole32.CLSCTX.INPROC_SERVER,
+            CLSCTX.CLSCTX_INPROC_SERVER,
             in IID_IUIAutomation,
             out object obj);
         if (hr.Succeeded)

@@ -2259,12 +2259,12 @@ namespace System.Windows.Forms
                 dataObject = (IComDataObject)iwdata;
             }
 
-            Ole32.DROPEFFECT finalEffect;
+            DROPEFFECT finalEffect;
 
             try
             {
                 IDropSource.Interface dropSource = CreateDropSource(dataObject, dragImage, cursorOffset, useDefaultDragImage);
-                if (Ole32.DoDragDrop(dataObject, dropSource, (Ole32.DROPEFFECT)allowedEffects, out finalEffect).Failed)
+                if (Ole32.DoDragDrop(dataObject, dropSource, (DROPEFFECT)(uint)allowedEffects, out finalEffect).Failed)
                 {
                     return DragDropEffects.None;
                 }

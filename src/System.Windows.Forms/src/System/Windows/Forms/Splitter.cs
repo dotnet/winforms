@@ -188,7 +188,7 @@ namespace System.Windows.Forms
         /// </summary>
         [DefaultValue(BorderStyle.None)]
         [SRCategory(nameof(SR.CatAppearance))]
-        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [DispId(PInvoke.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.SplitterBorderStyleDescr))]
         public BorderStyle BorderStyle
         {

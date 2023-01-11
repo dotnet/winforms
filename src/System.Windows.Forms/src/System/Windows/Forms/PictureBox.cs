@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -22,7 +21,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Image))]
     [DefaultBindingProperty(nameof(Image))]
     [Docking(DockingBehavior.Ask)]
-    [Designer("System.Windows.Forms.Design.PictureBoxDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.PictureBoxDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionPictureBox))]
     public partial class PictureBox : Control, ISupportInitialize
     {
@@ -127,7 +126,7 @@ namespace System.Windows.Forms
         /// </summary>
         [DefaultValue(BorderStyle.None)]
         [SRCategory(nameof(SR.CatAppearance))]
-        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [DispId(PInvoke.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.PictureBoxBorderStyleDescr))]
         public BorderStyle BorderStyle
         {

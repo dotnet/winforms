@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using ComType = System.Runtime.InteropServices.ComTypes;
 
@@ -10,14 +10,12 @@ namespace Windows.Win32.System.Com;
 
 internal unsafe partial struct STGMEDIUM
 {
+    [UnscopedRef]
+    public ref nint hGlobal => ref Anonymous.hGlobal;
+
     public static explicit operator STGMEDIUM(ComType.STGMEDIUM comTypeStg)
     {
-        IUnknown* pUnkForRelease = null;
-        if (comTypeStg.pUnkForRelease is not null)
-        {
-            bool result = ComHelpers.TryGetComPointer(comTypeStg.pUnkForRelease, out pUnkForRelease);
-            Debug.Assert(result);
-        }
+        IUnknown* pUnkForRelease = ComHelpers.TryGetComPointer<IUnknown>(comTypeStg.pUnkForRelease, out HRESULT hr);
 
         return new()
         {

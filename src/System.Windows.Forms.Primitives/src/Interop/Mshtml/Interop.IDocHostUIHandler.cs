@@ -31,9 +31,9 @@ internal partial class Interop
             HRESULT ShowUI(
                 uint dwID,
                 IOleInPlaceActiveObject.Interface activeObject,
-                Ole32.IOleCommandTarget commandTarget,
-                Ole32.IOleInPlaceFrame frame,
-                Ole32.IOleInPlaceUIWindow doc);
+                IOleCommandTarget.Interface commandTarget,
+                IOleInPlaceFrame.Interface frame,
+                IOleInPlaceUIWindow.Interface doc);
 
             [PreserveSig]
             HRESULT HideUI();
@@ -56,7 +56,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT ResizeBorder(
                 RECT* rect,
-                Ole32.IOleInPlaceUIWindow doc,
+                IOleInPlaceUIWindow.Interface doc,
                 BOOL fFrameWindow);
 
             [PreserveSig]

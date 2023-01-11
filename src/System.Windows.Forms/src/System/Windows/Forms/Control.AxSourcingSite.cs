@@ -8,72 +8,69 @@ using System.Runtime.InteropServices;
 using Windows.Win32.System.Ole;
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class Control
 {
-    public partial class Control
+    private class AxSourcingSite : ISite
     {
-        private class AxSourcingSite : ISite
+        private readonly AgileComPointer<IOleClientSite> _clientSite;
+        private string? _name;
+        private HtmlShimManager? _shimManager;
+
+        internal AxSourcingSite(IComponent component, AgileComPointer<IOleClientSite> clientSite, string? name)
         {
-            private readonly IOleClientSite.Interface _clientSite;
-            private string? _name;
-            private HtmlShimManager? _shimManager;
+            Component = component;
+            _clientSite = clientSite;
+            _name = name;
+        }
 
-            internal AxSourcingSite(IComponent component, IOleClientSite.Interface clientSite, string? name)
+        /// <summary>
+        ///  The component sited by this component site.
+        /// </summary>
+        public IComponent Component { get; }
+
+        /// <summary>
+        ///  The container in which the component is sited.
+        /// </summary>
+        public IContainer? Container => null;
+
+        public unsafe object? GetService(Type service)
+        {
+            if (service == typeof(HtmlDocument))
             {
-                Component = component;
-                _clientSite = clientSite;
-                _name = name;
+                using var clientSite = _clientSite.GetInterface();
+                using ComScope<IOleContainer> container = new(null);
+                clientSite.Value->GetContainer(container);
+
+                if (Marshal.GetObjectForIUnknown((nint)container) is Mshtml.IHTMLDocument document)
+                {
+                    _shimManager ??= new HtmlShimManager();
+                    return new HtmlDocument(_shimManager, document);
+                }
             }
 
-            /// <summary>
-            ///  The component sited by this component site.
-            /// </summary>
-            public IComponent Component { get; }
+            return null;
+        }
 
-            /// <summary>
-            ///  The container in which the component is sited.
-            /// </summary>
-            public IContainer? Container => null;
+        /// <summary>
+        ///  Indicates whether the component is in design mode.
+        /// </summary>
+        public bool DesignMode => false;
 
-            public unsafe object? GetService(Type service)
+        /// <summary>
+        ///  The name of the component.
+        /// </summary>
+        public string? Name
+        {
+            get => _name;
+
+            [RequiresUnreferencedCode(TrimmingConstants.SiteNameMessage)]
+            set
             {
-                if (service == typeof(HtmlDocument))
+                if (value is null || _name is null)
                 {
-                    IOleContainer* container;
-                    _clientSite.GetContainer(&container);
-                    if (Marshal.GetObjectForIUnknown((nint)container) is Mshtml.IHTMLDocument document)
-                    {
-                        _shimManager ??= new HtmlShimManager();
-                        return new HtmlDocument(_shimManager, document);
-                    }
-                }
-                else if (_clientSite.GetType().IsAssignableFrom(service))
-                {
-                    return _clientSite;
-                }
-
-                return null;
-            }
-
-            /// <summary>
-            ///  Indicates whether the component is in design mode.
-            /// </summary>
-            public bool DesignMode => false;
-
-            /// <summary>
-            ///  The name of the component.
-            /// </summary>
-            public string? Name
-            {
-                get => _name;
-
-                [RequiresUnreferencedCode(TrimmingConstants.SiteNameMessage)]
-                set
-                {
-                    if (value is null || _name is null)
-                    {
-                        _name = value;
-                    }
+                    _name = value;
                 }
             }
         }

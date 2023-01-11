@@ -38,7 +38,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT GetNames(
-                Ole32.DispatchID memid,
+                int memid,
                 BSTR* rgBstrNames,
                 uint cMaxNames,
                 uint* pcNames);
@@ -57,12 +57,12 @@ internal static partial class Interop
             HRESULT GetIDsOfNames(
                 [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)] string[] rgszNames,
                 uint cNames,
-                Ole32.DispatchID* pMemId);
+                int* pMemId);
 
             [PreserveSig]
             HRESULT Invoke(
                 [MarshalAs(UnmanagedType.Interface)] object pvInstance,
-                Ole32.DispatchID memid,
+                int memid,
                 DISPATCH_FLAGS wFlags,
                 DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
@@ -71,7 +71,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT GetDocumentation(
-                Ole32.DispatchID memid,
+                int memid,
                 BSTR* pBstrName,
                 BSTR* pBstrDocString,
                 uint* pdwHelpContext,
@@ -79,7 +79,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT GetDllEntry(
-                Ole32.DispatchID memid,
+                int memid,
                 INVOKEKIND invkind,
                 BSTR* pBstrDllName,
                 BSTR* pBstrName,
@@ -92,7 +92,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT AddressOfMember(
-                Ole32.DispatchID memid,
+                int memid,
                 INVOKEKIND invKind,
                 IntPtr* ppv);
 
@@ -104,7 +104,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT GetMops(
-                Ole32.DispatchID memid,
+                int memid,
                 BSTR* pBstrMops);
 
             /// <remarks>

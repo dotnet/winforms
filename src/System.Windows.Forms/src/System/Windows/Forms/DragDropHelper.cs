@@ -6,14 +6,15 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
+using Shell = Windows.Win32.UI.Shell;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
 using static Interop.Shell32;
 using static Interop.User32;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
-using Com = Windows.Win32.System.Com;
-using Shell = Windows.Win32.UI.Shell;
 
 namespace System.Windows.Forms
 {
@@ -55,14 +56,14 @@ namespace System.Windows.Forms
             }
 
             Point point = new(e.X, e.Y);
-            DragEnter(targetWindowHandle, dataObject, ref point, (Ole32.DROPEFFECT)e.Effect);
+            DragEnter(targetWindowHandle, dataObject, ref point, (DROPEFFECT)(uint)e.Effect);
         }
 
         /// <summary>
         /// Notifies the drag-image manager that the drop target has been entered, and provides it with the information
         /// needed to display the drag image.
         /// </summary>
-        public static void DragEnter(IntPtr targetWindowHandle, IComDataObject dataObject, ref Point point, Ole32.DROPEFFECT effect)
+        public static void DragEnter(IntPtr targetWindowHandle, IComDataObject dataObject, ref Point point, DROPEFFECT effect)
         {
             if (!TryGetDragDropHelper(out IDropTargetHelper? dropTargetHelper))
             {
@@ -113,7 +114,7 @@ namespace System.Windows.Forms
             try
             {
                 Point point = new(e.X, e.Y);
-                dropTargetHelper.DragOver(ref point, (Ole32.DROPEFFECT)e.Effect);
+                dropTargetHelper.DragOver(ref point, (DROPEFFECT)(uint)e.Effect);
             }
             finally
             {
@@ -135,7 +136,7 @@ namespace System.Windows.Forms
             try
             {
                 Point point = new(e.X, e.Y);
-                dropTargetHelper.Drop(dataObject, ref point, (Ole32.DROPEFFECT)e.Effect);
+                dropTargetHelper.Drop(dataObject, ref point, (DROPEFFECT)(uint)e.Effect);
             }
             finally
             {
@@ -151,17 +152,17 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(dataObject);
             ArgumentException.ThrowIfNullOrEmpty(format);
 
-            STGMEDIUM medium = default;
+            ComTypes.STGMEDIUM medium = default;
 
             try
             {
-                FORMATETC formatEtc = new()
+                ComTypes.FORMATETC formatEtc = new()
                 {
                     cfFormat = (short)RegisterClipboardFormatW(format),
-                    dwAspect = DVASPECT.DVASPECT_CONTENT,
+                    dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
                     lindex = -1,
                     ptd = IntPtr.Zero,
-                    tymed = TYMED.TYMED_HGLOBAL
+                    tymed = ComTypes.TYMED.TYMED_HGLOBAL
                 };
 
                 if (dataObject.QueryGetData(ref formatEtc) != (int)HRESULT.S_OK)
@@ -169,7 +170,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                medium = default(STGMEDIUM);
+                medium = default;
                 dataObject.GetData(ref formatEtc, out medium);
                 void* basePtr = PInvoke.GlobalLock(medium.unionmember);
                 return (basePtr is not null) && (*(BOOL*)basePtr == true);
@@ -259,22 +260,20 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(dataObject);
             ArgumentException.ThrowIfNullOrEmpty(format);
 
-            FORMATETC formatEtc = new()
+            ComTypes.FORMATETC formatEtc = new()
             {
                 cfFormat = (short)RegisterClipboardFormatW(format),
-                dwAspect = DVASPECT.DVASPECT_CONTENT,
+                dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
                 ptd = IntPtr.Zero,
-                tymed = TYMED.TYMED_HGLOBAL
+                tymed = ComTypes.TYMED.TYMED_HGLOBAL
             };
 
-            STGMEDIUM medium = new()
+            ComTypes.STGMEDIUM medium = new()
             {
                 pUnkForRelease = null,
-                tymed = TYMED.TYMED_HGLOBAL,
-                unionmember = PInvoke.GlobalAlloc(
-                    GMEM_MOVEABLE | GMEM_ZEROINIT,
-                    (nuint)sizeof(BOOL))
+                tymed = ComTypes.TYMED.TYMED_HGLOBAL,
+                unionmember = PInvoke.GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, (nuint)sizeof(BOOL))
             };
 
             if (medium.unionmember == IntPtr.Zero)
@@ -419,22 +418,20 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(messageReplacementToken));
             }
 
-            FORMATETC formatEtc = new()
+            ComTypes.FORMATETC formatEtc = new()
             {
                 cfFormat = (short)RegisterClipboardFormatW(CF_DROPDESCRIPTION),
-                dwAspect = DVASPECT.DVASPECT_CONTENT,
+                dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
                 lindex = -1,
                 ptd = IntPtr.Zero,
-                tymed = TYMED.TYMED_HGLOBAL
+                tymed = ComTypes.TYMED.TYMED_HGLOBAL
             };
 
-            STGMEDIUM medium = new()
+            ComTypes.STGMEDIUM medium = new()
             {
                 pUnkForRelease = null,
-                tymed = TYMED.TYMED_HGLOBAL,
-                unionmember = PInvoke.GlobalAlloc(
-                    GMEM_MOVEABLE | GMEM_ZEROINIT,
-                    (uint)sizeof(DROPDESCRIPTION))
+                tymed = ComTypes.TYMED.TYMED_HGLOBAL,
+                unionmember = PInvoke.GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, (uint)sizeof(DROPDESCRIPTION))
             };
 
             if (medium.unionmember == IntPtr.Zero)
@@ -529,11 +526,12 @@ namespace System.Windows.Forms
             try
             {
                 HRESULT hr = Ole32.CoCreateInstance(
-                    in Com.CLSID.DragDropHelper,
+                    in CLSID.DragDropHelper,
                     IntPtr.Zero,
-                    Ole32.CLSCTX.INPROC_SERVER,
-                    in NativeMethods.ActiveX.IID_IUnknown,
+                    CLSCTX.CLSCTX_INPROC_SERVER,
+                    in IID.GetRef<IUnknown>(),
                     out object obj);
+
                 if (hr.Succeeded)
                 {
                     dragDropHelper = (TDragDropHelper)obj;

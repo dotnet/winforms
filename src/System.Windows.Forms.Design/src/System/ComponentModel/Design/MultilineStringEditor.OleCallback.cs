@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
+using Windows.Win32.System.Ole;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -59,11 +60,11 @@ namespace System.ComponentModel.Design
                 return HRESULT.S_OK;
             }
 
-            public HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
+            public unsafe HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
             {
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, $"IRichTextBoxOleCallback::QueryInsertObject({lpclsid})");
 
-                HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
+                HRESULT hr = PInvoke.ReadClassStg((IStorage*)lpstg, out Guid realClsid);
                 Debug.WriteLineIf(RichTextDebug.TraceVerbose, $"real clsid:{realClsid} (hr={hr:X})");
 
                 if (!hr.Succeeded)
@@ -126,14 +127,14 @@ namespace System.ComponentModel.Design
                 return HRESULT.E_NOTIMPL;
             }
 
-            public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
+            public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, DROPEFFECT* pdwEffect)
             {
                 if (pdwEffect is null)
                 {
                     return HRESULT.E_POINTER;
                 }
 
-                *pdwEffect = Ole32.DROPEFFECT.NONE;
+                *pdwEffect = DROPEFFECT.DROPEFFECT_NONE;
                 return HRESULT.S_OK;
             }
 

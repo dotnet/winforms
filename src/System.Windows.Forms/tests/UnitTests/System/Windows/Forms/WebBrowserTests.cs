@@ -211,6 +211,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, control.AllowNavigation);
             Assert.NotNull(control.ActiveXInstance);
             Assert.True(control.IsHandleCreated);
+
+            control.Stop();
         }
 
         [WinFormsFact]

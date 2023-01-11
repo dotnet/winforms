@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.ApplicationInstallationAndServicing;
+using Windows.Win32.System.Com;
 using Xunit;
 using static Interop;
 
@@ -126,8 +127,8 @@ public class PropertyGridTests
         Guid clsidRawErrorInfoUsageTest = new("0ED8EE0D-22E3-49EA-850C-E69B20D1F296");
         Ole32.CoCreateInstance(in clsidRawErrorInfoUsageTest,
             IntPtr.Zero,
-            Ole32.CLSCTX.INPROC_SERVER,
-            in NativeMethods.ActiveX.IID_IUnknown,
+            CLSCTX.CLSCTX_INPROC_SERVER,
+            in IID.GetRef<global::Windows.Win32.System.Com.IUnknown>(),
             out object result);
         return result;
     }
@@ -137,8 +138,8 @@ public class PropertyGridTests
         Guid clsidStandardErrorInfoUsageTest = new("EA1FCB3A-277C-4C79-AB85-E2ED3E858201");
         Ole32.CoCreateInstance(in clsidStandardErrorInfoUsageTest,
             IntPtr.Zero,
-            Ole32.CLSCTX.INPROC_SERVER,
-            in NativeMethods.ActiveX.IID_IUnknown,
+            CLSCTX.CLSCTX_INPROC_SERVER,
+            in IID.GetRef<global::Windows.Win32.System.Com.IUnknown>(),
             out object result);
         return result;
     }

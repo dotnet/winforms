@@ -6,7 +6,6 @@ using System.Drawing;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.SystemServices;
-using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms;
@@ -93,7 +92,7 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
 
             if (!lastHwndTarget.IsNull && (Cursor.Position is Point point))
             {
-                DragDropHelper.DragEnter(lastHwndTarget, dataObject, ref point, (Ole32.DROPEFFECT)e.Effect);
+                DragDropHelper.DragEnter(lastHwndTarget, dataObject, ref point, (DROPEFFECT)e.Effect);
             }
         }
     }

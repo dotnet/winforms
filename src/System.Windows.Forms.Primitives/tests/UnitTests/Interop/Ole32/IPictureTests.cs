@@ -55,13 +55,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
             using VARIANT variant = new();
 
             IDispatch* dispatch = (IDispatch*)picture.Value;
-            dispatch->GetProperty(PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
+            dispatch->TryGetProperty(PInvoke.DISPID_PICT_TYPE, &variant).ThrowOnFailure();
             Assert.Equal(PICTYPE.PICTYPE_BITMAP, (PICTYPE)variant.data.iVal);
 
-            dispatch->GetProperty(PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
+            dispatch->TryGetProperty(PInvoke.DISPID_PICT_HEIGHT, &variant).ThrowOnFailure();
             Assert.Equal(bitmap.Size.Height, GdiHelper.HimetricToPixelY((int)variant.data.uintVal));
 
-            dispatch->GetProperty(PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
+            dispatch->TryGetProperty(PInvoke.DISPID_PICT_WIDTH, &variant).ThrowOnFailure();
             Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX((int)variant.data.uintVal));
         }
 

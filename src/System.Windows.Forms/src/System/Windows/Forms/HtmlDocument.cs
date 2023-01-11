@@ -428,52 +428,56 @@ namespace System.Windows.Forms
         {
             try
             {
-                if (NativeHtmlDocument2.GetScript() is Oleaut32.IDispatch scriptObject)
+                if (NativeHtmlDocument2.GetScript() is not Oleaut32.IDispatch scriptObject)
                 {
-                    Guid g = Guid.Empty;
-                    string[] names = new string[] { scriptName };
-                    Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
-                    HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
-                    if (!hr.Succeeded || dispid == Ole32.DispatchID.UNKNOWN)
+                    return null;
+                }
+
+                Guid g = Guid.Empty;
+                string[] names = new string[] { scriptName };
+                int dispid = PInvoke.DISPID_UNKNOWN;
+                HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, PInvoke.GetThreadLocale(), &dispid);
+                if (!hr.Succeeded || dispid == PInvoke.DISPID_UNKNOWN)
+                {
+                    return null;
+                }
+
+                if (args is not null)
+                {
+                    // Reverse the arg order so that they read naturally after IDispatch.
+                    Array.Reverse(args);
+                }
+
+                using VARIANTVector vectorArgs = new(args);
+                fixed (VARIANT* pVariants = vectorArgs.Variants)
+                {
+                    DISPPARAMS dispParams = new()
                     {
-                        return null;
-                    }
+                        rgvarg = pVariants,
+                        cArgs = (uint)vectorArgs.Variants.Length,
+                        rgdispidNamedArgs = null,
+                        cNamedArgs = 0
+                    };
 
-                    if (args is not null)
+                    var retVals = new object[1];
+                    EXCEPINFO excepInfo = default(EXCEPINFO);
+                    hr = scriptObject.Invoke(
+                        dispid,
+                        &g,
+                        PInvoke.GetThreadLocale(),
+                        DISPATCH_FLAGS.DISPATCH_METHOD,
+                        &dispParams,
+                        retVals,
+                        &excepInfo,
+                        null);
+
+                    if (hr == HRESULT.S_OK)
                     {
-                        // Reverse the arg order so that they read naturally after IDispatch.
-                        Array.Reverse(args);
-                    }
-
-                    using VARIANTVector vectorArgs = new(args);
-                    fixed (VARIANT* pVariants = vectorArgs.Variants)
-                    {
-                        DISPPARAMS dispParams = new()
-                        {
-                            rgvarg = pVariants,
-                            cArgs = (uint)vectorArgs.Variants.Length,
-                            rgdispidNamedArgs = null,
-                            cNamedArgs = 0
-                        };
-
-                        var retVals = new object[1];
-                        EXCEPINFO excepInfo = default(EXCEPINFO);
-                        hr = scriptObject.Invoke(
-                            dispid,
-                            &g,
-                            PInvoke.GetThreadLocale(),
-                            DISPATCH_FLAGS.DISPATCH_METHOD,
-                            &dispParams,
-                            retVals,
-                            &excepInfo,
-                            null);
-
-                        if (hr == HRESULT.S_OK)
-                        {
-                            return retVals[0];
-                        }
+                        return retVals[0];
                     }
                 }
+
+                return null;
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
