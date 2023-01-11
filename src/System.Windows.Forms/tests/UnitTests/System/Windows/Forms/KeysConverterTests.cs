@@ -19,5 +19,17 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(keys, result);
         }
+
+        [Theory]
+        [InlineData(Keys.None, "None")]
+        [InlineData(Keys.S, "S")]
+        [InlineData(Keys.Control | Keys.C, "Ctrl+C")]
+        [InlineData(Keys.Control | Keys.Alt | Keys.D, "Ctrl+Alt+D")]
+        public void ConvertToString_ShouldConvertKeys(Keys keys, string expectedResult)
+        {
+            KeysConverter converter = new();
+            var result = converter.ConvertToString(keys);
+            Assert.Equal(expectedResult, result);
+        }
     }
 }

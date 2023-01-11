@@ -285,7 +285,7 @@ namespace System.Windows.Forms
                 {
                     string keyString = DisplayOrder[i];
                     Keys keyValue = _keyNames[keyString];
-                    if (keyValue.HasFlag(modifiers))
+                    if (modifiers.HasFlag(keyValue))
                     {
                         termStrings.Append(keyString).Append('+');
                     }
@@ -313,7 +313,7 @@ namespace System.Windows.Forms
                 // of the enum.
                 if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
                 {
-                    termStrings.Append(keyOnly.ToString());
+                    termStrings.Append(Enum.GetName(keyOnly));
                 }
 
                 return termStrings.ToString();
