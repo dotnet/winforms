@@ -113,6 +113,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetKeyboardLayoutNameForHKL_TestData()
         {
+            yield return new object[] { unchecked((nint)0x0000000000000409), "00000409" }; // US
             yield return new object[] { unchecked((nint)0x0000000004090409), "00000409" }; // US
             yield return new object[] { unchecked((nint)0x00000000040c0409), "0000040c" }; // French
             yield return new object[] { unchecked((nint)0xfffffffff0200409), "00011009" }; // Canadian Multilingual Standard
@@ -121,9 +122,9 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(GetKeyboardLayoutNameForHKL_TestData))]
-        public void InputLanguage_GetKeyboardLayoutNameForHKL_Invoke_ReturnsExpected(IntPtr handle, string keyboardLayoutId)
+        public void InputLanguage_GetKeyboardLayoutNameForHKL_Invoke_ReturnsExpected(IntPtr handle, string keyboardName)
         {
-            Assert.Equal(keyboardLayoutId, InputLanguage.GetKeyboardLayoutNameForHKL(handle));
+            Assert.Equal(keyboardName, InputLanguage.GetKeyboardLayoutNameForHKL(handle));
         }
 
         private static void VerifyInputLanguage(InputLanguage language)

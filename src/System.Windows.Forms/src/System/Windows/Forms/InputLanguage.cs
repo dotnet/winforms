@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the culture of the current input language.
         /// </summary>
-        public CultureInfo Culture => new CultureInfo(PARAM.ToInt(_handle) & 0xFFFF);
+        public CultureInfo Culture => new CultureInfo(PARAM.LOWORD(_handle));
 
         /// <summary>
         ///  Gets or sets the input language for the current thread.
@@ -132,15 +132,14 @@ namespace System.Windows.Forms
             // High word of HKL contains a device handle to the physical layout
             // of the keyboard but exact format of this handle is not
             // documented. For older keyboard layouts device handle seems
-            // contain keyboard layout language which we can use as KLID without
-            // any issues.
+            // contains keyboard layout language which we can use as KLID.
             int device = PARAM.HIWORD(hkl);
 
             // But for newer keyboard layouts device handle contains layout id
             // if its high nibble is 0xF. This id may be used to search for
             // keyboard layout under registry.
             // NOTE: this logic may break in future versions of Windows since
-            // its not documented.
+            // it is not documented.
             if ((device & 0xF000) == 0xF000)
             {
                 // Extract layout id from the device handle
