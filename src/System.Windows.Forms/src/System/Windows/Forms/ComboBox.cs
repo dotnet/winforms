@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
@@ -3060,8 +3061,18 @@ namespace System.Windows.Forms
 
                 // Some accessibility tools (e.g., NVDA) could recognize ComboBox as IAccessible object
                 // and ignore UIA focus change event. For such cases we need to additionaly raise MSAA focus event.
-                // childID = CHILDID_SELF - 1 (the -1 will resolve to CHILDID_SELF when we call NotifyWinEvent)
-                AccessibilityNotifyClients(AccessibleEvents.Focus, childID: -1);
+                if (DropDownStyle == ComboBoxStyle.DropDownList)
+                {
+                    // Focus on the ComboBox itself for DropDownList style.
+                    // childID = CHILDID_SELF - 1 (the -1 will resolve to CHILDID_SELF when we call NotifyWinEvent)
+                    AccessibilityNotifyClients(AccessibleEvents.Focus, childID: -1);
+                }
+                else if (_childEdit is not null && _childEdit.Handle != IntPtr.Zero)
+                {
+                    // Focus on edit field so that its changes are announced, e.g. when selecting items by arrows.
+                    NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(_childEdit, _childEdit.Handle),
+                        objType: OBJID.CLIENT, objID: NativeMethods.CHILDID_SELF);
+                }
 
                 // Notify Collapsed/expanded property change.
                 AccessibilityObject.RaiseAutomationPropertyChangedEvent(
