@@ -4913,7 +4913,7 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
         <source>&amp;Details</source>
-        <target state="translated">Po&amp;drobnosti</target>
+        <target state="translated">&amp;Podrobnosti</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgWarningText">
