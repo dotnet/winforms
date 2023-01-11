@@ -30,9 +30,9 @@ namespace System.Windows.Forms
         private const int BUTTONDETAILS_LEFTPADDING = 8;
         private const int MESSAGE_TOPPADDING = 8;
         private const int HEIGHTPADDING = 8;
-        private const int BUTTONWIDTH = 100;
+        private const int BUTTONWIDTH = 130;
         private const int BUTTONHEIGHT = 23;
-        private const int BUTTONALIGNMENTWIDTH = 105;
+        private const int BUTTONALIGNMENTWIDTH = 135;
         private const int BUTTONALIGNMENTPADDING = 5;
         private const int DETAILSWIDTHPADDING = 16;
         private const int DETAILSHEIGHT = 154;
