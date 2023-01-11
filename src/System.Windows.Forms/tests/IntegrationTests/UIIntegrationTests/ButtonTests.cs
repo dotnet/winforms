@@ -290,7 +290,7 @@ namespace System.Windows.Forms.UITests
                 Point centerOfRect = GetCenter(rect);
                 Point centerOnScreen = control2.PointToScreen(centerOfRect);
                 Rectangle rect1 = control1.DisplayRectangle;
-                Point centerOfRect1 = new Point(rect1.Left, rect1.Top) + new Size(rect1.Width / 2, rect1.Height / 2);
+                Point centerOfRect1 = GetCenter(rect1);
                 Point centerOnScreen1 = control1.PointToScreen(centerOfRect1);
                 Size primaryMonitor = SystemInformation.PrimaryMonitorSize;
                 int horizontalResolution = primaryMonitor.Width;
@@ -383,13 +383,6 @@ namespace System.Windows.Forms.UITests
 
                 Assert.False(wasClicked);
             });
-        }
-
-        private static Point GetCenter(Rectangle rect)
-        {
-            int x = rect.Left + ((rect.Right - rect.Left) / 2);
-            int y = rect.Top + ((rect.Bottom - rect.Top) / 2);
-            return new Point(x, y);
         }
 
         private async Task RunTestAsync(Func<Form, Button, Task> runTest)

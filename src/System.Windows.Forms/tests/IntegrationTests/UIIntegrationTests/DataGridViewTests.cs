@@ -72,13 +72,6 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        private static Point GetCenter(Rectangle cell)
-        {
-            return new Point(GetMiddle(cell.Right, cell.Left), GetMiddle(cell.Top, cell.Bottom));
-
-            static int GetMiddle(int a, int b) => (a + b) / 2;
-        }
-
         private async Task RunTestAsync(Func<Form, DataGridView, Task> runTest)
         {
             await RunSingleControlTestAsync(

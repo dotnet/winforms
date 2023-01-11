@@ -106,7 +106,7 @@ namespace System.Windows.Forms.UITests
         protected async Task MoveMouseToControlAsync(Control control)
         {
             var rect = control.DisplayRectangle;
-            var centerOfRect = new Point(rect.Left, rect.Top) + new Size(rect.Width / 2, rect.Height / 2);
+            var centerOfRect = GetCenter(rect);
             var centerOnScreen = control.PointToScreen(centerOfRect);
             await MoveMouseAsync(control.FindForm()!, centerOnScreen);
         }
@@ -295,6 +295,13 @@ namespace System.Windows.Forms.UITests
 
         internal struct VoidResult
         {
+        }
+
+        internal static Point GetCenter(Rectangle cell)
+        {
+            return new Point(GetMiddle(cell.Right, cell.Left), GetMiddle(cell.Top, cell.Bottom));
+
+            static int GetMiddle(int a, int b) => a + ((b - a) / 2);
         }
     }
 }
