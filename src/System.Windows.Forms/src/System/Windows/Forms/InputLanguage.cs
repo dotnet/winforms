@@ -105,7 +105,36 @@ namespace System.Windows.Forms
             get
             {
                 string layoutName = GetKeyboardLayoutNameForHKL(_handle);
-                return GetKeyboardLayoutDisplayName(layoutName);
+
+                // https://learn.microsoft.com/windows/win32/intl/using-registry-string-redirection#create-resources-for-keyboard-layout-strings
+                if (KeyboardLayoutsRegistryKey?.OpenSubKey(layoutName) is RegistryKey key)
+                {
+                    // Localizable string resource associated with the keyboard layout
+                    if (key.GetValue("Layout Display Name") is string layoutDisplayName)
+                    {
+                        unsafe
+                        {
+                            var ppvReserved = (void*)IntPtr.Zero;
+                            Span<char> buffer = stackalloc char[512];
+                            fixed (char* pBuffer = buffer)
+                            {
+                                HRESULT res = PInvoke.SHLoadIndirectString(layoutDisplayName, pBuffer, (uint)buffer.Length, ref ppvReserved);
+                                if (res == HRESULT.S_OK)
+                                {
+                                    return buffer.SliceAtFirstNull().ToString();
+                                }
+                            }
+                        }
+                    }
+
+                    // Fallback to human-readable name for backward compatibility
+                    if (key.GetValue("Layout Text") is string layoutText)
+                    {
+                        return layoutText;
+                    }
+                }
+
+                return SR.UnknownInputLanguageLayout;
             }
         }
 
@@ -184,44 +213,6 @@ namespace System.Windows.Forms
 
             // Pad with zeros to its left to produce arbitrary length KLID string
             return language.ToString("x8");
-        }
-
-        /// <summary>
-        ///  Return localized keyboard layout name for provided KLID string.
-        ///  See https://learn.microsoft.com/windows/win32/intl/using-registry-string-redirection#create-resources-for-keyboard-layout-strings
-        /// </summary>
-        private static string GetKeyboardLayoutDisplayName(string layoutName)
-        {
-            if (KeyboardLayoutsRegistryKey?.OpenSubKey(layoutName) is RegistryKey key)
-            {
-                // Obtain localizable string resource associated with the
-                // keyboard layout that should be passed to SHLoadIndirectString
-                // API.
-                if (key.GetValue("Layout Display Name") is string layoutDisplayName)
-                {
-                    unsafe
-                    {
-                        var ppvReserved = (void*)IntPtr.Zero;
-                        Span<char> buffer = stackalloc char[512];
-                        fixed (char* pBuffer = buffer)
-                        {
-                            HRESULT res = PInvoke.SHLoadIndirectString(layoutDisplayName, pBuffer, (uint)buffer.Length, ref ppvReserved);
-                            if (res == HRESULT.S_OK)
-                            {
-                                return buffer.SliceAtFirstNull().ToString();
-                            }
-                        }
-                    }
-                }
-
-                // Fallback to human-readable name for backward compatibility
-                if (key.GetValue("Layout Text") is string layoutText)
-                {
-                    return layoutText;
-                }
-            }
-
-            return SR.UnknownInputLanguageLayout;
         }
 
         /// <summary>
