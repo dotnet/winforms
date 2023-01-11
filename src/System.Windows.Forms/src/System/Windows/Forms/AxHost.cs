@@ -3104,7 +3104,7 @@ namespace System.Windows.Forms
 
         private unsafe void ShowPropertyPageForDispid(int dispid, Guid guid)
         {
-            ComScope<IUnknown> unknown = ComHelpers.TryGetComScope<IUnknown>(_instance, out HRESULT hr);
+            using ComScope<IUnknown> unknown = ComHelpers.TryGetComScope<IUnknown>(_instance, out HRESULT hr);
             if (hr.Failed)
             {
                 Debug.Fail($"Failed to get instance in {nameof(ShowPropertyPageForDispid)}.");
