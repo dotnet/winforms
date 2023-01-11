@@ -479,11 +479,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            protected override void WmDpiChangedAfterParent(ref Message m)
-            {
-                base.WmDpiChangedAfterParent(ref m);
-            }
-
             protected override void WmDpiChangedBeforeParent(ref Message m)
             {
                 base.WmDpiChangedBeforeParent(ref m);
