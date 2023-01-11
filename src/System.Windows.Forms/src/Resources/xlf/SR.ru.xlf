@@ -4914,7 +4914,7 @@ If you click Continue, the application will ignore this error and attempt to con
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
         <source>&amp;Details</source>
-        <target state="translated">&amp;Подробности</target>
+        <target state="translated">&amp;сведения</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgWarningText">
