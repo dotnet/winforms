@@ -240,7 +240,7 @@ namespace System.Windows.Forms
                 {
                     string keyString = DisplayOrder[i];
                     Keys keyValue = _keyNames[keyString];
-                    if (keyValue.HasFlag(modifiers))
+                    if (modifiers.HasFlag(keyValue))
                     {
                         termKeys.Add(keyValue);
                     }

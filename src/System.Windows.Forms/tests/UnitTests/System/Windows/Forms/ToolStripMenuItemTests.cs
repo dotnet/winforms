@@ -134,6 +134,9 @@ namespace System.Windows.Forms.Tests
 
 		[WinFormsTheory]
         [InlineData(Keys.A)]
+        [InlineData(Keys.Control)]
+        [InlineData(Keys.Control | Keys.Alt)]
+        [InlineData(Keys.Control | Keys.Alt | Keys.Shift)]
         public void ToolStripMenuItem_SetShortcutKeys_ThrowsInvalidEnumArgumentException(Keys keys)
         {
             using var item = new SubToolStripMenuItem();
