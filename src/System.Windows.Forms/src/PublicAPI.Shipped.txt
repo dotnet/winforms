@@ -1388,9 +1388,9 @@ System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
 ~System.Windows.Forms.TableLayoutRowStyleCollection.Remove(System.Windows.Forms.RowStyle rowStyle) -> void
 ~System.Windows.Forms.TableLayoutRowStyleCollection.this[int index].get -> System.Windows.Forms.RowStyle
 ~System.Windows.Forms.TableLayoutRowStyleCollection.this[int index].set -> void
-~System.Windows.Forms.TableLayoutStyleCollection.Add(System.Windows.Forms.TableLayoutStyle style) -> int
-~System.Windows.Forms.TableLayoutStyleCollection.this[int index].get -> System.Windows.Forms.TableLayoutStyle
-~System.Windows.Forms.TableLayoutStyleCollection.this[int index].set -> void
+System.Windows.Forms.TableLayoutStyleCollection.Add(System.Windows.Forms.TableLayoutStyle! style) -> int
+System.Windows.Forms.TableLayoutStyleCollection.this[int index].get -> System.Windows.Forms.TableLayoutStyle!
+System.Windows.Forms.TableLayoutStyleCollection.this[int index].set -> void
 System.Windows.Forms.ToolStrip.Controls.get -> System.Windows.Forms.Control.ControlCollection!
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point point) -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control
