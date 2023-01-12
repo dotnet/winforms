@@ -69,6 +69,86 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
         }
 
+        [WinFormsFact]
+        public void ToolStripMenuItemAccessibleObject_GetPropertyValue_PositionInSet_ReturnsExpected_IfNoParent()
+        {
+            using ToolStripMenuItem toolStripMenuItem = new();
+
+            AccessibleObject accessibilityObject = toolStripMenuItem.AccessibilityObject;
+
+            Assert.Null(accessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripMenuItemAccessibleObject_GetPropertyValue_PositionInSet_ReturnsExpected()
+        {
+            using MenuStrip menuStrip = new();
+
+            using ToolStripMenuItem item1 = new();
+            menuStrip.Items.Add(item1);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(1, menuStrip.Items.Count);
+            Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+
+            using ToolStripSeparator separator = new();
+            menuStrip.Items.Add(separator);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(2, menuStrip.Items.Count);
+            Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+            Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+
+            using ToolStripMenuItem item2 = new();
+            menuStrip.Items.Add(item2);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(3, menuStrip.Items.Count);
+            Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+            Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+            Assert.Equal(2, item2.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripMenuItemAccessibleObject_GetPropertyValue_SizeOfSet_ReturnsExpected_IfNoParent()
+        {
+            using ToolStripMenuItem toolStripMenuItem = new();
+
+            AccessibleObject accessibilityObject = toolStripMenuItem.AccessibilityObject;
+
+            Assert.Null(accessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+        }
+
+        [WinFormsFact]
+        public void ToolStripMenuItemAccessibleObject_GetPropertyValue_SizeOfSet_ReturnsExpected()
+        {
+            using MenuStrip menuStrip = new();
+
+            using ToolStripMenuItem item1 = new();
+            menuStrip.Items.Add(item1);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(1, menuStrip.Items.Count);
+            Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+
+            using ToolStripSeparator separator = new();
+            menuStrip.Items.Add(separator);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(2, menuStrip.Items.Count);
+            Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+            Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+
+            using ToolStripMenuItem item2 = new();
+            menuStrip.Items.Add(item2);
+            menuStrip.PerformLayout();
+
+            Assert.Equal(3, menuStrip.Items.Count);
+            Assert.Equal(2, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+            Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+            Assert.Equal(2, item2.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+        }
+
         [WinFormsTheory]
         [InlineData(true, CheckState.Checked, true)]
         [InlineData(true, CheckState.Unchecked, true)]
