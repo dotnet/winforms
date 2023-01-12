@@ -121,10 +121,12 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(Keys.F1)]
         [InlineData(Keys.None)]
+        [InlineData(Keys.Control | Keys.Add)]
+        [InlineData(Keys.Control | Keys.Alt | Keys.D)]
         [InlineData(Keys.Control | Keys.Alt | Keys.Shift | Keys.A)]
         [InlineData(Keys.Control | Keys.Alt | Keys.Shift | Keys.F1)]
-        [InlineData(Keys.F1)]
         public void ToolStripMenuItem_SetShortcutKeys(Keys keys)
         {
             using var item = new SubToolStripMenuItem();
