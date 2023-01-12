@@ -5831,11 +5831,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">InvalidArgument=Valore di '{1}' non valido per '{0}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidArgumentType">
-        <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' should be between {2} and {3}.</source>
         <target state="translated">'{1}' non è un valore valido per '{0}'. '{0}' deve essere compreso tra {2} e {3}.</target>

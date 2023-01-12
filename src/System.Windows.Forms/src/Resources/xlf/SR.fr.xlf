@@ -5831,11 +5831,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">InvalidArgument=La valeur '{1}' n'est pas valide pour '{0}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidArgumentType">
-        <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' should be between {2} and {3}.</source>
         <target state="translated">La valeur '{1}' n'est pas valide pour '{0}'. '{0}' doit être compris entre {2} et {3}.</target>

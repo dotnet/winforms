@@ -5831,11 +5831,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">InvalidArgument='{1}' 不是 '{0}' 的有效值。</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidArgumentType">
-        <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' should be between {2} and {3}.</source>
         <target state="translated">'{1}' 不是 '{0}' 的有效值。'{0}' 應該介於 {2} 與 {3} 之間。</target>
