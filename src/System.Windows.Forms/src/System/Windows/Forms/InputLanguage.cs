@@ -96,6 +96,8 @@ namespace System.Windows.Forms
             }
         }
 
+        private static string KeyboardLayoutsRegistryPath => @"SYSTEM\CurrentControlSet\Control\Keyboard Layouts";
+
         /// <summary>
         ///  Returns the name of the current keyboard layout as it appears in the Windows
         ///  Regional Settings on the computer.
@@ -107,39 +109,39 @@ namespace System.Windows.Forms
                 string layoutName = GetKeyboardLayoutNameForHKL(_handle);
 
                 // https://learn.microsoft.com/windows/win32/intl/using-registry-string-redirection#create-resources-for-keyboard-layout-strings
-                if (KeyboardLayoutsRegistryKey?.OpenSubKey(layoutName) is RegistryKey key)
+                if (Registry.LocalMachine.OpenSubKey(KeyboardLayoutsRegistryPath) is RegistryKey key)
                 {
-                    // Localizable string resource associated with the keyboard layout
-                    if (key.GetValue("Layout Display Name") is string layoutDisplayName)
+                    if (key.OpenSubKey(layoutName) is RegistryKey subKey)
                     {
-                        unsafe
+                        // Localizable string resource associated with the keyboard layout
+                        if (subKey.GetValue("Layout Display Name") is string layoutDisplayName)
                         {
-                            var ppvReserved = (void*)IntPtr.Zero;
-                            Span<char> buffer = stackalloc char[512];
-                            fixed (char* pBuffer = buffer)
+                            unsafe
                             {
-                                HRESULT res = PInvoke.SHLoadIndirectString(layoutDisplayName, pBuffer, (uint)buffer.Length, ref ppvReserved);
-                                if (res == HRESULT.S_OK)
+                                var ppvReserved = (void*)IntPtr.Zero;
+                                Span<char> buffer = stackalloc char[512];
+                                fixed (char* pBuffer = buffer)
                                 {
-                                    return buffer.SliceAtFirstNull().ToString();
+                                    HRESULT res = PInvoke.SHLoadIndirectString(layoutDisplayName, pBuffer, (uint)buffer.Length, ref ppvReserved);
+                                    if (res == HRESULT.S_OK)
+                                    {
+                                        return buffer.SliceAtFirstNull().ToString();
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    // Fallback to human-readable name for backward compatibility
-                    if (key.GetValue("Layout Text") is string layoutText)
-                    {
-                        return layoutText;
+                        // Fallback to human-readable name for backward compatibility
+                        if (subKey.GetValue("Layout Text") is string layoutText)
+                        {
+                            return layoutText;
+                        }
                     }
                 }
 
                 return SR.UnknownInputLanguageLayout;
             }
         }
-
-        private static RegistryKey? KeyboardLayoutsRegistryKey
-            => Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Keyboard Layouts");
 
         /// <summary>
         ///  Returns the KLID string for provided HKL handle.
@@ -174,7 +176,7 @@ namespace System.Windows.Forms
                 // Extract layout id from the device handle
                 int layoutId = device & 0x0FFF;
 
-                if (KeyboardLayoutsRegistryKey is RegistryKey key)
+                if (Registry.LocalMachine.OpenSubKey(KeyboardLayoutsRegistryPath) is RegistryKey key)
                 {
                     // Match keyboard layout by layout id
                     foreach (string subKeyName in key.GetSubKeyNames())
@@ -191,7 +193,7 @@ namespace System.Windows.Forms
 
                         if (layoutId == Convert.ToInt32(subKeyLayoutId, 16))
                         {
-                            Debug.Assert(subKeyName.Length == 8, "unexpected key length in registry: " + subKey.Name);
+                            Debug.Assert(subKeyName.Length == 8, $"unexpected key length in registry: {subKey.Name}");
                             // We don't care what is exact format of KLID here
                             return subKeyName;
                         }
