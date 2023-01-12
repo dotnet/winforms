@@ -130,11 +130,11 @@ namespace System.Windows.Forms.Tests
         public void ToolStripMenuItem_SetShortcutKeys(Keys keys)
         {
             using var item = new SubToolStripMenuItem();
-            item.ShortcutKeys=keys;
+            item.ShortcutKeys = keys;
             Assert.Equal(keys, item.ShortcutKeys);
         }
 
-		[WinFormsTheory]
+        [WinFormsTheory]
         [InlineData(Keys.A)]
         [InlineData(Keys.Control)]
         [InlineData(Keys.Control | Keys.Alt)]
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests
         public void ToolStripMenuItem_SetShortcutKeys_ThrowsInvalidEnumArgumentException(Keys keys)
         {
             using var item = new SubToolStripMenuItem();
-            Assert.Throws<InvalidEnumArgumentException>(() => item.ShortcutKeys=keys);
+            Assert.Throws<InvalidEnumArgumentException>(() => item.ShortcutKeys = keys);
         }
 
         private class SubToolStripMenuItem : ToolStripMenuItem
