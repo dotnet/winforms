@@ -58,6 +58,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        public void Cursor_Ctor_Stream_NonStartPosition()
+        {
+            using var stream = new MemoryStream(File.ReadAllBytes(Path.Combine("bitmaps", "cursor.cur")));
+            stream.Position = 5;
+            using var cursor = new Cursor(stream);
+            Assert.NotNull(cursor);
+        }
+
+        [Fact]
+        public void Cursor_Ctor_EmptyStream_ThrowsArgumentException()
+        {
+            Assert.Throws<ArgumentException>("stream", () => new Cursor(new MemoryStream()));
+        }
+
+        [Fact]
         public void Cursor_Ctor_NullStream_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("stream", () => new Cursor((Stream)null));
