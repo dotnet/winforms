@@ -5831,6 +5831,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">'{1}'의 InvalidArgument=Value는 '{0}'에 사용할 수 없습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidArgumentType">
+        <source>Argument '{0}' must be of type '{1}'.</source>
+        <target state="new">Argument '{0}' must be of type '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' should be between {2} and {3}.</source>
         <target state="translated">'{1}'의 값은 '{0}'에 사용할 수 없습니다. '{0}'은(는) {2}에서 {3} 사이에 있어야 합니다.</target>
