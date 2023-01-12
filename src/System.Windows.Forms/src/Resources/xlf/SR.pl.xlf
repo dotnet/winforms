@@ -5831,6 +5831,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">InvalidArgument=Wartość '{1}' nie jest prawidłową wartością dla '{0}'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidArgumentType">
+        <source>Argument '{0}' must be of type '{1}'.</source>
+        <target state="new">Argument '{0}' must be of type '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' should be between {2} and {3}.</source>
         <target state="translated">Wartość '{1}' nie jest prawidłową wartością dla '{0}'. Wartość '{0}' powinna znajdować się w zakresie od {2} do {3}.</target>

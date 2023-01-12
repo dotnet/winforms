@@ -6958,4 +6958,7 @@ Stack trace where the illegal operation occurred was:
   <data name="Arg_RankMultiDimNotSupported" xml:space="preserve">
     <value>Only single dimensional arrays are supported for the requested action.</value>
   </data>
+  <data name="InvalidArgumentType" xml:space="preserve">
+    <value>Argument '{0}' must be of type '{1}'.</value>
+  </data>
 </root>

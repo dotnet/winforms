@@ -31,7 +31,7 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(style);
             if (style is not TableLayoutStyle tableLayoutStyle)
             {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(style), style), nameof(style));
+                throw new ArgumentException(string.Format(SR.InvalidArgumentType, nameof(style), typeof(TableLayoutStyle)), nameof(style));
             }
 
             EnsureNotOwned(tableLayoutStyle);
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(style);
             if (style is not TableLayoutStyle tableLayoutStyle)
             {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(style), style), nameof(style));
+                throw new ArgumentException(string.Format(SR.InvalidArgumentType, nameof(style), typeof(TableLayoutStyle)), nameof(style));
             }
 
             EnsureNotOwned(tableLayoutStyle);
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                 ArgumentNullException.ThrowIfNull(value);
                 if (value is not TableLayoutStyle tableLayoutStyle)
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(value), value), nameof(value));
+                    throw new ArgumentException(string.Format(SR.InvalidArgumentType, nameof(value), typeof(TableLayoutStyle)), nameof(value));
                 }
 
                 EnsureNotOwned(tableLayoutStyle);
@@ -88,7 +88,7 @@ namespace System.Windows.Forms
 
             if (style is not TableLayoutStyle tableLayoutStyle)
             {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(style), style), nameof(style));
+                throw new ArgumentException(string.Format(SR.InvalidArgumentType, nameof(style), typeof(TableLayoutStyle)), nameof(style));
             }
 
             if (!_innerList.Remove(tableLayoutStyle))
