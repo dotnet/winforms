@@ -417,7 +417,11 @@ namespace System.Windows.Forms
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
 
-            InnerList.Remove(value);
+            if (!InnerList.Remove(value))
+            {
+                return;
+            }
+
             OnAfterRemove(value);
         }
 
@@ -460,7 +464,6 @@ namespace System.Windows.Forms
             InnerList.CopyTo(array, index);
         }
 
-        //
         internal void MoveItem(ToolStripItem value)
         {
             if (value.ParentInternal is not null)

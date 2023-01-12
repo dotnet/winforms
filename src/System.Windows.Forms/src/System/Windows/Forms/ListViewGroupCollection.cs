@@ -279,8 +279,12 @@ namespace System.Windows.Forms
 
         public void Remove(ListViewGroup group)
         {
+            if (!List.Remove(group))
+            {
+                return;
+            }
+
             group.ListView = null;
-            List.Remove(group);
             group.ReleaseUiaProvider();
 
             if (_listView.IsHandleCreated)

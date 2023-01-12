@@ -101,12 +101,12 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TableLayoutStyleCollection_Insert_ObjectNotTableLayoutStyle_ThrowsInvalidCastException()
+        public void TableLayoutStyleCollection_Insert_ObjectNotTableLayoutStyle_ArgumentException()
         {
             using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
-            Assert.Throws<InvalidCastException>(() => collection.Insert(0, new object()));
+            Assert.Throws<ArgumentException>(() => collection.Insert(0, new object()));
         }
 
         [WinFormsFact]
@@ -162,13 +162,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TableLayoutStyleCollection_Item_ObjectNotTableLayoutStyle_ThrowsInvalidCastException()
+        public void TableLayoutStyleCollection_Item_ObjectNotTableLayoutStyle_ThrowsArgumentException()
         {
             using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             collection.Add(new RowStyle());
-            Assert.Throws<InvalidCastException>(() => collection[0] = new object());
+            Assert.Throws<ArgumentException>(() => collection[0] = new object());
         }
 
         [WinFormsFact]
@@ -211,12 +211,12 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TableLayoutStyleCollection_Remove_ObjectNotTableLayoutStyle_ThrowsInvalidCastException()
+        public void TableLayoutStyleCollection_Remove_ObjectNotTableLayoutStyle_ThrowsArgumentException()
         {
             using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
-            Assert.Throws<InvalidCastException>(() => collection.Remove(new object()));
+            Assert.Throws<ArgumentException>(() => collection.Remove(new object()));
         }
 
         [WinFormsFact]
