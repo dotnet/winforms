@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
@@ -55,7 +54,7 @@ public abstract partial class AxHost
                 {
                     if (_array![_location] is not null)
                     {
-                        *rgelt = (IUnknown*)Marshal.GetIUnknownForObject(_array[_location]);
+                        *rgelt = ComHelpers.GetComPointer<IUnknown>(_array[_location]);
                         ++fetched;
                     }
                 }
@@ -66,23 +65,13 @@ public abstract partial class AxHost
                 *pceltFetched = fetched;
             }
 
-            if (fetched != celt)
-            {
-                return HRESULT.S_FALSE;
-            }
-
-            return HRESULT.S_OK;
+            return fetched != celt ? HRESULT.S_FALSE : HRESULT.S_OK;
         }
 
         HRESULT IEnumUnknown.Interface.Skip(uint celt)
         {
             _location += (int)celt;
-            if (_location >= _size)
-            {
-                return HRESULT.S_FALSE;
-            }
-
-            return HRESULT.S_OK;
+            return _location >= _size ? HRESULT.S_FALSE : HRESULT.S_OK;
         }
 
         HRESULT IEnumUnknown.Interface.Reset()

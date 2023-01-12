@@ -371,6 +371,7 @@ IPropertyNotifySink
 IProvideMultipleClassInfo
 IQuickActivate
 IRecordInfo
+IRichEditOleCallback
 IsAccelerator
 IsAppThemed
 IsChild

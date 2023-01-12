@@ -789,17 +789,10 @@ public sealed partial class Application
                     return true;
                 }
 
-                void* component;
-                if (ComponentManager.FGetActiveComponent(msogac.Active, &component, null, 0))
+                using ComScope<IUnknown> component = new(null);
+                if (ComponentManager.FGetActiveComponent(msogac.Active, component, null, 0))
                 {
-                    IntPtr pUnk = Marshal.GetIUnknownForObject(this);
-                    bool matches = ((void*)pUnk == component);
-                    Marshal.Release(pUnk);
-                    Marshal.Release((IntPtr)component);
-                    if (matches)
-                    {
-                        return true;
-                    }
+                    return ComHelpers.WrapsManagedObject(this, component);
                 }
             }
 
@@ -830,7 +823,7 @@ public sealed partial class Application
                 HRESULT ret;
                 unsafe
                 {
-                    ret = PInvoke.OleInitialize(pvReserved:(void*)null);
+                    ret = PInvoke.OleInitialize(pvReserved: (void*)null);
                 }
 
                 SetState(STATE_OLEINITIALIZED, true);

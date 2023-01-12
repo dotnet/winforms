@@ -1393,16 +1393,13 @@ public partial class Control
             _control.GetMiscStatus(DVASPECT.DVASPECT_CONTENT, out OLEMISC status);
             pQaControl->dwMiscStatus = status;
 
-            // Advise the event sink so VB6 can catch events raised from UserControls. VB6 expects the control to do
-            // this during IQuickActivate, otherwise it will not hook events at runtime. We will do this if all of the
-            // following are true:
+            // Advise the event sink so Visual Basic 6 can catch events raised from UserControls. VB6 expects the control
+            // to do this during IQuickActivate, otherwise it will not hook events at runtime. We will do this if all of
+            // the following are true:
             //
-            //  1. The container (e.g., vb6) has supplied an event sink
+            //  1. The container (e.g., VB6) has supplied an event sink
             //  2. The control is a UserControl (this is only to limit the scope of the changed behavior)
             //  3. The UserControl has indicated it wants to expose events to COM via the ComSourceInterfacesAttribute
-            //
-            // Note that the AdviseHelper handles some non-standard COM interop that is required in order to access
-            // the events on the CLR-supplied CCW (COM-callable Wrapper.
 
             if ((pQaContainer->pUnkEventSink is not null) && (_control is UserControl))
             {
@@ -1411,15 +1408,19 @@ public partial class Control
 
                 if (eventInterface is not null)
                 {
-                    try
+                    // Control doesn't explicitly implement IConnectionPointContainer, but it is generated with a CCW by
+                    // COM interop.
+
+                    using var container = ComHelpers.GetComScope<IConnectionPointContainer>(_control);
+                    using ComScope<IConnectionPoint> connectionPoint = new(null);
+                    HRESULT hr = container.Value->FindConnectionPoint(eventInterface.GUID, connectionPoint);
+                    if (hr.Failed)
                     {
-                        // For the default source interface, call IConnectionPoint.Advise with the supplied event sink.
-                        // This is easier said than done. See notes in AdviseHelper.AdviseConnectionPoint.
-                        AdviseHelper.AdviseConnectionPoint(_control, pQaContainer->pUnkEventSink, eventInterface, out pQaControl->dwEventCookie);
+                        throw new ArgumentException(string.Format(SR.AXNoConnectionPoint, eventInterface.Name));
                     }
-                    catch (Exception e) when (!ClientUtils.IsCriticalException(e))
-                    {
-                    }
+
+                    hr = connectionPoint.Value->Advise(pQaContainer->pUnkEventSink, out pQaControl->dwEventCookie);
+                    Debug.WriteLineIf(hr.Failed, $"Failed to advise with {eventInterface.Name}.");
                 }
             }
 
@@ -1444,14 +1445,14 @@ public partial class Control
         private static Type? GetDefaultEventsInterface(Type controlType)
         {
             Type? eventInterface = null;
-            object[] custom = controlType.GetCustomAttributes(typeof(ComSourceInterfacesAttribute), false);
+            object[] custom = controlType.GetCustomAttributes(typeof(ComSourceInterfacesAttribute), inherit: false);
 
             if (custom.Length > 0)
             {
                 ComSourceInterfacesAttribute coms = (ComSourceInterfacesAttribute)custom[0];
-                string eventName = coms.Value.Split(new char[] { '\0' })[0];
-                eventInterface = controlType.Module.Assembly.GetType(eventName, false);
-                eventInterface ??= Type.GetType(eventName, false);
+                string eventName = coms.Value.Split('\0')[0];
+                eventInterface = controlType.Module.Assembly.GetType(eventName, throwOnError: false);
+                eventInterface ??= Type.GetType(eventName, throwOnError: false);
             }
 
             return eventInterface;
