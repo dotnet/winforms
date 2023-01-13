@@ -4,6 +4,8 @@
 
 using Xunit;
 using Xunit.Abstractions;
+using Windows.Win32.UI.Accessibility;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace System.Windows.Forms.UITests
 {
@@ -31,6 +33,28 @@ namespace System.Windows.Forms.UITests
             using OpenFileDialog dialog = new();
             dialog.InitialDirectory = Path.GetTempPath();
             Assert.Equal(DialogResult.Cancel, dialog.ShowDialog(dialogOwnerForm));
+        }
+
+        // Regression test for https://github.com/dotnet/winforms/issues/8414
+        [WinFormsFact]
+        public void OpenFileDialogTests_ResultWithMultiselect()
+        {
+            using var tempFile = TempFile.Create(0);
+            using AcceptDialogForm dialogOwnerForm = new();
+            using OpenFileDialog dialog = new();
+            dialog.Multiselect= true;
+            dialog.InitialDirectory = Path.GetDirectoryName(tempFile.Path);
+            dialog.FileName = tempFile.Path;
+            Assert.Equal(DialogResult.OK, dialog.ShowDialog(dialogOwnerForm));
+            Assert.Equal(tempFile.Path, dialog.FileName);
+        }
+
+        private class AcceptDialogForm : DialogHostForm
+        {
+            protected override void OnDialogIdle(HWND dialogHandle)
+            {
+                Accept(dialogHandle);
+            }
         }
     }
 }

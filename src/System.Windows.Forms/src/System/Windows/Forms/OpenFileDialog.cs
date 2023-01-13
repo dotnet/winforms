@@ -143,8 +143,11 @@ namespace System.Windows.Forms
                     : new string[] { GetFilePathFromShellItem(item) };
             }
 
+            using var openDialog = ComScope<IFileOpenDialog>.QueryFrom(dialog);
             using ComScope<IShellItemArray> items = new(null);
-            if (((IFileOpenDialog*)dialog)->GetResults(items).Failed)
+
+            HRESULT hr = openDialog.Value->GetResults(items);
+            if (hr.Failed)
             {
                 return Array.Empty<string>();
             }
