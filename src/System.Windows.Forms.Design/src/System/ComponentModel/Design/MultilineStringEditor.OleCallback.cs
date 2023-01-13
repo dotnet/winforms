@@ -31,6 +31,7 @@ public sealed partial class MultilineStringEditor
         public HRESULT GetNewStorage(IStorage** lplpstg)
         {
             Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
+
             if (lplpstg is null)
             {
                 return HRESULT.E_POINTER;
@@ -46,7 +47,7 @@ public sealed partial class MultilineStringEditor
             hr = PInvoke.StgCreateDocfileOnILockBytes(
                 pLockBytes,
                 STGM.STGM_SHARE_EXCLUSIVE | STGM.STGM_CREATE | STGM.STGM_READWRITE,
-                0,
+                reserved: 0,
                 lplpstg);
 
             Debug.Assert(hr.Succeeded);

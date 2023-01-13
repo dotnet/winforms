@@ -107,12 +107,12 @@ internal static unsafe partial class ComHelpers
     /// <summary>
     ///  Attempts to unwrap one of our ComWrapper CCWs as a particular managed object.
     /// </summary>
-    /// <remarks>
+    /// <devdoc>
     ///  <para>
     ///   This should remain internal to this class and will ultimately mostly be replaced by
     ///   https://github.com/dotnet/runtime/issues/79674.
     ///  </para>
-    /// </remarks>
+    /// </devdoc>
     private static bool TryUnwrapComWrapperCCW<TWrapper>(
         IUnknown* unknown,
         [NotNullWhen(true)] out TWrapper? @interface) where TWrapper : class
