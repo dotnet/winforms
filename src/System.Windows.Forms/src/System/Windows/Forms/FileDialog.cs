@@ -167,7 +167,7 @@ namespace System.Windows.Forms
         [AllowNull]
         public string FileName
         {
-            get => _fileNames is null ? string.Empty : _fileNames[0];
+            get => _fileNames is { } names && names.Length > 0 ? names[0] : string.Empty;
             set => _fileNames = value is not null ? new string[] { value } : null;
         }
 
@@ -296,10 +296,11 @@ namespace System.Windows.Forms
         ///  Gets the Win32 common Open File Dialog OFN_* and FOS_* option flags.
         /// </summary>
         protected int Options =>
-            (int)(_fileNameFlags & (OFN_READONLY | OFN_HIDEREADONLY | OFN_NOCHANGEDIR | OFN_SHOWHELP | OFN_NOVALIDATE | OFN_ALLOWMULTISELECT
-              | OFN_PATHMUSTEXIST | OFN_NODEREFERENCELINKS | OFN_DONTADDTORECENT | OFN_NOREADONLYRETURN
-              | OFN_NOTESTFILECREATE | OFN_FORCESHOWHIDDEN)) | (int)(_dialogOptions & (FOS_OKBUTTONNEEDSINTERACTION | FOS_HIDEPINNEDPLACES
-              | FOS_DEFAULTNOMINIMODE | FOS_FORCEPREVIEWPANEON));
+            (int)(_fileNameFlags & (OFN_READONLY | OFN_HIDEREADONLY | OFN_NOCHANGEDIR | OFN_SHOWHELP | OFN_NOVALIDATE
+              | OFN_ALLOWMULTISELECT | OFN_PATHMUSTEXIST | OFN_NODEREFERENCELINKS | OFN_DONTADDTORECENT
+              | OFN_NOREADONLYRETURN | OFN_NOTESTFILECREATE | OFN_FORCESHOWHIDDEN))
+              |
+            (int)(_dialogOptions & (FOS_OKBUTTONNEEDSINTERACTION | FOS_HIDEPINNEDPLACES | FOS_DEFAULTNOMINIMODE | FOS_FORCEPREVIEWPANEON));
 
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box restores the current

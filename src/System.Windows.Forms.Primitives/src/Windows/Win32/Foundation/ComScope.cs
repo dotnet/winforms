@@ -76,8 +76,12 @@ namespace Windows.Win32.Foundation
         /// </summary>
         public static ComScope<T> QueryFrom<TFrom>(TFrom* from) where TFrom : unmanaged, IComIID
         {
+            if (from is null)
+            {
+                HRESULT.E_POINTER.ThrowOnFailure();
+            }
+
             ComScope<T> scope = new(null);
-            HRESULT.E_POINTER.ThrowOnFailure();
             ((IUnknown*)from)->QueryInterface(IID.Get<T>(), scope).ThrowOnFailure();
             return scope;
         }
