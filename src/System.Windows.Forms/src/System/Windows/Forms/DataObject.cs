@@ -21,7 +21,11 @@ namespace System.Windows.Forms
     ///  Implements a basic data transfer mechanism.
     /// </summary>
     [ClassInterface(ClassInterfaceType.None)]
-    public partial class DataObject : IDataObject, ComTypes.IDataObject, Com.IDataObject.Interface, Com.IManagedWrapper<Com.IDataObject>
+    public unsafe partial class DataObject :
+        IDataObject,
+        ComTypes.IDataObject,
+        Com.IDataObject.Interface,
+        Com.IManagedWrapper<Com.IDataObject>
     {
         private const string CF_DEPRECATED_FILENAME = "FileName";
         private const string CF_DEPRECATED_FILENAMEW = "FileNameW";
@@ -53,6 +57,21 @@ namespace System.Windows.Forms
             CompModSwitches.DataObject.TraceVerbose("Constructed DataObject based on IDataObject");
             _innerData = data;
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
+        }
+
+        /// <summary>
+        ///  Create a <see cref="DataObject"/> from a raw interface pointer.
+        /// </summary>
+        internal static DataObject FromComPointer(Com.IDataObject* data)
+        {
+            // Get the RCW for the pointer and continue.
+            bool success = ComHelpers.TryGetManagedInterface(
+                (Com.IUnknown*)data,
+                takeOwnership: true,
+                out ComTypes.IDataObject? comTypesData);
+
+            Debug.Assert(success);
+            return new(comTypesData!);
         }
 
         /// <summary>

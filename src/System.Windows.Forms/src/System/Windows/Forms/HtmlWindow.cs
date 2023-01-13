@@ -6,7 +6,7 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using static Interop.Mshtml;
 
 namespace System.Windows.Forms
@@ -372,57 +372,30 @@ namespace System.Windows.Forms
             remove => WindowShim.RemoveHandler(s_eventUnload, value);
         }
 
-        #region operators
-
-        public static bool operator ==(HtmlWindow left, HtmlWindow right)
+        public static unsafe bool operator ==(HtmlWindow left, HtmlWindow right)
         {
-            //Not equal if only one's null.
+            // Not equal if only one's null.
             if (left is null != right is null)
             {
                 return false;
             }
 
-            //Equal if both are null.
+            // Equal if both are null.
             if (left is null)
             {
                 return true;
             }
 
-            //Neither are null.  Get the IUnknowns and compare them.
-            IntPtr leftPtr = IntPtr.Zero;
-            IntPtr rightPtr = IntPtr.Zero;
-            try
-            {
-                leftPtr = Marshal.GetIUnknownForObject(left.NativeHtmlWindow);
-                rightPtr = Marshal.GetIUnknownForObject(right.NativeHtmlWindow);
-                return leftPtr == rightPtr;
-            }
-            finally
-            {
-                if (leftPtr != IntPtr.Zero)
-                {
-                    Marshal.Release(leftPtr);
-                }
-
-                if (rightPtr != IntPtr.Zero)
-                {
-                    Marshal.Release(rightPtr);
-                }
-            }
+            // Neither are null. Get the IUnknowns and compare them.
+            using var leftUnknown = ComHelpers.GetComScope<IUnknown>(left.NativeHtmlWindow);
+            using var rightUnknown = ComHelpers.GetComScope<IUnknown>(right.NativeHtmlWindow);
+            return leftUnknown.Value == rightUnknown.Value;
         }
 
-        public static bool operator !=(HtmlWindow left, HtmlWindow right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(HtmlWindow left, HtmlWindow right) => !(left == right);
 
         public override int GetHashCode() => _htmlWindow2?.GetHashCode() ?? 0;
 
-        public override bool Equals(object obj)
-        {
-            return (this == (HtmlWindow)obj);
-        }
-        #endregion
-
+        public override bool Equals(object obj) => this == (HtmlWindow)obj;
     }
 }

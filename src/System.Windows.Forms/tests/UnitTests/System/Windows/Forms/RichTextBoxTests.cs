@@ -10,13 +10,14 @@ using System.Windows.Forms.Automation;
 using System.Windows.Forms.TestUtilities;
 using Moq;
 using Moq.Protected;
+using Windows.Win32.System.Ole;
+using Windows.Win32.UI.Controls.RichEdit;
 using Xunit;
 using static Interop;
 using static Interop.Richedit;
 using static Interop.User32;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
-using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests
 {

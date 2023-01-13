@@ -479,7 +479,7 @@ namespace System.Windows.Forms
                     };
 
                     var retVals = new object[1];
-                    EXCEPINFO excepInfo = default(EXCEPINFO);
+                    EXCEPINFO excepInfo = default;
                     hr = scriptObject.Invoke(
                         dispid,
                         &g,
@@ -518,14 +518,14 @@ namespace System.Windows.Forms
 
         public void ScrollIntoView(bool alignWithTop)
         {
-            NativeHtmlElement.ScrollIntoView((object)alignWithTop);
+            NativeHtmlElement.ScrollIntoView(alignWithTop);
         }
 
         public void SetAttribute(string attributeName, string value)
         {
             try
             {
-                NativeHtmlElement.SetAttribute(attributeName, (object)value, 0);
+                NativeHtmlElement.SetAttribute(attributeName, value, 0);
             }
             catch (COMException comException)
             {
@@ -661,58 +661,30 @@ namespace System.Windows.Forms
             remove => ElementShim.RemoveHandler(s_eventMouseLeave, value);
         }
 
-        #region operators
-        public static bool operator ==(HtmlElement left, HtmlElement right)
+        public static unsafe bool operator ==(HtmlElement left, HtmlElement right)
         {
-            //Not equal if only one's null.
+            // Not equal if only one's null.
             if (left is null != right is null)
             {
                 return false;
             }
 
-            //Equal if both are null.
+            // Equal if both are null.
             if (left is null)
             {
                 return true;
             }
 
-            //Neither are null.  Get the IUnknowns and compare them.
-            IntPtr leftPtr = IntPtr.Zero;
-            IntPtr rightPtr = IntPtr.Zero;
-            try
-            {
-                leftPtr = Marshal.GetIUnknownForObject(left.NativeHtmlElement);
-                rightPtr = Marshal.GetIUnknownForObject(right.NativeHtmlElement);
-                return leftPtr == rightPtr;
-            }
-            finally
-            {
-                if (leftPtr != IntPtr.Zero)
-                {
-                    Marshal.Release(leftPtr);
-                }
-
-                if (rightPtr != IntPtr.Zero)
-                {
-                    Marshal.Release(rightPtr);
-                }
-            }
+            // Neither are null. Get the IUnknowns and compare them.
+            using var leftUnknown = ComHelpers.GetComScope<IUnknown>(left.NativeHtmlElement);
+            using var rightUnknown = ComHelpers.GetComScope<IUnknown>(right.NativeHtmlElement);
+            return leftUnknown.Value == rightUnknown.Value;
         }
 
-        public static bool operator !=(HtmlElement left, HtmlElement right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(HtmlElement left, HtmlElement right) => !(left == right);
 
         public override int GetHashCode() => _htmlElement?.GetHashCode() ?? 0;
 
-        public override bool Equals(object obj)
-        {
-            //If obj isn't an HtmlElement, we want Equals to return false.  this will
-            //never be null, so now it will return false as expected (not throw).
-            return this == (obj as HtmlElement);
-        }
-        #endregion
-
+        public override bool Equals(object obj) => this == (obj as HtmlElement);
     }
 }

@@ -13,8 +13,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
+using RichEdit = Windows.Win32.UI.Controls.RichEdit;
 using static Interop;
 using static Interop.Richedit;
+using Windows.Win32.UI.Controls.RichEdit;
 
 namespace System.Windows.Forms
 {
@@ -23,12 +25,13 @@ namespace System.Windows.Forms
     ///  It supports font selection, boldface, and other type attributes.
     /// </summary>
     [Docking(DockingBehavior.Ask)]
-    [Designer("System.Windows.Forms.Design.RichTextBoxDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.RichTextBoxDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionRichTextBox))]
     public partial class RichTextBox : TextBoxBase
     {
-        static TraceSwitch richTextDbg;
-        static TraceSwitch RichTextDbg
+        private static TraceSwitch richTextDbg;
+
+        private static TraceSwitch RichTextDbg
         {
             get
             {
@@ -75,20 +78,20 @@ namespace System.Windows.Forms
         private string textRtf; // If not null, takes precedence over cached Text value
         private string textPlain;
         private Color selectionBackColorToSetOnHandleCreated;
-        RichTextBoxLanguageOptions languageOption = RichTextBoxLanguageOptions.AutoFont | RichTextBoxLanguageOptions.DualFont;
+        private RichTextBoxLanguageOptions languageOption = RichTextBoxLanguageOptions.AutoFont | RichTextBoxLanguageOptions.DualFont;
 
         // Non-persistent state
         //
-        static int logPixelsX;
-        static int logPixelsY;
-        Stream editStream;
-        float zoomMultiplier = 1.0f;
+        private static int logPixelsX;
+        private static int logPixelsY;
+        private Stream editStream;
+        private float zoomMultiplier = 1.0f;
 
         // used to decide when to fire the selectionChange event.
         private int curSelStart;
         private int curSelEnd;
         private short curSelType;
-        object oleCallback;
+        private object _oleCallback;
 
         private static int[] shortcutsToDisable;
         private static int richEditMajorVersion = 3;
@@ -1948,10 +1951,11 @@ namespace System.Windows.Forms
             if (position != -1 && selectWord)
             {
                 // Select the string found, this is done in ubyte units
-                var chrg = new CHARRANGE
+                CHARRANGE chrg = new()
                 {
                     cpMin = position
                 };
+
                 //Look for kashidas in the string.  A kashida is an arabic visual justification character
                 //that's not semantically meaningful.  Searching for ABC might find AB_C (where A,B, and C
                 //represent Arabic characters and _ represents a kashida).  We should highlight the text
@@ -2048,14 +2052,14 @@ namespace System.Windows.Forms
                 end = textLen;
             }
 
-            var chrg = default(Richedit.CHARRANGE); // The range of characters we have searched
+            var chrg = default(CHARRANGE); // The range of characters we have searched
             chrg.cpMax = chrg.cpMin = start;
 
             // Use the TEXTRANGE to move our text buffer forward
             // or backwards within the main text
             var txrg = new Richedit.TEXTRANGE
             {
-                chrg = new Richedit.CHARRANGE
+                chrg = new CHARRANGE
                 {
                     cpMin = chrg.cpMin,
                     cpMax = chrg.cpMax
@@ -2594,7 +2598,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            oleCallback = null;
+            _oleCallback = null;
             SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
         }
 
@@ -3185,41 +3189,23 @@ namespace System.Windows.Forms
         private void UpdateOleCallback()
         {
             RichTextDbg.TraceVerbose($"update ole callback ({AllowDrop})");
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                if (oleCallback is null)
-                {
-                    RichTextDbg.TraceVerbose("binding ole callback");
-
-                    AllowOleObjects = true;
-
-                    oleCallback = CreateRichEditOleCallback();
-
-                    // Forcibly QI (through IUnknown::QueryInterface) to handle multiple
-                    // definitions of the interface.
-                    //
-                    IntPtr punk = Marshal.GetIUnknownForObject(oleCallback);
-                    try
-                    {
-                        Guid iidRichEditOleCallback = typeof(IRichEditOleCallback).GUID;
-                        Marshal.QueryInterface(punk, ref iidRichEditOleCallback, out IntPtr pRichEditOleCallback);
-                        try
-                        {
-                            PInvoke.SendMessage(this, (User32.WM)EM.SETOLECALLBACK, 0, pRichEditOleCallback);
-                        }
-                        finally
-                        {
-                            Marshal.Release(pRichEditOleCallback);
-                        }
-                    }
-                    finally
-                    {
-                        Marshal.Release(punk);
-                    }
-                }
-
-                PInvoke.DragAcceptFiles(this, fAccept: false);
+                return;
             }
+
+            if (_oleCallback is null)
+            {
+                RichTextDbg.TraceVerbose("binding ole callback");
+
+                AllowOleObjects = true;
+
+                _oleCallback = CreateRichEditOleCallback();
+                using var oleCallback = ComHelpers.GetComScope<RichEdit.IRichEditOleCallback>(_oleCallback);
+                PInvoke.SendMessage(this, (User32.WM)EM.SETOLECALLBACK, 0, (nint)oleCallback);
+            }
+
+            PInvoke.DragAcceptFiles(this, fAccept: false);
         }
 
         //Note: RichTextBox doesn't work like other controls as far as setting ForeColor/
@@ -3247,10 +3233,7 @@ namespace System.Windows.Forms
         ///  information look up the MSDN info on this interface. This is designed to be a back door of
         ///  sorts, which is why it is fairly obscure, and uses the RichEdit name instead of RichTextBox.
         /// </summary>
-        protected virtual object CreateRichEditOleCallback()
-        {
-            return new OleCallback(this);
-        }
+        protected virtual object CreateRichEditOleCallback() => new OleCallback(this);
 
         /// <summary>
         ///  Handles link messages (mouse move, down, up, dblclk, etc)
@@ -3290,7 +3273,7 @@ namespace System.Windows.Forms
         ///  We have to create a CharBuffer of the type of RichTextBox DLL we're using,
         ///  not based on the SystemCharWidth.
         /// </remarks>
-        private string CharRangeToString(Richedit.CHARRANGE c)
+        private string CharRangeToString(CHARRANGE c)
         {
             var txrg = new Richedit.TEXTRANGE
             {

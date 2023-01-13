@@ -11,7 +11,7 @@ using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
-internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
+internal unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
 {
     private readonly Com2PropertyDescriptor _propertyDescriptor;
     private readonly Guid _guid;
@@ -63,16 +63,16 @@ internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2Pro
 
     public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 
-    public unsafe void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, IntPtr parentHandle)
+    public void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, nint parentHandle)
     {
         object[] objs = component.GetType().IsArray ? (object[])component : new object[] { component };
-        IntPtr[] objAddrs = new IntPtr[objs.Length];
+        nint[] objAddrs = new nint[objs.Length];
 
         try
         {
             for (int i = 0; i < objAddrs.Length; i++)
             {
-                objAddrs[i] = Marshal.GetIUnknownForObject(objs[i]);
+                objAddrs[i] = (nint)ComHelpers.GetComPointer<IUnknown>(objs[i]);
             }
 
             fixed (void* pObjAddrs = objAddrs)
@@ -95,7 +95,7 @@ internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2Pro
         {
             for (int i = 0; i < objAddrs.Length; i++)
             {
-                if (objAddrs[i] != IntPtr.Zero)
+                if (objAddrs[i] != 0)
                 {
                     Marshal.Release(objAddrs[i]);
                 }
