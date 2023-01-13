@@ -4,8 +4,6 @@
 
 using Xunit;
 using Xunit.Abstractions;
-using Windows.Win32.UI.Accessibility;
-using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace System.Windows.Forms.UITests
 {
