@@ -109,7 +109,6 @@ namespace System.Windows.Forms
         private static readonly int PropAcceptButton = PropertyStore.CreateKey();
         private static readonly int PropCancelButton = PropertyStore.CreateKey();
         private static readonly int PropDefaultButton = PropertyStore.CreateKey();
-        private static readonly int PropDialogOwner = PropertyStore.CreateKey();
 
         private static readonly int PropOwner = PropertyStore.CreateKey();
         private static readonly int PropOwnedForms = PropertyStore.CreateKey();
@@ -797,10 +796,9 @@ namespace System.Windows.Forms
                     cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYERED;
                 }
 
-                IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(PropDialogOwner);
-                if (dialogOwner is not null)
+                if (OwnerInternal is not null)
                 {
-                    cp.Parent = GetSafeHandle(dialogOwner).Handle;
+                    cp.Parent = GetSafeHandle(OwnerInternal!).Handle;
                 }
 
                 FillInCreateParamsBorderStyles(cp);
@@ -3546,12 +3544,9 @@ namespace System.Windows.Forms
                     else
                     {
                         Screen desktop;
-                        IWin32Window? dialogOwner = (IWin32Window?)Properties.GetObject(PropDialogOwner);
-                        if ((OwnerInternal is not null) || (dialogOwner is not null))
+                        if (OwnerInternal is not null)
                         {
-                            HandleRef<HWND> ownerHandle = dialogOwner is not null
-                                ? GetSafeHandle(dialogOwner)
-                                : new(OwnerInternal!);
+                            HandleRef<HWND> ownerHandle = new(OwnerInternal!);
                             desktop = Screen.FromHandle(ownerHandle.Handle);
                             GC.KeepAlive(ownerHandle.Wrapper);
                         }
@@ -5355,8 +5350,6 @@ namespace System.Windows.Forms
                     // So, it is necessary to not set the owner before creating the handle. Otherwise,
                     // the window may never receive Dpi changed event even if its parent has different Dpi.
                     // Users at runtime, has to move the window between the screens to get the Dpi changed events triggered.
-
-                    Properties.SetObject(PropDialogOwner, owner);
                     if (owner is Form form && owner != oldOwner)
                     {
                         Owner = form;
@@ -5417,7 +5410,6 @@ namespace System.Windows.Forms
             finally
             {
                 Owner = oldOwner;
-                Properties.SetObject(PropDialogOwner, null);
                 GC.KeepAlive(ownerHwnd.Wrapper);
             }
 
