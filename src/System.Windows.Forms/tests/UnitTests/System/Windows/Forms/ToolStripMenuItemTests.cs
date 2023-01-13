@@ -120,6 +120,31 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(bitmap);
         }
 
+        [WinFormsTheory]
+        [InlineData(Keys.F1)]
+        [InlineData(Keys.None)]
+        [InlineData(Keys.Control | Keys.Add)]
+        [InlineData(Keys.Control | Keys.Alt | Keys.D)]
+        [InlineData(Keys.Control | Keys.Alt | Keys.Shift | Keys.A)]
+        [InlineData(Keys.Control | Keys.Alt | Keys.Shift | Keys.F1)]
+        public void ToolStripMenuItem_SetShortcutKeys(Keys keys)
+        {
+            using var item = new SubToolStripMenuItem();
+            item.ShortcutKeys = keys;
+            Assert.Equal(keys, item.ShortcutKeys);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A)]
+        [InlineData(Keys.Control)]
+        [InlineData(Keys.Control | Keys.Alt)]
+        [InlineData(Keys.Control | Keys.Alt | Keys.Shift)]
+        public void ToolStripMenuItem_SetShortcutKeys_ThrowsInvalidEnumArgumentException(Keys keys)
+        {
+            using var item = new SubToolStripMenuItem();
+            Assert.Throws<InvalidEnumArgumentException>(() => item.ShortcutKeys = keys);
+        }
+
         private class SubToolStripMenuItem : ToolStripMenuItem
         {
             public SubToolStripMenuItem() : base()
