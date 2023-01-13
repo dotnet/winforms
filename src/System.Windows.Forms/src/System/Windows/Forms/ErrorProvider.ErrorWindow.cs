@@ -478,6 +478,21 @@ namespace System.Windows.Forms
                         break;
                 }
             }
+
+            protected override void WmDpiChangedBeforeParent(ref Message m)
+            {
+                base.WmDpiChangedBeforeParent(ref m);
+
+                int currentDpi = (int)PInvoke.GetDpiForWindow(this);
+                if (currentDpi == _parent._deviceDpi)
+                {
+                    return;
+                }
+
+                double factor = ((double)currentDpi) / _parent._deviceDpi;
+                using Icon icon = _provider.Icon;
+                _provider.Icon = new Icon(icon, (int)(icon.Width * factor), (int)(icon.Height * factor));
+            }
         }
     }
 }
