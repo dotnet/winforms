@@ -1866,6 +1866,24 @@ namespace System.Windows.Forms
             base.Dispose(disposing);
         }
 
+        internal override void ReleaseUiaProvider(HWND handle)
+        {
+            if (_viewTabProperties?.Count > 0)
+            {
+                foreach (GridEntry gridEntry in _viewTabProperties.Values)
+                {
+                    gridEntry.ReleaseUiaProvider();
+                }
+            }
+
+            _helpPane?.ReleaseUiaProvider(HWND.Null);
+            _commandsPane?.ReleaseUiaProvider(HWND.Null);
+            _toolStrip?.ReleaseUiaProvider(HWND.Null);
+            _rootEntry?.ReleaseUiaProvider();
+
+            base.ReleaseUiaProvider(handle);
+        }
+
         private void DividerDraw(int y)
         {
             if (y == -1)

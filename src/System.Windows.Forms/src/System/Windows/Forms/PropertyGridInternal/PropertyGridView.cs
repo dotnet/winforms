@@ -1054,6 +1054,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 _toolTip?.Dispose();
                 _toolTip = null;
+
+                _selectedGridEntry?.Dispose();
+                _selectedGridEntry = null;
             }
 
             base.Dispose(disposing);
@@ -4919,6 +4922,26 @@ namespace System.Windows.Forms.PropertyGridInternal
             SetCommitError(ErrorState.None);
 
             return CommitValue(value);
+        }
+
+        internal override void ReleaseUiaProvider(HWND handle)
+        {
+            if (_allGridEntries?.Count > 0)
+            {
+                foreach (GridEntry gridEntry in _allGridEntries)
+                {
+                    gridEntry.ReleaseUiaProvider();
+                }
+            }
+
+            _scrollBar?.ReleaseUiaProvider(HWND.Null);
+            _listBox?.ReleaseUiaProvider(HWND.Null);
+            _dropDownHolder?.ReleaseUiaProvider(HWND.Null);
+            _editTextBox?.ReleaseUiaProvider(HWND.Null);
+            _dropDownButton?.ReleaseUiaProvider(HWND.Null);
+            _dialogButton?.ReleaseUiaProvider(HWND.Null);
+
+            base.ReleaseUiaProvider(handle);
         }
 
         internal void ReverseFocus()

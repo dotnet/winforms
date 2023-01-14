@@ -997,12 +997,30 @@ namespace System.Windows.Forms.PropertyGridInternal
             _cacheItems = null;
             _typeConverter = null;
             Editor = null;
-            _accessibleObject = null;
+            ReleaseUiaProvider();
 
             if (disposing)
             {
                 DisposeChildren();
             }
+        }
+
+        internal void ReleaseUiaProvider()
+        {
+            if (_children?.Count > 0)
+            {
+                foreach (GridEntry gridEntry in _children)
+                {
+                    gridEntry.ReleaseUiaProvider();
+                }
+            }
+
+            if (OsVersion.IsWindows8OrGreater() && _accessibleObject is not null)
+            {
+                UiaCore.UiaDisconnectProvider(_accessibleObject);
+            }
+
+            _accessibleObject = null;
         }
 
         public virtual void DisposeChildren()

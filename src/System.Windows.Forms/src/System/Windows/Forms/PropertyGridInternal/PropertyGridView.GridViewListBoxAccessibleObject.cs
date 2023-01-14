@@ -36,8 +36,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (!_owningPropertyGridView.DropDownVisible || _owningPropertyGridView.SelectedGridEntry is null
-                    || _owningPropertyGridView.DropDownControlHolder.Component != Owner)
+                if (!_owningPropertyGridView.DropDownVisible
+                    || _owningPropertyGridView.SelectedGridEntry is null
+                    || _owningPropertyGridView.DropDownControlHolder.Component != Owner
+                    // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
+                    // But between these calls, AccessibleObject can be recreated and might cause memory leaks.
+                    || !_owningPropertyGridView.OwnerGrid.Created)
                 {
                     return null;
                 }
