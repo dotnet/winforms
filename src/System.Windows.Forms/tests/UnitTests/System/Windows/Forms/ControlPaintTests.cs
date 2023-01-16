@@ -264,6 +264,25 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("bitmap", () => ControlPaint.CreateHBitmapTransparencyMask(null));
         }
 
+        public static IEnumerable<object[]> CreateBitmapWithInvertedForeColor_TestData()
+        {
+            yield return new object[] { Color.White, Color.FromArgb(255, 0, 0, 0) };
+            yield return new object[] { Color.Black, Color.FromArgb(255, 255, 255, 255) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(CreateBitmapWithInvertedForeColor_TestData))]
+        public void ControlPaint_CreateBitmapWithInvertedForeColor(Color imageColor, Color expected)
+        {
+            using Bitmap bitmap = new(1, 1);
+            bitmap.SetPixel(0, 0, imageColor);
+
+            using Bitmap invertedBitmap = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, Color.LightGray);
+            Color newColor = invertedBitmap.GetPixel(0, 0);
+
+            Assert.Equal(expected, newColor);
+        }
+
         public static IEnumerable<object[]> Dark_Color_TestData()
         {
             yield return new object[] { Color.FromArgb(255, 255, 0, 0), Color.FromArgb(255, 85, 0, 0) };
@@ -2011,6 +2030,21 @@ namespace System.Windows.Forms.Tests
 
             // Call again to test caching.
             ControlPaint.FillReversibleRectangle(rectangle, backColor);
+        }
+
+        public static IEnumerable<object[]> IsDark_TestData()
+        {
+            yield return new object[] { Color.White, false };
+            yield return new object[] { Color.Black, true };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(IsDark_TestData))]
+        public void ControlPaint_IsDark(Color color, bool expected)
+        {
+            bool result = ControlPaint.IsDark(color);
+
+            Assert.Equal(expected, result);
         }
 
         public static IEnumerable<object[]> Light_Color_TestData()
