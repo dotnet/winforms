@@ -86,18 +86,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Overriden to return value from Control.CanSelect.
         /// </summary>
-        public override bool CanSelect
-        {
-            get
-            {
-                if (_control is not null)
-                {
-                    return (DesignMode || Control.CanSelect);
-                }
-
-                return false;
-            }
-        }
+        public override bool CanSelect => _control is not null ? DesignMode || Control.CanSelect : false;
 
         [SRCategory(nameof(SR.CatFocus))]
         [DefaultValue(true)]
@@ -130,7 +119,14 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Control Control => _control;
+        public Control Control
+        {
+            get
+            {
+                ObjectDisposedException.ThrowIf(_control is null, nameof(Control));
+                return _control;
+            }
+        }
 
         internal AccessibleObject ControlAccessibilityObject => Control?.AccessibilityObject;
 
@@ -323,19 +319,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_control is not null)
-                {
-                    return _control.RightToLeft;
-                }
-
-                return base.RightToLeft;
+                return _control is not null ? _control.RightToLeft : base.RightToLeft;
             }
             set
             {
-                if (_control is not null)
+                if (_control is null)
                 {
-                    _control.RightToLeft = value;
+                    return;
                 }
+
+                _control.RightToLeft = value;
             }
         }
 
@@ -476,12 +469,9 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            if (_control is not null)
-            {
-                return Control.GetPreferredSize(constrainingSize - Padding.Size) + Padding.Size;
-            }
-
-            return base.GetPreferredSize(constrainingSize);
+            return _control is not null
+                ? Control.GetPreferredSize(constrainingSize - Padding.Size) + Padding.Size
+                : base.GetPreferredSize(constrainingSize);
         }
 
         ///  Handle* wrappers:
@@ -651,7 +641,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnBoundsChanged()
         {
-            if (!(_control is IArrangedElement element))
+            if (_control is not IArrangedElement element)
             {
                 return;
             }
@@ -827,14 +817,7 @@ namespace System.Windows.Forms
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) => false;
 
         protected internal override bool ProcessMnemonic(char charCode)
-        {
-            if (_control is not null)
-            {
-                return _control.ProcessMnemonic(charCode);
-            }
-
-            return base.ProcessMnemonic(charCode);
-        }
+            => _control is not null ? _control.ProcessMnemonic(charCode) : base.ProcessMnemonic(charCode);
 
         protected internal override bool ProcessDialogKey(Keys keyData) => false;
 
@@ -879,44 +862,16 @@ namespace System.Windows.Forms
         private void ResumeSizeSync() => _suspendSyncSizeCount--;
 
         internal override bool ShouldSerializeBackColor()
-        {
-            if (_control is not null)
-            {
-                return _control.ShouldSerializeBackColor();
-            }
-
-            return base.ShouldSerializeBackColor();
-        }
+            => _control is not null ? _control.ShouldSerializeBackColor() : base.ShouldSerializeBackColor();
 
         internal override bool ShouldSerializeForeColor()
-        {
-            if (_control is not null)
-            {
-                return _control.ShouldSerializeForeColor();
-            }
-
-            return base.ShouldSerializeForeColor();
-        }
+            => _control is not null ? _control.ShouldSerializeForeColor() : base.ShouldSerializeForeColor();
 
         internal override bool ShouldSerializeFont()
-        {
-            if (_control is not null)
-            {
-                return _control.ShouldSerializeFont();
-            }
-
-            return base.ShouldSerializeFont();
-        }
+            => _control is not null ? _control.ShouldSerializeFont() : base.ShouldSerializeFont();
 
         internal override bool ShouldSerializeRightToLeft()
-        {
-            if (_control is not null)
-            {
-                return _control.ShouldSerializeRightToLeft();
-            }
-
-            return base.ShouldSerializeRightToLeft();
-        }
+            => _control is not null ? _control.ShouldSerializeRightToLeft() : base.ShouldSerializeRightToLeft();
 
         internal override void OnKeyboardToolTipHook(ToolTip toolTip)
         {
