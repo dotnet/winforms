@@ -41,6 +41,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         DockLayoutButton,
         DragAndDrop,
         TextBoxesButton,
-        MediaPlayerButton
+        MediaPlayerButton,
+        FormOwnerTestButton
     }
 }

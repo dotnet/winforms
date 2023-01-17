@@ -200,6 +200,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.MediaPlayerButton,
                 new InitInfo("MediaPlayer", (obj, e) => new MediaPlayer().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.FormOwnerTestButton,
+                new InitInfo("FormOwnerTest", (obj, e) => new FormOwnerTestForm().Show(this))
             }
         };
 
