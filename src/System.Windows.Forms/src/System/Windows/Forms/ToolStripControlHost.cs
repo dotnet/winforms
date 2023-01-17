@@ -123,7 +123,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ObjectDisposedException.ThrowIf(_control is null, Control);
+                ObjectDisposedException.ThrowIf(_control is null, _control);
                 return _control;
             }
         }
