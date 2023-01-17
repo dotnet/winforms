@@ -3380,6 +3380,8 @@ namespace System.Windows.Forms
                     Properties.SetObject(PropOwner, null);
                 }
 
+                Properties.SetObject(PropDialogOwner, null);
+
                 Form?[]? ownedForms = (Form?[]?)Properties.GetObject(PropOwnedForms);
                 int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
 
