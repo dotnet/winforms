@@ -8,34 +8,34 @@ namespace WinformsControlsTest
     {
         public FormOwnerTestForm()
         {
-            this.Shown += (object sender, EventArgs e) => ShowMemoryTest();
+            this.Shown += (object sender, EventArgs e) => RunFormOwnerMemoryLeakTest();
         }
 
-        private void ShowMemoryTest()
+        private void RunFormOwnerMemoryLeakTest()
         {
-            long a = Process.GetCurrentProcess().WorkingSet64;
+            long memoryStart = Process.GetCurrentProcess().WorkingSet64;
 
-            var children = new List<Form>();
+            List<Form> childForms = new();
             for (int i = 0; i < 500; i++)
             {
-                MemoryTestParentForm parent = new MemoryTestParentForm();
+                MemoryTestParentForm parent = new();
                 parent.Show();
-                children.Add(parent.Yum());
+                childForms.Add(parent.CreateChildFormWithMemory());
                 parent.Close();
             }
 
-            children.ForEach(cf => cf.Close());
-            children.Clear();
+            childForms.ForEach(childForm => childForm.Close());
+            childForms.Clear();
 
-            long b = Process.GetCurrentProcess().WorkingSet64;
+            long memoryBeforeGC = Process.GetCurrentProcess().WorkingSet64;
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
-            long c = Process.GetCurrentProcess().WorkingSet64;
+            long memoryAfterGC = Process.GetCurrentProcess().WorkingSet64;
 
             Controls.Add(new Label()
             {
-                Text = $"Memory Usage:\nBefore: {a:N0} bytes\nDuring: {b:N0} bytes\nAfter: {c:N0} bytes",
+                Text = $"Memory Usage:\nBefore: {memoryStart:N0} bytes\nDuring: {memoryBeforeGC:N0} bytes\nAfter: {memoryAfterGC:N0} bytes",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter
             });
@@ -45,14 +45,15 @@ namespace WinformsControlsTest
         {
             private byte[] array;
 
-            public Form Yum()
+            public Form CreateChildFormWithMemory()
             {
+                // Create a byte array to consume memory on the parent so the leak is more obvious.
                 this.array = new byte[1024 * 1024];
                 Array.Clear(array, 0, this.array.Length);
+                Form child = new();
 
-                Form child = new Form();
+                // Show the child and pass the parent as the owner, this is where the leak can happen.
                 child.Show(this);
-
                 return child;
             }
         }
