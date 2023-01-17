@@ -1,23 +1,23 @@
-# Modernization of code behind in WinForms OOP designer
+# Modernization of code-behind in WinForms OOP designer
 
 ## Background
 
-WinForms designer saves visual representations of user controls or forms on the design surface to code behind file(`Form1.Designer.cs` or `Form1.Designer.vb`). Control instances that developer sees on the design surface are represented as a CodeDOM tree (see [Using the CodeDOM](https://learn.microsoft.com/dotnet/framework/reflection-and-codedom/using-the-codedom)), that tree is saved to the generated code behind file in the `InitializeComponent` method. We call this feature design time serialization.
+The WinForms designer saves visual representations of user controls or forms on the design surface to code-behind file (`Form1.Designer.cs` or `Form1.Designer.vb`). Control instances that developer sees on the design surface are represented as a CodeDOM tree (see [Using the CodeDOM](https://learn.microsoft.com/dotnet/framework/reflection-and-codedom/using-the-codedom)), that tree is saved to the generated code-behind file in the `InitializeComponent` method. We call this feature design time serialization.
 
-Previously COM-based CodeModel interfaces (see [CodeModel Interface](https://learn.microsoft.com/dotnet/api/envdte.codemodel?view=visualstudiosdk-2022)) were used to write code into the editor's buffer as well as to generate CodeDOM tree from the source code when designer was loading. This COM object was accessible from the main thread only, which prevented parallelization in source code processing. Also, being more that 20 years old, it did not support some of the newer language features, for example the `nameof()` expression.
+Previously COM-based [CodeModel interface](https://learn.microsoft.com/dotnet/api/envdte.codemodel?view=visualstudiosdk-2022) was used to write code into the editor's buffer as well as to generate CodeDOM tree from the source code when designer was loading. This COM object was accessible from the main thread only, which prevented parallelization in source code processing. Also, being more than 20 years old, it did not support some of the newer language features, for example the `nameof()` expression.
 
 ## What's different
 
-Starting with [Visual Studio 2022 v17.5 Preview 3](https://visualstudio.microsoft.com/vs/preview/), WinForms out-of-process designer uses [Roslyn](https://github.com/dotnet/roslyn) for design time serialization.
+Starting with [Visual Studio 2022 v17.5 Preview 3](https://visualstudio.microsoft.com/vs/preview/), the WinForms out-of-process designer uses [Roslyn](https://github.com/dotnet/roslyn) for design time serialization.
 
 In Preview 3, designer serializes more modern code into `InitializeComponent`. We have worked hard to ensure that you can take projects between this version of Visual Studio and earlier versions. Someday in the future, we may build on the improvements in our serialization to enable performance enhancements and use newer language features. These potential future investments may break the backwards compatibility with earlier VS versions - but we will be sure to inform our developers well ahead of such changes so that you can prepare.
 
 ## Why change it
 
 * The use of Roslyn unblocks multithreaded serialization and deserialization to solve performance delays in designer load and unload scenarios.
-* Code behind generation now respects `.editorconfig` settings and thus matches code style in the source files.
+* Code-behind generation now respects `.editorconfig` settings and thus matches code style in the source files.
 * If implicit usings feature is enabled in project properties, global namespaces are not repeated in type names.
-* Further modernization of code behind is unblocked.
+* Further modernization of code-behind is unblocked.
 * Newly generated code will work with modern Roslyn analyzers.
 
 ## How the new code looks like
@@ -94,7 +94,7 @@ The above code was generated for default C# code style settings, thus `this` acc
 To preserve legacy code generation style in `InitializeComponent` method, set style preferences to legacy values in [`.editorconfig` file](https://learn.microsoft.com/visualstudio/ide/create-portable-custom-editor-options).
 
 ```ini
-# WinForms code behind files
+# WinForms code-behind files
 [*.designer.cs,*.designer.vb]
 
 # this. and Me. preferences
@@ -106,7 +106,7 @@ dotnet_style_qualification_for_property = true
 
 ### Support for implicit usings property
 
-Namespace names were removed from the type names in Preview 3 version. They are not needed for type resolution because design time serialization looks up the [implicit usings](https://www.hanselman.com/blog/implicit-usings-in-net-6) property, available in C# starting with .NET 6 for C#, from the project file:
+Namespace names were removed from the type names in Preview 3 version. They are not needed for type resolution because design time serialization looks up the [implicit usings](https://learn.microsoft.com/dotnet/core/tutorials/top-level-templates#implicit-using-directives) property, available in C# starting with .NET 6 for C#, from the project file:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -124,7 +124,7 @@ Namespace names were removed from the type names in Preview 3 version. They are 
 
 When implicit usings property is disabled in the C# project file, namespace names are generated.
 
-### Similar changes are present in VB
+### Similar changes are present in Visual Basic
 
 ![Comparison of Form1.Designer.vb as generated by Visual Studio 2022 v17.4 or earlier against the same file generated by v17.5 Preview 3](./images/Form1-Designer-VB-comparison.png)
 
@@ -189,4 +189,4 @@ End Sub
 
 ## Summary
 
-New code behind in WinForm looks differently because it follows code style settings defined for the project. Under the covers, design time serialization was redesigned in order to move from `EnvDTE.CodeModel` to `Roslyn`. We are planning to build upon this foundation in the future Visual Studio releases. Code behind generated by the older releases will load into Preview 3 or later releases and will work as expected. Code behind generated by Preview 3 can be loaded in the previous releases of the Visual Studio, but we are considering generating modern code that might not be supported by the previous versions of deserializer.
+New code-behind in WinForm apps looks differently because it follows code style settings defined for the project. Under the covers, the design time serialization was redesigned in order to move from `EnvDTE.CodeModel` to `Roslyn`. We are planning to build upon this foundation in the future Visual Studio releases. Code-behind generated by the older releases will load into v17.5 Preview 3 or later releases and will work as expected. Code-behind generated by v17.5 Preview 3 can be loaded in the previous releases of the Visual Studio, but we are considering generating modern code that might not be supported by the previous versions of deserializer.
