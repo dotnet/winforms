@@ -5833,7 +5833,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="InvalidArgumentType">
         <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
+        <target state="translated">L'argument « {0} » doit être de type « {1} »</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">

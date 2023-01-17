@@ -5833,7 +5833,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="InvalidArgumentType">
         <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
+        <target state="translated">O argumento '{0}' deve ser do tipo '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">

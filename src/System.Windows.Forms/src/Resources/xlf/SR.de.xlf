@@ -5833,7 +5833,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="InvalidArgumentType">
         <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
+        <target state="translated">Das Argument „{0}“ muss vom Typ „{1}“ sein.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">

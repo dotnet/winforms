@@ -5834,7 +5834,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="InvalidArgumentType">
         <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
+        <target state="translated">Аргумент "{0}" должен относиться к типу "{1}".</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">

@@ -5833,7 +5833,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="InvalidArgumentType">
         <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
+        <target state="translated">引数 '{0}' は型 '{1}' でなければなりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">

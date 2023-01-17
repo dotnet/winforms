@@ -5833,7 +5833,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="InvalidArgumentType">
         <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
+        <target state="translated">Bağımsız değişken '{0}', '{1}' türünde olmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
