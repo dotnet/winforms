@@ -35,7 +35,7 @@ namespace WinformsControlsTest
 
             Controls.Add(new Label()
             {
-                Text = $"Memory Usage:\n{a:N0} bytes\n{b:N0} bytes\n{c:N0} bytes",
+                Text = $"Memory Usage:\nBefore: {a:N0} bytes\nDuring: {b:N0} bytes\nAfter: {c:N0} bytes",
                 Dock = DockStyle.Fill,
                 TextAlign = ContentAlignment.MiddleCenter
             });
