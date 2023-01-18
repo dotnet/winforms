@@ -362,7 +362,7 @@ namespace System.ComponentModel.Design.Serialization
 
             SerializationException GetSerializationException()
             {
-                StringBuilder argTypes = new StringBuilder();
+                StringBuilder argTypes = new();
                 if (argArray is not null)
                 {
                     foreach (object? o in argArray)
