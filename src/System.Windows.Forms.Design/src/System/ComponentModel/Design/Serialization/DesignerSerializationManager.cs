@@ -763,7 +763,7 @@ namespace System.ComponentModel.Design.Serialization
                 && (!(instance is IComponent) // And it's not an icomponent
                     || !RecycleInstances))
             { // Or it is an icomponent but recycle instances is turned off
-                instancesByName ??= new();
+                instancesByName ??= new(StringComparer.CurrentCulture);
                 namesByInstance ??= new(new ReferenceComparer());
                 instancesByName[name] = instance;
                 namesByInstance[instance] = name;
@@ -777,15 +777,16 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         object? IDesignerSerializationManager.GetInstance(string name)
         {
-            object? instance = null;
             ArgumentNullException.ThrowIfNull(name);
 
             CheckSession();
             // Check our local nametable first
-            if (instancesByName is not null)
+            if (instancesByName is null)
             {
-                instance = instancesByName[name];
+                return null;
             }
+
+            instancesByName.TryGetValue(name, out object? instance);
 
             if (instance is null && PreserveNames && Container is not null)
             {
@@ -843,6 +844,7 @@ namespace System.ComponentModel.Design.Serialization
         Type? IDesignerSerializationManager.GetType(string typeName)
         {
             CheckSession();
+            ArgumentNullException.ThrowIfNull(typeName, nameof(typeName));
             Type? type = null;
 
             if (string.IsNullOrEmpty(typeName))
@@ -911,7 +913,7 @@ namespace System.ComponentModel.Design.Serialization
 
             if (instancesByName is null || namesByInstance is null)
             {
-                instancesByName = new();
+                instancesByName = new(StringComparer.CurrentCulture);
                 namesByInstance = new(new ReferenceComparer());
             }
 
