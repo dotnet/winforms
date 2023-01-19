@@ -563,7 +563,7 @@ namespace System.ComponentModel.Design.Serialization
                 searchedTypeResolver = true;
             }
 
-            return typeResolver is null ? Type.GetType(typeName) : typeResolver.GetType(typeName);
+            return typeName is null ? null : typeResolver is null ? Type.GetType(typeName) : typeResolver.GetType(typeName);
         }
 
         /// <summary>
