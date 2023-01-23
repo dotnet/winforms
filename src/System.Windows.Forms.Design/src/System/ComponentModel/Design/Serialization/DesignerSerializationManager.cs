@@ -508,14 +508,11 @@ namespace System.ComponentModel.Design.Serialization
                     continueLoop = false;
                     foreach (IDesignerSerializationProvider provider in designerSerializationProviders)
                     {
-                        if (serializer is not null && objectType is not null)
+                        object? newSerializer = provider.GetSerializer(this, serializer, objectType, serializerType);
+                        if (newSerializer is not null)
                         {
-                            object? newSerializer = provider.GetSerializer(this, serializer, objectType, serializerType);
-                            if (newSerializer is not null)
-                            {
-                                continueLoop = (serializer != newSerializer);
-                                serializer = newSerializer;
-                            }
+                            continueLoop = (serializer != newSerializer);
+                            serializer = newSerializer;
                         }
                     }
                 }
@@ -528,7 +525,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  Provides access to the underlying IServiceProvider
         /// </summary>
         protected virtual object? GetService(Type? serviceType)
-            => serviceType is null ? null : serviceType == typeof(IContainer) ? Container : (provider?.GetService(serviceType));
+            => serviceType == typeof(IContainer) ? Container : provider?.GetService(serviceType);
 
         /// <summary>
         ///  Retrieves the type for the given name using the type resolution service, if available.
@@ -563,7 +560,7 @@ namespace System.ComponentModel.Design.Serialization
                 searchedTypeResolver = true;
             }
 
-            return typeName is null ? null : typeResolver is null ? Type.GetType(typeName) : typeResolver.GetType(typeName);
+            return typeResolver is null ? Type.GetType(typeName!) : typeResolver.GetType(typeName!);
         }
 
         /// <summary>
@@ -781,12 +778,11 @@ namespace System.ComponentModel.Design.Serialization
 
             CheckSession();
             // Check our local nametable first
-            if (instancesByName is null)
+            object? instance = null;
+            if (instancesByName is not null && instancesByName.TryGetValue(name, out instance))
             {
-                return null;
+                return instance;
             }
-
-            instancesByName.TryGetValue(name, out object? instance);
 
             if (instance is null && PreserveNames && Container is not null)
             {
@@ -844,17 +840,16 @@ namespace System.ComponentModel.Design.Serialization
         Type? IDesignerSerializationManager.GetType(string typeName)
         {
             CheckSession();
-            ArgumentNullException.ThrowIfNull(typeName, nameof(typeName));
             Type? type = null;
-
-            if (string.IsNullOrEmpty(typeName))
-            {
-                return null;
-            }
 
             while (type is null)
             {
                 type = GetType(typeName);
+                if (type is null && typeName is null)
+                {
+                    break;
+                }
+
                 if (type is null)
                 {
                     int dotIndex = typeName.LastIndexOf('.');
