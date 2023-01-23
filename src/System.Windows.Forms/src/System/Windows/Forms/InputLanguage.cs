@@ -102,7 +102,7 @@ namespace System.Windows.Forms
         ///  Returns the name of the current keyboard layout as it appears in the Windows
         ///  Regional Settings on the computer.
         /// </summary>
-        public unsafe string LayoutName
+        public string LayoutName
         {
             get
             {
@@ -117,18 +117,10 @@ namespace System.Windows.Forms
                 if (key is not null)
                 {
                     // Localizable string resource associated with the keyboard layout
-                    if (key.GetValue("Layout Display Name") is string layoutDisplayName)
+                    if (key.GetValue("Layout Display Name") is string layoutDisplayName &&
+                        SHLoadIndirectString(ref layoutDisplayName))
                     {
-                        var ppvReserved = (void*)IntPtr.Zero;
-                        Span<char> buffer = stackalloc char[512];
-                        fixed (char* pBuffer = buffer)
-                        {
-                            HRESULT result = PInvoke.SHLoadIndirectString(layoutDisplayName, pBuffer, (uint)buffer.Length, ref ppvReserved);
-                            if (result == HRESULT.S_OK)
-                            {
-                                return buffer.SliceAtFirstNull().ToString();
-                            }
-                        }
+                        return layoutDisplayName;
                     }
 
                     // Fallback to human-readable name for backward compatibility
@@ -262,5 +254,21 @@ namespace System.Windows.Forms
         ///  Hash code for this input language.
         /// </summary>
         public override int GetHashCode() => unchecked((int)(long)_handle);
+
+        internal static unsafe bool SHLoadIndirectString(ref string source)
+        {
+            var ppvReserved = (void*)IntPtr.Zero;
+            Span<char> buffer = stackalloc char[512];
+            fixed (char* pBuffer = buffer)
+            {
+                if (PInvoke.SHLoadIndirectString(source, pBuffer, (uint)buffer.Length, ref ppvReserved) == HRESULT.S_OK)
+                {
+                    source = buffer.SliceAtFirstNull().ToString();
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
