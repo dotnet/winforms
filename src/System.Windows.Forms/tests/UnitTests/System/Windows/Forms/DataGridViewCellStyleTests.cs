@@ -80,7 +80,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellStyle_Ctor_EmptyDataGridViewCellStyle_Success()
         {
-            var formatProvider = new NumberFormatInfo();
+            _ = new NumberFormatInfo();
             var source = new DataGridViewCellStyle();
             var style = new DataGridViewCellStyle(source);
 
@@ -749,7 +749,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellStyle_Clone_EmptyDataGridViewCellStyle_Success()
         {
-            var formatProvider = new NumberFormatInfo();
+            _ = new NumberFormatInfo();
             var source = new DataGridViewCellStyle();
             DataGridViewCellStyle style = source.Clone();
 
@@ -816,7 +816,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellStyle_ICloneableClone_EmptyDataGridViewCellStyle_Success()
         {
-            var formatProvider = new NumberFormatInfo();
+            _ = new NumberFormatInfo();
             ICloneable source = new DataGridViewCellStyle();
             DataGridViewCellStyle style = Assert.IsType<DataGridViewCellStyle>(source.Clone());
 

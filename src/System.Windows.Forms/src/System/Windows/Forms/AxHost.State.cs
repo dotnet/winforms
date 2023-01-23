@@ -225,7 +225,8 @@ namespace System.Windows.Forms
                 if (!initializeBufferOnly)
                 {
                     Type = binaryReader.ReadInt32();
-                    int version = binaryReader.ReadInt32();
+
+                    _ = binaryReader.ReadInt32();
                     _manualUpdate = binaryReader.ReadBoolean();
                     int cc = binaryReader.ReadInt32();
                     if (cc != 0)

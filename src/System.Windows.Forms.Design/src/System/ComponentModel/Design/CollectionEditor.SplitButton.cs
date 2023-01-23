@@ -212,7 +212,7 @@ namespace System.ComponentModel.Design
 
                 ButtonRenderer.DrawButton(g, bounds, State);
 
-                Color color = SystemColors.ButtonHighlight;
+                _ = SystemColors.ButtonHighlight;
                 _dropDownRectangle = new Rectangle(bounds.Right - PushButtonWidth - 1, 4, PushButtonWidth, bounds.Height - 8);
 
                 if (RightToLeft == RightToLeft.Yes)

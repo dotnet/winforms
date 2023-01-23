@@ -2722,7 +2722,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static int MeasureTextHeight(Graphics graphics, string text, Font font, int maxWidth, TextFormatFlags flags)
         {
-            return DataGridViewCell.MeasureTextHeight(graphics, text, font, maxWidth, flags, out bool widthTruncated);
+            return DataGridViewCell.MeasureTextHeight(graphics, text, font, maxWidth, flags, out _);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]

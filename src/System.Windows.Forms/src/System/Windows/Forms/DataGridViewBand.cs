@@ -386,7 +386,7 @@ namespace System.Windows.Forms
             {
                 if (IsRow && Index > -1)
                 {
-                    GetHeightInfo(Index, out int height, out int minimumHeight);
+                    GetHeightInfo(Index, out _, out int minimumHeight);
                     return minimumHeight;
                 }
 
@@ -653,7 +653,7 @@ namespace System.Windows.Forms
             {
                 if (IsRow && Index > -1)
                 {
-                    GetHeightInfo(Index, out int height, out int minimumHeight);
+                    GetHeightInfo(Index, out int height, out _);
                     return height;
                 }
 
@@ -703,7 +703,7 @@ namespace System.Windows.Forms
                     {
                         if (dataGridViewColumn.Visible)
                         {
-                            IntPtr handle = DataGridView.Handle;
+                            _ = DataGridView.Handle;
                             DataGridView.AdjustFillingColumn(dataGridViewColumn, value);
                             setThickness = false;
                         }

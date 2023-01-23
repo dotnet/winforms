@@ -600,7 +600,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Validate()
         {
-            return ValidateActiveControl(out bool validatedControlAllowsFocusChange);
+            return ValidateActiveControl(out _);
         }
 
         /// <summary>

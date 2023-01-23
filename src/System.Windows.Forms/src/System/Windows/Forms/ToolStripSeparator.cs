@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                if (parent is ToolStripDropDownMenu dropDownMenu)
+                if (parent is ToolStripDropDownMenu)
                 {
                     return false;
                 }

@@ -3162,7 +3162,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // Ensure that tooltips don't display when host application is not foreground app.
                 // Assume that we don't want to display the tooltips
-                HWND foregroundWindow = PInvoke.GetForegroundWindow();
+                _ = PInvoke.GetForegroundWindow();
                 if (PInvoke.IsChild(PInvoke.GetForegroundWindow(), this))
                 {
                     // Don't show the tips if a dropdown is showing

@@ -663,7 +663,7 @@ namespace System.Windows.Forms
                     // right to left has changed while layout was deferred...
                     if (_state[s_stateRightToLeftChanged])
                     {
-                        controlLocation = new Point(Width - controlArray[i].Right, controlLocation.Y);
+                        _ = new Point(Width - controlArray[i].Right, controlLocation.Y);
                     }
 
                     var toolStrip = controlArray[i] as ToolStrip;
@@ -822,7 +822,7 @@ namespace System.Windows.Forms
 
         internal void MoveControl(ToolStrip? toolStripToDrag, Point screenLocation)
         {
-            if (toolStripToDrag is not ISupportToolStripPanel draggedControl)
+            if (toolStripToDrag is not ISupportToolStripPanel)
             {
                 Debug.Fail("Move called on immovable object.");
                 return;

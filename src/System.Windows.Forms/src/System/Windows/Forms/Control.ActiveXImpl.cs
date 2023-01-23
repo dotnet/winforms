@@ -506,7 +506,7 @@ public partial class Control
         {
             if (s_axVerbs is null)
             {
-                OLEVERB verbShow = new()
+                _ = new()
                 {
                     lVerb = OLEIVERB.OLEIVERB_SHOW
                 };

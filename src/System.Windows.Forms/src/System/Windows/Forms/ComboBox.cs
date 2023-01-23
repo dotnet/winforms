@@ -2485,7 +2485,8 @@ namespace System.Windows.Forms
             }
 
             found = false;
-            int itemHeight = Properties.GetInteger(PropItemHeight, out found);
+
+            _ = Properties.GetInteger(PropItemHeight, out found);
             if (found)
             {
                 // someone has set the item height - update it

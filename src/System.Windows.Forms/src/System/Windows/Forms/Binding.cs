@@ -464,7 +464,7 @@ namespace System.Windows.Forms
                 }
 
                 _propInfo = tempPropInfo;
-                propType = _propInfo.PropertyType;
+                _ = _propInfo.PropertyType;
                 _propInfoConverter = _propInfo.Converter;
 
                 if (tempPropIsNullInfo is not null && tempPropIsNullInfo.PropertyType == typeof(bool) && !tempPropIsNullInfo.IsReadOnly)

@@ -51,7 +51,8 @@ namespace System.Windows.Forms.Tests
         {
             var buffer = new ToolTipBuffer();
             buffer.SetText("text");
-            IntPtr memory1 = buffer.Buffer;
+
+            _ = buffer.Buffer;
             Assert.Equal("text", Marshal.PtrToStringUni(buffer.Buffer));
 
             // Set longer.

@@ -656,7 +656,8 @@ public unsafe partial class Control :
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Draw");
 
         Debug.Indent();
-        HRESULT hr = ActiveXInstance.Draw(
+
+        _ = ActiveXInstance.Draw(
             dwDrawAspect,
             lindex,
             pvAspect,

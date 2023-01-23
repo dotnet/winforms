@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Automation
                     // Leave it as it is except the case with 0-range.
                     if (IsDegenerate)
                     {
-                        End = MoveEndpointForward(End, TextUnit.Character, 1, out int moved);
+                        End = MoveEndpointForward(End, TextUnit.Character, 1, out _);
                     }
 
                     break;
@@ -515,7 +515,7 @@ namespace System.Windows.Forms.Automation
                     if (Start > visibleStart || Start < visibleEnd)
                     {
                         _provider.SendKeyboardInputVK(key, true);
-                        _provider.GetVisibleRangePoints(out visibleStart, out visibleEnd);
+                        _provider.GetVisibleRangePoints(out _, out _);
                     }
 
                     return;
@@ -524,7 +524,7 @@ namespace System.Windows.Forms.Automation
                 if (Start < visibleStart || Start > visibleEnd)
                 {
                     _provider.SendKeyboardInputVK(key, true);
-                    _provider.GetVisibleRangePoints(out visibleStart, out visibleEnd);
+                    _provider.GetVisibleRangePoints(out _, out _);
                 }
             }
         }

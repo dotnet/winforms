@@ -165,7 +165,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnLayout(LayoutEventArgs e)
         {
-            bool parentNeedsLayout = LayoutEngine.Layout(this, e);
+            _ = LayoutEngine.Layout(this, e);
         }
 
         protected virtual void OnBoundsChanged(Rectangle oldBounds, Rectangle newBounds)

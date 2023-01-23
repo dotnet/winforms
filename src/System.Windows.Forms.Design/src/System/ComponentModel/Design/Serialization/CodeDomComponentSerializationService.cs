@@ -957,7 +957,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             foreach (CodeExpression exp in exps)
                             {
-                                object exValue = DeserializeExpression(manager, name, exp);
+                                _ = DeserializeExpression(manager, name, exp);
                             }
 
                             _expressions.Remove(name);

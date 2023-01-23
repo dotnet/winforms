@@ -11050,7 +11050,7 @@ namespace System.Windows.Forms
                 if (dataGridViewColumn.CellTemplate.DefaultNewRowValue is not null && NewRowIndex != -1)
                 {
                     // New row needs to be unshared before addition of new cell with a Value is not null
-                    DataGridViewRow newRow = Rows[NewRowIndex];
+                    _ = Rows[NewRowIndex];
                 }
 
                 int newColumnCount = Columns.Count + 1;
@@ -11188,7 +11188,7 @@ namespace System.Windows.Forms
                     if (dataGridViewColumn.CellTemplate.DefaultNewRowValue is not null && NewRowIndex != -1)
                     {
                         // New row needs to be unshared before addition of new cell with a Value is not null
-                        DataGridViewRow newRow = Rows[NewRowIndex];
+                        _ = Rows[NewRowIndex];
                         break;
                     }
                 }
@@ -11840,7 +11840,8 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.ClickUnsharesRowInternal(e))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                DataGridViewRow dataGridViewRow;
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnClickInternal(e);
             }
             else
@@ -11926,7 +11927,8 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.ContentClickUnsharesRowInternal(e))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                DataGridViewRow dataGridViewRow;
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnContentClickInternal(e);
             }
             else
@@ -11961,7 +11963,8 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.ContentDoubleClickUnsharesRowInternal(e))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                DataGridViewRow dataGridViewRow;
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnContentDoubleClickInternal(e);
             }
             else
@@ -12040,7 +12043,8 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.DoubleClickUnsharesRowInternal(e))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                DataGridViewRow dataGridViewRow;
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnDoubleClickInternal(e);
             }
             else
@@ -12262,7 +12266,8 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.MouseClickUnsharesRowInternal(e))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                DataGridViewRow dataGridViewRow;
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseClickInternal(e);
             }
             else
@@ -12294,7 +12299,8 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.MouseDoubleClickUnsharesRowInternal(e))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                DataGridViewRow dataGridViewRow;
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseDoubleClickInternal(e);
             }
             else
@@ -12369,7 +12375,8 @@ namespace System.Windows.Forms
             {
                 if (e.RowIndex >= 0 && dataGridViewCell.MouseDownUnsharesRowInternal(e))
                 {
-                    DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                    DataGridViewRow dataGridViewRow;
+                    _ = Rows[e.RowIndex];
                     GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseDownInternal(e);
                 }
                 else
@@ -13022,7 +13029,8 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.MouseEnterUnsharesRowInternal(e.RowIndex))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                DataGridViewRow dataGridViewRow;
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseEnterInternal(e.RowIndex);
             }
             else
@@ -13055,7 +13063,8 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.MouseLeaveUnsharesRowInternal(e.RowIndex))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                DataGridViewRow dataGridViewRow;
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseLeaveInternal(e.RowIndex);
             }
             else
@@ -13085,7 +13094,8 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.MouseMoveUnsharesRowInternal(e))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                DataGridViewRow dataGridViewRow;
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseMoveInternal(e);
             }
             else
@@ -13153,7 +13163,8 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.MouseUpUnsharesRowInternal(e))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                DataGridViewRow dataGridViewRow;
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseUpInternal(e);
             }
             else
@@ -15220,7 +15231,7 @@ namespace System.Windows.Forms
             {
                 if (element is DataGridViewRow dataGridViewRow)
                 {
-                    if (Events[s_rowStateChangedEvent] is DataGridViewRowStateChangedEventHandler eh && dataGridViewRow.DataGridView is not null && dataGridViewRow.Index == -1)
+                    if (Events[s_rowStateChangedEvent] is DataGridViewRowStateChangedEventHandler && dataGridViewRow.DataGridView is not null && dataGridViewRow.Index == -1)
                     {
                         dataGridViewRow = Rows[index];
                     }
@@ -15990,7 +16001,7 @@ namespace System.Windows.Forms
                 if (dataGridViewColumn.CellTemplate.DefaultNewRowValue is not null && NewRowIndex != -1)
                 {
                     // New row needs to be unshared before addition of new cell with a Value is not null
-                    DataGridViewRow newRow = Rows[NewRowIndex];
+                    _ = Rows[NewRowIndex];
                 }
 
                 int newColumnCount = Columns.Count + 1;
@@ -16234,7 +16245,7 @@ namespace System.Windows.Forms
                 Debug.Assert(dataGridViewCell is not null);
                 if (dataGridViewCell.KeyDownUnsharesRowInternal(e, _ptCurrentCell.Y))
                 {
-                    DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y];
+                    _ = Rows[_ptCurrentCell.Y];
                     CurrentCellInternal.OnKeyDownInternal(e, _ptCurrentCell.Y);
                 }
                 else
@@ -16292,7 +16303,7 @@ namespace System.Windows.Forms
                 Debug.Assert(dataGridViewCell is not null);
                 if (dataGridViewCell.KeyPressUnsharesRowInternal(e, _ptCurrentCell.Y))
                 {
-                    DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y];
+                    _ = Rows[_ptCurrentCell.Y];
                     CurrentCellInternal.OnKeyPressInternal(e, _ptCurrentCell.Y);
                 }
                 else
@@ -16325,7 +16336,7 @@ namespace System.Windows.Forms
                 Debug.Assert(dataGridViewCell is not null);
                 if (dataGridViewCell.KeyUpUnsharesRowInternal(e, _ptCurrentCell.Y))
                 {
-                    DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y];
+                    _ = Rows[_ptCurrentCell.Y];
                     CurrentCellInternal.OnKeyUpInternal(e, _ptCurrentCell.Y);
                 }
                 else
@@ -20781,7 +20792,7 @@ namespace System.Windows.Forms
 
         protected bool ProcessDownKey(Keys keyData)
         {
-            return ProcessDownKeyInternal(keyData, out bool moved);
+            return ProcessDownKeyInternal(keyData, out _);
         }
 
         private bool ProcessDownKeyInternal(Keys keyData, out bool moved)
@@ -27059,7 +27070,7 @@ namespace System.Windows.Forms
                             int rowIndex = 0, maxRowIndex = Rows.Count;
                             while (rowIndex < maxRowIndex)
                             {
-                                dataGridViewRow = Rows[rowIndex];  //unsharing each row!
+                                _ = Rows[rowIndex];  //unsharing each row!
                                 int columnIndex = 0;
                                 while (columnIndex < maxColumnIndex)
                                 {

@@ -627,7 +627,7 @@ namespace System.Resources
                 }
             }
 
-            return resolvedType ??= Type.GetType(typeName, throwOnError: false);
+            return resolvedType ?? Type.GetType(typeName, throwOnError: false);
         }
 
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)

@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Design
                 {
                     foreach (ToolStripItem item in MenuItem.DropDownItems)
                     {
-                        if (!(item is DesignerToolStripControlHost addNewItem))
+                        if (!(item is DesignerToolStripControlHost))
                         {
                             items.Add(item);
                         }
@@ -1857,7 +1857,7 @@ namespace System.Windows.Forms.Design
         {
             if (e.Component is ToolStripItem itemToBeDeleted && itemToBeDeleted.IsOnDropDown)
             {
-                if (itemToBeDeleted.Owner is ToolStripDropDown owner)
+                if (itemToBeDeleted.Owner is ToolStripDropDown)
                 {
                     //Get the ownerItem
                     ToolStripDropDownItem ownerItem = (ToolStripDropDownItem)((ToolStripDropDown)(itemToBeDeleted.Owner)).OwnerItem;
@@ -1942,7 +1942,7 @@ namespace System.Windows.Forms.Design
 
             if (e.Component is ToolStripItem itemToBeDeleted && itemToBeDeleted.IsOnDropDown && itemToBeDeleted.Placement == ToolStripItemPlacement.Main)
             {
-                if (itemToBeDeleted.Owner is ToolStripDropDown owner)
+                if (itemToBeDeleted.Owner is ToolStripDropDown)
                 {
                     //Get the ownerItem
                     ToolStripDropDownItem ownerItem = (ToolStripDropDownItem)((ToolStripDropDown)(itemToBeDeleted.Owner)).OwnerItem;
@@ -2622,7 +2622,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public override void OnDragEnter(Glyph g, DragEventArgs e)
             {
-                if (e.Data is ToolStripItemDataObject data)
+                if (e.Data is ToolStripItemDataObject)
                 {
                     e.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
                 }
@@ -2637,7 +2637,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public override void OnDragOver(Glyph g, DragEventArgs e)
             {
-                if (e.Data is ToolStripItemDataObject data)
+                if (e.Data is ToolStripItemDataObject)
                 {
                     e.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
                 }

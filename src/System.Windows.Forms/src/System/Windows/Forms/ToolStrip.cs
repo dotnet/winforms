@@ -184,7 +184,8 @@ namespace System.Windows.Forms
             Dock = DefaultDock;
             AutoSize = true;
             CausesValidation = false;
-            Size defaultSize = DefaultSize;
+
+            _ = DefaultSize;
             SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
             ShowItemToolTips = DefaultShowItemToolTips;
             ResumeLayout(true);
@@ -3275,8 +3276,9 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ProcessLeftRightArrowKey(bool right)
         {
-            ToolStripItem selectedItem = GetSelectedItem();
-            ToolStripItem nextItem = SelectNextToolStripItem(GetSelectedItem(), right);
+            _ = GetSelectedItem();
+
+            _ = SelectNextToolStripItem(GetSelectedItem(), right);
             return true;
         }
 
@@ -4524,7 +4526,7 @@ namespace System.Windows.Forms
 
                 // For splitstack layout we re-arrange the items in the displayed items
                 // collection so that we can easily tab through them in natural order
-                Rectangle displayRect = DisplayRectangle;
+                _ = DisplayRectangle;
                 int lastRightAlignedItem = -1;
 
                 for (int pass = 0; pass < 2; pass++)
@@ -4859,7 +4861,7 @@ namespace System.Windows.Forms
                 // snap our last dimensions before switching over.
                 // use specifed bounds so that if something is docked or anchored we don't take the extra stretching
                 // effects into account.
-                Size size = CommonProperties.GetSpecifiedBounds(this).Size;
+                _ = CommonProperties.GetSpecifiedBounds(this).Size;
                 Orientation = newOrientation;
                 // since the Grip affects the DisplayRectangle, we need to re-adjust the size
                 SetupGrip();

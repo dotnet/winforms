@@ -112,7 +112,8 @@ namespace System.ComponentModel.Design.Serialization.Tests
         {
             var manager = new DesignerSerializationManager();
             IDesignerSerializationManager iManager = manager;
-            IDisposable session = manager.CreateSession();
+
+            _ = manager.CreateSession();
             ContextStack context = iManager.Context;
             Assert.Null(context.Current);
             Assert.Same(context, iManager.Context);
@@ -143,7 +144,8 @@ namespace System.ComponentModel.Design.Serialization.Tests
         public void DesignerSerializationManager_Errors_GetWithSession_ReturnsExpected()
         {
             var manager = new DesignerSerializationManager();
-            IDisposable session = manager.CreateSession();
+
+            _ = manager.CreateSession();
             IList errors = manager.Errors;
             Assert.Empty(errors);
             Assert.Same(errors, manager.Errors);
@@ -482,7 +484,8 @@ namespace System.ComponentModel.Design.Serialization.Tests
                 .Protected()
                 .Setup("OnSessionCreated", EventArgs.Empty)
                 .Verifiable();
-            IDisposable session = mockManager.Object.CreateSession();
+
+            _ = mockManager.Object.CreateSession();
             mockManager.Protected().Verify("OnSessionCreated", Times.Once(), EventArgs.Empty);
         }
 
@@ -547,7 +550,8 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             // Dispose, get another and ensure cleared.
             session1.Dispose();
-            IDisposable session2 = manager.CreateSession();
+
+            _ = manager.CreateSession();
             IList errors2 = manager.Errors;
             Assert.Empty(errors2);
             Assert.Same(errors2, manager.Errors);
@@ -567,7 +571,8 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             // Dispose, get another and ensure cleared.
             session1.Dispose();
-            IDisposable session2 = manager.CreateSession();
+
+            _ = manager.CreateSession();
             ContextStack stack2 = iManager.Context;
             Assert.NotNull(stack2);
             Assert.Same(stack2, iManager.Context);
@@ -1721,7 +1726,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var manager = new SubDesignerSerializationManager();
             IDesignerSerializationManager iManager = manager;
 
-            IDisposable session1 = manager.CreateSession();
+            _ = manager.CreateSession();
             IList errors1 = manager.Errors;
             Assert.Empty(errors1);
             Assert.Same(errors1, manager.Errors);
@@ -1731,7 +1736,8 @@ namespace System.ComponentModel.Design.Serialization.Tests
 
             // Dispose, get another and ensure cleared.
             manager.OnSessionDisposed(EventArgs.Empty);
-            IDisposable session2 = manager.CreateSession();
+
+            _ = manager.CreateSession();
             IList errors2 = manager.Errors;
             Assert.Empty(errors2);
             Assert.Same(errors2, manager.Errors);
@@ -1744,14 +1750,15 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var manager = new SubDesignerSerializationManager();
             IDesignerSerializationManager iManager = manager;
 
-            IDisposable session1 = manager.CreateSession();
+            _ = manager.CreateSession();
             ContextStack stack1 = iManager.Context;
             Assert.NotNull(stack1);
             Assert.Same(stack1, iManager.Context);
 
             // Dispose, get another and ensure cleared.
             manager.OnSessionDisposed(EventArgs.Empty);
-            IDisposable session2 = manager.CreateSession();
+
+            _ = manager.CreateSession();
             ContextStack stack2 = iManager.Context;
             Assert.NotNull(stack2);
             Assert.Same(stack2, iManager.Context);
@@ -1763,7 +1770,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         {
             var manager = new SubDesignerSerializationManager();
 
-            IDisposable session1 = manager.CreateSession();
+            _ = manager.CreateSession();
             object serializer1 = manager.GetSerializer(typeof(ClassWithPublicDesignerSerializer), typeof(BaseClass));
             Assert.IsType<PublicDesignerSerializationProvider>(serializer1);
             Assert.Same(serializer1, manager.GetSerializer(typeof(ClassWithPublicDesignerSerializer), typeof(PublicDesignerSerializationProvider)));

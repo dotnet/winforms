@@ -755,11 +755,11 @@ internal partial class Com2PropertyDescriptor : PropertyDescriptor, ICloneable
         // We don't do this if the state came from an attribute.
         if ((_refreshState & Com2PropertyDescriptorRefresh.TypeConverterAttr) == 0 && PropertyType == typeof(Com2Variant))
         {
-            Type editorType = PropertyType;
+            _ = PropertyType;
             object? value = GetValue(TargetObject);
             if (value is not null)
             {
-                editorType = value.GetType();
+                _ = value.GetType();
             }
 
             ComNativeDescriptor.ResolveVariantTypeConverterAndTypeEditor(value, ref localConverter, editorBaseType, ref localEditor);

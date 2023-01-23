@@ -262,7 +262,7 @@ namespace System.Windows.Forms
                             string href = iHTMLLocation.GetHref();
                             if (!string.IsNullOrEmpty(href))
                             {
-                                Uri url = new Uri(href);
+                                _ = new Uri(href);
                                 return new HtmlDocument(ShimManager, iHTMLDocument2 as IHTMLDocument);
                             }
                         }

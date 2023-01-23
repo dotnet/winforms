@@ -147,7 +147,8 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_DisableImeModeChangedCount()");
                 Debug.Indent();
 
-                int val = (int)Properties.GetInteger(s_disableImeModeChangedCountProperty, out bool dummy);
+
+                int val = (int)Properties.GetInteger(s_disableImeModeChangedCountProperty, out _);
 
                 Debug.Assert(val >= 0, "Counter underflow.");
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Value: " + val);

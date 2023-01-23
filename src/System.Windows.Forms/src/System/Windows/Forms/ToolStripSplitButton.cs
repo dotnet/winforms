@@ -345,10 +345,10 @@ namespace System.Windows.Forms
         private void CalculateLayout()
         {
             // Figure out where the DropDown image goes.
-            Rectangle dropDownButtonBounds = new Rectangle(Point.Empty, Size);
+            _ = new Rectangle(Point.Empty, Size);
             Rectangle splitButtonButtonBounds = Rectangle.Empty;
 
-            dropDownButtonBounds = new Rectangle(Point.Empty, new Size(Math.Min(Width, DropDownButtonWidth), Height));
+            var dropDownButtonBounds = new Rectangle(Point.Empty, new Size(Math.Min(Width, DropDownButtonWidth), Height));
 
             // Figure out the height and width of the selected item.
             int splitButtonButtonWidth = Math.Max(0, Width - dropDownButtonBounds.Width);

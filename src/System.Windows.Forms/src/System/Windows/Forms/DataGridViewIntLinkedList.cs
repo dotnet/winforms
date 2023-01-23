@@ -74,7 +74,7 @@ namespace System.Windows.Forms
                 Debug.Assert(index >= 0);
                 if (index != _lastAccessedIndex)
                 {
-                    int currentInt = this[index];
+                    _ = this[index];
                     Debug.Assert(index == _lastAccessedIndex);
                 }
 

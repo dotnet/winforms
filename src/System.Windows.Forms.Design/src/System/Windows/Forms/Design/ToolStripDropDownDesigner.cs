@@ -573,7 +573,7 @@ namespace System.Windows.Forms.Design
         // Reset Settings.
         public void ResetSettingsKey()
         {
-            if (Component is IPersistComponentSettings persistableComponent)
+            if (Component is IPersistComponentSettings)
             {
                 SettingsKey = null;
             }

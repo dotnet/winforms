@@ -2330,7 +2330,7 @@ namespace System.ComponentModel.Design.Tests
         [WinFormsFact]
         public void DesignerHost_GetServiceIMultitargetHelperServiceWithoutLoader_ReturnsNull()
         {
-            var service = new object();
+            _ = new object();
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
             var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;

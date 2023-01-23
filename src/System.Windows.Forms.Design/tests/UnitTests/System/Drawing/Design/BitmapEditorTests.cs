@@ -21,7 +21,7 @@ namespace System.Drawing.Design.Tests
         [Fact]
         public void BitmapEditor_BitmapExtensions_Get_ReturnsExpected()
         {
-            var editor = new SubBitmapEditor();
+            _ = new SubBitmapEditor();
             List<string> extensions = SubBitmapEditor.BitmapExtensions;
             Assert.Equal(new string[] { "bmp", "gif", "jpg", "jpeg", "png", "ico" }, extensions);
             Assert.Same(extensions, SubBitmapEditor.BitmapExtensions);

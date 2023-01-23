@@ -1959,6 +1959,7 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(cellStyle);
 
+
             PaintPrivate(graphics,
                 clipBounds,
                 cellBounds,
@@ -1968,7 +1969,7 @@ namespace System.Windows.Forms
                 errorText,
                 cellStyle,
                 advancedBorderStyle,
-                out Rectangle dropDownButtonRect,     // not used
+                out _,     // not used
                 paintParts,
                 false /*computeContentBounds*/,
                 false /*computeErrorIconBounds*/,

@@ -297,10 +297,11 @@ namespace System.Windows.Forms.Design
             if (componentTray is null)
                 return true;
 
+
             // Figure out if any of the components in the drag-drop are children
             // of our own tray. If so, we should prevent this drag-drop from proceeding.
             //
-            OleDragDropHandler ddh = GetOleDragHandler();
+            _ = GetOleDragHandler();
             object[] dragComps = OleDragDropHandler.GetDraggingObjects(de);
 
             if (dragComps is not null)

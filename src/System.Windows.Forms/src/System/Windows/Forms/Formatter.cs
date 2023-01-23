@@ -234,7 +234,7 @@ namespace System.Windows.Forms
             sourceConverter = NullableUnwrap(sourceConverter);
             targetConverter = NullableUnwrap(targetConverter);
 
-            bool isNullableTargetType = (targetType != oldTargetType);
+            _ = (targetType != oldTargetType);
 
             //
             // Call the 'real' method to perform the conversion

@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ListViewItem(), "reasonable", "reasonable" };
             yield return new object[] { new ListViewItem() { BackColor = Color.Yellow, ForeColor = Color.Yellow, Font = SystemFonts.StatusFont }, "reasonable", "reasonable" };
 
-            var listView = new ListView();
+            _ = new ListView();
             var item = new ListViewItem();
             Assert.Null(item.ListView);
             yield return new object[] { item, "reasonable", "reasonable" };

@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
         [StaFact]
         public void UiaTextProvider_RectArrayToDoubleArray_ReturnsCorrectValue()
         {
-            Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            _ = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
             double[] expected = { 0, 0, 10, 5, 10, 10, 20, 30 };
             double[] actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>
@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
         [StaFact]
         public void UiaTextProvider_RectArrayToDoubleArray_NullParameter_ReturnsNull()
         {
-            Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            _ = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
             double[] actual = UiaTextProvider.RectListToDoubleArray(null);
             Assert.Empty(actual);
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
         [StaFact]
         public void UiaTextProvider_RectArrayToDoubleArray_EmptyArrayParameter_ReturnsEmptyArrayResult()
         {
-            Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            _ = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
             double[] actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>());
             Assert.Empty(actual);

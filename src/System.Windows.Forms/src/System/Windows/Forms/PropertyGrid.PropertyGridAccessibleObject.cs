@@ -102,7 +102,7 @@ namespace System.Windows.Forms
 
                         return null;
                     case UiaCore.NavigateDirection.PreviousSibling:
-                        fragmentCount = GetChildFragmentCount();
+                        _ = GetChildFragmentCount();
                         childFragmentIndex = GetChildFragmentIndex(childFragment);
                         if (childFragmentIndex > 0)
                         {

@@ -755,7 +755,8 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_OnCollectionChanged_Invoke_Nop()
         {
             var context = new SubBindingContext();
-            CollectionChangeEventHandler handler = (sender, e) => { };
+
+            _ = (sender, e) => { };
             context.OnCollectionChanged(null);
         }
 

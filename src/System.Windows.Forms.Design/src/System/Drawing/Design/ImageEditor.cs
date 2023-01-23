@@ -63,7 +63,7 @@ namespace System.Drawing.Design
 
         public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         {
-            if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
+            if (!provider.TryGetService(out IWindowsFormsEditorService? _))
             {
                 return value;
             }

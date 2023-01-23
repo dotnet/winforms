@@ -131,7 +131,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         internal static object? GetPropertyValue(object component, int dispid, ref bool succeeded)
         {
-            if (component is not IDispatch.Interface dispatch)
+            if (component is not IDispatch.Interface)
             {
                 return null;
             }

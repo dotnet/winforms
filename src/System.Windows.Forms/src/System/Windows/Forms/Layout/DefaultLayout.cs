@@ -366,7 +366,7 @@ namespace System.Windows.Forms.Layout
         {
             // AnchorLayoutV2  only supports Control types. If the feature is disabled or
             // the element is not of Control type, use the original layout method.
-            return LocalAppContextSwitches.AnchorLayoutV2 && element is Control control;
+            return LocalAppContextSwitches.AnchorLayoutV2 && element is Control;
         }
 
         private static void LayoutAnchoredControls(IArrangedElement container, bool updateAnchorInfoIfNeeded = false)

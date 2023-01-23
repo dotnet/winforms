@@ -327,7 +327,7 @@ namespace System.Windows.Forms
                         // in Tile view our ListView uses the column header collection to update the Tile Information
                         for (int colIdx = _owner._columnHeaders.Length - 1; colIdx >= 0; colIdx--)
                         {
-                            int w = _owner._columnHeaders[colIdx].Width; // Update width before detaching from ListView
+                            _ = _owner._columnHeaders[colIdx].Width; // Update width before detaching from ListView
                             _owner._columnHeaders[colIdx].OwnerListview = null;
                             _owner._columnHeaders[colIdx].ReleaseUiaProvider();
                         }
@@ -342,7 +342,7 @@ namespace System.Windows.Forms
                     {
                         for (int colIdx = _owner._columnHeaders.Length - 1; colIdx >= 0; colIdx--)
                         {
-                            int w = _owner._columnHeaders[colIdx].Width; // Update width before detaching from ListView
+                            _ = _owner._columnHeaders[colIdx].Width; // Update width before detaching from ListView
                             if (_owner.IsHandleCreated)
                             {
                                 PInvoke.SendMessage(_owner, (User32.WM)PInvoke.LVM_DELETECOLUMN, (WPARAM)colIdx);
@@ -518,7 +518,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                int w = _owner._columnHeaders[index].Width; // Update width before detaching from ListView
+                _ = _owner._columnHeaders[index].Width; // Update width before detaching from ListView
 
                 // in Tile view our ListView uses the column header collection to update the Tile Information
                 if (_owner.IsHandleCreated && _owner.View != View.Tile)

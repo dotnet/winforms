@@ -32,7 +32,7 @@ namespace System.Windows.Forms
             {
                 if (!s_ACWindows.ContainsKey(handle))
                 {
-                    ACNativeWindow newAC = new ACNativeWindow(handle);
+                    _ = new ACNativeWindow(handle);
                 }
 
                 return true;
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
                 {
                     if (subclass)
                     {
-                        ACNativeWindow newAC = new ACNativeWindow(acHandle);
+                        _ = new ACNativeWindow(acHandle);
                     }
                     else
                     {

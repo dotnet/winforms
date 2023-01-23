@@ -149,7 +149,7 @@ namespace System.Windows.Forms.Design
                 ArrayList items = new ArrayList();
                 foreach (ToolStripItem item in ToolStrip.Items)
                 {
-                    if (!(item is DesignerToolStripControlHost addNewItem))
+                    if (!(item is DesignerToolStripControlHost))
                     {
                         items.Add(item);
                     }
@@ -781,7 +781,8 @@ namespace System.Windows.Forms.Design
                             if (dropDown is not null)
                             {
                                 ToolStripItem ownerItem = dropDown.OwnerItem;
-                                ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)_host.GetDesigner(ownerItem);
+
+                                _ = (ToolStripMenuItemDesigner)_host.GetDesigner(ownerItem);
                                 ToolStripDropDown topmost = ToolStripItemDesigner.GetFirstDropDown((ToolStripDropDownItem)(ownerItem));
                                 ToolStripItem topMostItem = (topmost is null) ? ownerItem : topmost.OwnerItem;
 
@@ -2349,7 +2350,8 @@ namespace System.Windows.Forms.Design
                     if (_editorNode is not null && (SelectionService.PrimarySelection == ToolStrip || itemSelected))
                     {
                         bool originalSyncSelection = FireSyncSelection;
-                        ToolStripPanel parent = ToolStrip.Parent as ToolStripPanel;
+
+                        _ = ToolStrip.Parent as ToolStripPanel;
                         try
                         {
                             FireSyncSelection = true;
@@ -2362,11 +2364,11 @@ namespace System.Windows.Forms.Design
                     }
 
                     // REQUIRED FOR THE REFRESH OF GLYPHS BUT TRY TO BE SMART ABOUT THE REGION TO INVALIDATE....
-                    if (!(SelectionService.PrimarySelection is ToolStripItem selectedItem))
+                    if (!(SelectionService.PrimarySelection is ToolStripItem))
                     {
                         if (KeyboardHandlingService is not null)
                         {
-                            selectedItem = KeyboardHandlingService.SelectedDesignerControl as ToolStripItem;
+                            _ = KeyboardHandlingService.SelectedDesignerControl as ToolStripItem;
                         }
                     }
 

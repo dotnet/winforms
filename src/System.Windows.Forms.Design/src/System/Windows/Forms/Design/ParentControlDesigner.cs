@@ -1603,7 +1603,7 @@ namespace System.Windows.Forms.Design
             }
             else
             {
-                OleDragDropHandler ddh = GetOleDragHandler();
+                _ = GetOleDragHandler();
                 dragComps = OleDragDropHandler.GetDraggingObjects(de);
             }
 

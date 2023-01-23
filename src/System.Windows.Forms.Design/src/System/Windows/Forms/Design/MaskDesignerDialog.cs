@@ -535,9 +535,7 @@ namespace System.Windows.Forms.Design
 
         private void InsertMaskDescriptor(int index, MaskDescriptor maskDescriptor, bool validateDescriptor)
         {
-            string errorMessage;
-
-            if (validateDescriptor && !MaskDescriptor.IsValidMaskDescriptor(maskDescriptor, out errorMessage))
+            if (validateDescriptor && !MaskDescriptor.IsValidMaskDescriptor(maskDescriptor, out _))
             {
                 return;
             }

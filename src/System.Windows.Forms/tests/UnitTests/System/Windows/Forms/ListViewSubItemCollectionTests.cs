@@ -230,7 +230,7 @@ namespace System.Windows.Forms.Tests
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
 
-            var otherItem = new ListViewItem();
+            _ = new ListViewItem();
             var otherCollection = new ListViewItem.ListViewSubItemCollection(item);
 
             var subItem = new ListViewItem.ListViewSubItem();

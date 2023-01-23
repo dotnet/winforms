@@ -1068,7 +1068,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                GetSelectionStartAndLength(out int start, out int length);
+                GetSelectionStartAndLength(out _, out int length);
 
                 return length;
             }
@@ -1102,7 +1102,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                GetSelectionStartAndLength(out int selStart, out int selLength);
+                GetSelectionStartAndLength(out int selStart, out _);
 
                 return selStart;
             }

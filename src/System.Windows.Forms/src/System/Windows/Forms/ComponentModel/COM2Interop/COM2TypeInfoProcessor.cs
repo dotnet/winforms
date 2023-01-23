@@ -228,7 +228,8 @@ internal static unsafe partial class Com2TypeInfoProcessor
     {
         int defaultProperty = -1;
         List<Com2PropertyDescriptor> propList = new();
-        Guid[] typeGuids = new Guid[typeInfos.Length];
+
+        _ = new Guid[typeInfos.Length];
 
         for (int i = 0; i < typeInfos.Length; i++)
         {

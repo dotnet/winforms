@@ -781,7 +781,7 @@ namespace System.Windows.Forms
 
             // We should consider the border size when calculating the preferred size.
 
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out _, out _);
             Rectangle borderWidths = BorderWidths(dgvabsEffective);
             preferredSize.Width += borderWidths.X;
             preferredSize.Height += borderWidths.Y;

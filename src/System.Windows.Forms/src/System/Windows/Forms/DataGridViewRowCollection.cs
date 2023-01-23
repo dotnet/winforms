@@ -173,7 +173,7 @@ namespace System.Windows.Forms
                 int rowCount = Count;
                 for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                 {
-                    DataGridViewRow dataGridViewRow = this[rowIndex];
+                    _ = this[rowIndex];
                 }
 
                 return items;
@@ -2296,15 +2296,18 @@ namespace System.Windows.Forms
             Debug.Assert(!DataGridView.NoDimensionChangeAllowed);
 
             DataGridViewRow dataGridViewRow = SharedRow(index);
-            Point newCurrentCell = new Point(-1, -1);
+
+            _ = new Point(-1, -1);
 
             if (IsCollectionChangedListenedTo || dataGridViewRow.GetDisplayed(index))
             {
-                dataGridViewRow = this[index]; // need to unshare row because dev is listening to OnCollectionChanged event or the row is displayed
+                _ = this[index]; // need to unshare row because dev is listening to OnCollectionChanged event or the row is displayed
             }
 
             dataGridViewRow = SharedRow(index);
             Debug.Assert(DataGridView is not null);
+
+            Point newCurrentCell;
             DataGridView.OnRemovingRow(index, out newCurrentCell, force);
             UpdateRowCaches(index, ref dataGridViewRow, false /*adding*/);
             if (dataGridViewRow.Index != -1)

@@ -158,7 +158,7 @@ namespace System.Windows.Forms.Layout
         /// </summary>
         private static void LayoutRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds)
         {
-            Size outSize = TryCalculatePreferredSizeRow(containerProxy, elementProxy, startIndex, endIndex, rowBounds, /* breakIndex = */ out int dummy, /* measureOnly = */ false);
+            _ = TryCalculatePreferredSizeRow(containerProxy, elementProxy, startIndex, endIndex, rowBounds, /* breakIndex = */ out int dummy, /* measureOnly = */ false);
             Debug.Assert(dummy == endIndex, "EndIndex / BreakIndex mismatch.");
         }
 

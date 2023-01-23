@@ -952,7 +952,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_UNKNOWN_ReturnsExpected()
         {
             var o = new object();
-            IntPtr pUnk = Marshal.GetIUnknownForObject(o);
+
+            _ = Marshal.GetIUnknownForObject(o);
             using VARIANT variant = Create(VT_UNKNOWN, (void*)Marshal.GetIUnknownForObject(o));
             AssertToObjectEqual(o, variant);
         }
@@ -5258,7 +5259,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [InlineData((ushort)VT_BLOB_OBJECT)]
         public void VARIANT_ToObject_ARRAYNoData_ReturnsExpected(ushort vt)
         {
-            SAFEARRAY* psa = CreateSafeArray(VT_I1, Array.Empty<byte>());
+            _ = CreateSafeArray(VT_I1, Array.Empty<byte>());
             using VARIANT variant = new()
             {
                 vt = VT_ARRAY | (VARENUM)vt
@@ -5272,7 +5273,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [InlineData((ushort)VT_BSTR_BLOB)]
         public void VARIANT_ToObject_ARRAYInvalidTypeNoData_ThrowsInvalidOleVariantTypeException(ushort vt)
         {
-            SAFEARRAY* psa = CreateSafeArray(VT_I1, Array.Empty<byte>());
+            _ = CreateSafeArray(VT_I1, Array.Empty<byte>());
             using VARIANT variant = new()
             {
                 vt = VT_ARRAY | (VARENUM)vt

@@ -421,7 +421,7 @@ namespace System.Windows.Forms.Layout
 
                     //try to layout the absolutely positioned element as if it were non-absolutely positioned.
                     //In this way we can tell whether this element overlaps with others or fits on the table.
-                    AdvanceUntilFits(maxColumns, reservationGrid, fixedElement, out colStop);
+                    AdvanceUntilFits(maxColumns, reservationGrid, fixedElement, out _);
 
                     //we have exceeded the row limit. just return
                     if (fixedElement.RowStart >= maxRows)
@@ -1190,7 +1190,8 @@ namespace System.Windows.Forms.Layout
             int currentCol = 0;
             int currentRow = 0;
             bool isContainerRTL = false;
-            Rectangle displayRect = Rectangle.Truncate(displayRectF);
+
+            _ = Rectangle.Truncate(displayRectF);
 
             if (containerInfo.Container is Control)
             {
@@ -1489,8 +1490,10 @@ namespace System.Windows.Forms.Layout
 
             List<LayoutInfo> layoutInfos = new(container.Children.Count);
             ContainerInfo containerInfo = GetContainerInfo(container);
-            Strip[] rows = containerInfo.Rows;
-            Strip[] columns = containerInfo.Columns;
+
+            _ = containerInfo.Rows;
+
+            _ = containerInfo.Columns;
 
             foreach (IArrangedElement element in container.Children)
             {

@@ -151,7 +151,8 @@ namespace System.ComponentModel.Design.Serialization
         {
             CodeDomSerializer.Trace("Property is marked as Visibility.Content.  Recursing.");
 
-            object propertyValue = GetPropertyValue(manager, property, value, out bool validValue);
+
+            object propertyValue = GetPropertyValue(manager, property, value, out _);
 
             // For persist contents objects, we don't just serialize the properties on the object; we
             // serialize everything.

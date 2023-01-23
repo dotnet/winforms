@@ -160,7 +160,7 @@ namespace System.Windows.Forms
         {
             if (AutoInstall)
             {
-                if (AsyncOperationManager.SynchronizationContext is WindowsFormsSynchronizationContext winFormsSyncContext)
+                if (AsyncOperationManager.SynchronizationContext is WindowsFormsSynchronizationContext)
                 {
                     try
                     {

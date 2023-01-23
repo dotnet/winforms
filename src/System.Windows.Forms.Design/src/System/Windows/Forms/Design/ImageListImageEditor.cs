@@ -30,7 +30,8 @@ namespace System.Windows.Forms.Design
             }
 
             var images = new ArrayList();
-            if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
+
+            if (!provider.TryGetService(out IWindowsFormsEditorService? _))
             {
                 return images;
             }

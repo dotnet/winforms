@@ -266,7 +266,7 @@ namespace System.Windows.Forms
 
             int IList.Add(object? value)
             {
-                if (!(value is Image image))
+                if (!(value is Image))
                 {
                     throw new ArgumentException(SR.ImageListBadImage, nameof(value));
                 }

@@ -373,7 +373,8 @@ namespace System.Windows.Forms
             public SortOrder BoundColumnSortOrder(int boundColumnIndex)
             {
                 IBindingList ibl = CurrencyManager is not null ? CurrencyManager.List as IBindingList : null;
-                IBindingListView iblv = ibl is not null ? ibl as IBindingListView : null;
+
+                _ = ibl is not null ? ibl as IBindingListView : null;
 
                 if (ibl is null || !ibl.SupportsSorting || !ibl.IsSorted)
                 {

@@ -1524,7 +1524,7 @@ namespace System.Windows.Forms
 
         public virtual void RemoveAt(int index)
         {
-            object value = ((IList)this)[index];
+            _ = ((IList)this)[index];
             List.RemoveAt(index);
             OnSimpleListChanged(ListChangedType.ItemDeleted, index);
         }
