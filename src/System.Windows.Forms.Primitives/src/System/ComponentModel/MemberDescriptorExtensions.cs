@@ -8,7 +8,8 @@ namespace System.ComponentModel
 {
     internal static class MemberDescriptorExtensions
     {
-        public static bool TryGetAttribute<T>(
+        public static bool TryGetAttribute
+            <[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] T>(
             this MemberDescriptor descriptor,
             [NotNullWhen(true)] out T? attribute) where T : Attribute
         {
@@ -16,7 +17,9 @@ namespace System.ComponentModel
             return attribute is not null;
         }
 
-        public static T? GetAttribute<T>(this MemberDescriptor descriptor) where T : Attribute
+        public static T? GetAttribute
+            <[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] T>(
+            this MemberDescriptor descriptor) where T : Attribute
             => descriptor?.Attributes[typeof(T)] as T;
     }
 }
