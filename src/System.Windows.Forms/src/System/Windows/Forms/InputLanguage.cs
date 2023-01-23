@@ -102,10 +102,14 @@ namespace System.Windows.Forms
         ///  Returns the name of the current keyboard layout as it appears in the Windows
         ///  Regional Settings on the computer.
         /// </summary>
-        public string LayoutName
+        public unsafe string LayoutName
         {
             get
             {
+                // There is no good way to do this in Windows. GetKeyboardLayoutName does what we want, but only for the
+                // current input language; setting and resetting the current input language would generate spurious
+                // InputLanguageChanged events.
+                // Try to extract needed information manually.
                 string layoutName = GetKeyboardLayoutNameForHKL(_handle);
 
                 // https://learn.microsoft.com/windows/win32/intl/using-registry-string-redirection#create-resources-for-keyboard-layout-strings
@@ -115,17 +119,14 @@ namespace System.Windows.Forms
                     // Localizable string resource associated with the keyboard layout
                     if (key.GetValue("Layout Display Name") is string layoutDisplayName)
                     {
-                        unsafe
+                        var ppvReserved = (void*)IntPtr.Zero;
+                        Span<char> buffer = stackalloc char[512];
+                        fixed (char* pBuffer = buffer)
                         {
-                            var ppvReserved = (void*)IntPtr.Zero;
-                            Span<char> buffer = stackalloc char[512];
-                            fixed (char* pBuffer = buffer)
+                            HRESULT result = PInvoke.SHLoadIndirectString(layoutDisplayName, pBuffer, (uint)buffer.Length, ref ppvReserved);
+                            if (result == HRESULT.S_OK)
                             {
-                                HRESULT result = PInvoke.SHLoadIndirectString(layoutDisplayName, pBuffer, (uint)buffer.Length, ref ppvReserved);
-                                if (result == HRESULT.S_OK)
-                                {
-                                    return buffer.SliceAtFirstNull().ToString();
-                                }
+                                return buffer.SliceAtFirstNull().ToString();
                             }
                         }
                     }
@@ -142,17 +143,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns the KLID string for provided HKL handle.
-        ///  Same as GetKeyboardLayoutName API but for any HKL.
-        ///  See https://learn.microsoft.com/windows-hardware/manufacture/desktop/windows-language-pack-default-values
-        ///  for a list of possible KLID values.
+        /// Returns the keyboard layout name for the provided <see cref="HKL"/> handle.
         /// </summary>
+        /// <param name="hkl">The <see cref="HKL"/> input locale identifier representing the input language.</param>
+        /// <returns>
+        /// <c>KLID</c> (Keyboard layout ID) string in the same format as in <see
+        /// href="https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-getkeyboardlayoutnamew">GetKeyboardLayoutName</see>
+        /// (8 hex chars with leading zeros when needed).
+        /// </returns>
+        /// <seealso href="https://learn.microsoft.com/windows-hardware/manufacture/desktop/windows-language-pack-default-values">
+        /// Keyboard identifiers and input method editors for Windows</seealso>
         internal static string GetKeyboardLayoutNameForHKL(IntPtr hkl)
         {
-            // There is no good way to do this in Windows.
-            // GetKeyboardLayoutName does what we want, but only for the current input language; setting and resetting
-            // the current input language would generate spurious InputLanguageChanged events.
-
             // According to the GetKeyboardLayout API function docs low word of HKL contains input language.
             int language = PARAM.LOWORD(hkl);
 
@@ -189,7 +191,6 @@ namespace System.Windows.Forms
                         if (layoutId == Convert.ToInt32(subKeyLayoutId, 16))
                         {
                             Debug.Assert(subKeyName.Length == 8, $"unexpected key length in registry: {subKey.Name}");
-                            // We don't care what is exact format of KLID here
                             return subKeyName;
                         }
                     }
@@ -206,7 +207,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Pad with zeros to its left to produce arbitrary length KLID string
             return language.ToString("x8");
         }
 
