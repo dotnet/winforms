@@ -391,6 +391,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Color DarkDark(Color baseColor) => new HLSColor(baseColor).Darker(1.0f);
 
+        internal static bool IsDark(Color color) => color.GetBrightness() <= .5;
+
         /// <summary>
         ///  Returns true if the luminosity of <paramref name="c1"/> is less than <paramref name="c2"/>.
         /// </summary>
@@ -2216,7 +2218,7 @@ namespace System.Windows.Forms
                     // properly.
                     color2 = Color.Black;
 
-                    if (baseColor.GetBrightness() <= .5)
+                    if (IsDark(baseColor))
                     {
                         color1 = color2;
                         color2 = baseColor.InvertColor();
@@ -2460,7 +2462,7 @@ namespace System.Windows.Forms
 
         internal static void InvertForeColorIfNeeded(Bitmap bitmap, Color backgroundColor)
         {
-            ControlPaint.HLSColor backgroundColorWrapper = new(backgroundColor);
+            HLSColor backgroundColorWrapper = new(backgroundColor);
 
             for (int y = 0; y < bitmap.Height; ++y)
             {
@@ -2469,7 +2471,7 @@ namespace System.Windows.Forms
                     var pixel = bitmap.GetPixel(x, y);
                     if (pixel != backgroundColor)
                     {
-                        var pixelColorWrapper = new ControlPaint.HLSColor(pixel);
+                        var pixelColorWrapper = new HLSColor(pixel);
                         if (Math.Abs(pixelColorWrapper.Luminosity - backgroundColorWrapper.Luminosity) > MaximumLuminosityDifference)
                         {
                             bitmap.SetPixel(x, y, pixel.InvertColor());
@@ -2477,6 +2479,21 @@ namespace System.Windows.Forms
                     }
                 }
             }
+        }
+
+        internal static Bitmap CreateBitmapWithInvertedForeColor(Bitmap bitmap, Color backgroundColor)
+        {
+            Bitmap result = new(bitmap.Width, bitmap.Height, bitmap.PixelFormat);
+            for (int y = 0; y < bitmap.Height; ++y)
+            {
+                for (int x = 0; x < bitmap.Width; ++x)
+                {
+                    Color pixel = bitmap.GetPixel(x, y);
+                    result.SetPixel(x, y, pixel != backgroundColor ? pixel.InvertColor() : pixel);
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

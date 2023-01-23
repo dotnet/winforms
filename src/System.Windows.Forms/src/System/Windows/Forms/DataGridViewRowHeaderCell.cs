@@ -905,7 +905,7 @@ namespace System.Windows.Forms
 
                                 lock (bmp)
                                 {
-                                    PaintIcon(graphics, bmp, valBounds, iconColor);
+                                    PaintIcon(graphics, bmp, valBounds, iconColor, cellStyle.BackColor);
                                 }
                             }
                         }
@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms
                                         iconColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
                                     }
 
-                                    PaintIcon(graphics, bmp, valBounds, iconColor);
+                                    PaintIcon(graphics, bmp, valBounds, iconColor, cellStyle.BackColor);
                                 }
                             }
                         }
@@ -1090,20 +1090,35 @@ namespace System.Windows.Forms
             return resultBounds;
         }
 
-        private void PaintIcon(Graphics g, Bitmap bmp, Rectangle bounds, Color foreColor)
+        private void PaintIcon(Graphics g, Bitmap bmp, Rectangle bounds, Color foreColor, Color backColor)
         {
-            Rectangle bmpRect = new Rectangle(DataGridView.RightToLeftInternal ?
-                                              bounds.Right - RowHeaderIconMarginWidth - s_iconsWidth :
-                                              bounds.Left + RowHeaderIconMarginWidth,
-                                              bounds.Y + (bounds.Height - s_iconsHeight) / 2,
-                                              s_iconsWidth,
-                                              s_iconsHeight);
+            int width = DataGridView.RightToLeftInternal
+                ? bounds.Right - RowHeaderIconMarginWidth - s_iconsWidth
+                : bounds.Left + RowHeaderIconMarginWidth;
+            int height = bounds.Y + (bounds.Height - s_iconsHeight) / 2;
+            Rectangle bmpRect = new(width, height, s_iconsWidth, s_iconsHeight);
+
             s_colorMap[0].NewColor = foreColor;
             s_colorMap[0].OldColor = Color.Black;
 
             ImageAttributes attr = new ImageAttributes();
             attr.SetRemapTable(s_colorMap, ColorAdjustType.Bitmap);
-            g.DrawImage(bmp, bmpRect, 0, 0, s_iconsWidth, s_iconsHeight, GraphicsUnit.Pixel, attr);
+
+            if (SystemInformation.HighContrast &&
+                // We can't replace black with white and vice versa as in other cases due to the colors of images are not exactly black and white.
+                // Also, we can't make a decision of inverting every pixel by comparing it with a background because it causes artifacts in the image.
+                // Because the primary color of all images provided to this method is similar to black (brightness almost zero),
+                // the decision to invert color may be made by checking the background color's brightness.
+                ControlPaint.IsDark(backColor))
+            {
+                using Bitmap invertedBitmap = ControlPaint.CreateBitmapWithInvertedForeColor(bmp, backColor);
+                g.DrawImage(invertedBitmap, bmpRect, 0, 0, s_iconsWidth, s_iconsHeight, GraphicsUnit.Pixel, attr);
+            }
+            else
+            {
+                g.DrawImage(bmp, bmpRect, 0, 0, s_iconsWidth, s_iconsHeight, GraphicsUnit.Pixel, attr);
+            }
+
             attr.Dispose();
         }
 
