@@ -120,27 +120,21 @@ namespace System.Windows.Forms
             [SkipLocalsInit]
             Scope Add(TKey key)
             {
-                Scope scope = default!;
-
                 if (_list.Count >= _softLimit)
                 {
                     // Try to free up space
                     Clean();
                 }
 
-                if (_list.Count < _hardLimit)
+                if (_list.Count >= _hardLimit)
                 {
-                    // We've got space, add to the cache
-                    var data = CreateEntry(key, cached: true);
-                    _list.AddFirst(data);
-                    scope = new Scope(data);
-                }
-                else
-                {
-                    scope = new Scope(CreateEntry(key, cached: false));
+                    return new Scope(CreateEntry(key, cached: false));
                 }
 
-                return scope;
+                // We've got space, add to the cache
+                var data = CreateEntry(key, cached: true);
+                _list.AddFirst(data);
+                return new Scope(data);
             }
 
             void Clean()
