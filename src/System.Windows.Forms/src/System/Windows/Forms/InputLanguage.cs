@@ -150,25 +150,20 @@ namespace System.Windows.Forms
         internal static string GetKeyboardLayoutNameForHKL(IntPtr hkl)
         {
             // There is no good way to do this in Windows.
-            // GetKeyboardLayoutName does what we want, but only for the current
-            // input language; setting and resetting the current input language
-            // would generate spurious InputLanguageChanged events.
+            // GetKeyboardLayoutName does what we want, but only for the current input language; setting and resetting
+            // the current input language would generate spurious InputLanguageChanged events.
 
-            // According to the GetKeyboardLayout API function docs low word of
-            // HKL contains input language.
+            // According to the GetKeyboardLayout API function docs low word of HKL contains input language.
             int language = PARAM.LOWORD(hkl);
 
-            // High word of HKL contains a device handle to the physical layout
-            // of the keyboard but exact format of this handle is not
-            // documented. For older keyboard layouts device handle seems
-            // contains keyboard layout language which we can use as KLID.
+            // High word of HKL contains a device handle to the physical layout of the keyboard but exact format of this
+            // handle is not documented. For older keyboard layouts device handle seems contains keyboard layout
+            // language which we can use as KLID.
             int device = PARAM.HIWORD(hkl);
 
-            // But for newer keyboard layouts device handle contains layout id
-            // if its high nibble is 0xF. This id may be used to search for
-            // keyboard layout under registry.
-            // NOTE: this logic may break in future versions of Windows since
-            // it is not documented.
+            // But for newer keyboard layouts device handle contains layout id if its high nibble is 0xF. This id may be
+            // used to search for keyboard layout under registry.
+            // NOTE: this logic may break in future versions of Windows since it is not documented.
             if ((device & 0xF000) == 0xF000)
             {
                 // Extract layout id from the device handle
@@ -202,11 +197,9 @@ namespace System.Windows.Forms
             }
             else
             {
-                // Keyboard layout language overrides input language, if
-                // available. This is crucial in cases when keyboard is
-                // installed more than once or under different languages.
-                // For example when French keyboard is installed under US input
-                // language we need to return French keyboard name.
+                // Keyboard layout language overrides input language, if available. This is crucial in cases when
+                // keyboard is installed more than once or under different languages. For example when French keyboard
+                // is installed under US input language we need to return French keyboard name.
                 if (device != 0)
                 {
                     language = device;
@@ -250,8 +243,8 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(culture);
 
-            // KeyboardLayoutId is the LCID for built-in cultures, but it
-            // is the CU-preferred keyboard language for custom cultures.
+            // KeyboardLayoutId is the LCID for built-in cultures, but it is the CU-preferred keyboard language for
+            // custom cultures.
             int lcid = culture.KeyboardLayoutId;
 
             foreach (InputLanguage? lang in InstalledInputLanguages)
