@@ -445,7 +445,7 @@ namespace System.Windows.Forms
 
                         // Parking window dpi awareness context need to match with dpi awareness context of control being
                         // parented to this parking window. Otherwise, reparenting of control will fail.
-                        using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext))
+                        using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext, DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_MIXED))
                         {
                             HINSTANCE modHandle = PInvoke.GetModuleHandle((PCWSTR)null);
 
@@ -495,6 +495,16 @@ namespace System.Windows.Forms
                     if (createResult.IsNull)
                     {
                         throw new Win32Exception(lastWin32Error, SR.ErrorCreatingHandle);
+                    }
+
+                    if (OsVersion.IsWindows10_18030rGreater())
+                    {
+                        // In a mixed DPI hosting environment, the DPI settings for child windows can be determined by either the parent window or the thread hosting it,
+                        // based on the window properties and the behavior of the thread. For additional information, please refer to
+                        // https://microsoft.visualstudio.com/OS/_search?action=contents&text=ref%3AIsValidKernelDpiAwarenessContext&type=code&filters=ProjectFilters%7BOS%7DRepositoryFilters%7Bos.2020%7D&pageSize=25&includeFacets=false&result=DefaultCollection/OS/os.2020/GBofficial/main//clientcore/windows/Core/ntuser/kernel/windows/createw.cxx
+                        DPI_AWARENESS_CONTEXT controlHandleDpiContext = PInvoke.GetWindowDpiAwarenessContext(HWND);
+                        Debug.Assert(PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, controlHandleDpiContext),
+                            $"Control's expected DpiAwarenessContext - {DpiAwarenessContext} is different from the DpiAwarenessContext on the Handle created for the control - {controlHandleDpiContext}");
                     }
 
                     _ownHandle = true;
