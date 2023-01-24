@@ -133,7 +133,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal AccessibleObject? ControlAccessibilityObject => _control?.AccessibilityObject;
+        internal AccessibleObject ControlAccessibilityObject => _control?.AccessibilityObject;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
