@@ -52,6 +52,11 @@ namespace System.Windows.Forms
         ///  The default item height for an owner-draw ListBox. The ListBox's non-ownerdraw
         ///  item height is 13 for the default font on Windows.
         /// </summary>
+        [Obsolete(
+            Obsoletions.ListBoxDefaultItemHeightMessage,
+            error: false,
+            DiagnosticId = Obsoletions.ListBoxDefaultItemHeightDiagnosticId,
+            UrlFormat = Obsoletions.SharedUrlFormat)]
         public const int DefaultItemHeight = 13;
 
         private static readonly object EVENT_SELECTEDINDEXCHANGED = new object();

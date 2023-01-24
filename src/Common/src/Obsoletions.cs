@@ -21,4 +21,9 @@ internal static class Obsoletions
     internal const string DomainItemAccessibleObjectMessage = $"{nameof(DomainUpDown.DomainItemAccessibleObject)} is no longer used to provide accessible support for {nameof(DomainUpDown)} items.";
 #pragma warning restore WFDEV003 // Type or member is obsolete
     internal const string DomainItemAccessibleObjectDiagnosticId = "WFDEV003";
+
+#pragma warning disable WFDEV004
+    internal const string ListBoxDefaultItemHeightMessage = $"{nameof(ListBox)}.{nameof(ListBox.DefaultItemHeight)} constant is no longer used as the default item height. Default item height is now scaled according to the default font.";
+#pragma warning restore WFDEV004
+    internal const string ListBoxDefaultItemHeightDiagnosticId = "WFDEV004";
 }

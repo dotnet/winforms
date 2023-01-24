@@ -1382,6 +1382,39 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [WinFormsFact]
+        public void ListBox_ItemHeight_EqualsDefaultHeight_IfDefaultFontIsChanged()
+        {
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.ItemHeight)];
+            using ListBox listBox = new();
+            using Font font = new("Times New Roman", 12);
+
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            var listBoxTestAccessor = typeof(ListBox).TestAccessor().Dynamic;
+
+            try
+            {
+                // Application.DefaultFont is being changed.
+                // ListBox.DefaultListBoxItemHeight and Control.DefaultFont are being cleared to pick up Application.DefaultFont value.
+                // ListBox.ItemHeight is being reset to a new default value.
+                applicationTestAccessor.s_defaultFont = font;
+                listBoxTestAccessor.s_defaultListBoxItemHeight = -1;
+                listBoxTestAccessor.s_defaultFont = null;
+                property.ResetValue(listBox);
+
+                // ListBox.ItemHeight equals the new default value now.
+                Assert.Equal(Control.DefaultFont.Height - 1, listBox.ItemHeight);
+                Assert.Equal(Control.DefaultFont.Height - 1, listBoxTestAccessor.DefaultListBoxItemHeight);
+            }
+            finally
+            {
+                applicationTestAccessor.s_defaultFont = null;
+                applicationTestAccessor.s_defaultFontScaled = null;
+                listBoxTestAccessor.s_defaultListBoxItemHeight = -1;
+                listBoxTestAccessor.s_defaultFont = null;
+            }
+        }
+
         [WinFormsTheory]
         [MemberData(nameof(HorizontalExtent_Set_TestData))]
         public void ListBox_HorizontalExtent_Set_GetReturnsExpected(bool multiColumn, bool horizontalScrollBar, int value)

@@ -38,6 +38,7 @@ The acceptance criteria for adding an obsoletion includes:
 |  __`WFDEV001`__ | Casting to/from IntPtr is unsafe, use `ResultInternal`. |
 |  __`WFDEV002`__ | `DomainUpDown.DomainUpDownAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` controls. Use `ControlAccessibleObject` instead. |
 |  __`WFDEV003`__ | `DomainUpDown.DomainItemAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` items. |
+|  __`WFDEV004`__ | `ListBox.DefaultItemHeight` constant is no longer used as the default item height. Default item height is now scaled according to the application default font. |
 
 
 ## Analyzer Warnings
