@@ -13,25 +13,22 @@ namespace Windows.Win32
         /// </summary>
         /// <returns>
         ///  The old thread DPI hosting behavior if the API is available in this version of OS.
-        ///  Otherwise, <see cref="DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_DEFAULT"/>.
+        ///  Otherwise, <see cref="DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_INVALID"/>.
         /// </returns>
         public static DPI_HOSTING_BEHAVIOR SetThreadDpiHostingBehaviorInternal(DPI_HOSTING_BEHAVIOR dpiHostingBehavior)
         {
-            if (dpiHostingBehavior == DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_MIXED)
+            if (dpiHostingBehavior != DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_MIXED)
             {
                 // Winforms only affects the behavior of thread hosting in mixed DPI mode situations, and does not apply to any other scenarios.
                 throw new ArgumentException(nameof(dpiHostingBehavior), dpiHostingBehavior.ToString());
             }
 
-            if (OsVersion.IsWindows10_18030rGreater())
+            if (!OsVersion.IsWindows10_18030rGreater())
             {
-                if (dpiHostingBehavior == DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_MIXED)
-                {
-                    return SetThreadDpiHostingBehavior(dpiHostingBehavior);
-                }
+                throw new PlatformNotSupportedException();
             }
 
-            return DPI_HOSTING_BEHAVIOR.DPI_HOSTING_BEHAVIOR_INVALID;
+            return SetThreadDpiHostingBehavior(dpiHostingBehavior);
         }
     }
 }
