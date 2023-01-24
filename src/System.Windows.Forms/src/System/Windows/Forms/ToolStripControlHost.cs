@@ -124,8 +124,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The control that this item is hosting.
         /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private Control ControlInternal
         {
             get
@@ -135,7 +133,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal AccessibleObject ControlAccessibilityObject => _control?.AccessibilityObject;
+        internal AccessibleObject? ControlAccessibilityObject => _control?.AccessibilityObject;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
