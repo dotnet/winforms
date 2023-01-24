@@ -5833,7 +5833,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="InvalidArgumentType">
         <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
+        <target state="translated">L'argomento '{0}' deve essere di tipo '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">

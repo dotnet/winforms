@@ -5833,7 +5833,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="InvalidArgumentType">
         <source>Argument '{0}' must be of type '{1}'.</source>
-        <target state="new">Argument '{0}' must be of type '{1}'.</target>
+        <target state="translated">Argument „{0}” musi być typu „{1}”.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
