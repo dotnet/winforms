@@ -94,10 +94,17 @@ The above code was generated for default C# code style settings, thus `this` acc
 To preserve legacy code generation style in `InitializeComponent` method, set style preferences to legacy values in [`.editorconfig` file](https://learn.microsoft.com/visualstudio/ide/create-portable-custom-editor-options).
 
 ```ini
-# WinForms code-behind files
-[*.designer.cs,*.designer.vb]
+[*.designer.cs]
 
-# this. and Me. preferences
+# this. preferences
+dotnet_style_qualification_for_event = true
+dotnet_style_qualification_for_field = true
+dotnet_style_qualification_for_method = true
+dotnet_style_qualification_for_property = true
+
+[*.vb]
+
+# Me. preferences
 dotnet_style_qualification_for_event = true
 dotnet_style_qualification_for_field = true
 dotnet_style_qualification_for_method = true
