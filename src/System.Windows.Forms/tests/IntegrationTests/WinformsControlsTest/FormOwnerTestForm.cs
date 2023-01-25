@@ -1,6 +1,11 @@
-﻿using System.Diagnostics;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using Windows.Win32.System.Ole;
 
 namespace WinformsControlsTest
 {
@@ -11,9 +16,17 @@ namespace WinformsControlsTest
             this.Shown += (object sender, EventArgs e) => RunFormOwnerMemoryLeakTest();
         }
 
+        /// <summary>
+        /// This method runs a loop to open and close a parent form.
+        /// The parent form opens a child form.show(IWin32Window) overload.
+        /// The parent form is then closed, which also closes the child.
+        /// The output shows how much memory was used in the process and
+        /// can be used to check if a memory leak is present.
+        /// This is used to test the bug: https://github.com/dotnet/winforms/issues/530
+        /// </summary>
         private void RunFormOwnerMemoryLeakTest()
         {
-            long memoryStart = Process.GetCurrentProcess().WorkingSet64;
+            long memoryStart = GC.GetTotalMemory(false);
 
             List<Form> childForms = new();
             for (int i = 0; i < 500; i++)
@@ -27,11 +40,11 @@ namespace WinformsControlsTest
             childForms.ForEach(childForm => childForm.Close());
             childForms.Clear();
 
-            long memoryBeforeGC = Process.GetCurrentProcess().WorkingSet64;
+            long memoryBeforeGC = GC.GetTotalMemory(false);
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
-            long memoryAfterGC = Process.GetCurrentProcess().WorkingSet64;
+            long memoryAfterGC = GC.GetTotalMemory(true);
 
             Controls.Add(new Label()
             {
