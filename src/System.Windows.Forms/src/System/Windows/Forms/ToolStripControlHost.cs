@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Overridden to return value from Control.CanSelect.
         /// </summary>
-        public override bool CanSelect => _control is not null ? DesignMode || Control.CanSelect : false;
+        public override bool CanSelect => _control is not null && (DesignMode || _control.CanSelect);
 
         [SRCategory(nameof(SR.CatFocus))]
         [DefaultValue(true)]
