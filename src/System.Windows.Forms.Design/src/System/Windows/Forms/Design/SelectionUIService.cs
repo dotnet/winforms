@@ -236,7 +236,8 @@ namespace System.Windows.Forms.Design
             return new HitTestInfo(SelectionUIItem.NOHIT, null);
         }
 
-        private ISelectionUIHandler GetHandler(object component) => _selectionHandlers[component];
+        private ISelectionUIHandler GetHandler(object component)
+            => _selectionHandlers.TryGetValue(component, out ISelectionUIHandler value) ? value : null;
 
         /// <summary>
         ///  This method returns a well-formed name for a drag transaction based on the rules it is given.
@@ -915,7 +916,7 @@ namespace System.Windows.Forms.Design
             _selectionHandlers.TryGetValue(component, out ISelectionUIHandler oldHandler);
             if (oldHandler == handler)
             {
-                _selectionHandlers[component] = null;
+                _selectionHandlers.Remove(component);
             }
         }
 

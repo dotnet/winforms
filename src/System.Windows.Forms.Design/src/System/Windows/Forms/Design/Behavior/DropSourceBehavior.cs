@@ -887,7 +887,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void InitiateDrag(Point initialMouseLocation, ICollection dragComps)
         {
-            dragObjects = (List<IComponent>)dragComps;
+            dragObjects = dragComps.Cast<IComponent>().ToList();
             DisableAdorners(serviceProviderSource, behaviorServiceSource, false);
             Control primaryControl = dragObjects[0] as Control;
             Control primaryParent = primaryControl?.Parent;
