@@ -524,7 +524,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Provides access to the underlying IServiceProvider
         /// </summary>
-        protected virtual object? GetService(Type? serviceType)
+        protected virtual object? GetService(Type serviceType)
             => serviceType == typeof(IContainer) ? Container : provider?.GetService(serviceType);
 
         /// <summary>

@@ -636,7 +636,7 @@ virtual System.ComponentModel.Design.DesignerCommandSet.GetCommands(string! name
 ~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMemberAbsolute(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object owningObject, System.ComponentModel.MemberDescriptor member) -> System.CodeDom.CodeStatementCollection
 ~virtual System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.SerializeCollection(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeExpression targetExpression, System.Type targetType, System.Collections.ICollection originalCollection, System.Collections.ICollection valuesToSerialize) -> object
 virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.CreateInstance(System.Type! type, System.Collections.ICollection? arguments, string? name, bool addToContainer) -> object!
-virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetService(System.Type? serviceType) -> object?
+virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetService(System.Type! serviceType) -> object?
 virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.GetType(string? typeName) -> System.Type?
 virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.OnResolveName(System.ComponentModel.Design.Serialization.ResolveNameEventArgs! e) -> void
 virtual System.ComponentModel.Design.Serialization.DesignerSerializationManager.OnSessionCreated(System.EventArgs! e) -> void
