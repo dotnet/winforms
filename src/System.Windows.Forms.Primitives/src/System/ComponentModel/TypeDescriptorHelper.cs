@@ -8,7 +8,8 @@ namespace System.ComponentModel
 {
     internal static class TypeDescriptorHelper
     {
-        public static bool TryGetAttribute<T>(
+        public static bool TryGetAttribute
+            <[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] T>(
             object component,
             [NotNullWhen(true)] out T? attribute) where T : Attribute
         {
