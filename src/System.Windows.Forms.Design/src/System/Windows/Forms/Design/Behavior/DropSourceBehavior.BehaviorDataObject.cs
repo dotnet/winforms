@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Design.Behavior
     internal sealed partial class DropSourceBehavior
     {
         /// <summary>
-        ///  This class extends from DataObject and carries additional
+        ///  This class extends from <see cref="DataObject"/> and carries additional
         ///  information such as: the list of Controls currently being dragged and the drag 'Source'.
         /// </summary>
         internal class BehaviorDataObject : DataObject
