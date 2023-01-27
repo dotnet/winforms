@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -126,6 +127,7 @@ namespace System.Windows.Forms
         /// </summary>
         private Control ControlInternal
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 ObjectDisposedException.ThrowIf(_control is null, _control);
@@ -806,7 +808,7 @@ namespace System.Windows.Forms
         private void SyncControlParent()
         {
             ReadOnlyControlCollection newControls = GetControlCollection(ParentInternal);
-            newControls?.AddInternal(ControlInternal);
+            newControls?.AddInternal(_control);
         }
 
         protected virtual void OnHostedControlResize(EventArgs e)
