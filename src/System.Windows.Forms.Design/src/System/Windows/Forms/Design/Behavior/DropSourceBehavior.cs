@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Design.Behavior
     /// <summary>
     ///  The DropSourceBehavior is created by ControlDesigner when it detects that  a drag operation has started.  This object is passed to the BehaviorService and is used to route GiveFeedback and QueryContinueDrag drag/drop messages. In response to GiveFeedback messages, this class will render the dragging controls in real-time with the help of the DragAssistanceManager (Snaplines) object or by simply snapping to grid dots.
     /// </summary>
-    internal sealed class DropSourceBehavior : Behavior, IComparer
+    internal sealed partial class DropSourceBehavior : Behavior, IComparer
     {
         private struct DragComponent
         {
@@ -1141,47 +1141,6 @@ namespace System.Windows.Forms.Design.Behavior
                     cleanedUpDrag = true;
                 }
             }
-        }
-
-        /// <summary>
-        ///  This class extends from DataObject and carries additional  information such as: the list of Controls currently being dragged and the drag 'Source'.
-        /// </summary>
-        internal class BehaviorDataObject : DataObject
-        {
-            private readonly ICollection _dragComponents;
-            private readonly Control _source;
-            private IComponent _target;
-            private readonly DropSourceBehavior _sourceBehavior;
-
-            public BehaviorDataObject(ICollection dragComponents, Control source, DropSourceBehavior sourceBehavior) : base()
-            {
-                _dragComponents = dragComponents;
-                _source = source;
-                _sourceBehavior = sourceBehavior;
-                _target = null;
-            }
-
-            public Control Source
-            {
-                get => _source;
-            }
-
-            public ICollection DragComponents
-            {
-                get => _dragComponents;
-            }
-
-            public IComponent Target
-            {
-                get => _target;
-                set => _target = value;
-            }
-
-            internal void EndDragDrop(bool allowSetChildIndexOnDrop) => _sourceBehavior.EndDragDrop(allowSetChildIndexOnDrop);
-
-            internal void CleanupDrag() => _sourceBehavior.CleanupDrag();
-
-            internal ArrayList GetSortedDragControls(ref int primaryControlIndex) => _sourceBehavior.GetSortedDragControls(ref primaryControlIndex);
         }
     }
 }
