@@ -189,13 +189,11 @@ namespace System.ComponentModel.Design
             {
                 if (tryLater)
                 {
-                    // we don't have an help service YET, we need to wait for it...
-                    // hook up to the application.idle event
-                    // yes this is UGLY but we don't have a choice.
-                    // vs is always returning a UserContext, so even if we manage to instantiate the HelpService
-                    // beforehand and class pushcontext on it
-                    // (trying to stack up help context in the helpservice to be flushed when we get the
-                    // documentactivation event we just don't know if that's going to work or not... so we just wait...) :(((
+                    // We don't have a HelpService yet, hook up to the ApplicationIdle event.
+                    // VS is always returning a UserContext, so instantiating the HelpService
+                    // beforehand and doing class pushcontext on it to try to
+                    // stack up help context in the HelpService to be flushed when we get the
+                    // documentation event may not work, so we need to wait for a HelpService instead.
                     Application.Idle += new EventHandler(ApplicationIdle);
                 }
 
@@ -301,7 +299,7 @@ namespace System.ComponentModel.Design
         ///  The primary selection has a slightly different UI look and is used as
         ///  a "key" when an operation is to be done on multiple components.
         /// </summary>
-        object? ISelectionService.PrimarySelection => _selection?.Count > 0 ? _selection[0] : null;
+        object? ISelectionService.PrimarySelection => PrimarySelection;
 
         /// <summary>
         ///  Retrieves the count of selected objects.
