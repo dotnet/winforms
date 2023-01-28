@@ -15,34 +15,21 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         internal class BehaviorDataObject : DataObject
         {
-            private readonly ICollection _dragComponents;
-            private readonly Control _source;
-            private IComponent? _target;
             private readonly DropSourceBehavior _sourceBehavior;
 
             public BehaviorDataObject(ICollection dragComponents, Control source, DropSourceBehavior sourceBehavior) : base()
             {
-                _dragComponents = dragComponents;
-                _source = source;
+                DragComponents = dragComponents;
+                Source = source;
                 _sourceBehavior = sourceBehavior;
-                _target = null;
+                Target = null;
             }
 
-            public Control Source
-            {
-                get => _source;
-            }
+            public Control Source { get; }
 
-            public ICollection DragComponents
-            {
-                get => _dragComponents;
-            }
+            public ICollection DragComponents { get; }
 
-            public IComponent? Target
-            {
-                get => _target;
-                set => _target = value;
-            }
+            public IComponent? Target { get; set; }
 
             internal void EndDragDrop(bool allowSetChildIndexOnDrop) => _sourceBehavior.EndDragDrop(allowSetChildIndexOnDrop);
 
